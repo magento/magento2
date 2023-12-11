@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Api;
 
 use Magento\Framework\Api\FilterBuilder;
@@ -46,10 +47,11 @@ class AttributeSetRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testGetThrowsExceptionIfRequestedAttributeSetDoesNotExist()
     {
+        $this->expectException(\Exception::class);
+
         $attributeSetId = 9999;
 
         $serviceInfo = [
@@ -139,11 +141,12 @@ class AttributeSetRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Default attribute set can not be deleted
      */
     public function testDeleteByIdDefaultAttributeSet()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The default attribute set can\'t be deleted.');
+
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Eav\Model\Config */
         $eavConfig = $objectManager->create(\Magento\Eav\Model\Config::class);
@@ -171,10 +174,11 @@ class AttributeSetRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testDeleteByIdThrowsExceptionIfRequestedAttributeSetDoesNotExist()
     {
+        $this->expectException(\Exception::class);
+
         $attributeSetId = 9999;
 
         $serviceInfo = [
@@ -256,7 +260,7 @@ class AttributeSetRepositoryTest extends WebapiAbstract
         $searchResult = $this->_webApiCall($serviceInfo, $requestData);
 
         $this->assertEquals(2, $searchResult['total_count']);
-        $this->assertEquals(1, count($searchResult['items']));
+        $this->assertCount(1, $searchResult['items']);
         $this->assertEquals(
             $searchResult['items'][0]['attribute_set_name'],
             'attribute_set_3_for_search'

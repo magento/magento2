@@ -17,7 +17,7 @@ class JsonTest extends \PHPUnit\Framework\TestCase
      */
     protected $parser;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fixtureDir = realpath(__DIR__ . '/../../_files') . '/';
 

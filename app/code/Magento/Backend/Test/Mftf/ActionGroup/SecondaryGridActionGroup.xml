@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Action group to delete an item given that items name -->
+    <!-- Must already be on the admin page containing the grid -->
+    <actionGroup name="deleteEntitySecondaryGrid">
+        <annotations>
+            <description>This Action Group deletes an item from a grid based on provided Name. After Searching, the First Row is clicked.</description>
+        </annotations>
+        <arguments>
+            <argument name="name" type="string"/>
+            <argument name="searchInput" type="string"/>
+        </arguments>
+
+        <!-- search for the name -->
+        <click stepKey="resetFilters" selector="{{AdminSecondaryGridSection.resetFilters}}"/>
+        <fillField stepKey="fillIdentifier" selector="{{searchInput}}" userInput="{{name}}"/>
+        <click stepKey="searchForName" selector="{{AdminSecondaryGridSection.searchButton}}"/>
+        <waitForPageLoad stepKey="waitForPageLoad" />
+        <waitForElementClickable selector="{{AdminSecondaryGridSection.firstRow}}" stepKey="waitForResult"/>
+        <click stepKey="clickResult" selector="{{AdminSecondaryGridSection.firstRow}}"/>
+        <waitForPageLoad stepKey="waitForTaxRateLoad"/>
+
+        <!-- delete the rule -->
+        <waitForElementClickable selector="{{AdminStoresMainActionsSection.deleteButton}}" stepKey="waitForDelete"/>
+        <click stepKey="clickDelete" selector="{{AdminStoresMainActionsSection.deleteButton}}"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForConfirmationModal"/>
+        <click stepKey="clickOk" selector="{{AdminConfirmationModalSection.ok}}"/>
+        <waitForText stepKey="seeSuccess" selector="{{AdminMessagesSection.success}}" userInput="deleted"/>
+    </actionGroup>
+</actionGroups>

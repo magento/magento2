@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontOnePageCheckoutDataWhenChangeQtyTest">
+        <annotations>
+            <stories value="Checkout"/>
+            <title value="One page Checkout Customer data when changing Product Qty"/>
+            <description value="One page Checkout Customer data when changing Product Qty"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-96960"/>
+            <useCaseId value="MAGETWO-96850"/>
+            <group value="checkout"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!--Create a product-->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexer">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <!--Add product to cart and checkout-->
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$createProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.emailAddress}}" stepKey="waitForEmailFieldVisible" />
+        <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{CustomerEntityOne.email}}" stepKey="enterEmail"/>
+        <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="enterLastName"/>
+        <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="enterStreet"/>
+        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{CustomerAddressSimple.city}}" stepKey="enterCity"/>
+        <selectOption selector="{{CheckoutShippingSection.region}}" userInput="{{CustomerAddressSimple.state}}" stepKey="selectRegion"/>
+        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="enterPostcode"/>
+        <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="enterTelephone"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+
+        <!--Grab customer data to check it-->
+        <grabValueFrom selector="{{CheckoutShippingSection.email}}" stepKey="grabEmail"/>
+        <grabValueFrom selector="{{CheckoutShippingSection.firstName}}" stepKey="grabFirstName"/>
+        <grabValueFrom selector="{{CheckoutShippingSection.lastName}}" stepKey="grabLastName"/>
+        <grabValueFrom selector="{{CheckoutShippingSection.street}}" stepKey="grabStreet"/>
+        <grabValueFrom selector="{{CheckoutShippingSection.city}}" stepKey="grabCity"/>
+        <grabTextFrom selector="{{CheckoutShippingSection.region}}" stepKey="grabRegion"/>
+        <grabValueFrom selector="{{CheckoutShippingSection.postcode}}" stepKey="grabPostcode"/>
+        <grabValueFrom selector="{{CheckoutShippingSection.telephone}}" stepKey="grabTelephone"/>
+
+        <!--Select shipping method and finalize checkout-->
+        <waitForElementClickable selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="waitForFirstShippingMethodClickable" />
+        <click selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <seeCurrentUrlMatches regex="~/checkout/?#payment~" stepKey="assertCheckoutPaymentUrl"/>
+
+        <!--Go to cart page, update qty and proceed to checkout-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage"/>
+        <see userInput="Shopping Cart" stepKey="seeCartPageIsOpened"/>
+        <fillField selector="{{CheckoutCartProductSection.qty($$createProduct.sku$$)}}" userInput="2" stepKey="updateProductQty"/>
+        <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="clickUpdateShoppingCart"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+        <grabValueFrom selector="{{CheckoutCartProductSection.qty($$createProduct.sku$$)}}" stepKey="grabQty"/>
+        <assertEquals stepKey="assertQty">
+			<actualResult type="const">$grabQty</actualResult>
+			<expectedResult type="const">2</expectedResult>
+        </assertEquals>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+
+        <!--Check that form is filled with customer data-->
+        <grabValueFrom selector="{{CheckoutShippingSection.email}}" stepKey="grabEmail1"/>
+        <grabValueFrom selector="{{CheckoutShippingSection.firstName}}" stepKey="grabFirstName1"/>
+        <grabValueFrom selector="{{CheckoutShippingSection.lastName}}" stepKey="grabLastName1"/>
+        <grabValueFrom selector="{{CheckoutShippingSection.street}}" stepKey="grabStreet1"/>
+        <grabValueFrom selector="{{CheckoutShippingSection.city}}" stepKey="grabCity1"/>
+        <grabTextFrom selector="{{CheckoutShippingSection.region}}" stepKey="grabRegion1"/>
+        <grabValueFrom selector="{{CheckoutShippingSection.postcode}}" stepKey="grabPostcode1"/>
+        <grabValueFrom selector="{{CheckoutShippingSection.telephone}}" stepKey="grabTelephone1"/>
+
+        <assertEquals stepKey="assertEmail">
+			<actualResult type="const">$grabEmail1</actualResult>
+			<expectedResult type="const">$grabEmail</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertFirstName">
+			<actualResult type="const">$grabFirstName1</actualResult>
+			<expectedResult type="const">$grabFirstName</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertLastName">
+			<actualResult type="const">$grabLastName1</actualResult>
+			<expectedResult type="const">$grabLastName</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertStreet">
+			<actualResult type="const">$grabStreet1</actualResult>
+			<expectedResult type="const">$grabStreet</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertCity">
+			<actualResult type="const">$grabCity1</actualResult>
+			<expectedResult type="const">$grabCity</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertRegion">
+			<actualResult type="const">$grabRegion1</actualResult>
+			<expectedResult type="const">$grabRegion</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertPostcode">
+			<actualResult type="const">$grabPostcode1</actualResult>
+			<expectedResult type="const">$grabPostcode</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertTelephone">
+			<actualResult type="const">$grabTelephone1</actualResult>
+			<expectedResult type="const">$grabTelephone</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

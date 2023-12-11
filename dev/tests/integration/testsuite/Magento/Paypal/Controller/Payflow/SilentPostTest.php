@@ -8,8 +8,8 @@ namespace Magento\Paypal\Controller\Payflow;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\DataObject;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Logger\Monolog;
+use Magento\Payment\Gateway\Command\CommandException;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Magento\Paypal\Model\Payflowlink;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -18,7 +18,11 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\TestFramework\TestCase\AbstractController;
 use PHPUnit\Framework\MockObject_MockObject as MockObject;
+use Psr\Log\LoggerInterface;
 
+/**
+ * @magentoAppIsolation enabled
+ */
 class SilentPostTest extends AbstractController
 {
     /**
@@ -34,7 +38,7 @@ class SilentPostTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -53,7 +57,7 @@ class SilentPostTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_objectManager->removeSharedInstance(Gateway::class);
         $this->_objectManager->removeSharedInstance(OrderSender::class);
@@ -93,7 +97,7 @@ class SilentPostTest extends AbstractController
     public function responseCodeDataProvider()
     {
         return [
-            [Payflowlink::RESPONSE_CODE_APPROVED, Order::STATE_PROCESSING, Order::STATE_PROCESSING],
+            [Payflowlink::RESPONSE_CODE_APPROVED, Order::STATE_COMPLETE, Order::STATE_COMPLETE],
             [Payflowlink::RESPONSE_CODE_FRAUDSERVICE_FILTER, Order::STATE_PAYMENT_REVIEW, Order::STATUS_FRAUD],
         ];
     }
@@ -114,9 +118,9 @@ class SilentPostTest extends AbstractController
         $logger = $this->getMockBuilder(Monolog::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_objectManager->addSharedInstance($logger, Monolog::class);
+        $this->_objectManager->addSharedInstance($logger, LoggerInterface::class, true);
 
-        $exception = new LocalizedException(__('Response message from PayPal gateway'));
+        $exception = new CommandException(__('Response message from PayPal gateway'));
         $logger->expects(self::once())
             ->method('critical')
             ->with(self::equalTo($exception));
@@ -125,7 +129,7 @@ class SilentPostTest extends AbstractController
 
         self::assertEquals(200, $this->getResponse()->getStatusCode());
 
-        $this->_objectManager->removeSharedInstance(Monolog::class);
+        $this->_objectManager->removeSharedInstance(LoggerInterface::class, true);
     }
 
     /**

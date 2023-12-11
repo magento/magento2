@@ -1,12 +1,17 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Statistics;
 
-class RefreshLifetime extends \Magento\Reports\Controller\Adminhtml\Report\Statistics
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Reports\Controller\Adminhtml\Report\Statistics;
+
+/**
+ * Refresh statistics action.
+ */
+class RefreshLifetime extends Statistics implements HttpPostActionInterface
 {
     /**
      * Refresh statistics for all period

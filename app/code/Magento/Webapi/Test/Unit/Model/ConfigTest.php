@@ -3,14 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Webapi\Test\Unit\Model;
 
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Webapi\Model\Cache\Type\Webapi;
 use Magento\Webapi\Model\Config;
 use Magento\Webapi\Model\Config\Reader;
-use Magento\Webapi\Model\Cache\Type\Webapi;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
     /**
      * @var Config
@@ -18,27 +23,27 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $config;
 
     /**
-     * @var Webapi|\PHPUnit_Framework_MockObject_MockObject
+     * @var Webapi|MockObject
      */
     private $webapiCacheMock;
 
     /**
-     * @var Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var Reader|MockObject
      */
     private $configReaderMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->webapiCacheMock = $this->createMock(\Magento\Webapi\Model\Cache\Type\Webapi::class);
-        $this->configReaderMock = $this->createMock(\Magento\Webapi\Model\Config\Reader::class);
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->webapiCacheMock = $this->createMock(Webapi::class);
+        $this->configReaderMock = $this->createMock(Reader::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
 
         $this->config = $objectManager->getObject(
             Config::class,

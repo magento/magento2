@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="placeholderBaseImage" type="imageFile">
+        <data key="file">adobe-base.jpg</data>
+        <data key="name">adobe-base</data>
+        <data key="extension">jpg</data>
+    </entity>
+
+    <entity name="placeholderSmallImage" type="imageFile">
+        <data key="file">adobe-small.jpg</data>
+        <data key="name">adobe-small</data>
+        <data key="extension">jpg</data>
+    </entity>
+
+    <entity name="placeholderThumbnailImage" type="imageFile">
+        <data key="file">adobe-thumb.jpg</data>
+        <data key="name">adobe-thumb</data>
+        <data key="extension">jpg</data>
+    </entity>
+    <entity name="AdobeSmallImage" type="image">
+        <data key="title" unique="suffix">magento-small</data>
+        <data key="file">adobe-small.jpg</data>
+        <data key="filename">adobe-small</data>
+        <data key="file_extension">jpg</data>
+    </entity>
+    <entity name="AdobeThumbImage" type="image">
+        <data key="title" unique="suffix">magento-thumb</data>
+        <data key="file">adobe-thumb.jpg</data>
+        <data key="filename">adobe-thumb</data>
+        <data key="file_extension">jpg</data>
+    </entity>
+    <entity name="JpgImage" type="image">
+        <data key="title" unique="suffix">jpgimage</data>
+        <data key="file">jpg.jpg</data>
+        <data key="filename">jpg</data>
+        <data key="file_extension">jpg</data>
+    </entity>
+    <entity name="GifImageWithUnusedTransparencyIndex" type="image">
+        <data key="title" unique="suffix">GifImageWithUnusedTransparencyIndex</data>
+        <data key="file">transparency_index.gif</data>
+        <data key="filename">transparency_index</data>
+        <data key="file_extension">gif</data>
+    </entity>
+    <entity name="LargeImage" type="image">
+        <data key="title" unique="suffix">largeimage</data>
+        <data key="file">large.jpg</data>
+        <data key="filename">large</data>
+        <data key="file_extension">jpg</data>
+    </entity>
+    <entity name="MagentoImage" type="image">
+        <data key="title" unique="suffix">magentoimage</data>
+        <data key="file">magento.jpg</data>
+        <data key="filename">magento</data>
+        <data key="file_extension">jpg</data>
+    </entity>
+    <entity name="MagentoStage" type="image">
+        <data key="title" unique="suffix">magentostage</data>
+        <data key="file">magentoStage.jpg</data>
+        <data key="filename">magentoStage</data>
+        <data key="file_extension">jpg</data>
+    </entity>
+    <entity name="MediumImage" type="image">
+        <data key="title" unique="suffix">mediumimage</data>
+        <data key="file">medium.jpg</data>
+        <data key="filename">medium</data>
+        <data key="file_extension">jpg</data>
+    </entity>
+    <entity name="PngImage" type="image">
+        <data key="title" unique="suffix">magentoimage</data>
+        <data key="file">png.png</data>
+        <data key="filename">png</data>
+        <data key="file_extension">png</data>
+    </entity>
+</entities>

@@ -14,14 +14,10 @@ use Magento\Sales\Model\Spi\CreditmemoResourceInterface;
 
 /**
  * Flat sales order creditmemo resource
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Creditmemo extends SalesResource implements CreditmemoResourceInterface
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_creditmemo_resource';
@@ -48,6 +44,10 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
         if (!$object->getOrderId() && $object->getOrder()) {
             $object->setOrderId($object->getOrder()->getId());
             $object->setBillingAddressId($object->getOrder()->getBillingAddress()->getId());
+        }
+
+        if (!$object->getInvoiceId() && $object->getInvoice()) {
+            $object->setInvoiceId($object->getInvoice()->getId());
         }
 
         return parent::_beforeSave($object);

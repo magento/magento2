@@ -11,7 +11,6 @@ use Magento\Review\Model\ResourceModel\Review\Collection as ReviewCollection;
 /**
  * Product Reviews Page
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class View extends \Magento\Catalog\Block\Product\View
@@ -82,13 +81,20 @@ class View extends \Magento\Catalog\Block\Product\View
      */
     protected function _toHtml()
     {
-        $this->getProduct()->setShortDescription(null);
+        $product = $this->getProduct();
+
+        if (!$product) {
+            return '';
+        }
+
+        $product->setShortDescription(null);
 
         return parent::_toHtml();
     }
 
     /**
      * Replace review summary html with more detailed review summary
+     *
      * Reviews collection count will be jerked here
      *
      * @param \Magento\Catalog\Model\Product $product

@@ -10,6 +10,8 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Payment;
 
 /**
+ * Credit Card payment method legacy implementation.
+ *
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @deprecated 100.0.8
@@ -93,6 +95,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function validate()
     {
@@ -103,9 +106,9 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
 
         $info = $this->getInfoInstance();
         $errorMsg = false;
-        $availableTypes = explode(',', $this->getConfigData('cctypes'));
+        $availableTypes = explode(',', $this->getConfigData('cctypes') ?? '');
 
-        $ccNumber = $info->getCcNumber();
+        $ccNumber = $info->getCcNumber() ?? '';
 
         // remove credit card number delimiters such as "-" and space
         $ccNumber = preg_replace('/[\-\s]+/', '', $ccNumber);
@@ -148,6 +151,22 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
                     'JCB' => '/^35(2[8-9][0-9]{12,15}|[3-8][0-9]{13,16})/',
                     'MI' => '/^(5(0|[6-9])|63|67(?!59|6770|6774))\d*$/',
                     'MD' => '/^(6759(?!24|38|40|6[3-9]|70|76)|676770|676774)\d*$/',
+
+                    //Hipercard
+                    'HC' => '/^((606282)|(637095)|(637568)|(637599)|(637609)|(637612))\d*$/',
+                    //Elo
+                    'ELO' => '/^((509091)|(636368)|(636297)|(504175)|(438935)|(40117[8-9])|(45763[1-2])|' .
+                        '(457393)|(431274)|(50990[0-2])|(5099[7-9][0-9])|(50996[4-9])|(509[1-8][0-9][0-9])|' .
+                        '(5090(0[0-2]|0[4-9]|1[2-9]|[24589][0-9]|3[1-9]|6[0-46-9]|7[0-24-9]))|' .
+                        '(5067(0[0-24-8]|1[0-24-9]|2[014-9]|3[0-379]|4[0-9]|5[0-3]|6[0-5]|7[0-8]))|' .
+                        '(6504(0[5-9]|1[0-9]|2[0-9]|3[0-9]))|' .
+                        '(6504(8[5-9]|9[0-9])|6505(0[0-9]|1[0-9]|2[0-9]|3[0-8]))|' .
+                        '(6505(4[1-9]|5[0-9]|6[0-9]|7[0-9]|8[0-9]|9[0-8]))|' .
+                        '(6507(0[0-9]|1[0-8]))|(65072[0-7])|(6509(0[1-9]|1[0-9]|20))|' .
+                        '(6516(5[2-9]|6[0-9]|7[0-9]))|(6550(0[0-9]|1[0-9]))|' .
+                        '(6550(2[1-9]|3[0-9]|4[0-9]|5[0-8])))\d*$/',
+                    //Aura
+                    'AU' => '/^5078\d*$/'
                 ];
 
                 $ccNumAndTypeMatches = isset(
@@ -189,6 +208,8 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     }
 
     /**
+     * Check if verification should be used.
+     *
      * @return bool
      * @api
      */
@@ -202,6 +223,8 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     }
 
     /**
+     * Get list of credit cards verification reg exp.
+     *
      * @return array
      * @api
      */
@@ -226,6 +249,8 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     }
 
     /**
+     * Validate expiration date
+     *
      * @param string $expYear
      * @param string $expMonth
      * @return bool
@@ -261,7 +286,8 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
             [
                 'cc_type' => $additionalData->getCcType(),
                 'cc_owner' => $additionalData->getCcOwner(),
-                'cc_last_4' => substr($additionalData->getCcNumber(), -4),
+                'cc_last_4' => $additionalData->getCcNumber() !== null ?
+                    substr($additionalData->getCcNumber(), -4) : '',
                 'cc_number' => $additionalData->getCcNumber(),
                 'cc_cid' => $additionalData->getCcCid(),
                 'cc_exp_month' => $additionalData->getCcExpMonth(),
@@ -276,6 +302,8 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     }
 
     /**
+     * Get code for "other" credit cards.
+     *
      * @param string $type
      * @return bool
      * @api
@@ -294,10 +322,11 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function validateCcNum($ccNumber)
     {
-        $cardNumber = strrev($ccNumber);
+        $cardNumber = $ccNumber !== null ? strrev($ccNumber) : '';
         $numSum = 0;
+        $length = strlen($cardNumber);
 
-        for ($i = 0; $i < strlen($cardNumber); $i++) {
+        for ($i = 0; $i < $length; $i++) {
             $currentNum = substr($cardNumber, $i, 1);
 
             /**
@@ -334,7 +363,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function validateCcNumOther($ccNumber)
     {
-        return preg_match('/^\\d+$/', $ccNumber);
+        return preg_match('/^\\d+$/', (string)$ccNumber);
     }
 
     /**

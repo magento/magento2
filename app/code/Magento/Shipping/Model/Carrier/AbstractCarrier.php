@@ -7,77 +7,72 @@
 namespace Magento\Shipping\Model\Carrier;
 
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
+use Magento\Shipping\Model\Rate\Result as RateResult;
 use Magento\Shipping\Model\Shipment\Request;
 
 /**
  * Class AbstractCarrier
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
 abstract class AbstractCarrier extends \Magento\Framework\DataObject implements AbstractCarrierInterface
 {
-    const DEBUG_KEYS_MASK = '****';
+    public const DEBUG_KEYS_MASK = '****';
 
     /**
-     * Carrier's code
-     *
      * @var string
      */
     protected $_code;
 
     /**
-     * Rates result
-     *
      * @var array|null
      */
     protected $_rates;
 
     /**
-     * Number of boxes in package
-     *
      * @var int
      */
     protected $_numBoxes = 1;
 
     /**
-     * Free Method config path
-     *
      * @var string
      */
     protected $_freeMethod = 'free_method';
 
     /**
-     * Whether this carrier has fixed rates calculation
-     *
      * @var bool
      */
     protected $_isFixed = false;
 
     /**
-     * Container types that could be customized
+     * Rate result data
      *
+     * @var RateResult|null
+     */
+    protected $_result = null;
+
+    /**
      * @var string[]
      */
     protected $_customizableContainerTypes = [];
 
-    const USA_COUNTRY_ID = 'US';
+    public const USA_COUNTRY_ID = 'US';
 
-    const CANADA_COUNTRY_ID = 'CA';
+    public const CANADA_COUNTRY_ID = 'CA';
 
-    const MEXICO_COUNTRY_ID = 'MX';
+    public const MEXICO_COUNTRY_ID = 'MX';
 
-    const HANDLING_TYPE_PERCENT = 'P';
+    public const HANDLING_TYPE_PERCENT = 'P';
 
-    const HANDLING_TYPE_FIXED = 'F';
+    public const HANDLING_TYPE_FIXED = 'F';
 
-    const HANDLING_ACTION_PERPACKAGE = 'P';
+    public const HANDLING_ACTION_PERPACKAGE = 'P';
 
-    const HANDLING_ACTION_PERORDER = 'O';
+    public const HANDLING_ACTION_PERORDER = 'O';
 
     /**
-     * Fields that should be replaced in debug with '***'
-     *
      * @var array
      */
     protected $_debugReplacePrivateDataKeys = [];
@@ -143,7 +138,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @param string $field
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @api
      */
     public function getConfigFlag($field)
     {
@@ -160,7 +154,8 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     }
 
     /**
-     * Do request to shipment
+     * Do request to shipment.
+     *
      * Implementation must be in overridden method
      *
      * @param Request $request
@@ -173,7 +168,8 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     }
 
     /**
-     * Do return of shipment
+     * Do return of shipment.
+     *
      * Implementation must be in overridden method
      *
      * @param Request $request
@@ -275,6 +271,8 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     }
 
     /**
+     * Validate request for available ship countries.
+     *
      * @param \Magento\Framework\DataObject $request
      * @return $this|bool|false|\Magento\Framework\Model\AbstractModel
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -328,10 +326,24 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @param \Magento\Framework\DataObject $request
      * @return $this|bool|\Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 100.2.6
+     */
+    public function processAdditionalValidation(\Magento\Framework\DataObject $request)
+    {
+        return $this;
+    }
+
+    /**
+     * Processing additional validation to check is carrier applicable.
+     *
+     * @param \Magento\Framework\DataObject $request
+     * @return $this|bool|\Magento\Framework\DataObject
+     * @deprecated 100.2.6
+     * @see processAdditionalValidation()
      */
     public function proccessAdditionalValidation(\Magento\Framework\DataObject $request)
     {
-        return $this;
+        return $this->processAdditionalValidation($request);
     }
 
     /**
@@ -387,6 +399,25 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     }
 
     /**
+     * Check if the request has free shipping weight
+     *
+     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
+     * @return bool
+     */
+    private function hasFreeMethodWeight($request): bool
+    {
+        return (
+            $request->getFreeShipping()
+            || (
+                $request->hasFreeMethodWeight()
+                && ((float) $request->getFreeMethodWeight()) !== ((float) $request->getPackageWeight())
+            )
+        );
+    }
+
+    /**
+     * Allows free shipping when all product items have free shipping.
+     *
      * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -394,7 +425,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      */
     protected function _updateFreeMethodQuote($request)
     {
-        if ($request->getFreeMethodWeight() == $request->getPackageWeight() || !$request->hasFreeMethodWeight()) {
+        if (!$this->hasFreeMethodWeight($request)) {
             return;
         }
 
@@ -403,7 +434,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
             return;
         }
         $freeRateId = false;
-
         if (is_object($this->_result)) {
             foreach ($this->_result->getAllRates() as $i => $item) {
                 if ($item->getMethod() == $freeMethod) {
@@ -418,8 +448,10 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
         }
         $price = null;
         if ($request->getFreeMethodWeight() > 0) {
+            // phpstan:ignore
             $this->_setFreeMethodRequest($freeMethod);
 
+            // phpstan:ignore
             $result = $this->_getQuotes();
             if ($result && ($rates = $result->getAllRates()) && count($rates) > 0) {
                 if (count($rates) == 1 && $rates[0] instanceof \Magento\Quote\Model\Quote\Address\RateResult\Method) {
@@ -435,6 +467,12 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
                     }
                 }
             }
+        } else {
+            /**
+             * if we can apply free shipping for all order we should force price
+             * to $0.00 for shipping with out sending second request to carrier
+             */
+            $price = 0;
         }
 
         /**
@@ -453,7 +491,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      */
     public function getFinalPriceWithHandlingFee($cost)
     {
-        $handlingFee = $this->getConfigData('handling_fee');
+        $handlingFee = (float)$this->getConfigData('handling_fee');
         $handlingType = $this->getConfigData('handling_type');
         if (!$handlingType) {
             $handlingType = self::HANDLING_TYPE_FIXED;
@@ -509,10 +547,10 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     }
 
     /**
-     * Sets the number of boxes for shipping
+     * Gets the average weight of each box available for shipping
      *
-     * @param int $weight in some measure
-     * @return int
+     * @param float $weight in some measure
+     * @return float
      */
     public function getTotalNumOfBoxes($weight)
     {
@@ -523,7 +561,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
         $maxPackageWeight = $this->getConfigData('max_package_weight');
         if ($weight > $maxPackageWeight && $maxPackageWeight != 0) {
             $this->_numBoxes = ceil($weight / $maxPackageWeight);
-            $weight = $weight / $this->_numBoxes;
+            $weight = (float)$weight / $this->_numBoxes;
         }
 
         return $weight;
@@ -579,7 +617,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @api
      */
     public function getDebugFlag()
     {
@@ -644,12 +681,14 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
             $this->filterXmlData($xml);
             $data = $xml->asXML();
         } catch (\Exception $e) {
+            $this->_logger->critical($e);
         }
         return $data;
     }
 
     /**
-     * Recursive replace sensitive xml nodes values by specified mask
+     * Recursive replace sensitive xml nodes values by specified mask.
+     *
      * @param \SimpleXMLElement $xml
      * @return void
      */

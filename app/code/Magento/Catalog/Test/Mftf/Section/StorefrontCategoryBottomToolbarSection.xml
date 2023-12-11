@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCategoryBottomToolbarSection">
+        <element name="nextPage" type="button" selector=".//*[@class='toolbar toolbar-products'][2]//a[contains(@class, 'next')]" timeout="30"/>
+        <element name="previousPage" type="button" selector=".//*[@class='toolbar toolbar-products'][2]//a[contains(@class, 'previous')]" timeout="30"/>
+        <element name="pageNumber" type="text" selector="//*[@class='toolbar toolbar-products'][2]//a[contains(@class, 'page')]//span[2][contains(text() ,'{{var1}}')]" parameterized="true"/>
+        <element name="perPage" type="select" selector="//*[@class='toolbar toolbar-products'][2]//select[@id='limiter']"/>
+        <element name="currentPage" type="text" selector=".//*[@class='toolbar toolbar-products'][2]//li[contains(@class, 'current')]//span[2]" timeout="30"/>
+    </section>
+</sections>

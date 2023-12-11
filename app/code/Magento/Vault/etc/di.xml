@@ -13,7 +13,7 @@
     <preference for="Magento\Vault\Api\PaymentTokenRepositoryInterface" type="Magento\Vault\Model\PaymentTokenRepository" />
     <preference for="Magento\Vault\Api\PaymentTokenManagementInterface" type="Magento\Vault\Model\PaymentTokenManagement" />
     <preference for="Magento\Vault\Api\PaymentMethodListInterface" type="Magento\Vault\Model\PaymentMethodList" />
-    <preference for="Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface" type="Magento\Vault\Model\PaymentTokenSearchResults" />
     <preference for="Magento\Vault\Model\Ui\TokenUiComponentInterface" type="Magento\Vault\Model\Ui\TokenUiComponent" />
 
     <type name="Magento\Sales\Api\Data\OrderPaymentInterface">
@@ -52,5 +52,12 @@
                 <item name="credit_card" xsi:type="const">Magento\Vault\Api\Data\PaymentTokenFactoryInterface::TOKEN_TYPE_CREDIT_CARD</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Checkout\Api\PaymentInformationManagementInterface">
+        <plugin name="ProcessPaymentVaultInformationManagement"
+                type="Magento\Vault\Plugin\PaymentVaultInformationManagement"/>
+    </type>
+    <type name="Magento\Payment\Block\Form\Container">
+        <plugin name="PaymentMethodProcess" type="Magento\Vault\Plugin\PaymentMethodProcess"/>
     </type>
 </config>

@@ -6,15 +6,16 @@
 
 /**
  * Magento data selector form element
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
+
 namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
-use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
+/**
+ * Date element
+ */
 class Date extends AbstractElement
 {
     /**
@@ -51,19 +52,28 @@ class Date extends AbstractElement
     }
 
     /**
-     * If script executes on x64 system, converts large
-     * numeric values to timestamp limit
+     * Check if a string is a date value
+     *
+     * @param string $value
+     * @return bool
+     */
+    private function isDate(string $value): bool
+    {
+        $date = date_parse($value);
+
+        return !empty($date['year']) && !empty($date['month']) && !empty($date['day']);
+    }
+
+    /**
+     * Initial scope of method was to limit timestamp on x64 systems to mimic x32 systems,
+     * but keeping the method for compatibility:
+     * If script executes on x64 system, converts large numeric values to timestamp limit
      *
      * @param int $value
      * @return int
      */
     protected function _toTimestamp($value)
     {
-        $value = (int)$value;
-        if ($value > 3155760000) {
-            $value = 0;
-        }
-
         return $value;
     }
 
@@ -83,13 +93,14 @@ class Date extends AbstractElement
             $this->_value = $value;
             return $this;
         }
-        if (preg_match('/^[0-9]+$/', $value)) {
-            $this->_value = (new \DateTime())->setTimestamp($this->_toTimestamp($value));
-            return $this;
-        }
-
         try {
-            $this->_value = new \DateTime($value, new \DateTimeZone($this->localeDate->getConfigTimezone()));
+            if (preg_match('/^[\-]{0,1}[0-9]+$/', $value)) {
+                $this->_value = (new \DateTime())->setTimestamp($this->_toTimestamp($value));
+            } elseif (is_string($value) && $this->isDate($value)) {
+                $this->_value = new \DateTime($value, new \DateTimeZone($this->localeDate->getConfigTimezone()));
+            } else {
+                $this->_value = '';
+            }
         } catch (\Exception $e) {
             $this->_value = '';
         }
@@ -98,6 +109,7 @@ class Date extends AbstractElement
 
     /**
      * Get date value as string.
+     *
      * Format can be specified, or it will be taken from $this->getFormat()
      *
      * @param string $format (compatible with \DateTime)
@@ -147,10 +159,11 @@ class Date extends AbstractElement
      */
     public function getElementHtml()
     {
-        $this->addClass('admin__control-text  input-text');
+        $this->addClass('admin__control-text input-text input-date');
         $dateFormat = $this->getDateFormat() ?: $this->getFormat();
         $timeFormat = $this->getTimeFormat();
         if (empty($dateFormat)) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception(
                 'Output format is not specified. ' .
                 'Please specify "format" key in constructor, or set it using setFormat().'
@@ -167,6 +180,8 @@ class Date extends AbstractElement
                         'buttonImage' => $this->getImage(),
                         'buttonText' => 'Select Date',
                         'disabled' => $this->getDisabled(),
+                        'minDate' => $this->getMinDate(),
+                        'maxDate' => $this->getMaxDate(),
                     ],
                 ]
             )

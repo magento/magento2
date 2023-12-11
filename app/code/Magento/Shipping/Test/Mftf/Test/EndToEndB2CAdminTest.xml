@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="EndToEndB2CAdminTest">
+        <!--Ship Order-->
+        <comment userInput="Admin creates shipment" stepKey="adminCreatesShipmentComment" before="clickShipAction"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction" after="clickOrderIdLinkOnInvoice"/>
+        <seeInCurrentUrl url="{{AdminShipmentNewPage.url}}" stepKey="seeOrderShipmentUrl" after="clickShipAction"/>
+
+        <see selector="{{AdminShipmentOrderInformationSection.orderStatus}}" userInput="Processing" stepKey="seeShipmentOrderStatus" after="seeOrderShipmentUrl"/>
+        <actionGroup ref="VerifyBasicShipmentInformationActionGroup" stepKey="checkBasicShipmentOrderInfo" after="seeShipmentOrderStatus">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="shippingAddress" value="US_Address_TX"/>
+            <argument name="billingAddress" value="US_Address_TX"/>
+        </actionGroup>
+
+        <!--Submit Shipment-->
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment" after="checkBasicShipmentOrderInfo"/>
+        <!--Shipment created successfully-->
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPageShipping" after="clickSubmitShipment"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="$orderNumber" stepKey="seeOrderIdInPageNameAfterShip" after="seeViewOrderPageShipping"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="seeShipmentCreateSuccess" after="seeOrderIdInPageNameAfterShip"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Complete" stepKey="seeOrderComplete" after="seeShipmentCreateSuccess"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Shipped 1" stepKey="seeShippedQuantity" after="seeOrderComplete"/>
+
+        <click selector="{{AdminOrderDetailsOrderViewSection.shipments}}" stepKey="clickOrderShipmentsTab" after="seeShippedQuantity"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForShipmentTabLoad" after="clickOrderShipmentsTab"/>
+        <see selector="{{AdminOrderShipmentsTabSection.gridRow('1')}}" userInput="{{Simple_US_Customer.firstname}}" stepKey="seeOrderShipmentInTabGrid" after="waitForShipmentTabLoad"/>
+        <click selector="{{AdminOrderShipmentsTabSection.viewGridRow('1')}}" stepKey="clickRowToViewShipment" after="seeOrderShipmentInTabGrid"/>
+        <see selector="{{AdminShipmentOrderInformationSection.orderId}}" userInput="$orderNumber" stepKey="seeOrderIdOnShipment" after="clickRowToViewShipment"/>
+        <actionGroup ref="VerifyBasicShipmentInformationActionGroup" stepKey="checkShipmentOrderInformation" after="seeOrderIdOnShipment">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="shippingAddress" value="US_Address_TX"/>
+            <argument name="billingAddress" value="US_Address_TX"/>
+        </actionGroup>
+        <actionGroup ref="SeeProductInShipmentItemsActionGroup" stepKey="seeSimpleProductInShipmentItems" after="checkShipmentOrderInformation">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="SeeProductInShipmentItemsActionGroup" stepKey="seeConfigurableProductInShipmentItems" after="seeSimpleProductInShipmentItems">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <click selector="{{AdminShipmentOrderInformationSection.orderId}}" stepKey="clickOrderIdOnShipment" after="seeConfigurableProductInShipmentItems"/>
+    </test>
+</tests>

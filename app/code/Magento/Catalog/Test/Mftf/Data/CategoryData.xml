@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="_defaultCategory" type="category">
+        <data key="name" unique="suffix">simpleCategory</data>
+        <data key="name_lwr" unique="suffix">simplecategory</data>
+        <data key="urlKey" unique="suffix">simplecategory</data>
+        <data key="is_active">true</data>
+    </entity>
+    <entity name="ApiCategory" type="category">
+        <data key="name" unique="suffix">ApiCategory</data>
+        <data key="is_active">true</data>
+    </entity>
+    <entity name="CategoryB" type="category">
+        <data key="name" unique="suffix">CategoryB</data>
+        <data key="name_lwr" unique="suffix">CategoryB</data>
+        <data key="urlKey" unique="suffix">CategoryB</data>
+        <data key="is_active">true</data>
+    </entity>
+    <entity name="SimpleSubCategory" type="category">
+        <data key="name" unique="suffix">SimpleSubCategory</data>
+        <data key="name_lwr" unique="suffix">simplesubcategory</data>
+        <data key="urlKey" unique="suffix">simplesubcategory</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+    </entity>
+    <entity name="SimpleSubCat" type="category">
+        <data key="name" unique="suffix">SubCat</data>
+        <data key="name_lwr" unique="suffix">simplesubcategory</data>
+        <data key="urlKey" unique="suffix">simplesubcategory</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+    </entity>
+    <entity name="NewRootCategory" type="category">
+        <data key="name" unique="suffix">NewRootCategory</data>
+        <data key="name_lwr" unique="suffix">newrootcategory</data>
+        <data key="urlKey" unique="suffix">newrootcategory</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <data key="parent_id">1</data>
+    </entity>
+    <entity name="SubCategoryWithParent" type="category">
+        <data key="name" unique="suffix">subCategory</data>
+        <data key="name_lwr" unique="suffix">subCategory</data>
+        <data key="is_active">true</data>
+        <var key="parent_id" entityType="category" entityKey="id" />
+    </entity>
+    <entity name="NewSubCategoryWithParent" type="category">
+        <data key="name" unique="suffix">subCategory</data>
+        <data key="name_lwr" unique="suffix">subcategory</data>
+        <data key="is_active">true</data>
+        <var key="parent_id" entityType="category" entityKey="id" />
+    </entity>
+    <entity name="FirstLevelSubCat" type="category">
+        <data key="name" unique="suffix">FirstLevelSubCategory</data>
+        <data key="name_lwr" unique="suffix">firstlevelsubcategory</data>
+        <data key="urlKey" unique="suffix">firstlevelsubcategory</data>
+    </entity>
+    <entity name="SecondLevelSubCat" type="category">
+        <data key="name" unique="suffix">SecondLevelSubCategory</data>
+        <data key="name_lwr" unique="suffix">secondlevelsubcategory</data>
+        <data key="urlKey" unique="suffix">secondlevelsubcategory</data>
+    </entity>
+    <entity name="ThirdLevelSubCat" type="category">
+        <data key="name" unique="suffix">ThirdLevelSubCategory</data>
+        <data key="name_lwr" unique="suffix">thirdlevelsubcategory</data>
+        <data key="urlKey" unique="suffix">thirdlevelsubcategory</data>
+    </entity>
+    <entity name="FourthLevelSubCat" type="category">
+        <data key="name" unique="suffix">FourthLevelSubCategory</data>
+        <data key="name_lwr" unique="suffix">fourthlevelsubcategory</data>
+        <data key="urlKey" unique="suffix">fourthlevelsubcategory</data>
+    </entity>
+    <entity name="FifthLevelCat" type="category">
+        <data key="name" unique="suffix">FifthLevelCategory</data>
+        <data key="name_lwr" unique="suffix">fifthlevelcategory</data>
+        <data key="urlKey" unique="suffix">fifthlevelcategory</data>
+    </entity>
+    <entity name="SimpleRootSubCategory" type="category">
+        <data key="name" unique="suffix">SimpleRootSubCategory</data>
+        <data key="name_lwr" unique="suffix">simplerootsubcategory</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <data key="url_key" unique="suffix">simplerootsubcategory</data>
+        <var key="parent_id" entityType="category" entityKey="id" />
+    </entity>
+    <entity name="SubCategory" type="category">
+        <data key="name" unique="suffix">SubCategory</data>
+        <data key="name_lwr" unique="suffix">subcategory</data>
+        <data key="urlKey" unique="suffix">subcategory</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+    </entity>
+    <entity name="Two_nested_categories" type="category">
+        <data key="name" unique="suffix">SecondLevel</data>
+        <data key="url_key" unique="suffix">secondlevel</data>
+        <data key="name_lwr" unique="suffix">secondlevel</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <var key="parent_id" entityType="category" entityKey="id" />
+    </entity>
+    <entity name="Three_nested_categories" type="category">
+        <data key="name" unique="suffix">ThirdLevel</data>
+        <data key="url_key" unique="suffix">thirdlevel</data>
+        <data key="name_lwr" unique="suffix">thirdlevel</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <var key="parent_id" entityType="category" entityKey="id" />
+    </entity>
+    <entity name="Four_nested_categories" type="category">
+        <data key="name" unique="suffix">FourthLevel</data>
+        <data key="url_key" unique="suffix">fourthlevel</data>
+        <data key="name_lwr" unique="suffix">fourthlevel</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <var key="parent_id" entityType="category" entityKey="id" />
+    </entity>
+    <entity name="Five_nested_categories" type="category">
+        <data key="name" unique="suffix">FifthLevel</data>
+        <data key="url_key" unique="suffix">fifthlevel</data>
+        <data key="name_lwr" unique="suffix">fifthlevel</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <var key="parent_id" entityType="category" entityKey="id" />
+    </entity>
+    <entity name="Six_nested_categories" type="category">
+        <data key="name" unique="suffix">SixthLevel</data>
+        <data key="url_key" unique="suffix">sixthlevel</data>
+        <data key="name_lwr" unique="suffix">sixthlevel</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <var key="parent_id" entityType="category" entityKey="id" />
+    </entity>
+    <entity name="CatNotIncludeInMenu" type="category">
+        <data key="name" unique="suffix">NotInclMenu</data>
+        <data key="name_lwr" unique="suffix">notinclemenu</data>
+        <data key="urlKey" unique="suffix">notinclemenu</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">false</data>
+    </entity>
+    <entity name="CatNotActive" type="category">
+        <data key="name" unique="suffix">NotActive</data>
+        <data key="name_lwr" unique="suffix">notactive</data>
+        <data key="is_active">false</data>
+        <data key="include_in_menu">true</data>
+    </entity>
+    <entity name="CatInactiveNotInMenu" type="category">
+        <data key="name" unique="suffix">InactiveNotInMenu</data>
+        <data key="name_lwr" unique="suffix">inactivenotinmenu</data>
+        <data key="is_active">false</data>
+        <data key="include_in_menu">false</data>
+    </entity>
+    <entity name="_defaultCategoryDifferentUrlStore" type="category">
+        <data key="name" unique="suffix">SimpleCategory</data>
+        <data key="name_lwr" unique="suffix">simplecategory</data>
+        <data key="is_active">true</data>
+        <data key="url_key_default_store" unique="suffix">default-simplecategory</data>
+        <data key="url_key_custom_store" unique="suffix">custom-simplecategory</data>
+    </entity>
+    <entity name="SimpleSubCategoryDifferentUrlStore" type="category">
+        <data key="name" unique="suffix">SimpleSubCategory</data>
+        <data key="name_lwr" unique="suffix">simplesubcategory</data>
+        <data key="is_active">true</data>
+        <data key="url_key_default_store" unique="suffix">default-simplesubcategory</data>
+        <data key="url_key_custom_store" unique="suffix">custom-simplesubcategory</data>
+        <data key="include_in_menu">true</data>
+        <var key="parent_id" entityType="category" entityKey="id" />
+    </entity>
+    <!-- Category from file "prepared-for-sample-data.csv"-->
+    <entity name="Gear" type="category">
+        <data key="name">Gear</data>
+        <data key="name_lwr">gear</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+    </entity>
+    <entity name="DefaultCategory" type="category">
+        <data key="name">Default Category</data>
+    </entity>
+    <!-- Category from file "export_import_configurable_product.csv" -->
+    <entity name="CategoryExportImport" extends="SimpleSubCategory" type="category">
+        <data key="name">CategoryExportImport</data>
+    </entity>
+    <entity name="SubCategoryNonAnchor" extends="SubCategoryWithParent">
+        <requiredEntity type="custom_attribute">CustomAttributeCategoryNonAnchor</requiredEntity>
+    </entity>
+    <entity name="ApiCategoryA" type="category">
+        <data key="name" unique="suffix">Category A</data>
+        <data key="is_active">true</data>
+    </entity>
+    <entity name="ApiCategoryTest" type="category">
+        <data key="name" unique="suffix">TEST</data>
+        <data key="is_active">true</data>
+    </entity>
+    <entity name="ApiCategoryTest2" type="category">
+        <data key="name" unique="suffix">_test2</data>
+        <data key="is_active">true</data>
+    </entity>
+    <entity name="ApiCategoryTest3" type="category">
+        <data key="name" unique="suffix">test 3</data>
+        <data key="is_active">true</data>
+    </entity>
+    <entity name="ApiCategorySeveralProducts" type="category">
+        <data key="name" unique="suffix">Category with several products</data>
+        <data key="is_active">true</data>
+    </entity>
+    <entity name="ApiCategoryTest4" type="category">
+        <data key="name" unique="suffix">test 4</data>
+        <data key="is_active">true</data>
+    </entity>
+    <entity name="ApiCategoryTest5" type="category">
+        <data key="name" unique="suffix">test 5</data>
+        <data key="is_active">true</data>
+    </entity>
+    <entity name="ApiCategoryTest8" type="category">
+        <data key="name" unique="suffix">test 8</data>
+        <data key="is_active">true</data>
+    </entity>
+    <entity name="ApiCategoryTest6" type="category">
+        <data key="name" unique="suffix">test 6</data>
+        <data key="is_active">true</data>
+    </entity>
+    <entity name="ApiCategoryTest7" type="category">
+        <data key="name" unique="suffix">test 7</data>
+        <data key="is_active">true</data>
+    </entity>
+    <entity name="ApiCategoryLongTitle" type="category">
+        <data key="name" unique="suffix">This is a very very very very very looong title</data>
+        <data key="is_active">true</data>
+    </entity>
+    <entity name="ApiCategoryWithImage" type="category">
+        <data key="name" unique="suffix">Category with image</data>
+        <data key="is_active">true</data>
+    </entity>
+    <entity name="ApiCategoryTest0" type="category">
+        <data key="name" unique="suffix">test 0</data>
+        <data key="is_active">true</data>
+    </entity>
+    <entity name="ApiCategoryWithDescription" type="category">
+        <data key="name" unique="suffix">Category with description &amp; custom title</data>
+        <data key="is_active">true</data>
+    </entity>
+    <entity name="ApiCategoryWithChildren" type="category">
+        <data key="name" unique="suffix">Category with children</data>
+        <data key="is_active">true</data>
+    </entity>
+    <entity name="ApiSubCategoryWithParentLongName" type="category">
+        <data key="name" unique="suffix">level 1 test category very very very long name</data>
+        <data key="name_lwr" unique="suffix">level 1 test category very very very long name</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <var key="parent_id" entityType="category" entityKey="id"/>
+    </entity>
+    <entity name="ApiSubCategoryWithParentLevel1" type="category">
+        <data key="name" unique="suffix">level 1 test category name</data>
+        <data key="name_lwr" unique="suffix">level 1 test category name</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <var key="parent_id" entityType="category" entityKey="id"/>
+    </entity>
+    <entity name="ApiSubCategoryWithChildrenLevel1" type="category">
+        <data key="name" unique="suffix">level 1 with children</data>
+        <data key="name_lwr" unique="suffix">level 1 with children</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <var key="parent_id" entityType="category" entityKey="id"/>
+    </entity>
+    <entity name="ApiSubCategoryWithChildrenLevel2" type="category">
+        <data key="name" unique="suffix">level 2 with children</data>
+        <data key="name_lwr" unique="suffix">level 2 with children</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <var key="parent_id" entityType="category" entityKey="id"/>
+    </entity>
+    <entity name="ApiSubCategoryLevel3" type="category">
+        <data key="name" unique="suffix">level 3 test</data>
+        <data key="name_lwr" unique="suffix">level 3 test</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <var key="parent_id" entityType="category" entityKey="id"/>
+    </entity>
+    <entity name="ApiSubCategoryLevel4" type="category">
+        <data key="name" unique="suffix">level 4</data>
+        <data key="name_lwr" unique="suffix">level 4</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <var key="parent_id" entityType="category" entityKey="id"/>
+    </entity>
+    <entity name="ApiSubCategoryLevel4Test" type="category">
+        <data key="name" unique="suffix">level 4 test</data>
+        <data key="name_lwr" unique="suffix">level 4 test</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <var key="parent_id" entityType="category" entityKey="id"/>
+    </entity>
+    <entity name="ApiSubCategoryLevel5" type="category">
+        <data key="name" unique="suffix">level 5</data>
+        <data key="name_lwr" unique="suffix">level 5</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <var key="parent_id" entityType="category" entityKey="id"/>
+    </entity>
+    <entity name="ApiSubCategoryWithLevelZero" type="category">
+        <data key="name" unique="suffix">cat with level 1</data>
+        <data key="is_active">true</data>
+        <data key="level">0</data>
+        <var key="parent_id" entityType="category" entityKey="id"/>
+    </entity>
+    <entity name="AssignProductToCategory" type="category_product_link">
+        <var key="category_id" entityKey="id" entityType="category"/>
+        <var key="sku" entityKey="sku" entityType="product"/>
+    </entity>
+</entities>

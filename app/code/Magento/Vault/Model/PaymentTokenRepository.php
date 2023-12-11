@@ -58,13 +58,15 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
     private $collectionProcessor;
 
     /**
-     * @param \Magento\Vault\Model\ResourceModel\PaymentToken $resourceModel
+     * PaymentTokenRepository constructor.
+     *
+     * @param PaymentTokenResourceModel $resourceModel
      * @param PaymentTokenFactory $paymentTokenFactory
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param PaymentTokenSearchResultsInterfaceFactory $searchResultsFactory
      * @param CollectionFactory $collectionFactory
-     * @param CollectionProcessorInterface | null $collectionProcessor
+     * @param CollectionProcessorInterface|null $collectionProcessor
      */
     public function __construct(
         PaymentTokenResourceModel $resourceModel,
@@ -99,7 +101,7 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);
         $searchResults->setItems($collection->getItems());
-
+        $searchResults->setTotalCount($collection->getSize());
         return $searchResults;
     }
 
@@ -140,7 +142,7 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
     /**
      * Performs persist operations for a specified payment token.
      *
-     * @param \Magento\Vault\Api\Data\PaymentTokenInterface $entity The payment token.
+     * @param \Magento\Vault\Api\Data\PaymentTokenInterface $paymentToken The payment token.
      * @return \Magento\Vault\Api\Data\PaymentTokenInterface Saved payment token data.
      */
     public function save(Data\PaymentTokenInterface $paymentToken)
@@ -156,7 +158,7 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
-     * @deprecated 100.3.0
+     * @deprecated 101.0.0
      * @throws \Magento\Framework\Exception\InputException
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
@@ -170,7 +172,7 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated 100.3.0
+     * @deprecated 101.0.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

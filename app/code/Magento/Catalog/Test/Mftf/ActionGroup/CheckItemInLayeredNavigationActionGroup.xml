@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CheckItemInLayeredNavigationActionGroup">
+        <annotations>
+            <description>Expands the Product Filters on a Storefront Category page if it is not expanded.</description>
+        </annotations>
+        <arguments>
+            <argument name="itemType"/>
+        </arguments>
+
+        <conditionalClick selector="{{StorefrontCategorySidebarSection.filterOptionsTitle('itemType')}}" dependentSelector="{{StorefrontCategorySidebarSection.filterOptions}}" visible="false" stepKey="expandFilterOptions"/>
+    </actionGroup>
+</actionGroups>

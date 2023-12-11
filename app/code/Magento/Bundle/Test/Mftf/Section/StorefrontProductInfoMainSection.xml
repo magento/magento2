@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontProductInfoMainSection">
+        <element name="priceFrom" type="text" selector=".product-info-price .price-from"/>
+        <element name="priceTo" type="text" selector=".product-info-price .price-to"/>
+        <element name="minPrice" type="text" selector="span[data-price-type='minPrice']"/>
+        <element name="maxPrice" type="text" selector="span[data-price-type='minPrice']"/>
+        <element name="asLowAsFinalPrice" type="text" selector="div.price-box.price-final_price p.minimal-price > span.price-final_price span.price"/>
+        <element name="fixedFinalPrice" type="text" selector="div.price-box.price-final_price p.price-from span.price-final_price span.price-wrapper span.price"/>
+        <element name="productBundleOptionsCheckbox" type="checkbox" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'{{childName}}')]/../input" parameterized="true" timeout="30"/>
+        <element name="productBundleOneOptionInput" type="input" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'{{childName}}')]/..//input[contains(@class, 'option')]" parameterized="true" timeout="30"/>
+        <element name="productBundleOptionQty" type="input" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'{{childName}}')]/..//input[contains(@class, 'qty')]" parameterized="true" timeout="30"/>
+        <element name="includingTaxPrice" type="text" selector=".//*[@class='price-wrapper price-including-tax']/span"/>
+        <element name="excludingTaxPrice" type="text" selector=".//*[@class='price-wrapper price-excluding-tax']/span"/>
+    </section>
+</sections>

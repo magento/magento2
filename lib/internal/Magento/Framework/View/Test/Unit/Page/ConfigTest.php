@@ -3,134 +3,176 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Framework\View\Page\Config
  */
 namespace Magento\Framework\View\Test\Unit\Page;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\State;
+use Magento\Framework\Escaper;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\Resolver;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Asset\File;
+use Magento\Framework\View\Asset\GroupedCollection;
+use Magento\Framework\View\Asset\Remote;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Layout\BuilderInterface;
+use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\FaviconInterface;
+use Magento\Framework\View\Page\Title;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * @covers Magento\Framework\View\Page\Config
+ * @covers \Magento\Framework\View\Page\Config
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
     /**
      * @var Config
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var Repository|MockObject
      */
     protected $assetRepo;
 
     /**
-     * @var \Magento\Framework\View\Asset\GroupedCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupedCollection|MockObject
      */
     protected $pageAssets;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Framework\View\Page\FaviconInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FaviconInterface|MockObject
      */
     protected $favicon;
 
     /**
-     * @var \Magento\Framework\View\Layout\BuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BuilderInterface|MockObject
      */
     protected $builder;
 
     /**
-     * @var \Magento\Framework\View\Asset\File|\PHPUnit_Framework_MockObject_MockObject
+     * @var File|MockObject
      */
     protected $asset;
 
     /**
-     * @var \Magento\Framework\View\Asset\Remote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Remote|MockObject
      */
     protected $remoteAsset;
 
     /**
-     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     * @var Title|MockObject
      */
     protected $title;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|MockObject
      */
     protected $areaResolverMock;
 
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResolverInterface|MockObject
      */
     protected $localeMock;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->assetRepo = $this->createMock(\Magento\Framework\View\Asset\Repository::class);
-        $this->pageAssets = $this->createMock(\Magento\Framework\View\Asset\GroupedCollection::class);
+        $this->assetRepo = $this->createMock(Repository::class);
+        $this->pageAssets = $this->createMock(GroupedCollection::class);
         $this->scopeConfig =
-            $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->favicon = $this->createMock(\Magento\Framework\View\Page\FaviconInterface::class);
-        $this->builder = $this->createMock(\Magento\Framework\View\Layout\BuilderInterface::class);
-        $this->asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
-        $this->remoteAsset = $this->createMock(\Magento\Framework\View\Asset\Remote::class);
-        $this->title = $this->createMock(\Magento\Framework\View\Page\Title::class);
+            $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->favicon = $this->getMockForAbstractClass(FaviconInterface::class);
+        $this->builder = $this->getMockForAbstractClass(BuilderInterface::class);
+        $this->asset = $this->createMock(File::class);
+        $this->remoteAsset = $this->createMock(Remote::class);
+        $this->title = $this->createMock(Title::class);
         $this->localeMock =
-            $this->getMockForAbstractClass(\Magento\Framework\Locale\ResolverInterface::class, [], '', false);
+            $this->getMockForAbstractClass(ResolverInterface::class, [], '', false);
         $this->localeMock->expects($this->any())
             ->method('getLocale')
             ->willReturn(Resolver::DEFAULT_LOCALE);
-        $this->model = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
+        $this->objectManager = new ObjectManager($this);
+        $escaper = $this->objectManager->getObject(
+            Escaper::class
+        );
+        $this->model = (new ObjectManager($this))
             ->getObject(
-                \Magento\Framework\View\Page\Config::class,
+                Config::class,
                 [
                     'assetRepo' => $this->assetRepo,
                     'pageAssets' => $this->pageAssets,
                     'scopeConfig' => $this->scopeConfig,
                     'favicon' => $this->favicon,
-                    'localeResolver' => $this->localeMock
+                    'localeResolver' => $this->localeMock,
+                    'escaper' => $escaper
                 ]
             );
 
-        $this->areaResolverMock = $this->createMock(\Magento\Framework\App\State::class);
+        $this->areaResolverMock = $this->createMock(State::class);
         $areaResolverReflection = (new \ReflectionClass(get_class($this->model)))->getProperty('areaResolver');
         $areaResolverReflection->setAccessible(true);
         $areaResolverReflection->setValue($this->model, $this->areaResolverMock);
     }
 
-    public function testSetBuilder()
+    /**
+     * @return void
+     */
+    public function testSetBuilder(): void
     {
         $this->assertInstanceOf(
-            \Magento\Framework\View\Page\Config::class,
+            Config::class,
             $this->model->setBuilder($this->builder)
         );
     }
 
-    public function testBuild()
+    /**
+     * @return void
+     */
+    public function testBuild(): void
     {
         $this->model->setBuilder($this->builder);
-        $this->builder->expects($this->once())->method('build')->will(
-            $this->returnValue(\Magento\Framework\View\LayoutInterface::class)
+        $this->builder->expects($this->once())->method('build')->willReturn(
+            LayoutInterface::class
         );
         $this->model->publicBuild();
     }
 
-    public function testGetTitle()
+    /**
+     * @return void
+     */
+    public function testGetTitle(): void
     {
-        $this->assertInstanceOf(\Magento\Framework\View\Page\Title::class, $this->model->getTitle());
+        $this->assertInstanceOf(Title::class, $this->model->getTitle());
     }
 
-    public function testMetadata()
+    /**
+     * @return void
+     */
+    public function testMetadata(): void
     {
         $expectedMetadata = [
             'charset' => null,
@@ -139,99 +181,143 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'description' => null,
             'keywords' => null,
             'robots' => null,
+            'title' => null,
             'name' => 'test_value',
-            'html_encoded' => '&lt;title&gt;&lt;span class=&quot;test&quot;&gt;Test&lt;/span&gt;&lt;/title&gt;',
+            'html_encoded' => '&lt;title&gt;&lt;span class=&quot;test&quot;&gt;Test&lt;/span&gt;&lt;/title&gt;'
         ];
         $this->model->setMetadata('name', 'test_value');
         $this->model->setMetadata('html_encoded', '<title><span class="test">Test</span></title>');
         $this->assertEquals($expectedMetadata, $this->model->getMetadata());
     }
 
-    public function testContentType()
+    /**
+     * @return void
+     */
+    public function testContentType(): void
     {
         $contentType = 'test_content_type';
         $this->model->setContentType($contentType);
         $this->assertEquals($contentType, $this->model->getContentType());
     }
 
-    public function testContentTypeEmpty()
+    /**
+     * @return void
+     */
+    public function testContentTypeEmpty(): void
     {
         $expectedData = null;
         $this->assertEquals($expectedData, $this->model->getContentType());
     }
 
-    public function testContentTypeAuto()
+    /**
+     * @return void
+     */
+    public function testContentTypeAuto(): void
     {
         $expectedData = 'default_media_type; charset=default_charset';
         $this->model->setContentType('auto');
-        $this->scopeConfig->expects($this->at(0))->method('getValue')->with('design/head/default_media_type', 'store')
-            ->will($this->returnValue('default_media_type'));
-        $this->scopeConfig->expects($this->at(1))->method('getValue')->with('design/head/default_charset', 'store')
-            ->will($this->returnValue('default_charset'));
+        $this->scopeConfig
+            ->method('getValue')
+            ->withConsecutive(
+                ['design/head/default_media_type', 'store'],
+                ['design/head/default_charset', 'store']
+            )
+            ->willReturnOnConsecutiveCalls('default_media_type', 'default_charset');
         $this->assertEquals($expectedData, $this->model->getContentType());
     }
 
-    public function testMediaType()
+    /**
+     * @return void
+     */
+    public function testMediaType(): void
     {
         $mediaType = 'test_media_type';
         $this->model->setMediaType($mediaType);
         $this->assertEquals($mediaType, $this->model->getMediaType());
     }
 
-    public function testMediaTypeEmpty()
+    /**
+     * @return void
+     */
+    public function testMediaTypeEmpty(): void
     {
         $expectedData = 'default_media_type';
-        $this->scopeConfig->expects($this->once())->method('getValue')->with('design/head/default_media_type', 'store')
-            ->will($this->returnValue('default_media_type'));
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->with('design/head/default_media_type', 'store')
+            ->willReturn('default_media_type');
         $this->assertEquals($expectedData, $this->model->getMediaType());
     }
 
-    public function testCharset()
+    /**
+     * @return void
+     */
+    public function testCharset(): void
     {
         $charset = 'test_charset';
         $this->model->setCharset($charset);
         $this->assertEquals($charset, $this->model->getCharset());
     }
 
-    public function testCharsetEmpty()
+    /**
+     * @return void
+     */
+    public function testCharsetEmpty(): void
     {
         $expectedData = 'default_charset';
         $this->scopeConfig->expects($this->once())->method('getValue')->with('design/head/default_charset', 'store')
-            ->will($this->returnValue('default_charset'));
+            ->willReturn('default_charset');
         $this->assertEquals($expectedData, $this->model->getCharset());
     }
 
-    public function testDescription()
+    /**
+     * @return void
+     */
+    public function testDescription(): void
     {
         $description = 'test_description';
         $this->model->setDescription($description);
         $this->assertEquals($description, $this->model->getDescription());
     }
 
-    public function testDescriptionEmpty()
+    /**
+     * @return void
+     */
+    public function testDescriptionEmpty(): void
     {
         $expectedData = 'default_description';
-        $this->scopeConfig->expects($this->once())->method('getValue')->with('design/head/default_description', 'store')
-            ->will($this->returnValue('default_description'));
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->with('design/head/default_description', 'store')
+            ->willReturn('default_description');
         $this->assertEquals($expectedData, $this->model->getDescription());
     }
 
-    public function testKeywords()
+    /**
+     * @return void
+     */
+    public function testKeywords(): void
     {
         $keywords = 'test_keywords';
         $this->model->setKeywords($keywords);
         $this->assertEquals($keywords, $this->model->getKeywords());
     }
 
-    public function testKeywordsEmpty()
+    /**
+     * @return void
+     */
+    public function testKeywordsEmpty(): void
     {
         $expectedData = 'default_keywords';
         $this->scopeConfig->expects($this->once())->method('getValue')->with('design/head/default_keywords', 'store')
-            ->will($this->returnValue('default_keywords'));
+            ->willReturn('default_keywords');
         $this->assertEquals($expectedData, $this->model->getKeywords());
     }
 
-    public function testRobots()
+    /**
+     * @return void
+     */
+    public function testRobots(): void
     {
         $this->areaResolverMock->expects($this->once())->method('getAreaCode')->willReturn('frontend');
         $robots = 'test_robots';
@@ -239,7 +325,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($robots, $this->model->getRobots());
     }
 
-    public function testRobotsEmpty()
+    /**
+     * @return void
+     */
+    public function testRobotsEmpty(): void
     {
         $this->areaResolverMock->expects($this->once())->method('getAreaCode')->willReturn('frontend');
         $expectedData = 'default_robots';
@@ -247,11 +336,14 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'design/search_engine_robots/default_robots',
             'store'
         )
-            ->will($this->returnValue('default_robots'));
+            ->willReturn('default_robots');
         $this->assertEquals($expectedData, $this->model->getRobots());
     }
 
-    public function testRobotsAdminhtml()
+    /**
+     * @return void
+     */
+    public function testRobotsAdminhtml(): void
     {
         $this->areaResolverMock->expects($this->once())->method('getAreaCode')->willReturn('adminhtml');
         $robots = 'test_robots';
@@ -259,10 +351,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('NOINDEX,NOFOLLOW', $this->model->getRobots());
     }
 
-    public function testGetAssetCollection()
+    /**
+     * @return void
+     */
+    public function testGetAssetCollection(): void
     {
         $this->assertInstanceOf(
-            \Magento\Framework\View\Asset\GroupedCollection::class,
+            GroupedCollection::class,
             $this->model->getAssetCollection()
         );
     }
@@ -273,28 +368,32 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      * @param string|null $name
      * @param string $expectedName
      *
+     * @return void
      * @dataProvider pageAssetDataProvider
      */
-    public function testAddPageAsset($file, $properties, $name, $expectedName)
+    public function testAddPageAsset($file, $properties, $name, $expectedName): void
     {
-        $this->assetRepo->expects($this->once())->method('createAsset')->with($file)->will(
-            $this->returnValue($this->asset)
+        $this->assetRepo->expects($this->once())->method('createAsset')->with($file)->willReturn(
+            $this->asset
         );
         $this->pageAssets->expects($this->once())->method('add')->with($expectedName, $this->asset, $properties);
         $this->assertInstanceOf(
-            \Magento\Framework\View\Page\Config::class,
+            Config::class,
             $this->model->addPageAsset($file, $properties, $name)
         );
     }
 
-    public function pageAssetDataProvider()
+    /**
+     * @return array
+     */
+    public function pageAssetDataProvider(): array
     {
         return [
             [
                 'test.php',
                 ['one', 'two', 3],
                 'test_name',
-                'test_name',
+                'test_name'
             ],
             [
                 'filename',
@@ -312,21 +411,25 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      * @param string|null $name
      * @param string $expectedName
      *
+     * @return void
      * @dataProvider remotePageAssetDataProvider
      */
-    public function testAddRemotePageAsset($url, $contentType, $properties, $name, $expectedName)
+    public function testAddRemotePageAsset($url, $contentType, $properties, $name, $expectedName): void
     {
-        $this->assetRepo->expects($this->once())->method('createRemoteAsset')->with($url, $contentType)->will(
-            $this->returnValue($this->remoteAsset)
+        $this->assetRepo->expects($this->once())->method('createRemoteAsset')->with($url, $contentType)->willReturn(
+            $this->remoteAsset
         );
         $this->pageAssets->expects($this->once())->method('add')->with($expectedName, $this->remoteAsset, $properties);
         $this->assertInstanceOf(
-            \Magento\Framework\View\Page\Config::class,
+            Config::class,
             $this->model->addRemotePageAsset($url, $contentType, $properties, $name)
         );
     }
 
-    public function remotePageAssetDataProvider()
+    /**
+     * @return array
+     */
+    public function remotePageAssetDataProvider(): array
     {
         return [
             [
@@ -334,7 +437,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 '<body><context>some content</context></body>',
                 ['one', 'two', 3],
                 'test_name',
-                'test_name',
+                'test_name'
             ],
             [
                 'http://test.com',
@@ -346,26 +449,32 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testAddRss()
+    /**
+     * @return void
+     */
+    public function testAddRss(): void
     {
         $title = 'test title';
         $href = 'http://test.com';
         $expected = ['attributes' => 'rel="alternate" type="application/rss+xml" title="test title"'];
-        $this->assetRepo->expects($this->once())->method('createRemoteAsset')->with($href, 'unknown')->will(
-            $this->returnValue($this->remoteAsset)
+        $this->assetRepo->expects($this->once())->method('createRemoteAsset')->with($href, 'unknown')->willReturn(
+            $this->remoteAsset
         );
         $this->pageAssets->expects($this->once())->method('add')->with(
             'link/http://test.com',
             $this->remoteAsset,
             $expected
         );
-        $this->assertInstanceOf(\Magento\Framework\View\Page\Config::class, $this->model->addRss($title, $href));
+        $this->assertInstanceOf(Config::class, $this->model->addRss($title, $href));
     }
 
-    public function testAddBodyClass()
+    /**
+     * @return void
+     */
+    public function testAddBodyClass(): void
     {
         $className = 'test class';
-        $this->assertInstanceOf(\Magento\Framework\View\Page\Config::class, $this->model->addBodyClass($className));
+        $this->assertInstanceOf(Config::class, $this->model->addBodyClass($className));
         $this->assertEquals('test-class', $this->model->getElementAttribute('body', 'class'));
     }
 
@@ -374,21 +483,25 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      * @param string $attribute
      * @param string $value
      *
+     * @return void
      * @dataProvider elementAttributeDataProvider
      */
-    public function testElementAttribute($elementType, $attribute, $value)
+    public function testElementAttribute($elementType, $attribute, $value): void
     {
         $this->model->setElementAttribute($elementType, $attribute, $value);
         $this->assertEquals($value, $this->model->getElementAttribute($elementType, $attribute));
     }
 
-    public function elementAttributeDataProvider()
+    /**
+     * @return array
+     */
+    public function elementAttributeDataProvider(): array
     {
         return [
             [
                 'head',
                 'class',
-                'test',
+                'test'
             ],
             [
                 'body',
@@ -399,7 +512,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 Config::ELEMENT_TYPE_HTML,
                 Config::HTML_ATTRIBUTE_LANG,
                 str_replace('_', '-', Resolver::DEFAULT_LOCALE)
-            ],
+            ]
         ];
     }
 
@@ -408,24 +521,26 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      * @param string $attribute
      * @param string $value
      *
+     * @return void
      * @dataProvider elementAttributeExceptionDataProvider
      */
-    public function testElementAttributeException($elementType, $attribute, $value)
+    public function testElementAttributeException($elementType, $attribute, $value): void
     {
-        $this->expectException(
-            \Magento\Framework\Exception\LocalizedException::class,
-            $elementType . " isn't allowed"
-        );
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage($elementType . " isn't allowed");
         $this->model->setElementAttribute($elementType, $attribute, $value);
     }
 
-    public function elementAttributeExceptionDataProvider()
+    /**
+     * @return array
+     */
+    public function elementAttributeExceptionDataProvider(): array
     {
         return [
             [
                 'test',
                 'class',
-                'test',
+                'test'
             ],
             [
                 '',
@@ -444,9 +559,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      * @param string $elementType
      * @param string $attributes
      *
+     * @return void
      * @dataProvider elementAttributesDataProvider
      */
-    public function testElementAttributes($elementType, $attributes)
+    public function testElementAttributes($elementType, $attributes): void
     {
         foreach ($attributes as $attribute => $value) {
             $this->model->setElementAttribute($elementType, $attribute, $value);
@@ -454,7 +570,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($attributes, $this->model->getElementAttributes($elementType));
     }
 
-    public function elementAttributesDataProvider()
+    /**
+     * @return array
+     */
+    public function elementAttributesDataProvider(): array
     {
         return [
             [
@@ -462,27 +581,31 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 [
                     'context' => 'value',
                     Config::HTML_ATTRIBUTE_LANG => str_replace('_', '-', Resolver::DEFAULT_LOCALE)
-                ],
-            ],
+                ]
+            ]
         ];
     }
 
     /**
      * @param string $handle
      *
+     * @return void
      * @dataProvider pageLayoutDataProvider
      */
-    public function testPageLayout($handle)
+    public function testPageLayout($handle): void
     {
         $this->model->setPageLayout($handle);
         $this->assertEquals($handle, $this->model->getPageLayout());
     }
 
-    public function pageLayoutDataProvider()
+    /**
+     * @return array
+     */
+    public function pageLayoutDataProvider(): array
     {
         return [
             [
-                'test',
+                'test'
             ],
             [
                 ''
@@ -492,20 +615,26 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 [
-                    'test',
+                    'test'
                 ]
             ]
         ];
     }
 
-    public function testGetFaviconFile()
+    /**
+     * @return void
+     */
+    public function testGetFaviconFile(): void
     {
         $expected = 'test';
-        $this->favicon->expects($this->once())->method('getFaviconFile')->will($this->returnValue($expected));
+        $this->favicon->expects($this->once())->method('getFaviconFile')->willReturn($expected);
         $this->assertEquals($expected, $this->model->getFaviconFile());
     }
 
-    public function testGetDefaultFavicon()
+    /**
+     * @return void
+     */
+    public function testGetDefaultFavicon(): void
     {
         $this->favicon->expects($this->once())->method('getDefaultFavicon');
         $this->model->getDefaultFavicon();
@@ -514,13 +643,15 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * @param bool $isAvailable
      * @param string $result
+     *
+     * @return void
      * @dataProvider getIncludesDataProvider
      */
-    public function testGetIncludes($isAvailable, $result)
+    public function testGetIncludes($isAvailable, $result): void
     {
-        $model = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
+        $model = (new ObjectManager($this))
             ->getObject(
-                \Magento\Framework\View\Page\Config::class,
+                Config::class,
                 [
                     'assetRepo' => $this->assetRepo,
                     'pageAssets' => $this->pageAssets,
@@ -538,7 +669,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $model->getIncludes());
     }
 
-    public function getIncludesDataProvider()
+    /**
+     * @return array
+     */
+    public function getIncludesDataProvider(): array
     {
         return [
             [

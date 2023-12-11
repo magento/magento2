@@ -4,15 +4,18 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Eav\Model\Validator\Attribute;
+
+use Magento\Eav\Model\Attribute;
+use Magento\Eav\Model\AttributeDataFactory;
+use Magento\Eav\Model\Config;
+use Magento\Framework\DataObject;
+
 /**
  * EAV attribute data validator
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Validator\Attribute;
-
-use Magento\Eav\Model\Attribute;
-
 class Data extends \Magento\Framework\Validator\AbstractValidator
 {
     /**
@@ -23,12 +26,12 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
     /**
      * @var array
      */
-    protected $_attributesWhiteList = [];
+    protected $allowedAttributesList = [];
 
     /**
      * @var array
      */
-    protected $_attributesBlackList = [];
+    protected $deniedAttributesList = [];
 
     /**
      * @var array
@@ -36,16 +39,46 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
     protected $_data = [];
 
     /**
-     * @var \Magento\Eav\Model\AttributeDataFactory
+     * @var AttributeDataFactory
      */
     protected $_attrDataFactory;
 
     /**
-     * @param \Magento\Eav\Model\AttributeDataFactory $attrDataFactory
+     * @var array
      */
-    public function __construct(\Magento\Eav\Model\AttributeDataFactory $attrDataFactory)
-    {
+    private $ignoredAttributesByTypesList;
+
+    /**
+     * @var \Magento\Eav\Model\Config
+     */
+    private $eavConfig;
+
+    /**
+     * @param AttributeDataFactory $attrDataFactory
+     * @param Config|null $eavConfig
+     * @param array $ignoredAttributesByTypesList
+     */
+    public function __construct(
+        AttributeDataFactory $attrDataFactory,
+        Config $eavConfig = null,
+        array $ignoredAttributesByTypesList = []
+    ) {
+        $this->eavConfig = $eavConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(Config::class);
         $this->_attrDataFactory = $attrDataFactory;
+        $this->ignoredAttributesByTypesList = $ignoredAttributesByTypesList;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_attributes = [];
+        $this->allowedAttributesList = [];
+        $this->deniedAttributesList = [];
+        $this->_data = [];
     }
 
     /**
@@ -68,9 +101,9 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
      * @param array $attributesCodes
      * @return $this
      */
-    public function setAttributesWhiteList(array $attributesCodes)
+    public function setAllowedAttributesList(array $attributesCodes)
     {
-        $this->_attributesWhiteList = $attributesCodes;
+        $this->allowedAttributesList = $attributesCodes;
         return $this;
     }
 
@@ -82,9 +115,9 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
      * @param array $attributesCodes
      * @return $this
      */
-    public function setAttributesBlackList(array $attributesCodes)
+    public function setDeniedAttributesList(array $attributesCodes)
     {
-        $this->_attributesBlackList = $attributesCodes;
+        $this->deniedAttributesList = $attributesCodes;
         return $this;
     }
 
@@ -111,22 +144,21 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
         /** @var $attributes Attribute[] */
         $attributes = $this->_getAttributes($entity);
 
-        $data = [];
-        if ($this->_data) {
-            $data = $this->_data;
-        } elseif ($entity instanceof \Magento\Framework\DataObject) {
-            $data = $entity->getData();
-        }
+        $data = $this->retrieveData($entity);
 
         foreach ($attributes as $attribute) {
             $attributeCode = $attribute->getAttributeCode();
             if (!$attribute->getDataModel() && !$attribute->getFrontendInput()) {
                 continue;
             }
+            if (!isset($data[$attributeCode]) && !$attribute->getIsVisible()) {
+                continue;
+            }
+
             $dataModel = $this->_attrDataFactory->create($attribute, $entity);
             $dataModel->setExtractedData($data);
             if (!isset($data[$attributeCode])) {
-                $data[$attributeCode] = null;
+                $data[$attributeCode] = '';
             }
             $result = $dataModel->validateValue($data[$attributeCode]);
             if (true !== $result) {
@@ -149,36 +181,38 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
     {
         /** @var \Magento\Eav\Model\Attribute[] $attributes */
         $attributes = [];
+        $ignoreAttributes = $this->deniedAttributesList;
 
         if ($this->_attributes) {
             $attributes = $this->_attributes;
         } elseif ($entity instanceof \Magento\Framework\Model\AbstractModel &&
             $entity->getResource() instanceof \Magento\Eav\Model\Entity\AbstractEntity
         ) { // $entity is EAV-model
+            $type = $entity->getEntityType()->getEntityTypeCode();
             /** @var \Magento\Eav\Model\Entity\Type $entityType */
-            $entityType = $entity->getEntityType();
+            $entityType = $this->eavConfig->getEntityType($type);
             $attributes = $entityType->getAttributeCollection()->getItems();
+
+            $ignoredTypeAttributes = $this->ignoredAttributesByTypesList[$entityType->getEntityTypeCode()] ?? [];
+            if ($ignoredTypeAttributes) {
+                $ignoreAttributes = array_merge($ignoreAttributes, $ignoredTypeAttributes);
+            }
         }
 
         $attributesByCode = [];
         $attributesCodes = [];
         foreach ($attributes as $attribute) {
-            if (!$attribute->getIsVisible()) {
-                continue;
-            }
             $attributeCode = $attribute->getAttributeCode();
             $attributesByCode[$attributeCode] = $attribute;
             $attributesCodes[] = $attributeCode;
         }
 
-        $ignoreAttributes = $this->_attributesBlackList;
-        if ($this->_attributesWhiteList) {
+        if ($this->allowedAttributesList) {
             $ignoreAttributes = array_merge(
                 $ignoreAttributes,
-                array_diff($attributesCodes, $this->_attributesWhiteList)
+                array_diff($attributesCodes, $this->allowedAttributesList)
             );
         }
-
         foreach ($ignoreAttributes as $attributeCode) {
             unset($attributesByCode[$attributeCode]);
         }
@@ -200,5 +234,23 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
         } else {
             $this->_messages[$code] = array_merge($this->_messages[$code], $messages);
         }
+    }
+
+    /**
+     * Retrieve entity data
+     *
+     * @param \Magento\Framework\Model\AbstractModel $entity
+     * @return array
+     */
+    private function retrieveData($entity): array
+    {
+        $data = [];
+        if ($this->_data) {
+            $data = $this->_data;
+        } elseif ($entity instanceof DataObject) {
+            $data = $entity->getData();
+        }
+
+        return $data;
     }
 }

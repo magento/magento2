@@ -6,13 +6,16 @@
 
 namespace Magento\Tax\Model\Calculation\Rule;
 
-use Magento\Framework\Exception\InputException;
+use Laminas\Validator\GreaterThan;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Validator\AbstractValidator;
+use Magento\Framework\Validator\NotEmpty;
+use Magento\Framework\Validator\ValidateException;
+use Magento\Framework\Validator\ValidatorChain;
 use Magento\Tax\Model\ClassModel as TaxClassModel;
 use Magento\Tax\Model\ClassModelRegistry;
-use Zend_Validate_Exception;
 
-class Validator extends \Magento\Framework\Validator\AbstractValidator
+class Validator extends AbstractValidator
 {
     /**
      * @var ClassModelRegistry
@@ -32,7 +35,7 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
      *
      * @param \Magento\Tax\Model\Calculation\Rule $value
      * @return boolean
-     * @throws Zend_Validate_Exception If validation of $value is impossible
+     * @throws ValidateException If validation of $value is impossible
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -42,10 +45,14 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
         $messages = [];
 
         // Position is required and must be 0 or greater
-        if (!\Zend_Validate::is(trim($value->getPosition()), 'NotEmpty')) {
-            $this->addErrorMessage($messages, '%fieldName is a required field.', ['fieldName' => 'position']);
+        if (!ValidatorChain::is(trim($value->getPosition()), NotEmpty::class)) {
+            $this->addErrorMessage(
+                $messages,
+                '"%fieldName" is required. Enter and try again.',
+                ['fieldName' => 'position']
+            );
         }
-        if (!\Zend_Validate::is(trim($value->getPosition()), 'GreaterThan', [-1])) {
+        if (!ValidatorChain::is(trim($value->getPosition()), GreaterThan::class, [-1])) {
             $this->addErrorMessage(
                 $messages,
                 'The %fieldName value of "%value" must be greater than or equal to %minValue.',
@@ -54,10 +61,14 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
         }
 
         // Priority is required and must be 0 or greater
-        if (!\Zend_Validate::is(trim($value->getPriority()), 'NotEmpty')) {
-            $this->addErrorMessage($messages, '%fieldName is a required field.', ['fieldName' => 'priority']);
+        if (!ValidatorChain::is(trim($value->getPriority() ?? ''), NotEmpty::class)) {
+            $this->addErrorMessage(
+                $messages,
+                '"%fieldName" is required. Enter and try again.',
+                ['fieldName' => 'priority']
+            );
         }
-        if (!\Zend_Validate::is(trim($value->getPriority()), 'GreaterThan', [-1])) {
+        if (!ValidatorChain::is(trim($value->getPriority() ?? ''), GreaterThan::class, [-1])) {
             $this->addErrorMessage(
                 $messages,
                 'The %fieldName value of "%value" must be greater than or equal to %minValue.',
@@ -66,15 +77,19 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
         }
 
         // Code is required
-        if (!\Zend_Validate::is(trim($value->getCode()), 'NotEmpty')) {
-            $this->addErrorMessage($messages, '%fieldName is a required field.', ['fieldName' => 'code']);
+        if ($value->getCode() === null || !ValidatorChain::is(trim($value->getCode() ?? ''), NotEmpty::class)) {
+            $this->addErrorMessage(
+                $messages,
+                '"%fieldName" is required. Enter and try again.',
+                ['fieldName' => 'code']
+            );
         }
 
         // customer tax class ids is required
         if (($value->getCustomerTaxClassIds() === null) || !$value->getCustomerTaxClassIds()) {
             $this->addErrorMessage(
                 $messages,
-                '%fieldName is a required field.',
+                '"%fieldName" is required. Enter and try again.',
                 ['fieldName' => 'customer_tax_class_ids']
             );
         } else { // see if the customer tax class ids exist
@@ -106,7 +121,7 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
         if (($value->getProductTaxClassIds() === null) || !$value->getProductTaxClassIds()) {
             $this->addErrorMessage(
                 $messages,
-                '%fieldName is a required field.',
+                '"%fieldName" is required. Enter and try again.',
                 ['fieldName' => 'product_tax_class_ids']
             );
         } else { // see if the product tax class ids exist
@@ -136,7 +151,11 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
 
         // tax rate ids is required
         if (($value->getTaxRateIds() === null) || !$value->getTaxRateIds()) {
-            $this->addErrorMessage($messages, '%fieldName is a required field.', ['fieldName' => 'tax_rate_ids']);
+            $this->addErrorMessage(
+                $messages,
+                '"%fieldName" is required. Enter and try again.',
+                ['fieldName' => 'tax_rate_ids']
+            );
         }
         $this->_addMessages($messages);
         return empty($messages);

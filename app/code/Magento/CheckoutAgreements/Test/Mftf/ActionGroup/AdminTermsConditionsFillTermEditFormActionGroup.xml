@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminTermsConditionsFillTermEditFormActionGroup">
+        <arguments>
+            <argument name="term"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{AdminNewTermFormSection.conditionName}}" stepKey="waitForConditionNameField" />
+        <fillField selector="{{AdminNewTermFormSection.conditionName}}" userInput="{{term.name}}" stepKey="fillFieldConditionName"/>
+        <selectOption selector="{{AdminNewTermFormSection.isActive}}" userInput="{{term.isActive}}" stepKey="selectOptionIsActive"/>
+        <selectOption selector="{{AdminNewTermFormSection.isHtml}}" userInput="{{term.isHtml}}" stepKey="selectOptionIsHtml"/>
+        <selectOption selector="{{AdminNewTermFormSection.mode}}" userInput="{{term.mode}}" stepKey="selectOptionMode"/>
+        <selectOption selector="{{AdminNewTermFormSection.storeView}}" userInput="{{term.storeView}}" stepKey="selectOptionStoreView" />
+        <fillField selector="{{AdminNewTermFormSection.checkboxText}}" userInput="{{term.checkboxText}}" stepKey="fillFieldCheckboxText"/>
+        <fillField selector="{{AdminNewTermFormSection.content}}" userInput="{{term.content}}" stepKey="fillFieldContent"/>
+    </actionGroup>
+</actionGroups>

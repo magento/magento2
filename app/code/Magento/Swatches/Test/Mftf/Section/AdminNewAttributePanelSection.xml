@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminNewAttributePanel">
+        <element name="updateProductPreviewImage" type="select" selector="#update_product_preview_image"/>
+        <element name="addVisualSwatchOption" type="button" selector="button#add_new_swatch_visual_option_button"/>
+        <element name="addTextSwatchOption" type="button" selector="button#add_new_swatch_text_option_button"/>
+        <element name="visualSwatchOptionAdminValue" type="input" selector="[data-role='swatch-visual-options-container'] input[name='optionvisual[value][option_{{row}}][0]']" parameterized="true"/>
+        <element name="lastVisualSwatchOptionAdminValue" type="input" selector="[data-role='swatch-visual-options-container'] tr:last-child [name*='][0]']"/>
+        <element name="visualSwatchOptionDefaultStoreValue" type="input" selector="[data-role='swatch-visual-options-container'] input[name='optionvisual[value][option_{{row}}][1]']" parameterized="true"/>
+        <element name="lastVisualSwatchOptionDefaultStoreValue" type="input" selector="[data-role='swatch-visual-options-container'] tr:last-child [name*='][1]']"/>
+    </section>
+</sections>

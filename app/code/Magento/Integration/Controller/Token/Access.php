@@ -6,11 +6,15 @@
  */
 namespace Magento\Integration\Controller\Token;
 
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
 use Magento\Integration\Model\Integration as IntegrationModel;
 use Magento\Integration\Api\IntegrationServiceInterface as IntegrationService;
 use Magento\Integration\Api\OauthServiceInterface as IntegrationOauthService;
+use Magento\Framework\App\Action\Action;
 
-class Access extends \Magento\Framework\App\Action\Action
+class Access extends Action implements CsrfAwareActionInterface
 {
     /**
      * @var \Magento\Framework\Oauth\OauthInterface
@@ -51,6 +55,23 @@ class Access extends \Magento\Framework\App\Action\Action
         $this->intOauthService = $intOauthService;
         $this->integrationService = $integrationService;
         $this->helper = $helper;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createCsrfValidationException(
+        RequestInterface $request
+    ): ?InvalidRequestException {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
     }
 
     /**

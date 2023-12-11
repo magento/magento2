@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCustomerCompareProductSection">
+        <element name="title" type="text" selector="#block-compare-heading"/>
+        <element name="emptyMessage" type="text" selector=".block-compare .empty"/>
+
+        <element name="productListMainArea" type="block" selector="#compare-items"/>
+        <element name="productCount" type="text" selector=".block-compare .counter"/>
+
+        <element name="productByName" type="button" selector="//*[contains(@class, 'product-items')]//a[contains(@class, 'product-item-link')][contains(text(), '{{productName}}')]" parameterized="true"/>
+        <element name="removeProductByName" type="button" selector="//li[contains(@class, 'product-item')]//*[contains(text(), '{{productName}}')]/../../a" parameterized="true"/>
+
+        <element name="compare" type="button" selector=".actions-toolbar .compare" timeout="30"/>
+        <element name="clearAll" type="button" selector="#compare-clear-all" timeout="30"/>
+    </section>
+</sections>

@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\Model;
 
 use ArrayObject;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Element\UiComponent\ArrayObjectFactory;
 use Magento\Framework\View\Element\UiComponent\Config\Converter;
 use Magento\Framework\View\Element\UiComponent\Config\DomMergerInterface;
@@ -17,12 +20,11 @@ use Magento\Framework\View\Element\UiComponent\Config\ManagerInterface;
 use Magento\Framework\View\Element\UiComponent\Config\Provider\Component\Definition as ComponentDefinition;
 use Magento\Framework\View\Element\UiComponent\Config\ReaderFactory;
 use Magento\Framework\View\Element\UiComponent\Config\UiReaderInterface;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
- * Class Manager
- * @deprecated 100.2.0
+ * @inheritdoc
+ *
+ * @deprecated 101.0.0
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Manager implements ManagerInterface
@@ -165,7 +167,10 @@ class Manager implements ManagerInterface
     {
         if ($name === null || $this->hasData($name)) {
             throw new LocalizedException(
-                new \Magento\Framework\Phrase("Invalid UI Component element name: '%1'", [$name])
+                new \Magento\Framework\Phrase(
+                    'The "%1" UI component element name is invalid. Verify the name and try again.',
+                    [$name]
+                )
             );
         }
         $this->componentsPool = $this->arrayObjectFactory->create();
@@ -293,6 +298,7 @@ class Manager implements ManagerInterface
         $createdComponents = [];
         $rootComponent = $this->createRawComponentData($name, false);
         foreach ($componentsPool as $key => $component) {
+            $resultConfiguration = [];
             $resultConfiguration = [ManagerInterface::CHILDREN_KEY => []];
             $instanceName = $this->createName($component, $key, $name);
             $resultConfiguration[ManagerInterface::COMPONENT_ARGUMENTS_KEY] = $this->mergeArguments(
@@ -307,14 +313,16 @@ class Manager implements ManagerInterface
             unset($component[Converter::DATA_ATTRIBUTES_KEY]);
 
             // Create inner components
+            $children = [];
             foreach ($component as $subComponentName => $subComponent) {
                 if (is_array($subComponent)) {
-                    $resultConfiguration[ManagerInterface::CHILDREN_KEY] = array_merge(
-                        $resultConfiguration[ManagerInterface::CHILDREN_KEY],
-                        $this->createDataForComponent($subComponentName, $subComponent)
-                    );
+                    $children[] = $this->createDataForComponent($subComponentName, $subComponent);
                 }
             }
+
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+            $resultConfiguration[ManagerInterface::CHILDREN_KEY] = array_merge([], ...$children);
+
             $createdComponents[$instanceName] = $resultConfiguration;
         }
 
@@ -382,8 +390,7 @@ class Manager implements ManagerInterface
      */
     protected function createName(array $componentData, $key, $componentName)
     {
-        return isset($componentData[Converter::DATA_ATTRIBUTES_KEY][Converter::NAME_ATTRIBUTE_KEY])
-            ? $componentData[Converter::DATA_ATTRIBUTES_KEY][Converter::NAME_ATTRIBUTE_KEY]
-            : sprintf(ManagerInterface::ANONYMOUS_TEMPLATE, $componentName, $key);
+        return $componentData[Converter::DATA_ATTRIBUTES_KEY][Converter::NAME_ATTRIBUTE_KEY]
+            ?? sprintf(ManagerInterface::ANONYMOUS_TEMPLATE, $componentName, $key);
     }
 }

@@ -5,21 +5,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Config;
 
 /**
  * Interface \Magento\Framework\App\Config\ValueInterface
  *
+ * @api
+ * @see \Magento\Framework\App\Config\Value
  */
 interface ValueInterface
 {
     /**
      * Table name
+     *
+     * @deprecated since it is not used
      */
     const ENTITY = 'config_data';
 
     /**
      * Check if config data value was changed
+     *
      * @todo this method should be make as protected
      * @return bool
      */

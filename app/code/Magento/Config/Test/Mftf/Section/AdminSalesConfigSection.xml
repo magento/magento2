@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminSalesConfigSection">
+        <element name="enableMAPUseSystemValue" type="checkbox" selector="#sales_msrp_enabled_inherit"/>
+        <element name="enableMAPSelect" type="select" selector="#sales_msrp_enabled"/>
+        <element name="giftOptions" type="select" selector="#sales_gift_options-head"/>
+        <element name="allowGiftReceipt" type="select" selector="#sales_gift_options_allow_gift_receipt"/>
+        <element name="allowPrintedCard" type="select" selector="#sales_gift_options_allow_printed_card"/>
+        <element name="go" type="select" selector="//a[@id='sales_gift_options-head']/ancestor::div[@class='entry-edit-head admin__collapsible-block']"/>
+        <element name="expandGiftOptions" type="button" selector="//a[@id='sales_gift_options-head' and @class='{{var}}']" parameterized="true"/>
+        <element name="chkAllowGiftMessagesOnOrderLevel" type="checkbox" selector="//input[@id='sales_gift_options_allow_order_inherit' and @type='checkbox']"/>
+        <element name="chkAllowGiftMessagesOnOrderItem" type="checkbox" selector="//input[@id='sales_gift_options_allow_items_inherit' and @type='checkbox']"/>
+        <element name="selectAllowGiftMessagesOnOrderLevel" type="select" selector="//select[@id='sales_gift_options_allow_order']"/>
+        <element name="selectAllowGiftMessagesOnOrderItem" type="select" selector="//select[@id='sales_gift_options_allow_items']"/>
+        <element name="selectAllowWrappingGiftOnOrderLevel" type="select" selector="//select[@id='sales_gift_options_wrapping_allow_order']"/>
+        <element name="selectAllowWrappingGiftOnItemLevel" type="select" selector="//select[@id='sales_gift_options_wrapping_allow_items']"/>
+        <element name="selectAllowGiftReceipt" type="select" selector="//select[@id='sales_gift_options_allow_gift_receipt']"/>
+        <element name="selectAllowPrintedCard" type="select" selector="//select[@id='sales_gift_options_allow_printed_card']"/>
+        <element name="defaultPrice" type="text" selector="#sales_gift_options_printed_card_price"/>
+    </section>
+</sections>
+

@@ -4,38 +4,33 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Advanced search form
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\CatalogSearch\Block\Advanced;
 
 use Magento\CatalogSearch\Model\Advanced;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\CatalogSearch\Helper\Data as CatalogSearchHelper;
 
 /**
+ * Advanced search form
+ *
  * @api
  * @since 100.0.2
  */
 class Form extends Template
 {
     /**
-     * Currency factory
-     *
      * @var CurrencyFactory
      */
     protected $_currencyFactory;
 
     /**
-     * Catalog search advanced
-     *
      * @var Advanced
      */
     protected $_catalogSearchAdvanced;
@@ -45,20 +40,24 @@ class Form extends Template
      * @param Advanced $catalogSearchAdvanced
      * @param CurrencyFactory $currencyFactory
      * @param array $data
+     * @param CatalogSearchHelper|null $catalogSearchHelper
      */
     public function __construct(
         Context $context,
         Advanced $catalogSearchAdvanced,
         CurrencyFactory $currencyFactory,
-        array $data = []
+        array $data = [],
+        ?CatalogSearchHelper $catalogSearchHelper = null
     ) {
         $this->_catalogSearchAdvanced = $catalogSearchAdvanced;
         $this->_currencyFactory = $currencyFactory;
+        $data['catalogSearchHelper'] = $catalogSearchHelper ??
+            ObjectManager::getInstance()->get(CatalogSearchHelper::class);
         parent::__construct($context, $data);
     }
 
     /**
-     * @return AbstractBlock
+     * @inheritdoc
      */
     public function _prepareLayout()
     {
@@ -122,15 +121,12 @@ class Form extends Template
     public function getAttributeValue($attribute, $part = null)
     {
         $value = $this->getRequest()->getQuery($attribute->getAttributeCode());
+
         if ($part && $value) {
-            if (isset($value[$part])) {
-                $value = $value[$part];
-            } else {
-                $value = '';
-            }
+            $value = $value[$part] ?? '';
         }
 
-        return $value;
+        return is_array($value) ? '' : $value;
     }
 
     /**
@@ -177,40 +173,32 @@ class Form extends Template
      *
      * @param AbstractAttribute $attribute
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getCurrency($attribute)
     {
         return $this->_storeManager->getStore()->getCurrentCurrencyCode();
-
-        $baseCurrency = $this->_storeManager->getStore()->getBaseCurrency()->getCurrencyCode();
-        return $this->getAttributeValue(
-            $attribute,
-            'currency'
-        ) ? $this->getAttributeValue(
-            $attribute,
-            'currency'
-        ) : $baseCurrency;
     }
 
     /**
      * Retrieve attribute input type
      *
      * @param AbstractAttribute $attribute
-     * @return  string
+     * @return string
      */
     public function getAttributeInputType($attribute)
     {
         $dataType = $attribute->getBackend()->getType();
-        $imputType = $attribute->getFrontend()->getInputType();
-        if ($imputType == 'select' || $imputType == 'multiselect') {
+        $inputType = $attribute->getFrontend()->getInputType();
+        if ($inputType == 'select' || $inputType == 'multiselect') {
             return 'select';
         }
 
-        if ($imputType == 'boolean') {
+        if ($inputType == 'boolean') {
             return 'yesno';
         }
 
-        if ($imputType == 'price') {
+        if ($inputType == 'price') {
             return 'price';
         }
 
@@ -294,6 +282,8 @@ class Form extends Template
     }
 
     /**
+     * Get select block.
+     *
      * @return BlockInterface
      */
     protected function _getSelectBlock()
@@ -307,6 +297,8 @@ class Form extends Template
     }
 
     /**
+     * Get date block.
+     *
      * @return BlockInterface|mixed
      */
     protected function _getDateBlock()

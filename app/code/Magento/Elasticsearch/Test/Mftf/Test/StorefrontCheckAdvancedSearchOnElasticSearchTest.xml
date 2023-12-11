@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckAdvancedSearchOnElasticSearchTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Storefront Search"/>
+            <title value="Check Advanced Search on ElasticSearch"/>
+            <description value="Check Advanced Search on ElasticSearch"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-31745"/>
+            <group value="SearchEngine"/>
+            <group value="configurableProduct"/>
+            <group value="catalog_search"/>
+            <group value="pr_exclude"/>
+        </annotations>
+
+        <before>
+            <!--Delete all product if exists-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
+
+            <actionGroup ref="CreateApiConfigurableProductWithDescriptionActionGroup" stepKey="createConfigurableProduct">
+                <argument name="productName" value="Product A"/>
+            </actionGroup>
+            <actionGroup ref="CreateApiConfigurableProductWithDescriptionActionGroup" stepKey="createConfigurableProductTwo">
+                <argument name="productName" value="Product1234"/>
+            </actionGroup>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushFullPageCache"/>
+        </before>
+
+        <after>
+            <!-- Delete configurable products data -->
+            <deleteData createDataKey="createConfigChildProduct1CreateConfigurableProduct" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2CreateConfigurableProduct" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProductCreateConfigurableProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigProductAttributeCreateConfigurableProduct" stepKey="deleteConfigProductAttribute"/>
+
+            <deleteData createDataKey="createConfigChildProduct1CreateConfigurableProductTwo" stepKey="deleteConfigChildProduct1ForSecondProduct"/>
+            <deleteData createDataKey="createConfigChildProduct2CreateConfigurableProductTwo" stepKey="deleteConfigChildProduct2ForSecondProduct"/>
+            <deleteData createDataKey="createConfigProductCreateConfigurableProductTwo" stepKey="deleteConfigProductTwo"/>
+            <deleteData createDataKey="createConfigProductAttributeCreateConfigurableProductTwo" stepKey="deleteConfigProductAttributeForSecondProduct"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Navigate to Frontend -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>
+
+        <!-- Click "Advanced Search" -->
+        <actionGroup ref="StorefrontOpenAdvancedSearchActionGroup" stepKey="openAdvancedSearch"/>
+
+        <!-- Fill Configurable name in to field. Click "Search" button and assert product present-->
+        <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="searchConfigurableProductByName">
+            <argument name="productName" value="$createConfigProductCreateConfigurableProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="storefrontCheckAdvancedSearchResult"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertConfigurableProductIsPresentOnCategoryPage">
+            <argument name="productName" value="$createConfigProductCreateConfigurableProduct.name$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenAdvancedSearchActionGroup"  stepKey="goToStoreViewAdvancedCatalogSearch"/>
+        <!-- Fill Configurable Two name in to field. Click "Search" button and assert product present-->
+        <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="searchConfigurableProductTwoByName">
+            <argument name="productName" value="$createConfigProductCreateConfigurableProductTwo.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="checkResultSearchConfigurableProductByName"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertConfigurableProductTwoIsPresentOnCategoryPage">
+            <argument name="productName" value="$createConfigProductCreateConfigurableProductTwo.name$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenAdvancedSearchActionGroup" stepKey="goToAdvancedCatalogSearchPage"/>
+        <!-- Fill Configurable partial name in to field. Click "Search" button and assert product present-->
+        <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="searchConfigurableProductByPartialName">
+            <argument name="productName" value="Product"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="checkResultSearchConfigurableProductByPartialName"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertConfigurableProductOneIsPresentAfterSearchByPartialName">
+            <argument name="productName" value="$createConfigProductCreateConfigurableProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertConfigurableProductTwoIsPresentAfterSearchByPartialName">
+            <argument name="productName" value="$createConfigProductCreateConfigurableProductTwo.name$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenAdvancedSearchActionGroup"  stepKey="goToAdvancedSearchForSearchProductByDescription"/>
+        <!-- Fill Configurable short description in to field. Click "Search" button and assert product present-->
+        <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="searchConfigurableProductByDescription">
+            <argument name="description" value="$createConfigProductCreateConfigurableProduct.product[custom_attributes][0][value]$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="storefrontCheckAdvancedSearchResultAfterSearchByDescription"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertConfigurableProductIsPresentAfterSearchByDescription">
+            <argument name="productName" value="$createConfigProductCreateConfigurableProduct.name$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenAdvancedSearchActionGroup"  stepKey="goToAdvancedSearchForSearchProductByShortDescription"/>
+        <!-- Fill Configurable short description in to field. Click "Search" button and assert product present-->
+        <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="searchConfigurableProductByShortDescription">
+            <argument name="short_description" value="$createConfigProductCreateConfigurableProduct.product[custom_attributes][1][value]$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="storefrontCheckAdvancedSearchResultAfterSearchByShortDescription"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertConfigurableProductIsPresentAfterSearchByShortDescription">
+            <argument name="productName" value="$createConfigProductCreateConfigurableProduct.name$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenAdvancedSearchActionGroup"  stepKey="goToAdvancedSearchForSearchProductsByPrice"/>
+        <!-- Fill Configurable price in to fields. Click "Search" button and assert product present-->
+        <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="searchConfigurableProductByPrice">
+            <argument name="price_from" value="40"/>
+            <argument name="price_to" value="123"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="storefrontCheckAdvancedSearchResultAfterSearchByPrice"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertConfigurableProductIsPresentAfterSearchByPrice">
+            <argument name="productName" value="$createConfigProductCreateConfigurableProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertConfigurableProductTwoIsPresentAfterSearchByPrice">
+            <argument name="productName" value="$createConfigProductCreateConfigurableProductTwo.name$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenAdvancedSearchActionGroup" stepKey="goToAdvancedCatalogSearchPageForSearchByDescriptionAndAttribute"/>
+        <!-- Fill Configurable description in to field and select attribute. Click "Search" button and assert product present-->
+        <actionGroup ref="StorefrontFillFormAdvancedSearchWithCustomDropDownAttributeActionGroup" stepKey="searchConfigurableProductByDescriptionAndAttribute">
+            <argument name="description" value="$createConfigProductCreateConfigurableProduct.product[custom_attributes][0][value]$"/>
+            <argument name="attributeCode" value="$createConfigProductAttributeCreateConfigurableProduct.attribute[attribute_code]$"/>
+            <argument name="optionName" value="$createConfigProductAttributeOption1CreateConfigurableProduct.option[store_labels][0][label]$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="storefrontCheckAdvancedSearchResultAfterSearchByDescriptionAndAttribute"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertConfigurableProductIsPresentAfterSearchByDescriptionAndAttribute">
+            <argument name="productName" value="$createConfigProductCreateConfigurableProduct.name$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenAdvancedSearchActionGroup"  stepKey="goToAdvancedSearchForSearchProductByDescriptionAndShortDescription"/>
+        <!-- Fill Configurable description and short description in to fields. Click "Search" button and assert product present-->
+        <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="searchConfigurableProductByDescriptionAndShortDescription">
+            <argument name="description" value="$createConfigProductCreateConfigurableProduct.product[custom_attributes][0][value]$"/>
+            <argument name="short_description" value="$createConfigProductCreateConfigurableProduct.product[custom_attributes][1][value]$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="storefrontCheckAdvancedSearchResultAfterSearchByDescriptionAndShortDescription"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertConfigurableProductIsPresentAfterSearchByDescriptionAndShortDescription">
+            <argument name="productName" value="$createConfigProductCreateConfigurableProduct.name$"/>
+        </actionGroup>
+    </test>
+</tests>

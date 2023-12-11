@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Exception;
 
 use Magento\Framework\Phrase;
@@ -11,6 +12,7 @@ use Magento\Framework\Phrase;
  * Exception to be thrown when there is an issue with the Input to a function call.
  *
  * @api
+ * @since 100.0.2
  */
 class InputException extends AbstractAggregateException
 {
@@ -42,7 +44,7 @@ class InputException extends AbstractAggregateException
     /**
      * @deprecated
      */
-    const REQUIRED_FIELD = '%fieldName is a required field.';
+    const REQUIRED_FIELD = '"%fieldName" is required. Enter and try again.';
 
     /**
      * Initialize the input exception.
@@ -87,7 +89,7 @@ class InputException extends AbstractAggregateException
     public static function requiredField($fieldName)
     {
         return new self(
-            new Phrase('%fieldName is a required field.', ['fieldName' => $fieldName])
+            new Phrase('"%fieldName" is required. Enter and try again.', ['fieldName' => $fieldName])
         );
     }
 }

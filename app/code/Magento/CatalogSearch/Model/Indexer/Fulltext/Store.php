@@ -11,6 +11,9 @@ use Magento\Framework\Search\Request\DimensionFactory;
 use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Catalog search indexer plugin for store.
+ */
 class Store implements ObserverInterface
 {
     /**
@@ -44,6 +47,8 @@ class Store implements ObserverInterface
     }
 
     /**
+     * Reindex catalog search.
+     *
      * @param \Magento\Store\Model\Store $store
      * @return void
      */
@@ -53,12 +58,14 @@ class Store implements ObserverInterface
             $this->dimensionFactory->create(['name' => 'scope', 'value' => $store->getId()])
         ];
         $configData = $this->indexerConfig->getIndexer(FulltextIndexer::INDEXER_ID);
-        /** @var \Magento\CatalogSearch\Model\Indexer\IndexerHandler $indexHandler */
+        /** @var \Magento\Framework\Indexer\SaveHandler\IndexerInterface $indexHandler */
         $indexHandler = $this->indexerHandlerFactory->create(['data' => $configData]);
         $indexHandler->cleanIndex($dimensions);
     }
 
     /**
+     * Reindex catalog search on store modification.
+     *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */

@@ -5,7 +5,15 @@
  */
 namespace Magento\Framework\File;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\TargetDirectory;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Validation\ValidationException;
+use Psr\Log\LoggerInterface;
 
 /**
  * File upload class
@@ -13,7 +21,12 @@ use Magento\Framework\Filesystem\DriverInterface;
  * ATTENTION! This class must be used like abstract class and must added
  * validation by protected file extension list to extended class
  *
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ *
  * @api
+ * @since 100.0.2
  */
 class Uploader
 {
@@ -35,8 +48,7 @@ class Uploader
 
     /**
      * Upload type. Used to right handle $_FILES array.
-     *
-     * @var \Magento\Framework\File\Uploader::SINGLE_STYLE|\Magento\Framework\File\Uploader::MULTIPLE_STYLE
+     * @var Uploader::SINGLE_STYLE|\Magento\Framework\File\Uploader::MULTIPLE_STYLE
      * @access protected
      */
     protected $_uploadType;
@@ -77,7 +89,7 @@ class Uploader
     protected $_allowRenameFiles = false;
 
     /**
-     * If this variable is set to TRUE, files dispertion will be supported.
+     * If this variable is set to TRUE, files dispersion will be supported.
      *
      * @var bool
      * @access protected
@@ -118,29 +130,51 @@ class Uploader
      */
     protected $_validateCallbacks = [];
 
+    /**
+     * @var \Magento\Framework\File\Mime
+     */
+    private $fileMime;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
     /**#@+
      * File upload type (multiple or single)
      */
-    const SINGLE_STYLE = 0;
+    public const SINGLE_STYLE = 0;
 
-    const MULTIPLE_STYLE = 1;
+    public const MULTIPLE_STYLE = 1;
 
     /**#@-*/
 
     /**
      * Temp file name empty code
      */
-    const TMP_NAME_EMPTY = 666;
+    public const TMP_NAME_EMPTY = 666;
 
     /**
-     * Max Image Width resolution in pixels. For image resizing on client side
+     * Maximum Image Width resolution in pixels. For image resizing on client side
+     * @deprecated @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxWidth()
      */
-    const MAX_IMAGE_WIDTH = 1920;
+    public const MAX_IMAGE_WIDTH = 1920;
 
     /**
-     * Max Image Height resolution in pixels. For image resizing on client side
+     * Maximum Image Height resolution in pixels. For image resizing on client side
+     * @deprecated @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxHeight()
      */
-    const MAX_IMAGE_HEIGHT = 1200;
+    public const MAX_IMAGE_HEIGHT = 1200;
+
+    /**
+     * Maximum file name length
+     */
+    private const MAX_FILE_NAME_LENGTH = 255;
 
     /**
      * Resulting of uploaded file
@@ -151,20 +185,57 @@ class Uploader
     protected $_result;
 
     /**
+     * @var DirectoryList
+     */
+    private $directoryList;
+
+    /**
+     * @var DriverPool|null
+     */
+    private $driverPool;
+
+    /**
+     * @var DriverInterface|null
+     */
+    private $fileDriver;
+
+    /**
+     * @var TargetDirectory
+     */
+    private $targetDirectory;
+
+    /**
      * Init upload
      *
      * @param string|array $fileId
-     * @throws \Exception
+     * @param \Magento\Framework\File\Mime|null $fileMime
+     * @param DirectoryList|null $directoryList
+     * @param DriverPool|null $driverPool
+     * @param TargetDirectory|null $targetDirectory
+     * @param Filesystem|null $filesystem
+     * @throws \DomainException
      */
-    public function __construct($fileId)
-    {
+    public function __construct(
+        $fileId,
+        Mime $fileMime = null,
+        DirectoryList $directoryList = null,
+        DriverPool $driverPool = null,
+        TargetDirectory $targetDirectory = null,
+        Filesystem $filesystem = null
+    ) {
+        $this->directoryList = $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
+        $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
+
+        $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(FileSystem::class);
         $this->_setUploadFileId($fileId);
         if (!file_exists($this->_file['tmp_name'])) {
             $code = empty($this->_file['tmp_name']) ? self::TMP_NAME_EMPTY : 0;
-            throw new \Exception('The file was not uploaded.', $code);
+            throw new \DomainException('The file was not uploaded.', $code);
         } else {
             $this->_fileExists = true;
         }
+        $this->fileMime = $fileMime ?: ObjectManager::getInstance()->get(Mime::class);
+        $this->driverPool = $driverPool ?: ObjectManager::getInstance()->get(DriverPool::class);
     }
 
     /**
@@ -180,8 +251,7 @@ class Uploader
     }
 
     /**
-     * Used to save uploaded file into destination folder with
-     * original or new file name (if specified)
+     * Used to save uploaded file into destination folder with original or new file name (if specified).
      *
      * @param string $destinationFolder
      * @param string $newFileName
@@ -196,21 +266,23 @@ class Uploader
 
         $this->_result = false;
         $destinationFile = $destinationFolder;
-        $fileName = isset($newFileName) ? $newFileName : $this->_file['name'];
-        $fileName = self::getCorrectFileName($fileName);
+        $fileName = $newFileName ?? $this->_file['name'];
+        $fileName = static::getCorrectFileName($fileName);
         if ($this->_enableFilesDispersion) {
             $fileName = $this->correctFileNameCase($fileName);
             $this->setAllowCreateFolders(true);
-            $this->_dispretionPath = self::getDispretionPath($fileName);
+            $this->_dispretionPath = static::getDispersionPath($fileName);
             $destinationFile .= $this->_dispretionPath;
-            $this->_createDestinationFolder($destinationFile);
+            $this->createDestinationFolder($destinationFile);
         }
 
         if ($this->_allowRenameFiles) {
-            $fileName = self::getNewFileName(self::_addDirSeparator($destinationFile) . $fileName);
+            $fileName = static::getNewFileName(
+                static::_addDirSeparator($destinationFile) . $fileName
+            );
         }
 
-        $destinationFile = self::_addDirSeparator($destinationFile) . $fileName;
+        $destinationFile = static::_addDirSeparator($destinationFile) . $fileName;
 
         try {
             $this->_result = $this->_moveFile($this->_file['tmp_name'], $destinationFile);
@@ -244,20 +316,28 @@ class Uploader
      *
      * @param string $destinationFolder
      * @return void
-     * @throws \Exception
+     * @throws FileSystemException
      */
-    private function validateDestination($destinationFolder)
+    private function validateDestination(string $destinationFolder): void
     {
-        if ($this->_allowCreateFolders) {
-            $this->_createDestinationFolder($destinationFolder);
+        if (strlen($this->getFileDriver()->getRealPathSafety($destinationFolder)) > 4096) {
+            throw new \InvalidArgumentException(
+                'Destination folder path is too long; must be 255 characters or less'
+            );
         }
-
-        if (!is_writable($destinationFolder)) {
-            throw new \Exception('Destination folder is not writable or does not exists.');
+        if ($this->_allowCreateFolders) {
+            $this->createDestinationFolder($destinationFolder);
+        } elseif (!$this->getTargetDirectory()
+            ->getDirectoryWrite(DirectoryList::ROOT)
+            ->isWritable($destinationFolder)
+        ) {
+            throw new FileSystemException(__('Destination folder is not writable or does not exists.'));
         }
     }
 
     /**
+     * Set access permissions to file.
+     *
      * @param string $file
      * @return void
      *
@@ -273,22 +353,80 @@ class Uploader
      *
      * @param string $tmpPath
      * @param string $destPath
-     * @return bool|void
+     * @return bool
      */
     protected function _moveFile($tmpPath, $destPath)
     {
-        if (is_uploaded_file($tmpPath)) {
-            return move_uploaded_file($tmpPath, $destPath);
-        } elseif (is_file($tmpPath)) {
-            return rename($tmpPath, $destPath);
+        $rootCode = DirectoryList::PUB;
+
+        try {
+            $path = $this->getDirectoryList()->getPath($rootCode) ?: '';
+            $destPath = $destPath ?: '';
+            if (strpos($destPath, $path) !== 0) {
+                $rootCode = DirectoryList::ROOT;
+            }
+
+            $destPath = str_replace($path, '', $destPath);
+            $directory = $this->getTargetDirectory()->getDirectoryWrite($rootCode);
+
+            return $this->getFileDriver()->rename(
+                $tmpPath,
+                $directory->getAbsolutePath($destPath),
+                $directory->getDriver()
+            );
+        } catch (FileSystemException $exception) {
+            $this->getLogger()->critical($exception->getMessage());
+            return false;
         }
+    }
+
+    /**
+     * Get logger instance.
+     *
+     * @deprecated
+     * @return LoggerInterface
+     */
+    private function getLogger(): LoggerInterface
+    {
+        if (!$this->logger) {
+            $this->logger = ObjectManager::getInstance()->get(LoggerInterface::class);
+        }
+        return $this->logger;
+    }
+
+    /**
+     * Retrieves target directory.
+     *
+     * @return TargetDirectory
+     */
+    private function getTargetDirectory(): TargetDirectory
+    {
+        if (!isset($this->targetDirectory)) {
+            $this->targetDirectory = ObjectManager::getInstance()->get(TargetDirectory::class);
+        }
+
+        return $this->targetDirectory;
+    }
+
+    /**
+     * Retrieves directory list.
+     *
+     * @return DirectoryList
+     */
+    private function getDirectoryList(): DirectoryList
+    {
+        if (!isset($this->directoryList)) {
+            $this->directoryList = ObjectManager::getInstance()->get(DirectoryList::class);
+        }
+
+        return $this->directoryList;
     }
 
     /**
      * Validate file before save
      *
      * @return void
-     * @throws \Exception
+     * @throws ValidationException
      */
     protected function _validateFile()
     {
@@ -298,7 +436,7 @@ class Uploader
 
         //is file extension allowed
         if (!$this->checkAllowedExtension($this->getFileExtension())) {
-            throw new \Exception('Disallowed file type.');
+            throw new ValidationException(__('Disallowed file type.'));
         }
         //run validate callbacks
         foreach ($this->_validateCallbacks as $params) {
@@ -352,19 +490,29 @@ class Uploader
     }
 
     /**
-     * Correct filename with special chars and spaces
+     * Correct filename with special chars and spaces; also trim excessively long filenames
      *
      * @param string $fileName
      * @return string
+     * @throws \InvalidArgumentException
      */
     public static function getCorrectFileName($fileName)
     {
+        $fileName = $fileName !== null ? ltrim($fileName, '.') : '';
         $fileName = preg_replace('/[^a-z0-9_\\-\\.]+/i', '_', $fileName);
         $fileInfo = pathinfo($fileName);
+        $fileInfo['extension'] = $fileInfo['extension'] ?? '';
 
-        if (preg_match('/^_+$/', $fileInfo['filename'])) {
+        if (strlen($fileInfo['basename'] ?? '') > self::MAX_FILE_NAME_LENGTH) {
+            throw new \LengthException(
+                __('Filename is too long; must be %1 characters or less', self::MAX_FILE_NAME_LENGTH)
+            );
+        }
+
+        if (preg_match('/^_+$/', $fileInfo['filename'] ?? '')) {
             $fileName = 'file.' . $fileInfo['extension'];
         }
+
         return $fileName;
     }
 
@@ -390,7 +538,7 @@ class Uploader
      */
     protected static function _addDirSeparator($dir)
     {
-        if (substr($dir, -1) != '/') {
+        if (!$dir || substr($dir, -1) != '/') {
             $dir .= '/';
         }
         return $dir;
@@ -484,7 +632,7 @@ class Uploader
     public function setAllowedExtensions($extensions = [])
     {
         foreach ((array)$extensions as $extension) {
-            $this->_allowedExtensions[] = strtolower($extension);
+            $this->_allowedExtensions[] = $extension !== null ? strtolower($extension) : '';
         }
         return $this;
     }
@@ -497,11 +645,16 @@ class Uploader
      */
     public function checkAllowedExtension($extension)
     {
+        //File extensions should only be allowed to contain alphanumeric characters
+        if ($extension && preg_match('/[^a-z0-9]/i', $extension)) {
+            return false;
+        }
+
         if (!is_array($this->_allowedExtensions) || empty($this->_allowedExtensions)) {
             return true;
         }
 
-        return in_array(strtolower($extension), $this->_allowedExtensions);
+        return $extension && in_array(strtolower($extension), $this->_allowedExtensions);
     }
 
     /**
@@ -511,7 +664,7 @@ class Uploader
      */
     private function _getMimeType()
     {
-        return $this->_file['type'];
+        return $this->fileMime->getMimeType($this->_file['tmp_name']);
     }
 
     /**
@@ -519,22 +672,25 @@ class Uploader
      *
      * @param string|array $fileId
      * @return void
-     * @throws \Exception
+     * @throws \DomainException
+     * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function _setUploadFileId($fileId)
     {
         if (is_array($fileId)) {
+            $this->validateFileId($fileId);
             $this->_uploadType = self::MULTIPLE_STYLE;
             $this->_file = $fileId;
         } else {
             if (empty($_FILES)) {
-                throw new \Exception('$_FILES array is empty');
+                throw new \DomainException('$_FILES array is empty');
             }
 
+            $fileId = $fileId !== null ? $fileId : '';
             preg_match("/^(.*?)\[(.*?)\]$/", $fileId, $file);
 
-            if (count($file) > 0 && count($file[0]) > 0 && count($file[1]) > 0) {
+            if (is_array($file) && count($file) > 0 && !empty($file[0]) && !empty($file[1])) {
                 array_shift($file);
                 $this->_uploadType = self::MULTIPLE_STYLE;
 
@@ -547,12 +703,67 @@ class Uploader
 
                 $fileAttributes = $tmpVar;
                 $this->_file = $fileAttributes;
-            } elseif (count($fileId) > 0 && isset($_FILES[$fileId])) {
+            } elseif (!empty($fileId) && isset($_FILES[$fileId])) {
                 $this->_uploadType = self::SINGLE_STYLE;
                 $this->_file = $_FILES[$fileId];
             } elseif ($fileId == '') {
-                throw new \Exception('Invalid parameter given. A valid $_FILES[] identifier is expected.');
+                throw new \InvalidArgumentException(
+                    'Invalid parameter given. A valid $_FILES[] identifier is expected.'
+                );
             }
+        }
+    }
+
+    /**
+     * Validates explicitly given uploaded file data.
+     *
+     * @param array $fileId
+     * @return void
+     * @throws \InvalidArgumentException
+     * @throws FileSystemException
+     */
+    private function validateFileId(array $fileId): void
+    {
+        $isValid = false;
+        if (isset($fileId['tmp_name'])) {
+            $tmpName = trim($fileId['tmp_name']);
+
+            if (preg_match('/\.\.(\\\|\/)/', $tmpName) !== 1) {
+                $allowedFolders = [
+                    sys_get_temp_dir(),
+                    $this->directoryList->getPath(DirectoryList::SYS_TMP),
+                    $this->directoryList->getPath(DirectoryList::MEDIA),
+                    $this->directoryList->getPath(DirectoryList::VAR_DIR),
+                    $this->directoryList->getPath(DirectoryList::TMP),
+                    $this->directoryList->getPath(DirectoryList::UPLOAD),
+                ];
+
+                $disallowedFolders = [
+                    $this->directoryList->getPath(DirectoryList::LOG),
+                ];
+
+                foreach ($allowedFolders as $allowedFolder) {
+                    $dir = $this->targetDirectory->getDirectoryReadByPath($allowedFolder);
+                    if ($dir->isExist($tmpName)) {
+                        $isValid = true;
+                        break;
+                    }
+                }
+
+                foreach ($disallowedFolders as $disallowedFolder) {
+                    $dir = $this->targetDirectory->getDirectoryReadByPath($disallowedFolder);
+                    if ($dir->isExist($tmpName)) {
+                        $isValid = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (!$isValid) {
+            throw new \InvalidArgumentException(
+                __('Invalid parameter given. A valid $fileId[tmp_name] is expected.')
+            );
         }
     }
 
@@ -560,10 +771,10 @@ class Uploader
      * Create destination folder
      *
      * @param string $destinationFolder
-     * @return \Magento\Framework\File\Uploader
-     * @throws \Exception
+     * @return Uploader
+     * @throws FileSystemException
      */
-    private function _createDestinationFolder($destinationFolder)
+    private function createDestinationFolder(string $destinationFolder)
     {
         if (!$destinationFolder) {
             return $this;
@@ -573,11 +784,15 @@ class Uploader
             $destinationFolder = substr($destinationFolder, 0, -1);
         }
 
-        if (!(@is_dir($destinationFolder)
-            || @mkdir($destinationFolder, 0777, true)
-        )) {
-            throw new \Exception("Unable to create directory '{$destinationFolder}'.");
+        $rootDirectory = $this->getTargetDirectory()->getDirectoryWrite(DirectoryList::ROOT);
+
+        if (!$rootDirectory->isDirectory($destinationFolder)) {
+            $result = $rootDirectory->getDriver()->createDirectory($destinationFolder);
+            if (!$result) {
+                throw new FileSystemException(__('Unable to create directory %1.', $destinationFolder));
+            }
         }
+
         return $this;
     }
 
@@ -589,42 +804,76 @@ class Uploader
      */
     public static function getNewFileName($destinationFile)
     {
+        /** @var Filesystem $fileSystem */
+        $fileSystem = ObjectManager::getInstance()->get(Filesystem::class);
+        $local = $fileSystem->getDirectoryRead(DirectoryList::ROOT);
+        /** @var TargetDirectory $targetDirectory */
+        $targetDirectory = ObjectManager::getInstance()->get(TargetDirectory::class);
+        $remote = $targetDirectory->getDirectoryRead(DirectoryList::ROOT);
+
+        $fileExists = function ($path) use ($local, $remote) {
+            return $local->isExist($path) || $remote->isExist($path);
+        };
+
         $fileInfo = pathinfo($destinationFile);
-        if (file_exists($destinationFile)) {
-            $index = 1;
-            $baseName = $fileInfo['filename'] . '.' . $fileInfo['extension'];
-            while (file_exists($fileInfo['dirname'] . '/' . $baseName)) {
-                $baseName = $fileInfo['filename'] . '_' . $index . '.' . $fileInfo['extension'];
-                $index++;
-            }
-            $destFileName = $baseName;
-        } else {
-            return $fileInfo['basename'];
+        $index = 1;
+        while ($fileExists($fileInfo['dirname'] . '/' . $fileInfo['basename'])) {
+            $fileInfo['basename'] = $fileInfo['filename'] . '_' . ($index++);
+            $fileInfo['basename'] .= isset($fileInfo['extension']) ? '.' . $fileInfo['extension'] : '';
         }
 
-        return $destFileName;
+        return $fileInfo['basename'];
     }
 
     /**
-     * Get dispertion path
+     * Get dispersion path
      *
      * @param string $fileName
      * @return string
+     * @deprecated 101.0.4
      */
     public static function getDispretionPath($fileName)
     {
+        return self::getDispersionPath($fileName);
+    }
+
+    /**
+     * Get dispersion path
+     *
+     * @param string $fileName
+     * @return string
+     * @since 101.0.4
+     */
+    public static function getDispersionPath($fileName)
+    {
         $char = 0;
-        $dispertionPath = '';
-        while ($char < 2 && $char < strlen($fileName)) {
-            if (empty($dispertionPath)) {
-                $dispertionPath = '/' . ('.' == $fileName[$char] ? '_' : $fileName[$char]);
+        $dispersionPath = '';
+        while ($char < 2 && ($fileName && $char < strlen($fileName))) {
+            if (empty($dispersionPath)) {
+                $dispersionPath = '/' . ('.' == $fileName[$char] ? '_' : $fileName[$char]);
             } else {
-                $dispertionPath = self::_addDirSeparator(
-                    $dispertionPath
+                $dispersionPath = self::_addDirSeparator(
+                    $dispersionPath
                 ) . ('.' == $fileName[$char] ? '_' : $fileName[$char]);
             }
             $char++;
         }
-        return $dispertionPath;
+        return $dispersionPath;
+    }
+
+    /**
+     * Get driver for file
+     *
+     * @deprecated
+     * @return DriverInterface
+     */
+    private function getFileDriver(): DriverInterface
+    {
+        if (!$this->fileDriver) {
+            $this->driverPool = $this->driverPool ?: ObjectManager::getInstance()->get(DriverPool::class);
+            $this->fileDriver = $this->driverPool->getDriver(DriverPool::FILE);
+        }
+
+        return $this->fileDriver;
     }
 }

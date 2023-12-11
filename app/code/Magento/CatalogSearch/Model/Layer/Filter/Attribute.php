@@ -3,9 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Model\Layer\Filter;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Layer attribute filter
@@ -46,27 +51,37 @@ class Attribute extends AbstractFilter
     /**
      * Apply attribute option filter to product collection
      *
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function apply(\Magento\Framework\App\RequestInterface $request)
+    public function apply(RequestInterface $request)
     {
         $attributeValue = $request->getParam($this->_requestVar);
         if (empty($attributeValue) && !is_numeric($attributeValue)) {
             return $this;
         }
+
         $attribute = $this->getAttributeModel();
-        /** @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $productCollection */
+        /** @var Collection $productCollection */
         $productCollection = $this->getLayer()
             ->getProductCollection();
-        $productCollection->addFieldToFilter($attribute->getAttributeCode(), $attributeValue);
-        $label = $this->getOptionText($attributeValue);
+        $productCollection->addFieldToFilter(
+            $attribute->getAttributeCode(),
+            $this->convertAttributeValue($attribute, $attributeValue)
+        );
+
+        $labels = [];
+        foreach ((array)$attributeValue as $value) {
+            $label = $this->getOptionText($value);
+            $labels[] = is_array($label) ? $label : [$label];
+        }
+        $label = implode(',', array_unique(array_merge([], ...$labels)));
         $this->getLayer()
             ->getState()
             ->addFilter($this->_createItem($label, $attributeValue));
 
         $this->setItems([]); // set items to disable show filtering
+
         return $this;
     }
 
@@ -79,7 +94,7 @@ class Attribute extends AbstractFilter
     protected function _getItemsData()
     {
         $attribute = $this->getAttributeModel();
-        /** @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $productCollection */
+        /** @var Collection $productCollection */
         $productCollection = $this->getLayer()
             ->getProductCollection();
         $optionsFacetedData = $productCollection->getFacetedData($attribute->getAttributeCode());
@@ -91,12 +106,10 @@ class Attribute extends AbstractFilter
             return $this->itemDataBuilder->build();
         }
 
-        $productSize = $productCollection->getSize();
-
         $options = $attribute->getFrontend()
             ->getSelectOptions();
         foreach ($options as $option) {
-            $this->buildOptionData($option, $isAttributeFilterable, $optionsFacetedData, $productSize);
+            $this->buildOptionData($option, $isAttributeFilterable, $optionsFacetedData);
         }
 
         return $this->itemDataBuilder->build();
@@ -108,17 +121,16 @@ class Attribute extends AbstractFilter
      * @param array $option
      * @param boolean $isAttributeFilterable
      * @param array $optionsFacetedData
-     * @param int $productSize
      * @return void
      */
-    private function buildOptionData($option, $isAttributeFilterable, $optionsFacetedData, $productSize)
+    private function buildOptionData($option, $isAttributeFilterable, $optionsFacetedData)
     {
         $value = $this->getOptionValue($option);
         if ($value === false) {
             return;
         }
         $count = $this->getOptionCount($value, $optionsFacetedData);
-        if ($isAttributeFilterable && (!$this->isOptionReducesResults($count, $productSize) || $count === 0)) {
+        if ($isAttributeFilterable && $count === 0) {
             return;
         }
 
@@ -155,5 +167,29 @@ class Attribute extends AbstractFilter
         return isset($optionsFacetedData[$value]['count'])
             ? (int)$optionsFacetedData[$value]['count']
             : 0;
+    }
+
+    /**
+     * Convert attribute value according to its backend type.
+     *
+     * @param ProductAttributeInterface $attribute
+     * @param mixed $value
+     * @return int|string
+     */
+    private function convertAttributeValue(ProductAttributeInterface $attribute, $value)
+    {
+        if ($attribute->getBackendType() === 'int') {
+            return (int)$value;
+        }
+
+        return $value;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function isOptionReducesResults($optionCount, $totalSize)
+    {
+        return $optionCount <= $totalSize;
     }
 }

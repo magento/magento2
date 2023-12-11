@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurableProductRemoveAnOptionTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create, Read, Update, Delete"/>
+            <title value="Admin should be able to remove a product configuration"/>
+            <description value="Admin should be able to remove a product configuration"/>
+            <testCaseId value="MC-63"/>
+            <group value="ConfigurableProduct"/>
+            <severity value="BLOCKER"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <!-- This was copied and modified from the EndToEndB2CGuestUserTest -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+
+        <!--check storefront for both options-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="amOnStorefront1">
+            <argument name="product" value="$createConfigProduct$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait1"/>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeOption1Storefront">
+            <argument name="productAttributeOption" value="option1"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeOption2Storefront">
+            <argument name="productAttributeOption" value="option2"/>
+        </actionGroup>
+
+        <!--check admin for both options-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToEditPage">
+            <argument name="productId" value="$$createConfigProduct.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="wait2"/>
+        <actionGroup ref="AssertAdminChildProductDataOnParentProductEditPageActionGroup" stepKey="seeOption1Admin">
+            <argument name="attribute" value="name_container"/>
+            <argument name="value" value="$$createConfigChildProduct1.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminChildProductDataOnParentProductEditPageActionGroup" stepKey="seeOption2Admin">
+            <argument name="attribute" value="name_container"/>
+            <argument name="value" value="$$createConfigChildProduct2.name$$"/>
+        </actionGroup>
+
+        <!--remove an option-->
+        <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandActions"/>
+        <click selector="{{AdminProductFormConfigurationsSection.removeProductBtn}}" stepKey="clickRemove"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
+
+        <!--check admin for one option-->
+        <dontSee selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="$$createConfigChildProduct1.name$$" stepKey="dontSeeOption1Admin"/>
+
+        <!--check storefront for one option-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="amOnStorefront2">
+            <argument name="product" value="$createConfigProduct$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait4"/>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionNotVisibleActionGroup" stepKey="dontSeeOption1InStorefront">
+            <argument name="productAttributeOption" value="option1"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeOption2Again">
+            <argument name="productAttributeOption" value="option2"/>
+        </actionGroup>
+    </test>
+</tests>

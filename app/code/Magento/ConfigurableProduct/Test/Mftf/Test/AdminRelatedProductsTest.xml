@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRelatedProductsTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Promote Products as Related"/>
+            <title value="Admin should be able to promote products as related"/>
+            <description value="Admin should be able to promote products as related"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-116"/>
+            <group value="configurable"/>
+            <group value="product"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="categoryHandle"/>
+
+            <createData entity="SimpleProduct" stepKey="simple1Handle">
+                <requiredEntity createDataKey="categoryHandle"/>
+            </createData>
+
+            <createData entity="SimpleProduct" stepKey="simple2Handle">
+                <requiredEntity createDataKey="categoryHandle"/>
+            </createData>
+
+            <!-- TODO: Move configurable product creation to an actionGroup when MQE-697 is fixed -->
+            <createData entity="BaseConfigurableProduct" stepKey="baseConfigProductHandle">
+                <requiredEntity createDataKey="categoryHandle"/>
+            </createData>
+            <createData entity="productDropDownAttribute" stepKey="productAttributeHandle"/>
+
+            <createData entity="productAttributeOption1" stepKey="productAttributeOption1Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="productAttributeOption2Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <createData entity="AddToDefaultSet" stepKey="addToAttributeSetHandle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getAttributeOption1Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getAttributeOption2Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </getData>
+
+            <createData entity="SimpleOne" stepKey="childProductHandle1">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption1Handle"/>
+            </createData>
+            <createData entity="SimpleOne" stepKey="childProductHandle2">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData entity="ConfigurableProductTwoOptions" stepKey="configProductOptionHandle">
+                <requiredEntity createDataKey="baseConfigProductHandle"/>
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption1Handle"/>
+                <requiredEntity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData entity="ConfigurableProductAddChild" stepKey="configProductHandle1">
+                <requiredEntity createDataKey="baseConfigProductHandle"/>
+                <requiredEntity createDataKey="childProductHandle1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="configProductHandle2">
+                <requiredEntity createDataKey="baseConfigProductHandle"/>
+                <requiredEntity createDataKey="childProductHandle2"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="simple1Handle" stepKey="deleteSimple1"/>
+            <deleteData createDataKey="simple2Handle" stepKey="deleteSimple2"/>
+            <deleteData createDataKey="childProductHandle1" stepKey="deleteChild1"/>
+            <deleteData createDataKey="childProductHandle2" stepKey="deleteChild2"/>
+            <deleteData createDataKey="baseConfigProductHandle" stepKey="deleteConfig"/>
+            <deleteData createDataKey="categoryHandle" stepKey="deleteCategory"/>
+            <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductAttribute"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+
+        <comment userInput="Filter and edit simple product 1" stepKey="filterAndEditComment1"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="productIndexPage"/>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridSimple">
+            <argument name="product" value="$$simple1Handle$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProducForEditByClickingRow1Column2InProductGrid"/>
+        <conditionalClick selector="{{AdminProductFormSection.productFormTab('Related Products')}}" dependentSelector="{{AdminProductFormSection.productFormTabState('Related Products', 'closed')}}" visible="true" stepKey="openRelatedProductTab"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+
+        <!-- TODO: move adding related product to a action group when nested action group is allowed (ref#: MQE-539)-->
+        <comment userInput="Add related simple product to simple product" stepKey="addSimpleToSimpleComment"/>
+        <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.AddRelatedProductsButton}}" stepKey="clickAddRelatedProductButton"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridSimple1">
+            <argument name="product" value="$$simple2Handle$$"/>
+        </actionGroup>
+        <click selector="{{AdminProductModalSlideGridSection.productGridXRowYColumnButton('1', '1')}}" stepKey="selectSimpleTwo"/>
+        <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="selectClearAll1"/>
+        <click selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected1"/>
+
+        <comment userInput="Add related config product to simple product" stepKey="addConfigToSimpleComment"/>
+        <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.AddRelatedProductsButton}}" stepKey="clickAddRelatedProductButton2"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridSimpleForRelatedConfig1">
+            <argument name="product" value="$$baseConfigProductHandle$$"/>
+        </actionGroup>
+        <click selector="{{AdminProductModalSlideGridSection.productGridXRowYColumnButton('1', '1')}}" stepKey="selectConfigProduct"/>
+        <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="selectClearAll2"/>
+        <click selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected2"/>
+
+        <comment userInput="Save simple product" stepKey="saveSimpleProductComment"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveRelatedProduct1"/>
+
+        <comment userInput="Assert related simple products for simple product in Admin Product Form" stepKey="assertRelated1Comment"/>
+        <actionGroup ref="AssertTextInAdminProductRelatedUpSellCrossSellSectionActionGroup" stepKey="assertRelated1">
+            <argument name="element" value="AdminProductFormRelatedUpSellCrossSellSection.relatedProductSectionText"/>
+            <argument name="expectedText" value="$$simple2Handle.name$$"/>
+        </actionGroup>
+
+        <comment userInput="Assert related config products for simple product in Admin Product Form" stepKey="assertRelated2Comment"/>
+        <actionGroup ref="AssertTextInAdminProductRelatedUpSellCrossSellSectionActionGroup" stepKey="assertRelated2">
+            <argument name="element" value="AdminProductFormRelatedUpSellCrossSellSection.relatedProductSectionText"/>
+            <argument name="expectedText" value="$$baseConfigProductHandle.name$$"/>
+        </actionGroup>
+
+        <comment userInput="Filter and edit config product" stepKey="filterAndEditComment2"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="productIndexPage2"/>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial2"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridConfig">
+            <argument name="product" value="$$baseConfigProductHandle$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProducForEditByClickingRow1Column2InProductGrid2"/>
+        <conditionalClick selector="{{AdminProductFormSection.productFormTab('Related Products')}}" dependentSelector="{{AdminProductFormSection.productFormTabState('Related Products', 'closed')}}" visible="true" stepKey="openRelatedProductTab2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
+
+        <comment userInput="Add related simple product to config product" stepKey="addSimpleToConfigComment"/>
+        <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.AddRelatedProductsButton}}" stepKey="clickAddRelatedProductButton3"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridForConfig3">
+            <argument name="product" value="$$simple2Handle$$"/>
+        </actionGroup>
+        <click selector="{{AdminProductModalSlideGridSection.productGridXRowYColumnButton('1', '1')}}" stepKey="selectSimpleTwo2"/>
+        <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="selectClearAll3"/>
+        <click selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected3"/>
+
+        <comment userInput="Save config product" stepKey="saveConfigProductComment"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveRelatedProduct2"/>
+
+        <comment userInput="Assert related simple product for config product in Admin Product Form" stepKey="assertRelated3Comment"/>
+        <actionGroup ref="AssertTextInAdminProductRelatedUpSellCrossSellSectionActionGroup" stepKey="assertRelated3">
+            <argument name="element" value="AdminProductFormRelatedUpSellCrossSellSection.relatedProductSectionText"/>
+            <argument name="expectedText" value="$$simple2Handle.name$$"/>
+        </actionGroup>
+
+        <comment userInput="Check storefront related products on simple product page" stepKey="navigateToSimpleProduct1PageComment"/>
+        <amOnPage url="$$simple1Handle.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProduct1Page"/>
+        <waitForPageLoad stepKey="waitForPageLoad9"/>
+        <see selector="{{StorefrontProductRelatedProductsSection.relatedProductsActionsHeaderText}}" userInput="Check items to add to the cart" stepKey="assertRelatedProductHeaderInStorefront1"/>
+        <see selector="{{StorefrontProductRelatedProductsSection.relatedProductsActionsHeaderText}}" userInput="select all" stepKey="assertRelatedProductHeaderInStorefront2"/>
+        <see selector="{{StorefrontProductRelatedProductsSection.relatedProductsListSectionText}}" userInput="$$simple2Handle.name$$" stepKey="assertRelatedSimpleProductNameInStorefront"/>
+        <see selector="{{StorefrontProductRelatedProductsSection.relatedProductsListSectionText}}" userInput="$$baseConfigProductHandle.name$$" stepKey="assertRelatedConfigProductNameInStorefront"/>
+
+        <comment userInput="Navigate to product page from related product link" stepKey="navigateToConfigProductFromRelatedSectionComment"/>
+        <click selector="{{StorefrontProductRelatedProductsSection.relatedProductName('$$baseConfigProductHandle.custom_attributes[url_key]$$')}}" stepKey="clickRelatedProductByName"/>
+        <waitForPageLoad stepKey="waitForPageLoad11"/>
+        <seeInCurrentUrl url="$$baseConfigProductHandle.custom_attributes[url_key]$$" stepKey="seeInCurrentUrl"/>
+
+        <comment userInput="Select option for configurable product" stepKey="selectOptionConfigProduct"/>
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$productAttributeOption1Handle.option[store_labels][0][label]$$" stepKey="configSelectOption"/>
+
+        <comment userInput="Check storefront related products on config product page" stepKey="navigateToConfigProductPageComment"/>
+        <see selector="{{StorefrontProductRelatedProductsSection.relatedProductsListSectionText}}" userInput="$$simple2Handle.name$$" stepKey="assertRelatedSimpleProductNameInStorefront2"/>
+
+        <comment userInput="Check related product in product page" stepKey="checkRelatedProductInProductPageComment"/>
+        <click selector="{{StorefrontProductRelatedProductsSection.relatedProductCheckBoxButton('$$simple2Handle.name$$')}}" stepKey="checkRelatedProcut"/>
+
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$baseConfigProductHandle.name$$"/>
+        </actionGroup>
+
+        <see selector="{{StorefrontMinicartSection.quantity}}" userInput="2" stepKey="seeItemCounterInMiniCart"/>
+
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertOneProductNameInMiniCart">
+            <argument name="productName" value="$$baseConfigProductHandle.name$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertOneProductNameInMiniCart2">
+            <argument name="productName" value="$$simple2Handle.name$$"/>
+        </actionGroup>
+    </test>
+</tests>

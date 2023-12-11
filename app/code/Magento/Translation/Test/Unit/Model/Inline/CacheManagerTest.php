@@ -3,64 +3,74 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Translation\Test\Unit\Model\Inline;
+
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Translate\ResourceInterface;
+use Magento\Translation\Model\FileManager;
+use Magento\Translation\Model\Inline\CacheManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Translation\Model\Inline\CacheManager
  */
-class CacheManagerTest extends \PHPUnit\Framework\TestCase
+class CacheManagerTest extends TestCase
 {
     /**
-     * @var \Magento\Translation\Model\Inline\CacheManager
+     * @var CacheManager
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Framework\Translate\ResourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceInterface|MockObject
      */
     protected $translateResourceMock;
 
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResolverInterface|MockObject
      */
     protected $localeResolverMock;
 
     /**
-     * @var \Magento\Translation\Model\FileManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileManager|MockObject
      */
     protected $fileManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
+        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMockForAbstractClass();
+
+        $this->translateResourceMock = $this->getMockBuilder(ResourceInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMockForAbstractClass();
+
+        $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMockForAbstractClass();
+
+        $this->fileManagerMock = $this->getMockBuilder(FileManager::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->translateResourceMock = $this->getMockBuilder(\Magento\Framework\Translate\ResourceInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->localeResolverMock = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->fileManagerMock = $this->getMockBuilder(\Magento\Translation\Model\FileManager::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
-            \Magento\Translation\Model\Inline\CacheManager::class,
+            CacheManager::class,
             [
                 'eventManager' => $this->eventManagerMock,
                 'translateResource' => $this->translateResourceMock,

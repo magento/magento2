@@ -8,6 +8,9 @@ namespace Magento\GroupedProduct\Model\Product\Type;
 
 use Magento\Framework\Module\Manager;
 
+/**
+ * Plugin.
+ */
 class Plugin
 {
     /**

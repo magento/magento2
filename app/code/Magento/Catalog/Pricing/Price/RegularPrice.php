@@ -22,14 +22,14 @@ class RegularPrice extends AbstractPrice implements BasePriceProviderInterface
     /**
      * Get price value
      *
-     * @return float|bool
+     * @return float
      */
     public function getValue()
     {
         if ($this->value === null) {
             $price = $this->product->getPrice();
             $priceInCurrentCurrency = $this->priceCurrency->convertAndRound($price);
-            $this->value = $priceInCurrentCurrency ? floatval($priceInCurrentCurrency) : false;
+            $this->value = $priceInCurrentCurrency ? (float)$priceInCurrentCurrency : 0;
         }
         return $this->value;
     }

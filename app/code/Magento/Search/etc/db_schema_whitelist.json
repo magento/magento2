@@ -1,0 +1,48 @@
+{
+    "search_query": {
+        "column": {
+            "query_id": true,
+            "query_text": true,
+            "num_results": true,
+            "popularity": true,
+            "redirect": true,
+            "synonym_for": true,
+            "store_id": true,
+            "display_in_terms": true,
+            "is_active": true,
+            "is_processed": true,
+            "updated_at": true
+        },
+        "index": {
+            "SEARCH_QUERY_QUERY_TEXT_STORE_ID_POPULARITY": true,
+            "SEARCH_QUERY_IS_PROCESSED": true,
+            "SEARCH_QUERY_SYNONYM_FOR": true,
+            "SEARCH_QUERY_STORE_ID_NUM_RESULTS_POPULARITY": true,
+            "SEARCH_QUERY_STORE_ID": false,
+            "SEARCH_QUERY_STORE_ID_POPULARITY": false
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SEARCH_QUERY_STORE_ID_STORE_STORE_ID": true,
+            "SEARCH_QUERY_QUERY_TEXT_STORE_ID": true
+        }
+    },
+    "search_synonyms": {
+        "column": {
+            "group_id": true,
+            "synonyms": true,
+            "store_id": true,
+            "website_id": true
+        },
+        "index": {
+            "SEARCH_SYNONYMS_SYNONYMS": true,
+            "SEARCH_SYNONYMS_STORE_ID": true,
+            "SEARCH_SYNONYMS_WEBSITE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SEARCH_SYNONYMS_STORE_ID_STORE_STORE_ID": true,
+            "SEARCH_SYNONYMS_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID": true
+        }
+    }
+}

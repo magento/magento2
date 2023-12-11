@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifySecureURLRedirectMultishippingTest">
+        <!--todo MC-5858: some urls don't redirect to https-->
+        <annotations>
+            <features value="Multishipping"/>
+            <stories value="Storefront Secure URLs"/>
+            <title value="Verify Secure URLs For Storefront Multishipping Pages"/>
+            <description value="Verify that the Secure URL configuration applies to the Multishipping pages on the Storefront"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-15611"/>
+            <group value="multishipping"/>
+            <group value="configuration"/>
+            <group value="secure_storefront_url"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="_defaultProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+                <argument name="Customer" value="$$customer$$"/>
+            </actionGroup>
+            <amOnPage url="{{StorefrontCategoryPage.url($$category.custom_attributes[url_key]$$)}}" stepKey="goToCategoryPage"/>
+            <waitForPageLoad stepKey="waitForPageLoad"/>
+            <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="moveMouseOverProduct"/>
+            <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="clickAddToCartButton"/>
+            <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForAddedToCartSuccessMessage"/>
+            <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$product.name$$ to your shopping cart." stepKey="seeAddedToCartSuccessMessage"/>
+            <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
+            <executeJS function="return window.location.host" stepKey="hostname"/>
+            <magentoCLI command="config:set web/secure/base_url https://{$hostname}/" stepKey="setSecureBaseURL"/>
+            <magentoCLI command="config:set web/secure/use_in_frontend 1" stepKey="useSecureURLsOnStorefront"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set web/secure/use_in_frontend 0" stepKey="dontUseSecureURLsOnStorefront"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+        </after>
+        <executeJS function="return window.location.host" stepKey="hostname"/>
+        <amOnUrl url="http://{$hostname}/multishipping/checkout" stepKey="goToUnsecureMultishippingCheckoutURL"/>
+        <seeInCurrentUrl url="https://{$hostname}/multishipping/checkout" stepKey="seeSecureMultishippingCheckoutURL"/>
+    </test>
+</tests>

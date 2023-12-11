@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductAttributeSetSection">
+        <element name="name" type="input" selector="#attribute_set_name"/>
+        <element name="basedOn" type="select" selector="#skeleton_set"/>
+        <element name="saveBtn" type="button" selector="button.save-attribute-set" timeout="30"/>
+        <element name="deleteBtn" type="button" selector="button[title='Delete']" timeout="30"/>
+        <element name="attribute" type="button" selector="//a[text()='{{var1}}']" parameterized="true"/>
+        <element name="addNewGroupBtn" type="button" selector="button.add" timeout="30"/>
+        <element name="newGroupName" type="input" selector="input[name='name']"/>
+        <element name="modalOk" type="button" selector="button.action-accept" timeout="30"/>
+    </section>
+</sections>

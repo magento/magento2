@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="sitemap" resource="default" engine="innodb" comment="XML Sitemap">
+        <column xsi:type="int" name="sitemap_id" unsigned="true" nullable="false" identity="true"
+                comment="Sitemap ID"/>
+        <column xsi:type="varchar" name="sitemap_type" nullable="true" length="32" comment="Sitemap Type"/>
+        <column xsi:type="varchar" name="sitemap_filename" nullable="true" length="32" comment="Sitemap Filename"/>
+        <column xsi:type="varchar" name="sitemap_path" nullable="true" length="255" comment="Sitemap Path"/>
+        <column xsi:type="timestamp" name="sitemap_time" on_update="false" nullable="true" comment="Sitemap Time"/>
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Store ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="sitemap_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SITEMAP_STORE_ID_STORE_STORE_ID" table="sitemap" column="store_id"
+                    referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+        <index referenceId="SITEMAP_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+</schema>

@@ -3,15 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Model\Block\Source;
 
 use Magento\Cms\Model\Block;
+use Magento\Cms\Model\Block\Source\IsActive;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class IsActiveTest extends \PHPUnit\Framework\TestCase
+class IsActiveTest extends TestCase
 {
     /**
-     * @var Block|\PHPUnit_Framework_MockObject_MockObject
+     * @var Block|MockObject
      */
     protected $cmsBlockMock;
 
@@ -28,10 +33,10 @@ class IsActiveTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
-        $this->cmsBlockMock = $this->getMockBuilder(\Magento\Cms\Model\Block::class)
+        $this->cmsBlockMock = $this->getMockBuilder(Block::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAvailableStatuses'])
             ->getMock();
@@ -46,7 +51,7 @@ class IsActiveTest extends \PHPUnit\Framework\TestCase
      */
     protected function getSourceClassName()
     {
-        return \Magento\Cms\Model\Block\Source\IsActive::class;
+        return IsActive::class;
     }
 
     /**

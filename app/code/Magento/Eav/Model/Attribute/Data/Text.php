@@ -3,34 +3,42 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model\Attribute\Data;
 
+use Magento\Eav\Model\Attribute;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Stdlib\StringUtils;
+use Psr\Log\LoggerInterface;
 
 /**
  * EAV Entity Attribute Text Data Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
 {
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils
+     * @var StringUtils
      */
     protected $_string;
 
     /**
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Framework\Stdlib\StringUtils $stringHelper
+     * @param TimezoneInterface $localeDate
+     * @param LoggerInterface $logger
+     * @param ResolverInterface $localeResolver
+     * @param StringUtils $stringHelper
      * @codeCoverageIgnore
      */
     public function __construct(
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        \Magento\Framework\Stdlib\StringUtils $stringHelper
+        TimezoneInterface $localeDate,
+        LoggerInterface   $logger,
+        ResolverInterface $localeResolver,
+        StringUtils       $stringHelper
     ) {
         parent::__construct($localeDate, $logger, $localeResolver);
         $this->_string = $stringHelper;
@@ -44,18 +52,18 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
      */
     public function extractValue(RequestInterface $request)
     {
-        $value = $this->_getRequestValue($request);
+        $value = trim($this->_getRequestValue($request));
         return $this->_applyInputFilter($value);
     }
 
     /**
      * Validate data
+     *
      * Return true or array of errors
      *
      * @param array|string $value
      * @return bool|array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function validateValue($value)
     {
@@ -67,34 +75,23 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
             $value = $this->getEntity()->getDataUsingMethod($attribute->getAttributeCode());
         }
 
-        if ($attribute->getIsRequired() && empty($value) && $value !== '0') {
-            $label = __($attribute->getStoreLabel());
-            $errors[] = __('"%1" is a required value.', $label);
-        }
-
-        if (!$errors && !$attribute->getIsRequired() && empty($value)) {
+        if (!$attribute->getIsRequired() && empty($value)) {
             return true;
         }
 
-        // validate length
-        $length = $this->_string->strlen(trim($value));
+        if (empty($value) && $value !== '0' && $attribute->getDefaultValue() === null) {
+            $label = __($attribute->getStoreLabel());
+            $errors[] = __('"%1" is a required value.', $label);
 
-        $validateRules = $attribute->getValidateRules();
-        if (!empty($validateRules['min_text_length']) && $length < $validateRules['min_text_length']) {
-            $label = __($attribute->getStoreLabel());
-            $v = $validateRules['min_text_length'];
-            $errors[] = __('"%1" length must be equal or greater than %2 characters.', $label, $v);
-        }
-        if (!empty($validateRules['max_text_length']) && $length > $validateRules['max_text_length']) {
-            $label = __($attribute->getStoreLabel());
-            $v = $validateRules['max_text_length'];
-            $errors[] = __('"%1" length must be equal or less than %2 characters.', $label, $v);
+            return $errors;
         }
 
-        $result = $this->_validateInputRule($value);
-        if ($result !== true) {
-            $errors = array_merge($errors, $result);
-        }
+        $validateLengthResult = $this->validateLength($attribute, $value);
+        $errors = array_merge($errors, $validateLengthResult);
+
+        $validateInputRuleResult = $this->validateInputRule($value);
+        $errors = array_merge($errors, $validateInputRuleResult);
+
         if (count($errors) == 0) {
             return true;
         }
@@ -107,6 +104,7 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param array|string $value
      * @return $this
+     * @throws LocalizedException
      */
     public function compactValue($value)
     {
@@ -129,11 +127,12 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
     }
 
     /**
-     * Return formated attribute value from entity model
+     * Return formatted attribute value from entity model
      *
      * @param string $format
      * @return string|array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws LocalizedException
      */
     public function outputValue($format = \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT)
     {
@@ -141,5 +140,46 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
         $value = $this->_applyOutputFilter($value);
 
         return $value;
+    }
+
+    /**
+     * Validates value length by attribute rules
+     *
+     * @param Attribute $attribute
+     * @param string $value
+     * @return array errors
+     */
+    private function validateLength(Attribute $attribute, string $value): array
+    {
+        $errors = [];
+        $length = $this->_string->strlen(trim($value));
+        $validateRules = $attribute->getValidateRules();
+
+        if (!empty($validateRules['input_validation'])) {
+            if (!empty($validateRules['min_text_length']) && $length < $validateRules['min_text_length']) {
+                $label = __($attribute->getStoreLabel());
+                $v = $validateRules['min_text_length'];
+                $errors[] = __('"%1" length must be equal or greater than %2 characters.', $label, $v);
+            }
+            if (!empty($validateRules['max_text_length']) && $length > $validateRules['max_text_length']) {
+                $label = __($attribute->getStoreLabel());
+                $v = $validateRules['max_text_length'];
+                $errors[] = __('"%1" length must be equal or less than %2 characters.', $label, $v);
+            }
+        }
+
+        return $errors;
+    }
+
+    /**
+     * Validate value by attribute input validation rule.
+     *
+     * @param string $value
+     * @return array
+     */
+    private function validateInputRule(string $value): array
+    {
+        $result = $this->_validateInputRule($value);
+        return \is_array($result) ? $result : [];
     }
 }

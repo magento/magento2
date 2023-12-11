@@ -1,22 +1,32 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 
-class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
+/**
+ * Class AddComment
+ *
+ * Controller responsible for addition of the order comment to the order
+ */
+class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::comment';
+    public const ADMIN_RESOURCE = 'Magento_Sales::comment';
+
+    /**
+     * ACL resource needed to send comment email notification
+     */
+    public const ADMIN_SALES_EMAIL_RESOURCE = 'Magento_Sales::emails';
 
     /**
      * Add order comment action
@@ -30,18 +40,25 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
             try {
                 $data = $this->getRequest()->getPost('history');
                 if (empty($data['comment']) && $data['status'] == $order->getDataByKey('status')) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a comment.'));
+                    $error = 'Please provide a comment text or ' .
+                        'update the order status to be able to submit a comment for this order.';
+                    throw new \Magento\Framework\Exception\LocalizedException(__($error));
                 }
 
-                $notify = isset($data['is_customer_notified']) ? $data['is_customer_notified'] : false;
-                $visible = isset($data['is_visible_on_front']) ? $data['is_visible_on_front'] : false;
+                $orderStatus = $this->getOrderStatus($order->getDataByKey('status'), $data['status']);
+                $order->setStatus($orderStatus);
+                $notify = $data['is_customer_notified'] ?? false;
+                $visible = $data['is_visible_on_front'] ?? false;
 
-                $history = $order->addStatusHistoryComment($data['comment'], $data['status']);
+                if ($notify && !$this->_authorization->isAllowed(self::ADMIN_SALES_EMAIL_RESOURCE)) {
+                    $notify = false;
+                }
+
+                $comment = trim(strip_tags($data['comment']));
+                $history = $order->addStatusHistoryComment($comment, $orderStatus);
                 $history->setIsVisibleOnFront($visible);
                 $history->setIsCustomerNotified($notify);
                 $history->save();
-
-                $comment = trim(strip_tags($data['comment']));
 
                 $order->save();
                 /** @var OrderCommentSender $orderCommentSender */
@@ -63,5 +80,18 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
             }
         }
         return $this->resultRedirectFactory->create()->setPath('sales/*/');
+    }
+
+    /**
+     * Get order status to set
+     *
+     * @param string $orderStatus
+     * @param string $historyStatus
+     * @return string
+     */
+    private function getOrderStatus(string $orderStatus, string $historyStatus): string
+    {
+        return ($orderStatus === Order::STATE_PROCESSING || $orderStatus === Order::STATUS_FRAUD) ? $historyStatus
+            : $orderStatus;
     }
 }

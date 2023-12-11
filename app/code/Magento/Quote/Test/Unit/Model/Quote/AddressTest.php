@@ -3,29 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Quote;
 
 use Magento\Directory\Model\Currency;
-use \Magento\Quote\Model\Quote\Address;
-use Magento\Quote\Model\Quote\Address\Rate;
-use Magento\Quote\Model\ResourceModel\Quote\Address\Rate\CollectionFactory as RateCollectionFactory;
-use Magento\Quote\Model\ResourceModel\Quote\Address\Rate\Collection as RatesCollection;
-use Magento\Shipping\Model\Rate\Result;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Directory\Model\Region;
 use Magento\Directory\Model\RegionFactory;
-use Magento\Quote\Model\Quote\Address\RateFactory;
+use Magento\Framework\App\Config;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address\CustomAttributeListInterface;
+use Magento\Quote\Model\Quote\Address\Rate;
+use Magento\Quote\Model\Quote\Address\RateCollectorInterface;
 use Magento\Quote\Model\Quote\Address\RateCollectorInterfaceFactory;
+use Magento\Quote\Model\Quote\Address\RateFactory;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateRequestFactory;
-use Magento\Quote\Model\Quote\Address\RateCollectorInterface;
-use Magento\Quote\Model\ResourceModel\Quote\Address\Item\CollectionFactory;
+use Magento\Quote\Model\Quote\Address\RateResult\AbstractResult;
 use Magento\Quote\Model\ResourceModel\Quote\Address\Item\Collection;
-use Magento\Directory\Model\Region;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Quote\Model\ResourceModel\Quote\Address\Item\CollectionFactory;
+use Magento\Quote\Model\ResourceModel\Quote\Address\Rate\Collection as RatesCollection;
+use Magento\Quote\Model\ResourceModel\Quote\Address\Rate\CollectionFactory as RateCollectionFactory;
+use Magento\Shipping\Model\Rate\Result;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
-use Magento\Quote\Model\Quote\Address\RateResult\AbstractResult;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for sales quote address model
@@ -34,7 +42,7 @@ use Magento\Quote\Model\Quote\Address\RateResult\AbstractResult;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AddressTest extends \PHPUnit\Framework\TestCase
+class AddressTest extends TestCase
 {
     /**
      * @var Address
@@ -42,86 +50,89 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     private $address;
 
     /**
-     * @var \Magento\Quote\Model\Quote | \PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|MockObject
      */
     private $quote;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\CustomAttributeListInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var CustomAttributeListInterface|MockObject
      */
     private $attributeList;
 
     /**
-     * @var \Magento\Framework\App\Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var RateRequestFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var RateRequestFactory|MockObject
      */
     private $requestFactory;
 
     /**
-     * @var RateFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var RateFactory|MockObject
      */
     private $addressRateFactory;
 
     /**
-     * @var RateCollectionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var RateCollectionFactory|MockObject
      */
     private $rateCollectionFactory;
 
     /**
-     * @var RateCollectorInterfaceFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var RateCollectorInterfaceFactory|MockObject
      */
     private $rateCollector;
 
     /**
-     * @var RateCollectorInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var RateCollectorInterface|MockObject
      */
     private $rateCollection;
 
     /**
-     * @var CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     private $itemCollectionFactory;
 
     /**
-     * @var RegionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var RegionFactory|MockObject
      */
     private $regionFactory;
 
     /**
-     * @var StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManager;
 
     /**
-     * @var StoreInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|MockObject
      */
     private $store;
 
     /**
-     * @var WebsiteInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteInterface|MockObject
      */
     private $website;
 
     /**
-     * @var Region | \PHPUnit_Framework_MockObject_MockObject
+     * @var Region|MockObject
      */
     private $region;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json | \PHPUnit_Framework_MockObject_MockObject
+     * @var Json|MockObject
      */
     protected $serializer;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config::class);
-        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->scopeConfig = $this->createMock(Config::class);
+        $this->serializer = new Json();
 
         $this->requestFactory = $this->getMockBuilder(RateRequestFactory::class)
             ->disableOriginalConstructor()
@@ -141,7 +152,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
         $this->rateCollection = $this->getMockBuilder(RateCollectorInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getResult'])
+            ->addMethods(['getResult'])
             ->getMockForAbstractClass();
 
         $this->itemCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
@@ -158,24 +169,24 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBaseCurrency', 'getCurrentCurrency', 'getCurrentCurrencyCode'])
+            ->addMethods(['getBaseCurrency', 'getCurrentCurrency', 'getCurrentCurrencyCode'])
             ->getMockForAbstractClass();
 
         $this->website = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->attributeList = $this->createMock(
-            \Magento\Quote\Model\Quote\Address\CustomAttributeListInterface::class
+            CustomAttributeListInterface::class
         );
         $this->attributeList->method('getAttributes')->willReturn([]);
 
         $this->address = $objectManager->getObject(
-            \Magento\Quote\Model\Quote\Address::class,
+            Address::class,
             [
                 'attributeList' => $this->attributeList,
                 'scopeConfig' => $this->scopeConfig,
@@ -189,11 +200,14 @@ class AddressTest extends \PHPUnit\Framework\TestCase
                 '_addressRateFactory' => $this->addressRateFactory
             ]
         );
-        $this->quote = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $this->quote = $this->createMock(Quote::class);
         $this->address->setQuote($this->quote);
     }
 
-    public function testValidateMiniumumAmountDisabled()
+    /**
+     * @return void
+     */
+    public function testValidateMinimumAmountDisabled(): void
     {
         $storeId = 1;
 
@@ -209,13 +223,17 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->address->validateMinimumAmount());
     }
 
-    public function testValidateMiniumumAmountVirtual()
+    /**
+     * @return void
+     */
+    public function testValidateMinimumAmountVirtual(): void
     {
         $storeId = 1;
         $scopeConfigValues = [
             ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
-            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true]
         ];
 
         $this->quote->expects($this->once())
@@ -233,13 +251,98 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->address->validateMinimumAmount());
     }
 
-    public function testValidateMiniumumAmount()
+    /**
+     * Provide data for test different cases
+     *
+     * @param void
+     * @return array
+     */
+    public function getDataProvider(): array
+    {
+        return [
+            'Non-virtual Quote' => [
+                'scopeConfigValues' => [
+                    ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, 1, true],
+                    ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, 1, 20],
+                    ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, 1, true],
+                    ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, 1, true]
+                ],
+                'address' => [
+                    'setAddressType' => 'billing'
+                ],
+                'quote' => [
+                    'getStoreId' => 1,
+                    'getIsVirtual' => false
+                ],
+                'result' => true
+            ],
+            'With Shipping Discount' => [
+                'scopeConfigValues' => [
+                    ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, 1, true],
+                    ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, 1, 2],
+                    ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, 1, true],
+                    ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, 1, true]
+                ],
+                'address' => [
+                    'setBaseSubtotal' => 25.00,
+                    'setBaseDiscountAmount' => -27.60,
+                    'setBaseShippingDiscountAmount' => 4.6,
+                    'setAddressType' => 'shipping'
+                ],
+                'quote' => [
+                    'getStoreId' => 1,
+                    'getIsVirtual' => false
+                ],
+                'result' => true
+            ]
+        ];
+    }
+
+    /**
+     * Tests minimum order amount validation
+     *
+     * @param array $scopeConfigValues
+     * @param array $address
+     * @param array $quote
+     * @param bool $result
+     * @dataProvider getDataProvider
+     *
+     * @return void
+     */
+    public function testValidateMinimumAmount(
+        array $scopeConfigValues,
+        array $address,
+        array $quote,
+        bool $result
+    ): void {
+        foreach ($quote as $method => $value) {
+            $this->quote->expects($this->once())
+                ->method($method)
+                ->willReturn($value);
+        }
+
+        foreach ($address as $setter => $value) {
+            $this->address->$setter($value);
+        }
+
+        $this->scopeConfig->expects($this->once())
+            ->method('isSetFlag')
+            ->willReturnMap($scopeConfigValues);
+
+        $this->assertEquals($result, $this->address->validateMinimumAmount());
+    }
+
+    /**
+     * @return void
+     */
+    public function testValidateMiniumumAmountWithoutDiscount(): void
     {
         $storeId = 1;
         $scopeConfigValues = [
             ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
-            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, false],
+            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true]
         ];
 
         $this->quote->expects($this->once())
@@ -256,13 +359,17 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->address->validateMinimumAmount());
     }
 
-    public function testValidateMiniumumAmountNegative()
+    /**
+     * @return void
+     */
+    public function testValidateMinimumAmountNegative(): void
     {
         $storeId = 1;
         $scopeConfigValues = [
             ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
-            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true]
         ];
 
         $this->quote->expects($this->once())
@@ -280,50 +387,81 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->address->validateMinimumAmount());
     }
 
-    public function testSetAndGetAppliedTaxes()
+    /**
+     * @return void
+     */
+    public function testSetAndGetAppliedTaxes(): void
     {
         $data = ['data'];
-        $result = json_encode($data);
+        self::assertInstanceOf(Address::class, $this->address->setAppliedTaxes($data));
+        self::assertEquals($data, $this->address->getAppliedTaxes());
+    }
 
-        $this->serializer->expects($this->once())
-            ->method('serialize')
-            ->with($data)
-            ->willReturn($result);
-
-        $this->serializer->expects($this->once())
-            ->method('unserialize')
-            ->with($result)
-            ->willReturn($data);
-
-        $this->assertInstanceOf(\Magento\Quote\Model\Quote\Address::class, $this->address->setAppliedTaxes($data));
-        $this->assertEquals($data, $this->address->getAppliedTaxes());
+    /**
+     * Checks a case, when applied taxes are not provided.
+     *
+     * @return void
+     */
+    public function testGetAppliedTaxesWithEmptyValue(): void
+    {
+        $this->address->setData('applied_taxes', null);
+        self::assertEquals([], $this->address->getAppliedTaxes());
     }
 
     /**
      * Test of requesting shipping rates by address
      *
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testRequestShippingRates()
+    public function testRequestShippingRates(): void
     {
         $storeId = 12345;
         $webSiteId = 6789;
         $baseCurrency = $this->getMockBuilder(Currency::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCurrentCurrencyCode','convert'])
+            ->onlyMethods(['convert'])
+            ->addMethods(['getCurrentCurrencyCode'])
             ->getMockForAbstractClass();
 
         $currentCurrency = $this->getMockBuilder(Currency::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCurrentCurrencyCode','convert'])
+            ->onlyMethods(['convert'])
+            ->addMethods(['getCurrentCurrencyCode'])
             ->getMockForAbstractClass();
 
         $currentCurrencyCode = 'UAH';
 
+        $this->quote->expects($this->any())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+
+        $this->store->expects($this->any())
+            ->method('getWebsiteId')
+            ->willReturn($webSiteId);
+
+        $this->scopeConfig->expects($this->exactly(1))
+            ->method('getValue')
+            ->with(
+                'tax/calculation/price_includes_tax',
+                ScopeInterface::SCOPE_STORE,
+                $storeId
+            )
+            ->willReturn(1);
+
         /** @var RateRequest */
         $request = $this->getMockBuilder(RateRequest::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setStoreId', 'setWebsiteId', 'setBaseCurrency', 'setPackageCurrency'])
+            ->addMethods(
+                [
+                    'setStoreId',
+                    'setWebsiteId',
+                    'setBaseCurrency',
+                    'setPackageCurrency',
+                    'getBaseSubtotalTotalInclTax',
+                    'getBaseSubtotal'
+                ]
+            )
             ->getMock();
 
         /** @var Collection */
@@ -400,14 +538,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->storeManager->method('getStore')
+            ->withConsecutive([$storeId], [null])
             ->willReturn($this->store);
-
-        $this->storeManager->expects($this->once())
-            ->method('getWebsite')
-            ->willReturn($this->website);
-
-        $this->store->method('getId')
-            ->willReturn($storeId);
 
         $this->store->method('getBaseCurrency')
             ->willReturn($baseCurrency);
@@ -419,10 +551,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->store->expects($this->once())
             ->method('getCurrentCurrencyCode')
             ->willReturn($currentCurrencyCode);
-
-        $this->website->expects($this->once())
-            ->method('getId')
-            ->willReturn($webSiteId);
 
         $this->addressRateFactory->expects($this->once())
             ->method('create')

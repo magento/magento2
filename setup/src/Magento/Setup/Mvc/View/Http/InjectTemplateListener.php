@@ -6,10 +6,13 @@
 
 namespace Magento\Setup\Mvc\View\Http;
 
-use Zend\Mvc\MvcEvent;
-use Zend\Mvc\View\Http\InjectTemplateListener as ZendInjectTemplateListener;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Mvc\View\Http\InjectTemplateListener as LaminasInjectTemplateListener;
 
-class InjectTemplateListener extends ZendInjectTemplateListener
+/**
+ * InjectTemplateListener for HTTP request
+ */
+class InjectTemplateListener extends LaminasInjectTemplateListener
 {
     /**
      * Determine the top-level namespace of the controller
@@ -30,6 +33,8 @@ class InjectTemplateListener extends ZendInjectTemplateListener
     }
 
     /**
+     * Get controller sub-namespace
+     *
      * @param string $namespace
      * @return string
      */

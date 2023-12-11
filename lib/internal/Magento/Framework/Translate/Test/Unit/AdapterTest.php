@@ -3,35 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Translate\Test\Unit;
 
-class AdapterTest extends \PHPUnit\Framework\TestCase
+use Laminas\I18n\Translator\Translator;
+use Magento\Framework\Translate\Adapter;
+use PHPUnit\Framework\TestCase;
+
+class AdapterTest extends TestCase
 {
     /**
      * Check that translate calls are passed to given translator
      *
-     * @param string $method
      * @param string $strToTranslate
      * @param string $translatedStr
      * @dataProvider translateDataProvider
      */
-    public function testTranslate($method, $strToTranslate, $translatedStr)
+    public function testTranslate($strToTranslate, $translatedStr)
     {
-        $translatorMock = $this->getMockBuilder('stdClass')->setMethods(['translate'])->getMock();
+        $translatorMock = $this->getMockBuilder(Translator::class)
+            ->setMethods(['translate'])->getMock();
         $translatorMock->expects(
             $this->once()
         )->method(
             'translate'
         )->with(
             $strToTranslate
-        )->will(
-            $this->returnValue($translatedStr)
+        )->willReturn(
+            $translatedStr
         );
-        $translator = new \Magento\Framework\Translate\Adapter(
-            ['translator' => [$translatorMock, 'translate']]
-        );
+        $translator = new Adapter();
+        $translator->setTranslator($translatorMock);
 
-        $this->assertEquals($translatedStr, $translator->{$method}($strToTranslate));
+        $this->assertEquals($translatedStr, $translator->translate($strToTranslate));
     }
 
     /**
@@ -39,7 +44,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      */
     public function translateDataProvider()
     {
-        return [['translate', 'Translate me!', 'Translated string']];
+        return [['Translate me!', 'Translated string']];
     }
 
     /**
@@ -47,7 +52,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      */
     public function testTranslateNoProxy()
     {
-        $translator = new \Magento\Framework\Translate\Adapter();
+        $translator = new Adapter();
         $this->assertEquals('test string', $translator->translate('test string'));
     }
 
@@ -56,6 +61,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnderscoresTranslation()
     {
-        $this->markTestIncomplete('MAGETWO-1012: i18n Improvements - Localization/Translations');
+        $this->markTestSkipped('MAGETWO-1012: i18n Improvements - Localization/Translations');
     }
 }

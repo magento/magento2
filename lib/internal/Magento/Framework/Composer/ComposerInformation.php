@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Composer;
 
 use Composer\Package\Link;
@@ -126,6 +127,7 @@ class ComposerInformation
         }
 
         if (!isset($requiredPhpVersion)) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Cannot find php version requirement in \'composer.lock\' file');
         }
         return $requiredPhpVersion;
@@ -142,16 +144,16 @@ class ComposerInformation
     public function getRequiredExtensions()
     {
         $requiredExtensions = [];
-        $allPlatformReqs = array_keys($this->getLocker()->getPlatformRequirements(true));
+        $allPlatformReqs = [array_keys($this->getLocker()->getPlatformRequirements(true))];
 
         if (!$this->isMagentoRoot()) {
             /** @var CompletePackageInterface $package */
             foreach ($this->getLocker()->getLockedRepository()->getPackages() as $package) {
                 $requires = array_keys($package->getRequires());
-                $requires = array_merge($requires, array_keys($package->getDevRequires()));
-                $allPlatformReqs = array_merge($allPlatformReqs, $requires);
+                $allPlatformReqs[] = $requires;
             }
         }
+        $allPlatformReqs = array_merge([], ...$allPlatformReqs);
         foreach ($allPlatformReqs as $reqIndex) {
             if (substr($reqIndex, 0, 4) === 'ext-') {
                 $requiredExtensions[] = substr($reqIndex, 4);
@@ -259,7 +261,7 @@ class ComposerInformation
      */
     public function isSystemPackage($packageName = '')
     {
-        if (preg_match('/magento\/product-*/', $packageName) == 1) {
+        if (preg_match('/magento\/product-.*?-edition/', $packageName) == 1) {
             return true;
         }
         return false;
@@ -301,6 +303,8 @@ class ComposerInformation
     }
 
     /**
+     * Retrieve magento packages types.
+     *
      * @return array
      */
     public function getPackagesTypes()
@@ -309,6 +313,8 @@ class ComposerInformation
     }
 
     /**
+     * Retrieve magento packages requirements.
+     *
      * @param string $name
      * @param string $version
      * @return array

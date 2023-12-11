@@ -3,17 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\BundleImportExport\Test\Unit\Model\Import\Product\Type\Bundle;
 
 use Magento\BundleImportExport\Model\Import\Product\Type\Bundle\RelationsDataSaver;
+use Magento\Catalog\Model\ResourceModel\Product\Relation;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class RelationsDataSaverTest
- */
-class RelationsDataSaverTest extends \PHPUnit\Framework\TestCase
+class RelationsDataSaverTest extends TestCase
 {
     /**
      * @var RelationsDataSaver
@@ -21,30 +23,39 @@ class RelationsDataSaverTest extends \PHPUnit\Framework\TestCase
     private $relationsDataSaver;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connectionMock;
 
-    protected function setUp()
+    /**
+     * @var Relation|MockObject
+     */
+    private $productRelationMock;
+
+    protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->productRelationMock = $this->getMockBuilder(Relation::class)
+            ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
 
         $this->relationsDataSaver = $helper->getObject(
             RelationsDataSaver::class,
             [
-                'resource' => $this->resourceMock
+                'resource' => $this->resourceMock,
+                'productRelation' => $this->productRelationMock
             ]
         );
     }
@@ -53,7 +64,7 @@ class RelationsDataSaverTest extends \PHPUnit\Framework\TestCase
     {
         $options = [1, 2];
         $table_name= 'catalog_product_bundle_option';
-
+        $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
         $this->resourceMock->expects($this->once())
             ->method('getTableName')
             ->with('catalog_product_bundle_option')
@@ -78,6 +89,7 @@ class RelationsDataSaverTest extends \PHPUnit\Framework\TestCase
         $optionsValues = [1, 2];
         $table_name= 'catalog_product_bundle_option_value';
 
+        $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
         $this->resourceMock->expects($this->once())
             ->method('getTableName')
             ->with('catalog_product_bundle_option_value')
@@ -98,6 +110,7 @@ class RelationsDataSaverTest extends \PHPUnit\Framework\TestCase
         $selections = [1, 2];
         $table_name= 'catalog_product_bundle_selection';
 
+        $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
         $this->resourceMock->expects($this->once())
             ->method('getTableName')
             ->with('catalog_product_bundle_selection')
@@ -120,5 +133,17 @@ class RelationsDataSaverTest extends \PHPUnit\Framework\TestCase
             );
 
         $this->relationsDataSaver->saveSelections($selections);
+    }
+
+    public function testSaveProductRelations()
+    {
+        $parentId = 1;
+        $children = [2, 3];
+
+        $this->productRelationMock->expects($this->once())
+            ->method('processRelations')
+            ->with($parentId, $children);
+
+        $this->relationsDataSaver->saveProductRelations($parentId, $children);
     }
 }

@@ -3,21 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Plugin;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface as ProductOption;
 use Magento\Catalog\Model\Plugin\QuoteItemProductOption as QuoteItemProductOptionPlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Quote\Model\Quote\Item\ToOrderItem as QuoteToOrderItem;
-use Magento\Quote\Model\Quote\Item\AbstractItem as AbstractQuoteItem;
-use Magento\Quote\Model\Quote\Item\Option as QuoteItemOption;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DataObject;
-use Magento\Catalog\Api\Data\ProductCustomOptionInterface as ProductOption;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Quote\Model\Quote\Item\AbstractItem as AbstractQuoteItem;
+use Magento\Quote\Model\Quote\Item\Option as QuoteItemOption;
+use Magento\Quote\Model\Quote\Item\ToOrderItem as QuoteToOrderItem;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class QuoteItemProductOptionTest extends \PHPUnit\Framework\TestCase
+class QuoteItemProductOptionTest extends TestCase
 {
     /**
      * @var QuoteItemProductOptionPlugin
@@ -30,26 +34,26 @@ class QuoteItemProductOptionTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var QuoteToOrderItem|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteToOrderItem|MockObject
      */
     private $subjectMock;
 
     /**
-     * @var AbstractQuoteItem|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractQuoteItem|MockObject
      */
     private $quoteItemMock;
 
     /**
-     * @var QuoteItemOption|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteItemOption|MockObject
      */
     private $quoteItemOptionMock;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     private $productMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subjectMock = $this->getMockBuilder(QuoteToOrderItem::class)
             ->disableOriginalConstructor()
@@ -84,9 +88,9 @@ class QuoteItemProductOptionTest extends \PHPUnit\Framework\TestCase
         $this->quoteItemMock->expects(static::exactly(2))
             ->method('getOptions')
             ->willReturn([$this->quoteItemOptionMock, $this->quoteItemOptionMock]);
-        $this->quoteItemOptionMock->expects(static::exactly(2))
+        $this->quoteItemOptionMock->expects(static::exactly(4))
             ->method('getCode')
-            ->willReturnOnConsecutiveCalls('someText_8', 'not_int_text');
+            ->willReturnOnConsecutiveCalls('someText_8', 'someText_8', 'not_int_text', 'not_int_text');
         $this->productMock->expects(static::once())
             ->method('getOptionById')
             ->willReturn(new DataObject(['type' => ProductOption::OPTION_TYPE_FILE]));

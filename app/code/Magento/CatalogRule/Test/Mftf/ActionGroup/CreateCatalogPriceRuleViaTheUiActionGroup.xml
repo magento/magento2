@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateCatalogPriceRuleViaTheUiActionGroup">
+        <arguments>
+            <argument name="catalogRule" defaultValue="_defaultCatalogRule"/>
+            <argument name="customerGroup" defaultValue="General" type="string"/>
+            <argument name="disregardRules" defaultValue="Yes" type="string"/>
+        </arguments>
+
+        <fillField selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{catalogRule.name}}" stepKey="fillName1"/>
+        <fillField selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{catalogRule.description}}" stepKey="fillDescription1"/>
+        <selectOption selector="{{AdminNewCatalogPriceRule.websites}}" userInput="{{catalogRule.website_ids[0]}}"  stepKey="selectWebSite1"/>
+        <selectOption selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="{{customerGroup}}" stepKey="selectCustomerGroup1"/>
+        <scrollTo selector="{{AdminNewCatalogPriceRule.actionsTab}}" stepKey="scrollToActionTab1"/>
+        <click selector="{{AdminNewCatalogPriceRule.actionsTab}}" stepKey="openActionDropdown1"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleActions.apply}}" userInput="{{catalogRule.simple_action}}" stepKey="discountType1"/>
+        <fillField selector="{{AdminNewCatalogPriceRuleActions.discountAmount}}" userInput="{{catalogRule.discount_amount}}" stepKey="fillDiscountValue1"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleActions.disregardRules}}" userInput="{{disregardRules}}" stepKey="discardSubsequentRules1"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <scrollToTopOfPage stepKey="scrollToTop1"/>
+    </actionGroup>
+</actionGroups>

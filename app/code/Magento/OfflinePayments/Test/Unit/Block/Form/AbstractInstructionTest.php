@@ -3,34 +3,41 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\OfflinePayments\Test\Unit\Block\Form;
 
-class AbstractInstructionTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\View\Element\Template\Context;
+use Magento\OfflinePayments\Block\Form\AbstractInstruction;
+use Magento\Payment\Model\MethodInterface;
+use PHPUnit\Framework\TestCase;
+
+class AbstractInstructionTest extends TestCase
 {
     /**
-     * @var \Magento\OfflinePayments\Block\Form\AbstractInstruction
+     * @var AbstractInstruction
      */
-    protected $_model;
+    protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
-        $this->_model = $this->getMockForAbstractClass(
-            \Magento\OfflinePayments\Block\Form\AbstractInstruction::class,
+        $context = $this->createMock(Context::class);
+        $this->model = $this->getMockForAbstractClass(
+            AbstractInstruction::class,
             ['context' => $context]
         );
     }
 
     public function testGetInstructions()
     {
-        $method = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
+        $method = $this->getMockBuilder(MethodInterface::class)
             ->getMockForAbstractClass();
 
         $method->expects($this->once())
             ->method('getConfigData')
             ->willReturn('instructions');
-        $this->_model->setData('method', $method);
+        $this->model->setData('method', $method);
 
-        $this->assertEquals('instructions', $this->_model->getInstructions());
+        $this->assertEquals('instructions', $this->model->getInstructions());
     }
 }

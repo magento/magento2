@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ProductOptions\ConfigInterface;
 use Magento\Catalog\Model\Config\Source\Product\Options\Price as ProductOptionsPrice;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Ui\Component\Form\Element\Hidden;
 use Magento\Ui\Component\Modal;
 use Magento\Ui\Component\Container;
 use Magento\Ui\Component\DynamicRows;
@@ -22,7 +23,6 @@ use Magento\Ui\Component\Form\Element\Checkbox;
 use Magento\Ui\Component\Form\Element\ActionDelete;
 use Magento\Ui\Component\Form\Element\DataType\Text;
 use Magento\Ui\Component\Form\Element\DataType\Number;
-use Magento\Framework\Locale\CurrencyInterface;
 
 /**
  * Data provider for "Customizable Options" panel
@@ -37,61 +37,61 @@ class CustomOptions extends AbstractModifier
     /**#@+
      * Group values
      */
-    const GROUP_CUSTOM_OPTIONS_NAME = 'custom_options';
-    const GROUP_CUSTOM_OPTIONS_SCOPE = 'data.product';
-    const GROUP_CUSTOM_OPTIONS_PREVIOUS_NAME = 'search-engine-optimization';
-    const GROUP_CUSTOM_OPTIONS_DEFAULT_SORT_ORDER = 31;
+    public const GROUP_CUSTOM_OPTIONS_NAME = 'custom_options';
+    public const GROUP_CUSTOM_OPTIONS_SCOPE = 'data.product';
+    public const GROUP_CUSTOM_OPTIONS_PREVIOUS_NAME = 'search-engine-optimization';
+    public const GROUP_CUSTOM_OPTIONS_DEFAULT_SORT_ORDER = 31;
     /**#@-*/
 
     /**#@+
      * Button values
      */
-    const BUTTON_ADD = 'button_add';
-    const BUTTON_IMPORT = 'button_import';
+    public const BUTTON_ADD = 'button_add';
+    public const BUTTON_IMPORT = 'button_import';
     /**#@-*/
 
     /**#@+
      * Container values
      */
-    const CONTAINER_HEADER_NAME = 'container_header';
-    const CONTAINER_OPTION = 'container_option';
-    const CONTAINER_COMMON_NAME = 'container_common';
-    const CONTAINER_TYPE_STATIC_NAME = 'container_type_static';
+    public const CONTAINER_HEADER_NAME = 'container_header';
+    public const CONTAINER_OPTION = 'container_option';
+    public const CONTAINER_COMMON_NAME = 'container_common';
+    public const CONTAINER_TYPE_STATIC_NAME = 'container_type_static';
     /**#@-*/
 
     /**#@+
      * Grid values
      */
-    const GRID_OPTIONS_NAME = 'options';
-    const GRID_TYPE_SELECT_NAME = 'values';
+    public const GRID_OPTIONS_NAME = 'options';
+    public const GRID_TYPE_SELECT_NAME = 'values';
     /**#@-*/
 
     /**#@+
      * Field values
      */
-    const FIELD_ENABLE = 'affect_product_custom_options';
-    const FIELD_OPTION_ID = 'option_id';
-    const FIELD_TITLE_NAME = 'title';
-    const FIELD_STORE_TITLE_NAME = 'store_title';
-    const FIELD_TYPE_NAME = 'type';
-    const FIELD_IS_REQUIRE_NAME = 'is_require';
-    const FIELD_SORT_ORDER_NAME = 'sort_order';
-    const FIELD_PRICE_NAME = 'price';
-    const FIELD_PRICE_TYPE_NAME = 'price_type';
-    const FIELD_SKU_NAME = 'sku';
-    const FIELD_MAX_CHARACTERS_NAME = 'max_characters';
-    const FIELD_FILE_EXTENSION_NAME = 'file_extension';
-    const FIELD_IMAGE_SIZE_X_NAME = 'image_size_x';
-    const FIELD_IMAGE_SIZE_Y_NAME = 'image_size_y';
-    const FIELD_IS_DELETE = 'is_delete';
-    const FIELD_IS_USE_DEFAULT = 'is_use_default';
+    public const FIELD_ENABLE = 'affect_product_custom_options';
+    public const FIELD_OPTION_ID = 'option_id';
+    public const FIELD_TITLE_NAME = 'title';
+    public const FIELD_STORE_TITLE_NAME = 'store_title';
+    public const FIELD_TYPE_NAME = 'type';
+    public const FIELD_IS_REQUIRE_NAME = 'is_require';
+    public const FIELD_SORT_ORDER_NAME = 'sort_order';
+    public const FIELD_PRICE_NAME = 'price';
+    public const FIELD_PRICE_TYPE_NAME = 'price_type';
+    public const FIELD_SKU_NAME = 'sku';
+    public const FIELD_MAX_CHARACTERS_NAME = 'max_characters';
+    public const FIELD_FILE_EXTENSION_NAME = 'file_extension';
+    public const FIELD_IMAGE_SIZE_X_NAME = 'image_size_x';
+    public const FIELD_IMAGE_SIZE_Y_NAME = 'image_size_y';
+    public const FIELD_IS_DELETE = 'is_delete';
+    public const FIELD_IS_USE_DEFAULT = 'is_use_default';
     /**#@-*/
 
     /**#@+
      * Import options values
      */
-    const IMPORT_OPTIONS_MODAL = 'import_options_modal';
-    const CUSTOM_OPTIONS_LISTING = 'product_custom_options_listing';
+    public const IMPORT_OPTIONS_MODAL = 'import_options_modal';
+    public const CUSTOM_OPTIONS_LISTING = 'product_custom_options_listing';
     /**#@-*/
 
     /**
@@ -137,11 +137,6 @@ class CustomOptions extends AbstractModifier
     protected $meta = [];
 
     /**
-     * @var CurrencyInterface
-     */
-    private $localeCurrency;
-
-    /**
      * @param LocatorInterface $locator
      * @param StoreManagerInterface $storeManager
      * @param ConfigInterface $productOptionsConfig
@@ -166,7 +161,7 @@ class CustomOptions extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyData(array $data)
@@ -226,7 +221,7 @@ class CustomOptions extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyMeta(array $meta)
@@ -348,7 +343,9 @@ class CustomOptions extends AbstractModifier
                                 'sortOrder' => 20,
                                 'actions' => [
                                     [
-                                        'targetName' => 'ns = ${ $.ns }, index = ' . static::GRID_OPTIONS_NAME,
+                                        'targetName' => '${ $.ns }.${ $.ns }.' . static::GROUP_CUSTOM_OPTIONS_NAME
+                                            . '.' . static::GRID_OPTIONS_NAME,
+                                        '__disableTmpl' => ['targetName' => false],
                                         'actionName' => 'processingAddChild',
                                     ]
                                 ]
@@ -375,8 +372,8 @@ class CustomOptions extends AbstractModifier
                     'config' => [
                         'addButtonLabel' => __('Add Option'),
                         'componentType' => DynamicRows::NAME,
-                        'component' => 'Magento_Catalog/js/components/dynamic-rows-import-custom-options',
-                        'template' => 'ui/dynamic-rows/templates/collapsible',
+                        'component' => 'Magento_Catalog/js/components/dynamic-rows-import-custom-options-per-page',
+                        'template' => 'Magento_Catalog/components/dynamic-rows-import-custom-options-per-page',
                         'additionalClasses' => 'admin__field-wide',
                         'deleteProperty' => static::FIELD_IS_DELETE,
                         'deleteValue' => '1',
@@ -386,7 +383,13 @@ class CustomOptions extends AbstractModifier
                         'collapsibleHeader' => true,
                         'sortOrder' => $sortOrder,
                         'dataProvider' => static::CUSTOM_OPTIONS_LISTING,
-                        'imports' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
+                        'imports' => [
+                            'insertData' => '${ $.provider }:${ $.dataProvider }',
+                            '__disableTmpl' => ['insertData' => false],
+                        ],
+                        'sizesConfig' => [
+                            'enabled' => true
+                        ]
                     ],
                 ],
             ],
@@ -511,7 +514,8 @@ class CustomOptions extends AbstractModifier
                                     'exports' => true
                                 ],
                                 'exports' => [
-                                    'currentProductId' => '${ $.externalProvider }:params.current_product_id'
+                                    'currentProductId' => '${ $.externalProvider }:params.current_product_id',
+                                    '__disableTmpl' => ['currentProductId' => false],
                                 ]
                             ],
                         ],
@@ -557,7 +561,8 @@ class CustomOptions extends AbstractModifier
                                     'valueUpdate' => 'input',
                                     'imports' => [
                                         'optionId' => '${ $.provider }:${ $.parentScope }.option_id',
-                                        'isUseDefault' => '${ $.provider }:${ $.parentScope }.is_use_default'
+                                        'isUseDefault' => '${ $.provider }:${ $.parentScope }.is_use_default',
+                                        '__disableTmpl' => ['optionId' => false, 'isUseDefault' => false],
                                     ]
                                 ],
                             ],
@@ -636,7 +641,8 @@ class CustomOptions extends AbstractModifier
                         'imports' => [
                             'optionId' => '${ $.provider }:${ $.parentScope }.option_id',
                             'optionTypeId' => '${ $.provider }:${ $.parentScope }.option_type_id',
-                            'isUseDefault' => '${ $.provider }:${ $.parentScope }.is_use_default'
+                            'isUseDefault' => '${ $.provider }:${ $.parentScope }.is_use_default',
+                            '__disableTmpl' => ['optionId' => false, 'optionTypeId' => false, 'isUseDefault' => false],
                         ],
                         'service' => [
                             'template' => 'Magento_Catalog/form/element/helper/custom-option-type-service',
@@ -652,12 +658,16 @@ class CustomOptions extends AbstractModifier
                     'config' => [
                         'addButtonLabel' => __('Add Value'),
                         'componentType' => DynamicRows::NAME,
-                        'component' => 'Magento_Ui/js/dynamic-rows/dynamic-rows',
+                        'component' => 'Magento_Catalog/js/components/dynamic-rows-per-page',
+                        'template' => 'Magento_Catalog/components/dynamic-rows-per-page',
                         'additionalClasses' => 'admin__field-wide',
                         'deleteProperty' => static::FIELD_IS_DELETE,
                         'deleteValue' => '1',
                         'renderDefaultRecord' => false,
                         'sortOrder' => $sortOrder,
+                        'sizesConfig' => [
+                            'enabled' => true
+                        ]
                     ],
                 ],
             ],
@@ -866,7 +876,7 @@ class CustomOptions extends AbstractModifier
                 'data' => [
                     'config' => [
                         'componentType' => Field::NAME,
-                        'formElement' => Input::NAME,
+                        'formElement' => Hidden::NAME,
                         'dataScope' => static::FIELD_SORT_ORDER_NAME,
                         'dataType' => Number::NAME,
                         'visible' => false,
@@ -922,7 +932,7 @@ class CustomOptions extends AbstractModifier
                         'addbeforePool' => $this->productOptionsPrice->prefixesToOptionArray(),
                         'sortOrder' => $sortOrder,
                         'validation' => [
-                            'validate-zero-or-greater' => true
+                            'validate-number' => true
                         ],
                     ],
                 ],
@@ -1045,6 +1055,7 @@ class CustomOptions extends AbstractModifier
                 'data' => [
                     'config' => [
                         'label' => __('Compatible File Extensions'),
+                        'notice' => __('Enter separated extensions, like: png, jpg, gif.'),
                         'componentType' => Field::NAME,
                         'formElement' => Input::NAME,
                         'dataScope' => static::FIELD_FILE_EXTENSION_NAME,
@@ -1150,7 +1161,7 @@ class CustomOptions extends AbstractModifier
 
             if (count($group['optgroup'])) {
                 $options[] = $group;
-                $groupIndex += 1;
+                $groupIndex++;
             }
         }
 
@@ -1166,40 +1177,5 @@ class CustomOptions extends AbstractModifier
     protected function getCurrencySymbol()
     {
         return $this->storeManager->getStore()->getBaseCurrency()->getCurrencySymbol();
-    }
-
-    /**
-     * The getter function to get the locale currency for real application code
-     *
-     * @return \Magento\Framework\Locale\CurrencyInterface
-     *
-     * @deprecated 101.0.0
-     */
-    private function getLocaleCurrency()
-    {
-        if ($this->localeCurrency === null) {
-            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()->get(CurrencyInterface::class);
-        }
-        return $this->localeCurrency;
-    }
-
-    /**
-     * Format price according to the locale of the currency
-     *
-     * @param mixed $value
-     * @return string
-     * @since 101.0.0
-     */
-    protected function formatPrice($value)
-    {
-        if (!is_numeric($value)) {
-            return null;
-        }
-
-        $store = $this->storeManager->getStore();
-        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
-        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
-
-        return $value;
     }
 }

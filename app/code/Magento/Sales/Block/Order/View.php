@@ -18,7 +18,7 @@ class View extends \Magento\Framework\View\Element\Template
     /**
      * @var string
      */
-    protected $_template = 'order/view.phtml';
+    protected $_template = 'Magento_Sales::order/view.phtml';
 
     /**
      * Core registry
@@ -29,7 +29,7 @@ class View extends \Magento\Framework\View\Element\Template
 
     /**
      * @var \Magento\Framework\App\Http\Context
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected $httpContext;
 

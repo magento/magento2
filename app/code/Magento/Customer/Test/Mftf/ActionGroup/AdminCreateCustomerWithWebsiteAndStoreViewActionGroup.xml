@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateCustomerWithWebsiteAndStoreViewActionGroup">
+        <annotations>
+            <description>Goes to the Customer grid page. Click on 'Add New Customer'. Fills provided Customer Data. Fill provided Customer Address data. Assigns Product to Website and Store View. Click on Save Address.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerData"/>
+            <argument name="address"/>
+            <argument name="website" type="string"/>
+            <argument name="storeView" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToCustomersPage"/>
+        <click stepKey="addNewCustomer" selector="{{AdminCustomerGridMainActionsSection.addNewCustomer}}"/>
+        <selectOption stepKey="selectWebSite" selector="{{AdminCustomerAccountInformationSection.associateToWebsite}}" userInput="{{website}}"/>
+        <fillField stepKey="FillFirstName" selector="{{AdminCustomerAccountInformationSection.firstName}}" userInput="{{customerData.firstname}}"/>
+        <fillField stepKey="FillLastName" selector="{{AdminCustomerAccountInformationSection.lastName}}" userInput="{{customerData.lastname}}"/>
+        <fillField stepKey="FillEmail" selector="{{AdminCustomerAccountInformationSection.email}}" userInput="{{customerData.email}}"/>
+        <selectOption stepKey="selectStoreView" selector="{{AdminCustomerAccountInformationSection.storeView}}" userInput="{{storeView}}"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfThePage"/>
+        <click stepKey="saveCustomer" selector="{{AdminCustomerAccountInformationSection.saveCustomerAndContinueEdit}}"/>
+        <waitForPageLoad stepKey="waitForCustomersPage"/>
+        <see stepKey="seeSuccessMessage" userInput="You saved the customer."/>
+        <click stepKey="goToAddresses" selector="{{AdminCustomerAccountInformationSection.addressesButton}}"/>
+        <waitForPageLoad stepKey="waitForAddresses"/>
+        <click stepKey="clickOnAddNewAddress" selector="{{AdminCustomerAddressesSection.addNewAddress}}"/>
+        <waitForPageLoad stepKey="waitForAddressFields"/>
+        <click stepKey="thickBillingAddress" selector="{{AdminCustomerAddressesSection.defaultBillingAddress}}"/>
+        <click stepKey="thickShippingAddress" selector="{{AdminCustomerAddressesSection.defaultShippingAddress}}"/>
+        <fillField stepKey="fillFirstNameForAddress" selector="{{AdminCustomerAddressesSection.firstNameForAddress}}" userInput="{{address.firstname}}"/>
+        <fillField stepKey="fillLastNameForAddress" selector="{{AdminCustomerAddressesSection.lastNameForAddress}}" userInput="{{address.lastname}}"/>
+        <fillField stepKey="fillStreetAddress" selector="{{AdminCustomerAddressesSection.streetAddress}}" userInput="{{address.street[0]}}"/>
+        <fillField stepKey="fillCity" selector="{{AdminCustomerAddressesSection.city}}" userInput="{{address.city}}"/>
+        <selectOption stepKey="selectCountry" selector="{{AdminCustomerAddressesSection.country}}" userInput="{{address.country}}"/>
+        <selectOption stepKey="selectState" selector="{{AdminCustomerAddressesSection.state}}" userInput="{{address.state}}"/>
+        <fillField stepKey="fillZip" selector="{{AdminCustomerAddressesSection.zip}}" userInput="{{address.postcode}}"/>
+        <fillField stepKey="fillPhoneNumber" selector="{{AdminCustomerAddressesSection.phoneNumber}}" userInput="{{address.telephone}}"/>
+        <click stepKey="saveAddress" selector="{{AdminCustomerAddressesSection.saveAddress}}"/>
+        <waitForPageLoad stepKey="waitForAddressSave"/>
+    </actionGroup>
+</actionGroups>

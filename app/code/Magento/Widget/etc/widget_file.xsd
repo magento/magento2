@@ -212,8 +212,8 @@
         <xs:annotation>
             <xs:documentation>List of parameters this parameter depends on.</xs:documentation>
         </xs:annotation>
-        <xs:all>
+        <xs:sequence maxOccurs="unbounded">
             <xs:element name="parameter" type="dependsParameterType" />
-        </xs:all>
+        </xs:sequence>
     </xs:complexType>
 </xs:schema>

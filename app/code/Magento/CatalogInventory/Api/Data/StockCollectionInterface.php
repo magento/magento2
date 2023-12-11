@@ -15,6 +15,10 @@ use Magento\Framework\Api\SearchResultsInterface;
  * Interface StockCollectionInterface
  * @api
  * @since 100.0.2
+ *
+ * @deprecated 100.3.0 Replaced with Multi Source Inventory
+ * @link https://developer.adobe.com/commerce/webapi/rest/inventory/index.html
+ * @link https://developer.adobe.com/commerce/webapi/rest/inventory/inventory-api-reference.html
  */
 interface StockCollectionInterface extends SearchResultsInterface
 {

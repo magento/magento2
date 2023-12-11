@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateTopCategoryUrlWithNoRedirectTest">
+        <annotations>
+            <stories value="Update category"/>
+            <title value="Update top category url and do not create redirect"/>
+            <description value="Login as admin and update top category url and do not create redirect"/>
+            <testCaseId value="MC-6056"/>
+            <severity value="BLOCKER"/>
+            <group value="Catalog"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <!-- Create three level nested category -->
+            <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
+            <createData entity="Two_nested_categories" stepKey="createTwoLevelNestedCategories">
+                <requiredEntity createDataKey="createDefaultCategory"/>
+            </createData>
+            <createData entity="Three_nested_categories" stepKey="createThreeLevelNestedCategories">
+                <requiredEntity createDataKey="createTwoLevelNestedCategories"/>
+            </createData>
+
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <deleteData createDataKey="createThreeLevelNestedCategories" stepKey="deleteThreeNestedCategories"/>
+            <deleteData createDataKey="createTwoLevelNestedCategories" stepKey="deleteTwoLevelNestedCategory"/>
+            <deleteData createDataKey="createDefaultCategory" stepKey="deleteDefaultCategory"/>
+        </after>
+
+        <!-- Open Category page -->
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+
+        <!-- Open 3rd Level category -->
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCategory">
+            <argument name="category" value="$$createThreeLevelNestedCategories$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad"/>
+
+        <!--Update category UrlKey and uncheck permanent redirect for old URL -->
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToSearchEngineOptimization1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectSearchEngineOptimization"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad1"/>
+        <actionGroup ref="AdminUncheckPermanentRedirectCheckBoxActionGroup" stepKey="updateUrlKey">
+            <argument name="value" value="updatedurl"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="uncheckPermanentRedirectCheckBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectSearchEngineOptimization1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="saveUpdatedCategory"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="seeSuccessMessage"/>
+
+        <!-- Get Category Id -->
+        <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#"/>
+
+        <!-- Open Url Rewrite Page -->
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openUrlRewriteIndexPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForUrlRewritePage"/>
+
+        <!-- Verify third level category's  Redirect Path, Target Path and Redirect Type after the URL Update -->
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnResetButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad0"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openUrlRewriteGridFilters"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillUpdatedUrlInRedirectPathFilter"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOrderApplyFilters"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeTheRedirectType"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeTheTargetPath"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeTheRedirectPath"/>
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath">
+            <argument name="redirectPath" value="$$createDefaultCategory.name$$/$$createTwoLevelNestedCategories.name$$/updatedurl.html" />
+            <argument name="redirectType" value="No" />
+            <argument name="targetPath" value="catalog/category/view/id/{$categoryId}"/>
+        </actionGroup>
+
+        <!-- Verify third level category's old URL path doesn't show redirect path-->
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickOnResetButton1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad3"/>
+        <actionGroup ref="AdminSearchDeletedUrlRewriteActionGroup" stepKey="searcOldUrlRewriteInGrid">
+            <argument name="requestPath" value="{{Three_nested_categories.name_lwr}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openUrlRewriteGridFilters1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillOldUrlInRedirectPathFilter"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOrderApplyFilters1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad4"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeEmptyRecodsMessage"/>
+    </test>
+</tests>

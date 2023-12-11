@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigDefaultProductLayoutFromConfigurationSettingTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Default layout configuration MAGETWO-88793"/>
+            <title value="Admin should be able to configure a default layout for Product Page from System Configuration"/>
+            <description value="Admin should be able to configure a default layout for Product Page from System Configuration"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MAGETWO-89023"/>
+            <group value="product"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="NavigateToDefaultLayoutsSettingActionGroup" stepKey="navigateToWebConfigurationPage1"/>
+            <actionGroup ref="AdminSetProductLayoutSettingsActionGroup" stepKey="sampleActionGroup">
+                <argument name="layout" value="1 column"/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheBeforeTestFinishes">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="NavigateToDefaultLayoutsSettingActionGroup" stepKey="navigateToWebConfigurationPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="expandDefaultLayouts"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibilityr" stepKey="DefaultProductLayout"/>
+        <actionGroup ref="AdminSetProductLayoutSettingsActionGroup" stepKey="select3ColumnsLayout">
+            <argument name="layout" value="3 columns"/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="clickSaveConfig">
+            <argument name="tags" value="config"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="navigateToNewProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait1"/>
+        <actionGroup ref="AdminExpandProductDesignSectionActionGroup" stepKey="clickOnDesignTab"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLayoutDropDown"/>
+        <seeOptionIsSelected selector="{{ProductDesignSection.LayoutDropdown}}" userInput="3 columns" stepKey="see3ColumnsSelected"/>
+    </test>
+</tests>

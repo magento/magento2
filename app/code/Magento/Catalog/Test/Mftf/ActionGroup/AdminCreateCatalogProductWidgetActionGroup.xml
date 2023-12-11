@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateCatalogProductWidgetActionGroup" extends="AdminCreateWidgetActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateWidgetActionGroup. Creates Catalog Category Link Widget.</description>
+        </annotations>
+        <arguments>
+            <argument name="categoryName" type="string" defaultValue="{{DefaultCategory.name}}"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{AdminNewWidgetSection.selectCategory}}" after="clickWidgetOptions" stepKey="waitForSelectCategoryButtonVisible"/>
+        <click selector="{{AdminNewWidgetSection.selectCategory}}" stepKey="clickOnSelectCategory"/>
+        <waitForPageLoad stepKey="waitForCategoryTreeLoaded"/>
+        <click selector="{{AdminCategorySidebarTreeSection.expandRootCategoryByName(DefaultCategory.name)}}" stepKey="clickToExpandDefaultCategory"/>
+        <waitForElementVisible selector="{{WidgetSection.CreateCategory(categoryName)}}" stepKey="waitForCategoryVisible"/>
+        <click selector="{{WidgetSection.CreateCategory(categoryName)}}" stepKey="selectCategory"/>
+        <waitForPageLoad stepKey="waitForWidgetPageLoaded"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveButton"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="The widget instance has been saved" stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

@@ -19,6 +19,7 @@ $customerData = [
     'lastname' => 'test lastname',
     'email' => 'customer@example.com',
     'default_billing' => 1,
+    'default_shipping' => 1,
     'password' => '123123q',
     'attribute_set_id' => 1,
 ];
@@ -81,3 +82,13 @@ $customer->addAddress($addressThree);
 
 $customer->save();
 $customerRegistry->remove($customer->getId());
+/** @var \Magento\JwtUserToken\Api\RevokedRepositoryInterface $revokedRepo */
+$revokedRepo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get(\Magento\JwtUserToken\Api\RevokedRepositoryInterface::class);
+$revokedRepo->saveRevoked(
+    new \Magento\JwtUserToken\Api\Data\Revoked(
+        \Magento\Authorization\Model\UserContextInterface::USER_TYPE_CUSTOMER,
+        (int) $customer->getId(),
+        time() - 3600 * 24
+    )
+);

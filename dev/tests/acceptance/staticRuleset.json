@@ -1,0 +1,9 @@
+{
+    "tests": [
+        "actionGroupArguments",
+        "deprecatedEntityUsage",
+        "annotations",
+        "pauseActionUsage",
+        "testDependencies"
+    ]
+}

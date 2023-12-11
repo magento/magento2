@@ -117,6 +117,7 @@ Capture,Capture
 "Total Paid","Total Paid"
 "Total Refunded","Total Refunded"
 "Total Due","Total Due"
+"Total Canceled","Total Canceled"
 Edit,Edit
 "Are you sure you want to send an order email to customer?","Are you sure you want to send an order email to customer?"
 "This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you want to continue?","This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you want to continue?"
@@ -158,7 +159,7 @@ Transactions,Transactions
 "Order View","Order View"
 Any,Any
 Specified,Specified
-"Applies to Any of the Specified Order Statuses except canceled orders","Applies to Any of the Specified Order Statuses except canceled orders"
+"Applies to Any of the Specified Order Statuses except canceled orders","Applies to Any of the Specified Order Statuses except canceled and pending orders"
 "Cart Price Rule","Cart Price Rule"
 Yes,Yes
 No,No
@@ -215,8 +216,8 @@ Sales,Sales
 "You created the credit memo.","You created the credit memo."
 "We can't save the credit memo right now.","We can't save the credit memo right now."
 "We can't update the item's quantity right now.","We can't update the item's quantity right now."
-"View Memo for #%1","View Memo for #%1"
-"View Memo","View Memo"
+"View Credit Memo for #%1","View Credit Memo for #%1"
+"View Credit Memo #%1","View Credit Memo #%1"
 "You voided the credit memo.","You voided the credit memo."
 "We can't void the credit memo.","We can't void the credit memo."
 "The order no longer exists.","The order no longer exists."
@@ -233,7 +234,6 @@ Sales,Sales
 "You can't create an invoice without products.","You can't create an invoice without products."
 "New Invoice","New Invoice"
 "We can't save the invoice right now.","We can't save the invoice right now."
-"The invoice and the shipment  have been created. The shipping label cannot be created now.","The invoice and the shipment  have been created. The shipping label cannot be created now."
 "You created the invoice and shipment.","You created the invoice and shipment."
 "The invoice has been created.","The invoice has been created."
 "We can't send the invoice email right now.","We can't send the invoice email right now."
@@ -458,6 +458,7 @@ State/Province,State/Province
 "Order # %1 Notification(s)","Order # %1 Notification(s)"
 "You can not cancel Credit Memo","You can not cancel Credit Memo"
 "Could not cancel creditmemo","Could not cancel creditmemo"
+"We found an invalid order to refund.","We found an invalid order to refund."
 "We cannot register an existing credit memo.","We cannot register an existing credit memo."
 "We found an invalid quantity to invoice item ""%1"".","We found an invalid quantity to invoice item ""%1""."
 "The Order State ""%1"" must not be set manually.","The Order State ""%1"" must not be set manually."
@@ -687,17 +688,9 @@ General,General
 "Allow Reorder","Allow Reorder"
 "Invoice and Packing Slip Design","Invoice and Packing Slip Design"
 "Logo for PDF Print-outs (200x50)","Logo for PDF Print-outs (200x50)"
-"
-                        Your default logo will be used in PDF and HTML documents.<br />(jpeg, tiff, png) If your pdf image is distorted, try to use larger file-size image.
-                    ","
-                        Your default logo will be used in PDF and HTML documents.<br />(jpeg, tiff, png) If your pdf image is distorted, try to use larger file-size image.
-                    "
+"Your default logo will be used in PDF and HTML documents.<br />(jpeg, tiff, png) If your pdf image is distorted, try to use larger file-size image.","Your default logo will be used in PDF and HTML documents.<br />(jpeg, tiff, png) If your pdf image is distorted, try to use larger file-size image."
 "Logo for HTML Print View","Logo for HTML Print View"
-"
-                        Logo for HTML documents only. If empty, default will be used.<br />(jpeg, gif, png)
-                    ","
-                        Logo for HTML documents only. If empty, default will be used.<br />(jpeg, gif, png)
-                    "
+"Logo for HTML documents only. If empty, default will be used.<br />(jpeg, gif, png)","Logo for HTML documents only. If empty, default will be used.<br />(jpeg, gif, png)"
 Address,Address
 "Minimum Order Amount","Minimum Order Amount"
 Enable,Enable
@@ -804,3 +797,26 @@ Created,Created
 "PDF Shipments","PDF Shipments"
 "PDF Creditmemos","PDF Creditmemos"
 Refunds,Refunds
+"Allow Zero GrandTotal for Creditmemo","Allow Zero GrandTotal for Creditmemo"
+"Allow Zero GrandTotal","Allow Zero GrandTotal"
+Email is required field for Admin order creation,Email is required field for Admin order creation
+If set YES Email field will be required during Admin order creation for new Customer.,If set YES Email field will be required during Admin order creation for new Customer.
+"Could not save the shipment tracking","Could not save the shipment tracking"
+"Please enter a coupon code!","Please enter a coupon code!"
+"Reorder is not available.","Reorder is not available."
+"The coupon code has been removed.","The coupon code has been removed."
+"This creditmemo no longer exists.","This creditmemo no longer exists."
+"Add to address book","Add to address book"
+"View Invoice # %1","View Invoice # %1"
+"Invoice Information","Invoice Information"
+"The invoice confirmation email was sent","The invoice confirmation email was sent"
+"The invoice confirmation email is not sent","The invoice confirmation email is not sent"
+"Invoice # %1","Invoice # %1"
+"Credit Memo Information","Credit Memo Information"
+"The credit memo confirmation email was sent","The credit memo confirmation email was sent"
+"The credit memo confirmation email is not sent","The credit memo confirmation email is not sent"
+"Memo # %1","Memo # %1"
+"Credit Memo Date","Credit Memo Date"
+"Logo for PDF Print-outs","Logo for PDF Print-outs"
+"Please provide a comment text or update the order status to be able to submit a comment for this order.", "Please provide a comment text or update the order status to be able to submit a comment for this order."
+"A status change or comment text is required to submit a comment.", "A status change or comment text is required to submit a comment."

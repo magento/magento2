@@ -21,8 +21,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Product\Image::class
         );
-        /** @var \Magento\Catalog\Model\View\Asset\Placeholder $defualtPlaceholder */
-        $defualtPlaceholder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        /** @var \Magento\Catalog\Model\View\Asset\Placeholder $defaultPlaceholder */
+        $defaultPlaceholder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(
                 \Magento\Catalog\Model\View\Asset\Placeholder::class,
                 ['type' => 'image']
@@ -30,7 +30,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         $model->setDestinationSubdir('image');
         $model->setBaseFile('');
-        $this->assertEquals($defualtPlaceholder->getSourceFile(), $model->getBaseFile());
+        $this->assertEquals($defaultPlaceholder->getSourceFile(), $model->getBaseFile());
         return $model;
     }
 
@@ -52,7 +52,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     public function testGetUrlPlaceholder($model)
     {
         $this->assertStringMatchesFormat(
-            'http://localhost/pub/static/%s/frontend/%s/Magento_Catalog/images/product/placeholder/image.jpg',
+            'http://localhost/static/%s/frontend/%s/Magento_Catalog/images/product/placeholder/image.jpg',
             $model->getUrl()
         );
     }
@@ -62,12 +62,12 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $inputFile = 'watermark.png';
         $expectedFile = '/somewhere/watermark.png';
 
-        /** @var \Magento\Framework\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject $viewFilesystem */
+        /** @var \Magento\Framework\View\FileSystem|\PHPUnit\Framework\MockObject\MockObject $viewFilesystem */
         $viewFileSystem = $this->createMock(\Magento\Framework\View\FileSystem::class);
         $viewFileSystem->expects($this->once())
             ->method('getStaticFileName')
             ->with($inputFile)
-            ->will($this->returnValue($expectedFile));
+            ->willReturn($expectedFile);
 
         /** @var $model \Magento\Catalog\Model\Product\Image */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

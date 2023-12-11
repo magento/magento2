@@ -16,15 +16,16 @@ use Magento\TestFramework\Helper\Bootstrap;
 class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Object Manager
-     *
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
+    /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * Tax calculation service
-     *
      * @var \Magento\Tax\Api\TaxCalculationInterface
      */
     private $taxCalculationService;
@@ -75,7 +76,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
      */
     private $dataObjectHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->quoteDetailsFactory = $this->objectManager->create(
@@ -88,7 +89,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
         $this->setUpDefaultRules();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->tearDownDefaultRules();
     }
@@ -108,7 +109,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
         );
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails, 1);
-        $this->assertEquals($expected, $this->convertObjectToArray($taxDetails));
+        $this->assertEqualsWithDelta($expected, $this->convertObjectToArray($taxDetails), self::EPSILON);
     }
 
     /**
@@ -1286,7 +1287,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails);
 
-        $this->assertEquals($expectedTaxDetails, $this->convertObjectToArray($taxDetails));
+        $this->assertEqualsWithDelta($expectedTaxDetails, $this->convertObjectToArray($taxDetails), self::EPSILON);
     }
 
     /**
@@ -2192,7 +2193,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Create the base results for the the multi rules test
+     * Create the base results for the multi rules test
      *
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -2387,7 +2388,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails);
 
-        $this->assertEquals($expectedTaxDetails, $this->convertObjectToArray($taxDetails));
+        $this->assertEqualsWithDelta($expectedTaxDetails, $this->convertObjectToArray($taxDetails), self::EPSILON);
     }
 
     /**
@@ -2424,7 +2425,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails);
 
-        $this->assertEquals($expectedTaxDetails, $this->convertObjectToArray($taxDetails));
+        $this->assertEqualsWithDelta($expectedTaxDetails, $this->convertObjectToArray($taxDetails), self::EPSILON);
     }
 
     /**
@@ -2471,7 +2472,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
         $taxDetails = $this->taxCalculationService->calculateTax($quoteDetails);
 
-        $this->assertEquals($expectedTaxDetails, $this->convertObjectToArray($taxDetails));
+        $this->assertEqualsWithDelta($expectedTaxDetails, $this->convertObjectToArray($taxDetails), self::EPSILON);
     }
 
     /**

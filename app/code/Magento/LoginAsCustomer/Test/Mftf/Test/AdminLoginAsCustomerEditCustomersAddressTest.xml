@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginAsCustomerEditCustomersAddressTest">
+        <annotations>
+            <features value="Login as Customer"/>
+            <stories value="Edit Customer addresses"/>
+            <title value="Admin user login as customer and edit customer's address"/>
+            <description
+                value="Verify Admin can access customer's personal cabinet and change his default shipping and billing addresses using Login as Customer functionality"/>
+            <severity value="CRITICAL"/>
+            <group value="login_as_customer"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
+                        stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
+                        stepKey="enableLoginAsCustomerAutoDetection"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheBeforeTestRun"/>
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
+                        stepKey="disableLoginAsCustomer"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheAfterTestRun"/>
+        </after>
+
+        <!-- Login as Customer Login from Customer page -->
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
+                     stepKey="loginAsCustomerFromCustomerPage">
+            <argument name="customerId" value="$$createCustomer.id$$"/>
+        </actionGroup>
+
+        <!-- Add new default address -->
+        <actionGroup ref="StorefrontAddCustomerDefaultAddressActionGroup" stepKey="addNewDefaultAddress">
+            <argument name="Address" value="US_Address_CA"/>
+        </actionGroup>
+
+        <!-- Open Customer edit page -->
+        <actionGroup ref="StorefrontSignOutAndCloseTabActionGroup" stepKey="signOutAfterLoggedInAsCustomer"/>
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$createCustomer.id$"/>
+        </actionGroup>
+
+        <!-- Assert Customer Default Billing Address -->
+        <actionGroup stepKey="checkDefaultBilling" ref="AdminAssertCustomerDefaultBillingAddress">
+            <argument name="firstName" value="$$createCustomer.firstname$$"/>
+            <argument name="lastName" value="$$createCustomer.lastname$$"/>
+            <argument name="street1" value="{{US_Address_CA.street[0]}}"/>
+            <argument name="state" value="{{US_Address_CA.state}}"/>
+            <argument name="postcode" value="{{US_Address_CA.postcode}}"/>
+            <argument name="country" value="{{US_Address_CA.country}}"/>
+            <argument name="telephone" value="{{US_Address_CA.telephone}}"/>
+        </actionGroup>
+
+        <!-- Assert Customer Default Shipping Address -->
+        <actionGroup stepKey="checkDefaultShipping" ref="AdminAssertCustomerDefaultShippingAddress">
+            <argument name="firstName" value="$$createCustomer.firstname$$"/>
+            <argument name="lastName" value="$$createCustomer.lastname$$"/>
+            <argument name="street1" value="{{US_Address_CA.street[0]}}"/>
+            <argument name="state" value="{{US_Address_CA.state}}"/>
+            <argument name="postcode" value="{{US_Address_CA.postcode}}"/>
+            <argument name="country" value="{{US_Address_CA.country}}"/>
+            <argument name="telephone" value="{{US_Address_CA.telephone}}"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -14,7 +14,7 @@ class Video extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function _construct()
     {
-        $this->_init(\Magento\ProductVideo\Setup\InstallSchema::GALLERY_VALUE_VIDEO_TABLE, 'value_id');
+        $this->_init('catalog_product_entity_media_gallery_value_video', 'value_id');
     }
 
     /**
@@ -39,7 +39,8 @@ class Video extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->getMainTable()
         )->where(
             'value_id IN(?)',
-            $ids
+            $ids,
+            \Zend_Db::INT_TYPE
         );
 
         return $this->getConnection()->fetchAll($select);

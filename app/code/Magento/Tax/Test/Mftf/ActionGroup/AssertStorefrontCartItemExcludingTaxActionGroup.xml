@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontCartItemExcludingTaxActionGroup">
+        <annotations>
+            <description>Validates that the provided product price and subtotal excluding tax are present and correct in the Shopping Cart.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" defaultValue="{{_defaultProduct.name}}" type="string"/>
+            <argument name="productPriceExcludingTax" defaultValue="150" type="string"/>
+            <argument name="productSubtotalExcludingTax" defaultValue="150" type="string"/>
+        </arguments>
+
+        <see userInput="{{productPriceExcludingTax}}" selector="{{StorefrontCheckoutCartItemTaxSection.productPriceExcludingTaxByName(productName)}}" stepKey="assertProductPriceExcludingTax"/>
+        <see userInput="{{productSubtotalExcludingTax}}" selector="{{StorefrontCheckoutCartItemTaxSection.productSubtotalExcludingTaxByName(productName)}}" stepKey="assertProductSubtotalExcludingTax"/>
+    </actionGroup>
+</actionGroups>

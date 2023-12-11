@@ -93,6 +93,7 @@ define('globalNavigationScroll', [
 
         } else { // static menu cases
             checkRemoveClass(menu, fixedClassName);
+            menu.css('top', 'auto');
         }
 
         //  Save previous window scrollTop
@@ -223,7 +224,7 @@ define('globalNavigation', [
 
             if (e.which === 13) {
                 this._close(e);
-                $(selectors.topLevelHref, menuItem).focus();
+                $(selectors.topLevelHref, menuItem).trigger('focus');
             }
         },
 
@@ -267,17 +268,18 @@ define('globalNavigation', [
             if (subMenu.length) {
                 e.preventDefault();
             }
-
-            menuItem.addClass('_show')
-                .siblings(menuItemSelector)
-                .removeClass('_show');
-
-            subMenu.attr('aria-expanded', 'true');
-
             closeBtn.on('click', close);
 
-            this.overlay.show(0).on('click', close);
-            this.menuLinks.last().off('blur');
+            if ($(menuItem).hasClass('_show')) {
+                closeBtn.trigger('click');
+            } else {
+                menuItem.addClass('_show')
+                    .siblings(menuItemSelector)
+                    .removeClass('_show');
+                subMenu.attr('aria-expanded', 'true');
+                this.overlay.show(0).on('click', close);
+                this.menuLinks.last().off('blur');
+            }
         },
 
         /**
@@ -310,8 +312,9 @@ define('globalNavigation', [
 
 define('globalSearch', [
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'Magento_Ui/js/lib/key-codes',
+    'jquery-ui-modules/widget'
+], function ($, keyCodes) {
     'use strict';
 
     $.widget('mage.globalSearch', {
@@ -342,6 +345,25 @@ define('globalSearch', [
 
             this.input.on('focus.activateGlobalSearchForm', function () {
                 self.field.addClass(self.options.fieldActiveClass);
+            });
+
+            $(document).on('keydown.activateGlobalSearchForm', function (event) {
+                var inputs = [
+                    'input',
+                    'select',
+                    'textarea'
+                ];
+
+                if (keyCodes[event.which] !== 'forwardSlashKey' ||
+                    inputs.indexOf(event.target.tagName.toLowerCase()) !== -1 ||
+                    event.target.isContentEditable
+                ) {
+                    return;
+                }
+
+                event.preventDefault();
+
+                self.input.focus();
             });
         }
     });
@@ -572,13 +594,13 @@ define('collapsable', [
             var self = this;
 
             this.element
-                .on('show', function (e) {
+                .on('show.bs.collapse', function (e) {
                     var fieldsetWrapper = $(this).closest(self.options.wrapper);
 
                     fieldsetWrapper.addClass(self.options.openedClass);
                     e.stopPropagation();
                 })
-                .on('hide', function (e) {
+                .on('hide.bs.collapse', function (e) {
                     var fieldsetWrapper = $(this).closest(self.options.wrapper);
 
                     fieldsetWrapper.removeClass(self.options.openedClass);
@@ -593,13 +615,12 @@ define('collapsable', [
 define('js/theme', [
     'jquery',
     'mage/smart-keyboard-handler',
-    'mage/ie-class-fixer',
     'collapsable',
     'domReady!'
 ], function ($, keyboardHandler) {
     'use strict';
 
-    /* @TODO refactor collapsable as widget and avoid logic binding with such a general selectors */
+    /* @TODO refactor collapsible as widget and avoid logic binding with such a general selectors */
     $('.collapse').collapsable();
 
     $.each($('.entry-edit'), function (i, entry) {

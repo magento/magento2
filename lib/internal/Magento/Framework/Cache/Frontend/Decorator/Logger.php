@@ -30,7 +30,7 @@ class Logger extends Bare
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function remove($identifier)
     {
@@ -40,16 +40,18 @@ class Logger extends Bare
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
     {
-        $result = parent::clean($mode, $tags, $mode);
+        $result = parent::clean($mode, $tags);
         $this->log(compact('tags', 'mode'));
         return $result;
     }
 
     /**
+     * Log cache invalidation
+     *
      * @param mixed $args
      * @return void
      */

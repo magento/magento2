@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateProductAttributeFromProductPageTest">
+        <annotations>
+            <stories value="Create product Attribute"/>
+            <title value="Create Product Attribute from Product Page"/>
+            <description value="Login as admin and create new product attribute from product page with Text Field"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-10899"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+
+            <!--Create Category-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+
+            <!--Create Simple Product-->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!--Delete created entity -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!--<deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>-->
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteCreatedAttribute">
+                <argument name="ProductAttribute" value="newProductAttribute"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Open Product Index Page-->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+
+        <!-- Select Created Product-->
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}" stepKey="openFirstProduct"/>
+        <waitForPageLoad stepKey="waitForProductToLoad"/>
+
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillProductQty">
+            <argument name="productQty" value="100"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="selectStockStatus">
+             <argument name="stockStatus" value="In Stock"/>
+        </actionGroup>
+
+        <!-- Create New Product Attribute -->
+        <click selector="{{AdminProductFormSection.addAttributeBtn}}" stepKey="clickOnAddAttribute"/>
+        <waitForPageLoad stepKey="waitForAttributePageToLoad"/>
+        <click selector="{{AdminProductFormSection.createNewAttributeBtn}}" stepKey="clickCreateNewAttributeButton"/>
+        <waitForPageLoad stepKey="waitForNewAttributePageToLoad"/>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.defaultLabel}}" stepKey="waitForDefaultLabelToBeVisible"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.defaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillAttributeLabel"/>
+        <selectOption selector="{{AdminCreateNewProductAttributeSection.inputType}}" userInput="Text Field" stepKey="selectTextField"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.advancedAttributeProperties}}" stepKey="clickOnAdvancedAttributeProperties"/>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.attributeCode}}" stepKey="waitForAttributeCodeToVisible"/>
+        <scrollTo selector="{{AdminCreateNewProductAttributeSection.attributeCode}}" stepKey="scrollToAttributeCode"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.attributeCode}}" userInput="{{newProductAttribute.attribute_code}}" stepKey="fillAttributeCode"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.defaultValue}}" userInput="{{ProductAttributeOption8.value}}" stepKey="fillDefaultValue"/>
+        <scrollTo selector="{{AdminCreateNewProductAttributeSection.isUnique}}"   stepKey="scrollToIsUniqueOption"/>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.isUnique}}" stepKey="enableIsUniqueOption"/>
+        <scrollTo selector="{{AdminCreateNewProductAttributeSection.advancedAttributeProperties}}" stepKey="scrollToAdvancedAttributeProperties"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.advancedAttributeProperties}}" stepKey="clickOnAdvancedAttributeProperties1"/>
+        <scrollTo selector="{{AdminCreateNewProductAttributeSection.storefrontProperties}}"  stepKey="scrollToStorefrontProperties"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.storefrontProperties}}" stepKey="clickOnStorefrontProperties"/>
+        <waitForPageLoad stepKey="waitForStoreFrontToLoad"/>
+        <scrollTo stepKey="scroll1" selector="{{AdminCreateNewProductAttributeSection.sortProductListing}}" x="0" y="-80"/>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.inSearch}}" stepKey="enableInSearchOption"/>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.advancedSearch}}" stepKey="enableAdvancedSearch"/>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.isComparable}}" stepKey="enableIsUComparableption"/>
+        <checkOption  selector="{{AdminCreateNewProductAttributeSection.allowHtmlTags}}" stepKey="enableAllowHtmlTags"/>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.visibleOnStorefront}}" stepKey="enableVisibleOnStorefront"/>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.sortProductListing}}" stepKey="enableSortProductListing"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.saveAttribute}}" stepKey="clickOnSaveAttribute"/>
+        <waitForPageLoad stepKey="waitForAttributeToSave"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="saveTheProduct"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
+
+        <actionGroup ref="AdminInputCustomAttributeToExistingProductActionGroup" stepKey="adminProductFillCustomAttribute">
+            <argument name="attributeCode" value="{{newProductAttribute.attribute_code}}"/>
+            <argument name="adminOption1" value="{{ProductAttributeOption8.label}}"/>
+        </actionGroup>
+
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
+        <!--Verify product attribute added in product form -->
+        <scrollTo selector="{{AdminProductFormSection.contentTab}}" stepKey="scrollToContentTab"/>
+        <waitForElementVisible selector="{{AdminProductFormSection.attributeTab}}" stepKey="waitForAttributeToVisible"/>
+        <click selector="{{AdminProductFormSection.attributeTab}}" stepKey="clickOnAttribute"/>
+        <seeElement selector="{{AdminProductFormSection.attributeLabelByText(ProductAttributeFrontendLabel.label)}}" stepKey="seeAttributeLabelInProductForm"/>
+
+        <!--Verify Product Attribute in Attribute Form -->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttributeGrid"/>
+        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{newProductAttribute.attribute_code}}" stepKey="setAttributeCode"/>
+        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
+        <waitForPageLoad stepKey="waitForPageLoad" />
+        <see selector="{{AdminProductAttributeGridSection.attributeCodeColumn}}" userInput="{{newProductAttribute.attribute_code}}" stepKey="seeAttributeCode"/>
+        <see selector="{{AdminProductAttributeGridSection.defaultLabelColumn}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="seeDefaultLabel"/>
+        <see selector="{{AdminProductAttributeGridSection.isVisibleColumn}}" userInput="Yes" stepKey="seeIsVisibleColumn"/>
+        <see selector="{{AdminProductAttributeGridSection.isSearchableColumn}}" userInput="Yes" stepKey="seeSearchableColumn"/>
+        <see selector="{{AdminProductAttributeGridSection.isComparableColumn}}" userInput="Yes" stepKey="seeComparableColumn"/>
+
+        <!--Verify Product Attribute is present in Category Store Front Page -->
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="goToStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForProductFrontPageToLoad"/>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="clickOnCategory"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
+        <click selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="openSearchedProduct"/>
+        <waitForPageLoad  stepKey="waitForProductToLoad1"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductNameInStoreFront">
+            <argument name="value" value="{{SimpleProduct.name}}"/>
+        </actionGroup>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{SimpleProduct.price}}" stepKey="seeProductPriceInStoreFront"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeProductSkuInStoreFront">
+            <argument name="productSku" value="{{SimpleProduct.sku}}"/>
+        </actionGroup>
+        <scrollTo selector="{{StorefrontProductMoreInformationSection.moreInformation}}" stepKey="scrollToMoreInformation"/>
+        <see selector="{{StorefrontProductMoreInformationSection.attributeLabel}}"  userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="seeAttributeLabel"/>
+        <see selector="{{StorefrontProductMoreInformationSection.attributeValue}}"  userInput="{{ProductAttributeOption8.value}}" stepKey="seeAttributeValue"/>
+
+        <!--Verify Product Attribute present in search page -->
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="goToStorefrontPage1"/>
+        <waitForPageLoad stepKey="waitForProductFrontPageToLoad1"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillAttribute">
+            <argument name="phrase" value="{{ProductAttributeOption8.value}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextBoxButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductNameInCategoryPage">
+            <argument name="productName" value="{{SimpleProduct.name}}"/>
+        </actionGroup>
+    </test>
+</tests>

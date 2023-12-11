@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+        <test name="AdminCreateStoreViewStatusEnabledVerifyBackendAndFrontendTest">
+            <annotations>
+                <stories value="Create Store View"/>
+                <title value="Create Store View Status Enabled and Verify Backend and Frontend"/>
+                <description value="Test log in to Stores and Create Store View Status Enabled Test"/>
+                <testCaseId value="MC-14304"/>
+                <severity value="CRITICAL"/>
+                <group value="store"/>
+                <group value="mtf_migrated"/>
+            </annotations>
+            <before>
+                <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            </before>
+            <after>
+                <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
+                    <argument name="customStore" value="storeViewData"/>
+                </actionGroup>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                    <argument name="indices" value=""/>
+                </actionGroup>
+                <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            </after>
+
+            <!--Create store view-->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+                <argument name="StoreGroup" value="_defaultStoreGroup"/>
+                <argument name="customStore" value="storeViewData"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
+            <!--Save the above store view and verify AssertStoreViewSuccessSaveMessage-->
+            <actionGroup ref="AdminCreateStoreViewSaveActionGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>
+
+            <!--Go to store configuration page and verify AssertStoreBackend-->
+            <actionGroup ref="AssertStoreConfigurationBackendActionGroup" stepKey="verifyValuesOnStoreBackend">
+                <argument name="storeView1" value="{{storeViewData.name}}"/>
+            </actionGroup>
+
+            <!--Go to storefront and verify AssertStoreFrontend-->
+            <actionGroup ref="AssertStorefrontStoreVisibleInHeaderActionGroup" stepKey="verifyValuesOnStoreFrontend">
+                <argument name="store" value="{{storeViewData.name}}"/>
+            </actionGroup>
+        </test>
+</tests>

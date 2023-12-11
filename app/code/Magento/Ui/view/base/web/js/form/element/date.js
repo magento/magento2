@@ -108,24 +108,31 @@ define([
         },
 
         /**
+         * @inheritdoc
+         */
+        getPreview: function () {
+            return this.shiftedValue();
+        },
+
+        /**
          * Prepares and sets date/time value that will be displayed
          * in the input field.
          *
          * @param {String} value
          */
         onValueChange: function (value) {
-            var dateFormat,
-                shiftedValue;
+            var shiftedValue;
 
             if (value) {
-                if (this.options.showsTime) {
+                if (this.options.showsTime && !this.options.timeOnly) {
                     shiftedValue = moment.tz(value, 'UTC').tz(this.storeTimeZone);
                 } else {
-                    dateFormat = this.shiftedValue() ? this.outputDateFormat : this.inputDateFormat;
-
-                    shiftedValue = moment(value, dateFormat);
+                    shiftedValue = moment(value, this.outputDateFormat, true);
                 }
 
+                if (!shiftedValue.isValid()) {
+                    shiftedValue = moment(value, this.inputDateFormat);
+                }
                 shiftedValue = shiftedValue.format(this.pickerDateTimeFormat);
             } else {
                 shiftedValue = '';
@@ -150,7 +157,7 @@ define([
             if (shiftedValue) {
                 momentValue = moment(shiftedValue, this.pickerDateTimeFormat);
 
-                if (this.options.showsTime) {
+                if (this.options.showsTime && !this.options.timeOnly) {
                     formattedValue = moment(momentValue).format(this.timezoneFormat);
                     value = moment.tz(formattedValue, this.storeTimeZone).tz('UTC').toISOString();
                 } else {
@@ -170,10 +177,14 @@ define([
          * with moment.js library.
          */
         prepareDateTimeFormats: function () {
-            this.pickerDateTimeFormat = this.options.dateFormat;
+            if (this.options.timeOnly) {
+                this.pickerDateTimeFormat = this.options.timeFormat;
+            } else {
+                this.pickerDateTimeFormat = this.options.dateFormat;
 
-            if (this.options.showsTime) {
-                this.pickerDateTimeFormat += ' ' + this.options.timeFormat;
+                if (this.options.showsTime) {
+                    this.pickerDateTimeFormat += ' ' + this.options.timeFormat;
+                }
             }
 
             this.pickerDateTimeFormat = utils.convertToMomentFormat(this.pickerDateTimeFormat);
@@ -182,8 +193,12 @@ define([
                 this.outputDateFormat = this.options.dateFormat;
             }
 
-            this.inputDateFormat = utils.convertToMomentFormat(this.inputDateFormat);
-            this.outputDateFormat = utils.convertToMomentFormat(this.outputDateFormat);
+            this.inputDateFormat = this.options.timeOnly ?
+                utils.convertToMomentFormat(this.pickerDefaultTimeFormat) :
+                utils.convertToMomentFormat(this.inputDateFormat);
+            this.outputDateFormat = this.options.timeOnly ?
+                utils.convertToMomentFormat(this.options.timeFormat) :
+                utils.convertToMomentFormat(this.outputDateFormat);
 
             this.validationParams.dateFormat = this.outputDateFormat;
         }

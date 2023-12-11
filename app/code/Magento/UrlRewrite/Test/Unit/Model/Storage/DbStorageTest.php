@@ -3,629 +3,581 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\UrlRewrite\Test\Unit\Model\Storage;
 
+use Exception;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Model\Storage\DbStorage;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DbStorageTest extends \PHPUnit\Framework\TestCase
+class DbStorageTest extends TestCase
 {
     /**
-     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlRewriteFactory|MockObject
      */
-    protected $urlRewriteFactory;
+    private $urlRewriteFactory;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataObjectHelper|MockObject
      */
-    protected $dataObjectHelper;
+    private $dataObjectHelper;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
-    protected $connectionMock;
+    private $connectionMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|MockObject
      */
-    protected $select;
+    private $select;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
-    protected $resource;
+    private $resource;
 
     /**
-     * @var \Magento\UrlRewrite\Model\Storage\DbStorage
+     * @var DbStorage
      */
-    protected $storage;
+    private $storage;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->urlRewriteFactory = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()->getMock();
-        $this->dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
-        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
-        $this->select = $this->createPartialMock(
-            \Magento\Framework\DB\Select::class,
-            ['from', 'where', 'deleteFromSelect']
-        );
-        $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->urlRewriteFactory = $this->getMockBuilder(UrlRewriteFactory::class)
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->select = $this->getMockBuilder(Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resource = $this->createMock(ResourceConnection::class);
 
-        $this->resource->expects($this->any())
-            ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
-        $this->connectionMock->expects($this->any())
-            ->method('select')
-            ->will($this->returnValue($this->select));
+        $this->resource->method('getConnection')
+            ->willReturn($this->connectionMock);
+        $this->connectionMock->method('select')
+            ->willReturn($this->select);
 
         $this->storage = (new ObjectManager($this))->getObject(
-            \Magento\UrlRewrite\Model\Storage\DbStorage::class,
+            DbStorage::class,
             [
                 'urlRewriteFactory' => $this->urlRewriteFactory,
                 'dataObjectHelper' => $this->dataObjectHelper,
-                'resource' => $this->resource,
+                'resource' => $this->resource
             ]
         );
     }
 
-    public function testFindAllByData()
+    /**
+     * @return void
+     */
+    public function testFindAllByData(): void
     {
         $data = ['col1' => 'val1', 'col2' => 'val2'];
 
-        $this->select->expects($this->at(1))
+        $this->select
             ->method('where')
-            ->with('col1 IN (?)', 'val1');
+            ->withConsecutive(['col1 IN (?)', 'val1'], ['col2 IN (?)', 'val2']);
 
-        $this->select->expects($this->at(2))
-            ->method('where')
-            ->with('col2 IN (?)', 'val2');
-
-        $this->connectionMock->expects($this->any())
+        $this->connectionMock
             ->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')
             ->with($this->select)
-            ->will($this->returnValue([['row1'], ['row2']]));
+            ->willReturn([['row1'], ['row2']]);
 
-        $this->dataObjectHelper->expects($this->at(0))
+        $this->dataObjectHelper
             ->method('populateWithArray')
-            ->with(['urlRewrite1'], ['row1'], \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
-            ->will($this->returnSelf());
+            ->withConsecutive(
+                [['urlRewrite1'], ['row1'], UrlRewrite::class],
+                [['urlRewrite2'], ['row2'], UrlRewrite::class]
+            )
+            ->willReturnOnConsecutiveCalls($this->dataObjectHelper, $this->dataObjectHelper);
 
-        $this->urlRewriteFactory->expects($this->at(0))
+        $this->urlRewriteFactory
             ->method('create')
-            ->will($this->returnValue(['urlRewrite1']));
-
-        $this->dataObjectHelper->expects($this->at(1))
-            ->method('populateWithArray')
-            ->with(['urlRewrite2'], ['row2'], \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
-            ->will($this->returnSelf());
-
-        $this->urlRewriteFactory->expects($this->at(1))
-            ->method('create')
-            ->will($this->returnValue(['urlRewrite2']));
+            ->willReturnOnConsecutiveCalls(['urlRewrite1'], ['urlRewrite2']);
 
         $this->assertEquals([['urlRewrite1'], ['urlRewrite2']], $this->storage->findAllByData($data));
     }
 
-    public function testFindOneByData()
+    /**
+     * @return void
+     */
+    public function testFindOneByData(): void
     {
         $data = ['col1' => 'val1', 'col2' => 'val2'];
 
-        $this->select->expects($this->at(1))
+        $this->select
             ->method('where')
-            ->with('col1 IN (?)', 'val1');
+            ->withConsecutive(['col1 IN (?)', 'val1'], ['col2 IN (?)', 'val2']);
 
-        $this->select->expects($this->at(2))
-            ->method('where')
-            ->with('col2 IN (?)', 'val2');
-
-        $this->connectionMock->expects($this->any())
-            ->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
+        $this->connectionMock->method('quoteIdentifier')
+            ->willReturnArgument(0);
 
         $this->connectionMock->expects($this->once())
             ->method('fetchRow')
             ->with($this->select)
-            ->will($this->returnValue(['row1']));
+            ->willReturn(['row1']);
 
         $this->connectionMock->expects($this->never())->method('fetchAll');
 
-        $this->dataObjectHelper->expects($this->at(0))
+        $this->dataObjectHelper
             ->method('populateWithArray')
-            ->with(['urlRewrite1'], ['row1'], \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
-            ->will($this->returnSelf());
+            ->with(['urlRewrite1'], ['row1'], UrlRewrite::class)
+            ->willReturn($this->dataObjectHelper);
 
-        $this->urlRewriteFactory->expects($this->at(0))
+        $this->urlRewriteFactory
             ->method('create')
-            ->will($this->returnValue(['urlRewrite1']));
+            ->willReturn(['urlRewrite1']);
 
         $this->assertEquals(['urlRewrite1'], $this->storage->findOneByData($data));
     }
 
-    public function testFindOneByDataWithRequestPath()
+    /**
+     * @return void
+     */
+    public function testFindOneByDataWithRequestPath(): void
     {
         $origRequestPath = 'page-one';
         $data = [
-            'col1'                   => 'val1',
-            'col2'                   => 'val2',
-            UrlRewrite::REQUEST_PATH => $origRequestPath,
+            'col1' => 'val1',
+            'col2' => 'val2',
+            UrlRewrite::REQUEST_PATH => $origRequestPath
         ];
 
-        $this->select->expects($this->at(1))
+        $this->select
             ->method('where')
-            ->with('col1 IN (?)', 'val1');
+            ->withConsecutive(
+                ['col1 IN (?)', 'val1'],
+                ['col2 IN (?)', 'val2'],
+                ['request_path IN (?)', [$origRequestPath, $origRequestPath . '/']]
+            );
 
-        $this->select->expects($this->at(2))
-            ->method('where')
-            ->with('col2 IN (?)', 'val2');
-
-        $this->select->expects($this->at(3))
-            ->method('where')
-            ->with('request_path IN (?)', [$origRequestPath, $origRequestPath . '/']);
-
-        $this->connectionMock->expects($this->any())
-            ->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
+        $this->connectionMock->method('quoteIdentifier')
+            ->willReturnArgument(0);
 
         $this->connectionMock->expects($this->never())
             ->method('fetchRow');
 
         $urlRewriteRowInDb = [
-            UrlRewrite::REQUEST_PATH  => $origRequestPath,
+            UrlRewrite::REQUEST_PATH => $origRequestPath,
+            UrlRewrite::TARGET_PATH => $origRequestPath,
             UrlRewrite::REDIRECT_TYPE => 0,
         ];
 
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')
             ->with($this->select)
-            ->will($this->returnValue([$urlRewriteRowInDb]));
+            ->willReturn([$urlRewriteRowInDb]);
 
-        $this->dataObjectHelper->expects($this->at(0))
+        $this->dataObjectHelper
             ->method('populateWithArray')
-            ->with(['urlRewrite1'], $urlRewriteRowInDb, \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
-            ->will($this->returnSelf());
+            ->with(['urlRewrite1'], $urlRewriteRowInDb, UrlRewrite::class)
+            ->willReturn($this->dataObjectHelper);
 
-        $this->urlRewriteFactory->expects($this->at(0))
+        $this->urlRewriteFactory
             ->method('create')
-            ->will($this->returnValue(['urlRewrite1']));
+            ->willReturn(['urlRewrite1']);
 
         $this->assertEquals(['urlRewrite1'], $this->storage->findOneByData($data));
     }
 
-    public function testFindOneByDataWithRequestPathIsDifferent()
+    /**
+     * @return void
+     */
+    public function testFindOneByDataWithRequestPathIsDifferent(): void
     {
         $origRequestPath = 'page-one';
         $data = [
-            'col1'                   => 'val1',
-            'col2'                   => 'val2',
-            UrlRewrite::REQUEST_PATH => $origRequestPath,
+            'col1' => 'val1',
+            'col2' => 'val2',
+            UrlRewrite::REQUEST_PATH => $origRequestPath
         ];
 
-        $this->select->expects($this->at(1))
+        $this->select
             ->method('where')
-            ->with('col1 IN (?)', 'val1');
+            ->withConsecutive(
+                ['col1 IN (?)', 'val1'],
+                ['col2 IN (?)', 'val2'],
+                ['request_path IN (?)', [$origRequestPath, $origRequestPath . '/']]
+            );
 
-        $this->select->expects($this->at(2))
-            ->method('where')
-            ->with('col2 IN (?)', 'val2');
-
-        $this->select->expects($this->at(3))
-            ->method('where')
-            ->with('request_path IN (?)', [$origRequestPath, $origRequestPath . '/']);
-
-        $this->connectionMock->expects($this->any())
-            ->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
+        $this->connectionMock->method('quoteIdentifier')
+            ->willReturnArgument(0);
 
         $this->connectionMock->expects($this->never())
             ->method('fetchRow');
 
         $urlRewriteRowInDb = [
-            UrlRewrite::REQUEST_PATH  => $origRequestPath . '/',
+            UrlRewrite::REQUEST_PATH => $origRequestPath . '/',
+            UrlRewrite::TARGET_PATH => $origRequestPath . '/',
             UrlRewrite::REDIRECT_TYPE => 0,
-            UrlRewrite::STORE_ID      => 1,
+            UrlRewrite::STORE_ID => 1
         ];
 
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')
             ->with($this->select)
-            ->will($this->returnValue([$urlRewriteRowInDb]));
+            ->willReturn([$urlRewriteRowInDb]);
 
         $urlRewriteRedirect = [
-            'request_path'     => $origRequestPath,
-            'redirect_type'    => 301,
-            'store_id'         => 1,
-            'entity_type'      => 'custom',
-            'entity_id'        => '0',
-            'target_path'      => $origRequestPath . '/',
-            'description'      => null,
+            'request_path' => $origRequestPath,
+            'redirect_type' => 301,
+            'store_id' => 1,
+            'entity_type' => 'custom',
+            'entity_id' => '0',
+            'target_path' => $origRequestPath . '/',
+            'description' => null,
             'is_autogenerated' => '0',
-            'metadata'         => null,
+            'metadata' => null
         ];
 
-        $this->dataObjectHelper->expects($this->at(0))
+        $this->dataObjectHelper
             ->method('populateWithArray')
-            ->with(['urlRewrite1'], $urlRewriteRedirect, \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
-            ->will($this->returnSelf());
+            ->with(['urlRewrite1'], $urlRewriteRedirect, UrlRewrite::class)
+            ->willReturn($this->dataObjectHelper);
 
-        $this->urlRewriteFactory->expects($this->at(0))
+        $this->urlRewriteFactory
             ->method('create')
-            ->will($this->returnValue(['urlRewrite1']));
+            ->willReturn(['urlRewrite1']);
 
         $this->assertEquals(['urlRewrite1'], $this->storage->findOneByData($data));
     }
 
-    public function testFindOneByDataWithRequestPathIsDifferent2()
+    /**
+     * @return void
+     */
+    public function testFindOneByDataWithRequestPathIsDifferent2(): void
     {
         $origRequestPath = 'page-one/';
         $data = [
-            'col1'                   => 'val1',
-            'col2'                   => 'val2',
-            UrlRewrite::REQUEST_PATH => $origRequestPath,
+            'col1' => 'val1',
+            'col2' => 'val2',
+            UrlRewrite::REQUEST_PATH => $origRequestPath
         ];
 
-        $this->select->expects($this->at(1))
+        $this->select
             ->method('where')
-            ->with('col1 IN (?)', 'val1');
+            ->withConsecutive(
+                ['col1 IN (?)', 'val1'],
+                ['col2 IN (?)', 'val2'],
+                ['request_path IN (?)', [rtrim($origRequestPath, '/'), rtrim($origRequestPath, '/') . '/']]
+            );
 
-        $this->select->expects($this->at(2))
-            ->method('where')
-            ->with('col2 IN (?)', 'val2');
-
-        $this->select->expects($this->at(3))
-            ->method('where')
-            ->with('request_path IN (?)', [rtrim($origRequestPath, '/'), rtrim($origRequestPath, '/') . '/']);
-
-        $this->connectionMock->expects($this->any())
+        $this->connectionMock
             ->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->connectionMock->expects($this->never())
             ->method('fetchRow');
 
         $urlRewriteRowInDb = [
-            UrlRewrite::REQUEST_PATH  => rtrim($origRequestPath, '/'),
+            UrlRewrite::REQUEST_PATH => rtrim($origRequestPath, '/'),
+            UrlRewrite::TARGET_PATH => rtrim($origRequestPath, '/'),
             UrlRewrite::REDIRECT_TYPE => 0,
-            UrlRewrite::STORE_ID      => 1,
+            UrlRewrite::STORE_ID => 1
         ];
 
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')
             ->with($this->select)
-            ->will($this->returnValue([$urlRewriteRowInDb]));
+            ->willReturn([$urlRewriteRowInDb]);
 
         $urlRewriteRedirect = [
-            'request_path'     => $origRequestPath,
-            'redirect_type'    => 301,
-            'store_id'         => 1,
-            'entity_type'      => 'custom',
-            'entity_id'        => '0',
-            'target_path'      => rtrim($origRequestPath, '/'),
-            'description'      => null,
+            'request_path' => $origRequestPath,
+            'redirect_type' => 301,
+            'store_id' => 1,
+            'entity_type' => 'custom',
+            'entity_id' => '0',
+            'target_path' => rtrim($origRequestPath, '/'),
+            'description' => null,
             'is_autogenerated' => '0',
-            'metadata'         => null,
+            'metadata' => null
         ];
 
-        $this->dataObjectHelper->expects($this->at(0))
+        $this->dataObjectHelper
             ->method('populateWithArray')
-            ->with(['urlRewrite1'], $urlRewriteRedirect, \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
-            ->will($this->returnSelf());
+            ->with(['urlRewrite1'], $urlRewriteRedirect, UrlRewrite::class)
+            ->willReturn($this->dataObjectHelper);
 
-        $this->urlRewriteFactory->expects($this->at(0))
+        $this->urlRewriteFactory
             ->method('create')
-            ->will($this->returnValue(['urlRewrite1']));
+            ->willReturn(['urlRewrite1']);
 
         $this->assertEquals(['urlRewrite1'], $this->storage->findOneByData($data));
     }
 
-    public function testFindOneByDataWithRequestPathIsRedirect()
+    /**
+     * @return void
+     */
+    public function testFindOneByDataWithRequestPathIsRedirect(): void
     {
         $origRequestPath = 'page-one';
         $data = [
-            'col1'                   => 'val1',
-            'col2'                   => 'val2',
-            UrlRewrite::REQUEST_PATH => $origRequestPath,
+            'col1' => 'val1',
+            'col2' => 'val2',
+            UrlRewrite::REQUEST_PATH => $origRequestPath
         ];
 
-        $this->select->expects($this->at(1))
+        $this->select
             ->method('where')
-            ->with('col1 IN (?)', 'val1');
+            ->withConsecutive(
+                ['col1 IN (?)', 'val1'],
+                ['col2 IN (?)', 'val2'],
+                ['request_path IN (?)', [$origRequestPath, $origRequestPath . '/']]
+            );
 
-        $this->select->expects($this->at(2))
-            ->method('where')
-            ->with('col2 IN (?)', 'val2');
-
-        $this->select->expects($this->at(3))
-            ->method('where')
-            ->with('request_path IN (?)', [$origRequestPath, $origRequestPath . '/']);
-
-        $this->connectionMock->expects($this->any())
-            ->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
+        $this->connectionMock->method('quoteIdentifier')
+            ->willReturnArgument(0);
 
         $this->connectionMock->expects($this->never())
             ->method('fetchRow');
 
         $urlRewriteRowInDb = [
-            UrlRewrite::REQUEST_PATH  => $origRequestPath . '/',
-            UrlRewrite::TARGET_PATH   => 'page-A/',
+            UrlRewrite::REQUEST_PATH => $origRequestPath . '/',
+            UrlRewrite::TARGET_PATH => 'page-A/',
             UrlRewrite::REDIRECT_TYPE => 301,
-            UrlRewrite::STORE_ID      => 1,
+            UrlRewrite::STORE_ID => 1
         ];
 
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')
             ->with($this->select)
-            ->will($this->returnValue([$urlRewriteRowInDb]));
+            ->willReturn([$urlRewriteRowInDb]);
 
-        $this->dataObjectHelper->expects($this->at(0))
+        $this->dataObjectHelper
             ->method('populateWithArray')
-            ->with(['urlRewrite1'], $urlRewriteRowInDb, \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
-            ->will($this->returnSelf());
+            ->with(['urlRewrite1'], $urlRewriteRowInDb, UrlRewrite::class)
+            ->willReturn($this->dataObjectHelper);
 
-        $this->urlRewriteFactory->expects($this->at(0))
+        $this->urlRewriteFactory
             ->method('create')
-            ->will($this->returnValue(['urlRewrite1']));
+            ->willReturn(['urlRewrite1']);
 
         $this->assertEquals(['urlRewrite1'], $this->storage->findOneByData($data));
     }
 
-    public function testFindOneByDataWithRequestPathTwoResults()
+    /**
+     * @return void
+     */
+    public function testFindOneByDataWithRequestPathTwoResults(): void
     {
         $origRequestPath = 'page-one';
         $data = [
-            'col1'                   => 'val1',
-            'col2'                   => 'val2',
+            'col1' => 'val1',
+            'col2' => 'val2',
             UrlRewrite::REQUEST_PATH => $origRequestPath,
         ];
 
-        $this->select->expects($this->at(1))
+        $this->select
             ->method('where')
-            ->with('col1 IN (?)', 'val1');
+            ->withConsecutive(
+                ['col1 IN (?)', 'val1'],
+                ['col2 IN (?)', 'val2'],
+                ['request_path IN (?)', [$origRequestPath, $origRequestPath . '/']]
+            );
 
-        $this->select->expects($this->at(2))
-            ->method('where')
-            ->with('col2 IN (?)', 'val2');
-
-        $this->select->expects($this->at(3))
-            ->method('where')
-            ->with('request_path IN (?)', [$origRequestPath, $origRequestPath . '/']);
-
-        $this->connectionMock->expects($this->any())
-            ->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
+        $this->connectionMock->method('quoteIdentifier')
+            ->willReturnArgument(0);
 
         $this->connectionMock->expects($this->never())
             ->method('fetchRow');
 
         $urlRewriteRowInDb = [
-            UrlRewrite::REQUEST_PATH  => $origRequestPath . '/',
-            UrlRewrite::TARGET_PATH  => 'page-A/',
+            UrlRewrite::REQUEST_PATH => $origRequestPath . '/',
+            UrlRewrite::TARGET_PATH => 'page-A/',
             UrlRewrite::REDIRECT_TYPE => 301,
-            UrlRewrite::STORE_ID      => 1,
+            UrlRewrite::STORE_ID => 1
         ];
 
         $urlRewriteRowInDb2 = [
-            UrlRewrite::REQUEST_PATH  => $origRequestPath,
-            UrlRewrite::TARGET_PATH  => 'page-B/',
+            UrlRewrite::REQUEST_PATH => $origRequestPath,
+            UrlRewrite::TARGET_PATH => 'page-B/',
             UrlRewrite::REDIRECT_TYPE => 301,
-            UrlRewrite::STORE_ID      => 1,
+            UrlRewrite::STORE_ID => 1
         ];
 
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')
             ->with($this->select)
-            ->will($this->returnValue([$urlRewriteRowInDb, $urlRewriteRowInDb2]));
+            ->willReturn([$urlRewriteRowInDb, $urlRewriteRowInDb2]);
 
-        $this->dataObjectHelper->expects($this->at(0))
+        $this->dataObjectHelper
             ->method('populateWithArray')
-            ->with(['urlRewrite1'], $urlRewriteRowInDb2, \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
-            ->will($this->returnSelf());
+            ->with(['urlRewrite1'], $urlRewriteRowInDb2, UrlRewrite::class)
+            ->willReturn($this->dataObjectHelper);
 
-        $this->urlRewriteFactory->expects($this->at(0))
+        $this->urlRewriteFactory
             ->method('create')
-            ->will($this->returnValue(['urlRewrite1']));
+            ->willReturn(['urlRewrite1']);
 
         $this->assertEquals(['urlRewrite1'], $this->storage->findOneByData($data));
     }
 
-    public function testReplace()
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testReplace(): void
     {
-        $urlFirst = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
-        $urlSecond = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
-
+        $urlFirst = $this->createMock(UrlRewrite::class);
+        $urlSecond = $this->createMock(UrlRewrite::class);
         // delete
-
-        $urlFirst->expects($this->any())
-            ->method('getByKey')
-            ->will($this->returnValueMap([
-                [UrlRewrite::ENTITY_TYPE, 'product'],
-                [UrlRewrite::ENTITY_ID, 'entity_1'],
-                [UrlRewrite::STORE_ID, 'store_id_1'],
-            ]));
-        $urlFirst->expects($this->any())->method('getEntityType')->willReturn('product');
-        $urlSecond->expects($this->any())
-            ->method('getByKey')
-            ->will($this->returnValueMap([
-                [UrlRewrite::ENTITY_TYPE, 'category'],
-                [UrlRewrite::ENTITY_ID, 'entity_2'],
-                [UrlRewrite::STORE_ID, 'store_id_2'],
-            ]));
-        $urlSecond->expects($this->any())->method('getEntityType')->willReturn('category');
-
-        $this->connectionMock->expects($this->any())
-            ->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
-
-        $this->select->expects($this->at(1))
-            ->method('where')
-            ->with('entity_id IN (?)', ['entity_1']);
-
-        $this->select->expects($this->at(2))
-            ->method('where')
-            ->with('store_id IN (?)', ['store_id_1']);
-
-        $this->select->expects($this->at(3))
-            ->method('where')
-            ->with('entity_type IN (?)', 'product');
-
-        $this->select->expects($this->at(4))
-            ->method('deleteFromSelect')
-            ->with('table_name')
-            ->will($this->returnValue('sql delete query'));
-
-        $this->select->expects($this->at(6))
-            ->method('where')
-            ->with('entity_id IN (?)', ['entity_2']);
-
-        $this->select->expects($this->at(7))
-            ->method('where')
-            ->with('store_id IN (?)', ['store_id_2']);
-
-        $this->select->expects($this->at(8))
-            ->method('where')
-            ->with('entity_type IN (?)', 'category');
-
-        $this->select->expects($this->at(9))
-            ->method('deleteFromSelect')
-            ->with('table_name')
-            ->will($this->returnValue('sql delete query'));
-
-        $this->resource->expects($this->any())
-            ->method('getTableName')
-            ->with(DbStorage::TABLE_NAME)
-            ->will($this->returnValue('table_name'));
-
-        $this->connectionMock->expects($this->any())
-            ->method('query')
-            ->with('sql delete query');
-
+        $urlFirst->method('getEntityType')->willReturn('product');
+        $urlFirst->method('getEntityId')->willReturn('1');
+        $urlFirst->method('getStoreId')->willReturn('store_id_1');
+        $urlFirst->method('getRequestPath')->willReturn('store_id_1.html');
+        $urlSecond->method('getEntityType')->willReturn('category');
+        $urlSecond->method('getEntityId')->willReturn('2');
+        $urlSecond->method('getStoreId')->willReturn('store_id_2');
+        $urlSecond->method('getRequestPath')->willReturn('store_id_2.html');
+        $this->connectionMock->method('quoteIdentifier')->willReturnArgument(0);
+        $this->select->method($this->anything())->willReturnSelf();
+        $this->resource->method('getTableName')->with(DbStorage::TABLE_NAME)->willReturn('table_name');
         // insert
-
-        $urlFirst->expects($this->any())
-            ->method('toArray')
-            ->will($this->returnValue(['row1']));
-        $urlSecond->expects($this->any())
-            ->method('toArray')
-            ->will($this->returnValue(['row2']));
-
-        $this->resource->expects($this->any())
-            ->method('getTableName')
-            ->with(DbStorage::TABLE_NAME)
-            ->will($this->returnValue('table_name'));
-
-        $this->connectionMock->expects($this->once())
-            ->method('insertMultiple')
-            ->with('table_name', [['row1'], ['row2']]);
-
-        $this->storage->replace([$urlFirst, $urlSecond]);
+        $urlFirst->method('toArray')->willReturn(['row1']);
+        $urlSecond->method('toArray')->willReturn(['row2']);
+        $this->resource->method('getTableName')->with(DbStorage::TABLE_NAME)->willReturn('table_name');
+        $urls = [$urlFirst, $urlSecond];
+        $this->connectionMock->method('fetchOne')->willReturnOnConsecutiveCalls(false, false);
+        $this->assertEquals($urls, $this->storage->replace($urls));
     }
 
     /**
-     * @expectedException \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException
+     * @return void
      */
-    public function testReplaceIfThrewExceptionOnDuplicateUrl()
+    public function testReplaceIfThrewExceptionOnDuplicateUrl(): void
     {
-        $url = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
-
-        $url->expects($this->any())
-            ->method('toArray')
-            ->will($this->returnValue(['row1']));
-
-        $this->connectionMock->expects($this->once())
-            ->method('insertMultiple')
-            ->will(
-                $this->throwException(
-                    new \Exception('SQLSTATE[23000]: test: 1062 test', DbStorage::ERROR_CODE_DUPLICATE_ENTRY)
-                )
-            );
-        $conflictingUrl = [
-            UrlRewrite::URL_REWRITE_ID => 'conflicting-url'
-        ];
-        $this->connectionMock->expects($this->any())
-            ->method('fetchRow')
-            ->willReturn($conflictingUrl);
-
+        $this->expectException('Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException');
+        $url = $this->createMock(UrlRewrite::class);
+        $url->method('toArray')->willReturn(['row1']);
+        $url->method('getEntityType')->willReturn('product');
+        $url->method('getEntityId')->willReturn('1');
+        $url->method('getStoreId')->willReturn('store_id_1');
+        $url->method('getRequestPath')->willReturn('store_id_1.html');
+        $this->connectionMock->method('fetchALL')->willReturn([[
+            'url_rewrite_id' => '5718',
+            'entity_type' => 'product',
+            'entity_id' => '1',
+            'request_path' => 'store_id_1.html',
+            'target_path' => 'catalog/product/view/id/1',
+            'redirect_type' => '0',
+            'store_id' => '1',
+            'description' => null,
+            'is_autogenerated' => '1',
+            'metadata' => null,
+        ]]);
+        $this->connectionMock->method('fetchOne')->willReturnOnConsecutiveCalls(false, true);
         $this->storage->replace([$url]);
     }
 
     /**
-     * Validates a case when DB errors on duplicate entry, but calculated URLs are not really duplicated
+     * Validates a case when DB errors on duplicate entry, but calculated URLs are not really duplicated.
      *
-     * An example is when URL length exceeds length of the DB field, so URLs are trimmed and become conflicting
+     * An example is when URL length exceeds length of the DB field, so URLs are trimmed and become conflicting.
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage SQLSTATE[23000]: test: 1062 test
+     * @return void
      */
-    public function testReplaceIfThrewExceptionOnDuplicateEntry()
+    public function testReplaceIfThrewExceptionOnDuplicateEntry(): void
     {
-        $url = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
-
-        $url->expects($this->any())
-            ->method('toArray')
-            ->will($this->returnValue(['row1']));
-
-        $this->connectionMock->expects($this->once())
-            ->method('insertMultiple')
-            ->will(
-                $this->throwException(
-                    new \Exception('SQLSTATE[23000]: test: 1062 test', DbStorage::ERROR_CODE_DUPLICATE_ENTRY)
-                )
-            );
-
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Unique constraint violation found');
+        $url = $this->createMock(UrlRewrite::class);
+        $url->method('toArray')->willReturn(['row1']);
+        $url->method('getEntityType')->willReturn('product');
+        $url->method('getEntityId')->willReturn('1');
+        $url->method('getStoreId')->willReturn('store_id_1');
+        $url->method('getRequestPath')->willReturn('store_id_1.html');
+        $this->connectionMock->method('fetchALL')->willReturn([]);
+        $this->connectionMock->method('fetchOne')->willReturnOnConsecutiveCalls(false, true);
         $this->storage->replace([$url]);
     }
 
     /**
-     * @expectedException \RuntimeException
+     * Validates a case when we try to insert multiple URL rewrites with same requestPath
+     *
+     * The Exception is different than duplicating an existing rewrite because there's no url_rewrite_id.
+     *
+     * @return void
      */
-    public function testReplaceIfThrewCustomException()
+    public function testReplaceIfThrewExceptionOnDuplicateUrlInInput(): void
     {
-        $url = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Unique constraint violation found');
+        $url = $this->createMock(UrlRewrite::class);
+        $url->method('toArray')->willReturn(['row1']);
+        $url->method('getEntityType')->willReturn('product');
+        $url->method('getEntityId')->willReturn('1');
+        $url->method('getStoreId')->willReturn('store_id_1');
+        $url->method('getRequestPath')->willReturn('store_id_1.html');
+        $url2 = $this->createMock(UrlRewrite::class);
+        $url2->method('toArray')->willReturn(['row2']);
+        $url2->method('getEntityType')->willReturn('product');
+        $url2->method('getEntityId')->willReturn('2');
+        $url2->method('getStoreId')->willReturn('store_id_1');
+        $url2->method('getRequestPath')->willReturn('store_id_1.html');
+        $this->connectionMock->method('fetchALL')->willReturn([]);
+        $this->connectionMock->method('fetchOne')->willReturnOnConsecutiveCalls(false, false);
+        $this->storage->replace([$url, $url2]);
+    }
 
-        $url->expects($this->any())
-            ->method('toArray')
-            ->will($this->returnValue(['row1']));
-
+    /**
+     * @return void
+     */
+    public function testReplaceIfThrewCustomException(): void
+    {
+        $this->expectException('RuntimeException');
+        $url = $this->createMock(UrlRewrite::class);
+        $url->method('toArray')->willReturn(['row1']);
+        $url->method('getEntityType')->willReturn('product');
+        $url->method('getEntityId')->willReturn('1');
+        $url->method('getStoreId')->willReturn('store_id_1');
+        $url->method('getRequestPath')->willReturn('store_id_1.html');
         $this->connectionMock->expects($this->once())
-            ->method('insertMultiple')
-            ->will($this->throwException(new \RuntimeException()));
-
+            ->method('insertOnDuplicate')
+            ->willThrowException(new \RuntimeException());
+        $this->connectionMock->method('fetchOne')->willReturnOnConsecutiveCalls(false, false);
         $this->storage->replace([$url]);
     }
 
-    public function testDeleteByData()
+    /**
+     * @return void
+     */
+    public function testDeleteByData(): void
     {
         $data = ['col1' => 'val1', 'col2' => 'val2'];
 
-        $this->connectionMock->expects($this->any())
-            ->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
+        $this->connectionMock->method('quoteIdentifier')
+            ->willReturnArgument(0);
 
-        $this->select->expects($this->at(1))
+        $this->select
             ->method('where')
-            ->with('col1 IN (?)', 'val1');
-
-        $this->select->expects($this->at(2))
-            ->method('where')
-            ->with('col2 IN (?)', 'val2');
-
-        $this->select->expects($this->at(3))
+            ->withConsecutive(['col1 IN (?)', 'val1'], ['col2 IN (?)', 'val2']);
+        $this->select
             ->method('deleteFromSelect')
             ->with('table_name')
-            ->will($this->returnValue('sql delete query'));
+            ->willReturn('sql delete query');
 
-        $this->resource->expects($this->any())
-            ->method('getTableName')
+        $this->resource->method('getTableName')
             ->with(DbStorage::TABLE_NAME)
-            ->will($this->returnValue('table_name'));
+            ->willReturn('table_name');
 
         $this->connectionMock->expects($this->once())
             ->method('query')

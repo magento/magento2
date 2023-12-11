@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="DeletePageByUrlKeyActionGroup">
+        <annotations>
+            <description>Goes to the Admin CMS Pages page. Deletes a Page based on the provided URL Key. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="UrlKey" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnCMSNewPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForElementVisible selector="{{AdminDataGridHeaderSection.bookmarkToggle}}" stepKey="waitForViewBookmarks"/>
+        <click selector="{{AdminDataGridHeaderSection.bookmarkToggle}}" stepKey="openViewBookmarks"/>
+        <click selector="{{AdminDataGridHeaderSection.bookmarkOption(DefaultGridView.name)}}" stepKey="selectDefaultGridView"/>
+        <waitForPageLoad stepKey="waitForGridReset"/>
+        <see selector="{{AdminDataGridHeaderSection.bookmarkToggle}}" userInput="{{DefaultGridView.name}}" stepKey="seeDefaultViewSelected"/>
+        <click selector="{{CmsPagesPageActionsSection.select(UrlKey)}}" stepKey="clickSelect"/>
+        <click selector="{{CmsPagesPageActionsSection.delete(UrlKey)}}" stepKey="clickDelete"/>
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.deleteConfirm}}" stepKey="waitForOkButtonToBeVisible"/>
+        <click selector="{{CmsPagesPageActionsSection.deleteConfirm}}" stepKey="clickOkButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <see userInput="The page has been deleted." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

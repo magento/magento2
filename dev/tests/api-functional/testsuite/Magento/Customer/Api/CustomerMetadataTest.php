@@ -9,15 +9,29 @@ namespace Magento\Customer\Api;
 use Magento\Customer\Api\Data\CustomerInterface as Customer;
 use Magento\Customer\Model\Data\AttributeMetadata;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Class CustomerMetadataTest
+ * Customer Metadata API test
  */
 class CustomerMetadataTest extends WebapiAbstract
 {
     const SERVICE_NAME = "customerCustomerMetadataV1";
     const SERVICE_VERSION = "V1";
     const RESOURCE_PATH = "/V1/attributeMetadata/customer";
+
+    /**
+     * @var CustomerMetadataInterface
+     */
+    private $customerMetadata;
+
+    /**
+     * Execute per test initialization.
+     */
+    protected function setUp(): void
+    {
+        $this->customerMetadata = Bootstrap::getObjectManager()->create(CustomerMetadataInterface::class);
+    }
 
     /**
      * Test retrieval of attribute metadata for the customer entity type.
@@ -63,7 +77,7 @@ class CustomerMetadataTest extends WebapiAbstract
                 Customer::FIRSTNAME,
                 [
                     AttributeMetadata::FRONTEND_INPUT   => 'text',
-                    AttributeMetadata::INPUT_FILTER     => '',
+                    AttributeMetadata::INPUT_FILTER     => 'trim',
                     AttributeMetadata::STORE_LABEL      => 'First Name',
                     AttributeMetadata::MULTILINE_COUNT  => 0,
                     AttributeMetadata::VALIDATION_RULES => [
@@ -173,12 +187,12 @@ class CustomerMetadataTest extends WebapiAbstract
         $firstName = $this->getAttributeMetadataDataProvider()[Customer::FIRSTNAME][1];
         $validationResult = $this->checkMultipleAttributesValidationRules($firstName, $attributeMetadata);
         list($firstName, $attributeMetadata) = $validationResult;
-        $this->assertContains($firstName, $attributeMetadata);
+        $this->assertContainsEquals($firstName, $attributeMetadata);
 
         $websiteId = $this->getAttributeMetadataDataProvider()[Customer::WEBSITE_ID][1];
         $validationResult = $this->checkMultipleAttributesValidationRules($websiteId, $attributeMetadata);
         list($websiteId, $attributeMetadata) = $validationResult;
-        $this->assertContains($websiteId, $attributeMetadata);
+        $this->assertContainsEquals($websiteId, $attributeMetadata);
     }
 
     /**
@@ -200,8 +214,7 @@ class CustomerMetadataTest extends WebapiAbstract
 
         $attributeMetadata = $this->_webApiCall($serviceInfo);
 
-        // There are no default custom attributes.
-        $this->assertCount(0, $attributeMetadata);
+        $this->assertCount(count($this->customerMetadata->getCustomAttributesMetadata()), $attributeMetadata);
     }
 
     /**
@@ -261,6 +274,7 @@ class CustomerMetadataTest extends WebapiAbstract
         ];
     }
 
+    // phpcs:disable Generic.Metrics.NestingLevel
     /**
      * Checks that expected and actual attribute metadata validation rules are equal
      * and removes the validation rules entry from expected and actual attribute metadata
@@ -304,6 +318,7 @@ class CustomerMetadataTest extends WebapiAbstract
         }
         return [$expectedResult, $actualResult];
     }
+    // phpcs:enable
 
     /**
      * Check specific attribute validation rules in set of multiple attributes

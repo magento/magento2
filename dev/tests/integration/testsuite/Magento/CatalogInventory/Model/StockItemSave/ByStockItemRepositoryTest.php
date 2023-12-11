@@ -43,7 +43,7 @@ class ByStockItemRepositoryTest extends \PHPUnit\Framework\TestCase
         StockItemInterface::IS_IN_STOCK => false,
     ];
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
@@ -56,6 +56,7 @@ class ByStockItemRepositoryTest extends \PHPUnit\Framework\TestCase
      * Test stock item saving via stock item repository
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testSave()
     {

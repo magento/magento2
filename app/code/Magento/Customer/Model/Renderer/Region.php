@@ -39,6 +39,11 @@ class Region implements \Magento\Framework\Data\Form\Element\Renderer\RendererIn
     protected $_countryFactory;
 
     /**
+     * @var \Magento\Directory\Helper\Data
+     */
+    private $_directoryHelper;
+
+    /**
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\Escaper $escaper
@@ -54,6 +59,8 @@ class Region implements \Magento\Framework\Data\Form\Element\Renderer\RendererIn
     }
 
     /**
+     * Render element
+     *
      * @param AbstractElement $element
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -80,7 +87,7 @@ class Region implements \Magento\Framework\Data\Form\Element\Renderer\RendererIn
             $regionCollection = self::$_regionCollections[$countryId];
         }
 
-        $regionId = intval($element->getForm()->getElement('region_id')->getValue());
+        $regionId = (int)$element->getForm()->getElement('region_id')->getValue();
 
         $htmlAttributes = $element->getHtmlAttributes();
         foreach ($htmlAttributes as $key => $attribute) {

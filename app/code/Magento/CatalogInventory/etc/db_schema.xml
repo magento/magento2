@@ -1,0 +1,200 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="cataloginventory_stock" resource="default" engine="innodb" comment="Cataloginventory Stock">
+        <column xsi:type="smallint" name="stock_id" unsigned="true" nullable="false" identity="true"
+                comment="Stock ID"/>
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
+                comment="Website ID"/>
+        <column xsi:type="varchar" name="stock_name" nullable="true" length="255" comment="Stock Name"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="stock_id"/>
+        </constraint>
+        <index referenceId="CATALOGINVENTORY_STOCK_WEBSITE_ID" indexType="btree">
+            <column name="website_id"/>
+        </index>
+    </table>
+    <table name="cataloginventory_stock_item" resource="default" engine="innodb" comment="Cataloginventory Stock Item">
+        <column xsi:type="int" name="item_id" unsigned="true" nullable="false" identity="true"
+                comment="Item ID"/>
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Product ID"/>
+        <column xsi:type="smallint" name="stock_id" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Stock ID"/>
+        <column xsi:type="decimal" name="qty" scale="4" precision="12" unsigned="false" nullable="true" comment="Qty"/>
+        <column xsi:type="decimal" name="min_qty" scale="4" precision="12" unsigned="false" nullable="false"
+                default="0" comment="Min Qty"/>
+        <column xsi:type="smallint" name="use_config_min_qty" unsigned="true" nullable="false"
+                identity="false" default="1" comment="Use Config Min Qty"/>
+        <column xsi:type="smallint" name="is_qty_decimal" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Is Qty Decimal"/>
+        <column xsi:type="smallint" name="backorders" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Backorders"/>
+        <column xsi:type="smallint" name="use_config_backorders" unsigned="true" nullable="false"
+                identity="false" default="1" comment="Use Config Backorders"/>
+        <column xsi:type="decimal" name="min_sale_qty" scale="4" precision="12" unsigned="false" nullable="false"
+                default="1" comment="Min Sale Qty"/>
+        <column xsi:type="smallint" name="use_config_min_sale_qty" unsigned="true" nullable="false"
+                identity="false" default="1" comment="Use Config Min Sale Qty"/>
+        <column xsi:type="decimal" name="max_sale_qty" scale="4" precision="12" unsigned="false" nullable="false"
+                default="0" comment="Max Sale Qty"/>
+        <column xsi:type="smallint" name="use_config_max_sale_qty" unsigned="true" nullable="false"
+                identity="false" default="1" comment="Use Config Max Sale Qty"/>
+        <column xsi:type="smallint" name="is_in_stock" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Is In Stock"/>
+        <column xsi:type="timestamp" name="low_stock_date" on_update="false" nullable="true" comment="Low Stock Date"/>
+        <column xsi:type="decimal" name="notify_stock_qty" scale="4" precision="12" unsigned="false" nullable="true"
+                comment="Notify Stock Qty"/>
+        <column xsi:type="smallint" name="use_config_notify_stock_qty" unsigned="true" nullable="false"
+                identity="false" default="1" comment="Use Config Notify Stock Qty"/>
+        <column xsi:type="smallint" name="manage_stock" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Manage Stock"/>
+        <column xsi:type="smallint" name="use_config_manage_stock" unsigned="true" nullable="false"
+                identity="false" default="1" comment="Use Config Manage Stock"/>
+        <column xsi:type="smallint" name="stock_status_changed_auto" unsigned="true" nullable="false"
+                identity="false" default="0" comment="Stock Status Changed Automatically"/>
+        <column xsi:type="smallint" name="use_config_qty_increments" unsigned="true" nullable="false"
+                identity="false" default="1" comment="Use Config Qty Increments"/>
+        <column xsi:type="decimal" name="qty_increments" scale="4" precision="12" unsigned="false" nullable="false"
+                default="0" comment="Qty Increments"/>
+        <column xsi:type="smallint" name="use_config_enable_qty_inc" unsigned="true" nullable="false"
+                identity="false" default="1" comment="Use Config Enable Qty Increments"/>
+        <column xsi:type="smallint" name="enable_qty_increments" unsigned="true" nullable="false"
+                identity="false" default="0" comment="Enable Qty Increments"/>
+        <column xsi:type="smallint" name="is_decimal_divided" unsigned="true" nullable="false"
+                identity="false" default="0" comment="Is Divided into Multiple Boxes for Shipping"/>
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Website ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="item_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="CATINV_STOCK_ITEM_PRD_ID_CAT_PRD_ENTT_ENTT_ID"
+                    table="cataloginventory_stock_item" column="product_id" referenceTable="catalog_product_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="CATINV_STOCK_ITEM_STOCK_ID_CATINV_STOCK_STOCK_ID"
+                    table="cataloginventory_stock_item" column="stock_id" referenceTable="cataloginventory_stock"
+                    referenceColumn="stock_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="CATALOGINVENTORY_STOCK_ITEM_PRODUCT_ID_STOCK_ID">
+            <column name="product_id"/>
+            <column name="stock_id"/>
+        </constraint>
+        <index referenceId="CATALOGINVENTORY_STOCK_ITEM_WEBSITE_ID" indexType="btree">
+            <column name="website_id"/>
+        </index>
+        <index referenceId="CATALOGINVENTORY_STOCK_ITEM_WEBSITE_ID_PRODUCT_ID" indexType="btree">
+            <column name="website_id"/>
+            <column name="product_id"/>
+        </index>
+        <index referenceId="CATALOGINVENTORY_STOCK_ITEM_STOCK_ID" indexType="btree">
+            <column name="stock_id"/>
+        </index>
+    </table>
+    <table name="cataloginventory_stock_status" resource="default" engine="innodb"
+           comment="Cataloginventory Stock Status">
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" identity="false"
+                comment="Product ID"/>
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
+                comment="Website ID"/>
+        <column xsi:type="smallint" name="stock_id" unsigned="true" nullable="false" identity="false"
+                comment="Stock ID"/>
+        <column xsi:type="decimal" name="qty" scale="4" precision="12" unsigned="false" nullable="false" default="0"
+                comment="Qty"/>
+        <column xsi:type="smallint" name="stock_status" unsigned="true" nullable="false" identity="false"
+                comment="Stock Status"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="product_id"/>
+            <column name="website_id"/>
+            <column name="stock_id"/>
+        </constraint>
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_STOCK_ID" indexType="btree">
+            <column name="stock_id"/>
+        </index>
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_WEBSITE_ID" indexType="btree">
+            <column name="website_id"/>
+        </index>
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_STOCK_STATUS" indexType="btree">
+            <column name="stock_status"/>
+        </index>
+    </table>
+    <table name="cataloginventory_stock_status_idx" resource="default" engine="innodb"
+           comment="Cataloginventory Stock Status Indexer Idx">
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" identity="false"
+                comment="Product ID"/>
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
+                comment="Website ID"/>
+        <column xsi:type="smallint" name="stock_id" unsigned="true" nullable="false" identity="false"
+                comment="Stock ID"/>
+        <column xsi:type="decimal" name="qty" scale="4" precision="12" unsigned="false" nullable="false" default="0"
+                comment="Qty"/>
+        <column xsi:type="smallint" name="stock_status" unsigned="true" nullable="false" identity="false"
+                comment="Stock Status"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="product_id"/>
+            <column name="website_id"/>
+            <column name="stock_id"/>
+        </constraint>
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_IDX_STOCK_ID" indexType="btree">
+            <column name="stock_id"/>
+        </index>
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_IDX_WEBSITE_ID" indexType="btree">
+            <column name="website_id"/>
+        </index>
+    </table>
+    <table name="cataloginventory_stock_status_tmp" resource="default" engine="innodb"
+           comment="Cataloginventory Stock Status Indexer Tmp">
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" identity="false"
+                comment="Product ID"/>
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
+                comment="Website ID"/>
+        <column xsi:type="smallint" name="stock_id" unsigned="true" nullable="false" identity="false"
+                comment="Stock ID"/>
+        <column xsi:type="decimal" name="qty" scale="4" precision="12" unsigned="false" nullable="false" default="0"
+                comment="Qty"/>
+        <column xsi:type="smallint" name="stock_status" unsigned="true" nullable="false" identity="false"
+                comment="Stock Status"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="product_id"/>
+            <column name="website_id"/>
+            <column name="stock_id"/>
+        </constraint>
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_TMP_STOCK_ID" indexType="btree">
+            <column name="stock_id"/>
+        </index>
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_TMP_WEBSITE_ID" indexType="btree">
+            <column name="website_id"/>
+        </index>
+    </table>
+    <table name="cataloginventory_stock_status_replica" resource="default" engine="innodb"
+           comment="Cataloginventory Stock Status">
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" identity="false"
+                comment="Product ID"/>
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
+                comment="Website ID"/>
+        <column xsi:type="smallint" name="stock_id" unsigned="true" nullable="false" identity="false"
+                comment="Stock ID"/>
+        <column xsi:type="decimal" name="qty" scale="4" precision="12" unsigned="false" nullable="false" default="0"
+                comment="Qty"/>
+        <column xsi:type="smallint" name="stock_status" unsigned="true" nullable="false" identity="false"
+                comment="Stock Status"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="product_id"/>
+            <column name="website_id"/>
+            <column name="stock_id"/>
+        </constraint>
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_STOCK_ID" indexType="btree">
+            <column name="stock_id"/>
+        </index>
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_WEBSITE_ID" indexType="btree">
+            <column name="website_id"/>
+        </index>
+        <index referenceId="CATALOGINVENTORY_STOCK_STATUS_STOCK_STATUS" indexType="btree">
+            <column name="stock_status"/>
+        </index>
+    </table>
+</schema>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginAsCustomerManualChooseStoreCodeInUrlTest" extends="AdminLoginAsCustomerManualChooseTest">
+        <annotations>
+            <features value="Login as Customer"/>
+            <stories value="Select Store based on 'Store View To Login In' setting"/>
+            <title
+                value="Admin user directly login into customer account with store View To Login In = Manual Choose when store code is added to url"/>
+            <description
+                value="Verify admin user can directly login into customer account to Custom store view when Store View To Login In = Manual Choose when store code is added to url"/>
+            <severity value="CRITICAL"/>
+            <group value="login_as_customer"/>
+        </annotations>
+        <before>
+            <magentoCLI
+                command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}"
+                stepKey="enableAddStoreCodeToUrls" after="enableLoginAsCustomerManualChoose"/>
+        </before>
+        <after>
+            <magentoCLI
+                command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}"
+                stepKey="disableAddStoreCodeToUrls" after="enableLoginAsCustomerAutoDetection"/>
+        </after>
+        <actionGroup ref="AssertStorefrontStoreCodeInUrlActionGroup" stepKey="seeCustomStoreViewCodeInUrl" after="assertCustomStoreView">
+            <argument name="storeCode" value="{{customStoreEN.code}}"/>
+        </actionGroup>
+    </test>
+</tests>

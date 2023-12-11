@@ -17,7 +17,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Framework\Config\FileResolverInterface/PHPUnit\Framework\MockObject_MockObject */
     protected $_fileResolverMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $cache \Magento\Framework\App\Cache */
@@ -35,7 +35,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     public function testRead()
     {
         $fileList = [file_get_contents(__DIR__ . '/../_files/page_layouts.xml')];
-        $this->_fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileList));
+        $this->_fileResolverMock->expects($this->any())->method('get')->willReturn($fileList);
         $result = $this->_model->read('global');
         $expected = [
             'empty' => [
@@ -56,7 +56,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             file_get_contents(__DIR__ . '/../_files/page_layouts.xml'),
             file_get_contents(__DIR__ . '/../_files/page_layouts2.xml'),
         ];
-        $this->_fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileList));
+        $this->_fileResolverMock->expects($this->any())->method('get')->willReturn($fileList);
 
         $result = $this->_model->read('global');
         $expected = [

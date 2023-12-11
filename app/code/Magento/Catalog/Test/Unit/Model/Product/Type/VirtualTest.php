@@ -3,28 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Product\Type;
 
-class VirtualTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product\Type\Virtual;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
+class VirtualTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product\Type\Virtual
+     * @var Virtual
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
-        $coreRegistryMock = $this->createMock(\Magento\Framework\Registry::class);
-        $fileStorageDbMock = $this->createMock(\Magento\MediaStorage\Helper\File\Storage\Database::class);
-        $filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $objectHelper = new ObjectManager($this);
+        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $coreRegistryMock = $this->createMock(Registry::class);
+        $fileStorageDbMock = $this->createMock(Database::class);
+        $filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $productFactoryMock = $this->createMock(\Magento\Catalog\Model\ProductFactory::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $productFactoryMock = $this->createMock(ProductFactory::class);
         $this->_model = $objectHelper->getObject(
-            \Magento\Catalog\Model\Product\Type\Virtual::class,
+            Virtual::class,
             [
                 'eventManager' => $eventManager,
                 'fileStorageDb' => $fileStorageDbMock,

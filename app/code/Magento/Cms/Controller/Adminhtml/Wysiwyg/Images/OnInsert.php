@@ -1,53 +1,63 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
-class OnInsert extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
+use Magento\Backend\App\Action\Context;
+use Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
+use Magento\Cms\Model\Wysiwyg\Images\GetInsertImageContent;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Registry;
+
+class OnInsert extends Images implements HttpPostActionInterface
 {
     /**
-     * @var \Magento\Framework\Controller\Result\RawFactory
+     * @var RawFactory
      */
     protected $resultRawFactory;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @var GetInsertImageContent
+     */
+    private $getInsertImageContent;
+
+    /**
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param RawFactory $resultRawFactory
+     * @param GetInsertImageContent $getInsertImageContent
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+        Context $context,
+        Registry $coreRegistry,
+        RawFactory $resultRawFactory,
+        ?GetInsertImageContent $getInsertImageContent = null
     ) {
         $this->resultRawFactory = $resultRawFactory;
         parent::__construct($context, $coreRegistry);
+        $this->getInsertImageContent = $getInsertImageContent ?: $this->_objectManager
+            ->get(GetInsertImageContent::class);
     }
 
     /**
-     * Fire when select image
+     * Return a content (just a link or an html block) for inserting image to the content
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
     public function execute()
     {
-        $helper = $this->_objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
-        $storeId = $this->getRequest()->getParam('store');
-
-        $filename = $this->getRequest()->getParam('filename');
-        $filename = $helper->idDecode($filename);
-        $asIs = $this->getRequest()->getParam('as_is');
-
-        $this->_objectManager->get(\Magento\Catalog\Helper\Data::class)->setStoreId($storeId);
-        $helper->setStoreId($storeId);
-
-        $image = $helper->getImageHtmlDeclaration($filename, $asIs);
-
-        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
-        $resultRaw = $this->resultRawFactory->create();
-        return $resultRaw->setContents($image);
+        $data = $this->getRequest()->getParams();
+        return $this->resultRawFactory->create()->setContents(
+            $this->getInsertImageContent->execute(
+                $data['filename'],
+                $data['force_static_path'],
+                $data['as_is'],
+                isset($data['store']) ? (int) $data['store'] : null
+            )
+        );
     }
 }

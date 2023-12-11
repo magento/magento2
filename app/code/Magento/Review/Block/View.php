@@ -9,7 +9,6 @@ namespace Magento\Review\Block;
  * Review detailed view block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class View extends \Magento\Catalog\Block\Product\AbstractProduct
@@ -19,7 +18,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @var string
      */
-    protected $_template = 'view.phtml';
+    protected $_template = 'Magento_Review::view.phtml';
 
     /**
      * Rating option model
@@ -103,9 +102,10 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function getRating()
     {
+        $reviewId = $this->getReviewId() ?: $this->getReviewData()->getId();
         if (!$this->getRatingCollection()) {
             $ratingCollection = $this->_voteFactory->create()->getResourceCollection()->setReviewFilter(
-                $this->getReviewId()
+                $reviewId
             )->setStoreFilter(
                 $this->_storeManager->getStore()->getId()
             )->addRatingInfo(
@@ -119,6 +119,8 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Retrieve rating summary for current product
      *
+     * @deprecated 100.3.3
+     * @see f72f74d3
      * @return string
      */
     public function getRatingSummary()
@@ -159,24 +161,5 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     public function dateFormat($date)
     {
         return $this->formatDate($date, \IntlDateFormatter::LONG);
-    }
-
-    /**
-     * Get product reviews summary
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param bool $templateType
-     * @param bool $displayIfNoReviews
-     * @return string
-     */
-    public function getReviewsSummaryHtml(
-        \Magento\Catalog\Model\Product $product,
-        $templateType = false,
-        $displayIfNoReviews = false
-    ) {
-        if (!$product->getRatingSummary()) {
-            $this->_reviewFactory->create()->getEntitySummary($product, $this->_storeManager->getStore()->getId());
-        }
-        return parent::getReviewsSummaryHtml($product, $templateType, $displayIfNoReviews);
     }
 }

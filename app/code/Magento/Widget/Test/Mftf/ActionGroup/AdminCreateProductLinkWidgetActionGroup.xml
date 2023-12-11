@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateProductLinkWidgetActionGroup" extends="AdminCreateWidgetActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateWidgetActionGroup. Creates a Product List Widget using the provided Product. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+
+        <selectOption selector="{{AdminNewWidgetSection.selectTemplate}}" userInput="{{widget.template}}" after="waitForPageLoad" stepKey="setTemplate"/>
+        <waitForAjaxLoad after="setTemplate" stepKey="waitForPageLoad2"/>
+        <click selector="{{AdminNewWidgetSection.selectProduct}}" after="clickWidgetOptions" stepKey="clickSelectProduct"/>
+        <fillField selector="{{AdminNewWidgetSelectProductPopupSection.filterBySku}}" userInput="{{product.sku}}" after="clickSelectProduct" stepKey="fillProductNameInFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" after="fillProductNameInFilter" stepKey="applyFilter"/>
+        <click selector="{{AdminNewWidgetSelectProductPopupSection.firstRow}}" after="applyFilter" stepKey="selectProduct"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveWidget"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="The widget instance has been saved" stepKey="seeSuccess"/>
+    </actionGroup>
+</actionGroups>

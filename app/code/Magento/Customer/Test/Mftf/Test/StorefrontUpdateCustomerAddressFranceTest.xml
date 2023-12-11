@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontUpdateCustomerAddressFranceTest">
+        <annotations>
+            <stories value="Update Customer Address"/>
+            <title value="Update Customer Address (France) in Storefront"/>
+            <description value="Test log in to Storefront and Update Customer Address (France) in Storefront"/>
+            <testCaseId value="MC-10912"/>
+            <severity value="BLOCKER"/>
+            <group value="customer"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+            <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+                <argument name="customer" value="CustomerEntityOne"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+            <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+                <argument name="messageType" value="success"/>
+                <argument name="message" value="Thank you for registering with Main Website Store."/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteNewUser">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Update customer address France in storefront-->
+        <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="enterAddress">
+            <argument name="Address" value="updateCustomerFranceAddress"/>
+        </actionGroup>
+        <!--Verify customer address save success message-->
+        <see selector="{{AdminCustomerMessagesSection.successMessage}}" userInput="You saved the address." stepKey="seeAssertCustomerAddressSuccessSaveMessage"/>
+
+        <!--Verify customer default billing address-->
+        <actionGroup ref="VerifyCustomerBillingAddressWithStateActionGroup" stepKey="verifyBillingAddress">
+            <argument name="address" value="updateCustomerFranceAddress"/>
+        </actionGroup>
+
+        <!--Verify customer default shipping address-->
+        <actionGroup ref="VerifyCustomerShippingAddressWithStateActionGroup" stepKey="verifyShippingAddress">
+            <argument name="address" value="updateCustomerFranceAddress"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -1,21 +1,26 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Gallery;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 
-class Upload extends \Magento\Backend\App\Action
+/**
+ * The product gallery upload controller
+ */
+class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Catalog::products';
+    public const ADMIN_RESOURCE = 'Magento_Catalog::products';
 
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
@@ -23,18 +28,57 @@ class Upload extends \Magento\Backend\App\Action
     protected $resultRawFactory;
 
     /**
+     * @var array
+     */
+    private $allowedMimeTypes = [
+        'jpg' => 'image/jpg',
+        'jpeg' => 'image/jpeg',
+        'gif' => 'image/gif',
+        'png' => 'image/png'
+    ];
+
+    /**
+     * @var \Magento\Framework\Image\AdapterFactory
+     */
+    private $adapterFactory;
+
+    /**
+     * @var \Magento\Framework\Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\Media\Config
+     */
+    private $productMediaConfig;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param \Magento\Framework\Image\AdapterFactory $adapterFactory
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Catalog\Model\Product\Media\Config $productMediaConfig
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
+        \Magento\Framework\Image\AdapterFactory $adapterFactory = null,
+        \Magento\Framework\Filesystem $filesystem = null,
+        \Magento\Catalog\Model\Product\Media\Config $productMediaConfig = null
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
+        $this->adapterFactory = $adapterFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Framework\Image\AdapterFactory::class);
+        $this->filesystem = $filesystem ?: ObjectManager::getInstance()
+            ->get(\Magento\Framework\Filesystem::class);
+        $this->productMediaConfig = $productMediaConfig ?: ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Model\Product\Media\Config::class);
     }
 
     /**
+     * Upload image(s) to the product gallery.
+     *
      * @return \Magento\Framework\Controller\Result\Raw
      */
     public function execute()
@@ -44,31 +88,33 @@ class Upload extends \Magento\Backend\App\Action
                 \Magento\MediaStorage\Model\File\Uploader::class,
                 ['fileId' => 'image']
             );
-            $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png']);
-            /** @var \Magento\Framework\Image\Adapter\AdapterInterface $imageAdapter */
-            $imageAdapter = $this->_objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create();
+            $uploader->setAllowedExtensions($this->getAllowedExtensions());
+            $imageAdapter = $this->adapterFactory->create();
             $uploader->addValidateCallback('catalog_product_image', $imageAdapter, 'validateUploadFile');
             $uploader->setAllowRenameFiles(true);
             $uploader->setFilesDispersion(true);
-            /** @var \Magento\Framework\Filesystem\Directory\Read $mediaDirectory */
-            $mediaDirectory = $this->_objectManager->get(\Magento\Framework\Filesystem::class)
-                ->getDirectoryRead(DirectoryList::MEDIA);
-            $config = $this->_objectManager->get(\Magento\Catalog\Model\Product\Media\Config::class);
-            $result = $uploader->save($mediaDirectory->getAbsolutePath($config->getBaseTmpMediaPath()));
-
+            $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+            $result = $uploader->save(
+                $mediaDirectory->getAbsolutePath($this->productMediaConfig->getBaseTmpMediaPath())
+            );
             $this->_eventManager->dispatch(
                 'catalog_product_gallery_upload_image_after',
                 ['result' => $result, 'action' => $this]
             );
 
-            unset($result['tmp_name']);
-            unset($result['path']);
+            if (is_array($result)) {
+                unset($result['tmp_name']);
+                unset($result['path']);
 
-            $result['url'] = $this->_objectManager->get(\Magento\Catalog\Model\Product\Media\Config::class)
-                ->getTmpMediaUrl($result['file']);
-            $result['file'] = $result['file'] . '.tmp';
-        } catch (\Exception $e) {
+                $result['url'] = $this->productMediaConfig->getTmpMediaUrl($result['file']);
+                $result['file'] = $result['file'] . '.tmp';
+            } else {
+                $result = ['error' => 'Something went wrong while saving the file(s).'];
+            }
+        } catch (LocalizedException $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
+        } catch (\Throwable $e) {
+            $result = ['error' => 'Something went wrong while saving the file(s).', 'errorcode' => 0];
         }
 
         /** @var \Magento\Framework\Controller\Result\Raw $response */
@@ -76,5 +122,15 @@ class Upload extends \Magento\Backend\App\Action
         $response->setHeader('Content-type', 'text/plain');
         $response->setContents(json_encode($result));
         return $response;
+    }
+
+    /**
+     * Get the set of allowed file extensions.
+     *
+     * @return array
+     */
+    private function getAllowedExtensions()
+    {
+        return array_keys($this->allowedMimeTypes);
     }
 }

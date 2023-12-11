@@ -16,7 +16,6 @@ use Magento\Sales\Model\AbstractModel;
  * By default transactions are saved as closed.
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
@@ -26,7 +25,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     /**
      * Raw details key in additional info
      */
-    const RAW_DETAILS = 'raw_details_info';
+    public const RAW_DETAILS = 'raw_details_info';
 
     /**
      * Order instance
@@ -95,8 +94,6 @@ class Transaction extends AbstractModel implements TransactionInterface
     protected $_eventObject = 'order_payment_transaction';
 
     /**
-     * Order website id
-     *
      * @var int
      */
     protected $_orderWebsiteId = null;
@@ -132,10 +129,12 @@ class Transaction extends AbstractModel implements TransactionInterface
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param \Magento\Sales\Api\OrderPaymentRepositoryInterface $orderPaymentRepository
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory
      * @param TransactionFactory $transactionFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -193,8 +192,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * Parent transaction ID setter
-     * Can set the transaction id as well
+     * Parent transaction ID setter Can set the transaction id as well
      *
      * @param string $parentTxnId
      * @param string $txnId
@@ -229,8 +227,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * Parent transaction getter
-     * May attempt to load it.
+     * Parent transaction getter. May attempt to load it.
      *
      * @param bool $shouldLoad
      * @return bool|\Magento\Sales\Model\Order\Payment\Transaction
@@ -366,8 +363,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * Close a capture transaction
-     * Logic is similar to closeAuthorization(), but for a capture transaction
+     * Close a capture transaction. Logic is similar to closeAuthorization(), but for a capture transaction
      *
      * @param bool $shouldSave
      * @return bool|\Magento\Sales\Model\Order\Payment\Transaction
@@ -395,6 +391,7 @@ class Transaction extends AbstractModel implements TransactionInterface
 
     /**
      * Check whether authorization in current hierarchy can be voided completely
+     *
      * Basically checks whether the authorization exists and it is not affected by a capture or void
      *
      * @return bool
@@ -409,6 +406,7 @@ class Transaction extends AbstractModel implements TransactionInterface
             return true;
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             // jam all logical exceptions, fallback to false
+            return false;
         }
         return false;
     }
@@ -472,7 +470,7 @@ class Transaction extends AbstractModel implements TransactionInterface
             $info = [];
         }
         if ($key) {
-            return isset($info[$key]) ? $info[$key] : null;
+            return $info[$key] ?? null;
         }
         return $info;
     }
@@ -536,6 +534,7 @@ class Transaction extends AbstractModel implements TransactionInterface
 
     /**
      * Order ID getter
+     *
      * Attempts to get ID from set order payment object, if any, or from data by key 'order_id'
      *
      * @return int|null
@@ -559,7 +558,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     /**
      * Retrieve order instance
      *
-     * @return \Magento\Sales\Model\Order
+     * @return \Magento\Sales\Model\Order\Payment
      */
     public function getOrder()
     {
@@ -572,6 +571,7 @@ class Transaction extends AbstractModel implements TransactionInterface
 
     /**
      * Set order instance for transaction depends on transaction behavior
+     *
      * If $order equals to true, method isn't loading new order instance.
      *
      * @param \Magento\Sales\Model\Order|null|boolean $order
@@ -695,7 +695,6 @@ class Transaction extends AbstractModel implements TransactionInterface
     /**
      * Check whether this transaction is voided
      *
-     * TODO: implement that there should be only one void per authorization
      * @return bool
      */
     protected function _isVoided()
@@ -805,7 +804,6 @@ class Transaction extends AbstractModel implements TransactionInterface
 
     /**
      * Make sure this object is a valid transaction
-     * TODO for more restriction we can check for data consistency
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -833,7 +831,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTransactionId($id)
     {
@@ -898,7 +896,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     public function getHtmlTxnId()
     {
         $this->_eventManager->dispatch($this->_eventPrefix . '_html_txn_id', $this->_getEventData());
-        return isset($this->_data['html_txn_id']) ? $this->_data['html_txn_id'] : $this->getTxnId();
+        return $this->_data['html_txn_id'] ?? $this->getTxnId();
     }
 
     /**
@@ -942,7 +940,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCreatedAt($createdAt)
     {
@@ -950,7 +948,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setParentId($id)
     {
@@ -958,7 +956,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setOrderId($id)
     {
@@ -966,7 +964,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPaymentId($id)
     {
@@ -974,7 +972,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setIsClosed($isClosed)
     {
@@ -982,7 +980,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Sales\Api\Data\TransactionExtensionInterface|null
      */
@@ -992,10 +990,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @param \Magento\Sales\Api\Data\TransactionExtensionInterface $extensionAttributes
-     * @return $this
+     * @inheritdoc
      */
     public function setExtensionAttributes(\Magento\Sales\Api\Data\TransactionExtensionInterface $extensionAttributes)
     {

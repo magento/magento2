@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckSortOrderStoreView">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Github issue: #13401 'Store View' sort order values are not reflected"/>
+            <title value="Check 'Store view' sort order values"/>
+            <description value="Check 'Store View' sort order values no frontend store-switcher"/>
+            <severity value="MINOR"/>
+            <group value="store"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createFirstStore">
+                <argument name="website" value="{{_defaultWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createSecondStore">
+                <argument name="website" value="{{_defaultWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
+                <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStore">
+                <argument name="storeGroupName" value="customStoreGroup.name"/>
+            </actionGroup>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteSecondStore">
+                <argument name="storeGroupName" value="SecondStoreGroupUnique.name"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        </after>
+        <actionGroup ref="AdminCreateStoreViewFillSortOrderActionGroup" stepKey="createFirstStoreView">
+            <argument name="StoreGroup" value="customStoreGroup"/>
+            <argument name="customStore" value="customStoreGroup"/>
+            <argument name="sortOrder" value="30"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateStoreViewFillSortOrderActionGroup" stepKey="createSecondStoreView">
+            <argument name="StoreGroup" value="SecondStoreGroupUnique"/>
+            <argument name="customStore" value="SecondStoreGroupUnique"/>
+            <argument name="sortOrder" value="20"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+        <click stepKey="selectStoreSwitcher" selector="{{StorefrontFooterSection.switchStoreButton}}"/>
+        <grabTextFrom selector="{{StorefrontFooterSection.storeViewOptionNumber('1')}}" stepKey="grabSwatchFirstOption"/>
+        <grabTextFrom selector="{{StorefrontFooterSection.storeViewOptionNumber('2')}}" stepKey="grabSwatchSecondOption"/>
+        <assertStringContainsString stepKey="checkingSwatchFirstOption">
+            <expectedResult type="string">{{SecondStoreGroupUnique.name}}</expectedResult>
+            <actualResult type="variable">$grabSwatchFirstOption</actualResult>
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="checkingSwatchSecondOption">
+            <expectedResult type="string">{{customStoreGroup.name}}</expectedResult>
+            <actualResult type="variable">$grabSwatchSecondOption</actualResult>
+        </assertStringContainsString>
+    </test>
+</tests>

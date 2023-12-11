@@ -11,7 +11,7 @@ define([
     'use strict';
 
     return function (config, element) {
-        $(element).click(function (event) {
+        $(element).on('click', function (event) {
             var cart = customerData.get('cart'),
                 customer = customerData.get('customer');
 
@@ -22,6 +22,7 @@ define([
 
                 return false;
             }
+            $(element).attr('disabled', true);
             location.href = config.checkoutUrl;
         });
 

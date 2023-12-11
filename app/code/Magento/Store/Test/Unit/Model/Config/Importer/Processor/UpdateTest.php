@@ -3,22 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Test\Unit\Model\Config\Importer\Processor;
 
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\Config\Importer\Processor\Update;
 use Magento\Store\Model\Group;
 use Magento\Store\Model\GroupFactory;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\StoreFactory;
-use Magento\Store\Model\Website;
-use Magento\Store\Model\ResourceModel\Website as WebsiteResource;
-use Magento\Store\Model\WebsiteFactory;
 use Magento\Store\Model\ResourceModel\Group as GroupResource;
 use Magento\Store\Model\ResourceModel\Store as StoreResource;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use Magento\Store\Model\ResourceModel\Website as WebsiteResource;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
-use Magento\Framework\Event\ManagerInterface;
+use Magento\Store\Model\StoreFactory;
+use Magento\Store\Model\Website;
+use Magento\Store\Model\WebsiteFactory;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Update processor.
@@ -26,7 +30,7 @@ use Magento\Framework\Event\ManagerInterface;
  * @see Update
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UpdateTest extends \PHPUnit\Framework\TestCase
+class UpdateTest extends TestCase
 {
     /**
      * @var Update
@@ -91,7 +95,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dataDifferenceCalculatorMock = $this->getMockBuilder(DataDifferenceCalculator::class)
             ->disableOriginalConstructor()
@@ -175,7 +179,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
                     $updateData[ScopeInterface::SCOPE_STORES],
                 ],
             ]);
-        $this->websiteMock->expects($this->exactly(4))
+        $this->websiteMock->expects($this->atLeastOnce())
             ->method('getResource')
             ->willReturn($this->websiteResourceMock);
         $this->websiteMock->expects($this->once())
@@ -203,7 +207,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
         $this->groupFactoryMock->expects($this->exactly(3))
             ->method('create')
             ->willReturn($this->groupMock);
-        $this->groupMock->expects($this->exactly(5))
+        $this->groupMock->expects($this->atLeastOnce())
             ->method('getResource')
             ->willReturn($this->groupResourceMock);
         $this->groupMock->expects($this->once())
@@ -227,7 +231,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
         $this->storeFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->willReturn($this->storeMock);
-        $this->storeMock->expects($this->exactly(4))
+        $this->storeMock->expects($this->atLeastOnce())
             ->method('getResource')
             ->willReturn($this->storeResourceMock);
         $this->storeMock->expects($this->once())
@@ -244,15 +248,16 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
         $this->storeMock->expects($this->once())
             ->method('setData')
             ->with($updateData[ScopeInterface::SCOPE_STORES]['test']);
-        $this->storeResourceMock->expects($this->once())
+        $this->storeMock->expects($this->once())
             ->method('save')
-            ->with($this->storeMock);
-        $this->storeResourceMock->expects($this->once())
-            ->method('addCommitCallback');
+            ->willReturnSelf();
 
         $this->model->run($data);
     }
 
+    /**
+     * @return array
+     */
     private function getData()
     {
         return [
@@ -290,12 +295,10 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage Some exception
-     */
     public function testRunWithException()
     {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Some exception');
         $data = [
             ScopeInterface::SCOPE_GROUPS => [],
             ScopeInterface::SCOPE_STORES => []

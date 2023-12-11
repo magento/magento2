@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminOrderFormActionSection">
+        <element name="SubmitOrder" type="button" selector="#submit_order_top_button" timeout="30"/>
+        <element name="Cancel" type="button" selector="#reset_order_top_button" timeout="30"/>
+        <element name="CreateNewCustomer" type="button" selector="#order-customer-selector .actions button.primary" timeout="30"/>
+        <element name="submitOrder" type="button" selector="#submit_order_top_button" timeout="30"/>
+        <element name="cancel" type="button" selector="#reset_order_top_button" timeout="30"/>
+        <element name="createNewCustomer" type="button" selector="#order-customer-selector .actions button.primary" timeout="30"/>
+        <element name="pageHeader" type="text" selector=".page-header.row"/>
+    </section>
+</sections>

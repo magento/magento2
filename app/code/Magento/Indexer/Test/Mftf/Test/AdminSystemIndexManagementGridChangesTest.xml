@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSystemIndexManagementGridChangesTest">
+        <annotations>
+            <features value="Indexer"/>
+            <stories value="Menu Navigation"/>
+            <title value="Admin system index management grid change test"/>
+            <description value="Verify changes in 'Schedule column' on system index management"/>
+            <severity value="CRITICAL"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!--Open Index Management Page and Select Index mode "Update by Schedule" -->
+            <magentoCLI command="indexer:set-mode" arguments="schedule" stepKey="setIndexerModeSchedule"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="indexerReindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/></before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <magentoCLI command="indexer:set-mode" arguments="realtime" stepKey="setIndexerModeRealTime"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="indexerReindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToIndexManagementPageFirst">
+            <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuSystemToolsIndexManagement.dataUiId}}"/>
+        </actionGroup>
+        <grabTextFrom selector="{{AdminIndexManagementSection.indexerScheduleStatus(AdminIndexManagementGridData.rowProductPrice)}}" stepKey="gradScheduleStatusBeforeChange"/>
+
+        <!-- Verify 'Schedule status' column is present -->
+        <seeElement selector="{{AdminIndexManagementSection.columnScheduleStatus}}" stepKey="seeScheduleStatusColumn"/>
+
+        <!--Adding Special price to product-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminProductEditPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPrice"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToIndexManagementPageSecond">
+            <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuSystemToolsIndexManagement.dataUiId}}"/>
+        </actionGroup>
+        <grabTextFrom selector="{{AdminIndexManagementSection.indexerScheduleStatus(AdminIndexManagementGridData.rowProductPrice)}}" stepKey="gradScheduleStatusAfterChange"/>
+
+        <!-- Verify 'Schedule Status' column changes for 'Product Price' -->
+        <assertNotEquals stepKey="assertChange">
+            <expectedResult type="string">$gradScheduleStatusBeforeChange</expectedResult>
+            <actualResult type="string">$gradScheduleStatusAfterChange</actualResult>
+        </assertNotEquals>
+    </test>
+</tests>

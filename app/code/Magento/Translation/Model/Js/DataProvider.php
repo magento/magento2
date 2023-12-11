@@ -30,8 +30,6 @@ class DataProvider implements DataProviderInterface
     protected $config;
 
     /**
-     * Files utility
-     *
      * @var \Magento\Framework\App\Utility\Files
      */
     protected $filesUtility;
@@ -46,7 +44,7 @@ class DataProvider implements DataProviderInterface
     /**
      * Basic translate renderer
      *
-     * @var \Magento\Framework\Phrase\Renderer\Translate
+     * @var \Magento\Framework\Phrase\RendererInterface
      */
     protected $translate;
 
@@ -54,7 +52,7 @@ class DataProvider implements DataProviderInterface
      * @param \Magento\Framework\App\State $appState
      * @param Config $config
      * @param \Magento\Framework\Filesystem\File\ReadFactory $fileReadFactory
-     * @param \Magento\Framework\Phrase\Renderer\Translate $translate
+     * @param \Magento\Framework\Phrase\RendererInterface $translate
      * @param \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
      * @param \Magento\Framework\Component\DirSearch $dirSearch
      * @param \Magento\Framework\View\Design\Theme\ThemePackageList $themePackageList
@@ -64,7 +62,7 @@ class DataProvider implements DataProviderInterface
         \Magento\Framework\App\State $appState,
         Config $config,
         \Magento\Framework\Filesystem\File\ReadFactory $fileReadFactory,
-        \Magento\Framework\Phrase\Renderer\Translate $translate,
+        \Magento\Framework\Phrase\RendererInterface $translate,
         \Magento\Framework\Component\ComponentRegistrar $componentRegistrar,
         \Magento\Framework\Component\DirSearch $dirSearch,
         \Magento\Framework\View\Design\Theme\ThemePackageList $themePackageList,
@@ -113,11 +111,14 @@ class DataProvider implements DataProviderInterface
                     }
                 } catch (\Exception $e) {
                     throw new LocalizedException(
-                        sprintf(__('Error while translating phrase "%s" in file %s.'), $phrase, $filePath[0])
+                        __('Error while translating phrase "%s" in file %s.', $phrase, $filePath[0]),
+                        $e
                     );
                 }
             }
         }
+
+        ksort($dictionary);
 
         return $dictionary;
     }
@@ -139,13 +140,13 @@ class DataProvider implements DataProviderInterface
             if ($result) {
                 if (isset($matches[2])) {
                     foreach ($matches[2] as $match) {
-                        $phrases[] = str_replace(["\'", '\"'], ["'", '"'], $match);
+                        $phrases[] = $match !== null ? str_replace(["\'", '\"'], ["'", '"'], $match) : '';
                     }
                 }
             }
             if (false === $result) {
                 throw new LocalizedException(
-                    sprintf(__('Error while generating js translation dictionary: "%s"'), error_get_last())
+                    __('Error while generating js translation dictionary: "%s"', error_get_last())
                 );
             }
         }

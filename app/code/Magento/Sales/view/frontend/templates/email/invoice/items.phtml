@@ -4,7 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+/** @var \Magento\Sales\Block\Order\Email\Invoice\Items $block */
+/** @var \Magento\Framework\Escaper $escaper */
 
 ?>
 <?php $_invoice = $block->getInvoice() ?>
@@ -14,25 +15,22 @@
         <thead>
             <tr>
                 <th class="item-info">
-                    <?= /* @escapeNotVerified */  __('Items') ?>
+                    <?= $escaper->escapeHtml(__('Items')) ?>
                 </th>
                 <th class="item-qty">
-                    <?= /* @escapeNotVerified */  __('Qty') ?>
+                    <?= $escaper->escapeHtml(__('Qty')) ?>
                 </th>
                 <th class="item-subtotal">
-                    <?= /* @escapeNotVerified */  __('Subtotal') ?>
+                    <?= $escaper->escapeHtml(__('Subtotal')) ?>
                 </th>
             </tr>
         </thead>
         <?php foreach ($_invoice->getAllItems() as $_item): ?>
-            <?php
-                if ($_item->getOrderItem()->getParentItem()) {
-                    continue;
-                }
-            ?>
-            <tbody>
-                <?= $block->getItemHtml($_item) ?>
-            </tbody>
+            <?php if (!$_item->getOrderItem()->getParentItem()): ?>
+                <tbody>
+                    <?= $block->getItemHtml($_item) ?>
+                </tbody>
+            <?php endif; ?>
         <?php endforeach; ?>
         <tfoot class="order-totals">
             <?= $block->getChildHtml('invoice_totals') ?>

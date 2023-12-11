@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="VerifyCategoryPageParametersActionGroup">
+        <annotations>
+            <description>Validate that the Category Page parameters are present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="category"/>
+            <argument name="mode" type="string"/>
+            <argument name="numOfProductsPerPage" type="string"/>
+            <argument name="sortBy" type="string" defaultValue="position"/>
+        </arguments>
+
+        <seeInCurrentUrl url="/{{category.custom_attributes[url_key]}}.html" stepKey="checkUrl"/>
+        <seeInTitle userInput="{{category.name}}" stepKey="assertCategoryNameInTitle"/>
+        <see userInput="{{category.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryName"/>
+        <see userInput="{{mode}}" selector="{{StorefrontCategoryMainSection.modeGridIsActive}}" stepKey="assertViewMode"/>
+        <see userInput="{{numOfProductsPerPage}}" selector="{{StorefrontCategoryMainSection.perPage}}" stepKey="assertNumberOfProductsPerPage"/>
+        <see userInput="{{sortBy}}" selector="{{StorefrontCategoryMainSection.sortedBy}}" stepKey="assertSortedBy"/>
+    </actionGroup>
+</actionGroups>

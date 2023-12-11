@@ -3,22 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Widget\Test\Unit\Controller\Adminhtml\Widget;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Widget\Controller\Adminhtml\Widget\LoadOptions;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\App\ViewInterface;
-use Magento\Widget\Helper\Conditions as ConditionsHelper;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\ViewInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Widget\Controller\Adminhtml\Widget\LoadOptions;
+use Magento\Widget\Helper\Conditions as ConditionsHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Widget\Controller\Adminhtml\Widget\LoadOptions
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LoadOptionsTest extends \PHPUnit\Framework\TestCase
+class LoadOptionsTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -26,32 +34,32 @@ class LoadOptionsTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
     /**
-     * @var ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ViewInterface|MockObject
      */
     private $viewMock;
 
     /**
-     * @var ConditionsHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConditionsHelper|MockObject
      */
     private $conditionsHelperMock;
 
     /**
-     * @var ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseInterface|MockObject
      */
     private $responseMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     private $requestMock;
 
@@ -63,7 +71,7 @@ class LoadOptionsTest extends \PHPUnit\Framework\TestCase
     /**
      * return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
@@ -110,8 +118,8 @@ class LoadOptionsTest extends \PHPUnit\Framework\TestCase
         $jsonResult = '{"error":true,"message":"Some error"}';
         $errorMessage = 'Some error';
 
-        /** @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject $jsonDataHelperMock */
-        $jsonDataHelperMock = $this->getMockBuilder(\Magento\Framework\Json\Helper\Data::class)
+        /** @var Data|MockObject $jsonDataHelperMock */
+        $jsonDataHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
         $jsonDataHelperMock->expects($this->once())
@@ -124,7 +132,7 @@ class LoadOptionsTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new LocalizedException(__($errorMessage)));
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with(\Magento\Framework\Json\Helper\Data::class)
+            ->with(Data::class)
             ->willReturn($jsonDataHelperMock);
         $this->responseMock->expects($this->once())
             ->method('representJson')
@@ -163,8 +171,8 @@ class LoadOptionsTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        /** @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject $jsonDataHelperMock */
-        $jsonDataHelperMock = $this->getMockBuilder(\Magento\Framework\Json\Helper\Data::class)
+        /** @var Data|MockObject $jsonDataHelperMock */
+        $jsonDataHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
         $jsonDataHelperMock->expects($this->once())
@@ -180,11 +188,11 @@ class LoadOptionsTest extends \PHPUnit\Framework\TestCase
             ->willReturn($widgetJsonParams);
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with(\Magento\Framework\Json\Helper\Data::class)
+            ->with(Data::class)
             ->willReturn($jsonDataHelperMock);
 
-        /** @var \Magento\Framework\View\Element\BlockInterface|\PHPUnit_Framework_MockObject_MockObject $blockMock */
-        $blockMock = $this->getMockBuilder(\Magento\Framework\View\Element\BlockInterface::class)
+        /** @var BlockInterface|MockObject $blockMock */
+        $blockMock = $this->getMockBuilder(BlockInterface::class)
             ->setMethods(['setWidgetType', 'setWidgetValues'])
             ->getMockForAbstractClass();
         $blockMock->expects($this->once())
@@ -196,8 +204,8 @@ class LoadOptionsTest extends \PHPUnit\Framework\TestCase
             ->with($resultWidgetArrayParams['values'])
             ->willReturnSelf();
 
-        /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject $layoutMock */
-        $layoutMock = $this->getMockForAbstractClass(\Magento\Framework\View\LayoutInterface::class);
+        /** @var LayoutInterface|MockObject $layoutMock */
+        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('wysiwyg_widget.options')

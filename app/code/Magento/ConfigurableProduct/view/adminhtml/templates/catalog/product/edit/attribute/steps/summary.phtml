@@ -4,14 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary */
+
 ?>
 <div data-bind="scope: '<?= /* @noEscape */  $block->getComponentName() ?>'">
     <h2 class="steps-wizard-title"><?= $block->escapeHtml(
-            __('Step 4: Summary')
-        ); ?></h2>
+        __('Step 4: Summary')
+    ); ?></h2>
 
     <div class="admin__data-grid-wrap admin__data-grid-wrap-static">
         <!-- ko if: gridNew().length -->
@@ -54,8 +53,12 @@
                     "<?= /* @noEscape */  $block->getComponentName() ?>": {
                         "component": "Magento_ConfigurableProduct/js/variations/steps/summary",
                         "appendTo": "<?= /* @noEscape */  $block->getParentComponentName() ?>",
-                        "variationsComponent": "<?= /* @noEscape */ $block->getData('config/form') ?>.configurableVariations",
-                        "modalComponent": "<?= /* @noEscape */ $block->getData('config/form') ?>.configurableModal"
+                        "variationsComponent": "<?= /* @noEscape */ $block->getData('config/form')
+                        ?>.configurableVariations",
+                        "modalComponent": "<?= /* @noEscape */ $block->getData('config/form')
+                        ?>.configurableModal",
+                        "matrixGridComponent": "<?= /* @noEscape */ $block->getData('config/form')
+                        ?>.configurable.configurable-matrix"
                     }
                 }
             }

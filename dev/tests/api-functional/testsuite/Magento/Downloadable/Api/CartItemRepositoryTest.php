@@ -17,7 +17,7 @@ class CartItemRepositoryTest extends WebapiAbstract
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -72,7 +72,7 @@ class CartItemRepositoryTest extends WebapiAbstract
             1,
             $response['product_option']['extension_attributes']['downloadable_option']['downloadable_links']
         );
-        $this->assertContains(
+        $this->assertContainsEquals(
             $linkId,
             $response['product_option']['extension_attributes']['downloadable_option']['downloadable_links']
         );
@@ -81,10 +81,11 @@ class CartItemRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Quote/_files/empty_quote.php
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     * @expectedException \Exception
      */
     public function testAddItemWithInvalidLinkId()
     {
+        $this->expectException(\Exception::class);
+
         /** @var  \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class)->load(1);
         /** @var \Magento\Quote\Model\Quote  $quote */
@@ -174,7 +175,7 @@ class CartItemRepositoryTest extends WebapiAbstract
             1,
             $response['product_option']['extension_attributes']['downloadable_option']['downloadable_links']
         );
-        $this->assertContains(
+        $this->assertContainsEquals(
             $linkId,
             $response['product_option']['extension_attributes']['downloadable_option']['downloadable_links']
         );
@@ -182,10 +183,11 @@ class CartItemRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/quote_with_downloadable_product.php
-     * @expectedException \Exception
      */
     public function testUpdateItemWithInvalidLinkId()
     {
+        $this->expectException(\Exception::class);
+
         /** @var \Magento\Quote\Model\Quote  $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('reserved_order_id_1', 'reserved_order_id');
@@ -319,7 +321,7 @@ class CartItemRepositoryTest extends WebapiAbstract
             1,
             $response['product_option']['extension_attributes']['downloadable_option']['downloadable_links']
         );
-        $this->assertContains(
+        $this->assertContainsEquals(
             $linkId,
             $response['product_option']['extension_attributes']['downloadable_option']['downloadable_links']
         );

@@ -20,11 +20,12 @@ class CreditmemoCancelTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Sales/_files/creditmemo_with_list.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage You can not cancel Credit Memo
      */
     public function testCreditmemoCancel()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('You can not cancel Credit Memo');
+
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection $creditmemoCollection */

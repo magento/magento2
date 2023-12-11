@@ -8,8 +8,9 @@ namespace Magento\Framework\DB\Tree;
 /**
  * TODO implements iterators
  *
+ * @deprecated 102.0.0 Not used anymore.
  */
-class NodeSet implements \Iterator
+class NodeSet implements \Iterator, \Countable
 {
     /**
      * @var Node[]
@@ -33,6 +34,8 @@ class NodeSet implements \Iterator
 
     /**
      * Constructor
+     *
+     * @deprecated 102.0.0
      */
     public function __construct()
     {
@@ -43,8 +46,12 @@ class NodeSet implements \Iterator
     }
 
     /**
+     * Adds a node to node list.
+     *
      * @param Node $node
      * @return int
+     *
+     * @deprecated 102.0.0
      */
     public function addNode(Node $node)
     {
@@ -54,24 +61,39 @@ class NodeSet implements \Iterator
     }
 
     /**
+     * Retrieves count elements in node list.
+     *
      * @return int
+     *
+     * @deprecated 102.0.0
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return $this->count;
     }
 
     /**
+     * Checks if current position is valid.
+     *
      * @return bool
+     *
+     * @deprecated 102.0.0
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return isset($this->_nodes[$this->_current]);
     }
 
     /**
+     * Move forward to next element.
+     *
      * @return false|int
+     *
+     * @deprecated 102.0.0
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         if ($this->_current > $this->_currentNode) {
@@ -82,24 +104,39 @@ class NodeSet implements \Iterator
     }
 
     /**
+     * Retrieves the key of the current element.
+     *
      * @return int
+     *
+     * @deprecated 102.0.0
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->_current;
     }
 
     /**
+     * Retrieves the current node.
+     *
      * @return Node
+     *
+     * @deprecated 102.0.0
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->_nodes[$this->_current];
     }
 
     /**
+     * Rewinds the Iterator to the first element.
+     *
      * @return void
+     *
+     * @deprecated 102.0.0
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->_current = 0;

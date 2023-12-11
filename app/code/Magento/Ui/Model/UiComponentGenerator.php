@@ -10,10 +10,10 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
- * Dynamicly generate UI Component
+ * Dynamically generate UI Component
  *
- * Sometimes we need to generate components dynamicly (not from layout).
- * Tha basic example, is creating widget UI component, based on CMS page or CMS block
+ * Sometimes we need to generate components dynamically (not from layout).
+ * The basic example, is creating widget UI component, based on CMS page or CMS block
  * directive
  */
 class UiComponentGenerator
@@ -32,7 +32,6 @@ class UiComponentGenerator
      * UiComponentGenerator constructor.
      * @param ContextFactory $contextFactory
      * @param UiComponentFactory $uiComponentFactory
-     * @param array $data
      */
     public function __construct(
         ContextFactory $contextFactory,
@@ -48,6 +47,7 @@ class UiComponentGenerator
      * @param string $name
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @return UiComponentInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function generateUiComponent($name, \Magento\Framework\View\LayoutInterface $layout)
     {

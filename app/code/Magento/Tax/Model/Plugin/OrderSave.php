@@ -7,6 +7,8 @@
 
 namespace Magento\Tax\Model\Plugin;
 
+use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxExtension;
+
 class OrderSave
 {
     /**
@@ -48,11 +50,14 @@ class OrderSave
     }
 
     /**
+     * Save order tax
+     *
      * @param \Magento\Sales\Api\Data\OrderInterface $order
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * phpcs:disable Generic.Metrics.NestingLevel.TooHigh
      */
     protected function saveOrderTax(\Magento\Sales\Api\Data\OrderInterface $order)
     {
@@ -79,8 +84,9 @@ class OrderSave
         foreach ($taxesForItems as $taxesArray) {
             foreach ($taxesArray['applied_taxes'] as $rates) {
                 if (isset($rates['extension_attributes'])) {
-                    /** @var \Magento\Tax\Api\Data\AppliedTaxRateInterface[] $taxRates */
-                    $taxRates = $rates['extension_attributes']->getRates();
+                    $taxRates = $rates['extension_attributes'] instanceof OrderTaxDetailsAppliedTaxExtension
+                        ? $rates['extension_attributes']->getRates()
+                        : $rates['extension_attributes']['rates'];
                     if (is_array($taxRates)) {
                         if (count($taxRates) == 1) {
                             $ratesIdQuoteItemId[$rates['id']][] = [
@@ -124,8 +130,9 @@ class OrderSave
         foreach ($taxes as $row) {
             $id = $row['id'];
             if (isset($row['extension_attributes'])) {
-                /** @var \Magento\Tax\Api\Data\AppliedTaxRateInterface[] $taxRates */
-                $taxRates = $row['extension_attributes']->getRates();
+                $taxRates = $row['extension_attributes'] instanceof OrderTaxDetailsAppliedTaxExtension
+                    ? $row['extension_attributes']->getRates()
+                    : $row['extension_attributes']['rates'];
                 if (is_array($taxRates)) {
                     foreach ($taxRates as $tax) {
                         if ($row['percent'] == null) {
@@ -172,7 +179,9 @@ class OrderSave
                                     } elseif (isset($quoteItemId['associated_item_id'])) {
                                         //This item is associated with a product item
                                         $item = $order->getItemByQuoteItemId($quoteItemId['associated_item_id']);
-                                        $associatedItemId = $item->getId();
+                                        if ($item !== null && $item->getId()) {
+                                            $associatedItemId = $item->getId();
+                                        }
                                     }
 
                                     $data = [

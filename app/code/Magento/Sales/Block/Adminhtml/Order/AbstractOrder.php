@@ -6,6 +6,9 @@
 namespace Magento\Sales\Block\Adminhtml\Order;
 
 use Magento\Sales\Model\Order;
+use Magento\Framework\App\ObjectManager;
+use Magento\Shipping\Helper\Data as ShippingHelper;
+use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * Adminhtml order abstract block
@@ -17,15 +20,11 @@ use Magento\Sales\Model\Order;
 class AbstractOrder extends \Magento\Backend\Block\Widget
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Admin helper
-     *
      * @var \Magento\Sales\Helper\Admin
      */
     protected $_adminHelper;
@@ -35,15 +34,21 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Helper\Admin $adminHelper
      * @param array $data
+     * @param ShippingHelper|null $shippingHelper
+     * @param TaxHelper|null $taxHelper
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Sales\Helper\Admin $adminHelper,
-        array $data = []
+        array $data = [],
+        ?ShippingHelper $shippingHelper = null,
+        ?TaxHelper $taxHelper = null
     ) {
         $this->_adminHelper = $adminHelper;
         $this->_coreRegistry = $registry;
+        $data['shippingHelper'] = $shippingHelper ?? ObjectManager::getInstance()->get(ShippingHelper::class);
+        $data['taxHelper'] = $taxHelper ?? ObjectManager::getInstance()->get(TaxHelper::class);
         parent::__construct($context, $data);
     }
 
@@ -135,7 +140,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Retrieve subtotal price include tax html formated content
+     * Retrieve subtotal price include tax html formatted content
      *
      * @param \Magento\Framework\DataObject $order
      * @return string

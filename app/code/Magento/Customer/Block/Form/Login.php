@@ -9,7 +9,6 @@ namespace Magento\Customer\Block\Form;
  * Customer login form block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Login extends \Magento\Framework\View\Element\Template
@@ -45,15 +44,6 @@ class Login extends \Magento\Framework\View\Element\Template
         $this->_isScopePrivate = false;
         $this->_customerUrl = $customerUrl;
         $this->_customerSession = $customerSession;
-    }
-
-    /**
-     * @return $this
-     */
-    protected function _prepareLayout()
-    {
-        $this->pageConfig->getTitle()->set(__('Customer Login'));
-        return parent::_prepareLayout();
     }
 
     /**

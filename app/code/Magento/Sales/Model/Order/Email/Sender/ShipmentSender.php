@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Model\Order\Email\Sender;
 
+use Magento\Framework\App\Area;
+use Magento\Framework\App\ObjectManager;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Container\ShipmentIdentity;
@@ -15,10 +17,13 @@ use Magento\Sales\Model\ResourceModel\Order\Shipment as ShipmentResource;
 use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\DataObject;
+use Magento\Store\Model\App\Emulation;
 
 /**
- * Class ShipmentSender
+ * Sends order shipment email to the customer.
  *
+ * @deprecated 102.1.0 since this class works only with the concrete model and no data interface
+ * @see \Magento\Sales\Model\Order\Shipment\Sender\EmailSender
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentSender extends Sender
@@ -53,15 +58,23 @@ class ShipmentSender extends Sender
     protected $eventManager;
 
     /**
+     * @var Emulation
+     */
+    private $appEmulation;
+
+    /**
      * @param Template $templateContainer
      * @param ShipmentIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
      * @param \Psr\Log\LoggerInterface $logger
+     * @param Renderer $addressRenderer
      * @param PaymentHelper $paymentHelper
      * @param ShipmentResource $shipmentResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
-     * @param Renderer $addressRenderer
      * @param ManagerInterface $eventManager
+     * @param Emulation|null $appEmulation
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Template $templateContainer,
@@ -72,7 +85,8 @@ class ShipmentSender extends Sender
         PaymentHelper $paymentHelper,
         ShipmentResource $shipmentResource,
         \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
-        ManagerInterface $eventManager
+        ManagerInterface $eventManager,
+        Emulation $appEmulation = null
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger, $addressRenderer);
         $this->paymentHelper = $paymentHelper;
@@ -80,6 +94,7 @@ class ShipmentSender extends Sender
         $this->globalConfig = $globalConfig;
         $this->addressRenderer = $addressRenderer;
         $this->eventManager = $eventManager;
+        $this->appEmulation = $appEmulation ?: ObjectManager::getInstance()->get(Emulation::class);
     }
 
     /**
@@ -96,25 +111,37 @@ class ShipmentSender extends Sender
      * @param Shipment $shipment
      * @param bool $forceSyncMode
      * @return bool
+     * @throws \Exception
      */
     public function send(Shipment $shipment, $forceSyncMode = false)
     {
-        $shipment->setSendEmail(true);
+        $shipment->setSendEmail($this->identityContainer->isEnabled());
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $order = $shipment->getOrder();
-
+            $this->identityContainer->setStore($order->getStore());
+            $paymentHTML = $this->getPaymentHtml($order);
+            $this->appEmulation->startEnvironmentEmulation($order->getStoreId(), Area::AREA_FRONTEND, true);
             $transport = [
                 'order' => $order,
+                'order_id' => $order->getId(),
                 'shipment' => $shipment,
+                'shipment_id' => $shipment->getId(),
                 'comment' => $shipment->getCustomerNoteNotify() ? $shipment->getCustomerNote() : '',
                 'billing' => $order->getBillingAddress(),
-                'payment_html' => $this->getPaymentHtml($order),
+                'payment_html' => $paymentHTML,
                 'store' => $order->getStore(),
                 'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
-                'formattedBillingAddress' => $this->getFormattedBillingAddress($order)
+                'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
+                'order_data' => [
+                    'customer_name' => $order->getCustomerName(),
+                    'is_not_virtual' => $order->getIsNotVirtual(),
+                    'email_customer_note' => $order->getEmailCustomerNote(),
+                    'frontend_status_label' => $order->getFrontendStatusLabel()
+                ]
             ];
             $transportObject = new DataObject($transport);
+            $this->appEmulation->stopEnvironmentEmulation();
 
             /**
              * Event argument `transport` is @deprecated. Use `transportObject` instead.
@@ -146,6 +173,7 @@ class ShipmentSender extends Sender
      *
      * @param Order $order
      * @return string
+     * @throws \Exception
      */
     protected function getPaymentHtml(Order $order)
     {

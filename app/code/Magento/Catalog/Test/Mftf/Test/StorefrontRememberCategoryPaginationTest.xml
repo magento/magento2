@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontRememberCategoryPaginationTest">
+        <annotations>
+            <title value="Verify that Number of Products per page retained when visiting a different category"/>
+            <stories value="MAGETWO-61478: Number of Products displayed per page not retained when visiting a different category"/>
+            <description value="Verify that Number of Products per page retained when visiting a different category"/>
+            <features value="Catalog"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-94210"/>
+            <group value="Catalog"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="defaultCategory1"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct1">
+                <requiredEntity createDataKey="defaultCategory1"/>
+            </createData>
+
+            <createData entity="_defaultCategory" stepKey="defaultCategory2"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct2">
+                <requiredEntity createDataKey="defaultCategory2"/>
+            </createData>
+
+            <createData entity="RememberPaginationCatalogStorefrontConfig" stepKey="setRememberPaginationCatalogStorefrontConfig"/>
+        </before>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($$defaultCategory1.custom_attributes[url_key]$$)}}" stepKey="GoToStorefrontCategory1Page"/>
+        <selectOption selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" userInput="24" stepKey="selectPerPageCategory1" />
+        <waitForPageLoad stepKey="waitForCategory1PageToLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="verifyCategory1PageParameters"/>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($$defaultCategory2.custom_attributes[url_key]$$)}}" stepKey="navigateToCategory2Page"/>
+        <waitForPageLoad stepKey="waitForCategory2PageToLoad"/>
+
+        <actionGroup ref="VerifyCategoryPageParametersActionGroup" stepKey="verifyCategory2PageParameters">
+            <argument name="category" value="$$defaultCategory2$$"/>
+            <argument name="mode" value="grid"/>
+            <argument name="numOfProductsPerPage" value="24"/>
+        </actionGroup>
+
+        <after>
+            <createData entity="DefaultCatalogStorefrontConfiguration" stepKey="setDefaultCatalogStorefrontConfiguration"/>
+
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="defaultCategory1" stepKey="deleteCategory1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="defaultCategory2" stepKey="deleteCategory2"/>
+
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        </after>
+    </test>
+</tests>

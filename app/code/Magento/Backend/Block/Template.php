@@ -3,7 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Backend\Block;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 
 /**
  * Standard admin block. Adds admin-specific behavior and event.
@@ -17,9 +24,11 @@ namespace Magento\Backend\Block;
  * Example:
  * <block name="my.block" class="Magento\Backend\Block\Template" template="My_Module::template.phtml" >
  *      <arguments>
- *          <argument name="viewModel" xsi:type="object">My\Module\ViewModel\Custom</argument>
+ *          <argument name="view_model" xsi:type="object">My\Module\ViewModel\Custom</argument>
  *      </arguments>
  * </block>
+ *
+ * Your class object can then be accessed by doing $block->getViewModel()
  *
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -55,15 +64,23 @@ class Template extends \Magento\Framework\View\Element\Template
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
+     * @param JsonHelper|null $jsonHelper
+     * @param DirectoryHelper|null $directoryHelper
      */
-    public function __construct(\Magento\Backend\Block\Template\Context $context, array $data = [])
-    {
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        array $data = [],
+        ?JsonHelper $jsonHelper = null,
+        ?DirectoryHelper $directoryHelper = null
+    ) {
         $this->_localeDate = $context->getLocaleDate();
         $this->_authorization = $context->getAuthorization();
         $this->mathRandom = $context->getMathRandom();
         $this->_backendSession = $context->getBackendSession();
         $this->formKey = $context->getFormKey();
         $this->nameBuilder = $context->getNameBuilder();
+        $data['jsonHelper'] = $jsonHelper ?? ObjectManager::getInstance()->get(JsonHelper::class);
+        $data['directoryHelper']= $directoryHelper ?? ObjectManager::getInstance()->get(DirectoryHelper::class);
         parent::__construct($context, $data);
     }
 

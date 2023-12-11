@@ -3,7 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-require 'order.php';
+
+use Magento\Sales\Model\Order\ShipmentFactory;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -36,4 +40,11 @@ $invoice->register();
 
 $order->setIsInProcess(true);
 
-$transaction->addObject($invoice)->addObject($order)->save();
+$items = [];
+foreach ($order->getItems() as $orderItem) {
+    $items[$orderItem->getId()] = $orderItem->getQtyOrdered();
+}
+$shipment = $objectManager->get(ShipmentFactory::class)->create($order, $items);
+$shipment->register();
+
+$transaction->addObject($invoice)->addObject($shipment)->addObject($order)->save();

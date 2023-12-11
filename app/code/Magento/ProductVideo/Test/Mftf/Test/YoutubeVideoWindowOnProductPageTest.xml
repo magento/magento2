@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="YoutubeVideoWindowOnProductPageTest">
+        <annotations>
+            <features value="ProductVideo"/>
+            <stories value="Check product video on storefront"/>
+            <title value="Youtube video window on the product page"/>
+            <description value="Check Youtube video window on the product page"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-95254"/>
+            <useCaseId value="MAGETWO-91707"/>
+            <group value="productVideo"/>
+            <skip>
+                <issueId value="MC-33903"/>
+            </skip>
+            <group value="pr_exclude"/>
+        </annotations>
+
+        <before>
+            <!--Log In-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create category-->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!--Create product-->
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Set product video Youtube api key configuration -->
+            <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setStoreConfig" after="loginAsAdmin"/>
+        </before>
+
+        <!--Open simple product-->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex"/>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openFirstProductForEdit"/>
+
+        <!-- Add product video -->
+        <actionGroup ref="AddProductVideoActionGroup" stepKey="addProductVideo" after="openFirstProductForEdit"/>
+        <!-- Assert product video in admin product form -->
+        <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertProductVideoAdminProductPage" after="addProductVideo"/>
+
+        <!-- Save the product -->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveFirstProduct"/>
+
+        <!-- Assert product video in storefront product page -->
+        <amOnPage url="$$createProduct.custom_attributes[url_key]$$.html" stepKey="goToStorefrontCategoryPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontPageLoaded"/>
+        <actionGroup ref="AssertProductVideoStorefrontProductPageActionGroup" stepKey="assertProductVideoStorefrontProductPage" after="waitForStorefrontPageLoaded"/>
+
+        <!--Click Play video button-->
+        <click stepKey="clickToPlayVideo" selector="{{StorefrontProductInfoMainSection.clickInVideo}}"/>
+        <wait stepKey="waitFiveSecondToPlayVideo" time="5"/>
+        <switchToIFrame selector="{{StorefrontProductInfoMainSection.frameVideo}}" stepKey="switchToFrame"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.videoPlayedMode}}" stepKey="waitForVideoPlayed"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.videoPlayedMode}}" stepKey="AssertVideoIsPlayed"/>
+        <switchToIFrame stepKey="switchBack1"/>
+
+        <!--Click Pause button-->
+        <click stepKey="clickToStopVideo" selector="{{StorefrontProductInfoMainSection.clickInVideo}}"/>
+        <wait stepKey="waitFiveSecondToStopVideo" time="5"/>
+        <switchToIFrame selector="{{StorefrontProductInfoMainSection.frameVideo}}" stepKey="switchToFrame2"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.videoPausedMode}}" stepKey="waitForVideoPaused"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.videoPausedMode}}" stepKey="AssertVideoIsPaused"/>
+        <switchToIFrame stepKey="switchBack2"/>
+
+        <!--Click Play video button again. Make sure that Video continued playing-->
+        <click stepKey="clickAgainToPlayVideo" selector="{{StorefrontProductInfoMainSection.clickInVideo}}"/>
+        <wait stepKey="waitAgainFiveSecondToPlayVideo" time="5"/>
+        <switchToIFrame selector="{{StorefrontProductInfoMainSection.frameVideo}}" stepKey="switchToFrame3"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.videoPlayedMode}}" stepKey="waitForVideoPlayedAgain"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.videoPlayedMode}}" stepKey="AssertVideoIsPlayedAgain"/>
+        <switchToIFrame stepKey="switchBack3"/>
+
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategoryFirst"/>
+            <!-- Set product video configuration to default -->
+            <createData entity="DefaultProductVideoConfig" stepKey="setStoreDefaultConfig" before="logout"/>
+            <!--Log Out-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+    </test>
+</tests>
+

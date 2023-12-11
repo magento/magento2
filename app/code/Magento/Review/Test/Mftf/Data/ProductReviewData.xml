@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="simpleProductReview">
+        <data key="nickname" unique="suffix">user</data>
+        <data key="title">Review title</data>
+        <data key="detail">Simple product review</data>
+        <array key="select_stores">
+            <item>Default Store View</item>
+        </array>
+    </entity>
+    <entity name="firstSimpleProductReview">
+        <data key="nickname" unique="suffix">user1</data>
+        <data key="title">Review title 1</data>
+        <data key="detail">Simple product review 1</data>
+        <array key="select_stores">
+            <item>Default Store View</item>
+        </array>
+    </entity>
+    <entity name="secondSimpleProductReview">
+        <data key="nickname" unique="suffix">user2</data>
+        <data key="title">Review title 2</data>
+        <data key="detail">Simple product review 2</data>
+        <array key="select_stores">
+            <item>Default Store View</item>
+        </array>
+    </entity>
+</entities>

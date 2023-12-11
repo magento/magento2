@@ -1,0 +1,43 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+type StoreConfig {
+    front : String @doc(description: "The landing page that is associated with the base URL.")
+    cms_home_page : String @doc(description: "The name of the CMS page that identifies the home page for the store.")
+    no_route : String @doc(description: "The default page that displays when a 404 'Page not Found' error occurs.")
+    cms_no_route : String @doc(description: "A specific CMS page that displays when a 404 'Page Not Found' error occurs.")
+    cms_no_cookies : String @doc(description: "A specific CMS page that displays when cookies are not enabled for the browser.")
+    show_cms_breadcrumbs : Int @doc(description: "Indicates whether a breadcrumb trail appears on all CMS pages in the catalog. 0 (No) or 1 (Yes).")
+}
+
+
+type Query {
+    cmsPage (
+        id: Int @doc(description: "The ID of the CMS page.") @deprecated(reason: "Use `identifier` instead.")
+        identifier: String @doc(description: "The identifier of the CMS page.")
+    ): CmsPage @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\Page") @doc(description: "Return details about a CMS page.") @cache(cacheIdentity: "Magento\\CmsGraphQl\\Model\\Resolver\\Page\\Identity")
+    cmsBlocks (
+        identifiers: [String] @doc(description: "An array of CMS block IDs.")
+    ): CmsBlocks @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\Blocks") @doc(description: "Return information about CMS blocks.") @cache(cacheIdentity: "Magento\\CmsGraphQl\\Model\\Resolver\\Block\\Identity")
+}
+
+type CmsPage implements RoutableInterface @doc(description: "Contains details about a CMS page.") {
+    identifier: String @doc(description: "The ID of a CMS page.")
+    url_key: String @doc(description: "The URL key of the CMS page, which is often based on the `content_heading`.")
+    title: String @doc(description: "The name that appears in the breadcrumb trail navigation and in the browser title bar and tab.")
+    content: String @doc(description: "The content of the CMS page in raw HTML.")
+    content_heading: String @doc(description: "The heading that displays at the top of the CMS page.")
+    page_layout: String @doc(description: "The design layout of the page, indicating the number of columns and navigation features used on the page.")
+    meta_title: String @doc(description: "A page title that is indexed by search engines and appears in search results listings.")
+    meta_description: String @doc(description: "A brief description of the page for search results listings.")
+    meta_keywords: String @doc(description: "A brief description of the page for search results listings.")
+}
+
+type CmsBlocks @doc(description: "Contains an array CMS block items.") {
+    items: [CmsBlock] @doc(description: "An array of CMS blocks.")
+}
+
+type CmsBlock @doc(description: "Contains details about a specific CMS block.") {
+    identifier: String @doc(description: "The CMS block identifier.")
+    title: String @doc(description: "The title assigned to the CMS block.")
+    content: String @doc(description: "The content of the CMS block in raw HTML.")
+}

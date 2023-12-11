@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckUrlRewritesMultipleStoreviewsProductImportTest">
+        <annotations>
+            <features value="Url Rewrite"/>
+            <stories value="Url Rewrites for Multiple Storeviews"/>
+            <title value="Url Rewrites Correctly Generated for Multiple Storeviews During Product Import"/>
+            <description value="Check Url Rewrites Correctly Generated for Multiple Storeviews During Product Import."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-12656"/>
+            <group value="urlRewrite"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableCategoryProductRewrites"/>
+            <createData entity="ApiCategory" stepKey="createCategory">
+                <field key="name">category-admin</field>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create Store View EN -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewEn">
+                <argument name="customStore" value="customStoreENNotUnique"/>
+            </actionGroup>
+            <!-- Create Store View NL -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewNl">
+                <argument name="customStore" value="customStoreNLNotUnique"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewEn">
+                <argument name="customStore" value="customStoreENNotUnique"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewNl">
+                <argument name="customStore" value="customStoreNLNotUnique"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearStoreFilters"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductByNameActionGroup" stepKey="deleteImportedProduct">
+                <argument name="sku" value="productformagetwo68980"/>
+                <argument name="name" value="productformagetwo68980"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFiltersIfSet"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableCategoryProductRewrites"/>
+        </after>
+        <!--Change category name and URL key for EN Store View-->
+        <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchToStoreViewEn">
+            <argument name="Store" value="customStoreENNotUnique.name"/>
+            <argument name="CatName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeCategoryNameOnStoreViewLevelActionGroup" stepKey="changeCategoryNameForENStoreView">
+            <argument name="categoryName" value="categoryEN"/>
+        </actionGroup>
+        <actionGroup ref="ChangeSeoUrlKeyForSubCategoryActionGroup" stepKey="changeSeoUrlKeyENStoreView">
+            <argument name="value" value="category-english"/>
+        </actionGroup>
+
+        <!--Change category name and URL key for NL Store View-->
+        <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchToStoreViewNl">
+            <argument name="Store" value="customStoreNLNotUnique.name"/>
+            <argument name="CatName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeCategoryNameOnStoreViewLevelActionGroup" stepKey="changeCategoryNameForNLStoreView">
+            <argument name="categoryName" value="categoryNL"/>
+        </actionGroup>
+        <actionGroup ref="ChangeSeoUrlKeyForSubCategoryActionGroup" stepKey="changeSeoUrlKeyNLStoreView">
+            <argument name="value" value="category-dutch"/>
+        </actionGroup>
+
+        <!-- Import products with add/update behavior -->
+        <actionGroup ref="AdminImportProductsWithCheckValidationResultActionGroup" stepKey="importProduct">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="import_updated.csv"/>
+            <argument name="importNoticeMessage" value="Created: 1, Updated: 0, Deleted: 0"/>
+            <argument name="validationNoticeMessage" value="Checked rows: 3, checked entities: 1, invalid rows: 0, total errors: 0"/>
+        </actionGroup>
+
+        <!--Filter Product in product page and get the Product ID -->
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterProduct">
+            <argument name="productSku" value="productformagetwo68980"/>
+        </actionGroup>
+        <grabFromCurrentUrl regex="~/id/(\d+)/~" stepKey="grabProductIdFromUrl"/>
+
+        <!--Open Marketing - SEO & Search - URL Rewrites-->
+        <actionGroup ref="AdminSearchUrlRewriteByRequestPathActionGroup" stepKey="searchingCategoryUrlRewriteForENStoreView">
+            <argument name="requestPath" value="category-english.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathInUrlRewriteGrigActionGroup" stepKey="seeCategoryUrlInRequestPathColumnForENStoreView">
+            <argument name="requestPath" value="category-english.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminTargetPathInUrlRewriteGrigActionGroup" stepKey="seeCategoryUrlInTargetPathColumnForENStoreView">
+            <argument name="targetPath" value="catalog/category/view/id/$$createCategory.id$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminSearchUrlRewriteByRequestPathActionGroup" stepKey="searchingCategoryUrlRewriteForNLStoreView">
+            <argument name="requestPath" value="category-dutch.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathInUrlRewriteGrigActionGroup" stepKey="seeCategoryUrlInRequestPathColumnForNLStoreView">
+            <argument name="requestPath" value="category-dutch.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminTargetPathInUrlRewriteGrigActionGroup" stepKey="seeCategoryUrlInTargetPathColumnForNLStoreView">
+            <argument name="targetPath" value="catalog/category/view/id/$$createCategory.id$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminSearchUrlRewriteByRequestPathActionGroup" stepKey="searchingProductUrlRewriteForENStoreView">
+            <argument name="requestPath" value="productformagetwo68980-english.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathInUrlRewriteGrigActionGroup" stepKey="seeProductUrlInRequestPathColumnForENStoreView">
+            <argument name="requestPath" value="productformagetwo68980-english.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminTargetPathInUrlRewriteGrigActionGroup" stepKey="seeProductUrlInTargetPathColumnForENStoreView">
+            <argument name="targetPath" value="catalog/product/view/id/$grabProductIdFromUrl"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminSearchUrlRewriteByRequestPathActionGroup" stepKey="searchingProductUrlRewriteForNLStoreView">
+            <argument name="requestPath" value="productformagetwo68980-dutch.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathInUrlRewriteGrigActionGroup" stepKey="seeProductUrlInRequestPathColumnForNLStoreView">
+            <argument name="requestPath" value="productformagetwo68980-dutch.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminTargetPathInUrlRewriteGrigActionGroup" stepKey="seeProductUrlInTargetPathColumnForNLStoreView">
+            <argument name="targetPath" value="catalog/product/view/id/$grabProductIdFromUrl"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminSearchUrlRewriteByRequestPathActionGroup" stepKey="searchingUrlRewriteForENStoreView">
+            <argument name="requestPath" value="category-english/productformagetwo68980-english.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathInUrlRewriteGrigActionGroup" stepKey="seeUrlInRequestPathColumnForENStoreView">
+            <argument name="requestPath" value="category-english/productformagetwo68980-english.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminTargetPathInUrlRewriteGrigActionGroup" stepKey="seeUrlInTargetPathColumnForENStoreView">
+            <argument name="targetPath" value="catalog/product/view/id/$grabProductIdFromUrl/category/$$createCategory.id$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminSearchUrlRewriteByRequestPathActionGroup" stepKey="searchingUrlRewriteForNLStoreView">
+            <argument name="requestPath" value="category-dutch/productformagetwo68980-dutch.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathInUrlRewriteGrigActionGroup" stepKey="seeUrlInRequestPathColumnForNLStoreView">
+            <argument name="requestPath" value="category-dutch/productformagetwo68980-dutch.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminTargetPathInUrlRewriteGrigActionGroup" stepKey="seeUrlInTargetPathColumnForNLStoreView">
+            <argument name="targetPath" value="catalog/product/view/id/$grabProductIdFromUrl/category/$$createCategory.id$$"/>
+        </actionGroup>
+    </test>
+</tests>

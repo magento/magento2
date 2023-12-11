@@ -9,8 +9,10 @@ use Magento\Deploy\Config\BundleConfig;
 use Magento\Deploy\Package\BundleInterface;
 use Magento\Deploy\Package\BundleInterfaceFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Asset\RepositoryMap;
 
@@ -23,19 +25,19 @@ use Magento\Framework\View\Asset\RepositoryMap;
 class Bundle
 {
     /**
-     * Path to package subdirectory wher bundle files are located
+     * Path to package subdirectory where bundle files are located
      */
-    const BUNDLE_JS_DIR = 'js/bundle';
+    public const BUNDLE_JS_DIR = 'js/bundle';
 
     /**
      * Matched file extension name for JavaScript files
      */
-    const ASSET_TYPE_JS = 'js';
+    public const ASSET_TYPE_JS = 'js';
 
     /**
      * Matched file extension name for template files
      */
-    const ASSET_TYPE_HTML = 'html';
+    public const ASSET_TYPE_HTML = 'html';
 
     /**
      * Public static directory writable interface
@@ -77,23 +79,38 @@ class Bundle
     ];
 
     /**
-     * Bundle constructor
-     *
+     * @var File|null
+     */
+    private $file;
+
+    /**
+     * @var BundleConfig
+     */
+    private $bundleConfig;
+
+    /**
      * @param Filesystem $filesystem
      * @param BundleInterfaceFactory $bundleFactory
      * @param BundleConfig $bundleConfig
      * @param Files $files
+     * @param File|null $file
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         Filesystem $filesystem,
         BundleInterfaceFactory $bundleFactory,
         BundleConfig $bundleConfig,
-        Files $files
+        Files $files,
+        File $file = null
     ) {
         $this->pubStaticDir = $filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
         $this->bundleFactory = $bundleFactory;
         $this->bundleConfig = $bundleConfig;
         $this->utilityFiles = $files;
+        $this->file = $file ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\Filesystem\Io\File::class
+        );
     }
 
     /**
@@ -103,14 +120,19 @@ class Bundle
      * @param string $theme
      * @param string $locale
      * @return void
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function deploy($area, $theme, $locale)
     {
-        $bundle = $this->bundleFactory->create([
+        $bundle = $this->bundleFactory->create(
+            [
             'area' => $area,
             'theme' => $theme,
             'locale' => $locale
-        ]);
+            ]
+        );
 
         // delete all previously created bundle files
         $bundle->clear();
@@ -135,15 +157,18 @@ class Bundle
                     . '/' . $sourcePath['locale']
                     . '/' . $filePath;
             } else {
-                $sourcePath = str_replace('\\', '/', $sourcePath);
+                $sourcePath = str_replace('\\', '/', $sourcePath ?? '');
                 $sourcePath = $this->pubStaticDir->getRelativePath($sourcePath);
                 $filePath = substr($sourcePath, strlen($area . '/' . $theme . '/' . $locale) + 1);
             }
 
-            $contentType = pathinfo($filePath, PATHINFO_EXTENSION);
-            if (!in_array($contentType, self::$availableTypes)) {
+            $contentType = $this->file->getPathInfo($filePath);
+            if (!array_key_exists('extension', $contentType) ||
+                !in_array($contentType['extension'], self::$availableTypes)
+            ) {
                 continue;
             }
+            $contentType = $contentType['extension'];
 
             if ($this->hasMinVersion($filePath) || $this->isExcluded($filePath, $area, $theme)) {
                 continue;
@@ -166,7 +191,7 @@ class Bundle
             return true;
         }
 
-        $info = pathinfo($filePath);
+        $info = $this->file->getPathInfo($filePath);
         if (strpos($filePath, '.min.') !== false) {
             $this->excludedCache[] = str_replace(".min.{$info['extension']}", ".{$info['extension']}", $filePath);
         } else {
@@ -193,7 +218,7 @@ class Bundle
         $excludedFiles = $this->bundleConfig->getExcludedFiles($area, $theme);
         foreach ($excludedFiles as $excludedFileId) {
             $excludedFilePath = $this->prepareExcludePath($excludedFileId);
-            if ($excludedFilePath === $filePath) {
+            if ($excludedFilePath === $filePath || $excludedFilePath === str_replace('.min.js', '.js', $filePath)) {
                 return true;
             }
         }
@@ -201,7 +226,7 @@ class Bundle
         $excludedDirs = $this->bundleConfig->getExcludedDirectories($area, $theme);
         foreach ($excludedDirs as $directoryId) {
             $directoryPath = $this->prepareExcludePath($directoryId);
-            if (strpos($filePath, $directoryPath) === 0) {
+            if (strpos($filePath, (string) $directoryPath) === 0) {
                 return true;
             }
         }
@@ -216,7 +241,7 @@ class Bundle
      */
     private function prepareExcludePath($path)
     {
-        if (strpos($path, Repository::FILE_ID_SEPARATOR) !== false) {
+        if ($path !== null && strpos($path, Repository::FILE_ID_SEPARATOR) !== false) {
             list($excludedModule, $excludedPath) = explode(Repository::FILE_ID_SEPARATOR, $path);
             if ($excludedModule == 'Lib') {
                 return $excludedPath;

@@ -24,7 +24,7 @@
                     <argument name="use_ajax" xsi:type="string">0</argument>
                     <argument name="pager_visibility" xsi:type="string">0</argument>
                     <argument name="id" xsi:type="string">gridReport</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Reports\Model\ResourceModel\Report\Collection</argument>
+                    <argument name="dataSource" xsi:type="object" shared="false">Magento\Reports\Model\ResourceModel\Report\Collection</argument>
                 </arguments>
                 <block class="Magento\Backend\Block\Widget\Grid\Export" name="adminhtml.report.grid.export" as="grid.export">
                     <arguments>

@@ -10,6 +10,8 @@
 namespace Magento\Config\Model\Config\Structure\Mapper;
 
 /**
+ * Sorting mapper
+ *
  * @api
  * @since 100.0.2
  */
@@ -30,6 +32,8 @@ class Sorting extends \Magento\Config\Model\Config\Structure\AbstractMapper
     }
 
     /**
+     * Process config
+     *
      * @param array $data
      * @return array
      */
@@ -55,17 +59,13 @@ class Sorting extends \Magento\Config\Model\Config\Structure\AbstractMapper
     {
         $sortIndexA = 0;
         if ($this->_hasValue('sortOrder', $elementA)) {
-            $sortIndexA = floatval($elementA['sortOrder']);
+            $sortIndexA = (float)$elementA['sortOrder'];
         }
         $sortIndexB = 0;
         if ($this->_hasValue('sortOrder', $elementB)) {
-            $sortIndexB = floatval($elementB['sortOrder']);
+            $sortIndexB = (float)$elementB['sortOrder'];
         }
 
-        if ($sortIndexA == $sortIndexB) {
-            return 0;
-        }
-
-        return $sortIndexA < $sortIndexB ? -1 : 1;
+        return $sortIndexA <=> $sortIndexB;
     }
 }

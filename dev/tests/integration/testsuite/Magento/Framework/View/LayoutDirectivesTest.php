@@ -5,10 +5,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\View;
 
 use Magento\Framework\App\State;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -31,7 +35,7 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
      */
     protected $state;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->layoutFactory = $this->objectManager->get(\Magento\Framework\View\LayoutFactory::class);
@@ -55,6 +59,7 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
         );
         $layout->loadString($xml->asXml());
         $layout->generateElements();
+
         return $layout;
     }
 
@@ -80,14 +85,18 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \OutOfBoundsException
-     * @expectedExceptionMessage No element found with ID 'nonexisting_element'
      * @magentoAppIsolation enabled
      */
     public function testRenderNonExistentElementShouldThrowException()
     {
+        $this->expectException(\OutOfBoundsException::class);
+
         $layout = $this->_getLayoutModel('render.xml');
         $this->assertEmpty($layout->renderElement('nonexisting_element'));
+
+        $this->expectExceptionMessage(
+            'The element with the "nonexisting_element" ID wasn\'t found. Verify the ID and try again.'
+        );
     }
 
     /**
@@ -142,9 +151,12 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
     public function testLayoutUrlArgumentsDirective()
     {
         $layout = $this->_getLayoutModel('arguments_url_type.xml');
-        $this->assertContains('customer/account/login', $layout->getBlock('block_with_url_args')->getOne());
-        $this->assertContains('customer/account/logout', $layout->getBlock('block_with_url_args')->getTwo());
-        $this->assertContains('customer_id/3', $layout->getBlock('block_with_url_args')->getTwo());
+        $this->assertStringContainsString('customer/account/login', $layout->getBlock('block_with_url_args')->getOne());
+        $this->assertStringContainsString(
+            'customer/account/logout',
+            $layout->getBlock('block_with_url_args')->getTwo()
+        );
+        $this->assertStringContainsString('customer_id/3', $layout->getBlock('block_with_url_args')->getTwo());
     }
 
     public function testLayoutObjectArgumentUpdatersDirective()
@@ -236,18 +248,20 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testMoveBroken()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_getLayoutModel('move_broken.xml');
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testMoveAliasBroken()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_getLayoutModel('move_alias_broken.xml');
     }
 

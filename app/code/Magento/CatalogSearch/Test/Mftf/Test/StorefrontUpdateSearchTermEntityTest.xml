@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontUpdateSearchTermEntityTest">
+        <annotations>
+            <stories value="Storefront Search"/>
+            <title value="Update Storefront Search Results"/>
+            <description value="You should see the updated Search Term on the Storefront via the Admin."/>
+            <testCaseId value="MC-13987"/>
+            <severity value="CRITICAL"/>
+            <group value="search"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory1"/>
+            <createData entity="SimpleProduct" stepKey="createProduct1">
+                <requiredEntity createDataKey="createCategory1"/>
+            </createData>
+
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStorefrontPage1"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createCategory1" stepKey="deleteCategory1"/>
+
+            <!-- Delete all search terms -->
+            <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="openAdminCatalogSearchTermIndexPage"/>
+            <comment userInput="Delete all search terms" stepKey="deleteAllSearchTermsComment"/>
+            <actionGroup ref="AdminDeleteAllSearchTermsActionGroup" stepKey="deleteAllSearchTerms"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin1"/>
+        </after>
+
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName1">
+            <argument name="phrase" value="$$createProduct1.name$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+
+        <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="openAdminCatalogSearchTermIndexPage1"/>
+
+        <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByFirstSearchQuery1">
+            <argument name="searchQuery" value="$$createProduct1.name$$"/>
+        </actionGroup>
+
+        <click selector="{{AdminGridRow.editByValue($$createProduct1.name$$)}}" stepKey="clickOnSearchResult1"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+
+        <actionGroup ref="AdminFillAllSearchTermFieldsActionGroup" stepKey="searchForSearchTerm1">
+            <argument name="searchTerm" value="UpdatedSearchTermData1"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="openAdminCatalogSearchTermIndexPage2"/>
+
+        <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByFirstSearchQuery2">
+            <argument name="searchQuery" value="{{UpdatedSearchTermData1.query_text}}"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStorefrontPage2"/>
+
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName2">
+            <argument name="phrase" value="{{UpdatedSearchTermData1.query_text}}"/>
+        </actionGroup>
+    </test>
+</tests>

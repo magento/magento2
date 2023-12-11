@@ -5,12 +5,12 @@
  */
 namespace Magento\Framework\Indexer;
 
-use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface as SaveHandlerInterface;
 
 /**
  * @api Instantiate save handler when implementing custom Indexer\Action
+ * @since 100.0.2
  */
 class SaveHandlerFactory
 {

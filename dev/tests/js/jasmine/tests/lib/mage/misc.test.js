@@ -2,14 +2,49 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+/* eslint-disable max-nested-callbacks */
 define([
     'mageUtils',
-    'moment'
-], function (utils, moment) {
+    'moment',
+    'jquery'
+], function (utils, moment, $) {
     'use strict';
 
     describe('mageUtils', function () {
+
+        it('Check getUrlParameters function', function () {
+            var fixture,
+                url,
+                getParameters;
+
+            fixture = {
+                'not valid url': {},
+                'http://example.com/catalogsearch/result/': {},
+                'http://example.com/catalogsearch/result/?': {},
+                'http://example.com/catalogsearch/result/?q': {
+                    q: ''
+                },
+                'http://example.com/catalogsearch/result/?q=': {
+                    q: ''
+                },
+                'http://example.com/catalogsearch/result/?q=+Simple+99%2C+8%2F%3F&cat=3': {
+                    q: ' Simple 99, 8/?',
+                    cat: '3'
+                },
+                'http://example.com/catalogsearch/result/?q=Simple&cat=3&p=1': {
+                    q: 'Simple',
+                    cat: '3',
+                    p: '1'
+                }
+            };
+
+            for (url in fixture) {
+                if (fixture.hasOwnProperty(url)) {
+                    getParameters = fixture[url];
+                    expect(utils.getUrlParameters(url)).toEqual(getParameters);
+                }
+            }
+        });
 
         it('Check convertToMomentFormat function', function () {
             var format, momentFormat;
@@ -35,13 +70,13 @@ define([
         it('Check convertToMomentFormat function for all Magento supported locales', function () {
 
             var fixture,
-            localeValues,
-            format,
-            expectedValue,
-            momentFormat,
-            dt,
-            m,
-            p;
+                localeValues,
+                format,
+                expectedValue,
+                momentFormat,
+                dt,
+                m,
+                p;
 
             fixture = {
                 'af_ZA': {
@@ -646,6 +681,24 @@ define([
                     expect(m.format(momentFormat)).toBe(expectedValue);
                 }
             }
+        });
+
+        it('Check ajaxSubmit method', function () {
+            var options = {
+                data: {}
+            },
+            config = {
+                ajaxSaveType: 'default'
+            },
+            d = new $.Deferred();
+
+            spyOn($, 'ajax').and.callFake(function () {
+                d.reject();
+
+                return d.promise();
+            });
+            utils.ajaxSubmit(options, config);
+            expect($.ajax).toHaveBeenCalled();
         });
     });
 });

@@ -1,0 +1,17 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div data-role="grid-wrapper" class="masonry-image-grid" attr="'data-id': containerId">
+    <div class="masonry-image-column" repeat="foreach: rows, item: '$row'">
+        <div outerfasteach="data: getVisible(), as: '$col'" template="getBody()"></div>
+    </div>
+    <div if="!hasData() && !getErrorMessageUnsanitizedHtml()" class="no-data-message-container">
+        <span translate="'We couldn\'t find any records.'"></span>
+    </div>
+    <div if="getErrorMessageUnsanitizedHtml()" class="error-message-container">
+        <span html="getErrorMessageUnsanitizedHtml()"></span>
+    </div>
+</div>

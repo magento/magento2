@@ -7,6 +7,8 @@ namespace Magento\Backend\Block\Dashboard;
 
 /**
  * Adminhtml dashboard diagram tabs
+ * @deprecated dashboard graphs were migrated to dynamic chart.js solution
+ * @see dashboard.diagrams in adminhtml_dashboard_index.xml
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
@@ -18,6 +20,8 @@ class Diagrams extends \Magento\Backend\Block\Widget\Tabs
     protected $_template = 'Magento_Backend::widget/tabshoriz.phtml';
 
     /**
+     * Internal constructor, that is called from real constructor
+     *
      * @return void
      */
     protected function _construct()
@@ -28,6 +32,8 @@ class Diagrams extends \Magento\Backend\Block\Widget\Tabs
     }
 
     /**
+     * Preparing global layout
+     *
      * @return $this
      */
     protected function _prepareLayout()

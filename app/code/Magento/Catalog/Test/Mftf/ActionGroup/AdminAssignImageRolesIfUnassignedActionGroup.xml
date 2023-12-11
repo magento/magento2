@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssignImageRolesIfUnassignedActionGroup" deprecated="This Action Group is deprecated. Please use AdminAssignImageRolesActionGroup.">
+        <annotations>
+            <description>Requires the navigation to the Product Creation page. Assign the Base, Small, Thumbnail, and Swatch Roles to image.</description>
+        </annotations>
+
+        <conditionalClick selector="{{AdminProductImagesSection.roleBase}}" dependentSelector="{{AdminProductImagesSection.isRoleChecked('Base')}}" visible="false" stepKey="checkRoleBase"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleSmall}}" dependentSelector="{{AdminProductImagesSection.isRoleChecked('Small')}}" visible="false" stepKey="checkRoleSmall"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleThumbnail}}" dependentSelector="{{AdminProductImagesSection.isRoleChecked('Thumbnail')}}" visible="false" stepKey="checkRoleThumbnail"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleSwatch}}" dependentSelector="{{AdminProductImagesSection.isRoleChecked('Swatch')}}" visible="false" stepKey="checkRoleSwatch"/>
+    </actionGroup>
+</actionGroups>

@@ -5,30 +5,30 @@
  */
 
 use Magento\Payment\Helper\Data;
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\Sales\Api\ShipmentCommentRepositoryInterface;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Comment;
-use Magento\Sales\Model\Order\Shipment\Item;
+use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require 'default_rollback.php';
-require __DIR__ . '/order.php';
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/default_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order.php');
 
+$objectManager = Bootstrap::getObjectManager();
 /** @var Order $order */
+$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
 $payment = $order->getPayment();
-$paymentInfoBlock = Bootstrap::getObjectManager()->get(Data::class)
-    ->getInfoBlock($payment);
+$paymentInfoBlock = $objectManager->get(Data::class)->getInfoBlock($payment);
 $payment->setBlockMock($paymentInfoBlock);
 
-/** @var Shipment $shipment */
-$shipment = Bootstrap::getObjectManager()->create(Shipment::class);
-$shipment->setOrder($order);
+$items = [];
+foreach ($order->getItems() as $orderItem) {
+    $items[$orderItem->getId()] = $orderItem->getQtyOrdered();
+}
+$shipment = $objectManager->get(ShipmentFactory::class)->create($order, $items);
 
-/** @var Item $shipmentItem */
-$shipmentItem = Bootstrap::getObjectManager()->create(Item::class);
-$shipmentItem->setOrderItem($orderItem);
-$shipment->addItem($shipmentItem);
 $shipment->setPackages([['1'], ['2']]);
 $shipment->setShipmentStatus(\Magento\Sales\Model\Order\Shipment::STATUS_NEW);
 $shipment->save();
@@ -62,11 +62,11 @@ $comments = [
 ];
 
 /** @var ShipmentCommentRepositoryInterface $shipmentCommentRepository */
-$shipmentCommentRepository = Bootstrap::getObjectManager()->get(ShipmentCommentRepositoryInterface::class);
+$shipmentCommentRepository = $objectManager->get(ShipmentCommentRepositoryInterface::class);
 
 foreach ($comments as $data) {
     /** @var $comment Comment */
-    $comment = Bootstrap::getObjectManager()->create(Comment::class);
+    $comment = $objectManager->create(Comment::class);
     $comment->setParentId($shipment->getId());
     $comment->setComment($data['comment']);
     $comment->setIsVisibleOnFront($data['is_visible_on_front']);

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="TestDynamicValidationHintActionGroup">
+        <annotations>
+            <description>Validates that the Product Text Option Text Length Hint displays the correct Count for multiple inputs based on the provided Character Limit.</description>
+        </annotations>
+
+        <fillField userInput="abcde" selector="{{StorefrontProductPageSection.customTextOptionInput}}" stepKey="textInput1"/>
+        <see selector="{{StorefrontProductPageSection.charCounter}}" userInput="(15 remaining)" stepKey="assertHint1"/>
+        <fillField userInput="abcdefghjklansdmnbv" selector="{{StorefrontProductPageSection.customTextOptionInput}}" stepKey="textInput2"/>
+        <see selector="{{StorefrontProductPageSection.charCounter}}" userInput="(1 remaining)" stepKey="assertHint2"/>
+        <fillField userInput="abcdefghjklansdmnbvd" selector="{{StorefrontProductPageSection.customTextOptionInput}}" stepKey="textInput3"/>
+        <see selector="{{StorefrontProductPageSection.charCounter}}" userInput="(0 remaining)" stepKey="assertHint3"/>
+        <fillField userInput="abcdefghjklansdmnbvds" selector="{{StorefrontProductPageSection.customTextOptionInput}}" stepKey="textInput4"/>
+        <see selector="{{StorefrontProductPageSection.charCounter}}" userInput="(1 too many)" stepKey="assertHint4"/>
+        <fillField userInput="abcdefghjklansdmnbvdsasdfghjmn" selector="{{StorefrontProductPageSection.customTextOptionInput}}" stepKey="textInput5"/>
+        <see selector="{{StorefrontProductPageSection.charCounter}}" userInput="(10 too many)" stepKey="assertHint5"/>
+    </actionGroup>
+</actionGroups>

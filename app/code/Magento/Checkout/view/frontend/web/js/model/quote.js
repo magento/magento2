@@ -7,7 +7,8 @@
  */
 define([
     'ko',
-    'underscore'
+    'underscore',
+    'domReady!'
 ], function (ko, _) {
     'use strict';
 
@@ -140,6 +141,13 @@ define([
             });
 
             return total;
+        },
+
+        /**
+         * @return {Boolean}
+         */
+        isPersistent: function () {
+            return !!Number(quoteData['is_persistent']);
         }
     };
 });

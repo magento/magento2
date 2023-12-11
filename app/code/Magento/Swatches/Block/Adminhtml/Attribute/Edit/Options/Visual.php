@@ -84,23 +84,26 @@ class Visual extends AbstractSwatch
      * Parse swatch labels for template
      *
      * @codeCoverageIgnore
-     * @param null $swatchStoreValue
-     * @return string
+     * @param null|array $swatchStoreValue
+     * @return null|array
      */
     protected function reformatSwatchLabels($swatchStoreValue = null)
     {
         if ($swatchStoreValue === null) {
             return;
         }
-        $newSwatch = '';
+        $newSwatch = [];
         foreach ($swatchStoreValue as $key => $value) {
-            if ($value[0] == '#') {
-                $newSwatch[$key] = 'background: '.$value;
-            } elseif ($value[0] == '/') {
-                $mediaUrl = $this->swatchHelper->getSwatchMediaUrl();
-                $newSwatch[$key] = 'background: url('.$mediaUrl.$value.'); background-size: cover;';
+            if (!empty($value) && is_string($value)) {
+                if ($value[0] === '#') {
+                    $newSwatch[$key] = 'background: ' . $value;
+                } elseif ($value[0] === '/') {
+                    $mediaUrl = $this->swatchHelper->getSwatchMediaUrl();
+                    $newSwatch[$key] = 'background: url(' . $mediaUrl . $value . '); background-size: cover;';
+                }
             }
         }
+
         return $newSwatch;
     }
 }

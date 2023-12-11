@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdminMenuCatalog">
+        <data key="pageTitle">Catalog</data>
+        <data key="title">Catalog</data>
+        <data key="dataUiId">magento-catalog-catalog</data>
+    </entity>
+    <entity name="AdminMenuCatalogCategories">
+        <data key="pageTitle">Default Category (ID: </data>
+        <data key="title">Categories</data>
+        <data key="dataUiId">magento-catalog-catalog-categories</data>
+    </entity>
+    <entity name="AdminMenuCatalogProducts">
+        <data key="pageTitle">Products</data>
+        <data key="title">Products</data>
+        <data key="dataUiId">magento-catalog-catalog-products</data>
+    </entity>
+    <entity name="AdminMenuStoresAttributesAttributeSet">
+        <data key="pageTitle">Attribute Sets</data>
+        <data key="title">Attribute Set</data>
+        <data key="dataUiId">magento-catalog-catalog-attributes-sets</data>
+    </entity>
+    <entity name="AdminMenuStoresAttributesProduct">
+        <data key="pageTitle">Product Attributes</data>
+        <data key="title">Product</data>
+        <data key="dataUiId">magento-catalog-catalog-attributes-attributes</data>
+    </entity>
+</entities>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="MinimalQueryLengthForCatalogSearchTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Catalog search"/>
+            <title value="Minimal query length for catalog search"/>
+            <description value="Minimal query length for catalog search"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-6325"/>
+            <useCaseId value="MAGETWO-58764"/>
+            <group value="CatalogSearch"/>
+            <group value="SearchEngine"/>
+
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="productAlphabeticalB" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <createData entity="SetMinQueryLengthToDefault" stepKey="setMinimumQueryLengthToDefault"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="SetMinimalQueryLengthActionGroup" stepKey="setMinQueryLength"/>
+        <comment userInput="Go to Storefront and search for product" stepKey="searchProdUsingMinQueryLength"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+        <comment userInput="Quick search by single character and avoid using ES stopwords" stepKey="commentQuickSearch"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillAttribute">
+            <argument name="phrase" value="B"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextBoxButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductNameInCategoryPage">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+    </test>
+</tests>

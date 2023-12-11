@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Integration test for \Magento\Framework\Validator\Factory
  *
@@ -8,8 +8,9 @@
 namespace Magento\Framework\Validator\Test\Unit;
 
 use Magento\Framework\Validator\EmailAddress;
+use PHPUnit\Framework\TestCase;
 
-class EmailAddressTest extends \PHPUnit\Framework\TestCase
+class EmailAddressTest extends TestCase
 {
     /**
      * Test that the validator ignores TLD validation by default

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddCrossSellProductBySkuActionGroup">
+        <annotations>
+            <description>Adds the provided Product SKU as a Cross Sell Product on the Admin Product creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="sku"/>
+        </arguments>
+
+        <!--Scroll up to avoid error-->
+        <scrollTo selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" x="0" y="-100" stepKey="scrollTo"/>
+        <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" dependentSelector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDependent}}" visible="false" stepKey="openDropDownIfClosedRelatedUpSellCrossSell"/>
+        <waitForElementClickable selector="{{AdminProductFormRelatedUpSellCrossSellSection.AddCrossSellProductsButton}}" stepKey="waitForAddCrossSellButtonClickable" />
+        <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.AddCrossSellProductsButton}}" stepKey="clickAddCrossSellButton"/>
+        <conditionalClick selector="{{AdminProductCrossSellModalSection.Modal}} {{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductCrossSellModalSection.Modal}} {{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <waitForElementClickable selector="{{AdminProductCrossSellModalSection.Modal}} {{AdminProductGridFilterSection.filters}}" stepKey="waitForProductFiltersClickable" />
+        <click selector="{{AdminProductCrossSellModalSection.Modal}} {{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <waitForElementVisible selector="{{AdminProductCrossSellModalSection.Modal}} {{AdminProductGridFilterSection.skuFilter}}" stepKey="waitForSkuFilterVisible" />
+        <fillField selector="{{AdminProductCrossSellModalSection.Modal}} {{AdminProductGridFilterSection.skuFilter}}" userInput="{{sku}}" stepKey="fillProductSkuFilter"/>
+        <click selector="{{AdminProductCrossSellModalSection.Modal}} {{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <waitForElementClickable selector="{{AdminProductCrossSellModalSection.Modal}}{{AdminProductModalSlideGridSection.productGridXRowYColumnButton('1', '1')}}" stepKey="waitForProductClickable" />
+        <click selector="{{AdminProductCrossSellModalSection.Modal}}{{AdminProductModalSlideGridSection.productGridXRowYColumnButton('1', '1')}}" stepKey="selectProduct"/>
+        <waitForElementClickable selector="{{AdminProductCrossSellModalSection.addSelectedProducts}}" stepKey="waitForAddRelatedProductClickable" />
+        <click selector="{{AdminProductCrossSellModalSection.addSelectedProducts}}" stepKey="addRelatedProductSelected"/>
+        <waitForPageLoad stepKey="waitForModalDisappear"/>
+    </actionGroup>
+</actionGroups>

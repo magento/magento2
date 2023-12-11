@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="front" xsi:type="string">web/default/front</item>
+                <item name="cms_home_page" xsi:type="string">web/default/cms_home_page</item>
+                <item name="no_route" xsi:type="string">web/default/no_route</item>
+                <item name="cms_no_route" xsi:type="string">web/default/cms_no_route</item>
+                <item name="cms_no_cookies" xsi:type="string">web/default/cms_no_cookies</item>
+                <item name="show_cms_breadcrumbs" xsi:type="string">web/default/show_cms_breadcrumbs</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\ResolverIdentityClassProvider">
+        <arguments>
+            <argument name="cacheableResolverClassNameIdentityMap" xsi:type="array">
+                <item name="Magento\CmsGraphQl\Model\Resolver\Page" xsi:type="string">
+                    Magento\CmsGraphQl\Model\Resolver\Page\ResolverCacheIdentity
+                </item>
+                <item name="Magento\CmsGraphQl\Model\Resolver\Blocks" xsi:type="string">
+                    Magento\CmsGraphQl\Model\Resolver\Block\ResolverCacheIdentity
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\Provider">
+        <arguments>
+            <argument name="factorProviders" xsi:type="array">
+                <item name="Magento\CmsGraphQl\Model\Resolver\Page" xsi:type="array">
+                    <item name="currency" xsi:type="string">Magento\StoreGraphQl\Model\Resolver\CacheKey\FactorProvider\Currency</item>
+                    <item name="store" xsi:type="string">Magento\StoreGraphQl\Model\Resolver\CacheKey\FactorProvider\Store</item>
+                    <item name="customergroup" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\CustomerGroup</item>
+                    <item name="customertaxrate" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\CustomerTaxRate</item>
+                    <item name="isloggedin" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\IsLoggedIn</item>
+                </item>
+                <item name="Magento\CmsGraphQl\Model\Resolver\Blocks" xsi:type="array">
+                    <item name="currency" xsi:type="string">Magento\StoreGraphQl\Model\Resolver\CacheKey\FactorProvider\Currency</item>
+                    <item name="store" xsi:type="string">Magento\StoreGraphQl\Model\Resolver\CacheKey\FactorProvider\Store</item>
+                    <item name="customergroup" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\CustomerGroup</item>
+                    <item name="customertaxrate" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\CustomerTaxRate</item>
+                    <item name="isloggedin" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\IsLoggedIn</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

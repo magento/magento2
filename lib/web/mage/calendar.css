@@ -141,7 +141,6 @@
     padding: 0;
 }
 .ui-datepicker {
-    background: #ffffff;
     padding: 15px;
     border: #ffffff 4px solid;
     -webkit-box-sizing: border-box;
@@ -266,4 +265,8 @@
     left: -4px; /*must have*/
     width: 200px; /*must have*/
     height: 200px; /*must have*/
+}
+
+.ui-timepicker-div .ui_tpicker_unit_hide {
+    display:none;
 }

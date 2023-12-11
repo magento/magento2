@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminStoresMainActionsSection">
+        <element name="createStoreViewButton" type="button" selector="#add_store" timeout="30"/>
+        <element name="createStoreButton" type="button" selector="#add_group" timeout="30"/>
+        <element name="createWebsiteButton" type="button" selector="#add" timeout="30"/>
+        <element name="saveButton" type="button" selector="#save" timeout="120"/>
+        <element name="backButton" type="button" selector="#back" timeout="30"/>
+        <element name="deleteButton" type="button" selector="#delete" timeout="30"/>
+        <element name="errorMessage" type="text" selector="//div[@class='message message-error error']/div"/>
+        <element name="allNonDefaultWebsites" type="block" selector="//table[@id='storeGrid_table']//tbody//tr//a[not(text()='Main Website')]/ancestor::td[@data-column='website_title']//a"/>
+        <element name="allWebsites" type="block" selector="//table[@id='storeGrid_table']//tbody//tr//td[@data-column='website_title']"/>
+        <element name="allNonDefaultStores" type="block" selector="//table[@id='storeGrid_table']//tbody//tr//a[not(text()='Main Website Store')]/ancestor::td[@data-column='group_title']//a"/>
+        <element name="allStores" type="block" selector="//table[@id='storeGrid_table']//tbody//tr//td[@data-column='group_title']"/>
+        <element name="allNonDefaultStoreViews" type="block" selector="//table[@id='storeGrid_table']//tbody//tr//a[not(text()='Default Store View')]/ancestor::td[@data-column='store_title']//a"/>
+        <element name="allStoreViews" type="block" selector="//table[@id='storeGrid_table']//tbody//tr//td[@data-column='store_title']"/>
+        <element name="mainWebsiteStore" type="text" selector="//a[@title='Edit Store']"/>
+    </section>
+</sections>

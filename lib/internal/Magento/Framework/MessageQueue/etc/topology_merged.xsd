@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:redefine schemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
+        <xs:complexType name="bindingType" mixed="true">
+            <xs:complexContent>
+                <xs:restriction base="bindingType">
+                    <xs:sequence>
+                        <xs:element type="argumentsType" name="arguments" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                    <xs:attribute type="xs:string" name="id" use="required"/>
+                    <xs:attribute type="destinationType" name="destinationType" use="optional"/>
+                    <xs:attribute type="xs:string" name="destination" use="required"/>
+                    <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
+                    <xs:attribute type="xs:string" name="topic" use="optional"/>
+                </xs:restriction>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:redefine>
+
+    <xs:redefine schemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
+        <xs:complexType name="exchangeConfigType">
+            <xs:complexContent>
+                <xs:restriction base="exchangeConfigType">
+                    <xs:choice maxOccurs="unbounded">
+                        <xs:element type="argumentsType" name="arguments" minOccurs="0" maxOccurs="unbounded"/>
+                        <xs:element type="bindingType" name="binding" maxOccurs="unbounded" minOccurs="0"/>
+                    </xs:choice>
+                    <xs:attribute type="xs:string" name="name" use="required"/>
+                    <xs:attribute type="exchangeType" name="type" use="optional"/>
+                    <xs:attribute name="connection" type="xs:string" use="optional" />
+                    <xs:attribute type="xs:boolean" name="durable" use="optional"/>
+                    <xs:attribute type="xs:boolean" name="autoDelete" use="optional"/>
+                    <xs:attribute type="xs:boolean" name="internal" use="optional"/>
+                </xs:restriction>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:redefine>
+</xs:schema>

@@ -4,9 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
-/** @var \Magento\Review\Block\View $block */
+/**
+ * @var \Magento\Review\Block\View $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
 <?php if ($block->getProductData()->getId()): ?>
 <div class="product-review">
@@ -15,11 +16,12 @@
     </div>
     <div class="product-img-box">
         <a href="<?= $block->escapeUrl($block->getProductData()->getProductUrl()) ?>">
-            <?= $block->getImage($block->getProductData(), 'product_base_image', ['class' => 'product-image'])->toHtml() ?>
+            <?= $block->getImage($block->getProductData(), 'product_base_image', ['class' => 'product-image'])->toHtml()
+            ?>
         </a>
         <?php if ($block->getRating() && $block->getRating()->getSize()): ?>
-          <p><?= $block->escapeHtml(__('Average Customer Rating')) ?>:</p>
-          <?= $block->getReviewsSummaryHtml($block->getProductData()) ?>
+            <p><?= $block->escapeHtml(__('Average Customer Rating')) ?>:</p>
+            <?= $block->getReviewsSummaryHtml($block->getProductData()) ?>
         <?php endif; ?>
     </div>
     <div class="details">
@@ -31,25 +33,44 @@
                     <caption class="table-caption"><?= $block->escapeHtml(__('Product Rating')) ?></caption>
                     <?php foreach ($block->getRating() as $_rating): ?>
                         <?php if ($_rating->getPercent()): ?>
+                            <?php $rating = ceil($_rating->getPercent()) ?>
                             <tr>
-                                <td class="label"><?= $block->escapeHtml(__($_rating->getRatingCode())) ?></td>
+                                <td class="label" width="10%">
+                                    <?= $block->escapeHtml(__($_rating->getRatingCode())) ?>
+                                </td>
                                 <td class="value">
-                                    <div class="rating-box">
-                                        <div class="rating" style="width:<?= /* @noEscape */ ceil($_rating->getPercent()) ?>%;"></div>
-                                    </div></td>
+                                    <?php $ratingId = $_rating->getRatingId() ?>
+                                    <div class="rating-summary item"
+                                         id="rating-div-<?= $block->escapeHtml($ratingId) ?>">
+                                        <div class="rating-result" title="<?= /* @noEscape */ $rating ?>%">
+                                            <span>
+                                                <span><?= /* @noEscape */ $rating ?>%</span>
+                                            </span>
+                                        </div>
+                                        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                            "width:" . /* @noEscape */ $rating . "%",
+                                            'div#rating-div-'.$_rating->getRatingId().
+                                            '>div.rating-result>span:first-child'
+                                        ) ?>
+                                    </div>
+                                </td>
                             </tr>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </table>
             </div>
         <?php endif; ?>
-        <p class="date"><?= $block->escapeHtml(__('Product Review (submitted on %1):', $block->dateFormat($block->getReviewData()->getCreatedAt()))) ?></p>
-        <p><?= nl2br($block->escapeHtml($block->getReviewData()->getDetail())) ?></p>
+        <p class="date">
+            <?= $block->escapeHtml(
+                __('Product Review (submitted on %1):', $block->dateFormat($block->getReviewData()->getCreatedAt()))
+            ) ?>
+        </p>
+        <p><?= /* @noEscape */ nl2br($block->escapeHtml($block->getReviewData()->getDetail())) ?></p>
     </div>
     <div class="actions">
         <div class="secondary">
             <a class="action back" href="<?= $block->escapeUrl($block->getBackUrl()) ?>">
-                <span><?= $block->escapeHtml(__('Back to Product Reviews')) ?></a></span>
+                <span><?= $block->escapeHtml(__('Back to Product Reviews')) ?></span>
             </a>
         </div>
     </div>

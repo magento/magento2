@@ -5,6 +5,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Webapi\Routing;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -17,7 +18,7 @@ class RestErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
      */
     protected $mode;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_markTestAsRestOnly();
         $this->mode = Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)->getMode();
@@ -72,7 +73,7 @@ class RestErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
             $serviceInfo,
             [],
             WebapiException::HTTP_UNAUTHORIZED,
-            'Consumer is not authorized to access %1',
+            "The consumer isn't authorized to access %1.",
             ['resourceN']
         );
     }

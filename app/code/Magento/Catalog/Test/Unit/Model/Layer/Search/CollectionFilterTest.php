@@ -3,43 +3,52 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Layer\Search;
 
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Config;
+use Magento\Catalog\Model\Layer\Search\CollectionFilter;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CollectionFilterTest extends \PHPUnit\Framework\TestCase
+class CollectionFilterTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $visibilityMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $catalogConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Search\CollectionFilter
+     * @var CollectionFilter
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->visibilityMock = $this->createMock(\Magento\Catalog\Model\Product\Visibility::class);
-        $this->catalogConfigMock = $this->createMock(\Magento\Catalog\Model\Config::class);
+        $this->visibilityMock = $this->createMock(Visibility::class);
+        $this->catalogConfigMock = $this->createMock(Config::class);
 
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $this->model = $objectManager->getObject(
-            \Magento\Catalog\Model\Layer\Search\CollectionFilter::class,
+            CollectionFilter::class,
             [
                 'catalogConfig' => $this->catalogConfigMock,
                 'storeManager' => $this->storeManagerMock,
@@ -54,25 +63,25 @@ class CollectionFilterTest extends \PHPUnit\Framework\TestCase
      */
     public function testFilter()
     {
-        $collectionMock = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class, [
-                'addAttributeToSelect', 'setStore', 'addMinimalPrice', 'addFinalPrice',
-                'addTaxPercents', 'addStoreFilter', 'addUrlRewrite', 'setVisibility'
-            ]);
-        $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $collectionMock = $this->createPartialMock(Collection::class, [
+            'addAttributeToSelect', 'setStore', 'addMinimalPrice', 'addFinalPrice',
+            'addTaxPercents', 'addStoreFilter', 'addUrlRewrite', 'setVisibility'
+        ]);
+        $categoryMock = $this->createMock(Category::class);
 
         $this->catalogConfigMock->expects($this->once())->method('getProductAttributes');
         $this->visibilityMock->expects($this->once())->method('getVisibleInSearchIds');
         $this->storeManagerMock->expects($this->once())->method('getStore');
 
         $collectionMock->expects($this->once())->method('addAttributeToSelect')
-            ->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())->method('setStore')->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())->method('addMinimalPrice')->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())->method('addFinalPrice')->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())->method('addTaxPercents')->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())->method('addStoreFilter')->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())->method('addUrlRewrite')->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())->method('setVisibility')->will($this->returnValue($collectionMock));
+            ->willReturn($collectionMock);
+        $collectionMock->expects($this->once())->method('setStore')->willReturn($collectionMock);
+        $collectionMock->expects($this->once())->method('addMinimalPrice')->willReturn($collectionMock);
+        $collectionMock->expects($this->once())->method('addFinalPrice')->willReturn($collectionMock);
+        $collectionMock->expects($this->once())->method('addTaxPercents')->willReturn($collectionMock);
+        $collectionMock->expects($this->once())->method('addStoreFilter')->willReturn($collectionMock);
+        $collectionMock->expects($this->once())->method('addUrlRewrite')->willReturn($collectionMock);
+        $collectionMock->expects($this->once())->method('setVisibility')->willReturn($collectionMock);
 
         $this->model->filter($collectionMock, $categoryMock);
     }

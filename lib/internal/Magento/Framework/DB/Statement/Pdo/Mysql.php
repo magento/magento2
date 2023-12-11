@@ -3,21 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Framework\DB\Statement\Pdo;
+
+use Magento\Framework\DB\Statement\Parameter;
 
 /**
  * Mysql DB Statement
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Framework\DB\Statement\Pdo;
-
-use Magento\Framework\DB\Statement\Parameter;
-
 class Mysql extends \Zend_Db_Statement_Pdo
 {
     /**
-     * Executes statement with binding values to it.
-     * Allows transferring specific options to DB driver.
+     * Executes statement with binding values to it. Allows transferring specific options to DB driver.
      *
      * @param array $params Array of values to bind to parameter placeholders.
      * @return bool
@@ -41,13 +39,11 @@ class Mysql extends \Zend_Db_Statement_Pdo
         // Separate array with values, as they are bound by reference
         foreach ($params as $name => $param) {
             $dataType = \PDO::PARAM_STR;
-            $length = null;
+            $length = is_string($param) ? strlen($param) : 0;
             $driverOptions = null;
 
             if ($param instanceof Parameter) {
-                if ($param->getIsBlob()) {
-                    // Nothing to do there - default options are fine for MySQL driver
-                } else {
+                if (!$param->getIsBlob()) {
                     $dataType = $param->getDataType();
                     $length = $param->getLength();
                     $driverOptions = $param->getDriverOptions();
@@ -61,11 +57,9 @@ class Mysql extends \Zend_Db_Statement_Pdo
             $statement->bindParam($paramName, $bindValues[$name], $dataType, $length, $driverOptions);
         }
 
-        try {
+        return $this->tryExecute(function () use ($statement) {
             return $statement->execute();
-        } catch (\PDOException $e) {
-            throw new \Zend_Db_Statement_Exception($e->getMessage(), (int)$e->getCode(), $e);
-        }
+        });
     }
 
     /**
@@ -74,6 +68,8 @@ class Mysql extends \Zend_Db_Statement_Pdo
      * @param array $params OPTIONAL Values to bind to parameter placeholders.
      * @return bool
      * @throws \Zend_Db_Statement_Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function _execute(array $params = null)
     {
@@ -90,7 +86,29 @@ class Mysql extends \Zend_Db_Statement_Pdo
         if ($specialExecute) {
             return $this->_executeWithBinding($params);
         } else {
-            return parent::_execute($params);
+            return $this->tryExecute(function () use ($params) {
+                return !empty($params) ? $this->_stmt->execute($params) : $this->_stmt->execute();
+            });
+        }
+    }
+
+    /**
+     * Executes query and avoid warnings.
+     *
+     * @param callable $callback
+     * @return bool
+     * @throws \Zend_Db_Statement_Exception
+     */
+    private function tryExecute($callback)
+    {
+        $previousLevel = error_reporting(\E_ERROR); // disable warnings for PDO bugs #63812, #74401
+        try {
+            return $callback();
+        } catch (\PDOException $e) {
+            $message = sprintf('%s, query was: %s', $e->getMessage(), $this->_stmt->queryString);
+            throw new \Zend_Db_Statement_Exception($message, (int)$e->getCode(), $e);
+        } finally {
+            error_reporting($previousLevel);
         }
     }
 }

@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="theme" resource="default" engine="innodb" comment="Core theme">
+        <column xsi:type="int" name="theme_id" unsigned="true" nullable="false" identity="true"
+                comment="Theme identifier"/>
+        <column xsi:type="int" name="parent_id" unsigned="false" nullable="true" identity="false"
+                comment="Parent ID"/>
+        <column xsi:type="varchar" name="theme_path" nullable="true" length="255" comment="Theme Path"/>
+        <column xsi:type="varchar" name="theme_title" nullable="false" length="255" comment="Theme Title"/>
+        <column xsi:type="varchar" name="preview_image" nullable="true" length="255" comment="Preview Image"/>
+        <column xsi:type="boolean" name="is_featured" nullable="false" default="false" comment="Is Theme Featured"/>
+        <column xsi:type="varchar" name="area" nullable="false" length="255" comment="Theme Area"/>
+        <column xsi:type="smallint" name="type" unsigned="false" nullable="false" identity="false"
+                comment="Theme type: 0:physical, 1:virtual, 2:staging"/>
+        <column xsi:type="text" name="code" nullable="true" comment="Full theme code, including package"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="theme_id"/>
+        </constraint>
+    </table>
+    <table name="theme_file" resource="default" engine="innodb" comment="Core theme files">
+        <column xsi:type="int" name="theme_files_id" unsigned="true" nullable="false" identity="true"
+                comment="Theme files identifier"/>
+        <column xsi:type="int" name="theme_id" unsigned="true" nullable="false" identity="false"
+                comment="Theme ID"/>
+        <column xsi:type="varchar" name="file_path" nullable="true" length="255" comment="Relative path to file"/>
+        <column xsi:type="varchar" name="file_type" nullable="false" length="32" comment="File Type"/>
+        <column xsi:type="longtext" name="content" nullable="false" comment="File Content"/>
+        <column xsi:type="smallint" name="sort_order" unsigned="false" nullable="false" identity="false"
+                default="0" comment="Sort Order"/>
+        <column xsi:type="boolean" name="is_temporary" nullable="false" default="false" comment="Is Temporary File"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="theme_files_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="THEME_FILE_THEME_ID_THEME_THEME_ID" table="theme_file" column="theme_id"
+                    referenceTable="theme" referenceColumn="theme_id" onDelete="CASCADE"/>
+    </table>
+    <table name="design_change" resource="default" engine="innodb" comment="Design Changes">
+        <column xsi:type="int" name="design_change_id" unsigned="false" nullable="false" identity="true"
+                comment="Design Change ID"/>
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Store ID"/>
+        <column xsi:type="varchar" name="design" nullable="true" length="255" comment="Design"/>
+        <column xsi:type="date" name="date_from" comment="First Date of Design Activity"/>
+        <column xsi:type="date" name="date_to" comment="Last Date of Design Activity"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="design_change_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="DESIGN_CHANGE_STORE_ID_STORE_STORE_ID" table="design_change"
+                    column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+        <index referenceId="DESIGN_CHANGE_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+</schema>

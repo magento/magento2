@@ -3,26 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Config\Test\Unit;
 
-use \Magento\Framework\Config\Scope;
+use Magento\Framework\App\AreaList;
+use Magento\Framework\Config\Scope;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ScopeTest extends \PHPUnit\Framework\TestCase
+class ScopeTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Config\Scope
+     * @var Scope
      */
-    protected $model;
+    private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\AreaList
+     * @var MockObject|AreaList
      */
-    protected $areaListMock;
+    private $areaListMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->areaListMock = $this->createPartialMock(\Magento\Framework\App\AreaList::class, ['getCodes']);
+        $this->areaListMock = $this->createPartialMock(AreaList::class, ['getCodes']);
         $this->model = new Scope($this->areaListMock);
     }
 
@@ -35,10 +39,10 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
 
     public function testGetAllScopes()
     {
-        $expectedBalances = ['primary', 'test_scope'];
+        $expectedBalances = ['primary', 'global', 'test_scope'];
         $this->areaListMock->expects($this->once())
             ->method('getCodes')
-            ->will($this->returnValue(['test_scope']));
+            ->willReturn(['test_scope']);
         $this->assertEquals($expectedBalances, $this->model->getAllScopes());
     }
 }

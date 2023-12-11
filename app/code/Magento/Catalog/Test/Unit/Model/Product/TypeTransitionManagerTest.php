@@ -3,40 +3,50 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
-class TypeTransitionManagerTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Edit\WeightResolver;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\Product\TypeTransitionManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class TypeTransitionManagerTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product\TypeTransitionManager
+     * @var TypeTransitionManager
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $weightResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
+            Product::class,
             ['getTypeId', 'setTypeId', 'setTypeInstance']
         );
-        $this->weightResolver = $this->createMock(\Magento\Catalog\Model\Product\Edit\WeightResolver::class);
-        $this->model = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
+        $this->weightResolver = $this->createMock(WeightResolver::class);
+        $this->model = (new ObjectManager($this))
             ->getObject(
-                \Magento\Catalog\Model\Product\TypeTransitionManager::class,
+                TypeTransitionManager::class,
                 [
                     'weightResolver' => $this->weightResolver,
                     'compatibleTypes' => [
-                        'simple' => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
-                        'virtual' => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL,
+                        'simple' => Type::TYPE_SIMPLE,
+                        'virtual' => Type::TYPE_VIRTUAL,
                     ]
                 ]
             );
@@ -50,7 +60,7 @@ class TypeTransitionManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcessProduct($hasWeight, $currentTypeId, $expectedTypeId)
     {
-        $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue($currentTypeId));
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn($currentTypeId);
         $this->productMock->expects($this->once())->method('setTypeInstance')->with(null);
         $this->weightResolver->expects($this->once())->method('resolveProductHasWeight')->willReturn($hasWeight);
         $this->productMock->expects($this->once())->method('setTypeId')->with($expectedTypeId);
@@ -62,7 +72,7 @@ class TypeTransitionManagerTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcessProductWithWrongTypeId()
     {
-        $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue('wrong-type'));
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn('wrong-type');
         $this->weightResolver->expects($this->never())->method('resolveProductHasWeight');
         $this->model->processProduct($this->productMock);
     }
@@ -75,23 +85,23 @@ class TypeTransitionManagerTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 true,
-                \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL,
-                \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
+                Type::TYPE_VIRTUAL,
+                Type::TYPE_SIMPLE,
             ],
             [
                 true,
-                \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
-                \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
+                Type::TYPE_SIMPLE,
+                Type::TYPE_SIMPLE,
             ],
             [
                 false,
-                \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
-                \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL,
+                Type::TYPE_SIMPLE,
+                Type::TYPE_VIRTUAL,
             ],
             [
                 false,
-                \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL,
-                \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL,
+                Type::TYPE_VIRTUAL,
+                Type::TYPE_VIRTUAL,
             ]
         ];
     }

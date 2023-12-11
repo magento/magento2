@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigDefaultCategoryLayoutFromConfigurationSettingTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Default layout configuration MAGETWO-88793"/>
+            <title value="Admin should be able to configure the default layout for Category Page from System Configuration"/>
+            <description value="Admin should be able to configure the default layout for Category Page from System Configuration"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MAGETWO-89024"/>
+            <group value="category"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="RestoreLayoutSetting" stepKey="sampleActionGroup"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminOpenWebConfigurationPageActionGroup" stepKey="navigateToWebConfigurationPage"/>
+        <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true"/>
+        <waitForElementVisible selector="{{DefaultLayoutsSection.categoryLayout}}" stepKey="waitForDefaultCategoryLayout"/>
+        <seeOptionIsSelected selector="{{DefaultLayoutsSection.categoryLayout}}" userInput="No layout updates" stepKey="seeNoLayoutUpdatesSelected"/>
+        <selectOption selector="{{DefaultLayoutsSection.categoryLayout}}" userInput="2 columns with right bar" stepKey="select2ColumnsLayout"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToNewCatalog"/>
+        <waitForLoadingMaskToDisappear stepKey="wait2"/>
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
+        <click selector="{{CategoryDesignSection.DesignTab}}" stepKey="clickOnDesignTab"/>
+        <waitForElementVisible selector="{{CategoryDesignSection.LayoutDropdown}}" stepKey="waitForLayoutDropDown"/>
+        <seeOptionIsSelected selector="{{CategoryDesignSection.LayoutDropdown}}" userInput="2 columns with right bar" stepKey="see2ColumnsSelected"/>
+    </test>
+</tests>

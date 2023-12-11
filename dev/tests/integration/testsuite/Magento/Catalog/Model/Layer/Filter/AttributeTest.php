@@ -8,6 +8,8 @@ namespace Magento\Catalog\Model\Layer\Filter;
 /**
  * Test class for \Magento\Catalog\Model\Layer\Filter\Attribute.
  *
+ * @magentoDbIsolation disabled
+ *
  * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/_files/attribute_with_option.php
  */
 class AttributeTest extends \PHPUnit\Framework\TestCase
@@ -27,7 +29,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     protected $_layer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var $attribute \Magento\Catalog\Model\Entity\Attribute */
         $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -89,8 +91,8 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     {
         $items = $this->_model->getItems();
 
-        $this->assertInternalType('array', $items);
-        $this->assertEquals(1, count($items));
+        $this->assertIsArray($items);
+        $this->assertCount(1, $items);
 
         /** @var $item \Magento\Catalog\Model\Layer\Filter\Item */
         $item = $items[0];

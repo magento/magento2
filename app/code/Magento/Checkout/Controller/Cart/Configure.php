@@ -4,15 +4,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Controller\Cart;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Configure extends \Magento\Checkout\Controller\Cart
+class Configure extends \Magento\Checkout\Controller\Cart implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
@@ -63,7 +65,9 @@ class Configure extends \Magento\Checkout\Controller\Cart
 
         try {
             if (!$quoteItem || $productId != $quoteItem->getProduct()->getId()) {
-                $this->messageManager->addError(__("We can't find the quote item."));
+                $this->messageManager->addErrorMessage(
+                    __("The quote item isn't found. Verify the item and try again.")
+                );
                 return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('checkout/cart');
             }
 
@@ -82,7 +86,7 @@ class Configure extends \Magento\Checkout\Controller\Cart
                 );
             return $resultPage;
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We cannot configure the product.'));
+            $this->messageManager->addErrorMessage(__('We cannot configure the product.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             return $this->_goBack();
         }

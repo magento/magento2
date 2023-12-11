@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyShoppingCartPersistenceUnderLongTermCookieTest">
+        <annotations>
+            <features value="Persistent"/>
+            <stories value="Shopping Cart Persistence"/>
+            <title value="Verify Shopping Cart Persistence under long-term cookie"/>
+            <description value="Verify Shopping Cart Persistence under long-term cookie"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-12666"/>
+            <group value="persistent"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <!--Enable Persistence-->
+            <createData entity="PersistentConfigSettings" stepKey="persistentConfigSetting"/>
+            <!--Create Simple Product 1  and Product 2 -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimple1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimple2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Set Defaults Persistence configuration-->
+            <createData entity="PersistentConfigUseSystemValue" stepKey="persistentDefaultsConfiguration"/>
+            <!--Delete Simple Product 1, Product 2 and Category-->
+            <deleteData createDataKey="createSimple1" stepKey="deleteSimple1"/>
+            <deleteData createDataKey="createSimple2" stepKey="deleteSimple2"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteJohnSmithCustomer">
+                <argument name="customerEmail" value="John_Smith_Customer.email"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteJohnDoeCustomer">
+                <argument name="customerEmail" value="Simple_Customer_Without_Address.email"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- 1. Go to storefront and click the Create an Account link-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage"/>
+        <click selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}" stepKey="clickCreateAnAccountLink" />
+        <actionGroup ref="StorefrontAssertPersistentRegistrationPageFields" stepKey="assertPersistentRegistrationPageFields"/>
+
+        <!-- 2. Fill fields for registration, set password and unselect the Remember Me checkbox-->
+        <actionGroup ref="StorefrontCreateCustomerOnRegisterPageDoNotRememberMeActionGroup" stepKey="registrationJohnSmithCustomer">
+            <argument name="Customer" value="John_Smith_Customer"/>
+        </actionGroup>
+        <!--Check customer name and last name in welcome message-->
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="customerCreatedSuccessMessageForJohnSmith"/>
+        <actionGroup ref="AssertCustomerWelcomeMessageActionGroup" stepKey="seeWelcomeMessageForJohnSmithCustomer">
+            <argument name="customerFullName" value="{{John_Smith_Customer.fullname}}"/>
+        </actionGroup>
+
+        <!-- 3. Put Simple Product 1 into Shopping Cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimple1ProductToCartForJohnSmithCustomer">
+            <argument name="product" value="$$createSimple1$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="checkSimple1InMiniCartForJohnSmithCustomer">
+            <argument name="productName" value="$$createSimple1.name$$"/>
+        </actionGroup>
+
+        <!-- 4. Click Sign Out -->
+        <actionGroup ref="CustomerLogoutStorefrontByMenuItemsActionGroup" stepKey="logoutJohnSmithCustomer"/>
+        <actionGroup ref="AssertStorefrontCustomerLogoutSuccessPageActionGroup" stepKey="seeLogoutSuccessPageUrlAfterLogOutJohnSmithCustomer"/>
+        <waitForPageLoad stepKey="waitForRedirectToHomePage"/>
+        <waitForText selector="{{StorefrontCMSPageSection.mainContent}}" userInput="CMS homepage content goes here." stepKey="waitForLoadContentMessage"/>
+        <actionGroup ref="StorefrontAssertPersistentCustomerWelcomeMessageNotPresentActionGroup" stepKey="dontSeeWelcomeJohnSmithCustomerNotYouMessage">
+            <argument name="customerFullName" value="{{John_Smith_Customer.fullname}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="assertMiniCartEmptyAfterJohnSmithSignOut" />
+
+        <!-- 5. Click the Create an Account link again and fill fields for registration of another customer, set password and check the Remember Me checkbox  -->
+        <amOnPage url="{{StorefrontCustomerCreatePage.url}}" stepKey="amOnCustomerAccountCreatePage"/>
+        <actionGroup ref="StorefrontRegisterCustomerRememberMeActionGroup" stepKey="registrationJohnDoeCustomer">
+            <argument name="Customer" value="Simple_Customer_Without_Address"/>
+        </actionGroup>
+        <!--Check customer name and last name in welcome message-->
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="customerCreatedSuccessMessageForJohnDoe"/>
+        <actionGroup ref="AssertCustomerWelcomeMessageActionGroup" stepKey="seeWelcomeMessageForJohnDoeCustomer">
+            <argument name="customerFullName" value="{{Simple_Customer_Without_Address.fullname}}"/>
+        </actionGroup>
+        <!-- 6. Add Simple Product 1 to Shopping Cart  -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimple1ProductToCartForJohnDoeCustomer">
+            <argument name="product" value="$$createSimple1$$"/>
+        </actionGroup>
+        <see selector="{{StorefrontMinicartSection.productCount}}" userInput="1" stepKey="miniCartContainsOneProductForJohnDoeCustomer"/>
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="checkSimple1InMiniCartForJohnDoeCustomer">
+            <argument name="productName" value="$$createSimple1.name$$"/>
+        </actionGroup>
+
+        <!-- 7. Click Log Out  -->
+        <actionGroup ref="CustomerLogoutStorefrontByMenuItemsActionGroup" stepKey="logoutJohnDoeCustomer"/>
+        <actionGroup ref="AssertStorefrontCustomerLogoutSuccessPageActionGroup" stepKey="seeLogoutSuccessPageUrlAfterLogOutJohnDoeCustomer"/>
+        <actionGroup ref="StorefrontAssertPersistentCustomerWelcomeMessageActionGroup" stepKey="seeWelcomeForJohnDoeCustomer">
+            <argument name="customerFullName" value="{{Simple_Customer_Without_Address.fullname}}"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForHomePageLoad"/>
+        <waitForText selector="{{StorefrontCMSPageSection.mainContent}}" userInput="CMS homepage content goes here." stepKey="waitForLoadContentMessageOnHomePage"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.productCount}}" stepKey="waitForCartCounterVisible"/>
+        <see selector="{{StorefrontMinicartSection.productCount}}" userInput="1" stepKey="miniCartContainsOneProductForGuest"/>
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="checkSimple1InMiniCartForGuestCustomer">
+            <argument name="productName" value="$$createSimple1.name$$"/>
+        </actionGroup>
+
+        <!-- 8. Go to Shopping Cart and verify Simple Product 1 is present there  -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCart" />
+        <see selector="{{CheckoutCartProductSection.productName}}" userInput="$$createSimple1.name$$" stepKey="checkSimple1InShoppingCart"/>
+
+        <!-- 9. Add Simple Product 2 to Shopping Cart  -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimple2ProductToCartForGuest">
+            <argument name="product" value="$$createSimple2$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="checkSimple1InMiniCartForGuestCustomerSecondTime">
+            <argument name="productName" value="$$createSimple1.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="checkSimple2InMiniCartForGuestCustomer">
+            <argument name="productName" value="$$createSimple2.name$$"/>
+        </actionGroup>
+        <see selector="{{StorefrontMinicartSection.productCount}}" userInput="2" stepKey="miniCartContainsTwoProductForGuest"/>
+
+        <!-- 10. Go to My Account section  -->
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="amOnCustomerAccountPage"/>
+        <seeInCurrentUrl url="{{StorefrontCustomerSignInPage.url}}" stepKey="redirectToCustomerAccountLoginPage"/>
+        <seeElement selector="{{StorefrontCustomerSignInFormSection.customerLoginBlock}}" stepKey="checkSystemRequiresToLogIn"/>
+
+        <!-- 11. Log in as John Doe  -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="logInAsJohnDoeCustomer">
+            <argument name="Customer" value="Simple_Customer_Without_Address"/>
+        </actionGroup>
+        <see selector="{{StorefrontMinicartSection.productCount}}" userInput="2" stepKey="miniCartContainsTwoProductForJohnDoeCustomer"/>
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="checkSimple1InMiniCartForJohnDoeCustomerSecondTime">
+            <argument name="productName" value="$$createSimple1.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="checkSimple2InMiniCartForJohnDoeCustomer">
+            <argument name="productName" value="$$createSimple2.name$$"/>
+        </actionGroup>
+
+        <!-- 12. Sign out and click the Not you? link  -->
+        <actionGroup ref="CustomerLogoutStorefrontByMenuItemsActionGroup" stepKey="logoutJohnDoeCustomerSecondTime"/>
+        <actionGroup ref="AssertStorefrontCustomerLogoutSuccessPageActionGroup" stepKey="seeLogoutSuccessPageUrlAfterLogOutJohnSmithCustomerSecondTime"/>
+        <waitForPageLoad stepKey="waitForHomePageLoadAfter5Seconds"/>
+        <waitForText selector="{{StorefrontCMSPageSection.mainContent}}" userInput="CMS homepage content goes here." stepKey="waitForLoadMainContentMessageOnHomePage"/>
+        <waitForElementClickable selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="waitForNotYouLinkClickable" />
+        <click selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="clickOnNotYouLink" />
+        <waitForPageLoad stepKey="waitForCustomerLoginPageLoad"/>
+        <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="assertMiniCartEmptyAfterJohnDoeSignOut" />
+    </test>
+</tests>

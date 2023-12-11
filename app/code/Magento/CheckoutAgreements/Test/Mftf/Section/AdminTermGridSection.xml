@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminTermGridSection">
+        <element name="searchButton" type="button" selector="//div[contains(@class,'admin__data-grid-header')]//div[contains(@class,'admin__filter-actions')]/button[1]"/>
+        <element name="resetButton" type="button" selector="//div[contains(@class,'admin__data-grid-header')]//div[contains(@class,'admin__filter-actions')]/button[2]"/>
+        <element name="filterByTermName" type="input" selector="#agreementGrid_filter_name"/>
+        <element name="firstRow" type="block" selector=".data-grid>tbody>tr"/>
+        <element name="firstRowConditionName" type="text" selector=".data-grid>tbody>tr>td.col-name"/>
+        <element name="firstRowConditionId" type="text" selector=".data-grid>tbody>tr>td.col-id.col-agreement_id"/>
+        <element name="successMessage" type="text" selector=".message-success"/>
+        <element name="allTermRows" type="block" selector="//table[@id='agreementGrid_table']//tbody//tr[not(contains(@class,'data-grid-tr-no-data'))]"/>
+        <element name="emptyGrid" type="block" selector="//table[@id='agreementGrid_table']//tbody//tr[contains(@class,'data-grid-tr-no-data')]"/>
+    </section>
+</sections>

@@ -1,0 +1,17 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<script type="application/javascript">
+    window.persistent = <?=/* @noEscape */ $block->getConfig()?>;
+    window.notYouLink = '<?=/* @noEscape */ $block->getLinkAttributes()?>';
+</script>
+<script type="text/x-magento-init">
+    {
+        "li.greet.welcome > span.not-logged-in": {
+            "Magento_Persistent/js/view/additional-welcome": {}
+        }
+    }
+</script>

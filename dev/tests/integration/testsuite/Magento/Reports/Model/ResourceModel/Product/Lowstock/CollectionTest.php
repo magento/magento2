@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Reports\Model\ResourceModel\Product\Lowstock;
 
 /**
- * Class CollectionTest
+ * Test for \Magento\Reports\Model\ResourceModel\Product\Lowstock\Collection
  */
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
@@ -16,7 +17,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     private $collection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /**
          * @var  \Magento\Reports\Model\ResourceModel\Product\Lowstock\Collection
@@ -29,10 +30,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * Assert that filterByProductType method throws LocalizedException if not String or Array is passed to it
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testFilterByProductTypeException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->collection->filterByProductType(100);
     }
 
@@ -44,7 +46,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->collection->filterByProductType('simple');
         $whereParts = $this->collection->getSelect()->getPart(\Magento\Framework\DB\Select::WHERE);
-        $this->assertContains('simple', $whereParts[0]);
+        $this->assertStringContainsString('simple', $whereParts[0]);
     }
 
     /**

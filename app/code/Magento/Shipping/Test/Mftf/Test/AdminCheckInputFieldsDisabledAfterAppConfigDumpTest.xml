@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckInputFieldsDisabledAfterAppConfigDumpTest">
+        <annotations>
+            <features value="Configuration"/>
+            <stories value="Disable configuration inputs"/>
+            <title value="Check that all input fields disabled after executing CLI app:config:dump"/>
+            <description value="Check that all input fields disabled after executing CLI app:config:dump. Command app:config:dump is not reversible and magento instance stays configuration read only after this test. You need to restore etc/env.php manually to make magento configuration writable again."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-11158"/>
+            <useCaseId value="MAGETWO-96428"/>
+            <group value="configuration"/>
+            <group value="config_dump"/>
+        </annotations>
+        <before>
+            <!-- Command app:config:dump is not reversible and magento instance stays configuration read only after this test. You need to restore etc/env.php manually to make magento configuration writable again.-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Assert configuration are disabled in Flat Rate section-->
+        <comment userInput="Assert configuration are disabled in Flat Rate section" stepKey="commentSeeDisabledFlatRateConfigs"/>
+        <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+        <conditionalClick selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateTab}}" dependentSelector="{{AdminShippingMethodFlatRateSection.carriersFlatRateActive}}" visible="false" stepKey="expandFlatRateTab"/>
+        <waitForElementVisible selector="{{AdminShippingMethodFlatRateSection.carriersEnableFlatRateActive}}" stepKey="waitForFlatRateTabOpen"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFlatRateSection.carriersEnableFlatRateActive}}" userInput="disabled" stepKey="grabFlatRateActiveDisabled"/>
+        <assertEquals stepKey="assertFlatRateActiveDisabled">
+			<actualResult type="const">$grabFlatRateActiveDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateTitle}}" userInput="disabled" stepKey="grabFlatRateTitleDisabled"/>
+        <assertEquals stepKey="assertFlatRateTitleDisabled">
+			<actualResult type="const">$grabFlatRateTitleDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateName}}" userInput="disabled" stepKey="grabFlatRateNameDisabled"/>
+        <assertEquals stepKey="assertFlatRateNameDisabled">
+			<actualResult type="const">$grabFlatRateNameDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateSpecificErrMsg}}" userInput="disabled" stepKey="grabFlatRateSpecificErrMsgDisabled"/>
+        <assertEquals stepKey="assertFlatRateSpecificErrMsgDisabled">
+			<actualResult type="const">$grabFlatRateSpecificErrMsgDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateAllowSpecific}}" userInput="disabled" stepKey="grabFlatRateAllowSpecificDisabled"/>
+        <assertEquals stepKey="assertFlatRateAllowSpecificDisabled">
+			<actualResult type="const">$grabFlatRateAllowSpecificDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateSpecificCountry}}" userInput="disabled" stepKey="grabFlatRateSpecificCountryDisabled"/>
+        <assertEquals stepKey="assertFlatRateSpecificCountryDisabled">
+			<actualResult type="const">$grabFlatRateSpecificCountryDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <!--Assert configuration are disabled in Free Shipping section-->
+        <comment userInput="Assert configuration are disabled in Free Shipping section" stepKey="commentSeeDisabledFreeShippingConfigs"/>
+        <conditionalClick selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingSectionHead}}" dependentSelector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingActive}}" visible="false" stepKey="expandFreeShippingTab"/>
+        <waitForElementVisible selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingActive}}" stepKey="waitForFreeShippingTabOpen"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingActive}}" userInput="disabled" stepKey="grabFreeShippingActiveDisabled"/>
+        <assertEquals stepKey="assertFreeShippingActiveDisabled">
+			<actualResult type="const">$grabFreeShippingActiveDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingTitle}}" userInput="disabled" stepKey="grabFreeShippingTitleDisabled"/>
+        <assertEquals stepKey="assertFreeShippingTitleDisabled">
+			<actualResult type="const">$grabFreeShippingTitleDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingName}}" userInput="disabled" stepKey="grabFreeShippingNameDisabled"/>
+        <assertEquals stepKey="assertFreeShippingNameDisabled">
+			<actualResult type="const">$grabFreeShippingNameDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingSpecificErrMsg}}" userInput="disabled" stepKey="grabFreeShippingSpecificErrMsgDisabled"/>
+        <assertEquals stepKey="assertFreeShippingSpecificErrMsgDisabled">
+			<actualResult type="const">$grabFreeShippingSpecificErrMsgDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingAllowSpecific}}" userInput="disabled" stepKey="grabFreeShippingAllowSpecificDisabled"/>
+        <assertEquals stepKey="assertFreeShippingAllowSpecificDisabled">
+			<actualResult type="const">$grabFreeShippingAllowSpecificDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingSpecificCountry}}" userInput="disabled" stepKey="grabFreeShippingSpecificCountryDisabled"/>
+        <assertEquals stepKey="assertFreeShippingSpecificCountryDisabled">
+			<actualResult type="const">$grabFreeShippingSpecificCountryDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <!--Assert configuration are disabled in Table Rates section-->
+        <comment userInput="Assert configuration are disabled in Table Rates section" stepKey="commentSeeDisabledTableRatesConfigs"/>
+        <conditionalClick selector="{{AdminShippingMethodTableRatesSection.carriersTableRateTab}}" dependentSelector="{{AdminShippingMethodTableRatesSection.carriersTableRateActive}}" visible="false" stepKey="expandTableRateTab"/>
+        <waitForElementVisible selector="{{AdminShippingMethodTableRatesSection.enabledUseSystemValue}}" stepKey="waitForTableRateTabOpen"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodTableRatesSection.enabledUseSystemValue}}" userInput="disabled" stepKey="grabTableRateActiveDisabled"/>
+        <assertEquals stepKey="assertTableRateActiveDisabled">
+			<actualResult type="const">$grabTableRateActiveDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodTableRatesSection.carriersTableRateTitle}}" userInput="disabled" stepKey="grabTableRateTitleDisabled"/>
+        <assertEquals stepKey="assertTableRateTitleDisabled">
+			<actualResult type="const">$grabTableRateTitleDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodTableRatesSection.carriersTableRateName}}" userInput="disabled" stepKey="grabTableRateNameDisabled"/>
+        <assertEquals stepKey="assertTableRateNameDisabled">
+			<actualResult type="const">$grabTableRateNameDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodTableRatesSection.carriersTableRateConditionName}}" userInput="disabled" stepKey="grabTableRateConditionNameDisabled"/>
+        <assertEquals stepKey="assertTableRateConditionNameDisabled">
+			<actualResult type="const">$grabTableRateConditionNameDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodTableRatesSection.carriersTableRateIncludeVirtualPrice}}" userInput="disabled" stepKey="grabTableRateIncludeVirtualPriceDisabled"/>
+        <assertEquals stepKey="assertTableRateIncludeVirtualPriceDisabled">
+			<actualResult type="const">$grabTableRateIncludeVirtualPriceDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodTableRatesSection.carriersTableRateHandlingType}}" userInput="disabled" stepKey="grabTableRateHandlingTypeDisabled"/>
+        <assertEquals stepKey="assertTableRateHandlingTypeDisabled">
+			<actualResult type="const">$grabTableRateHandlingTypeDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodTableRatesSection.carriersTableRateSpecificErrMsg}}" userInput="disabled" stepKey="grabTableRateSpecificErrMsgDisabled"/>
+        <assertEquals stepKey="assertTableRateSpecificErrMsgDisabled">
+			<actualResult type="const">$grabTableRateSpecificErrMsgDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodTableRatesSection.carriersTableRateAllowSpecific}}" userInput="disabled" stepKey="grabTableRateAllowSpecificDisabled"/>
+        <assertEquals stepKey="assertTableRateAllowSpecificDisabled">
+			<actualResult type="const">$grabTableRateAllowSpecificDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodTableRatesSection.carriersTableRateSpecificCountry}}" userInput="disabled" stepKey="grabTableRateSpecificCountryDisabled"/>
+        <assertEquals stepKey="assertTableRateSpecificCountryDisabled">
+			<actualResult type="const">$grabTableRateSpecificCountryDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

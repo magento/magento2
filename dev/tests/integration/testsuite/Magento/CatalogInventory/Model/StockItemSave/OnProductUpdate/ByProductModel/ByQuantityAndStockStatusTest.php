@@ -32,7 +32,7 @@ class ByQuantityAndStockStatusTest extends \PHPUnit\Framework\TestCase
         StockItemInterface::IS_IN_STOCK => false,
     ];
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
@@ -44,6 +44,7 @@ class ByQuantityAndStockStatusTest extends \PHPUnit\Framework\TestCase
      * model (deprecated)
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testSaveBySetQuantityAndStockStatus()
     {
@@ -60,6 +61,7 @@ class ByQuantityAndStockStatusTest extends \PHPUnit\Framework\TestCase
      * via product model (deprecated)
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testSaveBySetData()
     {

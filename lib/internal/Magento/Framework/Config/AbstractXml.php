@@ -11,6 +11,7 @@ namespace Magento\Framework\Config;
 
 /**
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractXml
 {
@@ -89,7 +90,10 @@ abstract class AbstractXml
                 $this->_getDomConfigModel()->merge($content);
             } catch (\Magento\Framework\Config\Dom\ValidationException $e) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    new \Magento\Framework\Phrase("Invalid XML in file %1:\n%2", [$key, $e->getMessage()])
+                    new \Magento\Framework\Phrase(
+                        'The XML in file "%1" is invalid:' . "\n%2\nVerify the XML and try again.",
+                        [$key, $e->getMessage()]
+                    )
                 );
             }
         }

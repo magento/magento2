@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ProductsListWidgetTest">
+        <annotations>
+            <features value="Widget"/>
+            <stories value="Products list widget"/>
+            <title value="Admin should be able to set Products List Widget"/>
+            <description value="Admin should be able to set Products List Widget"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MAGETWO-97041"/>
+            <group value="Widget"/>
+            <group value="WYSIWYGDisabled"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <conditionalClick selector="{{CmsPagesPageActionsSection.clearAllButton}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+        </after>
+        <!-- Create a CMS page containing the Products List widget -->
+        <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="amOnCmsList"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCmsList"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <actionGroup ref="AdminClickAddNewPageOnPagesGridActionGroup" stepKey="clickAddNewPageButton"/>
+        <actionGroup ref="AdminCmsPageSetTitleActionGroup" stepKey="fillPageTitle">
+            <argument name="newTitle" value="{{_newDefaultCmsPage.title}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandContentSectionActionGroup" stepKey="expandContentSection"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForContentSection"/>
+        <actionGroup ref="AdminInsertCatalogProductsListWidgetForCmsPageContentSectionActionGroup" stepKey="clickInsertWidgetButton">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSlideOut"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectWidgetType"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForWidgetOptions"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickAddNewCondition"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectCondition"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitRuleParameter"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickRuleParameter"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickChooser"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForAjaxLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickCategoryToEditInitial"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickApplyRuleParameter"/>
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidget"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn"/>
+        <click selector="{{CmsNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveAndClose"/>
+        <waitForPageLoad stepKey="waitForCmsList2"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMessage">
+            <argument name="message" value="You saved the page."/>
+        </actionGroup>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearGridFilters"/>
+        <!-- Verify CMS page on storefront -->
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.select(_newDefaultCmsPage.title)}}" stepKey="waitForCMSPageListItem" />
+        <click selector="{{CmsPagesPageActionsSection.select(_newDefaultCmsPage.title)}}" stepKey="clickSelect" />
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.edit(_newDefaultCmsPage.title)}}" stepKey="waitForEditLink" />
+        <click selector="{{CmsPagesPageActionsSection.preview(_newDefaultCmsPage.title)}}" stepKey="clickEdit" />
+        <switchToNextTab stepKey="switchToNextTab"/>
+        <waitForPageLoad stepKey="waitForCMSPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seePageTitle"/>
+        <actionGroup ref="AssertStorefrontProductIsShownOnCmsPageActionGroup" stepKey="seeProduct">
+            <argument name="cmsTitle" value="{{_newDefaultCmsPage.title}}"/>
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+        <closeTab stepKey="closeCurrentTab"/>
+    </test>
+</tests>

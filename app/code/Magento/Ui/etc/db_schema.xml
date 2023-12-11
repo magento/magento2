@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="ui_bookmark" resource="default" engine="innodb" comment="Bookmark">
+        <column xsi:type="int" name="bookmark_id" unsigned="true" nullable="false" identity="true"
+                comment="Bookmark identifier"/>
+        <column xsi:type="int" name="user_id" unsigned="true" nullable="false" identity="false"
+                comment="User ID"/>
+        <column xsi:type="varchar" name="namespace" nullable="false" length="255" comment="Bookmark namespace"/>
+        <column xsi:type="varchar" name="identifier" nullable="false" length="255" comment="Bookmark Identifier"/>
+        <column xsi:type="smallint" name="current" unsigned="false" nullable="false" identity="false"
+                comment="Mark current bookmark per user and identifier"/>
+        <column xsi:type="varchar" name="title" nullable="true" length="255" comment="Bookmark title"/>
+        <column xsi:type="longtext" name="config" nullable="true" comment="Bookmark config"/>
+        <column xsi:type="datetime" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Bookmark created at"/>
+        <column xsi:type="datetime" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Bookmark updated at"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="bookmark_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="UI_BOOKMARK_USER_ID_ADMIN_USER_USER_ID" table="ui_bookmark"
+                    column="user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
+        <index referenceId="UI_BOOKMARK_USER_ID_NAMESPACE_IDENTIFIER" indexType="btree">
+            <column name="user_id"/>
+            <column name="namespace"/>
+            <column name="identifier"/>
+        </index>
+    </table>
+</schema>

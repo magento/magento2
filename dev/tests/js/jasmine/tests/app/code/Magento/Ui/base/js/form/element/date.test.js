@@ -4,19 +4,54 @@
  */
 
 define([
-    'Magento_Ui/js/form/element/date',
-    'mageUtils'
-], function (DateElement, utils) {
+    'squire'
+], function (Squire) {
     'use strict';
 
     describe('Magento_Ui/js/form/element/date', function () {
-        var params, model;
+        var injector = new Squire(),
+            mocks = {
+                'Magento_Ui/js/lib/registry/registry': {
+                    /** Method stub. */
+                    get: function () {
+                        return {
+                            get: jasmine.createSpy(),
+                            set: jasmine.createSpy()
+                        };
+                    },
+                    create: jasmine.createSpy(),
+                    set: jasmine.createSpy(),
+                    async: jasmine.createSpy()
+                },
+                '/mage/utils/wrapper': jasmine.createSpy()
+            },
+            model, utils,
+            dataScope = 'abstract';
 
-        beforeEach(function () {
-            params = {
-                dataScope: 'abstract'
-            };
-            model = new DateElement(params);
+        beforeEach(function (done) {
+            injector.mock(mocks);
+            injector.require([
+                'Magento_Ui/js/form/element/date',
+                'mageUtils',
+                'knockoutjs/knockout-es5'
+            ], function (Constr, mageUtils) {
+                model = new Constr({
+                    provider: 'provName',
+                    name: '',
+                    index: '',
+                    dataScope: dataScope,
+                    outputDateFormat: 'DD-MM-YYYY',
+                    inputDateFormat: 'YYYY-MM-DD',
+                    pickerDateTimeFormat: 'DD-MM-YYYY',
+                    options: {
+                        showsTime: false,
+                        dateFormat: 'dd-MM-y'
+                    }
+                });
+                utils = mageUtils;
+
+                done();
+            });
         });
 
         it('Check prepareDateTimeFormats function', function () {
@@ -25,5 +60,27 @@ define([
             expect(utils.convertToMomentFormat).toHaveBeenCalled();
         });
 
+        it('Check date will have correct value with different locales.', function () {
+            model.value('2020-11-28');
+            expect(model.getPreview()).toBe('28-11-2020');
+        });
+
+        it('Check date will have correct value with timeOnly config value.', function () {
+            model.options.timeOnly = true;
+            model.options.timeFormat = 'h:mm a';
+            model.prepareDateTimeFormats();
+            model.value('02:43:58');
+            expect(model.getPreview()).toBe('2:43 am');
+
+            model.options.timeFormat = 'HH:mm:ss';
+            model.prepareDateTimeFormats();
+            model.value('02:43:58');
+            expect(model.getPreview()).toBe('02:43:58');
+
+            model.options.timeFormat = 'HH:mm:ss';
+            model.prepareDateTimeFormats();
+            model.value('2:43 am');
+            expect(model.getPreview()).toBe('02:43:00');
+        });
     });
 });

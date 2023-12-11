@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\Order\Pdf\Items\Creditmemo;
 
 /**
@@ -66,11 +68,18 @@ class DefaultCreditmemo extends \Magento\Sales\Model\Order\Pdf\Items\AbstractIte
         $lines = [];
 
         // draw Product name
-        $lines[0] = [['text' => $this->string->split($item->getName(), 35, true, true), 'feed' => 35]];
+        $lines[0] = [
+            [
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                'text' => $this->string->split(html_entity_decode($item->getName()), 35, true, true),
+                'feed' => 35
+            ]
+        ];
 
         // draw SKU
         $lines[0][] = [
-            'text' => $this->string->split($this->getSku($item), 17),
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            'text' => $this->string->split(html_entity_decode($this->getSku($item)), 17),
             'feed' => 255,
             'align' => 'right',
         ];
@@ -131,11 +140,20 @@ class DefaultCreditmemo extends \Magento\Sales\Model\Order\Pdf\Items\AbstractIte
                 ) ? $option['print_value'] : $this->filterManager->stripTags(
                     $option['value']
                 );
-                $lines[][] = ['text' => $this->string->split($printValue, 30, true, true), 'feed' => 40];
+
+                $values = explode(PHP_EOL, $printValue);
+                $text = [];
+                foreach ($values as $value) {
+                    foreach ($this->string->split($value, 50, true, true) as $subValue) {
+                        $text[] = $subValue;
+                    }
+                }
+
+                $lines[][] = ['text' => $text, 'feed' => 40];
             }
         }
 
-        $lineBlock = ['lines' => $lines, 'height' => 20];
+        $lineBlock = ['lines' => $lines, 'height' => 20, 'shift' => 5];
 
         $page = $pdf->drawLineBlocks($page, [$lineBlock], ['table_header' => true]);
         $this->setPage($page);

@@ -3,11 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Observer;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\CustomerRegistry;
+use Magento\Customer\Model\Data\CustomerSecure;
 use Magento\Customer\Observer\UpgradeCustomerPasswordObserver;
+use Magento\Framework\DataObject;
+use Magento\Framework\Encryption\Encryptor;
+use Magento\Framework\Event\Observer;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class UpgradeCustomerPasswordObserverTest extends \PHPUnit\Framework\TestCase
+/** for testing upgrade password observer
+ */
+class UpgradeCustomerPasswordObserverTest extends TestCase
 {
     /**
      * @var UpgradeCustomerPasswordObserver
@@ -15,28 +29,32 @@ class UpgradeCustomerPasswordObserverTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Encryption\Encryptor|\PHPUnit_Framework_MockObject_MockObject
+     * @var Encryptor|MockObject
      */
     protected $encryptorMock;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerRepositoryInterface|MockObject
      */
     protected $customerRepository;
 
     /**
-     * @var \Magento\Customer\Model\CustomerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerRegistry|MockObject
      */
     protected $customerRegistry;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->customerRepository = $this->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
+        $this->customerRepository = $this
+            ->getMockBuilder(CustomerRepositoryInterface::class)
             ->getMockForAbstractClass();
-        $this->customerRegistry = $this->getMockBuilder(\Magento\Customer\Model\CustomerRegistry::class)
+        $this->customerRegistry = $this->getMockBuilder(CustomerRegistry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->encryptorMock = $this->getMockBuilder(\Magento\Framework\Encryption\Encryptor::class)
+        $this->encryptorMock = $this->getMockBuilder(Encryptor::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -47,18 +65,23 @@ class UpgradeCustomerPasswordObserverTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Unit test for verifying customers password upgrade observer
+     */
     public function testUpgradeCustomerPassword()
     {
         $customerId = '1';
         $password = 'password';
         $passwordHash = 'hash:salt:999';
-        $model = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
+        $model = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMock();
-        $customer = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
+        $customer = $this->getMockBuilder(CustomerInterface::class)
+            ->setMethods(['setData'])
+            ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $customerSecure = $this->getMockBuilder(\Magento\Customer\Model\Data\CustomerSecure::class)
+        $customerSecure = $this->getMockBuilder(CustomerSecure::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPasswordHash', 'setPasswordHash'])
             ->getMock();
@@ -90,9 +113,9 @@ class UpgradeCustomerPasswordObserverTest extends \PHPUnit\Framework\TestCase
         $this->customerRepository->expects($this->once())
             ->method('save')
             ->with($customer);
-        $event = new \Magento\Framework\DataObject();
+        $event = new DataObject();
         $event->setData(['password' => 'password', 'model' => $model]);
-        $observerMock = new \Magento\Framework\Event\Observer();
+        $observerMock = new Observer();
         $observerMock->setEvent($event);
         $this->model->execute($observerMock);
     }

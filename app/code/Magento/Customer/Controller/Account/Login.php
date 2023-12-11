@@ -6,11 +6,17 @@
  */
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Customer\Controller\AbstractAccount;
 
-class Login extends \Magento\Customer\Controller\AbstractAccount
+/**
+ * Login form page. Accepts POST for backward compatibility reasons.
+ */
+class Login extends AbstractAccount implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var Session

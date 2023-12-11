@@ -1,22 +1,21 @@
 {
-  "name": "magento/module-test-join-directives",
-  "description": "test integration for join directives",
-  "config": {
-    "sort-packages": true
-  },
-  "require": {
-    "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
-    "magento/framework": "0.42.0-beta8",
-    "magento/module-sales": "0.42.0-beta8"
-  },
-  "type": "magento2-module",
-  "version": "1.0",
-  "extra": {
-    "map": [
-      [
-        "*",
-        "Magento/TestModuleJoinDirectives"
-      ]
-    ]
-  }
+    "name": "magento/module-test-join-directives",
+    "description": "test integration for join directives",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~7.4.0||~8.0.0",
+        "magento/framework": "*",
+        "magento/module-sales": "*"
+    },
+    "type": "magento2-module",
+    "extra": {
+        "map": [
+            [
+                "*",
+                "Magento/TestModuleJoinDirectives"
+            ]
+        ]
+    }
 }

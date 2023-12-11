@@ -3,15 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Option\Type\File;
 
+use Laminas\Filter\File\Rename;
+use Laminas\File\Transfer\Exception\PhpEnvironmentException;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Catalog\Model\Product\Exception as ProductException;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Math\Random;
+use Magento\MediaStorage\Model\File\Uploader;
 
 /**
+ * Validator class. Represents logic for validation file given from product option
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ValidatorFile extends Validator
@@ -63,11 +71,19 @@ class ValidatorFile extends Validator
     protected $isImageValidator;
 
     /**
+     * @var Random
+     */
+    private $random;
+
+    /**
+     * Constructor method
+     *
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\File\Size $fileSize
      * @param \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory
      * @param \Magento\Framework\Validator\File\IsImage $isImageValidator
+     * @param Random|null $random
      * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
@@ -75,16 +91,21 @@ class ValidatorFile extends Validator
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\File\Size $fileSize,
         \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory,
-        \Magento\Framework\Validator\File\IsImage $isImageValidator
+        \Magento\Framework\Validator\File\IsImage $isImageValidator,
+        Random $random = null
     ) {
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->filesystem = $filesystem;
         $this->httpFactory = $httpFactory;
         $this->isImageValidator = $isImageValidator;
+        $this->random = $random
+            ?? ObjectManager::getInstance()->get(Random::class);
         parent::__construct($scopeConfig, $filesystem, $fileSize);
     }
 
     /**
+     * Setter method for the product
+     *
      * @param Product $product
      * @return $this
      */
@@ -95,6 +116,8 @@ class ValidatorFile extends Validator
     }
 
     /**
+     * Validation method
+     *
      * @param \Magento\Framework\DataObject $processingParams
      * @param \Magento\Catalog\Model\Product\Option $option
      * @return array
@@ -103,7 +126,7 @@ class ValidatorFile extends Validator
      * @throws \Exception
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Validator\Exception
-     * @throws \Zend_File_Transfer_Exception
+     * @throws PhpEnvironmentException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -115,7 +138,10 @@ class ValidatorFile extends Validator
             $runValidation = $option->getIsRequire() || $upload->isUploaded($file);
             if (!$runValidation) {
                 throw new \Magento\Framework\Validator\Exception(
-                    __('Validation failed. Required options were not filled or the file was not uploaded.')
+                    __(
+                        'The validation failed. '
+                        . 'Make sure the required options are entered and the file is uploaded, then try again.'
+                    )
                 );
             }
 
@@ -128,10 +154,14 @@ class ValidatorFile extends Validator
             if ($this->validateContentLength()) {
                 $value = $this->fileSize->getMaxFileSizeInMb();
                 throw new LocalizedException(
-                    __('The file you uploaded is larger than %1 Megabytes allowed by server', $value)
+                    __(
+                        "The file was too big and couldn't be uploaded. "
+                        . "Use a file smaller than %1 MBs and try to upload again.",
+                        $value
+                    )
                 );
             } else {
-                throw new ProductException(__('Option required.'));
+                throw new ProductException(__("The required option wasn't entered. Enter the option and try again."));
             }
         }
 
@@ -147,19 +177,14 @@ class ValidatorFile extends Validator
         $userValue = [];
 
         if ($upload->isUploaded($file) && $upload->isValid($file)) {
-            $extension = pathinfo(strtolower($fileInfo['name']), PATHINFO_EXTENSION);
-
-            $fileName = \Magento\MediaStorage\Model\File\Uploader::getCorrectFileName($fileInfo['name']);
-            $dispersion = \Magento\MediaStorage\Model\File\Uploader::getDispretionPath($fileName);
-
-            $filePath = $dispersion;
-
             $tmpDirectory = $this->filesystem->getDirectoryRead(DirectoryList::SYS_TMP);
-            $fileHash = md5($tmpDirectory->readFile($tmpDirectory->getRelativePath($fileInfo['tmp_name'])));
-            $filePath .= '/' . $fileHash . '.' . $extension;
+            $fileRandomName = $this->random->getRandomString(32);
+            $fileName = Uploader::getCorrectFileName($fileRandomName);
+            $dispersion = Uploader::getDispersionPath($fileName);
+            $filePath = $dispersion . '/' . $fileName;
             $fileFullPath = $this->mediaDirectory->getAbsolutePath($this->quotePath . $filePath);
 
-            $upload->addFilter(new \Zend_Filter_File_Rename(['target' => $fileFullPath, 'overwrite' => true]));
+            $upload->addFilter(new Rename(['target' => $fileFullPath, 'overwrite' => true]));
 
             if ($this->product !== null) {
                 $this->product->getTypeInstance()->addFileQueue(
@@ -177,12 +202,14 @@ class ValidatorFile extends Validator
             $_height = 0;
 
             if ($tmpDirectory->isReadable($tmpDirectory->getRelativePath($fileInfo['tmp_name']))) {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 if (filesize($fileInfo['tmp_name'])) {
                     if ($this->isImageValidator->isValid($fileInfo['tmp_name'])) {
+                        // phpcs:ignore Magento2.Functions.DiscouragedFunction
                         $imageSize = getimagesize($fileInfo['tmp_name']);
                     }
                 } else {
-                    throw new LocalizedException(__('The file is empty. Please choose another one'));
+                    throw new LocalizedException(__('The file is empty. Select another file and try again.'));
                 }
 
                 if (!empty($imageSize)) {
@@ -190,6 +217,8 @@ class ValidatorFile extends Validator
                     $_height = $imageSize[1];
                 }
             }
+
+            $fileHash = hash('sha256', $tmpDirectory->readFile($tmpDirectory->getRelativePath($fileInfo['tmp_name'])));
 
             $userValue = [
                 'type' => $fileInfo['type'],
@@ -209,7 +238,9 @@ class ValidatorFile extends Validator
                 throw new LocalizedException(__(implode("\n", $errors)));
             }
         } else {
-            throw new LocalizedException(__('Please specify product\'s required option(s).'));
+            throw new LocalizedException(
+                __("The product's required option(s) weren't entered. Make sure the options are entered and try again.")
+            );
         }
         return $userValue;
     }
@@ -228,17 +259,24 @@ class ValidatorFile extends Validator
 
         // Directory listing and hotlink secure
         $path = $this->path . '/.htaccess';
-        if (!$this->mediaDirectory->isFile($path)) {
-            $this->mediaDirectory->writeFile($path, "Order deny,allow\nDeny from all");
+        $driver = $this->mediaDirectory->getDriver();
+        $absolutePath = $driver->getAbsolutePath($this->mediaDirectory->getAbsolutePath(), $path);
+        if (!$driver->isFile($absolutePath)) {
+            $resource = $driver->fileOpen($absolutePath, 'w+');
+            $driver->fileWrite($resource, "Order deny,allow\nDeny from all");
+            $driver->fileClose($resource);
         }
     }
 
     /**
+     * Validate contents length method
+     *
      * @return bool
      * @todo need correctly name
      */
     protected function validateContentLength()
     {
+        // phpcs:disable Magento2.Security.Superglobal
         return isset($_SERVER['CONTENT_LENGTH']) && $_SERVER['CONTENT_LENGTH'] > $this->fileSize->getMaxFileSize();
     }
 }

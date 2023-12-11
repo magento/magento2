@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddVariableToWYSIWYGCMSTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="MAGETWO-42158-Variable with WYSIWYG "/>
+            <title value="Admin should be able to insert the default Magento variable into content of WYSIWYG on CMS Pages"/>
+            <description value="Admin should be able to insert the default Magento variable into content of WYSIWYG on CMS Pages"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-83504"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
+        </before>
+        <!--Create Custom Variable-->
+        <actionGroup ref="CreateCustomVariableActionGroup" stepKey="createCustomVariable" />
+        <!--Setup Store information-->
+        <waitForPageLoad stepKey="wait" />
+        <amOnPage url="{{AdminConfigPage.url}}" stepKey="goToConfigStoreInformation" />
+        <waitForPageLoad stepKey="waitForPageLoad1" />
+        <conditionalClick selector="{{StoreConfigSection.StoreInformation}}" dependentSelector="{{StoreConfigSection.CheckIfTabExpand}}" stepKey="checkIfTabOpen" visible="true"/>
+        <fillField selector="{{StoreConfigSection.City}}" userInput="{{_defaultVariable.city}}" stepKey="fillCity" />
+        <click selector="{{StoreConfigSection.Save}}" stepKey="saveConfig"/>
+        <!--Main test-->
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToPage"/>
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE"/>
+        <executeJS function="tinyMCE.activeEditor.setContent('Hello CMS Page!');" stepKey="executeJSFillContent"/>
+        <seeElement selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="seeInsertVariableIcon" />
+        <click selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon1" />
+        <waitForLoadingMaskToDisappear stepKey="waitForPageLoad3"/>
+        <waitForText userInput="Insert Variable" stepKey="waitForSlideOutOpen"/>
+        <!--see Insert Variable button disabled-->
+        <see selector="{{VariableSection.InsertVariableBtnDisabled}}" userInput="Insert Variable" stepKey="seeInsertWidgetDisabled" />
+        <!--see Cancel button enabled-->
+        <see selector="{{VariableSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled" />
+        <!--see 4 columns-->
+        <see selector="{{VariableSection.ColName('Select')}}" userInput="Select" stepKey="selectCol" />
+        <see selector="{{VariableSection.ColName('Variable Name')}}" userInput="Variable Name" stepKey="variableCol" />
+        <see selector="{{VariableSection.ColName('Type')}}" userInput="Type" stepKey="typeCol" />
+        <see selector="{{VariableSection.ColName('Code')}}" userInput="Code" stepKey="codeCol" />
+        <!--select default variable-->
+        <click selector="{{VariableSection.Radio('city')}}" stepKey="selectDefaultVariable"/>
+        <see selector="{{VariableSection.InsertVariableBtnEnabled}}" userInput="Insert Variable" stepKey="seeInsertVarialeEnabled" />
+        <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save1" />
+        <waitForPageLoad stepKey="waitForPageLoad8" />
+        <click selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon2" />
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <!--see custom variable-->
+        <see userInput="{{customVariable.code}}"  stepKey="seeCustomVariable"/>
+        <seeElement selector="{{VariableSection.SearchTxtbox}}"  stepKey="searchBox"/>
+        <!--press Enter-->
+        <pressKey selector="{{VariableSection.SearchTxtbox}}" parameterArray="['Test Variable',\Facebook\WebDriver\WebDriverKeys::ENTER]" stepKey="pressKeyEnter"/>
+        <waitForPageLoad stepKey="waitForPageLoad5" />
+        <!--see result-->
+        <see selector="{{VariableSection.searchResult(customVariable.code)}}" userInput="{{customVariable.code}}" stepKey="seeResult" />
+        <!--Insert custom variable-->
+        <click selector="{{VariableSection.VariableRadio(customVariable.code)}}" stepKey="selectCustomVariable1"/>
+        <waitForPageLoad stepKey="waitForPageLoad6"/>
+        <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save2" />
+        <waitForElementNotVisible selector="{{VariableSection.VariableTitle}}" stepKey="waitForSlideOutClose" />
+        <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtn"/>
+        <waitForElementVisible selector="{{TinyMCESection.InsertVariableBtn}}"  stepKey="waitForInsertVariableBtn" />
+        <seeElement selector="{{TinyMCESection.InsertVariableBtn}}"  stepKey="InsertVariableBtn" />
+        <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab" />
+        <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
+        <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="expandButtonMenu"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSplitButtonMenuVisible"/>
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSavePage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSuccessMessage"/>
+        <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
+        <!--see Default Variable on Storefront-->
+        <see userInput="{{_defaultVariable.city}}" stepKey="seeDefaultVariable" />
+        <!--see Custom Variable on Storefront-->
+        <see userInput="{{customVariable.html}}" stepKey="seeCustomVariable2" />
+        <!--Delete Custom Variable-->
+        <actionGroup ref="DeleteCustomVariableActionGroup" stepKey="deleteCustomVariable" />
+        <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache" />
+        <!--Refresh Storefront-->
+        <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPageRefresh"/>
+        <waitForPageLoad stepKey="waitForPageLoad7" />
+        <!--see custom variable blank-->
+        <dontSee userInput="{{customVariable.html}}" stepKey="dontSeeCustomVariableName" />
+        <after>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

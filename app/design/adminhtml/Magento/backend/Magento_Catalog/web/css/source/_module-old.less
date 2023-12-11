@@ -25,11 +25,13 @@
 // Attributes
 .attributes-edit-form {
     .field {
+        .addon {
+            display: block;
+            position: relative;
+        }
+
         &:not(.field-weight) {
             .addon {
-                display: block;
-                position: relative;
-
                 input[type="text"] {
                     border-width: 1px;
                 }
@@ -46,6 +48,14 @@
                 }
             }
         }
+
+        &.field-weight {
+            .addon {
+                .addafter {
+                    border-width: 0;
+                }
+            }
+        }
     }
 
     .with-addon .textarea {
@@ -53,7 +63,7 @@
     }
 
     .attribute-change-checkbox {
-        background: #fff;
+        background: @color-white;
         display: block;
         margin-top: 5px;
 

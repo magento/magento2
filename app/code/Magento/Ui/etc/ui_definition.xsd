@@ -28,6 +28,7 @@
             <xs:element name="button" type="componentButton"/>
             <xs:element name="checkbox" type="componentCheckbox"/>
             <xs:element name="checkboxset" type="componentCheckboxset"/>
+            <xs:element name="colorPicker" type="componentColorPicker"/>
             <xs:element name="column" type="componentColumn"/>
             <xs:element name="columns" type="componentColumns"/>
             <xs:element name="columnsControls" type="componentColumnsControls"/>
@@ -53,6 +54,7 @@
             <xs:element name="hidden" type="componentHidden"/>
             <xs:element name="htmlContent" type="componentHtmlContent" />
             <xs:element name="image" type="componentFile"/>
+            <xs:element name="imageUploader" type="componentImageUploader"/>
             <xs:element name="input" type="componentInput"/>
             <xs:element name="insertForm" type="componentInsertForm"/>
             <xs:element name="insertListing" type="componentInsertListing"/>
@@ -74,6 +76,7 @@
             <xs:element name="textarea" type="componentTextarea"/>
             <xs:element name="wysiwyg" type="componentWysiwyg"/>
             <xs:element name="inlineEditing" type="componentInlineEditing"/>
+            <xs:element name="urlInput" type="componentUrlInput"/>
         </xs:choice>
     </xs:complexType>
 </xs:schema>

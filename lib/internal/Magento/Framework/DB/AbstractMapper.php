@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\DB;
 
 use Magento\Framework\Api\CriteriaInterface;
@@ -10,7 +11,6 @@ use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\ObjectFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Psr\Log\LoggerInterface as Logger;
-use Magento\Framework\DataObject;
 
 /**
  * Class AbstractMapper
@@ -126,7 +126,8 @@ abstract class AbstractMapper implements MapperInterface
                 if (!is_array($value)) {
                     throw new \InvalidArgumentException('Wrong type of argument, expecting array for '. $mapperMethod);
                 }
-                call_user_func_array([$this, $mapperMethod], $value);
+                // The `array_values` is a workaround to ensure the same behavior in PHP 7 and 8.
+                call_user_func_array([$this, $mapperMethod], array_values($value));
             }
         }
         return $this->select;
@@ -151,6 +152,8 @@ abstract class AbstractMapper implements MapperInterface
         }
         $fullExpression = $expression;
         foreach ($fields as $fieldKey => $fieldItem) {
+            $fieldItem = $fieldItem !== null ? $fieldItem : '';
+            $fullExpression = $fullExpression !== null ? $fullExpression : '';
             $fullExpression = str_replace('{{' . $fieldKey . '}}', $fieldItem, $fullExpression);
         }
         $this->getSelect()->columns([$alias => $fullExpression]);
@@ -393,9 +396,10 @@ abstract class AbstractMapper implements MapperInterface
 
     /**
      * Hook for operations before rendering filters
+     *
      * @return void
      */
-    protected function renderFiltersBefore()
+    protected function renderFiltersBefore() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
     }
 

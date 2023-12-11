@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontProcessMultishippingCheckoutWhenCartPageIsOpenedInAnotherTabTest">
+        <annotations>
+            <features value="Multishipping"/>
+            <stories value="Multishipping"/>
+            <title value="Process multishipping checkout when Cart page is opened in another tab"/>
+            <description value="Process multishipping checkout when Cart page is opened in another tab"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-17871"/>
+            <useCaseId value="MC-17469"/>
+            <group value="multishipping"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!-- Create two simple products -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createFirstProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSecondProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomerWithMultipleAddresses"/>
+        </before>
+        <after>
+            <!-- Delete created data -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomerWithMultipleAddresses" stepKey="deleteCustomer"/>
+        </after>
+        <!-- Login to the Storefront as created customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomerWithMultipleAddresses$$"/>
+        </actionGroup>
+        <!--  Add two products to the Shopping Cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$createFirstProduct.custom_attributes[url_key]$$)}}" stepKey="amOnStorefrontProductFirstPage"/>
+        <waitForPageLoad stepKey="waitForTheFirstProduct"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddProductToCart">
+            <argument name="product" value="$$createFirstProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontProductPage.url($$createSecondProduct.custom_attributes[url_key]$$)}}" stepKey="amOnStorefrontSecondProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoadForTheSecondProduct"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddSecondProductToCart">
+            <argument name="product" value="$$createSecondProduct$$"/>
+            <argument name="productCount" value="2"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnShoppingCartPage"/>
+        <!-- Click 'Check Out with Multiple Addresses' -->
+        <actionGroup ref="StorefrontGoCheckoutWithMultipleAddressesActionGroup" stepKey="goCheckoutWithMultipleAddresses"/>
+        <!-- Select different addresses and click 'Go to Shipping Information' -->
+        <actionGroup ref="StorefrontCheckoutShippingSelectMultipleAddressesActionGroup" stepKey="selectMultipleAddresses">
+            <argument name="firstAddress" value="{{UK_Not_Default_Address.street[0]}}"/>
+            <argument name="secondAddress" value="{{US_Address_NY.street[1]}}"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitPageLoad"/>
+        <!-- Open the Cart page in another browser window and go back -->
+        <openNewTab stepKey="openNewTab"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnShoppingCartPageNewTab"/>
+        <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertFirstProductItemInCheckOutCart">
+            <argument name="productName" value="$$createFirstProduct.name$$"/>
+            <argument name="productSku" value="$$createFirstProduct.sku$$"/>
+            <argument name="productPrice" value="$$createFirstProduct.price$$"/>
+            <argument name="subtotal" value="$$createFirstProduct.price$$" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertSecondProductItemInCheckOutCart">
+            <argument name="productName" value="$$createSecondProduct.name$$"/>
+            <argument name="productSku" value="$$createSecondProduct.sku$$"/>
+            <argument name="productPrice" value="$$createSecondProduct.price$$"/>
+            <argument name="subtotal" value="$$createSecondProduct.price$$" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <switchToNextTab stepKey="switchToNextTab"/>
+        <!-- Click 'Continue to Billing Information' and 'Go to Review Your Order' -->
+        <actionGroup ref="StorefrontGoToBillingInformationActionGroup" stepKey="redirectToSelectAddressAfterReset"/>
+        <seeOptionIsSelected selector="{{StorefrontCheckoutShippingMultipleAddressesSection.selectedMultipleShippingAddress('1')}}" userInput="{{US_Address_NY.street[1]}}" stepKey="checkAddressIsReset"/>
+        <actionGroup ref="StorefrontCheckoutShippingSelectMultipleAddressesActionGroup" stepKey="selectMultipleAddressesAfterReset">
+            <argument name="firstAddress" value="{{UK_Not_Default_Address.street[0]}}"/>
+            <argument name="secondAddress" value="{{US_Address_NY.street[1]}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontGoToBillingInformationActionGroup" stepKey="goToBillingInformation"/>
+        <see selector="{{ShipmentFormSection.shippingAddress}}" userInput="{{US_Address_NY.city}}" stepKey="seeBillingAddress"/>
+        <waitForElementVisible selector="{{StorefrontMultipleShippingMethodSection.goToReviewYourOrderButton}}" stepKey="waitForGoToReviewYourOrderVisible" />
+        <click selector="{{StorefrontMultipleShippingMethodSection.goToReviewYourOrderButton}}" stepKey="clickToGoToReviewYourOrderButton"/>
+        <!-- Click 'Place Order' -->
+        <actionGroup ref="PlaceOrderActionGroup" stepKey="placeOrder"/>
+        <see selector="{{StorefrontMultipleShippingMethodSection.successMessage}}" userInput="Successfully ordered" stepKey="seeSuccessMessage"/>
+        <grabTextFrom selector="{{StorefrontMultipleShippingMethodSection.orderId('1')}}" stepKey="grabFirstOrderId"/>
+        <grabTextFrom selector="{{StorefrontMultipleShippingMethodSection.orderId('2')}}" stepKey="grabSecondOrderId"/>
+        <!-- Go to My Account > My Orders -->
+        <amOnPage url="{{StorefrontCustomerOrdersHistoryPage.url}}" stepKey="goToMyOrdersPage"/>
+        <waitForPageLoad stepKey="waitForMyOrdersPageLoad"/>
+        <seeElement selector="{{StorefrontCustomerOrdersGridSection.orderView({$grabFirstOrderId})}}" stepKey="seeFirstOrder"/>
+        <seeElement selector="{{StorefrontCustomerOrdersGridSection.orderView({$grabSecondOrderId})}}" stepKey="seeSecondOrder"/>
+        <waitForPageLoad stepKey="waitForOrderPageLoad"/>
+        <!-- Go to Admin > Sales > Orders -->
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrdersPage"/>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchFirstOrder">
+            <argument name="keyword" value="$grabFirstOrderId"/>
+        </actionGroup>
+        <seeElement selector="{{AdminOrdersGridSection.orderId({$grabFirstOrderId})}}" stepKey="seeAdminFirstOrder"/>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchSecondOrder">
+            <argument name="keyword" value="$grabSecondOrderId"/>
+        </actionGroup>
+        <seeElement selector="{{AdminOrdersGridSection.orderId({$grabSecondOrderId})}}" stepKey="seeAdminSecondOrder"/>
+    </test>
+</tests>

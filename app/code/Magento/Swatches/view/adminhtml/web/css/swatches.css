@@ -149,6 +149,14 @@
     width: 50px;
 }
 
+.col-swatch-min-width {
+    min-width: 65px;
+}
+
+.data-table .col-swatch-min-width input[type="text"] {
+    padding: inherit;
+}
+
 .swatches-visual-col.unavailable:after {
     content: '';
     position: absolute;

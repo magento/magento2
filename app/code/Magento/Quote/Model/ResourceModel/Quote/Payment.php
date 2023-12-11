@@ -13,7 +13,7 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;
 class Payment extends AbstractDb
 {
     /**
-     * Serializeable field: additional_information
+     * Serializable field: additional_information
      *
      * @var array
      */

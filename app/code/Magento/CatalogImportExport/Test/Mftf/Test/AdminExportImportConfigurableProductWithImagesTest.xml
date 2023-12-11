@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminExportImportConfigurableProductWithImagesTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Export/Import products"/>
+            <title value="Check importing of configurable products with images present in filesystem"/>
+            <description value="Check importing of configurable products with images present in filesystem"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-11557"/>
+            <group value="configurable_product"/>
+        </annotations>
+        <before>
+            <!-- Add downloadable domains -->
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add example.com static.magento.com"/>
+
+            <!-- Create sample data:
+                 1. Create simple products -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct2" stepKey="createFirstSimpleProduct"/>
+            <createData entity="SimpleProduct2" stepKey="createSecondSimpleProduct"/>
+
+            <!-- 2. Create Downloadable product -->
+            <createData entity="ApiDownloadableProduct" stepKey="createDownloadableProduct"/>
+            <createData entity="ApiDownloadableLink" stepKey="addFirstDownloadableLink">
+                <requiredEntity createDataKey="createDownloadableProduct"/>
+            </createData>
+            <createData entity="ApiDownloadableLink" stepKey="addSecondDownloadableLink">
+                <requiredEntity createDataKey="createDownloadableProduct"/>
+            </createData>
+
+            <!-- 3. Create Grouped product -->
+            <createData entity="ApiGroupedProduct" stepKey="createGroupedProduct"/>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="createGroupedProduct"/>
+                <requiredEntity createDataKey="createFirstSimpleProduct"/>
+            </createData>
+
+            <!-- 4. Create  configurable product with images -->
+            <createData entity="CategoryExportImport" stepKey="createExportImportCategory"/>
+            <createData entity="ApiConfigurableExportImportProduct" stepKey="createExportImportConfigurableProduct">
+                <requiredEntity createDataKey="createExportImportCategory"/>
+            </createData>
+            <createData entity="ApiProductAttributeMediaGalleryForExportImport" stepKey="createConfigurableProductWithImage">
+                <requiredEntity createDataKey="createExportImportConfigurableProduct"/>
+            </createData>
+            <createData entity="ProductAttributeWithTwoOptionsForExportImport" stepKey="createExportImportConfigurableProductAttribute"/>
+            <createData entity="ProductAttributeOptionOneForExportImport" stepKey="createExportImportConfigurableProductAttributeFirstOption">
+                <requiredEntity createDataKey="createExportImportConfigurableProductAttribute"/>
+            </createData>
+            <createData entity="ProductAttributeOptionTwoForExportImport" stepKey="createExportImportConfigurableProductAttributeSecondOption">
+                <requiredEntity createDataKey="createExportImportConfigurableProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createExportImportConfigurableProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeFirstOption">
+                <requiredEntity createDataKey="createExportImportConfigurableProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeSecondOption">
+                <requiredEntity createDataKey="createExportImportConfigurableProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOneExportImport" stepKey="createConfigFirstChildProduct">
+                <requiredEntity createDataKey="createExportImportConfigurableProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeFirstOption"/>
+            </createData>
+            <createData entity="ApiProductAttributeMediaGalleryForExportImport" stepKey="addImageForFirstSimpleProduct">
+                <requiredEntity createDataKey="createConfigFirstChildProduct"/>
+            </createData>
+            <createData entity="ApiSimpleTwoExportImport" stepKey="createConfigSecondChildProduct">
+                <requiredEntity createDataKey="createExportImportConfigurableProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeSecondOption"/>
+            </createData>
+            <createData entity="ApiProductAttributeMediaGalleryEntryTestImage" stepKey="addImageForSecondSimpleProduct">
+                <requiredEntity createDataKey="createConfigSecondChildProduct"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createExportImportConfigurableProductTwoOption">
+                <requiredEntity createDataKey="createExportImportConfigurableProduct"/>
+                <requiredEntity createDataKey="createExportImportConfigurableProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeFirstOption"/>
+                <requiredEntity createDataKey="getConfigAttributeSecondOption"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="addFirstExportImportConfigurableProductChild">
+                <requiredEntity createDataKey="createExportImportConfigurableProduct"/>
+                <requiredEntity createDataKey="createConfigFirstChildProduct"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="addSecondExportImportConfigurableProductChild">
+                <requiredEntity createDataKey="createExportImportConfigurableProduct"/>
+                <requiredEntity createDataKey="createConfigSecondChildProduct"/>
+            </createData>
+
+            <!-- 5. Create configurable product -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttr"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttr"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttrSet">
+                <requiredEntity createDataKey="createConfigProductAttr"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttr"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct">
+                <requiredEntity createDataKey="createConfigProductAttr"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigurableProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttr"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="addConfigurableProductChild">
+                <requiredEntity createDataKey="createConfigurableProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct"/>
+            </createData>
+
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Remove downloadable domains -->
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>
+
+            <!-- Delete created data -->
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFisrtSimpleProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <deleteData createDataKey="createDownloadableProduct" stepKey="deleteDownloadableProduct"/>
+            <deleteData createDataKey="createGroupedProduct" stepKey="deleteGroupedProduct"/>
+            <deleteData createDataKey="createExportImportConfigurableProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createExportImportConfigurableProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createExportImportCategory" stepKey="deleteExportImportCategory"/>
+            <deleteData createDataKey="createConfigFirstChildProduct" stepKey="deleteConfigFirstChildProduct"/>
+            <deleteData createDataKey="createConfigSecondChildProduct" stepKey="deleteConfigSecondChildProduct"/>
+            <deleteData createDataKey="createConfigurableProduct" stepKey="deleteConfigurableProduct"/>
+            <deleteData createDataKey="createConfigChildProduct" stepKey="deleteConfigChildProduct"/>
+            <deleteData createDataKey="createConfigProductAttr" stepKey="deleteConfigProductAttr"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <!-- Admin logout-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Go to System > Export -->
+        <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="goToExportIndexPage"/>
+
+        <!-- Set Export Settings: Entity Type > Products, SKU > ConfProd's sku and press "Continue" -->
+        <actionGroup ref="ExportProductsFilterByAttributeActionGroup" stepKey="exportProductBySku">
+            <argument name="attribute" value="sku"/>
+            <argument name="attributeData" value="$$createExportImportConfigurableProduct.sku$$"/>
+        </actionGroup>
+
+        <!-- Start message queue for export consumer -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+            <argument name="consumerName" value="{{AdminExportMessageConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminExportMessageConsumerData.messageLimit}}"/>
+        </actionGroup>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForElementVisible selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="waitForFileName"/>
+        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="getFilename"/>
+        <actionGroup ref="AdminGetExportFilenameOnServerActionGroup" stepKey="grabNameFile">
+            <argument name="rowIndex" value="0"/>
+        </actionGroup>
+
+        <!-- Save exported file: file successfully downloaded -->
+        <actionGroup ref="DownloadFileActionGroup" stepKey="downloadCreatedProducts">
+            <argument name="fileName" value="{$getFilename}"/>
+        </actionGroup>
+
+        <!-- Go to Catalog > Products. Find ConfProd and delete it -->
+        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProductBySku">
+            <argument name="sku" value="$$createExportImportConfigurableProduct.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+
+        <!-- Go to System > Import. Set import settings: Entity Type > Product, Import Behavior > Add/Update,
+             Select File to Import > previously exported file and press "Check Data" -->
+        <actionGroup ref="AdminImportProductsActionGroup" stepKey="adminImportProduct">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="export_import_configurable_product.csv"/>
+            <argument name="importNoticeMessage" value="Created: 1, Updated: 0, Deleted: 0"/>
+        </actionGroup>
+
+        <!-- Go to Catalog > Products: Configurable product exists -->
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openConfigurableProduct">
+            <argument name="productSku" value="$$createExportImportConfigurableProduct.sku$$"/>
+        </actionGroup>
+
+        <!-- Go to "Configurations" section: configurations exist and have images -->
+        <seeNumberOfElements selector="{{AdminProductFormConfigurationsSection.currentVariationsRows}}" userInput="2" stepKey="seeNumberOfRows"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="$$createConfigFirstChildProduct.name$$" stepKey="seeFirstProductNameInField"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="$$createConfigSecondChildProduct.name$$" stepKey="seeSecondProductNameInField"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="$$createConfigFirstChildProduct.sku$$" stepKey="seeFirstProductSkuInField"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="$$createConfigSecondChildProduct.sku$$" stepKey="seeSecondProductSkuInField"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsPriceCells}}" userInput="$$createConfigFirstChildProduct.price$$" stepKey="seeFirstProductPriceInField"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsPriceCells}}" userInput="$$createConfigSecondChildProduct.price$$" stepKey="seeSecondProductPriceInField"/>
+        <seeElement selector="{{AdminProductFormConfigurationsSection.variationImageSource(MagentoLogo.fileName)}}" stepKey="seeFirstProductImageInField"/>
+        <seeElement selector="{{AdminProductFormConfigurationsSection.variationImageSource(TestImage.fileName)}}" stepKey="seeSecondProductImageInField"/>
+
+        <!-- Go to "Images and Videos" section: assert image -->
+        <scrollTo selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" stepKey="scrollToProductGalleryTab"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProductImageAdminProductPage"/>
+
+        <!-- Go to any ConfProd's configuration page: Product page open successfully -->
+        <click selector="{{AdminProductFormConfigurationsSection.variationProductLinkByName($$createConfigFirstChildProduct.name$$)}}" stepKey="clickOnFirstProductLink"/>
+        <switchToNextTab stepKey="switchToConfigChildProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <!-- Go to "Images and Videos" section: assert image -->
+        <scrollTo selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" stepKey="scrollToChildProductGalleryTab"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertChildProductImageAdminProductPage"/>
+        <closeTab stepKey="closeConfigChildProductPage"/>
+
+        <!-- Delete exported file -->
+        <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
+            <argument name="fileName" value="{$getFilename}"/>
+        </actionGroup>
+    </test>
+</tests>

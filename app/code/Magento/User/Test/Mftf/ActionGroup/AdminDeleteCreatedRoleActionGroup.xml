@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteCreatedRoleActionGroup">
+        <arguments>
+            <argument name="role" defaultValue=""/>
+        </arguments>
+        <amOnPage url="{{AdminRolesPage.url}}" stepKey="amOnAdminUsersPage"/>
+        <waitForPageLoad stepKey="waitForUserRolePageLoad"/>
+        <click stepKey="clickToAddNewRole" selector="{{AdminDeleteRoleSection.role(role.name)}}"/>
+        <fillField stepKey="TypeCurrentPassword" selector="{{AdminDeleteRoleSection.current_pass}}" userInput="{{_CREDS.magento/MAGENTO_ADMIN_PASSWORD}}"/>
+        <click stepKey="clickToDeleteRole" selector="{{AdminDeleteRoleSection.delete}}"/>
+        <waitForElementVisible stepKey="wait" selector="{{AdminDeleteRoleSection.confirm}}" time="30"/>
+        <click stepKey="clickToConfirm" selector="{{AdminDeleteRoleSection.confirm}}"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see stepKey="seeSuccessMessage" userInput="You deleted the role."/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CheckoutCartProductSection">
+        <element name="ProductLinkByName" type="button"
+                 selector="//main//table[@id='shopping-cart-table']//tbody//tr//strong[contains(@class, 'product-item-name')]//a[contains(text(), '{{var1}}')]"
+                 parameterized="true"/>
+        <element name="ProductPriceByName" type="text"
+                 selector="//main//table[@id='shopping-cart-table']//tbody//tr[..//strong[contains(@class, 'product-item-name')]//a/text()='{{var1}}'][1]//td[contains(@class, 'price')]//span[@class='price']"
+                 parameterized="true"/>
+        <element name="ProductRegularPriceByName" type="text"
+                 selector="//div[descendant::*[contains(text(), '{{var1}}')]]//*[contains(@class, 'subtotal')]"
+                 parameterized="true"/>
+        <element name="productFirstPrice" type="text" selector="td[class~=price] span[class='price']"/>
+        <element name="ProductImageByName" type="text"
+                 selector="//main//table[@id='shopping-cart-table']//tbody//tr//img[contains(@class, 'product-image-photo') and @alt='{{var1}}']"
+                 parameterized="true"/>
+        <element name="ProductQuantityByName" type="input"
+                 selector="//main//table[@id='shopping-cart-table']//tbody//tr[..//strong[contains(@class, 'product-item-name')]//a/text()='{{var1}}'][1]//td[contains(@class, 'qty')]//input[contains(@class, 'qty')]"
+                 parameterized="true"/>
+        <element name="ProductOptionByNameAndAttribute" type="input"
+                 selector="//main//table[@id='shopping-cart-table']//tbody//tr[.//strong[contains(@class, 'product-item-name')]//a[contains(text(), '{{var1}}')]]//dl[@class='item-options']//dt[.='{{var2}}']/following-sibling::dd[1]"
+                 parameterized="true"/>
+        <element name="ProductPriceByOption" type="text" selector="//*[contains(@class, 'item-options')]/dd[normalize-space(.)='{{var1}}']/ancestor::tr//td[contains(@class, 'price')]//span[@class='price']" parameterized="true"/>
+        <element name="RemoveItem" type="button"
+                 selector="//table[@id='shopping-cart-table']//tbody//tr[contains(@class,'item-actions')]//a[contains(@class,'action-delete')]"/>
+        <element name="removeProductByName" type="text" selector="//*[contains(text(), '{{productName}}')]/ancestor::tbody//a[@class='action action-delete']" parameterized="true" timeout="30"/>
+        <element name="productName" type="text" selector="//tbody[@class='cart item']//strong[@class='product-item-name']"/>
+        <element name="moveToWishlistByProductName" type="button" selector="//a[contains(text(), '{{productName}}')]/ancestor::tbody/tr//a[contains(@class, 'towishlist')]" parameterized="true"/>
+        <element name="nthItemOption" type="block" selector=".item:nth-of-type({{numElement}}) .item-options" parameterized="true"/>
+        <element name="nthEditButton" type="block" selector=".item:nth-of-type({{numElement}}) .action-edit" parameterized="true"/>
+        <element name="nthBundleOptionName" type="text" selector=".product-item-details .item-options:nth-of-type({{numOption}}) dt" parameterized="true"/>
+        <element name="productSubtotalByName" type="input" selector="//main//table[@id='shopping-cart-table']//tbody//tr[..//strong[contains(@class, 'product-item-name')]//a/text()='{{var1}}'][1]//td[contains(@class, 'subtotal')]//span[@class='price']" parameterized="true"/>
+        <element name="updateShoppingCartButton" type="button" selector="#form-validate button[type='submit'].update" timeout="30"/>
+        <element name="qty" type="input" selector="//input[@data-cart-item-id='{{var}}'][@title='Qty']" parameterized="true"/>
+        <element name="qtyByContains" type="text" selector="//input[contains(@data-cart-item-id, '{{sku}}')][@title='Qty']" parameterized="true"/>
+        <element name="messageErrorItem" type="text" selector="#sku-stock-failed-"/>
+        <element name="messageErrorNeedChooseOptions" type="text" selector="//*[contains(@class, 'error')]/div"/>
+        <element name="productOptionsLink" type="text" selector="a.action.configure"/>
+        <element name="productOptionLabel" type="text" selector="//dl[@class='item-options']"/>
+        <element name="checkoutCartProductPrice" type="text" selector="//td[@class='col price']//span[@class='price']"/>
+        <element name="checkoutCartSubtotal" type="text" selector="//td[@class='col subtotal']//span[@class='price']"/>
+        <element name="emptyCart" selector=".cart-empty" type="text"/>
+        <element name="emptyCartButton" type="button" selector="#empty_cart_button" timeout="30"/>
+        <element name="modalMessage" type="text" selector=".modal-popup.confirm._show .modal-content" timeout="30"/>
+        <element name="modalConfirmButton" type="button" selector=".modal-popup.confirm._show .action-accept" timeout="30"/>
+        <!-- Required attention section -->
+        <element name="removeProductBySku" type="button" selector="//div[contains(., '{{sku}}')]/ancestor::tbody//button" parameterized="true" timeout="30"/>
+        <element name="failedItemBySku" type="block" selector="//div[contains(.,'{{sku}}')]/ancestor::tbody" parameterized="true" timeout="30"/>
+        <element name="attributeText" selector="//tbody[@class='cart item']//a[text()='{{product_name}}']/../..//dl//dt[text()='{{attribute_name}}']/..//dd[contains(text(),'{{attribute_option}}')]" type="text" parameterized="true"/>
+    </section>
+</sections>

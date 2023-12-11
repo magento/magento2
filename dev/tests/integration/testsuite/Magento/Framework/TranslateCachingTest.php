@@ -24,14 +24,14 @@ class TranslateCachingTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->renderer = Phrase::getRenderer();
         Phrase::setRenderer($this->objectManager->get(\Magento\Framework\Phrase\RendererInterface::class));
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Phrase::setRenderer($this->renderer);
 
@@ -48,7 +48,7 @@ class TranslateCachingTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\Translate $model */
         $model = $this->objectManager->get(\Magento\Framework\Translate::class);
 
-        $model->loadData(\Magento\Framework\App\Area::AREA_FRONTEND); // this is supposed to cache the fixture
+        $model->loadData(\Magento\Framework\App\Area::AREA_FRONTEND, true); // this is supposed to cache the fixture
         $this->assertEquals('Fixture Db Translation', new Phrase('Fixture String'));
 
         /** @var \Magento\Translation\Model\ResourceModel\StringUtils $translateString */

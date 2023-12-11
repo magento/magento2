@@ -12,7 +12,7 @@
                 <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.block.promo.quote.grid" as="grid">
                     <arguments>
                         <argument name="id" xsi:type="string">promo_quote_grid</argument>
-                        <argument name="dataSource" xsi:type="object">Magento\SalesRule\Model\ResourceModel\Rule\Quote\Collection</argument>
+                        <argument name="dataSource" xsi:type="object" shared="false">Magento\SalesRule\Model\ResourceModel\Rule\Quote\Collection</argument>
                         <argument name="default_sort" xsi:type="string">sort_order</argument>
                         <argument name="default_dir" xsi:type="string">ASC</argument>
                         <argument name="save_parameters_in_session" xsi:type="string">1</argument>

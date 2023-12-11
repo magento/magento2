@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="media_gallery_asset" resource="default" engine="innodb" comment="Media Gallery Asset">
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="text" name="path" nullable="true" comment="Path"/>
+        <column xsi:type="varchar" name="title" length="255" nullable="true" comment="Title"/>
+        <column xsi:type="text" name="description" nullable="true" comment="Description"/>
+        <column xsi:type="varchar" name="source" length="255" nullable="true" comment="Source"/>
+        <column xsi:type="varchar" name="hash" length="255" nullable="true" comment="File hash"/>
+        <column xsi:type="varchar" name="content_type" length="255" nullable="true" comment="Content Type"/>
+        <column xsi:type="int" name="width" unsigned="true" nullable="false" identity="false" default="0" comment="Width"/>
+        <column xsi:type="int" name="height" unsigned="true" nullable="false" identity="false" default="0" comment="Height"/>
+        <column xsi:type="int" name="size" unsigned="true" nullable="false" identity="false" comment="Asset file size in bytes"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <index referenceId="MEDIA_GALLERY_ID" indexType="btree">
+            <column name="id"/>
+        </index>
+        <index referenceId="MEDIA_GALLERY_ASSET_TITLE" indexType="fulltext">
+            <column name="title"/>
+        </index>
+    </table>
+    <table name="media_gallery_keyword" resource="default" engine="innodb" comment="Media Gallery Keyword">
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="Keyword ID"/>
+        <column xsi:type="varchar" length="255" name="keyword" nullable="false" comment="Keyword"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <index referenceId="MEDIA_GALLERY_KEYWORD" indexType="btree">
+            <column name="id"/>
+        </index>
+        <constraint xsi:type="unique" referenceId="MEDIA_GALLERY_KEYWORD_KEYWORD_UNIQUE">
+            <column name="keyword"/>
+        </constraint>
+    </table>
+    <table name="media_gallery_asset_keyword" resource="default" engine="innodb" comment="Media Gallery Asset Keyword">
+        <column xsi:type="int" name="keyword_id" unsigned="true" nullable="false" identity="false" comment="Keyword Id"/>
+        <column xsi:type="int" name="asset_id" unsigned="true" nullable="false" identity="false" comment="Asset ID"/>
+        <index referenceId="MEDIA_GALLERY_ASSET_KEYWORD_ASSET_ID_INDEX" indexType="btree">
+            <column name="asset_id"/>
+        </index>
+        <index referenceId="MEDIA_GALLERY_ASSET_KEYWORD_KEYWORD_ID_INDEX" indexType="btree">
+            <column name="keyword_id"/>
+        </index>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="keyword_id"/>
+            <column name="asset_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="MEDIA_GALLERY_KEYWORD_KEYWORD_ID_MEDIA_GALLERY_KEYWORD_ID" table="media_gallery_asset_keyword" column="keyword_id" referenceTable="media_gallery_keyword" referenceColumn="id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="MEDIA_GALLERY_KEYWORD_ASSET_ID_ASSET_ID" table="media_gallery_asset_keyword" column="asset_id" referenceTable="media_gallery_asset" referenceColumn="id" onDelete="CASCADE"/>
+    </table>
+</schema>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLockAdminUserWhenCreatingNewIntegrationTest">
+        <annotations>
+            <features value="Security"/>
+            <stories value="Runs Lock admin user when creating new integration test."/>
+            <title value="Lock admin user when creating new integration"/>
+            <description value="Runs Lock admin user when creating new integration test."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14382" />
+            <group value="security"/>
+            <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- Log in to Admin Panel -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Unlock Admin user -->
+            <magentoCLI command="admin:user:unlock {{_ENV.MAGENTO_ADMIN_USERNAME}}" stepKey="unlockAdminUser"/>
+        </after>
+
+        <actionGroup ref="AdminOpenNewIntegrationPageActionGroup" stepKey="openNewIntegrationPage"/>
+        <!-- Perform add new admin user 6 specified number of times.
+        "The password entered for the current user is invalid. Verify the password and try again." appears after each attempt.-->
+        <actionGroup ref="AdminFillIntegrationFormActionGroup" stepKey="fillFieldFirstAttempt">
+            <argument name="integration" value="defaultIntegrationData" />
+            <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonIntegrationFormActionGroup" stepKey="saveIntegrationFirstAttempt"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="checkFirstSaveIntegrationError">
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
+            <argument name="messageType" value="error" />
+        </actionGroup>
+
+        <actionGroup ref="AdminFillIntegrationFormActionGroup" stepKey="fillFieldSecondAttempt">
+            <argument name="integration" value="defaultIntegrationData" />
+            <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonIntegrationFormActionGroup" stepKey="saveIntegrationSecondAttempt"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="checkSecondSaveIntegrationError">
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
+            <argument name="messageType" value="error" />
+        </actionGroup>
+
+        <actionGroup ref="AdminFillIntegrationFormActionGroup" stepKey="fillFieldThirdAttempt">
+            <argument name="integration" value="defaultIntegrationData" />
+            <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonIntegrationFormActionGroup" stepKey="saveIntegrationThirdAttempt"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="checkThirdSaveIntegrationError">
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
+            <argument name="messageType" value="error" />
+        </actionGroup>
+
+        <actionGroup ref="AdminFillIntegrationFormActionGroup" stepKey="fillFieldFourthAttempt">
+            <argument name="integration" value="defaultIntegrationData" />
+            <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonIntegrationFormActionGroup" stepKey="saveIntegrationFourthAttempt"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="checkFourthSaveIntegrationError">
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
+            <argument name="messageType" value="error" />
+        </actionGroup>
+
+        <actionGroup ref="AdminFillIntegrationFormActionGroup" stepKey="fillFieldFifthAttempt">
+            <argument name="integration" value="defaultIntegrationData" />
+            <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonIntegrationFormActionGroup" stepKey="saveIntegrationFifthAttempt"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="checkFifthSaveIntegrationError">
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
+            <argument name="messageType" value="error" />
+        </actionGroup>
+
+        <!-- Last invalid current password save integration attempt and check logout error -->
+        <actionGroup ref="AdminFillIntegrationFormActionGroup" stepKey="fillFieldLastAttempt">
+            <argument name="integration" value="defaultIntegrationData" />
+            <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonIntegrationFormActionGroup" stepKey="saveIntegrationLastAttempt"/>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkFifthError">
+            <argument name="message" value="Your account is temporarily disabled. Please try again later."/>
+        </actionGroup>
+
+        <!-- Try to login as admin and check error -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsLockedAdmin"/>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginError" />
+    </test>
+</tests>

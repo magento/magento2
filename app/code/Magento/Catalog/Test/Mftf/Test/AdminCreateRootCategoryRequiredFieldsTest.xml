@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateRootCategoryRequiredFieldsTest">
+        <annotations>
+            <stories value="Create categories"/>
+            <features value="Catalog"/>
+            <title value="Create Root Category from Category Page"/>
+            <description value="Create Root Category from Category Page"/>
+            <testCaseId value="MC-5263"/>
+            <severity value="CRITICAL"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginToAdminPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">
+                <argument name="categoryEntity" value="_defaultCategory" />
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout" />
+        </after>
+
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="OpenAdminCatergoryIndexPage"/>
+        <click selector="{{AdminCategorySidebarActionSection.AddRootCategoryButton}}" stepKey="ClickOnAddRootButton"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="FillCategoryField"/>
+        <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="EnableCheckOption"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="ClickSaveButton"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="AssertSuccessMessage"/>
+        <seeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}"  stepKey="SeeCheckBoxisSelected"/>
+        <seeInField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="SeedFieldInput"/>
+    </test>
+</tests>

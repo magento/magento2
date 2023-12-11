@@ -26,8 +26,8 @@ class ListAction extends ProductController
             $resultPage->getConfig()->setPageLayout($product->getPageLayout());
         }
         $urlSafeSku = rawurlencode($product->getSku());
-        $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku]);
         $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], null, false);
+        $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku]);
         $resultPage->addUpdate($product->getCustomLayoutUpdate());
         return $resultPage;
     }

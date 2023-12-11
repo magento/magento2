@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddBundleProductToCartFromWishListPageTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Add bundle product to Cart"/>
+            <title value="Add bundle product to Cart from Wish list page"/>
+            <description value="Add bundle product to Cart from Wish list page"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-17782"/>
+            <useCaseId value="MC-17387"/>
+            <group value="catalog"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- Login as Admin -->
+            <comment userInput="Login as Admin" stepKey="commentLoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create customer on Storefront and bundle product -->
+            <comment userInput="Create customer on Storefront and bundle product" stepKey="commentCreateData"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="CustomerEntityOne" stepKey="createCustomerViaTheStorefront"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiBundleProductPriceViewRange" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create Attribute -->
+            <comment userInput="Create Attribute" stepKey="commentCreateAttribute"/>
+            <createData entity="DropDownBundleOption" stepKey="bundleOption">
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createBundleLink1">
+                <requiredEntity createDataKey="createProduct"/>
+                <requiredEntity createDataKey="bundleOption"/>
+                <requiredEntity createDataKey="createSimpleProduct1"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createBundleLink2">
+                <requiredEntity createDataKey="createProduct"/>
+                <requiredEntity createDataKey="bundleOption"/>
+                <requiredEntity createDataKey="createSimpleProduct2"/>
+            </createData>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+                <argument name="productId" value="$$createProduct.id$$"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        </before>
+        <after>
+            <!-- Delete created data -->
+            <comment userInput="Delete created data" stepKey="commentDeleteCreatedData"/>
+            <deleteData createDataKey="createCustomerViaTheStorefront" stepKey="deleteCustomerViaTheStorefront"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Log out -->
+            <comment userInput="Log out" stepKey="commentLogOut"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Login to the Storefront as created customer -->
+        <comment userInput="Login to the Storefront as created customer" stepKey="commentLoginAsCustomer"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomerViaTheStorefront$$"/>
+        </actionGroup>
+        <!-- Add product to Wish List -->
+        <comment userInput="Add product to Wish List" stepKey="commentAddProductToWishList"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnBundleProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addToWishlistProduct">
+            <argument name="productVar" value="$$createProduct$$"/>
+        </actionGroup>
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName($$createProduct.name$$)}}" stepKey="moveMouseOverProduct"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName($$createProduct.name$$)}}" stepKey="clickAddToCart"/>
+        <waitForPageLoad stepKey="waitForProductBundlePage"/>
+        <!-- See error message -->
+        <comment userInput="See error message" stepKey="commentSeeErrorMessage"/>
+        <see userInput=" Please specify product option(s)." stepKey="seeErrorMessage"/>
+    </test>
+</tests>

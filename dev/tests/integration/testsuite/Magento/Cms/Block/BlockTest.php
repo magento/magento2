@@ -8,6 +8,7 @@ namespace Magento\Cms\Block;
 class BlockTest extends \PHPUnit\Framework\TestCase
 {
     /**
+     * @magentoAppArea frontend
      * @magentoDataFixture Magento/Cms/_files/block.php
      * @magentoDataFixture Magento/Variable/_files/variable.php
      * @magentoConfigFixture current_store web/unsecure/base_url http://example.com/
@@ -27,8 +28,8 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         );
         $block->setBlockId($cmsBlock->getId());
         $result = $block->toHtml();
-        $this->assertContains('<a href="http://example.com/', $result);
-        $this->assertContains('<p>Config value: "http://example.com/".</p>', $result);
-        $this->assertContains('<p>Custom variable: "HTML Value".</p>', $result);
+        $this->assertStringContainsString('<a href="http://example.com/', $result);
+        $this->assertStringContainsString('<p>Config value: "http://example.com/".</p>', $result);
+        $this->assertStringContainsString('<p>Custom variable: "HTML Value".</p>', $result);
     }
 }

@@ -6,6 +6,7 @@
 namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\Customer\Model\Indexer\Processor;
 
 /**
  * Import entity customer combined model
@@ -20,36 +21,36 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * Names that begins with underscore is not an attribute. This name convention is for
      * to avoid interference with same attribute name.
      */
-    const COLUMN_ADDRESS_PREFIX = '_address_';
+    public const COLUMN_ADDRESS_PREFIX = '_address_';
 
-    const COLUMN_DEFAULT_BILLING = '_address_default_billing_';
+    public const COLUMN_DEFAULT_BILLING = '_address_default_billing_';
 
-    const COLUMN_DEFAULT_SHIPPING = '_address_default_shipping_';
+    public const COLUMN_DEFAULT_SHIPPING = '_address_default_shipping_';
 
     /**#@-*/
 
     /**#@+
      * Data row scopes
      */
-    const SCOPE_DEFAULT = 1;
+    public const SCOPE_DEFAULT = 1;
 
-    const SCOPE_ADDRESS = -1;
+    public const SCOPE_ADDRESS = -1;
 
     /**#@-*/
 
     /**#@+
      * Component entity names
      */
-    const COMPONENT_ENTITY_CUSTOMER = 'customer';
+    public const COMPONENT_ENTITY_CUSTOMER = 'customer';
 
-    const COMPONENT_ENTITY_ADDRESS = 'address';
+    public const COMPONENT_ENTITY_ADDRESS = 'address';
 
     /**#@-*/
 
     /**
      * Error code for orphan rows
      */
-    const ERROR_ROW_IS_ORPHAN = 'rowIsOrphan';
+    public const ERROR_ROW_IS_ORPHAN = 'rowIsOrphan';
 
     /**
      * @var \Magento\CustomerImportExport\Model\Import\Customer
@@ -84,14 +85,14 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     ];
 
     /**
-     * Customer attributes
+     * Customer attribute
      *
      * @var string[]
      */
     protected $_customerAttributes = [];
 
     /**
-     * Address attributes
+     * Address attribute
      *
      * @var string[]
      */
@@ -133,9 +134,9 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     protected $needColumnCheck = true;
 
     /**
-     * Valid column names
+     * Valid column name
      *
-     * @array
+     * @var string[]
      */
     protected $validColumnNames = [
         Customer::COLUMN_DEFAULT_BILLING,
@@ -144,9 +145,14 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     ];
 
     /**
-     * {@inheritdoc}
+     * @var string
      */
     protected $masterAttributeCode = 'email';
+
+    /**
+     * @var Processor
+     */
+    private $indexerProcessor;
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
@@ -158,6 +164,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * @param \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory $dataFactory
      * @param \Magento\CustomerImportExport\Model\Import\CustomerFactory $customerFactory
      * @param \Magento\CustomerImportExport\Model\Import\AddressFactory $addressFactory
+     * @param Processor $indexerProcessor
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
      *
@@ -173,6 +180,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory $dataFactory,
         \Magento\CustomerImportExport\Model\Import\CustomerFactory $customerFactory,
         \Magento\CustomerImportExport\Model\Import\AddressFactory $addressFactory,
+        Processor $indexerProcessor,
         array $data = []
     ) {
         parent::__construct($string, $scopeConfig, $importFactory, $resourceHelper, $resource, $errorAggregator, $data);
@@ -230,6 +238,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         } else {
             $this->_nextCustomerId = $resourceHelper->getNextAutoincrement($this->_customerEntity->getEntityTable());
         }
+        $this->indexerProcessor = $indexerProcessor;
     }
 
     /**
@@ -269,11 +278,23 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      */
     protected function _importData()
     {
-        $result = $this->_customerEntity->importData();
-        if ($this->getBehavior() != \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE) {
-            return $result && $this->_addressEntity->setCustomerAttributes($this->_customerAttributes)->importData();
+        if ($this->getIds()) {
+            $this->_customerEntity->setIds($this->getIds());
         }
-
+        $result = $this->_customerEntity->importData();
+        $this->countItemsCreated += $this->_customerEntity->getCreatedItemsCount();
+        $this->countItemsUpdated += $this->_customerEntity->getUpdatedItemsCount();
+        $this->countItemsDeleted += $this->_customerEntity->getDeletedItemsCount();
+        if ($this->getBehavior() != \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE) {
+            $addressEntityObject = $this->_addressEntity->setCustomerAttributes($this->_customerAttributes);
+            if ($this->getIds() && $addressEntityObject !== null) {
+                $addressEntityObject->setIds($this->getIds());
+            }
+            $result = $result && $addressEntityObject->importData();
+        }
+        if ($result) {
+            $this->indexerProcessor->markIndexerAsInvalid();
+        }
         return $result;
     }
 
@@ -285,6 +306,28 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     public function getEntityTypeCode()
     {
         return 'customer_composite';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateData()
+    {
+        //Preparing both customer and address imports for mass validation.
+        $source = $this->getSource();
+        $this->_customerEntity->prepareCustomerData($source);
+        $source->rewind();
+        $rows = [];
+        foreach ($source as $row) {
+            $rows[] = [
+                Address::COLUMN_EMAIL => $row[Customer::COLUMN_EMAIL] ?? null,
+                Address::COLUMN_WEBSITE => $row[Customer::COLUMN_WEBSITE] ?? null
+            ];
+        }
+        $source->rewind();
+        $this->_addressEntity->prepareCustomerData($rows);
+
+        return parent::validateData();
     }
 
     /**
@@ -308,14 +351,13 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
                 // Add new customer data into customer storage for address entity instance
                 $websiteId = $this->_customerEntity->getWebsiteId($this->_currentWebsiteCode);
                 if (!$this->_addressEntity->getCustomerStorage()->getCustomerId($this->_currentEmail, $websiteId)) {
-                    $customerData = new \Magento\Framework\DataObject(
+                    $this->_addressEntity->getCustomerStorage()->addCustomerByArray(
                         [
-                            'id' => $this->_nextCustomerId,
+                            'entity_id' => $this->_nextCustomerId,
                             'email' => $this->_currentEmail,
                             'website_id' => $websiteId,
                         ]
                     );
-                    $this->_addressEntity->getCustomerStorage()->addCustomer($customerData);
                     $this->_nextCustomerId++;
                 }
 

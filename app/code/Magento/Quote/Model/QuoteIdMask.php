@@ -10,7 +10,7 @@ namespace Magento\Quote\Model;
  * QuoteIdMask model
  *
  * @method string getMaskedId()
- * @method QuoteIdMask setMaskedId()
+ * @method QuoteIdMask setMaskedId(string $id)
  */
 class QuoteIdMask extends \Magento\Framework\Model\AbstractModel
 {
@@ -53,11 +53,14 @@ class QuoteIdMask extends \Magento\Framework\Model\AbstractModel
      * Initialize quote identifier before save
      *
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeSave()
     {
         parent::beforeSave();
-        $this->setMaskedId($this->randomDataGenerator->getUniqueHash());
+        if (empty($this->getMaskedId())) {
+            $this->setMaskedId($this->randomDataGenerator->getUniqueHash());
+        }
         return $this;
     }
 }

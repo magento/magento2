@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurationBlankIndustryTest">
+        <annotations>
+            <features value="Analytics"/>
+            <stories value="Try to save empty Magento Advanced Reporting vertical"/>
+            <title value="Try to save empty Magento Advanced Reporting vertical"/>
+            <description value="An admin user cannot save a blank industry setting on the Advanced Reporting configuration page."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-63981"/>
+            <group value="analytics"/>
+            <group value="pr_exclude"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+        <actionGroup ref="AdminOpenConfigGeneralAnalyticsPageActionGroup" stepKey="amOnAdminConfig"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingService}}" userInput="Enable" stepKey="selectAdvancedReportingServiceEnabled"/>
+        <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingIndustryLabel}}" userInput="Industry" stepKey="seeAdvancedReportingIndustryLabel"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingIndustry}}" userInput="--Please Select--" stepKey="selectAdvancedReportingIndustry"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveConfigButton"/>
+        <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingBlankIndustryError}}" userInput="Please select an industry." stepKey="seeBlankIndustryErrorMessage"/>
+    </test>
+</tests>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Navigate to create order page (New Order -> Create New Customer)-->
+    <actionGroup name="NavigateToNewOrderPageNewCustomerActionGroup" deprecated="This Action Group is deprecated. Please use AdminNavigateToNewOrderPageNewCustomerActionGroup + AdminSelectStoreDuringOrderCreationActionGroup.">
+        <annotations>
+            <description>Goes to the Admin Orders grid page. Clicks on 'Create New Order'. Clicks on 'Create New Customer'. Select the provided Store View, if present. Validates that Page Title is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeView" defaultValue="_defaultStore"/>
+        </arguments>
+
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
+        <waitForPageLoad stepKey="waitForIndexPageLoad"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
+        <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
+        <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateCustomer"/>
+        <waitForPageLoad stepKey="waitForPageLoaded" />
+        <!--
+            Adding wait for 5 seconds to make sure AdminOrderStoreScopeTreeSection.storeForOrder(storeView.name)
+            renders properly. Unfortunately can not add waitForElement because in some scenarios where this action group
+            is used the step with Store selection is absent. That is why click is conditional.
+        -->
+        <wait time="5" stepKey="wait" />
+        <conditionalClick selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" dependentSelector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" visible="true" stepKey="selectStoreViewIfAppears"/>
+        <waitForPageLoad stepKey="waitForCreateOrderPageLoadAfterStoreSelect"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
+    </actionGroup>
+</actionGroups>

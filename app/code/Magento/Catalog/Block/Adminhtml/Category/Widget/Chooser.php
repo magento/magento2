@@ -6,8 +6,6 @@
 
 /**
  * Category chooser for Wysiwyg CMS widget
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Widget;
 
@@ -24,9 +22,11 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
      *
      * @var string
      */
-    protected $_template = 'catalog/category/widget/tree.phtml';
+    protected $_template = 'Magento_Catalog::catalog/category/widget/tree.phtml';
 
     /**
+     * Initialise the block
+     *
      * @return void
      */
     protected function _construct()
@@ -144,7 +144,7 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
      *
      * @param \Magento\Framework\Data\Tree\Node|array $node
      * @param int $level
-     * @return string
+     * @return array
      */
     protected function _getNodeJson($node, $level = 0)
     {

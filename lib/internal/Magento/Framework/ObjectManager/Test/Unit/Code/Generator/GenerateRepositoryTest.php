@@ -3,17 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\ObjectManager\Test\Unit\Code\Generator;
 
 use Composer\Autoload\ClassLoader;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\ObjectManager\Code\Generator\Repository;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class RepositoryTest
- */
-class GenerateRepositoryTest extends \PHPUnit\Framework\TestCase
+class GenerateRepositoryTest extends TestCase
 {
     /**
      * @var Io|MockObject
@@ -23,7 +23,7 @@ class GenerateRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ioGenerator = $this->getMockBuilder(Io::class)
             ->disableOriginalConstructor()

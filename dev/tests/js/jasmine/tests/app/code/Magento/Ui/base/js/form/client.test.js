@@ -8,8 +8,7 @@ define([
     'uiRegistry',
     'Magento_Ui/js/form/client',
     'jquery',
-    'mageUtils',
-    'jquery/ui'
+    'mageUtils'
 ], function (_, registry, Constr, $, utils) {
     'use strict';
 
@@ -19,7 +18,8 @@ define([
                 name: '',
                 index: ''
             }),
-            jQueryMethods = {};
+            jQueryMethods = {},
+            originaljQueryAjax;
 
         window.FORM_KEY = 'magentoFormKey';
 
@@ -37,10 +37,15 @@ define([
             }
         });
 
+        beforeEach(function () {
+            originaljQueryAjax = $.ajax;
+        });
+
         afterEach(function () {
             _.each(jQueryMethods, function (value, key) {
                 $.fn[key] = value;
             });
+            $.ajax = originaljQueryAjax;
         });
 
         describe('"save" method', function () {
@@ -97,6 +102,7 @@ define([
             });
             it('Check call "beforeSave" method without parameters', function () {
                 $.ajax = jasmine.createSpy();
+                utils.submit = jasmine.createSpy();
                 obj.urls.beforeSave = null;
                 obj.save();
 
@@ -108,6 +114,8 @@ define([
                 $.ajax = jasmine.createSpy().and.callFake(function (req) {
                     request = req.success;
                 });
+                utils.submit = jasmine.createSpy();
+                jQueryMethods.notification = $.fn.notification;
                 $.fn.notification = jasmine.createSpy();
                 obj.urls.beforeSave = 'requestPath';
                 obj.save();

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+        <test name="AdminCreateDuplicateNameStoreViewTest">
+            <annotations>
+                <features value="Store"/>
+                <stories value="Create a store view in admin"/>
+                <title value="Admin should be able to create a Store View with the same name"/>
+                <description value="Admin should be able to create a Store View with the same name"/>
+                <group value="storeView"/>
+                <severity value="AVERAGE"/>
+                <testCaseId value="MC-36863"/>
+            </annotations>
+            <before>
+            <!--Create two store views with same name, but different codes-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+                <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createFirstStoreView">
+                    <argument name="StoreGroup" value="_defaultStoreGroup"/>
+                    <argument name="customStore" value="customStoreViewSameNameFirst"/>
+                </actionGroup>
+                <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
+                    <argument name="StoreGroup" value="_defaultStoreGroup"/>
+                    <argument name="customStore" value="customStoreViewSameNameSecond"/>
+                </actionGroup>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                    <argument name="indices" value=""/>
+                </actionGroup>
+            </before>
+            <after>
+            <!--Delete both store views-->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteFirstStoreView">
+                <argument name="customStore" value="customStoreViewSameNameFirst"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteSecondStoreView">
+                <argument name="customStore" value="customStoreViewSameNameSecond"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+            <!--Get Id of store views-->
+            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToStoreViews"/>
+            <click selector="{{AdminStoresGridSection.storeViewLinkInNthRow('2')}}" stepKey="openFirstViewPAge" />
+            <grabFromCurrentUrl stepKey="getStoreViewIdFirst" regex="~/store_id/(\d+)/~"/>
+            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToStoreViewsAgain"/>
+            <click selector="{{AdminStoresGridSection.storeViewLinkInNthRow('3')}}" stepKey="openSecondViewPAge" />
+            <grabFromCurrentUrl stepKey="getStoreViewIdSecond" regex="~/store_id/(\d+)/~"/>
+            <!--Go to catalog -> product grid, open the filter and check the listed store view-->
+            <actionGroup ref="AdminCheckStoreViewOptionsActionGroup" stepKey="checkFirstStoreView">
+                <argument name="storeViewId"  value="{$getStoreViewIdFirst}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCheckStoreViewOptionsActionGroup" stepKey="checkSecondStoreView">
+                <argument name="storeViewId"  value="{$getStoreViewIdSecond}"/>
+            </actionGroup>
+        </test>
+</tests>

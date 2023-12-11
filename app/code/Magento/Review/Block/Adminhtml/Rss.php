@@ -9,6 +9,7 @@ use Magento\Framework\App\Rss\DataProviderInterface;
 
 /**
  * Class Rss
+ *
  * @package Magento\Catalog\Block\Adminhtml\Rss
  */
 class Rss extends \Magento\Backend\Block\AbstractBlock implements DataProviderInterface
@@ -41,14 +42,13 @@ class Rss extends \Magento\Backend\Block\AbstractBlock implements DataProviderIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getRssData()
     {
-        $newUrl = $this->getUrl('rss/catalog/review', ['_secure' => true, '_nosecret' => true]);
         $title = __('Pending product review(s)');
 
-        $data = ['title' => $title, 'description' => $title, 'link' => $newUrl, 'charset' => 'UTF-8'];
+        $data = ['title' => $title, 'description' => $title, 'link' => '', 'charset' => 'UTF-8'];
 
         foreach ($this->rssModel->getProductCollection() as $item) {
             if ($item->getStoreId()) {
@@ -56,11 +56,14 @@ class Rss extends \Magento\Backend\Block\AbstractBlock implements DataProviderIn
             }
 
             $url = $this->getUrl('catalog/product/view', ['id' => $item->getId()]);
-            $reviewUrl = $this->getUrl('review/product/edit/', [
-                'id' => $item->getReviewId(),
-                '_secure' => true,
-                '_nosecret' => true
-            ]);
+            $reviewUrl = $this->getUrl(
+                'review/product/edit/',
+                [
+                    'id' => $item->getReviewId(),
+                    '_secure' => true,
+                    '_nosecret' => true
+                ]
+            );
 
             $storeName = $this->storeManager->getStore($item->getStoreId())->getName();
             $description = '<p>' . __('Product: <a href="%1" target="_blank">%2</a> <br/>', $url, $item->getName())
@@ -80,7 +83,7 @@ class Rss extends \Magento\Backend\Block\AbstractBlock implements DataProviderIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCacheLifetime()
     {
@@ -88,7 +91,7 @@ class Rss extends \Magento\Backend\Block\AbstractBlock implements DataProviderIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function isAllowed()
     {
@@ -96,7 +99,7 @@ class Rss extends \Magento\Backend\Block\AbstractBlock implements DataProviderIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getFeeds()
     {
@@ -104,7 +107,7 @@ class Rss extends \Magento\Backend\Block\AbstractBlock implements DataProviderIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function isAuthRequired()
     {

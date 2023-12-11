@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontUpdateCustomerAddressChinaTest">
+        <annotations>
+            <stories value="Update Regions list for China country"/>
+            <title value="Update customer address on storefront with china address"/>
+            <description value="Update customer address on storefront with china address and verify you can select a region"/>
+            <testCaseId value="MC-20234"/>
+            <severity value="AVERAGE"/>
+            <group value="customer"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+            <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+                <argument name="customer" value="CustomerEntityOne"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+            <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+                <argument name="messageType" value="success"/>
+                <argument name="message" value="Thank you for registering with Main Website Store."/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteNewUser">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Update customer address in storefront-->
+        <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="enterAddress">
+            <argument name="Address" value="updateCustomerChinaAddress"/>
+        </actionGroup>
+        <!--Verify customer address save success message-->
+        <see selector="{{AdminCustomerMessagesSection.successMessage}}" userInput="You saved the address." stepKey="seeAssertCustomerAddressSuccessSaveMessage"/>
+
+        <!--Verify customer default billing address-->
+        <actionGroup ref="VerifyCustomerBillingAddressWithStateActionGroup" stepKey="verifyBillingAddress">
+            <argument name="address" value="updateCustomerChinaAddress"/>
+        </actionGroup>
+
+        <!--Verify customer default shipping address-->
+        <actionGroup ref="VerifyCustomerShippingAddressWithStateActionGroup" stepKey="verifyShippingAddress">
+            <argument name="address" value="updateCustomerChinaAddress"/>
+        </actionGroup>
+    </test>
+</tests>

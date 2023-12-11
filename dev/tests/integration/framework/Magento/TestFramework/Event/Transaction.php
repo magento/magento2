@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\TestFramework\Event;
+
 /**
  * Database transaction events manager
  */
-namespace Magento\TestFramework\Event;
-
 class Transaction
 {
     /**
@@ -86,6 +86,8 @@ class Transaction
      * Start transaction and fire 'startTransaction' event
      *
      * @param \PHPUnit\Framework\TestCase $test
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _startTransaction(\PHPUnit\Framework\TestCase $test)
     {
@@ -93,8 +95,23 @@ class Transaction
             $this->_getConnection()->beginTransparentTransaction();
             $this->_isTransactionActive = true;
             try {
+                /**
+                 * Add any warning during transaction execution as a failure.
+                 */
+                set_error_handler(
+                    function ($errNo, $errStr, $errFile, $errLine) use ($test) {
+                        $errMsg = sprintf("%s: %s in %s:%s.", "Warning", $errStr, $errFile, $errLine);
+                        $test->getTestResultObject()->addError($test, new \PHPUnit\Framework\Warning($errMsg), 0);
+
+                        // Allow error to be handled by next error handler
+                        return false;
+                    },
+                    E_WARNING
+                );
                 $this->_eventManager->fireEvent('startTransaction', [$test]);
+                restore_error_handler();
             } catch (\Exception $e) {
+                $this->_isTransactionActive = false;
                 $test->getTestResultObject()->addFailure(
                     $test,
                     new \PHPUnit\Framework\AssertionFailedError((string)$e),
@@ -110,8 +127,8 @@ class Transaction
     protected function _rollbackTransaction()
     {
         if ($this->_isTransactionActive) {
-            $this->_getConnection()->rollbackTransparentTransaction();
             $this->_isTransactionActive = false;
+            $this->_getConnection()->rollbackTransparentTransaction();
             $this->_eventManager->fireEvent('rollbackTransaction');
             $this->_getConnection()->closeConnection();
         }

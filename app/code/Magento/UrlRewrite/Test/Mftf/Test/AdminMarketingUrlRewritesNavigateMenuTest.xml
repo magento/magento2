@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMarketingUrlRewritesNavigateMenuTest">
+        <annotations>
+            <features value="UrlRewrite"/>
+            <stories value="Menu Navigation"/>
+            <title value="Admin marketing url rewrites navigate menu test"/>
+            <description value="Admin should be able to navigate to Marketing > URL Rewrites"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14202"/>
+            <group value="menu"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingURLRewritesPage">
+            <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuMarketingSEOAndSearchURLRewrites.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
+            <argument name="title" value="{{AdminMenuMarketingSEOAndSearchURLRewrites.pageTitle}}"/>
+        </actionGroup>
+    </test>
+</tests>

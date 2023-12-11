@@ -1,17 +1,20 @@
 <?php
 /**
- * Application area list
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
 
-class AreaList
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
+/**
+ * Lists router area codes & processes resolves FrontEndNames to area codes
+ *
+ * @api
+ */
+class AreaList implements ResetAfterRequestInterface
 {
     /**
-     * Area configuration list
-     *
      * @var array
      */
     protected $_areas = [];
@@ -63,7 +66,6 @@ class AreaList
      *
      * @param string $frontName
      * @return null|string
-     * @api
      */
     public function getCodeByFrontName($frontName)
     {
@@ -72,7 +74,7 @@ class AreaList
                 $resolver = $this->_resolverFactory->create($areaInfo['frontNameResolver']);
                 $areaInfo['frontName'] = $resolver->getFrontName(true);
             }
-            if ($areaInfo['frontName'] == $frontName) {
+            if (isset($areaInfo['frontName']) && $areaInfo['frontName'] === $frontName) {
                 return $areaCode;
             }
         }
@@ -84,18 +86,16 @@ class AreaList
      *
      * @param string $areaCode
      * @return string
-     * @api
      */
     public function getFrontName($areaCode)
     {
-        return isset($this->_areas[$areaCode]['frontName']) ? $this->_areas[$areaCode]['frontName'] : null;
+        return $this->_areas[$areaCode]['frontName'] ?? null;
     }
 
     /**
      * Retrieve area codes
      *
      * @return string[]
-     * @api
      */
     public function getCodes()
     {
@@ -107,11 +107,10 @@ class AreaList
      *
      * @param string $areaCode
      * @return string
-     * @api
      */
     public function getDefaultRouter($areaCode)
     {
-        return isset($this->_areas[$areaCode]['router']) ? $this->_areas[$areaCode]['router'] : null;
+        return $this->_areas[$areaCode]['router'] ?? null;
     }
 
     /**
@@ -129,5 +128,13 @@ class AreaList
             );
         }
         return $this->_areaInstances[$code];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_areaInstances = [];
     }
 }

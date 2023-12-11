@@ -11,6 +11,9 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * @magentoDbIsolation disabled
+ */
 class LowestPriceOptionProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -23,7 +26,7 @@ class LowestPriceOptionProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $productRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);

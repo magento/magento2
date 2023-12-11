@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSwitchAllIndexerToActionModeActionGroup">
+        <arguments>
+            <argument name="action" type="string" defaultValue="Update by Schedule"/>
+            <!-- <argument name="count" type="string" defaultValue="10"/> -->
+        </arguments>
+        <amOnPage url="{{AdminIndexManagementPage.url}}" stepKey="onIndexManagement"/>
+        <waitForPageLoad stepKey="waitForManagementPage"/>
+        <selectOption userInput="selectAll" selector="{{AdminIndexManagementSection.selectMassAction}}" stepKey="checkIndexer"/>
+        <selectOption userInput="{{action}}" selector="{{AdminIndexManagementSection.massActionSelect}}" stepKey="selectAction"/>
+        <grabValueFrom selector="{{AdminIndexManagementSection.massIndexSelectionCount}}" stepKey="selectCount"/>
+        <click selector="{{AdminIndexManagementSection.massActionSubmit}}" stepKey="clickSubmit"/>
+        <waitForPageLoad stepKey="waitForSubmit"/>
+        <see userInput="{$selectCount} indexer(s) have been updated to &quot;{{action}}&quot; mode. 0 skipped because there was nothing to change." stepKey="seeMessage"/>
+    </actionGroup>
+</actionGroups>

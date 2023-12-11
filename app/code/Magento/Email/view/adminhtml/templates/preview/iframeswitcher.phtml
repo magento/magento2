@@ -1,0 +1,43 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Backend\Block\Page $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+<div id="preview" class="cms-revision-preview">
+    <iframe name="preview_iframe"
+            id="preview_iframe"
+            frameborder="0"
+            title="<?= $block->escapeHtmlAttr(__('Preview')) ?>"
+            width="100%"
+            sandbox="allow-same-origin allow-pointer-lock"
+    ></iframe>
+    <form id="preview_form"
+          action="<?= $block->escapeUrl($block->getUrl('*/*/popup')) ?>"
+          method="post"
+          target="preview_iframe"
+    >
+    <input type="hidden" name="form_key" value="<?= /* @noEscape */ $block->getFormKey() ?>" />
+    <?php foreach ($block->getPreviewFormViewModel()->getFormFields() as $name => $value): ?>
+        <input type="hidden" name="<?= $block->escapeHtmlAttr($name) ?>" value="<?= $block->escapeHtmlAttr($value) ?>"/>
+    <?php endforeach; ?>
+    </form>
+</div>
+<?php $scriptString = <<<script
+require([
+    'jquery'
+], function($) {
+    $(document).ready(function() {
+        $('#preview_form').trigger('submit');
+    });
+
+    $('#preview_iframe').on('load', function() {
+        $(this).height($(this).contents().height());
+    });
+});
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

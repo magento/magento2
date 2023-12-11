@@ -12,7 +12,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::class
@@ -53,6 +53,20 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test if getAllIds method return results after using setInAllAttributeSetsFilter method
+     *
+     * @covers \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::setInAllAttributeSetsFilter()
+     * @covers \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::getAllIds()
+     */
+    public function testSetInAllAttributeSetsFilterWithGetAllIds()
+    {
+        $sets = [1];
+        $this->_model->setInAllAttributeSetsFilter($sets);
+        $attributeIds = $this->_model->getAllIds();
+        $this->assertGreaterThan(0, count($attributeIds));
+    }
+
+    /**
      * Returns array of group ids, present in collection attributes
      *
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection
@@ -78,5 +92,20 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($select->getPart(\Magento\Framework\DB\Select::GROUP));
         $this->_model->addAttributeGrouping();
         $this->assertEquals(['main_table.attribute_id'], $select->getPart(\Magento\Framework\DB\Select::GROUP));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $reflection = new \ReflectionObject($this);
+        foreach ($reflection->getProperties() as $property) {
+            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
+                $property->setAccessible(true);
+                $property->setValue($this, null);
+            }
+        }
     }
 }

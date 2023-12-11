@@ -61,7 +61,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     private $dataObjectHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->rateRepository = $this->objectManager->get(\Magento\Tax\Api\TaxRateRepositoryInterface::class);
@@ -178,25 +178,26 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertNotNull($taxRateServiceData->getId());
 
         $titles = $taxRateServiceData->getTitles();
-        $this->assertEquals(1, count($titles));
+        $this->assertCount(1, $titles);
         $this->assertEquals($store->getId(), $titles[0]->getStoreId());
         $this->assertEquals($taxData['titles'][0]['value'], $titles[0]->getValue());
 
         $taxRateServiceData = $this->rateRepository->get($taxRateServiceData->getId());
 
         $titles = $taxRateServiceData->getTitles();
-        $this->assertEquals(1, count($titles));
+        $this->assertCount(1, $titles);
         $this->assertEquals($store->getId(), $titles[0]->getStoreId());
         $this->assertEquals($taxData['titles'][0]['value'], $titles[0]->getValue());
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with taxRateId = 9999
      * @magentoDbIsolation enabled
      */
     public function testSaveThrowsExceptionIfTargetTaxRateDoesNotExist()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with taxRateId = 9999');
+
         $invalidTaxData = [
             'id' => 9999,
             'tax_country_id' => 'US',
@@ -217,12 +218,13 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
-     * @expectedExceptionMessage Code already exists.
      * @magentoDbIsolation enabled
      */
     public function testSaveThrowsExceptionIfTaxRateWithCorrespondingCodeAlreadyExists()
     {
+        $this->expectException(\Magento\Framework\Exception\AlreadyExistsException::class);
+        $this->expectExceptionMessage('Code already exists.');
+
         $invalidTaxData = [
             'tax_country_id' => 'US',
             'tax_region_id' => '8',
@@ -258,11 +260,12 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
      * @throws \Magento\Framework\Exception\InputException
      *
      * @dataProvider createDataProvider
-     * @expectedException \Magento\Framework\Exception\InputException
      * @magentoDbIsolation enabled
      */
     public function testSaveThrowsExceptionIfGivenDataIsInvalid($dataArray, $errorMessages)
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+
         $taxRate = $this->taxRateFactory->create();
         $this->dataObjectHelper->populateWithArray($taxRate, $dataArray, \Magento\Tax\Api\Data\TaxRateInterface::class);
         try {
@@ -289,9 +292,9 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                     'zip_to' => 'to',
                 ],
                 'error' => [
-                    'country_id is a required field.',
-                    'percentage_rate is a required field.',
-                    'code is a required field.',
+                    '"country_id" is required. Enter and try again.',
+                    '"percentage_rate" is required. Enter and try again.',
+                    '"code" is required. Enter and try again.',
                     'Invalid value of "from" provided for the zip_from field.',
                     'Invalid value of "to" provided for the zip_to field.',
                 ],
@@ -303,9 +306,9 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                     'zip_to' => '',
                 ],
                 'error' => [
-                    'country_id is a required field.',
-                    'percentage_rate is a required field.',
-                    'code is a required field.',
+                    '"country_id" is required. Enter and try again.',
+                    '"percentage_rate" is required. Enter and try again.',
+                    '"code" is required. Enter and try again.',
                     'Invalid value of "" provided for the zip_from field.',
                     'Invalid value of "" provided for the zip_to field.',
                 ],
@@ -313,10 +316,10 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
             'empty' => [
                 [],
                 'error' => [
-                    'country_id is a required field.',
-                    'percentage_rate is a required field.',
-                    'code is a required field.',
-                    'postcode is a required field.',
+                    '"country_id" is required. Enter and try again.',
+                    '"percentage_rate" is required. Enter and try again.',
+                    '"code" is required. Enter and try again.',
+                    '"postcode" is required. Enter and try again.',
                 ],
             ],
             'zipRangeAndPostcode' => [
@@ -327,9 +330,9 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                     'zip_to' => 78780,
                 ],
                 'error' => [
-                    'country_id is a required field.',
-                    'percentage_rate is a required field.',
-                    'code is a required field.',
+                    '"country_id" is required. Enter and try again.',
+                    '"percentage_rate" is required. Enter and try again.',
+                    '"code" is required. Enter and try again.',
                 ],
             ],
             'higherRange' => [
@@ -339,9 +342,9 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                     'zip_to' => 78780,
                 ],
                 'error' => [
-                    'country_id is a required field.',
-                    'percentage_rate is a required field.',
-                    'code is a required field.',
+                    '"country_id" is required. Enter and try again.',
+                    '"percentage_rate" is required. Enter and try again.',
+                    '"code" is required. Enter and try again.',
                     'Range To should be equal or greater than Range From.',
                 ],
             ],
@@ -349,37 +352,37 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                 ['tax_country_id' => 'XX'],
                 'error' => [
                     'Invalid value of "XX" provided for the country_id field.',
-                    'percentage_rate is a required field.',
-                    'code is a required field.',
-                    'postcode is a required field.',
+                    '"percentage_rate" is required. Enter and try again.',
+                    '"code" is required. Enter and try again.',
+                    '"postcode" is required. Enter and try again.',
                 ],
             ],
             'invalidCountry2' => [
                 ['tax_country_id' => ' '],
                 'error' => [
-                    'country_id is a required field.',
-                    'percentage_rate is a required field.',
-                    'code is a required field.',
-                    'postcode is a required field.',
+                    '"country_id" is required. Enter and try again.',
+                    '"percentage_rate" is required. Enter and try again.',
+                    '"code" is required. Enter and try again.',
+                    '"postcode" is required. Enter and try again.',
                 ],
             ],
             'invalidRegion1' => [
                 ['tax_region_id' => '-'],
                 'error' => [
-                    'country_id is a required field.',
+                    '"country_id" is required. Enter and try again.',
                     'Invalid value of "-" provided for the region_id field.',
-                    'percentage_rate is a required field.',
-                    'code is a required field.',
-                    'postcode is a required field.',
+                    '"percentage_rate" is required. Enter and try again.',
+                    '"code" is required. Enter and try again.',
+                    '"postcode" is required. Enter and try again.',
                 ],
             ],
             'spaceRegion' => [
                 ['tax_region_id' => ' '],
                 'error' => [
-                    'country_id is a required field.',
-                    'percentage_rate is a required field.',
-                    'code is a required field.',
-                    'postcode is a required field.',
+                    '"country_id" is required. Enter and try again.',
+                    '"percentage_rate" is required. Enter and try again.',
+                    '"code" is required. Enter and try again.',
+                    '"postcode" is required. Enter and try again.',
                 ],
             ],
             'emptyPercentageRate' => [
@@ -393,7 +396,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                     'zip_to' => 78780,
                 ],
                 'error' => [
-                    'percentage_rate is a required field.',
+                    '"percentage_rate" is required. Enter and try again.',
                 ],
             ]
 
@@ -429,11 +432,12 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with taxRateId = 9999
      */
     public function testGetThrowsExceptionIfTargetTaxRateDoesNotExist()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with taxRateId = 9999');
+
         $this->rateRepository->get(9999);
     }
 
@@ -469,11 +473,12 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage postcode
      */
     public function testSaveThrowsExceptionIfTargetTaxRateExistsButProvidedDataIsInvalid()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('postcode');
+
         $taxRate = $this->taxRateFactory->create();
         $taxRate->setTaxCountryId('US')
             ->setTaxRegionId(42)
@@ -557,7 +562,6 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
      * @param \Magento\Framework\Api\Filter[] $filters
      * @param \Magento\Framework\Api\Filter[] $filterGroup
      * @param $expectedRateCodes
@@ -629,7 +633,17 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                 ],
                 [],
                 ['US - 42 - 7.5', 'US - 12 - 7.5'],
-            ]
+            ],
+            'like_region_name' => [
+                [
+                    $filterBuilder->setField(Rate::KEY_REGION_NAME)
+                        ->setValue('%NM%')
+                        ->setConditionType('like')
+                        ->create(),
+                ],
+                null,
+                ['US - 42 - 7.5', 'US - 42 - 22'],
+            ],
         ];
     }
 }

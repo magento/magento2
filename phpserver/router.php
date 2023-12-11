@@ -103,6 +103,7 @@ if (php_sapi_name() === 'cli-server') {
         } else {
             $debug('file does not exist');
             if (strpos($route, 'static/') === 0) {
+                $route = preg_replace('#static/#', '', $route, 1);
                 $_GET['resource'] = $route;
                 $debug("static: $route");
                 include($magentoPackagePubDir.'/static.php');

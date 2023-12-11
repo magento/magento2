@@ -6,10 +6,14 @@
 
 namespace Magento\Tax\Plugin\Checkout\CustomerData;
 
+/**
+ * Process quote items price, considering tax configuration.
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class Cart
 {
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var \Magento\Checkout\Model\Session
      */
     protected $checkoutSession;
 
@@ -68,6 +72,16 @@ class Cart
                     $this->itemPriceRenderer->setItem($item);
                     $this->itemPriceRenderer->setTemplate('checkout/cart/item/price/sidebar.phtml');
                     $result['items'][$key]['product_price']=$this->itemPriceRenderer->toHtml();
+                    if ($this->itemPriceRenderer->displayPriceExclTax()) {
+                        $result['items'][$key]['product_price_value'] = $item->getCalculationPrice();
+                    } elseif ($this->itemPriceRenderer->displayPriceInclTax()) {
+                        $result['items'][$key]['product_price_value'] = $item->getPriceInclTax();
+                    } elseif ($this->itemPriceRenderer->displayBothPrices()) {
+                        //unset product price value in case price already has been set as scalar value.
+                        unset($result['items'][$key]['product_price_value']);
+                        $result['items'][$key]['product_price_value']['incl_tax'] = $item->getPriceInclTax();
+                        $result['items'][$key]['product_price_value']['excl_tax'] = $item->getCalculationPrice();
+                    }
                 }
             }
         }

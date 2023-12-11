@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCustomerWithCustomGroupTest">
+        <annotations>
+            <stories value="Create customer"/>
+            <title value="Create customer, with custom group"/>
+            <description value="Login as admin and create customer with custom group"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-5313"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value="customer_grid"/>
+            </actionGroup>
+            <createData entity="CustomCustomerGroup" stepKey="customerGroup" />
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{CustomerEntityOne.email}}" />
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+            <deleteData createDataKey="customerGroup" stepKey="deleteCustomerGroup"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Open New Customer Page -->
+        <actionGroup ref="AdminNavigateNewCustomerActionGroup" stepKey="navigateToNewCustomerPage"/>
+        <selectOption selector="{{AdminCustomerAccountInformationSection.group}}" userInput="$$customerGroup.code$$" stepKey="fillCustomerGroup"/>
+        <fillField userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminCustomerAccountInformationSection.firstName}}" stepKey="fillFirstName"/>
+        <fillField userInput="{{CustomerEntityOne.lastname}}" selector="{{AdminCustomerAccountInformationSection.lastName}}" stepKey="fillLastName"/>
+        <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerAccountInformationSection.email}}" stepKey="fillEmail"/>
+        <click selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
+        <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="assertSuccessMessage"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value="compiled_config"/>
+        </actionGroup>
+        <reloadPage stepKey="reloadPage"/>
+
+        <!--Verify Customer in grid -->
+        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterTheCustomerByEmail1">
+            <argument name="email" value="{{CustomerEntityOne.email}}"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForCustomerPageToLoad"/>
+        <see selector="{{AdminCustomerGridSection.customerGrid}}" userInput="$$customerGroup.code$$" stepKey="assertGroup"/>
+        <see userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertFirstName"/>
+        <see userInput="{{CustomerEntityOne.lastname}}" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertLastName"/>
+        <see userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertEmail"/>
+
+        <!--Assert Customer Form -->
+        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickOnEditButton1"/>
+        <click selector="{{AdminCustomerAccountInformationSection.accountInformationButton}}" stepKey="clickOnAccountInformation"/>
+        <waitForPageLoad stepKey="waitForCustomerInformationPageToLoad"/>
+        <see selector="{{AdminCustomerAccountInformationSection.groupIdValue}}" userInput="$$customerGroup.code$$" stepKey="seeCustomerGroup1"/>
+        <seeInField selector="{{AdminCustomerAccountInformationSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="seeCustomerFirstName"/>
+        <seeInField selector="{{AdminCustomerAccountInformationSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="seeCustomerLastName"/>
+        <seeInField selector="{{AdminCustomerAccountInformationSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="seeCustomerEmail"/>
+    </test>
+</tests>

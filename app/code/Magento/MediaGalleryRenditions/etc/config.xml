@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <system>
+            <media_gallery_renditions>
+                <enabled>1</enabled>
+                <width>1000</width>
+                <height>1000</height>
+            </media_gallery_renditions>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <renditions_folder>.renditions</renditions_folder>
+                </allowed_resources>
+            </media_storage_configuration>
+        </system>
+    </default>
+</config>

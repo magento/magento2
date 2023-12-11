@@ -6,11 +6,17 @@
 
 namespace Magento\Catalog\Model\View\Asset;
 
+use Magento\Catalog\Helper\Image as ImageHelper;
+use Magento\Catalog\Model\Config\CatalogMediaConfig;
+use Magento\Catalog\Model\Product\Image\ConvertImageMiscParamsToReadableFormat;
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Asset\ContextInterface;
 use Magento\Framework\View\Asset\LocalInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * A locally available image file asset that can be referred with a file path
@@ -19,6 +25,13 @@ use Magento\Framework\View\Asset\LocalInterface;
  */
 class Image implements LocalInterface
 {
+    /**
+     * Image type of image (thumbnail,small_image,image,swatch_image,swatch_thumb)
+     *
+     * @var string
+     */
+    private $sourceContentType;
+
     /**
      * @var string
      */
@@ -52,6 +65,26 @@ class Image implements LocalInterface
     private $encryptor;
 
     /**
+     * @var ImageHelper
+     */
+    private $imageHelper;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var string
+     */
+    private $mediaFormatUrl;
+
+    /**
+     * @var ConvertImageMiscParamsToReadableFormat
+     */
+    private $convertImageMiscParamsToReadableFormat;
+
+    /**
      * Image constructor.
      *
      * @param ConfigInterface $mediaConfig
@@ -59,31 +92,106 @@ class Image implements LocalInterface
      * @param EncryptorInterface $encryptor
      * @param string $filePath
      * @param array $miscParams
+     * @param ImageHelper $imageHelper
+     * @param CatalogMediaConfig $catalogMediaConfig
+     * @param StoreManagerInterface $storeManager
+     * @param ConvertImageMiscParamsToReadableFormat $convertImageMiscParamsToReadableFormat
      */
     public function __construct(
         ConfigInterface $mediaConfig,
         ContextInterface $context,
         EncryptorInterface $encryptor,
         $filePath,
-        array $miscParams = []
+        array $miscParams,
+        ImageHelper $imageHelper = null,
+        CatalogMediaConfig $catalogMediaConfig = null,
+        StoreManagerInterface $storeManager = null,
+        ?ConvertImageMiscParamsToReadableFormat $convertImageMiscParamsToReadableFormat = null
     ) {
+        if (isset($miscParams['image_type'])) {
+            $this->sourceContentType = $miscParams['image_type'];
+            unset($miscParams['image_type']);
+        } else {
+            $this->sourceContentType = $this->contentType;
+        }
         $this->mediaConfig = $mediaConfig;
         $this->context = $context;
         $this->filePath = $filePath;
         $this->miscParams = $miscParams;
         $this->encryptor = $encryptor;
+        $this->imageHelper = $imageHelper ?: ObjectManager::getInstance()->get(ImageHelper::class);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+
+        $catalogMediaConfig =  $catalogMediaConfig ?: ObjectManager::getInstance()->get(CatalogMediaConfig::class);
+        $this->mediaFormatUrl = $catalogMediaConfig->getMediaUrlFormat();
+        $this->convertImageMiscParamsToReadableFormat = $convertImageMiscParamsToReadableFormat ?:
+            ObjectManager::getInstance()->get(ConvertImageMiscParamsToReadableFormat::class);
     }
 
     /**
-     * {@inheritdoc}
+     * Get catalog image URL.
+     *
+     * @return string
+     * @throws LocalizedException
      */
     public function getUrl()
     {
-        return $this->context->getBaseUrl() . $this->getRelativePath(DIRECTORY_SEPARATOR);
+        switch ($this->mediaFormatUrl) {
+            case CatalogMediaConfig::IMAGE_OPTIMIZATION_PARAMETERS:
+                return $this->getUrlWithTransformationParameters();
+            case CatalogMediaConfig::HASH:
+                return $this->context->getBaseUrl() . DIRECTORY_SEPARATOR . $this->getImageInfo();
+            default:
+                throw new LocalizedException(
+                    __("The specified Catalog media URL format '$this->mediaFormatUrl' is not supported.")
+                );
+        }
     }
 
     /**
-     * {@inheritdoc}
+     * Get image URL with transformation parameters
+     *
+     * @return string
+     */
+    private function getUrlWithTransformationParameters()
+    {
+        return $this->getOriginalImageUrl() . '?' . http_build_query($this->getImageTransformationParameters());
+    }
+
+    /**
+     * The list of parameters to be used during image transformations (e.g. resizing or applying watermarks).
+     *
+     * This method can be used as an extension point.
+     *
+     * @return string[]
+     */
+    public function getImageTransformationParameters()
+    {
+        return [
+            'width' => $this->miscParams['image_width'],
+            'height' => $this->miscParams['image_height'],
+            'store' => $this->storeManager->getStore()->getCode(),
+            'image-type' => $this->sourceContentType
+        ];
+    }
+
+    /**
+     * Get URL to the original version of the product image.
+     *
+     * @return string
+     */
+    private function getOriginalImageUrl()
+    {
+        $originalImageFile = $this->getSourceFile();
+        if (!$originalImageFile) {
+            return $this->imageHelper->getDefaultPlaceholderUrl();
+        } else {
+            return $this->context->getBaseUrl() . $this->getFilePath();
+        }
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getContentType()
     {
@@ -91,35 +199,20 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPath()
     {
-        return $this->getAbsolutePath($this->context->getPath());
+        return $this->context->getPath() . DIRECTORY_SEPARATOR . $this->getImageInfo();
     }
 
     /**
-     * Subroutine for building path
-     *
-     * @param string $path
-     * @param string $item
-     * @return string
-     */
-    private function join($path, $item)
-    {
-        return trim(
-            $path . ($item ? DIRECTORY_SEPARATOR . ltrim($item, DIRECTORY_SEPARATOR) : ''),
-            DIRECTORY_SEPARATOR
-        );
-    }
-
-    /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSourceFile()
     {
-        return $this->mediaConfig->getBaseMediaPath()
-            . DIRECTORY_SEPARATOR . ltrim($this->filePath, DIRECTORY_SEPARATOR);
+        $path = $this->getFilePath() ? ltrim($this->getFilePath(), DIRECTORY_SEPARATOR) : '';
+        return $this->mediaConfig->getBaseMediaPath() . DIRECTORY_SEPARATOR . $path;
     }
 
     /**
@@ -129,11 +222,11 @@ class Image implements LocalInterface
      */
     public function getSourceContentType()
     {
-        return $this->contentType;
+        return $this->sourceContentType;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getContent()
     {
@@ -141,7 +234,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFilePath()
     {
@@ -149,7 +242,8 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @return ContextInterface
      */
     public function getContext()
@@ -158,7 +252,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getModule()
     {
@@ -172,35 +266,33 @@ class Image implements LocalInterface
      */
     private function getMiscPath()
     {
-        return $this->encryptor->hash(implode('_', $this->miscParams), Encryptor::HASH_VERSION_MD5);
+        return $this->encryptor->hash(
+            implode('_', $this->convertToReadableFormat($this->miscParams)),
+            Encryptor::HASH_VERSION_MD5
+        );
     }
 
     /**
-     * Generate absolute path
+     * Generate path from image info
      *
-     * @param string $result
      * @return string
      */
-    private function getAbsolutePath($result)
+    private function getImageInfo()
     {
-        $prefix = (substr($result, 0, 1) == DIRECTORY_SEPARATOR) ? DIRECTORY_SEPARATOR : '';
-        $result = $this->join($result, $this->getModule());
-        $result = $this->join($result, $this->getMiscPath());
-        $result = $this->join($result, $this->getFilePath());
-        return $prefix . $result;
+        $path = $this->getModule()
+            . DIRECTORY_SEPARATOR . $this->getMiscPath()
+            . DIRECTORY_SEPARATOR . $this->getFilePath();
+        return preg_replace('|\Q'. DIRECTORY_SEPARATOR . '\E+|', DIRECTORY_SEPARATOR, $path);
     }
 
     /**
-     * Generate relative path
+     * Converting bool into a string representation
      *
-     * @param string $result
-     * @return string
+     * @param array $miscParams
+     * @return array
      */
-    private function getRelativePath($result)
+    private function convertToReadableFormat(array $miscParams)
     {
-        $result = $this->join($result, $this->getModule());
-        $result = $this->join($result, $this->getMiscPath());
-        $result = $this->join($result, $this->getFilePath());
-        return DIRECTORY_SEPARATOR . $result;
+        return $this->convertImageMiscParamsToReadableFormat->convertImageMiscParamsToReadableFormat($miscParams);
     }
 }

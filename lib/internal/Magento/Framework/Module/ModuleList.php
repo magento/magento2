@@ -59,7 +59,7 @@ class ModuleList implements ModuleListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * Note that this triggers loading definitions of all existing modules in the system.
      * Use this method only when you actually need modules' declared meta-information.
@@ -84,17 +84,16 @@ class ModuleList implements ModuleListInterface
     }
 
     /**
-     * {@inheritdoc}
-     * @see has()
+     * @inheritdoc
      */
     public function getOne($name)
     {
         $enabled = $this->getAll();
-        return isset($enabled[$name]) ? $enabled[$name] : null;
+        return $enabled[$name] ?? null;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getNames()
     {
@@ -107,7 +106,7 @@ class ModuleList implements ModuleListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function has($name)
     {
@@ -136,12 +135,28 @@ class ModuleList implements ModuleListInterface
      * Loads configuration data only
      *
      * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
     private function loadConfigData()
     {
-        $this->config->resetData();
-        if (null === $this->configData && null !== $this->config->get(ConfigOptionsListConstants::KEY_MODULES)) {
-            $this->configData = $this->config->get(ConfigOptionsListConstants::KEY_MODULES);
+        if (null === $this->configData) {
+            $config = $this->config->get(ConfigOptionsListConstants::KEY_MODULES);
+            if (null !== $config) {
+                $this->configData = $config;
+            }
         }
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     *
+     * @return array|null
+     */
+    public function __debugInfo(): ?array
+    {
+        return [];
     }
 }

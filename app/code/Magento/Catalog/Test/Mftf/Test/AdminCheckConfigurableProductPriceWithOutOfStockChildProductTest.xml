@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckConfigurableProductPriceWithOutOfStockChildProductTest" extends="AdminCheckConfigurableProductPriceWithDisabledChildProductTest">
+        <annotations>
+            <stories value="Configurable Product"/>
+            <title value="Check Price for Configurable Product when Child is Out of Stock"/>
+            <description value="Login as admin and check the configurable product price when one child product is out of stock "/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-13750"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToProductQuantity" after="waitForProductPageToLoad"/>
+        <remove keyForRemoval="disableProduct"/>
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="selectOutOfStock" after="scrollToProductQuantity">
+           <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup> 
+     
+    </test>
+</tests>

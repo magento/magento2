@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Block\System\Design;
 
+/**
+ * Edit store design schedule block.
+ */
 class Edit extends \Magento\Backend\Block\Widget
 {
     /**
@@ -20,6 +23,8 @@ class Edit extends \Magento\Backend\Block\Widget
     protected $_coreRegistry = null;
 
     /**
+     * @inheritdoc
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
@@ -34,6 +39,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * @inheritdoc
+     *
      * @return void
      */
     protected function _construct()
@@ -44,7 +51,7 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareLayout()
     {
@@ -66,7 +73,7 @@ class Edit extends \Magento\Backend\Block\Widget
                     'label' => __('Delete'),
                     'onclick' => 'deleteConfirm(\'' . __(
                         'Are you sure?'
-                    ) . '\', \'' . $this->getDeleteUrl() . '\')',
+                    ) . '\', \'' . $this->getDeleteUrl() . '\', {data: {}})',
                     'class' => 'delete'
                 ]
             );
@@ -88,6 +95,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return design change Id.
+     *
      * @return string
      */
     public function getDesignChangeId()
@@ -96,6 +105,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return delete url.
+     *
      * @return string
      */
     public function getDeleteUrl()
@@ -104,6 +115,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return save url for edit form.
+     *
      * @return string
      */
     public function getSaveUrl()
@@ -112,6 +125,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return validation url for edit form.
+     *
      * @return string
      */
     public function getValidationUrl()
@@ -120,6 +135,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return page header.
+     *
      * @return string
      */
     public function getHeader()

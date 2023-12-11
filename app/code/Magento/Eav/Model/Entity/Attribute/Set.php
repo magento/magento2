@@ -177,18 +177,18 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
         $modelGroupArray = [];
         $modelAttributeArray = [];
         $attributeIds = [];
-        if ($data['attributes']) {
+        if (isset($data['attributes'])) {
             $ids = [];
             foreach ($data['attributes'] as $attribute) {
                 $ids[] = $attribute[0];
             }
             $attributeIds = $this->_resourceAttribute->getValidAttributeIds($ids);
         }
-        if ($data['groups']) {
+        if (isset($data['groups'])) {
             foreach ($data['groups'] as $group) {
                 $modelGroup = $this->initGroupModel($group);
 
-                if ($data['attributes']) {
+                if (isset($data['attributes'])) {
                     foreach ($data['attributes'] as $attribute) {
                         if ($attribute[1] == $group[0] && in_array($attribute[0], $attributeIds)) {
                             $modelAttribute = $this->_attributeFactory->create();
@@ -214,13 +214,18 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
             $this->setGroups($modelGroupArray);
         }
 
-        if ($data['not_attributes']) {
+        if (isset($data['not_attributes'])) {
             $modelAttributeArray = [];
             $data['not_attributes'] = array_filter($data['not_attributes']);
             foreach ($data['not_attributes'] as $entityAttributeId) {
                 $entityAttribute = $this->_resourceAttribute->getEntityAttribute($entityAttributeId);
                 if (!$entityAttribute) {
-                    throw new LocalizedException(__('Entity attribute with id "%1" not found', $entityAttributeId));
+                    throw new LocalizedException(
+                        __(
+                            'The entity attribute with the "%1" ID isn\'t found. Reset the attribute and try again.',
+                            $entityAttributeId
+                        )
+                    );
                 }
                 $modelAttribute = $this->_eavConfig->getAttribute(
                     $this->getEntityTypeId(),
@@ -232,7 +237,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
             $this->setRemoveAttributes($modelAttributeArray);
         }
 
-        if ($data['removeGroups']) {
+        if (isset($data['removeGroups'])) {
             $modelGroupArray = [];
             foreach ($data['removeGroups'] as $groupId) {
                 $modelGroup = $this->_attrGroupFactory->create();
@@ -282,11 +287,13 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     {
         $attributeSetName = $this->getAttributeSetName();
         if ($attributeSetName == '') {
-            throw new LocalizedException(__('Attribute set name is empty.'));
+            throw new LocalizedException(__('The attribute set name is empty. Enter the name and try again.'));
         }
 
         if (!$this->_getResource()->validate($this, $attributeSetName)) {
-            throw new LocalizedException(__('An attribute set named "%1" already exists.', $attributeSetName));
+            throw new LocalizedException(
+                __('A "%1" attribute set name already exists. Create a new name and try again.', $attributeSetName)
+            );
         }
 
         return true;
@@ -368,7 +375,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get resource instance
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @deprecated 100.2.0 because resource models should be used directly
+     * @deprecated 101.0.0 because resource models should be used directly
      */
     protected function _getResource()
     {

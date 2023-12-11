@@ -3,22 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\Framework\Filesystem\Test\Unit\File;
 
 use Magento\Framework\Filesystem\Filter\ExcludeFilter;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ExcludeFilterTest
- */
-class ExcludeFilterTest extends \PHPUnit\Framework\TestCase
+class ExcludeFilterTest extends TestCase
 {
     /**
      * @var \Iterator
      */
     protected $iterator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->iterator = $this->getFilesIterator();
     }
@@ -32,13 +32,17 @@ class ExcludeFilterTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
+        $result = [];
         foreach ($iterator as $i) {
             $result[] = $i;
         }
 
-        $this->assertTrue(!in_array(BP . '/var/session/', $result), 'Filtered path should not be in array');
+        $this->assertNotContains(BP . '/var/session/', $result, 'Filtered path should not be in array');
     }
 
+    /**
+     * @return \Generator
+     */
     private function getFilesIterator()
     {
         $files = [
@@ -49,8 +53,8 @@ class ExcludeFilterTest extends \PHPUnit\Framework\TestCase
 
         foreach ($files as $file) {
             $item = $this->getMockBuilder(
-                \SplFileInfoClass::class
-            )->setMethods(['__toString', 'getFilename'])->getMock();
+                \SplFileInfo::class
+            )->disableOriginalConstructor()->setMethods(['__toString', 'getFilename'])->getMock();
             $item->expects($this->any())->method('__toString')->willReturn($file);
             $item->expects($this->any())->method('getFilename')->willReturn('notDots');
             yield $item;

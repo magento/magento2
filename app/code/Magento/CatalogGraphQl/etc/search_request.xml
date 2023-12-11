@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:framework:Search/etc/search_request.xsd">
+    <!-- Request schema for product search including aggregation -->
+    <request query="graphql_product_search_with_aggregation" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="graphql_product_search_with_aggregation" boost="1">
+                <queryReference clause="should" ref="search" />
+                <queryReference clause="should" ref="partial_search" />
+                <queryReference clause="must" ref="category"/>
+                <queryReference clause="must" ref="price"/>
+                <queryReference clause="must" ref="visibility"/>
+            </query>
+            <query xsi:type="matchQuery" value="$search_term$" name="search">
+                <match field="sku"/>
+                <match field="*"/>
+            </query>
+            <query xsi:type="matchQuery" value="$search_term$" name="partial_search">
+                <match field="*"/>
+                <match field="name" matchCondition="match_phrase_prefix"/>
+                <match field="sku" matchCondition="match_phrase_prefix"/>
+            </query>
+            <query name="category" xsi:type="filteredQuery">
+                <filterReference clause="must" ref="category_filter"/>
+            </query>
+            <query name="price" xsi:type="filteredQuery">
+                <filterReference clause="must" ref="price_filter"/>
+            </query>
+            <query name="visibility" xsi:type="filteredQuery">
+                <filterReference clause="must" ref="visibility_filter"/>
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="termFilter" name="category_filter" field="category_ids" value="$category_id$"/>
+            <filter xsi:type="rangeFilter" name="price_filter" field="price" from="$price.from$" to="$price.to$"/>
+            <filter xsi:type="termFilter" name="visibility_filter" field="visibility" value="$visibility$"/>
+        </filters>
+        <aggregations>
+            <bucket name="price_bucket" field="price" xsi:type="dynamicBucket" method="$price_dynamic_algorithm$">
+                <metrics>
+                    <metric type="count"/>
+                </metrics>
+            </bucket>
+            <bucket name="category_bucket" field="category_ids" xsi:type="termBucket">
+                <metrics>
+                    <metric type="count"/>
+                </metrics>
+                <parameters>
+                    <parameter name="include" value="$category_ids_to_aggregate$"/>
+                </parameters>
+            </bucket>
+        </aggregations>
+        <from>0</from>
+        <size>10000</size>
+    </request>
+    <!-- Request schema for product search excluding aggregation -->
+    <request query="graphql_product_search" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="graphql_product_search" boost="1">
+                <queryReference clause="should" ref="search" />
+                <queryReference clause="should" ref="partial_search" />
+                <queryReference clause="must" ref="category"/>
+                <queryReference clause="must" ref="price"/>
+                <queryReference clause="must" ref="visibility"/>
+            </query>
+            <query xsi:type="matchQuery" value="$search_term$" name="search">
+                <match field="sku"/>
+                <match field="*"/>
+            </query>
+            <query xsi:type="matchQuery" value="$search_term$" name="partial_search">
+                <match field="*"/>
+                <match field="name" matchCondition="match_phrase_prefix"/>
+                <match field="sku" matchCondition="match_phrase_prefix"/>
+            </query>
+            <query name="category" xsi:type="filteredQuery">
+                <filterReference clause="must" ref="category_filter"/>
+            </query>
+            <query name="price" xsi:type="filteredQuery">
+                <filterReference clause="must" ref="price_filter"/>
+            </query>
+            <query name="visibility" xsi:type="filteredQuery">
+                <filterReference clause="must" ref="visibility_filter"/>
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="termFilter" name="category_filter" field="category_ids" value="$category_id$"/>
+            <filter xsi:type="rangeFilter" name="price_filter" field="price" from="$price.from$" to="$price.to$"/>
+            <filter xsi:type="termFilter" name="visibility_filter" field="visibility" value="$visibility$"/>
+        </filters>
+        <from>0</from>
+        <size>10000</size>
+    </request>
+</requests>

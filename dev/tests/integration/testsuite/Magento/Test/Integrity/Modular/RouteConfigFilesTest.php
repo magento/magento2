@@ -40,7 +40,7 @@ class RouteConfigFilesTest extends \PHPUnit\Framework\TestCase
      */
     protected $mergedSchemaFile;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $this->validationStateMock->method('isValidationRequired')
@@ -61,7 +61,7 @@ class RouteConfigFilesTest extends \PHPUnit\Framework\TestCase
             $files = array_merge($files, glob($mask));
         }
         $mergedConfig = new \Magento\Framework\Config\Dom(
-            '<config></config>',
+            '<config><router/></config>',
             $this->validationStateMock,
             $this->_idAttributes
         );

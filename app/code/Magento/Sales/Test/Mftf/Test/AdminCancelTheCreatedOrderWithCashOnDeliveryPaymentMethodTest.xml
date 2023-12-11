@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCancelTheCreatedOrderWithCashOnDeliveryPaymentMethodTest">
+        <annotations>
+            <group value="Sales"/>
+            <stories value="Cancel Created Order"/>
+            <title value="Cancel the created order with cash on delivery payment method"/>
+            <description value="Create an order with cash on delivery payment method and cancel the order"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-16069"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <magentoCLI command="config:set {{EnableCashOnDeliveryConfigData.path}} {{EnableCashOnDeliveryConfigData.value}}" stepKey="enableCashOnDeliveryPayment"/>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+
+            <createData entity="Simple_US_Customer_CA" stepKey="simpleCustomer"/>
+
+            <createData entity="SimpleProduct2" stepKey="simpleProduct">
+                <field key="price">10.00</field>
+            </createData>
+
+            <createData entity="CustomerCart" stepKey="createCustomerCart">
+                <requiredEntity createDataKey="simpleCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="createCustomerCart"/>
+                <requiredEntity createDataKey="simpleProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{DisableCashOnDeliveryConfigData.path}} {{DisableCashOnDeliveryConfigData.value}}" stepKey="disableCashOnDeliveryPayment"/>
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="navigateToNewOrderWithExistingCustomer"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="addSimpleProductToTheOrder"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectFlatRateShippingMethod"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPaymentOptions"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectCashOnDeliveryPaymentOption"/>
+
+        <updateData createDataKey="createCustomerCart" entity="CashOnDeliveryOrderPaymentMethod" stepKey="submitOrder">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </updateData>
+
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="verifyCreatedOrderInformation"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="orderId"/>
+
+        <actionGroup ref="AdminOpenOrderViewPageByOrderIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="$createCustomerCart.return$"/>
+        </actionGroup>
+
+        <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOrder"/>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
+            <argument name="Customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+
+        <getData entity="GetOrderData" stepKey="getOrderData">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </getData>
+        <actionGroup ref="StorefrontOpenMyOrdersPageActionGroup" stepKey="clickOnMyOrders"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderDetailsToLoad"/>
+        <actionGroup ref="AdminCheckOrderStatusInGridActionGroup" stepKey="seeOrderStatusInGrid">
+            <argument name="orderId" value="$getOrderData.increment_id$"/>
+            <argument name="status" value="Canceled"/>
+        </actionGroup>
+    </test>
+</tests>

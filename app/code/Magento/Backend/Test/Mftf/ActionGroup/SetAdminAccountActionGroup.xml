@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SetAdminAccountActionGroup">
+        <annotations>
+            <description>Update the Interface Language configuration setting using provided Interface Language.</description>
+        </annotations>
+        <arguments>
+            <argument name="InterfaceLocaleByValue" defaultValue="en_US" type="string"/>
+        </arguments>
+        <!-- Navigate to admin System Account Page-->
+        <amOnPage url="{{AdminSystemAccountPage.url}}" stepKey="openAdminSystemAccountPage" />
+        <waitForElementVisible selector="{{AdminSystemAccountSection.interfaceLocale}}" stepKey="waitForInterfaceLocale"/>
+        <!-- Change Admin locale to Français (France) / French (France) -->
+        <selectOption userInput="{{InterfaceLocaleByValue}}" selector="{{AdminSystemAccountSection.interfaceLocale}}" stepKey="setInterfaceLocate"/>
+        <fillField selector="{{AdminSystemAccountSection.currentPassword}}" userInput="{{_CREDS.magento/MAGENTO_ADMIN_PASSWORD}}" stepKey="fillPassword"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the account." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

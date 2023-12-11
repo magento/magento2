@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddCustomerNonDefaultAddressTest">
+        <annotations>
+            <features value="Customer address"/>
+            <stories value="Implement handling of large number of addresses on storefront Address book"/>
+            <title value="Storefront - My account - Address Book - add new non default billing/shipping address"/>
+            <description value="Storefront user should be able to create a new non default address via the storefront"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MAGETWO-97500"/>
+            <group value="customer"/>
+            <group value="create"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer_NY" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!--Log in to Storefront as Customer 1 -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddNewCustomerAddressActionGroup" stepKey="AddNewNonDefaultAddress">
+            <argument name="Address" value="US_Address_TX"/>
+        </actionGroup>
+        <see userInput="{{US_Address_TX.street[0]}}" selector="{{StorefrontCustomerAddressesSection.addressesList}}" stepKey="checkNewAddressesStreetOnDefaultShipping"/>
+        <see userInput="{{US_Address_TX.city}}" selector="{{StorefrontCustomerAddressesSection.addressesList}}" stepKey="checkNewAddressesCityOnDefaultShipping"/>
+        <see userInput="{{US_Address_TX.postcode}}" selector="{{StorefrontCustomerAddressesSection.addressesList}}" stepKey="checkNewAddressesPostcodeOnDefaultShipping"/>
+    </test>
+</tests>

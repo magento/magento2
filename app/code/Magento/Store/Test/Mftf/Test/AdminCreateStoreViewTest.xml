@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+        <test name="AdminCreateStoreViewTest">
+            <annotations>
+                <features value="Store"/>
+                <stories value="Create a store view in admin"/>
+                <title value="Admin shouldn't be able to create a Store View with the same code"/>
+                <description value="Admin shouldn't be able to create a Store View with the same code"/>
+                <group value="storeView"/>
+                <severity value="AVERAGE"/>
+                <useCaseId value="MAGETWO-95111"/>
+                <testCaseId value="MC-15422"/>
+            </annotations>
+
+            <before>
+                <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+                <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                    <argument name="indices" value=""/>
+                </actionGroup>
+            </before>
+
+            <after>
+                <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
+                    <argument name="customStore" value="customStore"/>
+                </actionGroup>
+                <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="resetSearchFilter"/>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                    <argument name="indices" value=""/>
+                </actionGroup>
+                <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            </after>
+
+            <!--Filter grid and see created store view-->
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="navigateToStoresIndex"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="resetSearchFilter"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillStoreViewFilterField"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearch"/>
+            <actionGroup ref="AssertStoreViewInGridActionGroup" stepKey="seeNewStoreView">
+                <argument name="storeViewName" value="{{customStore.name}}"/>
+            </actionGroup>
+            <!--Try to create store view with the same code-->
+            <actionGroup ref="AdminCreateStoreViewWithoutCheckActionGroup" stepKey="createSameStoreView"/>
+            <dontSeeElement selector="{{AdminMessagesSection.success}}" stepKey="dontSeeSuccessMessage"/>
+            <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeErrorMessage">
+                <argument name="message" value="Store with the same code already exists."/>
+                <argument name="messageType" value="error" />
+            </actionGroup>
+        </test>
+</tests>

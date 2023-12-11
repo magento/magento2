@@ -3,24 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Cache;
 
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Backend\Controller\Adminhtml\Cache\MassEnable;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\App\State;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\Message\ManagerInterface as MessageManager;
-use Magento\Framework\Controller\ResultFactory;
+use Magento\Backend\Controller\Adminhtml\Cache\MassEnable;
 use Magento\Backend\Model\View\Result\Redirect;
-use Magento\Framework\App\RequestInterface as Request;
-use Magento\Framework\App\Cache\TypeListInterface as CacheTypeList;
 use Magento\Framework\App\Cache\StateInterface as CacheState;
+use Magento\Framework\App\Cache\TypeListInterface as CacheTypeList;
+use Magento\Framework\App\RequestInterface as Request;
+use Magento\Framework\App\State;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Message\ManagerInterface as MessageManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MassEnableTest extends \PHPUnit\Framework\TestCase
+class MassEnableTest extends TestCase
 {
     /**
      * @var MassEnable
@@ -57,7 +60,7 @@ class MassEnableTest extends \PHPUnit\Framework\TestCase
      */
     private $cacheStateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -155,8 +158,8 @@ class MassEnableTest extends \PHPUnit\Framework\TestCase
             ->willReturn(['someCache']);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
-            ->with('Specified cache type(s) don\'t exist: someCache')
+            ->method('addErrorMessage')
+            ->with('These cache type(s) don\'t exist: someCache')
             ->willReturnSelf();
 
         $this->assertSame($this->redirectMock, $this->controller->execute());
@@ -175,7 +178,7 @@ class MassEnableTest extends \PHPUnit\Framework\TestCase
             ->willThrowException($exception);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addException')
+            ->method('addExceptionMessage')
             ->with($exception, 'An error occurred while enabling cache.')
             ->willReturnSelf();
 
@@ -215,7 +218,7 @@ class MassEnableTest extends \PHPUnit\Framework\TestCase
             ->method('persist');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('1 cache type(s) enabled.')
             ->willReturnSelf();
 

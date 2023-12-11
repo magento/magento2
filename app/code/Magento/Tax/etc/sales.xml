@@ -9,7 +9,7 @@
     <section name="quote">
         <group name="totals">
             <item name="tax_subtotal" instance="Magento\Tax\Model\Sales\Total\Quote\Subtotal" sort_order="200"/>
-            <item name="tax_shipping" instance="Magento\Tax\Model\Sales\Total\Quote\Shipping" sort_order="300"/>
+            <item name="tax_shipping" instance="Magento\Tax\Model\Sales\Total\Quote\Shipping" sort_order="375"/>
             <item name="tax" instance="Magento\Tax\Model\Sales\Total\Quote\Tax" sort_order="450">
                 <renderer name="adminhtml" instance="Magento\Sales\Block\Adminhtml\Order\Create\Totals\Tax"/>
                 <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Tax"/>

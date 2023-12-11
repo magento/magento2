@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertProductImageStorefrontProductPageActionGroup">
+        <annotations>
+            <description>Validates that the provided Product Image is present.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+            <argument name="image" defaultValue="MagentoLogo"/>
+        </arguments>
+
+        <seeInCurrentUrl url="/{{product.urlKey}}.html" stepKey="checkUrl"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElement selector="{{StorefrontProductMediaSection.imageFileInGallery(image.filename)}}" stepKey="waitForImage"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imageFileInGallery(image.filename)}}" stepKey="seeImage"/>
+    </actionGroup>
+</actionGroups>

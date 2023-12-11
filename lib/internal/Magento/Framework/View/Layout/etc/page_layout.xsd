@@ -7,6 +7,8 @@
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:include schemaLocation="urn:magento:framework:View/Layout/etc/elements.xsd"/>
+    <xs:include schemaLocation="urn:magento:framework:View/Layout/etc/head.xsd"/>
+    <xs:include schemaLocation="urn:magento:framework:View/Layout/etc/body.xsd"/>
 
     <xs:complexType name="pageLayoutType">
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
@@ -14,6 +16,8 @@
             <xs:element name="container" type="containerType" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="update" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="move" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="head" type="headType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="body" type="bodyType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 

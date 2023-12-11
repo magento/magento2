@@ -3,44 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Asset;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\TestFramework\Unit\BaseTestCase;
 use Magento\Framework\View\Asset\Config;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Tests Magento\Framework\View\Asset\Config
  */
-class ConfigTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
+class ConfigTest extends BaseTestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var MockObject|ScopeConfigInterface
      */
     private $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State
-     */
-    private $appStateMock;
-
-    /**
-     * @var \Magento\Framework\View\Asset\Config
+     * @var Config
      */
     private $model;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
-        $this->appStateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->model = new Config($this->scopeConfigMock, $this->appStateMock);
+        $this->model = new Config($this->scopeConfigMock);
     }
 
     /**

@@ -9,11 +9,12 @@ use Magento\Framework\Api\AbstractSimpleObject;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Document extends AbstractSimpleObject implements DocumentInterface, \IteratorAggregate
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getId()
     {
@@ -21,7 +22,7 @@ class Document extends AbstractSimpleObject implements DocumentInterface, \Itera
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setId($id)
     {
@@ -29,17 +30,15 @@ class Document extends AbstractSimpleObject implements DocumentInterface, \Itera
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCustomAttribute($attributeCode)
     {
-        return isset($this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode])
-            ? $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode]
-            : null;
+        return $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode] ?? null;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomAttribute($attributeCode, $attributeValue)
     {
@@ -50,7 +49,7 @@ class Document extends AbstractSimpleObject implements DocumentInterface, \Itera
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCustomAttributes()
     {
@@ -58,7 +57,7 @@ class Document extends AbstractSimpleObject implements DocumentInterface, \Itera
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomAttributes(array $attributes)
     {
@@ -71,6 +70,7 @@ class Document extends AbstractSimpleObject implements DocumentInterface, \Itera
      * @return \ArrayIterator
      * @since 100.1.0
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         $attributes = (array)$this->getCustomAttributes();

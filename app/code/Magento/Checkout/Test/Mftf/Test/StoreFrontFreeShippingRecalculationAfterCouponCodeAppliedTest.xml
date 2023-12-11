@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontFreeShippingRecalculationAfterCouponCodeAppliedTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout Free Shipping Recalculation after Coupon Code Added"/>
+            <title value="Checkout Free Shipping Recalculation after Coupon Code Added"/>
+            <description value="User should be able to do checkout free shipping recalculation after adding coupon code"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-28548"/>
+            <useCaseId value="MAGETWO-96431"/>
+            <group value="Checkout"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer">
+                <field key="group_id">1</field>
+            </createData>
+            <createData entity="_defaultCategory" stepKey="defaultCategory"/>
+            <createData entity="_defaultProduct" stepKey="simpleProduct">
+                <field key="price">90</field>
+                <requiredEntity createDataKey="defaultCategory"/>
+            </createData>
+            <!--It is default for FlatRate-->
+            <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
+            <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
+            <createData entity="MinimumOrderAmount90" stepKey="minimumOrderAmount90"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllCartPriceRules"/>
+            <actionGroup ref="AdminCreateCartPriceRuleWithCouponCodeActionGroup" stepKey="createCartPriceRule">
+                <argument name="ruleName" value="CatPriceRule"/>
+                <argument name="couponCode" value="CatPriceRule.coupon_code"/>
+            </actionGroup>
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStoreFront">
+                <argument name="Customer" value="$createCustomer$"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+                <argument name="productUrl" value="$simpleProduct.custom_attributes[url_key]$"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="defaultCategory" stepKey="deleteCategory"/>
+            <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
+            <createData entity="DefaultMinimumOrderAmount" stepKey="defaultMinimumOrderAmount"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllCartPriceRules"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartRule">
+            <argument name="product" value="$simpleProduct$"/>
+            <argument name="couponCode" value="{{CatPriceRule.coupon_code}}"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart1"/>
+        <waitForPageLoad stepKey="waitForpageLoad1"/>
+        <dontSee selector="{{CheckoutShippingMethodsSection.shippingMethodRowByName('Free')}}" stepKey="dontSeeFreeShipping"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage"/>
+        <conditionalClick selector="{{DiscountSection.DiscountTab}}" dependentSelector="{{DiscountSection.CouponInput}}" visible="false" stepKey="openDiscountTabIfClosed"/>
+        <waitForPageLoad stepKey="waitForCouponTabOpen1"/>
+        <click selector="{{DiscountSection.CancelCoupon}}" stepKey="cancelCoupon"/>
+        <waitForPageLoad stepKey="waitForCancel"/>
+        <see userInput='You canceled the coupon code.' stepKey="seeCancellationMessage"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2"/>
+        <waitForPageLoad stepKey="waitForShippingMethods"/>
+        <click selector="{{CheckoutShippingMethodsSection.shippingMethodRowByName('Free')}}" stepKey="chooseFreeShipping"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextAfterFreeShippingMethodSelection"/>
+        <waitForPageLoad stepKey="waitForReviewAndPayments"/>
+        <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyCouponCode">
+            <argument name="discountCode" value="{{CatPriceRule.coupon_code}}"/>
+        </actionGroup>
+        <!--  Assert order cannot be placed and error message will shown. -->
+        <actionGroup ref="AssertStorefrontOrderIsNotPlacedActionGroup" stepKey="seeShippingMethodError">
+            <argument name="error" value="The shipping method is missing. Select the shipping method and try again."/>
+        </actionGroup>
+        <amOnPage stepKey="navigateToShippingPage" url="{{CheckoutShippingPage.url}}"/>
+        <waitForPageLoad stepKey="waitForShippingPageLoad"/>
+
+        <click stepKey="chooseFlatRateShipping" selector="{{CheckoutShippingMethodsSection.shippingMethodRowByName('Flat Rate')}}"/>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextAfterFlatRateShippingMethodSelection"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
+        <!-- Place Order -->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeOrder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUserLockWhenCreatingNewUserTest">
+        <annotations>
+            <features value="Security"/>
+            <stories value="Runs Lock admin user when creating new user test."/>
+            <title value="Lock admin user when creating new user"/>
+            <description value="Runs Lock admin user when creating new user test."/>
+            <testCaseId value="MC-14383" />
+            <severity value="CRITICAL"/>
+            <group value="security"/>
+            <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Log in to Admin Panel -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Unlock Admin user -->
+            <magentoCLI command="admin:user:unlock {{DefaultAdminUser.username}}" stepKey="unlockAdminUser"/>
+        </after>
+
+        <!-- Open Admin New User Page -->
+        <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="openNewUserPage" />
+
+        <!-- Perform add new admin user 6 specified number of times.
+        "The password entered for the current user is invalid. Verify the password and try again." appears after each attempt.-->
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="failedSaveUserFirstAttempt">
+            <argument name="user" value="NewAdminUserWrongCurrentPassword" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="clickSaveFirstAttempt" />
+        <actionGroup ref="AssertAdminUserSaveMessageActionGroup" stepKey="seeInvalidPasswordError">
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
+            <argument name="messageType" value="error" />
+        </actionGroup>
+
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="failedSaveUserSecondAttempt">
+            <argument name="user" value="NewAdminUserWrongCurrentPassword" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="clickSaveSecondAttempt" />
+
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="failedSaveUserThirdAttempt">
+            <argument name="user" value="NewAdminUserWrongCurrentPassword" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="clickSaveThirdAttempt" />
+
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="failedSaveUserFourthAttempt">
+            <argument name="user" value="NewAdminUserWrongCurrentPassword" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="clickSaveFourthAttempt" />
+
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="failedSaveUserFifthAttempt">
+            <argument name="user" value="NewAdminUserWrongCurrentPassword" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="clickSaveFifthAttempt" />
+
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="failedSaveUserSixthAttempt">
+            <argument name="user" value="NewAdminUserWrongCurrentPassword" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="clickSaveSixthAttempt" />
+
+        <!-- Check Error that account has been locked -->
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeLockUserErrorMessage">
+            <argument name="message" value="Your account is temporarily disabled. Please try again later." />
+        </actionGroup>
+
+        <!-- Try to login as admin and check error -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsLockedAdmin"/>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeLoginUserErrorMessage" />
+    </test>
+</tests>

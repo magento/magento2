@@ -3,28 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
+//phpcs:disable Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace
+//phpcs:disable Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore
 ?>
 <?php $_item = $block->getItem() ?>
 <tr>
     <td class="col-product"><?= $block->getColumnHtml($_item, 'name') ?></td>
     <td class="col-ordered-qty"><?= $block->getColumnHtml($_item, 'qty') ?></td>
-    <td class="col-qty <?php if ($block->isShipmentRegular()): ?>last<?php endif; ?>">
-        <?php if ($block->canShipPartiallyItem()): ?>
+    <td class="col-qty <?php if ($block->isShipmentRegular()) : ?>last<?php endif; ?>">
+        <?php if ($block->canShipPartiallyItem()) : ?>
             <input type="text"
                    class="input-text admin__control-text qty-item"
-                   name="shipment[items][<?= /* @escapeNotVerified */ $_item->getOrderItemId() ?>]"
-                   value="<?= /* @escapeNotVerified */ $_item->getQty()*1 ?>" />
-        <?php else: ?>
-            <?= /* @escapeNotVerified */ $_item->getQty()*1 ?>
+                   name="shipment[items][<?= (int) $_item->getOrderItemId() ?>]"
+                   value="<?= /* @noEscape */ $_item->getQty()*1 ?>" />
+        <?php else : ?>
+            <?= /* @noEscape */ $_item->getQty()*1 ?>
         <?php endif; ?>
     </td>
-    <?php if (!$block->canShipPartiallyItem()): ?>
+    <?php if (!$block->canShipPartiallyItem()) : ?>
     <td class="col-ship last">
-        <input type="hidden" name="shipment[items][<?= /* @escapeNotVerified */ $_item->getOrderItemId() ?>]" value="0" />
-        <input type="checkbox" name="shipment[items][<?= /* @escapeNotVerified */ $_item->getOrderItemId() ?>]" value="<?= /* @escapeNotVerified */ $_item->getQty()*1 ?>" checked />
+        <input type="hidden" name="shipment[items][<?= (int) $_item->getOrderItemId() ?>]" value="0" />
+        <input type="checkbox"
+               name="shipment[items][<?= (int) $_item->getOrderItemId() ?>]"
+               value="<?= /* @noEscape */ $_item->getQty()*1 ?>" checked />
     </td>
     <?php endif; ?>
 </tr>

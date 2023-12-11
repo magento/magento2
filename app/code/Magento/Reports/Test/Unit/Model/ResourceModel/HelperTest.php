@@ -3,38 +3,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Reports\Test\Unit\Model\ResourceModel;
 
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Reports\Model\ResourceModel\Helper;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class HelperTest extends \PHPUnit\Framework\TestCase
+class HelperTest extends TestCase
 {
     /**
-     * @var \Magento\Reports\Model\ResourceModel\Helper
-     */
-    protected $helper;
-
-    /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $connectionMock;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private StoreManagerInterface $storeManager;
+
+    /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->getMock();
 
         $this->resourceMock
@@ -42,9 +50,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
             ->method('getConnection')
             ->willReturn($this->connectionMock);
 
-        $this->helper = new Helper(
-            $this->resourceMock
-        );
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
     }
 
     /**
@@ -61,7 +67,11 @@ class HelperTest extends \PHPUnit\Framework\TestCase
             ->method('insertOnDuplicate')
             ->with($mainTable, $data, array_keys($data));
 
-        $this->helper->mergeVisitorProductIndex($mainTable, $data, $matchFields);
+        $helper = new Helper(
+            $this->resourceMock,
+            $this->storeManager
+        );
+        $helper->mergeVisitorProductIndex($mainTable, $data, $matchFields);
     }
 
     /**
@@ -76,7 +86,10 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $column = 'column';
         $aggregationTable = 'aggregationTable';
 
-        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $store = $this->createMock(StoreInterface::class);
+        $store->expects($this->once())->method('getId')->willReturn(1);
+        $this->storeManager->expects($this->once())->method('getStores')->willReturn([$store]);
+        $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $selectMock
@@ -102,7 +115,11 @@ class HelperTest extends \PHPUnit\Framework\TestCase
             ->method('select')
             ->willReturn($selectMock);
 
-        $this->helper->updateReportRatingPos($this->connectionMock, $type, $column, $mainTable, $aggregationTable);
+        $helper = new Helper(
+            $this->resourceMock,
+            $this->storeManager
+        );
+        $helper->updateReportRatingPos($this->connectionMock, $type, $column, $mainTable, $aggregationTable);
     }
 
     /**

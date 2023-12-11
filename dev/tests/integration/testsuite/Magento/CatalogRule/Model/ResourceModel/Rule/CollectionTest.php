@@ -13,7 +13,6 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Setup\CategorySetup;
 
 /**
- * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
 class CollectionTest extends \PHPUnit\Framework\TestCase
@@ -38,7 +37,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $resourceRuleCollection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->indexBuilder = $this->objectManager->get(IndexBuilder::class);
@@ -48,7 +47,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppArea adminhtml
-     *
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/CatalogRule/_files/attribute.php
      * @magentoDataFixture Magento/CatalogRule/_files/rule_by_attribute.php
      * @magentoDataFixture Magento/CatalogRule/_files/two_rules.php

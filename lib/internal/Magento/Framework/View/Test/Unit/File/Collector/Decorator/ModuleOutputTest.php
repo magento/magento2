@@ -3,38 +3,47 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\File\Collector\Decorator;
 
-class ModuleOutputTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Module\Manager;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\File;
+use Magento\Framework\View\File\Collector\Decorator\ModuleOutput;
+use Magento\Framework\View\File\CollectorInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ModuleOutputTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\File\Collector\Decorator\ModuleOutput
+     * @var ModuleOutput
      */
     private $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $_fileSource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $_moduleManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_fileSource = $this->getMockForAbstractClass(\Magento\Framework\View\File\CollectorInterface::class);
-        $this->_moduleManager = $this->createMock(\Magento\Framework\Module\Manager::class);
+        $this->_fileSource = $this->getMockForAbstractClass(CollectorInterface::class);
+        $this->_moduleManager = $this->createMock(Manager::class);
         $this->_moduleManager
             ->expects($this->any())
             ->method('isOutputEnabled')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['Module_OutputEnabled', true],
                 ['Module_OutputDisabled', false],
-            ]));
-        $this->_model = new \Magento\Framework\View\File\Collector\Decorator\ModuleOutput(
+            ]);
+        $this->_model = new ModuleOutput(
             $this->_fileSource,
             $this->_moduleManager
         );
@@ -42,15 +51,15 @@ class ModuleOutputTest extends \PHPUnit\Framework\TestCase
 
     public function testGetFiles()
     {
-        $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
-        $fileOne = new \Magento\Framework\View\File('1.xml', 'Module_OutputEnabled');
-        $fileTwo = new \Magento\Framework\View\File('2.xml', 'Module_OutputDisabled');
-        $fileThree = new \Magento\Framework\View\File('3.xml', 'Module_OutputEnabled', $theme);
+        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $fileOne = new File('1.xml', 'Module_OutputEnabled');
+        $fileTwo = new File('2.xml', 'Module_OutputDisabled');
+        $fileThree = new File('3.xml', 'Module_OutputEnabled', $theme);
         $this->_fileSource
             ->expects($this->once())
             ->method('getFiles')
             ->with($theme, '*.xml')
-            ->will($this->returnValue([$fileOne, $fileTwo, $fileThree]));
+            ->willReturn([$fileOne, $fileTwo, $fileThree]);
         $this->assertSame([$fileOne, $fileThree], $this->_model->getFiles($theme, '*.xml'));
     }
 }

@@ -3,29 +3,79 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model;
 
-use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\State;
+use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Config\Data\ConfigData;
+use Magento\Framework\Config\Data\ConfigDataFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Setup\Model\ConfigGenerator;
+use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
+/**
+ * Test for Magento\Setup\Model\ConfigGenerator class.
+ */
+class ConfigGeneratorTest extends TestCase
 {
-    /** @var  \Magento\Framework\App\DeploymentConfig | \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var DeploymentConfig|MockObject
+     */
     private $deploymentConfigMock;
 
-    /** @var  \Magento\Setup\Model\ConfigGenerator | \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var ConfigGenerator|MockObject
+     */
     private $model;
 
-    public function setUp()
-    {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+    /**
+     * @var ConfigData|MockObject
+     */
+    private $configDataMock;
 
-        $this->deploymentConfigMock = $this->getMockBuilder(\Magento\Framework\App\DeploymentConfig::class)
+    /**
+     * @var DriverOptions
+     */
+    private $driverOptionsMock;
+
+    protected function setUp(): void
+    {
+        $objectManager = new ObjectManager($this);
+
+        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->configDataMock = $this->getMockBuilder(ConfigData::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['set'])
+            ->getMock();
+
+        $configDataFactoryMock = $this->getMockBuilder(ConfigDataFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $configDataFactoryMock->method('create')
+            ->willReturn($this->configDataMock);
+
+        $this->driverOptionsMock = $this->getMockBuilder(DriverOptions::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getDriverOptions'])
+            ->getMock();
+
         $this->model = $objectManager->getObject(
-            \Magento\Setup\Model\ConfigGenerator::class,
-            ['deploymentConfig' => $this->deploymentConfigMock]
+            ConfigGenerator::class,
+            [
+                'deploymentConfig'  => $this->deploymentConfigMock,
+                'configDataFactory' => $configDataFactoryMock,
+                'driverOptions'     => $this->driverOptionsMock,
+            ]
         );
     }
 
@@ -35,8 +85,13 @@ class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT)
             ->willReturn(null);
-        $configData = $this->model->createXFrameConfig();
-        $this->assertSame('SAMEORIGIN', $configData->getData()[ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT]);
+
+        $this->configDataMock
+            ->expects($this->once())
+            ->method('set')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT, 'SAMEORIGIN');
+
+        $this->model->createXFrameConfig();
     }
 
     public function testCreateCacheHostsConfig()
@@ -55,8 +110,13 @@ class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
                 'port' => '90',
             ],
         ];
-        $configData = $this->model->createCacheHostsConfig($data);
-        $this->assertEquals($expectedData, $configData->getData()[ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS]);
+
+        $this->configDataMock
+            ->expects($this->once())
+            ->method('set')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS, $expectedData);
+
+        $this->model->createCacheHostsConfig($data);
     }
 
     public function testCreateModeConfig()
@@ -65,8 +125,13 @@ class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(State::PARAM_MODE)
             ->willReturn(null);
-        $configData = $this->model->createModeConfig();
-        $this->assertSame(State::MODE_DEFAULT, $configData->getData()[State::PARAM_MODE]);
+
+        $this->configDataMock
+            ->expects($this->once())
+            ->method('set')
+            ->with(State::PARAM_MODE, State::MODE_DEFAULT);
+
+        $this->model->createModeConfig();
     }
 
     public function testCreateModeConfigIfAlreadySet()
@@ -77,5 +142,23 @@ class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(State::MODE_PRODUCTION);
         $configData = $this->model->createModeConfig();
         $this->assertSame([], $configData->getData());
+    }
+
+    public function testCreateCryptKeyConfig()
+    {
+        $key = 'my-new-key';
+        $data = [ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY => $key];
+
+        $this->deploymentConfigMock
+            ->method('get')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY)
+            ->willReturn(null);
+
+        $this->configDataMock
+            ->expects($this->once())
+            ->method('set')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY, $key);
+
+        $this->model->createCryptConfig($data);
     }
 }

@@ -7,50 +7,62 @@
 namespace Magento\ConfigurableProduct\Pricing\Price;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Framework\App\RequestSafetyInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
-class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterface
+/**
+ * Provide configurable child products for price calculation
+ */
+class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterface, ResetAfterRequestInterface
 {
     /**
-     * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     * @var Configurable
      */
     private $configurable;
 
     /**
-     * @var ProductInterface[]
+     * @var ProductInterface[]|null
      */
     private $products;
 
     /**
+     * @var ConfigurableOptionsFilterInterface
+     */
+    private $configurableOptionsFilter;
+
+    /**
      * @param Configurable $configurable
-     * @param ResourceConnection $resourceConnection
-     * @param LinkedProductSelectBuilderInterface $linkedProductSelectBuilder
-     * @param CollectionFactory $collectionFactory
-     * @param RequestSafetyInterface $requestSafety
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param ConfigurableOptionsFilterInterface|null $configurableOptionsFilter
      */
     public function __construct(
         Configurable $configurable,
-        ResourceConnection $resourceConnection,
-        LinkedProductSelectBuilderInterface $linkedProductSelectBuilder,
-        CollectionFactory $collectionFactory,
-        RequestSafetyInterface $requestSafety
+        ?ConfigurableOptionsFilterInterface $configurableOptionsFilter = null
     ) {
         $this->configurable = $configurable;
+        $this->configurableOptionsFilter = $configurableOptionsFilter
+            ?? ObjectManager::getInstance()->get(ConfigurableOptionsFilterInterface::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getProducts(ProductInterface $product)
     {
         if (!isset($this->products[$product->getId()])) {
-            $this->products[$product->getId()] = $this->configurable->getUsedProducts($product);
+            $this->products[$product->getId()] = $this->configurableOptionsFilter->filter(
+                $product,
+                $this->configurable->getUsedProducts($product)
+            );
         }
         return $this->products[$product->getId()];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->products = null;
     }
 }

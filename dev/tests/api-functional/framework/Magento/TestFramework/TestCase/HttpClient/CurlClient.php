@@ -10,7 +10,7 @@ namespace Magento\TestFramework\TestCase\HttpClient;
  */
 class CurlClient
 {
-    const EMPTY_REQUEST_BODY = 'Empty body';
+    public const EMPTY_REQUEST_BODY = 'Empty body';
 
     /**
      * Perform HTTP GET request
@@ -30,6 +30,51 @@ class CurlClient
         $curlOpts[CURLOPT_CUSTOMREQUEST] = \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET;
         $resp = $this->invokeApi($url, $curlOpts, $headers);
         return $resp["body"];
+    }
+
+    /**
+     * Perform a HTTP GET request and return the full response
+     *
+     * @param string $url
+     * @param array $data
+     * @param array $headers
+     * @param bool $flushCookies
+     * @return array
+     */
+    public function getWithFullResponse($url, $data = [], $headers = [], $flushCookies = false): array
+    {
+        if (!empty($data)) {
+            $url .= '?' . http_build_query($data);
+        }
+
+        $curlOpts = [];
+        $curlOpts[CURLOPT_CUSTOMREQUEST] = \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET;
+        if ($flushCookies) {
+            $curlOpts[CURLOPT_COOKIELIST] = 'ALL';
+        }
+        return $this->invokeApi($url, $curlOpts, $headers);
+    }
+
+    /**
+     * Perform a HTTP POST request and return the full response
+     *
+     * @param string $url
+     * @param array|string $data
+     * @param array $headers
+     * @param bool $flushCookies
+     * @return array
+     */
+    public function postWithFullResponse($url, $data, $headers = [], $flushCookies = false): array
+    {
+        $curlOpts = [];
+        $curlOpts[CURLOPT_CUSTOMREQUEST] = \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST;
+        $headers[] = 'Content-Length: ' . strlen($data);
+        $curlOpts[CURLOPT_POSTFIELDS] = $data;
+        if ($flushCookies) {
+            $curlOpts[CURLOPT_COOKIELIST] = 'ALL';
+        }
+
+        return $this->invokeApi($url, $curlOpts, $headers);
     }
 
     /**
@@ -98,8 +143,10 @@ class CurlClient
     public function invokeApi($url, $additionalCurlOpts, $headers = [])
     {
         // initialize cURL
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $curl = curl_init($url);
         if ($curl === false) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception("Error Initializing cURL for baseUrl: " . $url);
         }
 
@@ -108,28 +155,40 @@ class CurlClient
 
         // add CURL opts
         foreach ($curlOpts as $opt => $val) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             curl_setopt($curl, $opt, $val);
         }
 
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $response = curl_exec($curl);
         if ($response === false) {
-            throw new \Exception(curl_error($curl));
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $error = curl_error($curl);
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
+            throw new \Exception($error);
         }
 
         $resp = [];
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
         $resp["header"] = substr($response, 0, $headerSize);
         $resp["body"] = substr($response, $headerSize);
 
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $resp["meta"] = curl_getinfo($curl);
         if ($resp["meta"] === false) {
-            throw new \Exception(curl_error($curl));
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $error = curl_error($curl);
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
+            throw new \Exception($error);
         }
 
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         curl_close($curl);
 
         $meta = $resp["meta"];
         if ($meta && $meta['http_code'] >= 400) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception($resp["body"], $meta['http_code']);
         }
 

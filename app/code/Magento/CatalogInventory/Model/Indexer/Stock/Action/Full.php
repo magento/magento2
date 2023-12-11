@@ -6,12 +6,19 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
+use Magento\CatalogInventory\Model\Indexer\Stock\BatchSizeManagement;
+use Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock;
 use Magento\Framework\App\ResourceConnection;
 use Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory;
 use Magento\Catalog\Model\Product\Type as ProductType;
+use Magento\Framework\DB\Query\BatchIteratorInterface;
+use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -21,11 +28,12 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\CatalogInventory\Model\Indexer\Stock\AbstractAction;
 use Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\StockInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
 
 /**
  * Class Full reindex action
  *
- * @package Magento\CatalogInventory\Model\Indexer\Stock\Action
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Full extends AbstractAction
@@ -61,6 +69,23 @@ class Full extends AbstractAction
     private $activeTableSwitcher;
 
     /**
+     * @var QueryGenerator|null
+     */
+    private $batchQueryGenerator;
+
+    /**
+     * @var DeploymentConfig|null
+     */
+    private $deploymentConfig;
+
+    /**
+     * Deployment config path
+     *
+     * @var string
+     */
+    private const DEPLOYMENT_CONFIG_INDEXER_BATCHES = 'indexer/batch_size/';
+
+    /**
      * @param ResourceConnection $resource
      * @param StockFactory $indexerFactory
      * @param ProductType $catalogProductType
@@ -71,7 +96,8 @@ class Full extends AbstractAction
      * @param BatchProviderInterface|null $batchProvider
      * @param array $batchRowsCount
      * @param ActiveTableSwitcher|null $activeTableSwitcher
-     *
+     * @param QueryGenerator|null $batchQueryGenerator
+     * @param DeploymentConfig|null $deploymentConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -84,7 +110,9 @@ class Full extends AbstractAction
         BatchSizeManagementInterface $batchSizeManagement = null,
         BatchProviderInterface $batchProvider = null,
         array $batchRowsCount = [],
-        ActiveTableSwitcher $activeTableSwitcher = null
+        ActiveTableSwitcher $activeTableSwitcher = null,
+        QueryGenerator $batchQueryGenerator = null,
+        ?DeploymentConfig $deploymentConfig = null
     ) {
         parent::__construct(
             $resource,
@@ -97,11 +125,13 @@ class Full extends AbstractAction
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
         $this->batchProvider = $batchProvider ?: ObjectManager::getInstance()->get(BatchProviderInterface::class);
         $this->batchSizeManagement = $batchSizeManagement ?: ObjectManager::getInstance()->get(
-            \Magento\CatalogInventory\Model\Indexer\Stock\BatchSizeManagement::class
+            BatchSizeManagement::class
         );
         $this->batchRowsCount = $batchRowsCount;
         $this->activeTableSwitcher = $activeTableSwitcher ?: ObjectManager::getInstance()
             ->get(ActiveTableSwitcher::class);
+        $this->batchQueryGenerator = $batchQueryGenerator ?: ObjectManager::getInstance()->get(QueryGenerator::class);
+        $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
     }
 
     /**
@@ -109,48 +139,62 @@ class Full extends AbstractAction
      *
      * @param null|array $ids
      * @throws LocalizedException
-     *
      * @return void
-     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($ids = null)
+    public function execute($ids = null): void
     {
         try {
             $this->useIdxTable(false);
             $this->cleanIndexersTables($this->_getTypeIndexers());
 
-            $entityMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+            $entityMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
 
             $columns = array_keys($this->_getConnection()->describeTable($this->_getIdxTable()));
 
-            /** @var \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock $indexer */
+            /** @var DefaultStock $indexer */
             foreach ($this->_getTypeIndexers() as $indexer) {
                 $indexer->setActionType(self::ACTION_TYPE);
                 $connection = $indexer->getConnection();
                 $tableName = $this->activeTableSwitcher->getAdditionalTableName($indexer->getMainTable());
 
-                $batchRowCount = isset($this->batchRowsCount[$indexer->getTypeId()])
-                    ? $this->batchRowsCount[$indexer->getTypeId()]
-                    : $this->batchRowsCount['default'];
-
-                $this->batchSizeManagement->ensureBatchSize($connection, $batchRowCount);
-                $batches = $this->batchProvider->getBatches(
-                    $connection,
-                    $entityMetadata->getEntityTable(),
-                    $entityMetadata->getIdentifierField(),
-                    $batchRowCount
+                $batchRowCount = $this->deploymentConfig->get(
+                    self::DEPLOYMENT_CONFIG_INDEXER_BATCHES . Processor::INDEXER_ID . '/' . $indexer->getTypeId(),
+                    $this->deploymentConfig->get(
+                        self::DEPLOYMENT_CONFIG_INDEXER_BATCHES . Processor::INDEXER_ID . '/' . 'default'
+                    )
                 );
 
-                foreach ($batches as $batch) {
-                    $this->clearTemporaryIndexTable();
-                    // Get entity ids from batch
-                    $select = $connection->select();
-                    $select->distinct(true);
-                    $select->from(['e' => $entityMetadata->getEntityTable()], $entityMetadata->getIdentifierField());
-                    $select->where('type_id = ?', $indexer->getTypeId());
+                if (is_null($batchRowCount)) {
+                    $batchRowCount = isset($this->batchRowsCount[$indexer->getTypeId()])
+                        ? $this->batchRowsCount[$indexer->getTypeId()]
+                        : $this->batchRowsCount['default'];
+                }
 
-                    $entityIds = $this->batchProvider->getBatchIds($connection, $select, $batch);
+                $this->batchSizeManagement->ensureBatchSize($connection, $batchRowCount);
+
+                $select = $connection->select();
+                $select->distinct(true);
+                $select->from(
+                    [
+                        'e' => $entityMetadata->getEntityTable()
+                    ],
+                    $entityMetadata->getIdentifierField()
+                )->where(
+                    'type_id = ?',
+                    $indexer->getTypeId()
+                );
+
+                $batchQueries = $this->batchQueryGenerator->generate(
+                    $entityMetadata->getIdentifierField(),
+                    $select,
+                    $batchRowCount,
+                    BatchIteratorInterface::UNIQUE_FIELD_ITERATOR
+                );
+
+                foreach ($batchQueries as $query) {
+                    $this->clearTemporaryIndexTable();
+                    $entityIds = $connection->fetchCol($query);
                     if (!empty($entityIds)) {
                         $indexer->reindexEntity($entityIds);
                         $select = $connection->select()->from($this->_getIdxTable(), $columns);
@@ -167,12 +211,13 @@ class Full extends AbstractAction
 
     /**
      * Delete all records from index table
+     *
      * Used to clean table before re-indexation
      *
      * @param array $indexers
      * @return void
      */
-    private function cleanIndexersTables(array $indexers)
+    private function cleanIndexersTables(array $indexers): void
     {
         $tables = array_map(
             function (StockInterface $indexer) {

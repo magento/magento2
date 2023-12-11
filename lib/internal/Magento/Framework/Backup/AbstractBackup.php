@@ -11,7 +11,9 @@ use Magento\Framework\Phrase;
 /**
  * Class to work with archives
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractBackup implements BackupInterface, SourceFileInterface
 {
@@ -37,8 +39,6 @@ abstract class AbstractBackup implements BackupInterface, SourceFileInterface
     protected $_backupExtension;
 
     /**
-     * Resource model
-     *
      * @var object
      */
     protected $_resourceModel;
@@ -159,12 +159,13 @@ abstract class AbstractBackup implements BackupInterface, SourceFileInterface
             );
         }
 
-        $this->_rootDir = $rootDir;
+        $this->_rootDir = rtrim($rootDir, '/');
         return $this;
     }
 
     /**
      * Get Magento's root directory
+     *
      * @return string
      */
     public function getRootDir()
@@ -180,7 +181,7 @@ abstract class AbstractBackup implements BackupInterface, SourceFileInterface
      */
     public function setBackupsDir($backupsDir)
     {
-        $this->_backupsDir = $backupsDir;
+        $this->_backupsDir = $backupsDir !== null ? rtrim($backupsDir, '/') : '';
         return $this;
     }
 
@@ -289,7 +290,7 @@ abstract class AbstractBackup implements BackupInterface, SourceFileInterface
      */
     public function getDisplayName()
     {
-        return str_replace('_', ' ', $this->_name);
+        return $this->_name !== null ? str_replace('_', ' ', $this->_name) : '';
     }
 
     /**
@@ -300,17 +301,17 @@ abstract class AbstractBackup implements BackupInterface, SourceFileInterface
      */
     protected function _filterName($name)
     {
-        $name = trim(preg_replace('/[^\da-zA-Z ]/', '', $name));
+        $name = $name !== null ? trim(preg_replace('/[^\da-zA-Z ]/', '', $name)) : '';
         $name = preg_replace('/\s{2,}/', ' ', $name);
-        $name = str_replace(' ', '_', $name);
 
-        return $name;
+        return str_replace(' ', '_', $name);
     }
 
     /**
      * Check if keep files of backup
      *
      * @return bool
+     * @since 102.0.0
      */
     public function keepSourceFile()
     {
@@ -322,6 +323,7 @@ abstract class AbstractBackup implements BackupInterface, SourceFileInterface
      *
      * @param bool $keepSourceFile
      * @return $this
+     * @since 102.0.0
      */
     public function setKeepSourceFile(bool $keepSourceFile)
     {

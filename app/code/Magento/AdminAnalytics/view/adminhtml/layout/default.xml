@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" >
+    <body>
+        <referenceContainer name="header">
+            <block name="tracking" as="tracking" template="Magento_AdminAnalytics::tracking.phtml" ifconfig="admin/usage/enabled">
+                <arguments>
+                    <argument name="tracking_url" xsi:type="string">//assets.adobedtm.com/a7d65461e54e/37baabec1b6e/launch-177bc126c8e6.min.js</argument>
+                    <argument name="metadata" xsi:type="object">Magento\AdminAnalytics\ViewModel\Metadata</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>
+
+

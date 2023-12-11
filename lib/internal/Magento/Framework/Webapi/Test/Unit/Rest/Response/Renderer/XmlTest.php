@@ -5,23 +5,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Webapi\Test\Unit\Rest\Response\Renderer;
 
-class XmlTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\DataObject;
+use Magento\Framework\Webapi\Rest\Response\Renderer\Xml;
+use Magento\Framework\Xml\Generator;
+use PHPUnit\Framework\TestCase;
+
+class XmlTest extends TestCase
 {
-    /** @var \Magento\Framework\Webapi\Rest\Response\Renderer\Xml */
+    /** @var Xml */
     protected $_restXmlRenderer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** Prepare object for SUT constructor. */
-        $xmlGenerator = new \Magento\Framework\Xml\Generator();
+        $xmlGenerator = new Generator();
         /** Initialize SUT. */
-        $this->_restXmlRenderer = new \Magento\Framework\Webapi\Rest\Response\Renderer\Xml($xmlGenerator);
+        $this->_restXmlRenderer = new Xml($xmlGenerator);
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_restXmlRenderer);
         parent::tearDown();
@@ -77,6 +84,11 @@ class XmlTest extends \PHPUnit\Framework\TestCase
                 'Invalid XML render with numeric symbol in data index.'
             ],
             [
+                ['key' => 'test & foo'],
+                '<?xml version="1.0"?><response><key>test &amp; foo</key></response>',
+                'Invalid XML render with ampersand symbol in data index.'
+            ],
+            [
                 ['.key' => 'value'],
                 '<?xml version="1.0"?><response><item_key>value</item_key></response>',
                 'Invalid XML render with "." symbol in data index.'
@@ -97,7 +109,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
                 'Invalid XML render with simple data.'
             ],
             [
-                new \Magento\Framework\DataObject(['key' => 'value']),
+                new DataObject(['key' => 'value']),
                 '<?xml version="1.0"?><response><key>value</key></response>',
                 'Invalid XML render with \Magento\Framework\DataObject data.'
             ]

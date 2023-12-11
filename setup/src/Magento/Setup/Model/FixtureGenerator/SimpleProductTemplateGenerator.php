@@ -39,7 +39,7 @@ class SimpleProductTemplateGenerator implements TemplateEntityGeneratorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function generateEntity()
     {
@@ -62,14 +62,17 @@ class SimpleProductTemplateGenerator implements TemplateEntityGeneratorInterface
      */
     private function getProductTemplate($attributeSet, $additionalAttributes = [])
     {
-        $productRandomizerNumber = crc32(mt_rand(1, PHP_INT_MAX));
+        $productRandomizerNumber = crc32(random_int(1, PHP_INT_MAX));
         $product = $this->productFactory->create([
             'data' => [
                 'attribute_set_id' => $attributeSet,
                 'type_id' => Type::TYPE_SIMPLE,
                 'name' => 'template name' . $productRandomizerNumber,
                 'url_key' => 'template-url' . $productRandomizerNumber,
-                'sku' => 'template_sku' . $productRandomizerNumber,
+                'sku' => 'template_sku_simple' . $productRandomizerNumber,
+                'meta_description' => 'Simple Product',
+                'meta_keyword' => $productRandomizerNumber,
+                'meta_title' => $productRandomizerNumber,
                 'price' => 10,
                 'visibility' => Visibility::VISIBILITY_BOTH,
                 'status' => Status::STATUS_ENABLED,

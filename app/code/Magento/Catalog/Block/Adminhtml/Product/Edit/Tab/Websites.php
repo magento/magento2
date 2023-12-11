@@ -21,7 +21,7 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
     /**
      * @var string
      */
-    protected $_template = 'catalog/product/edit/websites.phtml';
+    protected $_template = 'Magento_Catalog::catalog/product/edit/websites.phtml';
 
     /**
      * Core registry

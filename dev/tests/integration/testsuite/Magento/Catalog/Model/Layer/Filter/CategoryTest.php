@@ -24,7 +24,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_category;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Category::class
@@ -95,6 +95,11 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Category', $this->_model->getName());
     }
 
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/categories.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
+     */
     public function testGetItems()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -130,8 +135,8 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
         $items = $model->getItems();
 
-        $this->assertInternalType('array', $items);
-        $this->assertEquals(2, count($items));
+        $this->assertIsArray($items);
+        $this->assertCount(2, $items);
 
         /** @var $item \Magento\Catalog\Model\Layer\Filter\Item */
         $item = $items[0];

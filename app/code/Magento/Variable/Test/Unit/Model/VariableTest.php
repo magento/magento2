@@ -3,44 +3,92 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Variable\Test\Unit\Model;
 
+use Magento\Framework\Escaper;
+use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Listener\ReplaceObjectManager\TestProvidesServiceInterface;
+use Magento\Framework\Validation\ValidationException;
+use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
+use Magento\Variable\Model\ResourceModel\Variable;
+use Magento\Variable\Model\ResourceModel\Variable\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class VariableTest extends \PHPUnit\Framework\TestCase
+class VariableTest extends TestCase implements TestProvidesServiceInterface
 {
-    /** @var  \Magento\Variable\Model\Variable */
+    /**
+     * @var  \Magento\Variable\Model\Variable
+     */
     private $model;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var Escaper|MockObject
+     */
     private $escaperMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Variable\Model\ResourceModel\Variable|MockObject
+     */
     private $resourceMock;
 
-    /** @var  \Magento\Framework\Phrase */
+    /**
+     * @var Collection|MockObject
+     */
+    private $resourceCollectionMock;
+
+    /**
+     * @var  Phrase
+     */
     private $validationFailedPhrase;
 
-    /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /**
+     * @var  ObjectManager
+     */
     private $objectManager;
 
-    protected function setUp()
+    /**
+     * @var WYSIWYGValidatorInterface
+     */
+    private $wysiwygValidator;
+
+    protected function setUp(): void
     {
+        $this->wysiwygValidator = $this->createMock(WYSIWYGValidatorInterface::class);
         $this->objectManager = new ObjectManager($this);
-        $this->escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+        $this->escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceMock = $this->getMockBuilder(\Magento\Variable\Model\ResourceModel\Variable::class)
+        $this->resourceMock = $this->getMockBuilder(Variable::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resourceCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $this->objectManager->getObject(
             \Magento\Variable\Model\Variable::class,
             [
                 'escaper' => $this->escaperMock,
-                'resource' => $this->resourceMock
+                'resource' => $this->resourceMock,
+                'resourceCollection' => $this->resourceCollectionMock,
+                'wysiwygValidator' => $this->wysiwygValidator
             ]
         );
         $this->validationFailedPhrase = __('Validation has failed.');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getServiceForObjectManager(string $type) : ?object
+    {
+        if (Collection::class == $type) {
+            return $this->resourceCollectionMock;
+        }
+        return null;
     }
 
     public function testGetValueHtml()
@@ -101,58 +149,51 @@ class VariableTest extends \PHPUnit\Framework\TestCase
     public function testGetVariablesOptionArrayNoGroup()
     {
         $origOptions = [
-            ['value' => 'VAL', 'label' => 'LBL']
+            ['value' => 'VAL', 'label' => 'LBL'],
         ];
 
         $transformedOptions = [
-            ['value' => '{{customVar code=VAL}}', 'label' => __('%1', 'LBL')]
+            ['value' => '{{customVar code=VAL}}', 'label' => __('%1', 'LBL')],
         ];
 
-        $collectionMock = $this->getMockBuilder(\Magento\Variable\Model\ResourceModel\Variable\Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionMock->expects($this->any())
+        $this->resourceCollectionMock->expects($this->any())
             ->method('toOptionArray')
             ->willReturn($origOptions);
-        $mockVariable = $this->getMockBuilder(\Magento\Variable\Model\Variable::class)
-            ->setMethods(['getCollection'])
-            ->setConstructorArgs($this->objectManager->getConstructArguments(\Magento\Variable\Model\Variable::class))
-            ->getMock();
-        $mockVariable->expects($this->any())
-            ->method('getCollection')
-            ->willReturn($collectionMock);
-        $this->assertEquals($transformedOptions, $mockVariable->getVariablesOptionArray());
+        $this->escaperMock->expects($this->once())
+            ->method('escapeHtml')
+            ->with($origOptions[0]['label'])
+            ->willReturn($origOptions[0]['label']);
+        $this->assertEquals($transformedOptions, $this->model->getVariablesOptionArray());
     }
 
     public function testGetVariablesOptionArrayWithGroup()
     {
         $origOptions = [
-            ['value' => 'VAL', 'label' => 'LBL']
+            ['value' => 'VAL', 'label' => 'LBL'],
         ];
 
         $transformedOptions = [
-            'label' => __('Custom Variables'),
-            'value' => [
-                ['value' => '{{customVar code=VAL}}', 'label' => __('%1', 'LBL')]
-            ]
+            [
+                'label' => __('Custom Variables'),
+                'value' => [
+                    ['value' => '{{customVar code=VAL}}', 'label' => __('%1', 'LBL')],
+                ],
+            ],
         ];
 
-        $collectionMock = $this->getMockBuilder(\Magento\Variable\Model\ResourceModel\Variable\Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionMock->expects($this->any())
+        $this->resourceCollectionMock->expects($this->any())
             ->method('toOptionArray')
             ->willReturn($origOptions);
-        $mockVariable = $this->getMockBuilder(\Magento\Variable\Model\Variable::class)
-            ->setMethods(['getCollection'])
-            ->setConstructorArgs($this->objectManager->getConstructArguments(\Magento\Variable\Model\Variable::class))
-            ->getMock();
-        $mockVariable->expects($this->any())
-            ->method('getCollection')
-            ->willReturn($collectionMock);
-        $this->assertEquals($transformedOptions, $mockVariable->getVariablesOptionArray(true));
+        $this->escaperMock->expects($this->atLeastOnce())
+            ->method('escapeHtml')
+            ->with($origOptions[0]['label'])
+            ->willReturn($origOptions[0]['label']);
+        $this->assertEquals($transformedOptions, $this->model->getVariablesOptionArray(true));
     }
 
+    /**
+     * @return array
+     */
     public function validateDataProvider()
     {
         $variable = [
@@ -161,15 +202,71 @@ class VariableTest extends \PHPUnit\Framework\TestCase
         return [
             'Empty Variable' => [[], null, true],
             'IDs match' => [$variable, 'matching_id', true],
-            'IDs do not match' => [$variable, 'non_matching_id', __('Variable Code must be unique.')]
+            'IDs do not match' => [$variable, 'non_matching_id', __('Variable Code must be unique.')],
         ];
     }
 
+    /**
+     * @return array
+     */
     public function validateMissingInfoDataProvider()
     {
         return [
             'Missing code' => ['', 'some-name'],
-            'Missing name' => ['some-code', '']
+            'Missing name' => ['some-code', ''],
+        ];
+    }
+
+    /**
+     * Test Variable validation.
+     *
+     * @param string $value
+     * @param bool $isChanged
+     * @param bool $isValidated
+     * @param bool $exceptionThrown
+     * @dataProvider getWysiwygValidationCases
+     */
+    public function testBeforeSave(string $value, bool $isChanged, bool $isValidated, bool $exceptionThrown): void
+    {
+        $actuallyThrown = false;
+
+        if (!$isValidated) {
+            $this->wysiwygValidator->expects($this->any())
+                ->method('validate')
+                ->willThrowException(new ValidationException(__('HTML is invalid')));
+        } else {
+            $this->wysiwygValidator->expects($this->any())->method('validate');
+        }
+
+        $this->model->setData('html_value', $value);
+
+        if (!$isChanged) {
+            $this->model->setOrigData('html_value', $value);
+        } else {
+            $this->model->setOrigData('html_value', $value . '-OLD');
+        }
+
+        try {
+            $this->model->beforeSave();
+        } catch (\Throwable $exception) {
+            $actuallyThrown = true;
+        }
+
+        $this->assertEquals($exceptionThrown, $actuallyThrown);
+    }
+
+    /**
+     * Validation cases.
+     *
+     * @return array
+     */
+    public function getWysiwygValidationCases(): array
+    {
+        return [
+            'changed-html-value-without-exception' => ['<b>Test Html</b>',true,true,false],
+            'changed-html-value-with-exception' => ['<b>Test Html</b>',true,false,true],
+            'no-changed-html-value-without-exception' => ['<b>Test Html</b>',false,false,false],
+            'no-html-value-with-exception' => ['',true,false,false]
         ];
     }
 }

@@ -3,10 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Filesystem\Directory;
 
+use Magento\Framework\Config\Dom\ValidationException;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Phrase;
 
+/**
+ * Write Interface implementation
+ */
 class Write extends Read implements WriteInterface
 {
     /**
@@ -20,19 +29,19 @@ class Write extends Read implements WriteInterface
      * Constructor
      *
      * @param \Magento\Framework\Filesystem\File\WriteFactory $fileFactory
-     * @param \Magento\Framework\Filesystem\DriverInterface $driver
+     * @param DriverInterface $driver
      * @param string $path
      * @param int $createPermissions
+     * @param PathValidatorInterface|null $pathValidator
      */
     public function __construct(
         \Magento\Framework\Filesystem\File\WriteFactory $fileFactory,
-        \Magento\Framework\Filesystem\DriverInterface $driver,
+        DriverInterface $driver,
         $path,
-        $createPermissions = null
+        ?int $createPermissions = null,
+        ?PathValidatorInterface $pathValidator = null
     ) {
-        $this->fileFactory = $fileFactory;
-        $this->driver = $driver;
-        $this->setPath($path);
+        parent::__construct($fileFactory, $driver, $path, $pathValidator);
         if (null !== $createPermissions) {
             $this->permissions = $createPermissions;
         }
@@ -43,15 +52,14 @@ class Write extends Read implements WriteInterface
      *
      * @param string $path
      * @return void
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException|ValidatorException
      */
     protected function assertWritable($path)
     {
+        $this->validatePath($path);
         if ($this->isWritable($path) === false) {
-            $path = (!$this->driver->isFile($path))
-                ? $this->getAbsolutePath($this->path, $path)
-                : $this->getAbsolutePath($path);
-            throw new FileSystemException(new \Magento\Framework\Phrase('The path "%1" is not writable', [$path]));
+            $path = $this->getAbsolutePath($path);
+            throw new FileSystemException(new Phrase('The path "%1" is not writable.', [$path]));
         }
     }
 
@@ -60,15 +68,15 @@ class Write extends Read implements WriteInterface
      *
      * @param string $path
      * @return void
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      */
     protected function assertIsFile($path)
     {
-        clearstatcache();
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
+        clearstatcache(true, $absolutePath);
         if (!$this->driver->isFile($absolutePath)) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase('The file "%1" doesn\'t exist or not a file', [$absolutePath])
+                new Phrase('The "%1" file doesn\'t exist.', [$absolutePath])
             );
         }
     }
@@ -79,9 +87,11 @@ class Write extends Read implements WriteInterface
      * @param string $path
      * @return bool
      * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function create($path = null)
     {
+        $this->validatePath($path);
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
         if ($this->driver->isDirectory($absolutePath)) {
             return true;
@@ -97,9 +107,12 @@ class Write extends Read implements WriteInterface
      * @param WriteInterface $targetDirectory
      * @return bool
      * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function renameFile($path, $newPath, WriteInterface $targetDirectory = null)
     {
+        $this->validatePath($path);
+        $this->validatePath($newPath);
         $this->assertIsFile($path);
         $targetDirectory = $targetDirectory ?: $this;
         if (!$targetDirectory->isExist($this->driver->getParentDirectory($newPath))) {
@@ -107,7 +120,7 @@ class Write extends Read implements WriteInterface
         }
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
         $absoluteNewPath = $targetDirectory->getAbsolutePath($newPath);
-        return $this->driver->rename($absolutePath, $absoluteNewPath, $targetDirectory->driver);
+        return $this->driver->rename($absolutePath, $absoluteNewPath, $targetDirectory->getDriver());
     }
 
     /**
@@ -118,9 +131,12 @@ class Write extends Read implements WriteInterface
      * @param WriteInterface $targetDirectory
      * @return bool
      * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function copyFile($path, $destination, WriteInterface $targetDirectory = null)
     {
+        $this->validatePath($path);
+        $this->validatePath($destination);
         $this->assertIsFile($path);
 
         $targetDirectory = $targetDirectory ?: $this;
@@ -140,10 +156,13 @@ class Write extends Read implements WriteInterface
      * @param string $destination
      * @param WriteInterface $targetDirectory [optional]
      * @return bool
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function createSymlink($path, $destination, WriteInterface $targetDirectory = null)
     {
+        $this->validatePath($path);
+        $this->validatePath($destination);
         $targetDirectory = $targetDirectory ?: $this;
         $parentDirectory = $this->driver->getParentDirectory($destination);
         if (!$targetDirectory->isExist($parentDirectory)) {
@@ -152,7 +171,7 @@ class Write extends Read implements WriteInterface
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
         $absoluteDestination = $targetDirectory->getAbsolutePath($destination);
 
-        return $this->driver->symlink($absolutePath, $absoluteDestination, $targetDirectory->driver);
+        return $this->driver->symlink($absolutePath, $absoluteDestination, $this->driver);
     }
 
     /**
@@ -161,19 +180,80 @@ class Write extends Read implements WriteInterface
      * @param string $path
      * @return bool
      * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function delete($path = null)
     {
+        $exceptionMessages = [];
+        $this->validatePath($path);
+
         if (!$this->isExist($path)) {
             return true;
         }
+
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
+        $basePath = $this->driver->getRealPathSafety($this->driver->getAbsolutePath($this->path, ''));
+
+        if ($path !== null && $path !== '' && $this->driver->getRealPathSafety($absolutePath) === $basePath) {
+            throw new FileSystemException(new Phrase('The path "%1" is not writable.', [$path]));
+        }
+
         if ($this->driver->isFile($absolutePath)) {
             $this->driver->deleteFile($absolutePath);
         } else {
-            $this->driver->deleteDirectory($absolutePath);
+            try {
+                $this->deleteFilesRecursively($absolutePath);
+            } catch (FileSystemException $e) {
+                $exceptionMessages[] = $e->getMessage();
+            }
+            try {
+                $this->driver->deleteDirectory($absolutePath);
+            } catch (FileSystemException $e) {
+                $exceptionMessages[] = $e->getMessage();
+            }
+
+            if (!empty($exceptionMessages)) {
+                throw new FileSystemException(
+                    new Phrase(
+                        \implode(' ', $exceptionMessages)
+                    )
+                );
+            }
         }
+
         return true;
+    }
+
+    /**
+     * Delete files recursively
+     *
+     * Implemented in order to delete as much files as possible and collect all exceptions
+     *
+     * @param string $path
+     * @return void
+     * @throws FileSystemException
+     */
+    private function deleteFilesRecursively(string $path)
+    {
+        $exceptionMessages = [];
+        $entitiesList = $this->driver->readDirectoryRecursively($path);
+        foreach ($entitiesList as $entityPath) {
+            if ($this->driver->isFile($entityPath)) {
+                try {
+                    $this->validatePath($entityPath);
+                    $this->driver->deleteFile($entityPath);
+                } catch (FileSystemException | ValidatorException $e) {
+                    $exceptionMessages[] = $e->getMessage();
+                }
+            }
+        }
+        if (!empty($exceptionMessages)) {
+            throw new FileSystemException(
+                new Phrase(
+                    \implode(' ', $exceptionMessages)
+                )
+            );
+        }
     }
 
     /**
@@ -183,10 +263,13 @@ class Write extends Read implements WriteInterface
      * @param int $permissions
      * @return bool
      * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function changePermissions($path, $permissions)
     {
+        $this->validatePath($path);
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
+
         return $this->driver->changePermissions($absolutePath, $permissions);
     }
 
@@ -198,10 +281,13 @@ class Write extends Read implements WriteInterface
      * @param int $filePermissions
      * @return bool
      * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function changePermissionsRecursively($path, $dirPermissions, $filePermissions)
     {
+        $this->validatePath($path);
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
+
         return $this->driver->changePermissionsRecursively($absolutePath, $dirPermissions, $filePermissions);
     }
 
@@ -212,9 +298,12 @@ class Write extends Read implements WriteInterface
      * @param int|null $modificationTime
      * @return bool
      * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function touch($path, $modificationTime = null)
     {
+        $this->validatePath($path);
+
         $folder = $this->driver->getParentDirectory($path);
         $this->create($folder);
         $this->assertWritable($folder);
@@ -224,12 +313,15 @@ class Write extends Read implements WriteInterface
     /**
      * Check if given path is writable
      *
-     * @param null $path
+     * @param string|null $path
      * @return bool
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function isWritable($path = null)
     {
+        $this->validatePath($path);
+
         return $this->driver->isWritable($this->driver->getAbsolutePath($this->path, $path));
     }
 
@@ -239,14 +331,17 @@ class Write extends Read implements WriteInterface
      * @param string $path
      * @param string $mode
      * @return \Magento\Framework\Filesystem\File\WriteInterface
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function openFile($path, $mode = 'w')
     {
+        $this->validatePath($path);
         $folder = dirname($path);
         $this->create($folder);
         $this->assertWritable($this->isExist($path) ? $path : $folder);
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
+
         return $this->fileFactory->create($absolutePath, $this->driver, $mode);
     }
 
@@ -256,18 +351,33 @@ class Write extends Read implements WriteInterface
      * @param string $path
      * @param string $content
      * @param string|null $mode
+     * @param bool $lock
      * @return int The number of bytes that were written.
-     * @throws FileSystemException
+     * @throws FileSystemException|ValidatorException
      */
-    public function writeFile($path, $content, $mode = 'w+')
+    public function writeFile($path, $content, $mode = 'w+', bool $lock = false)
     {
-        return $this->openFile($path, $mode)->write($content);
+        $this->validatePath($path);
+        $file = $this->openFile($path, $mode);
+        try {
+            if ($lock) {
+                $file->lock();
+            }
+            $result = $file->write($content);
+        } finally {
+            if ($lock) {
+                $file->unlock();
+            }
+        }
+        $file->close();
+
+        return $result;
     }
 
     /**
      * Get driver
      *
-     * @return \Magento\Framework\Filesystem\DriverInterface
+     * @return DriverInterface
      */
     public function getDriver()
     {

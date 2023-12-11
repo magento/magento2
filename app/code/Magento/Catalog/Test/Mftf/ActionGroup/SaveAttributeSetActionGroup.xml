@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SaveAttributeSetActionGroup">
+        <annotations>
+            <description>Save an Attribute Set on the Attribute Set creation/edit page.</description>
+        </annotations>
+
+        <click selector="{{AdminProductAttributeSetActionSection.save}}" stepKey="clickSave"/>
+        <see userInput="You saved the attribute set" selector="{{AdminMessagesSection.success}}" stepKey="successMessage"/>
+    </actionGroup>
+</actionGroups>

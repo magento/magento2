@@ -1,25 +1,28 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Controller\Adminhtml\Index;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
-class Create extends \Magento\Backup\Controller\Adminhtml\Index
+/**
+ * Create backup controller
+ */
+class Create extends \Magento\Backup\Controller\Adminhtml\Index implements HttpPostActionInterface
 {
     /**
-     * Create backup action
+     * Create backup action.
      *
      * @return void|\Magento\Backend\App\Action
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
-        if (!$this->getRequest()->isAjax()) {
+        if (!$this->isRequestAllowed()) {
             return $this->_redirect('*/*/index');
         }
 
@@ -55,7 +58,9 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
             $this->_coreRegistry->register('backup_manager', $backupManager);
 
             if ($this->getRequest()->getParam('maintenance_mode')) {
-                if (!$this->maintenanceMode->set(true)) {
+                $this->maintenanceMode->set(true);
+
+                if (!$this->maintenanceMode->isOn()) {
                     $response->setError(
                         __(
                             'You need more permissions to activate maintenance mode right now.'
@@ -82,7 +87,7 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
 
             $backupManager->create();
 
-            $this->messageManager->addSuccess($successMessage);
+            $this->messageManager->addSuccessMessage($successMessage);
 
             $response->setRedirectUrl($this->getUrl('*/*/index'));
         } catch (\Magento\Framework\Backup\Exception\NotEnoughFreeSpace $e) {
@@ -105,5 +110,15 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
         }
 
         $this->getResponse()->representJson($response->toJson());
+    }
+
+    /**
+     * Check if request is allowed.
+     *
+     * @return bool
+     */
+    private function isRequestAllowed()
+    {
+        return $this->getRequest()->isAjax() && $this->getRequest()->isPost();
     }
 }

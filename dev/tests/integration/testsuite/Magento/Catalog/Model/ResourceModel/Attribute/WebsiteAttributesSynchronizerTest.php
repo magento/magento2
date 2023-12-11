@@ -43,7 +43,7 @@ class WebsiteAttributesSynchronizerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
@@ -52,6 +52,7 @@ class WebsiteAttributesSynchronizerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/website_attribute_sync_flag.php
+     * @magentoDbIsolation disabled
      */
     public function testScheduleSynchronization()
     {
@@ -63,6 +64,7 @@ class WebsiteAttributesSynchronizerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/website_attribute_sync.php
+     * @magentoDbIsolation disabled
      */
     public function testSynchronizeSuccess()
     {

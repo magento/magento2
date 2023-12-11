@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCreateCustomerWithDateOfBirthTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Create a Customer via the Storefront"/>
+            <title value="Customer should be able to create an account with date of birth via the storefront"/>
+            <description value="Customer should be able to create an account with date of birth via the storefront"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-32413"/>
+            <group value="customer"/>
+            <group value="create"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <actionGroup ref="AdminCustomerShowDateOfBirthActionGroup" stepKey="showDateOfBirth">
+                <argument name="value" value="{{ShowDateOfBirth.required}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="AdminCustomerShowDateOfBirthActionGroup" stepKey="hideDateOfBirth">
+                <argument name="value" value="{{ShowDateOfBirth.no}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="StorefrontCustomerCreateAccountWithDateOfBirthActionGroup" stepKey="SignUpNewUser">
+            <argument name="Customer" value="CustomerEntityOne"/>
+            <argument name="dob" value="{{EN_US_DATE.short4DigitYear}}"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value="customer_grid"/>
+        </actionGroup>
+        <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteNewUser">
+            <argument name="email" value="{{CustomerEntityOne.email}}"/>
+        </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+    </test>
+</tests>

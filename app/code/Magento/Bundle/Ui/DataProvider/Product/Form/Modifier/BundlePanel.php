@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Bundle\Model\Product\Attribute\Source\Shipment\Type as ShipmentType;
@@ -14,7 +16,9 @@ use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\UrlInterface;
 use Magento\Ui\Component\Container;
 use Magento\Ui\Component\Form;
+use Magento\Ui\Component\Form\Fieldset;
 use Magento\Ui\Component\Modal;
+use Magento\Store\Model\Store;
 
 /**
  * Create Ship Bundle Items and Affect Bundle Product Selections fields
@@ -22,13 +26,13 @@ use Magento\Ui\Component\Modal;
  */
 class BundlePanel extends AbstractModifier
 {
-    const GROUP_CONTENT = 'content';
-    const CODE_SHIPMENT_TYPE = 'shipment_type';
-    const CODE_BUNDLE_DATA = 'bundle-items';
-    const CODE_AFFECT_BUNDLE_PRODUCT_SELECTIONS = 'affect_bundle_product_selections';
-    const CODE_BUNDLE_HEADER = 'bundle_header';
-    const CODE_BUNDLE_OPTIONS = 'bundle_options';
-    const SORT_ORDER = 20;
+    public const GROUP_CONTENT = 'content';
+    public const CODE_SHIPMENT_TYPE = 'shipment_type';
+    public const CODE_BUNDLE_DATA = 'bundle-items';
+    public const CODE_AFFECT_BUNDLE_PRODUCT_SELECTIONS = 'affect_bundle_product_selections';
+    public const CODE_BUNDLE_HEADER = 'bundle_header';
+    public const CODE_BUNDLE_OPTIONS = 'bundle_options';
+    public const SORT_ORDER = 20;
 
     /**
      * @var UrlInterface
@@ -69,13 +73,26 @@ class BundlePanel extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function modifyMeta(array $meta)
     {
         $meta = $this->removeFixedTierPrice($meta);
-        $path = $this->arrayManager->findPath(static::CODE_BUNDLE_DATA, $meta, null, 'children');
+
+        $groupCode = static::CODE_BUNDLE_DATA;
+        $path = $this->arrayManager->findPath($groupCode, $meta, null, 'children');
+        if (empty($path)) {
+            $meta[$groupCode]['children'] = [];
+            $meta[$groupCode]['arguments']['data']['config'] = [
+                'componentType' => Fieldset::NAME,
+                'label' => __('Bundle Items'),
+                'collapsible' => true
+            ];
+
+            $path = $this->arrayManager->findPath($groupCode, $meta, null, 'children');
+        }
 
         $meta = $this->arrayManager->merge(
             $path,
@@ -220,7 +237,7 @@ class BundlePanel extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -235,16 +252,19 @@ class BundlePanel extends AbstractModifier
      */
     private function modifyShipmentType(array $meta)
     {
+        $actualPath = $this->arrayManager->findPath(
+            static::CODE_SHIPMENT_TYPE,
+            $meta,
+            null,
+            'children'
+        );
+
         $meta = $this->arrayManager->merge(
-            $this->arrayManager->findPath(
-                static::CODE_SHIPMENT_TYPE,
-                $meta,
-                null,
-                'children'
-            ) . static::META_CONFIG_PATH,
+            $actualPath . static::META_CONFIG_PATH,
             $meta,
             [
-                'dataScope' => 'data.product.shipment_type',
+                'dataScope' => stripos($actualPath, self::CODE_BUNDLE_DATA) === 0
+                    ? 'data.product.shipment_type' : 'shipment_type',
                 'validation' => [
                     'required-entry' => false
                 ]
@@ -302,6 +322,7 @@ class BundlePanel extends AbstractModifier
      * Get Bundle Options structure
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function getBundleOptions()
     {
@@ -314,7 +335,8 @@ class BundlePanel extends AbstractModifier
                         'template' => 'ui/dynamic-rows/templates/collapsible',
                         'additionalClasses' => 'admin__field-wide',
                         'dataScope' => 'data.bundle_options',
-                        'bundleSelectionsName' => 'product_bundle_container.bundle_selections'
+                        'isDefaultFieldScope' => 'is_default',
+                        'bundleSelectionsName' => 'product_bundle_container.bundle_selections',
                     ],
                 ],
             ],
@@ -330,7 +352,8 @@ class BundlePanel extends AbstractModifier
                                 'component' => 'Magento_Ui/js/dynamic-rows/record',
                                 'positionProvider' => 'product_bundle_container.position',
                                 'imports' => [
-                                    'label' => '${ $.name }' . '.product_bundle_container.option_info.title:value'
+                                    'label' => '${ $.name }' . '.product_bundle_container.option_info.title:value',
+                                    '__disableTmpl' => ['label' => false],
                                 ],
                             ],
                         ],
@@ -360,9 +383,13 @@ class BundlePanel extends AbstractModifier
                                                 'component' => 'Magento_Bundle/js/components/bundle-dynamic-rows-grid',
                                                 'sortOrder' => 50,
                                                 'additionalClasses' => 'admin__field-wide',
-                                                'template' => 'ui/dynamic-rows/templates/default',
+                                                'template' => 'Magento_Catalog/components/dynamic-rows-per-page',
+                                                'sizesConfig' => [
+                                                    'enabled' => true
+                                                ],
                                                 'provider' => 'product_form.product_form_data_source',
                                                 'dataProvider' => '${ $.dataScope }' . '.bundle_button_proxy',
+                                                '__disableTmpl' => ['dataProvider' => false],
                                                 'identificationDRProperty' => 'product_id',
                                                 'identificationProperty' => 'product_id',
                                                 'map' => [
@@ -376,9 +403,17 @@ class BundlePanel extends AbstractModifier
                                                     'selection_price_type' => '',
                                                     'selection_price_value' => '',
                                                     'selection_qty' => '',
+                                                    'selection_qty_is_integer'=> 'selection_qty_is_integer',
                                                 ],
-                                                'links' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
-                                                'source' => 'product'
+                                                'links' => [
+                                                    'insertData' => '${ $.provider }:${ $.dataProvider }',
+                                                    '__disableTmpl' => ['insertData' => false],
+                                                ],
+                                                'imports' => [
+                                                    'inputType' => '${$.provider}:${$.dataScope}.type',
+                                                    '__disableTmpl' => ['inputType' => false],
+                                                ],
+                                                'source' => 'product',
                                             ],
                                         ],
                                     ],
@@ -594,11 +629,16 @@ class BundlePanel extends AbstractModifier
                     'config' => [
                         'componentType' => Container::NAME,
                         'isTemplate' => true,
-                        'component' => 'Magento_Bundle/js/components/bundle-record',
+                        'component' => 'Magento_Ui/js/dynamic-rows/record',
                         'is_collection' => true,
                         'imports' => [
-                            'onTypeChanged' => '${ $.provider }:${ $.bundleOptionsDataScope }.type'
-                        ]
+                            'inputType' => '${$.parentName}:inputType',
+                            '__disableTmpl' => ['inputType' => false],
+                        ],
+                        'exports' => [
+                            'isDefaultValue' => '${$.parentName}:isDefaultValue.${$.index}',
+                            '__disableTmpl' => ['isDefaultValue' => false],
+                        ],
                     ],
                 ],
             ],
@@ -678,7 +718,8 @@ class BundlePanel extends AbstractModifier
                                     'validate-greater-than-zero' => true
                                 ],
                                 'imports' => [
-                                    'isInteger' => '${ $.provider }:${ $.parentScope }.selection_qty_is_integer'
+                                    'isInteger' => '${ $.provider }:${ $.parentScope }.selection_qty_is_integer',
+                                    '__disableTmpl' => ['isInteger' => false],
                                 ],
                             ],
                         ],
@@ -691,11 +732,16 @@ class BundlePanel extends AbstractModifier
                                 'componentType' => Form\Field::NAME,
                                 'formElement' => Form\Element\Checkbox::NAME,
                                 'dataType' => Form\Element\DataType\Price::NAME,
+                                'component' => 'Magento_Bundle/js/components/bundle-user-defined-checkbox',
                                 'label' => __('User Defined'),
                                 'dataScope' => 'selection_can_change_qty',
                                 'value' => '1',
                                 'valueMap' => ['true' => '1', 'false' => '0'],
                                 'sortOrder' => 110,
+                                'imports' => [
+                                    'inputType' => '${$.parentName}:inputType',
+                                    '__disableTmpl' => ['inputType' => false],
+                                ],
                             ],
                         ],
                     ],
@@ -736,7 +782,8 @@ class BundlePanel extends AbstractModifier
                         'dataScope' => 'selection_price_value',
                         'value' => '0.00',
                         'imports' => [
-                            'visible' => '!ns = ${ $.ns }, index = ' . BundlePrice::CODE_PRICE_TYPE . ':checked'
+                            'visible' => '!ns = ${ $.ns }, index = ' . BundlePrice::CODE_PRICE_TYPE . ':checked',
+                            '__disableTmpl' => ['visible' => false],
                         ],
                         'sortOrder' => 80,
                     ],
@@ -773,7 +820,8 @@ class BundlePanel extends AbstractModifier
                             ]
                         ],
                         'imports' => [
-                            'visible' => '!ns = ${ $.ns }, index = ' . BundlePrice::CODE_PRICE_TYPE . ':checked'
+                            'visible' => '!ns = ${ $.ns }, index = ' . BundlePrice::CODE_PRICE_TYPE . ':checked',
+                            '__disableTmpl' => ['visible' => false],
                         ],
                         'sortOrder' => 90,
                     ],
@@ -789,6 +837,6 @@ class BundlePanel extends AbstractModifier
      */
     protected function isDefaultStore()
     {
-        return $this->locator->getProduct()->getStoreId() == 0;
+        return $this->locator->getProduct()->getStoreId() == Store::DEFAULT_STORE_ID;
     }
 }

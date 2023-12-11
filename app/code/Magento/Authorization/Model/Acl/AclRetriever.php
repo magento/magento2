@@ -21,8 +21,8 @@ use Psr\Log\LoggerInterface as Logger;
  */
 class AclRetriever
 {
-    const PERMISSION_ANONYMOUS = 'anonymous';
-    const PERMISSION_SELF = 'self';
+    public const PERMISSION_ANONYMOUS = 'anonymous';
+    public const PERMISSION_SELF = 'self';
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -84,7 +84,7 @@ class AclRetriever
             $role = $this->_getUserRole($userType, $userId);
             if (!$role) {
                 throw new AuthorizationException(
-                    __('We can\'t find the role for the user you wanted.')
+                    __("The role wasn't found for the user. Verify the role and try again.")
                 );
             }
             $allowedResources = $this->getAllowedResourcesByRole($role->getId());
@@ -117,7 +117,7 @@ class AclRetriever
         /** @var \Magento\Authorization\Model\Rules $ruleItem */
         foreach ($rulesCollection->getItems() as $ruleItem) {
             $resourceId = $ruleItem->getResourceId();
-            if ($acl->has($resourceId) && $acl->isAllowed($roleId, $resourceId)) {
+            if ($acl->hasResource($resourceId) && $acl->isAllowed($roleId, $resourceId)) {
                 $allowedResources[] = $resourceId;
             }
         }

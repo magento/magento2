@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontMultishippingCheckoutBillingToolbarSection">
+        <element name="goToReviewOrder" type="button" selector="button.action.primary.continue"/>
+        <element name="changeBillingAddress" type="button" selector="//span[text()='Change']"/>
+        <element name="selectBillingAddress" type="button" selector="//a[text()='333-33-333-33']/../../..//span[text()='Select Address']"/>
+    </section>
+</sections>

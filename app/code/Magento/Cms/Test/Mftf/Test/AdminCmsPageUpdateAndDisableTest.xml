@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  *CreateNewPage Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCmsPageUpdateAndDisableTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Update CMS Page via the Admin, disable"/>
+            <testCaseId value="MC-14673" />
+            <title value="Update CMS Page via the Admin, disable"/>
+            <description value="Admin should be able to update a CMS Page"/>
+            <severity value="CRITICAL"/>
+            <group value="backend"/>
+            <group value="cMSContent"/>
+            <group value="mtf_migrated"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultCmsPage" stepKey="existingCMSPage" />
+        </before>
+        <after>
+            <deleteData createDataKey="existingCMSPage" stepKey="deleteCMSPage" />
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Navigate to Page in Admin-->
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
+            <argument name="CMSPage" value="$$existingCMSPage$$"/>
+        </actionGroup>
+        <!--Deactivate page-->
+        <actionGroup ref="AdminDisableCMSPageActionGroup" stepKey="setPageDisabled"/>
+        <!--Fill data using _duplicatedCMSPage-->
+        <actionGroup ref="FillOutCMSPageContent" stepKey="fillNewData"/>
+        <!--Save page-->
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="saveDisabledPage"/>
+        <!--Check that page is not found on storefront-->
+        <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="goToCMSPageOnStorefront">
+            <argument name="identifier" value="{{_duplicatedCMSPage.identifier}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertCMSPageNotFoundOnStorefrontActionGroup" stepKey="seeNotFoundError"/>
+    </test>
+</tests>

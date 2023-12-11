@@ -30,8 +30,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_isStoreFilter = false;
 
     /**
-     * Date
-     *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $_date;
@@ -70,7 +68,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Joines templates information
+     * Joins templates information
      *
      * @return $this
      */
@@ -86,7 +84,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Adds subscribers info to selelect
+     * Adds subscribers info to select
      *
      * @return $this
      */
@@ -130,7 +128,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Joines subscribers information
+     * Joins subscribers information
      *
      * @return $this
      */
@@ -141,8 +139,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Checks if field is 'subscribers_total', 'subscribers_sent'
-     * to add specific filter or adds reguler filter
+     * Checks if field is 'subscribers_total', 'subscribers_sent' to add specific filter or adds regular filter
      *
      * @param string $field
      * @param null|string|array $condition
@@ -210,7 +207,36 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Add filter by only ready fot sending item
+     * Set filter for queue by customer
+     *
+     * @param int $customerId
+     * @return $this
+     * @since 100.4.0
+     */
+    public function addCustomerFilter(int $customerId): Collection
+    {
+        $this->getSelect()
+            ->join(
+                ['link' => $this->getTable('newsletter_queue_link')],
+                'main_table.queue_id=link.queue_id',
+                ['letter_sent_at']
+            )->join(
+                ['subscriber' => $this->getTable('newsletter_subscriber')],
+                'link.subscriber_id=subscriber.subscriber_id',
+                [
+                    'subscriber_store_id' => 'subscriber.store_id',
+                    'subscriber_id' => 'subscriber.subscriber_id',
+                ]
+            )->where(
+                'subscriber.customer_id = ?',
+                $customerId
+            );
+
+        return $this;
+    }
+
+    /**
+     * Add filter by only ready for sending item
      *
      * @return $this
      */
@@ -221,7 +247,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             [\Magento\Newsletter\Model\Queue::STATUS_SENDING, \Magento\Newsletter\Model\Queue::STATUS_NEVER]
         )->where(
             'main_table.queue_start_at < ?',
-            $this->_date->gmtdate()
+            $this->_date->gmtDate()
         )->where(
             'main_table.queue_start_at IS NOT NULL'
         );

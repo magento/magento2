@@ -5,36 +5,81 @@
  */
 namespace Magento\Paypal\Controller;
 
+use Magento\Checkout\Model\Session;
+use Magento\Paypal\Model\Config;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+
 /**
  * @magentoDataFixture Magento/Sales/_files/order.php
  */
 class PayflowadvancedTest extends \Magento\TestFramework\TestCase\AbstractController
 {
-    protected function setUp()
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * @var CartRepositoryInterface
+     */
+    private $quoteRepository;
+
+    /**
+     * @var OrderInterface
+     */
+    private $order;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class);
-        $order->load('100000001', 'increment_id');
-        $order->getPayment()->setMethod(\Magento\Paypal\Model\Config::METHOD_PAYFLOWADVANCED);
+        /** @var FilterBuilder $filterBuilder */
+        $filterBuilder = $this->_objectManager->get(FilterBuilder::class);
+        $filters = [
+            $filterBuilder->setField(OrderInterface::INCREMENT_ID)
+                ->setValue('100000001')
+                ->create(),
+        ];
 
-        $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Quote\Model\Quote::class
-        )->setStoreId(
-            $order->getStoreId()
-        )->save();
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = $this->_objectManager->get(SearchCriteriaBuilder::class);
+        $searchCriteria = $searchCriteriaBuilder->addFilters($filters)
+            ->create();
 
-        $order->setQuoteId($quote->getId());
-        $order->save();
+        $this->orderRepository = $this->_objectManager->get(OrderRepositoryInterface::class);
+        $orders = $this->orderRepository->getList($searchCriteria)
+            ->getItems();
 
-        $session = $this->_objectManager->create(\Magento\Checkout\Model\Session::class);
-        $session->setLastRealOrderId($order->getRealOrderId())->setLastQuoteId($order->getQuoteId());
+        /** @var OrderInterface $order */
+        $this->order = array_pop($orders);
+        $this->order->getPayment()->setMethod(Config::METHOD_PAYFLOWADVANCED);
+
+        /** @var $quote \Magento\Quote\Model\Quote */
+        $quote = $this->_objectManager->create(Quote::class)
+            ->setStoreid($this->order->getStoreId());
+
+        $this->quoteRepository = $this->_objectManager->get(CartRepositoryInterface::class);
+        $this->quoteRepository->save($quote);
+
+        $this->order->setQuoteId($quote->getId());
+        $this->orderRepository->save($this->order);
+
+        $session = $this->_objectManager->get(Session::class);
+        $session->setLastRealOrderId($this->order->getRealOrderId())->setLastQuoteId($this->order->getQuoteId());
     }
 
     public function testCancelPaymentActionIsContentGenerated()
     {
         $this->dispatch('paypal/payflowadvanced/cancelpayment');
-        $this->assertContains("goToSuccessPage = ''", $this->getResponse()->getBody());
+        $this->assertStringContainsString("goToSuccessPage = ''", $this->getResponse()->getBody());
     }
 
     public function testReturnurlActionIsContentGenerated()
@@ -42,36 +87,37 @@ class PayflowadvancedTest extends \Magento\TestFramework\TestCase\AbstractContro
         $checkoutHelper = $this->_objectManager->create(\Magento\Paypal\Helper\Checkout::class);
         $checkoutHelper->cancelCurrentOrder('test');
         $this->dispatch('paypal/payflowadvanced/returnurl');
-        $this->assertContains("goToSuccessPage = ''", $this->getResponse()->getBody());
+        $this->assertStringContainsString("goToSuccessPage = ''", $this->getResponse()->getBody());
     }
 
     public function testFormActionIsContentGenerated()
     {
         $this->dispatch('paypal/payflowadvanced/form');
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<form id="token_form" method="GET" action="https://payflowlink.paypal.com">',
             $this->getResponse()->getBody()
         );
     }
 
     /**
-     * @magentoDataFixture Magento/Sales/_files/order.php
      * @magentoConfigFixture current_store payment/paypal_payflow/active 1
      * @magentoConfigFixture current_store paypal/general/business_account merchant_2012050718_biz@example.com
+     * @return void
      */
-    public function testCancelAction()
+    public function testCancelAction(): void
     {
-        $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class);
-        $session = $this->_objectManager->get(\Magento\Checkout\Model\Session::class);
+        $orderId = $this->order->getEntityId();
+        /** @var \Magento\Sales\Model\Order $order */
+        $order = $this->orderRepository->get($orderId);
+        /** @var $quote \Magento\Quote\Model\Quote */
+        $quote = $this->quoteRepository->get($order->getQuoteId());
 
-        $quote = $this->_objectManager->create(\Magento\Quote\Model\Quote::class);
-        $quote->load('test02', 'reserved_order_id');
-        $order->load('100000001', 'increment_id')->setQuoteId($quote->getId())->save();
+        $session = $this->_objectManager->get(Session::class);
         $session->setQuoteId($quote->getId());
         $session->setPaypalStandardQuoteId($quote->getId())->setLastRealOrderId('100000001');
-        $this->dispatch('paypal/payflow/cancelpayment');
+        $this->dispatch('paypal/payflowadvanced/cancelpayment');
 
-        $order->load('100000001', 'increment_id');
+        $order = $this->_objectManager->create(OrderRepositoryInterface::class)->get($orderId);
         $this->assertEquals('canceled', $order->getState());
         $this->assertEquals($session->getQuote()->getGrandTotal(), $quote->getGrandTotal());
         $this->assertEquals($session->getQuote()->getItemsCount(), $quote->getItemsCount());

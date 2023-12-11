@@ -3,25 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Session\Test\Unit\SaveHandler\Redis;
 
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\State;
 use Magento\Framework\Session\SaveHandler\Redis\Config;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|MockObject
      */
     private $deploymentConfigMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|MockObject
      */
     private $appStateMock;
 
     /**
-     * @var \Magento\Framework\App\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config|MockObject
      */
     private $scopeConfigMock;
 
@@ -30,13 +37,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $config;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
-        $this->appStateMock = $this->createMock(\Magento\Framework\App\State::class);
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
+        $this->appStateMock = $this->createMock(State::class);
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config::class);
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->config = $objectManager->getObject(
             Config::class,
             [
@@ -245,5 +252,50 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn($expectedLifetime);
         $this->assertEquals($this->config->getLifetime(), $expectedLifetime);
+    }
+
+    public function testGetSentinelServers()
+    {
+        $expected = 'server-1,server-2';
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with(Config::PARAM_SENTINEL_SERVERS)
+            ->willReturn($expected);
+        $this->assertEquals($expected, $this->config->getSentinelServers());
+    }
+
+    public function testGetSentinelMaster()
+    {
+        $expected = 'master';
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with(Config::PARAM_SENTINEL_MASTER)
+            ->willReturn($expected);
+        $this->assertEquals($this->config->getSentinelMaster(), $expected);
+    }
+
+    public function testGetSentinelVerifyMaster()
+    {
+        $expected = '1';
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with(Config::PARAM_SENTINEL_VERIFY_MASTER)
+            ->willReturn($expected);
+        $this->assertEquals($this->config->getSentinelVerifyMaster(), $expected);
+    }
+
+    public function testGetSentinelConnectRetries()
+    {
+        $expected = '10';
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->willReturn(Config::PARAM_SENTINEL_CONNECT_RETRIES)
+            ->willReturn($expected);
+        $this->assertEquals($this->config->getSentinelConnectRetries(), $expected);
+    }
+
+    public function testGetFailAfter()
+    {
+        $this->assertEquals($this->config->getFailAfter(), Config::DEFAULT_FAIL_AFTER);
     }
 }

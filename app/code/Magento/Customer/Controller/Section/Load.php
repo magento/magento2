@@ -5,6 +5,7 @@
  */
 namespace Magento\Customer\Controller\Section;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Customer\CustomerData\Section\Identifier;
 use Magento\Customer\CustomerData\SectionPoolInterface;
 use Magento\Framework\App\Action\Context;
@@ -13,7 +14,7 @@ use Magento\Framework\Controller\Result\JsonFactory;
 /**
  * Customer section controller
  */
-class Load extends \Magento\Framework\App\Action\Action
+class Load extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
 {
     /**
      * @var JsonFactory
@@ -22,7 +23,8 @@ class Load extends \Magento\Framework\App\Action\Action
 
     /**
      * @var Identifier
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
+     * @see Used only for backward compatibility for do not break current class implementation with its dependencies
      */
     protected $sectionIdentifier;
 
@@ -58,25 +60,29 @@ class Load extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * @return \Magento\Framework\Controller\Result\Json
+     * @inheritdoc
      */
     public function execute()
     {
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
+        $resultJson->setHeader('Cache-Control', 'max-age=0, must-revalidate, no-cache, no-store', true);
+        $resultJson->setHeader('Pragma', 'no-cache', true);
         try {
             $sectionNames = $this->getRequest()->getParam('sections');
-            $sectionNames = $sectionNames ? array_unique(\explode(',', $sectionNames)) : null;
+            $sectionNames = $sectionNames
+                ? array_unique(is_array($sectionNames) ? $sectionNames : explode(',', $sectionNames))
+                : null;
 
-            $updateSectionId = $this->getRequest()->getParam('update_section_id');
-            if ('false' === $updateSectionId) {
-                $updateSectionId = false;
+            $forceNewSectionTimestamp = $this->getRequest()->getParam('force_new_section_timestamp');
+            if ('false' === $forceNewSectionTimestamp) {
+                $forceNewSectionTimestamp = false;
             }
-            $response = $this->sectionPool->getSectionsData($sectionNames, (bool)$updateSectionId);
+            $response = $this->sectionPool->getSectionsData($sectionNames, (bool)$forceNewSectionTimestamp);
         } catch (\Exception $e) {
             $resultJson->setStatusHeader(
-                \Zend\Http\Response::STATUS_CODE_400,
-                \Zend\Http\AbstractMessage::VERSION_11,
+                \Laminas\Http\Response::STATUS_CODE_400,
+                \Laminas\Http\AbstractMessage::VERSION_11,
                 'Bad Request'
             );
             $response = ['message' => $this->escaper->escapeHtml($e->getMessage())];

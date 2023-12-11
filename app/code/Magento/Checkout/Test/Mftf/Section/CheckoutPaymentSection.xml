@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CheckoutPaymentSection">
+        <element name="isPaymentSection" type="text" selector="//*[@class='opc-progress-bar']/li[contains(@class, '_active') and span[contains(.,'Review &amp; Payments')]]"/>
+        <element name="availablePaymentSolutions" type="text" selector="#checkout-payment-method-load>div>div>div:nth-child(2)>div.payment-method-title.field.choice"/>
+        <element name="notAvailablePaymentSolutions" type="text" selector="#checkout-payment-method-load>div>div>div.payment-method._active>div.payment-method-title.field.choice"/>
+        <element name="billingNewAddressForm" type="text" selector="[data-form='billing-new-address']"/>
+        <element name="billingAddressNotSameCheckbox" type="checkbox" selector="#billing-address-same-as-shipping-checkmo"/>
+        <element name="editAddress" type="button" selector="button.action.action-edit-address"/>
+        <element name="addressDropdown" type="select" selector="[name=billing_address_id]"/>
+        <element name="addressDropdownSelected" type="select" selector="[name=billing_address_id] option:checked"/>
+        <element name="placeOrderDisabled" type="button" selector="#checkout-payment-method-load button.disabled"/>
+        <element name="update" type="button" selector=".payment-method._active .payment-method-billing-address .action.action-update" timeout="30"/>
+        <element name="guestFirstName" type="input" selector=".payment-method._active .billing-address-form input[name='firstname']"/>
+        <element name="guestLastName" type="input" selector=".payment-method._active .billing-address-form input[name*='lastname']"/>
+        <element name="guestStreet" type="input" selector=".payment-method._active .billing-address-form input[name*='street[0]']"/>
+        <element name="guestStreet2" type="input" selector=".payment-method._active .billing-address-form input[name*='street[1]']"/>
+        <element name="guestStreet3" type="input" selector=".payment-method._active .billing-address-form input[name*='street[2]']"/>
+        <element name="guestStreet4" type="input" selector=".payment-method._active .billing-address-form input[name*='street[3]']"/>
+        <element name="guestCity" type="input" selector=".payment-method._active .billing-address-form input[name*='city']"/>
+        <element name="guestCountry" type="select" selector=".payment-method._active .billing-address-form select[name*='country_id']"/>
+        <element name="guestRegion" type="select" selector=".payment-method._active .billing-address-form select[name*='region_id']"/>
+        <element name="guestPostcode" type="input" selector=".payment-method._active .billing-address-form input[name*='postcode']"/>
+        <element name="guestTelephone" type="input" selector=".payment-method._active .billing-address-form input[name*='telephone']"/>
+        <element name="billingAddress" type="text" selector=".payment-method._active div.billing-address-details"/>
+        <element name="cartItems" type="text" selector="ol.minicart-items"/>
+        <element name="cartItemsArea" type="button" selector="div.block.items-in-cart"/>
+        <element name="cartItemsAreaActive" type="textarea" selector="div.block.items-in-cart.active" timeout="30"/>
+        <element name="checkMoneyOrderPayment" type="radio" selector="input#checkmo.radio" timeout="30"/>
+        <element name="purchaseOrderPayment" type="radio" selector="input#purchaseorder.radio" timeout="30"/>
+        <element name="placeOrder" type="button" selector=".payment-method._active button.action.primary.checkout" timeout="60"/>
+        <element name="placeOrderWithoutTimeout" type="button" selector=".payment-method._active button.action.primary.checkout"/>
+        <element name="paymentSectionTitle" type="text" selector="//*[@id='checkout-payment-method-load']//div[@data-role='title']" />
+        <element name="orderSummarySubtotal" type="text" selector="//tr[@class='totals sub']//span[@class='price']" />
+        <element name="orderSummaryShippingTotal" type="text" selector="//tr[@class='totals shipping excl']//span[@class='price']" />
+        <element name="orderSummaryShippingMethod" type="text" selector="//tr[@class='totals shipping excl']//span[@class='value']" />
+        <element name="orderSummaryTotal" type="text" selector="tr.grand.totals span.price" />
+        <element name="ProductItemByName" type="text" selector="//div[@class='product-item-details']//strong[@class='product-item-name'][text()='{{var1}}']" parameterized="true" />
+        <element name="ProductOptionsByProductItemName" type="text" selector="//div[@class='product-item-details']//strong[@class='product-item-name'][text()='{{var1}}']//ancestor::div[@class='product-item-details']//div[@class='product options']" parameterized="true" />
+        <element name="ProductOptionsActiveByProductItemName" type="text" selector="//div[@class='product-item-details']//strong[@class='product-item-name'][text()='{{var1}}']//ancestor::div[@class='product-item-details']//div[@class='product options active']" parameterized="true" />
+        <element name="ProductOptionLinkActiveByProductItemName" type="text" selector="//div[@class='product-item-details']//strong[@class='product-item-name'][text()='{{var1}}']//ancestor::div[@class='product-item-details']//div[@class='product options active']//a[text() = '{{var2}}']" parameterized="true" />
+        <element name="shipToInformation" type="text" selector="//div[@class='ship-to']//div[@class='shipping-information-content']" />
+        <element name="shippingMethodInformation" type="text" selector="//div[@class='ship-via']//div[@class='shipping-information-content']" />
+        <element name="shippingInformationSection" type="text" selector=".ship-to .shipping-information-content" />
+        <element name="paymentMethodTitle" type="text" selector=".payment-method-title span" />
+        <element name="productOptionsByProductItemPrice" type="text" selector="//div[@class='product-item-inner']//div[@class='subtotal']//span[@class='price'][contains(.,'{{price}}')]//ancestor::div[@class='product-item-details']//div[@class='product options']" parameterized="true"/>
+        <element name="productOptionsActiveByProductItemPrice" type="text" selector="//div[@class='subtotal']//span[@class='price'][contains(.,'{{price}}')]//ancestor::div[@class='product-item-details']//div[@class='product options active']" parameterized="true"/>
+        <element name="productItemPriceByName" type="text" selector="//div[@class='product-item-details'][contains(., '{{ProductName}}')]//span[@class='price']" parameterized="true"/>
+        <element name="tax" type="text" selector="[data-th='Tax'] span" timeout="30"/>
+        <element name="taxDetails" type="text" selector=".totals-tax-details th.mark" timeout="30"/>
+        <element name="taxPercentage" type="text" selector=".totals-tax-details .mark"/>
+        <element name="orderSummaryTotalIncluding" type="text" selector="//tr[@class='grand totals incl']//span[@class='price']" />
+        <element name="orderSummaryTotalExcluding" type="text" selector="//tr[@class='grand totals excl']//span[@class='price']" />
+        <element name="myShippingAndBillingAddressSame" type="input" selector=".billing-address-same-as-shipping-block"/>
+        <element name="addressAction" type="button" selector="//span[text()='{{action}}']" parameterized="true"/>
+        <element name="addressBook" type="button" selector="//a[text()='Address Book']"/>
+        <element name="noQuotes" type="text" selector=".no-quotes-block"/>
+        <element name="paymentMethodByName" type="text" selector="//*[@id='checkout-payment-method-load']//*[contains(@class, 'payment-group')]//label[normalize-space(.)='{{var1}}']" parameterized="true"/>
+        <element name="bankTransfer" type="radio" selector="#banktransfer"/>
+        <element name="billingAddressNotSameBankTransferCheckbox" type="checkbox" selector="#billing-address-same-as-shipping-banktransfer"/>
+        <element name="billingAddressSelectShared" type="select" selector=".checkout-billing-address select[name='billing_address_id']"/>
+        <element name="discount" type="block" selector="tr.totals.discount"/>
+        <element name="discountPrice" type="text" selector=".discount .price"/>
+        <element name="billingAddressSameAsShippingCashOnDeliveryCheckbox" type="checkbox" selector="#billing-address-same-as-shipping-cashondelivery"/>
+        <element name="errormessage" type="text" selector="//div[@data-ui-id='checkout-cart-validationmessages-message-error']"/>
+        <element name="productQuantityInCartBlock"  type="text" selector="//div[@class='details-qty']/span[@class='value']" />
+    </section>
+</sections>

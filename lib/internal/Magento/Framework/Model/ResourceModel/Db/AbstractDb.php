@@ -18,7 +18,9 @@ use Magento\Framework\Phrase;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractDb extends AbstractResource
 {
@@ -30,64 +32,46 @@ abstract class AbstractDb extends AbstractResource
     protected $_resources;
 
     /**
-     * Prefix for resources that will be used in this resource model
-     *
      * @var string
      */
     protected $connectionName = \Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION;
 
     /**
-     * Connections cache for this resource model
-     *
      * @var array
      */
     protected $_connections = [];
 
     /**
-     * Resource model name that contains entities (names of tables)
-     *
      * @var string
      */
     protected $_resourceModel;
 
     /**
-     * Tables used in this resource model
-     *
      * @var array
      */
     protected $_tables = [];
 
     /**
-     * Main table name
-     *
      * @var string
      */
     protected $_mainTable;
 
     /**
-     * Main table primary key field name
-     *
      * @var string
      */
     protected $_idFieldName;
 
     /**
-     * Primary key auto increment flag
-     *
      * @var bool
      */
     protected $_isPkAutoIncrement = true;
 
     /**
-     * Use is object new method for save of object
-     *
      * @var bool
      */
     protected $_useIsObjectNew = false;
 
     /**
-     * Fields of main table
-     *
      * @var array
      */
     protected $_mainTableFields;
@@ -219,8 +203,10 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
-     * Set main entity table name and primary key field name
-     * If field name is omitted {table_name}_id will be used
+     * Main table setter.
+     *
+     * Set main entity table name and primary key field name.
+     * If field name is omitted {table_name}_id will be used.
      *
      * @param string $mainTable
      * @param string|null $idFieldName
@@ -242,7 +228,6 @@ abstract class AbstractDb extends AbstractResource
      *
      * @throws LocalizedException
      * @return string
-     * @api
      */
     public function getIdFieldName()
     {
@@ -253,12 +238,13 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
+     * Main table getter.
+     *
      * Returns main table name - extracted from "module/table" style and
-     * validated by db adapter
+     * validated by db adapter.
      *
      * @throws LocalizedException
      * @return string
-     * @api
      */
     public function getMainTable()
     {
@@ -273,7 +259,6 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param string $tableName
      * @return string
-     * @api
      */
     public function getTable($tableName)
     {
@@ -357,7 +342,7 @@ abstract class AbstractDb extends AbstractResource
         $object->afterLoad();
         $object->setOrigData();
         $object->setHasDataChanges(false);
-        
+
         return $this;
     }
 
@@ -385,7 +370,6 @@ abstract class AbstractDb extends AbstractResource
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @throws \Exception
      * @throws AlreadyExistsException
-     * @api
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -535,6 +519,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return array
+     * @throws LocalizedException
      */
     protected function _prepareDataForSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -542,11 +527,11 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
-     * Check that model data fields that can be saved
-     * has really changed comparing with origData
+     * Check that model data fields that can be saved has really changed comparing with origData.
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return bool
+     * @throws LocalizedException
      */
     public function hasDataChanged($object)
     {
@@ -591,7 +576,7 @@ abstract class AbstractDb extends AbstractResource
         $fields = $this->getUniqueFields();
         if (!empty($fields)) {
             if (!is_array($fields)) {
-                $this->_uniqueFields = [['field' => $fields, 'title' => $fields]];
+                $fields = $this->_uniqueFields = [['field' => $fields, 'title' => $fields]];
             }
 
             $data = new \Magento\Framework\DataObject($this->_prepareDataForSave($object));
@@ -728,6 +713,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return array
+     * @throws LocalizedException
      */
     protected function prepareDataForUpdate($object)
     {
@@ -782,6 +768,24 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
+     * Check if column data type is numeric
+     *
+     * Based on column description
+     *
+     * @param array $columnDescription
+     * @return bool
+     */
+    private function isNumericValue(array $columnDescription): bool
+    {
+        $result = true;
+        if (!empty($columnDescription['DATA_TYPE'])
+            && in_array($columnDescription['DATA_TYPE'], ['tinyint', 'smallint', 'mediumint', 'int', 'bigint'])) {
+            $result = false;
+        }
+        return $result;
+    }
+
+    /**
      * Update existing object
      *
      * @param \Magento\Framework\Model\AbstractModel $object
@@ -790,29 +794,35 @@ abstract class AbstractDb extends AbstractResource
      */
     protected function updateObject(\Magento\Framework\Model\AbstractModel $object)
     {
-        $condition = $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
+        $connection = $this->getConnection();
+        $tableDescription = $connection->describeTable($this->getMainTable());
+        $preparedValue = $connection->prepareColumnValue($tableDescription[$this->getIdFieldName()], $object->getId());
+        $condition  = (!$this->isNumericValue($tableDescription[$this->getIdFieldName()]))
+            ? sprintf('%s=%d', $this->getIdFieldName(), $preparedValue)
+            : $connection->quoteInto($this->getIdFieldName() . '=?', $preparedValue);
+
         /**
          * Not auto increment primary key support
          */
         if ($this->_isPkAutoIncrement) {
             $data = $this->prepareDataForUpdate($object);
             if (!empty($data)) {
-                $this->getConnection()->update($this->getMainTable(), $data, $condition);
+                $connection->update($this->getMainTable(), $data, $condition);
             }
         } else {
-            $select = $this->getConnection()->select()->from(
+            $select = $connection->select()->from(
                 $this->getMainTable(),
                 [$this->getIdFieldName()]
             )->where(
                 $condition
             );
-            if ($this->getConnection()->fetchOne($select) !== false) {
+            if ($connection->fetchOne($select) !== false) {
                 $data = $this->prepareDataForUpdate($object);
                 if (!empty($data)) {
-                    $this->getConnection()->update($this->getMainTable(), $data, $condition);
+                    $connection->update($this->getMainTable(), $data, $condition);
                 }
             } else {
-                $this->getConnection()->insert(
+                $connection->insert(
                     $this->getMainTable(),
                     $this->_prepareDataForSave($object)
                 );

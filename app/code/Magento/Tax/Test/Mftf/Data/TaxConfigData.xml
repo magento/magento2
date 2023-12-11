@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <!-- Default Tax Destination Calculation -->
+    <entity name="CountryUS" type="country">
+        <data key="value">US</data>
+    </entity>
+    <entity name="AllPostCode" type="postcode">
+        <data key="value">*</data>
+    </entity>
+    <!-- Shopping Cart Display Settings -->
+    <entity name="IncludeAndExcludeTaxInCartPrice" type="priceCart">
+        <data key="value">3</data>
+    </entity>
+    <entity name="IncludeAndExcludeTaxInCartSubtotal" type="subtotalCart">
+        <data key="value">3</data>
+    </entity>
+    <entity name="IncludeTaxInOrderTotalCart" type="grandtotalCart">
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisplayFullTaxSummaryCart" type="full_summaryCart">
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisplayZeroTaxSubtotalCart" type="zero_taxCart">
+        <data key="value">1</data>
+    </entity>
+    <entity name="Tax_Config_CA" type="tax_config_state">
+    <!-- Default Tax Destination Calculation -->
+        <requiredEntity type="country">CountryUS</requiredEntity>
+        <requiredEntity type="region">Region_CA</requiredEntity>
+        <requiredEntity type="postcode">AllPostCode</requiredEntity>
+    <!-- Shopping Cart Display Settings -->
+        <requiredEntity type="grandtotalCart">IncludeTaxInOrderTotalCart</requiredEntity>
+        <requiredEntity type="full_summaryCart">DisplayFullTaxSummaryCart</requiredEntity>
+        <requiredEntity type="zero_taxCart">DisplayZeroTaxSubtotalCart</requiredEntity>
+    </entity>
+
+    <entity name="Tax_Config_NY" type="tax_config_state">
+    <!-- Default Tax Destination Calculation -->
+        <requiredEntity type="country">CountryUS</requiredEntity>
+        <requiredEntity type="region">Region_NY</requiredEntity>
+        <requiredEntity type="postcode">AllPostCode</requiredEntity>
+    <!-- Shopping Cart Display Settings -->
+        <requiredEntity type="grandtotalCart">IncludeTaxInOrderTotalCart</requiredEntity>
+        <requiredEntity type="full_summaryCart">DisplayFullTaxSummaryCart</requiredEntity>
+        <requiredEntity type="zero_taxCart">DisplayZeroTaxSubtotalCart</requiredEntity>
+    </entity>
+    <!-- Set default settings -->
+    <entity name="DefaultTaxConfig" type="tax_config_default">
+        <requiredEntity type="taxTotalFlagZero">DefaultTotalFlagZero</requiredEntity>
+        <requiredEntity type="taxPostCodeEmpty">EmptyField</requiredEntity>
+    </entity>
+    <entity name="DefaultTotalFlagZero" type="taxTotalFlagZero">
+        <data key="value">0</data>
+    </entity>
+    <entity name="EmptyField" type="taxPostCodeEmpty">
+        <data key="value"/>
+    </entity>
+    <entity name="TaxConfigExcludeAndIncludeTaxInCart" type="tax_config_state">
+        <!-- Shopping Cart Display Settings -->
+        <requiredEntity type="priceCart">IncludeAndExcludeTaxInCartPrice</requiredEntity>
+        <requiredEntity type="subtotalCart">IncludeAndExcludeTaxInCartSubtotal</requiredEntity>
+    </entity>
+    <!-- Orders, Invoices, Credit Memos Display Settings-->
+    <entity name="IncludeAndExcludeTaxInSalesPrice" type="priceSales">
+        <data key="value">3</data>
+    </entity>
+    <entity name="IncludeAndExcludeTaxInSalesSubtotal" type="subtotalSales">
+        <data key="value">3</data>
+    </entity>
+    <entity name="TaxConfigExcludeAndIncludeTaxInSales" type="tax_config_state">
+        <requiredEntity type="priceSales">IncludeAndExcludeTaxInSalesPrice</requiredEntity>
+        <requiredEntity type="subtotalSales">IncludeAndExcludeTaxInSalesSubtotal</requiredEntity>
+    </entity>
+    <entity name="DefaultProductTaxClass">
+        <!-- Default value -->
+        <data key="path">tax/classes/default_product_tax_class</data>
+        <data key="label">Yes</data>
+        <data key="value">2</data>
+    </entity>
+    <entity name="EnableDisplayFullTaxSummarySales">
+        <data key="path">tax/sales_display/full_summary</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableDisplayFullTaxSummarySales">
+        <data key="path">tax/sales_display/full_summary</data>
+        <data key="value">0</data>
+    </entity>
+</entities>

@@ -17,16 +17,15 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
     /**
      * full day is 86400, we need 23 hours:59 minutes:59 seconds = 86399
      */
-    const END_OF_DAY_IN_SECONDS = 86399;
+    public const END_OF_DAY_IN_SECONDS = 86399;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getValue($index = null)
     {
         if ($index) {
             if ($data = $this->getData('value', 'orig_' . $index)) {
-                // date('Y-m-d', strtotime($data));
                 return $data;
             }
             return null;
@@ -118,13 +117,13 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
             ) . '/>' . '</div></div>';
         $html .= '<input type="hidden" name="' . $this->_getHtmlName() . '[locale]"' . ' value="'
             . $this->localeResolver->getLocale() . '"/>';
-        $html .= '<script>
-            require(["jquery", "mage/calendar"],function($){
+        $scriptString = 'require(["jquery", "mage/calendar"],function($){
                     $("#' . $htmlId . '_range").dateRange({
                         dateFormat: "' . $format . '",
                         timeFormat: "' . $timeFormat . '",
                         showsTime: ' . ($this->getColumn()->getFilterTime() ? 'true' : 'false') . ',
                         buttonText: "' . $this->escapeHtml(__('Date selector')) . '",
+                        buttonImage: "' . $this->getViewFileUrl('Magento_Theme::calendar.png') . '",
                         from: {
                             id: "' . $htmlId . '_from"
                         },
@@ -132,16 +131,17 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
                             id: "' . $htmlId . '_to"
                         }
                     })
-            });
-        </script>';
+            });';
+        $html .= $this->secureHtmlRenderer->renderTag('script', [], $scriptString, false);
+
         return $html;
     }
 
     /**
      * Return escaped value for calendar
      *
-     * @param string $index
-     * @return string
+     * @param string|null $index
+     * @return array|string|int|float|null
      */
     public function getEscapedValue($index = null)
     {
@@ -150,6 +150,11 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
             if ($value instanceof \DateTimeInterface) {
                 return $this->_localeDate->formatDateTime($value);
             }
+
+            if (is_string($value)) {
+                return $this->escapeHtml($value);
+            }
+
             return $value;
         }
 

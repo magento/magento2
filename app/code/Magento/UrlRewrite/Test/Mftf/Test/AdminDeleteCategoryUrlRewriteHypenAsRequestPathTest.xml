@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteCategoryUrlRewriteHypenAsRequestPathTest">
+        <annotations>
+            <features value="UrlRewrite" />
+            <stories value="Delete custom URL rewrite"/>
+            <title value="Delete category URL rewrite, hyphen as request path"/>
+            <description value="Delete category URL rewrite, hyphen as request path"/>
+            <testCaseId value="MC-5348" />
+            <severity value="MAJOR"/>
+            <group value="urlRewrite"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <createData entity="_defaultCategory" stepKey="category"/>
+        </before>
+        <after>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Create the Category Url Rewrite-->
+        <actionGroup ref="AdminAddUrlRewriteActionGroup" stepKey="addUrlRewrite">
+            <argument name="category" value="$$category.name$$"/>
+            <argument name="customUrlRewriteValue" value="For Category"/>
+            <argument name="storeValue" value="Default Store View"/>
+            <argument name="requestPath" value="-"/>
+            <argument name="redirectTypeValue" value="No"/>
+            <argument name="description" value="End To End Test"/>
+        </actionGroup>
+
+        <!--Delete the Category Url Rewrite-->
+        <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteCustomUrlRewrite">
+            <argument name="requestPath" value="-"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="You deleted the URL rewrite."/>
+        </actionGroup>
+
+        <!--Verify AssertPageByUrlRewriteIsNotFound-->
+        <actionGroup ref="AssertPageByUrlRewriteIsNotFoundActionGroup" stepKey="checkUrlOnFrontend">
+            <argument name="requestPath" value="-"/>
+        </actionGroup>
+
+    </test>
+</tests>

@@ -161,7 +161,7 @@ define([
             var solutionConfiguration = solution.find(buttonConfiguration);
 
             unlock || typeof unlock === 'undefined' ?
-                solutionConfiguration.removeClass('disabled').removeAttr('disabled') :
+                solutionConfiguration.removeClass('disabled').prop('disabled', false) :
                 solutionConfiguration.addClass('disabled').attr('disabled', 'disabled');
         },
 
@@ -584,6 +584,41 @@ define([
                     newLine +
                     'Please re-enable the previously enabled payment solutions.'
                 });
+            }
+        },
+
+        /**
+         * @param {*} $target
+         * @param {*} $owner
+         * @param {Object} data
+         */
+        removeCreditOption: function ($target, $owner, data) {
+            if ($target.find(data.dependsButtonLabel + ' option[value="credit"]').length > 0) {
+                $target.find(data.dependsButtonLabel + ' option[value="credit"]').remove();
+            }
+        },
+
+        /**
+         * @param {*} $target
+         * @param {*} $owner
+         * @param {Object} data
+         */
+        addCreditOption: function ($target, $owner, data) {
+            if ($target.find(data.dependsButtonLabel + ' option[value="credit"]').length === 0) {
+                $target.find(data.dependsButtonLabel).append('<option value="credit">Credit</option>');
+            }
+        },
+
+        /**
+         * @param {*} $target
+         * @param {*} $owner
+         * @param {Object} data
+         */
+        removeCreditOptionConditional: function ($target, $owner, data) {
+            if ($target.find(data.dependsDisableFundingOptions + ' option[value="CREDIT"]').length === 0 ||
+                $target.find(data.dependsDisableFundingOptions + ' option[value="CREDIT"]:selected').length > 0
+            ) {
+                this.removeCreditOption($target, $owner, data);
             }
         }
     });

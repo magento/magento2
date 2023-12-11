@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminExpireCustomerSessionTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Customer Session Expire"/>
+            <title value="Customer Session Expireon"/>
+            <description value="Customer Session Expire"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14110"/>
+            <group value="Backend"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <after>
+            <!-- 6. Restore default configuration settings. -->
+            <magentoCLI command="config:set {{DefaultWebCookieLifetimeConfigData.path}} {{DefaultWebCookieLifetimeConfigData.value}}" stepKey="setDefaultCookieLifetime"/>
+            <!-- Customer Log Out -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <!-- Delete data -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- 1. Login to Admin. -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+
+        <!-- 2. Create customer if needed. -->
+        <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+        <!-- 3. Apply configuration settings. -->
+        <magentoCLI command="config:set {{ChangeWebCookieLifetimeConfigData.path}} {{ChangeWebCookieLifetimeConfigData.value}}" stepKey="changeCookieLifetime"/>
+
+        <!-- 4. Wait for session to expire. -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$" />
+        </actionGroup>
+        <wait time="60" stepKey="waitForCookieLifetime"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+
+        <!-- 5. Perform asserts. -->
+        <seeElement selector="{{StorefrontPanelHeaderSection.customerLoginLink}}" stepKey="assertAuthorizationLinkIsVisibleOnStoreFront"/>
+    </test>
+</tests>

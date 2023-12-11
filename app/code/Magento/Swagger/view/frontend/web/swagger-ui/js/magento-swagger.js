@@ -3,80 +3,95 @@
  * See COPYING.txt for license details.
  */
 
-/*global SwaggerClient SwaggerUi initOAuth hljs*/
+/*global SwaggerUIBundle SwaggerUIStandalonePreset */
 
 /**
  * @api
  */
-$(function () {
+(function () {
     'use strict';
 
-    var url = $('#input_baseUrl').val();
+    var elementBaseUrl = document.querySelector('#swagger-ui'),
+        url = elementBaseUrl.dataset.baseUrl,
+        originalAuthorize,
+        originalLogout;
 
-    // Pre load translate...
-    if (window.SwaggerTranslator) {
-        window.SwaggerTranslator.translate();
-    }
+    /**
+     * Adds token to request header.
+     */
+    function addApiKeyAuthorization(key) {
+        if (key && typeof key !== 'undefined') {
+            key = key.trim();
 
-    /** @function addApiKeyAuthorization */
-    function addApiKeyAuthorization() {
-        var key = encodeURIComponent($('#input_apiKey')[0].value);
+            /**
+             * Adds Auth token to request header.
+             *
+             * @param {Object} req
+             *
+             * @returns {Object} req
+             */
+            ui.getConfigs().requestInterceptor = function (req) {
+                req.headers.Authorization = 'Bearer ' + key;
 
-        if (key && key.trim() !== '') {
-            window.swaggerUi.api.clientAuthorizations.add(
-                'apiKeyAuth',
-                new SwaggerClient.ApiKeyAuthorization('Authorization',  'Bearer ' + key, 'header')
-            );
+                return req;
+            };
         }
     }
 
-    /** @function log */
-    function log() {
-        if ('console' in window) {
-            console.log.apply(console, arguments);
-        }
+    /**
+     * Remove token from request header.
+     */
+    function removeApiKeyAuthorization() {
+        /**
+         * Remove Auth token from request header.
+         *
+         * @param {Object} req
+         *
+         * @returns {Object} req
+         */
+        ui.getConfigs().requestInterceptor = function (req) {
+            delete req.headers.Authorization;
+
+            return req;
+        };
     }
 
-    window.swaggerUi = new SwaggerUi({
+    // Begin Swagger UI call region
+    const ui = SwaggerUIBundle({
         url: url,
         // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-        dom_id: 'swagger-ui-container',
+        dom_id: '#swagger-ui',
         // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
-        supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
-
-        /** @function onComplete */
-        onComplete: function () {
-            if (typeof initOAuth == 'function') {
-                initOAuth({
-                    clientId: 'your-client-id',
-                    clientSecret: 'your-client-secret',
-                    realm: 'your-realms',
-                    appName: 'your-app-name',
-                    scopeSeparator: ','
-                });
-            }
-
-            if (window.SwaggerTranslator) {
-                window.SwaggerTranslator.translate();
-            }
-
-            $('pre code').each(function (i, e) {
-                hljs.highlightBlock(e);
-            });
-
-            addApiKeyAuthorization();
-        },
-
-        /** @function onFailure */
-        onFailure: function () {
-            log('Unable to Load SwaggerUI');
-        },
+        deepLinking: true,
+        presets: [
+            SwaggerUIBundle.presets.apis,
+            SwaggerUIStandalonePreset
+        ],
+        plugins: [
+            SwaggerUIBundle.plugins.DownloadUrl
+        ],
         docExpansion: 'none',
-        apisSorter: 'alpha',
-        showRequestHeaders: false
+        layout: 'StandaloneLayout'
     });
+    // End Swagger UI call region
+    window.ui = ui;
 
-    $('#input_apiKey').change(addApiKeyAuthorization);
+    originalAuthorize = ui.authActions.authorize;
+    ui.authActions.authorize = function (payload) {
+        var apiKeyData = payload.api_key,
+            keyValue = typeof apiKeyData !== 'undefined' ? apiKeyData.value : '';
 
-    window.swaggerUi.load();
-});
+        addApiKeyAuthorization(keyValue);
+        ui.specActions.download();
+
+        return originalAuthorize(payload);
+    };
+
+    originalLogout = ui.authActions.logout;
+    ui.authActions.logout = function (payload) {
+        removeApiKeyAuthorization();
+        ui.specActions.download();
+
+        return originalLogout(payload);
+    };
+})();

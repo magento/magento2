@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminChangeAllCustomersGroupViaGridTest" extends="AdminChangeSingleCustomerGroupViaGridTest">
+        <annotations>
+            <stories value="Change all customers' group via grid"/>
+            <title value="Change all customers' group via grid"/>
+            <description value="Select All customers to change their group"/>
+            <testCaseId value="MC-26040"/>
+            <severity value="MAJOR"/>
+            <skip>
+                <issueId value="ACQE-4161"/>
+            </skip>
+        </annotations>
+
+        <remove keyForRemoval="filterCustomer"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" before="selectCustomer" stepKey="clearFilters"/>
+        <actionGroup ref="AdminSelectAllCustomers" stepKey="selectCustomer"/>
+    </test>
+</tests>

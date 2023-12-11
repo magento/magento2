@@ -6,7 +6,7 @@
 namespace Magento\Framework\View\TemplateEngine\Xhtml;
 
 /**
- * Class Template
+ * XML Template Engine
  */
 class Template
 {
@@ -34,7 +34,7 @@ class Template
     ) {
         $this->logger = $logger;
         $document = new \DOMDocument(static::XML_VERSION, static::XML_ENCODING);
-        $document->loadXML($content);
+        $document->loadXML($content, LIBXML_PARSEHUGE);
         $this->templateNode = $document->documentElement;
     }
 
@@ -56,9 +56,12 @@ class Template
      */
     public function append($content)
     {
-        $newFragment = $this->templateNode->ownerDocument->createDocumentFragment();
-        $newFragment->appendXML($content);
-        $this->templateNode->appendChild($newFragment);
+        $ownerDocument= $this->templateNode->ownerDocument;
+        $document = new \DOMDocument();
+        $document->loadXml($content, LIBXML_PARSEHUGE);
+        $this->templateNode->appendChild(
+            $ownerDocument->importNode($document->documentElement, true)
+        );
     }
 
     /**

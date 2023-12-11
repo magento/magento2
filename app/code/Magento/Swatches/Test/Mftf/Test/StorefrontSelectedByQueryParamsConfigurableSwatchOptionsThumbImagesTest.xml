@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSelectedByQueryParamsConfigurableSwatchOptionsThumbImagesTest"
+          extends="StorefrontConfigurableOptionsThumbImagesTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Configurable product with swatch attribute"/>
+            <title value="Check thumbnail images and active image for Configurable Product with swatch attribute
+                with predefined by query params options"/>
+            <description value="Login as admin, create swatch attribute with two options, configurable product with two
+                associated simple products. Add few images for products, check the fotorama thumbnail images
+                (visible and active) for each option for the configurable product using product URL with params
+                to selected needed option."/>
+            <severity value="MAJOR"/>
+            <group value="swatches"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- Go to created attribute (attribute page) -->
+            <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="navigateToSkuProductAttribute" after="createConfigProductOption">
+                <argument name="ProductAttribute" value="$$createConfigProductAttribute.default_frontend_label$$"/>
+            </actionGroup>
+
+            <!-- Set 'swatch_visual' value for option "Catalog Input Type for Store Owner" -->
+            <actionGroup ref="AdminUpdateAttributeInputTypeActionGroup" stepKey="selectSwatchVisualInputType" after="navigateToSkuProductAttribute"/>
+
+            <!-- Set 'yes' value for option "Update Product Preview Image" -->
+            <actionGroup ref="AdminUpdateProductPreviewImageActionGroup" stepKey="setUpdateProductPreviewImage" after="selectSwatchVisualInputType"/>
+
+            <!-- Save Product Attribute -->
+            <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveAttribute" after="setUpdateProductPreviewImage"/>
+        </before>
+
+        <!-- Select first option using product query params URL -->
+        <amOnPage
+            url="$$createConfigProduct.sku$$.html#$$createConfigProductAttribute.attribute_id$$=$$getConfigAttributeOption1.value$$"
+            stepKey="selectFirstOptionValue"/>
+        <reloadPage stepKey="selectFirstOptionValueRefreshPage" after="selectFirstOptionValue"/>
+        <waitForPageLoad stepKey="waitForProductWithSelectedFirstOptionToLoad" after="selectFirstOptionValueRefreshPage"/>
+
+        <!-- Select second option using product query params URL -->
+        <amOnPage
+            url="$$createConfigProduct.sku$$.html#$$createConfigProductAttribute.attribute_id$$=$$getConfigAttributeOption2.value$$"
+            stepKey="selectSecondOptionValue"/>
+        <reloadPage stepKey="selectSecondOptionValueRefreshPage" after="selectSecondOptionValue"/>
+        <waitForPageLoad stepKey="waitForProductWithSelectedSecondOptionToLoad" after="selectSecondOptionValueRefreshPage"/>
+    </test>
+</tests>

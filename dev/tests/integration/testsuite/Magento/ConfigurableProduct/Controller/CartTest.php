@@ -9,6 +9,8 @@
  */
 namespace Magento\ConfigurableProduct\Controller;
 
+use Magento\Framework\App\Request\Http as HttpRequest;
+
 class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
@@ -85,14 +87,30 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             'remove' => 0,
             'coupon_code' => 'test'
         ];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($inputData);
         $this->dispatch(
             'checkout/cart/couponPost/'
         );
 
         $this->assertSessionMessages(
-            $this->equalTo(['The coupon code "test" is not valid.']),
+            $this->equalTo(['The coupon code &quot;test&quot; is not valid.']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $reflection = new \ReflectionObject($this);
+        foreach ($reflection->getProperties() as $property) {
+            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
+                $property->setAccessible(true);
+                $property->setValue($this, null);
+            }
+        }
     }
 }

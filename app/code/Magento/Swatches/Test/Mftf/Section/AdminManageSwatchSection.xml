@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminManageSwatchSection">
+        <element name="adminInputByIndex" type="input" selector="optionvisual[value][option_{{var}}][0]" parameterized="true"/>
+        <element name="adminInputSwatchValues" type="input" selector="optionvisual[value][option_{{row_val}}][{{col_val}}]" parameterized="true"/>
+        <element name="adminInputSwatchValuesStore" type="input" selector="//td[@class='swatch-col-option_{{row}}'][{{col}}]//input" parameterized="true"/>
+        <element name="swatchOptionWindow" type="button" selector="//div[@id='swatch_window_option_option_{{row}}']" timeout="30" parameterized="true"/>
+        <element name="addSwatch" type="button" selector="#add_new_swatch_visual_option_button" timeout="30"/>
+        <element name="nthSwatch" type="button" selector="#swatch-visual-options-panel table tbody tr:nth-of-type({{var}}) .swatch_window" parameterized="true"/>
+        <element name="addSwatchText" type="button" selector="#add_new_swatch_text_option_button"/>
+        <element name="swatchTextByIndex" type="input" selector="input[name='swatchtext[value][option_{{index}}][0]']" parameterized="true"/>
+        <element name="nthSwatchText" type="input" selector="#swatch-text-options-panel table tbody tr:nth-of-type({{var}}) td:nth-of-type(3) input" parameterized="true"/>
+        <element name="nthIsDefault" type="input" selector="(//input[@name='defaultvisual[]'])[{{var}}]" parameterized="true"/>
+        <element name="nthSwatchAdminDescription" type="input" selector="#swatch-text-options-panel table tbody tr:nth-of-type({{var}}) td:nth-of-type(4) input" parameterized="true"/>
+        <element name="nthVisualSwatch" type="button" selector="#swatch-visual-options-panel table tbody tr:nth-of-type({{var}}) .swatches-visual-col" parameterized="true"/>
+        <element name="chooserBlock" type="block" selector="#swatch-visual-options-panel table tbody tr:nth-of-type({{var}}) .swatches-visual-col .swatch_sub-menu_container" parameterized="true"/>
+        <!-- Selector for Admin Description input where the index is zero-based -->
+        <element name="swatchAdminDescriptionByIndex" type="input" selector="input[name='optiontext[value][option_{{index}}][0]']" parameterized="true"/>
+        <element name="swatchWindow" type="button" selector="#swatch_window_option_option_{{var}}" parameterized="true"/>
+        <element name="swatchWindowUnavailable" type="button" selector="//div[@id='swatch_window_option_option_{{var}}']//ancestor::td[contains(@class,'swatches-visual-col') and contains(@class,'col-default') and contains(@class,'unavailable')]" parameterized="true"/>
+        <element name="nthChooseColor" type="button" selector="#swatch-visual-options-panel table tbody tr:nth-of-type({{var}}) .swatch_row_name.colorpicker_handler" parameterized="true"/>
+        <element name="nthUploadFile" type="button" selector="#swatch-visual-options-panel table tbody tr:nth-of-type({{var}}) .swatch_row_name.btn_choose_file_upload" parameterized="true"/>
+        <element name="nthDelete" type="button" selector="#swatch-visual-options-panel table tbody tr:nth-of-type({{var}}) button.delete-option" parameterized="true"/>
+        <element name="deleteBtn" type="button" selector="#manage-options-panel:nth-of-type({{var}}) button.delete-option" parameterized="true"/>
+        <element name="manageSwatchSection" type="block" selector='//legend/span[contains(text(),"Manage Swatch (Values of Your Attribute)")]'/>
+        <element name="updateSwatchText" type="input" selector="//td[contains(@class,'col-swatch col-swatch-min-width')][{{index}}]//input" parameterized="true"/>
+        <element name="updateDescriptionSwatchText" type="input" selector="//td[contains(@class,'col-swatch-min-width swatch-col')][{{index}}]//input[@placeholder='Description']" parameterized="true"/>
+        <element name="swatchWindowEdit" type="button" selector="//div[@class='swatch_window'][{{args}}]/.." parameterized="true"/>
+        <element name="updateSwatchTextValues" type="input" selector="//tbody[@data-role='swatch-visual-options-container']//tr[{{row}}]//td[{{col}}]//input" parameterized="true"/>
+        <element name="nthSwatchWindowEdit" type="button" selector="//tbody[@data-role='swatch-visual-options-container']//tr[{{row}}]//div[@class='swatch_window'][{{col}}]/.." parameterized="true"/>
+        <element name="defaultLabelField" type="input" selector="//input[@id='attribute_label']"/>
+        <element name="visualSwatchDefaultStoreViewBox" type="input" selector="input[name='optionvisual[value][option_{{index}}][1]']" parameterized="true"/>
+    </section>
+</sections>

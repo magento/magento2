@@ -3,26 +3,47 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Option\Validator;
 
-class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Config\Source\Product\Options\Price;
+use Magento\Catalog\Model\Product\Option;
+use Magento\Catalog\Model\Product\Option\Validator\DefaultValidator;
+use Magento\Catalog\Model\ProductOptions\ConfigInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Locale\FormatInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class DefaultValidatorTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product\Option\Validator\DefaultValidator
+     * @var DefaultValidator
      */
     protected $validator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $valueMock;
 
-    protected function setUp()
+    /**
+     * @var MockObject
+     */
+    protected $localeFormatMock;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $configMock = $this->createMock(\Magento\Catalog\Model\ProductOptions\ConfigInterface::class);
-        $storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $priceConfigMock = new \Magento\Catalog\Model\Config\Source\Product\Options\Price($storeManagerMock);
+        $configMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $priceConfigMock = new Price($storeManagerMock);
+        $this->localeFormatMock = $this->getMockForAbstractClass(FormatInterface::class);
+
         $config = [
             [
                 'label' => 'group label 1',
@@ -45,10 +66,11 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
                 ]
             ],
         ];
-        $configMock->expects($this->once())->method('getAll')->will($this->returnValue($config));
-        $this->validator = new \Magento\Catalog\Model\Product\Option\Validator\DefaultValidator(
+        $configMock->expects($this->once())->method('getAll')->willReturn($config);
+        $this->validator = new DefaultValidator(
             $configMock,
-            $priceConfigMock
+            $priceConfigMock,
+            $this->localeFormatMock
         );
     }
 
@@ -60,32 +82,34 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $mess = ['option required fields' => 'Missed values for option required fields'];
         return [
-            ['option_title', 'name 1.1', 'fixed', 10, new \Magento\Framework\DataObject(['store_id' => 1]), [], true],
-            ['option_title', 'name 1.1', 'fixed', 10, new \Magento\Framework\DataObject(['store_id' => 0]), [], true],
-            [null, 'name 1.1', 'fixed', 10, new \Magento\Framework\DataObject(['store_id' => 1]), [], true],
-            [null, 'name 1.1', 'fixed', 10, new \Magento\Framework\DataObject(['store_id' => 0]), $mess, false],
+            ['option_title', 'name 1.1', 'fixed', 10, new DataObject(['store_id' => 1]), [], true],
+            ['option_title', 'name 1.1', 'fixed', 10, new DataObject(['store_id' => 0]), [], true],
+            [null, 'name 1.1', 'fixed', 10, new DataObject(['store_id' => 1]), [], true],
+            [null, 'name 1.1', 'fixed', 10, new DataObject(['store_id' => 0]), $mess, false],
         ];
     }
 
     /**
-     * @param $title
-     * @param $type
-     * @param $priceType
-     * @param $price
-     * @param $product
-     * @param $messages
-     * @param $result
+     * @param string $title
+     * @param string $type
+     * @param string $priceType
+     * @param \Magento\Framework\DataObject $product
+     * @param array $messages
+     * @param bool $result
      * @dataProvider isValidTitleDataProvider
      */
     public function testIsValidTitle($title, $type, $priceType, $price, $product, $messages, $result)
     {
-        $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', '__wakeup', 'getProduct'];
-        $valueMock = $this->createPartialMock(\Magento\Catalog\Model\Product\Option::class, $methods);
-        $valueMock->expects($this->once())->method('getTitle')->will($this->returnValue($title));
-        $valueMock->expects($this->any())->method('getType')->will($this->returnValue($type));
-        $valueMock->expects($this->once())->method('getPriceType')->will($this->returnValue($priceType));
-        $valueMock->expects($this->once())->method('getPrice')->will($this->returnValue($price));
-        $valueMock->expects($this->once())->method('getProduct')->will($this->returnValue($product));
+        $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', 'getProduct'];
+        $valueMock = $this->createPartialMock(Option::class, $methods);
+        $valueMock->expects($this->once())->method('getTitle')->willReturn($title);
+        $valueMock->expects($this->any())->method('getType')->willReturn($type);
+        $valueMock->expects($this->once())->method('getPriceType')->willReturn($priceType);
+        $valueMock->expects($this->once())->method('getPrice')->willReturn($price);
+        $valueMock->expects($this->once())->method('getProduct')->willReturn($product);
+
+        $this->localeFormatMock->expects($this->once())->method('getNumber')->willReturn($price);
+
         $this->assertEquals($result, $this->validator->isValid($valueMock));
         $this->assertEquals($messages, $this->validator->getMessages());
     }
@@ -98,23 +122,23 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
     public function isValidFailDataProvider()
     {
         return [
-            [new \Magento\Framework\DataObject(['store_id' => 1])],
-            [new \Magento\Framework\DataObject(['store_id' => 0])],
+            [new DataObject(['store_id' => 1])],
+            [new DataObject(['store_id' => 0])],
         ];
     }
 
     /**
-     * @param $product
+     * @param \Magento\Framework\DataObject $product
      * @dataProvider isValidFailDataProvider
      */
     public function testIsValidFail($product)
     {
-        $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', '__wakeup', 'getProduct'];
-        $valueMock = $this->createPartialMock(\Magento\Catalog\Model\Product\Option::class, $methods);
-        $valueMock->expects($this->once())->method('getProduct')->will($this->returnValue($product));
+        $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', 'getProduct'];
+        $valueMock = $this->createPartialMock(Option::class, $methods);
+        $valueMock->expects($this->once())->method('getProduct')->willReturn($product);
         $valueMock->expects($this->once())->method('getTitle');
         $valueMock->expects($this->any())->method('getType');
-        $valueMock->expects($this->once())->method('getPriceType')->will($this->returnValue('some_new_value'));
+        $valueMock->expects($this->once())->method('getPriceType')->willReturn('some_new_value');
         $valueMock->expects($this->never())->method('getPrice');
         $messages = [
             'option required fields' => 'Missed values for option required fields',
@@ -129,11 +153,13 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
      * Data provider for testValidationNegativePrice
      * @return array
      */
-    public function validationNegativePriceDataProvider()
+    public function validationPriceDataProvider()
     {
         return [
-            ['option_title', 'name 1.1', 'fixed', -12, new \Magento\Framework\DataObject(['store_id' => 1])],
-            ['option_title', 'name 1.1', 'fixed', -12, new \Magento\Framework\DataObject(['store_id' => 0])],
+            ['option_title', 'name 1.1', 'fixed', -12, new DataObject(['store_id' => 1])],
+            ['option_title', 'name 1.1', 'fixed', -12, new DataObject(['store_id' => 0])],
+            ['option_title', 'name 1.1', 'fixed', 12, new DataObject(['store_id' => 1])],
+            ['option_title', 'name 1.1', 'fixed', 12, new DataObject(['store_id' => 0])]
         ];
     }
 
@@ -143,22 +169,22 @@ class DefaultValidatorTest extends \PHPUnit\Framework\TestCase
      * @param $priceType
      * @param $price
      * @param $product
-     * @dataProvider validationNegativePriceDataProvider
+     * @dataProvider validationPriceDataProvider
      */
-    public function testValidationNegativePrice($title, $type, $priceType, $price, $product)
+    public function testValidationPrice($title, $type, $priceType, $price, $product)
     {
-        $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', '__wakeup', 'getProduct'];
-        $valueMock = $this->createPartialMock(\Magento\Catalog\Model\Product\Option::class, $methods);
-        $valueMock->expects($this->once())->method('getTitle')->will($this->returnValue($title));
-        $valueMock->expects($this->exactly(2))->method('getType')->will($this->returnValue($type));
-        $valueMock->expects($this->once())->method('getPriceType')->will($this->returnValue($priceType));
-        $valueMock->expects($this->once())->method('getPrice')->will($this->returnValue($price));
-        $valueMock->expects($this->once())->method('getProduct')->will($this->returnValue($product));
+        $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', 'getProduct'];
+        $valueMock = $this->createPartialMock(Option::class, $methods);
+        $valueMock->expects($this->once())->method('getTitle')->willReturn($title);
+        $valueMock->expects($this->exactly(2))->method('getType')->willReturn($type);
+        $valueMock->expects($this->once())->method('getPriceType')->willReturn($priceType);
+        $valueMock->expects($this->once())->method('getPrice')->willReturn($price);
+        $valueMock->expects($this->once())->method('getProduct')->willReturn($product);
 
-        $messages = [
-            'option values' => 'Invalid option value',
-        ];
-        $this->assertFalse($this->validator->isValid($valueMock));
+        $this->localeFormatMock->expects($this->once())->method('getNumber')->willReturn($price);
+
+        $messages = [];
+        $this->assertTrue($this->validator->isValid($valueMock));
         $this->assertEquals($messages, $this->validator->getMessages());
     }
 }

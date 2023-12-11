@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/product_simple_rollback.php';
-require __DIR__ . '/product_image_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_image_rollback.php');

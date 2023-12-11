@@ -4,24 +4,27 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 /**
  * Module statuses manager
  */
 namespace Magento\Framework\Module;
 
 /**
- * Module status manager.
+ * Module status manager
  *
  * Usage:
  * ```php
  *  $manager->isEnabled('Vendor_Module');
  * ```
+ * @api
  */
 class Manager
 {
     /**
      * @var Output\ConfigInterface
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private $outputConfig;
 
@@ -32,7 +35,7 @@ class Manager
 
     /**
      * @var array
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private $outputConfigPaths;
 
@@ -67,7 +70,7 @@ class Manager
      *
      * @param string $moduleName Fully-qualified module name
      * @return boolean
-     * @deprecated 100.2.0 Magento does not support disabling/enabling modules output from the Admin Panel since 2.2.0
+     * @deprecated 101.0.0 Magento does not support disabling/enabling modules output from the Admin Panel since 2.2.0
      * version. Module output can still be enabled/disabled in configuration files. However, this functionality should
      * not be used in future development. Module design should explicitly state dependencies to avoid requiring output
      * disabling. This functionality will temporarily be kept in Magento core, as there are unresolved modularity
@@ -85,7 +88,7 @@ class Manager
      *
      * @param string $moduleName Fully-qualified module name
      * @return boolean
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected function _isCustomOutputConfigEnabled($moduleName)
     {

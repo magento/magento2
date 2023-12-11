@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDownloadableSetEditRelatedProductsTest" extends="AdminSimpleSetEditRelatedProductsTest">
+        <annotations>
+            <features value="Downloadable"/>
+            <stories value="Create/edit downloadable product"/>
+            <title value="Admin should be able to set/edit Related Products information when editing a downloadable product"/>
+            <description value="Admin should be able to set/edit Related Products information when editing a downloadable product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3416"/>
+            <group value="Downloadable"/>
+        </annotations>
+        <before></before>
+        <after>
+            <!-- Delete downloadable product -->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="DownloadableProduct"/>
+            </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+        </after>
+
+        <!-- Create product -->
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexer">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
+        <!--See related product in storefront-->
+        <amOnPage url="{{DownloadableProduct.urlKey}}.html" stepKey="goToStorefront"/>
+    </test>
+</tests>

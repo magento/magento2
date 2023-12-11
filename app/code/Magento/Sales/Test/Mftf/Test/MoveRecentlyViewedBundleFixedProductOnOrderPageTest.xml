@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="MoveRecentlyViewedBundleFixedProductOnOrderPageTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Add Products to Order from Recently Viewed Products Section"/>
+            <title value="Move recently viewed bundle fixed product on order page test"/>
+            <description value="Move recently viewed bundle fixed product on order page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-16164"/>
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
+
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+
+            <createData entity="SimpleProduct2" stepKey="createFirstProduct">
+                <field key="price">755.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createSecondProduct">
+                <field key="price">756.00</field>
+            </createData>
+
+            <createData entity="BundleProductPriceViewRange" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption">
+                <requiredEntity createDataKey="createBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkFirstOptionToProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption"/>
+                <requiredEntity createDataKey="createFirstProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkSecondOptionToProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption"/>
+                <requiredEntity createDataKey="createSecondProduct"/>
+            </createData>
+
+            <magentoCLI command="config:set reports/options/enabled 1" stepKey="enableReportModule"/>
+
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
+
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <magentoCLI command="config:set reports/options/enabled 0" stepKey="disableReportModule"/>
+        </after>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProductPage">
+            <argument name="productUrlKey" value="$$createBundleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductPageLoad"/>
+
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$createCustomer.id$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterCreatedCustomer"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickEditButton"/>
+
+        <actionGroup ref="AdminClickCreateOrderOnEditCustomerPageActionGroup" stepKey="clickCreateOrder"/>
+
+        <actionGroup ref="AdminClickConfigureForRecentlyViewedProductActionGroup" stepKey="configureProduct">
+            <argument name="productName" value="$$createBundleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectDropdownOptionOnConfigureProductSlidingModalActionGroup" stepKey="selectProductOption">
+            <argument name="optionName" value="$$createFirstProduct.name$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminClickOkOnConfigureProductSlidingModalActionGroup" stepKey="clickOkBtn"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForAddingConfigure"/>
+
+        <actionGroup ref="AdminClickUpdateChangesOnCreateOrderPageActionGroup" stepKey="clickUpdateChangesBtn"/>
+
+        <actionGroup ref="AdminAssertProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeProductName">
+            <argument name="index" value="1"/>
+            <argument name="attribute" value="Product"/>
+            <argument name="value" value="$$createBundleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeProductPrice">
+            <argument name="index" value="1"/>
+            <argument name="attribute" value="Price"/>
+            <argument name="value" value="$755.00"/>
+        </actionGroup>
+    </test>
+</tests>

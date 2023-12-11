@@ -6,6 +6,8 @@
 
 namespace Magento\Newsletter\Block\Adminhtml\Queue\Edit;
 
+use Magento\Newsletter\Model\Queue;
+
 /**
  * Newsletter queue edit form
  *
@@ -200,8 +202,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        $widgetFilters = ['is_email_compatible' => 1];
-        $wysiwygConfig = $this->_wysiwygConfig->getConfig(['widget_filters' => $widgetFilters]);
+        $wysiwygConfig = $this->_wysiwygConfig->getConfig($this->getAdditionalWysiwygConfig());
 
         if ($queue->isNew()) {
             $fieldset->addField(
@@ -228,7 +229,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'value' => $queue->getTemplate()->getTemplateStyles()
                 ]
             );
-        } elseif (\Magento\Newsletter\Model\Queue::STATUS_NEVER != $queue->getQueueStatus()) {
+        } elseif (Queue::STATUS_NEVER != $queue->getQueueStatus() && $queue->getQueueStatus() != Queue::STATUS_PAUSE) {
             $fieldset->addField(
                 'text',
                 'textarea',
@@ -276,6 +277,22 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $this->setForm($form);
         return $this;
+    }
+
+    /**
+     * This is extension point for customizing configuration of WYSIWYG
+     * You can add afterGetAdditionalWysiwygConfig plugin
+     * in order to extend current configuration
+     *
+     * @return array
+     */
+    public function getAdditionalWysiwygConfig()
+    {
+        return [
+            'widget_filers' => [
+                'is_email_compatible' => 1
+            ]
+        ];
     }
 
     /**

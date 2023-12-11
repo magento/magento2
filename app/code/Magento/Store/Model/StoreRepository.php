@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Store\Model;
 
 use Magento\Framework\App\ObjectManager;
@@ -71,7 +72,9 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
         ]);
 
         if ($store->getId() === null) {
-            throw new NoSuchEntityException(__('Requested store is not found'));
+            throw new NoSuchEntityException(
+                __("The store that was requested wasn't found. Verify the store and try again.")
+            );
         }
         $this->entities[$code] = $store;
         $this->entitiesById[$store->getId()] = $store;
@@ -106,7 +109,9 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
         ]);
 
         if ($store->getId() === null) {
-            throw new NoSuchEntityException(__('Requested store is not found'));
+            throw new NoSuchEntityException(
+                __("The store that was requested wasn't found. Verify the store and try again.")
+            );
         }
 
         $this->entitiesById[$id] = $store;

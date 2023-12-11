@@ -5,10 +5,15 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
-class InterfaceGeneratorTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Code\Generator\InterfaceGenerator;
+use Magento\SomeModule\Model\Two\Test;
+use Magento\Framework\Code\Generator\CodeGeneratorInterface;
+
+class InterfaceGeneratorTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Code\Generator\InterfaceGenerator
+     * @var InterfaceGenerator
      */
     protected $interfaceGenerator;
 
@@ -64,9 +69,9 @@ class InterfaceGeneratorTest extends \PHPUnit\Framework\TestCase
         'testMethod3' => ['name' => 'testMethod3'],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->interfaceGenerator = new \Magento\Framework\Code\Generator\InterfaceGenerator();
+        $this->interfaceGenerator = new InterfaceGenerator();
     }
 
     /**
@@ -75,16 +80,17 @@ class InterfaceGeneratorTest extends \PHPUnit\Framework\TestCase
     public function testGenerate($additionalMethodsData, $expectedException, $expectedExceptionMessage)
     {
         if ($expectedException) {
-            $this->expectException($expectedException, $expectedExceptionMessage);
+            $this->expectException($expectedException);
+            $this->expectExceptionMessage($expectedExceptionMessage);
         }
         $methodsData = array_merge_recursive($this->methodsData, $additionalMethodsData);
         $this->interfaceGenerator->setClassDocBlock($this->interfaceDocBlock)
             ->addMethods($methodsData)
             ->setName('SevenInterface')
             ->setNamespaceName(\Magento\SomeModule\Model::class)
-            ->addUse(\Magento\SomeModule\Model\Two\Test::class, 'TestTwo')
+            ->addUse(Test::class, 'TestTwo')
             ->addUse(\Magento\SomeModule\Model\Three\Test::class, 'TestThree')
-            ->setExtendedClass(\Magento\Framework\Code\Generator\CodeGeneratorInterface::class);
+            ->setExtendedClass(CodeGeneratorInterface::class);
         $generatedInterface = $this->interfaceGenerator->generate();
         $expectedInterface = file_get_contents(
             __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/SevenInterface.php'
@@ -113,6 +119,9 @@ class InterfaceGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedContent, $generatedContent, "Generated content is invalid.");
     }
 
+    /**
+     * @return array
+     */
     public function generateDataProvider()
     {
         return [

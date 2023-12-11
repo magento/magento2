@@ -3,59 +3,87 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Controller\Block;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Cms\Controller\Adminhtml\Block\InlineEdit;
+use Magento\Cms\Model\Block;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class InlineEditTest extends \PHPUnit\Framework\TestCase
+class InlineEditTest extends TestCase
 {
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var RequestInterface|MockObject
+     */
     protected $request;
 
-    /** @var \Magento\Cms\Model\Block|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var Block|MockObject
+     */
     protected $cmsBlock;
 
-    /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var Context|MockObject
+     */
     protected $context;
 
-    /** @var \Magento\Cms\Api\BlockRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var BlockRepositoryInterface|MockObject
+     */
     protected $blockRepository;
 
-    /** @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var JsonFactory|MockObject
+     */
     protected $jsonFactory;
 
-    /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var Json|MockObject
+     */
     protected $resultJson;
 
-    /** @var InlineEdit */
+    /**
+     * @var InlineEdit
+     */
     protected $controller;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
 
         $this->request = $this->getMockForAbstractClass(
-            \Magento\Framework\App\RequestInterface::class,
+            RequestInterface::class,
             [],
             '',
             false
         );
-        $this->cmsBlock = $this->createMock(\Magento\Cms\Model\Block::class);
+        $this->cmsBlock = $this->createMock(Block::class);
         $this->context = $helper->getObject(
-            \Magento\Backend\App\Action\Context::class,
+            Context::class,
             [
                 'request' => $this->request
             ]
         );
         $this->blockRepository = $this->getMockForAbstractClass(
-            \Magento\Cms\Api\BlockRepositoryInterface::class,
+            BlockRepositoryInterface::class,
             [],
             '',
             false
         );
-        $this->resultJson = $this->createMock(\Magento\Framework\Controller\Result\Json::class);
+        $this->resultJson = $this->createMock(Json::class);
         $this->jsonFactory = $this->createPartialMock(
-            \Magento\Framework\Controller\Result\JsonFactory::class,
+            JsonFactory::class,
             ['create']
         );
         $this->controller = new InlineEdit(
@@ -65,7 +93,10 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function prepareMocksForTestExecute()
+    /**
+     * @return void
+     */
+    public function prepareMocksForTestExecute(): void
     {
         $postData = [
             1 => [
@@ -74,14 +105,10 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->request->expects($this->at(0))
+        $this->request
             ->method('getParam')
-            ->with('isAjax')
-            ->willReturn(true);
-        $this->request->expects($this->at(1))
-            ->method('getParam')
-            ->with('items', [])
-            ->willReturn($postData);
+            ->withConsecutive(['isAjax'], ['items', []])
+            ->willReturnOnConsecutiveCalls(true, $postData);
         $this->blockRepository->expects($this->once())
             ->method('getById')
             ->with(1)
@@ -105,47 +132,49 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->resultJson);
     }
 
-    public function testExecuteWithException()
+    /**
+     * @return void
+     */
+    public function testExecuteWithException(): void
     {
         $this->prepareMocksForTestExecute();
         $this->blockRepository->expects($this->once())
             ->method('save')
             ->with($this->cmsBlock)
-            ->willThrowException(new \Exception(__('Exception')));
+            ->willThrowException(new \Exception('Exception'));
         $this->resultJson->expects($this->once())
             ->method('setData')
-            ->with([
-                'messages' => [
-                    '[Block ID: 1] Exception'
-                ],
-                'error' => true
-            ])
+            ->with(
+                [
+                    'messages' => ['[Block ID: 1] Exception'],
+                    'error' => true
+                ]
+            )
             ->willReturnSelf();
 
         $this->controller->execute();
     }
 
-    public function testExecuteWithoutData()
+    /**
+     * @return void
+     */
+    public function testExecuteWithoutData(): void
     {
-        $this->request->expects($this->at(0))
+        $this->request
             ->method('getParam')
-            ->with('isAjax')
-            ->willReturn(true);
-        $this->request->expects($this->at(1))
-            ->method('getParam')
-            ->with('items', [])
-            ->willReturn([]);
+            ->withConsecutive(['isAjax'], ['items', []])
+            ->willReturnOnConsecutiveCalls(true, []);
         $this->jsonFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->resultJson);
         $this->resultJson->expects($this->once())
             ->method('setData')
-            ->with([
-                'messages' => [
-                    'Please correct the data sent.'
-                ],
-                'error' => true
-            ])
+            ->with(
+                [
+                    'messages' => ['Please correct the data sent.'],
+                    'error' => true
+                ]
+            )
             ->willReturnSelf();
 
         $this->controller->execute();

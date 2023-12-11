@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/../../Checkout/_files/simple_product.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Checkout/_files/simple_product.php');
+
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->load(1);
@@ -54,4 +57,4 @@ $optionId = $product->getOptions()[0]->getOptionId();
 
 $requestInfo = new \Magento\Framework\DataObject(['qty' => 1, 'options' => [$optionId => 'test']]);
 
-require __DIR__ . '/../../Checkout/_files/cart.php';
+Resolver::getInstance()->requireDataFixture('Magento/Checkout/_files/cart.php');

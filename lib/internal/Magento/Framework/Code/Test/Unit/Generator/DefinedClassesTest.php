@@ -6,8 +6,15 @@
 
 // @codingStandardsIgnoreStart
 namespace Magento\Framework\Code\Generator {
+    use PHPUnit\Framework\TestCase;
+    use Magento\Framework\Autoload\AutoloaderRegistry;
+    use Magento\Framework\Autoload\AutoloaderInterface;
     use Magento\Framework\Code\Test\Unit\Generator\DefinedClassesTest;
 
+    /**
+     * @param $className
+     * @return bool
+     */
     function class_exists($className)
     {
         return DefinedClassesTest::$definedClassesTestActive
@@ -20,10 +27,12 @@ namespace Magento\Framework\Code\Test\Unit\Generator {
     use Magento\Framework\Autoload\AutoloaderInterface;
     use Magento\Framework\Autoload\AutoloaderRegistry;
     use Magento\Framework\Code\Generator\DefinedClasses;
+    use PHPUnit\Framework\TestCase;
+    use PHPUnit\Framework\MockObject\MockObject;
 
     // @codingStandardsIgnoreEnd
 
-    class DefinedClassesTest extends \PHPUnit\Framework\TestCase
+    class DefinedClassesTest extends TestCase
     {
         /** @var bool  */
         public static $definedClassesTestActive = false;
@@ -36,14 +45,14 @@ namespace Magento\Framework\Code\Test\Unit\Generator {
         /** @var  AutoloaderInterface */
         private $initAutoloader;
 
-        protected function setUp()
+        protected function setUp(): void
         {
             $this->model = new DefinedClasses();
             self::$definedClassesTestActive = true;
             $this->initAutoloader = AutoloaderRegistry::getAutoloader();
         }
 
-        public function tearDown()
+        protected function tearDown(): void
         {
             self::$definedClassesTestActive = false;
             AutoloaderRegistry::registerAutoloader($this->initAutoloader);
@@ -58,9 +67,9 @@ namespace Magento\Framework\Code\Test\Unit\Generator {
         {
             $classOnDisc = 'Class\That\Exists\On\Disc';
             /**
-             * @var AutoloaderInterface | \PHPUnit_Framework_MockObject_MockObject $autoloaderMock
+             * @var AutoloaderInterface|MockObject $autoloaderMock
              */
-            $autoloaderMock = $this->createMock(\Magento\Framework\Autoload\AutoloaderInterface::class);
+            $autoloaderMock = $this->getMockForAbstractClass(AutoloaderInterface::class);
             $autoloaderMock->expects($this->once())->method('findFile')->with($classOnDisc)->willReturn(true);
             AutoloaderRegistry::registerAutoloader($autoloaderMock);
             $this->assertTrue($this->model->isClassLoadable($classOnDisc));

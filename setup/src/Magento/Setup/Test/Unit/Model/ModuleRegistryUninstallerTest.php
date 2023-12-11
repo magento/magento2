@@ -3,36 +3,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model;
 
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Module\ModuleList\Loader;
 use Magento\Setup\Model\ModuleRegistryUninstaller;
+use Magento\Setup\Module\DataSetup;
+use Magento\Setup\Module\DataSetupFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class ModuleRegistryUninstallerTest extends \PHPUnit\Framework\TestCase
+class ModuleRegistryUninstallerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
+     * @var MockObject|DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig\Writer
+     * @var MockObject|Writer
      */
     private $writer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\ModuleList\Loader
+     * @var MockObject|Loader
      */
     private $loader;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Module\DataSetup
+     * @var MockObject|DataSetup
      */
     private $dataSetup;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Console\Output\OutputInterface
+     * @var MockObject|OutputInterface
      */
     private $output;
 
@@ -41,15 +51,15 @@ class ModuleRegistryUninstallerTest extends \PHPUnit\Framework\TestCase
      */
     private $moduleRegistryUninstaller;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
-        $this->writer = $this->createMock(\Magento\Framework\App\DeploymentConfig\Writer::class);
-        $this->loader = $this->createMock(\Magento\Framework\Module\ModuleList\Loader::class);
-        $this->dataSetup = $this->createMock(\Magento\Setup\Module\DataSetup::class);
-        $dataSetupFactory = $this->createMock(\Magento\Setup\Module\DataSetupFactory::class);
+        $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
+        $this->writer = $this->createMock(Writer::class);
+        $this->loader = $this->createMock(Loader::class);
+        $this->dataSetup = $this->createMock(DataSetup::class);
+        $dataSetupFactory = $this->createMock(DataSetupFactory::class);
         $dataSetupFactory->expects($this->any())->method('create')->willReturn($this->dataSetup);
-        $this->output = $this->createMock(\Symfony\Component\Console\Output\OutputInterface::class);
+        $this->output = $this->getMockForAbstractClass(OutputInterface::class);
         $this->moduleRegistryUninstaller = new ModuleRegistryUninstaller(
             $dataSetupFactory,
             $this->deploymentConfig,

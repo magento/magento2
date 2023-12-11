@@ -4,35 +4,46 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Framework\Data\Form\Element;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 /**
  * Form time element
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Framework\Data\Form\Element;
-
-use Magento\Framework\Escaper;
-
 class Time extends AbstractElement
 {
+    /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
     /**
      * @param Factory $factoryElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
      */
     public function __construct(
         Factory $factoryElement,
         CollectionFactory $factoryCollection,
         Escaper $escaper,
-        $data = []
+        $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null
     ) {
-        parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
+        $secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $data, $secureRenderer);
         $this->setType('time');
+        $this->secureRenderer = $secureRenderer;
     }
 
     /**
-     * @return mixed
+     * @inheritDoc
      */
     public function getName()
     {
@@ -44,13 +55,14 @@ class Time extends AbstractElement
     }
 
     /**
-     * @return string
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getElementHtml()
     {
         $this->addClass('select admin__control-select');
+        $this->addClass('select80wide');
 
         $valueHrs = 0;
         $valueMin = 0;
@@ -66,7 +78,7 @@ class Time extends AbstractElement
         }
 
         $html = '<input type="hidden" id="' . $this->getHtmlId() . '" ' . $this->_getUiId() . '/>';
-        $html .= '<select name="' . $this->getName() . '" style="width:80px" '
+        $html .= '<select name="' . $this->getName() . '" '
             . $this->serialize($this->getHtmlAttributes())
             . $this->_getUiId('hour') . '>' . "\n";
         for ($i = 0; $i < 24; $i++) {
@@ -76,7 +88,8 @@ class Time extends AbstractElement
         }
         $html .= '</select>' . "\n";
 
-        $html .= ':&nbsp;<select name="' . $this->getName() . '" style="width:80px" '
+        $html .= '<span class="time-separator">:&nbsp;</span><select name="'
+            . $this->getName() . '" '
             . $this->serialize($this->getHtmlAttributes())
             . $this->_getUiId('minute') . '>' . "\n";
         for ($i = 0; $i < 60; $i++) {
@@ -86,7 +99,8 @@ class Time extends AbstractElement
         }
         $html .= '</select>' . "\n";
 
-        $html .= ':&nbsp;<select name="' . $this->getName() . '" style="width:80px" '
+        $html .= '<span class="time-separator">:&nbsp;</span><select name="'
+            . $this->getName() . '" '
             . $this->serialize($this->getHtmlAttributes())
             . $this->_getUiId('second') . '>' . "\n";
         for ($i = 0; $i < 60; $i++) {
@@ -96,6 +110,18 @@ class Time extends AbstractElement
         }
         $html .= '</select>' . "\n";
         $html .= $this->getAfterElementHtml();
+        $html .= $this->secureRenderer->renderTag(
+            'style',
+            [],
+            <<<style
+                .select80wide {
+                    width: 80px !important;
+                }
+style
+            ,
+            false
+        );
+
         return $html;
     }
 }

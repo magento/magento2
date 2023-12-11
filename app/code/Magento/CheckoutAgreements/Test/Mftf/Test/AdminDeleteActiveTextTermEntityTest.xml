@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteActiveTextTermEntityTest">
+        <annotations>
+            <features value="CheckoutAgreements"/>
+            <stories value="Checkout agreements"/>
+            <title value="Delete active text checkout agreement"/>
+            <description value="Admin should be able to delete active text checkout agreement"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14663"/>
+            <group value="checkoutAgreements"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set checkout/options/enable_agreements 1" stepKey="setEnableTermsOnCheckout"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin" />
+            <createData entity="SimpleTwo" stepKey="createdProduct"/>
+            <actionGroup ref="AdminTermsConditionsOpenNewTermPageActionGroup" stepKey="openNewTerm"/>
+            <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="createTerm">
+                <argument name="term" value="activeTextTerm"/>
+            </actionGroup>
+            <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveNewTerm"/>
+        </before>
+        <after>
+            <!-- Disable shipping method for customer with default address -->
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
+            <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
+            <deleteData createDataKey="createdProduct" stepKey="deletedProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
+        <actionGroup ref="AdminOpenEditPageTermsConditionsByNameActionGroup" stepKey="openTermToDelete">
+            <argument name="termName" value="{{activeTextTerm.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminTermsConditionsDeleteTermByNameActionGroup" stepKey="deleteOpenedTerm"/>
+        <actionGroup ref="AdminAssertTermAbsentInGridActionGroup" stepKey="assertTermAbsentInGrid">
+            <argument name="termName" value="{{activeTextTerm.name}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$$createdProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProcessCheckoutToPaymentActionGroup" stepKey="processCheckoutToThePaymentMethodsPage"/>
+        <actionGroup ref="AssertStorefrontTermAbsentInCheckoutActionGroup" stepKey="assertTermAbsentInCheckout">
+            <argument name="termCheckboxText" value="{{activeTextTerm.checkboxText}}"/>
+        </actionGroup>
+    </test>
+</tests>

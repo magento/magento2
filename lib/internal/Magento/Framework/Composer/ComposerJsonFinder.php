@@ -13,7 +13,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class ComposerJsonFinder
 {
     /**
-     * @var DirectoryList $directoryList
+     * @var DirectoryList
      */
     private $directoryList;
 

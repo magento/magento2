@@ -86,5 +86,11 @@
                 </depends>
             </group>
         </section>
+        <section id="section_3" type="text">
+            <group id="group_5" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="field_5"  showInWebsite="1" type="text">
+                </field>
+            </group>
+        </section>
     </system>
 </config>

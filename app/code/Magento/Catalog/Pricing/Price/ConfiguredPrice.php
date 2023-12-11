@@ -8,6 +8,7 @@ namespace Magento\Catalog\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 
 /**
@@ -18,7 +19,7 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
     /**
      * Price type configured
      */
-    const PRICE_CODE = self::CONFIGURED_PRICE_CODE;
+    public const PRICE_CODE = self::CONFIGURED_PRICE_CODE;
 
     /**
      * @var null|ItemInterface
@@ -26,24 +27,34 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
     protected $item;
 
     /**
+     * @var ConfiguredOptions
+     */
+    private $configuredOptions;
+
+    /**
      * @param Product $saleableItem
      * @param float $quantity
      * @param CalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @param ItemInterface $item
+     * @param ItemInterface|null $item
+     * @param ConfiguredOptions|null $configuredOptions
      */
     public function __construct(
         Product $saleableItem,
         $quantity,
         CalculatorInterface $calculator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        ItemInterface $item = null
+        ItemInterface $item = null,
+        ConfiguredOptions $configuredOptions = null
     ) {
         $this->item = $item;
+        $this->configuredOptions = $configuredOptions ?: ObjectManager::getInstance()->get(ConfiguredOptions::class);
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
     }
 
     /**
+     * Method to set items.
+     *
      * @param ItemInterface $item
      * @return $this
      */
@@ -54,18 +65,19 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
     }
 
     /**
-     * Get value of configured options
+     * Get value of configured options.
      *
-     * @return array
+     * @deprecated 102.0.4 ConfiguredOptions::getItemOptionsValue is used instead
+     * @return float
      */
-    protected function getOptionsValue()
+    protected function getOptionsValue(): float
     {
         $product = $this->item->getProduct();
         $value = 0.;
         $basePrice = parent::getValue();
         $optionIds = $this->item->getOptionByCode('option_ids');
         if ($optionIds) {
-            foreach (explode(',', $optionIds->getValue()) as $optionId) {
+            foreach (explode(',', $optionIds->getValue() ?? '') as $optionId) {
                 $option = $product->getOptionById($optionId);
                 if ($option) {
                     $itemOption = $this->item->getOptionByCode('option_' . $option->getId());
@@ -78,16 +90,21 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
                 }
             }
         }
+
         return $value;
     }
 
     /**
-     * Price value of product with configured options
+     * Price value of product with configured options.
      *
      * @return bool|float
      */
     public function getValue()
     {
-        return $this->item ? parent::getValue() + $this->getOptionsValue() : parent::getValue();
+        $basePrice = parent::getValue();
+
+        return $this->item
+            ? $basePrice + $this->configuredOptions->getItemOptionsValue($basePrice, $this->item)
+            : $basePrice;
     }
 }

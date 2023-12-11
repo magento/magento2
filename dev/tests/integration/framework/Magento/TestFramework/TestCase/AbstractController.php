@@ -7,17 +7,25 @@
 /**
  * Abstract class for the controller tests
  */
+
 namespace Magento\TestFramework\TestCase;
 
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\Theme\Controller\Result\MessagePlugin;
+use PHPUnit\Framework\TestCase;
 
 /**
+ * Set of methods useful for performing requests to Controllers.
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractController extends \PHPUnit\Framework\TestCase
+abstract class AbstractController extends TestCase
 {
     protected $_runCode = '';
 
@@ -26,12 +34,12 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
     protected $_runOptions = [];
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var RequestInterface
      */
     protected $_request;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface
+     * @var ResponseInterface
      */
     protected $_response;
 
@@ -60,7 +68,7 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
     /**
      * Bootstrap application before any test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_assertSessionErrors = false;
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -68,7 +76,10 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
         $this->_objectManager->removeSharedInstance(\Magento\Framework\App\RequestInterface::class);
     }
 
-    protected function tearDown()
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
     {
         $this->_request = null;
         $this->_response = null;
@@ -78,7 +89,7 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
     /**
      * Ensure that there were no error messages displayed on the admin panel
      */
-    protected function assertPostConditions()
+    protected function assertPostConditions(): void
     {
         if ($this->_assertSessionErrors) {
             // equalTo() is intentionally used instead of isEmpty() to provide the informative diff
@@ -96,32 +107,53 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
      */
     public function dispatch($uri)
     {
-        $this->getRequest()->setRequestUri($uri);
+        $request = $this->getRequest();
+
+        $request->setDispatched(false);
+        $request->setRequestUri($uri);
+        if ($request->isPost()
+            && !property_exists($request->getPost(), 'form_key')
+        ) {
+            /** @var FormKey $formKey */
+            $formKey = $this->_objectManager->get(FormKey::class);
+            $request->setPostValue('form_key', $formKey->getFormKey());
+        }
         $this->_getBootstrap()->runApp();
     }
 
     /**
      * Request getter
      *
-     * @return \Magento\Framework\App\RequestInterface
+     * @return RequestInterface
      */
     public function getRequest()
     {
         if (!$this->_request) {
-            $this->_request = $this->_objectManager->get(\Magento\Framework\App\RequestInterface::class);
+            $this->_request = $this->_objectManager->get(RequestInterface::class);
         }
         return $this->_request;
     }
 
     /**
+     * Reset Request parameters
+     *
+     * @return void
+     */
+    protected function resetRequest(): void
+    {
+        $this->_objectManager->removeSharedInstance(RequestInterface::class);
+        $this->_request = null;
+    }
+
+    /**
      * Response getter
      *
-     * @return \Magento\Framework\App\ResponseInterface
+     * @return ResponseInterface
      */
     public function getResponse()
     {
         if (!$this->_response) {
-            $this->_response = $this->_objectManager->get(\Magento\Framework\App\ResponseInterface::class);
+            $this->_response = $this->_objectManager->get(ResponseInterface::class);
         }
         return $this->_response;
     }
@@ -132,7 +164,7 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
     public function assert404NotFound()
     {
         $this->assertEquals('noroute', $this->getRequest()->getControllerName());
-        $this->assertContains('404 Not Found', $this->getResponse()->getBody());
+        $this->assertStringContainsString('404 Not Found', $this->getResponse()->getBody());
     }
 
     /**
@@ -149,7 +181,7 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
         foreach ($headers as $header) {
             if ($header->getFieldName() === $headerName) {
                 $headerFound = true;
-                $this->assertRegExp($valueRegex, $header->getFieldValue());
+                $this->assertMatchesRegularExpression($valueRegex, $header->getFieldValue());
             }
         }
         if (!$headerFound) {
@@ -201,13 +233,21 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
         $messageManagerClass = \Magento\Framework\Message\Manager::class
     ) {
         $this->_assertSessionErrors = false;
-
+        /** @var MessageInterface[]|string[] $messageObjects */
         $messages = $this->getMessages($messageType, $messageManagerClass);
+        /** @var string[] $messages */
+        $messagesFiltered = array_map(
+            function ($message) {
+                /** @var MessageInterface|string $message */
+                return ($message instanceof MessageInterface) ? $message->toString() : $message;
+            },
+            $messages
+        );
 
         $this->assertThat(
-            $messages,
+            $messagesFiltered,
             $constraint,
-            'Session messages do not meet expectations ' . var_export($messages, true)
+            'Session messages do not meet expectations ' . var_export($messagesFiltered, true)
         );
     }
 

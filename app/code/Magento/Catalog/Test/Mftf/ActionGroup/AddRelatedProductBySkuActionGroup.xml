@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddRelatedProductBySkuActionGroup">
+        <annotations>
+            <description>Adds the provided Product SKU as a Related Product on the Admin Product creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="sku"/>
+        </arguments>
+
+        <!--Scroll to element to avoid test order flakiness-->
+        <waitForElement selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" stepKey="waitForSection"/>
+        <executeJS function="return document.evaluate(&quot;{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}&quot;, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.getBoundingClientRect().y" stepKey="sectionPosition"/>
+        <executeJS function="return document.querySelector(&quot;{{AdminHeaderSection.pageMainActions}}&quot;).getBoundingClientRect().height" stepKey="floatingHeaderHeight"/>
+        <executeJS function="window.scrollTo({top: {$sectionPosition}-{$floatingHeaderHeight}})" stepKey="scrollTo"/>
+        <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" dependentSelector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDependent}}" visible="false" stepKey="openDropDownIfClosedRelatedUpSellCrossSell"/>
+        <waitForPageLoad stepKey="waitForSectionExpanded"/>
+        <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.AddRelatedProductsButton}}" stepKey="clickAddRelatedProductButton"/>
+        <waitForPageLoad stepKey="waitForRelatedProductsGrid"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <waitForPageLoad stepKey="waitForFiltersCleared"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{sku}}" stepKey="fillProductSkuFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <click selector="{{AdminProductModalSlideGridSection.productGridXRowYColumnButton('1', '1')}}" stepKey="selectProduct"/>
+        <click selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected"/>
+        <waitForElementNotVisible selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}" stepKey="waitForElementNotVisible"/>
+    </actionGroup>
+</actionGroups>

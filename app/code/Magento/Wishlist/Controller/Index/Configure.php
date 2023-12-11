@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
@@ -10,9 +11,11 @@ use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
+ * Wishlist Configure Controller
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Configure extends \Magento\Wishlist\Controller\AbstractIndex
+class Configure extends \Magento\Wishlist\Controller\AbstractIndex implements Action\HttpGetActionInterface
 {
     /**
      * Core registry
@@ -66,7 +69,7 @@ class Configure extends \Magento\Wishlist\Controller\AbstractIndex
             $item->loadWithOptions($id);
             if (!$item->getId()) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('We can\'t load the Wish List item right now.')
+                    __("The Wish List item can't load at this time. Please try again later.")
                 );
             }
             $wishlist = $this->wishlistProvider->getWishlist($item->getWishlistId());
@@ -101,11 +104,11 @@ class Configure extends \Magento\Wishlist\Controller\AbstractIndex
 
             return $resultPage;
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $resultRedirect->setPath('*');
             return $resultRedirect;
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t configure the product right now.'));
+            $this->messageManager->addErrorMessage(__('We can\'t configure the product right now.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             $resultRedirect->setPath('*');
             return $resultRedirect;

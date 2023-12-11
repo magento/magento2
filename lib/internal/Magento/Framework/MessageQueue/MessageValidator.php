@@ -1,0 +1,202 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\Framework\MessageQueue;
+
+use InvalidArgumentException;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
+use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
+
+/**
+ * Class MessageValidator to validate message with topic schema.
+ */
+class MessageValidator
+{
+    /**
+     * @var CommunicationConfig
+     */
+    private $communicationConfig;
+
+    /**
+     * @param CommunicationConfig|null $communicationConfig
+     */
+    public function __construct(CommunicationConfig $communicationConfig = null)
+    {
+        $this->communicationConfig = $communicationConfig
+            ?? ObjectManager::getInstance()->get(CommunicationConfig::class);
+    }
+
+    /**
+     * Identify message data schema by topic.
+     *
+     * @param string $topic
+     * @param bool $requestType
+     * @return array
+     * @throws LocalizedException
+     */
+    protected function getTopicSchema($topic, $requestType)
+    {
+        $topicConfig = $this->communicationConfig->getTopic($topic);
+        if ($topicConfig === null) {
+            throw new LocalizedException(new Phrase('Specified topic "%topic" is not declared.', ['topic' => $topic]));
+        }
+        if ($requestType) {
+            return [
+                'schema_type' => $topicConfig[CommunicationConfig::TOPIC_REQUEST_TYPE],
+                'schema_value' => $topicConfig[CommunicationConfig::TOPIC_REQUEST]
+            ];
+        } else {
+            return [
+                'schema_type' => isset($topicConfig[CommunicationConfig::TOPIC_RESPONSE])
+                    ? CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS
+                    : null,
+                'schema_value' => $topicConfig[CommunicationConfig::TOPIC_RESPONSE]
+            ];
+        }
+    }
+
+    /**
+     * Validate message according to the format associated with its topic
+     *
+     * @param string $topic
+     * @param mixed $message
+     * @param bool $requestType
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws LocalizedException
+     */
+    public function validate($topic, $message, $requestType = true)
+    {
+        $topicSchema = $this->getTopicSchema($topic, $requestType);
+        if ($topicSchema['schema_type'] == CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS) {
+            $messageDataType = $topicSchema['schema_value'];
+            $this->validateMessage($message, $messageDataType, $topic);
+        } else {
+            /** Validate message according to the method signature associated with the message topic */
+            $message = (array)$message;
+            $isIndexedArray = array_keys($message) === range(0, count($message) - 1);
+            foreach ($topicSchema['schema_value'] as $methodParameterMeta) {
+                $paramName = $methodParameterMeta[CommunicationConfig::SCHEMA_METHOD_PARAM_NAME];
+                $paramType = $methodParameterMeta[CommunicationConfig::SCHEMA_METHOD_PARAM_TYPE];
+                if ($isIndexedArray) {
+                    $paramPosition = $methodParameterMeta[CommunicationConfig::SCHEMA_METHOD_PARAM_POSITION];
+                    if (isset($message[$paramPosition])) {
+                        $this->validateMessage($message[$paramPosition], $paramType, $topic);
+                    }
+                } else {
+                    if (isset($message[$paramName])) {
+                        if (isset($message[$paramName])) {
+                            $this->validateMessage($message[$paramName], $paramType, $topic);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Validate queue message.
+     *
+     * @param string $message
+     * @param string $messageType
+     * @param string $topic
+     * @return void
+     */
+    protected function validateMessage($message, $messageType, $topic)
+    {
+        if (preg_match_all("/\\\\/", $messageType)) {
+            $this->validateClassType($message, $messageType, $topic);
+        } else {
+            $this->validatePrimitiveType($message, $messageType, $topic);
+        }
+    }
+
+    /**
+     * Validate message primitive type.
+     *
+     * @param string $message
+     * @param string $messageType
+     * @param string $topic
+     * @return void
+     */
+    protected function validatePrimitiveType($message, $messageType, $topic)
+    {
+        $compareType = $messageType;
+        $realType = $this->getRealType($message);
+        if ($realType == 'array') {
+            $compareType = preg_replace('/\[\]/', '', $messageType);
+            foreach ($message as $subMessage) {
+                $this->validatePrimitiveType($subMessage, $compareType, $topic);
+            }
+            return;
+        }
+
+        if ($realType !== $compareType) {
+            throw new InvalidArgumentException(
+                new Phrase(
+                    'Data in topic "%topic" must be of type "%expectedType". '
+                    . '"%actualType" given.',
+                    [
+                        'topic' => $topic,
+                        'expectedType' => $messageType,
+                        'actualType' => $this->getRealType($message)
+                    ]
+                )
+            );
+        }
+    }
+
+    /**
+     * Validate class type
+     *
+     * @param string $message
+     * @param string $messageType
+     * @param string $topic
+     * @return void
+     */
+    protected function validateClassType($message, $messageType, $topic)
+    {
+        $origMessage = $message;
+        $compareType = $messageType;
+        $realType = $this->getRealType($message);
+        if ($realType == 'array') {
+            $compareType = preg_replace('/\[\]/', '', $messageType);
+            foreach ($message as $subMessage) {
+                $this->validateClassType($subMessage, $compareType, $topic);
+            }
+            return;
+        }
+
+        if (!($message instanceof $compareType)) {
+            throw new InvalidArgumentException(
+                new Phrase(
+                    'Data in topic "%topic" must be of type "%expectedType". '
+                    . '"%actualType" given.',
+                    [
+                        'topic' => $topic,
+                        'expectedType' => $messageType,
+                        'actualType' => $this->getRealType($origMessage)
+                    ]
+                )
+            );
+        }
+    }
+
+    /**
+     * Returns message real type
+     *
+     * @param string $message
+     * @return string
+     */
+    private function getRealType($message)
+    {
+        $type = is_object($message) ? get_class($message) : gettype($message);
+        $type = $type == 'boolean' ? 'bool' : $type;
+        $type = $type == 'double' ? 'float' : $type;
+        return $type == "integer" ? "int" : $type;
+    }
+}

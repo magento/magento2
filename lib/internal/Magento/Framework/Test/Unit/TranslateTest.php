@@ -3,75 +3,136 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Test\Unit;
 
+use Magento\Framework\App\Language\Dictionary;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\App\State;
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\File\Csv;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Module\Dir\Reader;
+use Magento\Framework\Module\ModuleList;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate;
+use Magento\Framework\Translate\ResourceInterface;
+use Magento\Framework\View\DesignInterface;
+use Magento\Framework\View\FileSystem as FilesystemView;
+use Magento\Theme\Model\Theme;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TranslateTest extends \PHPUnit\Framework\TestCase
+class TranslateTest extends TestCase
 {
-    /** @var Translate */
+    /**
+     * @var Translate
+     */
     protected $translate;
 
-    /** @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var DesignInterface|MockObject
+     */
     protected $viewDesign;
 
-    /** @var \Magento\Framework\Cache\FrontendInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var FrontendInterface|MockObject
+     */
     protected $cache;
 
-    /** @var \Magento\Framework\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var FilesystemView|MockObject
+     */
     protected $viewFileSystem;
 
-    /** @var \Magento\Framework\Module\ModuleList|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var ModuleList|MockObject
+     */
     protected $moduleList;
 
-    /** @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var Reader|MockObject
+     */
     protected $modulesReader;
 
-    /** @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var ScopeResolverInterface|MockObject
+     */
     protected $scopeResolver;
 
-    /** @var \Magento\Framework\Translate\ResourceInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var ResourceInterface|MockObject
+     */
     protected $resource;
 
-    /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var ResolverInterface|MockObject
+     */
     protected $locale;
 
-    /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var State|MockObject
+     */
     protected $appState;
 
-    /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var Filesystem|MockObject
+     */
     protected $filesystem;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var RequestInterface|MockObject
+     */
     protected $request;
 
-    /** @var \Magento\Framework\File\Csv|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var Csv|MockObject
+     */
     protected $csvParser;
 
-    /** @var  \Magento\Framework\App\Language\Dictionary|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var  Dictionary|MockObject
+     */
     protected $packDictionary;
 
-    /** @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var ReadInterface|MockObject
+     */
     protected $directory;
 
-    protected function setUp()
+    /**
+     * @var DriverInterface|MockObject
+     */
+    protected $fileDriver;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->viewDesign = $this->createMock(\Magento\Framework\View\DesignInterface::class);
-        $this->cache = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
-        $this->viewFileSystem = $this->createMock(\Magento\Framework\View\FileSystem::class);
-        $this->moduleList = $this->createMock(\Magento\Framework\Module\ModuleList::class);
-        $this->modulesReader = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
-        $this->scopeResolver = $this->createMock(\Magento\Framework\App\ScopeResolverInterface::class);
-        $this->resource = $this->createMock(\Magento\Framework\Translate\ResourceInterface::class);
-        $this->locale = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
-        $this->appState = $this->createMock(\Magento\Framework\App\State::class);
+        $objectManager = new ObjectManager($this);
+        $this->viewDesign = $this->getMockForAbstractClass(DesignInterface::class);
+        $this->cache = $this->getMockForAbstractClass(FrontendInterface::class);
+        $this->viewFileSystem = $this->createMock(FilesystemView::class);
+        $this->moduleList = $this->createMock(ModuleList::class);
+        $this->modulesReader = $this->createMock(Reader::class);
+        $this->scopeResolver = $this->getMockForAbstractClass(ScopeResolverInterface::class);
+        $this->resource = $this->getMockForAbstractClass(ResourceInterface::class);
+        $this->locale = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->appState = $this->createMock(State::class);
         $this->request = $this->getMockForAbstractClass(
-            \Magento\Framework\App\RequestInterface::class,
+            RequestInterface::class,
             [],
             '',
             false,
@@ -79,11 +140,12 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
             true,
             ['getParam', 'getControllerModule']
         );
-        $this->csvParser = $this->createMock(\Magento\Framework\File\Csv::class);
-        $this->packDictionary = $this->createMock(\Magento\Framework\App\Language\Dictionary::class);
-        $this->directory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
-        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
-        $filesystem->expects($this->once())->method('getDirectoryRead')->will($this->returnValue($this->directory));
+        $this->csvParser = $this->createMock(Csv::class);
+        $this->packDictionary = $this->createMock(Dictionary::class);
+        $this->directory = $this->getMockForAbstractClass(ReadInterface::class);
+        $filesystem = $this->createMock(Filesystem::class);
+        $filesystem->expects($this->once())->method('getDirectoryRead')->willReturn($this->directory);
+        $this->fileDriver = $this->getMockForAbstractClass(DriverInterface::class);
 
         $this->translate = new Translate(
             $this->viewDesign,
@@ -98,10 +160,11 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
             $filesystem,
             $this->request,
             $this->csvParser,
-            $this->packDictionary
+            $this->packDictionary,
+            $this->fileDriver
         );
 
-        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturnCallback(function ($data) {
                 return json_encode($data);
@@ -121,56 +184,98 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
      * @param string $area
      * @param bool $forceReload
      * @param array $cachedData
+     *
+     * @return void
+     * @dataProvider dataProviderLoadDataCachedTranslation
+     */
+    public function testLoadDataCachedTranslation($area, $forceReload, $cachedData): void
+    {
+        $this->expectsSetConfig('Magento/luma');
+
+        $this->cache->expects($this->once())
+            ->method('load')
+            ->willReturn(json_encode($cachedData));
+
+        $this->appState->expects($this->exactly($area ? 0 : 1))
+            ->method('getAreaCode')
+            ->willReturn('frontend');
+
+        $this->translate->loadData($area, $forceReload);
+        $this->assertEquals($cachedData, $this->translate->getData());
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderLoadDataCachedTranslation(): array
+    {
+        $cachedData = ['cached 1' => 'translated 1', 'cached 2' => 'translated 2'];
+        return [
+            ['adminhtml', false, $cachedData],
+            ['frontend', false, $cachedData],
+            [null, false, $cachedData]
+        ];
+    }
+
+    /**
+     * @param string $area
+     * @param bool $forceReload
+     *
+     * @return void
      * @dataProvider dataProviderForTestLoadData
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function testLoadData($area, $forceReload, $cachedData)
+    public function testLoadData($area, $forceReload): void
     {
-        $this->expectsSetConfig('themeId');
+        $this->expectsSetConfig('Magento/luma');
+
+        $this->appState->expects($this->exactly($area ? 0 : 1))
+            ->method('getAreaCode')
+            ->willReturn('frontend');
 
         $this->cache->expects($this->exactly($forceReload ? 0 : 1))
             ->method('load')
-            ->will($this->returnValue(json_encode($cachedData)));
+            ->willReturn(false);
 
-        if (!$forceReload && $cachedData !== false) {
-            $this->translate->loadData($area, $forceReload);
-            $this->assertEquals($cachedData, $this->translate->getData());
-            return;
-        }
-
-        $this->directory->expects($this->any())->method('isExist')->will($this->returnValue(true));
+        $this->directory->expects($this->any())->method('isExist')->willReturn(true);
 
         // _loadModuleTranslation()
-        $this->moduleList->expects($this->once())->method('getNames')->will($this->returnValue(['name']));
+        $modules = ['some_module', 'other_module', 'another_module', 'current_module'];
+        $this->request->expects($this->any())
+            ->method('getControllerModule')
+            ->willReturn('current_module');
+        $this->moduleList->expects($this->once())->method('getNames')->willReturn($modules);
         $moduleData = [
             'module original' => 'module translated',
             'module theme' => 'module-theme original translated',
             'module pack' => 'module-pack original translated',
-            'module db' => 'module-db original translated',
+            'module db' => 'module-db original translated'
         ];
-        $this->modulesReader->expects($this->any())->method('getModuleDir')->will($this->returnValue('/app/module'));
+        $this->modulesReader->expects($this->any())->method('getModuleDir')->willReturn('/app/module');
         $themeData = [
             'theme original' => 'theme translated',
             'module theme' => 'theme translated overwrite',
             'module pack' => 'theme-pack translated overwrite',
-            'module db' => 'theme-db translated overwrite',
+            'module db' => 'theme-db translated overwrite'
         ];
         $this->csvParser->expects($this->any())
             ->method('getDataPairs')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['/app/module/en_US.csv', 0, 1, $moduleData],
-                        ['/app/module/en_GB.csv', 0, 1, $moduleData],
-                        ['/theme.csv', 0, 1, $themeData],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['/app/module/en_US.csv', 0, 1, $moduleData],
+                    ['/app/module/en_GB.csv', 0, 1, $moduleData],
+                    ['/theme.csv', 0, 1, $themeData]
+                ]
             );
-
-        // _loadThemeTranslation()
-        $this->viewFileSystem->expects($this->any())
-            ->method('getLocaleFileName')
-            ->will($this->returnValue('/theme.csv'));
+        $this->fileDriver->expects($this->any())
+            ->method('isExists')
+            ->willReturnMap(
+                [
+                    ['/app/module/en_US.csv', true],
+                    ['/app/module/en_GB.csv', true],
+                    ['/theme.csv', true]
+                ]
+            );
 
         // _loadPackTranslation
         $packData = [
@@ -178,18 +283,21 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
             'module pack' => 'pack translated overwrite',
             'module db' => 'pack-db translated overwrite',
         ];
-        $this->packDictionary->expects($this->once())->method('getDictionary')->will($this->returnValue($packData));
+        $this->packDictionary->expects($this->once())->method('getDictionary')->willReturn($packData);
+
+        // _loadThemeTranslation()
+        $this->viewFileSystem->expects($this->any())
+            ->method('getLocaleFileName')
+            ->willReturn('/theme.csv');
 
         // _loadDbTranslation()
         $dbData = [
             'db original' => 'db translated',
             'module db' => 'db translated overwrite',
         ];
-        $this->resource->expects($this->any())->method('getTranslationArray')->will($this->returnValue($dbData));
+        $this->resource->expects($this->any())->method('getTranslationArray')->willReturn($dbData);
 
-        if (!$forceReload) {
-            $this->cache->expects($this->exactly(1))->method('save');
-        }
+        $this->cache->expects($this->exactly($forceReload ? 0 : 1))->method('save');
 
         $this->translate->loadData($area, $forceReload);
 
@@ -200,46 +308,47 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
             'module db' => 'db translated overwrite',
             'theme original' => 'theme translated',
             'pack original' => 'pack translated',
-            'db original' => 'db translated',
+            'db original' => 'db translated'
         ];
         $this->assertEquals($expected, $this->translate->getData());
     }
 
-    public function dataProviderForTestLoadData()
+    /**
+     * @return array
+     */
+    public function dataProviderForTestLoadData(): array
     {
-        $cachedData = ['cached 1' => 'translated 1', 'cached 2' => 'translated 2'];
         return [
-            ['adminhtml', true, false],
-            ['adminhtml', true, $cachedData],
-            ['adminhtml', false, $cachedData],
-            ['adminhtml', false, false],
-            ['frontend', true, false],
-            ['frontend', true, $cachedData],
-            ['frontend', false, $cachedData],
-            ['frontend', false, false],
-            [null, true, false],
-            [null, true, $cachedData],
-            [null, false, $cachedData],
-            [null, false, false]
+            ['adminhtml', true],
+            ['adminhtml', false],
+            ['frontend', true],
+            ['frontend', false],
+            [null, true],
+            [null, false]
         ];
     }
 
     /**
      * @param $data
      * @param $result
+     *
+     * @return void
      * @dataProvider dataProviderForTestGetData
      */
-    public function testGetData($data, $result)
+    public function testGetData($data, $result): void
     {
         $this->cache->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(json_encode($data)));
+            ->willReturn(json_encode($data));
         $this->expectsSetConfig('themeId');
         $this->translate->loadData('frontend');
         $this->assertEquals($result, $this->translate->getData());
     }
 
-    public function dataProviderForTestGetData()
+    /**
+     * @return array
+     */
+    public function dataProviderForTestGetData(): array
     {
         $data = ['original 1' => 'translated 1', 'original 2' => 'translated 2'];
         return [
@@ -248,9 +357,12 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testGetLocale()
+    /**
+     * @return void
+     */
+    public function testGetLocale(): void
     {
-        $this->locale->expects($this->once())->method('getLocale')->will($this->returnValue('en_US'));
+        $this->locale->expects($this->once())->method('getLocale')->willReturn('en_US');
         $this->assertEquals('en_US', $this->translate->getLocale());
 
         $this->locale->expects($this->never())->method('getLocale');
@@ -261,55 +373,72 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('en_GB', $this->translate->getLocale());
     }
 
-    public function testSetLocale()
+    /**
+     * @return void
+     */
+    public function testSetLocale(): void
     {
         $this->translate->setLocale('en_GB');
         $this->locale->expects($this->never())->method('getLocale');
         $this->assertEquals('en_GB', $this->translate->getLocale());
     }
 
-    public function testGetTheme()
+    /**
+     * @return void
+     */
+    public function testGetTheme(): void
     {
-        $this->request->expects($this->at(0))->method('getParam')->with('theme')->will($this->returnValue(''));
 
         $requestTheme = ['theme_title' => 'Theme Title'];
-        $this->request->expects($this->at(1))->method('getParam')->with('theme')
-            ->will($this->returnValue($requestTheme));
+        $this->request
+            ->method('getParam')
+            ->withConsecutive(['theme'], ['theme'])
+            ->willReturnOnConsecutiveCalls('', $requestTheme);
 
         $this->assertEquals('theme', $this->translate->getTheme());
         $this->assertEquals('themeTheme Title', $this->translate->getTheme());
     }
 
-    public function testLoadDataNoTheme()
+    /**
+     * @return void
+     */
+    public function testLoadDataNoTheme(): void
     {
         $forceReload = true;
         $this->expectsSetConfig(null, null);
-        $this->moduleList->expects($this->once())->method('getNames')->will($this->returnValue([]));
-        $this->appState->expects($this->once())->method('getAreaCode')->will($this->returnValue('frontend'));
-        $this->packDictionary->expects($this->once())->method('getDictionary')->will($this->returnValue([]));
-        $this->resource->expects($this->any())->method('getTranslationArray')->will($this->returnValue([]));
+        $this->moduleList->expects($this->once())->method('getNames')->willReturn([]);
+        $this->appState->expects($this->once())->method('getAreaCode')->willReturn('frontend');
+        $this->packDictionary->expects($this->once())->method('getDictionary')->willReturn([]);
+        $this->resource->expects($this->any())->method('getTranslationArray')->willReturn([]);
         $this->assertEquals($this->translate, $this->translate->loadData(null, $forceReload));
     }
 
     /**
-     * Declare calls expectation for setConfig() method
+     * Declare calls expectation for setConfig() method.
+     *
+     * @return void
      */
-    protected function expectsSetConfig($themeId, $localeCode = 'en_US')
+    protected function expectsSetConfig($themeId, $localeCode = 'en_US'): void
     {
-        $this->locale->expects($this->any())->method('getLocale')->will($this->returnValue($localeCode));
-        $scope = new \Magento\Framework\DataObject(['code' => 'frontendCode', 'id' => 1]);
-        $scopeAdmin = new \Magento\Framework\DataObject(['code' => 'adminCode', 'id' => 0]);
+        $this->locale->expects($this->any())->method('getLocale')->willReturn($localeCode);
+        $scope = new DataObject(['code' => 'frontendCode', 'id' => 1]);
+        $scopeAdmin = new DataObject(['code' => 'adminCode', 'id' => 0]);
         $this->scopeResolver->expects($this->any())
             ->method('getScope')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        [null, $scope],
-                        ['admin', $scopeAdmin],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    [null, $scope],
+                    ['admin', $scopeAdmin]
+                ]
             );
-        $designTheme = new \Magento\Framework\DataObject(['id' => $themeId]);
-        $this->viewDesign->expects($this->any())->method('getDesignTheme')->will($this->returnValue($designTheme));
+        $designTheme = $this->getMockBuilder(Theme::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $designTheme->expects($this->once())
+            ->method('getThemePath')
+            ->willReturn($themeId);
+
+        $this->viewDesign->expects($this->any())->method('getDesignTheme')->willReturn($designTheme);
     }
 }

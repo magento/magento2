@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAvailabilityCreditMemoWithNoPaymentTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="MAGETWO-91547: Unable to create Credit memo for order with no payment required"/>
+            <title value="Checking availability of 'Credit memo' button for order with no payment required"/>
+            <description value="*Credit Memo* button should be displayed"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-94470"/>
+            <group value="sales"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Enable *Free Shipping* -->
+            <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Disable *Free Shipping* -->
+            <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
+            <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="Simple_US_Customer.email"/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
+        </after>
+
+        <!--Proceed to Admin panel > SALES > Orders. Created order should be in Processing status-->
+        <actionGroup ref="AdminNavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage"/>
+
+        <!--Check if order can be submitted without the required fields including email address-->
+        <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage"/>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addFirstProductToOrder">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <!--Click *Custom Price* link, enter 0 and click *Update Items and Quantities* button-->
+        <click selector="{{AdminOrderFormItemsSection.customPriceCheckbox}}" stepKey="clickCustomPriceCheckbox"/>
+        <waitForElementVisible selector="{{AdminOrderFormItemsSection.customPriceField}}" stepKey="waitForPriceFieldAppears"/>
+        <fillField selector="{{AdminOrderFormItemsSection.customPriceField}}" userInput="0" stepKey="fillCustomPriceField"/>
+        <click selector="{{AdminOrderFormItemsSection.updateItemsAndQuantities}}" stepKey="clickUpdateItemsAndQuantitiesButton"/>
+
+        <!--Fill customer group and customer email-->
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectCustomerGroup"/>
+        <actionGroup ref="AdminFillAccountInformationOnCreateOrderPageActionGroup" stepKey="fillCustomerEmail">
+            <argument name="email" value="{{Simple_US_Customer.email}}"/>
+        </actionGroup>
+
+        <!--Fill customer address information-->
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+
+        <!-- Select Free shipping -->
+        <actionGroup ref="OrderSelectFreeShippingActionGroup" stepKey="selectFreeShippingOption"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="clickSubmitOrder" />
+
+        <!--Click *Invoice* button-->
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startCreateInvoice"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
+
+        <!--Verify that *Credit Memo* button is displayed-->
+        <seeElement selector="{{AdminOrderFormItemsSection.creditMemo}}" stepKey="seeCreditMemo"/>
+        <click selector="{{AdminOrderFormItemsSection.creditMemo}}" stepKey="clickCreditMemoItem"/>
+        <waitForPageLoad stepKey="waitForCreditMemoPageLoaded"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeNewMemoPageTitle">
+            <argument name="value" value="New Memo"/>
+        </actionGroup>
+        <seeInCurrentUrl url="{{AdminCreditMemoNewPage.url}}" stepKey="seeNewMemoUrlOnPage"/>
+    </test>
+</tests>

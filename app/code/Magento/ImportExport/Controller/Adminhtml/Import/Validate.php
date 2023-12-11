@@ -3,17 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\View\Result\Layout;
+use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
 use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\ImportExport\Model\Import;
-use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
-use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
-use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
-class Validate extends ImportResultController
+/**
+ * Import validate controller action.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Validate extends ImportResultController implements HttpPostActionInterface
 {
     /**
      * @var Import
@@ -23,32 +30,27 @@ class Validate extends ImportResultController
     /**
      * Validate uploaded files action
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
     public function execute()
     {
         $data = $this->getRequest()->getPostValue();
-        /** @var \Magento\Framework\View\Result\Layout $resultLayout */
+        /** @var Layout $resultLayout */
         $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
         /** @var $resultBlock Result */
         $resultBlock = $resultLayout->getLayout()->getBlock('import.frame.result');
+        //phpcs:disable Magento2.Security.Superglobal
         if ($data) {
             // common actions
-            $resultBlock->addAction(
-                'show',
-                'import_validation_container'
-            );
-
-            /** @var $import \Magento\ImportExport\Model\Import */
+            $resultBlock->addAction('show', 'import_validation_container');
             $import = $this->getImport()->setData($data);
             try {
-                $source = ImportAdapter::findAdapterFor(
-                    $import->uploadSource(),
-                    $this->_objectManager->create(\Magento\Framework\Filesystem::class)
-                        ->getDirectoryWrite(DirectoryList::ROOT),
-                    $data[$import::FIELD_FIELD_SEPARATOR]
-                );
+                $source = $import->uploadFileAndGetSource();
                 $this->processValidationResult($import->validateSource($source), $resultBlock);
+                $ids = $import->getValidatedIds();
+                if (count($ids) > 0) {
+                    $resultBlock->addAction('value', Import::FIELD_IMPORT_IDS, $ids);
+                }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $resultBlock->addError($e->getMessage());
             } catch (\Exception $e) {
@@ -59,8 +61,8 @@ class Validate extends ImportResultController
             $resultBlock->addError(__('The file was not uploaded.'));
             return $resultLayout;
         }
-        $this->messageManager->addError(__('Sorry, but the data is invalid or the file is not uploaded.'));
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $this->messageManager->addErrorMessage(__('Sorry, but the data is invalid or the file is not uploaded.'));
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath('adminhtml/*/index');
         return $resultRedirect;
@@ -72,6 +74,7 @@ class Validate extends ImportResultController
      * @param bool $validationResult
      * @param Result $resultBlock
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function processValidationResult($validationResult, $resultBlock)
     {
@@ -85,7 +88,7 @@ class Validate extends ImportResultController
                 $resultBlock->addError(
                     __('Data validation failed. Please fix the following errors and upload the file again.')
                 );
-                $this->addErrorMessages($resultBlock, $errorAggregator);
+
                 if ($errorAggregator->getErrorsCount()) {
                     $this->addMessageToSkipErrors($resultBlock);
                 }
@@ -99,6 +102,8 @@ class Validate extends ImportResultController
                     $errorAggregator->getErrorsCount()
                 )
             );
+
+            $this->addErrorMessages($resultBlock, $errorAggregator);
         } else {
             if ($errorAggregator->getErrorsCount()) {
                 $this->collectErrors($resultBlock);
@@ -109,8 +114,9 @@ class Validate extends ImportResultController
     }
 
     /**
+     * Provides import model.
+     *
      * @return Import
-     * @deprecated 100.1.0
      */
     private function getImport()
     {
@@ -128,6 +134,7 @@ class Validate extends ImportResultController
      *
      * @param Result $resultBlock
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function addMessageToSkipErrors(Result $resultBlock)
     {
@@ -148,6 +155,7 @@ class Validate extends ImportResultController
      *
      * @param Result $resultBlock
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function addMessageForValidResult(Result $resultBlock)
     {
@@ -161,11 +169,12 @@ class Validate extends ImportResultController
     /**
      * Collect errors and add error messages to Result block
      *
-     * Get all errors from ProcessingErrorAggregatorInterface and add appropriated error messages
+     * Get all errors from Error Aggregator and add appropriated error messages
      * to Result block.
      *
      * @param Result $resultBlock
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function collectErrors(Result $resultBlock)
     {

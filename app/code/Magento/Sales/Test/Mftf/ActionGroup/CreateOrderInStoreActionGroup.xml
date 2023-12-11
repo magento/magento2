@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateOrderInStoreActionGroup">
+        <annotations>
+            <description>Goes to the Admin Create Order page. Creates an Order based on the provided Customer, Store View and Product. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+            <argument name="customer"/>
+            <argument name="storeView"/>
+        </arguments>
+
+        <amOnPage stepKey="navigateToNewOrderPage" url="{{AdminOrderCreatePage.url}}"/>
+        <click stepKey="chooseCustomer" selector="{{AdminOrdersGridSection.customerInOrdersSection(customer.firstname)}}"/>
+        <waitForPageLoad stepKey="waitForStoresPageOpened"/>
+        <waitForElementClickable stepKey="waitForStoreClickable" selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}"/>
+        <selectOption selector="{{AdminOrderStoreScopeTreeSection.storeTree}}" userInput="{{storeView.name}}" stepKey="chooseStore"/>
+        <waitForPageLoad stepKey="waitForStoreToAppear"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <waitForElementClickable selector="{{OrdersGridSection.addProducts}}" stepKey="waitForAddProductsButton" />
+        <click selector="{{OrdersGridSection.addProducts}}" stepKey="clickOnAddProducts"/>
+        <waitForPageLoad stepKey="waitForProductsListForOrder"/>
+        <click selector="{{AdminOrdersGridSection.productForOrder(product.sku)}}" stepKey="chooseTheProduct"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="addSelectedProductToOrder"/>
+        <waitForPageLoad stepKey="waitForProductAddedInOrder"/>
+        <click selector="{{AdminInvoicePaymentShippingSection.getShippingMethodAndRates}}" stepKey="openShippingMethod"/>
+        <waitForPageLoad stepKey="waitForShippingMethods"/>
+        <click selector="{{AdminInvoicePaymentShippingSection.shippingMethod}}" stepKey="chooseShippingMethod"/>
+        <waitForPageLoad stepKey="waitForShippingMethodsThickened"/>
+        <click selector="{{OrdersGridSection.submitOrder}}" stepKey="submitOrder"/>
+        <see stepKey="seeSuccessMessageForOrder" userInput="You created the order."/>
+    </actionGroup>
+</actionGroups>

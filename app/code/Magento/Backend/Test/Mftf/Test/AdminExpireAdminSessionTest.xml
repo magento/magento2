@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminExpireAdminSessionTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Admin Session Expire"/>
+            <title value="Admin Session Expire"/>
+            <description value="Admin Session Expire"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14111"/>
+            <group value="Backend"/>
+            <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <after>
+            <!-- 4. Restore default configuration settings. -->
+            <magentoCLI command="config:set {{DefaultAdminSecuritySessionLifetimeConfigData.path}} {{DefaultAdminSecuritySessionLifetimeConfigData.value}}" stepKey="setDefaultSessionLifetime"/>
+        </after>
+        <!-- 1. Apply configuration settings. -->
+        <magentoCLI command="config:set {{ChangeAdminSecuritySessionLifetimeConfigData.path}} {{ChangeAdminSecuritySessionLifetimeConfigData.value}}" stepKey="changeCookieLifetime"/>
+
+        <!-- 2. Wait for session to expire. -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        <wait time="60" stepKey="waitForSessionLifetime"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+
+        <!-- 3. Perform asserts. -->
+        <seeElement selector="{{AdminLoginFormSection.loginBlock}}" stepKey="assertAdminLoginPageIsAvailable"/>
+    </test>
+</tests>

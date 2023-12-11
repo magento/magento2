@@ -3,52 +3,51 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
  * @var $block \Magento\CatalogSearch\Block\Advanced\Result
  */
+/** this changes need for valid apply filters and configuration before search process is started */
+$productList = $block->getProductListHtml();
 ?>
-<?php if ($results = $block->getResultCount()): ?>
+<?php if ($results = $block->getResultCount()) : ?>
     <div class="search found">
         <?php if ($results == 1) : ?>
-            <?= /* @escapeNotVerified */ __('<strong>%1 item</strong> were found using the following search criteria', $results) ?>
-        <?php else: ?>
-            <?= /* @escapeNotVerified */ __('<strong>%1 items</strong> were found using the following search criteria', $results) ?>
+            <?= /* @noEscape */ __('<strong>%1 item</strong> were found using the following search criteria', $results) ?>
+        <?php else : ?>
+            <?= /* @noEscape */ __('<strong>%1 items</strong> were found using the following search criteria', $results) ?>
         <?php endif; ?>
     </div>
-<?php else: ?>
+<?php else : ?>
     <div role="alert" class="message error">
         <div>
-            <?= /* @escapeNotVerified */ __('We can\'t find any items matching these search criteria.') ?> <a href="<?= /* @escapeNotVerified */ $block->getFormUrl() ?>"><?= /* @escapeNotVerified */ __('Modify your search.') ?></a>
+            <?= $block->escapeHtml(__('We can\'t find any items matching these search criteria.')) ?> <a href="<?= $block->escapeUrl($block->getFormUrl()) ?>"><?= $block->escapeHtml(__('Modify your search.')) ?></a>
         </div>
     </div>
 <?php endif; ?>
 
 <?php $searchCriterias = $block->getSearchCriterias(); ?>
 <div class="search summary">
-    <?php foreach (['left', 'right'] as $side): ?>
-        <?php if (@$searchCriterias[$side]): ?>
+    <?php foreach (['left', 'right'] as $side) : ?>
+        <?php if (!empty($searchCriterias[$side])) : ?>
             <ul class="items">
-                <?php foreach ($searchCriterias[$side] as $criteria): ?>
+                <?php foreach ($searchCriterias[$side] as $criteria) : ?>
                     <li class="item"><strong><?= $block->escapeHtml(__($criteria['name'])) ?>:</strong> <?= $block->escapeHtml($criteria['value']) ?></li>
                 <?php endforeach; ?>
             </ul>
         <?php endif; ?>
     <?php endforeach; ?>
 </div>
-<?php if ($block->getResultCount()): ?>
+<?php if ($block->getResultCount()) : ?>
     <div class="message notice">
         <div>
-            <?= /* @escapeNotVerified */ __("Don't see what you're looking for?") ?>
-            <a href="<?= /* @escapeNotVerified */ $block->getFormUrl() ?>"><?= /* @escapeNotVerified */ __('Modify your search.') ?></a>
+            <?= $block->escapeHtml(__("Don't see what you're looking for?")) ?>
+            <a href="<?= $block->escapeUrl($block->getFormUrl()) ?>"><?= $block->escapeHtml(__('Modify your search.')) ?></a>
         </div>
     </div>
 <?php endif; ?>
-<?php if ($block->getResultCount()): ?>
-    <div class="search results"><?= $block->getProductListHtml() ?></div>
+<?php if ($block->getResultCount()) : ?>
+    <div class="search results"><?= /* @noEscape */ $productList ?></div>
 <?php endif; ?>
 <?php $block->getSearchCriterias(); ?>

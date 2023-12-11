@@ -12,8 +12,10 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Abstract Rule product condition data model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -95,8 +97,8 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
-     * @param ProductCategoryList|null $categoryList
      * @param array $data
+     * @param ProductCategoryList|null $categoryList
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -514,6 +516,10 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
             ) ? $this->_localeFormat->getNumber(
                 $arr['is_value_parsed']
             ) : false;
+        } elseif (!empty($arr['operator']) && in_array($arr['operator'], ['()', '!()', true])) {
+            if (isset($arr['value'])) {
+                $arr['value'] = preg_replace('/\s*,\s*/', ',', $arr['value']);
+            }
         }
 
         return parent::loadArray($arr);
@@ -541,14 +547,14 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
             $attr = $model->getResource()->getAttribute($attrCode);
 
             if ($attr && $attr->getBackendType() == 'datetime' && !is_int($this->getValue())) {
-                $this->setValue(strtotime($this->getValue()));
+                $this->setValue(strtotime((string) $this->getValue()));
                 $value = strtotime($model->getData($attrCode));
                 return $this->validateAttribute($value);
             }
 
             if ($attr && $attr->getFrontendInput() == 'multiselect') {
                 $value = $model->getData($attrCode);
-                $value = strlen($value) ? explode(',', $value) : [];
+                $value = ($value && strlen($value)) ? explode(',', $value) : [];
                 return $this->validateAttribute($value);
             }
 
@@ -564,7 +570,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
                 if ($attr && $attr->getBackendType() == 'datetime') {
                     $value = strtotime($value);
                 } elseif ($attr && $attr->getFrontendInput() == 'multiselect') {
-                    $value = strlen($value) ? explode(',', $value) : [];
+                    $value = ($value && strlen($value)) ? explode(',', $value) : [];
                 }
 
                 $model->setData($attrCode, $value);
@@ -621,6 +627,8 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
             $mappedSqlField = $this->getEavAttributeTableAlias() . '.value';
         } elseif ($this->getAttribute() == 'category_ids') {
             $mappedSqlField = 'e.entity_id';
+        } elseif ($this->getAttribute() == 'attribute_set_id') {
+            $mappedSqlField = 'e.attribute_set_id';
         } else {
             $mappedSqlField = parent::getMappedSqlField();
         }
@@ -655,19 +663,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      */
     protected function _getAvailableInCategories($productId)
     {
-        return $this->_productResource->getConnection()
-            ->fetchCol(
-                $this->_productResource->getConnection()
-                    ->select()
-                    ->distinct()
-                    ->from(
-                        $this->_productResource->getTable('catalog_category_product'),
-                        ['category_id']
-                    )->where(
-                        'product_id = ?',
-                        $productId
-                    )
-            );
+        return $this->productCategoryList->getCategoryIds($productId);
     }
 
     /**
@@ -695,6 +691,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
 
     /**
      * Correct '==' and '!=' operators
+     *
      * Categories can't be equal because product is included categories selected by administrator and in their parents
      *
      * @return string

@@ -5,51 +5,66 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
-use Magento\Framework\Convert\ConvertArray;
+use IntlDateFormatter;
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Form\Renderer\Element;
+use Magento\Backend\Block\Widget\Form\Renderer\Fieldset;
+use Magento\Backend\Model\Session\Quote;
+use Magento\Customer\Api\Data\OptionInterface;
+use Magento\Customer\Block\Adminhtml\Edit\Renderer\Region;
+use Magento\Customer\Block\Adminhtml\Form\Element\Boolean;
+use Magento\Customer\Block\Adminhtml\Form\Element\File;
+use Magento\Customer\Block\Adminhtml\Form\Element\Image;
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate;
+use Magento\Sales\Model\AdminOrder\Create;
 
 /**
  * Sales Order Create Form Abstract Block
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
+abstract class AbstractForm extends AbstractCreate
 {
     /**
-     * Form factory
-     *
-     * @var \Magento\Framework\Data\FormFactory
+     * @var FormFactory
      */
     protected $_formFactory;
 
     /**
      * Data Form object
      *
-     * @var \Magento\Framework\Data\Form
+     * @var Form
      */
     protected $_form;
 
     /**
-     * @var \Magento\Framework\Reflection\DataObjectProcessor
+     * @var DataObjectProcessor
      */
     protected $dataObjectProcessor;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Model\Session\Quote $sessionQuote
-     * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
+     * @param Context $context
+     * @param Quote $sessionQuote
+     * @param Create $orderCreate
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param FormFactory $formFactory
+     * @param DataObjectProcessor $dataObjectProcessor
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Model\Session\Quote $sessionQuote,
-        \Magento\Sales\Model\AdminOrder\Create $orderCreate,
+        Context $context,
+        Quote $sessionQuote,
+        Create $orderCreate,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        FormFactory $formFactory,
+        DataObjectProcessor $dataObjectProcessor,
         array $data = []
     ) {
         $this->_formFactory = $formFactory;
@@ -58,30 +73,30 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
     }
 
     /**
-     * Prepare global layout
-     * Add renderers to \Magento\Framework\Data\Form
+     * Prepare global layout. Add renderers to \Magento\Framework\Data\Form
      *
      * @return $this
+     * @throws LocalizedException
      */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
 
-        \Magento\Framework\Data\Form::setElementRenderer(
+        Form::setElementRenderer(
             $this->getLayout()->createBlock(
-                \Magento\Backend\Block\Widget\Form\Renderer\Element::class,
+                Element::class,
                 $this->getNameInLayout() . '_element'
             )
         );
-        \Magento\Framework\Data\Form::setFieldsetRenderer(
+        Form::setFieldsetRenderer(
             $this->getLayout()->createBlock(
-                \Magento\Backend\Block\Widget\Form\Renderer\Fieldset::class,
+                Fieldset::class,
                 $this->getNameInLayout() . '_fieldset'
             )
         );
-        \Magento\Framework\Data\Form::setFieldsetElementRenderer(
+        Form::setFieldsetElementRenderer(
             $this->getLayout()->createBlock(
-                \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element::class,
+                Fieldset\Element::class,
                 $this->getNameInLayout() . '_fieldset_element'
             )
         );
@@ -92,7 +107,8 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
     /**
      * Return Form object
      *
-     * @return \Magento\Framework\Data\Form
+     * @return Form
+     * @throws LocalizedException
      */
     public function getForm()
     {
@@ -118,9 +134,9 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
     protected function _getAdditionalFormElementTypes()
     {
         return [
-            'file' => \Magento\Customer\Block\Adminhtml\Form\Element\File::class,
-            'image' => \Magento\Customer\Block\Adminhtml\Form\Element\Image::class,
-            'boolean' => \Magento\Customer\Block\Adminhtml\Form\Element\Boolean::class
+            'file' => File::class,
+            'image' => Image::class,
+            'boolean' => Boolean::class
         ];
     }
 
@@ -128,12 +144,13 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
      * Return array of additional form element renderers by element id
      *
      * @return array
+     * @throws LocalizedException
      */
     protected function _getAdditionalFormElementRenderers()
     {
         return [
             'region' => $this->getLayout()->createBlock(
-                \Magento\Customer\Block\Adminhtml\Edit\Renderer\Region::class
+                Region::class
             )
         ];
     }
@@ -141,11 +158,11 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
     /**
      * Add additional data to form element
      *
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _addAdditionalFormElementData(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    protected function _addAdditionalFormElementData(AbstractElement $element)
     {
         return $this;
     }
@@ -153,12 +170,13 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
     /**
      * Add rendering EAV attributes to Form element
      *
-     * @param \Magento\Customer\Api\Data\AttributeMetadataInterface[] $attributes
-     * @param \Magento\Framework\Data\Form\AbstractForm $form
+     * @param AttributeMetadataInterface[] $attributes
+     * @param Form\AbstractForm $form
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws LocalizedException
      */
-    protected function _addAttributesToForm($attributes, \Magento\Framework\Data\Form\AbstractForm $form)
+    protected function _addAttributesToForm($attributes, Form\AbstractForm $form)
     {
         // add additional form types
         $types = $this->_getAdditionalFormElementTypes();
@@ -177,41 +195,31 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
                     [
                         'name' => $attribute->getAttributeCode(),
                         'label' => __($attribute->getStoreLabel()),
-                        'class' => $attribute->getFrontendClass(),
-                        'required' => $attribute->isRequired()
+                        'class' => $this->getValidationClasses($attribute),
+                        'required' => $attribute->isRequired(),
+                        'sort_order' => $attribute->getSortOrder()
                     ]
                 );
-                if ($inputType == 'multiline') {
-                    $element->setLineCount($attribute->getMultilineCount());
+                switch ($inputType) {
+                    case 'multiline':
+                        $element->setLineCount($attribute->getMultilineCount());
+                        break;
+                    case 'select':
+                    case 'multiselect':
+                        $this->addSelectOptions($attribute, $element);
+                        break;
+                    case 'date':
+                        $format = $this->_localeDate->getDateFormat(
+                            IntlDateFormatter::SHORT
+                        );
+                        $element->setDateFormat($format);
+                        break;
                 }
                 $element->setEntityAttribute($attribute);
                 $this->_addAdditionalFormElementData($element);
 
                 if (!empty($renderers[$attribute->getAttributeCode()])) {
                     $element->setRenderer($renderers[$attribute->getAttributeCode()]);
-                }
-
-                if ($inputType == 'select' || $inputType == 'multiselect') {
-                    $options = [];
-                    foreach ($attribute->getOptions() as $optionData) {
-                        $data = $this->dataObjectProcessor->buildOutputDataArray(
-                            $optionData,
-                            \Magento\Customer\Api\Data\OptionInterface::class
-                        );
-                        foreach ($data as $key => $value) {
-                            if (is_array($value)) {
-                                unset($data[$key]);
-                                $data['value'] = $value;
-                            }
-                        }
-                        $options[] = $data;
-                    }
-                    $element->setValues($options);
-                } elseif ($inputType == 'date') {
-                    $format = $this->_localeDate->getDateFormat(
-                        \IntlDateFormatter::SHORT
-                    );
-                    $element->setDateFormat($format);
                 }
             }
         }
@@ -227,5 +235,84 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
     public function getFormValues()
     {
         return [];
+    }
+
+    /**
+     * Retrieve frontend classes according validation rules
+     *
+     * @param AttributeMetadataInterface $attribute
+     *
+     * @return string
+     */
+    private function getValidationClasses(AttributeMetadataInterface $attribute) : string
+    {
+        $out = [];
+        $out[] = $attribute->getFrontendClass();
+
+        $textClasses = $this->getTextLengthValidateClasses($attribute);
+        if (!empty($textClasses)) {
+            $out = array_merge($out, $textClasses);
+        }
+
+        return implode(' ', array_unique(array_filter($out)));
+    }
+
+    /**
+     * Retrieve validation classes by min_text_length and max_text_length rules
+     *
+     * @param AttributeMetadataInterface $attribute
+     *
+     * @return array
+     */
+    private function getTextLengthValidateClasses(AttributeMetadataInterface $attribute) : array
+    {
+        $classes = [];
+
+        $validateRules = $attribute->getValidationRules();
+        if (!empty($validateRules)) {
+            foreach ($validateRules as $rule) {
+                switch ($rule->getName()) {
+                    case 'min_text_length':
+                        $classes[] = 'minimum-length-' . $rule->getValue();
+                        break;
+
+                    case 'max_text_length':
+                        $classes[] = 'maximum-length-' . $rule->getValue();
+                        break;
+                }
+            }
+
+            if (!empty($classes)) {
+                $classes[] = 'validate-length';
+            }
+        }
+
+        return $classes;
+    }
+
+    /**
+     * Add select options for SELECT and MULTISELECT attribute
+     *
+     * @param AttributeMetadataInterface $attribute
+     * @param AbstractElement $element
+     * @return void
+     */
+    private function addSelectOptions(AttributeMetadataInterface $attribute, AbstractElement $element): void
+    {
+        $options = [];
+        foreach ($attribute->getOptions() as $optionData) {
+            $data = $this->dataObjectProcessor->buildOutputDataArray(
+                $optionData,
+                OptionInterface::class
+            );
+            foreach ($data as $key => $value) {
+                if (is_array($value)) {
+                    unset($data[$key]);
+                    $data['value'] = $value;
+                }
+            }
+            $options[] = $data;
+        }
+        $element->setValues($options);
     }
 }

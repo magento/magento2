@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCartRuleCouponForFreeShippingTest">
+        <annotations>
+            <stories value="Create Sales Rule"/>
+            <title value="Create Cart Price Rule for Free Shipping And Verify Coupon Code will shown in Order's totals"/>
+            <description value="Test that Coupon Code of Cart Price Rule without discount for Product price but with Free shipping will shown in Order's totals"/>
+            <testCaseId value="MC-21923"/>
+            <useCaseId value="MC-20387"/>
+            <severity value="MAJOR"/>
+            <group value="SalesRule"/>
+        </annotations>
+
+        <before>
+            <!--Enable flat rate shipping-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <!-- Create Simple Product -->
+            <createData entity="defaultSimpleProduct" stepKey="createSimpleProduct"/>
+            <!-- Create Cart Price Rule without discount but with free shipping -->
+            <createData entity="ApiSalesRule" stepKey="createCartPriceRule">
+                <field key="simple_free_shipping">1</field>
+                <field key="discount_amount">0</field>
+            </createData>
+            <!-- Create Coupon code for the Cart Price Rule -->
+            <createData entity="ApiSalesRuleCoupon" stepKey="createCartPriceRuleCoupon">
+                <requiredEntity createDataKey="createCartPriceRule"/>
+            </createData>
+            <!-- Create Customer with filled Shipping & Billing Address -->
+            <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
+        </before>
+
+        <after>
+            <!-- Disable shipping method for customer with default address -->
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFromStorefront"/>
+            <deleteData createDataKey="createCartPriceRule" stepKey="deleteSalesRule"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromBackend"/>
+        </after>
+
+        <!-- Login with created Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Add Simple Product to Cart -->
+        <actionGroup ref="StorefrontAddSimpleProductToShoppingCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+
+        <!-- Go to Checkout -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckout"/>
+
+        <!-- Go to Order review -->
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutReview"/>
+
+        <!-- Apply Discount Coupon to the Order -->
+        <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyDiscountCoupon">
+            <argument name="discountCode" value="$createCartPriceRuleCoupon.code$"/>
+        </actionGroup>
+
+        <!-- Assert Coupon Code will shown in Shipping total -->
+        <actionGroup ref="AssertStorefrontShippingLabelDescriptionInOrderSummaryActionGroup" stepKey="assertCouponCodeInShippingLabel">
+            <argument name="labelDescription" value="$createCartPriceRuleCoupon.code$"/>
+        </actionGroup>
+
+        <!-- Select payment solution -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="clickCheckMoneyOrderPayment"/>
+
+        <!-- Place Order -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+
+        <!-- Go To Order View -->
+        <click selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="goToViewOrder"/>
+
+        <!-- Assert Coupon Code will shown in Shipping total description in Order View page -->
+        <actionGroup ref="AssertStorefrontShippingDescriptionInOrderViewActionGroup" stepKey="assertCouponCodeInShippingTotalDescription">
+            <argument name="description" value="$createCartPriceRuleCoupon.code$"/>
+        </actionGroup>
+
+        <!-- Keep Order Id -->
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+
+        <!-- Login to admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <!-- Go to created Order -->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="goToAdminViewOrder">
+            <argument name="entityId" value="{$grabOrderId}"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForOrderPage"/>
+
+        <!-- Assert Coupon Code will shown in Shipping total description -->
+        <actionGroup ref="AssertAdminShippingDescriptionInOrderViewActionGroup" stepKey="seeCouponInShippingDescription">
+            <argument name="description" value="$createCartPriceRuleCoupon.code$"/>
+        </actionGroup>
+    </test>
+</tests>

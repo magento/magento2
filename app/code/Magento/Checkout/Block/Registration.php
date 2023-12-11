@@ -9,6 +9,7 @@ use Magento\Framework\View\Element\Template;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Registration extends \Magento\Framework\View\Element\Template
 {
@@ -91,7 +92,7 @@ class Registration extends \Magento\Framework\View\Element\Template
      */
     public function getCreateAccountUrl()
     {
-        return $this->getUrl('checkout/account/create');
+        return $this->getUrl('checkout/account/delegateCreate');
     }
 
     /**

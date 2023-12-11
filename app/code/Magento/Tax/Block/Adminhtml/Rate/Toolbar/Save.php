@@ -6,17 +6,18 @@
 
 /**
  * Admin tax rate save toolbar
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Tax\Block\Adminhtml\Rate\Toolbar;
 
+/**
+ * Rate toolbar block
+ */
 class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\ContainerInterface
 {
     /**
      * @var string
      */
-    protected $_template = 'toolbar/rate/save.phtml';
+    protected $_template = 'Magento_Tax::toolbar/rate/save.phtml';
 
     /**
      * @var \Magento\Backend\Block\Widget\Button\ButtonList
@@ -46,6 +47,8 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
     }
 
     /**
+     * Init model
+     *
      * @return void
      */
     protected function _construct()
@@ -97,6 +100,8 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
     }
 
     /**
+     * Prepare layout
+     *
      * @return $this
      */
     protected function _prepareLayout()
@@ -115,7 +120,7 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
             ['label' => __('Reset'), 'onclick' => 'window.location.reload()', 'class' => 'reset']
         );
 
-        $rate = intval($this->getRequest()->getParam('rate'));
+        $rate = (int)$this->getRequest()->getParam('rate');
         if ($rate) {
             $this->buttonList->add(
                 'delete',
@@ -126,7 +131,7 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
                     ) . '\', \'' . $this->getUrl(
                         'tax/*/delete',
                         ['rate' => $rate]
-                    ) . '\')',
+                    ) . '\', {data: {}})',
                     'class' => 'delete'
                 ]
             );

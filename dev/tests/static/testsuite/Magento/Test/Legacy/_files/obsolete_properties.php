@@ -239,7 +239,7 @@ return [
     ['_url', 'Magento\Framework\View\Asset\Minified', 'url'],
     ['_viewUrl', 'Magento\Framework\View\Asset\Minified', 'viewUrl'],
     ['_logger', 'Magento\Framework\View\Asset\Minified', 'logger'],
-    ['_scopeConfig', 'Magento\Framework\View\Asset\MinifyService', 'сonfig'],
+    ['_scopeConfig', 'Magento\Framework\View\Asset\MinifyService', 'config'],
     ['_objectManager', 'Magento\Framework\View\Asset\MinifyService', 'objectManager'],
     ['_enabled', 'Magento\Framework\View\Asset\MinifyService', 'enabled'],
     ['_minifiers', 'Magento\Framework\View\Asset\MinifyService', 'minifiers'],

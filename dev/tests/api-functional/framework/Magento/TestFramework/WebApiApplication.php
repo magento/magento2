@@ -13,7 +13,7 @@ namespace Magento\TestFramework;
 class WebApiApplication extends Application
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function run()
     {
@@ -24,10 +24,14 @@ class WebApiApplication extends Application
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function install()
+    public function install($cleanup)
     {
+        if ($cleanup) {
+            $this->cleanup();
+        }
+
         $installOptions = $this->getInstallConfig();
 
         /* Install application */
@@ -41,19 +45,27 @@ class WebApiApplication extends Application
                     }
                     continue;
                 }
-                if (!empty($optionValue)) {
-                    $installCmd .= " --$optionName=%s";
-                    $installArgs[] = $optionValue;
-                }
+                $installCmd .= " --$optionName=%s";
+                $installArgs[] = $optionValue;
             }
             $this->_shell->execute($installCmd, $installArgs);
         }
+        /* Set Indexer mode as "Update on Save" & Reindex all the Indexers */
+        $this->_shell->execute(
+            'php -f ' . BP . '/bin/magento indexer:set-mode realtime -vvv'
+        );
+        $this->_shell->execute(
+            'php -f ' . BP . '/bin/magento indexer:reindex -vvv'
+        );
+
+        $this->runPostInstallCommands();
     }
 
     /**
-     * Use the application as is
+     * @inheritdoc
      *
-     * {@inheritdoc}
+     * Return empty array of custom directories
+     * @return array
      */
     protected function getCustomDirs()
     {

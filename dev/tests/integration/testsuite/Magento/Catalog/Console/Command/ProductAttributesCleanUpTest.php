@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Console\Command;
 
 use Symfony\Component\Console\Tester\CommandTester;
@@ -29,7 +30,7 @@ class ProductAttributesCleanUpTest extends \PHPUnit\Framework\TestCase
      */
     private $attributeResource;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->command = $this->objectManager->create(\Magento\Catalog\Console\Command\ProductAttributesCleanUp::class);
@@ -50,6 +51,7 @@ class ProductAttributesCleanUpTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Store/_files/website.php
      * @magentoDataFixture Magento/Store/_files/fixture_store_with_catalogsearch_index.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testExecute()
     {
@@ -64,9 +66,12 @@ class ProductAttributesCleanUpTest extends \PHPUnit\Framework\TestCase
         $this->tester->execute([]);
 
         // Verify that unused attribute was removed
-        $this->assertContains('Unused product attributes successfully cleaned up', $this->tester->getDisplay());
+        $this->assertStringContainsString(
+            'Unused product attributes successfully cleaned up',
+            $this->tester->getDisplay()
+        );
         $attribute = $this->getUnusedProductAttribute();
-        $this->assertFalse($attribute);
+        $this->assertEmpty($attribute);
     }
 
     /**
@@ -78,6 +83,7 @@ class ProductAttributesCleanUpTest extends \PHPUnit\Framework\TestCase
         $select = $connection->select();
         $select->from($this->attributeResource->getTable('catalog_product_entity_varchar'));
         $select->where('value = ?', 'Simple fixture store');
+
         return $connection->fetchRow($select);
     }
 
@@ -98,6 +104,7 @@ class ProductAttributesCleanUpTest extends \PHPUnit\Framework\TestCase
         $storeGroup = $this->objectManager->create(\Magento\Store\Model\Group::class);
         $storeGroup->setWebsiteId($website->getId());
         $storeGroup->setName('Fixture Store Group');
+        $storeGroup->setCode('fixturestoregroup');
         $storeGroup->setRootCategoryId(2);
         $storeGroup->setDefaultStoreId($store->getId());
         $storeGroup->save();
@@ -106,8 +113,6 @@ class ProductAttributesCleanUpTest extends \PHPUnit\Framework\TestCase
             ->setGroupId($storeGroup->getId())
             ->save();
 
-        /* Refresh stores memory cache */
-        $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
         return $store;
     }
 }

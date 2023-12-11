@@ -3,47 +3,61 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Price\System\Config;
 
-class PriceScopeTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Indexer\Product\Price\Processor;
+use Magento\Catalog\Model\Indexer\Product\Price\System\Config\PriceScope;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Indexer\Model\Indexer;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class PriceScopeTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\System\Config\PriceScope
+     * @var PriceScope
      */
     protected $_model;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Indexer|MockObject
      */
     protected $_indexerMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|MockObject
      */
     protected $indexerRegistryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->_objectManager = new ObjectManager($this);
 
-        $this->_indexerMock = $this->createPartialMock(\Magento\Indexer\Model\Indexer::class, ['load', 'invalidate']);
+        $this->_indexerMock = $this->createPartialMock(Indexer::class, ['load', 'invalidate']);
         $this->indexerRegistryMock = $this->createPartialMock(
-            \Magento\Framework\Indexer\IndexerRegistry::class,
+            IndexerRegistry::class,
             ['get']
         );
 
-        $contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
-        $registryMock = $this->createMock(\Magento\Framework\Registry::class);
-        $storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $configMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $contextMock = $this->createMock(Context::class);
+        $registryMock = $this->createMock(Registry::class);
+        $storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->_model = $this->_objectManager->getObject(
-            \Magento\Catalog\Model\Indexer\Product\Price\System\Config\PriceScope::class,
+            PriceScope::class,
             [
                 'context' => $contextMock,
                 'registry' => $registryMock,
@@ -76,7 +90,7 @@ class PriceScopeTest extends \PHPUnit\Framework\TestCase
     {
         $this->indexerRegistryMock->expects($this->exactly($countCall))
             ->method('get')
-            ->with(\Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID)
-            ->will($this->returnValue($this->_indexerMock));
+            ->with(Processor::INDEXER_ID)
+            ->willReturn($this->_indexerMock);
     }
 }

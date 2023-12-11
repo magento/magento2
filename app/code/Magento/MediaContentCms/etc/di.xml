@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\MediaContentCms\Observer\Block">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="content" xsi:type="string">content</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaContentCms\Observer\Page">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="content" xsi:type="string">content</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaContentCms\Observer\PageDelete">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="content" xsi:type="string">content</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaContentCms\Observer\BlockDelete">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="content" xsi:type="string">content</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByPageStatus" type="Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByContentField">
+        <arguments>
+            <argument name="entityType" xsi:type="string">cms_page</argument>
+            <argument name="fieldTable" xsi:type="string">cms_page</argument>
+            <argument name="idColumn" xsi:type="string">page_id</argument>
+            <argument name="fieldColumn" xsi:type="string">is_active</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByBlockStatus" type="Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByContentField">
+        <arguments>
+            <argument name="entityType" xsi:type="string">cms_block</argument>
+            <argument name="fieldTable" xsi:type="string">cms_block</argument>
+            <argument name="idColumn" xsi:type="string">block_id</argument>
+            <argument name="fieldColumn" xsi:type="string">is_active</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\MediaContentApi\Model\Composite\GetAssetIdsByContentField">
+        <arguments>
+            <argument name="fieldHandlers" xsi:type="array">
+                <item name="content_status" xsi:type="array">
+                    <item name="getAssetIdsByPageStatus" xsi:type="object">Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByPageStatus</item>
+                    <item name="getAssetIdsByBlockStatus" xsi:type="object">Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByBlockStatus</item>
+                </item>
+                <item name="store_id" xsi:type="array">
+                    <item name="getAssetIdsByPageStore" xsi:type="object">Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByPageStore</item>
+                    <item name="getAssetIdsByBlockStore" xsi:type="object">Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByBlockStore</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

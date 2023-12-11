@@ -8,6 +8,9 @@ namespace Magento\Theme\Model\Design\Backend;
 use Magento\Config\Model\Config\Backend\Serialized\ArraySerialized;
 use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * Validate Eav Model before save.
+ */
 class Exceptions extends ArraySerialized
 {
     /**
@@ -79,7 +82,7 @@ class Exceptions extends ArraySerialized
             }
 
             // Empty string (match all) is not supported, because it means setting a default theme. Remove such entries.
-            if (!strlen($row['search'])) {
+            if (!isset($row['search']) || !strlen($row['search'])) {
                 unset($exceptions[$rowKey]);
                 continue;
             }
@@ -100,14 +103,17 @@ class Exceptions extends ArraySerialized
      *
      * @param string $search
      * @return string
+     *
      * @throws \Magento\Framework\Exception\LocalizedException on invalid regular expression
      */
     protected function _composeRegexp($search)
     {
         // If valid regexp entered - do nothing
+        /** @codingStandardsIgnoreStart */
         if (@preg_match($search, '') !== false) {
             return $search;
         }
+        /** @codingStandardsIgnoreEnd */
 
         // Find out - whether user wanted to enter regexp or normal string.
         if ($this->_isRegexp($search)) {
@@ -125,7 +131,7 @@ class Exceptions extends ArraySerialized
      */
     protected function _isRegexp($search)
     {
-        if (strlen($search) < 3) {
+        if ($search === null || strlen($search) < 3) {
             return false;
         }
 
@@ -133,7 +139,7 @@ class Exceptions extends ArraySerialized
         // Limit delimiters to reduce possibility, that we miss string with regexp.
 
         // Starts with a delimiter
-        if (strpos($possibleDelimiters, $search[0]) !== false) {
+        if (strpos($possibleDelimiters, (string) $search[0]) !== false) {
             return true;
         }
 
@@ -163,6 +169,8 @@ class Exceptions extends ArraySerialized
     }
 
     /**
+     * Get Value from data array.
+     *
      * @return array
      */
     public function getValue()

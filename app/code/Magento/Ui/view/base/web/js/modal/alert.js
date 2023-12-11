@@ -9,7 +9,7 @@
 define([
     'jquery',
     'underscore',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'Magento_Ui/js/modal/confirm',
     'mage/translate'
 ], function ($, _) {
@@ -44,7 +44,7 @@ define([
          */
         closeModal: function () {
             this.options.actions.always();
-            this.element.bind('alertclosed', _.bind(this._remove, this));
+            this.element.on('alertclosed', _.bind(this._remove, this));
 
             return this._super();
         }

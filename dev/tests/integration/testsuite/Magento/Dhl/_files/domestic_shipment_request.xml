@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<req:ShipmentRequest xmlns:req="http://www.dhl.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="http://www.dhl.com ship-val-global-req.xsd" schemaVersion="10.0">
+    <Request xmlns="">
+        <ServiceHeader>
+            <MessageTime>currentTime</MessageTime>
+            <MessageReference>MAGE_SHIP_28TO32_Char_CHECKED</MessageReference>
+            <SiteID>some ID</SiteID>
+            <Password>some password</Password>
+        </ServiceHeader>
+        <MetaData>
+            <SoftwareName>Magento</SoftwareName>
+            <SoftwareVersion>1.0.0+no-v</SoftwareVersion>
+        </MetaData>
+    </Request>
+    <RegionCode xmlns="">CHECKED</RegionCode>
+    <RequestedPickupTime xmlns="">N</RequestedPickupTime>
+    <LanguageCode xmlns="">EN</LanguageCode>
+    <Billing xmlns="">
+        <ShipperAccountNumber>123456789</ShipperAccountNumber>
+        <ShippingPaymentType>S</ShippingPaymentType>
+        <BillingAccountNumber>123456789</BillingAccountNumber>
+    </Billing>
+    <Consignee xmlns="">
+        <CompanyName/>
+        <AddressLine1>15099 Some Blvd</AddressLine1>
+        <City/>
+        <PostalCode/>
+        <CountryCode/>
+        <CountryName/>
+        <Contact>
+            <PersonName/>
+            <PhoneNumber/>
+        </Contact>
+    </Consignee>
+    <Commodity xmlns="">
+        <CommodityCode>01</CommodityCode>
+    </Commodity>
+    <Reference xmlns="">
+        <ReferenceID>shipment reference</ReferenceID>
+        <ReferenceType>St</ReferenceType>
+    </Reference>
+    <ShipmentDetails xmlns="">
+        <Pieces xmlns="">
+            <Piece xmlns="">
+                <PieceID>1</PieceID>
+                <PackageType>CP</PackageType>
+                <Weight>0.454</Weight>
+                <Width>3</Width>
+                <Height>3</Height>
+                <Depth>3</Depth>
+                <PieceContents>item_name</PieceContents>
+            </Piece>
+        </Pieces>
+        <WeightUnit>K</WeightUnit>
+        <GlobalProductCode/>
+        <LocalProductCode/>
+        <Date>currentTime</Date>
+        <Contents>DHL Parcel</Contents>
+        <DimensionUnit>C</DimensionUnit>
+        <PackageType>CP</PackageType>
+        <CurrencyCode>USD</CurrencyCode>
+    </ShipmentDetails>
+    <Shipper xmlns="">
+        <ShipperID>123456789</ShipperID>
+        <CompanyName/>
+        <RegisteredAccount>123456789</RegisteredAccount>
+        <AddressLine1>4956 Some Way</AddressLine1>
+        <City/>
+        <PostalCode/>
+        <CountryCode/>
+        <CountryName/>
+        <Contact xmlns="">
+            <PersonName/>
+            <PhoneNumber/>
+        </Contact>
+    </Shipper>
+    <LabelImageFormat xmlns="">PDF</LabelImageFormat>
+</req:ShipmentRequest>

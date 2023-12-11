@@ -3,15 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Model\Payflow;
 
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Info;
 use Magento\Paypal\Model\Payflow\AvsEmsCodeMapper;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AvsEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
+class AvsEmsCodeMapperTest extends TestCase
 {
     /**
      * @var AvsEmsCodeMapper
@@ -21,7 +24,7 @@ class AvsEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mapper = new AvsEmsCodeMapper();
     }
@@ -40,7 +43,7 @@ class AvsEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
         /** @var OrderPaymentInterface|MockObject $orderPayment */
         $orderPayment = $this->getMockBuilder(OrderPaymentInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $orderPayment->expects(self::once())
             ->method('getMethod')
@@ -60,15 +63,15 @@ class AvsEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
      * Checks a test case, when payment order is not Payflow payment method.
      *
      * @covers \Magento\Paypal\Model\Payflow\AvsEmsCodeMapper::getCode
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "some_payment" does not supported by Payflow AVS mapper.
      */
     public function testGetCodeWithException()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('The "some_payment" does not supported by Payflow AVS mapper.');
         /** @var OrderPaymentInterface|MockObject $orderPayment */
         $orderPayment = $this->getMockBuilder(OrderPaymentInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $orderPayment->expects(self::exactly(2))
             ->method('getMethod')
@@ -85,17 +88,17 @@ class AvsEmsCodeMapperTest extends \PHPUnit\Framework\TestCase
     public function getCodeDataProvider()
     {
         return [
-            ['avsZip' => null, 'avsStreet' => null, 'expected' => 'U'],
-            ['avsZip' => null, 'avsStreet' => 'Y', 'expected' => 'U'],
-            ['avsZip' => 'Y', 'avsStreet' => null, 'expected' => 'U'],
+            ['avsZip' => null, 'avsStreet' => null, 'expected' => ''],
+            ['avsZip' => null, 'avsStreet' => 'Y', 'expected' => ''],
+            ['avsZip' => 'Y', 'avsStreet' => null, 'expected' => ''],
             ['avsZip' => 'Y', 'avsStreet' => 'Y', 'expected' => 'Y'],
             ['avsZip' => 'N', 'avsStreet' => 'Y', 'expected' => 'A'],
             ['avsZip' => 'Y', 'avsStreet' => 'N', 'expected' => 'Z'],
             ['avsZip' => 'N', 'avsStreet' => 'N', 'expected' => 'N'],
-            ['avsZip' => 'X', 'avsStreet' => 'Y', 'expected' => 'U'],
-            ['avsZip' => 'N', 'avsStreet' => 'X', 'expected' => 'U'],
-            ['avsZip' => '', 'avsStreet' => 'Y', 'expected' => 'U'],
-            ['avsZip' => 'N', 'avsStreet' => '', 'expected' => 'U']
+            ['avsZip' => 'X', 'avsStreet' => 'Y', 'expected' => ''],
+            ['avsZip' => 'N', 'avsStreet' => 'X', 'expected' => ''],
+            ['avsZip' => '', 'avsStreet' => 'Y', 'expected' => ''],
+            ['avsZip' => 'N', 'avsStreet' => '', 'expected' => '']
         ];
     }
 }

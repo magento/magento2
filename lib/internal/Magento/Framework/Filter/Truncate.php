@@ -5,13 +5,19 @@
  */
 namespace Magento\Framework\Filter;
 
+use Laminas\Filter\FilterInterface;
+use Magento\Framework\Stdlib\StringUtils;
+
 /**
  * Truncate filter
  *
  * Truncate a string to a certain length if necessary, appending the $etc string.
  * $remainder will contain the string that has been replaced with $etc.
+ *
+ * @deprecated 101.0.7
+ * @see \Magento\Framework\Filter\TruncateFilter
  */
-class Truncate implements \Zend_Filter_Interface
+class Truncate implements FilterInterface
 {
     /**
      * @var int
@@ -34,19 +40,19 @@ class Truncate implements \Zend_Filter_Interface
     protected $breakWords;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils
+     * @var StringUtils
      */
     protected $string;
 
     /**
-     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param StringUtils $string
      * @param int $length
      * @param string $etc
-     * @param string &$remainder
+     * @param string $remainder
      * @param bool $breakWords
      */
     public function __construct(
-        \Magento\Framework\Stdlib\StringUtils $string,
+        StringUtils $string,
         $length = 80,
         $etc = '...',
         &$remainder = '',

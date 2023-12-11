@@ -2,7 +2,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/* global jQuery */
+
 /* eslint-disable max-nested-callbacks */
 define([
     'jquery',
@@ -44,6 +44,14 @@ define([
         });
     });
 
+    afterEach(function () {
+        try {
+            injector.clean();
+            injector.remove();
+        } catch (e) {}
+        window.localStorage.clear();
+    });
+
     describe('Magento_Catalog/js/product/storage/data-storage', function () {
         describe('"initCustomerDataInvalidateListener" method', function () {
             it('check returned value', function () {
@@ -81,18 +89,20 @@ define([
                 };
             });
 
+            afterEach(function () {
+                window.localStorage.clear();
+            });
+
             it('check calls "dataHandler" method with data', function () {
                 var data = {
                     property: 'value'
                 };
 
                 obj.dataHandler(data);
-                expect(obj.localStorage.set).toHaveBeenCalledWith(data);
-                expect(obj.localStorage.removeAll).not.toHaveBeenCalled();
+                expect(window.localStorage.getItem(obj.namespace)).toBe(JSON.stringify(data));
             });
             it('check calls "dataHandler" method with empty data', function () {
                 obj.dataHandler({});
-                expect(obj.localStorage.set).not.toHaveBeenCalled();
                 expect(obj.localStorage.removeAll).toHaveBeenCalled();
             });
         });
@@ -109,7 +119,8 @@ define([
                 obj.data = function (data) {
                     if (!data) {
                         return {
-                            dataProperty: 'dataValue'
+                            existingKey1: 'existingKey1Value',
+                            existingKey2: 'existingKey2Value'
                         };
                     }
 
@@ -120,14 +131,16 @@ define([
             it('check calls "providerHandler" method with data', function () {
                 var data = {
                     items: {
-                        key: 'value'
+                        newKey: 'newKeyValue',
+                        existingKey2: 'existingKey2NewValue'
                     }
                 };
 
                 obj.providerHandler(data);
 
-                expect(obj.result.key).toBe('value');
-                expect(obj.result.dataProperty).toBe('dataValue');
+                expect(obj.result.existingKey1).toBe('existingKey1Value');
+                expect(obj.result.existingKey2).toBe('existingKey2NewValue');
+                expect(obj.result.newKey).toBe('newKeyValue');
             });
             it('check calls "providerHandler" method without data', function () {
                 obj.providerHandler({});
@@ -334,8 +347,19 @@ define([
                 expect(obj.hasIdsInSentRequest(ids)).toBe(false);
             });
 
-            it('check calls "hasIdsInSentRequest" with request data', function () {
+            it('check calls "hasIdsInSentRequest" with request data #1', function () {
                 expect(obj.hasIdsInSentRequest(ids)).toBe(true);
+            });
+
+            it('check calls "hasIdsInSentRequest" with request data #2', function () {
+                obj.request = {
+                    data: {
+                        '2': {
+                            data: 'value'
+                        }
+                    }
+                };
+                expect(obj.hasIdsInSentRequest(ids)).toBe(false);
             });
         });
         describe('"addDataFromPageCache" method', function () {

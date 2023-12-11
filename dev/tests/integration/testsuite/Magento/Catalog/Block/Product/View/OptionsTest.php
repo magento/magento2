@@ -30,7 +30,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
      */
     protected $productRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -119,8 +119,8 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
                         'basePrice' => ['amount' => 10],
                         'finalPrice' => ['amount' => 10]
                     ],
-                    'type' => 'fixed',
-                    'name' => 'drop_down option 1',
+                'type' => 'fixed',
+                'name' => 'drop_down option 1',
             ],
             1 => [
                 'prices' =>
@@ -129,8 +129,8 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
                         'basePrice' => ['amount' => 40],
                         'finalPrice' => ['amount' => 40],
                     ],
-                    'type' => 'percent',
-                    'name' => 'drop_down option 2',
+                'type' => 'percent',
+                'name' => 'drop_down option 2',
             ],
         ];
     }

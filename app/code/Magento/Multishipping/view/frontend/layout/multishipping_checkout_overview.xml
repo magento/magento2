@@ -17,6 +17,7 @@
         <referenceContainer name="content">
             <block class="Magento\Multishipping\Block\Checkout\Overview" name="checkout_overview" template="Magento_Multishipping::checkout/overview.phtml" cacheable="false">
                 <arguments>
+                    <argument name="checkout_data" xsi:type="object">Magento\Multishipping\Block\DataProviders\Overview</argument>
                     <argument name="renderer_template" xsi:type="string">Magento_Multishipping::checkout/item/default.phtml</argument>
                     <argument name="row_renderer_template" xsi:type="string">Magento_Multishipping::checkout/overview/item.phtml</argument>
                 </arguments>

@@ -5,9 +5,12 @@
  */
 namespace Magento\Framework;
 
-use Zend\Stdlib\Parameters;
+use Laminas\Stdlib\Parameters;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * Test class for \Magento\Framework\Url
+ */
 class UrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -15,16 +18,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = Bootstrap::getObjectManager()->create(\Magento\Framework\Url::class);
-    }
-
-    public function testSetGetUseSession()
-    {
-        $this->assertTrue((bool)$this->model->getUseSession());
-        $this->model->setUseSession(false);
-        $this->assertFalse($this->model->getUseSession());
     }
 
     public function testSetRouteFrontName()
@@ -185,7 +181,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
          * Get url with type specified in params
          */
         $mediaUrl = $this->model->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA]);
-        $this->assertEquals('http://localhost/pub/media/', $mediaUrl, 'Incorrect media url');
+        $this->assertEquals('http://localhost/media/', $mediaUrl, 'Incorrect media url');
         $this->assertEquals('http://localhost/index.php/', $this->model->getBaseUrl(), 'Incorrect link url');
     }
 
@@ -209,7 +205,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->model->setRouteName('catalog');
         $this->assertEquals('catalog', $this->model->getRouteName());
 
-        $this->markTestIncomplete('setRouteName() logic is unclear.');
+        $this->markTestSkipped('setRouteName() logic is unclear.');
     }
 
     public function testSetGetControllerName()
@@ -217,7 +213,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->model->setControllerName('product');
         $this->assertEquals('product', $this->model->getControllerName());
 
-        $this->markTestIncomplete('setControllerName() logic is unclear.');
+        $this->markTestSkipped('setControllerName() logic is unclear.');
     }
 
     public function testSetGetActionName()
@@ -225,7 +221,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->model->setActionName('view');
         $this->assertEquals('view', $this->model->getActionName());
 
-        $this->markTestIncomplete('setActionName() logic is unclear.');
+        $this->markTestSkipped('setActionName() logic is unclear.');
     }
 
     /**
@@ -474,6 +470,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Check that SID is removed from URL.
+     *
      * Note: isolation flushes the URL memory cache
      * @magentoAppIsolation enabled
      *
@@ -482,15 +480,13 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      */
     public function testSessionUrlVar()
     {
-        $sessionId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\Session\Generic::class
-        )->getSessionId();
         $sessionUrl = $this->model->sessionUrlVar('<a href="http://example.com/?___SID=U">www.example.com</a>');
-        $this->assertEquals('<a href="http://example.com/?SID=' . $sessionId . '">www.example.com</a>', $sessionUrl);
+        $this->assertEquals('<a href="http://example.com/">www.example.com</a>', $sessionUrl);
     }
 
     public function testUseSessionIdForUrl()
     {
+        // phpcs:ignore
         $_SERVER['HTTP_HOST'] = 'localhost';
         $this->assertFalse($this->model->useSessionIdForUrl(true));
         $this->assertFalse($this->model->useSessionIdForUrl(false));

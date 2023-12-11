@@ -6,7 +6,12 @@
  */
 namespace Magento\Indexer\Controller\Adminhtml\Indexer;
 
-class ListAction extends \Magento\Indexer\Controller\Adminhtml\Indexer
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+/**
+ * Controller for indexer grid
+ */
+class ListAction extends \Magento\Indexer\Controller\Adminhtml\Indexer implements HttpGetActionInterface
 {
     /**
      * Display processes grid action

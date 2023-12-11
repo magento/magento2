@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SeeProductInComparisonListActionGroup">
+        <annotations>
+            <description>Validate that the Product is present in the comparison list</description>
+        </annotations>
+        <arguments>
+            <argument name="productVar"/>
+        </arguments>
+
+        <amOnPage url="{{StorefrontProductComparePage.url}}" stepKey="navigateToComparePage"/>
+        <waitForPageLoad stepKey="waitForStorefrontProductComparePageLoad"/>
+        <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName(productVar.name)}}"
+                    stepKey="seeProductInCompareList"/>
+    </actionGroup>
+</actionGroups>

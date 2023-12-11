@@ -7,7 +7,7 @@ define([
     'jquery',
     'mage/template',
     'underscore',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'mage/validation'
 ], function ($, mageTemplate, _) {
     'use strict';
@@ -56,6 +56,9 @@ define([
             if (this.options.isMultipleCountriesAllowed) {
                 this.element.parents('div.field').show();
                 this.element.on('change', $.proxy(function (e) {
+                    // clear region inputs on country change
+                    $(this.options.regionListId).val('');
+                    $(this.options.regionInputId).val('');
                     this._updateRegion($(e.target).val());
                 }, this));
 
@@ -139,9 +142,9 @@ define([
                     this.options.form.validation.apply(this.options.form, _.compact(args));
 
                 // Clean up errors on region & zip fix
-                $(this.options.regionInputId).removeClass('mage-error').parent().find('[generated]').remove();
-                $(this.options.regionListId).removeClass('mage-error').parent().find('[generated]').remove();
-                $(this.options.postcodeId).removeClass('mage-error').parent().find('[generated]').remove();
+                $(this.options.regionInputId).removeClass('mage-error').parent().find('.mage-error').remove();
+                $(this.options.regionListId).removeClass('mage-error').parent().find('.mage-error').remove();
+                $(this.options.postcodeId).removeClass('mage-error').parent().find('.mage-error').remove();
             }
         },
 
@@ -157,7 +160,10 @@ define([
                 regionInput = $(this.options.regionInputId),
                 postcode = $(this.options.postcodeId),
                 label = regionList.parent().siblings('label'),
-                requiredLabel = regionList.parents('div.field');
+                container = regionList.parents('div.field'),
+                regionsEntries,
+                regionId,
+                regionData;
 
             this._clearError();
             this._checkRegionRequired(country);
@@ -165,8 +171,14 @@ define([
             // Populate state/province dropdown list if available or use input box
             if (this.options.regionJson[country]) {
                 this._removeSelectOptions(regionList);
-                $.each(this.options.regionJson[country], $.proxy(function (key, value) {
-                    this._renderSelectOption(regionList, key, value);
+                regionsEntries = _.pairs(this.options.regionJson[country]);
+                regionsEntries.sort(function (a, b) {
+                    return a[1].name > b[1].name ? 1 : -1;
+                });
+                $.each(regionsEntries, $.proxy(function (key, value) {
+                    regionId = value[0];
+                    regionData = value[1];
+                    this._renderSelectOption(regionList, regionId, regionData);
                 }, this));
 
                 if (this.currentRegionOption) {
@@ -180,14 +192,17 @@ define([
                 }
 
                 if (this.options.isRegionRequired) {
-                    regionList.addClass('required-entry').removeAttr('disabled');
-                    requiredLabel.addClass('required');
+                    regionList.addClass('required-entry').prop('disabled', false);
+                    container.addClass('required').show();
                 } else {
                     regionList.removeClass('required-entry validate-select').removeAttr('data-validate');
-                    requiredLabel.removeClass('required');
+                    container.removeClass('required');
 
                     if (!this.options.optionalRegionAllowed) { //eslint-disable-line max-depth
-                        regionList.attr('disabled', 'disabled');
+                        regionList.hide();
+                        container.hide();
+                    } else {
+                        regionList.prop('disabled', false).show();
                     }
                 }
 
@@ -195,18 +210,21 @@ define([
                 regionInput.hide();
                 label.attr('for', regionList.attr('id'));
             } else {
+                this._removeSelectOptions(regionList);
+
                 if (this.options.isRegionRequired) {
-                    regionInput.addClass('required-entry').removeAttr('disabled');
-                    requiredLabel.addClass('required');
+                    regionInput.addClass('required-entry').prop('disabled', false);
+                    container.addClass('required').show();
                 } else {
                     if (!this.options.optionalRegionAllowed) { //eslint-disable-line max-depth
                         regionInput.attr('disabled', 'disabled');
+                        container.hide();
                     }
-                    requiredLabel.removeClass('required');
+                    container.removeClass('required');
                     regionInput.removeClass('required-entry');
                 }
 
-                regionList.removeClass('required-entry').hide();
+                regionList.removeClass('required-entry').prop('disabled', 'disabled').hide();
                 regionInput.show();
                 label.attr('for', regionInput.attr('id'));
             }
@@ -220,6 +238,7 @@ define([
 
             // Add defaultvalue attribute to state/province select element
             regionList.attr('defaultvalue', this.options.defaultRegion);
+            this.options.form.find('[type="submit"]').prop('disabled', false).show();
         },
 
         /**

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMarketingCreateSitemapPathErrorTest">
+        <annotations>
+            <features value="Sitemap"/>
+            <stories value="Admin Creates Sitemap Entity Path Error"/>
+            <title value="Sitemap Creation With Path Error"/>
+            <description value="Sitemap Entity Creation With Path Error"/>
+            <testCaseId value="MC-14313"/>
+            <severity value="MAJOR"/>
+            <group value="sitemap"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!--TEST BODY -->
+
+        <!--Navigate to Marketing->Sitemap Page -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingSiteMapPage">
+            <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuSEOAndSearchSiteMap.dataUiId}}"/>
+        </actionGroup>
+        <!-- Navigate to New Sitemap Creation Page -->
+        <actionGroup ref="AdminMarketingNavigateToNewSitemapPageActionGroup" stepKey="navigateToAddNewSitemap"/>
+        <!-- Create Sitemap Entity With Incorrect Path-->
+        <actionGroup ref="AdminMarketingCreateSitemapEntityActionGroup" stepKey="createSitemap">
+            <argument name="filename" value="%isolation%"/>
+            <argument name="path" value="/"/>
+        </actionGroup>
+        <!-- See Error Message-->
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeErrorMessage">
+            <argument name="message" value="Path &quot;/%isolation%&quot; is not available and cannot be used."/>
+            <argument value="error" name="messageType"/>
+        </actionGroup>
+        <!--END TEST BODY -->
+    </test>
+</tests>

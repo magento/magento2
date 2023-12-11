@@ -3,63 +3,79 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Observer;
+
+use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Asset\File;
+use Magento\Framework\View\Asset\GroupedCollection;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Design\Theme\Customization;
+use Magento\Framework\View\Design\Theme\Customization\FileAssetInterface;
+use Magento\Framework\View\DesignInterface;
+use Magento\Theme\Model\Theme;
+use Magento\Theme\Observer\ApplyThemeCustomizationObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ApplyThemeCustomizationObserverTest extends \PHPUnit\Framework\TestCase
+class ApplyThemeCustomizationObserverTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $themeCustomization;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $assetRepo;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $assetsMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     protected $logger;
 
     /**
-     * @var \Magento\Theme\Observer\ApplyThemeCustomizationObserver
+     * @var ApplyThemeCustomizationObserver
      */
     protected $themeObserver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->themeCustomization = $this->createMock(\Magento\Framework\View\Design\Theme\Customization::class);
-        $themeMock = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['__wakeup', 'getCustomization']);
+        $this->themeCustomization = $this->createMock(Customization::class);
+        $themeMock = $this->createPartialMock(Theme::class, ['__wakeup', 'getCustomization']);
         $themeMock->expects(
             $this->any()
         )->method(
             'getCustomization'
-        )->will(
-            $this->returnValue($this->themeCustomization)
+        )->willReturn(
+            $this->themeCustomization
         );
 
-        $designMock = $this->createMock(\Magento\Framework\View\DesignInterface::class);
-        $designMock->expects($this->any())->method('getDesignTheme')->will($this->returnValue($themeMock));
+        $designMock = $this->getMockForAbstractClass(DesignInterface::class);
+        $designMock->expects($this->any())->method('getDesignTheme')->willReturn($themeMock);
 
-        $this->assetsMock = $this->createMock(\Magento\Framework\View\Asset\GroupedCollection::class);
+        $this->assetsMock = $this->createMock(GroupedCollection::class);
 
-        $this->assetRepo = $this->createMock(\Magento\Framework\View\Asset\Repository::class);
+        $this->assetRepo = $this->createMock(Repository::class);
 
-        $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();
+        $this->logger = $this->getMockBuilder(LoggerInterface::class)
+            ->getMock();
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->themeObserver = $objectManagerHelper->getObject(
-            \Magento\Theme\Observer\ApplyThemeCustomizationObserver::class,
+            ApplyThemeCustomizationObserver::class,
             [
                 'design' => $designMock,
                 'assets' => $this->assetsMock,
@@ -71,21 +87,21 @@ class ApplyThemeCustomizationObserverTest extends \PHPUnit\Framework\TestCase
 
     public function testApplyThemeCustomization()
     {
-        $asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
+        $asset = $this->createMock(File::class);
         $file = $this->createMock(\Magento\Theme\Model\Theme\File::class);
         $fileService = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Design\Theme\Customization\FileAssetInterface::class
+            FileAssetInterface::class
         );
-        $file->expects($this->any())->method('getCustomizationService')->will($this->returnValue($fileService));
+        $file->expects($this->any())->method('getCustomizationService')->willReturn($fileService);
 
         $this->assetRepo->expects($this->once())
             ->method('createArbitrary')
-            ->will($this->returnValue($asset));
+            ->willReturn($asset);
 
-        $this->themeCustomization->expects($this->once())->method('getFiles')->will($this->returnValue([$file]));
+        $this->themeCustomization->expects($this->once())->method('getFiles')->willReturn([$file]);
         $this->assetsMock->expects($this->once())->method('add')->with($this->anything(), $asset);
 
-        $observer = new \Magento\Framework\Event\Observer();
+        $observer = new Observer();
         $this->themeObserver->execute($observer);
     }
 
@@ -96,10 +112,10 @@ class ApplyThemeCustomizationObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getCustomizationService')
             ->willThrowException(new \InvalidArgumentException());
 
-        $this->themeCustomization->expects($this->once())->method('getFiles')->will($this->returnValue([$file]));
+        $this->themeCustomization->expects($this->once())->method('getFiles')->willReturn([$file]);
         $this->logger->expects($this->once())->method('critical');
 
-        $observer = new \Magento\Framework\Event\Observer();
+        $observer = new Observer();
         $this->themeObserver->execute($observer);
     }
 }

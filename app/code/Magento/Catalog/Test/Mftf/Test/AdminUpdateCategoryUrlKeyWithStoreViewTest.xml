@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateCategoryUrlKeyWithStoreViewTest">
+        <annotations>
+            <stories value="Update categories"/>
+            <title value="Update category, URL key with custom store view"/>
+            <description value="Login as admin and update category URL Key with store view"/>
+            <testCaseId value="MC-6062"/>
+            <severity value="BLOCKER"/>
+            <group value="Catalog"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <createData entity="NewRootCategory" stepKey="rootCategory"/>
+            <createData entity="SimpleRootSubCategory" stepKey="category">
+                <requiredEntity createDataKey="rootCategory"/>
+            </createData>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStore">
+                <argument name="storeGroupName" value="customStore.name"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Create Custom Store -->
+        <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStore">
+            <argument name="website" value="{{_defaultWebsite.name}}"/>
+            <argument name="store" value="{{customStore.name}}"/>
+            <argument name="rootCategory" value="$$rootCategory.name$$"/>
+        </actionGroup>
+
+        <!--Create Store View-->
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+            <argument name="StoreGroup" value="customStore"/>
+            <argument name="customStore" value="customStore"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
+        <!--Verify Category in Store View-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepage"/>
+        <actionGroup ref="StorefrontSwitchStoreActionGroup" stepKey="switchToCustomStore">
+            <argument name="storeName" value="{{customStore.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCatergoryInStoreFront">
+            <argument name="categoryName" value="{{SimpleRootSubCategory.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="selectCategory">
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
+
+        <!--Update URL Key-->
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="openCreatedSubCategory">
+            <argument name="Category" value="$$category$$"/>
+        </actionGroup>
+        <actionGroup ref="ChangeSeoUrlKeyActionGroup" stepKey="changeSeoUrlKey">
+            <argument name="value" value="newurlkey"/>
+        </actionGroup>
+
+        <!--Open Category Store Front Page-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomepage"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCatergoryNameInStoreFront">
+            <argument name="categoryName" value="{{SimpleRootSubCategory.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategory">
+            <argument name="categoryName" value="{{SimpleRootSubCategory.name}}"/>
+        </actionGroup>
+
+        <!--Verify Updated URLKey is present-->
+        <actionGroup ref="StorefrontAssertProperUrlIsShownActionGroup" stepKey="seeUpdatedUrlkey">
+            <argument name="urlPath" value="newurlkey.html"/>
+        </actionGroup>
+    </test>
+</tests>

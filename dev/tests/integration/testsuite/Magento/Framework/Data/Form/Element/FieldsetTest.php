@@ -16,7 +16,7 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
      */
     protected $_fieldset;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $elementFactory \Magento\Framework\Data\Form\ElementFactory */
@@ -246,7 +246,7 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
         $fieldsetField = $textField;
         $fieldsetField[1] = 'fieldset';
         $advancedFieldsetFld = $fieldsetField;
-        // set isAdvenced flag
+        // set isAdvanced flag
         $advancedFieldsetFld[4] = true;
         $result = [[[$fieldsetField, $textField, $advancedFieldsetFld], 1]];
         return $result;

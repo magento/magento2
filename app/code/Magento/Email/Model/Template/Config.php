@@ -1,7 +1,5 @@
 <?php
 /**
- * High-level interface for email templates data that hides format from the client code
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,6 +8,9 @@ namespace Magento\Email\Model\Template;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\View\Design\Theme\ThemePackageList;
 
+/**
+ * High-level interface for email templates data that hides format from the client code
+ */
 class Config implements \Magento\Framework\Mail\Template\ConfigInterface
 {
     /**
@@ -78,6 +79,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
                 'group' => $this->getTemplateModule($templateId),
             ];
             $themeTemplates = $this->getThemeTemplates($templateId);
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $templates = array_merge($templates, $themeTemplates);
         }
         return $templates;
@@ -137,7 +139,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
             'theme' => null
         ];
         $pattern = "#^(?<templateId>[^/]+)/(?<themeVendor>[^/]+)/(?<themeName>[^/]+)#i";
-        if (preg_match($pattern, $templateId, $matches)) {
+        if ($templateId !== null && preg_match($pattern, $templateId, $matches)) {
             $parts['templateId'] = $matches['templateId'];
             $parts['theme'] = $matches['themeVendor'] . '/' . $matches['themeName'];
         }
@@ -205,8 +207,9 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
         $designParams['module'] = $module;
 
         $file = $this->_getInfo($templateId, 'file');
+        $filename = $this->getFilename($file, $designParams, $module);
 
-        return $this->viewFileSystem->getEmailTemplateFileName($file, $designParams, $module);
+        return $filename;
     }
 
     /**
@@ -229,5 +232,27 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
             );
         }
         return $data[$templateId][$fieldName];
+    }
+
+    /**
+     * Retrieve template file path.
+     *
+     * @param string $file
+     * @param array $designParams
+     * @param string $module
+     *
+     * @return string
+     *
+     * @throws \UnexpectedValueException
+     */
+    private function getFilename(string $file, array $designParams, string $module): string
+    {
+        $filename = $this->viewFileSystem->getEmailTemplateFileName($file, $designParams, $module);
+
+        if ($filename === false) {
+            throw new \UnexpectedValueException("Template file '{$file}' is not found.");
+        }
+
+        return $filename;
     }
 }

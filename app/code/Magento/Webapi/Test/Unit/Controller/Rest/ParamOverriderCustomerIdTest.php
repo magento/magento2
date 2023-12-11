@@ -3,14 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Webapi\Test\Unit\Controller\Rest;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Webapi\Controller\Rest\ParamOverriderCustomerId;
+use PHPUnit\Framework\TestCase;
 
-class ParamOverriderCustomerIdTest extends \PHPUnit\Framework\TestCase
+class ParamOverriderCustomerIdTest extends TestCase
 {
     /**
      * @var ParamOverriderCustomerId
@@ -22,28 +24,28 @@ class ParamOverriderCustomerIdTest extends \PHPUnit\Framework\TestCase
      */
     private $userContext;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->userContext = $this->getMockBuilder(\Magento\Authorization\Model\UserContextInterface::class)
+        $this->userContext = $this->getMockBuilder(UserContextInterface::class)
             ->getMockForAbstractClass();
         $this->model = (new ObjectManager($this))->getObject(
-            \Magento\Webapi\Controller\Rest\ParamOverriderCustomerId::class,
+            ParamOverriderCustomerId::class,
             [
                 'userContext' => $this->userContext
             ]
         );
     }
-    
+
     public function testGetOverriddenValueIsCustomer()
     {
         $retValue = 'retValue';
 
         $this->userContext->expects($this->once())
             ->method('getUserType')
-            ->will($this->returnValue(UserContextInterface::USER_TYPE_CUSTOMER));
+            ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
         $this->userContext->expects($this->once())
             ->method('getUserId')
-            ->will($this->returnValue($retValue));
+            ->willReturn($retValue);
 
         $this->assertSame($retValue, $this->model->getOverriddenValue());
     }
@@ -52,7 +54,7 @@ class ParamOverriderCustomerIdTest extends \PHPUnit\Framework\TestCase
     {
         $this->userContext->expects($this->once())
             ->method('getUserType')
-            ->will($this->returnValue(UserContextInterface::USER_TYPE_ADMIN));
+            ->willReturn(UserContextInterface::USER_TYPE_ADMIN);
 
         $this->assertNull($this->model->getOverriddenValue());
     }

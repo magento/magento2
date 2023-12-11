@@ -4,12 +4,14 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
 /*
  * Since the bundle product creation GUI doesn't allow to choose values for bundled products' custom options,
  * bundled items should not contain products with required custom options.
  * However, if to create such a bundle product, it will be always out of stock.
  */
-require __DIR__ . '/../../../Magento/Catalog/_files/products.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/products.php');
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);

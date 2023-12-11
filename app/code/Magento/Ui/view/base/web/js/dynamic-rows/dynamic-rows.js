@@ -13,8 +13,9 @@ define([
     'uiLayout',
     'uiCollection',
     'uiRegistry',
-    'mage/translate'
-], function (ko, utils, _, layout, uiCollection, registry, $t) {
+    'mage/translate',
+    'jquery'
+], function (ko, utils, _, layout, uiCollection, registry, $t, $) {
     'use strict';
 
     /**
@@ -224,6 +225,14 @@ define([
             return this;
         },
 
+        /** @inheritdoc */
+        destroy: function () {
+            if (this.dnd()) {
+                this.dnd().destroy();
+            }
+            this._super();
+        },
+
         /**
          * Calls 'initObservable' of parent
          *
@@ -322,9 +331,7 @@ define([
             }
 
             if (this.defaultPagesState[this.currentPage()]) {
-                this.pagesChanged[this.currentPage()] =
-                    !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
-                this.changed(_.some(this.pagesChanged));
+                this.setChangedForCurrentPage();
             }
         },
 
@@ -434,13 +441,9 @@ define([
                     return initialize;
                 }));
 
-                this.pagesChanged[this.currentPage()] =
-                    !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
-                this.changed(_.some(this.pagesChanged));
+                this.setChangedForCurrentPage();
             } else if (this.hasInitialPagesState[this.currentPage()]) {
-                this.pagesChanged[this.currentPage()] =
-                    !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
-                this.changed(_.some(this.pagesChanged));
+                this.setChangedForCurrentPage();
             }
         },
 
@@ -533,22 +536,24 @@ define([
          * Init header elements
          */
         initHeader: function () {
-            var data;
+            var labels = [],
+                data;
 
             if (!this.labels().length) {
                 _.each(this.childTemplate.children, function (cell) {
                     data = this.createHeaderTemplate(cell.config);
                     cell.config.labelVisible = false;
                     _.extend(data, {
+                        defaultLabelVisible: data.visible(),
                         label: cell.config.label,
                         name: cell.name,
                         required: !!cell.config.validation,
                         columnsHeaderClasses: cell.config.columnsHeaderClasses,
                         sortOrder: cell.config.sortOrder
                     });
-
-                    this.labels.push(data);
+                    labels.push(data);
                 }, this);
+                this.labels(_.sortBy(labels, 'sortOrder'));
             }
         },
 
@@ -616,15 +621,12 @@ define([
          * @param {Array} data
          */
         parsePagesData: function (data) {
-            var pages;
-
             this.relatedData = this.deleteProperty ?
                 _.filter(data, function (elem) {
                     return elem && elem[this.deleteProperty] !== this.deleteValue;
                 }, this) : data;
 
-            pages = Math.ceil(this.relatedData.length / this.pageSize) || 1;
-            this.pages(pages);
+            this._updatePagesQuantity();
         },
 
         /**
@@ -653,7 +655,7 @@ define([
 
             startIndex = page || this.startIndex;
 
-            return dataRecord.slice(startIndex, this.startIndex + this.pageSize);
+            return dataRecord.slice(startIndex, this.startIndex + parseInt(this.pageSize, 10));
         },
 
         /**
@@ -712,6 +714,8 @@ define([
          * @param {Number} page - current page
          */
         changePage: function (page) {
+            this.clear();
+
             if (page === 1 && !this.recordData().length) {
                 return false;
             }
@@ -753,7 +757,6 @@ define([
          * Change page to next
          */
         nextPage: function () {
-            this.clear();
             this.currentPage(this.currentPage() + 1);
         },
 
@@ -761,7 +764,6 @@ define([
          * Change page to previous
          */
         previousPage: function () {
-            this.clear();
             this.currentPage(this.currentPage() - 1);
         },
 
@@ -799,7 +801,7 @@ define([
             var max = 0,
                 pos;
 
-            this.elems.each(function (record) {
+            this.recordData.each(function (record) {
                 pos = ~~record.position;
                 pos > max ? max = pos : false;
             });
@@ -839,7 +841,8 @@ define([
         deleteRecord: function (index, recordId) {
             var recordInstance,
                 lastRecord,
-                recordsData;
+                recordsData,
+                lastRecordIndex;
 
             if (this.deleteProperty) {
                 recordsData = this.recordData();
@@ -858,12 +861,13 @@ define([
                 this.update = true;
 
                 if (~~this.currentPage() === this.pages()) {
+                    lastRecordIndex = this.startIndex + this.getChildItems().length - 1;
                     lastRecord =
                         _.findWhere(this.elems(), {
-                            index: this.startIndex + this.getChildItems().length - 1
+                            index: lastRecordIndex
                         }) ||
                         _.findWhere(this.elems(), {
-                            index: (this.startIndex + this.getChildItems().length - 1).toString()
+                            index: lastRecordIndex.toString()
                         });
 
                     lastRecord.destroy();
@@ -877,6 +881,18 @@ define([
 
             this._reducePages();
             this._sort();
+        },
+
+        /**
+         * Update number of pages.
+         *
+         * @private
+         * @return void
+         */
+        _updatePagesQuantity: function () {
+            var pages = Math.ceil(this.relatedData.length / this.pageSize) || 1;
+
+            this.pages(pages);
         },
 
         /**
@@ -901,7 +917,7 @@ define([
             prop = prop || this.identificationProperty;
 
             return _.reject(this.getChildItems(), function (recordData) {
-                return ~~recordData[prop] === ~~id;
+                return recordData[prop].toString() === id.toString();
             }, this);
         },
 
@@ -954,6 +970,22 @@ define([
         reload: function () {
             this.clear();
             this.initChildren(false, true);
+            this._updatePagesQuantity();
+
+            /* After change page size need to check existing current page */
+            this._reducePages();
+        },
+
+        /**
+         * Update page size based on select change event.
+         * The value needs to be retrieved from select as ko value handler is executed after the event handler.
+         *
+         * @param {Object} component
+         * @param {jQuery.Event} event
+         */
+        updatePageSize: function (component, event) {
+            this.pageSize = $(event.target).val();
+            this.reload();
         },
 
         /**
@@ -1117,13 +1149,29 @@ define([
          * Update whether value differs from default value
          */
         setDifferedFromDefault: function () {
-            var recordData = utils.copy(this.recordData());
+            var recordData;
 
-            Array.isArray(recordData) && recordData.forEach(function (item) {
-                delete item['record_id'];
-            });
+            if (this.default) {
+                recordData = utils.copy(this.recordData());
 
-            this.isDifferedFromDefault(!_.isEqual(recordData, this.default));
+                Array.isArray(recordData) && recordData.forEach(function (item) {
+                    delete item['record_id'];
+                });
+
+                this.isDifferedFromDefault(!_.isEqual(recordData, this.default));
+            }
+        },
+
+        /**
+         * Set the changed property if the current page is different
+         * than the default state
+         *
+         * @return void
+         */
+        setChangedForCurrentPage: function () {
+            this.pagesChanged[this.currentPage()] =
+                !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
+            this.changed(_.some(this.pagesChanged));
         }
     });
 });

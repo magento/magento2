@@ -4,6 +4,14 @@
  */
 
 var config = {
+    deps: [],
+    shim: {
+        'chartjs/chartjs-adapter-moment': ['moment'],
+        'chartjs/es6-shim.min': {},
+        'tiny_mce_5/tinymce.min': {
+            exports: 'tinyMCE'
+        }
+    },
     paths: {
         'ui/template': 'Magento_Ui/templates'
     },
@@ -17,7 +25,11 @@ var config = {
             uiRegistry:     'Magento_Ui/js/lib/registry/registry',
             consoleLogger:  'Magento_Ui/js/lib/logger/console-logger',
             uiLayout:       'Magento_Ui/js/core/renderer/layout',
-            buttonAdapter:  'Magento_Ui/js/form/button-adapter'
+            buttonAdapter:  'Magento_Ui/js/form/button-adapter',
+            chartJs:        'chartjs/Chart.min',
+            'chart.js':     'chartjs/Chart.min',
+            tinymce:        'tiny_mce_5/tinymce.min',
+            wysiwygAdapter: 'mage/adminhtml/wysiwyg/tiny_mce/tinymce5Adapter'
         }
     }
 };

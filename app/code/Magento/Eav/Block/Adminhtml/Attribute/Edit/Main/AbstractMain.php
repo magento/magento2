@@ -4,15 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Product attribute add/edit form main tab
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Main;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 
+/**
+ * Product attribute add/edit form main tab
+ */
 abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -110,7 +108,6 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
-            
             ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );
 
@@ -133,7 +130,8 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Default Label'),
                 'title' => __('Default label'),
                 'required' => true,
-                'value' => is_array($labels) ? $labels[0] : $labels
+                'value' => is_array($labels) ? $labels[0] : $labels,
+                'class' => 'validate-no-html-tags',
             ]
         );
 
@@ -203,7 +201,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        $dateFormat = $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
+        $dateFormat = $this->_localeDate->getDateFormatWithLongYear();
         $fieldset->addField(
             'default_value_date',
             'date',
@@ -265,7 +263,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Initialize form fileds values
+     * Initialize form fields values
      *
      * @return $this
      */
@@ -280,11 +278,13 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Processing block html after rendering
+     * Processing block html after rendering.
+     *
      * Adding js block to the end of this block
      *
-     * @param   string $html
-     * @return  string
+     * @param string $html
+     *
+     * @return string
      */
     protected function _afterToHtml($html)
     {

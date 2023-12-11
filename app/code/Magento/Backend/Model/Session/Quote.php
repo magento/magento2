@@ -24,6 +24,7 @@ use Magento\Customer\Api\GroupManagementInterface;
  * @method Quote setOrderId($orderId)
  * @method int getOrderId()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Quote extends \Magento\Framework\Session\SessionManager
@@ -139,6 +140,17 @@ class Quote extends \Magento\Framework\Session\SessionManager
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_quote = null;
+        $this->_store = null;
+        $this->_order = null;
+    }
+
+    /**
      * Retrieve quote model object
      *
      * @return \Magento\Quote\Model\Quote
@@ -149,10 +161,11 @@ class Quote extends \Magento\Framework\Session\SessionManager
             $this->_quote = $this->quoteFactory->create();
             if ($this->getStoreId()) {
                 if (!$this->getQuoteId()) {
-                    $this->_quote->setCustomerGroupId($this->groupManagement->getDefaultGroup()->getId());
+                    $customerGroupId = $this->groupManagement->getDefaultGroup($this->getStoreId())->getId();
+                    $this->_quote->setCustomerGroupId($customerGroupId);
                     $this->_quote->setIsActive(false);
                     $this->_quote->setStoreId($this->getStoreId());
-                    
+
                     $this->quoteRepository->save($this->_quote);
                     $this->setQuoteId($this->_quote->getId());
                     $this->_quote = $this->quoteRepository->get($this->getQuoteId(), [$this->getStoreId()]);

@@ -5,24 +5,53 @@
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
-use Magento\Tax\Model\Calculation;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Model\Quote\TotalsCollector;
 use Magento\TestFramework\Helper\Bootstrap;
 
 require_once __DIR__ . '/SetupUtil.php';
 require_once __DIR__ . '/../../../../_files/tax_calculation_data_aggregated.php';
+require_once __DIR__ . '/../../../../_files/full_discount_with_tax.php';
 
 /**
  * Class TaxTest
+ *
+ * Tests sales taxes with discounts/price rules during checkout.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TaxTest extends \PHPUnit\Framework\TestCase
+class TaxTest extends \Magento\TestFramework\Indexer\TestCase
 {
+    /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
     /**
      * Utility object for setting up tax rates, tax classes and tax rules
      *
      * @var SetupUtil
      */
     protected $setupUtil = null;
+
+    /**
+     * @var TotalsCollector
+     */
+    private $totalsCollector;
+
+    /**
+     * test setup
+     */
+    protected function setUp(): void
+    {
+        /** @var  \Magento\Framework\ObjectManagerInterface $objectManager */
+        $objectManager = Bootstrap::getObjectManager();
+        $this->totalsCollector = $objectManager->create(TotalsCollector::class);
+        $this->setupUtil = new SetupUtil($objectManager);
+
+        parent::setUp();
+    }
 
     /**
      * Test taxes collection for quote.
@@ -109,6 +138,40 @@ class TaxTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test taxes collection with full discount for quote.
+     *
+     * Test tax calculation and price when the discount may be bigger than total
+     * This method will test the collector through $quote->collectTotals() method
+     *
+     * @see \Magento\SalesRule\Model\Utility::deltaRoundingFix
+     * @magentoDataFixture Magento/Tax/_files/full_discount_with_tax.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testFullDiscountWithDeltaRoundingFix()
+    {
+        global $fullDiscountIncTax;
+        $configData = $fullDiscountIncTax['config_data'];
+        $quoteData = $fullDiscountIncTax['quote_data'];
+        $expectedResults = $fullDiscountIncTax['expected_result'];
+
+        /** @var  \Magento\Framework\ObjectManagerInterface $objectManager */
+        $objectManager = Bootstrap::getObjectManager();
+
+        //Setup tax configurations
+        $this->setupUtil = new SetupUtil($objectManager);
+        $this->setupUtil->setupTax($configData);
+
+        $quote = $this->setupUtil->setupQuote($quoteData);
+
+        $quote->collectTotals();
+
+        $quoteAddress = $quote->getShippingAddress();
+
+        $this->verifyResult($quoteAddress, $expectedResults);
+    }
+
+    /**
      * Verify fields in quote item
      *
      * @param \Magento\Quote\Model\Quote\Address\Item $item
@@ -118,7 +181,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
     protected function verifyItem($item, $expectedItemData)
     {
         foreach ($expectedItemData as $key => $value) {
-            $this->assertEquals($value, $item->getData($key), 'item ' . $key . ' is incorrect');
+            $this->assertEqualsWithDelta($value, $item->getData($key), self::EPSILON, 'item ' . $key . ' is incorrect');
         }
 
         return $this;
@@ -189,7 +252,12 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             if ($key == 'applied_taxes') {
                 $this->verifyAppliedTaxes($quoteAddress->getAppliedTaxes(), $value);
             } else {
-                $this->assertEquals($value, $quoteAddress->getData($key), 'Quote address ' . $key . ' is incorrect');
+                $this->assertEqualsWithDelta(
+                    $value,
+                    $quoteAddress->getData($key),
+                    self::EPSILON,
+                    'Quote address ' . $key . ' is incorrect'
+                );
             }
         }
 
@@ -227,26 +295,32 @@ class TaxTest extends \PHPUnit\Framework\TestCase
      * @param array $configData
      * @param array $quoteData
      * @param array $expectedResults
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @dataProvider taxDataProvider
      * @return void
      */
     public function testTaxCalculation($configData, $quoteData, $expectedResults)
     {
-        /** @var  \Magento\Framework\ObjectManagerInterface $objectManager */
-        $objectManager = Bootstrap::getObjectManager();
-        /** @var  \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector */
-        $totalsCollector = $objectManager->create(\Magento\Quote\Model\Quote\TotalsCollector::class);
-
+        $db = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+        if (!$db->isDbDumpExists()) {
+            throw new \LogicException('DB dump does not exist.');
+        }
+        $db->restoreFromDbDump();
         //Setup tax configurations
-        $this->setupUtil = new SetupUtil($objectManager);
         $this->setupUtil->setupTax($configData);
 
         $quote = $this->setupUtil->setupQuote($quoteData);
         $quoteAddress = $quote->getShippingAddress();
-        $totalsCollector->collectAddressTotals($quote, $quoteAddress);
+        $this->totalsCollector->collectAddressTotals($quote, $quoteAddress);
         $this->verifyResult($quoteAddress, $expectedResults);
+
+        $skus = array_map(function ($item) {
+            return $item['sku'];
+        }, $quoteData['items'] ?? []);
+        $this->removeProducts($skus);
     }
 
     /**
@@ -259,5 +333,33 @@ class TaxTest extends \PHPUnit\Framework\TestCase
     {
         global $taxCalculationData;
         return $taxCalculationData;
+    }
+
+    /**
+     * Cleanup test by removing products.
+     *
+     * @param string[] $skus
+     * @return void
+     */
+    private function removeProducts(array $skus): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $objectManager->create(ProductRepositoryInterface::class);
+        $registry = $objectManager->get(\Magento\Framework\Registry::class);
+        /** @var ProductRepositoryInterface $productRepository */
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+
+        foreach ($skus as $sku) {
+            try {
+                $productRepository->deleteById($sku);
+            } catch (NoSuchEntityException $e) {
+                // product already deleted
+            }
+        }
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
     }
 }

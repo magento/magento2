@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Same as "EditCustomerAddressesFromAdminActionGroup" but taking country and state from input "customerAddress" -->
+    <actionGroup name="AdminEditCustomerAddressesFromActionGroup">
+        <annotations>
+            <description>Adds the provided Address to a Customer from the Admin Customers creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerAddress" type="entity"/>
+        </arguments>
+
+        <click selector="{{AdminEditCustomerAddressesSection.addresses}}" stepKey="proceedToAddresses"/>
+        <click selector="{{AdminEditCustomerAddressesSection.addNewAddress}}" stepKey="addNewAddresses"/>
+        <waitForPageLoad time="60" stepKey="wait5678"/>
+        <fillField  stepKey="fillPrefixName" userInput="{{customerAddress.prefix}}" selector="{{AdminEditCustomerAddressesSection.prefixName}}"/>
+        <fillField  stepKey="fillMiddleName" userInput="{{customerAddress.middlename}}" selector="{{AdminEditCustomerAddressesSection.middleName}}"/>
+        <fillField  stepKey="fillSuffixName" userInput="{{customerAddress.suffix}}" selector="{{AdminEditCustomerAddressesSection.suffixName}}"/>
+        <fillField  stepKey="fillCompany" userInput="{{customerAddress.company}}" selector="{{AdminEditCustomerAddressesSection.company}}"/>
+        <fillField  stepKey="fillStreetAddress" userInput="{{customerAddress.street[0]}}" selector="{{AdminEditCustomerAddressesSection.streetAddress}}"/>
+        <fillField  stepKey="fillCity" userInput="{{customerAddress.city}}" selector="{{AdminEditCustomerAddressesSection.city}}"/>
+        <selectOption stepKey="selectCountry" selector="{{AdminEditCustomerAddressesSection.country}}" userInput="{{customerAddress.country_id}}"/>
+        <selectOption stepKey="selectState" selector="{{AdminEditCustomerAddressesSection.state}}" userInput="{{customerAddress.state}}"/>
+        <fillField  stepKey="fillZipCode" userInput="{{customerAddress.postcode}}" selector="{{AdminEditCustomerAddressesSection.zipCode}}"/>
+        <fillField  stepKey="fillPhone" userInput="{{customerAddress.telephone}}" selector="{{AdminEditCustomerAddressesSection.phone}}"/>
+        <fillField  stepKey="fillVAT" userInput="{{customerAddress.vat_id}}" selector="{{AdminEditCustomerAddressesSection.vat}}"/>
+        <click selector="{{AdminEditCustomerAddressesSection.save}}" stepKey="saveAddress"/>
+        <waitForPageLoad stepKey="waitForAddressSaved"/>
+    </actionGroup>
+</actionGroups>

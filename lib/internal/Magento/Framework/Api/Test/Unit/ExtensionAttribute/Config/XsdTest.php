@@ -3,21 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Api\Test\Unit\ExtensionAttribute\Config;
 
-class XsdTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Config\Dom;
+use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\Config\ValidationStateInterface;
+use PHPUnit\Framework\TestCase;
+
+class XsdTest extends TestCase
 {
     /**
      * @var string
      */
     protected $_schemaFile;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!function_exists('libxml_set_external_entity_loader')) {
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
         }
-        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $urnResolver = new UrnResolver();
         $this->_schemaFile = $urnResolver->getRealPath('urn:magento:framework:Api/etc/extension_attributes.xsd');
     }
 
@@ -28,11 +35,11 @@ class XsdTest extends \PHPUnit\Framework\TestCase
      */
     public function testExemplarXml($fixtureXml, array $expectedErrors)
     {
-        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationStateMock = $this->getMockForAbstractClass(ValidationStateInterface::class);
         $validationStateMock->method('isValidationRequired')
             ->willReturn(true);
         $messageFormat = '%message%';
-        $dom = new \Magento\Framework\Config\Dom($fixtureXml, $validationStateMock, [], null, null, $messageFormat);
+        $dom = new Dom($fixtureXml, $validationStateMock, [], null, null, $messageFormat);
         $actualResult = $dom->validate($this->_schemaFile, $actualErrors);
         $this->assertEquals($expectedErrors, $actualErrors, "Validation errors does not match.");
         $this->assertEquals(empty($expectedErrors), $actualResult, "Validation result is invalid.");
@@ -124,7 +131,10 @@ class XsdTest extends \PHPUnit\Framework\TestCase
             /** Invalid configurations */
             'invalid missing extension_attributes' => [
                 '<config/>',
-                ["Element 'config': Missing child element(s). Expected is ( extension_attributes )."],
+                [
+                    "Element 'config': Missing child element(s). Expected is ( extension_attributes ).The " .
+                    "xml was: \n0:<?xml version=\"1.0\"?>\n1:<config/>\n2:\n"
+                ],
             ],
             'invalid with attribute code with resources without single resource' => [
                 '<config>
@@ -135,7 +145,15 @@ class XsdTest extends \PHPUnit\Framework\TestCase
                         </attribute>
                     </extension_attributes>
                 </config>',
-                ["Element 'resources': Missing child element(s). Expected is ( resource )."],
+                [
+                    "Element 'resources': Missing child element(s). Expected is ( resource ).The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <extension_attributes " .
+                    "for=\"Magento\Tax\Api\Data\TaxRateInterface\">\n3:                        <attribute " .
+                    "code=\"custom_1\" type=\"Magento\Customer\Api\Data\CustomerCustom\">\n" .
+                    "4:                            <resources>\n5:                            </resources>\n" .
+                    "6:                        </attribute>\n7:                    </extension_attributes>\n" .
+                    "8:                </config>\n9:\n"
+                ],
             ],
             'invalid with attribute code without join attributes' => [
                 '<config>
@@ -146,10 +164,30 @@ class XsdTest extends \PHPUnit\Framework\TestCase
                     </extension_attributes>
                 </config>',
                 [
-                    "Element 'join': The attribute 'reference_table' is required but missing.",
-                    "Element 'join': The attribute 'join_on_field' is required but missing.",
-                    "Element 'join': The attribute 'reference_field' is required but missing.",
-                    "Element 'join': Missing child element(s). Expected is ( field ).",
+                    "Element 'join': The attribute 'reference_table' is required but missing.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <extension_attributes " .
+                    "for=\"Magento\Tax\Api\Data\TaxRateInterface\">\n3:                        <attribute " .
+                    "code=\"custom_1\" type=\"Magento\Customer\Api\Data\CustomerCustom\">\n" .
+                    "4:                            <join/>\n5:                        </attribute>\n" .
+                    "6:                    </extension_attributes>\n7:                </config>\n8:\n",
+                    "Element 'join': The attribute 'join_on_field' is required but missing.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <extension_attributes " .
+                    "for=\"Magento\Tax\Api\Data\TaxRateInterface\">\n3:                        <attribute " .
+                    "code=\"custom_1\" type=\"Magento\Customer\Api\Data\CustomerCustom\">\n" .
+                    "4:                            <join/>\n5:                        </attribute>\n" .
+                    "6:                    </extension_attributes>\n7:                </config>\n8:\n",
+                    "Element 'join': The attribute 'reference_field' is required but missing.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <extension_attributes " .
+                    "for=\"Magento\Tax\Api\Data\TaxRateInterface\">\n3:                        <attribute " .
+                    "code=\"custom_1\" type=\"Magento\Customer\Api\Data\CustomerCustom\">\n" .
+                    "4:                            <join/>\n5:                        </attribute>\n" .
+                    "6:                    </extension_attributes>\n7:                </config>\n8:\n",
+                    "Element 'join': Missing child element(s). Expected is ( field ).The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <extension_attributes " .
+                    "for=\"Magento\Tax\Api\Data\TaxRateInterface\">\n3:                        <attribute " .
+                    "code=\"custom_1\" type=\"Magento\Customer\Api\Data\CustomerCustom\">\n" .
+                    "4:                            <join/>\n5:                        </attribute>\n" .
+                    "6:                    </extension_attributes>\n7:                </config>\n8:\n",
                 ],
             ],
         ];

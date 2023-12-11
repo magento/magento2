@@ -1,0 +1,307 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+directive @doc(description: String="") on QUERY
+    | MUTATION
+    | FIELD
+    | FRAGMENT_DEFINITION
+    | FRAGMENT_SPREAD
+    | INLINE_FRAGMENT
+    | SCHEMA
+    | SCALAR
+    | OBJECT
+    | FIELD_DEFINITION
+    | ARGUMENT_DEFINITION
+    | INTERFACE
+    | UNION
+    | ENUM
+    | ENUM_VALUE
+    | INPUT_OBJECT
+    | INPUT_FIELD_DEFINITION
+
+directive @resolver(class: String="") on QUERY
+    | MUTATION
+    | FIELD
+    | FRAGMENT_DEFINITION
+    | FRAGMENT_SPREAD
+    | INLINE_FRAGMENT
+    | SCHEMA
+    | SCALAR
+    | OBJECT
+    | FIELD_DEFINITION
+    | ARGUMENT_DEFINITION
+    | ENUM
+    | ENUM_VALUE
+    | INPUT_OBJECT
+    | INPUT_FIELD_DEFINITION
+
+directive @typeResolver(class: String="") on UNION
+    | INTERFACE
+    | OBJECT
+
+directive @cache(cacheIdentity: String="" cacheable: Boolean=true) on QUERY
+
+type Query {
+}
+
+type Mutation {
+}
+
+input FilterTypeInput @doc(description: "Defines the comparison operators that can be used in a filter.") {
+    eq: String @doc(description: "Equals.")
+    finset: [String] @deprecated (reason: "We do not recommend storing comma separated values, therefore the `finset` filter is redundant.")
+    from: String @doc(description: "From. Must be used with the `to` field.")
+    gt: String @doc(description: "Greater than.")
+    gteq: String @doc(description: "Greater than or equal to.")
+    in: [String] @doc(description: "In. The value can contain a set of comma-separated values.")
+    like: String @doc(description: "Like. The specified value can contain % (percent signs) to allow matching of 0 or more characters.")
+    lt: String @doc(description: "Less than.")
+    lteq: String @doc(description: "Less than or equal to.")
+    moreq: String @doc(description: "More than or equal to.")
+    neq: String @doc(description: "Not equal to.")
+    notnull: String @doc(description: "Not null.")
+    null: String @doc(description: "Is null.")
+    to: String@doc(description: "To. Must be used with the `from` field.")
+    nin: [String] @doc(description: "Not in. The value can contain a set of comma-separated values.")
+}
+
+input FilterEqualTypeInput @doc(description: "Defines a filter that matches the input exactly.") {
+    in: [String] @doc(description: "Use this attribute to filter on an array of values. For example, to filter on category IDs 4, 5, and 6, specify a value of `[\"4\", \"5\", \"6\"]`.")
+    eq: String @doc(description: "Use this attribute to exactly match the specified string. For example, to filter on a specific category ID, specify a value such as `5`.")
+}
+
+input FilterRangeTypeInput @doc(description: "Defines a filter that matches a range of values, such as prices or dates.") {
+    from: String @doc(description: "Use this attribute to specify the lowest possible value in the range.")
+    to: String @doc(description: "Use this attribute to specify the highest possible value in the range.")
+}
+
+input FilterMatchTypeInput @doc(description: "Defines a filter that performs a fuzzy search.") {
+    match: String @doc(description: "Use this attribute to fuzzy match the specified string. For example, to filter on a specific SKU, specify a value such as `24-MB01`.")
+    match_type: FilterMatchTypeEnum @doc(description: "Filter match type for fine-tuned results. Possible values FULL or PARTIAL. If match_type is not provided, returned results will default to FULL match.")
+}
+
+enum FilterMatchTypeEnum {
+    FULL
+    PARTIAL
+}
+
+input FilterStringTypeInput @doc(description: "Defines a filter for an input string.") {
+    in: [String] @doc(description: "Filters items that are exactly the same as entries specified in an array of strings.")
+    eq: String @doc(description: "Filters items that are exactly the same as the specified string.")
+    match: String @doc(description: "Defines a filter that performs a fuzzy search using the specified string.")
+}
+
+type SearchResultPageInfo @doc(description: "Provides navigation for the query response.") {
+    page_size: Int @doc(description: "The maximum number of items to return per page of results.")
+    current_page: Int @doc(description: "The specific page to return.")
+    total_pages: Int @doc(description: "The total number of pages in the response.")
+}
+
+enum SortEnum @doc(description: "Indicates whether to return results in ascending or descending order.") {
+    ASC
+    DESC
+}
+
+type ComplexTextValue {
+    html: String! @doc(description: "Text that can contain HTML tags.")
+}
+
+type Money @doc(description: "Defines a monetary value, including a numeric value and a currency code.") {
+    value: Float @doc(description: "A number expressing a monetary value.")
+    currency: CurrencyEnum @doc(description: "A three-letter currency code, such as USD or EUR.")
+}
+
+enum CurrencyEnum @doc(description: "The list of available currency codes.") {
+    AFN
+    ALL
+    AZN
+    DZD
+    AOA
+    ARS
+    AMD
+    AWG
+    AUD
+    BSD
+    BHD
+    BDT
+    BBD
+    BYN
+    BZD
+    BMD
+    BTN
+    BOB
+    BAM
+    BWP
+    BRL
+    GBP
+    BND
+    BGN
+    BUK
+    BIF
+    KHR
+    CAD
+    CVE
+    CZK
+    KYD
+    GQE
+    CLP
+    CNY
+    COP
+    KMF
+    CDF
+    CRC
+    HRK
+    CUP
+    DKK
+    DJF
+    DOP
+    XCD
+    EGP
+    SVC
+    ERN
+    EEK
+    ETB
+    EUR
+    FKP
+    FJD
+    GMD
+    GEK
+    GEL
+    GHS
+    GIP
+    GTQ
+    GNF
+    GYD
+    HTG
+    HNL
+    HKD
+    HUF
+    ISK
+    INR
+    IDR
+    IRR
+    IQD
+    ILS
+    JMD
+    JPY
+    JOD
+    KZT
+    KES
+    KWD
+    KGS
+    LAK
+    LVL
+    LBP
+    LSL
+    LRD
+    LYD
+    LTL
+    MOP
+    MKD
+    MGA
+    MWK
+    MYR
+    MVR
+    LSM
+    MRO
+    MUR
+    MXN
+    MDL
+    MNT
+    MAD
+    MZN
+    MMK
+    NAD
+    NPR
+    ANG
+    YTL
+    NZD
+    NIC
+    NGN
+    KPW
+    NOK
+    OMR
+    PKR
+    PAB
+    PGK
+    PYG
+    PEN
+    PHP
+    PLN
+    QAR
+    RHD
+    RON
+    RUB
+    RWF
+    SHP
+    STD
+    SAR
+    RSD
+    SCR
+    SLL
+    SGD
+    SKK
+    SBD
+    SOS
+    ZAR
+    KRW
+    LKR
+    SDG
+    SRD
+    SZL
+    SEK
+    CHF
+    SYP
+    TWD
+    TJS
+    TZS
+    THB
+    TOP
+    TTD
+    TND
+    TMM
+    USD
+    UGX
+    UAH
+    AED
+    UYU
+    UZS
+    VUV
+    VEB
+    VEF
+    VND
+    CHE
+    CHW
+    XOF
+    WST
+    YER
+    ZMK
+    ZWD
+    TRY
+    AZM
+    ROL
+    TRL
+    XPF
+}
+
+input EnteredOptionInput @doc(description: "Defines a customer-entered option.") {
+    uid: ID! @doc(description: "The unique ID for a `CustomizableOptionInterface` object, such as a `CustomizableFieldOption`, `CustomizableFileOption`, or `CustomizableAreaOption` object.")
+    value: String! @doc(description: "Text the customer entered.")
+}
+
+enum BatchMutationStatus {
+    SUCCESS
+    FAILURE
+    MIXED_RESULTS
+}
+
+interface ErrorInterface @typeResolver(class: "\\Magento\\GraphQl\\Model\\Mutation\\Resolver\\ErrorTypeResolver") {
+    message: String! @doc(description: "The returned error message.")
+}
+
+type NoSuchEntityUidError implements ErrorInterface @doc(description: "Contains an error message when an invalid UID was specified.") {
+    uid: ID! @doc(description: "The specified invalid unique ID of an object.")
+}
+
+type InternalError implements ErrorInterface @doc(description: "Contains an error message when an internal error occurred.") {
+}

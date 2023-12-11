@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddWidgetToWYSIWYGBlockTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="MAGETWO-42156-Apply new WYSIWYG in Block"/>
+            <group value="Cms"/>
+            <title value="Admin should be able to add widget to WYSIWYG content of Block"/>
+            <description value="Admin should be able to add widget to WYSIWYG content Block"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MAGETWO-84654"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
+            <createData entity="_defaultBlock" stepKey="createPreReqBlock" />
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
+        </before>
+        <actionGroup ref="NavigateToCreatedCMSBlockPageActionGroup" stepKey="navigateToCreatedCMSBlockPage">
+            <argument name="CMSBlockPage" value="$$createPreReqBlock$$"/>
+        </actionGroup>
+        <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE" />
+        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon1" />
+        <wait time="10" stepKey="waitForPageLoad2" />
+        <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
+        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Page Link" stepKey="selectCMSPageLink" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear1" />
+        <see selector="{{WidgetSection.InsertWidgetBtnEnabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetEnabled" />
+        <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Page Link Block Template" stepKey="selectTemplate1" />
+        <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn1" />
+        <waitForElementVisible selector="{{WidgetSection.CMSPage}}" stepKey="waitForPageVisible" />
+        <click selector="{{WidgetSection.CMSPage}}" stepKey="selectPreCreateCMS" />
+        <waitForElementNotVisible selector="{{WidgetSection.SelectPageTitle}}" stepKey="waitForSlideOutCloses" />
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidget"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoading"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSlideOutCloses1"/>
+        <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}" stepKey="expandSplitButton"/>
+        <click selector="{{BlockNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveBlock"/>
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
+            <argument name="CMSPage" value="$$createCMSPage$$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE1"/>
+        <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
+        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon2" />
+        <waitForPageLoad stepKey="waitForPageLoad5" />
+        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Static Block" stepKey="selectCMSStaticBlock" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear2" />
+        <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Static Block Default Template" stepKey="selectTemplate2" />
+        <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn2" />
+        <waitForLoadingMaskToDisappear stepKey="waitForWidgetChooserLoadingMaskToDisappear"/>
+        <actionGroup ref="searchBlockOnGridPage" stepKey="searchBlockOnGridPage">
+            <argument name="Block" value="_defaultBlock"/>
+        </actionGroup>
+        <click selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="selectPreCreateBlock" />
+        <wait time="3" stepKey="wait1" />
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidgetBtn"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoading2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad6"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="expandButtonMenu"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSplitButtonMenuVisible"/>
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSavePage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSuccessMessage"/>
+        <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache" />
+        <amOnPage url="$$createCMSPage.identifier$$" stepKey="amOnPageTestPage1"/>
+        <waitForPageLoad stepKey="waitForPageLoad7" />
+        <see userInput="Home page" stepKey="seeHomePageCMSPage"/>
+        <after>
+            <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="amOnEditPage"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad2"/>
+            <conditionalClick selector="{{CmsPagesPageActionsSection.clearAllButton}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
+            <waitForPageLoad stepKey="waitForGridReload"/>
+            <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
+            <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

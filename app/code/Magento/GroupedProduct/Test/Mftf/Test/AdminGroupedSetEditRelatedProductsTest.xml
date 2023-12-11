@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminGroupedSetEditRelatedProductsTest" extends="AdminSimpleSetEditRelatedProductsTest">
+        <annotations>
+            <features value="GroupedProduct"/>
+            <stories value="Create/edit grouped product"/>
+            <title value="Admin should be able to set/edit Related Products information when editing a grouped product"/>
+            <description value="Admin should be able to set/edit Related Products information when editing a grouped product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3755"/>
+            <group value="GroupedProduct"/>
+            <group value="cloud_smoke"/>
+            <group value="cloud"/>
+        </annotations>
+        <before></before>
+        <after>
+            <!-- Delete grouped product -->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="GroupedProduct"/>
+            </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters" after="deleteProduct"/>
+        </after>
+
+        <!-- Create product -->
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="GroupedProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillGroupedProductFormActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="GroupedProduct"/>
+        </actionGroup>
+
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexer">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
+        <!--See related product in storefront-->
+        <amOnPage url="{{GroupedProduct.urlKey}}.html" stepKey="goToStorefront"/>
+    </test>
+</tests>

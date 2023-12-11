@@ -1,0 +1,49 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Magento_AdminAnalytics Modal on dashboard
+//  ---------------------------------------------
+
+.admin-usage-notification {
+    -webkit-transition: visibility 0s .5s, opacity .5s ease;
+    transition: visibility 0s .5s, opacity .5s ease;
+
+    &._show {
+        -webkit-transition: opacity .5s ease;
+        opacity: 1;
+        transition: opacity .5s ease;
+        visibility: visible;
+    }
+
+    .modal-inner-wrap {
+        .modal-content,
+        .modal-header {
+            padding-left: 4rem;
+            padding-right: 4rem;
+
+            .action-close {
+                display: none;
+            }
+        }
+
+        .modal-list {
+            margin-left: 0;
+            padding-left: 40px;
+            padding-top: 5px;
+        }
+
+        -webkit-transform: translateX(0);
+        -webkit-transition: -webkit-transform 0s;
+        transition: transform 0s;
+        transform: translateX(0);
+        margin-top: 13rem;
+        max-width: 75rem;
+    }
+
+    .admin__fieldset {
+        padding: 0;
+    }
+}

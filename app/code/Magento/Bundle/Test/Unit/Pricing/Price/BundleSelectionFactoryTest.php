@@ -3,40 +3,47 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Pricing\Price;
 
-use \Magento\Bundle\Pricing\Price\BundleSelectionFactory;
-
+use Magento\Bundle\Pricing\Price\BundleSelectionFactory;
+use Magento\Bundle\Pricing\Price\BundleSelectionPrice;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class BundleSelectionFactoryTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class BundleSelectionFactoryTest extends TestCase
 {
-    /** @var \Magento\Bundle\Pricing\Price\BundleSelectionFactory */
+    /** @var BundleSelectionFactory */
     protected $bundleSelectionFactory;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ObjectManagerInterface|MockObject */
     protected $objectManagerMock;
 
-    /** @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var SaleableInterface|MockObject */
     protected $bundleMock;
 
-    /** @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var SaleableInterface|MockObject */
     protected $selectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->bundleMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $this->selectionMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->bundleMock = $this->createMock(Product::class);
+        $this->selectionMock = $this->createMock(Product::class);
 
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->bundleSelectionFactory = $this->objectManagerHelper->getObject(
-            \Magento\Bundle\Pricing\Price\BundleSelectionFactory::class,
+            BundleSelectionFactory::class,
             [
                 'objectManager' => $this->objectManagerMock
             ]
@@ -45,21 +52,19 @@ class BundleSelectionFactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreate()
     {
-        $result = $this->createMock(\Magento\Bundle\Pricing\Price\BundleSelectionPrice::class);
+        $result = $this->createMock(BundleSelectionPrice::class);
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(
-                $this->equalTo(BundleSelectionFactory::SELECTION_CLASS_DEFAULT),
-                $this->equalTo(
-                    [
-                        'test' => 'some value',
-                        'bundleProduct' => $this->bundleMock,
-                        'saleableItem' => $this->selectionMock,
-                        'quantity' => 2.,
-                    ]
-                )
+                BundleSelectionFactory::SELECTION_CLASS_DEFAULT,
+                [
+                    'test' => 'some value',
+                    'bundleProduct' => $this->bundleMock,
+                    'saleableItem' => $this->selectionMock,
+                    'quantity' => 2.,
+                ]
             )
-        ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertSame(
             $result,
             $this->bundleSelectionFactory

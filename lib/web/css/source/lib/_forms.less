@@ -271,7 +271,7 @@
     input[type="tel"],
     input[type="search"],
     input[type="number"],
-    input[type="datetime"],
+    input[type*="date"],
     input[type="email"] {
         .lib-form-element-input(@_type: input-text);
     }
@@ -288,7 +288,7 @@
         .lib-form-element-input(@_type: select);
     }
 
-    select[multiple="multiple"] {
+    select[multiple] {
         .lib-css(height, auto);
         background-image: none;
     }
@@ -300,6 +300,8 @@
 
     input[type="checkbox"] {
         .lib-form-element-choice(@_type: input-checkbox);
+        position: relative;
+        top: 2px;
     }
 
     input[type="radio"] {
@@ -312,7 +314,7 @@
         .lib-form-validation();
     }
 
-    div.mage-error[generated] {
+    div.mage-error {
         .lib-form-validation-note();
     }
 
@@ -465,11 +467,9 @@
     .lib-css(margin, @_margin);
     .lib-css(padding, @_padding);
     letter-spacing: -.31em;
-    //word-spacing: -.43em;
 
     > * {
         letter-spacing: normal;
-        //word-spacing: normal;
     }
 
     > .legend {

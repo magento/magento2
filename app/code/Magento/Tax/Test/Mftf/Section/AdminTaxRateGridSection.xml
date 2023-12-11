@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminTaxRateGridSection">
+        <element name="grid" type="block" selector="#tax_rate_grid"/>
+        <element name="add" type="button" selector="#add" timeout="30"/>
+        <element name="search" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
+        <element name="filterByTaxIdentifier" type="input" selector="#tax_rate_grid_filter_code"/>
+        <element name="filterByCountry" type="input" selector="#tax_rate_grid_filter_tax_country_id"/>
+        <element name="filterByPostCode" type="input" selector="#tax_rate_grid_filter_tax_postcode"/>
+        <element name="allRows" type="block" selector="#tax_rate_grid_table tbody tr"/>
+        <element name="nthRow" type="block" parameterized="true" timeout="30" selector="#tax_rate_grid_table tbody tr:nth-of-type({{rowIndex}})"/>
+        <element name="taxIdentifierByRow" type="text" parameterized="true" selector="#tax_rate_grid_table tbody tr:nth-of-type({{rowIndex}}) [data-column=code]"/>
+        <element name="countryByRow" type="text" parameterized="true" selector="#tax_rate_grid_table tbody tr:nth-of-type({{rowIndex}}) [data-column=tax_country_id]"/>
+        <element name="regionByRow" type="text" parameterized="true" selector="#tax_rate_grid_table tbody tr:nth-of-type({{rowIndex}}) [data-column=region_name]"/>
+        <element name="zipByRow" type="text" parameterized="true" selector="#tax_rate_grid_table tbody tr:nth-of-type({{rowIndex}}) [data-column=tax_postcode]"/>
+        <element name="rateByRow" type="text" parameterized="true" selector="#tax_rate_grid_table tbody tr:nth-of-type({{rowIndex}}) [data-column=rate]"/>
+        <element name="allNonDefaultTaxRates" type="block" selector="//table[@id='tax_rate_grid_table']//tbody//tr//td[@data-column='code' and not(contains(.,'US-CA-*-Rate 1')) and not(contains(.,'US-NY-*-Rate 1'))]"/>
+        <element name="emptyText" type="text" selector=".empty-text"/>
+    </section>
+</sections>

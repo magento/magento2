@@ -23,8 +23,8 @@ class Quote extends AbstractDb
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param Snapshot $entitySnapshot,
-     * @param RelationComposite $entityRelationComposite,
+     * @param Snapshot $entitySnapshot
+     * @param RelationComposite $entityRelationComposite
      * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param string $connectionName
      */
@@ -61,8 +61,11 @@ class Quote extends AbstractDb
     {
         $select = parent::_getLoadSelect($field, $value, $object);
         $storeIds = $object->getSharedStoreIds();
+
         if ($storeIds) {
-            if ($storeIds != ['*']) {
+            // The comparison the arrays [0] != ['*'] returns `true` in PHP >= 8 and `false` otherwise
+            // This check emulates an old behavior (as it was in PHP 7)
+            if ($storeIds !== ['*'] && $storeIds !== [0]) {
                 $select->where('store_id IN (?)', $storeIds);
             }
         } else {
@@ -102,6 +105,7 @@ class Quote extends AbstractDb
 
         if ($data) {
             $quote->setData($data);
+            $quote->setOrigData();
         }
 
         $this->_afterLoad($quote);
@@ -124,6 +128,7 @@ class Quote extends AbstractDb
         $data = $connection->fetchRow($select);
         if ($data) {
             $quote->setData($data);
+            $quote->setOrigData();
         }
 
         $this->_afterLoad($quote);
@@ -148,6 +153,7 @@ class Quote extends AbstractDb
 
             if ($data) {
                 $quote->setData($data);
+                $quote->setOrigData();
             }
         }
 
@@ -165,32 +171,9 @@ class Quote extends AbstractDb
     {
         return $this->sequenceManager->getSequence(
             \Magento\Sales\Model\Order::ENTITY,
-            $quote->getStore()->getGroup()->getDefaultStoreId()
+            $quote->getStoreId()
         )
         ->getNextValue();
-    }
-
-    /**
-     * Check if order increment ID is already used.
-     * Method can be used to avoid collisions of order IDs.
-     *
-     * @param int $orderIncrementId
-     * @return bool
-     */
-    public function isOrderIncrementIdUsed($orderIncrementId)
-    {
-        /** @var  \Magento\Framework\DB\Adapter\AdapterInterface $adapter */
-        $adapter = $this->getConnection();
-        $bind = [':increment_id' => $orderIncrementId];
-        /** @var \Magento\Framework\DB\Select $select */
-        $select = $adapter->select();
-        $select->from($this->getTable('sales_order'), 'entity_id')->where('increment_id = :increment_id');
-        $entity_id = $adapter->fetchOne($select, $bind);
-        if ($entity_id > 0) {
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -232,7 +215,7 @@ class Quote extends AbstractDb
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
-    public function substractProductFromQuotes($product)
+    public function subtractProductFromQuotes($product)
     {
         $productId = (int)$product->getId();
         if (!$productId) {
@@ -250,7 +233,8 @@ class Quote extends AbstractDb
                 'items_qty' => new \Zend_Db_Expr(
                     $connection->quoteIdentifier('q.items_qty') . ' - ' . $connection->quoteIdentifier('qi.qty')
                 ),
-                'items_count' => new \Zend_Db_Expr($ifSql)
+                'items_count' => new \Zend_Db_Expr($ifSql),
+                'updated_at' => 'q.updated_at',
             ]
         )->join(
             ['qi' => $this->getTable('quote_item')],
@@ -273,6 +257,21 @@ class Quote extends AbstractDb
     }
 
     /**
+     * Subtract product from all quotes quantities
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     *
+     * @deprecated 101.0.3
+     * @see \Magento\Quote\Model\ResourceModel\Quote::subtractProductFromQuotes
+     *
+     * @return $this
+     */
+    public function substractProductFromQuotes($product)
+    {
+        return $this->subtractProductFromQuotes($product);
+    }
+
+    /**
      * Mark recollect contain product(s) quotes
      *
      * @param array|int|\Zend_Db_Expr $productIds
@@ -282,21 +281,27 @@ class Quote extends AbstractDb
     {
         $tableQuote = $this->getTable('quote');
         $tableItem = $this->getTable('quote_item');
-        $subSelect = $this->getConnection()->select()->from(
-            $tableItem,
-            ['entity_id' => 'quote_id']
-        )->where(
-            'product_id IN ( ? )',
-            $productIds
-        )->group(
-            'quote_id'
-        );
-
-        $select = $this->getConnection()->select()->join(
-            ['t2' => $subSelect],
-            't1.entity_id = t2.entity_id',
-            ['trigger_recollect' => new \Zend_Db_Expr('1')]
-        );
+        $subSelect = $this->getConnection()
+            ->select()
+            ->from(
+                $tableItem,
+                ['entity_id' => 'quote_id']
+            )->where(
+                'product_id IN ( ? )',
+                $productIds
+            )->group(
+                'quote_id'
+            );
+        $select = $this->getConnection()
+            ->select()
+            ->join(
+                ['t2' => $subSelect],
+                't1.entity_id = t2.entity_id',
+                [
+                    'trigger_recollect' => new \Zend_Db_Expr('1'),
+                    'updated_at' => 't1.updated_at',
+                ]
+            );
         $updateQuery = $select->crossUpdateFromSelect(['t1' => $tableQuote]);
         $this->getConnection()->query($updateQuery);
 
@@ -304,12 +309,36 @@ class Quote extends AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
         if (!$object->isPreventSaving()) {
             return parent::save($object);
         }
+
+        return $this;
+    }
+
+    /**
+     * Quickly check if quote exists
+     *
+     * Uses direct DB query due to performance reasons
+     *
+     * @param int $quoteId
+     * @return bool
+     */
+    public function isExists(int $quoteId): bool
+    {
+        $connection = $this->getConnection();
+        $mainTable = $this->getMainTable();
+        $idFieldName = $this->getIdFieldName();
+
+        $field = $connection->quoteIdentifier(sprintf('%s.%s', $mainTable, $idFieldName));
+        $select = $connection->select()
+            ->from($mainTable, [$idFieldName])
+            ->where($field . '=?', $quoteId);
+
+        return (bool)$connection->fetchOne($select);
     }
 }

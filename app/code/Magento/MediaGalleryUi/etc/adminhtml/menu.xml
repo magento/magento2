@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Magento_MediaGalleryUi::media" title="Media" translate="title" module="Magento_MediaGalleryUi" sortOrder="15" parent="Magento_Backend::content" resource="Magento_Cms::media_gallery" dependsOnConfig="system/media_gallery/enabled"/>
+        <add id="Magento_MediaGalleryUi::media_gallery" title="Media Gallery" translate="title" module="Magento_MediaGalleryUi" sortOrder="0" parent="Magento_MediaGalleryUi::media" action="media_gallery/media/index" resource="Magento_Cms::media_gallery"/>
+    </menu>
+</config>

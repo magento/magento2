@@ -3,27 +3,56 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogRule\Model;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\CatalogRule\Api\Data\RuleExtensionInterface;
 use Magento\CatalogRule\Api\Data\RuleInterface;
+use Magento\CatalogRule\Helper\Data;
+use Magento\CatalogRule\Model\Data\Condition\Converter;
+use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
+use Magento\CatalogRule\Model\ResourceModel\Product\ConditionsToCollectionApplier;
+use Magento\CatalogRule\Model\ResourceModel\Rule as RuleResourceModel;
+use Magento\CatalogRule\Model\Rule\Action\CollectionFactory as RuleCollectionFactory;
+use Magento\CatalogRule\Model\Rule\Condition\CombineFactory;
+use Magento\Customer\Model\Session;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Model\ResourceModel\Iterator;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Rule\Model\AbstractModel;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Catalog Rule data model
  *
- * @method \Magento\CatalogRule\Model\Rule setFromDate(string $value)
- * @method \Magento\CatalogRule\Model\Rule setToDate(string $value)
- * @method \Magento\CatalogRule\Model\Rule setCustomerGroupIds(string $value)
+ * @method Rule setFromDate(string $value)
+ * @method Rule setToDate(string $value)
+ * @method Rule setCustomerGroupIds(string $value)
  * @method string getWebsiteIds()
- * @method \Magento\CatalogRule\Model\Rule setWebsiteIds(string $value)
+ * @method Rule setWebsiteIds(string $value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, IdentityInterface
+class Rule extends AbstractModel implements RuleInterface, IdentityInterface, ResetAfterRequestInterface
 {
     /**
      * Prefix of model events names
@@ -70,7 +99,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     protected static $_priceRulesData = [];
 
     /**
-     * Catalog rule data
+     * Catalog rule data class
      *
      * @var \Magento\CatalogRule\Helper\Data
      */
@@ -137,6 +166,21 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     protected $ruleConditionConverter;
 
     /**
+     * @var ConditionsToCollectionApplier
+     */
+    private $conditionsToCollectionApplier;
+
+    /**
+     * @var array
+     */
+    private $websitesMap;
+
+    /**
+     * @var RuleResourceModel
+     */
+    private $ruleResourceModel;
+
+    /**
      * Rule constructor
      *
      * @param \Magento\Framework\Model\Context $context
@@ -161,32 +205,36 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * @param ExtensionAttributesFactory|null $extensionFactory
      * @param AttributeValueFactory|null $customAttributeFactory
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param \Magento\CatalogRule\Model\ResourceModel\RuleResourceModel|null $ruleResourceModel
+     * @param ConditionsToCollectionApplier $conditionsToCollectionApplier
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\CatalogRule\Model\Rule\Condition\CombineFactory $combineFactory,
-        \Magento\CatalogRule\Model\Rule\Action\CollectionFactory $actionCollectionFactory,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Framework\Model\ResourceModel\Iterator $resourceIterator,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\CatalogRule\Helper\Data $catalogRuleData,
-        \Magento\Framework\App\Cache\TypeListInterface $cacheTypesList,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor $ruleProductProcessor,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        TimezoneInterface $localeDate,
+        CollectionFactory $productCollectionFactory,
+        StoreManagerInterface $storeManager,
+        CombineFactory $combineFactory,
+        RuleCollectionFactory $actionCollectionFactory,
+        ProductFactory $productFactory,
+        Iterator $resourceIterator,
+        Session $customerSession,
+        Data $catalogRuleData,
+        TypeListInterface $cacheTypesList,
+        DateTime $dateTime,
+        RuleProductProcessor $ruleProductProcessor,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $relatedCacheTypes = [],
         array $data = [],
         ExtensionAttributesFactory $extensionFactory = null,
         AttributeValueFactory $customAttributeFactory = null,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        Json $serializer = null,
+        RuleResourceModel $ruleResourceModel = null,
+        ConditionsToCollectionApplier $conditionsToCollectionApplier = null
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_storeManager = $storeManager;
@@ -200,6 +248,10 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         $this->_relatedCacheTypes = $relatedCacheTypes;
         $this->dateTime = $dateTime;
         $this->_ruleProductProcessor = $ruleProductProcessor;
+        $this->ruleResourceModel = $ruleResourceModel ?: ObjectManager::getInstance()->get(RuleResourceModel::class);
+
+        $this->conditionsToCollectionApplier = $conditionsToCollectionApplier
+            ?? ObjectManager::getInstance()->get(ConditionsToCollectionApplier::class);
 
         parent::__construct(
             $context,
@@ -223,7 +275,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     protected function _construct()
     {
         parent::_construct();
-        $this->_init(\Magento\CatalogRule\Model\ResourceModel\Rule::class);
+        $this->_init(RuleResourceModel::class);
         $this->setIdFieldName('rule_id');
     }
 
@@ -255,7 +307,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     public function getCustomerGroupIds()
     {
         if (!$this->hasCustomerGroupIds()) {
-            $customerGroupIds = $this->_getResource()->getCustomerGroupIds($this->getId());
+            $customerGroupIds = $this->ruleResourceModel->getCustomerGroupIds($this->getId());
             $this->setData('customer_group_ids', (array)$customerGroupIds);
         }
         return $this->_getData('customer_group_ids');
@@ -269,7 +321,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     public function getNow()
     {
         if (!$this->_now) {
-            return (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+            return (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT);
         }
         return $this->_now;
     }
@@ -300,11 +352,17 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
             if ($this->getWebsiteIds()) {
                 /** @var $productCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
                 $productCollection = $this->_productCollectionFactory->create();
+                $productCollection->setStoreId($this->_storeManager->getDefaultStoreView()->getId());
                 $productCollection->addWebsiteFilter($this->getWebsiteIds());
                 if ($this->_productsFilter) {
                     $productCollection->addIdFilter($this->_productsFilter);
                 }
                 $this->getConditions()->collectValidatedAttributes($productCollection);
+
+                if ($this->canPreMapProducts()) {
+                    $productCollection = $this->conditionsToCollectionApplier
+                        ->applyConditionsToCollection($this->getConditions(), $productCollection);
+                }
 
                 $this->_resourceIterator->walk(
                     $productCollection->getSelect(),
@@ -321,6 +379,23 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
+     * Check if we can use mapping for rule conditions
+     *
+     * @return bool
+     */
+    private function canPreMapProducts()
+    {
+        $conditions = $this->getConditions();
+
+        // No need to map products if there is no conditions in rule
+        if (!$conditions || !$conditions->getConditions()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Callback function for product matching
      *
      * @param array $args
@@ -332,9 +407,16 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         $product->setData($args['row']);
 
         $websites = $this->_getWebsitesMap();
+        $websiteIds = $this->getWebsiteIds();
+        if (!is_array($websiteIds)) {
+            $websiteIds = explode(',', $websiteIds);
+        }
         $results = [];
 
         foreach ($websites as $websiteId => $defaultStoreId) {
+            if (!in_array($websiteId, $websiteIds)) {
+                continue;
+            }
             $product->setStoreId($defaultStoreId);
             $results[$websiteId] = $this->getConditions()->validate($product);
         }
@@ -348,22 +430,25 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      */
     protected function _getWebsitesMap()
     {
-        $map = [];
-        $websites = $this->_storeManager->getWebsites();
-        foreach ($websites as $website) {
-            // Continue if website has no store to be able to create catalog rule for website without store
-            if ($website->getDefaultStore() === null) {
-                continue;
+        if ($this->websitesMap === null) {
+            $this->websitesMap = [];
+            $websites = $this->_storeManager->getWebsites();
+            foreach ($websites as $website) {
+                // Continue if website has no store to be able to create catalog rule for website without store
+                if ($website->getDefaultStore() === null) {
+                    continue;
+                }
+                $this->websitesMap[$website->getId()] = $website->getDefaultStore()->getId();
             }
-            $map[$website->getId()] = $website->getDefaultStore()->getId();
         }
-        return $map;
+
+        return $this->websitesMap;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function validateData(\Magento\Framework\DataObject $dataObject)
+    public function validateData(DataObject $dataObject)
     {
         $result = parent::validateData($dataObject);
         if ($result === true) {
@@ -470,7 +555,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      */
     protected function _getRulesFromProduct($dateTs, $websiteId, $customerGroupId, $productId)
     {
-        return $this->_getResource()->getRulesFromProduct($dateTs, $websiteId, $customerGroupId, $productId);
+        return $this->ruleResourceModel->getRulesFromProduct($dateTs, $websiteId, $customerGroupId, $productId);
     }
 
     /**
@@ -510,20 +595,25 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return $this
      */
     public function afterSave()
     {
-        if ($this->isObjectNew()) {
-            $this->getMatchingProductIds();
-            if (!empty($this->_productIds) && is_array($this->_productIds)) {
-                $this->_getResource()->addCommitCallback([$this, 'reindex']);
+        if (!$this->getIsActive() && !$this->getOrigData(self::IS_ACTIVE)) {
+            return parent::afterSave();
+        }
+
+        if ($this->isObjectNew() && !$this->_ruleProductProcessor->isIndexerScheduled()) {
+            $productIds = $this->getMatchingProductIds();
+            if (!empty($productIds) && is_array($productIds)) {
+                $this->ruleResourceModel->addCommitCallback([$this, 'reindex']);
             }
         } else {
             $this->_ruleProductProcessor->getIndexer()->invalidate();
         }
+
         return parent::afterSave();
     }
 
@@ -534,11 +624,19 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      */
     public function reindex()
     {
-        $this->_ruleProductProcessor->reindexList($this->_productIds);
+        $productIds = $this->_productIds ? array_keys(
+            array_filter(
+                $this->_productIds,
+                function (array $data) {
+                    return array_filter($data);
+                }
+            )
+        ) : [];
+        $this->_ruleProductProcessor->reindexList($productIds);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return $this
      */
@@ -568,6 +666,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * Get array with data differences
+     *
      * @param array $array1
      * @param array $array2
      *
@@ -589,6 +688,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
+     * Getter for conditions field set ID
+     *
      * @param string $formName
      * @return string
      */
@@ -597,10 +698,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         return $formName . 'rule_conditions_fieldset_' . $this->getId();
     }
 
-    //@codeCoverageIgnoreStart
-
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRuleId()
     {
@@ -608,7 +707,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRuleId($ruleId)
     {
@@ -616,7 +715,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getName()
     {
@@ -624,7 +723,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setName($name)
     {
@@ -632,7 +731,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDescription()
     {
@@ -640,7 +739,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDescription($description)
     {
@@ -648,7 +747,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getIsActive()
     {
@@ -656,7 +755,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setIsActive($isActive)
     {
@@ -664,7 +763,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRuleCondition()
     {
@@ -672,7 +771,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRuleCondition($condition)
     {
@@ -683,7 +782,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getStopRulesProcessing()
     {
@@ -691,7 +790,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStopRulesProcessing($isStopProcessing)
     {
@@ -699,7 +798,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSortOrder()
     {
@@ -707,7 +806,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSortOrder($sortOrder)
     {
@@ -715,7 +814,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSimpleAction()
     {
@@ -723,7 +822,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSimpleAction($action)
     {
@@ -731,7 +830,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDiscountAmount()
     {
@@ -739,7 +838,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDiscountAmount($amount)
     {
@@ -747,6 +846,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
+     * Get from date
+     *
      * @return string
      */
     public function getFromDate()
@@ -755,6 +856,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
+     * Get to date
+     *
      * @return string
      */
     public function getToDate()
@@ -763,7 +866,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\CatalogRule\Api\Data\RuleExtensionInterface|null
      */
@@ -773,30 +876,31 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\CatalogRule\Api\Data\RuleExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\CatalogRule\Api\Data\RuleExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(RuleExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
 
     /**
+     * Getter for the rule condition converter
+     *
      * @return Data\Condition\Converter
      * @deprecated 100.1.0
+     * @see getRuleCondition, setRuleCondition
      */
     private function getRuleConditionConverter()
     {
         if (null === $this->ruleConditionConverter) {
-            $this->ruleConditionConverter = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\CatalogRule\Model\Data\Condition\Converter::class);
+            $this->ruleConditionConverter = ObjectManager::getInstance()
+                ->get(Converter::class);
         }
         return $this->ruleConditionConverter;
     }
-
-    //@codeCoverageIgnoreEnd
 
     /**
      * @inheritDoc
@@ -804,5 +908,23 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     public function getIdentities()
     {
         return ['price'];
+    }
+
+    /**
+     * Clear price rules cache.
+     *
+     * @return void;
+     */
+    public function clearPriceRulesData(): void
+    {
+        self::$_priceRulesData = [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        self::$_priceRulesData = [];
     }
 }

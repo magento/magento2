@@ -15,6 +15,9 @@ class Sample
         return $this->attribute;
     }
 
+    /**
+     * @param $value
+     */
     public function setValue($value)
     {
         $this->attribute = $value;
@@ -24,18 +27,28 @@ class Sample
     {
     }
 
+    /**
+     * @param mixed ...$variadicValue
+     */
     public function firstVariadicParameter(...$variadicValue)
     {
         $this->variadicAttribute = $variadicValue;
     }
 
+    /**
+     * @param $value
+     * @param mixed ...$variadicValue
+     */
     public function secondVariadicParameter($value, ...$variadicValue)
     {
         $this->attribute = $value;
         $this->variadicAttribute = $variadicValue;
     }
 
-    public function byRefVariadic(& ...$variadicValue)
+    /**
+     * @param mixed ...$variadicValue
+     */
+    public function byRefVariadic(&...$variadicValue)
     {
         $this->variadicAttribute = $variadicValue;
     }

@@ -5,5 +5,5 @@
  */
 ?>
 <small class="copyright">
-    <span><?= /* @escapeNotVerified */ $block->getCopyright() ?></span>
+    <span><?= $block->escapeHtml($block->getCopyright()) ?></span>
 </small>

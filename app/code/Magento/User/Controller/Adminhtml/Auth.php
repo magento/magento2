@@ -3,31 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\User\Controller\Adminhtml;
 
 use Magento\Framework\Encryption\Helper\Security;
+use Magento\Backend\App\AbstractAction;
+use Magento\Backend\App\Action\Context;
+use Magento\User\Model\UserFactory;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * \Magento\User Auth controller
  */
-abstract class Auth extends \Magento\Backend\App\AbstractAction
+abstract class Auth extends AbstractAction
 {
     /**
      * User model factory
      *
-     * @var \Magento\User\Model\UserFactory
+     * @var UserFactory
      */
     protected $_userFactory;
 
     /**
      * Construct
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\User\Model\UserFactory $userFactory
+     * @param Context $context
+     * @param UserFactory $userFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\User\Model\UserFactory $userFactory
+        Context $context,
+        UserFactory $userFactory
     ) {
         parent::__construct($context);
         $this->_userFactory = $userFactory;
@@ -39,7 +44,7 @@ abstract class Auth extends \Magento\Backend\App\AbstractAction
      * @param int $userId
      * @param string $resetPasswordToken
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _validateResetPasswordLinkToken($userId, $resetPasswordToken)
     {
@@ -49,20 +54,20 @@ abstract class Auth extends \Magento\Backend\App\AbstractAction
             $resetPasswordToken
         ) || empty($resetPasswordToken) || empty($userId) || $userId < 0
         ) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the password reset token.'));
+            throw new LocalizedException(__('Please correct the password reset token.'));
         }
 
         /** @var $user \Magento\User\Model\User */
         $user = $this->_userFactory->create()->load($userId);
         if (!$user->getId()) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('Please specify the correct account and try again.')
             );
         }
 
         $userToken = $user->getRpToken();
         if (!Security::compareStrings($userToken, $resetPasswordToken) || $user->isResetPasswordLinkTokenExpired()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Your password reset link has expired.'));
+            throw new LocalizedException(__('Your password reset link has expired.'));
         }
     }
 

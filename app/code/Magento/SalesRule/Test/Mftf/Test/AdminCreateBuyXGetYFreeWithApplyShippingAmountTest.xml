@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateBuyXGetYFreeWithApplyShippingAmountTest" extends="AdminCreateBuyXGetYFreeTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Create cart price rule"/>
+            <title value="Admin should be able to create a cart price rule of type Buy X get Y free enable 'Apply to Shipping Amount' "/>
+            <description value="Use cart price rule of type Buy X get Y free with enable 'Apply to Shipping Amount'"/>
+            <severity value="MAJOR"/>
+            <group value="SalesRule"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <remove keyForRemoval="verifyStorefront"/>
+        <click selector="{{AdminCartPriceRulesFormSection.applyDiscountToShippingLabel}}" stepKey="enabledApplyDiscountToShipping" after="fillDiscountStep"/>
+        <actionGroup ref="VerifyDiscountAmountActionGroup" stepKey="verifyStorefrontDiscount" after="fillProductFieldsInAdmin">
+            <argument name="productUrl" value="{{_defaultProduct.urlKey}}.html"/>
+            <argument name="quantity" value="2"/>
+            <argument name="expectedDiscount" value="-$128.00"/>
+        </actionGroup>
+    </test>
+</tests>

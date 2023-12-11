@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Fixtures\AttributeSet;
+
+use Magento\Setup\Fixtures\AttributeSet\Pattern;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD)
  */
-class PatternTest extends \PHPUnit\Framework\TestCase
+class PatternTest extends TestCase
 {
     public function testGenerateAttributeSet()
     {
@@ -28,7 +32,7 @@ class PatternTest extends \PHPUnit\Framework\TestCase
                         'frontend_label' => 'Attribute 1',
                         'frontend_input' => 'select',
                         'backend_type' => 1,
-                        'default_option' => 'option 1',
+                        'default_value' => 'option_1',
                         'options' => [
                             'option' => [
                                 [
@@ -45,7 +49,7 @@ class PatternTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         ];
-        $pattern = new \Magento\Setup\Fixtures\AttributeSet\Pattern();
+        $pattern = new Pattern();
         $this->assertEquals(
             $attributeSets,
             $pattern->generateAttributeSet(

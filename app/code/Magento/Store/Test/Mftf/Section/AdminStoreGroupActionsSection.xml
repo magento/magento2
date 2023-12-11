@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminStoreGroupActionsSection">
+        <element name="saveButton" type="button" selector="#save" timeout="120" />
+        <element name="okButton" type="button" selector="//footer[@class='modal-footer']//button[@class='action-primary action-accept']/span" timeout="30"/>
+        <element name="btnSaveStore" type="button" selector="//button[@title='Save Store' and @id='save']"/>
+    </section>
+</sections>

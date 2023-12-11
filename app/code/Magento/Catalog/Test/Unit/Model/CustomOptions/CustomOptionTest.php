@@ -3,38 +3,57 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\CustomOptions;
 
+use Magento\Catalog\Api\Data\CustomOptionExtensionInterface;
+use Magento\Catalog\Api\Data\CustomOptionInterface;
 use Magento\Catalog\Model\CustomOptions\CustomOption;
 use Magento\Catalog\Model\Webapi\Product\Option\Type\File\Processor as FileProcessor;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\Data\ImageContentInterface;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CustomOptionTest extends \PHPUnit\Framework\TestCase
+class CustomOptionTest extends TestCase
 {
     /**
      * @var CustomOption
      */
     protected $model;
 
+    /** @var ExtensionAttributesFactory|MockObject */
+    private $extensionAttributesFactoryMock;
+
+    /** @var CustomOptionExtensionInterface|MockObject */
+    private $extensionMock;
+
     /**
-     * @var FileProcessor | \PHPUnit_Framework_MockObject_MockObject
+     * @var FileProcessor|MockObject
      */
     protected $fileProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $context = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
+        $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
+        $registry = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $extensionAttributesFactory = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesFactory::class)
+        $this->extensionAttributesFactoryMock = $this->getMockBuilder(ExtensionAttributesFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $attributeValueFactory = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
+        $attributeValueFactory = $this->getMockBuilder(AttributeValueFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -44,18 +63,25 @@ class CustomOptionTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $resource = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\AbstractResource::class)
+        $resource = $this->getMockBuilder(AbstractResource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $collection = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
+        $collection = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->extensionMock = $this->getMockBuilder(CustomOptionExtensionInterface::class)
+            ->setMethods(['getFileInfo'])
+            ->getMockForAbstractClass();
+
+        $this->extensionAttributesFactoryMock->expects(self::any())
+            ->method('create')->willReturn($this->extensionMock);
 
         $this->model = new CustomOption(
             $context,
             $registry,
-            $extensionAttributesFactory,
+            $this->extensionAttributesFactoryMock,
             $attributeValueFactory,
             $this->fileProcessor,
             $resource,
@@ -75,23 +101,19 @@ class CustomOptionTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertNull($this->model->getOptionValue());
 
-        $this->model->setData(\Magento\Catalog\Api\Data\CustomOptionInterface::OPTION_VALUE, 'test');
+        $this->model->setData(CustomOptionInterface::OPTION_VALUE, 'test');
         $this->assertEquals('test', $this->model->getOptionValue());
 
-        $this->model->setData(\Magento\Catalog\Api\Data\CustomOptionInterface::OPTION_VALUE, 'file');
+        $this->model->setData(CustomOptionInterface::OPTION_VALUE, 'file');
         $this->assertEquals('file', $this->model->getOptionValue());
     }
 
     public function testGetOptionValueWithFileInfo()
     {
-        $customOption = $this->getMockBuilder(\Magento\Catalog\Api\Data\CustomOptionExtensionInterface::class)
-            ->setMethods(['getFileInfo'])
+        $imageContent = $this->getMockBuilder(ImageContentInterface::class)
             ->getMockForAbstractClass();
 
-        $imageContent = $this->getMockBuilder(\Magento\Framework\Api\Data\ImageContentInterface::class)
-            ->getMockForAbstractClass();
-
-        $customOption->expects($this->once())
+        $this->extensionMock->expects($this->once())
             ->method('getFileInfo')
             ->willReturn($imageContent);
 
@@ -112,8 +134,7 @@ class CustomOptionTest extends \PHPUnit\Framework\TestCase
             ->with($imageContent)
             ->willReturn($imageResult);
 
-        $this->model->setExtensionAttributes($customOption);
-        $this->model->setData(\Magento\Catalog\Api\Data\CustomOptionInterface::OPTION_VALUE, 'file');
+        $this->model->setData(CustomOptionInterface::OPTION_VALUE, 'file');
         $this->assertEquals($imageResult, $this->model->getOptionValue());
     }
 

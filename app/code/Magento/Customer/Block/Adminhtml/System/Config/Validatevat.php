@@ -6,8 +6,6 @@
 
 /**
  * Adminhtml VAT ID validation block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Customer\Block\Adminhtml\System\Config;
 
@@ -99,7 +97,7 @@ class Validatevat extends \Magento\Config\Block\System\Config\Form\Field
     {
         parent::_prepareLayout();
         if (!$this->getTemplate()) {
-            $this->setTemplate('system/config/validatevat.phtml');
+            $this->setTemplate('Magento_Customer::system/config/validatevat.phtml');
         }
         return $this;
     }

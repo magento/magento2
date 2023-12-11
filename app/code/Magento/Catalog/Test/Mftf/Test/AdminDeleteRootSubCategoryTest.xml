@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteRootSubCategoryTest">
+        <annotations>
+            <stories value="Delete categories"/>
+            <title value="Can delete a subcategory"/>
+            <description value="Login as admin and delete a root sub category"/>
+            <testCaseId value="MC-6049"/>
+            <severity value="CRITICAL"/>
+            <group value="Catalog"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <createData entity="NewRootCategory" stepKey="rootCategory" />
+            <createData entity="SimpleRootSubCategory" stepKey="category">
+                <requiredEntity createDataKey="rootCategory"/>
+            </createData>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCreatedStore">
+                <argument name="storeGroupName" value="customStore.code"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Create a Store-->
+        <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStore">
+            <argument name="website" value="{{_defaultWebsite.name}}"/>
+            <argument name="store" value="{{customStore.name}}"/>
+            <argument name="rootCategory" value="{{NewRootCategory.name}}"/>
+        </actionGroup>
+
+        <!--Create a Store View-->
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+            <argument name="StoreGroup" value="customStore"/>
+            <argument name="customStore" value="customStore"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
+        <!--Go To store front page-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomepage"/>
+
+        <!--Verify subcategory displayed in store front-->
+        <actionGroup ref="StorefrontSwitchStoreActionGroup" stepKey="selectCustomStore">
+            <argument name="storeName" value="{{customStore.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCatergoryInStoreFront">
+            <argument name="categoryName" value="{{SimpleRootSubCategory.name}}"/>
+        </actionGroup>
+
+        <!--Delete SubCategory-->
+        <deleteData createDataKey="category" stepKey="deleteCategory"/>
+
+        <!--Verify Sub Category is absent in backend -->
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandTheCategoryTree"/>
+        <actionGroup ref="AssertAdminCategoryIsNotListedInCategoriesTreeActionGroup" stepKey="doNotSeeRootCategory">
+            <argument name="categoryName" value="{{SimpleRootSubCategory.name}}"/>
+        </actionGroup>
+
+        <!--Verify Sub Category is not present in Store Front-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepage"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeOldCategoryNameInStoreFront">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
+
+        <!--Verify in Category is not in Url Rewrite grid-->
+        <actionGroup ref="AdminSearchDeletedUrlRewriteActionGroup" stepKey="searchingCategoryUrlRewrite">
+            <argument name="requestPath" value="{{SimpleRootSubCategory.url_key}}"/>
+        </actionGroup>
+    </test>
+</tests>

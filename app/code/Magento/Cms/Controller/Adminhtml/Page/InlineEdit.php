@@ -7,6 +7,7 @@ namespace Magento\Cms\Controller\Adminhtml\Page;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Cms\Api\PageRepositoryInterface as PageRepository;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Cms\Api\Data\PageInterface;
 
@@ -15,7 +16,7 @@ use Magento\Cms\Api\Data\PageInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InlineEdit extends \Magento\Backend\App\Action
+class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -56,7 +57,10 @@ class InlineEdit extends \Magento\Backend\App\Action
     }
 
     /**
+     * Process the request
+     *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {
@@ -67,19 +71,21 @@ class InlineEdit extends \Magento\Backend\App\Action
 
         $postItems = $this->getRequest()->getParam('items', []);
         if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
-            return $resultJson->setData([
-                'messages' => [__('Please correct the data sent.')],
-                'error' => true,
-            ]);
+            return $resultJson->setData(
+                [
+                    'messages' => [__('Please correct the data sent.')],
+                    'error' => true,
+                ]
+            );
         }
 
         foreach (array_keys($postItems) as $pageId) {
             /** @var \Magento\Cms\Model\Page $page */
             $page = $this->pageRepository->getById($pageId);
             try {
-                $pageData = $this->filterPost($postItems[$pageId]);
-                $this->validatePost($pageData, $page, $error, $messages);
                 $extendedPageData = $page->getData();
+                $pageData = $this->filterPostWithDateConverting($postItems[$pageId], $extendedPageData);
+                $this->validatePost($pageData, $page, $error, $messages);
                 $this->setCmsPageData($page, $extendedPageData, $pageData);
                 $this->pageRepository->save($page);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -97,10 +103,12 @@ class InlineEdit extends \Magento\Backend\App\Action
             }
         }
 
-        return $resultJson->setData([
-            'messages' => $messages,
-            'error' => $error
-        ]);
+        return $resultJson->setData(
+            [
+                'messages' => $messages,
+                'error' => $error
+            ]
+        );
     }
 
     /**
@@ -120,6 +128,34 @@ class InlineEdit extends \Magento\Backend\App\Action
     }
 
     /**
+     * Filtering posted data with converting custom theme dates to proper format
+     *
+     * @param array $postData
+     * @param array $pageData
+     * @return array
+     */
+    private function filterPostWithDateConverting($postData = [], $pageData = [])
+    {
+        $newPageData = $this->filterPost($postData);
+        if (
+            !empty($newPageData['custom_theme_from'])
+            && date("Y-m-d", strtotime($postData['custom_theme_from']))
+                === date("Y-m-d", strtotime($pageData['custom_theme_from']))
+        ) {
+            $newPageData['custom_theme_from'] = date("Y-m-d", strtotime($postData['custom_theme_from']));
+        }
+        if (
+            !empty($newPageData['custom_theme_to'])
+            && date("Y-m-d", strtotime($postData['custom_theme_to']))
+                === date("Y-m-d", strtotime($pageData['custom_theme_to']))
+        ) {
+            $newPageData['custom_theme_to'] = date("Y-m-d", strtotime($postData['custom_theme_to']));
+        }
+
+        return $newPageData;
+    }
+
+    /**
      * Validate post data
      *
      * @param array $pageData
@@ -130,7 +166,7 @@ class InlineEdit extends \Magento\Backend\App\Action
      */
     protected function validatePost(array $pageData, \Magento\Cms\Model\Page $page, &$error, array &$messages)
     {
-        if (!($this->dataProcessor->validate($pageData) && $this->dataProcessor->validateRequireEntry($pageData))) {
+        if (!$this->dataProcessor->validateRequireEntry($pageData)) {
             $error = true;
             foreach ($this->messageManager->getMessages(true)->getItems() as $error) {
                 $messages[] = $this->getErrorWithPageId($page, $error->getText());

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifyChildCategoriesShouldNotIncludeInMenuTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create categories"/>
+            <title value="Customer should not see categories that are not included in the menu"/>
+            <description value="Customer should not see categories that are not included in the menu"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-72238"/>
+            <group value="category"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- Create a category -->
+            <createData entity="ApiCategory" stepKey="simpleCategory"/>
+            <!-- Create second category, having as parent the 1st one -->
+            <createData entity="SubCategoryWithParent" stepKey="simpleSubCategory">
+                <requiredEntity createDataKey="simpleCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleSubCategory" stepKey="deleteSubCategory"/>
+            <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Go to storefront and verify visibility of categories-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCreatedCategoryOnStorefront">
+            <argument name="categoryName" value="$$simpleCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeSubCategoryOnStorefront">
+            <argument name="categoryName" value="$$simpleSubCategory.name$$"/>
+        </actionGroup>
+
+        <!--Set Include in menu to No on created category under Default Category -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="openParentCategoryViaAdmin">
+            <argument name="Category" value="$$simpleCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminDisableIncludeInMenuConfigActionGroup" stepKey="setNoToIncludeInMenuSelect"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
+        <actionGroup ref="AssertAdminCategoryIsEnabledActionGroup" stepKey="assertParentCategoryIsActive"/>
+        <actionGroup ref="AssertAdminCategoryIsNotIncludeInMenuActionGroup" stepKey="assertParentCategoryIsNotIncludeInMenu"/>
+
+        <!--Go to storefront and verify visibility of categories-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPageSecondTime"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeParentCategoryOnStorefront">
+            <argument name="categoryName" value="$$simpleCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeSubCategory">
+            <argument name="categoryName" value="$$simpleSubCategory.name$$"/>
+        </actionGroup>
+
+        <!--Set Enable category to No and Include in menu to Yes on created category under Default Category -->
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="openParentCategoryViaAdminSecondTime">
+            <argument name="Category" value="$$simpleCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminDisableActiveCategoryActionGroup" stepKey="SetNoToEnableCategorySelect"/>
+        <actionGroup ref="AdminIncludeInMenuExcludedCategoryActionGroup" stepKey="SetToYesIncludeInMenuSelect"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveParentCategory"/>
+        <actionGroup ref="AssertAdminCategoryIsInactiveActionGroup" stepKey="seeCategoryIsDisabled"/>
+        <actionGroup ref="AssertAdminCategoryIncludedToMenuActionGroup" stepKey="seeCheckboxIncludeInMenuIsChecked"/>
+
+        <!--Go to storefront and verify visibility of categories-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPageThirdTime"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeCategoryInMenuOnStorefront">
+            <argument name="categoryName" value="$$simpleCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeSubCategoryInMenuOnStorefront">
+            <argument name="categoryName" value="$$simpleSubCategory.name$$"/>
+        </actionGroup>
+
+        <!--Set Enable category to No and Include in menu to No on created category under Default Category -->
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="openParentCategoryViaAdminThirdTime">
+            <argument name="Category" value="$$simpleCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminDisableIncludeInMenuConfigActionGroup" stepKey="setNoToIncludeInMenuForParentCategory"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveChanges"/>
+        <actionGroup ref="AssertAdminCategoryIsInactiveActionGroup" stepKey="assertCategoryIsDisabled"/>
+        <actionGroup ref="AssertAdminCategoryIsNotIncludeInMenuActionGroup" stepKey="assertParentCategoryIsNotIncludeToMenu"/>
+
+        <!--Go to storefront and verify visibility of categories-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPageFourthTime"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeCategoryOnStorefront">
+            <argument name="categoryName" value="$$simpleCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeSubCategoryInMenu">
+            <argument name="categoryName" value="$$simpleSubCategory.name$$"/>
+        </actionGroup>
+    </test>
+</tests>

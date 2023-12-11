@@ -17,14 +17,14 @@ class WebapiTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Registry */
     protected $registry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->registry = $objectManager->get(\Magento\Framework\Registry::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->registry->unregister(IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION);
         parent::tearDown();
@@ -43,17 +43,18 @@ class WebapiTest extends \PHPUnit\Framework\TestCase
             IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION,
             $this->getFixtureIntegration()->getData()
         );
-        $this->assertContains($expectedResult, $this->createApiTabBlock()->getSelectedResourcesJson());
+        $this->assertStringContainsString($expectedResult, $this->createApiTabBlock()->getSelectedResourcesJson());
     }
 
     public function testGetResourcesTreeJson()
     {
-        $expectedResult = '[{"attr":{"data-id":"Magento_Backend::dashboard"},"data":"Dashboard","children":[],"state":';
+        $expectedResult = '[{"id":"Magento_Backend::dashboard","li_attr":{"data-id":"Magento_Backend::dashboard"},' .
+            '"text":"Dashboard","children":[],"state":';
         $this->registry->register(
             IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION,
             $this->getFixtureIntegration()->getData()
         );
-        $this->assertContains($expectedResult, $this->createApiTabBlock()->getResourcesTreeJson());
+        $this->assertStringContainsString($expectedResult, $this->createApiTabBlock()->getResourcesTreeJson());
     }
 
     public function testCanShowTabNegative()

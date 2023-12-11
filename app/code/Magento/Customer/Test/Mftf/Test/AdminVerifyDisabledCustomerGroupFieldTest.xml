@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyDisabledCustomerGroupFieldTest">
+        <annotations>
+            <stories value="Check that field is disabled in system Customer Group"/>
+            <title value="Check that field is disabled in system Customer Group"/>
+            <description value="Checks that customer_group_code field is disabled in NOT LOGGED IN Customer Group"/>
+            <testCaseId value="MC-14206"/>
+            <severity value="CRITICAL"/>
+            <group value="customers"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <actionGroup ref="AdminNavigateToCustomerGroupPageActionGroup" stepKey="amOnCustomerGroupPage"/>
+        <actionGroup ref="AdminFilterCustomerGroupByNameActionGroup" stepKey="clearFiltersIfTheySet">
+            <argument name="customerGroupName" value="{{NotLoggedInCustomerGroup.code}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminGridCustomerGroupEditByCodeActionGroup" stepKey="openCustomerGroup">
+            <argument name="customerGroupCode" value="{{NotLoggedInCustomerGroup.code}}"/>
+        </actionGroup>
+
+        <seeInField selector="{{AdminNewCustomerGroupSection.groupName}}" userInput="{{NotLoggedInCustomerGroup.code}}" stepKey="seeNotLoggedInTextInGroupName" />
+        <assertElementContainsAttribute stepKey="checkIfGroupNameIsDisabled">
+			<expectedResult selector="{{AdminNewCustomerGroupSection.groupName}}" attribute="disabled" type="string">true</expectedResult>
+        </assertElementContainsAttribute>
+
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+    </test>
+</tests>

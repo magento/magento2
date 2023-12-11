@@ -3,7 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Reports\Block\Adminhtml\Product\Lowstock;
+
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Helper\Data;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Framework\Data\Collection as DataCollection;
+use Magento\Reports\Model\ResourceModel\Product\Lowstock\Collection;
+use Magento\Reports\Model\ResourceModel\Product\Lowstock\CollectionFactory;
 
 /**
  * Adminhtml low stock products report grid block
@@ -15,20 +24,20 @@ namespace Magento\Reports\Block\Adminhtml\Product\Lowstock;
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
     /**
-     * @var \Magento\Reports\Model\ResourceModel\Product\Lowstock\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_lowstocksFactory;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Reports\Model\ResourceModel\Product\Lowstock\CollectionFactory $lowstocksFactory
+     * @param Context $context
+     * @param Data $backendHelper
+     * @param CollectionFactory $lowstocksFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Reports\Model\ResourceModel\Product\Lowstock\CollectionFactory $lowstocksFactory,
+        Context $context,
+        Data $backendHelper,
+        CollectionFactory $lowstocksFactory,
         array $data = []
     ) {
         $this->_lowstocksFactory = $lowstocksFactory;
@@ -36,6 +45,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     }
 
     /**
+     * @inheritDoc
+     *
      * @return \Magento\Backend\Block\Widget\Grid
      */
     protected function _prepareCollection()
@@ -56,7 +67,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
             $storeId = null;
         }
 
-        /** @var $collection \Magento\Reports\Model\ResourceModel\Product\Lowstock\Collection  */
+        /** @var $collection Collection  */
         $collection = $this->_lowstocksFactory->create()->addAttributeToSelect(
             '*'
         )->filterByIsQtyProductTypes()->joinInventoryItem(
@@ -67,7 +78,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
             $storeId
         )->setOrder(
             'qty',
-            \Magento\Framework\Data\Collection::SORT_ORDER_ASC
+            DataCollection::SORT_ORDER_ASC
+        )->addAttributeToFilter(
+            'status',
+            Status::STATUS_ENABLED
         );
 
         if ($storeId) {

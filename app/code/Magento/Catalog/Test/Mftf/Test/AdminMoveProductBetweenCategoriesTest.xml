@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMoveProductBetweenCategoriesTest">
+        <annotations>
+            <stories value="Move Product"/>
+            <title value="Move Product between Categories (Cron is ON, 'Update by Schedule' Mode)"/>
+            <description value="Verifies correctness of showing data (products, categories) on Storefront after moving an anchored category in terms of products/categories association"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-11296"/>
+            <group value="catalog"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
+            <createData entity="_defaultCategory" stepKey="createAnchoredCategory1"/>
+            <createData entity="_defaultCategory" stepKey="createSecondCategory"/>
+
+            <comment userInput="BIC workaround" stepKey="onIndexManagement"/>
+            <comment userInput="BIC workaround" stepKey="switchCategoryProduct"/>
+            <comment userInput="BIC workaround" stepKey="switchProductCategory"/>
+            <comment userInput="BIC workaround" stepKey="switchCatalogSearch"/>
+
+            <!-- Switch "Category Product", "Product Category" and "Catalog Search" indexers to "Update by Schedule" mode -->
+            <actionGroup ref="CliIndexerSetScheduleModeActionGroup" stepKey="setScheduleIndexerMode">
+                <argument name="indices" value="catalog_category_product catalog_product_category catalogsearch_fulltext"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <comment userInput="BIC workaround" stepKey="onIndexManagement"/>
+            <comment userInput="BIC workaround" stepKey="switchCategoryProduct"/>
+            <comment userInput="BIC workaround" stepKey="switchProductCategory"/>
+            <!-- Switch "Category Product", "Product Category" and "Catalog Search" indexers to "Update by Save" mode -->
+            <actionGroup ref="CliIndexerSetRealtimeModeActionGroup" stepKey="setRealtimeIndexerMode">
+                <argument name="indices" value="catalog_category_product catalog_product_category catalogsearch_fulltext"/>
+            </actionGroup>
+
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createSecondCategory" stepKey="deleteSecondCategory"/>
+            <deleteData createDataKey="createAnchoredCategory1" stepKey="deleteAnchoredCategory1"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Create the anchored category <Cat1_anchored> -->
+        <actionGroup ref="AdminAnchorCategoryActionGroup" stepKey="anchorCategory">
+            <argument name="categoryName" value="$$createAnchoredCategory1.name$$"/>
+        </actionGroup>
+
+        <!-- Create subcategory <Sub1> of the anchored category -->
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="addSubCategoryName"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory1"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSaveSuccessMessage"/>
+
+        <!-- Assign <product1> to the <Sub1> -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct">
+            <argument name="productId" value="$$simpleProduct.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="activateDropDownCategory"/>
+        <fillField userInput="{{SimpleSubCategory.name}}" selector="{{AdminProductFormSection.searchCategory}}" stepKey="fillSearch"/>
+        <waitForPageLoad stepKey="waitForSubCategory"/>
+        <click selector="{{AdminProductFormSection.selectCategory(SimpleSubCategory.name)}}" stepKey="selectSub1Category"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickDone"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSave"/>
+
+        <!-- Enable `Use Categories Path for Product URLs` on Stores -> Configuration -> Catalog -> Catalog -> Search Engine Optimization -->
+        <amOnPage url="{{AdminCatalogSearchConfigurationPage.url}}" stepKey="onConfigPage"/>
+        <waitForPageLoad stepKey="waitForLoading"/>
+        <conditionalClick selector="{{AdminCatalogSearchEngineConfigurationSection.searchEngineOptimization}}" dependentSelector="{{AdminCatalogSearchEngineConfigurationSection.openedEngineOptimization}}" visible="false" stepKey="clickEngineOptimization"/>
+        <uncheckOption selector="{{AdminCatalogSearchEngineConfigurationSection.systemValueUseCategoriesPath}}" stepKey="uncheckDefault"/>
+        <selectOption userInput="Yes" selector="{{AdminCatalogSearchEngineConfigurationSection.selectUseCategoriesPatForProductUrls}}" stepKey="selectYes"/>
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
+        <waitForPageLoad stepKey="waitForSaving"/>
+        <see selector="{{AdminIndexManagementSection.successMessage}}"  userInput="You saved the configuration." stepKey="seeMessage"/>
+
+        <!-- Navigate to the Catalog > Products -->
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="onCatalogProductPage"/>
+
+        <!-- Click on <product1>: Product page opens-->
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterProduct">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.productGridNameProduct($$simpleProduct.name$$)}}" stepKey="clickProduct1"/>
+        <waitForPageLoad stepKey="waitForProductLoad"/>
+
+        <!-- Clear "Categories" field and assign the product to <Cat2> and save the product -->
+        <grabTextFrom selector="{{AdminProductFormSection.currentCategory}}" stepKey="grabNameSubCategory"/>
+        <click selector="{{AdminProductFormSection.unselectCategories(SimpleSubCategory.name)}}" stepKey="removeCategory"/>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="openDropDown"/>
+        <checkOption selector="{{AdminProductFormSection.selectCategory($$createSecondCategory.name$$)}}" stepKey="selectCategory"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="pressButtonDone"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="pushButtonSave"/>
+
+        <!--Product is saved -->
+        <see userInput="You saved the product." selector="{{CatalogProductsSection.messageSuccessSavedProduct}}" stepKey="seeSuccessMessage"/>
+
+        <!-- Run cron -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCron">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
+        <!-- Clear invalidated cache on System>Tools>Cache Management page  -->
+        <amOnPage url="{{AdminCacheManagementPage.url}}" stepKey="onCachePage"/>
+        <waitForPageLoad stepKey="waitForCacheManagementPage"/>
+
+        <checkOption selector="{{AdminCacheManagementSection.configurationCheckbox}}" stepKey="checkConfigCache"/>
+        <checkOption selector="{{AdminCacheManagementSection.pageCacheCheckbox}}" stepKey="checkPageCache"/>
+
+        <selectOption userInput="Refresh" selector="{{AdminCacheManagementSection.massActionSelect}}" stepKey="selectRefresh"/>
+        <waitForElementVisible selector="{{AdminCacheManagementSection.massActionSubmit}}" stepKey="waitSubmitButton"/>
+        <click selector="{{AdminCacheManagementSection.massActionSubmit}}" stepKey="clickSubmit"/>
+        <waitForPageLoad stepKey="waitForRefresh"/>
+
+        <see userInput="2 cache type(s) refreshed." stepKey="seeCacheRefreshedMessage"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+        <!-- Open frontend -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="onFrontend"/>
+
+        <!-- Open <Cat2> from navigation menu -->
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createSecondCategory.name$$)}}" stepKey="openCat2"/>
+        <waitForPageLoad stepKey="waitForCategory2Page"/>
+
+        <!-- # <Cat 2> should open # <product1> should be present on the page -->
+        <see userInput="$$createSecondCategory.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategoryName"/>
+        <see userInput="$$simpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProduct"/>
+
+        <!-- Open <product1>  -->
+        <click selector="{{StorefrontCategoryMainSection.productLinkByHref($$simpleProduct.custom_attributes[url_key]$$)}}" stepKey="openProduct"/>
+        <waitForPageLoad stepKey="waitForProductPageLoading"/>
+
+        <!-- # Product page should open successfully # Breadcrumb for product should be like <Cat 2> -->
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName">
+            <argument name="value" value="$$simpleProduct.name$$"/>
+        </actionGroup>
+        <see userInput="$$createSecondCategory.name$$" selector="{{StorefrontNavigationSection.categoryBreadcrumbs}}" stepKey="seeCategoryInBreadcrumbs"/>
+
+        <!-- Open <Cat1_anchored> category -->
+        <click selector="{{StorefrontNavigationSection.topCategory($$createAnchoredCategory1.name$$)}}" stepKey="clickCat1"/>
+        <waitForPageLoad stepKey="waitForCategory1PageLoad"/>
+
+        <!-- # Category should open successfully # <product1> should be absent on the page -->
+        <see userInput="$$createAnchoredCategory1.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategory1Name"/>
+        <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="seeEmptyNotice"/>
+        <dontSee userInput="$$simpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeProduct"/>
+
+        <!-- Log in to the backend: Admin user is logged in-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAdmin"/>
+
+        <!-- Navigate to the Catalog > Products: Navigate to the Catalog>Products -->
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="amOnProductPage"/>
+
+        <!-- Click on <product1> -->
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openSimpleProduct">
+            <argument name="productSku" value="$$simpleProduct.sku$$"/>
+        </actionGroup>
+
+        <!-- Clear "Categories" field and assign the product to <Sub1> and save the product -->
+        <click selector="{{AdminProductFormSection.unselectCategories($$createSecondCategory.name$$)}}" stepKey="clearCategory"/>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="activateDropDown"/>
+        <fillField userInput="{$grabNameSubCategory}" selector="{{AdminProductFormSection.searchCategory}}" stepKey="fillSearchField"/>
+        <waitForPageLoad stepKey="waitForSearchSubCategory"/>
+        <click selector="{{AdminProductFormSection.selectCategory({$grabNameSubCategory})}}" stepKey="selectSubCategory"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickButtonDone"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickButtonSave"/>
+
+        <!-- Product is saved successfully -->
+        <see userInput="You saved the product." selector="{{CatalogProductsSection.messageSuccessSavedProduct}}" stepKey="seeSaveMessage"/>
+
+        <!-- Run cron -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCron2">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
+        <!-- Open frontend -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="onFrontendPage"/>
+
+        <!-- Open <Cat2> from navigation menu -->
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createSecondCategory.name$$)}}" stepKey="openSecondCategory"/>
+        <waitForPageLoad stepKey="waitForSecondCategoryPage"/>
+
+        <!-- # <Cat 2> should open # <product1> should be absent on the page -->
+        <see userInput="$$createSecondCategory.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeSecondCategory1Name"/>
+        <dontSee userInput="$$simpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeSimpleProduct"/>
+
+        <!-- Click on <Cat1_anchored> category -->
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createAnchoredCategory1.name$$)}}" stepKey="clickAnchoredCategory"/>
+        <waitForPageLoad stepKey="waitForAnchoredCategoryPage"/>
+
+        <!-- # Category should open successfully # <product1> should be present on the page -->
+        <see userInput="$$createAnchoredCategory1.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="see1CategoryName"/>
+        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$simpleProduct.name$$" stepKey="seeProductNameOnCategory1Page"/>
+
+        <!-- Breadcrumb for product should be like <Cat1_anchored>/<product> (if you clicks from anchor category) -->
+        <see userInput="$$createAnchoredCategory1.name$$" selector="{{StorefrontNavigationSection.categoryBreadcrumbs}}" stepKey="seeCat1inBreadcrumbs"/>
+        <dontSee userInput="{$grabNameSubCategory}" selector="{{StorefrontNavigationSection.categoryBreadcrumbs}}" stepKey="dontSeeSubCategoryInBreadCrumbs"/>
+
+        <!-- <Cat1_anchored>/<Sub1>/<product> (if you clicks from Sub1 category) -->
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createAnchoredCategory1.name$$)}}" stepKey="hoverCategory1"/>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName({$grabNameSubCategory})}}" stepKey="clickSubCat"/>
+        <waitForPageLoad stepKey="waitForSubCategoryPageLoad"/>
+
+        <see userInput="{$grabNameSubCategory}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeSubCategoryName"/>
+        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$simpleProduct.name$$" stepKey="seeProductNameOnSubCategoryPage"/>
+
+        <see userInput="{$grabNameSubCategory}" selector="{{StorefrontNavigationSection.categoryBreadcrumbs}}" stepKey="seeSubCategoryInBreadcrumbs"/>
+        <see userInput="$$createAnchoredCategory1.name$$" selector="{{StorefrontNavigationSection.categoryBreadcrumbs}}" stepKey="seeCat1InBreadcrumbs"/>
+    </test>
+</tests>

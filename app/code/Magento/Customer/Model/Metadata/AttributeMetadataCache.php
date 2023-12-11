@@ -11,17 +11,20 @@ use Magento\Eav\Model\Cache\Type;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Cache for attribute metadata
  */
-class AttributeMetadataCache
+class AttributeMetadataCache implements ResetAfterRequestInterface
 {
     /**
      * Cache prefix
      */
-    const ATTRIBUTE_METADATA_CACHE_PREFIX = 'ATTRIBUTE_METADATA_INSTANCES_CACHE';
+    public const ATTRIBUTE_METADATA_CACHE_PREFIX = 'ATTRIBUTE_METADATA_INSTANCES_CACHE';
 
     /**
      * @var CacheInterface
@@ -34,7 +37,7 @@ class AttributeMetadataCache
     private $state;
 
     /**
-     * @var AttributeMetadataInterface[]
+     * @var AttributeMetadataInterface[]|null
      */
     private $attributes;
 
@@ -54,23 +57,32 @@ class AttributeMetadataCache
     private $serializer;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * Constructor
      *
      * @param CacheInterface $cache
      * @param StateInterface $state
      * @param SerializerInterface $serializer
      * @param AttributeMetadataHydrator $attributeMetadataHydrator
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         CacheInterface $cache,
         StateInterface $state,
         SerializerInterface $serializer,
-        AttributeMetadataHydrator $attributeMetadataHydrator
+        AttributeMetadataHydrator $attributeMetadataHydrator,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->cache = $cache;
         $this->state = $state;
         $this->serializer = $serializer;
         $this->attributeMetadataHydrator = $attributeMetadataHydrator;
+        $this->storeManager = $storeManager ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(StoreManagerInterface::class);
     }
 
     /**
@@ -82,11 +94,12 @@ class AttributeMetadataCache
      */
     public function load($entityType, $suffix = '')
     {
-        if (isset($this->attributes[$entityType . $suffix])) {
-            return $this->attributes[$entityType . $suffix];
+        $storeId = $this->storeManager->getStore()->getId();
+        if (isset($this->attributes[$entityType . $suffix . $storeId])) {
+            return $this->attributes[$entityType . $suffix . $storeId];
         }
         if ($this->isEnabled()) {
-            $cacheKey = self::ATTRIBUTE_METADATA_CACHE_PREFIX . $entityType . $suffix;
+            $cacheKey = self::ATTRIBUTE_METADATA_CACHE_PREFIX . $entityType . $suffix . $storeId;
             $serializedData = $this->cache->load($cacheKey);
             if ($serializedData) {
                 $attributesData = $this->serializer->unserialize($serializedData);
@@ -94,7 +107,7 @@ class AttributeMetadataCache
                 foreach ($attributesData as $key => $attributeData) {
                     $attributes[$key] = $this->attributeMetadataHydrator->hydrate($attributeData);
                 }
-                $this->attributes[$entityType . $suffix] = $attributes;
+                $this->attributes[$entityType . $suffix . $storeId] = $attributes;
                 return $attributes;
             }
         }
@@ -111,9 +124,10 @@ class AttributeMetadataCache
      */
     public function save($entityType, array $attributes, $suffix = '')
     {
-        $this->attributes[$entityType . $suffix] = $attributes;
+        $storeId = $this->storeManager->getStore()->getId();
+        $this->attributes[$entityType . $suffix . $storeId] = $attributes;
         if ($this->isEnabled()) {
-            $cacheKey = self::ATTRIBUTE_METADATA_CACHE_PREFIX . $entityType . $suffix;
+            $cacheKey = self::ATTRIBUTE_METADATA_CACHE_PREFIX . $entityType . $suffix . $storeId;
             $attributesData = [];
             foreach ($attributes as $key => $attribute) {
                 $attributesData[$key] = $this->attributeMetadataHydrator->extract($attribute);
@@ -125,7 +139,8 @@ class AttributeMetadataCache
                 [
                     Type::CACHE_TAG,
                     Attribute::CACHE_TAG,
-                    System::CACHE_TAG
+                    System::CACHE_TAG,
+                    Store::CACHE_TAG
                 ]
             );
         }
@@ -143,7 +158,7 @@ class AttributeMetadataCache
             $this->cache->clean(
                 [
                     Type::CACHE_TAG,
-                    Attribute::CACHE_TAG,
+                    Attribute::CACHE_TAG
                 ]
             );
         }
@@ -160,5 +175,13 @@ class AttributeMetadataCache
             $this->isAttributeCacheEnabled = $this->state->isEnabled(Type::TYPE_IDENTIFIER);
         }
         return $this->isAttributeCacheEnabled;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->attributes = null;
     }
 }

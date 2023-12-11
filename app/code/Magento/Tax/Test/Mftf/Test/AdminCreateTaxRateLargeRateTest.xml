@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateTaxRateLargeRateTest">
+        <annotations>
+            <stories value="Create tax rate"/>
+            <title value="Create tax rate, large rate"/>
+            <description value="Test log in to Create Tax Rate and Create Large Rate"/>
+            <testCaseId value="MC-5322"/>
+            <severity value="CRITICAL"/>
+            <group value="tax"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clickClearFilters"/>
+            <actionGroup ref="AdminFilterTaxRateByCodeActionGroup" stepKey="filterByCode">
+                <argument name="taxRateCode" value="{{SimpleTaxRate.code}}" />
+            </actionGroup>
+            <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="clickFirstRow"/>
+
+            <actionGroup ref="AdminDeleteTaxRateActionGroup" stepKey="deleteTaxRate"/>
+        </after>
+
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex1"/>
+        <!-- Create a tax rate for large postcodes -->
+        <click selector="{{AdminTaxRateGridSection.add}}" stepKey="clickAddNewTaxRateButton"/>
+        <fillField selector="{{AdminTaxRateFormSection.taxIdentifier}}" userInput="{{SimpleTaxRate.code}}" stepKey="fillRuleName"/>
+        <fillField selector="{{AdminTaxRateFormSection.zipCode}}" userInput="*" stepKey="fillPostCode"/>
+        <selectOption selector="{{AdminTaxRateFormSection.country}}" userInput="France" stepKey="selectCountry1"/>
+        <selectOption selector="{{AdminTaxRateFormSection.state}}" userInput="Val-d'Oise" stepKey="selectState" />
+        <fillField selector="{{AdminTaxRateFormSection.rate}}" userInput="999" stepKey="fillRate"/>
+        <click selector="{{AdminTaxRateFormSection.save}}" stepKey="clickSave"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the tax rate." stepKey="seeSuccess"/>
+
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex2"/>
+        <!-- Create a tax rate for large postcodes and verify we see expected values on the tax rate grid page -->
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickClearFilters2"/>
+        <actionGroup ref="AdminFillTaxIdentifierFilterOnTaxRateGridActionGroup" stepKey="fillTaxIdentifierField2">
+            <argument name="taxRateCode" value="{{SimpleTaxRate.code}}"/>
+        </actionGroup> 
+        <selectOption selector="{{AdminTaxRateGridSection.filterByCountry}}" userInput="France" stepKey="selectCountry2" />
+        <fillField selector="{{AdminTaxRateGridSection.filterByPostCode}}" userInput="*" stepKey="seeTaxPostCode1"/>
+        <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch2"/>
+        <click selector="{{AdminTaxRateGridSection.nthRow('1')}}" stepKey="clickFirstRow3"/>
+        <!-- Verify we see expected values on the tax rate form page -->
+        <seeInField selector="{{AdminTaxRateFormSection.taxIdentifier}}" userInput="{{SimpleTaxRate.code}}" stepKey="seeTaxIdentifierField2"/>
+        <seeInField selector="{{AdminTaxRateFormSection.zipCode}}" userInput="*" stepKey="seeZipCode"/>
+        <seeOptionIsSelected selector="{{AdminTaxRateFormSection.country}}" userInput="France" stepKey="seeCountry2"/>
+        <seeOptionIsSelected selector="{{AdminTaxRateFormSection.state}}" userInput="Val-d'Oise" stepKey="seeState"/>
+        <seeInField selector="{{AdminTaxRateFormSection.rate}}" userInput="999.0000" stepKey="seeRate"/>
+
+        <!-- Verify we see expected values on the tax rule form page -->
+        <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleIndex1"/>
+        <actionGroup ref="AdminClickAddTaxRuleButtonActionGroup" stepKey="clickAdd"/>
+        <see selector="{{AdminTaxRulesSection.taxRateMultiSelectItems}}" userInput="{{SimpleTaxRate.code}}" stepKey="seeTaxRateOnNewTaxRulePage"/>
+    </test>
+</tests>

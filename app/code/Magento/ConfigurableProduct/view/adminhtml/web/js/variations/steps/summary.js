@@ -17,7 +17,8 @@ define([
         defaults: {
             modules: {
                 variationsComponent: '${ $.variationsComponent }',
-                modalComponent: '${ $.modalComponent }'
+                modalComponent: '${ $.modalComponent }',
+                matrixGridComponent: '${ $.matrixGridComponent }'
             },
             notificationMessage: {
                 text: null,
@@ -53,7 +54,8 @@ define([
             attributes: [],
             attributesName: [$.mage.__('Images'), $.mage.__('SKU'), $.mage.__('Quantity'), $.mage.__('Price')],
             sections: [],
-            gridTemplate: 'Magento_ConfigurableProduct/variations/steps/summary-grid'
+            gridTemplate: 'Magento_ConfigurableProduct/variations/steps/summary-grid',
+            quantityFieldName: 'quantity'
         },
 
         /** @inheritdoc */
@@ -95,11 +97,16 @@ define([
                 variationsKeys = [],
                 gridExisting = [],
                 gridNew = [],
-                gridDeleted = [];
+                gridDeleted = [],
+                matrixGridData = this.matrixGridComponent() ?
+                    _.indexBy(this.matrixGridComponent().getUnionInsertData(), 'variationKey') : {};
 
             this.variations = [];
             _.each(variations, function (options) {
                 var product, images, sku, name, quantity, price, variation,
+                    variationsKey = this.variationsComponent().getVariationKey(options),
+                    productDataFromGrid = matrixGridData[variationsKey] || {},
+                    productDataFromWizard = {},
                     productId = this.variationsComponent().getProductIdByOptions(options);
 
                 if (productId) {
@@ -112,44 +119,53 @@ define([
                     return memo + '-' + option.label;
                 }, '');
                 name = productName + _.reduce(options, function (memo, option) {
-                        return memo + '-' + option.label;
-                    }, '');
-                quantity = getSectionValue('quantity', options);
+                    return memo + '-' + option.label;
+                }, '');
+                quantity = getSectionValue(this.quantityFieldName, options);
 
-                if (!quantity && productId) {
-                    quantity = product.quantity;
+                if (quantity) {
+                    productDataFromWizard[this.quantityFieldName] = quantity;
                 }
                 price = getSectionValue('price', options);
 
-                if (!price) {
-                    price = productId ? product.price : productPrice;
+                if (price) {
+                    productDataFromWizard.price = price;
                 }
 
                 if (productId && !images.file) {
                     images = product.images;
                 }
+                productDataFromGrid = this.prepareProductDataFromGrid(productDataFromGrid);
+
+                product = _.pick(
+                    product || {},
+                    'sku',
+                    'name',
+                    'weight',
+                    'status',
+                    'price',
+                    this.quantityFieldName
+                );
                 variation = {
                     options: options,
                     images: images,
                     sku: sku,
                     name: name,
-                    quantity: quantity,
-                    price: price,
+                    price: productPrice,
                     productId: productId,
                     weight: productWeight,
                     editable: true
                 };
+                variation[this.quantityFieldName] = quantity;
+                variation = _.extend(variation, product, productDataFromGrid, productDataFromWizard);
 
                 if (productId) {
-                    variation.sku = product.sku;
-                    variation.weight = product.weight;
-                    variation.name = product.name;
                     gridExisting.push(this.prepareRowForGrid(variation));
                 } else {
                     gridNew.push(this.prepareRowForGrid(variation));
                 }
                 this.variations.push(variation);
-                variationsKeys.push(this.variationsComponent().getVariationKey(options));
+                variationsKeys.push(variationsKey);
             }, this);
 
             _.each(_.omit(this.variationsComponent().productAttributesMap, variationsKeys), function (productId) {
@@ -163,7 +179,6 @@ define([
             this.variationsExisting = gridExisting;
             this.variationsNew = gridNew;
             this.variationsDeleted = gridDeleted;
-
         },
 
         /**
@@ -195,7 +210,7 @@ define([
                 images: []
             }, variation.images));
             row.push(variation.sku);
-            row.push(variation.quantity);
+            row.push(variation[this.quantityFieldName]);
             _.each(variation.options, function (option) {
                 row.push(option.label);
             });
@@ -261,6 +276,32 @@ define([
          * Back.
          */
         back: function () {
+        },
+
+        /**
+         * Prepare product data from grid to have all the current fields values
+         *
+         * @param {Object} productDataFromGrid
+         * @return {Object}
+         */
+        prepareProductDataFromGrid: function (productDataFromGrid) {
+            productDataFromGrid = _.pick(
+                productDataFromGrid,
+                'sku',
+                'name',
+                'weight',
+                'status',
+                'price',
+                'qty'
+            );
+
+            if (productDataFromGrid.hasOwnProperty('qty')) {
+                productDataFromGrid[this.quantityFieldName] = productDataFromGrid.qty;
+            }
+
+            delete productDataFromGrid.qty;
+
+            return productDataFromGrid;
         }
     });
 });

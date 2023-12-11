@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMarketingCreateSitemapFailFolderSaveTest">
+        <annotations>
+            <features value="Sitemap"/>
+            <stories value="Admin Creates Sitemap Entity Fail Folder Save"/>
+            <title value="Sitemap Creation Fail Folder Save"/>
+            <description value="Sitemap Entity Creation Fail Folder Save"/>
+            <testCaseId value="MC-14314"/>
+            <severity value="MAJOR"/>
+            <group value="sitemap"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!--TEST BODY -->
+        <!--Navigate to Marketing->Sitemap Page -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingSiteMapPage">
+            <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuSEOAndSearchSiteMap.dataUiId}}"/>
+        </actionGroup>
+        <!-- Navigate to New Sitemap Creation Page -->
+        <actionGroup ref="AdminMarketingNavigateToNewSitemapPageActionGroup" stepKey="navigateToAddNewSitemap"/>
+        <!-- Create Sitemap Entity With Incorrect Folder-->
+        <actionGroup ref="AdminMarketingCreateSitemapEntityActionGroup" stepKey="createSitemap">
+            <argument name="filename" value="sitemap.xml"/>
+            <argument name="path" value="%isolation%"/>
+        </actionGroup>
+        <!-- See Error Message-->
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeErrorMessage">
+            <argument name="message" value="Please create the specified folder &quot;%isolation%&quot; before saving the sitemap."/>
+            <argument value="error" name="messageType"/>
+        </actionGroup>
+        <!--END TEST BODY -->
+    </test>
+</tests>

@@ -1,0 +1,27 @@
+{
+    "persistent_session": {
+        "column": {
+            "persistent_id": true,
+            "key": true,
+            "customer_id": true,
+            "website_id": true,
+            "info": true,
+            "updated_at": true
+        },
+        "index": {
+            "PERSISTENT_SESSION_UPDATED_AT": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "PERSISTENT_SESSION_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
+            "PERSISTENT_SESSION_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID": true,
+            "PERSISTENT_SESSION_KEY": true,
+            "PERSISTENT_SESSION_CUSTOMER_ID": true
+        }
+    },
+    "quote": {
+        "column": {
+            "is_persistent": true
+        }
+    }
+}

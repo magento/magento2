@@ -9,6 +9,10 @@ namespace Magento\CatalogInventory\Api;
  * Interface StockConfigurationInterface
  * @api
  * @since 100.0.2
+ *
+ * @deprecated 100.3.0 Replaced with Multi Source Inventory
+ * @link https://developer.adobe.com/commerce/webapi/rest/inventory/index.html
+ * @link https://developer.adobe.com/commerce/webapi/rest/inventory/inventory-api-reference.html
  */
 interface StockConfigurationInterface
 {
@@ -77,7 +81,7 @@ interface StockConfigurationInterface
 
     /**
      * @param int $storeId
-     * @return int
+     * @return float
      */
     public function getQtyIncrements($store = null);
 

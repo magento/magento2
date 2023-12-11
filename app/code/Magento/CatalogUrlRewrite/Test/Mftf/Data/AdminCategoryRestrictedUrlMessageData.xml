@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdminCategoryRestrictedUrlErrorMessage">
+        <data key="urlAdmin">URL key "admin" matches a reserved endpoint name (admin, soap, rest, graphql, standard). Use another URL key.</data>
+        <data key="urlSoap">URL key "soap" matches a reserved endpoint name (admin, soap, rest, graphql, standard). Use another URL key.</data>
+        <data key="urlRest">URL key "rest" matches a reserved endpoint name (admin, soap, rest, graphql, standard). Use another URL key.</data>
+        <data key="urlGraphql">URL key "graphql" matches a reserved endpoint name (admin, soap, rest, graphql, standard). Use another URL key.</data>
+        <data key="urlAdminError">URL key "admin" matches a reserved endpoint name (admin). Use another URL key.</data>
+        <data key="urlAdminPartialError">URL key "admin" matches a reserved endpoint name </data>
+    </entity>
+</entities>

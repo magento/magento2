@@ -3,38 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FulltextTest extends \PHPUnit\Framework\TestCase
+class FulltextTest extends TestCase
 {
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connection;
 
     /**
-     * @var Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var Resource|MockObject
      */
     private $resource;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $context;
 
     /**
      * Holder for MetadataPool mock object.
      *
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|MockObject
      */
     private $metadataPool;
 
@@ -43,18 +48,18 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
      */
     private $target;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\Context::class)
+        $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $this->resource = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->once())
             ->method('getResources')
             ->willReturn($this->resource);
-        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $this->connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->resource->expects($this->once())
@@ -66,7 +71,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
 
         $objectManager = new ObjectManager($this);
         $this->target = $objectManager->getObject(
-            \Magento\CatalogSearch\Model\ResourceModel\Fulltext::class,
+            Fulltext::class,
             [
                 'context' => $this->context,
                 'metadataPool' => $this->metadataPool
@@ -74,7 +79,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testResetSearchResult()
+    public function testResetSearchResultByStore()
     {
         $this->resource->expects($this->once())
             ->method('getTableName')
@@ -82,9 +87,9 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
             ->willReturn('table_name_search_query');
         $this->connection->expects($this->once())
             ->method('update')
-            ->with('table_name_search_query', ['is_processed' => 0], ['is_processed != 0'])
+            ->with('table_name_search_query', ['is_processed' => 0], ['is_processed != ?' => 0, 'store_id = ?' => 1])
             ->willReturn(10);
-        $result = $this->target->resetSearchResults();
+        $result = $this->target->resetSearchResultsByStore(1);
         $this->assertEquals($this->target, $result);
     }
 
@@ -107,10 +112,10 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
 
         $this->metadataPool->expects($this->once())
             ->method('getMetadata')
-            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->with(ProductInterface::class)
             ->willReturn($metadata);
 
-        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $select->expects($this->once())

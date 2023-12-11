@@ -22,8 +22,6 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     protected $_columnGroupBy = 'period';
 
     /**
-     * Config factory
-     *
      * @var \Magento\Sales\Model\Order\ConfigFactory
      */
     protected $_configFactory;
@@ -53,7 +51,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @codeCoverageIgnore
      */
     protected function _construct()
@@ -64,7 +63,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getResourceCollectionName()
     {
@@ -74,7 +73,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareColumns()
     {
@@ -123,7 +122,6 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
             [
                 'header' => __('Orders'),
                 'index' => 'orders_count',
-                'total' => 'sum',
                 'type' => 'number',
                 'sortable' => false,
                 'header_css_class' => 'col-qty',
@@ -131,9 +129,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
             ]
         );
 
-        if ($this->getFilterData()->getStoreIds()) {
-            $this->setStoreIds(explode(',', $this->getFilterData()->getStoreIds()));
-        }
+        $this->setStoreIds($this->_getStoreIds());
         $currencyCode = $this->getCurrentCurrencyCode();
 
         $this->addColumn(

@@ -21,7 +21,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
      */
     protected $gridBlock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->gridBlock = Bootstrap::getObjectManager()
             ->create(\Magento\Integration\Block\Adminhtml\Integration\Grid::class);

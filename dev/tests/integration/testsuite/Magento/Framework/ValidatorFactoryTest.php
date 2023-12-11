@@ -12,7 +12,7 @@ class ValidatorFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Framework\ValidatorFactory */
     private $model;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->model = $objectManager->create(\Magento\Framework\ValidatorFactory::class);

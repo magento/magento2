@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdvanceCatalogSearchVirtualProductByNameTest" extends="AdvanceCatalogSearchSimpleProductByNameTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search virtual product with product name"/>
+            <description value="Guest customer should be able to advance search virtual product with product name"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-137"/>
+            <group value="Catalog"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="ApiVirtualProductWithDescription" stepKey="product"/>
+        </before>
+    </test>
+</tests>

@@ -16,6 +16,7 @@ use Magento\Quote\Model\Quote\Address;
  * Configure shipping method for instant purchase
  *
  * @api May be used for pluginization.
+ * @since 100.2.0
  */
 class ShippingConfiguration
 {
@@ -41,6 +42,7 @@ class ShippingConfiguration
      * @param ShippingMethodInterface $shippingMethod
      * @return Quote
      * @throws LocalizedException if shipping can not be configured for a quote.
+     * @since 100.2.0
      */
     public function configureShippingMethod(
         Quote $quote,

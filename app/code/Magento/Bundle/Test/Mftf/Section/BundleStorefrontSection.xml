@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="BundleStorefrontSection">
+        <!--TestingForLocationOfOptions-->
+        <element name="bundleOptionSelector" type="checkbox" selector="//*[@id='bundle-slide']/span" timeout="30"/>
+        <element name="bundleOptionSelection" type="checkbox" selector="//div[@class='nested options-list']/div[{{optionNumber}}]/label[@class='label']" parameterized="true"/>
+        <!--Description-->
+        <!--CE exclusively-->
+        <element name="longDescriptionText" type="text" selector="#description>div>div" timeout="30"/>
+        <element name="shortDescriptionText" type="text" selector="div.product.attribute.overview" timeout="30"/>
+        <!--NameOfProductOnProductPage-->
+        <element name="bundleProductName" type="text" selector="//*[@id='maincontent']//span[@itemprop='name']"/>
+        <!--PageNotFoundErrorMessage-->
+        <element name="pageNotFound" type="text" selector="//h1[@class='page-title']//span[contains(., 'Whoops, our bad...')]"/>
+    </section>
+</sections>

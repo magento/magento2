@@ -55,6 +55,12 @@ define(
                     checkoutDataResolver.resolveEstimationAddress();
                     address = quote.isVirtual() ? quote.billingAddress() : quote.shippingAddress();
 
+                    if (!address && quote.isVirtual()) {
+                        address = addressConverter.formAddressDataToQuoteAddress(
+                            checkoutData.getSelectedBillingAddress()
+                        );
+                    }
+
                     if (address) {
                         estimatedAddress = address.isEditable() ?
                             addressConverter.quoteAddressToFormAddressData(address) :
@@ -73,7 +79,13 @@ define(
 
                     if (!quote.isVirtual()) {
                         checkoutProvider.on('shippingAddress', function (shippingAddressData) {
-                            checkoutData.setShippingAddressFromData(shippingAddressData);
+                            //jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+                            if (quote.shippingAddress().countryId !== shippingAddressData.country_id ||
+                                (shippingAddressData.postcode || shippingAddressData.region_id)
+                            ) {
+                                checkoutData.setShippingAddressFromData(shippingAddressData);
+                            }
+                            //jscs:enable requireCamelCaseOrUpperCaseIdentifiers
                         });
                     } else {
                         checkoutProvider.on('shippingAddress', function (shippingAddressData) {

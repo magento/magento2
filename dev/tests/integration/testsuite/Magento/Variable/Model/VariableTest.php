@@ -12,7 +12,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Variable\Model\Variable::class
@@ -75,6 +75,22 @@ class VariableTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $collection->getStoreId(), 'Store id setter and getter');
 
         $collection->addValuesToResult();
-        $this->assertContains('variable_value', (string)$collection->getSelect());
+        $this->assertStringContainsString('variable_value', (string)$collection->getSelect());
+    }
+
+    /**
+     * Test to verify that returned by getVariablesOptionArray()
+     * custom variable label is HTML escaped.
+     */
+    public function testGetVariablesOptionArrayWithHtmlLabel()
+    {
+        $expectedLabel = '&lt;b&gt;HTML Name value&lt;/b&gt;';
+        $data = [
+            'code' => 'html_name',
+            'name' => '<b>HTML Name value</b>'
+        ];
+        $this->_model->setData($data)->save();
+        $actualLabel = current(current($this->_model->getVariablesOptionArray())['label']->getArguments());
+        $this->assertEquals($expectedLabel, $actualLabel);
     }
 }

@@ -18,6 +18,20 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
+
+    .search {
+        .fieldset {
+            .control {
+                .addon {
+                    input {
+                        flex-basis: auto;
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+
     .block-search {
         margin-bottom: 0;
 
@@ -37,9 +51,9 @@
             @_icon-font-size: 22px,
             @_icon-font-line-height: 28px,
             @_icon-font-margin: 0 @indent__s 0 0,
-            @_icon-font-color: @minicart-icons-color,
-            @_icon-font-color-hover: @minicart-icons-color-hover,
-            @_icon-font-color-active: @minicart-icons-color-hover,
+            @_icon-font-color: @header-icons-color,
+            @_icon-font-color-hover: @header-icons-color-hover,
+            @_icon-font-color-active: @header-icons-color-hover,
             @_icon-font-text-hide: true
             );
             display: inline-block;
@@ -66,6 +80,7 @@
         }
 
         input {
+            font-size: 16px;
             left: -300%;
             margin: 15px 0;
             position: absolute;
@@ -122,8 +137,6 @@
     }
 
     .form.search.advanced {
-        &:extend(.abs-forms-general-desktop all);
-
         .fields.range {
             .field {
                 &:first-child {
@@ -147,7 +160,7 @@
                 &:last-child {
                     position: relative;
 
-                    div.mage-error[generated] {
+                    div.mage-error {
                         left: 0;
                         position: absolute;
                         top: 32px;
@@ -199,7 +212,7 @@
 //  Mobile
 //  _____________________________________________
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .block-search {
         margin-top: @indent__s;
     }
@@ -260,5 +273,9 @@
 
     .search-autocomplete {
         margin-top: 0;
+    }
+
+    .form.search.advanced {
+        &:extend(.abs-forms-general-desktop all);
     }
 }

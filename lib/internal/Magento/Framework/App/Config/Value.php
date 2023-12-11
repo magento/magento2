@@ -8,6 +8,10 @@ namespace Magento\Framework\App\Config;
 /**
  * Config data model
  *
+ * This model is temporarily marked as API since {@see \Magento\Framework\App\Config\ValueInterface} doesn't fit
+ * developers' needs of extensibility. In 2.4 we are going to introduce a new interface which should cover all needs
+ * and deprecate the mentioned together with the model
+ *
  * @method string getScope()
  * @method \Magento\Framework\App\Config\ValueInterface setScope(string $value)
  * @method int getScopeId()
@@ -17,7 +21,10 @@ namespace Magento\Framework\App\Config;
  * @method string getValue()
  * @method \Magento\Framework\App\Config\ValueInterface setValue(string $value)
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\App\Config\ValueInterface
 {
@@ -87,11 +94,16 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      */
     public function getOldValue()
     {
-        return (string)$this->_config->getValue(
+        $oldValue = $this->_config->getValue(
             $this->getPath(),
             $this->getScope() ?: ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
             $this->getScopeCode()
         );
+
+        if (is_array($oldValue)) {
+            return json_encode($oldValue);
+        }
+        return (string)$oldValue;
     }
 
     /**
@@ -107,7 +119,7 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     }
 
     /**
-     * {@inheritdoc}
+     * Processing object after save data
      *
      * {@inheritdoc}. In addition, it sets status 'invalidate' for config caches
      *
@@ -123,11 +135,12 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     }
 
     /**
-     * {@inheritdoc}
+     * Processing object after delete data
      *
      * {@inheritdoc}. In addition, it sets status 'invalidate' for config caches
      *
      * @return $this
+     * @since 100.1.0
      */
     public function afterDelete()
     {

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontStoreVisibleInFooterActionGroup">
+        <annotations>
+            <description>Goes to the Storefront. Validates that the provided Store is present in the Footer Switch Store View drop down menu on the Storefront.</description>
+        </annotations>
+        <arguments>
+            <argument name="customStore" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontHomePageLoad"/>
+        <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickSwitchStoreButton"/>
+        <waitForElementVisible selector="{{StorefrontFooterSection.storeLink(customStore)}}" stepKey="waitForStoreLinkToVosible"/>
+        <seeElement selector="{{StorefrontFooterSection.storeLink(customStore)}}" stepKey="seeAssertStoreOnStorefront"/>
+    </actionGroup>
+</actionGroups>

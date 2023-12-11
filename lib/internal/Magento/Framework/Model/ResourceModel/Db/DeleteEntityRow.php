@@ -6,8 +6,10 @@
 namespace Magento\Framework\Model\ResourceModel\Db;
 
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\EntityManager\EntityMetadata;
 
+/**
+ * Delete entity row.
+ */
 class DeleteEntityRow
 {
     /**
@@ -25,6 +27,8 @@ class DeleteEntityRow
     }
 
     /**
+     * Delete entity row.
+     *
      * @param string $entityType
      * @param array $data
      * @return bool

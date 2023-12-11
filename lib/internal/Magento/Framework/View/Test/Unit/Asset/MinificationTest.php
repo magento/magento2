@@ -3,42 +3,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Asset;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\View\Asset\Minification;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for Magento\Framework\View\Asset\Minification
  */
-class MinificationTest extends \PHPUnit\Framework\TestCase
+class MinificationTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Asset\Minification
+     * @var Minification
      */
     protected $minification;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|MockObject
      */
     protected $appStateMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $this->appStateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
+            ->getMockForAbstractClass();
+        $this->appStateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -195,6 +199,8 @@ class MinificationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test dev/js/minify_exclude system value as array
+     *
      * @return void
      */
     public function testGetExcludes()
@@ -203,14 +209,48 @@ class MinificationTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getValue')
             ->with('dev/js/minify_exclude')
-            ->willReturn(
-                "    /tiny_mce/  \n" .
-                "  /tiny_mce2/  "
-            );
+            ->willReturn([
+                'tiny_mce' => '/tiny_mce/',
+                'some_other_unique_name' => '/tiny_mce2/'
+            ]);
 
         $expected = ['/tiny_mce/', '/tiny_mce2/'];
         $this->assertEquals($expected, $this->minification->getExcludes('js'));
         /** check cache: */
         $this->assertEquals($expected, $this->minification->getExcludes('js'));
+    }
+
+    /**
+     * Test dev/js/minify_exclude system value backward compatibility when value was a string
+     *
+     * @param string $value
+     * @param array $expectedValue
+     * @return void
+     *
+     * @dataProvider getExcludesTinyMceAsStringDataProvider
+     */
+    public function testGetExcludesTinyMceAsString(string $value, array $expectedValue)
+    {
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('getValue')
+            ->with('dev/js/minify_exclude')
+            ->willReturn($value);
+
+        $this->assertEquals($expectedValue, $this->minification->getExcludes('js'));
+        /** check cache: */
+        $this->assertEquals($expectedValue, $this->minification->getExcludes('js'));
+    }
+
+    /**
+     * @return array
+     */
+    public function getExcludesTinyMceAsStringDataProvider()
+    {
+        return [
+            ["/tiny_mce/  \n  /tiny_mce2/", ['/tiny_mce/', '/tiny_mce2/']],
+            ['/tiny_mce/', ['/tiny_mce/']],
+            [' /tiny_mce/', ['/tiny_mce/']],
+        ];
     }
 }

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGalleryPopupUploadImagesWithoutErrorTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Spinner is Always Displayed on Media Gallery popup"/>
+            <title value="Media Gallery popup upload images without error"/>
+            <description value="Media Gallery popup upload images without error"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-18962"/>
+            <useCaseId value="MC-18709"/>
+            <group value="Cms"/>
+        </annotations>
+        <before>
+            <!--Enable WYSIWYG options-->
+            <comment userInput="Enable WYSIWYG options" stepKey="commentEnableWYSIWYG"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYGEditor"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="setValueWYSIWYGEditor" />
+            <!--Create block-->
+            <comment userInput="Create block" stepKey="commentCreateBlock"/>
+            <createData entity="Sales25offBlock" stepKey="createBlock"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <actionGroup ref="CliMediaGalleryEnhancedEnableActionGroup" stepKey="enableOldMediaGallery">
+                <argument name="enabled" value="0"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Disable WYSIWYG options-->
+            <comment userInput="Disable WYSIWYG options" stepKey="commentDisableWYSIWYG"/>
+            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <deleteData createDataKey="createBlock" stepKey="deleteBlock" />
+            <!-- Delete Uploaded Images -->
+            <actionGroup ref="NavigateToMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandStorageRootFolder">
+                <argument name="FolderName" value="Storage Root"/>
+            </actionGroup>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+                <argument name="FolderName" value="wysiwyg"/>
+            </actionGroup>
+            <actionGroup ref="DeleteFolderActionGroup" stepKey="DeleteCreatedFolder">
+                <argument name="ImageFolder" value="ImageFolder"/>
+            </actionGroup>
+            <actionGroup ref="CliMediaGalleryEnhancedEnableActionGroup" stepKey="disableOldMediaGallery">
+                <argument name="enabled" value="1"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Open created block page and add image-->
+        <comment userInput="Open create block page and add image" stepKey="commentOpenBlockPage"/>
+        <actionGroup ref="NavigateToCreatedCMSBlockPageActionGroup" stepKey="navigateToCreatedCMSBlockPage1">
+            <argument name="CMSBlockPage" value="$$createBlock$$"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="addImage"/>
+        <actionGroup ref="ClickInsertEditImageTinyMCEButtonActionGroup" stepKey="clickInsertImage"/>
+        <actionGroup ref="ClickBrowseBtnOnUploadPopupActionGroup" stepKey="openMediaGallery"/>
+        <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandStorageRootFolder">
+            <argument name="FolderName" value="Storage Root"/>
+        </actionGroup>
+        <actionGroup ref="NavigateToMediaFolderActionGroup" stepKey="navigateToWysiwygFolder">
+            <argument name="FolderName" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="CreateImageFolderActionGroup" stepKey="createImageFolder">
+            <argument name="ImageFolder" value="ImageFolder"/>
+        </actionGroup>
+        <actionGroup ref="AttachImageActionGroup" stepKey="attachImage">
+            <argument name="Image" value="ImageUpload3"/>
+        </actionGroup>
+        <actionGroup ref="SaveImageActionGroup" stepKey="insertImage"/>
+        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMceActionGroup" stepKey="clickOk"/>
+        <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtnFirstTime"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtnSecondTime"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <!--Switch to content frame and click on image-->
+        <comment userInput="Switch to content frame and click on image" stepKey="commentSwitchToIframe"/>
+        <switchToIFrame selector="{{TinyMCESection.EditAreaIframe}}" stepKey="switchToContentFrame"/>
+        <click selector="{{TinyMCESection.IframeContent}} {{BlockContentSection.image}}" stepKey="clickImage"/>
+        <switchToIFrame stepKey="switchBack"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <!--Add image second time and assert-->
+        <comment userInput="Add image second time and assert" stepKey="commentAddImageAndAssert"/>
+        <comment userInput="BIC workaround" stepKey="addImageSecondTime"/>
+        <actionGroup ref="ClickInsertEditImageTinyMCEButtonActionGroup" stepKey="clickInsertImage2"/>
+        <actionGroup ref="ClickBrowseBtnOnUploadPopupActionGroup" stepKey="openMediaGallery2"/>
+        <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandStorageRootFolder2">
+            <argument name="FolderName" value="Storage Root"/>
+        </actionGroup>
+        <actionGroup ref="NavigateToMediaFolderActionGroup" stepKey="navigateToWysiwygFolder2">
+            <argument name="FolderName" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="NavigateToMediaFolderActionGroup" stepKey="navigateToTestFolder2">
+            <argument name="FolderName" value="{{ImageFolder.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AttachImageActionGroup" stepKey="attachImage2">
+            <argument name="Image" value="ImageUpload3"/>
+        </actionGroup>
+        <actionGroup ref="SaveImageActionGroup" stepKey="insertImage2"/>
+        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMceActionGroup" stepKey="clickOk2"/>
+        <switchToIFrame selector="{{TinyMCESection.EditAreaIframe}}" stepKey="switchToContentFrameSecondTime"/>
+        <seeElement selector="{{TinyMCESection.IframeContent}} {{BlockContentSection.image}}" stepKey="seeImageElement"/>
+    </test>
+</tests>

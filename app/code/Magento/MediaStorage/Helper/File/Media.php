@@ -3,13 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\MediaStorage\Helper\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-/**
- * Class Media
- */
 class Media extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
@@ -55,19 +53,22 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function collectFileInfo($mediaDirectory, $path)
     {
-        $path = ltrim($path, '\\/');
+        $path = $path !== null ? ltrim($path, '\\/') : '';
         $fullPath = $mediaDirectory . '/' . $path;
 
         $dir = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $relativePath = $dir->getRelativePath($fullPath);
         if (!$dir->isFile($relativePath)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('File %1 does not exist', $fullPath));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The "%1" file doesn\'t exist. Verify the file and try again.', $fullPath)
+            );
         }
         if (!$dir->isReadable($relativePath)) {
             throw new \Magento\Framework\Exception\LocalizedException(__('File %1 is not readable', $fullPath));
         }
 
         $path = str_replace(['/', '\\'], '/', $path);
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $directory = dirname($path);
         if ($directory == '.') {
             $directory = null;

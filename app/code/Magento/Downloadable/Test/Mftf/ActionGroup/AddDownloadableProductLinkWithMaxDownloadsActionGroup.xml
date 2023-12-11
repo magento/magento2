@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddDownloadableProductLinkWithMaxDownloadsActionGroup">
+        <annotations>
+            <description>Clicks on 'Add Link'. Fills in the provided Link details including a Max Downloads limit.</description>
+        </annotations>
+        <arguments>
+            <argument name="link" defaultValue="downloadableLinkWithMaxDownloads"/>
+        </arguments>
+
+        <click selector="{{AdminProductDownloadableSection.linksAddLinkButton}}" stepKey="clickLinkAddLinkButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <fillField userInput="{{link.title}}" selector="{{AdminProductDownloadableSection.addLinkTitleInput('0')}}" stepKey="fillDownloadableLinkTitle"/>
+        <fillField userInput="{{link.price}}" selector="{{AdminProductDownloadableSection.addLinkPriceInput('0')}}" stepKey="fillDownloadableLinkPrice"/>
+        <selectOption userInput="{{link.file_type}}" selector="{{AdminProductDownloadableSection.addLinkFileTypeSelector('0')}}" stepKey="selectDownloadableLinkFileType"/>
+        <selectOption userInput="{{link.sample_type}}" selector="{{AdminProductDownloadableSection.addLinkSampleTypeSelector('0')}}" stepKey="selectDownloadableLinkSampleType"/>
+        <selectOption userInput="{{link.shareable}}" selector="{{AdminProductDownloadableSection.addLinkShareableSelector('0')}}" stepKey="selectDownloadableLinkShareable"/>
+        <fillField userInput="{{link.max_downloads}}" selector="{{AdminProductDownloadableSection.addLinkMaxDownloadsInput('0')}}" stepKey="fillDownloadableLinkMaxDownloads"/>
+        <attachFile userInput="{{link.file}}" selector="{{AdminProductDownloadableSection.addLinkFileUploadFile('0')}}" stepKey="fillDownloadableLinkUploadFile"/>
+        <waitForPageLoad stepKey="waitForFileLoad"/>
+        <fillField userInput="{{link.sample}}" selector="{{AdminProductDownloadableSection.addLinkSampleUrlInput('0')}}" stepKey="fillDownloadableLinkSampleUrl"/>
+    </actionGroup>
+</actionGroups>

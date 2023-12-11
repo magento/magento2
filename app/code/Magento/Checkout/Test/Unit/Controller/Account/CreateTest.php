@@ -3,57 +3,89 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Controller\Account;
+
+use Magento\Checkout\Controller\Account\Create;
+use Magento\Checkout\Model\Session;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\OrderCustomerManagementInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Shopping cart edit tests
  */
-class CreateTest extends \PHPUnit\Framework\TestCase
+class CreateTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $customerSession;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $checkoutSession;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Checkout\Controller\Account\Create
+     * @var Create
      */
     protected $action;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $orderCustomerService;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|MockObject
      */
-    protected $objectManagerMock;
+    private $resultFactory;
 
-    protected function setUp()
+    /**
+     * @var ResultInterface|MockObject
+     */
+    private $resultPage;
+
+    protected function setUp(): void
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->checkoutSession = $this->createPartialMock(\Magento\Checkout\Model\Session::class, ['getLastOrderId']);
+        $objectManagerHelper = new ObjectManager($this);
+        $this->checkoutSession = $this->getMockBuilder(Session::class)
+            ->addMethods(['getLastOrderId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
-        $this->orderCustomerService = $this->createMock(\Magento\Sales\Api\OrderCustomerManagementInterface::class);
-        $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
+        $this->orderCustomerService = $this->getMockForAbstractClass(OrderCustomerManagementInterface::class);
+        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
 
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $contextMock = $this->createPartialMock(\Magento\Framework\App\Action\Context::class, ['getObjectManager']);
-        $contextMock->expects($this->once())->method('getObjectManager')->willReturn($this->objectManagerMock);
+        $contextMock = $this->createPartialMock(
+            Context::class,
+            ['getObjectManager', 'getResultFactory']
+        );
+        $this->resultFactory = $this->getMockBuilder(ResultFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contextMock->expects($this->once())
+            ->method('getResultFactory')
+            ->willReturn($this->resultFactory);
+        $this->resultPage = $this->getMockBuilder(ResultInterface::class)
+            ->setMethods(['setData'])
+            ->getMockForAbstractClass();
 
         $this->action = $objectManagerHelper->getObject(
-            \Magento\Checkout\Controller\Account\Create::class,
+            Create::class,
             [
                 'checkoutSession' => $this->checkoutSession,
                 'customerSession' => $this->customerSession,
@@ -66,53 +98,48 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
     public function testExecuteAddsSessionMessageIfCustomerIsLoggedIn()
     {
-        $jsonFactoryMock = $this->createMock(\Magento\Framework\Controller\Result\JsonFactory::class);
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with(\Magento\Framework\Controller\Result\JsonFactory::class)
-            ->willReturn($jsonFactoryMock);
-        $jsonMock = $this->createMock(\Magento\Framework\Controller\Result\Json::class);
-        $jsonFactoryMock->expects($this->once())->method('create')->willReturn($jsonMock);
-
-        $this->customerSession->expects($this->once())->method('isLoggedIn')->will($this->returnValue(true));
-
-        $jsonMock->expects($this->once())
+        $resultJson = '{"errors": "true", "message": "Customer is already registered"}';
+        $this->customerSession->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(true);
+        $this->resultFactory->expects($this->once())
+            ->method('create')
+            ->with(ResultFactory::TYPE_JSON)
+            ->willReturn($this->resultPage);
+        $this->resultPage->expects($this->once())
             ->method('setData')
             ->with(
                 [
                     'errors' => true,
                     'message' => __('Customer is already registered')
                 ]
-            )->willReturnSelf();
-        $this->action->execute();
+            )->willReturn($resultJson);
+        $this->assertEquals($resultJson, $this->action->execute());
     }
 
     public function testExecute()
     {
-        $jsonFactoryMock = $this->createMock(\Magento\Framework\Controller\Result\JsonFactory::class);
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with(\Magento\Framework\Controller\Result\JsonFactory::class)
-            ->willReturn($jsonFactoryMock);
-        $jsonMock = $this->createMock(\Magento\Framework\Controller\Result\Json::class);
-        $jsonFactoryMock->expects($this->once())->method('create')->willReturn($jsonMock);
+        $this->customerSession->expects($this->once())->method('isLoggedIn')->willReturn(false);
+        $this->checkoutSession->expects($this->once())->method('getLastOrderId')->willReturn(100);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $this->orderCustomerService->expects($this->once())
+            ->method('create')
+            ->with(100)
+            ->willReturn($customer);
 
-        $this->customerSession->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
-        $this->checkoutSession->expects($this->once())->method('getLastOrderId')->will($this->returnValue(100));
-        $customer = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
-        $this->orderCustomerService->expects($this->once())->method('create')->with(100)->will(
-            $this->returnValue($customer)
-        );
-
-        $jsonMock->expects($this->once())
+        $resultJson = '{"errors":"false", "message":"A letter with further instructions will be sent to your email."}';
+        $this->resultFactory->expects($this->once())
+            ->method('create')
+            ->with(ResultFactory::TYPE_JSON)
+            ->willReturn($this->resultPage);
+        $this->resultPage->expects($this->once())
             ->method('setData')
             ->with(
                 [
                     'errors' => false,
                     'message' => __('A letter with further instructions will be sent to your email.')
                 ]
-            )->willReturnSelf();
-
-        $this->action->execute();
+            )->willReturn($resultJson);
+        $this->assertEquals($resultJson, $this->action->execute());
     }
 }

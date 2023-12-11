@@ -3,85 +3,146 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model;
 
+use Magento\Config\Model\Config\Backend\Encrypted;
+use Magento\Framework\App\Config;
+use Magento\Framework\App\Config\Value;
+use Magento\Framework\App\Config\ValueFactory;
+use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\AbstractModel;
+use Magento\Sales\Model\EmailSenderHandler;
+use Magento\Sales\Model\Order\Email\Container\IdentityInterface;
+use Magento\Sales\Model\Order\Email\Sender;
+use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
+use Magento\Sales\Model\ResourceModel\EntityAbstract;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test of sales emails sending observer.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
+class EmailSenderHandlerTest extends TestCase
 {
     /**
      * Subject of testing.
      *
-     * @var \Magento\Sales\Model\EmailSenderHandler
+     * @var EmailSenderHandler
      */
     protected $object;
 
     /**
      * Email sender model mock.
      *
-     * @var \Magento\Sales\Model\Order\Email\Sender|\PHPUnit_Framework_MockObject_MockObject
+     * @var Sender|MockObject
      */
     protected $emailSender;
 
     /**
      * Entity resource model mock.
      *
-     * @var \Magento\Sales\Model\ResourceModel\EntityAbstract|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityAbstract|MockObject
      */
     protected $entityResource;
 
     /**
      * Entity collection model mock.
      *
-     * @var \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractCollection|MockObject
      */
     protected $entityCollection;
 
     /**
      * Global configuration storage mock.
      *
-     * @var \Magento\Framework\App\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     protected $globalConfig;
 
-    protected function setUp()
+    /**
+     * @var IdentityInterface|MockObject
+     */
+    private $identityContainerMock;
+
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManagerMock;
+
+    /**
+     * @var ValueFactory|MockObject
+     */
+    private $configValueFactory;
+
+    /**
+     * @var string
+     */
+    private $modifyStartFromDate = '-1 day';
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
-        $this->emailSender = $this->createPartialMock(\Magento\Sales\Model\Order\Email\Sender::class, ['send']);
+        $this->emailSender = $this->getMockBuilder(Sender::class)
+            ->addMethods(['send'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->entityResource = $this->getMockForAbstractClass(
-            \Magento\Sales\Model\ResourceModel\EntityAbstract::class,
+            EntityAbstract::class,
             [],
             '',
             false,
             false,
             true,
-            ['save']
+            ['saveAttribute']
         );
 
         $this->entityCollection = $this->getMockForAbstractClass(
-            \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection::class,
+            AbstractCollection::class,
             [],
             '',
             false,
             false,
             true,
-            ['addFieldToFilter', 'getItems']
+            ['addFieldToFilter', 'getItems', 'addAttributeToSelect', 'getSelect']
         );
 
-        $this->globalConfig = $this->createMock(\Magento\Framework\App\Config::class);
+        $this->globalConfig = $this->createMock(Config::class);
+
+        $this->identityContainerMock = $this->createMock(
+            IdentityInterface::class
+        );
+
+        $this->storeManagerMock = $this->createMock(
+            StoreManagerInterface::class
+        );
+
+        $this->configValueFactory = $this->createMock(
+            ValueFactory::class
+        );
 
         $this->object = $objectManager->getObject(
-            \Magento\Sales\Model\EmailSenderHandler::class,
+            EmailSenderHandler::class,
             [
-                'emailSender' => $this->emailSender,
-                'entityResource' => $this->entityResource,
-                'entityCollection' => $this->entityCollection,
-                'globalConfig' => $this->globalConfig
+                'emailSender'         => $this->emailSender,
+                'entityResource'      => $this->entityResource,
+                'entityCollection'    => $this->entityCollection,
+                'globalConfig'        => $this->globalConfig,
+                'identityContainer'   => $this->identityContainerMock,
+                'storeManager'        => $this->storeManagerMock,
+                'configValueFactory'  => $this->configValueFactory,
+                'modifyStartFromDate' => $this->modifyStartFromDate
             ]
         );
     }
@@ -90,37 +151,75 @@ class EmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
      * @param int $configValue
      * @param array|null $collectionItems
      * @param bool|null $emailSendingResult
-     * @dataProvider executeDataProvider
+     *
      * @return void
+     * @dataProvider executeDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testExecute($configValue, $collectionItems, $emailSendingResult)
-    {
+    public function testExecute(
+        int $configValue,
+        ?array $collectionItems,
+        ?bool $emailSendingResult
+    ): void {
         $path = 'sales_email/general/async_sending';
 
         $this->globalConfig
-            ->expects($this->once())
             ->method('getValue')
-            ->with($path)
-            ->willReturn($configValue);
+            ->withConsecutive([$path])
+            ->willReturnOnConsecutiveCalls($configValue);
 
         if ($configValue) {
+            $nowDate = date('Y-m-d H:i:s');
+            $fromDate = date('Y-m-d H:i:s', strtotime($nowDate . ' ' . $this->modifyStartFromDate));
             $this->entityCollection
-                ->expects($this->at(0))
                 ->method('addFieldToFilter')
-                ->with('send_email', ['eq' => 1]);
+                ->withConsecutive(
+                    ['send_email', ['eq' => 1]],
+                    ['email_sent', ['null' => true]],
+                    ['created_at', ['from' => $fromDate]]
+                );
 
             $this->entityCollection
-                ->expects($this->at(1))
-                ->method('addFieldToFilter')
-                ->with('email_sent', ['null' => true]);
+                ->expects($this->any())
+                ->method('addAttributeToSelect')
+                ->with('store_id')
+                ->willReturnSelf();
+
+            $selectMock = $this->createMock(Select::class);
+
+            $selectMock
+                ->expects($this->atLeastOnce())
+                ->method('group')
+                ->with('store_id')
+                ->willReturnSelf();
+
+            $this->entityCollection
+                ->expects($this->any())
+                ->method('getSelect')
+                ->willReturn($selectMock);
 
             $this->entityCollection
                 ->expects($this->any())
                 ->method('getItems')
                 ->willReturn($collectionItems);
 
+            /** @var Value|Encrypted|MockObject $valueMock */
+            $backendModelMock = $this->getMockBuilder(Value::class)
+                ->disableOriginalConstructor()
+                ->onlyMethods(['load', 'getId'])
+                ->addMethods(['getUpdatedAt'])
+                ->getMock();
+            $backendModelMock->expects($this->once())->method('load')->willReturnSelf();
+            $backendModelMock->expects($this->once())->method('getId')->willReturn(1);
+            $backendModelMock->expects($this->once())->method('getUpdatedAt')->willReturn($nowDate);
+
+            $this->configValueFactory->expects($this->once())
+                ->method('create')
+                ->willReturn($backendModelMock);
+
             if ($collectionItems) {
-                /** @var \Magento\Sales\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject $collectionItem */
+
+                /** @var AbstractModel|MockObject $collectionItem */
                 $collectionItem = $collectionItems[0];
 
                 $this->emailSender
@@ -128,6 +227,23 @@ class EmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
                     ->method('send')
                     ->with($collectionItem, true)
                     ->willReturn($emailSendingResult);
+
+                $storeMock = $this->createMock(Store::class);
+
+                $this->storeManagerMock
+                    ->expects($this->any())
+                    ->method('getStore')
+                    ->willReturn($storeMock);
+
+                $this->identityContainerMock
+                    ->expects($this->any())
+                    ->method('setStore')
+                    ->with($storeMock);
+
+                $this->identityContainerMock
+                    ->expects($this->any())
+                    ->method('isEnabled')
+                    ->willReturn(true);
 
                 if ($emailSendingResult) {
                     $collectionItem
@@ -138,7 +254,7 @@ class EmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
 
                     $this->entityResource
                         ->expects($this->once())
-                        ->method('save')
+                        ->method('saveAttribute')
                         ->with($collectionItem);
                 }
             }
@@ -150,23 +266,39 @@ class EmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public function executeDataProvider(): array
     {
         $entityModel = $this->getMockForAbstractClass(
-            \Magento\Sales\Model\AbstractModel::class,
+            AbstractModel::class,
             [],
             '',
             false,
             false,
             true,
-            ['setEmailSent']
+            ['setEmailSent', 'getOrder']
         );
 
         return [
-            [1, [$entityModel], true],
-            [1, [$entityModel], false],
-            [1, [], null],
-            [0, null, null]
+            [
+                'configValue' => 1,
+                'collectionItems' => [clone $entityModel],
+                'emailSendingResult' => true
+            ],
+            [
+                'configValue' => 1,
+                'collectionItems' => [clone $entityModel],
+                'emailSendingResult' => false
+            ],
+            [
+                'configValue' => 1,
+                'collectionItems' => [],
+                'emailSendingResult' => null
+            ],
+            [
+                'configValue' => 0,
+                'collectionItems' => null,
+                'emailSendingResult' => null
+            ]
         ];
     }
 }

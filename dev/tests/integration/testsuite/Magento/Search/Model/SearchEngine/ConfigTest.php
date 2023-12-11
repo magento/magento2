@@ -5,6 +5,8 @@
  */
 namespace Magento\Search\Model\SearchEngine;
 
+use PHPUnit\Framework\MockObject\MockObject;
+
 /**
  * Class ConfigTest
  *
@@ -12,12 +14,20 @@ namespace Magento\Search\Model\SearchEngine;
  */
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
-    protected function setUp()
+    /**
+     * @var \Magento\Search\Model\SearchEngine\Config|MockObject
+     */
+    private $config;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         $xmlPath = __DIR__ . '/../../_files/search_engine.xml';
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        // Clear out the clache
+        // Clear out the cache
         $cacheManager = $objectManager->create(\Magento\Framework\App\Cache\Manager::class);
         /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
         $cacheManager->clean($cacheManager->getAvailableTypes());

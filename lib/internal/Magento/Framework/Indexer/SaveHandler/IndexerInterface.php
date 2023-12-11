@@ -15,6 +15,7 @@ use Magento\Framework\Search\Request\Dimension;
  * Indexer persistence handler
  *
  * @api
+ * @since 100.0.2
  */
 interface IndexerInterface
 {
@@ -47,7 +48,8 @@ interface IndexerInterface
     /**
      * Define if engine is available
      *
+     * @param Dimension[] $dimensions
      * @return bool
      */
-    public function isAvailable();
+    public function isAvailable($dimensions = []);
 }

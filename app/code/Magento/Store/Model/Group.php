@@ -9,8 +9,12 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
+use Magento\Store\Model\Validation\StoreValidator;
+
 /**
- * Class Group
+ * Store Group model class used to retrieve and format group information
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -21,9 +25,9 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Store\Api\Data\GroupInterface,
     \Magento\Framework\App\ScopeInterface
 {
-    const ENTITY = 'store_group';
+    public const ENTITY = 'store_group';
 
-    const CACHE_TAG = 'store_group';
+    public const CACHE_TAG = 'store_group';
 
     /**
      * @var bool
@@ -96,16 +100,34 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     protected $_storeManager;
 
     /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    private $eventManager;
+
+    /**
+     * @var PoisonPillPutInterface
+     */
+    private $pillPut;
+
+    /**
+     * @var StoreValidator
+     */
+    private $modelValidator;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Config\Model\ResourceModel\Config\Data $configDataResource
-     * @param \Magento\Store\Model\Store $store
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param ResourceModel\Store\CollectionFactory $storeListFactory
+     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     * @param \Magento\Framework\Event\ManagerInterface|null $eventManager
+     * @param PoisonPillPutInterface|null $pillPut
+     * @param StoreValidator|null $modelValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -118,11 +140,20 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Event\ManagerInterface $eventManager = null,
+        PoisonPillPutInterface $pillPut = null,
+        StoreValidator $modelValidator = null
     ) {
         $this->_configDataResource = $configDataResource;
         $this->_storeListFactory = $storeListFactory;
         $this->_storeManager = $storeManager;
+        $this->eventManager = $eventManager ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Event\ManagerInterface::class);
+        $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(PoisonPillPutInterface::class);
+        $this->modelValidator = $modelValidator ?: ObjectManager::getInstance()
+            ->get(StoreValidator::class);
         parent::__construct(
             $context,
             $registry,
@@ -142,6 +173,14 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     protected function _construct()
     {
         $this->_init(\Magento\Store\Model\ResourceModel\Group::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _getValidationRulesBeforeSave()
+    {
+        return $this->modelValidator;
     }
 
     /**
@@ -235,6 +274,8 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
+     * Get stores count
+     *
      * @return int
      */
     public function getStoresCount()
@@ -340,6 +381,8 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
+     * Get default store id
+     *
      * @return mixed
      */
     public function getDefaultStoreId()
@@ -356,6 +399,8 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
+     * Get root category id
+     *
      * @return mixed
      */
     public function getRootCategoryId()
@@ -372,6 +417,8 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
+     * Get website id
+     *
      * @return mixed
      */
     public function getWebsiteId()
@@ -388,7 +435,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * @return $this
+     * @inheritdoc
      */
     public function beforeDelete()
     {
@@ -405,6 +452,11 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function afterDelete()
     {
+        $group = $this;
+        $this->getResource()->addCommitCallback(function () use ($group) {
+            $this->_storeManager->reinitStores();
+            $this->eventManager->dispatch($this->_eventPrefix . '_delete', ['group' => $group]);
+        });
         $result = parent::afterDelete();
 
         if ($this->getId() === $this->getWebsite()->getDefaultGroupId()) {
@@ -419,6 +471,21 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
             $this->getWebsite()->save();
         }
         return $result;
+    }
+
+    /**
+     * @inheritdoc
+     * @since 100.2.5
+     */
+    public function afterSave()
+    {
+        $group = $this;
+        $this->getResource()->addCommitCallback(function () use ($group) {
+            $this->_storeManager->reinitStores();
+            $this->eventManager->dispatch($this->_eventPrefix . '_save', ['group' => $group]);
+        });
+        $this->pillPut->put();
+        return parent::afterSave();
     }
 
     /**
@@ -446,7 +513,18 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
+     */
+    public function getCacheTags()
+    {
+        $identities = $this->getIdentities();
+        $parentTags = parent::getCacheTags();
+
+        return array_unique(array_merge($identities, $parentTags));
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getName()
     {
@@ -480,7 +558,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -488,7 +566,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setExtensionAttributes(
         \Magento\Store\Api\Data\GroupExtensionInterface $extensionAttributes
@@ -497,7 +575,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.0
      */
     public function getScopeType()
@@ -506,7 +584,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.0
      */
     public function getScopeTypeName()

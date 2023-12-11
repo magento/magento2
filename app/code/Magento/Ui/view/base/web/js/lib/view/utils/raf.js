@@ -3,10 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-/* global WeakMap */
-define([
-    'es6-collections'
-], function () {
+define([], function () {
     'use strict';
 
     var processMap = new WeakMap(),
@@ -19,6 +16,9 @@ define([
         window.onRequestAnimationFrame ||
         window.msRequestAnimationFrame ||
         function (callback) {
+            if (typeof callback != 'function') {
+                throw new Error('raf argument "callback" must be of type function');
+            }
             window.setTimeout(callback, 1000 / 60);
         };
 

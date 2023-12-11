@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="UpdateBundleProductViaImportTest">
+        <annotations>
+            <stories value="Update Bundle product via import"/>
+            <features value="Import/Export"/>
+            <title value="Update Bundle product via import"/>
+            <description
+                value="Check that Bundle products are displaying on the storefront after updating product via importing CSV"/>
+            <severity value="MAJOR"/>
+            <group value="importExport"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete products created via import -->
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteBundleProduct">
+                <argument name="sku" value="Bundle"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSimpleProduct">
+                <argument name="sku" value="Simple"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Create Bundle product via import -->
+        <actionGroup ref="AdminImportProductsActionGroup" stepKey="adminImportProductsCreate">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="catalog_product_import_bundle.csv"/>
+            <argument name="importNoticeMessage" value="Created: 2, Updated: 0, Deleted: 0"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterCreate"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="indexerReindexAfterCreate">
+            <argument name="indices" value="catalog_product_price"/>
+        </actionGroup>
+
+        <!-- Check Bundle product is visible on the storefront-->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryPageAfterCreation">
+            <argument name="categoryName" value="New"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup"
+                     stepKey="assertBundleProductInStockAfterCreation">
+            <argument name="productName" value="Bundle"/>
+        </actionGroup>
+
+        <!-- Update Bundle product via import -->
+        <actionGroup ref="AdminImportProductsActionGroup" stepKey="adminImportProductsUpdate">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="catalog_product_import_bundle.csv"/>
+            <argument name="importNoticeMessage" value="Created: 0, Updated: 2, Deleted: 0"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterUpdate"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="indexerReindexAfterUpdate"/>
+
+        <!-- Check Bundle product is still visible on the storefront-->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryPageAfterUpdate">
+            <argument name="categoryName" value="New"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup"
+                     stepKey="assertBundleProductInStockAfterUpdate">
+            <argument name="productName" value="Bundle"/>
+        </actionGroup>
+    </test>
+</tests>

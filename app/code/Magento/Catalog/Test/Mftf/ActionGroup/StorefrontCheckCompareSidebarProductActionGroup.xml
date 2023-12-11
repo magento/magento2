@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCheckCompareSidebarProductActionGroup">
+        <annotations>
+            <description>Validate that the Product Name is present and correct in the Compare Product list.</description>
+        </annotations>
+        <arguments>
+            <argument name="productVar"/>
+        </arguments>
+
+        <waitForElement selector="{{StorefrontComparisonSidebarSection.ProductTitleByName(productVar.name)}}" stepKey="waitForProduct"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CmsNewBlockBlockBasicFieldsSection">
+        <element name="title" type="input" selector="input[name=title]"/>
+        <element name="identifier" type="input" selector="input[name=identifier]"/>
+        <element name="content_textarea" type="input" selector="#cms_block_form_content"/>
+    </section>
+</sections>

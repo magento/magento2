@@ -23,7 +23,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      *
      * @static
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $importModel = $objectManager->create(\Magento\ImportExport\Model\Import::class);

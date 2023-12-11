@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Review\Block\Customer;
 
 use Magento\Catalog\Model\Product;
@@ -13,7 +14,6 @@ use Magento\Review\Model\Review;
  * Customer Review detailed view block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class View extends \Magento\Catalog\Block\Product\AbstractProduct
@@ -23,7 +23,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @var string
      */
-    protected $_template = 'customer/view.phtml';
+    protected $_template = 'Magento_Review::customer/view.phtml';
 
     /**
      * Catalog product model
@@ -160,6 +160,8 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Get rating summary
      *
+     * @deprecated 100.3.3
+     * @see f72f74d3
      * @return array
      */
     public function getRatingSummary()
@@ -181,11 +183,14 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     {
         if (!$this->getTotalReviewsCache()) {
             $this->setTotalReviewsCache(
-                $this->_reviewFactory->create()->getTotalReviews($this->getProductData()->getId()),
-                false,
-                $this->_storeManager->getStore()->getId()
+                $this->_reviewFactory->create()->getTotalReviews(
+                    $this->getProductData()->getId(),
+                    false,
+                    $this->_storeManager->getStore()->getId()
+                )
             );
         }
+
         return $this->getTotalReviewsCache();
     }
 
@@ -201,26 +206,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     }
 
     /**
-     * Get product reviews summary
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param bool $templateType
-     * @param bool $displayIfNoReviews
-     * @return string
-     */
-    public function getReviewsSummaryHtml(
-        \Magento\Catalog\Model\Product $product,
-        $templateType = false,
-        $displayIfNoReviews = false
-    ) {
-        if (!$product->getRatingSummary()) {
-            $this->_reviewFactory->create()->getEntitySummary($product, $this->_storeManager->getStore()->getId());
-        }
-        return parent::getReviewsSummaryHtml($product, $templateType, $displayIfNoReviews);
-    }
-
-    /**
-     * @return string
+     * @inheritDoc
      */
     protected function _toHtml()
     {

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFilterStoreViewActionGroup">
+        <annotations>
+            <description>Filters the Admin Catalog Product page based on the provided Store Group and Custom Store.</description>
+        </annotations>
+        <arguments>
+            <argument name="customStore" defaultValue="customStore.name"/>
+        </arguments>
+
+        <click selector="{{AdminProductFiltersSection.filter}}" stepKey="ClickOnFilter"/>
+        <click selector="{{AdminProductFiltersSection.storeViewDropDown}}" stepKey="ClickOnStoreViewDropDown"/>
+        <click selector="{{AdminProductFiltersSection.storeViewOption(customStore)}}" stepKey="ClickOnStoreViewOption"/>
+        <click selector="{{AdminProductFiltersSection.applyFilters}}" stepKey="ClickOnApplyFilters"/>
+    </actionGroup>
+</actionGroups>

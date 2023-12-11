@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateSimpleProductNotVisibleIndividuallyTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create a Simple Product via Admin"/>
+            <title value="Create Simple Product that Not Visible Individually"/>
+            <description value="Create Simple Product that Not Visible Individually"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value=""/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+        </before>
+        <after>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{simpleProductNotVisibleIndividually.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+        </after>
+
+        <!--Create Simple Product Not Visible Individually-->
+        <actionGroup ref="FillAdminSimpleProductFormActionGroup" stepKey="fillProductFieldsInAdmin">
+            <argument name="category" value="$$createPreReqCategory$$"/>
+            <argument name="simpleProduct" value="simpleProductNotVisibleIndividually"/>
+        </actionGroup>
+
+        <!--Search and verify AssertUrlRewriteNotInGrid-->
+        <actionGroup ref="AdminSearchDeletedUrlRewriteActionGroup" stepKey="searchUrlRewriteForNotVisibleProductInGrid">
+            <argument name="requestPath" value="{{simpleProductNotVisibleIndividually.urlKey}}.html"/>
+        </actionGroup>
+
+        <!--Verify AssertPageByUrlRewriteIsNotFound-->
+        <actionGroup ref="AssertPageByUrlRewriteIsNotFoundActionGroup" stepKey="amOnPage">
+            <argument name="requestPath" value="{{simpleProductNotVisibleIndividually.urlKey}}.html"/>
+        </actionGroup>
+    </test>
+</tests>

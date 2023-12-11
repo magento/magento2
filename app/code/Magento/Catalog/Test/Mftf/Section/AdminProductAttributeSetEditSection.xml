@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductAttributeSetEditSection">
+        <!-- Groups Column -->
+        <element name="groupTree" type="block" selector="#tree-div1"/>
+        <element name="attributeGroup" type="text" selector="//*[@id='tree-div1']//a[text()='{{groupName}}']" parameterized="true"/>
+        <element name="attributeGroupExtender" type="button" selector="//*[@id='tree-div1']//a[text()='{{groupName}}']" parameterized="true"/>
+        <element name="attributeGroupCollapsed" type="button" selector="//*[@id='tree-div1']//a[text()='{{groupName}}']/parent::*[contains(@class, 'jstree-closed')]" parameterized="true"/>
+        <element name="assignedAttribute" type="text" selector="//*[@id='tree-div1']//a[text()='{{attributeName}}']" parameterized="true"/>
+        <element name="xThLineItemYthAttributeGroup" type="text" selector="//*[@id='tree-div1']/ul/div/li[{{y}}]//li[{{x}}]" parameterized="true"/>
+        <element name="xThLineItemAttributeGroup" type="text" selector="//*[@id='tree-div1']//a[text()='{{groupName}}']/parent::*//li[{{x}}]//a" parameterized="true"/>
+        <element name="attributesInGroup" type="text" selector="//span[text()='{{GroupName}}']/../../following-sibling::ul/li" parameterized="true"/>
+        <!-- Unassigned Attributes Column -->
+        <element name="unassignedAttributesTree" type="block" selector="#tree-div2"/>
+        <element name="unassignedAttribute" type="text" selector="//*[@id='tree-div2']//a[text()='{{attributeName}}']" parameterized="true"/>
+        <element name="xThLineItemUnassignedAttribute" type="text" selector="//*[@id='tree-div2']//li[{{x}}]//a" parameterized="true"/>
+        <!-- Buttons -->
+        <element name="AddNewGroup" type="button" selector="button[data-ui-id='adminhtml-catalog-product-set-edit-add-group-button']"/>
+        <element name="DeleteSelectedGroup" type="button" selector="button[data-ui-id='adminhtml-catalog-product-set-edit-delete-group-button']"/>
+        <!-- Modal Window Add New Group -->
+        <element name="newGroupName" type="input" selector="input[data-role='promptField']"/>
+        <element name="buttonOk" type="button" selector=".modal-footer .action-primary.action-accept"/>
+        <element name="errorLabel" type="text" selector="label.mage-error"/>
+        <element name="attentionMessage" type="text" selector="(//div[@class='modal-inner-wrap'])[2]//div[contains(text(),'This group')]"/>
+    </section>
+</sections>

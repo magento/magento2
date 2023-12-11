@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="productAttributeWysiwyg" type="ProductAttribute">
+        <data key="attribute_code" unique="suffix">attribute</data>
+        <data key="frontend_input">textarea</data>
+        <data key="scope">global</data>
+        <data key="is_required">false</data>
+        <data key="is_unique">false</data>
+        <data key="is_searchable">true</data>
+        <data key="is_visible">true</data>
+        <data key="backend_type">text</data>
+        <data key="is_wysiwyg_enabled">true</data>
+        <data key="is_visible_in_advanced_search">true</data>
+        <data key="is_visible_on_front">true</data>
+        <data key="is_filterable">false</data>
+        <data key="is_filterable_in_search">false</data>
+        <data key="used_in_product_listing">true</data>
+        <data key="is_used_for_promo_rules">true</data>
+        <data key="is_comparable">true</data>
+        <data key="is_used_in_grid">true</data>
+        <data key="is_visible_in_grid">true</data>
+        <data key="is_filterable_in_grid">true</data>
+        <data key="used_for_sort_by">true</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="productAttributeLayered" type="ProductAttribute">
+        <data key="attribute_code" unique="suffix">attribute</data>
+        <data key="frontend_input">textarea</data>
+        <data key="scope">global</data>
+        <data key="is_required">false</data>
+        <data key="is_unique">false</data>
+        <data key="is_searchable">true</data>
+        <data key="is_visible">true</data>
+        <data key="backend_type">text</data>
+        <data key="is_wysiwyg_enabled">true</data>
+        <data key="is_visible_in_advanced_search">true</data>
+        <data key="is_visible_on_front">true</data>
+        <data key="is_filterable">true</data>
+        <data key="is_filterable_in_search">true</data>
+        <data key="used_in_product_listing">true</data>
+        <data key="is_used_for_promo_rules">true</data>
+        <data key="is_comparable">true</data>
+        <data key="is_used_in_grid">true</data>
+        <data key="is_visible_in_grid">true</data>
+        <data key="is_filterable_in_grid">true</data>
+        <data key="used_for_sort_by">true</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="productAttributeWithTwoOptions" type="ProductAttribute">
+        <data key="attribute_code" unique="suffix">attribute</data>
+        <data key="frontend_input">select</data>
+        <data key="scope">global</data>
+        <data key="is_required">false</data>
+        <data key="is_unique">false</data>
+        <data key="is_searchable">true</data>
+        <data key="is_visible">true</data>
+        <data key="is_visible_in_advanced_search">true</data>
+        <data key="is_visible_on_front">true</data>
+        <data key="is_filterable">true</data>
+        <data key="is_filterable_in_search">true</data>
+        <data key="used_in_product_listing">true</data>
+        <data key="is_used_for_promo_rules">true</data>
+        <data key="is_comparable">true</data>
+        <data key="is_used_in_grid">true</data>
+        <data key="is_visible_in_grid">true</data>
+        <data key="is_filterable_in_grid">true</data>
+        <data key="used_for_sort_by">true</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="productAttributeWithTwoOptionsNotVisible" type="ProductAttribute">
+        <data key="attribute_code" unique="suffix">test_attr_</data>
+        <data key="frontend_input">select</data>
+        <data key="scope">global</data>
+        <data key="is_required">false</data>
+        <data key="is_unique">false</data>
+        <data key="is_searchable">false</data>
+        <data key="is_visible">true</data>
+        <data key="is_visible_in_advanced_search">false</data>
+        <data key="is_visible_on_front">false</data>
+        <data key="is_filterable">false</data>
+        <data key="is_filterable_in_search">false</data>
+        <data key="used_in_product_listing">false</data>
+        <data key="is_used_for_promo_rules">false</data>
+        <data key="is_comparable">false</data>
+        <data key="is_used_in_grid">false</data>
+        <data key="is_visible_in_grid">false</data>
+        <data key="is_filterable_in_grid">false</data>
+        <data key="used_for_sort_by">false</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="hiddenDropdownAttributeWithOptions" extends="productAttributeWithTwoOptions">
+        <data key="is_searchable">false</data>
+        <data key="is_visible_in_advanced_search">false</data>
+        <data key="is_visible_on_front">false</data>
+        <data key="is_filterable">false</data>
+        <data key="is_filterable_in_search">false</data>
+        <data key="used_in_product_listing">false</data>
+        <data key="is_used_for_promo_rules">false</data>
+        <data key="is_comparable">false</data>
+        <data key="is_used_in_grid">false</data>
+        <data key="is_visible_in_grid">false</data>
+        <data key="is_filterable_in_grid">false</data>
+        <data key="used_for_sort_by">false</data>
+    </entity>
+    <entity name="productDropDownAttribute" type="ProductAttribute">
+        <data key="attribute_code" unique="suffix">attribute</data>
+        <data key="frontend_input">select</data>
+        <data key="scope">global</data>
+        <data key="is_required">false</data>
+        <data key="is_unique">false</data>
+        <data key="is_searchable">true</data>
+        <data key="is_visible">true</data>
+        <data key="is_visible_in_advanced_search">true</data>
+        <data key="is_visible_on_front">true</data>
+        <data key="is_filterable">true</data>
+        <data key="is_filterable_in_search">true</data>
+        <data key="used_in_product_listing">true</data>
+        <data key="is_used_for_promo_rules">true</data>
+        <data key="is_comparable">true</data>
+        <data key="is_used_in_grid">true</data>
+        <data key="is_visible_in_grid">true</data>
+        <data key="is_filterable_in_grid">true</data>
+        <data key="used_for_sort_by">true</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="multipleSelectProductAttribute" extends="productDropDownAttribute" type="ProductAttribute">
+        <data key="frontend_input">multiselect</data>
+        <data key="frontend_input_admin">Multiple Select</data>
+    </entity>
+    <entity name="productDropDownAttributeNotSearchable" type="ProductAttribute">
+        <data key="attribute_code" unique="suffix">attribute</data>
+        <data key="frontend_input">select</data>
+        <data key="scope">global</data>
+        <data key="is_required">false</data>
+        <data key="is_unique">false</data>
+        <data key="is_searchable">false</data>
+        <data key="is_visible">true</data>
+        <data key="is_visible_in_advanced_search">true</data>
+        <data key="is_visible_on_front">true</data>
+        <data key="is_filterable">true</data>
+        <data key="is_filterable_in_search">true</data>
+        <data key="used_in_product_listing">true</data>
+        <data key="is_used_for_promo_rules">true</data>
+        <data key="is_comparable">true</data>
+        <data key="is_used_in_grid">true</data>
+        <data key="is_visible_in_grid">true</data>
+        <data key="is_filterable_in_grid">true</data>
+        <data key="used_for_sort_by">true</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="productAttributeWithDropdownTwoOptions" type="ProductAttribute">
+        <data key="attribute_code" unique="suffix">testattribute</data>
+        <data key="frontend_input">select</data>
+        <data key="scope">global</data>
+        <data key="is_required">false</data>
+        <data key="is_unique">false</data>
+        <data key="is_searchable">true</data>
+        <data key="is_visible">true</data>
+        <data key="is_visible_in_advanced_search">true</data>
+        <data key="is_visible_on_front">true</data>
+        <data key="is_filterable">true</data>
+        <data key="is_filterable_in_search">true</data>
+        <data key="used_in_product_listing">true</data>
+        <data key="is_used_for_promo_rules">true</data>
+        <data key="is_comparable">true</data>
+        <data key="is_used_in_grid">true</data>
+        <data key="is_visible_in_grid">true</data>
+        <data key="is_filterable_in_grid">true</data>
+        <data key="used_for_sort_by">true</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="productAttributeMultiselectTwoOptions" type="ProductAttribute">
+        <data key="attribute_code" unique="suffix">attribute</data>
+        <data key="frontend_input">multiselect</data>
+        <data key="scope">global</data>
+        <data key="is_required">false</data>
+        <data key="is_unique">false</data>
+        <data key="is_searchable">true</data>
+        <data key="is_visible">true</data>
+        <data key="is_visible_in_advanced_search">true</data>
+        <data key="is_visible_on_front">true</data>
+        <data key="is_filterable">true</data>
+        <data key="is_filterable_in_search">true</data>
+        <data key="used_in_product_listing">true</data>
+        <data key="is_used_for_promo_rules">true</data>
+        <data key="is_comparable">true</data>
+        <data key="is_used_in_grid">true</data>
+        <data key="is_visible_in_grid">true</data>
+        <data key="is_filterable_in_grid">true</data>
+        <data key="used_for_sort_by">true</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="productAttributeMultiselectTwoOptionsNotSearchable" type="ProductAttribute">
+        <data key="attribute_code" unique="suffix">attribute</data>
+        <data key="frontend_input">multiselect</data>
+        <data key="scope">global</data>
+        <data key="is_required">false</data>
+        <data key="is_unique">false</data>
+        <data key="is_searchable">false</data>
+        <data key="is_visible">true</data>
+        <data key="is_visible_in_advanced_search">true</data>
+        <data key="is_visible_on_front">true</data>
+        <data key="is_filterable">true</data>
+        <data key="is_filterable_in_search">true</data>
+        <data key="used_in_product_listing">true</data>
+        <data key="is_used_for_promo_rules">true</data>
+        <data key="is_comparable">true</data>
+        <data key="is_used_in_grid">true</data>
+        <data key="is_visible_in_grid">true</data>
+        <data key="is_filterable_in_grid">true</data>
+        <data key="used_for_sort_by">true</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="newsFromDate" type="ProductAttribute">
+        <data key="attribute_code">news_from_date</data>
+        <data key="default_frontend_label">Set Product as New from Date</data>
+        <data key="frontend_input">date</data>
+        <data key="is_required">false</data>
+        <data key="is_user_defined">true</data>
+        <data key="scope">website</data>
+        <data key="is_unique">false</data>
+        <data key="is_searchable">false</data>
+        <data key="is_visible">false</data>
+        <data key="is_visible_on_front">false</data>
+        <data key="is_filterable">false</data>
+        <data key="is_filterable_in_search">false</data>
+        <data key="used_in_product_listing">true</data>
+        <data key="is_used_for_promo_rules">false</data>
+        <data key="is_comparable">false</data>
+        <data key="is_used_in_grid">true</data>
+        <data key="is_filterable_in_grid">true</data>
+        <data key="used_for_sort_by">false</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="newProductAttribute" type="ProductAttribute">
+        <data key="attribute_code" unique="suffix">attribute</data>
+        <data key="frontend_input">text</data>
+        <data key="scope">global</data>
+        <data key="is_required">false</data>
+        <data key="is_unique">false</data>
+        <data key="is_searchable">true</data>
+        <data key="is_visible">true</data>
+        <data key="is_visible_in_advanced_search">true</data>
+        <data key="is_visible_on_front">true</data>
+        <data key="is_filterable">false</data>
+        <data key="is_filterable_in_search">false</data>
+        <data key="used_in_product_listing">true</data>
+        <data key="is_used_for_promo_rules">true</data>
+        <data key="is_comparable">true</data>
+        <data key="is_used_in_grid">true</data>
+        <data key="is_visible_in_grid">true</data>
+        <data key="is_filterable_in_grid">true</data>
+        <data key="used_for_sort_by">true</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="productYesNoAttribute" type="ProductAttribute">
+        <data key="attribute_code" unique="suffix">attribute</data>
+        <data key="frontend_input">boolean</data>
+        <data key="scope">global</data>
+        <data key="is_required">false</data>
+        <data key="is_unique">false</data>
+        <data key="is_searchable">true</data>
+        <data key="is_visible">true</data>
+        <data key="is_visible_in_advanced_search">true</data>
+        <data key="is_visible_on_front">true</data>
+        <data key="is_filterable">true</data>
+        <data key="is_filterable_in_search">true</data>
+        <data key="used_in_product_listing">true</data>
+        <data key="is_used_for_promo_rules">true</data>
+        <data key="is_comparable">true</data>
+        <data key="is_used_in_grid">true</data>
+        <data key="is_visible_in_grid">true</data>
+        <data key="is_filterable_in_grid">true</data>
+        <data key="used_for_sort_by">true</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="productAttributeText" type="ProductAttribute">
+        <data key="attribute_code" unique="suffix">attribute</data>
+        <data key="frontend_input">text</data>
+        <data key="scope">global</data>
+        <data key="is_required">false</data>
+        <data key="is_unique">false</data>
+        <data key="is_searchable">false</data>
+        <data key="is_visible">true</data>
+        <data key="backend_type">text</data>
+        <data key="is_wysiwyg_enabled">false</data>
+        <data key="is_visible_in_advanced_search">false</data>
+        <data key="is_visible_on_front">true</data>
+        <data key="is_filterable">false</data>
+        <data key="is_filterable_in_search">false</data>
+        <data key="used_in_product_listing">false</data>
+        <data key="is_used_for_promo_rules">false</data>
+        <data key="is_comparable">true</data>
+        <data key="is_used_in_grid">false</data>
+        <data key="is_visible_in_grid">false</data>
+        <data key="is_filterable_in_grid">false</data>
+        <data key="used_for_sort_by">false</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="textProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
+        <data key="frontend_input">text</data>
+        <data key="default_value" unique="suffix">defaultValue</data>
+        <data key="is_required_admin">No</data>
+    </entity>
+    <entity name="dateProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
+        <data key="frontend_input">date</data>
+        <data key="is_required_admin">No</data>
+    </entity>
+    <entity name="DatetimeProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
+        <data key="frontend_input">datetime</data>
+        <data key="is_required_admin">No</data>
+    </entity>
+    <entity name="priceProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
+        <data key="frontend_input">date</data>
+        <data key="is_required_admin">No</data>
+    </entity>
+    <entity name="dropdownProductAttribute" extends="productAttributeLayered" type="ProductAttribute">
+        <data key="frontend_input">select</data>
+        <data key="frontend_input_admin">Dropdown</data>
+        <data key="is_required_admin">No</data>
+        <data key="option1_admin" unique="suffix">opt1Admin</data>
+        <data key="option1_frontend" unique="suffix">opt1Front</data>
+        <data key="option2_admin" unique="suffix">opt2Admin</data>
+        <data key="option2_frontend" unique="suffix">opt2Front</data>
+        <data key="option3_admin" unique="suffix">opt3Admin</data>
+        <data key="option3_frontend" unique="suffix">opt3Front</data>
+    </entity>
+    <entity name="multiselectProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
+        <data key="frontend_input">multiselect</data>
+        <data key="frontend_input_admin">Multiple Select</data>
+        <data key="is_required_admin">No</data>
+        <data key="option1_admin" unique="suffix">opt1Admin</data>
+        <data key="option1_frontend" unique="suffix">opt1Front</data>
+        <data key="option2_admin" unique="suffix">opt2Admin</data>
+        <data key="option2_frontend" unique="suffix">opt2Front</data>
+        <data key="option3_admin" unique="suffix">opt3Admin</data>
+        <data key="option3_frontend" unique="suffix">opt3Front</data>
+    </entity>
+    <entity name="visualSwatchProductAttribute" extends="newProductAttribute" type="ProductAttribute">
+        <data key="frontend_input">swatch_visual</data>
+        <data key="frontend_input_admin">Visual Swatch</data>
+        <data key="is_required_admin">No</data>
+        <data key="option1_admin" unique="suffix">opt1Admin</data>
+        <data key="option1_store" unique="suffix">opt1Front</data>
+    </entity>
+    <entity name="textSwatchProductAttribute" extends="newProductAttribute" type="ProductAttribute">
+        <data key="frontend_input">text_visual</data>
+        <data key="frontend_input_admin">Text Swatch</data>
+        <data key="is_required_admin">No</data>
+        <data key="swatchStore" unique="suffix">opt1swatch</data>
+        <data key="store" unique="suffix">opt1store</data>
+        <data key="SwatchAdmin" unique="suffix">opt1SwatchAdmin</data>
+        <data key="admin" unique="suffix">opt1Admin</data>
+    </entity>
+    <entity name="dropdownProductAttributeWithQuote" extends="productAttributeWysiwyg" type="ProductAttribute">
+        <data key="frontend_input">select</data>
+        <data key="frontend_input_admin">Dropdown</data>
+        <data key="is_required_admin">No</data>
+        <data key="option1_admin" unique="suffix">opt1'Admin</data>
+        <data key="option1_frontend" unique="suffix">opt1'Front</data>
+    </entity>
+    <entity name="productTextEditorAttribute" type="ProductAttribute">
+        <data key="attribute_code" unique="suffix">attribute</data>
+        <data key="frontend_input">texteditor</data>
+        <data key="scope">global</data>
+        <data key="is_required">false</data>
+        <data key="is_unique">false</data>
+        <data key="is_searchable">true</data>
+        <data key="is_visible">true</data>
+        <data key="backend_type">text</data>
+        <data key="is_wysiwyg_enabled">true</data>
+        <data key="is_visible_in_advanced_search">true</data>
+        <data key="is_visible_on_front">true</data>
+        <data key="is_filterable">false</data>
+        <data key="is_filterable_in_search">false</data>
+        <data key="used_in_product_listing">true</data>
+        <data key="is_used_for_promo_rules">true</data>
+        <data key="is_comparable">true</data>
+        <data key="is_used_in_grid">true</data>
+        <data key="is_visible_in_grid">true</data>
+        <data key="is_filterable_in_grid">true</data>
+        <data key="used_for_sort_by">true</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="productAttributeDropdownTwoOptions" type="ProductAttribute">
+        <data key="attribute_code" unique="suffix">testattribute</data>
+        <data key="frontend_input">select</data>
+        <data key="scope">Global</data>
+        <data key="is_required">false</data>
+        <data key="is_unique">false</data>
+        <data key="is_searchable">true</data>
+        <data key="is_visible">true</data>
+        <data key="is_visible_in_advanced_search">true</data>
+        <data key="is_visible_on_front">true</data>
+        <data key="is_filterable">true</data>
+        <data key="is_filterable_in_search">true</data>
+        <data key="used_in_product_listing">true</data>
+        <data key="is_used_for_promo_rules">true</data>
+        <data key="is_comparable">true</data>
+        <data key="is_used_in_grid">true</data>
+        <data key="is_visible_in_grid">true</data>
+        <data key="is_filterable_in_grid">true</data>
+        <data key="used_for_sort_by">true</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="ProductColorAttribute" type="ProductAttribute">
+        <data key="frontend_label">Color</data>
+        <data key="attribute_code" unique="suffix">color_attr</data>
+    </entity>
+    <entity name="ProductSizeAttribute" type="ProductAttribute">
+        <data key="frontend_label">Size</data>
+        <data key="attribute_code" unique="suffix">size_attr</data>
+    </entity>
+    <entity name="productAttributeWithHtmlTagsInLabel" extends="newProductAttribute" type="ProductAttribute">
+        <data key="default_label" unique="suffix">Attribute Default label &lt;span&gt;</data>
+        <data key="default_store_label" unique="suffix">Attribute Store label &lt;span&gt; </data>
+        <data key="frontend_input">text</data>
+    </entity>
+    <entity name="ProductTypeIdAttribute" type="ProductAttribute">
+        <data key="frontend_label">Type id</data>
+        <data key="attribute_code">type_id</data>
+        <data key="frontend_input">text</data>
+        <data key="is_required">No</data>
+        <data key="is_required_admin">No</data>
+    </entity>
+    <entity name="ProductProductTypeAttribute" type="ProductAttribute">
+        <data key="frontend_label">Product type</data>
+        <data key="attribute_code">product_type</data>
+        <data key="frontend_input">text</data>
+        <data key="is_required">No</data>
+        <data key="is_required_admin">No</data>
+    </entity>
+    <!-- Product attribute from file "export_import_configurable_product.csv" -->
+    <entity name="ProductAttributeWithTwoOptionsForExportImport" extends="productAttributeDropdownTwoOptions" type="ProductAttribute">
+        <data key="attribute_code">attribute</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabelForExportImport</requiredEntity>
+    </entity>
+</entities>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SaveImageActionGroup">
+        <annotations>
+            <description>Clicks on Insert File in the Media Gallery.</description>
+        </annotations>
+
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForElementVisible selector="{{MediaGallerySection.InsertFile}}" stepKey="waitForInsertBtn"/>
+        <click selector="{{MediaGallerySection.InsertFile}}" stepKey="clickInsertBtn"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappear"/>
+    </actionGroup>
+</actionGroups>

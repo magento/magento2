@@ -9,97 +9,96 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Helper\Minsaleqty as MinsaleqtyHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
-/**
- * Class Configuration
- */
-class Configuration implements StockConfigurationInterface
+class Configuration implements StockConfigurationInterface, ResetAfterRequestInterface
 {
     /**
      * Default website id
      */
-    const DEFAULT_WEBSITE_ID = 1;
+    public const DEFAULT_WEBSITE_ID = 1;
 
     /**
      * Inventory options config path
      */
-    const XML_PATH_GLOBAL = 'cataloginventory/options/';
+    public const XML_PATH_GLOBAL = 'cataloginventory/options/';
 
     /**
      * Subtract config path
      */
-    const XML_PATH_CAN_SUBTRACT = 'cataloginventory/options/can_subtract';
+    public const XML_PATH_CAN_SUBTRACT = 'cataloginventory/options/can_subtract';
 
     /**
      * Back in stock config path
      */
-    const XML_PATH_CAN_BACK_IN_STOCK = 'cataloginventory/options/can_back_in_stock';
+    public const XML_PATH_CAN_BACK_IN_STOCK = 'cataloginventory/options/can_back_in_stock';
 
     /**
      * Item options config path
      */
-    const XML_PATH_ITEM = 'cataloginventory/item_options/';
+    public const XML_PATH_ITEM = 'cataloginventory/item_options/';
 
     /**
      * Max qty config path
      */
-    const XML_PATH_MIN_QTY = 'cataloginventory/item_options/min_qty';
+    public const XML_PATH_MIN_QTY = 'cataloginventory/item_options/min_qty';
 
     /**
      * Min sale qty config path
      */
-    const XML_PATH_MIN_SALE_QTY = 'cataloginventory/item_options/min_sale_qty';
+    public const XML_PATH_MIN_SALE_QTY = 'cataloginventory/item_options/min_sale_qty';
 
     /**
      * Max sale qty config path
      */
-    const XML_PATH_MAX_SALE_QTY = 'cataloginventory/item_options/max_sale_qty';
+    public const XML_PATH_MAX_SALE_QTY = 'cataloginventory/item_options/max_sale_qty';
 
     /**
      * Back orders config path
      */
-    const XML_PATH_BACKORDERS = 'cataloginventory/item_options/backorders';
+    public const XML_PATH_BACKORDERS = 'cataloginventory/item_options/backorders';
 
     /**
      * Notify stock config path
      */
-    const XML_PATH_NOTIFY_STOCK_QTY = 'cataloginventory/item_options/notify_stock_qty';
+    public const XML_PATH_NOTIFY_STOCK_QTY = 'cataloginventory/item_options/notify_stock_qty';
 
     /**
      * Manage stock config path
      */
-    const XML_PATH_MANAGE_STOCK = 'cataloginventory/item_options/manage_stock';
+    public const XML_PATH_MANAGE_STOCK = 'cataloginventory/item_options/manage_stock';
 
     /**
      * Enable qty increments config path
      */
-    const XML_PATH_ENABLE_QTY_INCREMENTS = 'cataloginventory/item_options/enable_qty_increments';
+    public const XML_PATH_ENABLE_QTY_INCREMENTS = 'cataloginventory/item_options/enable_qty_increments';
 
     /**
      * Qty increments config path
      */
-    const XML_PATH_QTY_INCREMENTS = 'cataloginventory/item_options/qty_increments';
+    public const XML_PATH_QTY_INCREMENTS = 'cataloginventory/item_options/qty_increments';
 
     /**
      * Show out of stock config path
      */
-    const XML_PATH_SHOW_OUT_OF_STOCK = 'cataloginventory/options/show_out_of_stock';
+    public const XML_PATH_SHOW_OUT_OF_STOCK = 'cataloginventory/options/show_out_of_stock';
 
     /**
      * Auto return config path
      */
-    const XML_PATH_ITEM_AUTO_RETURN = 'cataloginventory/item_options/auto_return';
+    public const XML_PATH_ITEM_AUTO_RETURN = 'cataloginventory/item_options/auto_return';
 
     /**
      * Path to configuration option 'Display product stock status'
      */
-    const XML_PATH_DISPLAY_PRODUCT_STOCK_STATUS = 'cataloginventory/options/display_product_stock_status';
+    public const XML_PATH_DISPLAY_PRODUCT_STOCK_STATUS = 'cataloginventory/options/display_product_stock_status';
 
     /**
      * Threshold qty config path
      */
-    const XML_PATH_STOCK_THRESHOLD_QTY = 'cataloginventory/options/stock_threshold_qty';
+    public const XML_PATH_STOCK_THRESHOLD_QTY = 'cataloginventory/options/stock_threshold_qty';
 
     /**
      * @var ConfigInterface
@@ -121,7 +120,7 @@ class Configuration implements StockConfigurationInterface
     /**
      * All product types registry in scope of quantity availability
      *
-     * @var array
+     * @var array|null
      */
     protected $isQtyTypeIds;
 
@@ -131,6 +130,8 @@ class Configuration implements StockConfigurationInterface
     protected $storeManager;
 
     /**
+     * Configuration constructor.
+     *
      * @param ConfigInterface $config
      * @param ScopeConfigInterface $scopeConfig
      * @param MinsaleqtyHelper $minsaleqtyHelper
@@ -149,7 +150,15 @@ class Configuration implements StockConfigurationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->isQtyTypeIds = null;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getDefaultScopeId()
     {
@@ -159,6 +168,8 @@ class Configuration implements StockConfigurationInterface
     }
 
     /**
+     * Is Qty Type Ids
+     *
      * @param int|null $filter
      * @return array
      */
@@ -182,6 +193,8 @@ class Configuration implements StockConfigurationInterface
     }
 
     /**
+     * Is Qty
+     *
      * @param int $productTypeId
      * @return bool
      */
@@ -201,12 +214,14 @@ class Configuration implements StockConfigurationInterface
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_CAN_SUBTRACT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
 
     /**
+     * Get Min Qty
+     *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return float
      */
@@ -214,12 +229,14 @@ class Configuration implements StockConfigurationInterface
     {
         return (float)$this->scopeConfig->getValue(
             self::XML_PATH_MIN_QTY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
 
     /**
+     * Get Min Sale Qty
+     *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @param int $customerGroupId
      * @return float
@@ -230,6 +247,8 @@ class Configuration implements StockConfigurationInterface
     }
 
     /**
+     * Get Max Sale Qty
+     *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return float|null
      */
@@ -237,12 +256,14 @@ class Configuration implements StockConfigurationInterface
     {
         return (float)$this->scopeConfig->getValue(
             self::XML_PATH_MAX_SALE_QTY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
 
     /**
+     * Get Notify Stock Qty
+     *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return float
      */
@@ -250,7 +271,7 @@ class Configuration implements StockConfigurationInterface
     {
         return (float) $this->scopeConfig->getValue(
             self::XML_PATH_NOTIFY_STOCK_QTY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -264,22 +285,24 @@ class Configuration implements StockConfigurationInterface
      */
     public function getEnableQtyIncrements($store = null)
     {
-        return (bool) $this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_ENABLE_QTY_INCREMENTS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
 
     /**
+     * Get Qty Increments
+     *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
-     * @return int
+     * @return float
      */
     public function getQtyIncrements($store = null)
     {
         return (float)$this->scopeConfig->getValue(
             self::XML_PATH_QTY_INCREMENTS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -294,7 +317,7 @@ class Configuration implements StockConfigurationInterface
     {
         return (int) $this->scopeConfig->getValue(
             self::XML_PATH_BACKORDERS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -309,7 +332,7 @@ class Configuration implements StockConfigurationInterface
     {
         return (int) $this->scopeConfig->isSetFlag(
             self::XML_PATH_MANAGE_STOCK,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -325,7 +348,7 @@ class Configuration implements StockConfigurationInterface
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_CAN_BACK_IN_STOCK,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -340,7 +363,7 @@ class Configuration implements StockConfigurationInterface
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_SHOW_OUT_OF_STOCK,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -355,14 +378,13 @@ class Configuration implements StockConfigurationInterface
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_ITEM_AUTO_RETURN,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
 
     /**
-     * Get 'Display product stock status' option value
-     * Shows if it is necessary to show product stock status ('in stock'/'out of stock')
+     * Display product stock status. Shows if it is necessary to show product stock status in stock/out of stock.
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return bool
@@ -371,12 +393,14 @@ class Configuration implements StockConfigurationInterface
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_DISPLAY_PRODUCT_STOCK_STATUS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
 
     /**
+     * Get Default Config Value
+     *
      * @param string $field
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return string|null
@@ -385,12 +409,14 @@ class Configuration implements StockConfigurationInterface
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_ITEM . $field,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
 
     /**
+     * Get Stock Threshold Qty
+     *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return string|null
      */
@@ -398,7 +424,7 @@ class Configuration implements StockConfigurationInterface
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_STOCK_THRESHOLD_QTY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }

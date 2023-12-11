@@ -24,7 +24,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -39,19 +39,19 @@ class InfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testToHtmlNoExistingIntegrationData()
     {
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '/<input id="integration_properties_name" name="name".*type="text".*>/',
             $this->block->toHtml()
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '/<input id="integration_properties_email" name="email".*type="text".*>/',
             $this->block->toHtml()
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '/<input id="integration_properties_endpoint" name="endpoint".*type="text".*>/',
             $this->block->toHtml()
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '/<input id="integration_properties_identity_link_url" name="identity_link_url".*type="text".*>/',
             $this->block->toHtml()
         );
@@ -81,36 +81,36 @@ class InfoTest extends \PHPUnit\Framework\TestCase
 
         $html = $this->block->toHtml();
 
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             "/<input id=\"integration_properties_name\" name=\"name\".*value=\"$name\".*type=\"text\".*>/",
             $html
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             "/<input id=\"integration_properties_email\" name=\"email\".*value=\"$email\".*type=\"text\".*>/",
             $html
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             "/<input id=\"integration_properties_endpoint\" name=\"endpoint\".*value=\"$endpoint\".*type=\"text\".*>/",
             $html
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             "/<input id=\"integration_properties_identity_link_url\" name=\"identity_link_url\".*"
             . "value=\"$identityLinkUrl\".*type=\"text\".*>/",
             $html
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '/<input id="integration_properties_consumer_key" name="consumer_key".*type="text".*>/',
             $this->block->toHtml()
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '/<input id="integration_properties_consumer_secret" name="consumer_secret".*type="text".*>/',
             $this->block->toHtml()
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '/<input id="integration_properties_token" name="token".*type="text".*>/',
             $this->block->toHtml()
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '/<input id="integration_properties_token_secret" name="token_secret".*type="text".*>/',
             $this->block->toHtml()
         );

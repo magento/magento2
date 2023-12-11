@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontProductInfoMainSection">
+        <element name="optionByAttributeId" type="input" selector="#attribute{{var1}}" parameterized="true"/>
+        <element name="selectableProductOptions" type="select" selector="#attribute{{var1}} option:not([disabled])" parameterized="true"/>
+        <element name="productAttributeTitle1" type="text" selector="#product-options-wrapper div[tabindex='0'] label"/>
+        <element name="productPrice" type="text" selector="div.price-box.price-final_price"/>
+        <element name="tierPriceBlock" type="block" selector="div[data-role='tier-price-block']"/>
+        <element name="productAttributeOptions1" type="select" selector="#product-options-wrapper div[tabindex='0'] option"/>
+        <element name="productAttributeOptionsSelectButton" type="select" selector="#product-options-wrapper .super-attribute-select"/>
+        <element name="productAttributeOptionsError" type="text" selector="//div[@class='mage-error']"/>
+        <element name="selectCustomOptionByName" type="radio" selector="//*[@class='options-list nested']//span[contains(text(), '{{value}}')]/../../input" parameterized="true"/>
+        <!-- Parameter is the order number of the attribute on the page (1 is the newest) -->
+        <element name="nthAttributeOnPage" type="block" selector="tr:nth-of-type({{numElement}}) .data" parameterized="true"/>
+        <element name="stockIndication" type="block" selector=".stock" />
+        <element name="attributeSelectByAttributeID" type="select" selector="//div[@class='fieldset']//div[//span[text()='{{attribute_code}}']]//select" parameterized="true"/>
+        <element name="attributeOptionByAttributeID" type="select" selector="//div[@class='fieldset']//div[//span[text()='{{attribute_code}}']]//option[text()='{{optionName}}']" parameterized="true"/>
+        <element name="tierPriceExcludingPrice" type="text" selector=".item [data-label='Excl. Tax']"/>
+        <element name="tierPriceContainsExcludingTax" type="text" selector=".item .price"/>
+    </section>
+</sections>

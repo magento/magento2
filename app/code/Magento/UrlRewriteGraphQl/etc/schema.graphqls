@@ -1,0 +1,39 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Query {
+    urlResolver(url: String! @doc(description: "A `url_key` appended by the `url_suffix, if one exists.")): EntityUrl @resolver(class: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\EntityUrl") @doc(description: "Return the relative URL for a specified product, category or CMS page.") @deprecated(reason: "Use the `route` query instead.") @cache(cacheIdentity: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\UrlRewrite\\UrlResolverIdentity")
+    route(url: String! @doc(description: "A `url_key` appended by the `url_suffix, if one exists.")): RoutableInterface @resolver(class: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\Route") @doc(description: "Return the full details for a specified product, category, or CMS page.") @cache(cacheIdentity: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\UrlRewrite\\UrlResolverIdentity")
+}
+
+type EntityUrl @doc(description: "Contains the `uid`, `relative_url`, and `type` attributes.") {
+    id: Int @deprecated(reason: "Use `entity_uid` instead.") @doc(description: "The ID assigned to the object associated with the specified url. This could be a product ID, category ID, or page ID.")
+    entity_uid: ID @doc(description: "The unique ID for a `ProductInterface`, `CategoryInterface`, `CmsPage`, or similar object associated with the specified URL. This could be a product, category, or CMS page UID.")
+    canonical_url: String @deprecated(reason: "Use `relative_url` instead.")
+    relative_url: String @doc(description: "The internal relative URL. If the specified URL is a redirect, the query returns the redirected URL, not the original.")
+    redirectCode: Int @doc(description: "Contains 0 when there is no redirect error. A value of 301 indicates the URL of the requested resource has been changed permanently, while a value of 302 indicates a temporary redirect.")
+    type: UrlRewriteEntityTypeEnum @doc(description: "One of PRODUCT, CATEGORY, or CMS_PAGE.")
+}
+
+enum UrlRewriteEntityTypeEnum {
+}
+
+type UrlRewrite @doc(description: "Contains URL rewrite details.") {
+    url: String @doc(description: "The request URL.")
+    parameters: [HttpQueryParameter] @doc(description: "An array of request parameters.")
+}
+
+type HttpQueryParameter @doc(description: "Contains target path parameters.") {
+    name: String @doc(description: "A parameter name.")
+    value: String @doc(description: "A parameter value.")
+}
+
+type RoutableUrl implements RoutableInterface @doc(description: "Default implementation of RoutableInterface. This type is returned when the URL is not linked to an entity.") {
+
+}
+
+interface RoutableInterface @typeResolver(class: "Magento\\UrlRewriteGraphQl\\Model\\RoutableInterfaceTypeResolver") @doc(description: "Routable entities serve as the model for a rendered page.") {
+    relative_url: String @doc(description: "The internal relative URL. If the specified URL is a redirect, the query returns the redirected URL, not the original.")
+    redirect_code: Int! @doc(description: "Contains 0 when there is no redirect error. A value of 301 indicates the URL of the requested resource has been changed permanently, while a value of 302 indicates a temporary redirect.")
+    type: UrlRewriteEntityTypeEnum @doc(description: "One of PRODUCT, CATEGORY, or CMS_PAGE.")
+}

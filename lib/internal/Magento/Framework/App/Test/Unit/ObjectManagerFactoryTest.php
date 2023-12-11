@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\App\Bootstrap;
+use Magento\Framework\Filesystem\Io\File;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Framework\App\ObjectManagerFactory
  */
-class ObjectManagerFactoryTest extends \PHPUnit\Framework\TestCase
+class ObjectManagerFactoryTest extends TestCase
 {
     /** @var callable[] */
     protected static $originalAutoloadFunctions;
@@ -18,7 +22,7 @@ class ObjectManagerFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var string */
     protected static $originalIncludePath;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$originalAutoloadFunctions = spl_autoload_functions();
         self::$originalIncludePath = get_include_path();
@@ -27,7 +31,7 @@ class ObjectManagerFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Avoid impact of initialized \Magento\Framework\Code\Generator\Autoloader on other tests
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         foreach (spl_autoload_functions() as $autoloadFunction) {
             spl_autoload_unregister($autoloadFunction);
@@ -36,15 +40,13 @@ class ObjectManagerFactoryTest extends \PHPUnit\Framework\TestCase
             spl_autoload_register($autoloadFunction);
         }
         set_include_path(self::$originalIncludePath);
-        \Magento\Framework\Filesystem\Io\File::rmdirRecursive(__DIR__ . '/_files/var/');
+        File::rmdirRecursive(__DIR__ . '/_files/var/');
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     * @expectedExceptionMessage Magento\Framework\App\Test\Unit\ObjectManager\FactoryStub::__construct
-     */
     public function testCreateObjectManagerFactoryCouldBeOverridden()
     {
+        $this->expectException('BadMethodCallException');
+        $this->expectExceptionMessage('Magento\Framework\App\Test\Unit\ObjectManager\FactoryStub::__construct');
         $rootPath = __DIR__ . '/_files/';
         $factory = Bootstrap::createObjectManagerFactory($rootPath, []);
         $factory->create([], false);

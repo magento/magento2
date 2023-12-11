@@ -11,8 +11,7 @@ use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Api\ExtensionAttributesInterface;
-use Magento\Framework\Reflection\MethodsMap;
-use Zend\Code\Reflection\MethodReflection;
+use Laminas\Code\Reflection\MethodReflection;
 
 /**
  * Processes extension attributes and produces an array for the data.
@@ -119,7 +118,7 @@ class ExtensionAttributesProcessor
                 $value = $this->dataObjectProcessor->buildOutputDataArray($value, $returnType);
             } elseif (is_array($value)) {
                 $valueResult = [];
-                $arrayElementType = substr($returnType, 0, -2);
+                $arrayElementType = $returnType !== null ? substr($returnType, 0, -2) : '';
                 foreach ($value as $singleValue) {
                     if (is_object($singleValue) && !($singleValue instanceof Phrase)) {
                         $singleValue = $this->dataObjectProcessor->buildOutputDataArray(
@@ -141,6 +140,8 @@ class ExtensionAttributesProcessor
     }
 
     /**
+     * Is attribute permissions valid
+     *
      * @param string $dataObjectType
      * @param string $attributeCode
      * @return bool
@@ -159,6 +160,8 @@ class ExtensionAttributesProcessor
     }
 
     /**
+     * Get regular type for extension attribute type
+     *
      * @param string $name
      * @return string
      */
@@ -168,6 +171,8 @@ class ExtensionAttributesProcessor
     }
 
     /**
+     * Get permissions for attribute type
+     *
      * @param string $typeName
      * @param string $attributeCode
      * @return string[] A list of permissions

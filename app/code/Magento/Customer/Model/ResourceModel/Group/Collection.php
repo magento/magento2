@@ -7,11 +7,14 @@ namespace Magento\Customer\Model\ResourceModel\Group;
 
 /**
  * Customer group collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
+    /**
+     * @var string
+     */
+    protected $_idFieldName = 'customer_group_id';
+
     /**
      * Resource initialization
      *

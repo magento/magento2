@@ -4,14 +4,16 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Backend\Block\Widget\Form\Element;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 /**
  * Form element dependencies mapper
  * Assumes that one element may depend on other element values.
  * Will toggle as "enabled" only if all elements it depends from toggle as true.
- */
-namespace Magento\Backend\Block\Widget\Form\Element;
-
-/**
+ *
  * @api
  * @since 100.0.2
  */
@@ -54,20 +56,28 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
     protected $_jsonEncoder;
 
     /**
+     * @var SecureHtmlRenderer
+     */
+    protected $secureRenderer;
+
+    /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory
      * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory,
-        array $data = []
+        array $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_fieldFactory = $fieldFactory;
         parent::__construct($context, $data);
+        $this->secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
     }
 
     /**
@@ -117,6 +127,7 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
 
     /**
      * HTML output getter
+     *
      * @return string
      */
     protected function _toHtml()
@@ -124,18 +135,23 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
         if (!$this->_depends) {
             return '';
         }
-        return '<script>
-            require(["mage/adminhtml/form"], function(){
-        new FormElementDependenceController(' .
-            $this->_getDependsJson() .
-            ($this->_configOptions ? ', ' .
-            $this->_jsonEncoder->encode(
-                $this->_configOptions
-            ) : '') . '); });</script>';
+
+        $params = $this->_getDependsJson();
+
+        if ($this->_configOptions) {
+            $params .= ', ' .  $this->_jsonEncoder->encode($this->_configOptions);
+        }
+
+        $scriptString = 'require([\'mage/adminhtml/form\'], function(){
+    new FormElementDependenceController(' . $params . ');
+});';
+
+        return /* @noEscape */ $this->secureRenderer->renderTag('script', [], $scriptString, false);
     }
 
     /**
-     * Field dependences JSON map generator
+     * Field dependencies JSON map generator
+     *
      * @return string
      */
     protected function _getDependsJson()

@@ -13,7 +13,7 @@
                     <argument name="id" xsi:type="string">sales_order_create_customer_grid</argument>
                     <argument name="use_ajax" xsi:type="string">1</argument>
                     <argument name="default_sort" xsi:type="string">entity_id</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Customer\Collection</argument>
+                    <argument name="dataSource" xsi:type="object" shared="false">Magento\Sales\Model\ResourceModel\Order\Customer\Collection</argument>
                     <argument name="pager_visibility" xsi:type="string">1</argument>
                     <argument name="grid_url" xsi:type="url" path="*/*/loadBlock">
                         <param name="block">customer_grid</param>
@@ -80,13 +80,13 @@
                             <argument name="align" xsi:type="string">center</argument>
                         </arguments>
                     </block>
-                </block>
-                <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.customer.grid.columnSet.website_name" as="website_name">
-                    <arguments>
-                        <argument name="header" xsi:type="string" translate="true">Website</argument>
-                        <argument name="index" xsi:type="string">website_name</argument>
-                        <argument name="align" xsi:type="string">center</argument>
-                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.customer.grid.columnSet.website_name" as="website_name">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Website</argument>
+                            <argument name="index" xsi:type="string">website_name</argument>
+                            <argument name="align" xsi:type="string">center</argument>
+                        </arguments>
+                    </block>
                 </block>
             </block>
         </referenceBlock>

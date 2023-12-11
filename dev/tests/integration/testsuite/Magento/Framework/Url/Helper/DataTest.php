@@ -12,7 +12,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $_helper = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\Url\Helper\Data::class
@@ -21,12 +21,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCurrentBase64Url()
     {
-        $this->assertEquals('aHR0cDovL2xvY2FsaG9zdDo4MS8,', $this->_helper->getCurrentBase64Url());
+        $this->assertEquals('aHR0cDovL2xvY2FsaG9zdDo4MS8~', $this->_helper->getCurrentBase64Url());
     }
 
     public function testGetEncodedUrl()
     {
-        $this->assertEquals('aHR0cDovL2xvY2FsaG9zdDo4MS8,', $this->_helper->getEncodedUrl());
-        $this->assertEquals('aHR0cDovL2V4YW1wbGUuY29tLw,,', $this->_helper->getEncodedUrl('http://example.com/'));
+        $this->assertEquals('aHR0cDovL2xvY2FsaG9zdDo4MS8~', $this->_helper->getEncodedUrl());
+        $this->assertEquals('aHR0cDovL2V4YW1wbGUuY29tLw~~', $this->_helper->getEncodedUrl('http://example.com/'));
     }
 }

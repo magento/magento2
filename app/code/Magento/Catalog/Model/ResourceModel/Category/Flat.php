@@ -17,22 +17,16 @@ use Magento\Framework\App\ObjectManager;
 class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
 {
     /**
-     * Store id
-     *
      * @var int
      */
     protected $_storeId;
 
     /**
-     * Loaded
-     *
      * @var boolean
      */
     protected $_loaded = false;
 
     /**
-     * Nodes
-     *
      * @var array
      */
     protected $_nodes = [];
@@ -52,30 +46,22 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
     protected $_eventManager;
 
     /**
-     * Catalog config
-     *
      * @var \Magento\Catalog\Model\Config
      */
     protected $_catalogConfig;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Category collection factory
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
-     * @deprecated 100.0.12
+     * @deprecated 100.0.2
      */
     protected $_categoryCollectionFactory;
 
     /**
-     * Category factory
-     *
      * @var \Magento\Catalog\Model\CategoryFactory
      */
     protected $_categoryFactory;
@@ -173,7 +159,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
     public function getMainStoreTable($storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID)
     {
         if (is_string($storeId)) {
-            $storeId = intval($storeId);
+            $storeId = (int) $storeId;
         }
 
         if ($storeId) {
@@ -294,7 +280,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
         $inactiveCategories = $this->getInactiveCategoryIds();
 
         if (!empty($inactiveCategories)) {
-            $select->where('main_table.entity_id NOT IN (?)', $inactiveCategories);
+            $select->where('main_table.entity_id NOT IN (?)', $inactiveCategories, \Zend_Db::INT_TYPE);
         }
 
         // Allow extensions to modify select (e.g. add custom category attributes to select)
@@ -370,7 +356,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
                 $nodes = $this->_loadNodes($parentNode, $recursionLevel, $storeId);
                 $childrenItems = [];
                 foreach ($nodes as $node) {
-                    $pathToParent = explode('/', $node->getPath());
+                    $pathToParent = explode('/', $node->getPath() ?? '');
                     array_pop($pathToParent);
                     $pathToParent = implode('/', $pathToParent);
                     $childrenItems[$pathToParent][] = $node;
@@ -602,9 +588,10 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * @param \Magento\Catalog\Model\Category $category
      * @param bool $recursive
      * @param bool $isActive
+     * @param bool $sortByPosition
      * @return array
      */
-    public function getChildren($category, $recursive = true, $isActive = true)
+    public function getChildren($category, $recursive = true, $isActive = true, $sortByPosition = false)
     {
         $select = $this->getConnection()->select()->from(
             $this->getMainStoreTable($category->getStoreId()),
@@ -618,6 +605,9 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
         }
         if ($isActive) {
             $select->where('is_active = ?', '1');
+        }
+        if ($sortByPosition) {
+            $select->order('position ASC');
         }
         $_categories = $this->getConnection()->fetchAll($select);
         $categoriesIds = [];
@@ -677,7 +667,8 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
             1
         )->where(
             'entity_id IN (?)',
-            $filterIds
+            $filterIds,
+            \Zend_Db::INT_TYPE
         );
 
         return $this->getConnection()->fetchCol($select);
@@ -695,10 +686,21 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
             $this->getTable('catalog_category_product'),
             ['product_id', 'position']
         )->where(
-            'category_id = :category_id'
+            "{$this->getTable('catalog_category_product')}.category_id = ?",
+            $category->getId()
         );
-        $bind = ['category_id' => (int)$category->getId()];
+        $websiteId = $category->getStore()->getWebsiteId();
+        if ($websiteId) {
+            $select->join(
+                ['product_website' => $this->getTable('catalog_product_website')],
+                "product_website.product_id = {$this->getTable('catalog_category_product')}.product_id",
+                []
+            )->where(
+                'product_website.website_id = ?',
+                $websiteId
+            );
+        }
 
-        return $this->getConnection()->fetchPairs($select, $bind);
+        return $this->getConnection()->fetchPairs($select);
     }
 }

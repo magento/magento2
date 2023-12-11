@@ -7,15 +7,17 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Cms\Api\Data\PageSearchResultsInterface"
-                type="Magento\Framework\Api\SearchResults" />
+                type="Magento\Cms\Model\PageSearchResults" />
     <preference for="Magento\Cms\Api\Data\BlockSearchResultsInterface"
-                type="Magento\Framework\Api\SearchResults" />
+                type="Magento\Cms\Model\BlockSearchResults" />
     <preference for="Magento\Cms\Api\GetBlockByIdentifierInterface" type="Magento\Cms\Model\GetBlockByIdentifier" />
     <preference for="Magento\Cms\Api\GetPageByIdentifierInterface" type="Magento\Cms\Model\GetPageByIdentifier" />
     <preference for="Magento\Cms\Api\Data\PageInterface" type="Magento\Cms\Model\Page" />
     <preference for="Magento\Cms\Api\Data\BlockInterface" type="Magento\Cms\Model\Block" />
     <preference for="Magento\Cms\Api\BlockRepositoryInterface" type="Magento\Cms\Model\BlockRepository" />
-    <preference for="Magento\Cms\Api\PageRepositoryInterface" type="Magento\Cms\Model\PageRepository" />
+    <preference for="Magento\Cms\Api\PageRepositoryInterface" type="Magento\Cms\Model\PageRepository\ValidationComposite" />
+    <preference for="Magento\Ui\Component\Wysiwyg\ConfigInterface" type="Magento\Cms\Model\Wysiwyg\Config"/>
+    <preference for="Magento\Cms\Api\GetUtilityPageIdentifiersInterface" type="Magento\Cms\Model\GetUtilityPageIdentifiers" />
     <type name="Magento\Cms\Model\Wysiwyg\Config">
         <arguments>
             <argument name="windowSize" xsi:type="array">
@@ -32,29 +34,61 @@
             </argument>
             <argument name="extensions" xsi:type="array">
                 <item name="allowed" xsi:type="array">
-                    <item name="jpg" xsi:type="number">1</item>
-                    <item name="jpeg" xsi:type="number">1</item>
-                    <item name="png" xsi:type="number">1</item>
-                    <item name="gif" xsi:type="number">1</item>
+                    <item name="jpg" xsi:type="string">image/jpg</item>
+                    <item name="jpeg" xsi:type="string">image/jpeg</item>
+                    <item name="png" xsi:type="string">image/png</item>
+                    <item name="gif" xsi:type="string">image/gif</item>
                 </item>
                 <item name="image_allowed" xsi:type="array">
-                    <item name="jpg" xsi:type="number">1</item>
-                    <item name="jpeg" xsi:type="number">1</item>
-                    <item name="png" xsi:type="number">1</item>
-                    <item name="gif" xsi:type="number">1</item>
+                    <item name="jpg" xsi:type="string">image/jpg</item>
+                    <item name="jpeg" xsi:type="string">image/jpeg</item>
+                    <item name="png" xsi:type="string">image/png</item>
+                    <item name="gif" xsi:type="string">image/gif</item>
                 </item>
                 <item name="media_allowed" xsi:type="array">
-                    <item name="flv" xsi:type="number">1</item>
-                    <item name="swf" xsi:type="number">1</item>
-                    <item name="avi" xsi:type="number">1</item>
-                    <item name="mov" xsi:type="number">1</item>
-                    <item name="rm" xsi:type="number">1</item>
-                    <item name="wmv" xsi:type="number">1</item>
+                    <item name="flv" xsi:type="string">video/x-flv</item>
+                    <item name="avi" xsi:type="string">video/x-msvideo</item>
+                    <item name="mov" xsi:type="string">video/x-sgi-movie</item>
+                    <item name="rm" xsi:type="string">application/vnd.rn-realmedia</item>
+                    <item name="wmv" xsi:type="string">video/x-ms-wmv</item>
                 </item>
             </argument>
             <argument name="dirs" xsi:type="array">
-                <item name="exclude" xsi:type="string"/>
-                <item name="include" xsi:type="string"/>
+                <item name="exclude" xsi:type="array">
+                    <item name="captcha" xsi:type="array">
+                        <item name="regexp" xsi:type="boolean">true</item>
+                        <item name="name" xsi:type="string">media[/\\]+captcha[/\\]*$</item>
+                    </item>
+                    <item name="catalog/product" xsi:type="array">
+                        <item name="regexp" xsi:type="boolean">true</item>
+                        <item name="name" xsi:type="string">media[/\\]+catalog[/\\]+product[/\\]*$</item>
+                    </item>
+                    <item name="customer" xsi:type="array">
+                        <item name="regexp" xsi:type="boolean">true</item>
+                        <item name="name" xsi:type="string">media[/\\]+customer[/\\]*$</item>
+                    </item>
+                    <item name="downloadable" xsi:type="array">
+                        <item name="regexp" xsi:type="boolean">true</item>
+                        <item name="name" xsi:type="string">media[/\\]+downloadable[/\\]*$</item>
+                    </item>
+                    <item name="import" xsi:type="array">
+                        <item name="regexp" xsi:type="boolean">true</item>
+                        <item name="name" xsi:type="string">media[/\\]+import[/\\]*$</item>
+                    </item>
+                    <item name="theme" xsi:type="array">
+                        <item name="regexp" xsi:type="boolean">true</item>
+                        <item name="name" xsi:type="string">media[/\\]+theme[/\\]*$</item>
+                    </item>
+                    <item name="theme_customization" xsi:type="array">
+                        <item name="regexp" xsi:type="boolean">true</item>
+                        <item name="name" xsi:type="string">media[/\\]+theme_customization[/\\]*$</item>
+                    </item>
+                    <item name="tmp" xsi:type="array">
+                        <item name="regexp" xsi:type="boolean">true</item>
+                        <item name="name" xsi:type="string">media[/\\]+tmp[/\\]*$</item>
+                    </item>
+                </item>
+                <item name="include" xsi:type="array"/>
             </argument>
         </arguments>
     </type>
@@ -82,14 +116,6 @@
             <argument name="resourceModel" xsi:type="string">Magento\Cms\Model\ResourceModel\Block</argument>
         </arguments>
     </type>
-    <virtualType name="CmsGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
-        <arguments>
-            <argument name="appliers" xsi:type="array">
-                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
-                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
-            </argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\Framework\Model\Entity\RepositoryFactory">
         <arguments>
             <argument name="entities" xsi:type="array">
@@ -167,6 +193,7 @@
     <type name="Magento\Cms\Model\PageRepository">
         <arguments>
             <argument name="collectionProcessor" xsi:type="object">Magento\Cms\Model\Api\SearchCriteria\PageCollectionProcessor</argument>
+            <argument name="hydrator" xsi:type="object">Magento\Framework\EntityManager\AbstractModelHydrator</argument>
         </arguments>
     </type>
     <virtualType name="Magento\Cms\Model\Api\SearchCriteria\CollectionProcessor\BlockFilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
@@ -188,6 +215,105 @@
     <type name="Magento\Cms\Model\BlockRepository">
         <arguments>
             <argument name="collectionProcessor" xsi:type="object">Magento\Cms\Model\Api\SearchCriteria\BlockCollectionProcessor</argument>
+            <argument name="hydrator" xsi:type="object">Magento\Framework\EntityManager\AbstractModelHydrator</argument>
         </arguments>
     </type>
+
+    <type name="Magento\Cms\Ui\Component\DataProvider">
+        <arguments>
+            <argument name="additionalFilterPool" xsi:type="array">
+                <item name="fulltext" xsi:type="object">Magento\Cms\Ui\Component\Page\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="cms" type="Magento\Cms\Model\Plugin\Product" sortOrder="100"/>
+    </type>
+    <type name="Magento\Cms\Model\PageRepository\ValidationComposite">
+        <arguments>
+            <argument name="repository" xsi:type="object">Magento\Cms\Model\PageRepository</argument>
+            <argument name="validators" xsi:type="array">
+                <item name="layout_update" xsi:type="object">Magento\Cms\Model\PageRepository\Validator\LayoutUpdateValidator</item>
+            </argument>
+            <argument name="hydrator" xsi:type="object">Magento\Framework\EntityManager\AbstractModelHydrator</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Cms\Model\Page\CustomLayoutManagerInterface" type="Magento\Cms\Model\Page\CustomLayout\CustomLayoutManager" />
+    <type name="Magento\Cms\Model\Page\CustomLayout\CustomLayoutManager">
+        <arguments>
+            <argument name="themeFactory" xsi:type="object">Magento\Framework\View\Design\Theme\FlyweightFactory\Proxy</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Cms\Model\Page\CustomLayoutRepositoryInterface" type="Magento\Cms\Model\Page\CustomLayout\CustomLayoutRepository" />
+    <type name="Magento\Cms\Model\Wysiwyg\Validator">
+        <arguments>
+            <argument name="validator" xsi:type="object">DefaultWYSIWYGValidator</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface" type="Magento\Cms\Model\Wysiwyg\Validator" />
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="cms_wysiwyg_restrict" xsi:type="object">Magento\Cms\Command\WysiwygRestrictCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="DefaultWYSIWYGValidator" type="Magento\Framework\Validator\HTML\ConfigurableWYSIWYGValidator">
+        <arguments>
+            <argument name="allowedTags" xsi:type="array">
+                <item name="div" xsi:type="string">div</item>
+                <item name="a" xsi:type="string">a</item>
+                <item name="p" xsi:type="string">p</item>
+                <item name="span" xsi:type="string">span</item>
+                <item name="em" xsi:type="string">em</item>
+                <item name="strong" xsi:type="string">strong</item>
+                <item name="ul" xsi:type="string">ul</item>
+                <item name="li" xsi:type="string">li</item>
+                <item name="ol" xsi:type="string">ol</item>
+                <item name="h5" xsi:type="string">h5</item>
+                <item name="h4" xsi:type="string">h4</item>
+                <item name="h3" xsi:type="string">h3</item>
+                <item name="h2" xsi:type="string">h2</item>
+                <item name="h1" xsi:type="string">h1</item>
+                <item name="table" xsi:type="string">table</item>
+                <item name="tbody" xsi:type="string">tbody</item>
+                <item name="tr" xsi:type="string">tr</item>
+                <item name="td" xsi:type="string">td</item>
+                <item name="th" xsi:type="string">th</item>
+                <item name="tfoot" xsi:type="string">tfoot</item>
+                <item name="img" xsi:type="string">img</item>
+                <item name="hr" xsi:type="string">hr</item>
+                <item name="figure" xsi:type="string">figure</item>
+                <item name="button" xsi:type="string">button</item>
+                <item name="i" xsi:type="string">i</item>
+                <item name="u" xsi:type="string">u</item>
+                <item name="br" xsi:type="string">br</item>
+                <item name="b" xsi:type="string">b</item>
+            </argument>
+            <argument name="allowedAttributes" xsi:type="array">
+                <item name="class" xsi:type="string">class</item>
+                <item name="width" xsi:type="string">width</item>
+                <item name="height" xsi:type="string">height</item>
+                <item name="style" xsi:type="string">style</item>
+                <item name="alt" xsi:type="string">alt</item>
+                <item name="title" xsi:type="string">title</item>
+                <item name="border" xsi:type="string">border</item>
+                <item name="id" xsi:type="string">id</item>
+            </argument>
+            <argument name="attributesAllowedByTags" xsi:type="array">
+                <item name="a" xsi:type="array">
+                    <item name="href" xsi:type="string">href</item>
+                </item>
+                <item name="img" xsi:type="array">
+                    <item name="src" xsi:type="string">src</item>
+                </item>
+                <item name="button" xsi:type="array">
+                    <item name="type" xsi:type="string">type</item>
+                </item>
+            </argument>
+            <argument name="attributeValidators" xsi:type="array">
+                <item name="style" xsi:type="object">Magento\Framework\Validator\HTML\StyleAttributeValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

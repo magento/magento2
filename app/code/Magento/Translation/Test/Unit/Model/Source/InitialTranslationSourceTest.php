@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Translation\Test\Unit\Model\Source;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -13,46 +15,47 @@ use Magento\Store\Model\StoreManager;
 use Magento\Translation\Model\ResourceModel\Translate;
 use Magento\Translation\Model\ResourceModel\TranslateFactory;
 use Magento\Translation\Model\Source\InitialTranslationSource;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Translation\Model\Source\InitialTranslationSource
- * @package Magento\Translation\Test\Unit\Model\Source
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InitialTranslationSourceTest extends \PHPUnit\Framework\TestCase
+class InitialTranslationSourceTest extends TestCase
 {
     /**
-     * @var TranslateFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var TranslateFactory|MockObject
      */
     private $translationFactory;
 
     /**
-     * @var Translate|\PHPUnit_Framework_MockObject_MockObject
+     * @var Translate|MockObject
      */
     private $translation;
 
     /**
-     * @var StoreManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManager|MockObject
      */
     private $storeManager;
 
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|MockObject
      */
     private $store;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connection;
 
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|MockObject
      */
     private $select;
 
     /**
-     * @var DeploymentConfig | \PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|MockObject
      */
     private $deploymentConfigMock;
 
@@ -61,7 +64,7 @@ class InitialTranslationSourceTest extends \PHPUnit\Framework\TestCase
      */
     private $source;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->translationFactory = $this->getMockBuilder(TranslateFactory::class)
             ->disableOriginalConstructor()
@@ -78,7 +81,7 @@ class InitialTranslationSourceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();

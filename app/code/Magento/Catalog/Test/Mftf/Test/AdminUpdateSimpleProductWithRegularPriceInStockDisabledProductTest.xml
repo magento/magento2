@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateSimpleProductWithRegularPriceInStockDisabledProductTest">
+        <annotations>
+            <stories value="Update Simple Product"/>
+            <title value="Update Simple Product with Regular Price (In Stock), Disabled Product"/>
+            <description value="Test log in to Update Simple Product and Update Simple Product with Regular Price (In Stock), Disabled Product"/>
+            <testCaseId value="MC-10816"/>
+            <severity value="BLOCKER"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleSubCategory" stepKey="initialCategoryEntity"/>
+            <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct">
+                <requiredEntity createDataKey="initialCategoryEntity"/>
+            </createData>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
+                <argument name="sku" value="{{simpleProductDisabled.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Search default simple product in the grid page -->
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="openProductCatalogPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterProductGrid"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="clickFirstRowToOpenDefaultSimpleProduct">
+            <argument name="product" value="$$initialSimpleProduct$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitUntilProductIsOpened"/>
+
+        <!-- Update simple product with regular price(in stock) -->
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{simpleProductDisabled.name}}" stepKey="fillSimpleProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{simpleProductDisabled.sku}}" stepKey="fillSimpleProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{simpleProductDisabled.price}}" stepKey="fillSimpleProductPrice"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillSimpleProductQuantity">
+            <argument name="productQty" value="{{simpleProductDisabled.quantity}}"/>
+        </actionGroup>
+        <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{simpleProductDisabled.status}}" stepKey="selectStockStatusInStock"/>
+        <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductDisabled.weight}}" stepKey="fillSimpleProductWeight"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
+        <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{simpleProductDisabled.urlKey}}" stepKey="fillUrlKey"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
+        <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="clickEnableProductLabelToDisableProduct"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
+
+        <!-- Verify customer see success message -->
+        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
+
+        <!-- Search updated simple product(from above step) in the grid -->
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPageToSearchUpdatedSimpleProduct"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFiltersButton"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{simpleProductDisabled.name}}" stepKey="fillSimpleProductNameInNameFilter"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{simpleProductDisabled.sku}}" stepKey="fillProductSku"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyUpdatedSimpleProductVisibleInGrid"/>
+        <waitForPageLoad stepKey="waitUntilSimpleProductPageIsOpened"/>
+
+        <!-- Verify customer see updated simple product in the product form page -->
+        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{simpleProductDisabled.name}}" stepKey="seeSimpleProductName"/>
+        <seeInField selector="{{AdminProductFormSection.productSku}}" userInput="{{simpleProductDisabled.sku}}" stepKey="seeSimpleProductSku"/>
+        <seeInField selector="{{AdminProductFormSection.productPrice}}" userInput="{{simpleProductDisabled.price}}" stepKey="seeSimpleProductPrice"/>
+        <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{simpleProductDisabled.quantity}}" stepKey="seeSimpleProductQuantity"/>
+        <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{simpleProductDisabled.status}}" stepKey="seeSimpleProductStockStatus"/>
+        <seeInField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductDisabled.weight}}" stepKey="seeSimpleProductWeight"/>
+        <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSectionHeader"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSectionHeader"/>
+        <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{simpleProductDisabled.urlKey}}" stepKey="seeSimpleProductUrlKey"/>
+
+        <!--Verify customer don't see updated simple product link on magento storefront page -->
+        <amOnPage url="{{StorefrontProductPage.url(simpleProductDisabled.urlKey)}}" stepKey="goToMagentoStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillSimpleProductSkuInSearchTextBox">
+            <argument name="phrase" value="{{simpleProductDisabled.sku}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextBoxButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch"/>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProductNameOnStorefrontPage">
+            <argument name="productName" value="{{simpleProductDisabled.name}}"/>
+        </actionGroup>
+    </test>
+</tests>

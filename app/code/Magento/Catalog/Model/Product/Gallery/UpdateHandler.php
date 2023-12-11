@@ -5,51 +5,137 @@
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
-use Magento\Framework\EntityManager\Operation\ExtensionInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Media\Config;
+use Magento\Catalog\Model\ResourceModel\Product\Gallery;
+use Magento\Eav\Model\ResourceModel\AttributeValue;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Json\Helper\Data;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Model\Product\Image\RemoveDeletedImagesFromCache;
 
 /**
  * Update handler for catalog product gallery.
  *
  * @api
  * @since 101.0.0
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
+class UpdateHandler extends CreateHandler
 {
     /**
-     * {@inheritdoc}
+     * @var AttributeValue
+     */
+    private AttributeValue $attributeValue;
+
+    /**
+     * @var RemoveDeletedImagesFromCache
+     */
+    private RemoveDeletedImagesFromCache $removeDeletedImagesFromCache;
+
+    /**
+     * @param MetadataPool $metadataPool
+     * @param ProductAttributeRepositoryInterface $attributeRepository
+     * @param Gallery $resourceModel
+     * @param Data $jsonHelper
+     * @param Config $mediaConfig
+     * @param Filesystem $filesystem
+     * @param Database $fileStorageDb
+     * @param StoreManagerInterface|null $storeManager
+     * @param AttributeValue|null $attributeValue
+     * @param RemoveDeletedImagesFromCache|null $removeDeletedImagesFromCache
+     * @throws FileSystemException
+     */
+    public function __construct(
+        MetadataPool $metadataPool,
+        ProductAttributeRepositoryInterface $attributeRepository,
+        Gallery $resourceModel,
+        Data $jsonHelper,
+        Config $mediaConfig,
+        Filesystem $filesystem,
+        Database $fileStorageDb,
+        StoreManagerInterface $storeManager = null,
+        ?AttributeValue $attributeValue = null,
+        ?RemoveDeletedImagesFromCache $removeDeletedImagesFromCache = null
+    ) {
+        parent::__construct(
+            $metadataPool,
+            $attributeRepository,
+            $resourceModel,
+            $jsonHelper,
+            $mediaConfig,
+            $filesystem,
+            $fileStorageDb,
+            $storeManager
+        );
+        $this->attributeValue = $attributeValue ?: ObjectManager::getInstance()->get(AttributeValue::class);
+        $this->removeDeletedImagesFromCache = $removeDeletedImagesFromCache ?:
+            ObjectManager::getInstance()->get(RemoveDeletedImagesFromCache::class);
+    }
+
+    /**
+     * @inheritdoc
+     *
      * @since 101.0.0
      */
     protected function processDeletedImages($product, array &$images)
     {
         $filesToDelete = [];
         $recordsToDelete = [];
-        $picturesInOtherStores = [];
-
-        foreach ($this->resourceModel->getProductImages($product, $this->extractStoreIds($product)) as $image) {
-            $picturesInOtherStores[$image['filepath']] = true;
+        $imagesToDelete = [];
+        $imagesToNotDelete = [];
+        foreach ($images as $image) {
+            if (empty($image['removed'])) {
+                $imagesToNotDelete[] = $image['file'];
+            }
         }
 
-        foreach ($images as &$image) {
+        foreach ($images as $image) {
             if (!empty($image['removed'])) {
-                if (!empty($image['value_id']) && !isset($picturesInOtherStores[$image['file']])) {
+                if (!empty($image['value_id'])) {
                     $recordsToDelete[] = $image['value_id'];
-                    $catalogPath = $this->mediaConfig->getBaseMediaPath();
-                    $isFile = $this->mediaDirectory->isFile($catalogPath . $image['file']);
-                    // only delete physical files if they are not used by any other products and if this file exist
-                    if ($isFile && !($this->resourceModel->countImageUses($image['file']) > 1)) {
-                        $filesToDelete[] = ltrim($image['file'], '/');
+                    if (!in_array($image['file'], $imagesToNotDelete)) {
+                        $imagesToDelete[] = $image['file'];
+                        if ($this->canDeleteImage($image['file'])) {
+                            $filesToDelete[] = ltrim($image['file'], '/');
+                        }
                     }
                 }
             }
         }
 
+        $this->deleteMediaAttributeValues($product, $imagesToDelete);
         $this->resourceModel->deleteGallery($recordsToDelete);
-
         $this->removeDeletedImages($filesToDelete);
+        $this->removeDeletedImagesFromCache->removeDeletedImagesFromCache($filesToDelete);
     }
 
     /**
-     * {@inheritdoc}
+     * Check if image exists and is not used by any other products
+     *
+     * @param string $file
+     * @return bool
+     */
+    private function canDeleteImage(string $file): bool
+    {
+        $catalogPath = $this->mediaConfig->getBaseMediaPath();
+        $filePath = $this->mediaDirectory->getRelativePath($catalogPath . $file);
+        return $this->mediaDirectory->isFile($filePath)
+            && $this->resourceModel->countImageUses($file) <= 1;
+    }
+
+    /**
+     * @inheritdoc
+     *
      * @since 101.0.0
      */
     protected function processNewImage($product, array &$image)
@@ -70,20 +156,32 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
                 $image['value_id'],
                 $product->getData($this->metadata->getLinkField())
             );
+        } elseif (!empty($image['recreate'])) {
+            $data['value_id'] = $image['value_id'];
+            $data['value'] = $image['file'];
+            $data['attribute_id'] = $this->getAttribute()->getAttributeId();
+
+            if (!empty($image['media_type'])) {
+                $data['media_type'] = $image['media_type'];
+            }
+
+            $this->resourceModel->saveDataRow(Gallery::GALLERY_TABLE, $data);
         }
 
         return $data;
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product $product
+     * Retrieve store ids from product.
+     *
+     * @param Product $product
      * @return array
      * @since 101.0.0
      */
     protected function extractStoreIds($product)
     {
         $storeIds = $product->getStoreIds();
-        $storeIds[] = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+        $storeIds[] = Store::DEFAULT_STORE_ID;
 
         // Removing current storeId.
         $storeIds = array_flip($storeIds);
@@ -94,8 +192,11 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
     }
 
     /**
+     * Remove deleted images.
+     *
      * @param array $files
      * @return null
+     * @throws FileSystemException
      * @since 101.0.0
      */
     protected function removeDeletedImages(array $files)
@@ -104,6 +205,37 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
 
         foreach ($files as $filePath) {
             $this->mediaDirectory->delete($catalogPath . '/' . $filePath);
+        }
+        return null;
+    }
+
+    /**
+     * Delete media attributes values for given images
+     *
+     * @param Product $product
+     * @param string[] $images
+     * @throws LocalizedException
+     */
+    private function deleteMediaAttributeValues(Product $product, array $images): void
+    {
+        if ($images) {
+            $values = $this->attributeValue->getValues(
+                ProductInterface::class,
+                $product->getData($this->metadata->getLinkField()),
+                $this->mediaConfig->getMediaAttributeCodes()
+            );
+            $valuesToDelete = [];
+            foreach ($values as $value) {
+                if (in_array($value['value'], $images, true)) {
+                    $valuesToDelete[] = $value;
+                }
+            }
+            if ($valuesToDelete) {
+                $this->attributeValue->deleteValues(
+                    ProductInterface::class,
+                    $valuesToDelete
+                );
+            }
         }
     }
 }

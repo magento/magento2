@@ -4,12 +4,18 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Framework\Encryption;
+
+use Magento\Framework\Encryption\Adapter\Mcrypt;
 
 /**
  * Class encapsulates cryptographic algorithm
  *
  * @api
+ * @deprecated 102.0.0
+ * @since 100.0.2
  */
 class Crypt
 {
@@ -29,23 +35,24 @@ class Crypt
     protected $_initVector;
 
     /**
-     * Encryption algorithm module handle
+     * Mcrypt adapter
      *
-     * @var resource
+     * @var Mcrypt
      */
-    protected $_handle;
+    private $mcrypt;
 
     /**
      * Constructor
      *
-     * @param  string      $key        Secret encryption key.
-     *                                 It's unsafe to store encryption key in memory, so no getter for key exists.
-     * @param  string      $cipher     Cipher algorithm (one of the MCRYPT_ciphername constants)
-     * @param  string      $mode       Mode of cipher algorithm (MCRYPT_MODE_modeabbr constants)
-     * @param  string|bool $initVector Initial vector to fill algorithm blocks.
-     *                                 TRUE generates a random initial vector.
-     *                                 FALSE fills initial vector with zero bytes to not use it.
+     * @param string $key Secret encryption key.
+     *                    It's unsafe to store encryption key in memory, so no getter for key exists.
+     * @param string $cipher Cipher algorithm (one of the MCRYPT_ciphername constants)
+     * @param string $mode Mode of cipher algorithm (MCRYPT_MODE_modeabbr constants)
+     * @param string|bool $initVector Initial vector to fill algorithm blocks.
+     *                                TRUE generates a random initial vector.
+     *                                FALSE fills initial vector with zero bytes to not use it.
      * @throws \Exception
+     * phpcs:disable PHPCompatibility.Constants.RemovedConstants
      */
     public function __construct(
         $key,
@@ -53,64 +60,30 @@ class Crypt
         $mode = MCRYPT_MODE_ECB,
         $initVector = false
     ) {
-        $this->_cipher = $cipher;
-        $this->_mode = $mode;
-        // @codingStandardsIgnoreStart
-        $this->_handle = @mcrypt_module_open($cipher, '', $mode, '');
-        // @codingStandardsIgnoreEnd
-        try {
-            // @codingStandardsIgnoreStart
-            $maxKeySize = @mcrypt_enc_get_key_size($this->_handle);
-            // @codingStandardsIgnoreEnd
-            if (strlen($key) > $maxKeySize) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    new \Magento\Framework\Phrase('Key must not exceed %1 bytes.', [$maxKeySize])
-                );
-            }
-            // @codingStandardsIgnoreStart
-            $initVectorSize = @mcrypt_enc_get_iv_size($this->_handle);
-            // @codingStandardsIgnoreEnd
-            if (true === $initVector) {
-                /* Generate a random vector from human-readable characters */
-                $abc = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-                $initVector = '';
-                for ($i = 0; $i < $initVectorSize; $i++) {
-                    $initVector .= $abc[rand(0, strlen($abc) - 1)];
-                }
-            } elseif (false === $initVector) {
-                /* Set vector to zero bytes to not use it */
-                $initVector = str_repeat("\0", $initVectorSize);
-            } elseif (!is_string($initVector) || strlen($initVector) != $initVectorSize) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    new \Magento\Framework\Phrase(
-                        'Init vector must be a string of %1 bytes.',
-                        [$initVectorSize]
-                    )
-                );
-            }
-            $this->_initVector = $initVector;
-        } catch (\Exception $e) {
-            // @codingStandardsIgnoreStart
-            @mcrypt_module_close($this->_handle);
-            // @codingStandardsIgnoreEnd
-            throw $e;
-        }
-        // @codingStandardsIgnoreStart
-        @mcrypt_generic_init($this->_handle, $key, $initVector);
-        // @codingStandardsIgnoreEnd
-    }
+        if (true === $initVector) {
+            //phpcs:disable
+            $handle = @mcrypt_module_open($cipher, '', $mode, '');
+            $initVectorSize = @mcrypt_enc_get_iv_size($handle);
+            //phpcs:enable
 
-    /**
-     * Destructor frees allocated resources
-     */
-    public function __destruct()
-    {
-        // @codingStandardsIgnoreStart
-        @mcrypt_generic_deinit($this->_handle);
-        // @codingStandardsIgnoreEnd
-        // @codingStandardsIgnoreStart
-        @mcrypt_module_close($this->_handle);
-        // @codingStandardsIgnoreEnd
+            /* Generate a random vector from human-readable characters */
+            $allowedCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            $initVector = '';
+            for ($i = 0; $i < $initVectorSize; $i++) {
+                $initVector .= $allowedCharacters[random_int(0, strlen($allowedCharacters) - 1)];
+            }
+            //phpcs:disable
+            @mcrypt_generic_deinit($handle);
+            @mcrypt_module_close($handle);
+            //phpcs:enable
+        }
+
+        $this->mcrypt = new Mcrypt(
+            $key,
+            $cipher,
+            $mode,
+            $initVector === false ? null : $initVector
+        );
     }
 
     /**
@@ -120,7 +93,7 @@ class Crypt
      */
     public function getCipher()
     {
-        return $this->_cipher;
+        return $this->mcrypt->getCipher();
     }
 
     /**
@@ -130,7 +103,7 @@ class Crypt
      */
     public function getMode()
     {
-        return $this->_mode;
+        return $this->mcrypt->getMode();
     }
 
     /**
@@ -140,7 +113,7 @@ class Crypt
      */
     public function getInitVector()
     {
-        return $this->_initVector;
+        return $this->mcrypt->getInitVector();
     }
 
     /**
@@ -151,12 +124,11 @@ class Crypt
      */
     public function encrypt($data)
     {
-        if (strlen($data) == 0) {
+        if (!$data || strlen($data) == 0) {
             return $data;
         }
-        // @codingStandardsIgnoreStart
-        return @mcrypt_generic($this->_handle, $data);
-        // @codingStandardsIgnoreEnd
+        // @codingStandardsIgnoreLine
+        return @mcrypt_generic($this->mcrypt->getHandle(), $data);
     }
 
     /**
@@ -167,17 +139,6 @@ class Crypt
      */
     public function decrypt($data)
     {
-        if (strlen($data) == 0) {
-            return $data;
-        }
-        // @codingStandardsIgnoreStart
-        $data = @mdecrypt_generic($this->_handle, $data);
-        // @codingStandardsIgnoreEnd
-        /*
-         * Returned string can in fact be longer than the unencrypted string due to the padding of the data
-         * @link http://www.php.net/manual/en/function.mdecrypt-generic.php
-         */
-        $data = rtrim($data, "\0");
-        return $data;
+        return $this->mcrypt->decrypt($data);
     }
 }

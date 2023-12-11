@@ -20,14 +20,14 @@ class Collection extends \Magento\Framework\Data\Collection
     /**
      * From value
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $_from;
 
     /**
      * To value
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $_to;
 
@@ -39,8 +39,6 @@ class Collection extends \Magento\Framework\Data\Collection
     protected $_period;
 
     /**
-     * Intervals
-     *
      * @var int
      */
     protected $_intervals;
@@ -53,7 +51,7 @@ class Collection extends \Magento\Framework\Data\Collection
     protected $_reports;
 
     /**
-     * Page size
+     * Page size|null
      *
      * @var int
      */
@@ -99,7 +97,17 @@ class Collection extends \Magento\Framework\Data\Collection
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_pageSize = null;
+    }
+
+    /**
      * Set period
+     *
      * @codeCoverageIgnore
      *
      * @param int $period
@@ -113,6 +121,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Set interval
+     *
      * @codeCoverageIgnore
      *
      * @param \DateTimeInterface $fromDate
@@ -121,8 +130,8 @@ class Collection extends \Magento\Framework\Data\Collection
      */
     public function setInterval(\DateTimeInterface $fromDate, \DateTimeInterface $toDate)
     {
-        $this->_from = new \DateTime($fromDate->format('Y-m-d'), $fromDate->getTimezone());
-        $this->_to = new \DateTime($toDate->format('Y-m-d'), $toDate->getTimezone());
+        $this->_from = $fromDate;
+        $this->_to = $toDate;
 
         return $this;
     }
@@ -139,8 +148,8 @@ class Collection extends \Magento\Framework\Data\Collection
             if (!$this->_from && !$this->_to) {
                 return $this->_intervals;
             }
-            $dateStart = $this->_from;
-            $dateEnd = $this->_to;
+            $dateStart = new \DateTime($this->_from->format('Y-m-d'), $this->_from->getTimezone());
+            $dateEnd = new \DateTime($this->_to->format('Y-m-d'), $this->_to->getTimezone());
 
             $firstInterval = true;
             while ($dateStart <= $dateEnd) {
@@ -175,11 +184,7 @@ class Collection extends \Magento\Framework\Data\Collection
     protected function _getDayInterval(\DateTime $dateStart)
     {
         $interval = [
-            'period' => $this->_localeDate->formatDateTime(
-                $dateStart,
-                \IntlDateFormatter::SHORT,
-                \IntlDateFormatter::NONE
-            ),
+            'period' => $this->_localeDate->formatDate($dateStart, \IntlDateFormatter::SHORT),
             'start' => $this->_localeDate->convertConfigTimeToUtc($dateStart->format('Y-m-d 00:00:00')),
             'end' => $this->_localeDate->convertConfigTimeToUtc($dateStart->format('Y-m-d 23:59:59')),
         ];
@@ -215,8 +220,11 @@ class Collection extends \Magento\Framework\Data\Collection
                 )
             );
         } else {
+            // Transform the start date to UTC whilst preserving the date. This is required as getTimestamp()
+            // is in UTC which may result in a different month from the original start date due to time zones.
+            $dateStartUtc = (new \DateTime())->createFromFormat('d-m-Y g:i:s', $dateStart->format('d-m-Y 00:00:00'));
             $interval['end'] = $this->_localeDate->convertConfigTimeToUtc(
-                $dateStart->format('Y-m-' . date('t', $dateStart->getTimestamp()) . ' 23:59:59')
+                $dateStart->format('Y-m-' . date('t', $dateStartUtc->getTimestamp()) . ' 23:59:59')
             );
         }
 
@@ -245,7 +253,7 @@ class Collection extends \Magento\Framework\Data\Collection
             ? $this->_localeDate->convertConfigTimeToUtc($dateStart->format('Y-m-d 00:00:00'))
             : $this->_localeDate->convertConfigTimeToUtc($dateStart->format('Y-01-01 00:00:00'));
 
-        $interval['end'] = $dateStart->diff($dateEnd)->y == 0
+        $interval['end'] = $dateStart->format('Y') === $dateEnd->format('Y')
             ? $this->_localeDate->convertConfigTimeToUtc(
                 $dateStart->setDate($dateStart->format('Y'), $dateEnd->format('m'), $dateEnd->format('d'))
                     ->format('Y-m-d 23:59:59')
@@ -272,6 +280,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Set store ids
+     *
      * @codeCoverageIgnore
      *
      * @param array $storeIds
@@ -285,6 +294,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Get store ids
+     *
      * @codeCoverageIgnore
      *
      * @return array
@@ -306,6 +316,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Set page size
+     *
      * @codeCoverageIgnore
      *
      * @param int $size
@@ -319,6 +330,7 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * Get page size
+     *
      * @codeCoverageIgnore
      *
      * @return int

@@ -20,7 +20,7 @@ class InstantPurchaseTest extends TestCase
      */
     private $objectManager;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }

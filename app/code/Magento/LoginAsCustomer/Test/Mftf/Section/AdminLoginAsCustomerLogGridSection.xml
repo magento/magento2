@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminLoginAsCustomerLogGridSection">
+        <element name="loginIdInRow" type="text" selector="//table[@data-role='grid']/tbody/tr[{{row}}]/td[1]" parameterized="true"/>
+        <element name="customerIdInRow" type="text" selector="//table[@data-role='grid']/tbody/tr[{{row}}]/td[2]" parameterized="true"/>
+        <element name="customerEmailInRow" type="text" selector="//table[@data-role='grid']/tbody/tr[{{row}}]/td[3]" parameterized="true"/>
+        <element name="adminIdInRow" type="text" selector="//table[@data-role='grid']/tbody/tr[{{row}}]/td[4]" parameterized="true"/>
+        <element name="adminNameInRow" type="text" selector="//table[@data-role='grid']/tbody/tr[{{row}}]/td[5]" parameterized="true"/>
+        <element name="createdAtInRow" type="text" selector="//table[@data-role='grid']/tbody/tr[{{row}}]/td[6]" parameterized="true"/>
+    </section>
+</sections>
+

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDesignConfigMediaGalleryImageUploadTest">
+        <annotations>
+            <features value="Content"/>
+            <stories value="Content"/>
+            <title value="MC-5784: Image fields using imageUploader UIComponent cannot use gallery image"/>
+            <description value="Admin should be able to use Image Uploader to add Gallery Images"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-13832"/>
+            <group value="Content"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminArea"/>
+            <actionGroup ref="CliMediaGalleryEnhancedEnableActionGroup" stepKey="enableOldMediaGallery">
+                <argument name="enabled" value="0"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="CliMediaGalleryEnhancedEnableActionGroup" stepKey="disableOldMediaGallery">
+                <argument name="enabled" value="1"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+        <!--Edit Store View-->
+        <comment userInput="Edit Store View" stepKey="editStoreViewComment"/>
+        <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPage" />
+        <waitForPageLoad stepKey="waitForPageload1"/>
+        <click selector="{{AdminDesignConfigSection.scopeRow('3')}}" stepKey="editStoreView"/>
+        <waitForPageLoad stepKey="waitForPageload2"/>
+        <scrollTo selector="{{AdminDesignConfigSection.htmlHeaderSection}}" stepKey="scrollToHtmlHeadSection"/>
+        <click selector="{{AdminDesignConfigSection.htmlHeaderSection}}" stepKey="openHtmlHeadSection"/>
+        <!--Upload Image-->
+        <comment userInput="Upload Image" stepKey="uploadImageComment"/>
+        <click selector="{{AdminDesignConfigSection.selectFromGalleryByFieldsetName('Head')}}" stepKey="openMediaGallery"/>
+        <actionGroup ref="VerifyMediaGalleryStorageActionsActionGroup" stepKey="verifyMediaGalleryStorageBtn"/>
+        <comment userInput="BIC workaround" stepKey="navigateToFolder"/>
+        <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandStorageRootFolder">
+            <argument name="FolderName" value="Storage Root"/>
+        </actionGroup>
+        <actionGroup ref="NavigateToMediaFolderActionGroup" stepKey="navigateToWysiwygFolder">
+            <argument name="FolderName" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="CreateImageFolderActionGroup" stepKey="CreateImageFolder">
+            <argument name="ImageFolder" value="ImageFolder"/>
+        </actionGroup>
+        <actionGroup ref="AttachImageActionGroup" stepKey="selectImageFromMediaStorage">
+            <argument name="Image" value="ImageUpload3"/>
+        </actionGroup>
+        <actionGroup ref="SaveImageActionGroup" stepKey="insertImage"/>
+        <click selector="{{AdminDesignConfigSection.saveConfiguration}}" stepKey="saveConfiguration"/>
+        <waitForElementVisible selector="{{AdminDesignConfigSection.successNotification}}" stepKey="waitForSuccessNotification"/>
+        <waitForPageLoad stepKey="waitForPageloadSuccess"/>
+        <!--Edit Store View-->
+        <comment userInput="Edit Store View" stepKey="editStoreViewComment2"/>
+        <click selector="{{AdminDesignConfigSection.scopeRow('3')}}" stepKey="editStoreView2"/>
+        <waitForPageLoad stepKey="waitForPageload3"/>
+        <scrollTo selector="{{AdminDesignConfigSection.htmlHeaderSection}}" stepKey="scrollToHtmlHeadSection2"/>
+        <click selector="{{AdminDesignConfigSection.htmlHeaderSection}}" stepKey="openHtmlHeadSection2"/>
+        <!--Save Default Configuration-->
+        <comment userInput="Save Default Configuration" stepKey="saveDefaultConfigurationComment"/>
+        <click selector="{{AdminDesignConfigSection.useDefaultByFieldsetName('Head')}}" stepKey="clickUseDefault"/>
+        <waitForElementVisible selector="{{AdminDesignConfigSection.saveConfiguration}}" stepKey="waitForWrapperToClose2"/>
+        <click selector="{{AdminDesignConfigSection.saveConfiguration}}" stepKey="saveConfiguration2"/>
+        <waitForElementVisible selector="{{AdminDesignConfigSection.successNotification}}" stepKey="waitForSuccessNotification2"/>
+        <waitForPageLoad stepKey="waitForPageloadSuccess2"/>
+        <!--Delete Image: will be in both root and favicon-->
+        <comment userInput="Delete Image" stepKey="deleteImageComment"/>
+        <actionGroup ref="NavigateToMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
+        <comment userInput="BIC workaround" stepKey="navigateToFolder2"/>
+        <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandStorageRootFolder2">
+            <argument name="FolderName" value="Storage Root"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+            <argument name="FolderName" value="wysiwyg"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="deleteImageFromStorage"/>
+        <actionGroup ref="DeleteFolderActionGroup" stepKey="DeleteFolderFromMediaGallery">
+            <argument name="Image" value="{{ImageFolder.name}}"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="navigateToFolder3"/>
+        <comment userInput="BIC workaround" stepKey="deleteImageFromStorage2"/>
+    </test>
+</tests>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CreateInvoiceWithShipmentAndCheckInvoicedOrderTest">
+        <annotations>
+            <stories value="Create Invoice for Offline Payment Methods"/>
+            <title value="Create invoice with shipment and check invoiced order test"/>
+            <description value="Create invoice with shipment for offline payment methods and check invoiced order on admin dashboard"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-15867"/>
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!-- Create simple product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+
+            <!-- Enable charts -->
+            <magentoCLI command="config:set {{AdminEnableDashboardCharts.path}} {{AdminEnableDashboardCharts.value}}" stepKey="enableDashboardCharts"/>
+        </before>
+        <after>
+            <!-- Disable charts -->
+            <magentoCLI command="config:set {{AdminDisableDashboardCharts.path}} {{AdminDisableDashboardCharts.value}}" stepKey="disableDashboardCharts"/>
+
+            <!-- Logout customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
+
+            <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <!-- Delete product -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Create order-->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="goToCreateOrderPage">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Add product to order -->
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProductToOrder">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+
+        <!-- Select shipping method -->
+        <actionGroup ref="AdminClickGetShippingMethodsAndRatesActionGroup" stepKey="openShippingMethod"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForShippingMethods"/>
+        <actionGroup ref="AdminSelectFixedShippingMethodActionGroup" stepKey="chooseShippingMethod"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForShippingMethodLoad"/>
+
+        <!-- Submit order -->
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+
+        <!-- Grab order id -->
+        <comment userInput="BIC workaround" stepKey="getOrderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+
+        <!-- Open created order -->
+        <comment userInput="BIC workaround" stepKey="goToOrdersPage"/>
+        <comment userInput="BIC workaround" stepKey="filterOrdersGridById"/>
+        <comment userInput="BIC workaround" stepKey="clickCreatedOrderInGrid"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder1">
+            <argument name="entityId" value="{$orderId}"/>
+        </actionGroup>
+
+        <!-- Go to invoice tab and fill data -->
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceAction"/>
+        <click selector="{{AdminInvoicePaymentShippingSection.CreateShipment}}" stepKey="createShipment"/>
+        <fillField selector="{{AdminInvoiceTotalSection.invoiceComment}}" userInput="comment" stepKey="writeComment"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
+
+        <!-- Assert invoice with shipment success message -->
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the invoice and shipment." stepKey="seeSuccessMessage"/>
+
+        <!-- Assert order graph image is visible on admin dashboard -->
+        <amOnPage url="{{AdminDashboardPage.url}}" stepKey="amOnDashboardPage"/>
+        <waitForPageLoad stepKey="waitForDashboardPageLoad"/>
+        <actionGroup ref="AssertOrderGraphImageOnDashboardActionGroup" stepKey="seeOrderGraphImage"/>
+
+        <!-- Assert invoice in invoices grid -->
+        <actionGroup ref="FilterInvoiceGridByOrderIdWithCleanFiltersActionGroup" stepKey="filterInvoiceGridByOrderId">
+            <argument name="orderId" value="$orderNumber"/>
+        </actionGroup>
+        <click selector="{{AdminInvoicesGridSection.firstRow}}" stepKey="opeCreatedInvoice"/>
+        <waitForPageLoad stepKey="waitForInvoiceDetailsPageToLoad"/>
+        <grabFromCurrentUrl regex="~/invoice_id/(\d+)/~" stepKey="grabInvoiceId"/>
+
+        <!-- Assert no invoice button -->
+        <comment userInput="BIC workaround" stepKey="goToOrders"/>
+        <comment userInput="BIC workaround" stepKey="filterOrderGridByIdForAssertingInvoiceBtn"/>
+        <comment userInput="BIC workaround" stepKey="clickOrderInGrid"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder2">
+            <argument name="entityId" value="{$orderId}"/>
+        </actionGroup>
+        <dontSeeElement selector="{{AdminOrderDetailsMainActionsSection.invoiceBtn}}" stepKey="dontSeeInvoiceBtn"/>
+
+        <!-- Assert invoice in invoices tab  -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoiceTab}}" stepKey="clickInvoicesTabOrdersPage"/>
+        <conditionalClick selector="{{AdminOrderInvoicesTabSection.clearFilters}}" dependentSelector="{{AdminOrderInvoicesTabSection.clearFilters}}" visible="true" stepKey="clearInvoiceFilters"/>
+        <click selector="{{AdminOrderInvoicesTabSection.filters}}" stepKey="openOrderInvoicesGridFilters"/>
+        <fillField selector="{{AdminOrderInvoicesTabSection.invoiceId}}" userInput="$grabInvoiceId" stepKey="fillInvoiceIdFilter"/>
+        <fillField selector="{{AdminOrderInvoicesTabSection.amountFrom}}" userInput="128.00" stepKey="fillAmountFromFilter"/>
+        <fillField selector="{{AdminOrderInvoicesTabSection.amountTo}}" userInput="128.00" stepKey="fillAmountToFilter"/>
+        <click selector="{{AdminOrderInvoicesTabSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
+        <dontSeeElement selector="{{AdminDataGridTableSection.dataGridEmpty}}" stepKey="assertThatInvoiceGridNotEmpty"/>
+
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForCustomerLogin"/>
+
+        <!-- Open My Account > My Orders -->
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage"/>
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToSidebarMenu">
+            <argument name="menu" value="My Orders"/>
+        </actionGroup>
+
+        <!-- Assert invoiced amount on frontend -->
+        <click selector="{{StorefrontCustomerOrderSection.viewOrder}}" stepKey="clickViewOrder"/>
+        <click selector="{{StorefrontOrderInvoicesSection.invoiceTab}}" stepKey="clickInvoiceTabOnStorefront"/>
+        <see selector="{{StorefrontOrderInvoicesSection.grandTotalPrice}}" userInput="128.00" stepKey="seePrice"/>
+
+        <!-- Assert shipment in grid -->
+        <actionGroup ref="FilterShipmentGridByOrderIdActionGroup" stepKey="filterShipmentGridByOrderId">
+            <argument name="orderId" value="$orderNumber"/>
+        </actionGroup>
+        <click selector="{{AdminShipmentGridSection.firstRow}}" stepKey="openCreatedShipment"/>
+        <waitForPageLoad stepKey="waitForShipmentDetailsPageToLoad"/>
+        <grabFromCurrentUrl regex="~/shipment_id/(\d+)/~" stepKey="grabShipmentId"/>
+
+        <!-- Assert no ship button -->
+        <comment userInput="BIC workaround" stepKey="goToAdminOrdersPage"/>
+        <comment userInput="BIC workaround" stepKey="filterOrderGridByIdForAssertingShipBtn"/>
+        <comment userInput="BIC workaround" stepKey="selectOrderInGrid"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder3">
+            <argument name="entityId" value="{$orderId}"/>
+        </actionGroup>
+        <dontSeeElement selector="{{AdminOrderDetailsMainActionsSection.shipBtn}}" stepKey="dontSeeShipBtn"/>
+
+        <!-- Assert shipment in shipments tab -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.shipmentsTab}}" stepKey="clickShipmentsTab"/>
+        <waitForPageLoad stepKey="waitOrderShipTabToLoad"/>
+        <conditionalClick selector="{{AdminOrderShipmentsTabSection.clearFilters}}" dependentSelector="{{AdminOrderShipmentsTabSection.clearFilters}}" visible="true" stepKey="clearShipmentsFilters"/>
+        <click selector="{{AdminOrderShipmentsTabSection.filters}}" stepKey="openOrderShipmentsGridFilters"/>
+        <fillField selector="{{AdminOrderShipmentsTabSection.shipmentId}}" userInput="$grabShipmentId" stepKey="fillShipmentsIdFilter"/>
+        <fillField selector="{{AdminOrderShipmentsTabSection.totalQtyFrom}}" userInput="1.0000" stepKey="fillTotalQtyFromFilter"/>
+        <fillField selector="{{AdminOrderShipmentsTabSection.totalQtyTo}}" userInput="1.0000" stepKey="fillTotalQtyToFilter"/>
+        <click selector="{{AdminOrderShipmentsTabSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <dontSeeElement selector="{{AdminDataGridTableSection.dataGridEmpty}}" stepKey="assertThatShipmentGridNotEmpty"/>
+
+        <!-- Assert invoice items -->
+        <actionGroup ref="FilterInvoiceGridByOrderIdWithCleanFiltersActionGroup" stepKey="filterInvoiceByOrderId">
+            <argument name="orderId" value="$orderNumber"/>
+        </actionGroup>
+        <click selector="{{AdminInvoicesGridSection.firstRow}}" stepKey="openInvoice"/>
+        <waitForPageLoad stepKey="waitForInvoicePageToLoad"/>
+        <see selector="{{AdminInvoiceTotalSection.itemName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProductNameInInvoiceItems"/>
+        <see selector="{{AdminInvoiceTotalSection.itemQty}}" userInput="1" stepKey="seeProductQtyInInvoiceItems"/>
+        <see selector="{{AdminInvoiceTotalSection.itemTotalPrice}}" userInput="$$createSimpleProduct.price$$" stepKey="seeProductTotalPriceInInvoiceItems"/>
+    </test>
+</tests>

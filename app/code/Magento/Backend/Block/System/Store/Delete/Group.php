@@ -19,7 +19,7 @@ class Group extends \Magento\Backend\Block\Template
     {
         $itemId = $this->getRequest()->getParam('group_id');
 
-        $this->setTemplate('system/store/delete_group.phtml');
+        $this->setTemplate('Magento_Backend::system/store/delete_group.phtml');
         $this->setAction($this->getUrl('adminhtml/*/deleteGroupPost', ['group_id' => $itemId]));
         $this->addChild(
             'confirm_deletion_button',

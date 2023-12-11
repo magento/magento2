@@ -52,7 +52,7 @@ class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     }
 
     /**
-     * Retrieve avilable currency codes
+     * Retrieve available currency codes
      *
      * @return string[]
      */
@@ -75,7 +75,7 @@ class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     }
 
     /**
-     * Retrieve curency name by code
+     * Retrieve currency name by code
      *
      * @param string $code
      * @return string
@@ -86,7 +86,7 @@ class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     }
 
     /**
-     * Retrieve curency name by code
+     * Retrieve currency name by code
      *
      * @param string $code
      * @return string

@@ -5,61 +5,53 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category\Product\Plugin;
 
-use Magento\Framework\Indexer\IndexerRegistry;
-use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Model\Indexer\Category\Product;
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 class StoreGroup
 {
-    /**
-     * @var bool
-     */
-    private $needInvalidating;
-
     /**
      * @var IndexerRegistry
      */
     protected $indexerRegistry;
 
     /**
-     * @param IndexerRegistry $indexerRegistry
+     * @var TableMaintainer
      */
-    public function __construct(IndexerRegistry $indexerRegistry)
-    {
-        $this->indexerRegistry = $indexerRegistry;
-    }
+    protected $tableMaintainer;
 
     /**
-     * Check if need invalidate flat category indexer
-     *
-     * @param AbstractDb $subject
-     * @param AbstractModel $group
-     *
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param IndexerRegistry $indexerRegistry
+     * @param TableMaintainer $tableMaintainer
      */
-    public function beforeSave(AbstractDb $subject, AbstractModel $group)
-    {
-        $this->needInvalidating = $this->validate($group);
+    public function __construct(
+        IndexerRegistry $indexerRegistry,
+        TableMaintainer $tableMaintainer
+    ) {
+        $this->indexerRegistry = $indexerRegistry;
+        $this->tableMaintainer = $tableMaintainer;
     }
 
     /**
      * Invalidate flat product
      *
      * @param AbstractDb $subject
-     * @param AbstractDb $objectResource
+     * @param AbstractDb $result
+     * @param AbstractModel $group
      *
      * @return AbstractDb
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSave(AbstractDb $subject, AbstractDb $objectResource)
+    public function afterSave(AbstractDb $subject, AbstractDb $result, AbstractModel $group)
     {
-        if ($this->needInvalidating) {
+        if ($this->validate($group)) {
             $this->indexerRegistry->get(Product::INDEXER_ID)->invalidate();
         }
 
-        return $objectResource;
+        return $result;
     }
 
     /**
@@ -72,5 +64,23 @@ class StoreGroup
     {
         return ($group->dataHasChangedFor('website_id') || $group->dataHasChangedFor('root_category_id'))
                && !$group->isObjectNew();
+    }
+
+    /**
+     * Delete catalog_category_product indexer tables for deleted store group
+     *
+     * @param AbstractDb $subject
+     * @param AbstractDb $objectResource
+     * @param AbstractModel $storeGroup
+     *
+     * @return AbstractDb
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterDelete(AbstractDb $subject, AbstractDb $objectResource, AbstractModel $storeGroup)
+    {
+        foreach ($storeGroup->getStores() as $store) {
+            $this->tableMaintainer->dropTablesForStore((int)$store->getId());
+        }
+        return $objectResource;
     }
 }

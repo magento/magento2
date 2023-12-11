@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CustomerCheckoutFillNewShippingAddressActionGroup">
+        <annotations>
+            <description>Fills in the provided Address details in the 'Shipping Address' section on the Storefront Checkout page.</description>
+        </annotations>
+        <arguments>
+            <argument name="address" type="entity"/>
+        </arguments>
+
+        <selectOption selector="{{CheckoutShippingSection.country}}" userInput="{{address.country}}" stepKey="selectCounty"/>
+        <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{address.street}}" stepKey="fillStreet"/>
+        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{address.city}}" stepKey="fillCity"/>
+        <selectOption selector="{{CheckoutShippingSection.region}}" userInput="{{address.state}}" stepKey="selectRegion"/>
+        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{address.postcode}}" stepKey="fillZipCode"/>
+        <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{address.telephone}}" stepKey="fillPhone"/>
+        <fillField selector="{{CheckoutShippingSection.company}}" userInput="{{address.company}}" stepKey="fillCompany"/>
+    </actionGroup>
+</actionGroups>

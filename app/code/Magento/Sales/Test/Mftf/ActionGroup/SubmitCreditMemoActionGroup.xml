@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SubmitCreditMemoActionGroup">
+        <arguments>
+            <argument name="refundButton" defaultValue="{{AdminCreditMemoTotalSection.submitRefundOfflineEnabled}}" type="string"/>
+        </arguments>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+        <waitForElementVisible selector="{{refundButton}}" stepKey="waitButtonEnabled"/>
+        <click selector="{{refundButton}}" stepKey="clickSubmitCreditMemo"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForMessageAppears"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You created the credit memo." stepKey="seeCreditMemoCreateSuccess"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}$grabOrderId" stepKey="seeViewOrderPageCreditMemo"/>
+    </actionGroup>
+</actionGroups>

@@ -187,6 +187,50 @@ $oldOptions = [
         'price_type' => 'percent',
         'sku' => 'sku2',
         'max_characters' => 20,
+    ],
+    [
+        'title' => 'multiple option',
+        'type' => 'multiple',
+        'is_require' => true,
+        'sort_order' => 7,
+        'values' => [
+            [
+                'title' => 'multiple option 1',
+                'price' => 10,
+                'price_type' => 'fixed',
+                'sku' => 'multiple option 1 sku',
+                'sort_order' => 1,
+            ],
+            [
+                'title' => 'multiple option 2',
+                'price' => 20,
+                'price_type' => 'fixed',
+                'sku' => 'multiple option 2 sku',
+                'sort_order' => 2,
+            ],
+        ],
+    ],
+    [
+        'title' => 'checkbox option',
+        'type' => 'checkbox',
+        'is_require' => true,
+        'sort_order' => 6,
+        'values' => [
+            [
+                'title' => 'checkbox option 1',
+                'price' => 10,
+                'price_type' => 'fixed',
+                'sku' => 'checkbox option 1 sku',
+                'sort_order' => 1,
+            ],
+            [
+                'title' => 'checkbox option 2',
+                'price' => 20,
+                'price_type' => 'fixed',
+                'sku' => 'checkbox option 2 sku',
+                'sort_order' => 2,
+            ],
+        ],
     ]
 ];
 

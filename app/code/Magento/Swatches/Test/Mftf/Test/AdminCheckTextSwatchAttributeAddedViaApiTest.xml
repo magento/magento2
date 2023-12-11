@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckTextSwatchAttributeAddedViaApiTest">
+        <annotations>
+            <stories value="Add Swatch Text Product Attribute via API"/>
+            <title value="Add Swatch Text Product Attribute via API"/>
+            <description value="Login as admin, create swatch text product attribute.Go to New Product page,
+                check the created attribute is available on the page."/>
+            <severity value="MAJOR"/>
+            <group value="swatches"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <!-- Create an attribute with two options to be used in the first child product -->
+            <createData entity="textSwatchProductAttribute" stepKey="createTextSwatchConfigProductAttribute"/>
+            <!-- Add the attribute just created to default attribute set -->
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createTextSwatchConfigProductAttribute"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete Created Data -->
+            <deleteData createDataKey="createTextSwatchConfigProductAttribute" stepKey="deleteAttribute"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+
+        <!-- Open the new simple product page -->
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="openNewProductPage"/>
+        <!-- Check created attribute presents on the page -->
+        <actionGroup ref="AssertAdminProductAttributeByCodeOnProductFormActionGroup" stepKey="checkTextSwatchConfigProductAttributeOnThePage">
+            <argument name="productAttributeCode" value="$createTextSwatchConfigProductAttribute.attribute_code$"/>
+        </actionGroup>
+    </test>
+</tests>

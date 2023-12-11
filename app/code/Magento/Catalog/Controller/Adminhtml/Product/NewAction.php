@@ -4,17 +4,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\RegexValidator;
 
-class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
+class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpGetActionInterface
 {
     /**
      * @var Initialization\StockDataFilter
      * @deprecated 101.0.0
+     * @see Initialization\StockDataFilter
      */
     protected $stockFilter;
 
@@ -29,23 +33,32 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $resultForwardFactory;
 
     /**
-     * @param Action\Context $context
+     * @var RegexValidator
+     */
+    private RegexValidator $regexValidator;
+
+    /**
+     * @param Context $context
      * @param Builder $productBuilder
      * @param Initialization\StockDataFilter $stockFilter
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @param RegexValidator|null $regexValidator
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         Product\Builder $productBuilder,
         Initialization\StockDataFilter $stockFilter,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
+        RegexValidator $regexValidator = null
     ) {
         $this->stockFilter = $stockFilter;
         parent::__construct($context, $productBuilder);
         $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
+        $this->regexValidator = $regexValidator
+            ?: ObjectManager::getInstance()->get(RegexValidator::class);
     }
 
     /**
@@ -55,6 +68,11 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
      */
     public function execute()
     {
+        $typeId = $this->getRequest()->getParam('type');
+        if (!$this->regexValidator->validateParamRegex($typeId)) {
+            return $this->resultForwardFactory->create()->forward('noroute');
+        }
+
         if (!$this->getRequest()->getParam('set')) {
             return $this->resultForwardFactory->create()->forward('noroute');
         }
@@ -71,11 +89,6 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
             $resultPage->setActiveMenu('Magento_Catalog::catalog_products');
             $resultPage->getConfig()->getTitle()->prepend(__('Products'));
             $resultPage->getConfig()->getTitle()->prepend(__('New Product'));
-        }
-
-        $block = $resultPage->getLayout()->getBlock('catalog.wysiwyg.js');
-        if ($block) {
-            $block->setStoreId($product->getStoreId());
         }
 
         return $resultPage;

@@ -3,7 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Swatches\Controller\Adminhtml\Iframe;
+
+use Magento\TestFramework\Bootstrap;
 
 /**
  * @magentoAppArea adminhtml
@@ -20,12 +23,18 @@ class ShowTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             ->get(\Magento\Framework\Acl\Builder::class)
             ->getAcl();
 
-        $acl->allow(null, \Magento\Swatches\Controller\Adminhtml\Iframe\Show::ADMIN_RESOURCE);
+        $acl->allow(
+            Bootstrap::ADMIN_ROLE_ID,
+            \Magento\Swatches\Controller\Adminhtml\Iframe\Show::ADMIN_RESOURCE
+        );
 
         $this->dispatch('backend/swatches/iframe/show/');
 
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
-        $this->assertNotContains('Access denied', $this->getResponse()->getBody());
+        $this->assertStringNotContainsString(
+            'Sorry, you need permissions to view this content.',
+            $this->getResponse()->getBody()
+        );
     }
 
     /**
@@ -38,11 +47,17 @@ class ShowTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             ->get(\Magento\Framework\Acl\Builder::class)
             ->getAcl();
 
-        $acl->deny(null, \Magento\Swatches\Controller\Adminhtml\Iframe\Show::ADMIN_RESOURCE);
+        $acl->deny(
+            Bootstrap::ADMIN_ROLE_ID,
+            \Magento\Swatches\Controller\Adminhtml\Iframe\Show::ADMIN_RESOURCE
+        );
 
         $this->dispatch('backend/swatches/iframe/show/');
 
         $this->assertEquals(403, $this->getResponse()->getHttpResponseCode());
-        $this->assertContains('Access denied', $this->getResponse()->getBody());
+        $this->assertStringContainsString(
+            'Sorry, you need permissions to view this content.',
+            $this->getResponse()->getBody()
+        );
     }
 }

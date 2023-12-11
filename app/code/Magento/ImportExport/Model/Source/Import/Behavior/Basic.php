@@ -5,6 +5,8 @@
  */
 namespace Magento\ImportExport\Model\Source\Import\Behavior;
 
+use Magento\ImportExport\Model\Import;
+
 /**
  * Import behavior source model used for defining the behaviour during the import.
  *
@@ -14,19 +16,19 @@ namespace Magento\ImportExport\Model\Source\Import\Behavior;
 class Basic extends \Magento\ImportExport\Model\Source\Import\AbstractBehavior
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toArray()
     {
         return [
-            \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND => __('Add/Update'),
-            \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE => __('Replace'),
-            \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE => __('Delete')
+            Import::BEHAVIOR_APPEND => __('Add/Update'),
+            Import::BEHAVIOR_REPLACE => __('Replace'),
+            Import::BEHAVIOR_DELETE => __('Delete')
         ];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCode()
     {
@@ -34,12 +36,23 @@ class Basic extends \Magento\ImportExport\Model\Source\Import\AbstractBehavior
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getNotes($entityCode)
     {
         $messages = ['catalog_product' => [
-            \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE => __("Note: Product IDs will be regenerated.")
+            Import::BEHAVIOR_APPEND => __(
+                "New product data is added to the existing product data for the existing entries in the database. "
+                . "All fields except sku can be updated."
+            ),
+            Import::BEHAVIOR_REPLACE => __(
+                "The existing product data is replaced with new data. <b>Exercise caution when replacing data "
+                . "because the existing product data will be completely cleared and all references "
+                . "in the system will be lost.</b>"
+            ),
+            Import::BEHAVIOR_DELETE => __(
+                "Any entities in the import data that already exist in the database are deleted from the database."
+            ),
         ]];
         return isset($messages[$entityCode]) ? $messages[$entityCode] : [];
     }

@@ -4,19 +4,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Controller\Download;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Action\Context;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Framework\Controller\Result\ForwardFactory;
 
-/**
- * Class DownloadCustomOption
- * @package Magento\Sales\Controller\Download
- */
-class DownloadCustomOption extends \Magento\Framework\App\Action\Action
+class DownloadCustomOption extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
 {
     /**
      * @var ForwardFactory
@@ -30,7 +28,9 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
 
     /**
      * @var \Magento\Framework\Unserialize\Unserialize
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
+     * @deprecated No longer used
+     * @see $serializer
      */
     protected $unserialize;
 
@@ -84,7 +84,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
         }
 
         $optionId = null;
-        if (strpos($option->getCode(), AbstractType::OPTION_PREFIX) === 0) {
+        if ($option->getCode() && strpos($option->getCode(), AbstractType::OPTION_PREFIX) === 0) {
             $optionId = str_replace(AbstractType::OPTION_PREFIX, '', $option->getCode());
             if ((int)$optionId != $optionId) {
                 $optionId = null;
@@ -95,10 +95,11 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
             /** @var $productOption \Magento\Catalog\Model\Product\Option */
             $productOption = $this->_objectManager->create(
                 \Magento\Catalog\Model\Product\Option::class
-            )->load($optionId);
+            );
+            $productOption->load($optionId);
         }
 
-        if (!$productOption || !$productOption->getId() || $productOption->getType() != 'file') {
+        if ($productOption->getId() && $productOption->getType() != 'file') {
             return $resultForward->forward('noroute');
         }
 
@@ -107,7 +108,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
             if ($this->getRequest()->getParam('key') != $info['secret_key']) {
                 return $resultForward->forward('noroute');
             }
-            $this->download->downloadFile($info);
+            return $this->download->createResponse($info);
         } catch (\Exception $e) {
             return $resultForward->forward('noroute');
         }
@@ -118,10 +119,10 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
      * Ends execution process
      *
      * @return void
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     protected function endExecute()
     {
+        // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
         exit(0);
     }
 }

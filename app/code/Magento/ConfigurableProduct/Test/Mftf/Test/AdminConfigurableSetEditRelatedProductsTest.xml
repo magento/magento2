@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurableSetEditRelatedProductsTest" extends="AdminSimpleSetEditRelatedProductsTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create/Edit configurable product"/>
+            <title value="Admin should be able to set/edit Related Products information when editing a configurable product"/>
+            <description value="Admin should be able to set/edit Related Products information when editing a configurable product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3414"/>
+            <group value="ConfigurableProduct"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexer">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete configurable product -->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="_defaultProduct"/>
+            </actionGroup>
+            <comment userInput="BIC workaround" stepKey="clearFilters"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters" after="deleteProduct"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute" after="clearProductsGridFilters">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex" after="deleteProductAttribute">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <!-- Create product -->
+        <remove keyForRemoval="goToCreateProduct"/>
+        <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+
+        <!--See related product in storefront-->
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="goToStorefront"/>
+    </test>
+</tests>

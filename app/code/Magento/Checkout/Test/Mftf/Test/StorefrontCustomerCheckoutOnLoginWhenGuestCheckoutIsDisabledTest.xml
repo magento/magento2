@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerCheckoutOnLoginWhenGuestCheckoutIsDisabledTest">
+        <annotations>
+            <stories value="Checkout"/>
+            <title value="Verify customer is redirected to checkout on login when guest checkout is disabled"/>
+            <description value="Customer is redirected to checkout on login when guest checkout is disabled"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14703"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <magentoCLI command="config:set {{DisableGuestCheckoutConfigData.path}} {{DisableGuestCheckoutConfigData.value}}" stepKey="disableGuestCheckout"/>
+            <magentoCLI command="config:set {{DisableCustomerRedirectToDashboardConfigData.path}} {{DisableCustomerRedirectToDashboardConfigData.value}}" stepKey="disableCustomerRedirect"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct">
+                <field key="price">50.00</field>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{EnableGuestCheckoutConfigData.path}} {{EnableGuestCheckoutConfigData.value}}" stepKey="enableGuestCheckout"/>
+            <magentoCLI command="config:set {{EnableCustomerRedirectToDashboardConfigData.path}} {{EnableCustomerRedirectToDashboardConfigData.value}}" stepKey="enableCustomerRedirect"/>
+
+            <!-- Sign out Customer from storefront -->
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomePage"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Open Product page in StoreFront and assert product and price range -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+
+        <!--Add product to the cart -->
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addProductToTheCart">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+
+        <!--Open View and edit -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickMiniCart"/>
+
+        <!-- Fill the Estimate Shipping and Tax section -->
+        <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+
+        <!--Fill the pop up sign form -->
+        <actionGroup ref="StorefrontCustomerSignInPopUpActionGroup" stepKey="customerSignIn">
+            <argument name="customerEmail" value="$$createCustomer.email$$"/>
+            <argument name="customerPwd" value="$$createCustomer.password$$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="waitProceedToCheckout"/>
+        <scrollTo selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="scrollToGoToCheckout"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout1"/>
+        <comment userInput="Adding the comment to replace waitForShippingMethodSectionToLoad action for preserving Backward Compatibility" stepKey="waitForShippingMethodSectionToLoad"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
+
+        <!-- Verify order summary on payment page -->
+        <actionGroup ref="VerifyCheckoutPaymentOrderSummaryActionGroup" stepKey="verifyCheckoutPaymentOrderSummary">
+            <argument name="orderSummarySubTotal" value="$50.00"/>
+            <argument name="orderSummaryShippingTotal" value="$5.00"/>
+            <argument name="orderSummaryTotal" value="$55.00"/>
+        </actionGroup>
+
+        <!-- Place order and Assert success message -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="orderId"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="openOrderViewPage"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openAdminOrderViewPage">
+            <argument name="entityId" value="$grabOrderId"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToOrders"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterOrderGridById"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnViewLink"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderPageToLoad"/>
+
+        <!-- Ship the order and assert the shipping status -->
+        <actionGroup ref="AdminShipThePendingOrderActionGroup" stepKey="shipTheOrder"/>
+    </test>
+</tests>

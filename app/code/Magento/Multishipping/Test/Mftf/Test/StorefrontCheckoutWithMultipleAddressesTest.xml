@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckoutWithMultipleAddressesTest">
+        <annotations>
+            <features value="Multishipping"/>
+            <stories value="Multiple Shipping"/>
+            <title value="Place an order with three different addresses"/>
+            <description value="Place an order with three different addresses"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-17461"/>
+            <useCaseId value="MAGETWO-99490"/>
+            <group value="Multishipment"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!-- Create simple products -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="firstProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="secondProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Customer_US_UK_DE" stepKey="createCustomerWithMultipleAddresses"/>
+        </before>
+        <after>
+            <!-- Delete created data -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="firstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="secondProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomerWithMultipleAddresses" stepKey="deleteCustomer"/>
+        </after>
+        <!-- Login to the Storefront as created customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomerWithMultipleAddresses$$"/>
+        </actionGroup>
+        <!-- Open the first product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToFirstProductPage">
+            <argument name="productUrl" value="$$firstProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!--  Add the first product to the Shopping Cart -->
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addFirstProductToCart">
+            <argument name="productName" value="$$firstProduct.name$$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <!-- Open the second product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToSecondProductPage">
+            <argument name="productUrl" value="$$secondProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!--  Add the second product to the Shopping Cart -->
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addSecondProductToCart">
+            <argument name="productName" value="$$secondProduct.name$$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <!--Go to Cart -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <!--Check Out with Multiple Addresses -->
+        <actionGroup ref="StorefrontCheckoutWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
+        <!-- Select different addresses and click 'Go to Shipping Information' -->
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectFirstAddress">
+            <argument name="sequenceNumber" value="1"/>
+            <argument name="option" value="John Doe, 368 Broadway St. 113, New York, New York 10001, United States"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectSecondAddress">
+            <argument name="sequenceNumber" value="2"/>
+            <argument name="option" value="John Doe, Augsburger Strabe 41, Berlin,  10789, Germany"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSaveAddressActionGroup" stepKey="saveAddresses"/>
+        <!-- Click 'Continue to Billing Information' -->
+        <actionGroup ref="StorefrontLeaveDefaultShippingMethodsAndGoToBillingInfoActionGroup" stepKey="useDefaultShippingMethod"/>
+        <!-- Click 'Go to Review Your Order' -->
+        <actionGroup ref="SelectBillingInfoActionGroup" stepKey="useDefaultBillingMethod"/>
+        <!-- Click 'Place Order' -->
+        <actionGroup ref="PlaceOrderActionGroup" stepKey="placeOrder"/>
+        <!-- Open the first product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToFirstProductPageSecondTime">
+            <argument name="productUrl" value="$$firstProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!--  Add three identical products to the Shopping Cart -->
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addIdenticalProductsToCart">
+            <argument name="productName" value="$$firstProduct.name$$"/>
+            <argument name="productQty" value="3"/>
+        </actionGroup>
+        <!--Go to Cart -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCartWithIdenticalProducts"/>
+        <!--Check Out with Multiple Addresses -->
+        <actionGroup ref="StorefrontCheckoutWithMultipleAddressesActionGroup" stepKey="checkoutWithThreeDifferentAddresses"/>
+        <!-- Select different addresses and click 'Go to Shipping Information' -->
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectFirstAddressFromThree">
+            <argument name="sequenceNumber" value="1"/>
+            <argument name="option" value="John Doe, 368 Broadway St. 113, New York, New York 10001, United States"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectSecondAddressFromThree">
+            <argument name="sequenceNumber" value="2"/>
+            <argument name="option" value="John Doe, Augsburger Strabe 41, Berlin,  10789, Germany"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectThirdAddressFromThree">
+            <argument name="sequenceNumber" value="3"/>
+            <argument name="option" value="Jane Doe, 172, Westminster Bridge Rd, London,  SE1 7RW, United Kingdom"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSaveAddressActionGroup" stepKey="saveThreeDifferentAddresses"/>
+        <!-- Click 'Continue to Billing Information' -->
+        <actionGroup ref="StorefrontLeaveDefaultShippingMethodsAndGoToBillingInfoActionGroup" stepKey="useDefaultShippingMethodForIdenticalProducts"/>
+        <!-- Click 'Go to Review Your Order' -->
+        <actionGroup ref="SelectBillingInfoActionGroup" stepKey="UseDefaultBillingMethodForIdenticalProducts"/>
+        <!-- Click 'Place Order' -->
+        <actionGroup ref="PlaceOrderActionGroup" stepKey="placeOrderWithIdenticalProducts"/>
+    </test>
+</tests>

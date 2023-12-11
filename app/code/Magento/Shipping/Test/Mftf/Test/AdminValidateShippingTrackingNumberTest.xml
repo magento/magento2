@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminValidateShippingTrackingNumberTest">
+        <annotations>
+            <stories value="Admin validate the shipping tracking number for an order"/>
+            <title value="Admin validate the shipping tracking number for an order"/>
+            <description value="Testing for a required tracking number when adding new shipping information"/>
+            <severity value="CRITICAL"/>
+            <group value="shipping"/>
+            <group value="cloud_smoke"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <createData entity="CustomerCart" stepKey="createCustomerCart">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="createCustomerCart"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+            <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformation">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </updateData>
+            <createData entity="Shipment" stepKey="shipOrder">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToCreateOrderPage"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="openOrdersGrid"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
+        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createCustomerCart.return$)}}" stepKey="orderId"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="createShipmentForOrder"/>
+        <actionGroup ref="FilterShipmentGridByOrderIdActionGroup" stepKey="filterForNewlyCreatedShipment">
+            <argument name="orderId" value="$orderId"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="selectShipmentFromGrid"/>
+        <actionGroup ref="AdminAddTrackingNumberToShipmentActionGroup" stepKey="addTrackingInformation">
+            <argument name="trackingNumber" value=""/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertTrackingValidationErrorActionGroup" stepKey="assertValidateTrackingNumber">
+            <argument name="inputName" value="tracking_number"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddTrackingNumberToShipmentActionGroup" stepKey="addTrackingNumber">
+            <argument name="trackingNumber" value="123123"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertExistingTrackingNumberActionGroup" stepKey="checkAddedTrackingNumber">
+            <argument name="trackingNumber" value="123123"/>
+        </actionGroup>
+    </test>
+</tests>

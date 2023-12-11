@@ -7,7 +7,6 @@
 namespace Magento\Bundle\Model\Product;
 
 /**
- * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
  * @magentoAppArea frontend
  */
 class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
@@ -17,6 +16,8 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
      * @param array $expectedResults
      * @dataProvider getTestCases
      * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
+     * @magentoDbIsolation disabled
      */
     public function testPriceForDynamicBundle(array $strategyModifiers, array $expectedResults)
     {
@@ -27,26 +28,24 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
         $priceInfo = $bundleProduct->getPriceInfo();
         $priceCode = \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE;
 
-        $priceInfoFromIndexer = $this->productCollectionFactory->create()
-            ->addFieldToFilter('sku', 'bundle_product')
-            ->addPriceData()
-            ->load()
-            ->getFirstItem();
-
         $this->assertEquals(
             $expectedResults['minimalPrice'],
             $priceInfo->getPrice($priceCode)->getMinimalPrice()->getValue(),
             'Failed to check minimal price on product'
         );
-
         $this->assertEquals(
             $expectedResults['maximalPrice'],
             $priceInfo->getPrice($priceCode)->getMaximalPrice()->getValue(),
             'Failed to check maximal price on product'
         );
 
-        $this->assertEquals($expectedResults['minimalPrice'], $priceInfoFromIndexer->getMinimalPrice());
+        $priceInfoFromIndexer = $this->productCollectionFactory->create()
+            ->addFieldToFilter('sku', 'bundle_product')
+            ->addPriceData()
+            ->load()
+            ->getFirstItem();
 
+        $this->assertEquals($expectedResults['minimalPrice'], $priceInfoFromIndexer->getMinimalPrice());
         $this->assertEquals($expectedResults['maximalPrice'], $priceInfoFromIndexer->getMaxPrice());
     }
 
@@ -56,6 +55,8 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
      * @dataProvider getTestCases
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/price/scope 1
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
+     * @magentoDbIsolation disabled
      */
     public function testPriceForDynamicBundleInWebsiteScope(array $strategyModifiers, array $expectedResults)
     {
@@ -71,12 +72,20 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
             $priceInfo->getPrice($priceCode)->getMinimalPrice()->getValue(),
             'Failed to check minimal price on product'
         );
-
         $this->assertEquals(
             $expectedResults['maximalPrice'],
             $priceInfo->getPrice($priceCode)->getMaximalPrice()->getValue(),
             'Failed to check maximal price on product'
         );
+
+        $priceInfoFromIndexer = $this->productCollectionFactory->create()
+            ->addFieldToFilter('sku', 'bundle_product')
+            ->addPriceData()
+            ->load()
+            ->getFirstItem();
+
+        $this->assertEquals($expectedResults['minimalPrice'], $priceInfoFromIndexer->getMinimalPrice());
+        $this->assertEquals($expectedResults['maximalPrice'], $priceInfoFromIndexer->getMaxPrice());
     }
 
     /**
@@ -154,6 +163,8 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
                     [
                         'sku' => 'simple1',
                         'qty' => 1,
+                        'price' => 100,
+                        'price_type' => 0,
                     ],
                 ]
             ],
@@ -183,14 +194,20 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
                     [
                         'sku' => 'simple1',
                         'qty' => 3,
+                        'price' => 100,
+                        'price_type' => 0,
                     ],
                     [
                         'sku' => 'simple2',
                         'qty' => 2,
+                        'price' => 100,
+                        'price_type' => 0,
                     ],
                     [
                         'sku' => 'simple3',
                         'qty' => 1,
+                        'price' => 100,
+                        'price_type' => 0,
                     ],
                 ]
             ]
@@ -220,14 +237,20 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
                     [
                         'sku' => 'simple1',
                         'qty' => 1,
+                        'price' => 100,
+                        'price_type' => 0,
                     ],
                     [
                         'sku' => 'simple2',
                         'qty' => 1,
+                        'price' => 100,
+                        'price_type' => 0,
                     ],
                     [
                         'sku' => 'simple3',
                         'qty' => 1,
+                        'price' => 100,
+                        'price_type' => 0,
                     ]
                 ]
             ]
@@ -256,10 +279,14 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
                     [
                         'sku' => 'simple1',
                         'qty' => 1,
+                        'price' => 100,
+                        'price_type' => 0,
                     ],
                     [
                         'sku' => 'simple2',
                         'qty' => 3,
+                        'price' => 100,
+                        'price_type' => 0,
                     ],
                 ]
             ],
@@ -271,10 +298,14 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
                     [
                         'sku' => 'simple1',
                         'qty' => 1,
+                        'price' => 100,
+                        'price_type' => 0,
                     ],
                     [
                         'sku' => 'simple2',
                         'qty' => 3,
+                        'price' => 100,
+                        'price_type' => 0,
                     ],
                 ]
             ]
@@ -303,10 +334,14 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
                     [
                         'sku' => 'simple1',
                         'qty' => 1,
+                        'price' => 100,
+                        'price_type' => 0,
                     ],
                     [
                         'sku' => 'simple2',
                         'qty' => 3,
+                        'price' => 100,
+                        'price_type' => 0,
                     ],
                 ]
             ],
@@ -318,10 +353,14 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
                     [
                         'sku' => 'simple1',
                         'qty' => 1,
+                        'price' => 100,
+                        'price_type' => 0,
                     ],
                     [
                         'sku' => 'simple2',
                         'qty' => 3,
+                        'price' => 100,
+                        'price_type' => 0,
                     ],
                 ]
             ]

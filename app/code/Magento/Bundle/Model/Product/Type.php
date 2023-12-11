@@ -6,12 +6,18 @@
 
 namespace Magento\Bundle\Model\Product;
 
-use Magento\Framework\App\ObjectManager;
+use Magento\Bundle\Model\Option;
+use Magento\Bundle\Model\ResourceModel\Option\AreBundleOptionsSalable;
+use Magento\Bundle\Model\ResourceModel\Option\Collection;
+use Magento\Bundle\Model\ResourceModel\Selection\Collection as Selections;
+use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier as SelectionCollectionFilterApplier;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier as SelectionCollectionFilterApplier;
+use Magento\Framework\Stdlib\ArrayUtils;
 
 /**
  * Bundle Type Model
@@ -26,7 +32,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Product type
      */
-    const TYPE_CODE = 'bundle';
+    public const TYPE_CODE = 'bundle';
 
     /**
      * Product is composite
@@ -47,6 +53,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @var string
      * @deprecated 100.2.0
+     * @see MAGETWO-71174
      */
     protected $_keySelectionsCollection = '_cache_instance_selections_collection';
 
@@ -86,14 +93,14 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $_canConfigure = true;
 
     /**
-     * Catalog data
+     * Catalog data helper
      *
      * @var \Magento\Catalog\Helper\Data
      */
     protected $_catalogData = null;
 
     /**
-     * Catalog product
+     * Catalog product helper
      *
      * @var \Magento\Catalog\Helper\Product
      */
@@ -160,6 +167,16 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     private $selectionCollectionFilterApplier;
 
     /**
+     * @var ArrayUtils
+     */
+    private $arrayUtility;
+
+    /**
+     * @var AreBundleOptionsSalable
+     */
+    private $areBundleOptionsSalable;
+
+    /**
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
@@ -181,10 +198,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
-     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param Json|null $serializer
      * @param MetadataPool|null $metadataPool
      * @param SelectionCollectionFilterApplier|null $selectionCollectionFilterApplier
-     *
+     * @param ArrayUtils|null $arrayUtility
+     * @param UploaderFactory|null $uploaderFactory
+     * @param AreBundleOptionsSalable|null $areBundleOptionsSalable
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -211,7 +230,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\CatalogInventory\Api\StockStateInterface $stockState,
         Json $serializer = null,
         MetadataPool $metadataPool = null,
-        SelectionCollectionFilterApplier $selectionCollectionFilterApplier = null
+        SelectionCollectionFilterApplier $selectionCollectionFilterApplier = null,
+        ArrayUtils $arrayUtility = null,
+        UploaderFactory $uploaderFactory = null,
+        AreBundleOptionsSalable $areBundleOptionsSalable = null
     ) {
         $this->_catalogProduct = $catalogProduct;
         $this->_catalogData = $catalogData;
@@ -231,6 +253,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         $this->selectionCollectionFilterApplier = $selectionCollectionFilterApplier
             ?: ObjectManager::getInstance()->get(SelectionCollectionFilterApplier::class);
+        $this->arrayUtility= $arrayUtility ?: ObjectManager::getInstance()->get(ArrayUtils::class);
+        $this->areBundleOptionsSalable = $areBundleOptionsSalable
+            ?? ObjectManager::getInstance()->get(AreBundleOptionsSalable::class);
 
         parent::__construct(
             $catalogProductOption,
@@ -242,7 +267,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $coreRegistry,
             $logger,
             $productRepository,
-            $serializer
+            $serializer,
+            $uploaderFactory
         );
     }
 
@@ -307,8 +333,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $selectionIds = $this->serializer->unserialize($customOption->getValue());
                 if (!empty($selectionIds)) {
                     $selections = $this->getSelectionsByIds($selectionIds, $product);
-                    foreach ($selections->getItems() as $selection) {
-                        $skuParts[] = $selection->getSku();
+                    foreach ($selectionIds as $selectionId) {
+                        $entity = $selections->getItemByColumnValue('selection_id', $selectionId);
+                        if (isset($entity) && $entity->getEntityId()) {
+                            $skuParts[] = $entity->getSku();
+                        }
                     }
                 }
             }
@@ -401,16 +430,13 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         if ($product->getCanSaveBundleSelections()) {
             $product->canAffectOptions(true);
             $selections = $product->getBundleSelectionsData();
-            if ($selections && !empty($selections)) {
-                $options = $product->getBundleOptionsData();
-                if ($options) {
-                    foreach ($options as $option) {
-                        if (empty($option['delete']) || 1 != (int)$option['delete']) {
-                            $product->setTypeHasOptions(true);
-                            if (1 == (int)$option['required']) {
-                                $product->setTypeHasRequiredOptions(true);
-                                break;
-                            }
+            if (!empty($selections) && $options = $product->getBundleOptionsData()) {
+                foreach ($options as $option) {
+                    if (empty($option['delete']) || 1 != (int)$option['delete']) {
+                        $product->setTypeHasOptions(true);
+                        if (1 == (int)$option['required']) {
+                            $product->setTypeHasRequiredOptions(true);
+                            break;
                         }
                     }
                 }
@@ -451,7 +477,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     public function getOptionsCollection($product)
     {
         if (!$product->hasData($this->_keyOptionsCollection)) {
-            /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection */
+            /** @var Collection $optionsCollection */
             $optionsCollection = $this->_bundleOption->create()
                 ->getResourceCollection();
             $optionsCollection->setProductIdFilter($product->getEntityId());
@@ -484,7 +510,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             \Magento\Catalog\Api\Data\ProductInterface::class
         );
 
-        $selectionsCollection = $this->_bundleCollection->create()
+        /** @var Selections $selectionsCollection */
+        $selectionsCollection = $this->_bundleCollection->create();
+        $selectionsCollection
             ->addAttributeToSelect($this->_config->getProductAttributes())
             ->addAttributeToSelect('tax_class_id') //used for calculation item taxes in Bundle with Dynamic Price
             ->setFlag('product_children', true)
@@ -515,10 +543,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Example: the catalog inventory validation of decimal qty can change qty to int,
      * so need to change quote item qty option value too.
      *
-     * @param   array $options
-     * @param   \Magento\Framework\DataObject $option
-     * @param   mixed $value
-     * @param   \Magento\Catalog\Model\Product $product
+     * @param  array $options
+     * @param  \Magento\Framework\DataObject $option
+     * @param  mixed $value
+     * @param  \Magento\Catalog\Model\Product $product
      * @return $this
      */
     public function updateQtyOption($options, \Magento\Framework\DataObject $option, $value, $product)
@@ -531,12 +559,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         foreach ($selections as $selection) {
             if ($selection->getProductId() == $optionProduct->getId()) {
-                foreach ($options as &$option) {
-                    if ($option->getCode() == 'selection_qty_' . $selection->getSelectionId()) {
+                foreach ($options as $quoteItemOption) {
+                    if ($quoteItemOption->getCode() == 'selection_qty_' . $selection->getSelectionId()) {
                         if ($optionUpdateFlag) {
-                            $option->setValue(intval($option->getValue()));
+                            $quoteItemOption->setValue((int) $quoteItemOption->getValue());
                         } else {
-                            $option->setValue($value);
+                            $quoteItemOption->setValue($value);
                         }
                     }
                 }
@@ -556,7 +584,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function prepareQuoteItemQty($qty, $product)
     {
-        return intval($qty);
+        return (int) $qty;
     }
 
     /**
@@ -577,44 +605,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             return $product->getData('all_items_salable');
         }
 
-        $metadata = $this->metadataPool->getMetadata(
-            \Magento\Catalog\Api\Data\ProductInterface::class
-        );
-
-        $isSalable = false;
-        foreach ($this->getOptionsCollection($product) as $option) {
-            $hasSalable = false;
-
-            $selectionsCollection = $this->_bundleCollection->create();
-            $selectionsCollection->addAttributeToSelect('status');
-            $selectionsCollection->addQuantityFilter();
-            $selectionsCollection->setFlag('product_children', true);
-            $selectionsCollection->addFilterByRequiredOptions();
-            $selectionsCollection->setOptionIdsFilter([$option->getId()]);
-
-            $this->selectionCollectionFilterApplier->apply(
-                $selectionsCollection,
-                'parent_product_id',
-                $product->getData($metadata->getLinkField())
-            );
-
-            foreach ($selectionsCollection as $selection) {
-                if ($selection->isSalable()) {
-                    $hasSalable = true;
-                    break;
-                }
-            }
-
-            if ($hasSalable) {
-                $isSalable = true;
-            }
-
-            if (!$hasSalable && $option->getRequired()) {
-                $isSalable = false;
-                break;
-            }
-        }
-
+        $store = $this->_storeManager->getStore();
+        $isSalable = $this->areBundleOptionsSalable->execute((int) $product->getEntityId(), (int) $store->getId());
         $product->setData('all_items_salable', $isSalable);
 
         return $isSalable;
@@ -622,6 +614,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * Prepare product and its configuration to be added to some products list.
+     *
      * Perform standard preparation process and then prepare of bundle selections options.
      *
      * @param \Magento\Framework\DataObject $buyRequest
@@ -647,7 +640,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $skipSaleableCheck = $this->_catalogProduct->getSkipSaleableCheck();
             $_appendAllSelections = (bool)$product->getSkipCheckRequiredOption() || $skipSaleableCheck;
 
-            $options = $buyRequest->getBundleOption();
+            if ($buyRequest->getBundleOptionsData()) {
+                $options = $this->getPreparedOptions($buyRequest->getBundleOptionsData());
+            } else {
+                $options = $buyRequest->getBundleOption();
+            }
             if (is_array($options)) {
                 $options = $this->recursiveIntval($options);
                 $optionIds = array_keys($options);
@@ -666,7 +663,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     $options
                 );
 
-                $selectionIds = $this->multiToFlatArray($options);
+                $this->validateRadioAndSelectOptions(
+                    $optionsCollection,
+                    $options
+                );
+
+                $selectionIds = array_values($this->arrayUtility->flatten($options));
                 // If product has not been configured yet then $selections array should be empty
                 if (!empty($selectionIds)) {
                     $selections = $this->getSelectionsByIds($selectionIds, $product);
@@ -706,10 +708,14 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
                 $selections = $this->mergeSelectionsWithOptions($options, $selections);
             }
-            if (count($selections) > 0 || !$isStrictProcessMode) {
+            if ((is_array($selections) && count($selections) > 0) || !$isStrictProcessMode) {
                 $uniqueKey = [$product->getId()];
                 $selectionIds = [];
-                $qtys = $buyRequest->getBundleOptionQty();
+                if ($buyRequest->getBundleOptionsData()) {
+                    $qtys = $buyRequest->getBundleOptionsData();
+                } else {
+                    $qtys = $buyRequest->getBundleOptionQty();
+                }
 
                 // Shuffle selection array by option position
                 usort($selections, [$this, 'shakeSelections']);
@@ -730,9 +736,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                      * for selection (not for all bundle)
                      */
                     $price = $product->getPriceModel()
-                        ->getSelectionFinalTotalPrice($product, $selection, 0, $qty);
+                        ->getSelectionFinalTotalPrice($product, $selection, 0, 1);
                     $attributes = [
-                        'price' => $this->priceCurrency->convert($price),
+                        'price' => $price,
                         'qty' => $qty,
                         'option_label' => $selection->getOption()
                             ->getTitle(),
@@ -787,6 +793,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Cast array values to int
+     *
      * @param array $array
      * @return int[]|int[][]
      */
@@ -803,24 +811,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
 
         return $array;
-    }
-
-    /**
-     * @param array $array
-     * @return int[]
-     */
-    private function multiToFlatArray(array $array)
-    {
-        $flatArray = [];
-        foreach ($array as $key => $value) {
-            if (is_array($value)) {
-                $flatArray = array_merge($flatArray, $this->multiToFlatArray($value));
-            } else {
-                $flatArray[$key] = $value;
-            }
-        }
-
-        return $flatArray;
     }
 
     /**
@@ -853,8 +843,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         if (!$usedSelections || $usedSelectionsIds !== $selectionIds) {
             $storeId = $product->getStoreId();
-            $usedSelections = $this->_bundleCollection
-                ->create()
+            /** @var Selections $usedSelections */
+            $usedSelections = $this->_bundleCollection->create();
+            $usedSelections
                 ->addAttributeToSelect('*')
                 ->setFlag('product_children', true)
                 ->addStoreFilter($this->getStoreFilter($product))
@@ -916,8 +907,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * Prepare additional options/information for order item which will be
-     * created from this product
+     * Prepare additional options/information for order item which will be created from this product
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
@@ -983,6 +973,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * Sort selections method for usort function
+     *
      * Sort selections by option position, selection position and selection id
      *
      * @param  \Magento\Catalog\Model\Product $firstItem
@@ -1005,11 +996,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $secondItem->getPosition(),
             $secondItem->getSelectionId(),
         ];
-        if ($aPosition == $bPosition) {
-            return 0;
-        } else {
-            return $aPosition < $bPosition ? -1 : 1;
-        }
+
+        return $aPosition <=> $bPosition;
     }
 
     /**
@@ -1047,6 +1035,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * Retrieve additional searchable data from type instance
+     *
      * Using based on product id and store_id data
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -1115,6 +1104,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * Retrieve products divided into groups required to purchase
+     *
      * At least one product in each group has to be purchased
      *
      * @param  \Magento\Catalog\Model\Product $product
@@ -1184,9 +1174,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    // @codingStandardsIgnoreStart
     public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product)
     {
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * Return array of specific to type product entities
@@ -1196,21 +1188,24 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getIdentities(\Magento\Catalog\Model\Product $product)
     {
-        $identities = parent::getIdentities($product);
+        $identities = [];
+        $identities[] = parent::getIdentities($product);
         /** @var \Magento\Bundle\Model\Option $option */
         foreach ($this->getOptions($product) as $option) {
             if ($option->getSelections()) {
                 /** @var \Magento\Catalog\Model\Product $selection */
                 foreach ($option->getSelections() as $selection) {
-                    $identities = array_merge($identities, $selection->getIdentities());
+                    $identities[] = $selection->getIdentities();
                 }
             }
         }
 
-        return $identities;
+        return array_merge([], ...$identities);
     }
 
     /**
+     * Returns selection qty
+     *
      * @param \Magento\Framework\DataObject $selection
      * @param int[] $qtys
      * @param int $selectionOptionId
@@ -1219,7 +1214,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected function getQty($selection, $qtys, $selectionOptionId)
     {
         if ($selection->getSelectionCanChangeQty() && isset($qtys[$selectionOptionId])) {
-            $qty = (float)$qtys[$selectionOptionId] > 0 ? $qtys[$selectionOptionId] : 1;
+            if (is_array($qtys[$selectionOptionId]) && isset($qtys[$selectionOptionId][$selection->getSelectionId()])) {
+                $selectionQty = $qtys[$selectionOptionId][$selection->getSelectionId()];
+                $qty = (float)$selectionQty > 0 ? $selectionQty : 1;
+            } else {
+                $qty = (float)$qtys[$selectionOptionId] > 0 ? $qtys[$selectionOptionId] : 1;
+            }
         } else {
             $qty = (float)$selection->getSelectionQty() ? $selection->getSelectionQty() : 1;
         }
@@ -1229,6 +1229,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Returns qty
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Framework\DataObject $selection
      * @return float|int
@@ -1246,6 +1248,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Validate required options
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param bool $isStrictProcessMode
      * @param \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection
@@ -1257,7 +1261,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         if (!$product->getSkipCheckRequiredOption() && $isStrictProcessMode) {
             foreach ($optionsCollection->getItems() as $option) {
-                if ($option->getRequired() && !isset($options[$option->getId()])) {
+                if ($option->getRequired() && empty($options[$option->getId()])) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __('Please select all required options.')
                     );
@@ -1267,6 +1271,55 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Validate Options for Radio and Select input types
+     *
+     * @param Collection $optionsCollection
+     * @param int[] $options
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function validateRadioAndSelectOptions($optionsCollection, $options): void
+    {
+        $errorTypes = [];
+
+        if (is_array($optionsCollection->getItems())) {
+            foreach ($optionsCollection->getItems() as $option) {
+                if ($this->isSelectedOptionValid($option, $options)) {
+                    $errorTypes[] = $option->getType();
+                }
+            }
+        }
+
+        if (!empty($errorTypes)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __(
+                    'Option type (%types) should have only one element.',
+                    ['types' => implode(", ", $errorTypes)]
+                )
+            );
+        }
+    }
+
+    /**
+     * Check if selected option is valid
+     *
+     * @param Option $option
+     * @param array $options
+     * @return bool
+     */
+    private function isSelectedOptionValid($option, $options): bool
+    {
+        return (
+            ($option->getType() == 'radio' || $option->getType() == 'select') &&
+            isset($options[$option->getOptionId()]) &&
+            is_array($options[$option->getOptionId()]) &&
+            count($options[$option->getOptionId()]) > 1
+        );
+    }
+
+    /**
+     * Check if selection is salable
+     *
      * @param \Magento\Bundle\Model\ResourceModel\Selection\Collection $selections
      * @param bool $skipSaleableCheck
      * @param \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection
@@ -1297,6 +1350,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Validate result
+     *
      * @param array $_result
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -1315,21 +1370,44 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Merge selections with options
+     *
      * @param \Magento\Catalog\Model\Product\Option[] $options
      * @param \Magento\Framework\DataObject[] $selections
      * @return \Magento\Framework\DataObject[]
      */
     protected function mergeSelectionsWithOptions($options, $selections)
     {
+        $selections = [];
+
         foreach ($options as $option) {
-            if ($option->getRequired() && count($option->getSelections()) == 1) {
-                $selections = array_merge($selections, $option->getSelections());
+            $optionSelections = $option->getSelections();
+            if ($option->getRequired() && is_array($optionSelections) && count($optionSelections) == 1) {
+                $selections[] = $optionSelections;
             } else {
                 $selections = [];
                 break;
             }
         }
 
-        return $selections;
+        return array_merge([], ...$selections);
+    }
+
+    /**
+     * Get prepared options with selection ids
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @param array $options
+     * @return array
+     */
+    private function getPreparedOptions(array $options): array
+    {
+        foreach ($options as $optionId => $option) {
+            foreach ($option as $selectionId => $optionQty) {
+                $options[$optionId][$selectionId] = $selectionId;
+            }
+        }
+
+        return $options;
     }
 }

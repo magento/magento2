@@ -9,8 +9,8 @@ define([
     'ko',
     'uiComponent',
     'Magento_Checkout/js/model/step-navigator',
-    'jquery/jquery.hashchange'
-], function ($, _, ko, Component, stepNavigator) {
+    'Magento_Checkout/js/view/billing-address'
+], function ($, _, ko, Component, stepNavigator, billingAddress) {
     'use strict';
 
     var steps = stepNavigator.steps;
@@ -24,8 +24,19 @@ define([
 
         /** @inheritdoc */
         initialize: function () {
+            var stepsValue;
+
             this._super();
-            $(window).hashchange(_.bind(stepNavigator.handleHash, stepNavigator));
+            window.addEventListener('hashchange', _.bind(stepNavigator.handleHash, stepNavigator));
+
+            if (!window.location.hash) {
+                stepsValue = stepNavigator.steps();
+
+                if (stepsValue.length) {
+                    stepNavigator.setHash(stepsValue.sort(stepNavigator.sortItems)[0].code);
+                }
+            }
+
             stepNavigator.handleHash();
         },
 
@@ -42,6 +53,9 @@ define([
          * @param {Object} step
          */
         navigateTo: function (step) {
+            if (step.code === 'shipping') {
+                billingAddress().needCancelBillingAddressChanges();
+            }
             stepNavigator.navigateTo(step.code);
         },
 

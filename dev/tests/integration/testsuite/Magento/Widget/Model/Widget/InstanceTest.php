@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Widget\Model\Widget;
 
 class InstanceTest extends \PHPUnit\Framework\TestCase
@@ -12,7 +13,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Widget\Model\Widget\Instance::class
@@ -45,7 +46,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     {
         $config = $this->_model->setType(\Magento\Catalog\Block\Product\Widget\NewWidget::class)
             ->getWidgetConfigAsArray();
-        $this->assertTrue(is_array($config));
+        $this->assertIsArray($config);
         $element = null;
         if (isset(
             $config['parameters']
@@ -76,10 +77,11 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->setType(\Magento\Catalog\Block\Product\Widget\NewWidget::class);
         $containers = $this->_model->getWidgetSupportedContainers();
-        $this->assertInternalType('array', $containers);
+        $this->assertIsArray($containers);
         $this->assertContains('sidebar.main', $containers);
         $this->assertContains('content', $containers);
         $this->assertContains('sidebar.additional', $containers);
+
         return $this->_model;
     }
 
@@ -91,7 +93,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     {
         $templates = $model->getWidgetSupportedTemplatesByContainer('content');
         $this->assertNotEmpty($templates);
-        $this->assertInternalType('array', $templates);
+        $this->assertIsArray($templates);
         foreach ($templates as $row) {
             $this->assertArrayHasKey('value', $row);
             $this->assertArrayHasKey('label', $row);
@@ -99,8 +101,8 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Magento\Widget\Model\Widget\Instance::generateLayoutUpdateXml()
-     * @covers \Magento\Widget\Model\Widget\Instance::getWidgetParameters()
+     * @covers  \Magento\Widget\Model\Widget\Instance::generateLayoutUpdateXml()
+     * @covers  \Magento\Widget\Model\Widget\Instance::getWidgetParameters()
      * @param \Magento\Widget\Model\Widget\Instance $model
      * @depends testGetWidgetConfigAsArray
      */
@@ -128,16 +130,19 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('', $model->generateLayoutUpdateXml('content'));
         $model->setId('test_id')->setPackageTheme('Magento/luma');
         $result = $model->generateLayoutUpdateXml('content');
-        $this->assertContains('<body><referenceContainer name="content">', $result);
-        $this->assertContains('<block class="' . $model->getType() . '"', $result);
+        $this->assertStringContainsString('<body><referenceContainer name="content">', $result);
+        $this->assertStringContainsString('<block class="' . $model->getType() . '"', $result);
         $this->assertEquals(count($params), substr_count($result, '<action method="setData">'));
-        $this->assertContains('<argument name="name" xsi:type="string">display_mode</argument>', $result);
-        $this->assertContains('<argument name="value" xsi:type="string">fixed</argument>', $result);
-        $this->assertContains('<argument name="name" xsi:type="string">types</argument>', $result);
-        $this->assertContains('<argument name="value" xsi:type="string">type_1,type_2</argument>', $result);
-        $this->assertContains('<argument name="name" xsi:type="string">conditions_encoded</argument>', $result);
-        $this->assertContains('`Magento||CatalogWidget||Model||Rule||Condition||Combine`', $result);
-        $this->assertContains('`Magento||CatalogWidget||Model||Rule||Condition||Product`', $result);
+        $this->assertStringContainsString('<argument name="name" xsi:type="string">display_mode</argument>', $result);
+        $this->assertStringContainsString('<argument name="value" xsi:type="string">fixed</argument>', $result);
+        $this->assertStringContainsString('<argument name="name" xsi:type="string">types</argument>', $result);
+        $this->assertStringContainsString('<argument name="value" xsi:type="string">type_1,type_2</argument>', $result);
+        $this->assertStringContainsString(
+            '<argument name="name" xsi:type="string">conditions_encoded</argument>',
+            $result
+        );
+        $this->assertStringContainsString('`Magento||CatalogWidget||Model||Rule||Condition||Combine`', $result);
+        $this->assertStringContainsString('`Magento||CatalogWidget||Model||Rule||Condition||Product`', $result);
     }
 
     /**
@@ -162,10 +167,28 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     public function beforeSaveDataProvider()
     {
         return [
-          # Variation 1
-          [
-              ['block_id' => '2']
-          ]
+            # Variation 1
+            [
+                ['block_id' => '2']
+            ]
         ];
+    }
+
+    /**
+     * @param Instance $model
+     * @depends testGetWidgetConfigAsArray
+     */
+    public function testGenerateLayoutUpdateXmlWithInvalidParamName(\Magento\Widget\Model\Widget\Instance $model)
+    {
+        $params = [
+            'block_id' => '2',
+            'block_id</argument><argument name="value" xsi:type="string">2</argument></action></block><block'
+            . ' class="Magento\Cms\Block\Widget\Block" name="dfgdfgdfg" template="widget/static_block/default.phtml">'
+            . '<action method="setData"><argument name="name" xsi:type="string">' => 'some_value',
+        ];
+        $this->expectException('\Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Layout update is invalid');
+        $model->setData('widget_parameters', $params);
+        $model->generateLayoutUpdateXml('content');
     }
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminNewCustomerGroupSection">
+        <element name="groupName" type="input" selector="#customer_group_code"/>
+        <element name="taxClass" type="select" selector="#tax_class_id"/>
+        <element name="saveCustomerGroup" type="button" selector="#save"/>
+        <element name="resetBtn" type="button" selector="#reset"/>
+        <element name="backBtn" type="button" selector="#back"/>
+    </section>
+</sections>

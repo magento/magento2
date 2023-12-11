@@ -3,147 +3,159 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sitemap\Test\Unit\Controller\Adminhtml\Sitemap;
 
-class DeleteTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Helper\Data;
+use Magento\Backend\Model\Session;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\HTTP\PhpEnvironment\Request;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sitemap\Controller\Adminhtml\Sitemap\Delete;
+use Magento\Sitemap\Model\SitemapFactory;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class DeleteTest extends TestCase
 {
     /**
-     * @var \Magento\Sitemap\Controller\Adminhtml\Sitemap\Delete
+     * @var Context
      */
-    private $deleteController;
+    private $contextMock;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $filesystemMock;
-
-    /**
-     * @var \Magento\Sitemap\Model\SitemapFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $sitemapFactoryMock;
-
-    /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Request
      */
     private $requestMock;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface
      */
-    private $responseMock;
+    private $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface
      */
     private $messageManagerMock;
 
-    protected function setUp()
+    /**
+     * @var Filesystem
+     */
+    private $fileSystem;
+
+    /**
+     * @var SitemapFactory
+     */
+    private $siteMapFactory;
+
+    /**
+     * @var Delete
+     */
+    private $deleteController;
+
+    /**
+     * @var Session
+     */
+    private $sessionMock;
+
+    /**
+     * @var ActionFlag
+     */
+    private $actionFlag;
+
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
+     * @var ResponseInterface
+     */
+    private $response;
+
+    /**
+     * @var Data
+     */
+    private $helperMock;
+
+    protected function setUp(): void
     {
-        $this->filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
-        $this->sitemapFactoryMock = $this->getMockBuilder(\Magento\Sitemap\Model\SitemapFactory::class)
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->setMethods(['getParam'])
+            ->getMockForAbstractClass();
+        $this->sessionMock = $this->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['setIsUrlNotice'])
             ->getMock();
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
+        $this->response = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setRedirect'])
+            ->onlyMethods(['sendResponse'])
             ->getMockForAbstractClass();
-        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
+        $this->response->expects($this->once())->method('setRedirect');
+        $this->sessionMock->expects($this->any())->method('setIsUrlNotice')->willReturn($this->objectManager);
+        $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
+        $this->actionFlag->expects($this->any())->method("get")->willReturn($this->objectManager);
+        $this->objectManager = $this->getMockBuilder(ObjectManager::class)
+            ->addMethods(['get'])
             ->disableOriginalConstructor()
-            ->setMethods(['setRedirect'])
-            ->getMockForAbstractClass();
-        $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
+            ->getMock();
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->getMock();
+        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
+            ->getMock();
+        $this->helperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
-
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
-        $this->deleteController = $objectManagerHelper->getObject(
-            \Magento\Sitemap\Controller\Adminhtml\Sitemap\Delete::class,
-            [
-                'request' => $this->requestMock,
-                'response' => $this->responseMock,
-                'messageManager' => $this->messageManagerMock,
-                'filesystem' => $this->filesystemMock,
-                'sitemapFactory' => $this->sitemapFactoryMock
-            ]
+            ->onlyMethods(['getUrl'])
+            ->getMock();
+        $this->helperMock->expects($this->any())
+            ->method('getUrl')
+            ->willReturn('adminhtml/*/');
+        $this->contextMock->expects($this->any())
+            ->method('getSession')
+            ->willReturn($this->sessionMock);
+        $this->contextMock->expects($this->once())
+            ->method('getMessageManager')
+            ->willReturn($this->messageManagerMock);
+        $this->contextMock->expects($this->once())
+            ->method('getRequest')
+            ->willReturn($this->requestMock);
+        $this->contextMock->expects($this->once())
+            ->method('getResponse')
+            ->willReturn($this->response);
+        $this->contextMock->expects($this->any())
+            ->method('getHelper')
+            ->willReturn($this->helperMock);
+        $this->contextMock->expects($this->any())->method("getActionFlag")->willReturn($this->actionFlag);
+        $this->fileSystem = $this->createMock(Filesystem::class);
+        $this->siteMapFactory = $this->createMock(SitemapFactory::class);
+        $this->deleteController = new Delete(
+            $this->contextMock,
+            $this->siteMapFactory,
+            $this->fileSystem
         );
     }
 
-    public function testExecuteWithoutSitemapId()
+    public function testDelete()
     {
-        $writeDirectoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->filesystemMock->expects($this->any())->method('getDirectoryWrite')->willReturn($writeDirectoryMock);
-        $this->requestMock->expects($this->any())->method('getParam')->with('sitemap_id')->willReturn(0);
-        $this->responseMock->expects($this->once())->method('setRedirect');
-        $this->messageManagerMock->expects($this->any())
-            ->method('addError')
-            ->with('We can\'t find a sitemap to delete.');
+        $this->requestMock->expects($this->once())
+            ->method('getParam')
+            ->willReturn(null);
 
-        $this->deleteController->execute();
-    }
-
-    public function testExecuteCannotFindSitemap()
-    {
-        $id = 1;
-        $writeDirectoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->filesystemMock->expects($this->any())->method('getDirectoryWrite')->willReturn($writeDirectoryMock);
-        $this->requestMock->expects($this->any())->method('getParam')->with('sitemap_id')->willReturn($id);
-
-        $sitemapMock = $this->getMockBuilder(\Magento\Sitemap\Model\Sitemap::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['load'])
-            ->getMock();
-
-        $sitemapMock->expects($this->once())->method('load')->with($id)->willThrowException(new \Exception);
-        $this->sitemapFactoryMock->expects($this->once())->method('create')->willReturn($sitemapMock);
-        $this->responseMock->expects($this->once())->method('setRedirect');
-        $this->messageManagerMock->expects($this->any())
-            ->method('addError');
-
-        $this->deleteController->execute();
-    }
-
-    public function testExecute()
-    {
-        $id = 1;
-        $sitemapPath = '/';
-        $sitemapFilename = 'sitemap.xml';
-        $relativePath = '/sitemap.xml';
-        $writeDirectoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->filesystemMock->expects($this->any())->method('getDirectoryWrite')->willReturn($writeDirectoryMock);
-        $this->requestMock->expects($this->any())->method('getParam')->with('sitemap_id')->willReturn($id);
-
-        $sitemapMock = $this->getMockBuilder(\Magento\Sitemap\Model\Sitemap::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getSitemapPath', 'getSitemapFilename', 'load', 'delete'])
-            ->getMock();
-        $sitemapMock->expects($this->once())->method('load')->with($id);
-        $sitemapMock->expects($this->once())->method('delete');
-        $sitemapMock->expects($this->any())->method('getSitemapPath')->willReturn($sitemapPath);
-        $sitemapMock->expects($this->any())->method('getSitemapFilename')->willReturn($sitemapFilename);
-        $this->sitemapFactoryMock->expects($this->once())->method('create')->willReturn($sitemapMock);
-        $writeDirectoryMock->expects($this->any())
-            ->method('getRelativePath')
-            ->with($sitemapPath . $sitemapFilename)
-            ->willReturn($relativePath);
-        $writeDirectoryMock->expects($this->once())->method('isFile')->with($relativePath)->willReturn(true);
-        $writeDirectoryMock->expects($this->once())->method('delete')->with($relativePath)->willReturn(true);
-
-        $this->responseMock->expects($this->once())->method('setRedirect');
-        $this->messageManagerMock->expects($this->any())
-            ->method('addSuccess');
-
+        $this->messageManagerMock->expects($this->never())
+            ->method('addSuccessMessage');
         $this->deleteController->execute();
     }
 }

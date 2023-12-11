@@ -6,7 +6,12 @@
 
 namespace Magento\Developer\Console\Command;
 
+use Magento\Developer\Model\XmlCatalog\Format\FormatInterface;
+use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -26,45 +31,45 @@ class XmlCatalogGenerateCommand extends Command
     /**
      * Option for the type of IDE
      */
-    const IDE_OPTION = 'ide';
+    public const IDE_OPTION = 'ide';
 
     /**
      * Argument for the path to IDE config file
      */
-    const IDE_FILE_PATH_ARGUMENT = 'path';
+    public const IDE_FILE_PATH_ARGUMENT = 'path';
 
     /**
-     * @var \Magento\Framework\App\Utility\Files
+     * @var Files
      */
     private $filesUtility;
 
     /**
-     * @var \Magento\Framework\Config\Dom\UrnResolver
+     * @var UrnResolver
      */
     private $urnResolver;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadFactory
+     * @var ReadFactory
      */
     private $readFactory;
 
     /**
      * Supported formats
      *
-     * @var \Magento\Developer\Model\XmlCatalog\Format\FormatInterface[]
+     * @var FormatInterface[]
      */
     private $formats;
 
     /**
-     * @param \Magento\Framework\App\Utility\Files $filesUtility
-     * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
-     * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
-     * @param \Magento\Developer\Model\XmlCatalog\Format\FormatInterface[] $formats
+     * @param Files $filesUtility
+     * @param UrnResolver $urnResolver
+     * @param ReadFactory $readFactory
+     * @param FormatInterface[] $formats
      */
     public function __construct(
-        \Magento\Framework\App\Utility\Files $filesUtility,
-        \Magento\Framework\Config\Dom\UrnResolver $urnResolver,
-        \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
+        Files $filesUtility,
+        UrnResolver $urnResolver,
+        ReadFactory $readFactory,
         array $formats = []
     ) {
         $this->filesUtility = $filesUtility;
@@ -75,7 +80,7 @@ class XmlCatalogGenerateCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -86,7 +91,7 @@ class XmlCatalogGenerateCommand extends Command
                     self::IDE_OPTION,
                     null,
                     InputOption::VALUE_REQUIRED,
-                    'Format in which catalog will be generated. Supported: ['.
+                    'Format in which catalog will be generated. Supported: [' .
                     implode(', ', $this->getSupportedFormats()) . ']',
                     'phpstorm'
                 ),
@@ -113,17 +118,19 @@ class XmlCatalogGenerateCommand extends Command
 
         $urns = [];
         foreach ($files as $file) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $fileDir = dirname($file[0]);
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $fileName = basename($file[0]);
             $read = $this->readFactory->create($fileDir);
             $content = $read->readFile($fileName);
             $matches = [];
             preg_match_all('/schemaLocation="(urn\:magento\:[^"]*)"/i', $content, $matches);
             if (isset($matches[1])) {
-                $urns = array_merge($urns, $matches[1]);
+                $urns[] = $matches[1];
             }
         }
-        $urns = array_unique($urns);
+        $urns = array_unique(array_merge([], ...$urns));
         $paths = [];
         foreach ($urns as $urn) {
             try {
@@ -139,31 +146,36 @@ class XmlCatalogGenerateCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @throws \InvalidArgumentException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $ideName = $input->getOption(self::IDE_OPTION);
-        $ideFilePath = $input->getArgument(self::IDE_FILE_PATH_ARGUMENT);
 
+        $ideFilePath = $input->getArgument(self::IDE_FILE_PATH_ARGUMENT);
         $urnDictionary = $this->getUrnDictionary($output);
-        if ($formatter = $this->getFormatters($ideName)) {
-            $formatter->generateCatalog($urnDictionary, $ideFilePath);
-        } else {
+
+        $formatter = $this->getFormatters($ideName);
+        if (!$formatter instanceof FormatInterface) {
             throw new InputException(__("Format for IDE '%1' is not supported", $ideName));
         }
+
+        $formatter->generateCatalog($urnDictionary, $ideFilePath);
+
+        return Cli::RETURN_SUCCESS;
     }
 
     /**
      * Get formatter based on format
      *
      * @param string $format
-     * @return \Magento\Developer\Model\XmlCatalog\Format\FormatInterface|false
+     * @return FormatInterface|false
      */
     private function getFormatters($format)
     {
-        $format = strtolower($format);
+        $format = $format === null ? '' : strtolower($format);
         if (!isset($this->formats[$format])) {
             return false;
         }

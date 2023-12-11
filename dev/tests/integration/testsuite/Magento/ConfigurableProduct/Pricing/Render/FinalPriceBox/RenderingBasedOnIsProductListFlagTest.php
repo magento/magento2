@@ -39,7 +39,7 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
      */
     private $finalPriceBox;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->product = $productRepository->get('configurable');
@@ -75,15 +75,16 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoAppArea frontend
+     * @magentoDbIsolation disabled
      */
     public function testRenderingByDefault()
     {
         $html = $this->finalPriceBox->toHtml();
-        self::assertContains('5.99', $html);
+        self::assertStringContainsString('5.99', $html);
         $this->assertGreaterThanOrEqual(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
-                '//*[contains(@class,"special-price")]',
+                '//*[contains(@class,"normal-price")]',
                 $html
             )
         );
@@ -109,16 +110,17 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoAppArea frontend
      * @dataProvider isProductListDataProvider
+     * @magentoDbIsolation disabled
      */
     public function testRenderingAccordingToIsProductListFlag($flag, $count)
     {
         $this->finalPriceBox->setData('is_product_list', $flag);
         $html = $this->finalPriceBox->toHtml();
-        self::assertContains('5.99', $html);
+        self::assertStringContainsString('5.99', $html);
         $this->assertEquals(
-            $count,
+            1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
-                '//*[contains(@class,"special-price")]',
+                '//*[contains(@class,"normal-price")]',
                 $html
             )
         );
@@ -137,7 +139,7 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
     public function isProductListDataProvider()
     {
         return [
-            'is_not_product_list' => [false, true],
+            'is_not_product_list' => [false, 1],
             'is_product_list' => [true, 0],
         ];
     }

@@ -11,7 +11,7 @@ use Magento\Framework\App\State as AppState;
 use Magento\Framework\Registry;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\App\Response\Http as ResponseHttp;
-use Zend\Http\Header\HeaderInterface as HttpHeaderInterface;
+use Laminas\Http\Header\HeaderInterface as HttpHeaderInterface;
 use Magento\PageCache\Model\Cache\Type as CacheType;
 
 /**
@@ -69,7 +69,7 @@ class BuiltinPlugin
     {
         $usePlugin = $this->registry->registry('use_page_cache_plugin');
 
-        if (!$usePlugin || !$this->config->isEnabled() || $this->config->getType() != Config::BUILT_IN) {
+        if (!$usePlugin || !$this->config->isEnabled() || $this->config->getType() !== Config::BUILT_IN) {
             return $result;
         }
 

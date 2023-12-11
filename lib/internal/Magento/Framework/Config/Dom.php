@@ -14,22 +14,22 @@ use Magento\Framework\Config\Dom\ValidationSchemaException;
 use Magento\Framework\Phrase;
 
 /**
- * Class Dom
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  * @api
+ * @since 100.0.2
  */
 class Dom
 {
     /**
      * Prefix which will be used for root namespace
      */
-    const ROOT_NAMESPACE_PREFIX = 'x';
+    public const ROOT_NAMESPACE_PREFIX = 'x';
 
     /**
      * Format of items in errors array to be used by default. Available placeholders - fields of \LibXMLError.
      */
-    const ERROR_FORMAT_DEFAULT = "%message%\nLine: %line%\n";
+    public const ERROR_FORMAT_DEFAULT = "%message%\nLine: %line%\n";
 
     /**
      * @var \Magento\Framework\Config\ValidationStateInterface
@@ -120,15 +120,16 @@ class Dom
      * Retrieve array of xml errors
      *
      * @param string $errorFormat
+     * @param \DOMDocument|null $dom
      * @return string[]
      */
-    private static function getXmlErrors($errorFormat)
+    private static function getXmlErrors($errorFormat, $dom = null)
     {
         $errors = [];
         $validationErrors = libxml_get_errors();
         if (count($validationErrors)) {
             foreach ($validationErrors as $error) {
-                $errors[] = self::_renderErrorMessage($error, $errorFormat);
+                $errors[] = self::_renderErrorMessage($error, $errorFormat, $dom);
             }
         } else {
             $errors[] = 'Unknown validation error';
@@ -188,9 +189,20 @@ class Dom
             /* override node value */
             if ($this->_isTextNode($node)) {
                 /* skip the case when the matched node has children, otherwise they get overridden */
-                if (!$matchedNode->hasChildNodes() || $this->_isTextNode($matchedNode)) {
+                if (!$matchedNode->hasChildNodes()
+                    || $this->_isTextNode($matchedNode)
+                    || $this->isCdataNode($matchedNode)
+                ) {
                     $matchedNode->nodeValue = $node->childNodes->item(0)->nodeValue;
                 }
+            } elseif ($this->isCdataNode($node) && $this->_isTextNode($matchedNode)) {
+                /* Replace text node with CDATA section */
+                if ($this->findCdataSection($node)) {
+                    $matchedNode->nodeValue = $this->findCdataSection($node)->nodeValue;
+                }
+            } elseif ($this->isCdataNode($node) && $this->isCdataNode($matchedNode)) {
+                /* Replace CDATA with new one */
+                $this->replaceCdataNode($matchedNode, $node);
             } else {
                 /* recursive merge for all child nodes */
                 foreach ($node->childNodes as $childNode) {
@@ -216,6 +228,58 @@ class Dom
     protected function _isTextNode($node)
     {
         return $node->childNodes->length == 1 && $node->childNodes->item(0) instanceof \DOMText;
+    }
+
+    /**
+     * Check if the node content is CDATA (probably surrounded with text nodes) or just text node
+     *
+     * @param \DOMNode $node
+     * @return bool
+     */
+    private function isCdataNode($node)
+    {
+        // If every child node of current is NOT \DOMElement
+        // It is arbitrary combination of text nodes and CDATA sections.
+        foreach ($node->childNodes as $childNode) {
+            if ($childNode instanceof \DOMElement) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Finds CDATA section from given node children
+     *
+     * @param \DOMNode $node
+     * @return \DOMCdataSection|null
+     */
+    private function findCdataSection($node)
+    {
+        foreach ($node->childNodes as $childNode) {
+            if ($childNode instanceof \DOMCdataSection) {
+                return $childNode;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Replaces CDATA section in $oldNode with $newNode's
+     *
+     * @param \DOMNode $oldNode
+     * @param \DOMNode $newNode
+     */
+    private function replaceCdataNode($oldNode, $newNode)
+    {
+        $oldCdata = $this->findCdataSection($oldNode);
+        $newCdata = $this->findCdataSection($newNode);
+
+        if ($oldCdata && $newCdata) {
+            $oldCdata->nodeValue = $newCdata->nodeValue;
+        }
     }
 
     /**
@@ -275,7 +339,10 @@ class Dom
         $node = null;
         if ($matchedNodes->length > 1) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase("More than one node matching the query: %1", [$nodePath])
+                new \Magento\Framework\Phrase(
+                    "More than one node matching the query: %1, Xml is: %2",
+                    [$nodePath, $this->dom->saveXML()]
+                )
             );
         } elseif ($matchedNodes->length == 1) {
             $node = $matchedNodes->item(0);
@@ -315,7 +382,7 @@ class Dom
         try {
             $result = $dom->schemaValidate($schema);
             if (!$result) {
-                $errors = self::getXmlErrors($errorFormat);
+                $errors = self::getXmlErrors($errorFormat, $dom);
             }
         } catch (\Exception $exception) {
             $errors = self::getXmlErrors($errorFormat);
@@ -333,18 +400,22 @@ class Dom
      *
      * @param \LibXMLError $errorInfo
      * @param string $format
+     * @param \DOMDocument|null $dom
      * @return string
      * @throws \InvalidArgumentException
      */
-    private static function _renderErrorMessage(\LibXMLError $errorInfo, $format)
-    {
+    private static function _renderErrorMessage(
+        \LibXMLError $errorInfo,
+        string $format,
+        \DOMDocument $dom = null
+    ): string {
         $result = $format;
         foreach ($errorInfo as $field => $value) {
             $placeholder = '%' . $field . '%';
             $value = trim((string)$value);
-            $result = str_replace($placeholder, $value, $result);
+            $result = $result !== null ? str_replace($placeholder, $value, $result) : '';
         }
-        if (strpos($result, '%') !== false) {
+        if ($result && strpos($result, '%') !== false) {
             if (preg_match_all('/%.+%/', $result, $matches)) {
                 $unsupported = [];
                 foreach ($matches[0] as $placeholder) {
@@ -357,6 +428,14 @@ class Dom
                         "Error format '{$format}' contains unsupported placeholders: " . implode(', ', $unsupported)
                     );
                 }
+            }
+        }
+        if ($dom) {
+            $xml = explode(PHP_EOL, $dom->saveXml());
+            $lines = array_slice($xml, max(0, $errorInfo->line - 5), 10, true);
+            $result .= 'The xml was: ' . PHP_EOL;
+            foreach ($lines as $lineNumber => $line) {
+                $result .= $lineNumber . ':' . $line . PHP_EOL;
             }
         }
         return $result;

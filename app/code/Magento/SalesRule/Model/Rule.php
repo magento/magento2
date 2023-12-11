@@ -38,7 +38,6 @@ use Magento\Quote\Model\Quote\Address;
  * @method \Magento\SalesRule\Model\Rule setProductIds(string $value)
  * @method int getSortOrder()
  * @method \Magento\SalesRule\Model\Rule setSortOrder(int $value)
- * @method string getSimpleAction()
  * @method \Magento\SalesRule\Model\Rule setSimpleAction(string $value)
  * @method float getDiscountAmount()
  * @method \Magento\SalesRule\Model\Rule setDiscountAmount(float $value)
@@ -70,26 +69,26 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * Coupon types
      */
-    const COUPON_TYPE_NO_COUPON = 1;
+    public const COUPON_TYPE_NO_COUPON = 1;
 
-    const COUPON_TYPE_SPECIFIC = 2;
+    public const COUPON_TYPE_SPECIFIC = 2;
 
-    const COUPON_TYPE_AUTO = 3;
+    public const COUPON_TYPE_AUTO = 3;
 
     /**
      * Rule type actions
      */
-    const TO_PERCENT_ACTION = 'to_percent';
+    public const TO_PERCENT_ACTION = 'to_percent';
 
-    const BY_PERCENT_ACTION = 'by_percent';
+    public const BY_PERCENT_ACTION = 'by_percent';
 
-    const TO_FIXED_ACTION = 'to_fixed';
+    public const TO_FIXED_ACTION = 'to_fixed';
 
-    const BY_FIXED_ACTION = 'by_fixed';
+    public const BY_FIXED_ACTION = 'by_fixed';
 
-    const CART_FIXED_ACTION = 'cart_fixed';
+    public const CART_FIXED_ACTION = 'cart_fixed';
 
-    const BUY_X_GET_Y_ACTION = 'buy_x_get_y';
+    public const BUY_X_GET_Y_ACTION = 'buy_x_get_y';
 
     /**
      * Store coupon code generator instance
@@ -285,7 +284,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      */
     public function afterSave()
     {
-        $couponCode = trim($this->getCouponCode());
+        $couponCode = is_string($this->getCouponCode()) ? trim($this->getCouponCode()) : '';
         if (strlen(
             $couponCode
         ) && $this->getCouponType() == self::COUPON_TYPE_SPECIFIC && !$this->getUseAutoGeneration()
@@ -296,8 +295,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel
                 $this->getUsesPerCoupon() ? $this->getUsesPerCoupon() : null
             )->setUsagePerCustomer(
                 $this->getUsesPerCustomer() ? $this->getUsesPerCustomer() : null
-            )->setExpirationDate(
-                $this->getToDate()
             )->save();
         } else {
             $this->getPrimaryCoupon()->delete();
@@ -308,8 +305,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
-     * Initialize rule model data from array.
-     * Set store labels if applicable.
+     * Initialize rule model data from array. Set store labels if applicable.
      *
      * @param array $data
      * @return $this
@@ -426,7 +422,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     public function getStoreLabels()
     {
         if (!$this->hasStoreLabels()) {
-            $labels = $this->_getResource()->getStoreLabels($this->getId());
+            $linkedField = $this->_getResource()->getLinkField();
+            $labels = $this->_getResource()->getStoreLabels($this->getData($linkedField));
             $this->setStoreLabels($labels);
         }
 
@@ -499,8 +496,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             $this->getUsesPerCoupon() ? $this->getUsesPerCoupon() : null
         )->setUsagePerCustomer(
             $this->getUsesPerCustomer() ? $this->getUsesPerCustomer() : null
-        )->setExpirationDate(
-            $this->getToDate()
+        )->setType(
+            \Magento\SalesRule\Api\Data\CouponInterface::TYPE_GENERATED
         );
 
         $couponCode = self::getCouponCodeGenerator()->generateCode();
@@ -521,7 +518,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
                         $coupon->setCode(
                             $couponCode . self::getCouponCodeGenerator()->getDelimiter() . sprintf(
                                 '%04u',
-                                rand(0, 9999)
+                                random_int(0, 9999)
                             )
                         );
                         continue;
@@ -539,6 +536,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
+     * Get from date.
+     *
      * @return string
      * @since 100.1.0
      */
@@ -548,6 +547,19 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
+     * Get from date.
+     *
+     * @return string
+     * @since 100.1.0
+     */
+    public function getSimpleAction()
+    {
+        return $this->_getData('simple_action');
+    }
+
+    /**
+     * Get to date.
+     *
      * @return string
      * @since 100.1.0
      */
@@ -610,6 +622,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
+     * Get conditions field set id.
+     *
      * @param string $formName
      * @return string
      * @since 100.1.0
@@ -620,6 +634,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
+     * Get actions field set id.
+     *
      * @param string $formName
      * @return string
      * @since 100.1.0

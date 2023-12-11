@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="UpdateAttributeNameAndDescription" type="productAttributeMassUpdate">
+        <data key="name" unique="suffix">New Bundle Product Name</data>
+        <data key="description" unique="suffix">This is the description</data>
+    </entity>
+    <entity name="UpdateAttributeQtyAndStockToInStock" type="productAttributeMassUpdate">
+        <data key="qty">10</data>
+        <data key="stockAvailability">In Stock</data>
+    </entity>
+    <entity name="UpdateAttributeQtyAndStockToOutOfStock" type="productAttributeMassUpdate">
+        <data key="qty">0</data>
+        <data key="stockAvailability">Out of Stock</data>
+    </entity>
+</entities>

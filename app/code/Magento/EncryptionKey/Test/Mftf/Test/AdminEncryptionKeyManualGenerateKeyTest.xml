@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminEncryptionKeyManualGenerateKeyTest">
+        <annotations>
+            <features value="Encryption Key"/>
+            <stories value="Change Encryption Key"/>
+            <title value="Change Encryption Key by Manual Key"/>
+            <description value="Change Encryption Key by Manual Key"/>
+            <severity value="CRITICAL"/>
+            <group value="encryption_key"/>
+            <group value="pr_exclude"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <!--Login to Admin Area-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminArea"/>
+        </before>
+
+        <after>
+            <!--Logout from Admin Area-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <actionGroup ref="AdminEncryptionKeyNavigateToChangePageActionGroup" stepKey="navigateToPage"/>
+        <actionGroup ref="AdminEncryptionKeyChangeKeyManualActionGroup" stepKey="changeKeyManualGenerate"/>
+    </test>
+</tests>

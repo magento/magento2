@@ -9,6 +9,10 @@ namespace Magento\CatalogInventory\Api;
  * Interface StockRegistryInterface
  * @api
  * @since 100.0.2
+ *
+ * @deprecated 100.3.0 Replaced with Multi Source Inventory
+ * @link https://developer.adobe.com/commerce/webapi/rest/inventory/index.html
+ * @link https://developer.adobe.com/commerce/webapi/rest/inventory/inventory-api-reference.html
  */
 interface StockRegistryInterface
 {
@@ -72,7 +76,7 @@ interface StockRegistryInterface
      * @param float $qty
      * @param int $currentPage
      * @param int $pageSize
-     * @return \Magento\CatalogInventory\Api\Data\StockStatusCollectionInterface
+     * @return \Magento\CatalogInventory\Api\Data\StockItemCollectionInterface
      */
     public function getLowStockItems($scopeId, $qty, $currentPage = 1, $pageSize = 0);
 

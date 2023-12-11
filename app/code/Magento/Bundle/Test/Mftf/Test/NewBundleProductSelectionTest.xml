@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="NewBundleProductSelectionTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Create/Edit bundle product in Admin"/>
+            <title value="Admin should be able to select a “Bundle Product” product type when adding a new product"/>
+            <description value="Admin should be able to select a “Bundle Product” product type when adding a new product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-220"/>
+            <group value="Bundle"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+        </after>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage"/>
+        <!--Selecting new bundle product-->
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateBundleProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <!--Testing if on the bundle product creation page-->
+        <seeElement selector="{{AdminProductFormBundleSection.bundleOptionsDropDown}}" stepKey="CheckForPresenceOfBundleProductFeatures"/>
+    </test>
+</tests>

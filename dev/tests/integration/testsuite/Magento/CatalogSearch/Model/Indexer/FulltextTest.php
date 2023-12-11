@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\Catalog\Model\Product;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -19,21 +21,6 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\Indexer\IndexerInterface
      */
     protected $indexer;
-
-    /**
-     * @var \Magento\CatalogSearch\Model\ResourceModel\Engine
-     */
-    protected $engine;
-
-    /**
-     * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext
-     */
-    protected $resourceFulltext;
-
-    /**
-     * @var \Magento\CatalogSearch\Model\Fulltext
-     */
-    protected $fulltext;
 
     /**
      * @var \Magento\Search\Model\QueryFactory
@@ -70,21 +57,13 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
      */
     protected $dimension;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var \Magento\Framework\Indexer\IndexerInterface indexer */
         $this->indexer = Bootstrap::getObjectManager()->create(
             \Magento\Indexer\Model\Indexer::class
         );
         $this->indexer->load('catalogsearch_fulltext');
-
-        $this->engine = Bootstrap::getObjectManager()->get(
-            \Magento\CatalogSearch\Model\ResourceModel\Engine::class
-        );
-
-        $this->resourceFulltext = Bootstrap::getObjectManager()->get(
-            \Magento\CatalogSearch\Model\ResourceModel\Fulltext::class
-        );
 
         $this->queryFactory = Bootstrap::getObjectManager()->get(
             \Magento\Search\Model\QueryFactory::class
@@ -187,26 +166,56 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test the case when the last child product of the configurable becomes disabled/out of stock.
+     *
+     * Such behavior should enforce parent product to be deleted from the index as its latest child become unavailable
+     * and the configurable cannot be sold anymore.
+     *
+     * @return void
+     * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento/CatalogSearch/_files/product_configurable_with_single_child.php
+     */
+    public function testReindexParentProductWhenChildBeingDisabled()
+    {
+        $this->indexer->reindexAll();
+
+        $visibilityFilter = [
+            Visibility::VISIBILITY_IN_SEARCH,
+            Visibility::VISIBILITY_IN_CATALOG,
+            Visibility::VISIBILITY_BOTH
+        ];
+        $products = $this->search('Configurable', $visibilityFilter);
+        $this->assertCount(1, $products);
+
+        $childProduct = $this->getProductBySku('configurable_option_single_child');
+        $childProduct->setStatus(Product\Attribute\Source\Status::STATUS_DISABLED)->save();
+
+        $products = $this->search('Configurable', $visibilityFilter);
+        $this->assertCount(0, $products);
+    }
+
+    /**
      * Search the text and return result collection
      *
      * @param string $text
+     * @param array|null $visibilityFilter
      * @return Product[]
      */
-    protected function search($text)
+    protected function search(string $text, $visibilityFilter = null): array
     {
-        $this->resourceFulltext->resetSearchResults();
         $query = $this->queryFactory->get();
         $query->unsetData();
         $query->setQueryText($text);
         $query->saveIncrementalPopularity();
         $products = [];
-        $collection = Bootstrap::getObjectManager()->create(
-            Collection::class,
-            [
-                'searchRequestName' => 'quick_search_container'
-            ]
-        );
+        $searchLayer = Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Layer\Search::class);
+        $collection = $searchLayer->getProductCollection();
         $collection->addSearchFilter($text);
+
+        if (null !== $visibilityFilter) {
+            $collection->setVisibility($visibilityFilter);
+        }
+
         foreach ($collection as $product) {
             $products[] = $product;
         }
@@ -217,9 +226,9 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
      * Return product by SKU
      *
      * @param string $sku
-     * @return Product
+     * @return Product|bool
      */
-    protected function getProductBySku($sku)
+    protected function getProductBySku(string $sku)
     {
         /** @var Product $product */
         $product = Bootstrap::getObjectManager()->get(

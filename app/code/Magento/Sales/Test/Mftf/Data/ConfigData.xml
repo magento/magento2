@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdminEnableDashboardCharts">
+        <data key="path">admin/dashboard/enable_charts</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdminDisableDashboardCharts">
+        <data key="path">admin/dashboard/enable_charts</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="DisableEmailRequiredForOrder">
+        <data key="path">customer/create_account/email_required_create_order</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnableEmailRequiredForOrder">
+        <data key="path">customer/create_account/email_required_create_order</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DefaultTaxDestinationCountry">
+        <data key="path">tax/defaults/country</data>
+        <data key="value">US</data>
+    </entity>
+    <entity name="DefaultTaxDestinationRegion">
+        <data key="path">tax/defaults/region</data>
+        <data key="value">*</data>
+    </entity>
+    <entity name="DefaultTaxDestinationPostcode">
+        <data key="path">tax/defaults/postcode</data>
+        <data key="value">''</data>
+    </entity>
+</entities>

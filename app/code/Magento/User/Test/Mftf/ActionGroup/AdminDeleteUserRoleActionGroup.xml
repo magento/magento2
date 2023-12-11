@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteUserRoleActionGroup">
+        <arguments>
+            <argument name="roleName" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRolesGrid" />
+        <fillField selector="{{AdminRoleGridSection.roleNameFilterTextField}}" userInput="{{roleName}}" stepKey="enterRoleName" />
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearch" />
+        <see selector="{{AdminDataGridTableSection.row('1')}}" userInput="{{roleName}}" stepKey="seeUserRole" />
+        <click selector="{{AdminDataGridTableSection.row('1')}}" stepKey="openRoleEditPage"/>
+        <waitForPageLoad stepKey="waitForRoleEditPageLoad"/>
+        <fillField selector="{{AdminEditRoleInfoSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterThePassword" />
+        <click selector="{{AdminEditRoleInfoSection.deleteButton}}" stepKey="deleteUserRole"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForConfirmModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the role." stepKey="seeUserRoleDeleteMessage"/>
+    </actionGroup>
+</actionGroups>

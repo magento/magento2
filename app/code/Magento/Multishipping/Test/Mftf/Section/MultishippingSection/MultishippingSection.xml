@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="MultishippingSection">
+        <element name="pageTitle" type="text" selector="//span[text()='Ship to Multiple Addresses']"/>
+        <element name="checkoutWithMultipleAddresses" type="button" selector="//span[text()='Check Out with Multiple Addresses']"/>
+        <element name="shippingMultipleCheckout" type="button" selector=".action.multicheckout"/>
+        <element name="shippingAddressSelector" type="select" selector="//tr[position()={{addressPosition}}]//td[@data-th='Send To']//select" parameterized="true"/>
+        <element name="shippingAddressOptions" type="select" selector="#multiship-addresses-table tbody tr:nth-of-type({{addressPosition}}) .col.address select option:nth-of-type({{optionIndex}})" parameterized="true"/>
+        <element name="selectShippingAddress" type="select" selector="(//table[@id='multiship-addresses-table'] //div[@class='field address'] //select)[{{sequenceNumber}}]" parameterized="true"/>
+        <element name="productQty" type="input" selector="#multiship-addresses-table tbody tr:nth-of-type({{sequenceNumber}}) .col.qty input" parameterized="true"/>
+        <element name="productLink" type="button" selector="(//form[@id='checkout_multishipping_form']//a[contains(text(),'{{productName}}')])[{{sequenceNumber}}]" parameterized="true"/>
+        <element name="removeItemButton" type="button" selector="//a[contains(@title, 'Remove Item')][{{var}}]" parameterized="true"/>
+        <element name="back" type="button" selector=".action.back"/>
+        <element name="addressSection" type="text" selector="//div[@class='block-title']/strong[text()='Address {{var}} ']" parameterized="true"/>
+        <element name="flatRateCharge" type="text" selector="//span[@class='price' and text()='${{price}}']/../../label[contains(text(),'Fixed')]" parameterized="true"/>
+        <element name="enterNewAddress" type="button" selector=".action.add"/>
+    </section>
+</sections>

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\GiftMessage\Model;
 
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -24,10 +25,13 @@ class GiftMessageManager
     }
 
     /**
+     * Save gift message information.
+     *
      * @param array $giftMessages
      * @param \Magento\Quote\Model\Quote $quote
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function add($giftMessages, $quote)
     {
@@ -60,11 +64,12 @@ class GiftMessageManager
                     $giftMessage->load($entity->getGiftMessageId());
                 }
 
-                if (trim($message['message']) == '') {
+                if ($message['message'] === null || trim($message['message']) == '') {
                     if ($giftMessage->getId()) {
                         try {
                             $giftMessage->delete();
                             $entity->setGiftMessageId(0)->save();
+                        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
                         } catch (\Exception $e) {
                         }
                     }
@@ -83,6 +88,7 @@ class GiftMessageManager
                     )->save();
 
                     $entity->setGiftMessageId($giftMessage->getId())->save();
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
                 } catch (\Exception $e) {
                 }
             }
@@ -98,7 +104,7 @@ class GiftMessageManager
      * @param \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage The gift message.
      * @param null|int $entityId The entity ID.
      * @return void
-     * @throws \Magento\Framework\Exception\CouldNotSaveException The specified gift message is not available.
+     * @throws \Magento\Framework\Exception\CouldNotSaveException The gift message isn't available.
      */
     public function setMessage(\Magento\Quote\Model\Quote $quote, $type, $giftMessage, $entityId = null)
     {
@@ -111,7 +117,7 @@ class GiftMessageManager
         try {
             $this->add($message, $quote);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not add gift message to shopping cart'));
+            throw new CouldNotSaveException(__("The gift message couldn't be added to Cart."));
         }
     }
 }

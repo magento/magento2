@@ -3,23 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Usps\Test\Unit\Helper;
 
-class DataTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Usps\Helper\Data;
+use PHPUnit\Framework\TestCase;
+
+class DataTest extends TestCase
 {
     /**
-     * @var \Magento\Usps\Helper\Data
+     * @var Data
      */
     protected $_helperData;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $arguments = [
-            'context' => $this->createMock(\Magento\Framework\App\Helper\Context::class),
+            'context' => $this->createMock(Context::class),
         ];
 
-        $this->_helperData = $helper->getObject(\Magento\Usps\Helper\Data::class, $arguments);
+        $this->_helperData = $helper->getObject(Data::class, $arguments);
     }
 
     /**
@@ -63,6 +70,14 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ['usps_INT_14'],   // First-Class Mail International Large Envelope
             ['usps_INT_16'],   // Priority Mail International Small Flat Rate Box
             ['usps_INT_20'],   // Priority Mail International Small Flat Rate Envelope
+            ['1058'],          // Ground Advantage™
+            ['4058'],          // Ground Advantage™ HAZMAT
+            ['6058'],          // Ground Advantage™ Parcel locker
+            ['2058'],          // Ground Advantage™ Hold for pickup
+            ['4096'],          // Ground Advantage™ Cubic HAZMAT
+            ['1096'],          // Ground Advantage™ Cubic
+            ['2096'],          // Ground Advantage™ Cubic Hold for pickup
+            ['6096'],          // Ground Advantage™ Cubic Parcel locker
         ];
     }
 }

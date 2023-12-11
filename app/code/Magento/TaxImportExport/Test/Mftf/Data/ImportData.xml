@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <!-- Tax Import Files -->
+    <entity name="import_tax_rates" type="taxImport">
+        <data key="filename">import_tax_rates.csv</data>
+    </entity>
+
+    <!-- Tax Rates -->
+    <entity name="import_rate_1" type="taxRate">
+        <data key="code">import-rate-1</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_country">United States</data>
+        <data key="tax_region_id">57</data>
+        <data key="tax_region">TX</data>
+        <data key="tax_postcode">78758</data>
+        <data key="zip_is_range">0</data>
+        <data key="rate">5.25</data>
+    </entity>
+    <entity name="import_rate_2" type="taxRate">
+        <data key="code">import-rate-2</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_country">United States</data>
+        <data key="tax_region_id">2</data>
+        <data key="tax_region">AK</data>
+        <data key="tax_postcode">12345-12346</data>
+        <data key="zip_is_range">1</data>
+        <data key="rate">7.75</data>
+    </entity>
+</entities>

@@ -1,29 +1,37 @@
 <?php
 /**
- * HTTP response
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\App\Response;
 
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\Cookie\CookieMetadata;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Session\Config\ConfigInterface;
 
+/**
+ * HTTP Response.
+ *
+ * @api
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
+#[\AllowDynamicProperties]
 class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
 {
     /** Cookie to store page vary string */
-    const COOKIE_VARY_STRING = 'X-Magento-Vary';
+    public const COOKIE_VARY_STRING = 'X-Magento-Vary';
 
     /** Format for expiration timestamp headers */
-    const EXPIRATION_TIMESTAMP_FORMAT = 'D, d M Y H:i:s T';
+    public const EXPIRATION_TIMESTAMP_FORMAT = 'D, d M Y H:i:s T';
 
     /** X-FRAME-OPTIONS Header name */
-    const HEADER_X_FRAME_OPT = 'X-Frame-Options';
+    public const HEADER_X_FRAME_OPT = 'X-Frame-Options';
 
     /**
      * @var \Magento\Framework\App\Request\Http
@@ -51,24 +59,32 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     protected $dateTime;
 
     /**
+     * @var \Magento\Framework\Session\Config\ConfigInterface
+     */
+    private $sessionConfig;
+
+    /**
      * @param HttpRequest $request
      * @param CookieManagerInterface $cookieManager
      * @param CookieMetadataFactory $cookieMetadataFactory
      * @param Context $context
      * @param DateTime $dateTime
+     * @param ConfigInterface|null $sessionConfig
      */
     public function __construct(
         HttpRequest $request,
         CookieManagerInterface $cookieManager,
         CookieMetadataFactory $cookieMetadataFactory,
         Context $context,
-        DateTime $dateTime
+        DateTime $dateTime,
+        ConfigInterface $sessionConfig = null
     ) {
         $this->request = $request;
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->context = $context;
         $this->dateTime = $dateTime;
+        $this->sessionConfig = $sessionConfig ?: ObjectManager::getInstance()->get(ConfigInterface::class);
     }
 
     /**
@@ -85,13 +101,20 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     /**
      * Send Vary cookie
      *
-     * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException
+     * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
      */
     public function sendVary()
     {
         $varyString = $this->context->getVaryString();
         if ($varyString) {
-            $sensitiveCookMetadata = $this->cookieMetadataFactory->createSensitiveCookieMetadata()->setPath('/');
+            $cookieLifeTime = $this->sessionConfig->getCookieLifetime();
+            $sensitiveCookMetadata = $this->cookieMetadataFactory->createSensitiveCookieMetadata(
+                [CookieMetadata::KEY_DURATION => $cookieLifeTime,
+                    CookieMetadata::KEY_SAME_SITE => 'Lax'
+                ]
+            )->setPath('/');
             $this->cookieManager->setSensitiveCookie(self::COOKIE_VARY_STRING, $varyString, $sensitiveCookMetadata);
         } elseif ($this->request->get(self::COOKIE_VARY_STRING)) {
             $cookieMetadata = $this->cookieMetadataFactory->createSensitiveCookieMetadata()->setPath('/');
@@ -101,6 +124,7 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
 
     /**
      * Set headers for public cache
+     *
      * Accepts the time-to-live (max-age) parameter
      *
      * @param int $ttl
@@ -109,7 +133,7 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      */
     public function setPublicHeaders($ttl)
     {
-        if ($ttl < 0 || !preg_match('/^[0-9]+$/', $ttl)) {
+        if ($ttl === null || $ttl < 0 || !preg_match('/^[0-9]+$/', $ttl)) {
             throw new \InvalidArgumentException('Time to live is a mandatory parameter for set public headers');
         }
         $this->setHeader('pragma', 'cache', true);
@@ -161,6 +185,8 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     }
 
     /**
+     * Remove links to other objects.
+     *
      * @return string[]
      * @codeCoverageIgnore
      */

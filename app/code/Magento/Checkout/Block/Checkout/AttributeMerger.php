@@ -6,10 +6,20 @@
 namespace Magento\Checkout\Block\Checkout;
 
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Helper\Address as AddressHelper;
 use Magento\Customer\Model\Session;
 use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Directory\Model\AllowedCountries;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Fields attribute merger.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class AttributeMerger
 {
     /**
@@ -46,6 +56,7 @@ class AttributeMerger
         'alpha' => 'validate-alpha',
         'numeric' => 'validate-number',
         'alphanumeric' => 'validate-alphanum',
+        'alphanum-with-spaces' => 'validate-alphanum-with-spaces',
         'url' => 'validate-url',
         'email' => 'email2',
         'length' => 'validate-length',
@@ -67,7 +78,7 @@ class AttributeMerger
     private $customerRepository;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerInterface
+     * @var CustomerInterface
      */
     private $customer;
 
@@ -84,22 +95,31 @@ class AttributeMerger
     private $topCountryCodes;
 
     /**
+     * @var AllowedCountries|null
+     */
+    private $allowedCountryReader;
+
+    /**
      * @param AddressHelper $addressHelper
      * @param Session $customerSession
      * @param CustomerRepository $customerRepository
      * @param DirectoryHelper $directoryHelper
+     * @param AllowedCountries $allowedCountryReader
      */
     public function __construct(
         AddressHelper $addressHelper,
         Session $customerSession,
         CustomerRepository $customerRepository,
-        DirectoryHelper $directoryHelper
+        DirectoryHelper $directoryHelper,
+        ?AllowedCountries $allowedCountryReader = null
     ) {
         $this->addressHelper = $addressHelper;
         $this->customerSession = $customerSession;
         $this->customerRepository = $customerRepository;
         $this->directoryHelper = $directoryHelper;
         $this->topCountryCodes = $directoryHelper->getTopCountryCodes();
+        $this->allowedCountryReader =
+            $allowedCountryReader ?: ObjectManager::getInstance()->get(AllowedCountries::class);
     }
 
     /**
@@ -269,6 +289,7 @@ class AttributeMerger
         for ($lineIndex = 0; $lineIndex < (int)$attributeConfig['size']; $lineIndex++) {
             $isFirstLine = $lineIndex === 0;
             $line = [
+                'label' => __("%1: Line %2", $attributeConfig['label'], $lineIndex + 1),
                 'component' => 'Magento_Ui/js/form/element/abstract',
                 'config' => [
                     // customScope is used to group elements within a single form e.g. they can be validated separately
@@ -279,6 +300,7 @@ class AttributeMerger
                 'dataScope' => $lineIndex,
                 'provider' => $providerName,
                 'validation' => $isFirstLine
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     ? array_merge(
                         ['required-entry' => (bool)$attributeConfig['required']],
                         $attributeConfig['validation']
@@ -309,13 +331,21 @@ class AttributeMerger
     }
 
     /**
+     * Returns default attribute value.
+     *
      * @param string $attributeCode
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
      * @return null|string
      */
-    protected function getDefaultValue($attributeCode)
+    protected function getDefaultValue($attributeCode): ?string
     {
         if ($attributeCode === 'country_id') {
-            return $this->directoryHelper->getDefaultCountry();
+            $defaultCountryId = $this->directoryHelper->getDefaultCountry();
+            if (!in_array($defaultCountryId, $this->allowedCountryReader->getAllowedCountries())) {
+                $defaultCountryId = null;
+            }
+            return $defaultCountryId;
         }
 
         $customer = $this->getCustomer();
@@ -346,9 +376,13 @@ class AttributeMerger
     }
 
     /**
-     * @return \Magento\Customer\Api\Data\CustomerInterface|null
+     * Returns logged customer.
+     *
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
+     * @return CustomerInterface|null
      */
-    protected function getCustomer()
+    protected function getCustomer(): ?CustomerInterface
     {
         if (!$this->customer) {
             if ($this->customerSession->isLoggedIn()) {
@@ -363,14 +397,14 @@ class AttributeMerger
     /**
      * Retrieve field options from attribute configuration
      *
-     * @param string $attributeCode
+     * @param mixed $attributeCode
      * @param array $attributeConfig
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function getFieldOptions($attributeCode, array $attributeConfig)
     {
-        return isset($attributeConfig['options']) ? $attributeConfig['options'] : [];
+        return $attributeConfig['options'] ?? [];
     }
 
     /**
@@ -378,7 +412,7 @@ class AttributeMerger
      *
      * @param array $countryOptions
      * @return array
-     * @deprecated 100.2.0
+     * @deprecated 100.1.7
      */
     protected function orderCountryOptions(array $countryOptions)
     {
@@ -394,9 +428,9 @@ class AttributeMerger
         ]];
         foreach ($countryOptions as $countryOption) {
             if (empty($countryOption['value']) || in_array($countryOption['value'], $this->topCountryCodes)) {
-                array_push($headOptions, $countryOption);
+                $headOptions[] = $countryOption;
             } else {
-                array_push($tailOptions, $countryOption);
+                $tailOptions[] = $countryOption;
             }
         }
         return array_merge($headOptions, $tailOptions);

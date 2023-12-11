@@ -10,15 +10,13 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test class for \Magento\Catalog\Model\Layer\Filter\Price.
- *
- * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/Price/_files/products_advanced.php
  */
 class AlgorithmAdvancedTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/Price/_files/products_advanced.php
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/engine mysql
      * @covers \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
      */
     public function testWithoutLimits()
@@ -88,14 +86,14 @@ class AlgorithmAdvancedTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/Price/_files/products_advanced.php
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/engine mysql
      * @covers \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
      */
     public function testWithLimits()
     {
-        $this->markTestIncomplete('Bug MAGE-6561');
+        $this->markTestSkipped('Bug MAGE-6561');
 
         $layer = $this->createLayer();
         $priceResource = $this->createPriceResource($layer);

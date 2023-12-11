@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_WebapiAsync:etc/webapi_async.xsd">
+    <service class="Magento\Customer\Api\CustomerRepositoryInterface" method="getById">
+        <synchronousInvocationOnly>true</synchronousInvocationOnly>
+    </service>
+
+    <service class="Magento\Customer\Api\CustomerRepositoryInterface" method="save">
+        <synchronousInvocationOnly />
+    </service>
+
+    <service class="Magento\Customer\Api\CustomerRepositoryInterface" method="get" />
+
+    <route url="async/V1/products" method="POST" alias="asyncProducts">
+        <data input-array-size-limit="30" />
+    </route>
+    <route url="async/bulk/V1/cmsBlock" method="POST" alias="asyncBulkCmsBlocks"/>
+    <route url="async/V1/customers" method="POST" alias="asyncCustomers"/>
+</services>

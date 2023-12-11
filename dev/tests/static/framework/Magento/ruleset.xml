@@ -7,27 +7,8 @@
 -->
 <ruleset name="Magento">
     <description>Custom Magento coding standard.</description>
-
-    <rule ref="PSR2"/>
-
-    <rule ref="Magento.Files.LineLength">
-        <properties>
-            <property name="lineLimit" value="120"/>
-            <property name="absoluteLineLimit" value="120"/>
-        </properties>
-    </rule>
-    <rule ref="Magento.LanguageConstructs.LanguageConstructs">
-        <include-pattern>*/app/code/*\.(?!phtml)</include-pattern>
-    </rule>
-    <rule ref="Magento.LiteralNamespaces.LiteralNamespaces">
-        <exclude-pattern>*/_files/*</exclude-pattern>
-    </rule>
-
-    <rule ref="Generic.PHP.CharacterBeforePHPOpeningTag"/>
-    <rule ref="Generic.Functions.CallTimePassByReference"/>
-    <rule ref="Generic.PHP.DeprecatedFunctions"/>
-
-    <rule ref="Squiz.Commenting.DocCommentAlignment"/>
-    <rule ref="Squiz.Functions.GlobalFunction"/>
-    <rule ref="Squiz.WhiteSpace.LogicalOperatorSpacing"/>
+    <rule ref="./../../../../../vendor/magento/magento-coding-standard/Magento2"/>
+    <rule ref="./../../../../../vendor/magento/magento-coding-standard/Magento2Framework"/>
+    <exclude-pattern>*\.min.js$</exclude-pattern>
+    <exclude-pattern>lib\/web\/(?!mage)</exclude-pattern>
 </ruleset>

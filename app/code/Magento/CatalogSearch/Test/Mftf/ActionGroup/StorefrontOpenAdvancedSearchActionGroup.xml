@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontOpenAdvancedSearchActionGroup">
+        <annotations>
+            <description>Clicks on 'Advanced Search' in the Storefront Footer. Validates that the URL and Title are present and correct.</description>
+        </annotations>
+
+        <click selector="{{StorefrontFooterSection.AdvancedSearch}}" stepKey="clickAdvancedSearchLink"/>
+        <seeInCurrentUrl url="{{StorefrontCatalogSearchAdvancedFormPage.url}}" stepKey="checkUrl"/>
+        <seeInTitle userInput="Advanced Search" stepKey="assertAdvancedSearchTitle1"/>
+        <see userInput="Advanced Search" selector="{{StorefrontCatalogSearchAdvancedFormSection.SearchTitle}}" stepKey="assertAdvancedSearchTitle2"/>
+    </actionGroup>
+</actionGroups>

@@ -39,7 +39,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
      */
     private $tierPriceFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->productCollectionFactory = Bootstrap::getObjectManager()->get(CollectionFactory::class);
@@ -50,6 +50,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/GroupedProduct/_files/product_grouped.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testReindex()
     {

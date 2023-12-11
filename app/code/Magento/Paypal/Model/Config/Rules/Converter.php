@@ -63,6 +63,7 @@ class Converter implements ConverterInterface
             if ($this->hasNodeElement($child)) {
                 $result[$child->getAttribute('name')] = [
                     'value' => $child->getAttribute('value'),
+                    'include' => $child->getAttribute('include'),
                     'predicate' => $this->createPredicate($child),
                 ];
             }

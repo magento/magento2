@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/product_with_multiple_options.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Bundle/_files/product_with_multiple_options.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -46,6 +48,7 @@ $requestInfo = [
     'bundle_option' => $bundleOptions,
     'bundle_option_qty' => $bundleOptionsQty,
     'qty' => 1,
+    'custom_price' => 300,
 ];
 
 /** @var \Magento\Sales\Model\Order\Item $orderItem */
@@ -56,7 +59,14 @@ $orderItem->setBasePrice($product->getPrice());
 $orderItem->setPrice($product->getPrice());
 $orderItem->setRowTotal($product->getPrice());
 $orderItem->setProductType($product->getTypeId());
-$orderItem->setProductOptions(['info_buyRequest' => $requestInfo]);
+$orderItem->setProductOptions([
+    'info_buyRequest' => $requestInfo,
+    'bundle_options' => [
+        [
+            'value' => [['title' => $product->getName()]]
+        ]
+    ]
+]);
 
 /** @var \Magento\Sales\Model\Order $order */
 $order = $objectManager->create(\Magento\Sales\Model\Order::class);

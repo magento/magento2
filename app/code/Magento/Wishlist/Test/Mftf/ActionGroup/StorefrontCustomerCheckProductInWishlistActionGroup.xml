@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCustomerCheckProductInWishlistActionGroup">
+        <annotations>
+            <description>Validates that the provided Product details (Price and Name) are present in the Storefront Customer Dashboard Wish List.</description>
+        </annotations>
+        <arguments>
+            <argument name="productVar"/>
+        </arguments>
+
+        <waitForElement selector="{{StorefrontCustomerWishlistProductSection.ProductTitleByName(productVar.name)}}" time="30" stepKey="assertWishlistProductName"/>
+        <see userInput="${{productVar.price}}.00" selector="{{StorefrontCustomerWishlistProductSection.ProductPriceByName(productVar.name)}}" stepKey="AssertWishlistProductPrice"/>
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName(productVar.name)}}" stepKey="wishlistMoveMouseOverProduct"/>
+        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductAddToCartByName(productVar.name)}}" stepKey="AssertWishlistAddToCart"/>
+        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductImageByName(productVar.name)}}" stepKey="AssertWishlistProductImage"/>
+    </actionGroup>
+</actionGroups>

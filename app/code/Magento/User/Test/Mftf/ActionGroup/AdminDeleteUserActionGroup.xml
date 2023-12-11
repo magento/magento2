@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteUserActionGroup">
+        <annotations>
+            <description>Goes to the Admin Users grid page. Deletes the provided User. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="user"/>
+        </arguments>
+
+        <amOnPage stepKey="amOnAdminUsersPage" url="{{AdminUsersPage.url}}"/>
+        <waitForPageLoad stepKey="waitForAdminUserPageLoad"/>
+        <!-- Add reset filter to locate the required user as user page has more than 1 pages -->
+        <click selector="{{AdminUserGridSection.resetButton}}" stepKey="resetGridFilter"/>
+        <waitForPageLoad stepKey="waitForFiltersReset" time="15"/>
+        <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="{{user.username}}" stepKey="enterUserName"/>
+        <click selector="{{AdminUserGridSection.searchButton}}" stepKey="clickSearch"/>
+        <waitForPageLoad stepKey="waitForGridToLoad" time="15"/>
+        <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="{{user.username}}" stepKey="seeUser"/>
+        <click stepKey="openTheUser" selector="{{AdminDeleteUserSection.role(user.username)}}"/>
+        <waitForElementVisible selector="{{AdminDeleteUserSection.password}}" stepKey="waitForPasswordField" />
+        <fillField stepKey="TypeCurrentPassword" selector="{{AdminDeleteUserSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click stepKey="clickToDeleteRole" selector="{{AdminDeleteUserSection.delete}}"/>
+        <waitForElementVisible stepKey="wait" selector="{{AdminDeleteRoleSection.confirm}}" time="30"/>
+        <click stepKey="clickToConfirm" selector="{{AdminDeleteUserSection.confirm}}"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see stepKey="seeDeleteMessageForUser" userInput="You deleted the user."/>
+    </actionGroup>
+</actionGroups>

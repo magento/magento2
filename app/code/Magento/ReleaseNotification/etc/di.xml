@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\ReleaseNotification\Model\ContentProviderInterface" type="Magento\ReleaseNotification\Model\ContentProvider\Http\HttpContentProvider" />
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="system/release_notification/content_url" xsi:type="string">1</item>
+                <item name="system/release_notification/use_https" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="notificationPool" type="Magento\Ui\DataProvider\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="notifications" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\ReleaseNotification\Ui\DataProvider\Modifier\Notifications</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\ReleaseNotification\Ui\DataProvider\NotificationDataProvider">
+        <arguments>
+            <argument name="pool" xsi:type="object">notificationPool</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ReleaseNotification\Model\ContentProvider\Http\HttpContentProvider">
+        <arguments>
+            <argument name="httpClient" xsi:type="object" shared="false">Magento\Framework\HTTP\ClientInterface</argument>
+            <argument name="requestTimeout" xsi:type="number">5</argument>
+        </arguments>
+    </type>
+</config>

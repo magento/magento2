@@ -6,6 +6,9 @@
 
 namespace Magento\Backup\Model\ResourceModel;
 
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+
 /**
  * @api
  * @since 100.0.2
@@ -21,21 +24,19 @@ class Helper extends \Magento\Framework\DB\Helper
     protected $_foreignKeys = [];
 
     /**
-     * Core Date
-     *
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var DateTime
      */
     protected $_coreDate;
 
     /**
-     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param ResourceConnection $resource
      * @param string $modulePrefix
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $coreDate
+     * @param DateTime $coreDate
      */
     public function __construct(
-        \Magento\Framework\App\ResourceConnection $resource,
+        ResourceConnection $resource,
         $modulePrefix,
-        \Magento\Framework\Stdlib\DateTime\DateTime $coreDate
+        DateTime $coreDate
     ) {
         parent::__construct($resource, $modulePrefix);
         $this->_coreDate = $coreDate;
@@ -153,8 +154,8 @@ class Helper extends \Magento\Framework\DB\Helper
                     $connection->quoteIdentifier($match[2]),
                     $connection->quoteIdentifier($match[3]),
                     $connection->quoteIdentifier($match[4]),
-                    isset($match[5]) ? $match[5] : '',
-                    isset($match[7]) ? $match[7] : ''
+                    $match[5] ?? '',
+                    $match[7] ?? ''
                 );
             }
         }
@@ -307,7 +308,7 @@ class Helper extends \Magento\Framework\DB\Helper
         foreach ($row as $key => $data) {
             if ($data === null) {
                 $value = 'NULL';
-            } elseif (in_array(strtolower($describe[$key]['DATA_TYPE']), $dataTypes)) {
+            } elseif (in_array(strtolower($describe[$key]['DATA_TYPE'] ?? ''), $dataTypes)) {
                 $value = $data;
             } else {
                 $value = $connection->quoteInto('?', $data);
@@ -336,5 +337,42 @@ class Helper extends \Magento\Framework\DB\Helper
     public function restoreTransactionIsolationLevel()
     {
         $this->getConnection()->query('SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ');
+    }
+
+    /**
+     * Get create script for triggers.
+     *
+     * @param string $tableName
+     * @param boolean $addDropIfExists
+     * @param boolean $stripDefiner
+     * @return string
+     * @since 100.2.3
+     */
+    public function getTableTriggersSql($tableName, $addDropIfExists = false, $stripDefiner = true)
+    {
+        $script = "--\n-- Triggers structure for table `{$tableName}`\n--\n";
+        $triggers = $this->getConnection()->query('SHOW TRIGGERS LIKE \'' . $tableName . '\'')->fetchAll();
+
+        if (!$triggers) {
+            return '';
+        }
+        foreach ($triggers as $trigger) {
+            if ($addDropIfExists) {
+                $script .= 'DROP TRIGGER IF EXISTS ' . $trigger['Trigger'] . ";\n";
+            }
+            $script .= "delimiter ;;\n";
+
+            $triggerData = $this->getConnection()->query('SHOW CREATE TRIGGER ' . $trigger['Trigger'])->fetch();
+            if ($stripDefiner) {
+                $cleanedScript = preg_replace('/DEFINER=[^\s]*/', '', $triggerData['SQL Original Statement']);
+                $script .= $cleanedScript . "\n";
+            } else {
+                $script .= $triggerData['SQL Original Statement'] . "\n";
+            }
+            $script .= ";;\n";
+            $script .= "delimiter ;\n";
+        }
+
+        return $script;
     }
 }

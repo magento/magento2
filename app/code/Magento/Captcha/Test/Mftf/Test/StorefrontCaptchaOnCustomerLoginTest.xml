@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCaptchaOnCustomerLoginTest">
+        <annotations>
+            <features value="Captcha"/>
+            <stories value="Login with Customer Account + Captcha"/>
+            <title value="Captcha customer login page test"/>
+            <description value="Check CAPTCHA on Storefront Login Page."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14010" />
+            <group value="captcha"/>
+            <group value="mtf_migrated"/>
+            <group value="storefront_captcha_enabled"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{StorefrontCaptchaOnCustomerLoginConfigData.path}} {{StorefrontCaptchaOnCustomerLoginConfigData.value}}" stepKey="enableCaptchaOnCustomerLogin"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaLength3ConfigData.path}} {{StorefrontCustomerCaptchaLength3ConfigData.value}}" stepKey="setCaptchaLength" />
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaSymbols1ConfigData.path}} {{StorefrontCustomerCaptchaSymbols1ConfigData.value}}" stepKey="setCaptchaSymbols" />
+            <magentoCLI command="config:set customer/captcha/failed_attempts_login 3" stepKey="setLoginAttempt"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{StorefrontCaptchaOnCustomerLoginConfigData.path}} {{StorefrontCaptchaOnCustomerLoginConfigData.value}},{{StorefrontCaptchaOnCustomerForgotPasswordConfigData.value}}" stepKey="enableCaptchaOnDefaultForms"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultLengthConfigData.path}} {{StorefrontCustomerCaptchaDefaultLengthConfigData.value}}" stepKey="setDefaultCaptchaLength" />
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.path}} {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.value}}" stepKey="setDefaultCaptchaSymbols" />
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- Open storefront login form -->
+        <actionGroup ref="StorefrontOpenCustomerLoginPageActionGroup" stepKey="goToSignInPage" />
+
+        <!-- Login with wrong credentials 3 times -->
+        <actionGroup ref="StorefrontFillCustomerLoginFormActionGroup" stepKey="fillLoginFormFirstAttempt">
+            <argument name="customer" value="Colorado_US_Customer" />
+        </actionGroup>
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButtonFirstAttempt" />
+        <actionGroup ref="AssertMessageCustomerLoginActionGroup" stepKey="seeErrorMessageAfterFirstAttempt" />
+        <actionGroup ref="AssertCaptchaNotVisibleOnCustomerLoginFormActionGroup" stepKey="dontSeeCaptchaAfterFirstAttempt" />
+
+        <actionGroup ref="StorefrontFillCustomerLoginFormActionGroup" stepKey="fillLoginFormSecondAttempt">
+            <argument name="customer" value="Colorado_US_Customer" />
+        </actionGroup>
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButtonSecondAttempt" />
+        <actionGroup ref="AssertMessageCustomerLoginActionGroup" stepKey="seeErrorMessageAfterSecondAttempt" />
+        <actionGroup ref="AssertCaptchaNotVisibleOnCustomerLoginFormActionGroup" stepKey="dontSeeCaptchaAfterSecondAttempt" />
+
+        <actionGroup ref="StorefrontFillCustomerLoginFormActionGroup" stepKey="fillLoginFormThirdAttempt">
+            <argument name="customer" value="Colorado_US_Customer" />
+        </actionGroup>
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButtonThirdAttempt" />
+        <actionGroup ref="AssertMessageCustomerLoginActionGroup" stepKey="seeErrorMessageAfterThirdAttempt" />
+        <actionGroup ref="AssertCaptchaVisibleOnCustomerLoginFormActionGroup" stepKey="seeCaptchaAfterThirdAttempt" />
+
+        <!-- Submit form with incorrect captcha -->
+        <actionGroup ref="StorefrontFillCustomerLoginFormWithCaptchaActionGroup" stepKey="fillLoginFormCorrectAccountIncorrectCaptcha">
+            <argument name="customer" value="$$customer$$" />
+            <argument name="captcha" value="{{WrongCaptcha.value}}" />
+        </actionGroup>
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButtonCorrectAccountIncorrectCaptcha" />
+        <actionGroup ref="AssertMessageCustomerLoginActionGroup" stepKey="seeErrorMessageAfterIncorrectCaptcha">
+            <argument name="message" value="Incorrect CAPTCHA" />
+        </actionGroup>
+
+        <actionGroup ref="StorefrontFillCustomerLoginFormWithCaptchaActionGroup" stepKey="fillLoginFormCorrectAccountCorrectCaptcha">
+            <argument name="customer" value="$$customer$$" />
+            <argument name="captcha" value="{{PreconfiguredCaptcha.value}}" />
+        </actionGroup>
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButtonCorrectAccountCorrectCaptcha" />
+        <actionGroup ref="AssertCustomerWelcomeMessageActionGroup" stepKey="assertCustomerLoggedIn">
+            <argument name="customerFullName" value="$$customer.firstname$$ $$customer.lastname$$" />
+        </actionGroup>
+    </test>
+</tests>

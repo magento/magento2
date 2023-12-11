@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
 \Magento\TestFramework\Helper\Bootstrap::getInstance()
     ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
 
-require __DIR__ . '/../../Catalog/_files/product_simple.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple.php');

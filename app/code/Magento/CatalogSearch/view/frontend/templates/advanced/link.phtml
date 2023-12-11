@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 
  /** @var \Magento\CatalogSearch\Helper\Data $helper */
-$helper = $this->helper('Magento\CatalogSearch\Helper\Data');
+$helper = $this->helper(\Magento\CatalogSearch\Helper\Data::class);
 ?>
 <div class="nested">
-    <a class="action advanced" href="<?= /* @escapeNotVerified */ $helper->getAdvancedSearchUrl() ?>" data-action="advanced-search">
-        <?= /* @escapeNotVerified */ __('Advanced Search') ?>
+    <a class="action advanced" href="<?= $block->escapeUrl($helper->getAdvancedSearchUrl()) ?>" data-action="advanced-search">
+        <?= $block->escapeHtml(__('Advanced Search')) ?>
     </a>
 </div>

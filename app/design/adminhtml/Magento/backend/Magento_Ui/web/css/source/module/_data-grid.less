@@ -12,6 +12,9 @@
 //  _____________________________________________
 
 //  Data Grid Change Indicator
+/**
+ * @codingStandardsIgnoreStart
+ */
 @data-grid-row-changed__icon: @icon-edit__content;
 @data-grid-row-changed-tooltip__background: @color-white-fog2;
 
@@ -38,7 +41,6 @@
 .admin__data-grid-wrap {
     margin-bottom: 2rem;
     max-width: 100%;
-    overflow-x: auto;
     padding-bottom: 1rem;
     padding-top: @data-grid-header-row__indent;
 }
@@ -59,18 +61,6 @@
         margin-top: -(@data-grid-spinner__size / 2);
         position: absolute;
         top: 50%;
-
-        .ie9 & {
-            background: url('@{baseDir}images/loader-2.gif') 50% 50% no-repeat;
-            bottom: 0;
-            height: 149px;
-            left: 0;
-            margin: auto;
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: 218px;
-        }
     }
 }
 
@@ -78,6 +68,10 @@
     display: inline-block;
     overflow: hidden;
     width: 100%;
+
+    &.white-space-preserved {
+        white-space: pre-wrap;
+    }
 }
 
 body._in-resize {
@@ -236,10 +230,10 @@ body._in-resize {
 
     th,
     td {
-        font-size: @data-grid__font-size; // ToDo UI: Rewrite old styles. Should be deleted afterwards
+        font-size: @data-grid__font-size; // Rewrite old styles. Should be deleted afterwards
         line-height: @line-height__base;
         transition: @smooth__background-color;
-        vertical-align: top;
+        vertical-align: middle;
 
         &._resizing {
             border-left: 1px solid @color-blue-pure;
@@ -304,7 +298,7 @@ body._in-resize {
         .action-menu {
             left: auto;
             min-width: 10rem;
-            right: auto;
+            right: 0;
             text-align: left;
             top: auto;
             z-index: 1;
@@ -403,7 +397,7 @@ body._in-resize {
     .data-grid-checkbox-cell {
         overflow: hidden;
         padding: 0;
-        vertical-align: top;
+        vertical-align: middle;
         width: @control-checkbox-radio__size + @data-grid-checkbox-cell-inner__padding-horizontal * 2;
 
         &:hover {
@@ -435,6 +429,7 @@ body._in-resize {
     .data-grid-actions-cell {
         padding-left: @data-grid-cell__padding-horizontal * 2;
         padding-right: @data-grid-cell__padding-horizontal * 2;
+        position: relative;
         text-align: center;
         width: 1%;
     }
@@ -999,10 +994,6 @@ body._in-resize {
                 transform: rotate(45deg);
                 width: 1.6rem;
                 z-index: 3;
-
-                .ie9 & {
-                    display: none;
-                }
             }
         }
     }
@@ -1090,8 +1081,9 @@ body._in-resize {
     }
 
     .data-grid-checkbox-cell-inner {
-        margin: @data-grid-checkbox-cell-inner__padding-top @data-grid-checkbox-cell-inner__padding-horizontal .9rem;
+        margin: 0 @data-grid-checkbox-cell-inner__padding-horizontal 0;
         padding: 0;
+        text-align: center;
     }
 
     //  Content Hierarchy specific

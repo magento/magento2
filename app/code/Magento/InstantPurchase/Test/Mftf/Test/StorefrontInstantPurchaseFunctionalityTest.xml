@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontInstantPurchaseFunctionalityTest">
+        <annotations>
+            <features value="InstantPurchase"/>
+            <stories value="Using Instant Purchase"/>
+            <title value="Checks that Instant Purchase functionality works fine"/>
+            <description value="Checks that customer with different billing and shipping addresses work with Instant Purchase functionality fine"/>
+            <useCaseId value="MAGETWO-90898"/>
+            <testCaseId value="MC-25924"/>
+            <severity value="CRITICAL"/>
+            <group value="instant_purchase"/>
+            <group value="vault"/>
+            <group value="paypal"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
+        </annotations>
+        <before>
+            <magentoCLI command="downloadable:domains:add" arguments="example.com static.magento.com" stepKey="addDownloadableDomain"/>
+            <!-- Configure Paypal Payflow Pro payment method -->
+            <createData entity="PaypalPayflowProConfig" stepKey="configurePaypalPayflowProPayment"/>
+            <!-- Enable Paypal Payflow Pro with Vault -->
+            <createData entity="EnablePaypalPayflowProWithVault" stepKey="enablePaypalPayflowProPaymentWithVault"/>
+            <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomer"/>
+            <!-- Create all product variations -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct"/>
+            <actionGroup ref="AdminCreateApiConfigurableProductActionGroup" stepKey="createConfigurableProduct"/>
+            <!-- Create Bundle Product -->
+            <createData entity="ApiFixedBundleProduct" stepKey="createBundleProduct"/>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption">
+                <requiredEntity createDataKey="createBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createBundleLink">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <!-- Create Downloadable Product -->
+            <createData entity="ApiDownloadableProduct" stepKey="createDownloadableProduct"/>
+            <createData entity="downloadableLink1" stepKey="addDownloadableLink">
+                <requiredEntity createDataKey="createDownloadableProduct"/>
+            </createData>
+            <!-- Create Grouped Product -->
+            <createData entity="ApiGroupedProduct" stepKey="createGroupedProduct"/>
+            <createData entity="OneSimpleProductLink" stepKey="createLinkForGroupedProduct">
+                <requiredEntity createDataKey="createGroupedProduct"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <!-- Log in as a customer -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLoginToStorefront">
+                <argument name="Customer" value="$createCustomer$"/>
+            </actionGroup>
+            <!-- Customer placed order from storefront with payment method -->
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+                <argument name="product" value="$createSimpleProduct$"/>
+            </actionGroup>
+            <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+            <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFlatRate"/>
+            <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentStep"/>
+            <!-- Fill Paypal card data -->
+            <click selector="{{StorefrontPaypalCheckoutSection.creditCard}}" stepKey="selectPaypalPaymentMethod"/>
+            <waitForPageLoad stepKey="waitForPaypalFormLoad"/>
+            <scrollTo selector="{{StorefrontPaypalCheckoutSection.creditCard}}" stepKey="scrollToCreditCardSection"/>
+            <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardDataPaypal">
+                <argument name="cardData" value="Visa3DSecureCard"/>
+            </actionGroup>
+            <waitForPageLoad stepKey="waitForFillCardData"/>
+            <checkOption selector="{{StorefrontOnePageCheckoutPaymentSection.saveForLaterUse}}" stepKey="checkSaveForLaterUse"/>
+            <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrder">
+                <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+                <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Set configs to default -->
+            <createData entity="DefaultPaypalPayflowProConfig" stepKey="defaultPaypalPayflowProConfig"/>
+            <createData entity="RollbackPaypalPayflowPro" stepKey="rollbackPaypalPayflowProConfig"/>
+            <!-- Remove created products/attributes -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="createGroupedProduct" stepKey="deleteGroupedProduct"/>
+            <!-- Remove Downloadable Product -->
+            <magentoCLI command="downloadable:domains:remove static.magento.com" stepKey="removeDownloadableDomain"/>
+            <deleteData createDataKey="createDownloadableProduct" stepKey="deleteDownloadableProduct"/>
+            <!-- Remove Configurable Product -->
+            <deleteData createDataKey="createConfigProductCreateConfigurableProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigProductAttributeCreateConfigurableProduct" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createConfigChildProduct1CreateConfigurableProduct" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2CreateConfigurableProduct" stepKey="deleteConfigChildProduct2"/>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+        <!-- 1. Browse all product page and verify that the "Instant Purchase" button appears -->
+        <!-- Virtual product -->
+        <amOnPage url="{{StorefrontProductPage.url($createVirtualProduct.custom_attributes[url_key]$)}}" stepKey="openVirtualProductPage"/>
+        <waitForElementVisible selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="waitForButtonOnVirtualProductPage"/>
+        <!-- Downloadable Product -->
+        <amOnPage url="{{StorefrontProductPage.url($createDownloadableProduct.custom_attributes[url_key]$)}}" stepKey="openDownloadableProductPage"/>
+        <waitForElementVisible selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="waitForButtonOnDownloadableProductPage"/>
+        <!-- Bundle Product -->
+        <amOnPage url="{{StorefrontProductPage.url($createBundleProduct.custom_attributes[url_key]$)}}" stepKey="openBundleProductPage"/>
+        <waitForElementVisible selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="waitForCustomizeAndAddToCartButton"/>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickCustomizeAndAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="waitForButtonOnBundleProductPage"/>
+        <!-- Grouped product -->
+        <amOnPage url="{{StorefrontProductPage.url($createGroupedProduct.custom_attributes[url_key]$)}}" stepKey="openGroupedProductPage"/>
+        <waitForElementVisible selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="waitForButtonOnGroupedProductPage"/>
+        <!-- Configurable Product -->
+        <amOnPage url="{{StorefrontProductPage.url($createConfigProductCreateConfigurableProduct.custom_attributes[url_key]$)}}" stepKey="openConfigurableProductPage"/>
+        <waitForElementVisible selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="waitForButtonOnConfigurableProductPage"/>
+        <!-- 2. Click on "Instant Purchase" and assert information -->
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct.custom_attributes[url_key]$)}}" stepKey="openSimpleProductPage"/>
+        <waitForElementVisible selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="waitForInstantPurchaseButton"/>
+        <actionGroup ref="AssertStorefrontInstantPurchaseConfirmationDataActionGroup" stepKey="assertInstantPurchasePopupData">
+            <argument name="shippingStreet" value="{{US_Address_NY.street[0]}}"/>
+            <argument name="billingStreet" value="{{US_Address_NY.street[0]}}"/>
+            <argument name="cardEnding" value="{{Visa3DSecureCardInfo.cardNumberEnding}}"/>
+        </actionGroup>
+        <!-- 3. Confirm Instant Purchase -->
+        <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="placeOrderAgain"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see userInput="Your order number is:" selector="{{StorefrontMessagesSection.success}}" stepKey="seePlaceOrderSuccessMessage"/>
+        <!-- 4. Customer changes his default address -->
+        <amOnPage url="{{StorefrontCustomerAddressesPage.url}}" stepKey="goToAddressPage"/>
+        <click selector="{{StorefrontCustomerAddressesSection.editAdditionalAddress('1')}}" stepKey="clickOnEditAdditionalAddressButton"/>
+        <checkOption selector="{{StorefrontCustomerAddressFormSection.useAsDefaultBillingAddressCheckBox}}" stepKey="checkUseAsDefaultBillingAddressCheckbox"/>
+        <actionGroup ref="AdminSaveCustomerAddressActionGroup" stepKey="saveAddress"/>
+        <!-- 5.1 Customer places a new order from the storefront with new payment credentials -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCartAgain">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicartAgain"/>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFlatRateAgain"/>
+        <click selector="{{CheckoutShippingMethodsSection.shipHereButton}}" stepKey="changeShippingAddress"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentStepAgain"/>
+        <!-- Fill Paypal card data -->
+        <click selector="{{StorefrontPaypalCheckoutSection.creditCard}}" stepKey="selectPaypalPaymentMethodAgain"/>
+        <waitForPageLoad stepKey="waitForPaypalFormLoadAgain"/>
+        <scrollTo selector="{{StorefrontPaypalCheckoutSection.creditCard}}" stepKey="scrollToCreditCardSectionAgain"/>
+        <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardDataAgain">
+            <argument name="cardData" value="VisaDefaultCard"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForFillCardDataAgain"/>
+        <!-- 5.2 Customer save this payment method -->
+        <checkOption selector="{{StorefrontOnePageCheckoutPaymentSection.saveForLaterUse}}" stepKey="checkSaveForLaterUseAgain"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrderAgain">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+        <!-- 6. Customer opens simple product page -->
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct.custom_attributes[url_key]$)}}" stepKey="openSimpleProductPageAgain"/>
+        <waitForElementVisible selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="waitForInstantPurchaseButtonAgain"/>
+        <!-- 7. Click on "Instant Purchase" and verify that information are different from previous -->
+        <actionGroup ref="AssertStorefrontInstantPurchaseConfirmationDataActionGroup" stepKey="assertInstantPurchasePopupDataAgain">
+            <argument name="shippingStreet" value="{{US_Address_NY.street[0]}}"/>
+            <argument name="billingStreet" value="{{UK_Not_Default_Address.street[0]}}"/>
+            <argument name="cardEnding" value="{{VisaDefaultCardInfo.cardNumberEnding}}"/>
+        </actionGroup>
+        <!-- 8. Confirm Instant Purchase -->
+        <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="placeOrderFinalTime"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessageAgain"/>
+        <see userInput="Your order number is:" selector="{{StorefrontMessagesSection.success}}" stepKey="seePlaceOrderSuccessMessageAgain"/>
+    </test>
+</tests>

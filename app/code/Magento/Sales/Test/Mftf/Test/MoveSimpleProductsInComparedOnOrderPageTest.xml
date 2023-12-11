@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="MoveSimpleProductsInComparedOnOrderPageTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Add Products to Order from Products in Comparison List Section"/>
+            <title value="Move simple products in compared on order page test"/>
+            <description value="Move simple products in compared on order page test"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-16103"/>
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
+
+            <!-- Create simple products -->
+            <createData entity="SimpleProduct2" stepKey="createFirstSimpleProduct">
+                <field key="price">560</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createSecondSimpleProduct">
+                <field key="price">560</field>
+            </createData>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Admin logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Logout customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+
+            <!-- Delete created entities -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+        </after>
+
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$" />
+        </actionGroup>
+
+        <!-- Add first product to compare list -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openFirstProductPage">
+            <argument name="productUrl" value="$$createFirstSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <scrollTo selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="scrollToCompareProductButton"/>
+        <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="addFirstProductToCompare">
+            <argument name="productVar" value="$$createFirstSimpleProduct$$"/>
+        </actionGroup>
+
+        <!-- Add second product to compare list -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSecondProductPage">
+            <argument name="productUrl" value="$$createSecondSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <scrollTo selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="scrollToCompareButton"/>
+        <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="addSecondProductToCompare">
+            <argument name="productVar" value="$$createSecondSimpleProduct$$"/>
+        </actionGroup>
+
+        <!-- Login as admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGridPage"/>
+        <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPage">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Click 'Create Order' -->
+        <click selector="{{AdminCustomerMainActionsSection.createOrderBtn}}" stepKey="clickCreateOrder"/>
+
+        <!-- Select products in comparison list section -->
+        <click selector="{{AdminCustomerActivitiesComparisonListSection.addProductToOrder($$createFirstSimpleProduct.name$$)}}" stepKey="addFirstProductToOrder"/>
+        <click selector="{{AdminCustomerActivitiesComparisonListSection.addProductToOrder($$createSecondSimpleProduct.name$$)}}" stepKey="addSecondProductToOrder"/>
+
+        <!-- Click 'Update Changes' -->
+        <actionGroup ref="AdminClickUpdateChangesOnCreateOrderPageActionGroup" stepKey="clickUpdateChangesBtn"/>
+
+        <!-- Assert products in items ordered grid -->
+        <actionGroup ref="AdminAssertProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeFirstProductName">
+            <argument name="index" value="1"/>
+            <argument name="attribute" value="Product"/>
+            <argument name="value" value="$$createFirstSimpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeFirstProductPrice">
+            <argument name="index" value="1"/>
+            <argument name="attribute" value="Price"/>
+            <argument name="value" value="$$createFirstSimpleProduct.price$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeSecondProductName">
+            <argument name="index" value="2"/>
+            <argument name="attribute" value="Product"/>
+            <argument name="value" value="$$createSecondSimpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeSecondProductPrice">
+            <argument name="index" value="2"/>
+            <argument name="attribute" value="Price"/>
+            <argument name="value" value="$$createSecondSimpleProduct.price$$"/>
+        </actionGroup>
+    </test>
+</tests>

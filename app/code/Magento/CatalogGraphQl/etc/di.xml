@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface" type="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CompositeCollectionProcessor"/>
+    <preference for="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionPostProcessorInterface" type="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CompositeCollectionPostProcessor"/>
+    <preference for="Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CollectionProcessorInterface" type="Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CompositeCollectionProcessor"/>
+    <type name="Magento\EavGraphQl\Model\Resolver\Query\Type">
+        <arguments>
+            <argument name="customTypes" xsi:type="array">
+                <item name="media_gallery" xsi:type="string">ProductMediaGallery</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Framework\GraphQlSchemaStitching\Reader" type="Magento\Framework\GraphQlSchemaStitching\Common\Reader">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="productDynamicAttributeReader" xsi:type="object">Magento\CatalogGraphQl\Model\Config\AttributeReader</item>
+                <item name="categoryDynamicAttributeReader" xsi:type="object">Magento\CatalogGraphQl\Model\Config\CategoryAttributeReader</item>
+                <item name="productSortDynamicAttributeReader" xsi:type="object">Magento\CatalogGraphQl\Model\Config\SortAttributeReader</item>
+                <item name="productFilterDynamicAttributeReader" xsi:type="object">Magento\CatalogGraphQl\Model\Config\FilterAttributeReader</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Framework\GraphQl\Config\Data" type="Magento\Framework\Config\Data">
+        <arguments>
+            <argument name="cacheTags" xsi:type="array">
+                <!-- Note: Because of DynamicAttributeReaders, this cache needs to be cleaned when attributes change-->
+                <item name="EAV" xsi:type="string">EAV</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\GraphQl\Query\FieldTranslator">
+        <arguments>
+            <argument name="translationMap" xsi:type="array">
+                <item name="new_from_date" xsi:type="string">news_from_date</item>
+                <item name="new_to_date" xsi:type="string">news_to_date</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\FieldEntityAttributesPool">
+        <arguments>
+            <argument name="attributesInstances" xsi:type="array">
+                <item name="products" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\FilterArgument\ProductEntityAttributesForAst</item>
+                <item name="categoryList" xsi:type="object">Magento\CatalogGraphQl\Model\Category\CategoryFilterAttributesForAst</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CompositeCollectionProcessor">
+        <arguments>
+            <argument name="collectionProcessors" xsi:type="array">
+                <item name="attributes" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\AttributeProcessor</item>
+                <item name="extensible" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\ExtensibleEntityProcessor</item>
+                <item name="required" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\RequiredColumnsProcessor</item>
+                <item name="search" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\SearchCriteriaProcessor</item>
+                <item name="stock" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\StockProcessor</item>
+                <item name="visibility" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\VisibilityStatusProcessor</item>
+                <item name="mediaGallery" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\MediaGalleryProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CompositeCollectionPostProcessor">
+        <arguments>
+            <argument name="collectionPostProcessors" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionPostProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CompositeCollectionProcessor">
+        <arguments>
+            <argument name="collectionProcessors" xsi:type="array">
+                <item name="catalog" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CollectionProcessor\CatalogProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\SearchCriteriaProcessor">
+        <arguments>
+            <argument name="searchCriteriaApplier" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\GraphQl\Query\Resolver\ArgumentsCompositeProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="category_url_path" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\Query\CategoryUrlPathArgsProcessor</item>
+                <item name="category_uid" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\Query\CategoryUidArgsProcessor</item>
+                <item name="category_uids" xsi:type="object">Magento\CatalogGraphQl\Model\Category\CategoryUidsArgsProcessor</item>
+                <item name="parent_category_uids" xsi:type="object">Magento\CatalogGraphQl\Model\Category\ParentCategoryUidsArgsProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\CatalogGraphQl\Plugin\Search\Request\ConfigReader">
+        <arguments>
+            <argument name="exactMatchAttributes" xsi:type="array">
+                <item name="sku" xsi:type="string">sku</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Search\Request\Config\FilesystemReader">
+        <plugin name="productAttributesDynamicFields"  type="Magento\CatalogGraphQl\Plugin\Search\Request\ConfigReader" />
+    </type>
+    <type name="Magento\Framework\Search\Request\Config">
+        <arguments>
+            <argument name="cacheTags" xsi:type="array">
+                <!-- Note: We have to add EAV to the cache tags because productAttributesDynamicFields uses EAV -->
+                <item name="EAV" xsi:type="string">EAV</item>
+            </argument>
+        </arguments>
+        <plugin name="localRequestDataPlugin"  type="Magento\CatalogGraphQl\Plugin\Search\RequestBuilderPlugin" />
+    </type>
+
+    <preference type="Magento\CatalogGraphQl\Model\Resolver\Product\Price\Provider" for="Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface"/>
+
+    <preference type="Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search" for="Magento\CatalogGraphQl\Model\Resolver\Products\Query\ProductQueryInterface"/>
+
+    <type name="\Magento\CatalogGraphQl\Model\Resolver\Product\BatchProductLinks">
+        <arguments>
+            <argument name="linkTypes" xsi:type="array">
+                <item name="related" xsi:type="string">related</item>
+                <item name="upsell" xsi:type="string">upsell</item>
+                <item name="crosssell" xsi:type="string">crosssell</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CollectionProcessor\CatalogProcessor">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\TagResolver">
+        <arguments>
+            <argument name="invalidatableObjectTypes" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="string">
+                    Magento\Catalog\Api\Data\ProductInterface
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQlResolverCache\App\Cache\Tag\Strategy\Locator">
+        <arguments>
+            <argument name="customStrategies" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="object">
+                    Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\TagsStrategy
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

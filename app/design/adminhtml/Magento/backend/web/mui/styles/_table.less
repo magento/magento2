@@ -204,16 +204,6 @@
     }
 }
 
-.eq-ie9 {
-    .hor-scroll {
-        display: inline-block;
-        min-height: 0;
-        overflow-y: hidden;
-        overflow-x: auto;
-        width: 100%;
-    }
-}
-
 td.col-period,
 td.col-date,
 td.col-date_to,
@@ -360,7 +350,7 @@ td.col-type {
             position: relative;
             border-bottom-right-radius: 0;
             box-shadow: none;
-            background: #fff;
+            background: @color-white;
 
             &:after {
                 position: absolute;
@@ -369,7 +359,7 @@ td.col-type {
                 right: 0;
                 height: 2px;
                 margin-top: -1px;
-                background: #fff;
+                background: @color-white;
                 content: '';
                 z-index: 2;
             }
@@ -424,7 +414,7 @@ td.col-type {
     }
 
     tbody tr:nth-child(odd) td {
-        &:extend(.data-table tbody tr:nth-child(odd) td);
+        &:extend(.data-table tbody tr:nth-child(odd) td all);
     }
 
     tfoot tr:last-child td {
@@ -455,7 +445,6 @@ td.col-type {
 
     .import {
         display: block;
-        vertical-align: top;
     }
 
     .action-reset {
@@ -612,13 +601,13 @@ td.col-type {
         }
 
         .label {
-            &:extend(.grid-actions .export .label);
+            &:extend(.grid-actions .export .label all);
             padding: 0;
             width: auto;
         }
 
         .action- {
-            &:extend(.grid-actions .export .action-);
+            &:extend(.grid-actions .export .action- all);
             vertical-align: top;
         }
     }

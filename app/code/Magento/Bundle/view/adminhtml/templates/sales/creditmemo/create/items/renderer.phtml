@@ -4,20 +4,21 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
-?>
-<?php
 /**
  * @see \Magento\Bundle\Block\Adminhtml\Sales\Order\Items\Renderer
  */
 /** @var $block \Magento\Bundle\Block\Adminhtml\Sales\Order\Items\Renderer */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
 <?php $_item = $block->getItem() ?>
 <?php $items = $block->getChildren($_item); ?>
 <?php $_count = count($items) ?>
 <?php $_index = 0 ?>
+<?php
+/** @var \Magento\Catalog\Helper\Data $catalogHelper */
+$catalogHelper = $block->getData('catalogHelper');
+?>
 
 <?php $_prevOptionId = '' ?>
 
@@ -33,7 +34,9 @@
     <?php if ($_item->getOrderItem()->getParentItem()): ?>
         <?php if ($_prevOptionId != $attributes['option_id']): ?>
         <tr>
-            <td class="col-product"><div class="option-label"><?= /* @escapeNotVerified */ $attributes['option_label'] ?></div></td>
+            <td class="col-product">
+                <div class="option-label"><?= $block->escapeHtml($attributes['option_label']) ?></div>
+            </td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
@@ -43,7 +46,7 @@
             <td>&nbsp;</td>
             <td class="last">&nbsp;</td>
         </tr>
-        <?php $_prevOptionId = $attributes['option_id'] ?>
+            <?php $_prevOptionId = $attributes['option_id'] ?>
         <?php endif; ?>
     <?php endif; ?>
     <tr<?= (++$_index == $_count && !$_showlastRow) ? ' class="border"' : '' ?>>
@@ -51,8 +54,8 @@
         <td class="col-product">
             <div class="product-title"><?= $block->escapeHtml($_item->getName()) ?></div>
             <div class="product-sku-block">
-                <span><?= /* @escapeNotVerified */ __('SKU') ?>:</span>
-                <?= implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($_item->getSku()))) ?>
+                <span><?= $block->escapeHtml(__('SKU')) ?>:</span>
+                <?= /* @noEscape */ implode('<br />', $catalogHelper->splitSku($_item->getSku())) ?>
             </div>
         </td>
         <?php else: ?>
@@ -69,44 +72,45 @@
             <?php if ($block->canShowPriceInfo($_item)): ?>
                 <table class="qty-table">
                     <tr>
-                        <th><?= /* @escapeNotVerified */ __('Ordered') ?></th>
-                        <td><?= /* @escapeNotVerified */ $_item->getOrderItem()->getQtyOrdered()*1 ?></td>
+                        <th><?= $block->escapeHtml(__('Ordered')) ?></th>
+                        <td><?= (float)$_item->getOrderItem()->getQtyOrdered() * 1 ?></td>
                     </tr>
                     <?php if ((float) $_item->getOrderItem()->getQtyInvoiced()): ?>
                     <tr>
-                        <th><?= /* @escapeNotVerified */ __('Invoiced') ?></th>
-                        <td><?= /* @escapeNotVerified */ $_item->getOrderItem()->getQtyInvoiced()*1 ?></td>
+                        <th><?= $block->escapeHtml(__('Invoiced')) ?></th>
+                        <td><?= (float)$_item->getOrderItem()->getQtyInvoiced() * 1 ?></td>
                     </tr>
                     <?php endif; ?>
-                    <?php if ((float) $_item->getOrderItem()->getQtyShipped() && $block->isShipmentSeparately($_item)): ?>
+                    <?php if ((float) $_item->getOrderItem()->getQtyShipped() &&
+                        $block->isShipmentSeparately($_item)): ?>
                     <tr>
-                        <th><?= /* @escapeNotVerified */ __('Shipped') ?></th>
-                        <td><?= /* @escapeNotVerified */ $_item->getOrderItem()->getQtyShipped()*1 ?></td>
+                        <th><?= $block->escapeHtml(__('Shipped')) ?></th>
+                        <td><?= (float)$_item->getOrderItem()->getQtyShipped() * 1 ?></td>
                     </tr>
                     <?php endif; ?>
                     <?php if ((float) $_item->getOrderItem()->getQtyRefunded()): ?>
                     <tr>
-                        <th><?= /* @escapeNotVerified */ __('Refunded') ?></th>
-                        <td><?= /* @escapeNotVerified */ $_item->getOrderItem()->getQtyRefunded()*1 ?></td>
+                        <th><?= $block->escapeHtml(__('Refunded')) ?></th>
+                        <td><?= (float)$_item->getOrderItem()->getQtyRefunded() * 1 ?></td>
                     </tr>
                     <?php endif; ?>
                     <?php if ((float) $_item->getOrderItem()->getQtyCanceled()): ?>
                     <tr>
-                        <th><?= /* @escapeNotVerified */ __('Canceled') ?></th>
-                        <td><?= /* @escapeNotVerified */ $_item->getOrderItem()->getQtyCanceled()*1 ?></td>
+                        <th><?= $block->escapeHtml(__('Canceled')) ?></th>
+                        <td><?= (float)$_item->getOrderItem()->getQtyCanceled() * 1 ?></td>
                     </tr>
                     <?php endif; ?>
                 </table>
             <?php elseif ($block->isShipmentSeparately($_item)): ?>
                 <table class="qty-table">
                     <tr>
-                        <th><?= /* @escapeNotVerified */ __('Ordered') ?></th>
-                        <td><?= /* @escapeNotVerified */ $_item->getOrderItem()->getQtyOrdered()*1 ?></td>
+                        <th><?= $block->escapeHtml(__('Ordered')) ?></th>
+                        <td><?= (float)$_item->getOrderItem()->getQtyOrdered() * 1 ?></td>
                     </tr>
                     <?php if ((float) $_item->getOrderItem()->getQtyShipped()): ?>
                     <tr>
-                        <th><?= /* @escapeNotVerified */ __('Shipped') ?></th>
-                        <td><?= /* @escapeNotVerified */ $_item->getOrderItem()->getQtyShipped()*1 ?></td>
+                        <th><?= $block->escapeHtml(__('Shipped')) ?></th>
+                        <td><?= (float)$_item->getOrderItem()->getQtyShipped() * 1 ?></td>
                     </tr>
                     <?php endif; ?>
                 </table>
@@ -114,13 +118,14 @@
                 &nbsp;
             <?php endif; ?>
         </td>
-        <?php if ($block->canParentReturnToStock($_item)) : ?>
+        <?php if ($block->canParentReturnToStock($_item)): ?>
         <td class="col-return-to-stock">
             <?php if ($block->canShowPriceInfo($_item)): ?>
-                <?php if ($block->canReturnItemToStock($_item)) : ?>
+                <?php if ($block->canReturnItemToStock($_item)): ?>
                     <input type="checkbox"
                            class="admin__control-checkbox"
-                           name="creditmemo[items][<?= /* @escapeNotVerified */ $_item->getOrderItemId() ?>][back_to_stock]"
+                           name="creditmemo[items][<?= $block->escapeHtmlAttr($_item->getOrderItemId())
+                            ?>][back_to_stock]"
                            value="1"<?php if ($_item->getBackToStock()):?> checked="checked"<?php endif;?> />
                     <label class="admin__field-label"></label>
                 <?php endif; ?>
@@ -131,13 +136,13 @@
         <?php endif; ?>
         <td class="col-refund col-qty">
             <?php if ($block->canShowPriceInfo($_item)): ?>
-                <?php if ($block->canEditQty()) : ?>
+                <?php if ($block->canEditQty()): ?>
                     <input type="text"
                            class="input-text admin__control-text qty-input"
-                           name="creditmemo[items][<?= /* @escapeNotVerified */ $_item->getOrderItemId() ?>][qty]"
-                           value="<?= /* @escapeNotVerified */ $_item->getQty()*1 ?>" />
+                           name="creditmemo[items][<?= $block->escapeHtmlAttr($_item->getOrderItemId()) ?>][qty]"
+                           value="<?= (float)$_item->getQty() * 1 ?>" />
                 <?php else: ?>
-                    <?= /* @escapeNotVerified */ $_item->getQty()*1 ?>
+                    <?= (float)$_item->getQty() * 1 ?>
                 <?php endif; ?>
             <?php else: ?>
                 &nbsp;
@@ -152,14 +157,14 @@
         </td>
         <td class="col-tax-amount">
             <?php if ($block->canShowPriceInfo($_item)): ?>
-                <?= /* @escapeNotVerified */ $block->displayPriceAttribute('tax_amount') ?>
+                <?= /* @noEscape */ $block->displayPriceAttribute('tax_amount') ?>
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <td class="col-discont">
             <?php if ($block->canShowPriceInfo($_item)): ?>
-                <?= /* @escapeNotVerified */ $block->displayPriceAttribute('discount_amount') ?>
+                <?= /* @noEscape */ $block->displayPriceAttribute('discount_amount') ?>
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>
@@ -179,23 +184,25 @@
             <?php if ($block->getOrderOptions($_item->getOrderItem())): ?>
                 <dl class="item-options">
                 <?php foreach ($block->getOrderOptions($_item->getOrderItem()) as $option): ?>
-                    <dt><?= /* @escapeNotVerified */ $option['label'] ?></dt>
+                    <dt><?= $block->escapeHtml($option['label']) ?></dt>
                     <dd>
                     <?php if (isset($option['custom_view']) && $option['custom_view']): ?>
-                        <?= /* @escapeNotVerified */ $option['value'] ?>
+                        <?= $block->escapeHtml($option['value']) ?>
                     <?php else: ?>
-                        <?= $block->truncateString($option['value'], 55, '', $_remainder) ?>
+                        <?= $block->escapeHtml($block->truncateString($option['value'], 55, '', $_remainder)) ?>
                         <?php if ($_remainder):?>
-                            ... <span id="<?= /* @escapeNotVerified */ $_id = 'id' . uniqid() ?>"><?= /* @escapeNotVerified */ $_remainder ?></span>
-                            <script>
-require(['prototype'], function(){
-
-    $('<?= /* @escapeNotVerified */ $_id ?>').hide();
-    $('<?= /* @escapeNotVerified */ $_id ?>').up().observe('mouseover', function(){$('<?= /* @escapeNotVerified */ $_id ?>').show();});
-    $('<?= /* @escapeNotVerified */ $_id ?>').up().observe('mouseout',  function(){$('<?= /* @escapeNotVerified */ $_id ?>').hide();});
-
-});
-</script>
+                            ... <span id="<?= $block->escapeHtmlAttr($_id = 'id' . uniqid())
+                            ?>"><?= $block->escapeHtml($_remainder) ?></span>
+                            <?php $escapedId = /* @noEscape */ $block->escapeJs($_id);
+                            $scriptString = <<<script
+                                require(['prototype'], function(){
+                                    $('{$escapedId}').hide();
+                                    $('{$escapedId}').up().observe('mouseover', function(){\$('{$escapedId}').show();});
+                                    $('{$escapedId}').up().observe('mouseout',  function(){\$('{$escapedId}').hide();});
+                                });
+script;
+                            ?>
+                            <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
                         <?php endif;?>
                     <?php endif;?>
                     </dd>

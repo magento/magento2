@@ -21,8 +21,6 @@ use Magento\Framework\App\TemplateTypesInterface;
 class Edit extends Widget
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -67,12 +65,6 @@ class Edit extends Widget
      */
     protected function _prepareLayout()
     {
-        // Load Wysiwyg on demand and Prepare layout
-//        $block = $this->getLayout()->getBlock('head');
-//        if ($this->_wysiwygConfig->isEnabled() && $block) {
-//            $block->setCanLoadTinyMce(true);
-//        }
-
         $this->getToolbar()->addChild(
             'back_button',
             \Magento\Backend\Block\Widget\Button::class,
@@ -216,13 +208,15 @@ class Edit extends Widget
     }
 
     /**
-     * Return return template name for JS
+     * Return template name for JS
      *
      * @return string
      */
     public function getJsTemplateName()
     {
-        return addcslashes($this->getModel()->getTemplateCode(), "\"\r\n\\");
+        $templateCode = $this->getModel()->getTemplateCode();
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        return $templateCode ? addcslashes($templateCode, "\"\r\n\\") : '';
     }
 
     /**

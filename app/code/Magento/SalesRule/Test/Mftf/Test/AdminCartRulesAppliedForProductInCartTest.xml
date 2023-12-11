@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCartRulesAppliedForProductInCartTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="The cart rule cannot effect the cart"/>
+            <title value="Check that cart rules applied for product in cart"/>
+            <description value="Check that cart rules applied for product in cart"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-96722"/>
+            <useCaseId value="MAGETWO-96410"/>
+            <group value="SalesRule"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <!--Create category and product-->
+            <createData entity="_defaultCategory" stepKey="defaultCategory"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct">
+                <field key="price">200</field>
+                <field key="quantity">500</field>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="defaultCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteBundleProduct">
+                <argument name="sku" value="{{BundleProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
+                <argument name="ruleName" value="{{PriceRuleWithCondition.name}}"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters1"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Start creating a bundle product-->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillNameAndSku">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <pressKey selector="{{AdminProductFormSection.productSku}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" stepKey="enter"/>
+
+        <!--Off dynamic price and set value-->
+        <scrollToTopOfPage stepKey="scrollToTopOfThePageToSeePriceTypeElement"/>
+        <click  selector="{{AdminProductFormBundleSection.dynamicPrice}}" stepKey="offDynamicPrice"/>
+        <fillField selector="{{AdminProductFormBundleSection.priceField}}" userInput="0" stepKey="setProductPrice"/>
+
+        <!-- Add category to product -->
+        <click selector="{{AdminProductFormBundleSection.categoriesDropDown}}" stepKey="dropDownCategories"/>
+        <fillField selector="{{AdminProductFormBundleSection.searchForCategory}}" userInput="$$defaultCategory.name$$" stepKey="searchForCategory"/>
+        <waitForElementVisible selector="{{AdminProductFormBundleSection.selectCategory}}" stepKey="waitForElementLoaded"/>
+        <click selector="{{AdminProductFormBundleSection.selectCategory}}" stepKey="selectCategory"/>
+        <click selector="{{AdminProductFormBundleSection.categoriesLabel}}" stepKey="clickOnCategoriesLabelToCloseOptions"/>
+
+        <!-- Add option, a "Radio Buttons" type option, with one product and set fixed price 200-->
+        <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOptionWithOneProduct">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$$simpleProduct.sku$$"/>
+            <argument name="prodTwoSku" value=""/>
+            <argument name="optionTitle" value="Option One"/>
+            <argument name="inputType" value="radio"/>
+        </actionGroup>
+        <selectOption selector="{{AdminProductFormBundleSection.bundlePriceType}}" userInput="Fixed" stepKey="selectPriceType"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundlePriceValue}}" userInput="200" stepKey="fillPriceValue"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+        <!--Create cart price rule-->
+        <actionGroup ref="AdminCreateCartPriceRuleWithConditionsActionGroup" stepKey="createRule">
+            <argument name="ruleName" value="PriceRuleWithCondition"/>
+            <argument name="condition1" value="Products subselection"/>
+            <argument name="condition2" value="Category"/>
+            <argument name="ruleToChange1" value="is"/>
+            <argument name="rule1" value="equals or greater than"/>
+            <argument name="ruleToChange2" value="..."/>
+            <argument name="rule2" value="2"/>
+            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
+
+        <!--Go to Storefront and add product to cart and checkout from cart-->
+        <amOnPage url="{{StorefrontProductPage.url($$simpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPage" />
+        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="2" stepKey="setQuantity"/>
+        <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="AddProductToCard">
+            <argument name="productName" value="$$simpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping"/>
+
+        <!--Check totals-->
+        <grabTextFrom selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="grabSubtotal"/>
+        <grabTextFrom selector="{{CheckoutPaymentSection.orderSummaryShippingTotal}}" stepKey="grabShippingTotal"/>
+        <grabTextFrom selector="{{CheckoutPaymentSection.orderSummaryTotal}}" stepKey="grabTotal"/>
+        <assertEquals stepKey="assertSubtotal">
+            <expectedResult type="string">$400.00</expectedResult>
+            <actualResult type="variable">$grabSubtotal</actualResult>
+        </assertEquals>
+        <assertEquals stepKey="assertShippingTotal">
+            <expectedResult type="string">$10.00</expectedResult>
+            <actualResult type="variable">$grabShippingTotal</actualResult>
+        </assertEquals>
+        <assertEquals stepKey="assertTotal">
+            <expectedResult type="string">$410.00</expectedResult>
+            <actualResult type="variable">$grabTotal</actualResult>
+        </assertEquals>
+    </test>
+</tests>

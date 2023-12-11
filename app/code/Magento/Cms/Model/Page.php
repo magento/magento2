@@ -7,24 +7,30 @@ namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Helper\Page as PageHelper;
+use Magento\Cms\Model\Page\CustomLayout\CustomLayoutRepository;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Validation\ValidationException;
+use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
+use Magento\Backend\Model\Validator\UrlKey\CompositeUrlKey;
 
 /**
  * Cms Page Model
  *
  * @api
- * @method Page setStoreId(array $storeId)
- * @method array getStoreId()
+ * @method Page setStoreId(int $storeId)
+ * @method int getStoreId()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
 class Page extends AbstractModel implements PageInterface, IdentityInterface
 {
     /**
-     * No route page id
+     * Page ID for the 404 page.
      */
     const NOROUTE_PAGE_ID = 'no-route';
 
@@ -56,6 +62,50 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
+
+    /**
+     * @var CustomLayoutRepository
+     */
+    private $customLayoutRepository;
+
+    /**
+     * @var WYSIWYGValidatorInterface
+     */
+    private $wysiwygValidator;
+
+    /**
+     * @var CompositeUrlKey
+     */
+    private $compositeUrlValidator;
+
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param array $data
+     * @param CustomLayoutRepository|null $customLayoutRepository
+     * @param WYSIWYGValidatorInterface|null $wysiwygValidator
+     * @param CompositeUrlKey|null $compositeUrlValidator
+     */
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = [],
+        ?CustomLayoutRepository $customLayoutRepository = null,
+        ?WYSIWYGValidatorInterface $wysiwygValidator = null,
+        CompositeUrlKey $compositeUrlValidator = null
+    ) {
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        $this->customLayoutRepository = $customLayoutRepository
+            ?? ObjectManager::getInstance()->get(CustomLayoutRepository::class);
+        $this->wysiwygValidator = $wysiwygValidator
+            ?? ObjectManager::getInstance()->get(WYSIWYGValidatorInterface::class);
+        $this->compositeUrlValidator = $compositeUrlValidator
+            ?? ObjectManager::getInstance()->get(CompositeUrlKey::class);
+    }
 
     /**
      * Initialize resource model
@@ -103,8 +153,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     }
 
     /**
-     * Check if page identifier exist for specific store
-     * return page id if page exists
+     * Check if page identifier exist for specific store return page id if page exists
      *
      * @param string $identifier
      * @param int $storeId
@@ -116,8 +165,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     }
 
     /**
-     * Prepare page's statuses.
-     * Available event cms_page_get_available_statuses to customize statuses.
+     * Prepare page's statuses, available event cms_page_get_available_statuses to customize statuses.
      *
      * @return array
      */
@@ -538,39 +586,89 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     }
 
     /**
-     * {@inheritdoc}
-     * @since 101.0.0
+     * Validate identifier before saving the entity.
+     *
+     * @return void
+     * @throws LocalizedException
      */
-    public function beforeSave()
+    private function validateNewIdentifier(): void
     {
         $originalIdentifier = $this->getOrigData('identifier');
         $currentIdentifier = $this->getIdentifier();
+        if ($this->getId() && $originalIdentifier !== $currentIdentifier) {
+            switch ($originalIdentifier) {
+                case $this->getScopeConfig()->getValue(PageHelper::XML_PATH_NO_ROUTE_PAGE):
+                    throw new LocalizedException(
+                        __('This identifier is reserved for "CMS No Route Page" in configuration.')
+                    );
+                case $this->getScopeConfig()->getValue(PageHelper::XML_PATH_HOME_PAGE):
+                    throw new LocalizedException(
+                        __('This identifier is reserved for "CMS Home Page" in configuration.')
+                    );
+                case $this->getScopeConfig()->getValue(PageHelper::XML_PATH_NO_COOKIES_PAGE):
+                    throw new LocalizedException(
+                        __('This identifier is reserved for "CMS No Cookies Page" in configuration.')
+                    );
+            }
+        }
+        $errors = $this->compositeUrlValidator->validate($currentIdentifier);
+        if (!empty($errors)) {
+            throw new LocalizedException($errors[0]);
+        }
+    }
 
+    /**
+     * @inheritdoc
+     * @since 101.0.0
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function beforeSave()
+    {
         if ($this->hasDataChanges()) {
             $this->setUpdateTime(null);
         }
 
-        if (!$this->getId() || $originalIdentifier === $currentIdentifier) {
-            return parent::beforeSave();
-        }
+        $this->validateNewIdentifier();
 
-        switch ($originalIdentifier) {
-            case $this->getScopeConfig()->getValue(PageHelper::XML_PATH_NO_ROUTE_PAGE):
-                throw new LocalizedException(
-                    __('This identifier is reserved for "CMS No Route Page" in configuration.')
+        //Removing deprecated custom layout update if a new value is provided
+        $layoutUpdate = $this->getData('layout_update_selected');
+        if ($layoutUpdate === '_no_update_' || ($layoutUpdate && $layoutUpdate !== '_existing_')) {
+            $this->setCustomLayoutUpdateXml(null);
+            $this->setLayoutUpdateXml(null);
+        }
+        if ($layoutUpdate === '_no_update_' || $layoutUpdate === '_existing_') {
+            $layoutUpdate = null;
+        }
+        $this->setData('layout_update_selected', $layoutUpdate);
+        $this->customLayoutRepository->validateLayoutSelectedFor($this);
+
+        //Validating Content HTML.
+        $oldValue = null;
+        if ($this->getId()) {
+            if ($this->getOrigData()) {
+                $oldValue = $this->getOrigData(self::CONTENT);
+            } elseif (array_key_exists(self::CONTENT, $this->getStoredData())) {
+                $oldValue = $this->getStoredData()[self::CONTENT];
+            }
+        }
+        if ($this->getContent() && $this->getContent() !== $oldValue) {
+            try {
+                $this->wysiwygValidator->validate($this->getContent());
+            } catch (ValidationException $exception) {
+                throw new ValidationException(
+                    __('Content HTML contains restricted elements. %1', $exception->getMessage()),
+                    $exception
                 );
-            case $this->getScopeConfig()->getValue(PageHelper::XML_PATH_HOME_PAGE):
-                throw new LocalizedException(__('This identifier is reserved for "CMS Home Page" in configuration.'));
-            case $this->getScopeConfig()->getValue(PageHelper::XML_PATH_NO_COOKIES_PAGE):
-                throw new LocalizedException(
-                    __('This identifier is reserved for "CMS No Cookies Page" in configuration.')
-                );
+            }
         }
 
         return parent::beforeSave();
     }
 
     /**
+     * Returns scope config.
+     *
      * @return ScopeConfigInterface
      */
     private function getScopeConfig()

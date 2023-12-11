@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckCreditMemoTotalsTest">
+        <annotations>
+            <features value="Tax"/>
+            <stories value="Credit memo entity"/>
+            <title value="Checking Credit memo Totals"/>
+            <description value="Checking Credit memo Totals"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-25752"/>
+            <group value="tax"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <!-- Create productTaxClass -->
+            <createData entity="productTaxClass" stepKey="createProductTaxClass"/>
+            <!--Set configs-->
+            <magentoCLI command="config:set {{DefaultProductTaxClass.path}} $createProductTaxClass.return$" stepKey="setDefaultProductTaxClass"/>
+            <!--Create category and product-->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="productTaxClass">$createProductTaxClass.taxClass[class_name]$</field>
+            </createData>
+            <!--Create customer-->
+            <createData entity="Simple_US_Customer_NY" stepKey="createCustomer"/>
+            <!--Login as admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create tax rule-->
+            <actionGroup ref="AdminCreateTaxRuleCustomProductTaxClassActionGroup" stepKey="createTaxRuleCustomProductTaxClass">
+                <argument name="productTaxClassName" value="$createProductTaxClass.taxClass[class_name]$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Set configs-->
+            <magentoCLI command="config:set {{DefaultProductTaxClass.path}} {{DefaultProductTaxClass.value}}" stepKey="setDefaultProductTaxClass"/>
+            <!--Delete category and product-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <!--Delete customer-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Reset admin order filter -->
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clearOrderFilters"/>
+            <!-- Go to the tax rule page and delete the row we created-->
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPage"/>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
+                <argument name="name" value="{{defaultTaxRule.code}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearTaxRuleFilter"/>
+            <!-- Delete Tax Class -->
+            <deleteData createDataKey="createProductTaxClass" stepKey="deleteProductTaxClass"/>
+            <!--Logout-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!--Create new order-->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrder">
+            <argument name="customer" value="Simple_US_Customer_NY"/>
+        </actionGroup>
+        <!--Add product to order-->
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <!--Set shipping method-->
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShipping"/>
+        <!--Submit order-->
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <!--Create order invoice-->
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startCreateInvoice"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
+        <!--Create Credit Memo-->
+        <actionGroup ref="AdminStartToCreateCreditMemoFromOrderPageActionGroup" stepKey="startCreatingCreditMemo"/>
+        <fillField selector="{{AdminCreditMemoTotalSection.refundShipping}}" userInput="0" stepKey="setRefundShipping"/>
+        <actionGroup ref="UpdateCreditMemoTotalsActionGroup" stepKey="updateTotals"/>
+        <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitCreditMemo"/>
+        <actionGroup ref="AdminOpenCreditMemoFromOrderPageActionGroup" stepKey="openCreditMemoFromOrderPageActionGroup"/>
+        <actionGroup ref="AssertAdminCreditMemoGrandTotalActionGroup" stepKey="assertGrandTotal">
+            <argument name="expectedGrandTotal" value="$133.30"/>
+        </actionGroup>
+    </test>
+</tests>

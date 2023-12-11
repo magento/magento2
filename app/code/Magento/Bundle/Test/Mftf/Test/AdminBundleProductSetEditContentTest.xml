@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminBundleProductSetEditContentTest" extends="AdminSimpleProductSetEditContentTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Create/Edit bundle product in Admin"/>
+            <title value="Admin should be able to set/edit product Content when editing a bundle product"/>
+            <description value="Admin should be able to set/edit product Content when editing a bundle product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3343"/>
+            <group value="Bundle"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <after>
+            <!-- Delete bundle product -->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
+        </after>
+
+        <!-- Create product -->
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+
+        <!--Checking content storefront-->
+        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="goToStorefront"/>
+    </test>
+</tests>

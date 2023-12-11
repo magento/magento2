@@ -6,8 +6,6 @@
 
 /**
  * Widget Instance Properties tab block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 
@@ -49,7 +47,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
     }
 
     /**
-     * Returns status flag about this tab can be showen or not
+     * Returns status flag about this tab can be shown or not
      *
      * @return true
      */
@@ -90,6 +88,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
 
     /**
      * Prepare block children and data.
+     *
      * Set widget type and widget parameters if available
      *
      * @return $this

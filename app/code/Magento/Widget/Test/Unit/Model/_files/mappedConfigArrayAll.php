@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 $array1File = __DIR__ . '/mappedConfigArray1.php';
 $array1 = include $array1File;
 $array2File = __DIR__ . '/mappedConfigArray2.php';

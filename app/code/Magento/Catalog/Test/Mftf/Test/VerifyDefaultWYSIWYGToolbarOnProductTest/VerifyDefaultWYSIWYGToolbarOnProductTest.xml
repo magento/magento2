@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifyDefaultWYSIWYGToolbarOnProductTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="MAGETWO-70412-Default toolbar configuration in Magento"/>
+            <group value="Catalog"/>
+            <title value="Admin should be able to see default toolbar display on Description content area"/>
+            <description value="Admin should be able to see default toolbar display on Description content area"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-80505"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE"/>
+        </before>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="navigateToProduct">
+            <argument name="attributeSetId" value="{{AddToDefaultSet.attributeSetId}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait"/>
+        <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty"/>
+        <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab"/>
+        <waitForElementVisible selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitforTinyMCEVisible1"/>
+        <seeElement selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="TinyMCEDescription"/>
+        <seeElement selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.Style}}" stepKey="assertInfo2"/>
+        <seeElement selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.Bold}}" stepKey="assertInfo3"/>
+        <seeElement selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.Italic}}" stepKey="assertInfo4"/>
+        <seeElement selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.Underline}}" stepKey="assertInfo5"/>
+        <seeElement selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.AlignLeft}}" stepKey="assertInfo6"/>
+        <seeElement selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.AlignCenter}}" stepKey="assertInfo7"/>
+        <seeElement selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.AlignRight}}" stepKey="assertInfo8"/>
+        <seeElement selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.Numlist}}" stepKey="assertInfo9"/>
+        <seeElement selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.Bullet}}" stepKey="assertInfo10"/>
+        <seeElement selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.InsertLink}}" stepKey="assertInfo11"/>
+        <seeElement selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.InsertImageIcon}}" stepKey="assertInf12"/>
+        <seeElement selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.InsertTable}}" stepKey="assertInfo13"/>
+        <seeElement selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.SpecialCharacter}}" stepKey="assertInfo14"/>
+        <after>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

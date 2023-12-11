@@ -5,9 +5,16 @@
  */
 namespace Magento\Framework\Code\Reader;
 
+use Magento\Framework\GetParameterClassTrait;
+
+/**
+ * The class arguments reader
+ */
 class ArgumentsReader
 {
-    const NO_DEFAULT_VALUE = 'NO-DEFAULT';
+    use GetParameterClassTrait;
+
+    public const NO_DEFAULT_VALUE = 'NO-DEFAULT';
 
     /**
      * @var NamespaceResolver
@@ -54,7 +61,7 @@ class ArgumentsReader
             return $output;
         }
 
-        $constructor = new \Zend\Code\Reflection\MethodReflection($class->getName(), '__construct');
+        $constructor = new \Laminas\Code\Reflection\MethodReflection($class->getName(), '__construct');
         foreach ($constructor->getParameters() as $parameter) {
             $name = $parameter->getName();
             $position = $parameter->getPosition();
@@ -90,18 +97,24 @@ class ArgumentsReader
      * Process argument type.
      *
      * @param \ReflectionClass $class
-     * @param \Zend\Code\Reflection\ParameterReflection $parameter
+     * @param \Laminas\Code\Reflection\ParameterReflection $parameter
      * @return string
      */
-    private function processType(\ReflectionClass $class, \Zend\Code\Reflection\ParameterReflection $parameter)
+    private function processType(\ReflectionClass $class, \Laminas\Code\Reflection\ParameterReflection $parameter)
     {
-        if ($parameter->getClass()) {
-            return NamespaceResolver::NS_SEPARATOR . $parameter->getClass()->getName();
+        $parameterClass = $this->getParameterClass($parameter);
+
+        if ($parameterClass) {
+            return NamespaceResolver::NS_SEPARATOR . $parameterClass->getName();
         }
 
-        $type =  $parameter->detectType();
+        $type = $parameter->detectType();
 
-        if ($type === 'null') {
+        /**
+         * $type === null if it is unspecified
+         * $type === 'null' if it is used in doc block
+         */
+        if ($type === null || $type === 'null') {
             return null;
         }
 
@@ -124,8 +137,9 @@ class ArgumentsReader
      * @param \ReflectionClass $class
      * @param array $classArguments
      * @return array|null
+     * @throws \ReflectionException
      */
-    public function getParentCall(\ReflectionClass $class, array $classArguments)
+    public function getParentCall(\ReflectionClass $class, array $classArguments): ?array
     {
         /** Skip native PHP types */
         if (!$class->getFileName()) {
@@ -133,7 +147,12 @@ class ArgumentsReader
         }
 
         $trimFunction = function (&$value) {
-            $value = trim($value, PHP_EOL . ' $');
+            $position = strpos($value, ':');
+            if ($position !== false) {
+                $value = trim(substr($value, 0, $position), PHP_EOL . ' ');
+            } else {
+                $value = trim($value, PHP_EOL . ' $');
+            }
         };
 
         $method = $class->getMethod('__construct');
@@ -145,10 +164,11 @@ class ArgumentsReader
         $content = implode('', array_slice($source, $start, $length));
         $pattern = '/parent::__construct\(([ ' .
             PHP_EOL .
-            ']*[$]{1}[a-zA-Z0-9_]*,)*[ ' .
+            ']*' .
+            '([a-zA-Z0-9_]+([ ' . PHP_EOL . '])*:([ ' . PHP_EOL . '])*)*[$][a-zA-Z0-9_]*,)*[ ' .
             PHP_EOL .
             ']*' .
-            '([$]{1}[a-zA-Z0-9_]*){1}[' .
+            '([a-zA-Z0-9_]+([ ' . PHP_EOL . '])*:([ ' . PHP_EOL . '])*)*([$][a-zA-Z0-9_]*)[' .
             PHP_EOL .
             ' ]*\);/';
 
@@ -163,6 +183,10 @@ class ArgumentsReader
 
         $arguments = substr(trim($arguments), 20, -2);
         $arguments = explode(',', $arguments);
+        $isNamedArgument = [];
+        foreach ($arguments as $argumentPosition => $argumentName) {
+            $isNamedArgument[$argumentPosition] = (bool)strpos($argumentName, ':');
+        }
         array_walk($arguments, $trimFunction);
 
         $output = [];
@@ -172,8 +196,10 @@ class ArgumentsReader
                 'name' => $argumentName,
                 'position' => $argumentPosition,
                 'type' => $type,
+                'isNamedArgument' => $isNamedArgument[$argumentPosition],
             ];
         }
+
         return $output;
     }
 

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSalesBillingAgreementsNavigateMenuTest">
+        <annotations>
+            <features value="Paypal"/>
+            <stories value="Menu Navigation"/>
+            <title value="Admin sales billing agreements navigate menu test"/>
+            <description value="Admin should be able to navigate to Sales > Billing Agreements"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14194"/>
+            <group value="menu"/>
+            <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToBillingAgreementsPage">
+            <argument name="menuUiId" value="{{AdminMenuSales.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuSalesBillingAgreements.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
+            <argument name="title" value="{{AdminMenuSalesBillingAgreements.pageTitle}}"/>
+        </actionGroup>
+    </test>
+</tests>

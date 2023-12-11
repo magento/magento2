@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\GiftMessage\Model;
 
 class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
@@ -16,7 +17,7 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\GiftMessage\Model\OrderRepository */
     protected $giftMessageOrderRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -30,7 +31,7 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager = null;
         $this->message = null;
@@ -76,11 +77,12 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Sales/_files/order.php
      * @magentoConfigFixture default_store sales/gift_options/allow_order 0
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Gift Message is not available
      */
     public function testSaveMessageIsNotAvailable()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectExceptionMessage('The gift message isn\'t available.');
+
         /** @var \Magento\Sales\Model\Order $order */
         $order = $this->objectManager->create(\Magento\Sales\Model\Order::class)->loadByIncrementId('100000001');
 
@@ -91,11 +93,12 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/GiftMessage/_files/virtual_order.php
      * @magentoConfigFixture default_store sales/gift_options/allow_order 1
-     * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage Gift Messages are not applicable for virtual products
      */
     public function testSaveMessageIsVirtual()
     {
+        $this->expectException(\Magento\Framework\Exception\State\InvalidTransitionException::class);
+        $this->expectExceptionMessage('Gift messages can\'t be used for virtual products.');
+
         /** @var \Magento\Sales\Model\Order $order */
         $order = $this->objectManager->create(\Magento\Sales\Model\Order::class)->loadByIncrementId('100000001');
 
@@ -106,26 +109,31 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/GiftMessage/_files/empty_order.php
      * @magentoConfigFixture default_store sales/gift_options/allow_order 1
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Gift Messages are not applicable for empty order
      */
     public function testSaveMessageIsEmpty()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+
         /** @var \Magento\Sales\Model\Order $order */
         $order = $this->objectManager->create(\Magento\Sales\Model\Order::class)->loadByIncrementId('100000001');
 
         /** @var \Magento\GiftMessage\Api\Data\MessageInterface $message */
         $this->giftMessageOrderRepository->save($order->getEntityId(), $this->message);
+
+        $this->expectExceptionMessage(
+            "Gift messages can't be used for an empty order. Create an order, add an item, and try again."
+        );
     }
 
     /**
      * @magentoDataFixture Magento/GiftMessage/_files/empty_order.php
      * @magentoConfigFixture default_store sales/gift_options/allow_order 1
-     * @expectedException  \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage There is no order with provided id
      */
     public function testSaveMessageNoProvidedItemId()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No order exists with this ID. Verify your information and try again.');
+
         /** @var \Magento\Sales\Model\Order $order */
         $order = $this->objectManager->create(\Magento\Sales\Model\Order::class)->loadByIncrementId('100000001');
 

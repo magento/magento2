@@ -7,6 +7,7 @@ namespace Magento\Newsletter\Model;
 
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Stdlib\DateTime\Timezone\LocalizedDateToUtcConverterInterface;
 
 /**
  * Newsletter queue model.
@@ -47,14 +48,14 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
     protected $_template;
 
     /**
-     * Subscribers collection
+     * Subscriber collection
      *
      * @var \Magento\Newsletter\Model\ResourceModel\Subscriber\Collection
      */
     protected $_subscribersCollection;
 
     /**
-     * Save stores flag.
+     * Flag for Save Stores.
      *
      * @var boolean
      */
@@ -67,15 +68,15 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      */
     protected $_stores = [];
 
-    const STATUS_NEVER = 0;
+    public const STATUS_NEVER = 0;
 
-    const STATUS_SENDING = 1;
+    public const STATUS_SENDING = 1;
 
-    const STATUS_CANCEL = 2;
+    public const STATUS_CANCEL = 2;
 
-    const STATUS_SENT = 3;
+    public const STATUS_SENT = 3;
 
-    const STATUS_PAUSE = 4;
+    public const STATUS_PAUSE = 4;
 
     /**
      * Filter for newsletter text
@@ -85,21 +86,21 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
     protected $_templateFilter;
 
     /**
-     * Date
+     * Datetime
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $_date;
 
     /**
-     * Problem factory
+     * Factory of Problem
      *
      * @var \Magento\Newsletter\Model\ProblemFactory
      */
     protected $_problemFactory;
 
     /**
-     * Template factory
+     * Factory of Template
      *
      * @var \Magento\Newsletter\Model\TemplateFactory
      */
@@ -118,6 +119,11 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
     private $timezone;
 
     /**
+     * @var LocalizedDateToUtcConverterInterface
+     */
+    private $utcConverter;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Newsletter\Model\Template\Filter $templateFilter
@@ -130,6 +136,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param TimezoneInterface $timezone
+     * @param LocalizedDateToUtcConverterInterface $utcConverter
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -144,7 +151,8 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        TimezoneInterface $timezone = null
+        TimezoneInterface $timezone = null,
+        LocalizedDateToUtcConverterInterface $utcConverter = null
     ) {
         parent::__construct(
             $context,
@@ -159,9 +167,10 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
         $this->_problemFactory = $problemFactory;
         $this->_subscribersCollection = $subscriberCollectionFactory->create();
         $this->_transportBuilder = $transportBuilder;
-        $this->timezone = $timezone ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
-            TimezoneInterface::class
-        );
+
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->timezone = $timezone ?: $objectManager->get(TimezoneInterface::class);
+        $this->utcConverter = $utcConverter ?? $objectManager->get(LocalizedDateToUtcConverterInterface::class);
     }
 
     /**
@@ -193,11 +202,14 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      */
     public function setQueueStartAtByString($startAt)
     {
-        if ($startAt === null || $startAt == '') {
-            $this->setQueueStartAt(null);
-        } else {
-            $this->setQueueStartAt($this->timezone->convertConfigTimeToUtc($startAt));
-        }
+        // Cast start_at value to null if value is incorrect ("0", "" must be casted to null)
+        $startAt = (string) $startAt ?: null;
+        // Convert start_at value using UTC converter if start_at value is not null
+        $startAt = $startAt === null
+            ? $startAt
+            : $this->utcConverter->convertLocalizedDateToUtc($startAt);
+        $this->setQueueStartAt($startAt);
+
         return $this;
     }
 
@@ -207,6 +219,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * @param int $count
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function sendPerSubscriber($count = 20)
     {
@@ -242,12 +255,21 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
             ]
         );
 
-        /** @var \Magento\Newsletter\Model\Subscriber $item */
+        if ($this->getQueueStatus() != self::STATUS_SENDING && count($collection->getItems()) > 0) {
+            $this->startQueue();
+        }
+
+        /** @var Subscriber $item */
         foreach ($collection->getItems() as $item) {
             $transport = $this->_transportBuilder->setTemplateOptions(
                 ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $item->getStoreId()]
             )->setTemplateVars(
-                ['subscriber' => $item]
+                [
+                    'subscriber' => $item,
+                    'subscriber_data' => [
+                        'unsubscription_link' => $item->getUnsubscriptionLink()
+                    ]
+                ]
             )->setFrom(
                 ['name' => $this->getNewsletterSenderName(), 'email' => $this->getNewsletterSenderEmail()]
             )->addTo(
@@ -271,6 +293,19 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
         if (count($collection->getItems()) < $count - 1 || count($collection->getItems()) == 0) {
             $this->_finishQueue();
         }
+        return $this;
+    }
+
+    /**
+     * Start queue: set status SENDING for queue
+     *
+     * @return $this
+     */
+    private function startQueue()
+    {
+        $this->setQueueStatus(self::STATUS_SENDING);
+        $this->save();
+
         return $this;
     }
 

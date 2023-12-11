@@ -1,18 +1,18 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\Api\DataObjectHelper;
 use Magento\Customer\Model\Session;
-use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\View\Result\PageFactory;
 
-class Edit extends \Magento\Customer\Controller\AbstractAccount
+class Edit extends \Magento\Customer\Controller\AbstractAccount implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
@@ -80,10 +80,10 @@ class Edit extends \Magento\Customer\Controller\AbstractAccount
                 \Magento\Customer\Api\Data\CustomerInterface::class
             );
         }
+
         $this->session->setCustomerData($customerDataObject);
         $this->session->setChangePassword($this->getRequest()->getParam('changepass') == 1);
 
-        $resultPage->getConfig()->getTitle()->set(__('Account Information'));
         return $resultPage;
     }
 }

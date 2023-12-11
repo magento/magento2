@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="UpdateDecimalTaxRateEntityTest">
+        <annotations>
+            <stories value="Update Tax Rate"/>
+            <title value="Update tax rate, decimal rate"/>
+            <description value="Test log in to Tax Rate and Update Decimal Tax Rate"/>
+            <testCaseId value="MC-5329"/>
+            <severity value="CRITICAL"/>
+            <group value="tax"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="defaultTaxRate" stepKey="initialTaxRate"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteTaxRate" createDataKey="initialTaxRate" />
+        </after>
+
+        <!-- Search the tax rate on tax grid page -->
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex1"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickClearFilters1"/>
+        <actionGroup ref="AdminFillTaxIdentifierFilterOnTaxRateGridActionGroup" stepKey="fillCode">
+            <argument name="taxRateCode" value="$$initialTaxRate.code$$"/>
+        </actionGroup>
+        <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch1"/>
+        <click selector="{{AdminTaxRateGridSection.nthRow('1')}}" stepKey="clickFirstRow1"/>
+
+        <!-- Update decimal tax rate on the tax rate form page -->
+        <fillField selector="{{AdminTaxRateFormSection.taxIdentifier}}" userInput="{{defaultTaxRateWithZipRange.code}}" stepKey="fillTaxIdentifierField2"/>
+        <selectOption selector="{{AdminTaxRateFormSection.country}}" userInput="{{defaultTaxRateWithZipRange.tax_country_id}}" stepKey="selectCountry1"/>
+        <selectOption selector="{{AdminTaxRateFormSection.state}}" userInput="{{defaultTaxRateWithZipRange.tax_region_id}}" stepKey="selectState"/>
+        <checkOption selector="{{AdminTaxRateFormSection.zipRange}}" stepKey="checkZipRange"/>
+        <fillField selector="{{AdminTaxRateFormSection.rangeFrom}}" userInput="{{defaultTaxRateWithZipRange.zip_from}}" stepKey="fillZipFrom"/>
+        <fillField selector="{{AdminTaxRateFormSection.rangeTo}}" userInput="{{defaultTaxRateWithZipRange.zip_to}}"  stepKey="fillZipTo"/>
+        <fillField selector="{{AdminTaxRateFormSection.rate}}" userInput="{{defaultTaxRateWithZipRange.rate}}" stepKey="fillRate1"/>
+        <click selector="{{AdminTaxRateFormSection.save}}" stepKey="clickSave"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the tax rate." stepKey="seeSuccess"/>
+
+        <!-- Verify we see updated tax rate(from the above step) on the tax rate grid page -->
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex2"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickClearFilters2"/>
+        <actionGroup ref="AdminFillTaxIdentifierFilterOnTaxRateGridActionGroup" stepKey="fillTaxIdentifierField3">
+            <argument name="taxRateCode" value="{{defaultTaxRateWithZipRange.code}}"/>
+        </actionGroup>
+        <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch2"/>
+        <click selector="{{AdminTaxRateGridSection.nthRow('1')}}" stepKey="clickFirstRow2"/>
+        <!-- Verify we see updated tax rate on the tax rate form page -->
+        <seeInField selector="{{AdminTaxRateFormSection.taxIdentifier}}" userInput="{{defaultTaxRateWithZipRange.code}}" stepKey="seeRTaxIdentifier"/>
+        <seeOptionIsSelected selector="{{AdminTaxRateFormSection.country}}" userInput="{{defaultTaxRateWithZipRange.tax_country}}" stepKey="seeCountry2"/>
+        <seeOptionIsSelected selector="{{AdminTaxRateFormSection.state}}" userInput="{{defaultTaxRateWithZipRange.tax_region}}" stepKey="seeState2"/>
+        <seeCheckboxIsChecked selector="{{AdminTaxRateFormSection.zipRange}}" stepKey="seeZipRange"/>
+        <seeInField selector="{{AdminTaxRateFormSection.rangeFrom}}" userInput="{{defaultTaxRateWithZipRange.zip_from}}" stepKey="seeTaxPostCode2"/>
+        <seeInField selector="{{AdminTaxRateFormSection.rangeTo}}" userInput="{{defaultTaxRateWithZipRange.zip_to}}" stepKey="seeTaxPostCode3"/>
+        <seeInField selector="{{AdminTaxRateFormSection.rate}}" userInput="{{defaultTaxRateWithZipRange.rate}}" stepKey="seeRate2"/>
+    </test>
+</tests>

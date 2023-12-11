@@ -6,6 +6,8 @@
 namespace Magento\CatalogSearch\Model;
 
 use Magento\Catalog\Model\Config;
+use Magento\CatalogSearch\Model\Advanced\ProductCollectionPrepareStrategyProvider;
+use Magento\CatalogSearch\Model\Search\ItemCollectionProviderInterface;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
@@ -19,9 +21,11 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Catalog advanced search model
+ *
  * @method int getEntityTypeId()
  * @method \Magento\CatalogSearch\Model\Advanced setEntityTypeId(int $value)
  * @method int getAttributeSetId()
@@ -47,67 +51,62 @@ use Magento\Store\Model\StoreManagerInterface;
 class Advanced extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * User friendly search criteria list
-     *
      * @var array
      */
     protected $_searchCriterias = [];
 
     /**
-     * Product collection
-     *
      * @var ProductCollection
      */
     protected $_productCollection;
 
     /**
-     * Initialize dependencies
-     *
+     * @deprecated 101.0.2
      * @var Config
      */
     protected $_catalogConfig;
 
     /**
-     * Catalog product visibility
-     *
      * @var Visibility
      */
     protected $_catalogProductVisibility;
 
     /**
-     * Attribute collection factory
-     *
      * @var AttributeCollectionFactory
      */
     protected $_attributeCollectionFactory;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Product factory
-     *
      * @var ProductFactory
      */
     protected $_productFactory;
 
     /**
-     * Currency factory
-     *
      * @var CurrencyFactory
      */
     protected $_currencyFactory;
 
     /**
-     * Advanced Collection Factory
-     *
+     * @deprecated
+     * @see $collectionProvider
      * @var ProductCollectionFactory
      */
     protected $productCollectionFactory;
+
+    /**
+     * @var ItemCollectionProviderInterface
+     */
+    private $collectionProvider;
+
+    /**
+     * @var ProductCollectionPrepareStrategyProvider|null
+     */
+    private $productCollectionPrepareStrategyProvider;
 
     /**
      * Construct
@@ -123,7 +122,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * @param ProductCollectionFactory $productCollectionFactory
      * @param AdvancedFactory $advancedFactory
      * @param array $data
-     *
+     * @param ItemCollectionProviderInterface|null $collectionProvider
+     * @param ProductCollectionPrepareStrategyProvider|null $productCollectionPrepareStrategyProvider
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -137,7 +137,9 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
         StoreManagerInterface $storeManager,
         ProductCollectionFactory $productCollectionFactory,
         AdvancedFactory $advancedFactory,
-        array $data = []
+        array $data = [],
+        ItemCollectionProviderInterface $collectionProvider = null,
+        ProductCollectionPrepareStrategyProvider $productCollectionPrepareStrategyProvider = null
     ) {
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
         $this->_catalogProductVisibility = $catalogProductVisibility;
@@ -146,11 +148,14 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
         $this->_productFactory = $productFactory;
         $this->_storeManager = $storeManager;
         $this->productCollectionFactory = $productCollectionFactory;
+        $this->collectionProvider = $collectionProvider;
+        $this->productCollectionPrepareStrategyProvider = $productCollectionPrepareStrategyProvider
+            ?: ObjectManager::getInstance()->get(ProductCollectionPrepareStrategyProvider::class);
         parent::__construct(
             $context,
             $registry,
             $advancedFactory->create(),
-            $this->productCollectionFactory->create(),
+            $this->resolveProductCollection(),
             $data
         );
     }
@@ -158,8 +163,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Add advanced search filters to product collection
      *
-     * @param   array $values
-     * @return  $this
+     * @param array $values
+     * @return $this
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -174,7 +179,15 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             if (!isset($values[$attribute->getAttributeCode()])) {
                 continue;
             }
+
             $value = $values[$attribute->getAttributeCode()];
+
+            if (($attribute->getFrontendInput() == 'text' || $attribute->getFrontendInput() == 'textarea')
+                && (!is_string($value) || !trim($value))
+            ) {
+                continue;
+            }
+
             $preparedSearchValue = $this->getPreparedSearchCriteria($attribute, $value);
             if (false === $preparedSearchValue) {
                 continue;
@@ -182,6 +195,12 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             $this->addSearchCriteria($attribute, $preparedSearchValue);
 
             if ($attribute->getAttributeCode() == 'price') {
+                foreach ($value as $key => $element) {
+                    if (is_array($element)) {
+                        $value[$key] = 0;
+                    }
+                }
+
                 $rate = 1;
                 $store = $this->_storeManager->getStore();
                 $currency = $store->getCurrentCurrencyCode();
@@ -205,6 +224,11 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                     ? date('Y-m-d\TH:i:s\Z', strtotime($value['to']))
                     : '';
             }
+
+            if ($attribute->getAttributeCode() === 'sku') {
+                $value = mb_strtolower($value);
+            }
+
             $condition = $this->_getResource()->prepareCondition(
                 $attribute,
                 $value,
@@ -226,7 +250,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             $this->_registry->register('advanced_search_conditions', $allConditions);
             $this->getProductCollection()->addFieldsToFilter($allConditions);
         } else {
-            throw new LocalizedException(__('Please specify at least one search term.'));
+            throw new LocalizedException(__('Enter a search term and try again.'));
         }
 
         return $this;
@@ -265,7 +289,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     public function getProductCollection()
     {
         if ($this->_productCollection === null) {
-            $collection = $this->productCollectionFactory->create();
+            $collection = $this->resolveProductCollection();
             $this->prepareProductCollection($collection);
             if (!$collection) {
                 return $collection;
@@ -277,6 +301,18 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Resolve product collection.
+     *
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection|\Magento\Framework\Data\Collection
+     */
+    private function resolveProductCollection()
+    {
+        return (null === $this->collectionProvider)
+            ? $this->productCollectionFactory->create()
+            : $this->collectionProvider->getCollection();
+    }
+
+    /**
      * Prepare product collection
      *
      * @param Collection $collection
@@ -284,18 +320,14 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      */
     public function prepareProductCollection($collection)
     {
-        $collection
-            ->addAttributeToSelect($this->_catalogConfig->getProductAttributes())
-            ->setStore($this->_storeManager->getStore())
-            ->addMinimalPrice()
-            ->addTaxPercents()
-            ->addStoreFilter()
-            ->setVisibility($this->_catalogProductVisibility->getVisibleInSearchIds());
+        $this->productCollectionPrepareStrategyProvider->getStrategy()->prepare($collection);
 
         return $this;
     }
 
     /**
+     * Add search criteria.
+     *
      * @param EntityAttribute $attribute
      * @param mixed $value
      * @return void
@@ -310,19 +342,30 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Add data about search criteria to object state
      *
-     * @todo: Move this code to block
+     * @param EntityAttribute $attribute
+     * @param mixed $value
      *
-     * @param   EntityAttribute $attribute
-     * @param   mixed $value
-     * @return  string|bool
+     * @return string|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws LocalizedException
+     * @todo: Move this code to block
      */
     protected function getPreparedSearchCriteria($attribute, $value)
     {
+        $from = null;
+        $to = null;
         if (is_array($value)) {
+            foreach ($value as $key => $element) {
+                if (is_array($element)) {
+                    $value[$key] = '';
+                }
+            }
             if (isset($value['from']) && isset($value['to'])) {
                 if (!empty($value['from']) || !empty($value['to'])) {
+                    $from = '';
+                    $to = '';
+
                     if (isset($value['currency'])) {
                         /** @var $currencyModel Currency */
                         $currencyModel = $this->_currencyFactory->create()->load($value['currency']);

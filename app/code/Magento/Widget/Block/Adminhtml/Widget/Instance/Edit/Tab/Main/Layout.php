@@ -27,7 +27,7 @@ class Layout extends Template implements RendererInterface
     /**
      * @var string
      */
-    protected $_template = 'instance/edit/layout.phtml';
+    protected $_template = 'Magento_Widget::instance/edit/layout.phtml';
 
     /**
      * @var \Magento\Catalog\Model\Product\Type
@@ -310,25 +310,6 @@ class Layout extends Template implements RendererInterface
                 'label' => __('Add Layout Update'),
                 'onclick' => 'WidgetInstance.addPageGroup({})',
                 'class' => 'action-add',
-            ]
-        );
-        return $button->toHtml();
-    }
-
-    /**
-     * Retrieve remove layout button html
-     *
-     * @return string
-     */
-    public function getRemoveLayoutButtonHtml()
-    {
-        $button = $this->getLayout()->createBlock(
-            \Magento\Backend\Block\Widget\Button::class
-        )->setData(
-            [
-                'label' => $this->escapeHtmlAttr(__('Remove Layout Update')),
-                'onclick' => 'WidgetInstance.removePageGroup(this)',
-                'class' => 'action-delete',
             ]
         );
         return $button->toHtml();

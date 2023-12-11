@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateProductDuplicateUrlkeyTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Errors"/>
+            <title value="Admin should see an error when trying to save a product with a duplicate URL key"/>
+            <description value="Admin should see an error when trying to save a product with a duplicate URL key"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-112"/>
+            <group value="product"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleTwo" stepKey="simpleProduct">
+            </createData>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="clickAddProductDropdown"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickAddSimpleProduct">
+            <argument name="productType" value="simple"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillProductNameOnProductFormActionGroup" stepKey="fillName">
+            <argument name="productName" value="$$simpleProduct.name$$new"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillProductSkuOnProductFormActionGroup" stepKey="fillSKU">
+            <argument name="productSku" value="$$simpleProduct.sku$$new"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillProductPriceFieldAndPressEnterOnProductEditPageActionGroup" stepKey="fillPrice">
+            <argument name="price" value="$$simpleProduct.price$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillQuantity">
+            <argument name="productQty" value="$$simpleProduct.quantity$$"/>
+        </actionGroup>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+        <fillField userInput="$$simpleProduct.custom_attributes[url_key]$$" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertErrorMessage">
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="The value specified in the URL Key field would generate a URL that already exists"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifySearchButtonEnabledAfterMinimumSearchLengthHitTest">
+        <annotations>
+            <stories value="Search Button Not Disabled"/>
+            <title value="Verify search button is not disabled if search term is equal or greater than minimum search length"/>
+            <description value="Storefront verify search button is not disabled if search term is equal or greater than minimum search length"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-37381"/>
+            <group value="searchFrontend"/>
+            <group value="pr_exclude"/>
+        </annotations>
+
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
+
+        <actionGroup ref="StoreFrontFillSearchActionGroup" stepKey="fillSearchByTextMoreThanMinimumSearchLength">
+            <argument name="query" value="Magento"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertStorefrontVerifySearchButtonIsEnabledActionGroup" stepKey="assertSearchButtonIsNotDisabled"/>
+    </test>
+</tests>

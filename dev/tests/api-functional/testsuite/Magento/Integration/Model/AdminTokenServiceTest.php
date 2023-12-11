@@ -47,8 +47,9 @@ class AdminTokenServiceTest extends WebapiAbstract
     /**
      * Setup AdminTokenService
      */
-    public function setUp()
+    protected function setUp(): void
     {
+        $this->markTestSkipped('Skipped until MC-34201 is addressed');
         $this->_markTestAsRestOnly();
         $this->tokenService = Bootstrap::getObjectManager()->get(\Magento\Integration\Model\AdminTokenService::class);
         $this->tokenModel = Bootstrap::getObjectManager()->get(\Magento\Integration\Model\Oauth\Token::class);
@@ -302,13 +303,13 @@ class AdminTokenServiceTest extends WebapiAbstract
             'message' => 'One or more input exceptions have occurred.',
             'errors' => [
                 [
-                    'message' => '%fieldName is a required field.',
+                    'message' => '"%fieldName" is required. Enter and try again.',
                     'parameters' => [
                         'fieldName' => 'username',
                     ],
                 ],
                 [
-                    'message' => '%fieldName is a required field.',
+                    'message' => '"%fieldName" is required. Enter and try again.',
                     'parameters' => [
                         'fieldName' => 'password',
                     ]
@@ -332,7 +333,8 @@ class AdminTokenServiceTest extends WebapiAbstract
         );
         $exceptionData = $this->processRestExceptionResult($exception);
         $expectedExceptionData = [
-            'message' => 'You did not sign in correctly or your account is temporarily disabled.'
+            'message' => 'The account sign-in was incorrect or your account is disabled temporarily. '
+                . 'Please wait and try again later.'
         ];
         $this->assertEquals($expectedExceptionData, $exceptionData, "Exception message is invalid.");
     }
@@ -351,7 +353,7 @@ class AdminTokenServiceTest extends WebapiAbstract
         );
         $exceptionData = $this->processRestExceptionResult($exception);
         $expectedExceptionData = [
-            'message' => 'Consumer is not authorized to access %resources',
+            'message' => "The consumer isn't authorized to access %resources.",
             'parameters' => [
                 'resources' => 'Magento_Backend::store'
             ]

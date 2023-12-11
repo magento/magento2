@@ -20,7 +20,7 @@ class DeserializationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
      */
     protected $_restResourcePath;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_version = 'V1';
         $this->_restResourcePath = "/{$this->_version}/TestModule5/";
@@ -38,12 +38,13 @@ class DeserializationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
         ];
-        $expectedMessage = '{"message":"%fieldName is a required field.","parameters":{"fieldName":"item"}}';
+        $expectedMessage =
+            '{"message":"\"%fieldName\" is required. Enter and try again.","parameters":{"fieldName":"item"}}';
         try {
             $this->_webApiCall($serviceInfo, RestClient::EMPTY_REQUEST_BODY);
         } catch (\Exception $e) {
             $this->assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Response does not contain expected message."
@@ -64,12 +65,13 @@ class DeserializationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
         ];
-        $expectedMessage = '{"message":"%fieldName is a required field.","parameters":{"fieldName":"entityItem"}}';
+        $expectedMessage =
+            '{"message":"\"%fieldName\" is required. Enter and try again.","parameters":{"fieldName":"entityItem"}}';
         try {
             $this->_webApiCall($serviceInfo, RestClient::EMPTY_REQUEST_BODY);
         } catch (\Exception $e) {
             $this->assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Response does not contain expected message."

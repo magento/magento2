@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddSimpleProductWithCustomOptionFileToOrderActionGroup" extends="AddSimpleProductToOrderActionGroup">
+        <annotations>
+            <description>Add product to order with custom option type file. Start on create order page.</description>
+        </annotations>
+        <arguments>
+            <argument name="file" type="string" defaultValue="{{TestImageNew.file}}" />
+        </arguments>
+
+        <remove keyForRemoval="fillProductQty"/>
+        <comment userInput="BIC workaround" stepKey="waitForAjaxLoad" after="waitForProductLoad"/>
+        <waitForElementVisible selector="{{AdminOrderFormCustomOptionsSection.quantity}}" stepKey="waitForProductQty" after="waitForAjaxLoad"/>
+        <fillField selector="{{AdminOrderFormCustomOptionsSection.quantity}}" userInput="{{productQty}}" stepKey="fillProductQty" after="waitForProductQty"/>
+        <attachFile selector="{{AdminOrderFormCustomOptionsSection.file}}" userInput="{{file}}" stepKey="attachImageForOptional" after="fillProductQty"/>
+        <waitForPageLoad stepKey="waitForImageUploaded" after="attachImageForOptional"/>
+        <click selector="{{AdminOrderFormCustomOptionsSection.buttonOk}}" stepKey="clickButtonOK" after="waitForImageUploaded"/>
+        <waitForPageLoad stepKey="waitForSlideOutGone" after="clickButtonOK"/>
+        <waitForElementNotVisible selector="{{AdminOrderFormCustomOptionsSection.buttonOk}}" stepKey="waitForOkButtonGone" after="waitForSlideOutGone"/>
+    </actionGroup>
+</actionGroups>

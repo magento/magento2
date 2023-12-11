@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Paypal\Model\Config\Structure;
 
 /**
@@ -28,7 +29,7 @@ class PaymentSectionModifier
      * Payment configuration has predefined special blocks:
      *  - Account information (id = account),
      *  - Recommended Solutions (id = recommended_solutions),
-     *  - Other PayPal paymnt solution (id = other_paypal_payment_solutions),
+     *  - Other PayPal payment solution (id = other_paypal_payment_solutions),
      *  - Other payment methods (id = other_payment_methods).
      * All payment methods configuration should be moved to one of this group.
      * To move payment method to specific configuration group specify "displayIn"
@@ -60,9 +61,9 @@ class PaymentSectionModifier
                         unset($childData['children'][$moveInstruction['section']]);
                         unset($moveInstruction['data']['displayIn']);
                         $changedStructure
-                            [$moveInstruction['parent']]
-                                ['children']
-                                    [$moveInstruction['section']] = $moveInstruction['data'];
+                        [$moveInstruction['parent']]
+                        ['children']
+                        [$moveInstruction['section']] = $moveInstruction['data'];
                     }
                 }
                 if (!isset($moveInstructions[$childSection])) {
@@ -91,23 +92,20 @@ class PaymentSectionModifier
                 if (isset($movedChildren[$childSection])) {
                     unset($data['children'][$childSection]);
                 }
-                $moved = array_merge($moved, $movedChildren);
+                $moved[] = $movedChildren;
             }
         }
 
         if (isset($data['displayIn']) && in_array($data['displayIn'], self::$specialGroups)) {
-            $moved = array_merge(
-                [
-                    $section => [
+            $moved[] = [
+                $section => [
                     'parent' => $data['displayIn'],
                     'section' => $section,
                     'data' => $data
-                    ]
-                ],
-                $moved
-            );
+                ]
+            ];
         }
 
-        return $moved;
+        return array_merge([], ...$moved);
     }
 }

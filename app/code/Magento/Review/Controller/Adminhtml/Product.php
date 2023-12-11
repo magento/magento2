@@ -12,10 +12,15 @@ use Magento\Review\Model\ReviewFactory;
 use Magento\Review\Model\RatingFactory;
 
 /**
- * Reviews admin controller
+ * Reviews admin controller.
  */
 abstract class Product extends Action
 {
+    /**
+     * Authorization resource
+     */
+    public const ADMIN_RESOURCE = 'Magento_Review::reviews_all';
+
     /**
      * Array of actions which can be processed without secret key validation
      *
@@ -60,20 +65,5 @@ abstract class Product extends Action
         $this->reviewFactory = $reviewFactory;
         $this->ratingFactory = $ratingFactory;
         parent::__construct($context);
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        switch ($this->getRequest()->getActionName()) {
-            case 'pending':
-                return $this->_authorization->isAllowed('Magento_Review::pending');
-                break;
-            default:
-                return $this->_authorization->isAllowed('Magento_Review::reviews_all');
-                break;
-        }
     }
 }

@@ -13,12 +13,17 @@ use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 use Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Currency\Exception\CurrencyException;
+use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\UrlInterface;
 
 /**
+ * Associated products helper
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AssociatedProducts
@@ -84,6 +89,11 @@ class AssociatedProducts
     protected $imageHelper;
 
     /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
      * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
      * @param ConfigurableType $configurableType
@@ -93,6 +103,8 @@ class AssociatedProducts
      * @param CurrencyInterface $localeCurrency
      * @param JsonHelper $jsonHelper
      * @param ImageHelper $imageHelper
+     * @param Escaper|null $escaper
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         LocatorInterface $locator,
@@ -103,7 +115,8 @@ class AssociatedProducts
         VariationMatrix $variationMatrix,
         CurrencyInterface $localeCurrency,
         JsonHelper $jsonHelper,
-        ImageHelper $imageHelper
+        ImageHelper $imageHelper,
+        Escaper $escaper = null
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
@@ -114,6 +127,7 @@ class AssociatedProducts
         $this->localeCurrency = $localeCurrency;
         $this->jsonHelper = $jsonHelper;
         $this->imageHelper = $imageHelper;
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
     }
 
     /**
@@ -219,7 +233,9 @@ class AssociatedProducts
      * Prepare variations
      *
      * @return void
-     * @throws \Zend_Currency_Exception
+     * @throws CurrencyException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * phpcs:disable Generic.Metrics.NestingLevel.TooHigh
      */
     protected function prepareVariations()
     {
@@ -251,14 +267,15 @@ class AssociatedProducts
                                 'position' => $configurableAttributes[$attribute->getAttributeId()]['position'],
                                 'chosen' => [],
                             ];
-                            foreach ($attribute->getOptions() as $option) {
-                                if (!empty($option->getValue())) {
-                                    $attributes[$attribute->getAttributeId()]['options'][$option->getValue()] = [
+                            $options = $attribute->usesSource() ? $attribute->getSource()->getAllOptions() : [];
+                            foreach ($options as $option) {
+                                if (!empty($option['value'])) {
+                                    $attributes[$attribute->getAttributeId()]['options'][$option['value']] = [
                                         'attribute_code' => $attribute->getAttributeCode(),
                                         'attribute_label' => $attribute->getStoreLabel(0),
-                                        'id' => $option->getValue(),
-                                        'label' => $option->getLabel(),
-                                        'value' => $option->getValue(),
+                                        'id' => $option['value'],
+                                        'label' => $option['label'],
+                                        'value' => $option['value'],
                                     ];
                                 }
                             }
@@ -280,9 +297,9 @@ class AssociatedProducts
                         'product_link' => '<a href="' . $this->urlBuilder->getUrl(
                             'catalog/product/edit',
                             ['id' => $product->getId()]
-                        ) . '" target="_blank">' . $product->getName() . '</a>',
+                        ) . '" target="_blank">' . $this->escaper->escapeHtml($product->getName()) . '</a>',
                         'sku' => $product->getSku(),
-                        'name' => $product->getName(),
+                        'name' => $this->escaper->escapeHtml($product->getName()),
                         'qty' => $this->getProductStockQty($product),
                         'price' => $price,
                         'price_string' => $currency->toCurrency(sprintf("%f", $price)),
@@ -305,6 +322,7 @@ class AssociatedProducts
         $this->productIds = $productIds;
         $this->productAttributes = array_values($attributes);
     }
+    //phpcs: enable
 
     /**
      * Get JSON string that contains attribute code and value

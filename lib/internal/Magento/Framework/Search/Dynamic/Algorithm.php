@@ -10,6 +10,7 @@ namespace Magento\Framework\Search\Dynamic;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 100.0.2
  */
 class Algorithm
 {
@@ -173,7 +174,7 @@ class Algorithm
         $lastCount = 0;
         $intervalFirstValue = $this->_minValue;
         $lastSeparator = $this->_lowerLimit === null ? 0 : $this->_lowerLimit;
-
+        // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
         for ($intervalNumber = 1; $intervalNumber < $this->getIntervalsNumber(); ++$intervalNumber) {
             $separator = $this->_findValueSeparator($intervalNumber, $interval);
             if (empty($separator)) {
@@ -298,51 +299,55 @@ class Algorithm
                 $interval->load($intervalValuesCount + 1, $offset, $lowerValue, $this->_upperLimit)
             );
         }
-        $lastValue = $values[$intervalValuesCount - 1];
+        // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
+        $lastValue = $this->offsetLimits($intervalValuesCount, $values);
         $bestRoundValue = [];
-        if ($lastValue == $values[0]) {
-            if ($quantileNumber == 1 && $offset) {
-                $additionalValues = $interval->loadPrevious($lastValue, $quantileInterval[0], $this->_lowerLimit);
-                if ($additionalValues) {
-                    $quantileInterval[0] -= count($additionalValues);
-                    $values = array_merge($additionalValues, $values);
-                    $bestRoundValue = $this->_findRoundValue(
-                        $values[0] + self::MIN_POSSIBLE_VALUE / 10,
-                        $lastValue,
-                        false
-                    );
-                }
-            }
-            if ($quantileNumber == $this->getIntervalsNumber() - 1) {
-                $valuesCount = count($values);
-                if ($values[$valuesCount - 1] > $lastValue) {
-                    $additionalValues = [$values[$valuesCount - 1]];
-                } else {
-                    $additionalValues = $interval->loadNext(
-                        $lastValue,
-                        $this->_count - $quantileInterval[0] - count($values),
-                        $this->_upperLimit
-                    );
-                }
-                if ($additionalValues) {
-                    $quantileInterval[1] = $quantileInterval[0] + count($values) - 1;
-                    if ($values[$valuesCount - 1] <= $lastValue) {
-                        $quantileInterval[1] += count($additionalValues);
-                        $values = array_merge($values, $additionalValues);
+
+        if (count($values) > 0) {
+            if ($lastValue == $values[0]) {
+                if ($quantileNumber == 1 && $offset) {
+                    $additionalValues = $interval->loadPrevious($lastValue, $quantileInterval[0], $this->_lowerLimit);
+                    if ($additionalValues) {
+                        $quantileInterval[0] -= count($additionalValues);
+                        $values = array_merge($additionalValues, $values);
+                        $bestRoundValue = $this->_findRoundValue(
+                            $values[0] + self::MIN_POSSIBLE_VALUE / 10,
+                            $lastValue,
+                            false
+                        );
                     }
-                    $upperBestRoundValue = $this->_findRoundValue(
-                        $lastValue + self::MIN_POSSIBLE_VALUE / 10,
-                        $values[count($values) - 1],
-                        false
-                    );
-                    $this->_mergeRoundValues($bestRoundValue, $upperBestRoundValue);
                 }
+                if ($quantileNumber == $this->getIntervalsNumber() - 1) {
+                    $valuesCount = count($values);
+                    if ($values[$valuesCount - 1] > $lastValue) {
+                        $additionalValues = [$values[$valuesCount - 1]];
+                    } else {
+                        $additionalValues = $interval->loadNext(
+                            $lastValue,
+                            $this->_count - $quantileInterval[0] - count($values),
+                            $this->_upperLimit
+                        );
+                    }
+                    if ($additionalValues) {
+                        $quantileInterval[1] = $quantileInterval[0] + count($values) - 1;
+                        if ($values[$valuesCount - 1] <= $lastValue) {
+                            $quantileInterval[1] += count($additionalValues);
+                            $values = array_merge($values, $additionalValues);
+                        }
+                        $upperBestRoundValue = $this->_findRoundValue(
+                            $lastValue + self::MIN_POSSIBLE_VALUE / 10,
+                            $values[count($values) - 1],
+                            false
+                        );
+                        $this->_mergeRoundValues($bestRoundValue, $upperBestRoundValue);
+                    }
+                }
+            } else {
+                $bestRoundValue = $this->_findRoundValue(
+                    $values[0] + self::MIN_POSSIBLE_VALUE / 10,
+                    $lastValue
+                );
             }
-        } else {
-            $bestRoundValue = $this->_findRoundValue(
-                $values[0] + self::MIN_POSSIBLE_VALUE / 10,
-                $lastValue
-            );
         }
 
         $this->_quantileInterval = $quantileInterval;
@@ -430,8 +435,8 @@ class Algorithm
      */
     protected function _findRoundValue($lowerValue, $upperValue, $returnEmpty = true, $roundingFactor = null)
     {
-        $lowerValue = round($lowerValue, 3);
-        $upperValue = round($upperValue, 3);
+        $lowerValue = round((float) $lowerValue, 3);
+        $upperValue = round((float) $upperValue, 3);
 
         if ($roundingFactor !== null) {
             // Can't separate if values are equal
@@ -497,6 +502,7 @@ class Algorithm
         foreach ($newRoundValues as $roundingFactor => $roundValueValues) {
             if (array_key_exists($roundingFactor, $oldRoundValues)) {
                 $oldRoundValues[$roundingFactor] = array_unique(
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     array_merge($oldRoundValues[$roundingFactor], $roundValueValues)
                 );
             } else {
@@ -551,6 +557,7 @@ class Algorithm
 
     /**
      * Search first index of value, that satisfy conditions to be 'greater or equal' than $value
+     *
      * Returns -1 if index was not found
      *
      * @param float $value
@@ -591,5 +598,18 @@ class Algorithm
         }
 
         return $this->_binarySearch($value, [$limits[0], $limits[1]]);
+    }
+
+    /**
+     * Get the offsetLimit value
+     *
+     * @param float $intervalValuesCount
+     * @param array $values
+     */
+    private function offsetLimits(float $intervalValuesCount, array $values)
+    {
+        if (array_key_exists((int)$intervalValuesCount - 1, $values)) {
+            return $values[$intervalValuesCount - 1];
+        }
     }
 }

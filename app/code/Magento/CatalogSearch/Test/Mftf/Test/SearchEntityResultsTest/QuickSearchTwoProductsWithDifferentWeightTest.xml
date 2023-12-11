@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="QuickSearchTwoProductsWithDifferentWeightTest" extends="QuickSearchTwoProductsWithSameWeightTest">
+        <annotations>
+            <stories value="Search Product on Storefront"/>
+            <title value="Quick Search should sort products with the different weight appropriately"/>
+            <description value="Use Quick Search to find a two products with the different weight"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14797"/>
+            <group value="CatalogSearch"/>
+            <group value="SearchEngine"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminCreateAttributeWithSearchWeightActionGroup" stepKey="createProduct1Attribute">
+                <argument name="attributeType" value="Text Field"/>
+                <argument name="attributeName" value="$product1.name$"/>
+                <argument name="attributeSetName" value="$product1.name$"/>
+                <argument name="weight" value="5"/>
+                <argument name="defaultValue" value="{{_defaultProduct.name}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute" before="clearFilters">
+                <argument name="productAttributeLabel" value="$$product1.name$$"/>
+            </actionGroup>
+            <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="clearFilters" before="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex" before="logoutOfAdmin">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGridActionGroup" stepKey="assertProduct1Position">
+            <argument name="productName" value="$product1.name$"/>
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGridActionGroup" stepKey="assertProduct2Position">
+            <argument name="productName" value="$product2.name$"/>
+            <argument name="index" value="2"/>
+        </actionGroup>
+    </test>
+</tests>

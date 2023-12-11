@@ -3,43 +3,68 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Block\Html;
 
-class HeaderTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Config;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Theme\Block\Html\Header;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Escaper;
+
+class HeaderTest extends TestCase
 {
     /**
-     * @var \Magento\Theme\Block\Html\Header
+     * @var Header
      */
     protected $unit;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $scopeConfig;
 
-    protected function setUp()
+    /**
+     * @var Escaper|MockObject
+     */
+    private $escaper;
+
+    protected function setUp(): void
     {
-        $context = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
+        $context = $this->getMockBuilder(Context::class)
             ->setMethods(['getScopeConfig'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config::class)
+        $this->scopeConfig = $this->getMockBuilder(Config::class)
             ->setMethods(['getValue'])
-            ->disableOriginalConstructor()->getMock();
-        $context->expects($this->once())->method('getScopeConfig')->will($this->returnValue($this->scopeConfig));
-
-        $this->unit = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            \Magento\Theme\Block\Html\Header::class,
-            ['context' => $context]
+            ->disableOriginalConstructor()
+            ->getMock();
+        $context->expects($this->once())->method('getScopeConfig')->willReturn($this->scopeConfig);
+        $this->escaper = $this->createPartialMock(Escaper::class, ['escapeQuote']);
+        $this->unit = (new ObjectManager($this))->getObject(
+            Header::class,
+            [
+               'context' => $context,
+               'escaper' => $this->escaper
+            ]
         );
     }
 
     public function testGetWelcomeDefault()
     {
         $this->scopeConfig->expects($this->once())->method('getValue')
-            ->with('design/header/welcome', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            ->willReturn('Welcome Message');
+            ->with('design/header/welcome', ScopeInterface::SCOPE_STORE)
+            ->willReturn("Message d'accueil par défaut");
 
-        $this->assertEquals('Welcome Message', $this->unit->getWelcome());
+        $this->escaper->expects($this->once())
+            ->method('escapeQuote')
+            ->with("Message d'accueil par défaut", true)
+            ->willReturn("Message d\'accueil par défaut");
+
+        $this->assertEquals("Message d\'accueil par défaut", $this->unit->getWelcome());
     }
 }

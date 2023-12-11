@@ -5,13 +5,18 @@
  */
 namespace Magento\Sales\Model\Order;
 
+use Magento\Framework\App\Area;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * Order configuration model
  *
  * @api
  * @since 100.0.2
  */
-class Config
+class Config implements ResetAfterRequestInterface
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Status\Collection
@@ -49,11 +54,16 @@ class Config
      * @var array
      */
     protected $maskStatusesMapping = [
-        \Magento\Framework\App\Area::AREA_FRONTEND => [
-            \Magento\Sales\Model\Order::STATUS_FRAUD => \Magento\Sales\Model\Order::STATE_PROCESSING,
+        Area::AREA_FRONTEND => [
+            \Magento\Sales\Model\Order::STATUS_FRAUD => \Magento\Sales\Model\Order::STATUS_FRAUD,
             \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW => \Magento\Sales\Model\Order::STATE_PROCESSING
         ]
     ];
+
+    /**
+     * @var StatusLabel
+     */
+    private $statusLabel;
 
     /**
      * Constructor
@@ -61,18 +71,31 @@ class Config
      * @param \Magento\Sales\Model\Order\StatusFactory $orderStatusFactory
      * @param \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory $orderStatusCollectionFactory
      * @param \Magento\Framework\App\State $state
+     * @param StatusLabel|null $statusLabel
      */
     public function __construct(
         \Magento\Sales\Model\Order\StatusFactory $orderStatusFactory,
         \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory $orderStatusCollectionFactory,
-        \Magento\Framework\App\State $state
+        \Magento\Framework\App\State $state,
+        StatusLabel $statusLabel = null
     ) {
         $this->orderStatusFactory = $orderStatusFactory;
         $this->orderStatusCollectionFactory = $orderStatusCollectionFactory;
         $this->state = $state;
+        $this->statusLabel = $statusLabel ?: ObjectManager::getInstance()->get(StatusLabel::class);
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->collection = null;
+    }
+
+    /**
+     * Get collection.
+     *
      * @return \Magento\Sales\Model\ResourceModel\Order\Status\Collection
      */
     protected function _getCollection()
@@ -84,8 +107,10 @@ class Config
     }
 
     /**
+     * Get state.
+     *
      * @param string $state
-     * @return Status|null
+     * @return Status
      */
     protected function _getState($state)
     {
@@ -101,9 +126,9 @@ class Config
      * Retrieve default status for state
      *
      * @param   string $state
-     * @return  string
+     * @return  string|null
      */
-    public function getStateDefaultStatus($state)
+    public function getStateDefaultStatus($state): ?string
     {
         $status = false;
         $stateNode = $this->_getState($state);
@@ -115,16 +140,31 @@ class Config
     }
 
     /**
-     * Retrieve status label
+     * Retrieve status label for detected area
      *
-     * @param   string $code
-     * @return  string
+     * @param string|null $code
+     * @return string|null
+     * @throws LocalizedException
+     * @deprecated Functionality moved to separate class
+     * @see \Magento\Sales\Model\Order\StatusLabel::getStatusLabel
      */
     public function getStatusLabel($code)
     {
-        $code = $this->maskStatusForArea($this->state->getAreaCode(), $code);
-        $status = $this->orderStatusFactory->create()->load($code);
-        return $status->getStoreLabel();
+        return $this->statusLabel->getStatusLabel($code);
+    }
+
+    /**
+     * Retrieve status label for area
+     *
+     * @param string|null $code
+     * @return string|null
+     * @since 102.0.1
+     * @deprecated Functionality moved to separate class
+     * @see \Magento\Sales\Model\Order\StatusLabel::getStatusFrontendLabel
+     */
+    public function getStatusFrontendLabel(?string $code): ?string
+    {
+        return $this->statusLabel->getStatusFrontendLabel($code, Area::AREA_FRONTEND);
     }
 
     /**
@@ -133,19 +173,18 @@ class Config
      * @param string $area
      * @param string $code
      * @return string
+     * @deprecated Functionality moved to separate class
+     * @see \Magento\Sales\Model\Order\StatusLabel::maskStatusForArea
      */
     protected function maskStatusForArea($area, $code)
     {
-        if (isset($this->maskStatusesMapping[$area][$code])) {
-            return $this->maskStatusesMapping[$area][$code];
-        }
-        return $code;
+        return $this->statusLabel->maskStatusForArea($area, $code);
     }
 
     /**
      * State label getter
      *
-     * @param   string $state
+     * @param string $state
      * @return \Magento\Framework\Phrase|string
      */
     public function getStateLabel($state)
@@ -177,7 +216,7 @@ class Config
     {
         $states = [];
         foreach ($this->_getCollection() as $item) {
-            if ($item->getState()) {
+            if ($item->getState() && $item->getIsDefault()) {
                 $states[$item->getState()] = __($item->getData('label'));
             }
         }
@@ -211,7 +250,7 @@ class Config
                 foreach ($collection as $item) {
                     $status = $item->getData('status');
                     if ($addLabels) {
-                        $statuses[$status] = $item->getStoreLabel();
+                        $statuses[$status] = $this->getStatusLabel($status);
                     } else {
                         $statuses[] = $status;
                     }
@@ -243,8 +282,9 @@ class Config
     }
 
     /**
-     * Get existing order statuses
-     * Visible or invisible on frontend according to passed param
+     * Get existing order statuses.
+     *
+     * Visible or invisible on frontend according to passed param.
      *
      * @param bool $visibility
      * @return array
@@ -270,7 +310,7 @@ class Config
      * @param string $state
      * @param string $status
      * @return \Magento\Framework\Phrase|string
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getStateLabelByStateAndStatus($state, $status)
     {

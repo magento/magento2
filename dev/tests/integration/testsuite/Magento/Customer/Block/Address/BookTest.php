@@ -20,9 +20,9 @@ class BookTest extends \PHPUnit\Framework\TestCase
      */
     protected $currentCustomer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject $blockMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $blockMock */
         $blockMock = $this->getMockBuilder(
             \Magento\Framework\View\Element\BlockInterface::class
         )->disableOriginalConstructor()->setMethods(
@@ -43,7 +43,7 @@ class BookTest extends \PHPUnit\Framework\TestCase
             );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
@@ -65,6 +65,7 @@ class BookTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
      * @dataProvider hasPrimaryAddressDataProvider
+     * @magentoAppIsolation enabled
      */
     public function testHasPrimaryAddress($customerId, $expected)
     {
@@ -82,6 +83,7 @@ class BookTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
+     * @magentoAppIsolation enabled
      */
     public function testGetAdditionalAddresses()
     {
@@ -98,6 +100,7 @@ class BookTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
      * @dataProvider getAdditionalAddressesDataProvider
+     * @magentoAppIsolation enabled
      */
     public function testGetAdditionalAddressesNegative($customerId, $expected)
     {
@@ -115,6 +118,7 @@ class BookTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @magentoAppIsolation enabled
      */
     public function testGetAddressHtml()
     {
@@ -134,6 +138,7 @@ class BookTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoAppIsolation enabled
      */
     public function testGetCustomer()
     {
@@ -158,6 +163,7 @@ class BookTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
      * @dataProvider getDefaultBillingDataProvider
+     * @magentoAppIsolation enabled
      */
     public function testGetDefaultBilling($customerId, $expected)
     {
@@ -175,6 +181,7 @@ class BookTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
      * @dataProvider getDefaultShippingDataProvider
+     * @magentoAppIsolation enabled
      */
     public function testGetDefaultShipping($customerId, $expected)
     {

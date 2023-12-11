@@ -3,20 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Wishlist\Test\Unit\Block\Customer;
 
+use Magento\Catalog\Block\Product\Context;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\Pricing\Render;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\LayoutInterface;
 use Magento\Wishlist\Block\Customer\Sidebar;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SidebarTest extends \PHPUnit\Framework\TestCase
+class SidebarTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Block\Product\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $productContext;
 
     /**
-     * @var \Magento\Framework\App\Http\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Http\Context|MockObject
      */
     private $httpContext;
 
@@ -26,16 +34,16 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
     private $block;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|MockObject
      */
     private $layout;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->layout = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
+        $this->layout = $this->getMockBuilder(LayoutInterface::class)
             ->getMockForAbstractClass();
 
-        $this->productContext = $this->getMockBuilder(\Magento\Catalog\Block\Product\Context::class)
+        $this->productContext = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->productContext->expects($this->any())
@@ -46,9 +54,14 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->block = new Sidebar(
-            $this->productContext,
-            $this->httpContext
+        $objectManager = new ObjectManager($this);
+
+        $this->block = $objectManager->getObject(
+            Sidebar::class,
+            [
+                'context' => $this->productContext,
+                'httpContext' => $this->httpContext
+            ]
         );
     }
 
@@ -57,11 +70,11 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
         $priceType = 'wishlist_configured_price';
         $expected = 'block content';
 
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $renderMock = $this->getMockBuilder(\Magento\Framework\Pricing\Render::class)
+        $renderMock = $this->getMockBuilder(Render::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderMock->expects($this->once())
@@ -85,11 +98,11 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
         $priceType = 'wishlist_configured_price';
         $expected = 'block content';
 
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $renderMock = $this->getMockBuilder(\Magento\Framework\Pricing\Render::class)
+        $renderMock = $this->getMockBuilder(Render::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderMock->expects($this->once())
@@ -104,7 +117,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
         $this->layout->expects($this->once())
             ->method('createBlock')
             ->with(
-                \Magento\Framework\Pricing\Render::class,
+                Render::class,
                 'product.price.render.default',
                 ['data' => ['price_render_handle' => 'catalog_product_prices']]
             )

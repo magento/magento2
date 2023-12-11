@@ -1,25 +1,33 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sitemap\Model\ResourceModel\Cms;
 
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Cms\Api\GetUtilityPageIdentifiersInterface;
 use Magento\Cms\Model\Page as CmsPage;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
  * Sitemap cms page collection model
  *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+ * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Page extends AbstractDb
 {
     /**
      * @var MetadataPool
@@ -34,19 +42,28 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $entityManager;
 
     /**
-     * @param Context $context
-     * @param MetadataPool $metadataPool
-     * @param EntityManager $entityManager
-     * @param string $connectionName
+     * @var GetUtilityPageIdentifiersInterface
+     */
+    private $getUtilityPageIdentifiers;
+
+    /**
+     * @param Context                            $context
+     * @param MetadataPool                       $metadataPool
+     * @param EntityManager                      $entityManager
+     * @param string                             $connectionName
+     * @param GetUtilityPageIdentifiersInterface $getUtilityPageIdentifiers
      */
     public function __construct(
         Context $context,
         MetadataPool $metadataPool,
         EntityManager $entityManager,
-        $connectionName = null
+        $connectionName = null,
+        GetUtilityPageIdentifiersInterface $getUtilityPageIdentifiers = null
     ) {
-        $this->metadataPool = $metadataPool;
-        $this->entityManager = $entityManager;
+        $this->metadataPool      = $metadataPool;
+        $this->entityManager     = $entityManager;
+        $this->getUtilityPageIdentifiers = $getUtilityPageIdentifiers ?:
+            ObjectManager::getInstance()->get(GetUtilityPageIdentifiersInterface::class);
         parent::__construct($context, $connectionName);
     }
 
@@ -73,6 +90,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Retrieve cms page collection array
      *
      * @param int $storeId
+     *
      * @return array
      */
     public function getCollection($storeId)
@@ -90,8 +108,18 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         )->where(
             'main_table.is_active = 1'
         )->where(
-            'main_table.identifier != ?',
-            \Magento\Cms\Model\Page::NOROUTE_PAGE_ID
+            'main_table.identifier NOT IN (?)',
+            array_map(
+                // When two CMS pages have the same URL key (in different
+                // stores), the value stored in configuration is 'url-key|ID'.
+                // This function strips the trailing '|ID' so that this where()
+                // matches the url-key configured.
+                // See https://github.com/magento/magento2/issues/35001
+                static function ($urlKey) {
+                    return explode('|', $urlKey, 2)[0];
+                },
+                $this->getUtilityPageIdentifiers->execute()
+            )
         )->where(
             'store_table.store_id IN(?)',
             [0, $storeId]
@@ -111,11 +139,12 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Prepare page object
      *
      * @param array $data
-     * @return \Magento\Framework\DataObject
+     *
+     * @return DataObject
      */
     protected function _prepareObject(array $data)
     {
-        $object = new \Magento\Framework\DataObject();
+        $object = new DataObject();
         $object->setId($data[$this->getIdFieldName()]);
         $object->setUrl($data['url']);
         $object->setUpdatedAt($data['updated_at']);
@@ -128,7 +157,8 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param CmsPage|AbstractModel $object
      * @param mixed $value
-     * @param string $field field to load by (defaults to model id)
+     * @param string $field Field to load by (defaults to model id).
+     *
      * @return $this
      * @since 100.1.0
      */
@@ -156,6 +186,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($isId) {
             $this->entityManager->load($object, $value);
         }
+
         return $this;
     }
 
@@ -178,6 +209,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $object->setHasDataChanges(false);
                 return $this;
             }
+
             $object->validateBeforeSave();
             $object->beforeSave();
             if ($object->isSaveAllowed()) {
@@ -189,6 +221,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $this->unserializeFields($object);
                 $this->processAfterSaves($object);
             }
+
             $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
             $object->setHasDataChanges(false);
         } catch (\Exception $e) {
@@ -196,6 +229,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $object->setHasDataChanges(true);
             throw $e;
         }
+
         return $this;
     }
 

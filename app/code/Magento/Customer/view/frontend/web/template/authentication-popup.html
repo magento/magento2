@@ -54,12 +54,13 @@
                   id="login-form">
                 <div class="fieldset login" data-bind="attr: {'data-hasrequired': $t('* Required Fields')}">
                     <div class="field email required">
-                        <label class="label" for="email"><span data-bind="i18n: 'Email Address'"></span></label>
+                        <label class="label" for="customer-email"><span data-bind="i18n: 'Email Address'"></span></label>
                         <div class="control">
                             <input name="username"
-                                   id="email"
+                                   id="customer-email"
                                    type="email"
                                    class="input-text"
+                                   data-mage-init='{"mage/trim-input":{}}'
                                    data-bind="attr: {autocomplete: autocomplete}"
                                    data-validate="{required:true, 'validate-email':true}">
                         </div>

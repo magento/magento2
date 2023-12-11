@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\GraphQl\Controller\HttpRequestProcessor">
+        <arguments>
+            <argument name="graphQlHeaders" xsi:type="array">
+                <item name="Content-Currency" xsi:type="object">Magento\DirectoryGraphQl\Controller\HttpHeaderProcessor\CurrencyProcessor</item>
+            </argument>
+            <argument name="requestValidators" xsi:type="array">
+                <item name="currencyValidator" xsi:type="object">Magento\DirectoryGraphQl\Controller\HttpRequestValidator\CurrencyValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\DirectoryGraphQl\Controller\HttpHeaderProcessor\CurrencyProcessor">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Framework\Session\Generic\Proxy</argument>
+        </arguments>
+    </type>
+</config>

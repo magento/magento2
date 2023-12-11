@@ -1,13 +1,14 @@
 <?php
 /**
- * DB helper class for MySql Magento DB Adapter
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\DB;
 
+/**
+ * DataBase Helper
+ */
 class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
 {
     /**
@@ -52,13 +53,13 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
      * Field can be with 'dot' delimiter.
      *
      * @param string $field
-     * @param bool   $reverse OPTIONAL
+     * @param bool $reverse OPTIONAL
      * @return string
      */
     protected function _truncateAliasName($field, $reverse = false)
     {
         $string = $field;
-        if (!is_numeric($field) && (strpos($field, '.') !== false)) {
+        if ($field !== null && !is_numeric($field) && (strpos($field, '.') !== false)) {
             $size  = strpos($field, '.');
             if ($reverse) {
                 $string = substr($field, 0, $size);
@@ -120,7 +121,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
                 /**
                  * Looking for column expression in the having clause
                  */
-                if (strpos($having, $correlationName) !== false) {
+                if ($having !== null && strpos($having, $correlationName) !== false) {
                     if (is_string($column)) {
                         /**
                          * Replace column expression to column alias in having clause
@@ -143,6 +144,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
     }
 
     /**
+     * Assemble limit
      *
      * @param string $query
      * @param int $limitCount
@@ -153,15 +155,9 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
     protected function _assembleLimit($query, $limitCount, $limitOffset, $columnList = [])
     {
         if ($limitCount !== null) {
-            $limitCount = intval($limitCount);
-            if ($limitCount <= 0) {
-                //throw new \Exception("LIMIT argument count={$limitCount} is not valid");
-            }
+            $limitCount = (int)$limitCount;
 
-            $limitOffset = intval($limitOffset);
-            if ($limitOffset < 0) {
-                //throw new \Exception("LIMIT argument offset={$limitOffset} is not valid");
-            }
+            $limitOffset = (int)$limitOffset;
 
             if ($limitOffset + $limitCount != $limitOffset + 1) {
                 $columns = [];
@@ -271,7 +267,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
      */
     public function getDateDiff($startDate, $endDate)
     {
-        $dateDiff = '(TO_DAYS(' . $endDate . ') - TO_DAYS(' . $startDate . '))';
+        $dateDiff = "TIMESTAMPDIFF(DAY, {$startDate}, {$endDate})";
         return new \Zend_Db_Expr($dateDiff);
     }
 

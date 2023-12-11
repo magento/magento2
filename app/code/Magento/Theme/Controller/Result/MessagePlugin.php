@@ -7,17 +7,22 @@ namespace Magento\Theme\Controller\Result;
 
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
+use Magento\Framework\Translate\Inline\ParserInterface;
+use Magento\Framework\Translate\InlineInterface;
+use Magento\Framework\Session\Config\ConfigInterface;
 
 /**
  * Plugin for putting messages to cookies
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class MessagePlugin
 {
     /**
      * Cookies name for messages
      */
-    const MESSAGES_COOKIES_NAME = 'mage-messages';
+    public const MESSAGES_COOKIES_NAME = 'mage-messages';
 
     /**
      * @var \Magento\Framework\Stdlib\CookieManagerInterface
@@ -45,25 +50,40 @@ class MessagePlugin
     private $serializer;
 
     /**
+     * @var InlineInterface
+     */
+    private $inlineTranslate;
+
+    /**
+     * @var ConfigInterface
+     */
+    protected $sessionConfig;
+
+    /**
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param InlineInterface $inlineTranslate
+     * @param ConfigInterface $sessionConfig
      */
     public function __construct(
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer,
+        InlineInterface $inlineTranslate,
+        ConfigInterface $sessionConfig
     ) {
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->messageManager = $messageManager;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $serializer;
         $this->interpretationStrategy = $interpretationStrategy;
+        $this->inlineTranslate = $inlineTranslate;
+        $this->sessionConfig = $sessionConfig;
     }
 
     /**
@@ -81,9 +101,42 @@ class MessagePlugin
         ResultInterface $result
     ) {
         if (!($subject instanceof Json)) {
-            $this->setCookie($this->getMessages());
+            $newMessages = [];
+            foreach ($this->messageManager->getMessages(true)->getItems() as $message) {
+                $newMessages[] = [
+                    'type' => $message->getType(),
+                    'text' => $this->interpretationStrategy->interpret($message),
+                ];
+            }
+            if (!empty($newMessages)) {
+                $this->setMessages($this->getCookiesMessages(), $newMessages);
+            }
         }
         return $result;
+    }
+
+    /**
+     * Add new messages to already existing ones.
+     *
+     * In case if there are too many messages clear old messages.
+     *
+     * @param array $oldMessages
+     * @param array $newMessages
+     * @throws CookieSizeLimitReachedException
+     */
+    private function setMessages(array $oldMessages, array $newMessages): void
+    {
+        $messages = array_merge($oldMessages, $newMessages);
+        try {
+            $this->setCookie($messages);
+        } catch (CookieSizeLimitReachedException $e) {
+            if (empty($oldMessages)) {
+                throw $e;
+            }
+
+            array_shift($oldMessages);
+            $this->setMessages($oldMessages, $newMessages);
+        }
     }
 
     /**
@@ -105,17 +158,23 @@ class MessagePlugin
      *   ],
      * ]
      *
-     *
      * @param array $messages List of Magento messages that must be set as 'mage-messages' cookie.
      * @return void
      */
     private function setCookie(array $messages)
     {
         if (!empty($messages)) {
+            if ($this->inlineTranslate->isAllowed()) {
+                foreach ($messages as &$message) {
+                    $message['text'] = $this->convertMessageText($message['text']);
+                }
+            }
+
             $publicCookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
             $publicCookieMetadata->setDurationOneYear();
-            $publicCookieMetadata->setPath('/');
+            $publicCookieMetadata->setPath($this->sessionConfig->getCookiePath());
             $publicCookieMetadata->setHttpOnly(false);
+            $publicCookieMetadata->setSameSite('Strict');
 
             $this->cookieManager->setPublicCookie(
                 self::MESSAGES_COOKIES_NAME,
@@ -126,21 +185,18 @@ class MessagePlugin
     }
 
     /**
-     * Return messages array and clean message manager messages
+     * Replace wrapping translation with html body.
      *
-     * @return array
+     * @param string $text
+     * @return string
      */
-    protected function getMessages()
+    private function convertMessageText(string $text): string
     {
-        $messages = $this->getCookiesMessages();
-        /** @var MessageInterface $message */
-        foreach ($this->messageManager->getMessages(true)->getItems() as $message) {
-            $messages[] = [
-                'type' => $message->getType(),
-                'text' => $this->interpretationStrategy->interpret($message),
-            ];
+        if (preg_match('#' . ParserInterface::REGEXP_TOKEN . '#', $text, $matches)) {
+            $text = $matches[1];
         }
-        return $messages;
+
+        return $text;
     }
 
     /**

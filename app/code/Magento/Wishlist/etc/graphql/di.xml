@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Wishlist\Model\Wishlist\BuyRequest\BuyRequestBuilder">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="super_attribute" xsi:type="object">Magento\Wishlist\Model\Wishlist\BuyRequest\SuperAttributeDataProvider</item>
+                <item name="customizable_option" xsi:type="object">Magento\Wishlist\Model\Wishlist\BuyRequest\CustomizableOptionDataProvider</item>
+                <item name="bundle" xsi:type="object">Magento\Wishlist\Model\Wishlist\BuyRequest\BundleDataProvider</item>
+                <item name="downloadable" xsi:type="object">Magento\Wishlist\Model\Wishlist\BuyRequest\DownloadableLinkDataProvider</item>
+                <item name="grouped" xsi:type="object">Magento\Wishlist\Model\Wishlist\BuyRequest\SuperGroupDataProvider</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

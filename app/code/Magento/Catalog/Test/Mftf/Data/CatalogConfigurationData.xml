@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <!-- Catalog > Price -->
+    <entity name="GlobalCatalogPriceScopeConfigData">
+        <!-- Default configuration -->
+        <data key="path">catalog/price/scope</data>
+        <data key="scope_id">0</data>
+        <data key="label">Global</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="WebsiteCatalogPriceScopeConfigData">
+        <data key="path">catalog/price/scope</data>
+        <data key="scope_id">0</data>
+        <data key="label">Website</data>
+        <data key="value">1</data>
+    </entity>
+    <!-- Catalog > Recently Viewed/Compared Products > Synchronize Widget Products With Backend Storage -->
+    <entity name="DisableSynchronizeWidgetProductsWithBackendStorage">
+        <!-- Default configuration -->
+        <data key="path">catalog/recently_products/synchronize_with_backend</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnableSynchronizeWidgetProductsWithBackendStorage">
+        <data key="path">catalog/recently_products/synchronize_with_backend</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+</entities>

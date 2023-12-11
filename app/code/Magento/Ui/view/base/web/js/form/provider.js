@@ -21,6 +21,9 @@ define([
                     save: '${ $.submit_url }',
                     beforeSave: '${ $.validate_url }'
                 }
+            },
+            ignoreTmpls: {
+                data: true
             }
         },
 
@@ -79,7 +82,7 @@ define([
         },
 
         /**
-         *  Set data to provder based on current data.
+         *  Set data to provider based on current data.
          *
          * @param {Object} oldData
          * @param {Object} newData

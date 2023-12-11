@@ -12,7 +12,13 @@ var config = {
             sidebar:                'Magento_Checkout/js/sidebar',
             checkoutLoader:         'Magento_Checkout/js/checkout-loader',
             checkoutData:           'Magento_Checkout/js/checkout-data',
-            proceedToCheckout:      'Magento_Checkout/js/proceed-to-checkout'
+            proceedToCheckout:      'Magento_Checkout/js/proceed-to-checkout',
+            catalogAddToCart:       'Magento_Catalog/js/catalog-add-to-cart'
+        }
+    },
+    shim: {
+        'Magento_Checkout/js/model/totals' : {
+            deps: ['Magento_Customer/js/customer-data']
         }
     }
 };

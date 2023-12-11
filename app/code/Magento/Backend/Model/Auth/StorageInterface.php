@@ -18,16 +18,14 @@ interface StorageInterface
      *
      * @return $this
      * @abstract
-     * @api
      */
     public function processLogin();
 
     /**
-     * Perform login specific actions
+     * Perform logout specific actions
      *
      * @return $this
      * @abstract
-     * @api
      */
     public function processLogout();
 
@@ -36,7 +34,6 @@ interface StorageInterface
      *
      * @return bool
      * @abstract
-     * @api
      */
     public function isLoggedIn();
 
@@ -45,7 +42,6 @@ interface StorageInterface
      *
      * @return void
      * @abstract
-     * @api
      */
     public function prolong();
 }

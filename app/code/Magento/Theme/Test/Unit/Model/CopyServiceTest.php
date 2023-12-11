@@ -3,15 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Framework\View\Design\Theme\Customization;
+use Magento\Framework\View\Design\Theme\Customization\Path;
+use Magento\Framework\View\Design\Theme\FileFactory;
+use Magento\Theme\Model\CopyService;
+use Magento\Theme\Model\Theme;
+use Magento\Theme\Model\Theme\File;
+use Magento\Widget\Model\Layout\Link;
+use Magento\Widget\Model\Layout\Update;
+use Magento\Widget\Model\ResourceModel\Layout\Update\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
-class CopyServiceTest extends \PHPUnit\Framework\TestCase
+class CopyServiceTest extends TestCase
 {
     /**#@+
      * @var \Magento\Theme\Model\CopyService
@@ -19,162 +36,181 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $fileFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $filesystem;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $sourceTheme;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $targetTheme;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $link;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $linkCollection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $update;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $updateCollection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $updateFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $customizationPath;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject[]
+     * @var MockObject[]
      */
     protected $targetFiles = [];
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject[]
+     * @var MockObject[]
      */
     protected $sourceFiles = [];
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $dirWriteMock;
 
     /**
-     * @return void
+     * @var array
+     */
+    private $updateFactoryReturn = [];
+
+    /**
+     * @var int
+     */
+    private $updateFactoryCalls = 0;
+
+    /**
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $sourceFileOne = $this->createPartialMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup', 'delete']);
+        $sourceFileOne = $this->createPartialMock(File::class, ['__wakeup', 'delete']);
         $sourceFileOne->setData(
             [
                 'file_path' => 'fixture_file_path_one',
                 'file_type' => 'fixture_file_type_one',
                 'content' => 'fixture_content_one',
-                'sort_order' => 10,
+                'sort_order' => 10
             ]
         );
-        $sourceFileTwo = $this->createPartialMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup', 'delete']);
+        $sourceFileTwo = $this->createPartialMock(File::class, ['__wakeup', 'delete']);
         $sourceFileTwo->setData(
             [
                 'file_path' => 'fixture_file_path_two',
                 'file_type' => 'fixture_file_type_two',
                 'content' => 'fixture_content_two',
-                'sort_order' => 20,
+                'sort_order' => 20
             ]
         );
         $this->sourceFiles = [$sourceFileOne, $sourceFileTwo];
         $this->sourceTheme = $this->createPartialMock(
-            \Magento\Theme\Model\Theme::class,
+            Theme::class,
             ['__wakeup', 'getCustomization']
         );
 
         $this->targetFiles = [
-            $this->createPartialMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup', 'delete']),
-            $this->createPartialMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup', 'delete']),
+            $this->createPartialMock(File::class, ['__wakeup', 'delete']),
+            $this->createPartialMock(File::class, ['__wakeup', 'delete'])
         ];
         $this->targetTheme = $this->createPartialMock(
-            \Magento\Theme\Model\Theme::class,
+            Theme::class,
             ['__wakeup', 'getCustomization']
         );
         $this->targetTheme->setId(123);
 
-        $this->customizationPath = $this->createMock(\Magento\Framework\View\Design\Theme\Customization\Path::class);
+        $this->customizationPath = $this->createMock(Path::class);
 
         $this->fileFactory = $this->createPartialMock(
-            \Magento\Framework\View\Design\Theme\FileFactory::class,
+            FileFactory::class,
             ['create']
         );
         $this->filesystem =
-            $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryWrite']);
-        $this->dirWriteMock = $this->createPartialMock(
-            \Magento\Framework\Filesystem\Directory\Write::class,
-            ['isDirectory', 'search', 'copy', 'delete', 'read', 'copyFile', 'isExist']
-        );
+            $this->createPartialMock(Filesystem::class, ['getDirectoryWrite']);
+        $this->dirWriteMock = $this->getMockBuilder(Write::class)
+            ->addMethods(['copy'])
+            ->onlyMethods(['isDirectory', 'search', 'delete', 'read', 'copyFile', 'isExist'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->filesystem->expects(
             $this->any()
         )->method(
             'getDirectoryWrite'
         )->with(
             DirectoryList::MEDIA
-        )->will(
-            $this->returnValue($this->dirWriteMock)
+        )->willReturn(
+            $this->dirWriteMock
         );
 
         /* Init \Magento\Widget\Model\ResourceModel\Layout\Update\Collection model  */
         $this->updateFactory = $this->createPartialMock(\Magento\Widget\Model\Layout\UpdateFactory::class, ['create']);
         $this->update = $this->createPartialMock(
-            \Magento\Widget\Model\Layout\Update::class,
+            Update::class,
             ['__wakeup', 'getCollection']
         );
-        $this->updateFactory->expects($this->at(0))->method('create')->will($this->returnValue($this->update));
+        $this->updateFactoryReturn = [$this->update];
+        $classInstance = $this;
+        $this->updateFactory
+            ->method('create')
+            ->will(
+                $this->returnCallback(function () use ($classInstance) {
+                    return $classInstance->updateFactoryReturn[$classInstance->updateFactoryCalls++];
+                })
+            );
         $this->updateCollection = $this->createPartialMock(
-            \Magento\Widget\Model\ResourceModel\Layout\Update\Collection::class,
+            Collection::class,
             ['addThemeFilter', 'delete', 'getIterator']
         );
         $this->update->expects(
             $this->any()
         )->method(
             'getCollection'
-        )->will(
-            $this->returnValue($this->updateCollection)
+        )->willReturn(
+            $this->updateCollection
         );
 
         /* Init Link an Link_Collection model */
-        $this->link = $this->createPartialMock(\Magento\Widget\Model\Layout\Link::class, ['__wakeup', 'getCollection']);
+        $this->link = $this->createPartialMock(Link::class, ['__wakeup', 'getCollection']);
         $this->linkCollection = $this->createPartialMock(
             \Magento\Widget\Model\ResourceModel\Layout\Link\Collection::class,
             ['addThemeFilter', 'getIterator', 'addFieldToFilter']
         );
-        $this->link->expects($this->any())->method('getCollection')->will($this->returnValue($this->linkCollection));
+        $this->link->expects($this->any())->method('getCollection')->willReturn($this->linkCollection);
 
-        $eventManager = $this->createPartialMock(\Magento\Framework\Event\ManagerInterface::class, ['dispatch']);
+        $eventManager = $this->createPartialMock(ManagerInterface::class, ['dispatch']);
 
-        $this->object = new \Magento\Theme\Model\CopyService(
+        $this->object = new CopyService(
             $this->filesystem,
             $this->fileFactory,
             $this->link,
@@ -184,7 +220,10 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
     {
         $this->object = null;
         $this->filesystem = null;
@@ -200,165 +239,188 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return void
      * cover \Magento\Theme\Model\CopyService::_copyLayoutCustomization
      */
-    public function testCopyLayoutUpdates()
+    public function testCopyLayoutUpdates(): void
     {
         $customization = $this->createPartialMock(
-            \Magento\Framework\View\Design\Theme\Customization::class,
+            Customization::class,
             ['getFiles']
         );
-        $customization->expects($this->atLeastOnce())->method('getFiles')->will($this->returnValue([]));
+        $customization->expects($this->atLeastOnce())->method('getFiles')->willReturn([]);
         $this->sourceTheme->expects(
             $this->once()
         )->method(
             'getCustomization'
-        )->will(
-            $this->returnValue($customization)
+        )->willReturn(
+            $customization
         );
         $this->targetTheme->expects(
             $this->once()
         )->method(
             'getCustomization'
-        )->will(
-            $this->returnValue($customization)
+        )->willReturn(
+            $customization
         );
 
         $this->updateCollection->expects($this->once())->method('delete');
         $this->linkCollection->expects($this->once())->method('addThemeFilter');
 
-        $targetLinkOne = $this->createPartialMock(
-            \Magento\Widget\Model\Layout\Link::class,
-            ['__wakeup', 'setId', 'setThemeId', 'save', 'setLayoutUpdateId']
-        );
+        $targetLinkOne = $this->getMockBuilder(Link::class)
+            ->addMethods(['setThemeId', 'setLayoutUpdateId'])
+            ->onlyMethods(['__wakeup', 'setId', 'save'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $targetLinkOne->setData(['id' => 1, 'layout_update_id' => 1]);
-        $targetLinkTwo = $this->createPartialMock(
-            \Magento\Widget\Model\Layout\Link::class,
-            ['__wakeup', 'setId', 'setThemeId', 'save', 'setLayoutUpdateId']
-        );
+        $targetLinkTwo = $this->getMockBuilder(Link::class)
+            ->addMethods(['setThemeId', 'setLayoutUpdateId'])
+            ->onlyMethods(['__wakeup', 'setId', 'save'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $targetLinkTwo->setData(['id' => 2, 'layout_update_id' => 2]);
 
-        $targetLinkOne->expects($this->at(0))->method('setThemeId')->with(123);
-        $targetLinkOne->expects($this->at(1))->method('setLayoutUpdateId')->with(1);
-        $targetLinkOne->expects($this->at(2))->method('setId')->with(null);
-        $targetLinkOne->expects($this->at(3))->method('save');
+        $targetLinkOne
+            ->method('setThemeId')
+            ->withConsecutive([123]);
+        $targetLinkOne
+            ->method('setLayoutUpdateId')
+            ->withConsecutive([1]);
+        $targetLinkOne
+            ->method('setId')
+            ->withConsecutive([null]);
+        $targetLinkOne
+            ->method('save');
 
-        $targetLinkTwo->expects($this->at(0))->method('setThemeId')->with(123);
-        $targetLinkTwo->expects($this->at(1))->method('setLayoutUpdateId')->with(2);
-        $targetLinkTwo->expects($this->at(2))->method('setId')->with(null);
-        $targetLinkTwo->expects($this->at(3))->method('save');
+        $targetLinkTwo
+            ->method('setThemeId')
+            ->withConsecutive([123]);
+        $targetLinkTwo
+            ->method('setLayoutUpdateId')
+            ->withConsecutive([2]);
+        $targetLinkTwo
+            ->method('setId')
+            ->withConsecutive([null]);
+        $targetLinkTwo
+            ->method('save');
 
         $linkReturnValues = $this->onConsecutiveCalls(new \ArrayIterator([$targetLinkOne, $targetLinkTwo]));
         $this->linkCollection->expects($this->any())->method('getIterator')->will($linkReturnValues);
 
         $targetUpdateOne = $this->createPartialMock(
-            \Magento\Widget\Model\Layout\Update::class,
+            Update::class,
             ['__wakeup', 'setId', 'load', 'save']
         );
         $targetUpdateOne->setData(['id' => 1]);
         $targetUpdateTwo = $this->createPartialMock(
-            \Magento\Widget\Model\Layout\Update::class,
+            Update::class,
             ['__wakeup', 'setId', 'load', 'save']
         );
         $targetUpdateTwo->setData(['id' => 2]);
-        $updateReturnValues = $this->onConsecutiveCalls($this->update, $targetUpdateOne, $targetUpdateTwo);
-        $this->updateFactory->expects($this->any())->method('create')->will($updateReturnValues);
+
+        $this->updateFactoryReturn = array_merge(
+            $this->updateFactoryReturn,
+            [
+                $targetUpdateOne,
+                $targetUpdateTwo
+            ]
+        );
 
         $this->object->copy($this->sourceTheme, $this->targetTheme);
     }
 
     /**
+     * @return void
      * cover \Magento\Theme\Model\CopyService::_copyDatabaseCustomization
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testCopyDatabaseCustomization()
+    public function testCopyDatabaseCustomization(): void
     {
         $sourceCustom = $this->createPartialMock(
-            \Magento\Framework\View\Design\Theme\Customization::class,
+            Customization::class,
             ['getFiles']
         );
         $sourceCustom->expects(
             $this->atLeastOnce()
         )->method(
             'getFiles'
-        )->will(
-            $this->returnValue($this->sourceFiles)
+        )->willReturn(
+            $this->sourceFiles
         );
         $this->sourceTheme->expects(
             $this->once()
         )->method(
             'getCustomization'
-        )->will(
-            $this->returnValue($sourceCustom)
+        )->willReturn(
+            $sourceCustom
         );
         $targetCustom = $this->createPartialMock(
-            \Magento\Framework\View\Design\Theme\Customization::class,
+            Customization::class,
             ['getFiles']
         );
         $targetCustom->expects(
             $this->atLeastOnce()
         )->method(
             'getFiles'
-        )->will(
-            $this->returnValue($this->targetFiles)
+        )->willReturn(
+            $this->targetFiles
         );
         $this->targetTheme->expects(
             $this->once()
         )->method(
             'getCustomization'
-        )->will(
-            $this->returnValue($targetCustom)
+        )->willReturn(
+            $targetCustom
         );
 
         $this->linkCollection->expects(
             $this->any()
         )->method(
             'addFieldToFilter'
-        )->will(
-            $this->returnValue($this->linkCollection)
+        )->willReturn(
+            $this->linkCollection
         );
         $this->linkCollection->expects(
             $this->any()
         )->method(
             'getIterator'
-        )->will(
-            $this->returnValue(new \ArrayIterator([]))
+        )->willReturn(
+            new \ArrayIterator([])
         );
 
         foreach ($this->targetFiles as $targetFile) {
             $targetFile->expects($this->once())->method('delete');
         }
 
-        $newFileOne = $this->createPartialMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup', 'setData', 'save']);
-        $newFileTwo = $this->createPartialMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup', 'setData', 'save']);
-        $newFileOne->expects(
-            $this->at(0)
-        )->method(
-            'setData'
-        )->with(
-            [
-                'theme_id' => 123,
-                'file_path' => 'fixture_file_path_one',
-                'file_type' => 'fixture_file_type_one',
-                'content' => 'fixture_content_one',
-                'sort_order' => 10,
-            ]
-        );
-        $newFileOne->expects($this->at(1))->method('save');
-        $newFileTwo->expects(
-            $this->at(0)
-        )->method(
-            'setData'
-        )->with(
-            [
-                'theme_id' => 123,
-                'file_path' => 'fixture_file_path_two',
-                'file_type' => 'fixture_file_type_two',
-                'content' => 'fixture_content_two',
-                'sort_order' => 20,
-            ]
-        );
-        $newFileTwo->expects($this->at(1))->method('save');
+        $newFileOne = $this->createPartialMock(File::class, ['__wakeup', 'setData', 'save']);
+        $newFileTwo = $this->createPartialMock(File::class, ['__wakeup', 'setData', 'save']);
+
+        $newFileOne
+            ->method('setData')
+            ->with(
+                [
+                    'theme_id' => 123,
+                    'file_path' => 'fixture_file_path_one',
+                    'file_type' => 'fixture_file_type_one',
+                    'content' => 'fixture_content_one',
+                    'sort_order' => 10
+                ]
+            );
+        $newFileOne->method('save');
+
+        $newFileTwo
+            ->method('setData')
+            ->with(
+                [
+                    'theme_id' => 123,
+                    'file_path' => 'fixture_file_path_two',
+                    'file_type' => 'fixture_file_type_two',
+                    'content' => 'fixture_content_two',
+                    'sort_order' => 20
+                ]
+            );
+        $newFileTwo->method('save');
+
         $this->fileFactory->expects(
             $this->any()
         )->method(
@@ -373,95 +435,79 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return void
      * cover \Magento\Theme\Model\CopyService::_copyFilesystemCustomization
-     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testCopyFilesystemCustomization()
+    public function testCopyFilesystemCustomization(): void
     {
         $customization = $this->createPartialMock(
-            \Magento\Framework\View\Design\Theme\Customization::class,
+            Customization::class,
             ['getFiles']
         );
-        $customization->expects($this->atLeastOnce())->method('getFiles')->will($this->returnValue([]));
+        $customization->expects($this->atLeastOnce())->method('getFiles')->willReturn([]);
         $this->sourceTheme->expects(
             $this->once()
         )->method(
             'getCustomization'
-        )->will(
-            $this->returnValue($customization)
+        )->willReturn(
+            $customization
         );
         $this->targetTheme->expects(
             $this->once()
         )->method(
             'getCustomization'
-        )->will(
-            $this->returnValue($customization)
+        )->willReturn(
+            $customization
         );
 
         $this->linkCollection->expects(
             $this->any()
         )->method(
             'addFieldToFilter'
-        )->will(
-            $this->returnValue($this->linkCollection)
+        )->willReturn(
+            $this->linkCollection
         );
         $this->linkCollection->expects(
             $this->any()
         )->method(
             'getIterator'
-        )->will(
-            $this->returnValue(new \ArrayIterator([]))
+        )->willReturn(
+            new \ArrayIterator([])
         );
 
-        $this->customizationPath->expects(
-            $this->at(0)
-        )->method(
-            'getCustomizationPath'
-        )->will(
-            $this->returnValue('source/path')
-        );
-
-        $this->customizationPath->expects(
-            $this->at(1)
-        )->method(
-            'getCustomizationPath'
-        )->will(
-            $this->returnValue('target/path')
-        );
+        $this->customizationPath
+            ->method('getCustomizationPath')
+            ->willReturnOnConsecutiveCalls('source/path', 'target/path');
 
         $this->dirWriteMock->expects(
             $this->any()
         )->method(
             'isDirectory'
-        )->will(
-            $this->returnValueMap([['source/path', true], ['source/path/subdir', true]])
+        )->willReturnMap(
+            [['source/path', true], ['source/path/subdir', true]]
         );
 
         $this->dirWriteMock->expects(
             $this->any()
         )->method(
             'isExist'
-        )->will(
-            $this->returnValueMap(
-                [
-                    ['target/path', true]
-                ]
-            )
+        )->willReturnMap(
+            [
+                ['target/path', true]
+            ]
         );
 
         $this->dirWriteMock->expects(
             $this->any()
         )->method(
             'read'
-        )->will(
-            $this->returnValueMap(
-                [
-                    ['target/path', ['target/path/subdir']],
-                    ['source/path', ['source/path/subdir']],
-                    ['source/path/subdir', ['source/path/subdir/file_one.jpg', 'source/path/subdir/file_two.png']],
-                ]
-            )
+        )->willReturnMap(
+            [
+                ['target/path', ['target/path/subdir']],
+                ['source/path', ['source/path/subdir']],
+                ['source/path/subdir', ['source/path/subdir/file_one.jpg', 'source/path/subdir/file_two.png']]
+            ]
         );
 
         $expectedCopyEvents = [
@@ -472,7 +518,7 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
         $recordCopyEvent = function () use (&$actualCopyEvents) {
             $actualCopyEvents[] = func_get_args();
         };
-        $this->dirWriteMock->expects($this->any())->method('copyFile')->will($this->returnCallback($recordCopyEvent));
+        $this->dirWriteMock->expects($this->any())->method('copyFile')->willReturnCallback($recordCopyEvent);
 
         $this->object->copy($this->sourceTheme, $this->targetTheme);
 

@@ -9,6 +9,8 @@ namespace Magento\CatalogSearch\Model\Search\RequestGenerator;
 /**
  * @api
  * @since 100.1.6
+ * @deprecated 101.0.0
+ * @see \Magento\ElasticSearch
  */
 class GeneratorResolver
 {

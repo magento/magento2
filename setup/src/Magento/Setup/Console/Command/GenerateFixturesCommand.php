@@ -21,12 +21,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class GenerateFixturesCommand extends Command
 {
-    /**
-     * Profile argument
-     */
-    const PROFILE_ARGUMENT = 'profile';
+    public const PROFILE_ARGUMENT = 'profile';
 
-    const SKIP_REINDEX_OPTION = 'skip-reindex';
+    public const SKIP_REINDEX_OPTION = 'skip-reindex';
 
     /**
      * @var FixtureModel
@@ -43,7 +40,7 @@ class GenerateFixturesCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -66,7 +63,7 @@ class GenerateFixturesCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -96,8 +93,10 @@ class GenerateFixturesCommand extends Command
             $indexerRegistry = $fixtureModel->getObjectManager()
                 ->create(\Magento\Framework\Indexer\IndexerRegistry::class);
 
+            $indexersState = [];
             foreach ($indexerListIds as $indexerId) {
                 $indexer = $indexerRegistry->get($indexerId['indexer_id']);
+                $indexersState[$indexerId['indexer_id']] = $indexer->isScheduled();
                 $indexer->setScheduled(true);
             }
 
@@ -106,6 +105,14 @@ class GenerateFixturesCommand extends Command
             }
 
             $this->clearChangelog();
+
+            foreach ($indexerListIds as $indexerId) {
+                /** @var $indexer \Magento\Indexer\Model\Indexer */
+                $indexer = $indexerRegistry->get($indexerId['indexer_id']);
+                $indexer->setScheduled($indexersState[$indexerId['indexer_id']]);
+            }
+
+            $this->optimizeTables($fixtureModel->getObjectManager(), $output);
 
             /** @var \Magento\Setup\Fixtures\IndexersStatesApplyFixture $indexerFixture */
             $indexerFixture = $fixtureModel
@@ -117,14 +124,14 @@ class GenerateFixturesCommand extends Command
             }
 
             $totalEndTime = microtime(true);
-            $totalResultTime = $totalEndTime - $totalStartTime;
-
+            $totalResultTime = (int) ($totalEndTime - $totalStartTime);
             $output->writeln('<info>Total execution time: ' . gmdate('H:i:s', $totalResultTime) . '</info>');
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             // we must have an exit code higher than zero to indicate something was wrong
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**
@@ -148,13 +155,37 @@ class GenerateFixturesCommand extends Command
         }
     }
 
+    /**
+     * Executes fixture and output the execution time.
+     *
+     * @param \Magento\Setup\Fixtures\Fixture $fixture
+     * @param OutputInterface $output
+     */
     private function executeFixture(\Magento\Setup\Fixtures\Fixture $fixture, OutputInterface $output)
     {
         $output->write('<info>' . $fixture->getActionTitle() . '... </info>');
         $startTime = microtime(true);
         $fixture->execute($output);
         $endTime = microtime(true);
-        $resultTime = $endTime - $startTime;
+        $resultTime = (int) ($endTime - $startTime);
         $output->writeln('<info> done in ' . gmdate('H:i:s', $resultTime) . '</info>');
+    }
+
+    /**
+     * Optimize tables after entities generation.
+     *
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param OutputInterface $output
+     * @return void
+     */
+    private function optimizeTables(
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        OutputInterface $output
+    ): void {
+        $connect = $objectManager->get(ResourceConnection::class)->getConnection();
+        $output->writeln("<info>Optimize tables</info>");
+        foreach ($connect->getTables() as $tableName) {
+            $connect->query("OPTIMIZE TABLE `$tableName`");
+        }
     }
 }

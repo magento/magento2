@@ -71,8 +71,6 @@ class FilterFactory
      */
     protected function getFilterType($attribute)
     {
-        return isset($this->filterMap[$attribute->getFrontendInput()])
-            ? $this->filterMap[$attribute->getFrontendInput()]
-            : $this->filterMap['default'];
+        return $this->filterMap[$attribute->getFrontendInput()] ?? $this->filterMap['default'];
     }
 }

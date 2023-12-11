@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteCustomerActionGroup">
+        <annotations>
+            <description>Goes to the Customers grid page. Check the row for the provided Customer Email Address. Delete the Customer.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerEmail"/>
+        </arguments>
+
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomersPage"/>
+        <conditionalClick selector="{{AdminCustomerFiltersSection.clearAll}}" dependentSelector="{{AdminCustomerFiltersSection.clearAll}}" visible="true" stepKey="clickClearFilters"/>
+        <waitForPageLoad stepKey="waitForFiltersClear"/>
+        <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="openFilters"/>
+        <fillField selector="{{AdminCustomerFiltersSection.emailInput}}" userInput="{{customerEmail}}" stepKey="fillEmail"/>
+        <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="clickApplyFilters"/>
+        <click stepKey="chooseCustomer" selector="{{AdminCustomerGridMainActionsSection.customerCheckbox(customerEmail)}}"/>
+        <click stepKey="openActions" selector="{{AdminCustomerGridMainActionsSection.actions}}"/>
+        <waitForPageLoad stepKey="waitActions"/>
+        <click stepKey="delete" selector="{{AdminCustomerGridMainActionsSection.delete}}"/>
+        <waitForPageLoad stepKey="waitForConfirmationAlert"/>
+        <click stepKey="accept" selector="{{AdminCustomerGridMainActionsSection.ok}}"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) were deleted." stepKey="seeSuccessMessage"/>
+        <waitForPageLoad stepKey="waitForCustomersGridIsLoaded"/>
+    </actionGroup>
+</actionGroups>

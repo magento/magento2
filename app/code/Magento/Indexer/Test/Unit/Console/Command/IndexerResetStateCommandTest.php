@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
 use Magento\Backend\App\Area\FrontNameResolver;
-use Symfony\Component\Console\Tester\CommandTester;
+use Magento\Framework\Indexer\StateInterface;
 use Magento\Indexer\Console\Command\IndexerResetStateCommand;
+use Magento\Indexer\Model\Indexer\State;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class IndexerResetStateCommandTest extends AbstractIndexerCommandCommonSetup
 {
@@ -18,33 +22,17 @@ class IndexerResetStateCommandTest extends AbstractIndexerCommandCommonSetup
      */
     private $command;
 
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->stateMock->expects($this->once())->method('setAreaCode')->with(FrontNameResolver::AREA_CODE);
-    }
-
     public function testExecute()
     {
         $this->configureAdminArea();
         $indexerOne = $this->getIndexerMock(
-            ['getState'],
+            ['invalidate'],
             ['indexer_id' => 'indexer_1', 'title' => 'Title_indexerOne']
         );
         $this->initIndexerCollectionByItems([$indexerOne]);
 
-        $stateMock = $this->createMock(\Magento\Indexer\Model\Indexer\State::class);
-        $stateMock->expects($this->exactly(1))
-            ->method('setStatus')
-            ->with(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID)
-            ->will($this->returnSelf());
-
-        $stateMock->expects($this->exactly(1))
-            ->method('save');
-
         $indexerOne->expects($this->once())
-            ->method('getState')
-            ->willReturn($stateMock);
+            ->method('invalidate');
 
         $this->command = new IndexerResetStateCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);

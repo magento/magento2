@@ -3,14 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Test\Unit\Model;
 
+use Magento\Framework\App\Cache\Type\Config;
+use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\ResourceModel\Website\Collection;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class WebsiteTest extends \PHPUnit\Framework\TestCase
+class WebsiteTest extends TestCase
 {
     /**
      * @var Website
@@ -23,33 +31,50 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var WebsiteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteFactory|MockObject
      */
     protected $websiteFactory;
 
-    public function setUp()
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManager;
+
+    /**
+     * @var TypeListInterface|MockObject
+     */
+    private $typeList;
+
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
 
-        $this->websiteFactory = $this->getMockBuilder(\Magento\Store\Model\WebsiteFactory::class)
+        $this->websiteFactory = $this->getMockBuilder(WebsiteFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create', 'getCollection', '__wakeup'])
             ->getMock();
 
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->typeList = $this->getMockForAbstractClass(TypeListInterface::class);
+
         /** @var Website $websiteModel */
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Website::class,
-            ['websiteFactory' => $this->websiteFactory]
+            Website::class,
+            [
+                'websiteFactory' => $this->websiteFactory,
+                'storeManager' => $this->storeManager,
+                'typeList' => $this->typeList
+            ]
         );
     }
 
     public function testIsCanDelete()
     {
         $websiteCollection = $this->createPartialMock(
-            \Magento\Store\Model\ResourceModel\Website\Collection::class,
+            Collection::class,
             ['getSize']
         );
-        $websiteCollection->expects($this->any())->method('getSize')->will($this->returnValue(2));
+        $websiteCollection->expects($this->any())->method('getSize')->willReturn(2);
 
         $this->websiteFactory->expects($this->any())
             ->method('create')
@@ -70,5 +95,44 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     public function testGetScopeTypeName()
     {
         $this->assertEquals('Website', $this->model->getScopeTypeName());
+    }
+
+    public function testGetCacheTags()
+    {
+        $this->assertEquals([Website::CACHE_TAG], $this->model->getCacheTags());
+    }
+
+    public function testAfterSaveNewObject()
+    {
+        $this->storeManager->expects($this->once())
+            ->method('reinitStores');
+
+        $this->model->afterSave();
+    }
+
+    public function testAfterSaveObject()
+    {
+        $this->model->setId(1);
+
+        $this->storeManager->expects($this->never())
+            ->method('reinitStores');
+
+        $this->typeList->expects($this->once())
+            ->method('invalidate')
+            ->with(['full_page', Config::TYPE_IDENTIFIER]);
+
+        $this->model->afterSave();
+    }
+
+    public function testAfterDelete()
+    {
+        $this->typeList->expects($this->exactly(2))
+            ->method('cleanType')
+            ->withConsecutive(
+                ['full_page'],
+                [Config::TYPE_IDENTIFIER]
+            );
+
+        $this->model->afterDelete();
     }
 }

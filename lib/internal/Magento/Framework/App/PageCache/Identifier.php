@@ -11,7 +11,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Page unique identifier
  */
-class Identifier
+class Identifier implements IdentifierInterface
 {
     /**
      * @var \Magento\Framework\App\Request\Http
@@ -56,6 +56,7 @@ class Identifier
             $this->request->get(\Magento\Framework\App\Response\Http::COOKIE_VARY_STRING)
                 ?: $this->context->getVaryString()
         ];
+
         return sha1($this->serializer->serialize($data));
     }
 }

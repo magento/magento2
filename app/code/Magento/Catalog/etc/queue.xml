@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue.xsd">
+    <broker topic="product_action_attribute.update" exchange="magento">
+        <queue name="product_action_attribute.update" consumer="product_action_attribute.update" handler="Magento\Catalog\Model\Attribute\Backend\Consumer::process"/>
+    </broker>
+    <broker topic="product_action_attribute.website.update" exchange="magento">
+        <queue name="product_action_attribute.website.update" consumer="product_action_attribute.website.update" handler="Magento\Catalog\Model\Attribute\Backend\ConsumerWebsiteAssign::process"/>
+    </broker>
+    <broker topic="catalog_website_attribute_value_sync" exchange="magento">
+        <queue name="catalog_website_attribute_value_sync" consumer="catalog_website_attribute_value_sync" handler="Magento\Catalog\Model\Attribute\Backend\WebsiteSpecific\ValueSynchronizer::process"/>
+    </broker>
+</config>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontProductMediaSection">
+        <element name="gallerySpinner" type="block" selector="#maincontent .fotorama__spinner--show" />
+        <element name="gallery" type="block" selector="[data-gallery-role='gallery']" timeout="30"/>
+        <element name="galleryNoControlsElement" type="block" selector=".fotorama__wrap.fotorama__wrap--no-controls"/>
+        <element name="productImage" type="text" selector="//*[@data-gallery-role='gallery' and not(contains(@class, 'fullscreen'))]//img[contains(@src, '{{filename}}') and not(contains(@class, 'full'))]" parameterized="true" />
+        <element name="productImageFullscreen" type="text" selector="//*[@data-gallery-role='gallery' and contains(@class, 'fullscreen')]//img[contains(@src, '{{filename}}') and contains(@class, 'full')]" parameterized="true" />
+        <element name="closeFullscreenImage" type="button" selector="//*[@data-gallery-role='gallery' and contains(@class, 'fullscreen')]//*[@data-gallery-role='fotorama__fullscreen-icon']" />
+        <element name="imageFile" type="text" selector="//div[contains(@class, 'fotorama__active')]//img[contains(@src, '{{filename}}')]" parameterized="true"/>
+        <element name="imageFileInGallery" type="text" selector="//div[contains(@class, 'fotorama__loaded--img')]//img[contains(@src, '{{filename}}')]" parameterized="true"/>
+        <element name="productImageActive" type="text" selector=".product.media div[data-active=true] > img[src*='{{filename}}']" parameterized="true"/>
+        <element name="productImageInFotorama" type="file" selector=".fotorama__nav__shaft img[src*='{{imageName}}']" parameterized="true" timeout="30"/>
+        <element name="fotoramaPrevButton" type="button" selector="//*[@data-gallery-role='gallery']//*[@data-gallery-role='nav-wrap']//*[@data-gallery-role='arrow' and contains(@class, 'fotorama__thumb__arr--left')]" timeout="30"/>
+        <element name="fotoramaNextButton" type="button" selector="//*[@data-gallery-role='gallery']//*[@data-gallery-role='nav-wrap']//*[@data-gallery-role='arrow' and contains(@class, 'fotorama__thumb__arr--right')]" timeout="30"/>
+        <element name="fotoramaNextButtonVideo" type="button" selector="div.fotorama__arr.fotorama__arr--next.fotorama__arr--next" timeout="30"/>
+        <element name="fotoramaAnyMedia" type="text" selector=".fotorama__nav__shaft img"/>
+        <element name="fotoramaImageThumbnail" type="block" selector="//div[contains(@class, 'fotorama__nav__shaft')]//div[contains(@class, 'fotorama__nav__frame--thumb')][{{imageNumber}}]" parameterized="true" timeout="30"/>
+        <element name="fotoramaImageThumbnailImgByNumber" type="block" selector="//div[contains(@class, 'fotorama__nav__shaft')]//div[contains(@class, 'fotorama__nav__frame--thumb')][{{imageNumber}}]//img" parameterized="true" timeout="30"/>
+        <element name="fotoramaImageThumbnailActive" type="block" selector="//div[contains(@class, 'fotorama__nav__shaft')]//div[contains(@class, 'fotorama__nav__frame--thumb') and contains(@class, 'fotorama__active')][{{imageNumber}}]" parameterized="true" timeout="30"/>
+        <element name="imageNextButton" type="button" selector=".product.media .fotorama-item .fotorama__wrap--toggle-arrows .fotorama__arr--next" timeout="30"/>
+        <element name="imageFullscreenNextButton" type="button" selector=".fotorama--fullscreen.fotorama-item .fotorama__wrap--toggle-arrows .fotorama__arr--next" timeout="30"/>
+        <element name="imagePrevButton" type="button" selector=".product.media .fotorama-item .fotorama__wrap--toggle-arrows .fotorama__arr--prev" timeout="30"/>
+        <element name="imageFullscreenPrevButton" type="button" selector=".fotorama--fullscreen.fotorama-item .fotorama__wrap--toggle-arrows .fotorama__arr--prev" timeout="30"/>
+        <element name="mainImageForJsActions" type="text" selector="div.fotorama div.fotorama__active img.fotorama__img" timeout="30"/>
+        <element name="mainImageForJsActionsFullscreen" type="text" selector="div.fotorama div.fotorama__active img.fotorama__img--full" timeout="30"/>
+        <element name="imageSectionForJsActions" type="text" selector=".fotorama__wrap .fotorama__stage" />
+        <element name="imgSelectedInThumbnail" type="block" selector=".fotorama__nav-wrap .fotorama__active .fotorama__loaded img[src*='{{filename}}']"  parameterized="true"/>
+    </section>
+</sections>

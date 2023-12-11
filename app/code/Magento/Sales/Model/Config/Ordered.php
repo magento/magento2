@@ -10,9 +10,9 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Configuration class for ordered items
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 abstract class Ordered extends \Magento\Framework\App\Config\Base
@@ -144,6 +144,7 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
 
     /**
      * Aggregate before/after information from all items and sort totals based on this data
+     *
      * Invoke simple sorting if the first element contains the "sort_order" key
      *
      * @param array $config
@@ -167,13 +168,8 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
                     if (!isset($a['sort_order']) || !isset($b['sort_order'])) {
                         return 0;
                     }
-                    if ($a['sort_order'] > $b['sort_order']) {
-                        return 1;
-                    } elseif ($a['sort_order'] < $b['sort_order']) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
+
+                    return $a['sort_order'] <=> $b['sort_order'];
                 }
             );
         }
@@ -183,6 +179,7 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
 
     /**
      * Initialize collectors array.
+     *
      * Collectors array is array of total models ordered based on configuration settings
      *
      * @return $this

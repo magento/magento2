@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurableProductTypeSwitchingToVirtualProductTest" extends="AdminSimpleProductTypeSwitchingToConfigurableProductTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Product type switching"/>
+            <title value="Configurable product type switching on editing to virtual product"/>
+            <description value="Configurable product type switching on editing to virtual product"/>
+            <testCaseId value="MC-28742"/>
+            <useCaseId value="MAGETWO-44170"/>
+            <severity value="MAJOR"/>
+            <group value="catalog"/>
+            <group value="cloud"/>
+        </annotations>
+        <!--Delete product configurations-->
+        <comment userInput="Delete product configuration" stepKey="commentDeleteConfigs"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="gotToConfigProductPage">
+            <argument name="productId" value="$createProduct.id$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForConfigurableProductPageLoad"/>
+        <conditionalClick selector="{{ AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="openConfigurationSection"/>
+        <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandOption1Actions"/>
+        <click selector="{{AdminProductFormConfigurationsSection.removeProductBtn}}" stepKey="clickRemoveOption1"/>
+        <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandOption2Actions"/>
+        <click selector="{{AdminProductFormConfigurationsSection.removeProductBtn}}" stepKey="clickRemoveOption2"/>
+        <actionGroup ref="AdminFillProductPriceFieldAndPressEnterOnProductEditPageActionGroup" stepKey="fillProductPrice">
+            <argument name="price" value="{{SimpleProduct2.price}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillProductQty">
+            <argument name="productQty" value="{{SimpleProduct2.quantity}}"/>
+        </actionGroup>
+        <clearField selector="{{AdminProductFormSection.productWeight}}" stepKey="clearWeightField"/>
+        <actionGroup ref="AdminSelectWeightTypeOnProductFormActionGroup" stepKey="selectNoWeight"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveVirtualProductForm"/>
+        <!--Assert virtual product on Admin product page grid-->
+        <comment userInput="Assert virtual product on Admin product page grid" stepKey="commentAssertVirtualProductOnAdmin"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPageForVirtual"/>
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySkuForVirtual">
+            <argument name="sku" value="$createProduct.sku$"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductGridSection.productRowByTypeAndName('Virtual Product',$createProduct.name$)}}" stepKey="seeVirtualProductInGrid"/>
+        <!--Assert virtual product on storefront-->
+        <comment userInput="Assert virtual product on storefront" stepKey="commentAssertVirtualProductOnStorefront"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openVirtualProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefrontVirtualProductPageLoad"/>
+        <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="assertVirtualProductInStock">
+            <argument name="productStockStatus" value="In Stock"/>
+        </actionGroup>
+    </test>
+</tests>

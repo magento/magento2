@@ -2,50 +2,58 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-define(
-    [
-        'uiComponent',
-        'jquery',
-        'domReady!'
-    ],
-    function (
-        Component,
-        $
-    ) {
-        'use strict';
+define([
+    'uiComponent',
+    'jquery',
+    'Magento_Paypal/js/in-context/express-checkout-wrapper',
+    'Magento_Customer/js/customer-data'
+], function (Component, $, Wrapper, customerData) {
+    'use strict';
 
-        return Component.extend({
+    return Component.extend(Wrapper).extend({
+        defaults: {
+            declinePayment: false
+        },
 
-            defaults: {},
+        /** @inheritdoc */
+        initialize: function (config, element) {
+            var cart = customerData.get('cart'),
+                customer = customerData.get('customer');
 
-            /**
-             * @returns {Object}
-             */
-            initialize: function () {
-                this._super();
+            this._super();
+            this.renderPayPalButtons(element);
 
-                return this.initEvents();
-            },
+            if (cart().isGuestCheckoutAllowed === undefined) {
+                cart.subscribe(function (updatedCart) {
+                    this.declinePayment = !customer().firstname && !cart().isGuestCheckoutAllowed;
 
-            /**
-             * @returns {Object}
-             */
-            initEvents: function () {
-                $('a[data-action="' + this.linkDataAction + '"]').off('click.' + this.id)
-                    .on('click.' + this.id, this.click.bind(this));
-
-                return this;
-            },
-
-            /**
-             * @param {Object} event
-             * @returns void
-             */
-            click: function (event) {
-                event.preventDefault();
-
-                $('#' + this.paypalButton).click();
+                    return updatedCart;
+                }.bind(this));
             }
-        });
-    }
-);
+
+            return this;
+        },
+
+        /** @inheritdoc */
+        beforePayment: function (resolve, reject) {
+            var promise = $.Deferred();
+
+            if (this.declinePayment) {
+                this.addError(this.signInMessage, 'warning');
+
+                reject();
+            } else {
+                promise.resolve();
+            }
+
+            return promise;
+        },
+
+        /** @inheritdoc */
+        prepareClientConfig: function () {
+            this._super();
+
+            return this.clientConfig;
+        }
+    });
+});

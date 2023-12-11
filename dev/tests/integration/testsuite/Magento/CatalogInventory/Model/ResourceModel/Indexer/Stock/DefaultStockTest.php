@@ -22,7 +22,7 @@ class DefaultStockTest extends \PHPUnit\Framework\TestCase
      */
     private $stockConfiguration;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock::class
@@ -35,6 +35,8 @@ class DefaultStockTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Store/_files/website.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     *
+     * @magentoDbIsolation disabled
      *
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */

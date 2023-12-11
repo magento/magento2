@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontProductGridUIUpdatesOnDesktopTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="New products list widget"/>
+            <title value="Storefront product grid UI updates on Desktop"/>
+            <description value="Storefront product grid UI updates on Desktop"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-27569"/>
+            <group value="catalog"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <before>
+            <!-- 1. Create multiple products and assign to a category. -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createFirstSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createSecondSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createThirdSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createFourthSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- 2. Create new CMS page and add "Catalog Product List" widget type via content >insert  widget option -->
+            <createData entity="_emptyCmsPage" stepKey="createCmsPage"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCmsPage">
+                <argument name="CMSPage" value="$createCmsPage$"/>
+            </actionGroup>
+            <actionGroup ref="AdminInsertWidgetToCmsPageContentActionGroup" stepKey="insertWidgetToCmsPageContentActionGroup">
+                <argument name="widgetType" value="Catalog Products List"/>
+            </actionGroup>
+            <actionGroup ref="AdminFillCatalogProductsListWidgetCategoryActionGroup" stepKey="fillCatalogProductsListWidgetOptions">
+                <argument name="categoryName" value="$createCategory.name$"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidgetButton"/>
+            <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSaveButton"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <deleteData createDataKey="createThirdSimpleProduct" stepKey="deleteThirdSimpleProduct"/>
+            <deleteData createDataKey="createFourthSimpleProduct" stepKey="deleteFourthSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCmsPage" stepKey="deleteCmsPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="navigateAndOpenCreatedCmsPage">
+            <argument name="identifier" value="$createCmsPage.identifier$"/>
+        </actionGroup>
+        <moveMouseOver selector="{{StorefrontCategoryMainSection.searchStore}}" stepKey="hoverSearchTextField"/>
+        <actionGroup ref="AssertStorefrontProductControlsAreNotVisibleWithoutHoverActionGroup" stepKey="assertProductControlsAreNotVisibleWithoutHoverOnCmsPage"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.productLinkByHref($createFirstSimpleProduct.custom_attributes[url_key]$)}}" stepKey="assertProductName"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.productPriceByName($createFirstSimpleProduct.name$)}}" stepKey="assertProductPrice"/>
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName($createFirstSimpleProduct.name$)}}" stepKey="hoverProduct"/>
+        <actionGroup ref="AssertStorefrontProductControlsAreVisibleOnHoverActionGroup" stepKey="assertProductControlsAreVisibleOnHoverOnCmsPage"/>
+        <actionGroup ref="AssertStorefrontAddToWishListIconIsClickableForGuestUserActionGroup" stepKey="assertAddToWishListIconIsClickable"/>
+        <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="navigateAndOpenCreatedCmsPageToVerifyAddToCompareIconIsClickable">
+            <argument name="identifier" value="$createCmsPage.identifier$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="assertAddToCompareIconIsClickable">
+            <argument name="productVar" value="$createFirstSimpleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateCategoryCreatedInPreconditions">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductControlsAreNotVisibleWithoutHoverActionGroup" stepKey="assertProductControlsAreNotVisibleWithoutHoverOnCategoryPage"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.productLinkByHref($createFirstSimpleProduct.custom_attributes[url_key]$)}}" stepKey="assertProductNameOnCategoryPage"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.productPriceByName($createFirstSimpleProduct.name$)}}" stepKey="assertProductPriceOnCategoryPage"/>
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName($createFirstSimpleProduct.name$)}}" stepKey="hoverProductOnCategoryPage"/>
+        <actionGroup ref="AssertStorefrontProductControlsAreVisibleOnHoverActionGroup" stepKey="assertProductControlsAreVisibleOnHoverOnCategoryPage"/>
+        <actionGroup ref="AssertStorefrontAddToWishListIconIsClickableForGuestUserActionGroup" stepKey="assertAddToWishListIconIsClickableOnCategoryPage"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateCategoryCreatedInPreconditionsToVerifyAddToCompareIconIsClickable">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="assertAddToCompareIconIsClickableOnCategoryPage">
+            <argument name="productVar" value="$createFirstSimpleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClearCompareActionGroup" stepKey="clearAllCompareProducts"/>
+    </test>
+</tests>

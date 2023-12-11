@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminReindexAndFlushCache" deprecated="This AG is deprecated, please use (CliIndexerReindexActionGroup, CliCacheCleanActionGroup, CliCacheFlushActionGroup) instead">
+        <annotations>
+            <!--
+                PLEASE NOTE:
+                The action group runs commands to reindex ALL indexers and to flush ALL cache types.
+                It's better to specify needed index (for reindexing) / cache type (for cache flushing).
+                Please use the following action groups:
+                - CliIndexerReindexActionGroup - run reindex by CLI with specified indexers
+                - CliCacheCleanActionGroup - run cache:clean by CLI with specified cache tags
+                - CliCacheFlushActionGroup - run cache:flush by CLI with specified cache tags
+             -->
+            <description>Run reindex and flush cache.</description>
+        </annotations>
+
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+    </actionGroup>
+</actionGroups>

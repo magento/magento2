@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist $block */
 ?>
-<?php if ($block->isAllowInCart() && $block->isProductVisibleInSiteVisibility()): ?>
+<?php if ($block->isAllowInCart() && $block->isProductVisibleInSiteVisibility()) : ?>
     <a href="#"
        data-post='<?= /* @noEscape */ $block->getMoveFromCartParams() ?>'
        class="use-ajax action towishlist action-towishlist">

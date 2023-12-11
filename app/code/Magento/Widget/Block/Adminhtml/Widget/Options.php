@@ -91,7 +91,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
         if ($this->_getData('main_fieldset') instanceof \Magento\Framework\Data\Form\Element\Fieldset) {
             return $this->_getData('main_fieldset');
         }
-        $mainFieldsetHtmlId = 'options_fieldset' . md5($this->getWidgetType());
+        $mainFieldsetHtmlId = 'options_fieldset' . hash('sha256', $this->getWidgetType());
         $this->setMainFieldsetHtmlId($mainFieldsetHtmlId);
         $fieldset = $this->getForm()->addFieldset(
             $mainFieldsetHtmlId,
@@ -141,7 +141,6 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
     {
         $form = $this->getForm();
         $fieldset = $this->getMainFieldset();
-        //$form->getElement('options_fieldset');
 
         // prepare element data with values (either from request of from default values)
         $fieldName = $parameter->getKey();
@@ -157,18 +156,23 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
             $data['value'] = isset($values[$fieldName]) ? $values[$fieldName] : '';
         } else {
             $data['value'] = $parameter->getValue();
-            //prepare unique id value
-            if ($fieldName == 'unique_id' && $data['value'] == '') {
-                $data['value'] = md5(microtime(1));
-            }
+        }
+
+        //prepare unique id value
+        if ($fieldName == 'unique_id' && $data['value'] == '') {
+            $data['value'] = hash('sha256', microtime(1));
         }
 
         if (is_array($data['value'])) {
             foreach ($data['value'] as &$value) {
-                $value = html_entity_decode($value);
+                if (is_string($value)) {
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    $value = html_entity_decode($value);
+                }
             }
         } else {
-            $data['value'] = html_entity_decode($data['value']);
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $data['value'] = \is_string($data['value']) ? html_entity_decode($data['value']) : '';
         }
 
         // prepare element dropdown values
@@ -189,7 +193,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
         // hidden element
         if (!$parameter->getVisible()) {
             $fieldType = 'hidden';
-            // just an element renderer
+        // just an element renderer
         } elseif ($fieldType && $this->_isClassName($fieldType)) {
             $fieldRenderer = $this->getLayout()->createBlock($fieldType);
             $fieldType = $this->_defaultElementType;
@@ -240,6 +244,6 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _isClassName($fieldType)
     {
-        return preg_match('/[A-Z]/', $fieldType) > 0;
+        return $fieldType && preg_match('/[A-Z]/', $fieldType) > 0;
     }
 }

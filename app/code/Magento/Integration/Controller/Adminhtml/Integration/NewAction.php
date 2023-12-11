@@ -6,7 +6,9 @@
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
-class NewAction extends \Magento\Integration\Controller\Adminhtml\Integration
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class NewAction extends \Magento\Integration\Controller\Adminhtml\Integration implements HttpGetActionInterface
 {
     /**
      * New integration action.

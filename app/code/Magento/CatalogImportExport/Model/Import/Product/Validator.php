@@ -7,9 +7,10 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\Validator\AbstractValidator;
+use Magento\Catalog\Model\Product\Attribute\Backend\Sku;
 
 /**
- * Class Validator
+ * Product import model validator
  *
  * @api
  * @since 100.0.2
@@ -60,6 +61,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Text validation
+     *
      * @param mixed $attrCode
      * @param string $type
      * @return bool
@@ -69,6 +72,12 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         $val = $this->string->cleanString($this->_rowData[$attrCode]);
         if ($type == 'text') {
             $valid = $this->string->strlen($val) < Product::DB_MAX_TEXT_LENGTH;
+        } elseif ($attrCode == Product::COL_SKU) {
+            $valid = $this->string->strlen($val) <= SKU::SKU_MAX_LENGTH;
+            if ($this->string->strlen($val) !== $this->string->strlen(trim($val))) {
+                $this->_addMessages([RowValidatorInterface::ERROR_SKU_MARGINAL_WHITESPACES]);
+                return false;
+            }
         } else {
             $valid = $this->string->strlen($val) < Product::DB_MAX_VARCHAR_LENGTH;
         }
@@ -105,13 +114,15 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Numeric validation
+     *
      * @param mixed $attrCode
      * @param string $type
      * @return bool
      */
     protected function numericValidation($attrCode, $type)
     {
-        $val = trim($this->_rowData[$attrCode]);
+        $val = trim($this->_rowData[$attrCode] ?? '');
         if ($type == 'int') {
             $valid = (string)(int)$val === $val;
         } else {
@@ -132,6 +143,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Is required attribute valid
+     *
      * @param string $attrCode
      * @param array $attributeParams
      * @param array $rowData
@@ -150,10 +163,17 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             $doCheck = true;
         }
 
-        return $doCheck ? isset($rowData[$attrCode]) && strlen(trim($rowData[$attrCode])) : true;
+        if ($doCheck === true) {
+            return isset($rowData[$attrCode])
+                && strlen(trim($rowData[$attrCode]))
+                && trim($rowData[$attrCode]) !== $this->context->getEmptyAttributeValueConstant();
+        }
+        return true;
     }
 
     /**
+     * Is attribute valid
+     *
      * @param string $attrCode
      * @param array $attrParams
      * @param array $rowData
@@ -185,42 +205,28 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             return $valid;
         }
 
-        if (!strlen(trim($rowData[$attrCode]))) {
-            return true;
-        }
-        switch ($attrParams['type']) {
-            case 'varchar':
-            case 'text':
-                $valid = $this->textValidation($attrCode, $attrParams['type']);
-                break;
-            case 'decimal':
-            case 'int':
-                $valid = $this->numericValidation($attrCode, $attrParams['type']);
-                break;
-            case 'select':
-            case 'boolean':
-                $valid = $this->validateOption($attrCode, $attrParams['options'], $rowData[$attrCode]);
-                break;
-            case 'multiselect':
-                $values = $this->context->parseMultiselectValues($rowData[$attrCode]);
-                foreach ($values as $value) {
-                    $valid = $this->validateOption($attrCode, $attrParams['options'], $value);
-                    if (!$valid) {
-                        break;
-                    }
+        if (is_array($rowData[$attrCode])) {
+            if (empty($rowData[$attrCode])) {
+                return true;
+            }
+
+            foreach ($rowData[$attrCode] as $attrValue) {
+                if ($attrValue === null || trim($attrValue) === '') {
+                    return true;
                 }
-                break;
-            case 'datetime':
-                $val = trim($rowData[$attrCode]);
-                $valid = strtotime($val) !== false;
-                if (!$valid) {
-                    $this->_addMessages([RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_TYPE]);
-                }
-                break;
-            default:
-                $valid = true;
-                break;
+            }
+        } else {
+            if ($rowData[$attrCode] === null || trim($rowData[$attrCode]) === '') {
+                return true;
+            }
+
+            if ($rowData[$attrCode] === $this->context->getEmptyAttributeValueConstant()
+                && !$attrParams['is_required']) {
+                return true;
+            }
         }
+
+        $valid = $this->validateByAttributeType($attrCode, $attrParams, $rowData);
 
         if ($valid && !empty($attrParams['is_unique'])) {
             if (isset($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]])
@@ -239,6 +245,73 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Validates attribute type.
+     *
+     * @param string $attrCode
+     * @param array $attrParams
+     * @param array $rowData
+     * @return bool
+     */
+    private function validateByAttributeType(string $attrCode, array $attrParams, array $rowData): bool
+    {
+        return match ($attrParams['type']) {
+            'varchar', 'text' => $this->textValidation($attrCode, $attrParams['type']),
+            'decimal', 'int' => $this->numericValidation($attrCode, $attrParams['type']),
+            'select', 'boolean' => $this->validateOption($attrCode, $attrParams['options'], $rowData[$attrCode]),
+            'multiselect' => $this->validateMultiselect($attrCode, $attrParams['options'], $rowData[$attrCode]),
+            'datetime' => $this->validateDateTime($rowData[$attrCode]),
+            default => true,
+        };
+    }
+
+    /**
+     * Validate multiselect attribute.
+     *
+     * @param string $attrCode
+     * @param array $options
+     * @param array|string $rowData
+     * @return bool
+     */
+    private function validateMultiselect(string $attrCode, array $options, array|string $rowData): bool
+    {
+        $valid = true;
+
+        $values = $this->context->parseMultiselectValues($rowData);
+        foreach ($values as $value) {
+            $valid = $this->validateOption($attrCode, $options, $value);
+            if (!$valid) {
+                break;
+            }
+        }
+
+        $uniqueValues = array_unique($values);
+        if (count($uniqueValues) != count($values)) {
+            $valid = false;
+            $this->_addMessages([RowValidatorInterface::ERROR_DUPLICATE_MULTISELECT_VALUES]);
+        }
+
+        return $valid;
+    }
+
+    /**
+     * Validate datetime attribute.
+     *
+     * @param string $rowData
+     * @return bool
+     */
+    private function validateDateTime(string $rowData): bool
+    {
+        $val = trim($rowData);
+        $valid = strtotime($val) !== false;
+        if (!$valid) {
+            $this->_addMessages([RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_TYPE]);
+        }
+        return $valid;
+    }
+
+    /**
+     * Set invalid attribute
+     *
      * @param string|null $attribute
      * @return void
      * @since 100.1.0
@@ -249,6 +322,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Get invalid attribute
+     *
      * @return string
      * @since 100.1.0
      */
@@ -258,6 +333,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Is valid attributes
+     *
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -272,7 +349,9 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         if ($entityTypeModel) {
             foreach ($this->_rowData as $attrCode => $attrValue) {
                 $attrParams = $entityTypeModel->retrieveAttributeFromCache($attrCode);
-                if ($attrParams) {
+                if ($attrCode === Product::COL_CATEGORY && $attrValue) {
+                    $this->isCategoriesValid($attrValue);
+                } elseif ($attrParams) {
                     $this->isAttributeValid($attrCode, $attrParams, $this->_rowData);
                 }
             }
@@ -284,7 +363,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isValid($value)
     {
@@ -315,6 +394,38 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
+     * Validate category names
+     *
+     * @param string|array $value
+     * @return bool
+     */
+    private function isCategoriesValid(string|array $value) : bool
+    {
+        $result = true;
+        if ($value) {
+            $values = [];
+            if (is_string($value)) {
+                $values = explode($this->context->getMultipleValueSeparator(), $value);
+            } elseif (is_array($value)) {
+                $values = $value;
+            }
+
+            foreach ($values as $categoryName) {
+                if ($result === true) {
+                    $result = $this->string->strlen($categoryName) < Product::DB_MAX_VARCHAR_LENGTH;
+                }
+            }
+        }
+        if ($result === false) {
+            $this->_addMessages([RowValidatorInterface::ERROR_EXCEEDED_MAX_LENGTH]);
+            $this->setInvalidAttribute(Product::COL_CATEGORY);
+        }
+        return $result;
+    }
+
+    /**
+     * Init
+     *
      * @param \Magento\CatalogImportExport\Model\Import\Product $context
      * @return $this
      */
@@ -324,5 +435,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         foreach ($this->validators as $validator) {
             $validator->init($context);
         }
+
+        return $this;
     }
 }

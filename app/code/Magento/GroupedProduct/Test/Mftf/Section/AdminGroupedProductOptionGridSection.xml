@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminGroupedProductOptionGridSection">
+        <element name="allRows" type="text" selector="[data-index=associated] .data-row"/>
+        <element name="productId" type="text" parameterized="true" selector="[data-index=associated] .data-row:nth-of-type({{index}}) span[data-index=id]"/>
+        <element name="productImage" type="text" parameterized="true" selector="[data-index=associated] .data-row:nth-of-type({{index}}) [data-index=thumbnail] img"/>
+        <element name="productName" type="text" selector=".data-row td[data-index='name']"/>
+        <element name="productNameByRow" type="text" parameterized="true" selector="[data-index=associated] .data-row:nth-of-type({{index}}) span[data-index=name]"/>
+        <element name="productAttributeSet" type="text" parameterized="true" selector="[data-index=associated] .data-row:nth-of-type({{index}}) span[data-index=attribute_set]"/>
+        <element name="productStatus" type="text" parameterized="true" selector="[data-index=associated] .data-row:nth-of-type({{index}}) span[data-index=status]"/>
+        <element name="productSku" type="text" selector=".data-row td[data-index='sku']"/>
+        <element name="productSkuByRow" type="text" parameterized="true" selector="[data-index=associated] .data-row:nth-of-type({{index}}) span[data-index=sku]"/>
+        <element name="productPrice" type="text" parameterized="true" selector="[data-index=associated] .data-row:nth-of-type({{index}}) span[data-index=price]"/>
+        <element name="productDefaultQuantity" type="input" parameterized="true" selector="[data-index=associated] .data-row:nth-of-type({{index}}) [data-index=qty] input"/>
+        <element name="productPosition" type="input" parameterized="true" selector="[data-index=associated] .data-row:nth-of-type({{index}}) .position-widget-input"/>
+        <element name="removeProduct" type="button" parameterized="true" selector="[data-index=associated] .data-row:nth-of-type({{index}}) button[data-action=remove_row]"/>
+    </section>
+</sections>

@@ -10,6 +10,7 @@ use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\ReinitableConfig;
 use Magento\Framework\App\State;
+use Magento\Framework\View\Element\ButtonLockManager;
 use Magento\TestFramework\ObjectManager;
 
 class FormTest extends \PHPUnit\Framework\TestCase
@@ -19,7 +20,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = $this->getObjectManager();
 
@@ -55,6 +56,9 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Review\Block\Form $form */
         $form = $this->objectManager->create(\Magento\Review\Block\Form::class);
+        $form->setButtonLockManager(
+            $this->objectManager->create(ButtonLockManager::class, ['buttonLockPool' => []])
+        );
         $result = $form->getAllowWriteReviewFlag();
         $this->assertEquals($result, $expectedResult);
     }

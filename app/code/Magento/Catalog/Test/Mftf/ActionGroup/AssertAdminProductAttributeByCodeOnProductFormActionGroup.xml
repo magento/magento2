@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminProductAttributeByCodeOnProductFormActionGroup">
+        <annotations>
+            <description>Requires the navigation to the Product page. Provided dropdown attribute presents on the page.</description>
+        </annotations>
+        <arguments>
+            <argument name="productAttributeCode" type="string" defaultValue="{{textSwatchProductAttribute.attribute_code}}"/>
+        </arguments>
+
+        <seeElement selector="{{AdminProductAttributesSection.attributeDropdownByCode(productAttributeCode)}}" stepKey="assertAttributeIsPresentOnForm"/>
+    </actionGroup>
+</actionGroups>

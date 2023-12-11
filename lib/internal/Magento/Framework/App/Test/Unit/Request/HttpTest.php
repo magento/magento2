@@ -4,41 +4,61 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit\Request;
 
+use Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Request\PathInfo;
+use Magento\Framework\App\Request\PathInfoProcessorInterface;
+use Magento\Framework\App\Route\ConfigInterface;
+use Magento\Framework\App\Route\ConfigInterface\Proxy;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class HttpTest extends \PHPUnit\Framework\TestCase
+/**
+ * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
+class HttpTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\Request\Http
+     * @var Http
      */
-    protected $_model;
+    private $model;
 
     /**
-     * @var \Magento\Framework\App\Route\ConfigInterface\Proxy | \PHPUnit_Framework_MockObject_MockObject
+     * @var Proxy|MockObject
      */
-    protected $_routerListMock;
+    private $routerListMock;
 
     /**
-     * @var \Magento\Framework\App\Request\PathInfoProcessorInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var PathInfoProcessorInterface|MockObject
      */
-    protected $_infoProcessorMock;
+    private $infoProcessorMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager | \PHPUnit_Framework_MockObject_MockObject
+     * @var PathInfo
      */
-    protected $objectManagerMock;
+    private $pathInfo;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils | \PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManager|MockObject
      */
-    protected $converterMock;
+    private $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var StringUtils|MockObject
+     */
+    private $converterMock;
+
+    /**
+     * @var ObjectManager
      */
     private $objectManager;
 
@@ -47,42 +67,43 @@ class HttpTest extends \PHPUnit\Framework\TestCase
      */
     private $serverArray;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_routerListMock = $this->createPartialMock(
-            \Magento\Framework\App\Route\ConfigInterface\Proxy::class,
+        $this->routerListMock = $this->createPartialMock(
+            Proxy::class,
             ['getRouteFrontName', 'getRouteByFrontName', '__wakeup']
         );
-        $this->_infoProcessorMock = $this->createMock(\Magento\Framework\App\Request\PathInfoProcessorInterface::class);
-        $this->_infoProcessorMock->expects($this->any())->method('process')->will($this->returnArgument(1));
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->converterMock = $this->getMockBuilder(\Magento\Framework\Stdlib\StringUtils::class)
+        $this->infoProcessorMock = $this->getMockForAbstractClass(PathInfoProcessorInterface::class);
+        $this->infoProcessorMock->expects($this->any())->method('process')->willReturnArgument(1);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->converterMock = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
             ->setMethods(['cleanString'])
             ->getMock();
-        $this->converterMock->expects($this->any())->method('cleanString')->will($this->returnArgument(0));
 
         // Stash the $_SERVER array to protect it from modification in test
         $this->serverArray = $_SERVER;
 
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
+        $this->pathInfo =  $this->objectManager->getObject(PathInfo::class);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $_SERVER = $this->serverArray;
     }
 
     /**
-     * @return \Magento\Framework\App\Request\Http
+     * @return Http
      */
     private function getModel($uri = null, $appConfigMock = true)
     {
         $model = $this->objectManager->getObject(
-            \Magento\Framework\App\Request\Http::class,
+            Http::class,
             [
-                'routeConfig' => $this->_routerListMock,
-                'pathInfoProcessor' => $this->_infoProcessorMock,
+                'routeConfig' => $this->routerListMock,
+                'pathInfoProcessor' => $this->infoProcessorMock,
+                'pathInfoService' => $this->pathInfo,
                 'objectManager' => $this->objectManagerMock,
                 'converter' => $this->converterMock,
                 'uri' => $uri,
@@ -90,7 +111,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         );
 
         if ($appConfigMock) {
-            $configMock = $this->createMock(\Magento\Framework\App\Config::class);
+            $configMock = $this->createMock(Config::class);
             $this->objectManager->setBackwardCompatibleProperty($model, 'appConfig', $configMock);
         }
 
@@ -100,91 +121,91 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     public function testGetOriginalPathInfoWithTestUri()
     {
         $uri = 'http://test.com/value?key=value';
-        $this->_model = $this->getModel($uri);
-        $this->assertEquals('/value', $this->_model->getOriginalPathInfo());
+        $this->model = $this->getModel($uri);
+        $this->assertEquals('/value', $this->model->getOriginalPathInfo());
     }
 
     public function testGetOriginalPathInfoWithEmptyUri()
     {
-        $this->_model = $this->getModel();
-        $this->assertEmpty($this->_model->getOriginalPathInfo());
+        $this->model = $this->getModel();
+        $this->assertEmpty($this->model->getOriginalPathInfo());
     }
 
     public function testGetBasePathWithPath()
     {
-        $this->_model = $this->getModel();
-        $this->_model->setBasePath('http:\/test.com\one/two');
-        $this->assertEquals('http://test.com/one/two', $this->_model->getBasePath());
+        $this->model = $this->getModel();
+        $this->model->setBasePath('http:\/test.com\one/two');
+        $this->assertEquals('http://test.com/one/two', $this->model->getBasePath());
     }
 
     public function testGetBasePathWithoutPath()
     {
-        $this->_model = $this->getModel();
-        $this->_model->setBasePath(null);
-        $this->assertEquals('/', $this->_model->getBasePath());
+        $this->model = $this->getModel();
+        $this->model->setBasePath('');
+        $this->assertEquals('/', $this->model->getBasePath());
     }
 
     public function testSetRouteNameWithRouter()
     {
-        $router = $this->createMock(\Magento\Framework\App\Route\ConfigInterface::class);
-        $this->_routerListMock->expects($this->any())->method('getRouteFrontName')->will($this->returnValue($router));
-        $this->_model = $this->getModel();
-        $this->_model->setRouteName('RouterName');
-        $this->assertEquals('RouterName', $this->_model->getRouteName());
+        $router = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->routerListMock->expects($this->any())->method('getRouteFrontName')->willReturn($router);
+        $this->model = $this->getModel();
+        $this->model->setRouteName('RouterName');
+        $this->assertEquals('RouterName', $this->model->getRouteName());
     }
 
     public function testSetRouteNameWithNullRouterValue()
     {
-        $this->_model = $this->getModel();
-        $this->_routerListMock->expects($this->once())->method('getRouteFrontName')->will($this->returnValue(null));
-        $this->_model->setRouteName('RouterName');
+        $this->model = $this->getModel();
+        $this->routerListMock->expects($this->once())->method('getRouteFrontName')->willReturn(null);
+        $this->model->setRouteName('RouterName');
     }
 
     public function testGetFrontName()
     {
         $uri = 'http://test.com/one/two';
-        $this->_model = $this->getModel($uri);
-        $this->assertEquals('one', $this->_model->getFrontName());
+        $this->model = $this->getModel($uri);
+        $this->assertEquals('one', $this->model->getFrontName());
     }
 
     public function testGetRouteNameWithNullValueRouteName()
     {
-        $this->_model = $this->getModel();
-        $this->_model->setRouteName('RouteName');
-        $this->assertEquals('RouteName', $this->_model->getRouteName());
+        $this->model = $this->getModel();
+        $this->model->setRouteName('RouteName');
+        $this->assertEquals('RouteName', $this->model->getRouteName());
     }
 
     public function testGetRouteName()
     {
-        $this->_model = $this->getModel();
+        $this->model = $this->getModel();
         $expected = 'RouteName';
-        $this->_model->setRouteName($expected);
-        $this->assertEquals($expected, $this->_model->getRouteName());
+        $this->model->setRouteName($expected);
+        $this->assertEquals($expected, $this->model->getRouteName());
     }
 
     public function testGetFullActionName()
     {
-        $this->_model = $this->getModel();
+        $this->model = $this->getModel();
         /* empty request */
-        $this->assertEquals('__', $this->_model->getFullActionName());
-        $this->_model->setRouteName('test')->setControllerName('controller')->setActionName('action');
-        $this->assertEquals('test/controller/action', $this->_model->getFullActionName('/'));
+        $this->assertEquals('__', $this->model->getFullActionName());
+        $this->model->setRouteName('test')->setControllerName('controller')->setActionName('action');
+        $this->assertEquals('test/controller/action', $this->model->getFullActionName('/'));
     }
 
     public function testInitForward()
     {
-        $expected = $this->_initForward();
-        $this->assertEquals($expected, $this->_model->getBeforeForwardInfo());
+        $expected = $this->initForward();
+        $this->assertEquals($expected, $this->model->getBeforeForwardInfo());
     }
 
     public function testGetBeforeForwardInfo()
     {
-        $beforeForwardInfo = $this->_initForward();
-        $this->assertNull($this->_model->getBeforeForwardInfo('not_existing_forward_info_key'));
+        $beforeForwardInfo = $this->initForward();
+        $this->assertNull($this->model->getBeforeForwardInfo('not_existing_forward_info_key'));
         foreach (array_keys($beforeForwardInfo) as $key) {
-            $this->assertEquals($beforeForwardInfo[$key], $this->_model->getBeforeForwardInfo($key));
+            $this->assertEquals($beforeForwardInfo[$key], $this->model->getBeforeForwardInfo($key));
         }
-        $this->assertEquals($beforeForwardInfo, $this->_model->getBeforeForwardInfo());
+        $this->assertEquals($beforeForwardInfo, $this->model->getBeforeForwardInfo());
     }
 
     /**
@@ -192,9 +213,9 @@ class HttpTest extends \PHPUnit\Framework\TestCase
      *
      * @return array Contents of $_beforeForwardInfo
      */
-    protected function _initForward()
+    private function initForward()
     {
-        $this->_model = $this->getModel();
+        $this->model = $this->getModel();
         $beforeForwardInfo = [
             'params' => ['one' => '111', 'two' => '222'],
             'action_name' => 'ActionName',
@@ -202,49 +223,51 @@ class HttpTest extends \PHPUnit\Framework\TestCase
             'module_name' => 'ModuleName',
             'route_name' => 'RouteName'
         ];
-        $this->_model->setParams($beforeForwardInfo['params']);
-        $this->_model->setActionName($beforeForwardInfo['action_name']);
-        $this->_model->setControllerName($beforeForwardInfo['controller_name']);
-        $this->_model->setModuleName($beforeForwardInfo['module_name']);
-        $this->_model->setRouteName($beforeForwardInfo['route_name']);
-        $this->_model->initForward();
+        $this->model->setParams($beforeForwardInfo['params']);
+        $this->model->setActionName($beforeForwardInfo['action_name']);
+        $this->model->setControllerName($beforeForwardInfo['controller_name']);
+        $this->model->setModuleName($beforeForwardInfo['module_name']);
+        $this->model->setRouteName($beforeForwardInfo['route_name']);
+        $this->model->initForward();
         return $beforeForwardInfo;
     }
 
     public function testIsAjax()
     {
-        $this->_model = $this->getModel();
+        $this->model = $this->getModel();
 
-        $this->assertFalse($this->_model->isAjax());
+        $this->assertFalse($this->model->isAjax());
 
-        $this->_model->clearParams();
-        $this->_model->setParam('ajax', 1);
-        $this->assertTrue($this->_model->isAjax());
+        $this->model->clearParams();
+        $this->model->setParam('ajax', 1);
+        $this->assertTrue($this->model->isAjax());
 
-        $this->_model->clearParams();
-        $this->_model->setParam('isAjax', 1);
-        $this->assertTrue($this->_model->isAjax());
+        $this->model->clearParams();
+        $this->model->setParam('isAjax', 1);
+        $this->assertTrue($this->model->isAjax());
 
-        $this->_model->clearParams();
-        $this->_model->getHeaders()->addHeaderLine('X-Requested-With', 'XMLHttpRequest');
-        $this->assertTrue($this->_model->isAjax());
+        $this->model->clearParams();
+        $this->model->getHeaders()->addHeaderLine('X-Requested-With', 'XMLHttpRequest');
+        $this->assertTrue($this->model->isAjax());
 
-        $this->_model->getHeaders()->clearHeaders();
-        $this->_model->getHeaders()->addHeaderLine('X-Requested-With', 'NotXMLHttpRequest');
-        $this->assertFalse($this->_model->isAjax());
+        $this->model->getHeaders()->clearHeaders();
+        $this->model->getHeaders()->addHeaderLine('X-Requested-With', 'NotXMLHttpRequest');
+        $this->assertFalse($this->model->isAjax());
     }
 
     /**
-     * @param $serverVariables array
-     * @param $expectedResult string
+     * @param array $serverVariables
+     * @param string $cleanHeaderHttpHost
+     * @param string $expectedResult
      * @dataProvider serverVariablesProvider
      */
-    public function testGetDistroBaseUrl($serverVariables, $expectedResult)
+    public function testGetDistroBaseUrl($serverVariables, $cleanHeaderHttpHost, $expectedResult)
     {
         $originalServerValue = $_SERVER;
         $_SERVER = $serverVariables;
-        $this->_model = $this->getModel();
-        $this->assertEquals($expectedResult, $this->_model->getDistroBaseUrl());
+        $this->model = $this->getModel();
+        $this->converterMock->expects($this->once())->method('cleanString')->willReturn($cleanHeaderHttpHost);
+        $this->assertEquals($expectedResult, $this->model->getDistroBaseUrl());
 
         $_SERVER = $originalServerValue;
     }
@@ -259,6 +282,9 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, Http::getDistroBaseUrlPath(['SCRIPT_NAME' => $scriptName]));
     }
 
+    /**
+     * @return array
+     */
     public function getDistroBaseUrlPathDataProvider()
     {
         return [
@@ -273,6 +299,9 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function serverVariablesProvider()
     {
         $returnValue = [];
@@ -286,37 +315,53 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $secureUnusualPort = $noHttpsData = $httpsOffData = $noHostData = $noScriptNameData = $defaultServerData;
 
         unset($noScriptNameData['SCRIPT_NAME']);
-        $returnValue['no SCRIPT_NAME'] = [$noScriptNameData, 'http://localhost/'];
+        $returnValue['no SCRIPT_NAME'] = [$noScriptNameData, $noScriptNameData['HTTP_HOST'], 'http://localhost/'];
 
         unset($noHostData['HTTP_HOST']);
-        $returnValue['no HTTP_HOST'] = [$noHostData, 'http://localhost/'];
+        $returnValue['no HTTP_HOST'] = [$noHostData, '', 'http://localhost/'];
 
         $httpsOffData['HTTPS'] = 'off';
-        $returnValue['HTTPS off'] = [$httpsOffData, 'http://sample.host.com/'];
+        $returnValue['HTTPS off'] = [$httpsOffData, $httpsOffData['HTTP_HOST'], 'http://sample.host.com/'];
 
         unset($noHttpsData['HTTPS']);
-        $returnValue['no HTTPS'] = [$noHttpsData, 'http://sample.host.com/'];
+        $returnValue['no HTTPS'] = [$noHttpsData, $noHttpsData['HTTP_HOST'], 'http://sample.host.com/'];
 
         $noHttpsNoServerPort = $noHttpsData;
         unset($noHttpsNoServerPort['SERVER_PORT']);
-        $returnValue['no SERVER_PORT'] = [$noHttpsNoServerPort, 'http://sample.host.com/'];
+        $returnValue['no SERVER_PORT'] = [
+            $noHttpsNoServerPort,
+            $noHttpsNoServerPort['HTTP_HOST'],
+            'http://sample.host.com/'
+        ];
 
         $noHttpsButSecurePort = $noHttpsData;
         $noHttpsButSecurePort['SERVER_PORT'] = 443;
-        $returnValue['no HTTP but secure port'] = [$noHttpsButSecurePort, 'https://sample.host.com/'];
+        $returnValue['no HTTP but secure port'] = [
+            $noHttpsButSecurePort,
+            $noHttpsButSecurePort['HTTP_HOST'],
+            'https://sample.host.com/'
+        ];
 
         $notSecurePort = $noHttpsData;
         $notSecurePort['SERVER_PORT'] = 81;
         $notSecurePort['HTTP_HOST'] = 'sample.host.com:81';
-        $returnValue['not secure not standard port'] = [$notSecurePort, 'http://sample.host.com:81/'];
+        $returnValue['not secure not standard port'] = [
+            $notSecurePort,
+            $notSecurePort['HTTP_HOST'],
+            'http://sample.host.com:81/'
+        ];
 
         $secureUnusualPort['SERVER_PORT'] = 441;
         $secureUnusualPort['HTTP_HOST'] = 'sample.host.com:441';
-        $returnValue['not standard secure port'] = [$secureUnusualPort, 'https://sample.host.com:441/'];
+        $returnValue['not standard secure port'] = [
+            $secureUnusualPort,
+            $secureUnusualPort['HTTP_HOST'],
+            'https://sample.host.com:441/'
+        ];
 
         $customUrlPathData = $noHttpsData;
         $customUrlPathData['SCRIPT_FILENAME'] = '/some/dir/custom.php';
-        $returnValue['custom path'] = [$customUrlPathData, 'http://sample.host.com/'];
+        $returnValue['custom path'] = [$customUrlPathData, $customUrlPathData['HTTP_HOST'], 'http://sample.host.com/'];
 
         return $returnValue;
     }
@@ -332,52 +377,55 @@ class HttpTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsSecure($isSecure, $serverHttps, $headerOffloadKey, $headerOffloadValue, $configCall)
     {
-        $this->_model = $this->getModel(null, false);
+        $this->model = $this->getModel(null, false);
         $configOffloadHeader = 'Header-From-Proxy';
-        $configMock = $this->getMockBuilder(\Magento\Framework\App\Config::class)
+        $configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMock();
         $configMock->expects($this->exactly($configCall))
             ->method('getValue')
             ->with(
-                \Magento\Framework\App\Request\Http::XML_PATH_OFFLOADER_HEADER,
+                Http::XML_PATH_OFFLOADER_HEADER,
                 ScopeConfigInterface::SCOPE_TYPE_DEFAULT
             )->willReturn($configOffloadHeader);
 
-        $this->objectManager->setBackwardCompatibleProperty($this->_model, 'appConfig', $configMock);
-        $this->objectManager->setBackwardCompatibleProperty($this->_model, 'sslOffloadHeader', null);
+        $this->objectManager->setBackwardCompatibleProperty($this->model, 'appConfig', $configMock);
+        $this->objectManager->setBackwardCompatibleProperty($this->model, 'sslOffloadHeader', null);
 
-        $this->_model->getServer()->set($headerOffloadKey, $headerOffloadValue);
-        $this->_model->getServer()->set('HTTPS', $serverHttps);
+        $this->model->getServer()->set($headerOffloadKey, $headerOffloadValue);
+        $this->model->getServer()->set('HTTPS', $serverHttps);
 
-        $this->assertSame($isSecure, $this->_model->isSecure());
+        $this->assertSame($isSecure, $this->model->isSecure());
     }
 
     /**
      * @dataProvider httpSafeMethodProvider
      * @backupGlobals enabled
-     * @param string $method value of $_SERVER['REQUEST_METHOD']
+     * @param string $httpMethod value of $_SERVER['REQUEST_METHOD']
      */
     public function testIsSafeMethodTrue($httpMethod)
     {
-        $this->_model = $this->getModel();
+        $this->model = $this->getModel();
         $_SERVER['REQUEST_METHOD'] = $httpMethod;
-        $this->assertEquals(true, $this->_model->IsSafeMethod());
+        $this->assertTrue($this->model->isSafeMethod());
     }
 
     /**
      * @dataProvider httpNotSafeMethodProvider
      * @backupGlobals enabled
-     * @param string $method value of $_SERVER['REQUEST_METHOD']
+     * @param string $httpMethod value of $_SERVER['REQUEST_METHOD']
      */
     public function testIsSafeMethodFalse($httpMethod)
     {
-        $this->_model = $this->getModel();
+        $this->model = $this->getModel();
         $_SERVER['REQUEST_METHOD'] = $httpMethod;
-        $this->assertEquals(false, $this->_model->IsSafeMethod());
+        $this->assertFalse($this->model->isSafeMethod());
     }
 
+    /**
+     * @return array
+     */
     public function httpSafeMethodProvider()
     {
         return [
@@ -388,6 +436,9 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function httpNotSafeMethodProvider()
     {
         return [
@@ -400,6 +451,9 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function isSecureDataProvider()
     {
         /**
@@ -427,21 +481,37 @@ class HttpTest extends \PHPUnit\Framework\TestCase
             'HTTPS off with HTTP_ prefixed proxy set to https' => [true, 'off', 'HTTP_HEADER_FROM_PROXY', 'https', 1],
         ];
     }
-    
+
     /**
      * @dataProvider setPathInfoDataProvider
      * @param string $requestUri
      * @param string $basePath$
      * @param string $expected
      */
-    public function testSetPathInfo($requestUri, $basePath, $expected)
+    public function testGetPathInfo($requestUri, $basePath, $expected)
     {
-        $this->_model = $this->getModel($requestUri);
-        $this->_model->setBaseUrl($basePath);
-        $this->_model->setPathInfo();
-        $this->assertEquals($expected, $this->_model->getPathInfo());
+        $this->model = $this->getModel($requestUri);
+        $this->model->setBaseUrl($basePath);
+        $this->assertEquals($expected, $this->model->getPathInfo());
+        $this->assertEquals($expected, $this->model->getOriginalPathInfo());
     }
 
+    public function testSetPathInfo()
+    {
+        $requestUri = 'http://svr.com//module/route/mypage/myproduct?param1=1';
+        $basePath = '/module/route/';
+        $this->model = $this->getModel($requestUri);
+        $this->model->setBaseUrl($basePath);
+        $expected = '/mypage/myproduct';
+        $this->assertEquals($expected, $this->model->getOriginalPathInfo());
+        $this->model->setPathInfo('http://svr.com/something/route?param1=1');
+        $this->assertEquals('http://svr.com/something/route?param1=1', $this->model->getPathInfo());
+        $this->assertEquals($expected, $this->model->getOriginalPathInfo());
+    }
+
+    /**
+     * @return array
+     */
     public function setPathInfoDataProvider()
     {
         return [

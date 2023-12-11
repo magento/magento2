@@ -3,14 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Logger\Handler;
 
+use InvalidArgumentException;
 use Magento\Framework\Filesystem\DriverInterface;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
+/**
+ * Base stream handler
+ *
+ * @api
+ */
 class Base extends StreamHandler
 {
     /**
@@ -30,18 +37,20 @@ class Base extends StreamHandler
 
     /**
      * @param DriverInterface $filesystem
-     * @param string $filePath
-     * @param string $fileName
+     * @param string|null $filePath
+     * @param string|null $fileName
      */
     public function __construct(
         DriverInterface $filesystem,
-        $filePath = null,
-        $fileName = null
+        ?string $filePath = null,
+        ?string $fileName = null
     ) {
         $this->filesystem = $filesystem;
+
         if (!empty($fileName)) {
             $this->fileName = $this->sanitizeFileName($fileName);
         }
+
         parent::__construct(
             $filePath ? $filePath . $this->fileName : BP . DIRECTORY_SEPARATOR . $this->fileName,
             $this->loggerType
@@ -51,17 +60,13 @@ class Base extends StreamHandler
     }
 
     /**
-     * @param string $fileName
+     * Remove dots from file name
      *
+     * @param string $fileName
      * @return string
-     * @throws \InvalidArgumentException
      */
-    private function sanitizeFileName($fileName)
+    private function sanitizeFileName(string $fileName): string
     {
-        if (!is_string($fileName)) {
-            throw  new \InvalidArgumentException('Filename expected to be a string');
-        }
-
         $parts = explode('/', $fileName);
         $parts = array_filter($parts, function ($value) {
             return !in_array($value, ['', '.', '..']);
@@ -71,19 +76,26 @@ class Base extends StreamHandler
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @param $record array
-     *
-     * @return void
+     * @inheritDoc
      */
-    public function write(array $record)
+    protected function write(array $record): void
     {
         $logDir = $this->filesystem->getParentDirectory($this->url);
+
         if (!$this->filesystem->isDirectory($logDir)) {
             $this->filesystem->createDirectory($logDir);
         }
 
         parent::write($record);
+    }
+
+    /**
+     * Retrieve debug info
+     *
+     * @return string[]
+     */
+    public function __debugInfo()
+    {
+        return ['fileName' => $this->fileName];
     }
 }

@@ -3,25 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Translation\Model\ResourceModel;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Config;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Translate\ResourceInterface;
 use Magento\Translation\App\Config\Type\Translation;
 
-class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements
-    \Magento\Framework\Translate\ResourceInterface
+/**
+ * Translate data resource model
+ */
+class Translate extends AbstractDb implements ResourceInterface
 {
     /**
-     * @var \Magento\Framework\App\ScopeResolverInterface
+     * @var ScopeResolverInterface
      */
     protected $scopeResolver;
-
-    /**
-     * @var null|string
-     */
-    protected $scope;
 
     /**
      * @var Config
@@ -34,19 +37,30 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
     private $deployedConfig;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
+     * @var null|string
+     */
+    protected $scope;
+
+    /**
+     * @param Context $context
+     * @param ScopeResolverInterface $scopeResolver
      * @param string $connectionName
      * @param null|string $scope
+     * @param Config|null $appConfig
+     * @param DeploymentConfig|null $deployedConfig
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
+        Context $context,
+        ScopeResolverInterface $scopeResolver,
         $connectionName = null,
-        $scope = null
+        $scope = null,
+        ?Config $appConfig = null,
+        ?DeploymentConfig $deployedConfig = null
     ) {
         $this->scopeResolver = $scopeResolver;
         $this->scope = $scope;
+        $this->appConfig = $appConfig ?? ObjectManager::getInstance()->get(Config::class);
+        $this->deployedConfig = $deployedConfig ?? ObjectManager::getInstance()->get(DeploymentConfig::class);
         parent::__construct($context, $connectionName);
     }
 
@@ -65,6 +79,7 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
      *
      * @param int $storeId
      * @param string $locale
+     *
      * @return array
      */
     public function getTranslationArray($storeId = null, $locale = null)
@@ -74,7 +89,7 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
         }
         $locale = (string) $locale;
 
-        $data = $this->getAppConfig()->get(
+        $data = $this->appConfig->get(
             Translation::CONFIG_TYPE,
             $locale . '/' . $this->getStoreCode($storeId),
             []
@@ -87,7 +102,9 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
                 ->where('locale = :locale')
                 ->order('store_id');
             $bind = [':locale' => $locale, ':store_id' => $storeId];
-            $dbData = $connection->fetchPairs($select, $bind);
+            $dbData = array_map(function ($value) {
+                return htmlspecialchars_decode($value);
+            }, $connection->fetchPairs($select, $bind));
             $data = array_replace($data, $dbData);
         }
         return $data;
@@ -98,6 +115,7 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
      *
      * @param array $strings
      * @param int|null $storeId
+     *
      * @return array
      */
     public function getTranslationArrayByStrings(array $strings, $storeId = null)
@@ -141,7 +159,7 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
      */
     public function getConnection()
     {
-        if (!$this->getDeployedConfig()->isDbAvailable()) {
+        if (!$this->deployedConfig->isDbAvailable()) {
             return false;
         }
         return parent::getConnection();
@@ -161,34 +179,11 @@ class Translate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb imp
      * Retrieve store code by store id
      *
      * @param int $storeId
+     *
      * @return string
      */
     private function getStoreCode($storeId)
     {
         return $this->scopeResolver->getScope($storeId)->getCode();
-    }
-
-    /**
-     * @deprecated 100.1.2
-     * @return DeploymentConfig
-     */
-    private function getDeployedConfig()
-    {
-        if ($this->deployedConfig === null) {
-            $this->deployedConfig = ObjectManager::getInstance()->get(DeploymentConfig::class);
-        }
-        return $this->deployedConfig;
-    }
-
-    /**
-     * @deprecated 100.1.2
-     * @return Config
-     */
-    private function getAppConfig()
-    {
-        if ($this->appConfig === null) {
-            $this->appConfig = ObjectManager::getInstance()->get(Config::class);
-        }
-        return $this->appConfig;
     }
 }

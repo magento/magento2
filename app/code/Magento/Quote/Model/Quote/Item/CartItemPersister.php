@@ -3,16 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Quote\Model\Quote\Item;
 
-use Magento\Quote\Api\Data\CartInterface;
-use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Api\Data\CartItemInterface;
 
+/**
+ * Cart item save handler
+ */
 class CartItemPersister
 {
     /**
@@ -38,6 +42,8 @@ class CartItemPersister
     }
 
     /**
+     * Save cart item into cart
+     *
      * @param CartInterface $quote
      * @param CartItemInterface $item
      * @return CartItemInterface
@@ -62,22 +68,25 @@ class CartItemPersister
                 $currentItem = $quote->getItemById($itemId);
                 if (!$currentItem) {
                     throw new NoSuchEntityException(
-                        __('Cart %1 does not contain item %2', $cartId, $itemId)
+                        __('The %1 Cart doesn\'t contain the %2 item.', $cartId, $itemId)
                     );
                 }
                 $productType = $currentItem->getProduct()->getTypeId();
                 $buyRequestData = $this->cartItemOptionProcessor->getBuyRequest($productType, $item);
                 if (is_object($buyRequestData)) {
                     /** Update item product options */
-                    $item = $quote->updateItem($itemId, $buyRequestData);
+                    if ($quote->getIsActive()) {
+                        $item = $quote->updateItem($itemId, $buyRequestData);
+                    }
                 } else {
                     if ($item->getQty() !== $currentItem->getQty()) {
+                        $currentItem->clearMessage();
                         $currentItem->setQty($qty);
                         /**
                          * Qty validation errors are stored as items message
                          * @see \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator::validate
                          */
-                        if (!empty($currentItem->getMessage())) {
+                        if (!empty($currentItem->getMessage()) && $currentItem->getHasError()) {
                             throw new LocalizedException(__($currentItem->getMessage()));
                         }
                     }
@@ -99,7 +108,7 @@ class CartItemPersister
         } catch (LocalizedException $e) {
             throw $e;
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not save quote'));
+            throw new CouldNotSaveException(__("The quote couldn't be saved."));
         }
         $itemId = $item->getId();
         foreach ($quote->getAllItems() as $quoteItem) {
@@ -109,6 +118,6 @@ class CartItemPersister
                 return $this->cartItemOptionProcessor->applyCustomOptions($item);
             }
         }
-        throw new CouldNotSaveException(__('Could not save quote'));
+        throw new CouldNotSaveException(__("The quote couldn't be saved."));
     }
 }

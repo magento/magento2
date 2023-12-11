@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="InlineTranslationModeCheckoutSection">
+        <!-- Shipping Step -->
+        <element name="progressBarActive" type="text" selector=".opc-progress-bar ._active span"/>
+        <element name="stepTitleShipping" type="text" selector="#shipping div.step-title"/>
+        <element name="buttonShippingHere" type="button" selector="div.shipping-address-item.not-selected-item button.action-select-shipping-item span"/>
+        <element name="buttonNewAddress" type="button" selector=".new-address-popup button span"/>
+        <element name="titleShippingMethod" type="text" selector=".checkout-shipping-method .step-title"/>
+        <element name="buttonNext" type="button" selector="#shipping-method-buttons-container button.primary span"/>
+        <!-- Step Review & Payments -->
+        <element name="titlePayment" type="text" selector=".payment-group .step-title"/>
+        <element name="checkboxSameBillingAddress" type="text" selector=".billing-address-same-as-shipping-block span"/>
+        <element name="buttonPlaceOrder" type="text" selector=".actions-toolbar button.checkout span"/>
+        <element name="textApplyDiscountCode" type="text" selector="#block-discount-heading span"/>
+        <!-- Sidebar "Order Summary" -->
+        <element name="titleOrderSummary" type="text" selector=".opc-block-summary span.title"/>
+        <element name="itemsInCartText" type="text" selector=".items-in-cart strong span:nth-of-type(2)"/>
+        <element name="textCartSubtotal" type="text" selector=".totals.sub th.mark"/>
+        <element name="textShippingTotal" type="text" selector=".totals.shipping span.label"/>
+        <element name="textOrderTotal" type="text" selector=".grand.totals th strong"/>
+        <element name="titleShipTo" type="text" selector=".ship-to>.shipping-information-title>span"/>
+        <element name="titleShopVia" type="text" selector=".ship-via>.shipping-information-title>span"/>
+    </section>
+</sections>

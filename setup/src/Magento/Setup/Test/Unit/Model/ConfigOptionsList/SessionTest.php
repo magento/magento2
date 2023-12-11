@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model\ConfigOptionsList;
 
-use Magento\Setup\Model\ConfigOptionsList\Session as SessionConfigOptionsList;
-use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Setup\Option\SelectConfigOption;
+use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Setup\Model\ConfigOptionsList\Session as SessionConfigOptionsList;
+use PHPUnit\Framework\TestCase;
 
-class SessionTest extends \PHPUnit\Framework\TestCase
+class SessionTest extends TestCase
 {
     /**
      * @var \Magento\Setup\Model\ConfigOptionsList\Session
@@ -18,21 +22,21 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     private $configList;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig
+     * @var DeploymentConfig
      */
     private $deploymentConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configList = new SessionConfigOptionsList();
 
-        $this->deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
     }
 
     public function testGetOptions()
     {
         $options = $this->configList->getOptions();
-        $this->assertCount(19, $options);
+        $this->assertCount(23, $options);
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);
@@ -114,7 +118,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     public function testCreateConfig()
     {
         $configData = $this->configList->createConfig([], $this->deploymentConfigMock);
-        $this->assertInstanceOf(\Magento\Framework\Config\Data\ConfigData::class, $configData);
+        $this->assertInstanceOf(ConfigData::class, $configData);
     }
 
     public function testCreateConfigWithSessionSaveFiles()
@@ -156,7 +160,11 @@ class SessionTest extends \PHPUnit\Framework\TestCase
                     'bot_lifetime' => '',
                     'disable_locking' => '',
                     'min_lifetime' => '',
-                    'max_lifetime' => ''
+                    'max_lifetime' => '',
+                    'sentinel_master' => '',
+                    'sentinel_servers' => '',
+                    'sentinel_connect_retries' => '',
+                    'sentinel_verify_master' => '',
                 ]
 
             ]
@@ -209,7 +217,11 @@ class SessionTest extends \PHPUnit\Framework\TestCase
                     'bot_lifetime' => '',
                     'disable_locking' => '',
                     'min_lifetime' => '60',
-                    'max_lifetime' => '3600'
+                    'max_lifetime' => '3600',
+                    'sentinel_master' => '',
+                    'sentinel_servers' => '',
+                    'sentinel_connect_retries' => '',
+                    'sentinel_verify_master' => '',
                 ]
             ],
 
@@ -262,6 +274,9 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($errorMessage, $errors[0]);
     }
 
+    /**
+     * @return array
+     */
     public function redisOptionProvider()
     {
         return [
@@ -286,6 +301,9 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function invalidOptionsProvider()
     {
         return [

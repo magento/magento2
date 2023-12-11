@@ -3,13 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin;
+
+use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item;
 
 class IncompatibleArgumentsCount
 {
     /**
-     * @param \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item $subject
+     * @param Item $subject
      * @param string $name
      * @param string $surname
      * @return string
@@ -17,7 +20,7 @@ class IncompatibleArgumentsCount
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeGetItem(
-        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item $subject,
+        Item $subject,
         $name,
         $surname
     ) {

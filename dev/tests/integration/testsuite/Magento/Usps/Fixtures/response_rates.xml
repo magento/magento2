@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<IntlRateV2Response>
+    <Package>
+        <Service ID="12">
+            <Pounds>3</Pounds>
+            <Ounces>0</Ounces>
+            <Postage>80.45</Postage>
+            <ExtraServices>
+                <ExtraService>
+                    <Available>True</Available>
+                </ExtraService>
+            </ExtraServices>
+            <SvcDescription>USPS GXG&amp;lt;sup&amp;gt;&amp;#8482;&amp;lt;/sup&amp;gt; Envelopes</SvcDescription>
+        </Service>
+        <Service ID="1">
+            <Pounds>3</Pounds>
+            <Ounces>0</Ounces>
+            <Postage>54.25</Postage>
+            <ExtraServices>
+                <ExtraService>
+                    <Available>True</Available>
+                </ExtraService>
+            </ExtraServices>
+            <SvcDescription>Priority Mail Express International&amp;lt;sup&amp;gt;&amp;#8482;&amp;lt;/sup&amp;gt;</SvcDescription>
+        </Service>
+        <Service ID="10">
+            <Pounds>3</Pounds>
+            <Ounces>0</Ounces>
+            <Postage>41.50</Postage>
+            <ExtraServices>
+                <ExtraService>
+                    <ServiceID>1</ServiceID>
+                    <Available>True</Available>
+                </ExtraService>
+            </ExtraServices>
+            <SvcDescription>Priority Mail Express International&amp;lt;sup&amp;gt;&amp;#8482;&amp;lt;/sup&amp;gt; Flat Rate Envelope</SvcDescription>
+        </Service>
+        <Service ID="11">
+            <Pounds>3</Pounds>
+            <Ounces>0</Ounces>
+            <Postage>59.95</Postage>
+            <ExtraServices>
+                <ExtraService>
+                    <Available>True</Available>
+                </ExtraService>
+                <ExtraService>
+                    <Available>True</Available>
+                </ExtraService>
+            </ExtraServices>
+            <SvcDescription>Priority Mail International&amp;lt;sup&amp;gt;&amp;#174;&amp;lt;/sup&amp;gt; Large Flat Rate Box</SvcDescription>
+        </Service>
+        <Service ID="15">
+            <Pounds>3</Pounds>
+            <Ounces>0</Ounces>
+            <Postage>24.50</Postage>
+            <ExtraServices>
+                <ExtraService>
+                    <Available>False</Available>
+                </ExtraService>
+                <ExtraService>
+                    <Available>True</Available>
+                </ExtraService>
+            </ExtraServices>
+            <SvcDescription>First-Class Package International Service&amp;lt;sup&amp;gt;&amp;#8482;&amp;lt;/sup&amp;gt;</SvcDescription>
+        </Service>
+        <Service ID="2">
+            <Pounds>3</Pounds>
+            <Ounces>0</Ounces>
+            <Postage>0.00</Postage>
+            <ExtraServices>
+                <ExtraService>
+                    <Available>False</Available>
+                </ExtraService>
+            </ExtraServices>
+        </Service>
+    </Package>
+</IntlRateV2Response>

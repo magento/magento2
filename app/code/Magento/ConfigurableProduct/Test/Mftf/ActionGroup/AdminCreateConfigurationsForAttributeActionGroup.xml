@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateConfigurationsForAttributeActionGroup" extends="GenerateConfigurationsByAttributeCodeActionGroup">
+        <annotations>
+            <description>EXTENDS: generateConfigurationsByAttributeCode. Click to apply single price to all Skus. Enter Attribute price</description>
+        </annotations>
+        <arguments>
+            <argument name="price" type="string" defaultValue="100"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" after="clickOnNextButton2" stepKey="waitForNextPageOpened2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" after="waitForNextPageOpened2" stepKey="clickOnApplySinglePriceToAllSkus"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.singlePrice}}" userInput="{{price}}" before="clickOnApplySingleQuantityToEachSku" stepKey="enterAttributePrice"/>
+    </actionGroup>
+</actionGroups>

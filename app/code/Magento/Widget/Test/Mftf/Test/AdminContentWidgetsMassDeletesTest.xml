@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminContentWidgetsMassDeletesTest">
+        <annotations>
+            <features value="Widget"/>
+            <stories value="Widget mass delete"/>
+            <title value="Admin mass delete widgets in grid"/>
+            <description value="Admin select widgets in grid and try to mass delete action, will show pop-up with confirm action"/>
+            <severity value="MAJOR"/>
+            <group value="widget"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentWidgetsPageFirst">
+            <argument name="menuUiId" value="{{AdminMenuContent.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuContentElementsWidgets.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitleFirst">
+            <argument name="title" value="{{AdminMenuContentElementsWidgets.pageTitle}}"/>
+        </actionGroup>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear1"/>
+        <actionGroup ref="AdminCreateAndSaveWidgetActionGroup" stepKey="addWidgetForTest1">
+            <argument name="widget" value="ProductsListWidget"/>
+        </actionGroup>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear2"/>
+        <actionGroup ref="AdminCreateAndSaveWidgetActionGroup" stepKey="addWidgetForTest2">
+            <argument name="widget" value="ProductsListWidget"/>
+        </actionGroup>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear4"/>
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentWidgetsPageSecond">
+            <argument name="menuUiId" value="{{AdminMenuContent.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuContentElementsWidgets.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitleSecond">
+            <argument name="title" value="{{AdminMenuContentElementsWidgets.pageTitle}}"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <actionGroup ref="AdminMassDeleteWidgetActionGroup" stepKey="massWidgetDelete">
+            <argument name="row" value="1"/>
+        </actionGroup>
+    </test>
+</tests>
+

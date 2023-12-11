@@ -72,9 +72,20 @@ class FilterProcessor implements CollectionProcessorInterface
             if (!$isApplied) {
                 $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
                 $fields[] = $this->getFieldMapping($filter->getField());
+
+                if ($condition === 'fulltext') {
+                    // NOTE: This is not a fulltext search, but the best way to search something when
+                    // a SearchCriteria with "fulltext" condition is provided over a MySQL table
+                    // (see https://github.com/magento-engcom/msi/issues/1221)
+                    $condition = 'like';
+                    $filter->setValue('%' . $filter->getValue() . '%');
+                }
+
                 $conditions[] = [$condition => $filter->getValue()];
             }
         }
+
+        $this->checkFromTo($fields, $conditions);
 
         if ($fields) {
             $collection->addFieldToFilter($fields, $conditions);
@@ -114,6 +125,28 @@ class FilterProcessor implements CollectionProcessorInterface
      */
     private function getFieldMapping($field)
     {
-        return isset($this->fieldMapping[$field]) ? $this->fieldMapping[$field] : $field;
+        return $this->fieldMapping[$field] ?? $field;
+    }
+
+    /**
+     * Check filtergoup for type from & to
+     *
+     * @param string[] $fields
+     * @param array<string[]> $conditions
+     * @return void
+     */
+    private function checkFromTo(&$fields, &$conditions)
+    {
+        $_fields = array_unique($fields);
+        $_conditions = [];
+        foreach ($conditions as $condition) {
+            $_conditions[array_key_first($condition)] = reset($condition);
+        }
+        if ((count($_fields) == 1) && (count($_conditions) == 2)
+            && isset($_conditions['from']) && isset($_conditions['to'])
+        ) {
+            $fields = $_fields;
+            $conditions = [$_conditions];
+        }
     }
 }

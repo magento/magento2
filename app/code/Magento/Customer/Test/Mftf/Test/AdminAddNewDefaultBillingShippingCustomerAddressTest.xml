@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddNewDefaultBillingShippingCustomerAddressTest">
+        <annotations>
+            <stories value="Add new default billing/shipping customer address"/>
+            <title value="DEPRECATED. Add new default billing/shipping customer address"/>
+            <description value="Add new default billing/shipping customer address on customer addresses tab"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MAGETWO-94814"/>
+            <group value="customer"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminAddNewDefaultBillingAndShippingCustomerAddressTest instead</issueId>
+            </skip>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer_Multiple_Addresses_No_Default_Address" stepKey="customer"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- -
+        Step1. Login to admin and go to Customers > All Customers.
+        Step2. On *Customers* page choose customer from preconditions and open it to edit
+        Step3. Open *Addresses* tab on edit customer page and press *Add New Address* button
+        <!- -->
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGridPage"/>
+        <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPage">
+            <argument name="customer" value="Simple_US_Customer_Multiple_Addresses_No_Default_Address"/>
+        </actionGroup>
+        <click selector="{{AdminEditCustomerInformationSection.addresses}}" stepKey="openAddressesTab"/>
+        <waitForPageLoad stepKey="waitForAddresses"/>
+        <conditionalClick selector="{{AdminCustomerAddressFiltersSection.clearAll}}" dependentSelector="{{AdminCustomerAddressFiltersSection.clearAll}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+        <seeElement selector="{{AdminCustomerAddressesDefaultBillingSection.address}}" stepKey="seeDefaultBillingAddressSectionBeforeChangingDefaultAddress"/>
+        <see userInput="The customer does not have default billing address" selector="{{AdminCustomerAddressesDefaultBillingSection.address}}" stepKey="assertThereIsNoDefaultBillingAddressSet"/>
+        <seeElement selector="{{AdminCustomerAddressesDefaultShippingSection.address}}" stepKey="seeDefaultShippingAddressSectionBeforeChangingDefaultAddress"/>
+        <see userInput="The customer does not have default shipping address" selector="{{AdminCustomerAddressesDefaultShippingSection.address}}" stepKey="assertThereIsNoDefaultShippingAddressSet"/>
+        <click selector="{{AdminCustomerAddressesSection.addNewAddress}}" stepKey="clickAddNewAddressButton"/>
+        <waitForPageLoad stepKey="waitForAddUpdateCustomerAddressForm"/>
+        <!--Step4. Fill all the fields with test data and press *Save* button-->
+        <click selector="{{AdminCustomerAddressesSection.defaultBillingAddress}}" stepKey="enableDefaultBillingAddress"/>
+        <click selector="{{AdminCustomerAddressesSection.defaultShippingAddress}}" stepKey="enableDefaultShippingAddress"/>
+        <fillField userInput="{{US_Address_TX.firstname}}" selector="{{AdminCustomerAddressesSection.firstNameForAddress}}" stepKey="fillFirstName"/>
+        <fillField userInput="{{US_Address_TX.lastname}}" selector="{{AdminCustomerAddressesSection.lastNameForAddress}}" stepKey="fillLastName"/>
+        <fillField userInput="{{US_Address_TX.company}}" selector="{{AdminCustomerAddressesSection.company}}" stepKey="fillCompany"/>
+        <fillField userInput="{{US_Address_TX.street[0]}}" selector="{{AdminCustomerAddressesSection.streetAddress}}" stepKey="fillStreet"/>
+        <fillField userInput="{{US_Address_TX.city}}" selector="{{AdminCustomerAddressesSection.city}}" stepKey="fillCity"/>
+        <click selector="{{AdminCustomerAddressesSection.country}}" stepKey="clickCountryToOpenListOfCountries"/>
+        <click selector="{{AdminCustomerAddressesSection.countryId(US_Address_TX.country_id)}}" stepKey="fillCountry"/>
+        <fillField userInput="{{US_Address_TX.postcode}}" selector="{{AdminCustomerAddressesSection.zip}}" stepKey="fillPostcode"/>
+        <fillField userInput="{{US_Address_TX.telephone}}" selector="{{AdminCustomerAddressesSection.phoneNumber}}" stepKey="fillTelephone"/>
+        <click selector="{{AdminCustomerAddressesSection.region}}" stepKey="clickRegionToOpenListOfRegions"/>
+        <click selector="{{AdminCustomerAddressesSection.regionId(US_Address_TX.state)}}" stepKey="fillRegion"/>
+        <click selector="{{AdminCustomerAddressesSection.saveAddress}}" stepKey="clickSaveCustomerAddressOnAddUpdateAddressForm"/>
+        <waitForPageLoad stepKey="waitForNewAddressIsCreated"/>
+        <see userInput="{{US_Address_TX.street[0]}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="assertDefaultBillingAddressIsChanged"/>
+        <see userInput="{{US_Address_TX.street[0]}}" selector="{{AdminCustomerAddressesDefaultShippingSection.addressDetails}}" stepKey="assertDefaultShippingAddressIsChanged"/>
+        <click selector="{{AdminCustomerAddressesDefaultBillingSection.editButton}}" stepKey="clickEditDefaultBillingAddress"/>
+        <waitForPageLoad stepKey="waitForCustomerAddressAddUpdateFormLoad"/>
+        <assertElementContainsAttribute stepKey="assertDefaultBillingIsEnabledCustomerAddressAddUpdateForm">
+			<expectedResult selector="{{AdminCustomerAddressesSection.defaultBillingAddressCheckBox}}" attribute="value" type="string">1</expectedResult>
+        </assertElementContainsAttribute>
+        <assertElementContainsAttribute stepKey="assertDefaultShippingIsEnabledOnCustomerAddressAddUpdateForm">
+			<expectedResult selector="{{AdminCustomerAddressesSection.defaultShippingAddressCheckBox}}" attribute="value" type="string">1</expectedResult>
+        </assertElementContainsAttribute>
+    </test>
+</tests>

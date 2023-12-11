@@ -200,6 +200,6 @@ class Generic implements LayoutInterface
      */
     protected function getConfig($name)
     {
-        return isset($this->data['config'][$name]) ? $this->data['config'][$name] : null;
+        return $this->data['config'][$name] ?? null;
     }
 }

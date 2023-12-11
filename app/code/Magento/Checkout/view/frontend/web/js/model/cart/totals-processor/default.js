@@ -38,7 +38,7 @@ define([
             payload.addressInformation['shipping_carrier_code'] = quote.shippingMethod()['carrier_code'];
         }
 
-        storage.post(
+        return storage.post(
             serviceUrl, JSON.stringify(payload), false
         ).done(function (result) {
             var data = {
@@ -77,27 +77,7 @@ define([
          * @param {Object} address
          */
         estimateTotals: function (address) {
-            var data = {
-                shippingMethodCode: null,
-                shippingCarrierCode: null
-            };
-
-            if (quote.shippingMethod() && quote.shippingMethod()['method_code']) {
-                data.shippingMethodCode = quote.shippingMethod()['method_code'];
-                data.shippingCarrierCode = quote.shippingMethod()['carrier_code'];
-            }
-
-            if (!cartCache.isChanged('cartVersion', customerData.get('cart')()['data_id']) &&
-                !cartCache.isChanged('shippingMethodCode', data.shippingMethodCode) &&
-                !cartCache.isChanged('shippingCarrierCode', data.shippingCarrierCode) &&
-                !cartCache.isChanged('address', address) &&
-                cartCache.get('totals') &&
-                !cartCache.isChanged('subtotal', parseFloat(quote.totals().subtotal))
-            ) {
-                quote.setTotals(cartCache.get('totals'));
-            } else {
-                loadFromServer(address);
-            }
+            return loadFromServer(address);
         }
     };
 });

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderWithBundleProductTest">
+        <annotations>
+            <title value="Create Order in Admin and update bundle product configuration"/>
+            <stories value="MAGETWO-96488: Wrong price calculation for bundle product on creating order from the admin panel"/>
+            <description value="Add bundle product with bundle option items with default quantity 2 to order in Admin and check price in product grid"/>
+            <features value="Sales"/>
+            <severity value="AVERAGE"/>
+            <group value="Sales"/>
+        </annotations>
+
+        <before>
+            <!--Set default flat rate shipping method settings-->
+            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+
+            <!--Create simple customer-->
+            <createData entity="Simple_US_Customer_CA" stepKey="simpleCustomer"/>
+
+            <!--Create simple product 1-->
+            <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
+
+            <!--Create simple product 2-->
+            <createData entity="ApiProductWithDescription" stepKey="simple2" before="product"/>
+
+            <!--Create bundle product with checkbox bundle option-->
+            <createData entity="ApiBundleProduct" stepKey="product"/>
+            <createData entity="CheckboxOption" stepKey="checkboxBundleOption">
+                <requiredEntity createDataKey="product"/>
+            </createData>
+
+            <!--Link simple product 1 to bundle option with default quantity 2-->
+            <createData entity="ApiBundleLink" stepKey="createBundleLink1">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="checkboxBundleOption"/>
+                <requiredEntity createDataKey="simple1"/>
+                <field key="qty">2</field>
+                <field key="is_default">1</field>
+            </createData>
+
+            <!--Link simple product 2 to bundle option with default quantity 2-->
+            <createData entity="ApiBundleLink" stepKey="createBundleLink2">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="checkboxBundleOption"/>
+                <requiredEntity createDataKey="simple2"/>
+                <field key="qty">2</field>
+                <field key="is_default">1</field>
+            </createData>
+
+            <!--Add drop-down bundle option-->
+            <createData entity="DropDownBundleOption" stepKey="dropDownBundleOption">
+                <requiredEntity createDataKey="product"/>
+            </createData>
+
+            <!--Link simple product 1 to drop-down bundle option with default quantity 2-->
+            <createData entity="ApiBundleLink" stepKey="createBundleLink3">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="dropDownBundleOption"/>
+                <requiredEntity createDataKey="simple1"/>
+                <field key="qty">2</field>
+                <field key="is_default">1</field>
+            </createData>
+
+            <!--Link simple product 2 to drop-down bundle option with default quantity 2-->
+            <createData entity="ApiBundleLink" stepKey="createBundleLink4">
+                <requiredEntity createDataKey="product"/>
+                <requiredEntity createDataKey="dropDownBundleOption"/>
+                <requiredEntity createDataKey="simple2"/>
+                <field key="qty">2</field>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <!--Create new customer order-->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+
+        <!--Add bundle product to order and check product price in grid-->
+        <actionGroup ref="AddBundleProductToOrderAndCheckPriceInGridActionGroup" stepKey="addBundleProductToOrder">
+            <argument name="product" value="$$product$$"/>
+            <argument name="quantity" value="1"/>
+            <argument name="price" value="$738.00"/>
+        </actionGroup>
+
+        <!--Select FlatRate shipping method-->
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
+
+        <!--Verify order information-->
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
+
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <deleteData createDataKey="product" stepKey="delete"/>
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+            <deleteData createDataKey="simple1" stepKey="deleteSimple1" before="deleteSimple2"/>
+            <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="delete"/>
+        </after>
+    </test>
+</tests>

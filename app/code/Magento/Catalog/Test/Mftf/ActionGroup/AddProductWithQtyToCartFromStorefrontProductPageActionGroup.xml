@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" extends="AddToCartFromStorefrontProductPageActionGroup">
+        <annotations>
+            <description>EXTENDS: addToCartFromStorefrontProductPage. Fills in the provided Product Quantity for the provided Product Name.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="productQty" type="string"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{StorefrontProductActionSection.quantity}}" stepKey="waitForProductQuantity" before="fillProductQuantity"/>
+        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="{{productQty}}" stepKey="fillProductQuantity" before="waitForAddToCartButtonToRemoveDisabledState"/>
+    </actionGroup>
+</actionGroups>

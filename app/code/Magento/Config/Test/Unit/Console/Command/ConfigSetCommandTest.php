@@ -3,17 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Console\Command;
 
-use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacade;
+use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
+use Magento\Config\Console\Command\LocaleEmulatorInterface;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\ValidatorException;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -21,7 +26,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  *
  * @see ConfigSetCommand
  */
-class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
+class ConfigSetCommandTest extends TestCase
 {
     /**
      * @var ConfigSetCommand
@@ -54,9 +59,14 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
     private $processorFacadeMock;
 
     /**
+     * @var LocaleEmulatorInterface|MockObject
+     */
+    private $localeEmulatorMock;
+
+    /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->emulatedAreProcessorMock = $this->getMockBuilder(EmulatedAdminhtmlAreaProcessor::class)
             ->disableOriginalConstructor()
@@ -73,12 +83,15 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->localeEmulatorMock = $this->getMockBuilder(LocaleEmulatorInterface::class)
+            ->getMockForAbstractClass();
 
         $this->command = new ConfigSetCommand(
             $this->emulatedAreProcessorMock,
             $this->changeDetectorMock,
             $this->processorFacadeFactoryMock,
-            $this->deploymentConfigMock
+            $this->deploymentConfigMock,
+            $this->localeEmulatorMock
         );
     }
 
@@ -94,12 +107,17 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->processorFacadeMock);
         $this->processorFacadeMock->expects($this->once())
-            ->method('process')
+            ->method('processWithLockTarget')
             ->willReturn('Some message');
         $this->emulatedAreProcessorMock->expects($this->once())
             ->method('process')
             ->willReturnCallback(function ($function) {
                 return $function();
+            });
+        $this->localeEmulatorMock->expects($this->once())
+            ->method('emulate')
+            ->willReturnCallback(function ($callback) {
+                return $callback();
             });
 
         $tester = new CommandTester($this->command);
@@ -108,7 +126,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ConfigSetCommand::ARG_VALUE => 'value'
         ]);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             __('Some message')->render(),
             $tester->getDisplay()
         );
@@ -129,7 +147,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ConfigSetCommand::ARG_VALUE => 'value'
         ]);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             __('You cannot run this command because the Magento application is not installed.')->render(),
             $tester->getDisplay()
         );
@@ -153,7 +171,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ConfigSetCommand::ARG_VALUE => 'value'
         ]);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             __('This command is unavailable right now.')->render(),
             $tester->getDisplay()
         );
@@ -178,7 +196,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ConfigSetCommand::ARG_VALUE => 'value'
         ]);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             __('The "test/test/test" path does not exists')->render(),
             $tester->getDisplay()
         );

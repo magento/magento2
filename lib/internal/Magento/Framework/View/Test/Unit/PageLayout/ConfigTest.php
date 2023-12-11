@@ -3,36 +3,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\PageLayout;
+
+use Magento\Framework\Config\Dom;
+use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\Config\DomFactory;
+use Magento\Framework\Config\ValidationStateInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\PageLayout\Config;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Page layouts configuration
  */
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\PageLayout\Config
+     * @var Config
      */
     protected $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        $urnResolverMock = $this->createMock(\Magento\Framework\Config\Dom\UrnResolver::class);
+        $urnResolver = new UrnResolver();
+        $urnResolverMock = $this->createMock(UrnResolver::class);
         $urnResolverMock->expects($this->once())
             ->method('getRealPath')
             ->with('urn:magento:framework:View/PageLayout/etc/layouts.xsd')
             ->willReturn($urnResolver->getRealPath('urn:magento:framework:View/PageLayout/etc/layouts.xsd'));
-        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationStateMock = $this->getMockForAbstractClass(ValidationStateInterface::class);
         $validationStateMock->method('isValidationRequired')
             ->willReturn(true);
-        $domFactoryMock = $this->createMock(\Magento\Framework\Config\DomFactory::class);
+        $domFactoryMock = $this->createMock(DomFactory::class);
         $domFactoryMock->expects($this->once())
             ->method('createDom')
             ->willReturnCallback(
                 function ($arguments) use ($validationStateMock) {
                     // @codingStandardsIgnoreStart
-                    return new \Magento\Framework\Config\Dom(
+                    return new Dom(
                         '<?xml version="1.0" encoding="UTF-8"?>'
                             . '<page_layouts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"></page_layouts>',
                         $validationStateMock,
@@ -43,9 +53,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                     // @codingStandardsIgnoreEnd
                 }
             );
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->config = $objectManagerHelper->getObject(
-            \Magento\Framework\View\PageLayout\Config::class,
+            Config::class,
             [
                 'urnResolver' => $urnResolverMock,
                 'configFiles' => [
@@ -64,8 +74,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testHasPageLayout()
     {
-        $this->assertEquals(true, $this->config->hasPageLayout('one'));
-        $this->assertEquals(false, $this->config->hasPageLayout('three'));
+        $this->assertTrue($this->config->hasPageLayout('one'));
+        $this->assertFalse($this->config->hasPageLayout('three'));
     }
 
     public function testGetOptions()

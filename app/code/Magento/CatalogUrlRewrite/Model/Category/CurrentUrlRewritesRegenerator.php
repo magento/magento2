@@ -27,13 +27,13 @@ class CurrentUrlRewritesRegenerator
 
     /**
      * @var \Magento\Catalog\Model\Category
-     * @deprecated 100.1.4
+     * @deprecated 100.1.0
      */
     protected $category;
 
     /**
      * @var \Magento\UrlRewrite\Model\UrlFinderInterface
-     * @deprecated 100.1.4
+     * @deprecated 100.1.0
      */
     protected $urlFinder;
 

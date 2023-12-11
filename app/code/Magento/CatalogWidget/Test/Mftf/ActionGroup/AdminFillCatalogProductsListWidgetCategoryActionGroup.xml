@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillCatalogProductsListWidgetCategoryActionGroup">
+        <annotations>
+            <description>Fill catalog products list widget category.</description>
+        </annotations>
+
+        <arguments>
+            <argument name="categoryName" type="string" defaultValue="{{_defaultCategory.name}}"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{WidgetSection.AddParam}}" stepKey="waitForAddParamElement"/>
+        <click selector="{{WidgetSection.AddParam}}" stepKey="clickOnAddParamElement"/>
+        <waitForElementVisible selector="{{WidgetSection.ConditionsDropdown}}" stepKey="waitForConditionsDropdownVisible"/>
+        <selectOption selector="{{WidgetSection.ConditionsDropdown}}" userInput="Category" stepKey="selectCategoryAsCondition"/>
+        <waitForElementVisible selector="{{WidgetSection.RuleParam}}" stepKey="waitForRuleParamElementVisible"/>
+        <click selector="{{WidgetSection.RuleParam}}" stepKey="clickToAddRuleParam"/>
+        <click selector="{{WidgetSection.Chooser}}" stepKey="clickToSelectFromList"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterSelectingRuleParam"/>
+        <waitForElementVisible selector="{{WidgetSection.CreateCategory(categoryName)}}" stepKey="waitForCategoryElementVisible"/>
+        <click selector="{{WidgetSection.CreateCategory(categoryName)}}" stepKey="selectCategoryFromArguments"/>
+        <click selector="{{AdminNewWidgetSection.applyParameter}}" stepKey="clickApplyButton"/>
+        <waitForElementNotVisible selector="{{InsertWidgetSection.categoryTreeWrapper}}" stepKey="waitForCategoryTreeIsNotVisible"/>
+    </actionGroup>
+</actionGroups>

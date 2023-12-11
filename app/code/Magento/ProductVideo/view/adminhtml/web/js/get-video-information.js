@@ -86,6 +86,7 @@ define([
                 this._height = this.element.data('height');
                 this._autoplay = !!this.element.data('autoplay');
                 this._playing = this._autoplay || false;
+                this.useYoutubeNocookie = this.element.data('youtubenocookie') || false;
 
                 this._responsive = this.element.data('responsive') !== false;
 
@@ -128,7 +129,9 @@ define([
              * Abstract destroying command
              */
             destroy: function () {
-                this._player.destroy();
+                if (this._player) {
+                    this._player.destroy();
+                }
             },
 
             /**
@@ -154,7 +157,7 @@ define([
 
                 this._initialize();
 
-                this.element.append('<div/>');
+                this.element.append('<div></div>');
 
                 this._on(window, {
 
@@ -163,6 +166,12 @@ define([
                      * @private
                      */
                     'youtubeapiready': function () {
+                        var host = 'https://www.youtube.com';
+
+                        if (self.useYoutubeNocookie) {
+                            host = 'https://www.youtube-nocookie.com';
+                        }
+
                         if (self._player !== undefined) {
                             return;
                         }
@@ -177,6 +186,7 @@ define([
                             width: self._width,
                             videoId: self._code,
                             playerVars: self._params,
+                            host: host,
                             events: {
 
                                 /**
@@ -279,8 +289,11 @@ define([
              * @private
              */
             destroy: function () {
-                this.stop();
-                this._player.destroy();
+                if (this._player) {
+                    this.stop();
+                    this._player.destroy();
+                    this._player = undefined;
+                }
             }
         });
 
@@ -308,7 +321,7 @@ define([
                     timestamp +
                     additionalParams;
                 this.element.append(
-                    $('<iframe/>')
+                    $('<iframe></iframe>')
                         .attr('frameborder', 0)
                         .attr('id', 'vimeo' + this._code + timestamp)
                         .attr('width', this._width)
@@ -469,7 +482,8 @@ define([
                         description: tmp.snippet.description,
                         thumbnail: tmp.snippet.thumbnails.high.url,
                         videoId: videoInfo.id,
-                        videoProvider: videoInfo.type
+                        videoProvider: videoInfo.type,
+                        useYoutubeNocookie: videoInfo.useYoutubeNocookie
                     };
                     this._videoInformation = respData;
                     this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, respData);
@@ -481,28 +495,40 @@ define([
                  */
                 function _onVimeoLoaded(data) {
                     var tmp,
-                        respData;
+                        respData,
+                        videoDescription = '';
 
-                    if (data.length < 1) {
+                    if (!data) {
                         this._onRequestError($.mage.__('Video not found'));
 
                         return null;
                     }
-                    tmp = data[0];
-                    respData = {
-                        duration: this._formatVimeoDuration(tmp.duration),
-                        channel: tmp['user_name'],
-                        channelId: tmp['user_url'],
-                        uploaded: tmp['upload_date'],
-                        title: tmp.title,
-                        description: tmp.description.replace(/(&nbsp;|<([^>]+)>)/ig, ''),
-                        thumbnail: tmp['thumbnail_large'],
-                        videoId: videoInfo.id,
-                        videoProvider: videoInfo.type
-                    };
-                    this._videoInformation = respData;
-                    this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, respData);
-                    this.element.trigger(this._FINISH_UPDATE_INFORMATION_TRIGGER, true);
+                    tmp = data;
+
+                    if (tmp.description !== null) {
+                        videoDescription = tmp.description;
+                    }
+
+                    if (tmp.duration == null) {
+                        this._onRequestError(
+                            $.mage.__('Because of its privacy settings, this video cannot be played here.')
+                        );
+                    } else {
+                        respData = {
+                            duration: this._formatVimeoDuration(tmp.duration),
+                            channel: tmp['author_name'],
+                            channelId: tmp['author_url'],
+                            uploaded: tmp['upload_date'],
+                            title: tmp.title,
+                            description: videoDescription.replace(/(&nbsp;|<([^>]+)>)/ig, ''),
+                            thumbnail: tmp['thumbnail_url'],
+                            videoId: videoInfo.id,
+                            videoProvider: videoInfo.type
+                        };
+                        this._videoInformation = respData;
+                        this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, respData);
+                        this.element.trigger(this._FINISH_UPDATE_INFORMATION_TRIGGER, true);
+                    }
                 }
 
                 type = videoInfo.type;
@@ -511,7 +537,7 @@ define([
                 if (type === 'youtube') {
                     googleapisUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' +
                         id +
-                        '&part=snippet,contentDetails,statistics,status&key=' +
+                        '&part=snippet,contentDetails&key=' +
                         this.options.youtubeKey + '&alt=json&callback=?';
                     $.getJSON(googleapisUrl,
                         {
@@ -525,10 +551,11 @@ define([
                     );
                 } else if (type === 'vimeo') {
                     $.ajax({
-                        url: 'https://www.vimeo.com/api/v2/video/' + id + '.json',
+                        url: 'https://vimeo.com/api/oembed.json',
                         dataType: 'jsonp',
                         data: {
-                            format: 'json'
+                            format: 'json',
+                            url: 'https://vimeo.com/' + id
                         },
                         timeout: 5000,
                         success:  $.proxy(_onVimeoLoaded, self),
@@ -579,7 +606,7 @@ define([
              * @private
              */
             _formatVimeoDuration: function (seconds) {
-                return (new Date(seconds * 1000)).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
+                return new Date(seconds * 1000).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
             },
 
             /**
@@ -600,7 +627,8 @@ define([
                 var id,
                     type,
                     ampersandPosition,
-                    vimeoRegex;
+                    vimeoRegex,
+                    useYoutubeNocookie = false;
 
                 if (typeof href !== 'string') {
                     return href;
@@ -620,9 +648,13 @@ define([
                         id = id.substring(0, ampersandPosition);
                     }
 
-                } else if (href.host.match(/youtube\.com|youtu\.be/)) {
+                } else if (href.host.match(/youtube\.com|youtu\.be|youtube-nocookie.com/)) {
                     id = href.pathname.replace(/^\/(embed\/|v\/)?/, '').replace(/\/.*/, '');
                     type = 'youtube';
+
+                    if (href.host.match(/youtube-nocookie.com/)) {
+                        useYoutubeNocookie = true;
+                    }
                 } else if (href.host.match(/vimeo\.com/)) {
                     type = 'vimeo';
                     vimeoRegex = new RegExp(['https?:\\/\\/(?:www\\.|player\\.)?vimeo.com\\/(?:channels\\/(?:\\w+\\/)',
@@ -640,7 +672,7 @@ define([
                 }
 
                 return id ? {
-                    id: id, type: type, s: href.search.replace(/^\?/, '')
+                    id: id, type: type, s: href.search.replace(/^\?/, ''), useYoutubeNocookie: useYoutubeNocookie
                 } : false;
             }
         });

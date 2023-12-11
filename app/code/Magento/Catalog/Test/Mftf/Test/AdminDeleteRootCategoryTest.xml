@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteRootCategoryTest">
+        <annotations>
+            <stories value="Delete categories"/>
+            <title value="Can delete a root category not assigned to any store"/>
+            <description value="Login as admin and delete a root category not assigned to any store"/>
+            <testCaseId value="MC-6048"/>
+            <severity value="BLOCKER"/>
+            <group value="Catalog"/>
+            <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <createData entity="NewRootCategory" stepKey="rootCategory" />
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Verify Created root Category-->
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandCategoryTree"/>
+        <actionGroup ref="AssertAdminCategoryIsListedInCategoriesTreeActionGroup" stepKey="seeRootCategory">
+            <argument name="categoryName" value="{{NewRootCategory.name}}"/>
+        </actionGroup>
+
+        <!--Delete Root Category-->
+        <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
+
+        <!--Verify Root Category is not listed in backend-->
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage1"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandTheCategoryTree"/>
+        <actionGroup ref="AssertAdminCategoryIsNotListedInCategoriesTreeActionGroup" stepKey="doNotSeeRootCategory">
+            <argument name="categoryName" value="{{NewRootCategory.name}}"/>
+        </actionGroup>
+    </test>
+</tests>

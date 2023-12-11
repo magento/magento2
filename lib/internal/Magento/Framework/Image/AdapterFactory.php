@@ -3,8 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Image;
 
+/**
+ * Factory for Adapters that Image Library is using to process images
+ *
+ * @api
+ */
 class AdapterFactory
 {
     /**
@@ -34,7 +41,7 @@ class AdapterFactory
     ) {
         $this->objectManager = $objectManager;
         $this->config = $config;
-        $this->adapterMap = array_merge($config->getAdapters(), $adapterMap);
+        $this->adapterMap = $adapterMap;
     }
 
     /**
@@ -46,6 +53,7 @@ class AdapterFactory
      */
     public function create($adapterAlias = null)
     {
+        $this->adapterMap = array_merge($this->config->getAdapters(), $this->adapterMap);
         $adapterAlias = !empty($adapterAlias) ? $adapterAlias : $this->config->getAdapterAlias();
         if (empty($adapterAlias)) {
             throw new \InvalidArgumentException('Image adapter is not selected.');

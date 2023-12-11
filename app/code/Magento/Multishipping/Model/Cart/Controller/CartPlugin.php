@@ -3,68 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Multishipping\Model\Cart\Controller;
 
+use Magento\Checkout\Controller\Cart;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Multishipping\Model\Cart\MultishippingClearItemAddress;
+
+/**
+ * Cleans shipping addresses and item assignments after MultiShipping flow
+ */
 class CartPlugin
 {
     /**
-     * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @var MultishippingClearItemAddress
      */
-    private $cartRepository;
+    private $multishippingClearItemAddress;
 
     /**
-     * @var \Magento\Checkout\Model\Session
-     */
-    private $checkoutSession;
-
-    /**
-     * @var \Magento\Customer\Api\AddressRepositoryInterface
-     */
-    private $addressRepository;
-
-    /**
-     * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepository
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
+     * @param MultishippingClearItemAddress $multishippingClearItemAddress
      */
     public function __construct(
-        \Magento\Quote\Api\CartRepositoryInterface $cartRepository,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
+        MultishippingClearItemAddress $multishippingClearItemAddress
     ) {
-        $this->cartRepository = $cartRepository;
-        $this->checkoutSession = $checkoutSession;
-        $this->addressRepository = $addressRepository;
+        $this->multishippingClearItemAddress = $multishippingClearItemAddress;
     }
 
     /**
-     * @param \Magento\Checkout\Controller\Cart $subject
-     * @param \Magento\Framework\App\RequestInterface $request
+     * Cleans shipping addresses and item assignments after MultiShipping flow
+     *
+     * @param Cart $subject
+     * @param RequestInterface $request
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws LocalizedException
      */
-    public function beforeDispatch(
-        \Magento\Checkout\Controller\Cart $subject,
-        \Magento\Framework\App\RequestInterface $request
-    ) {
-        /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->checkoutSession->getQuote();
-
-        // Clear shipping addresses and item assignments after MultiShipping flow
-        if ($quote->isMultipleShippingAddresses()) {
-            foreach ($quote->getAllShippingAddresses() as $address) {
-                $quote->removeAddress($address->getId());
-            }
-
-            $shippingAddress = $quote->getShippingAddress();
-            $defaultShipping = $quote->getCustomer()->getDefaultShipping();
-            if ($defaultShipping) {
-                $defaultCustomerAddress = $this->addressRepository->getById(
-                    $defaultShipping
-                );
-                $shippingAddress->importCustomerAddressData($defaultCustomerAddress);
-            }
-            $this->cartRepository->save($quote);
-        }
+    public function beforeDispatch(Cart $subject, RequestInterface $request)
+    {
+        $this->multishippingClearItemAddress->clearAddressItem($subject, $request);
     }
 }

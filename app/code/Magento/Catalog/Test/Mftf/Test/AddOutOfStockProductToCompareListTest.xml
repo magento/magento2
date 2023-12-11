@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AddOutOfStockProductToCompareListTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product Comparison for products Out of Stock"/>
+            <title value="Add Product that is Out of Stock product to Product Comparison"/>
+            <description value="Customer should be able to add Product that is Out Of Stock to the Product Comparison"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-98644"/>
+            <useCaseId value="MAGETWO-98522"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <comment userInput="Adding the comment for preserving Backward Compatibility" stepKey="loginAsAdmin"/>
+            <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="setConfigShowOutOfStockFalse"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct4" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+
+        <after>
+            <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="setConfigShowOutOfStockFalse"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <comment userInput="Adding the comment for preserving Backward Compatibility"  stepKey="logout"/>
+        </after>
+        <comment userInput="Open product page | Comment is kept to preserve the step key for backward compatibility" stepKey="openProdPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToSimpleProductPage"/>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="waitForSimpleProductPage">
+            <argument name="productUrl" value="$$product.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <comment userInput="'Add to compare' link is not available | Comment is kept to preserve the step key for backward compatibility" stepKey="addToCompareLinkAvailability"/>
+
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="dontSeeAddToCompareLink"/>
+
+        <comment userInput="Turn on 'out of stock' config | Comment is kept to preserve the step key for backward compatibility" stepKey="onOutOfStockConfig"/>
+        <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockEnable.path}} {{CatalogInventoryOptionsShowOutOfStockEnable.value}}" stepKey="setConfigShowOutOfStockTrue"/>
+
+        <comment userInput="Clear cache and reindex | Comment is kept to preserve the step key for backward compatibility" stepKey="cleanCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value="catalog_product_price"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+
+        <comment userInput="Open product page | Comment is kept to preserve the step key for backward compatibility" stepKey="openProductPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToSimpleProductPage2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSimpleProductPage2"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="seeAddToCompareLink">
+            <argument name="productUrl" value="$$product.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <comment userInput="Click on 'Add to Compare' link | Comment is kept to preserve the step key for backward compatibility" stepKey="clickOnAddToCompareLink"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnAddToCompare"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProdAddToCmpList"/>
+        <comment userInput="Assert success message | Comment is kept to preserve the step key for backward compatibility" stepKey="assertSuccessMsg"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabTextFromSuccessMessage"/>
+
+        <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="assertSuccessMessage">
+            <argument name="productVar" value="$$product$$"/>
+        </actionGroup>
+
+        <comment userInput="See product in the comparison list | Comment is kept to preserve the step key for backward compatibility" stepKey="seeProductInComparisonList"/>
+
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryPage">
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
+        <comment userInput="Comment is kept to preserve the step key for backward compatibility" stepKey="navigateToComparePage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefrontProductComparePageLoad"/>
+
+        <actionGroup ref="SeeProductInComparisonListActionGroup" stepKey="seeProductInCompareList">
+            <argument name="productVar" value="$$product$$"/>
+        </actionGroup>
+
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="deleteProdFromCmpList"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onCategoryPage"/>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="waitForPageLoad1">
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontRemoveFirstProductFromCompareActionGroup" stepKey="clickClearAll"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForConfirmPageLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="confirmProdDelate"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForConfirmLoad"/>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="addToCmpFromCategPage">
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverOverProduct"/>
+
+        <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="clickAddToCompare">
+            <argument name="productVar" value="$$product$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitProdAddingToCmpList"/>
+        <comment userInput="Assert success message | Comment is kept to preserve the step key for backward compatibility" stepKey="assertSuccessMsg2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabTextFromSuccessMessage2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertSuccessMessage2"/>
+
+        <comment userInput="Comment is kept to preserve the step key for backward compatibility" stepKey="checkProdNameOnWidget"/>
+        <comment userInput="Comment is kept to preserve the step key for backward compatibility" stepKey="seeProdNameOnCmpWidget"/>
+
+        <comment userInput="See product in the compare page" stepKey="seeProductInComparePage"/>
+        <comment userInput="Comment is kept to preserve the step key for backward compatibility" stepKey="navigateToComparePage2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefrontProductComparePageLoad2"/>
+
+        <actionGroup ref="SeeProductInComparisonListActionGroup" stepKey="seeProductInCompareList2">
+            <argument name="productVar" value="$$product$$"/>
+        </actionGroup>
+
+    </test>
+</tests>

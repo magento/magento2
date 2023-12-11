@@ -3,64 +3,77 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Helper\Form;
 
-class WeightTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight;
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\Element\CollectionFactory;
+use Magento\Framework\Data\Form\Element\Factory;
+use Magento\Framework\Data\Form\Element\Radios;
+use Magento\Framework\Locale\Format;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class WeightTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight
+     * @var Weight
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Radios|MockObject
      */
     protected $weightSwitcher;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|MockObject
      */
     protected $factory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $collectionFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Format|MockObject
      */
     protected $localeFormat;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->weightSwitcher = $this->createPartialMock(
-            \Magento\Framework\Data\Form\Element\Radios::class,
-            ['setId', 'setName', 'setLabel', 'setForm']
-        );
-        $this->weightSwitcher->expects($this->any())->method('setId')->will($this->returnSelf());
-        $this->weightSwitcher->expects($this->any())->method('setName')->will($this->returnSelf());
-        $this->weightSwitcher->expects($this->any())->method('setLabel')->will($this->returnSelf());
+        $this->weightSwitcher = $this->getMockBuilder(Radios::class)
+            ->addMethods(['setName', 'setLabel'])
+            ->onlyMethods(['setId', 'setForm'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->weightSwitcher->method('setId')->willReturnSelf();
+        $this->weightSwitcher->method('setName')->willReturnSelf();
+        $this->weightSwitcher->method('setLabel')->willReturnSelf();
 
-        $this->factory = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
+        $this->factory = $this->createMock(Factory::class);
         $this->factory->expects(
             $this->once()
         )->method(
             'create'
         )->with(
-            $this->equalTo('radios')
-        )->will(
-            $this->returnValue($this->weightSwitcher)
+            'radios'
+        )->willReturn(
+            $this->weightSwitcher
         );
-        $this->localeFormat = $this->createMock(\Magento\Framework\Locale\Format::class);
+        $this->localeFormat = $this->createMock(Format::class);
 
         $this->collectionFactory = $this->createPartialMock(
-            \Magento\Framework\Data\Form\Element\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
 
-        $this->_model = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight::class,
+        $this->_model = (new ObjectManager($this))->getObject(
+            Weight::class,
             [
                 'factoryElement' => $this->factory,
                 'factoryCollection' => $this->collectionFactory,
@@ -71,15 +84,12 @@ class WeightTest extends \PHPUnit\Framework\TestCase
 
     public function testSetForm()
     {
-        $form = $this->createMock(\Magento\Framework\Data\Form::class);
-        $this->weightSwitcher->expects(
-            $this->any()
-        )->method(
+        $form = $this->createMock(Form::class);
+        $this->weightSwitcher->method(
             'setForm'
         )->with(
-            $this->equalTo($form)
-        )->will(
-            $this->returnSelf()
+            $form
+        )->willReturnSelf(
         );
 
         $this->_model->setForm($form);
@@ -87,9 +97,7 @@ class WeightTest extends \PHPUnit\Framework\TestCase
 
     public function testGetEscapedValue()
     {
-        $this->localeFormat->expects(
-            $this->any()
-        )->method(
+        $this->localeFormat->method(
             'getPriceFormat'
         )->willReturn([
             'precision' => 2,
@@ -97,7 +105,7 @@ class WeightTest extends \PHPUnit\Framework\TestCase
             'groupSymbol' => '.',
         ]);
 
-        $this->_model->setValue('30000.4');
+        $this->_model->setValue(30000.4);
         $this->_model->setEntityAttribute(true);
 
         $return = $this->_model->getEscapedValue('30000.4');

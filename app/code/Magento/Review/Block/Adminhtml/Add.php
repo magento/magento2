@@ -8,8 +8,6 @@ namespace Magento\Review\Block\Adminhtml;
 
 /**
  * Adminhtml add Review main block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Add extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -17,33 +15,27 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
      * Initialize add review
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _construct()
     {
         parent::_construct();
-
         $this->_blockGroup = 'Magento_Review';
         $this->_controller = 'adminhtml';
         $this->_mode = 'add';
-
         $this->buttonList->update('save', 'label', __('Save Review'));
         $this->buttonList->update('save', 'id', 'save_button');
-
+        $this->buttonList->update('save', 'style', 'display: none;');
         $this->buttonList->update('reset', 'id', 'reset_button');
-
-        $this->_formScripts[] = '
-            require(["prototype"], function(){
-                toggleParentVis("add_review_form");
-                toggleVis("save_button");
-                toggleVis("reset_button");
-            });
-        ';
-
+        $this->buttonList->update('reset', 'style', 'display: none;');
+        $this->buttonList->update('reset', 'onclick', 'window.review.formReset()');
         // @codingStandardsIgnoreStart
         $this->_formInitScripts[] = '
-            require(["jquery","prototype"], function(jQuery){
+            require(["jquery","Magento_Review/js/rating","prototype"], function(jQuery, rating){
             window.review = function() {
                 return {
+                    reviewFormEditSelector: "#edit_form",
+                    ratingSelector: "[data-widget=ratingControl]",
                     productInfoUrl : null,
                     formHidden : true,
                     gridRowClick : function(data, click) {
@@ -56,7 +48,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                     },
                     loadProductData : function() {
                         jQuery.ajax({
-                            type: "POST",
+                            type: "GET",
                             url: review.productInfoUrl,
                             data: {
                                 form_key: FORM_KEY
@@ -71,6 +63,10 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                         toggleVis("productGrid");
                         toggleVis("save_button");
                         toggleVis("reset_button");
+                    },
+                    formReset: function() {
+                        jQuery(review.reviewFormEditSelector).trigger(\'reset\');
+                        jQuery(review.ratingSelector).ratingControl(\'removeRating\');
                     },
                     updateRating: function() {
                         elements = [$("select_stores"), $("rating_detail").getElementsBySelector("input[type=\'radio\']")].flatten();
@@ -93,13 +89,14 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                         if( response.error ) {
                             alert(response.message);
                         } else if( response.id ){
+                            var productName = response.name;
                             $("product_id").value = response.id;
 
                             $("product_name").innerHTML = \'<a href="' .
             $this->getUrl(
                 'catalog/product/edit'
             ) .
-            'id/\' + response.id + \'" target="_blank">\' + response.name + \'</a>\';
+            'id/\' + response.id + \'" target="_blank">\' + productName.escapeHTML() + \'</a>\';
                         } else if ( response.message ) {
                             alert(response.message);
                         }

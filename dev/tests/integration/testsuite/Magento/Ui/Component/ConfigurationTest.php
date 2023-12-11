@@ -7,13 +7,18 @@ namespace Magento\Ui\Component;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentFile;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\DirSearch;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Ui\Config\Reader\DefinitionMap;
-use Magento\Framework\Component\ComponentRegistrar;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigurationTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -25,6 +30,11 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
      * @var ReadInterface
      */
     private $appDir;
+
+    /**
+     * @var ReadInterface
+     */
+    private $rootDir;
 
     /**
      * @var \DOMDocument
@@ -56,7 +66,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
         ]
     ];
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $mapReader = $objectManager->create(DefinitionMap::class);
@@ -67,6 +77,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
         /** @var Filesystem $filesystem */
         $filesystem = $objectManager->create(Filesystem::class);
         $this->appDir = $filesystem->getDirectoryRead(DirectoryList::APP);
+        $this->rootDir = $filesystem->getDirectoryRead(DirectoryList::ROOT);
     }
 
     /**
@@ -84,7 +95,14 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
         /** @var ComponentFile $file */
         foreach ($uiConfigurationFiles as $file) {
             $this->currentFile = $file;
-            $content = $this->appDir->readFile($this->appDir->getRelativePath($file->getFullPath()));
+            $fullPath = $file->getFullPath();
+            // by default search files in `app` directory but Magento can be installed via composer
+            // or some modules can be in `vendor` directory (like bundled extensions)
+            try {
+                $content = $this->appDir->readFile($this->appDir->getRelativePath($fullPath));
+            } catch (ValidatorException $e) {
+                $content = $this->rootDir->readFile($this->rootDir->getRelativePath($fullPath));
+            }
             $this->assertConfigurationSemantic($this->getDom($content), $result);
         }
         if (!empty($result)) {

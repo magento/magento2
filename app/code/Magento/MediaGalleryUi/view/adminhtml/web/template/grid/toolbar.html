@@ -1,0 +1,32 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="admin__data-grid-header" data-role="masonry-main-toolbar" afterRender="$data.setToolbarNode">
+    <div class="admin__data-grid-header-row">
+        <div class="admin__data-grid-actions-wrap" each="getRegion('dataGridActions')" render=""></div>
+        <each args="getRegion('dataGridFilters')" render=""></each>
+    </div>
+    <div class="admin__data-grid-header-row row row-gutter">
+        <div class="col-xs-2" if="hasChild('listing_massaction')" ko-scope="requestChild('listing_massaction')" render=""></div>
+        <div css="
+            'col-xs-10': hasChild('listing_massaction'),
+            'col-xs-12': !hasChild('listing_massaction')">
+            <div class="row">
+                <div class="col-xs-4">
+                    <div class="masonry-results-number" ko-scope="requestChild('listing_paging')">
+                        <render args="totalTmpl"></render>
+                    </div>
+                    <each args="getRegion('sorting')" render=""></each>
+                </div>
+                <div class="col-xs-8" ko-scope="requestChild('listing_paging')">
+                    <div render=""></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<render args="stickyTmpl" if="$data.sticky"></render>

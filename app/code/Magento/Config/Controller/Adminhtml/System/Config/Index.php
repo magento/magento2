@@ -6,7 +6,9 @@
  */
 namespace Magento\Config\Controller\Adminhtml\System\Config;
 
-class Index extends AbstractScopeConfig
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends AbstractScopeConfig implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory

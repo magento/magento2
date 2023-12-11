@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="NoOptionAvailableToConfigureDisabledProductTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Admin order configurable product"/>
+            <title value="Disabled variation of configurable product can't be added to shopping cart via admin"/>
+            <description value="Disabled variation of configurable product can't be added to shopping cart via admin"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-17373"/>
+            <useCaseId value="MAGETWO-72172"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!--Create category-->
+            <comment userInput="Create category" stepKey="commentCreateCategory"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <!-- Create the configurable product based on the data in the data folder -->
+            <comment userInput="Create the configurable product based on the data in the data folder" stepKey="createConfigurableProduct"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create the configurable product with two options based on the default attribute set -->
+            <comment userInput="Create the configurable product with two options based on the default attribute set" stepKey="configurableProductWithTwoOptions"/>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption3" stepKey="createConfigProductAttributeOption3">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="3" stepKey="getConfigAttributeOption3">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <!-- Create the 3 children that will be a part of the configurable product -->
+            <comment userInput="Create the 3 children that will be a part of the configurable product" stepKey="createTwoChildrenProducts"/>
+            <createData entity="ApiSimpleProductWithPrice50" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithPrice60" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithPrice70" stepKey="createConfigChildProduct3">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption3"/>
+            </createData>
+            <!-- Assign 3 products to the configurable product -->
+            <comment userInput="Assign 3 products to the configurable product" stepKey="assignToConfigurableProduct"/>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+                <requiredEntity createDataKey="getConfigAttributeOption3"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild3">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct3"/>
+            </createData>
+            <!-- Create Customer -->
+            <comment userInput="Create customer" stepKey="commentCreateCustomer"/>
+            <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <!-- Delete created data -->
+            <comment userInput="Delete created data" stepKey="deleteData"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory2"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigChildProduct3" stepKey="deleteConfigChildProduct3"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCreatedCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+        <!-- Disable child product -->
+        <comment userInput="Disable child product" stepKey="disableChildProduct"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToEditPage">
+            <argument name="productId" value="$$createConfigChildProduct1.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForChildProductPageLoad"/>
+        <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="disableProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+        <!-- Set the second product out of stock -->
+        <comment userInput="Set the second product out of stock" stepKey="outOfStockChildProduct"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToSecondProductEditPage">
+            <argument name="productId" value="$$createConfigChildProduct2.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForSecondChildProductPageLoad"/>
+
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="outOfStockStatus">
+            <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup>
+
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondProductForm"/>
+        <!-- Go to created customer page -->
+        <comment userInput="Go to created customer page" stepKey="goToCreatedCustomerPage"/>
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrder">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickToAddProduct"/>
+        <waitForPageLoad stepKey="waitForProductsOpened"/>
+        <!-- Find created configurable product and click on "Configure" link -->
+        <comment userInput="Find created configurable product and click on Configure link" stepKey="goToConfigurableLink"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.configure($$createConfigProduct.id$$)}}" stepKey="clickOnConfigure"/>
+        <!-- Click on attribute drop-down and check no option 1 is available -->
+        <comment userInput="Click on attribute drop-down and check no option 1 is available" stepKey="commentNoOptionIsAvailable"/>
+        <waitForPageLoad stepKey="waitForConfigure"/>
+        <waitForElementVisible selector="{{AdminOrderFormConfigureProductSection.selectOption}}" stepKey="waitForShippingSectionLoaded"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.selectOption}}" stepKey="clickToSelectOption"/>
+        <dontSee userInput="$$createConfigProductAttributeOption1.option[store_labels][1][label]$$" stepKey="dontSeeOption1"/>
+        <!-- Go to created customer page again -->
+        <comment userInput="Go to created customer page again" stepKey="goToCreatedCustomerPageAgain"/>
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrderAgain">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickToAddProductAgain"/>
+        <waitForPageLoad stepKey="waitForProductsOpenedAgain"/>
+        <fillField selector="{{AdminOrderFormItemsSection.idFilter}}" userInput="$$createConfigChildProduct2.id$$" stepKey="idFilter"/>
+        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearch"/>
+        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectConfigurableProduct"/>
+        <!-- Add product to order -->
+        <comment userInput="Add product to order" stepKey="addProductToOrder"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickToAddProductToOrder"/>
+        <waitForPageLoad stepKey="waitForNewOrderPageLoad"/>
+        <see userInput="There are no source items with the in stock status" stepKey="seeTheErrorMessageDisplayed"/>
+
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrderThirdTime">
+            <argument name="customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addThirdChildProductToOrder">
+            <argument name="product" value="$createConfigChildProduct3$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminItemOrderedErrorNotVisibleActionGroup" stepKey="assertNoticeAbsent">
+            <argument name="productName" value="$createConfigChildProduct3.name$"/>
+            <argument name="messageType" value="notice"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminItemOrderedErrorNotVisibleActionGroup" stepKey="assertErrorAbsent">
+            <argument name="productName" value="$createConfigChildProduct3.name$"/>
+            <argument name="messageType" value="error"/>
+        </actionGroup>
+        <!-- Select shipping method -->
+        <comment userInput="Select shipping method" stepKey="selectShippingMethod"/>
+        <actionGroup ref="AdminClickGetShippingMethodsAndRatesActionGroup" stepKey="openShippingMethod"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForShippingMethods"/>
+        <actionGroup ref="AdminSelectFixedShippingMethodActionGroup" stepKey="chooseShippingMethod"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForShippingMethodLoad"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="clickSubmitOrder" />
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="checkOrderSuccessfullyCreated"/>
+    </test>
+</tests>

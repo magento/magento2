@@ -4,24 +4,22 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Catalog fieldset element renderer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset;
 
+/**
+ * Catalog fieldset element renderer
+ */
 class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
 {
     /**
-     * Initialize block template
+     * @var string
      */
     protected $_template = 'Magento_Catalog::catalog/form/renderer/fieldset/element.phtml';
 
     /**
      * Retrieve data object related with form
      *
-     * @return \Magento\Catalog\Model\Product || \Magento\Catalog\Model\Category
+     * @return \Magento\Catalog\Model\Product|\Magento\Catalog\Model\Category
      */
     public function getDataObject()
     {
@@ -29,7 +27,7 @@ class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Eleme
     }
 
     /**
-     * Retireve associated with element attribute object
+     * Retrieve associated with element attribute object
      *
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */

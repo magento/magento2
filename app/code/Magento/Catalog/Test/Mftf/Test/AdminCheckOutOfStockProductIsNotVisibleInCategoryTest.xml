@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckOutOfStockProductIsNotVisibleInCategoryTest">
+        <annotations>
+            <stories value="Manage products"/>
+            <title value="Out of Stock Product is Not Visible in Category"/>
+            <description value="Login as admin and check out of stock product is not visible in category"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-11064"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!--Create Category-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <!--Create Simple Product-->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete created entity -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Open Product Index Page and filter the product-->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
+
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <!-- Update product Advanced Inventory Setting -->
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProduct"/>
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink"/>
+        <actionGroup ref="AdminSetManageStockConfigActionGroup" stepKey="setManageStockConfig">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillAdvancedInventoryQtyActionGroup" stepKey="fillProductQty">
+            <argument name="qty" value="5"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetMinAllowedQtyForProductActionGroup" stepKey="fillMiniAllowedQty">
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetMaxAllowedQtyForProductActionGroup" stepKey="fillMaxAllowedQty">
+            <argument name="qty" value="1000"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetQtyUsesDecimalsConfigActionGroup" stepKey="setQtyUsesDecimalsConfig">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetNotifyBelowQtyValueActionGroup" stepKey="fillNotifyBelowQty">
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetStockStatusConfigActionGroup" stepKey="selectOutOfStock">
+            <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup>
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickDoneButton"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <!--Verify product is not visible in category store front page -->
+        <actionGroup ref="AssertStorefrontProductAbsentOnCategoryPageActionGroup" stepKey="doNotSeeProductInCategoryPage">
+            <argument name="categoryUrlKey" value="$$createCategory.name$$"/>
+            <argument name="productName" value="{{SimpleProduct.name}}"/>
+        </actionGroup>
+        <!--Verify Product In Store Front-->
+        <actionGroup ref="StorefrontCheckProductStockStatus" stepKey="seeProductOnStorefront">
+            <argument name="productUrlKey" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+            <argument name="stockStatus" value="Out of stock"/>
+        </actionGroup>
+    </test>
+</tests>

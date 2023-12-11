@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminStoreValueIsSetForUrlRewriteActionGroup">
+        <annotations>
+            <description>Verifies that the proper Store Value is used for URL Rewrite.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeValue" type="string"/>
+        </arguments>
+
+        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Store View')}}"
+             userInput="{{storeValue}}" stepKey="seeStoreValueForCategoryId"/>
+    </actionGroup>
+</actionGroups>

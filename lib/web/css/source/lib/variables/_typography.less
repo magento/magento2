@@ -12,7 +12,6 @@
 //  ---------------------------------------------
 
 //  Path
-@font-path: "../../fonts/";
 @icons__font-path: "@{baseDir}fonts/Blank-Theme-Icons/Blank-Theme-Icons";
 
 //  Names
@@ -30,7 +29,7 @@
 @font-size-ratio__base: 1.4; // Defines ratio of the root font-size to the base font-size
 
 @font-size-unit: rem; // The unit to which most typography values will be converted by default
-@font-size-unit-ratio: unit(@root__font-size * 16/100); // Ratio of the root font-size to the font-size unit
+@font-size-unit-ratio: unit((@root__font-size * 16/100)); // Ratio of the root font-size to the font-size unit
 @font-size-unit-convert: true; // Controls whether font-size values are converted to the specified font-size unit
 
 @font-size__base: unit(@font-size-unit-ratio * @font-size-ratio__base, px); // Base font size value in <b>px</b>
@@ -40,11 +39,15 @@
 @font-size__xs: floor(.75 * @font-size__base); // 11px
 
 //  Weights
+@font-weight__hairline: 100;
+@font-weight__extralight: 200;
 @font-weight__light: 300;
 @font-weight__regular: 400;
 @font-weight__heavier: 500;
 @font-weight__semibold: 600;
 @font-weight__bold: 700;
+@font-weight__extrabold: 800;
+@font-weight__heavy: 900;
 
 //  Styles
 @font-style__base: normal;
@@ -70,8 +73,8 @@
 @indent__xl: @indent__base * 2; // 40px
 @indent__l: @indent__base * 1.5; // 30px
 @indent__m: @indent__base * 1.25; // 25px
-@indent__s: @indent__base / 2; // 10px
-@indent__xs: @indent__base / 4; // 5px
+@indent__s: (@indent__base / 2); // 10px
+@indent__xs: (@indent__base / 4); // 5px
 
 //
 //  Borders
@@ -84,13 +87,13 @@
 //  Links
 //  ---------------------------------------------
 
-@link__color: @color-blue1;
+@link__color: @theme__color__primary;
 @link__text-decoration: none;
 
 @link__visited__color: @link__color;
 @link__visited__text-decoration: none;
 
-@link__hover__color: @color-blue2;
+@link__hover__color: @theme__color__primary-alt;
 @link__hover__text-decoration: underline;
 
 @link__active__color: @active__color;

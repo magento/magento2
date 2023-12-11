@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateTaxClassCustomerGroupTest">
+        <annotations>
+            <features value="Create tax class customer group"/>
+            <stories value="Create customer group"/>
+            <title value="Create tax class customer group"/>
+            <description value="Create tax class customer group"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-5303"/>
+            <group value="customer"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- Create Tax Class "Customer tax class"-->
+            <createData entity="customerTaxClass" stepKey="createCustomerTaxClass"/>
+            <getData entity="customerTaxClass" stepKey="customerTaxClassData">
+                <requiredEntity createDataKey="createCustomerTaxClass"/>
+            </getData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminDeleteCustomerGroupActionGroup" stepKey="deleteCustomerGroup">
+                <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
+            <deleteData createDataKey="createCustomerTaxClass" stepKey="deleteCustomerTaxClass"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Steps: 1. Log in to backend as admin user.
+                    2. Navigate to Stores > Other Settings > Customer Groups.
+                    3. Start to create new Customer Group.
+                    4. Fill in all data according to data set:   Tax Class "Customer tax class"
+                    5. Click "Save Customer Group" button. -->
+        <!-- Assert "You saved the customer group." success message displayed  -->
+        <!-- Assert created Customer Group displayed In Grid  -->
+        <actionGroup ref="AdminCreateCustomerGroupActionGroup" stepKey="createNewCustomerGroup">
+            <argument name="groupName" value="{{CustomCustomerGroup.code}}"/>
+            <argument name="taxClass" value="$$customerTaxClassData.class_name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCustomerGroupPresentInGrid" stepKey="assertCustomerGroupDisplayedInGrid">
+            <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
+        </actionGroup>
+        <!-- 6. Go to Customers -> All Customers  -> click  "Add New Customer" button -->
+        <!--  Assert   created  Customer Group  displayed On Customer Form -->
+        <actionGroup ref="AdminAssertCustomerGroupOnCustomerForm" stepKey="assertCustomerGroupDisplayedOnCustomerForm">
+            <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
+        </actionGroup>
+    </test>
+</tests>

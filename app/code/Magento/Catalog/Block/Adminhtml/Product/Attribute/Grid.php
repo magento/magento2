@@ -6,8 +6,6 @@
 
 /**
  * Product attributes grid
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute;
 
@@ -101,8 +99,7 @@ class Grid extends AbstractGrid
                 'type' => 'options',
                 'options' => ['1' => __('Yes'), '0' => __('No')],
                 'align' => 'center'
-            ],
-            'is_user_defined'
+            ]
         );
 
         $this->_eventManager->dispatch('product_attribute_grid_build', ['grid' => $this]);

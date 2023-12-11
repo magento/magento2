@@ -5,9 +5,10 @@
  */
 namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 
+use Magento\Catalog\Model\Product\Image\UrlBuilder;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\Store\Model\Store;
 use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\Store;
 
 /**
  * Sitemap resource product collection model
@@ -80,16 +81,13 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_mediaConfig;
 
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var UrlBuilder
      */
-    private $productModel;
+    private $imageUrlBuilder;
 
     /**
-     * @var \Magento\Catalog\Helper\Image
-     */
-    private $catalogImageHelper;
-
-    /**
+     * Product constructor.
+     *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Sitemap\Helper\Data $sitemapData
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
@@ -102,7 +100,10 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $connectionName
      * @param \Magento\Catalog\Model\Product $productModel
      * @param \Magento\Catalog\Helper\Image $catalogImageHelper
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface|null $scopeConfig
+     * @param UrlBuilder $urlBuilder
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -116,7 +117,9 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         $connectionName = null,
         \Magento\Catalog\Model\Product $productModel = null,
-        \Magento\Catalog\Helper\Image $catalogImageHelper = null
+        \Magento\Catalog\Helper\Image $catalogImageHelper = null,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null,
+        UrlBuilder $urlBuilder = null
     ) {
         $this->_productResource = $productResource;
         $this->_storeManager = $storeManager;
@@ -126,13 +129,14 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->mediaGalleryReadHandler = $mediaGalleryReadHandler;
         $this->_mediaConfig = $mediaConfig;
         $this->_sitemapData = $sitemapData;
-        $this->productModel = $productModel ?: ObjectManager::getInstance()->get(\Magento\Catalog\Model\Product::class);
-        $this->catalogImageHelper = $catalogImageHelper ?: ObjectManager::getInstance()
-            ->get(\Magento\Catalog\Helper\Image::class);
+        $this->imageUrlBuilder = $urlBuilder ?? ObjectManager::getInstance()->get(UrlBuilder::class);
+
         parent::__construct($context, $connectionName);
     }
 
     /**
+     * Construct
+     *
      * @return void
      */
     protected function _construct()
@@ -147,7 +151,9 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $attributeCode
      * @param mixed $value
      * @param string $type
+     *
      * @return \Magento\Framework\DB\Select|bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _addFilter($storeId, $attributeCode, $value, $type = '=')
     {
@@ -164,7 +170,6 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 break;
             default:
                 return false;
-                break;
         }
 
         $attribute = $this->_getAttribute($attributeCode);
@@ -193,7 +198,9 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $storeId
      * @param string $attributeCode
      * @param string $column Add attribute value to given column
+     *
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _joinAttribute($storeId, $attributeCode, $column = null)
     {
@@ -226,9 +233,11 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         // Add attribute value to result set if needed
         if (isset($column)) {
-            $this->_select->columns([
-               $column => $columnValue
-            ]);
+            $this->_select->columns(
+                [
+                    $column => $columnValue
+                ]
+            );
         }
     }
 
@@ -236,7 +245,9 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Get attribute data by attribute code
      *
      * @param string $attributeCode
+     *
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getAttribute($attributeCode)
     {
@@ -248,7 +259,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 'attribute_id' => $attribute->getId(),
                 'table' => $attribute->getBackend()->getTable(),
                 'is_global' => $attribute->getIsGlobal() ==
-                \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
+                    \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
                 'backend_type' => $attribute->getBackendType(),
             ];
         }
@@ -256,10 +267,14 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Get category collection array
+     * Get product collection array
      *
      * @param null|string|bool|int|Store $storeId
+     *
      * @return array|bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Zend_Db_Statement_Exception
      */
     public function getCollection($storeId)
     {
@@ -272,7 +287,6 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         $connection = $this->getConnection();
-
         $this->_select = $connection->select()->from(
             ['e' => $this->getMainTable()],
             [$this->getIdFieldName(), $this->_productResource->getLinkField(), 'updated_at']
@@ -282,7 +296,8 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             []
         )->joinLeft(
             ['url_rewrite' => $this->getTable('url_rewrite')],
-            'e.entity_id = url_rewrite.entity_id AND url_rewrite.is_autogenerated = 1 AND url_rewrite.metadata IS NULL'
+            'e.entity_id = url_rewrite.entity_id AND url_rewrite.is_autogenerated = 1'
+            . ' AND url_rewrite.metadata IS NULL'
             . $connection->quoteInto(' AND url_rewrite.store_id = ?', $store->getId())
             . $connection->quoteInto(' AND url_rewrite.entity_type = ?', ProductUrlRewriteGenerator::ENTITY_TYPE),
             ['url' => 'request_path']
@@ -319,7 +334,9 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param array $productRow
      * @param int $storeId
+     *
      * @return \Magento\Framework\DataObject
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _prepareProduct(array $productRow, $storeId)
     {
@@ -344,6 +361,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _loadProductImages($product, $storeId)
     {
+        $this->_storeManager->setCurrentStore($storeId);
         /** @var $helper \Magento\Sitemap\Helper\Data */
         $helper = $this->_sitemapData;
         $imageIncludePolicy = $helper->getProductImageIncludePolicy($storeId);
@@ -427,6 +445,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\DB\Select $select
      * @return \Magento\Framework\DB\Select
+     * @since 100.2.1
      */
     public function prepareSelectStatement(\Magento\Framework\DB\Select $select)
     {
@@ -434,19 +453,13 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Get product image URL from image filename and path
+     * Get product image URL from image filename
      *
      * @param string $image
      * @return string
      */
     private function getProductImageUrl($image)
     {
-        $productObject = $this->productModel;
-        $imgUrl = $this->catalogImageHelper
-            ->init($productObject, 'product_page_image_large')
-            ->setImageFile($image)
-            ->getUrl();
-
-        return $imgUrl;
+        return $this->imageUrlBuilder->getUrl($image, 'product_page_image_large');
     }
 }

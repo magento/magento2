@@ -14,20 +14,21 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class GroupRepositoryTest
+ * Customer Group Repository API test
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GroupRepositoryTest extends WebapiAbstract
 {
-    const SERVICE_NAME = "customerGroupRepositoryV1";
-    const SERVICE_VERSION = "V1";
-    const RESOURCE_PATH = "/V1/customerGroups";
+    private const SERVICE_NAME = "customerGroupRepositoryV1";
+    private const SERVICE_VERSION = "V1";
+    private const RESOURCE_PATH = "/V1/customerGroups";
 
     /**
      * @var GroupRegistry
@@ -40,35 +41,27 @@ class GroupRepositoryTest extends WebapiAbstract
     private $groupRepository;
 
     /**
-     * @var \Magento\Customer\Api\Data\groupInterfaceFactory
+     * @var \Magento\Customer\Api\Data\GroupInterfaceFactory
      */
     private $customerGroupFactory;
 
     /**
+     * @var \Magento\Customer\Api\Data\GroupExtensionInterfaceFactory
+     */
+    private $groupExtensionInterfaceFactory;
+
+    /**
      * Execute per test initialization.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->groupRegistry = $objectManager->get(\Magento\Customer\Model\GroupRegistry::class);
         $this->groupRepository = $objectManager->get(\Magento\Customer\Model\ResourceModel\GroupRepository::class);
         $this->customerGroupFactory = $objectManager->create(\Magento\Customer\Api\Data\GroupInterfaceFactory::class);
-    }
-
-    /**
-     * Execute per test cleanup.
-     */
-    public function tearDown()
-    {
-        parent::tearDown();
-    }
-
-    /**
-     * Cleaning up the extra groups that might have been created as part of the testing.
-     */
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
+        $this->groupExtensionInterfaceFactory = $objectManager->create(
+            \Magento\Customer\Api\Data\GroupExtensionInterfaceFactory::class
+        );
     }
 
     /**
@@ -176,6 +169,69 @@ class GroupRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * Verify that creating a new group with excluded website as extension attributes works via REST.
+     *
+     * @dataProvider testExcludedWebsitesRestDataProvider
+     * @param string $code
+     * @param null|array $excludeWebsitesIds
+     * @param null|array $result
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
+     */
+    public function testCreateGroupWithExcludedWebsiteRest(
+        string $code,
+        array $excludeWebsitesIds,
+        ?array $result
+    ): void {
+        $this->_markTestAsRestOnly();
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+        ];
+
+        $groupData = [
+            CustomerGroup::ID => null,
+            CustomerGroup::CODE => $code,
+            CustomerGroup::TAX_CLASS_ID => 3,
+            'extension_attributes' => ['exclude_website_ids' => $excludeWebsitesIds]
+        ];
+        $requestData = ['group' => $groupData];
+
+        $groupId = $this->_webApiCall($serviceInfo, $requestData)[CustomerGroup::ID];
+        self::assertNotNull($groupId);
+
+        $newGroup = $this->groupRepository->getById($groupId);
+        self::assertEquals($groupId, $newGroup->getId(), 'The group id does not match.');
+        self::assertEquals($groupData[CustomerGroup::CODE], $newGroup->getCode(), 'The group code does not match.');
+        self::assertEquals(
+            $groupData[CustomerGroup::TAX_CLASS_ID],
+            $newGroup->getTaxClassId(),
+            'The group tax class id does not match.'
+        );
+        self::assertEquals(
+            $result,
+            $newGroup->getExtensionAttributes()->getExcludeWebsiteIds(),
+            'The group extension attributes do not match.'
+        );
+    }
+
+    /**
+     * Data provider for excluded websites from customer group with REST.
+     *
+     * @return array
+     */
+    public function testExcludedWebsitesRestDataProvider(): array
+    {
+        return [
+            ['Create Group No Excludes REST', [], null],
+            ['Create Group With Excludes REST', ['1'], ['1']]
+        ];
+    }
+
+    /**
      * Verify that creating a new group with a duplicate group name fails with an error via REST.
      */
     public function testCreateGroupDuplicateGroupRest()
@@ -278,8 +334,8 @@ class GroupRepositoryTest extends WebapiAbstract
             $this->fail("Expected exception");
         } catch (\Exception $e) {
             // @codingStandardsIgnoreStart
-            $this->assertContains(
-                '{"message":"%fieldName is a required field.","parameters":{"fieldName":"code"}',
+            $this->assertStringContainsString(
+                '\"%fieldName\" is required. Enter and try again.","parameters":{"fieldName":"code"}',
                 $e->getMessage(),
                 "Exception does not contain expected message."
             );
@@ -315,7 +371,7 @@ class GroupRepositoryTest extends WebapiAbstract
             $this->fail("Expected exception");
         } catch (\Exception $e) {
             // @codingStandardsIgnoreStart
-            $this->assertContains(
+            $this->assertStringContainsString(
                 '{"message":"Invalid value of \"%value\" provided for the %fieldName field.","parameters":{"fieldName":"taxClassId","value":9999}',
                 $e->getMessage(),
                 "Exception does not contain expected message."
@@ -348,7 +404,7 @@ class GroupRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail('Expected exception');
         } catch (\Exception $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 '{"message":"No such entity with %fieldName = %fieldValue","parameters":{"fieldName":"id","fieldValue":88}',
                 $e->getMessage(),
                 "Exception does not contain expected message."
@@ -382,7 +438,7 @@ class GroupRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 'No such entity with %fieldName = %fieldValue',
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
@@ -428,6 +484,60 @@ class GroupRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * Verify that updating an existing group with excluded website works via REST.
+     */
+    public function testUpdateGroupWithExcludedWebsiteRest(): void
+    {
+        $this->_markTestAsRestOnly();
+        $group = $this->customerGroupFactory->create();
+        $group->setId(null);
+        $group->setCode('New Group with Exclude REST');
+        $group->setTaxClassId(3);
+        $groupId = $this->createGroup($group);
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . "/$groupId",
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+            ],
+        ];
+
+        $groupData = [
+            CustomerGroup::ID => $groupId,
+            CustomerGroup::CODE => 'Updated Group with Exclude REST',
+            CustomerGroup::TAX_CLASS_ID => 3,
+            'extension_attributes' => ['exclude_website_ids' => ['1']]
+        ];
+        $requestData = ['group' => $groupData];
+
+        self::assertEquals($groupId, $this->_webApiCall($serviceInfo, $requestData)[CustomerGroup::ID]);
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . "/$groupId",
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+        ];
+
+        $group = $this->_webApiCall($serviceInfo);
+        self::assertEquals(
+            $groupData[CustomerGroup::CODE],
+            $group['code'],
+            'The group code did not change.'
+        );
+        self::assertEquals(
+            $groupData[CustomerGroup::TAX_CLASS_ID],
+            $group['tax_class_id'],
+            'The group tax class id did not change'
+        );
+        self::assertEquals(
+            ['1'],
+            $group['extension_attributes']['exclude_website_ids'],
+            'The group excluded websites do not match.'
+        );
+    }
+
+    /**
      * Verify that updating a non-existing group throws an exception.
      */
     public function testUpdateGroupNotExistingGroupRest()
@@ -456,7 +566,7 @@ class GroupRepositoryTest extends WebapiAbstract
         } catch (\Exception $e) {
             $expectedMessage = '{"message":"No such entity with %fieldName = %fieldValue",'
              . '"parameters":{"fieldName":"id","fieldValue":9999}';
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Exception does not contain expected message."
@@ -500,6 +610,70 @@ class GroupRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * Verify that creating a new group with excluded website as extension attributes works via SOAP.
+     *
+     * @dataProvider testExcludedWebsitesSoapDataProvider
+     * @param string $code
+     * @param array $excludeWebsitesIds
+     * @param array|null $result
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    public function testCreateGroupWithExcludedWebsiteSoap(
+        string $code,
+        array $excludeWebsitesIds,
+        ?array $result
+    ): void {
+        $this->_markTestAsSoapOnly();
+
+        $serviceInfo = [
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => 'customerGroupRepositoryV1Save',
+            ],
+        ];
+
+        $groupData = [
+            CustomerGroup::ID => null,
+            CustomerGroup::CODE => $code,
+            'taxClassId' => 3,
+            'extension_attributes' => ['exclude_website_ids' => $excludeWebsitesIds]
+        ];
+        $requestData = ['group' => $groupData];
+
+        $groupId = $this->_webApiCall($serviceInfo, $requestData)[CustomerGroup::ID];
+        self::assertNotNull($groupId);
+
+        $newGroup = $this->groupRepository->getById($groupId);
+        self::assertEquals($groupId, $newGroup->getId(), "The group id does not match.");
+        self::assertEquals($groupData[CustomerGroup::CODE], $newGroup->getCode(), "The group code does not match.");
+        self::assertEquals(
+            $groupData['taxClassId'],
+            $newGroup->getTaxClassId(),
+            "The group tax class id does not match."
+        );
+        self::assertEquals(
+            $result,
+            $newGroup->getExtensionAttributes()->getExcludeWebsiteIds(),
+            'The group extension attributes do not match.'
+        );
+    }
+
+    /**
+     * Data provider for excluded websites from customer group with SOAP.
+     *
+     * @return array
+     */
+    public function testExcludedWebsitesSoapDataProvider(): array
+    {
+        return [
+            ['Create Group No Excludes SOAP', [], null],
+            ['Create Group With Excludes SOAP', ['1'], ['1']]
+        ];
+    }
+
+    /**
      * Verify that creating a new group with a duplicate code fails with an error via SOAP.
      */
     public function testCreateGroupDuplicateGroupSoap()
@@ -534,7 +708,7 @@ class GroupRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Exception does not contain expected message."
@@ -605,8 +779,8 @@ class GroupRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
-                '%fieldName is a required field.',
+            $this->assertStringContainsString(
+                '"%fieldName" is required. Enter and try again.',
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
             );
@@ -643,7 +817,7 @@ class GroupRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
@@ -716,7 +890,7 @@ class GroupRepositoryTest extends WebapiAbstract
         } catch (\Exception $e) {
             $expectedMessage = 'No such entity with %fieldName = %fieldValue';
 
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Exception does not contain expected message."
@@ -765,6 +939,51 @@ class GroupRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * Verify that deleting an existing group with excluded website works.
+     */
+    public function testDeleteGroupExistsWithExcludedWebsite(): void
+    {
+        $group = $this->customerGroupFactory->create();
+        $group->setId(null);
+        $group->setCode('Delete Group with Excludes');
+        $group->setTaxClassId(3);
+        // set excluded website as an extension attribute
+        $customerGroupExtensionAttributes = $this->groupExtensionInterfaceFactory->create();
+        $customerGroupExtensionAttributes->setExcludeWebsiteIds(['1']);
+        $group->setExtensionAttributes($customerGroupExtensionAttributes);
+
+        $groupId = $this->createGroup($group);
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . "/$groupId",
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => 'customerGroupRepositoryV1DeleteById',
+            ],
+        ];
+
+        $requestData = [CustomerGroup::ID => $groupId];
+        $response = $this->_webApiCall($serviceInfo, $requestData);
+        self::assertTrue($response, 'Expected response should be true.');
+
+        try {
+            $this->groupRepository->getById($groupId);
+            self::fail('An expected NoSuchEntityException was not thrown.');
+        } catch (NoSuchEntityException $e) {
+            $exception = NoSuchEntityException::singleField(CustomerGroup::ID, $groupId);
+            self::assertEquals(
+                $exception->getMessage(),
+                $e->getMessage(),
+                'Exception message does not match expected message.'
+            );
+        }
+    }
+
+    /**
      * Verify that deleting an non-existing group works.
      */
     public function testDeleteGroupNotExists()
@@ -790,7 +1009,11 @@ class GroupRepositoryTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, $requestData);
         } catch (\SoapFault $e) {
-            $this->assertContains($expectedMessage, $e->getMessage(), "SoapFault does not contain expected message.");
+            $this->assertStringContainsString(
+                $expectedMessage,
+                $e->getMessage(),
+                "SoapFault does not contain expected message."
+            );
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
@@ -825,13 +1048,13 @@ class GroupRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
             );
         } catch (\Exception $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Exception does not contain expected message."
@@ -874,7 +1097,7 @@ class GroupRepositoryTest extends WebapiAbstract
         return [
             ['tax_class_id', 3, []],
             ['tax_class_id', 0, null],
-            ['code', md5(mt_rand(0, 10000000000) . time()), null],
+            ['code', hash("sha256", random_int(0, 10000000000) . time()), null],
             [
                 'id',
                 0,

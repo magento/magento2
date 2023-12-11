@@ -1,0 +1,16 @@
+{
+    "googleoptimizer_code": {
+        "column": {
+            "code_id": true,
+            "entity_id": true,
+            "entity_type": true,
+            "store_id": true,
+            "experiment_script": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "GOOGLEOPTIMIZER_CODE_STORE_ID_STORE_STORE_ID": true,
+            "GOOGLEOPTIMIZER_CODE_STORE_ID_ENTITY_ID_ENTITY_TYPE": true
+        }
+    }
+}

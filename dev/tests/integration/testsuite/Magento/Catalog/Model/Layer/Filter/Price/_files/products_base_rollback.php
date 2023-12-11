@@ -44,15 +44,11 @@ $category->setId(
 
 $lastProductId = 0;
 foreach ($testCases as $index => $testCase) {
-    $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-        \Magento\Catalog\Model\Category::class
+
+    /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+    $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        \Magento\Catalog\Api\ProductRepositoryInterface::class
     );
-    $position = $index + 1;
-    $categoryId = $index + 4;
-    $category->load($categoryId);
-    if ($category->getId()) {
-        $category->delete();
-    }
 
     foreach ($testCase[0] as $price) {
         /** @var \Magento\Catalog\Model\Product $product */
@@ -60,10 +56,20 @@ foreach ($testCases as $index => $testCase) {
             \Magento\Catalog\Model\Product::class
         );
         $productId = $lastProductId + 1;
-        $product->load($productId);
-        if ($product->getId()) {
-            $product->delete();
+        try {
+            $product = $productRepository->get('simple-' . $productId, false, null, true);
+            $productRepository->delete($product);
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            //Product already removed
         }
         ++$lastProductId;
     }
 }
+
+/** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
+$collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);
+$collection
+    ->addAttributeToFilter('level', ['in' => [2, 3, 4]])
+    ->load()
+    ->delete();

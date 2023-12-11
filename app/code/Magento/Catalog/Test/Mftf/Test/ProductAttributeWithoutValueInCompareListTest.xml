@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ProductAttributeWithoutValueInCompareListTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product Comparison"/>
+            <title value="Product attribute without value in compare list test"/>
+            <description value="The product attribute that has no value should output 'N/A' on the product comparison page."/>
+            <severity value="MINOR"/>
+            <group value="Catalog"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="textProductAttribute" stepKey="createProductAttribute"/>
+            <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
+            <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/$$createAttributeSet.attribute_set_id$$/"
+                stepKey="onAttributeSetEdit"/>
+            <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
+                <argument name="group" value="Product Details"/>
+                <argument name="attribute" value="$$createProductAttribute.attribute_code$$"/>
+            </actionGroup>
+            <actionGroup ref="SaveAttributeSetActionGroup" stepKey="SaveAttributeSet"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProductDefault">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProductWithCustomAttributeSet" stepKey="createProductCustom">
+                <requiredEntity createDataKey="createCategory"/>
+                <requiredEntity createDataKey="createAttributeSet"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createProductDefault" stepKey="deleteProductDefault"/>
+            <deleteData createDataKey="createProductCustom" stepKey="deleteProductCustom"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+            <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+        <!--Open product page-->
+        <amOnPage url="{{StorefrontProductPage.url($$createProductDefault.custom_attributes[url_key]$$)}}" stepKey="goToProductDefaultPage"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <!--Click on 'Add to Compare' link-->
+        <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="clickOnAddToCompare">
+            <argument name="productVar" value="$$createProductDefault$$"/>
+        </actionGroup>
+        <!--See product in the comparison list-->
+        <actionGroup ref="SeeProductInComparisonListActionGroup" stepKey="seeProductDefaultInComparisonListActionGroup">
+            <argument name="productVar" value="$$createProductDefault$$"/>
+        </actionGroup>
+        <!--Open product with custom attribute page-->
+        <amOnPage url="{{StorefrontProductPage.url($$createProductCustom.custom_attributes[url_key]$$)}}" stepKey="goToProductCustomPage"/>
+        <waitForPageLoad stepKey="waitForProductCustomPage"/>
+        <!--Click on 'Add to Compare' link-->
+        <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="clickOnAddToCompareCustom">
+            <argument name="productVar" value="$$createProductCustom$$"/>
+        </actionGroup>
+        <!--See product with custom attribute in the comparison list-->
+        <actionGroup ref="SeeProductInComparisonListActionGroup" stepKey="seeProductCustomInComparisonListActionGroup">
+            <argument name="productVar" value="$$createProductCustom$$"/>
+        </actionGroup>
+        <!--See attribute default value in the comparison list-->
+        <see userInput="$createProductAttribute.defaultValue$"
+            selector="{{StorefrontProductCompareMainSection.ProductAttributeByCodeAndProductName(ProductAttributeFrontendLabel.label, $createProductCustom.name$)}}"
+            stepKey="assertAttributeValueForProductCustom"/>
+        <!--See N/A if attribute has no value in the comparison list-->
+        <see userInput="N/A"
+            selector="{{StorefrontProductCompareMainSection.ProductAttributeByCodeAndProductName(ProductAttributeFrontendLabel.label, $createProductDefault.name$)}}"
+            stepKey="assertNAForProductDefault"/>
+    </test>
+</tests>

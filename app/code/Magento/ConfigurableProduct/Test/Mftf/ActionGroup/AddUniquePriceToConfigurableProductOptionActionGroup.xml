@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddUniquePriceToConfigurableProductOptionActionGroup">
+        <annotations>
+            <description>On the 'Step 3: Bulk Images, Price and Quantity' page of the 'Create Product Configurations' model click on 'Apply unique prices...'. Select provided Option. Fill price.</description>
+        </annotations>
+        <arguments>
+            <argument name="frontend_label" type="string"/>
+            <argument name="label" type="string"/>
+            <argument name="price" type="string"/>
+        </arguments>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyUniquePricesToEachSkus}}" stepKey="clickOnApplyUniquePricesToEachSku"/>
+        <selectOption userInput="{{frontend_label}}" selector="{{AdminCreateProductConfigurationsPanel.selectPriceButton}}" stepKey="selectOption"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.price(label)}}" userInput="{{price}}" stepKey="enterAttributeQuantity"/>
+    </actionGroup>
+</actionGroups>

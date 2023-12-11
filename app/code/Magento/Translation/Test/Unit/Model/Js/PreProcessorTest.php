@@ -3,83 +3,132 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Translation\Test\Unit\Model\Js;
 
-use Magento\Translation\Model\Js\PreProcessor;
-use Magento\Translation\Model\Js\Config;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\TranslateInterface;
+use Magento\Framework\View\Asset\File;
+use Magento\Framework\View\Asset\File\FallbackContext;
+use Magento\Framework\View\Asset\PreProcessor\Chain;
+use Magento\Translation\Model\Js\Config;
+use Magento\Translation\Model\Js\PreProcessor;
+use Symfony\Component\Console\Input\ArgvInput;
+use PHPUnit\Framework\TestCase;
 
-class PreProcessorTest extends \PHPUnit\Framework\TestCase
+class PreProcessorTest extends TestCase
 {
     /**
      * @var PreProcessor
      */
-    protected $model;
+    private PreProcessor $model;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
-    protected $configMock;
+    private $configMock;
 
     /**
-     * @var AreaList|\PHPUnit_Framework_MockObject_MockObject
+     * @var AreaList|MockObject
      */
-    protected $areaListMock;
+    private $areaListMock;
 
     /**
-     * @var TranslateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TranslateInterface|MockObject
      */
-    protected $translateMock;
+    private $translateMock;
 
-    protected function setUp()
+    /**
+     * @var ArgvInput|MockObject
+     */
+    private $inputMock;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->configMock = $this->createMock(\Magento\Translation\Model\Js\Config::class);
-        $this->areaListMock = $this->createMock(\Magento\Framework\App\AreaList::class);
-        $this->translateMock = $this->getMockForAbstractClass(\Magento\Framework\TranslateInterface::class);
-        $this->model = new PreProcessor($this->configMock, $this->areaListMock, $this->translateMock);
+        $this->configMock = $this->createMock(Config::class);
+        $this->areaListMock = $this->createMock(AreaList::class);
+        $this->translateMock = $this->getMockForAbstractClass(TranslateInterface::class);
+        $this->inputMock = $this->createMock(ArgvInput::class);
+        $this->model = new PreProcessor(
+            $this->configMock,
+            $this->areaListMock,
+            $this->translateMock,
+            $this->inputMock
+        );
     }
 
-    public function testGetData()
+    /**
+     * Test 'process' method.
+     *
+     */
+    public function testProcess()
     {
-        $asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
-        $chain = $this->createMock(\Magento\Framework\View\Asset\PreProcessor\Chain::class);
-        $context = $this->createMock(\Magento\Framework\View\Asset\File\FallbackContext::class);
-        $originalContent = 'content$.mage.__("hello1")content';
-        $translatedContent = 'content"hello1"content';
-        $patterns = ['~\$\.mage\.__\([\'|\"](.+?)[\'|\"]\)~'];
-        $areaCode = 'adminhtml';
-        $area = $this->createMock(\Magento\Framework\App\Area::class);
+        $areaCode = 'frontend';
+        $themePath = '*/*';
 
+        $chain = $this->createMock(Chain::class);
+        $asset = $this->createMock(File::class);
+        $context = $this->createMock(FallbackContext::class);
+        $area = $this->createMock(Area::class);
+        $this->configMock->expects($this->once())
+            ->method('isEmbeddedStrategy')
+            ->willReturn(1);
         $chain->expects($this->once())
             ->method('getAsset')
             ->willReturn($asset);
         $asset->expects($this->once())
             ->method('getContext')
             ->willReturn($context);
-        $context->expects($this->once())
+        $context->expects($this->atLeastOnce())
             ->method('getAreaCode')
             ->willReturn($areaCode);
-
-        $this->configMock->expects($this->once())
-            ->method('isEmbeddedStrategy')
+        $context->expects($this->atLeastOnce())
+            ->method('getLocale')
+            ->willReturn('nl_NL');
+        $this->translateMock->expects($this->once())
+            ->method('setLocale')
+            ->with('nl_NL')
+            ->willReturnSelf();
+        $context->expects($this->atLeastOnce())
+            ->method('getThemePath')
+            ->willReturn($themePath);
+        $this->translateMock->expects($this->once())
+            ->method('loadData')
+            ->with($areaCode, false)
+            ->willReturnSelf();
+        $this->translateMock->expects($this->any())
+            ->method('getData')
+            ->willReturn(['$t("Add to Cart")' => 'In Winkelwagen']);
+        $area->expects($this->once())->method('load')->willReturnSelf();
+        $this->inputMock->expects($this->once())
+            ->method('hasParameterOption')
             ->willReturn(true);
-        $chain->expects($this->once())
-            ->method('getContent')
-            ->willReturn($originalContent);
-        $this->configMock->expects($this->once())
-            ->method('getPatterns')
-            ->willReturn($patterns);
-
+        $this->inputMock->expects($this->once())
+            ->method('getParameterOption')
+            ->willReturn('quick');
         $this->areaListMock->expects($this->once())
             ->method('getArea')
             ->with($areaCode)
             ->willReturn($area);
-
+        $chain->expects($this->once())
+            ->method('getContent')
+            ->willReturn('$t("Add to Cart")');
+        $this->configMock->expects($this->any())
+            ->method('getPatterns')
+            ->willReturn(new \ArrayIterator(
+                [
+                    '~(?s)\$t\(\s*([\'"])(\?\<translate\>.+?)(?<!\\\)\1\s*(*SKIP)\)(?s)~',
+                    '~\$\.mage\.__\(([\'"])(.+?)\1\)~'
+                ],
+            ));
         $chain->expects($this->once())
             ->method('setContent')
-            ->with($translatedContent);
-
+            ->willReturn('In Winkelwagen');
         $this->model->process($chain);
     }
 }

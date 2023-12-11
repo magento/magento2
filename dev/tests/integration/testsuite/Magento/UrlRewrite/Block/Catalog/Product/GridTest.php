@@ -42,7 +42,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertStringEndsWith('/category', $gridBlock->getRowUrl($row), 'Grid row URL is invalid');
 
-        $this->assertEmpty(0, $gridBlock->getMassactionBlock()->getItems(), 'Grid should not have mass action items');
+        $this->assertEmpty($gridBlock->getMassactionBlock()->getItems(), 'Grid should not have mass action items');
         $this->assertTrue($gridBlock->getUseAjax(), '"use_ajax" value of grid is incorrect');
     }
 }

@@ -9,8 +9,6 @@ use Magento\Search\Model\QueryFactory;
 
 /**
  * Search model for backend search
- *
- * @deprecated 100.2.0
  */
 class Catalog extends \Magento\Framework\DataObject
 {
@@ -29,8 +27,6 @@ class Catalog extends \Magento\Framework\DataObject
     protected $string;
 
     /**
-     * Adminhtml data
-     *
      * @var \Magento\Backend\Helper\Data
      */
     protected $_adminhtmlData = null;
@@ -73,7 +69,7 @@ class Catalog extends \Magento\Framework\DataObject
             ->load();
 
         foreach ($collection as $product) {
-            $description = strip_tags($product->getDescription());
+            $description = $product->getDescription() !== null ? strip_tags($product->getDescription()) : '';
             $result[] = [
                 'id' => 'product/1/' . $product->getId(),
                 'type' => __('Product'),

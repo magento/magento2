@@ -6,12 +6,12 @@
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Api\GroupRepositoryInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Ui\Component\Form;
+use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\DynamicRows;
+use Magento\Ui\Component\Form;
 
 /**
  * Class Websites customizes websites panel
@@ -23,7 +23,7 @@ use Magento\Ui\Component\DynamicRows;
  */
 class Websites extends AbstractModifier
 {
-    const SORT_ORDER = 40;
+    public const SORT_ORDER = 40;
 
     /**
      * @var LocatorInterface
@@ -89,7 +89,7 @@ class Websites extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyData(array $data)
@@ -117,7 +117,7 @@ class Websites extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function modifyMeta(array $meta)
@@ -135,7 +135,6 @@ class Websites extends AbstractModifier
                                     'collapsible' => true,
                                     'componentType' => Form\Fieldset::NAME,
                                     'dataScope' => self::DATA_SCOPE_PRODUCT,
-                                    'disabled' => false,
                                     'sortOrder' => $this->getNextGroupSortOrder(
                                         $meta,
                                         'search-engine-optimization',
@@ -166,7 +165,7 @@ class Websites extends AbstractModifier
         $websitesList = $this->getWebsitesList();
         $isNewProduct = !$this->locator->getProduct()->getId();
         $tooltip = [
-            'link' => 'http://docs.magento.com/m2/ce/user_guide/configuration/scope.html',
+            'link' => 'https://experienceleague.adobe.com/docs/commerce-admin/start/setup/websites-stores-views.html#scope-settings', // @codingStandardsIgnoreLine
             'description' => __(
                 'If your Magento installation has multiple websites, ' .
                 'you can edit the scope to use the product on specific sites.'
@@ -196,6 +195,7 @@ class Websites extends AbstractModifier
                                 'false' => '0',
                             ],
                             'value' => $isChecked ? (string)$website['id'] : '0',
+                            'disabled' => $this->locator->getProduct()->isLockedAttribute('website_ids'),
                         ],
                     ],
                 ],
@@ -210,7 +210,32 @@ class Websites extends AbstractModifier
                 $sortOrder++;
             }
         }
+        if ($isNewProduct) {
+            $children = $this->setDefaultWebsiteIdIfNoneAreSelected($children);
+        }
+        return $children;
+    }
 
+    /**
+     * Set default website id if none are selected
+     *
+     * @param array $children
+     * @return array
+     */
+    private function setDefaultWebsiteIdIfNoneAreSelected(array $children):array
+    {
+        $websitesList = $this->getWebsitesList();
+        $defaultSelectedWebsite = false;
+        foreach ($websitesList as $website) {
+            if ($children[$website['id']]['arguments']['data']['config']['value']) {
+                $defaultSelectedWebsite = true;
+                break;
+            }
+        }
+        if (count($websitesList) === 1 && !$defaultSelectedWebsite) {
+            $website = reset($websitesList);
+            $children[$website['id']]['arguments']['data']['config']['value'] = (string)$website['id'];
+        }
         return $children;
     }
 
@@ -235,7 +260,8 @@ class Websites extends AbstractModifier
                         'columnsHeader' => true,
                         'dndConfig' => ['enabled' => false],
                         'imports' => [
-                            'visible' => '${$.namespace}.${$.namespace}.websites.' . $websiteId . ':checked'
+                            'visible' => '${$.namespace}.${$.namespace}.websites.' . $websiteId . ':checked',
+                            '__disableTmpl' => ['visible' => false],
                         ],
                         'itemTemplate' => 'record',
                         'dataScope' => '',
@@ -331,6 +357,8 @@ class Websites extends AbstractModifier
     }
 
     /**
+     * Returns websites options list.
+     *
      * @return array
      * @since 101.0.0
      */
@@ -397,8 +425,9 @@ class Websites extends AbstractModifier
         $this->websitesList = [];
         $groupList = $this->groupRepository->getList();
         $storesList = $this->storeRepository->getList();
+        $websiteList = $this->storeManager->getWebsites(true);
 
-        foreach ($this->websiteRepository->getList() as $website) {
+        foreach ($websiteList as $website) {
             $websiteId = $website->getId();
             if (!$websiteId) {
                 continue;

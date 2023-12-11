@@ -9,7 +9,7 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 
 class ImportExportTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
-    public function setUp()
+    protected function setUp(): void
     {
         $this->resource = 'Magento_Sales::transactions_fetch';
         $this->uri = 'backend/sales/transactions/fetch';

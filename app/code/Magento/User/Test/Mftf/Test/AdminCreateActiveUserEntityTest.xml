@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateActiveUserEntityTest">
+        <annotations>
+            <features value="User"/>
+            <stories value="Create Admin User"/>
+            <title value="Admin user should be able to create active admin user"/>
+            <description value="Admin user should be able to create active admin user"/>
+            <testCaseId value="MC-33044"/>
+            <severity value="CRITICAL"/>
+            <group value="user"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud_smoke"/>
+            <group value="cloud"/>
+        </annotations>
+        <after>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <actionGroup ref="AdminDeleteUserActionGroup" stepKey="deleteUser">
+                <argument name="user" value="activeAdmin"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+        <actionGroup ref="AdminCreateUserWithRoleAndIsActiveActionGroup" stepKey="createAdminUser">
+            <argument name="user" value="activeAdmin"/>
+            <argument name="role" value="roleDefaultAdministrator"/>
+        </actionGroup>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutMainAdmin"/>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginToNewAdmin">
+            <argument name="username" value="{{activeAdmin.username}}"/>
+            <argument name="password" value="{{activeAdmin.password}}"/>
+        </actionGroup>
+        <amOnPage url="{{AdminUsersPage.url}}" stepKey="navigateToAdminUsersGrid"/>
+        <actionGroup ref="AssertAdminUserIsInGridActionGroup" stepKey="assertAdminIsInGrid">
+            <argument name="user" value="activeAdmin"/>
+        </actionGroup>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutCreatedUser"/>
+    </test>
+</tests>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+
+    <test name="AdminNavigateWhileUserExpiredTest">
+        <annotations>
+            <features value="Security"/>
+            <stories value="Navigate to an admin page after user expiration date passes."/>
+            <title value="Navigate to an admin page after user expiration date passes"/>
+            <description value="Navigate to an admin page after user expiration date passes."/>
+            <testCaseId value="" />
+            <severity value="CRITICAL"/>
+            <group value="security"/>
+            <group value="pr_exclude"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Create user -->
+        <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="openNewUserPage" />
+        <generateDate date="+2 minute" format="M d, Y g:i:s A" stepKey="expiresDateTime"/>
+        <actionGroup ref="AdminFillInUserWithExpirationActionGroup" stepKey="fillInNewUserWithValidExpiration">
+            <argument name="expires_at" value="{$expiresDateTime}"/>
+        </actionGroup>
+        <grabValueFrom selector="{{AdminNewUserFormSection.username}}" stepKey="grabUsername"/>
+        <grabValueFrom selector="{{AdminNewUserFormSection.password}}" stepKey="grabPassword"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click selector="{{AdminNewUserFormSection.userInfoTab}}" stepKey="openUserInfoTab"/>
+        <actionGroup ref="AdminSaveUserSuccessActionGroup" stepKey="saveNewUserWithValidExpirationSuccess"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+        <!-- Login as that user -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewAdmin">
+            <argument name="username" value="{$grabUsername}"/>
+            <argument name="password" value="{$grabPassword}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminDashboardPageIsVisibleActionGroup" stepKey="seeDashboardPage"/>
+        <wait time="120" stepKey="waitForUserToExpire"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="navigateToCustomers"/>
+        <!-- Confirm that user is logged out -->
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeAdminLoginUrl"/>
+        <seeElement selector="{{AdminLoginFormSection.loginBlock}}" stepKey="assertAdminLoginPageIsAvailable"/>
+
+        <!-- Delete created user -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteUser">
+            <argument name="user" value="NewAdminUser"/>
+        </actionGroup>
+    </test>
+</tests>

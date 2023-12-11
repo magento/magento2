@@ -45,6 +45,13 @@ define([
         });
     });
 
+    afterEach(function () {
+        try {
+            injector.clean();
+            injector.remove();
+        } catch (e) {}
+    });
+
     describe('Magento_Ui/js/form/element/multiselect', function () {
         describe('"setPrepareToSendData" method', function () {
             it('Check method call with empty array as parameter.', function () {

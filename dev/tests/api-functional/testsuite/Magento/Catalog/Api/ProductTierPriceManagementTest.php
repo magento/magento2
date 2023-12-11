@@ -9,11 +9,14 @@ namespace Magento\Catalog\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * ProductTierPriceManagementTest API operations test
+ */
 class ProductTierPriceManagementTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductTierPriceManagementV1';
-    const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/products/';
+    private const SERVICE_NAME = 'catalogProductTierPriceManagementV1';
+    private const SERVICE_VERSION = 'V1';
+    private const RESOURCE_PATH = '/V1/products/';
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
@@ -34,22 +37,22 @@ class ProductTierPriceManagementTest extends WebapiAbstract
             ],
         ];
 
-        $tearPriceList = $this->_webApiCall(
+        $tierPriceList = $this->_webApiCall(
             $serviceInfo,
             ['sku' => $productSku, 'customerGroupId' => $customerGroupId]
         );
 
-        $this->assertCount($count, $tearPriceList);
+        $this->assertCount($count, $tierPriceList);
         if ($count) {
-            $this->assertEquals($value, $tearPriceList[0]['value']);
-            $this->assertEquals($qty, $tearPriceList[0]['qty']);
+            $this->assertEquals($value, $tierPriceList[0]['value']);
+            $this->assertEquals($qty, $tierPriceList[0]['qty']);
         }
     }
 
     public function getListDataProvider()
     {
         return [
-            [0, 2, 5, 3],
+            [0, 3, 5, 3],
             [1, 0, null, null],
             ['all', 2, 8, 2],
         ];
@@ -77,7 +80,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
             ],
         ];
         $requestData = ['sku' => $productSku, 'customerGroupId' => $customerGroupId, 'qty' => $qty];
-        $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
+        $this->assertTrue($this->_webApiCall($serviceInfo, $requestData, null, "all"));
     }
 
     public function deleteDataProvider()
@@ -193,7 +196,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
             'qty' => $qty,
             'price' => $price,
         ];
-        $this->_webApiCall($serviceInfo, $requestData);
+        $this->_webApiCall($serviceInfo, $requestData, null, "all");
         $objectManager = \Magento\TestFramework\ObjectManager::getInstance();
         /** @var \Magento\Catalog\Api\ProductTierPriceManagementInterface $service */
         $service = $objectManager->get(\Magento\Catalog\Api\ProductTierPriceManagementInterface::class);

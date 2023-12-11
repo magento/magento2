@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontProductInfoMainSection">
+        <element name="swatchOptionByLabel" type="button" selector="div.swatch-option[data-option-label='{{opt}}']" parameterized="true"/>
+        <element name="nthSwatchOption" type="button" selector="div.swatch-option:nth-of-type({{var}})" parameterized="true"/>
+        <element name="selectedSwatchValue" type="text" selector="//div[contains(@class, 'swatch-attribute') and contains(., '{{attr}}')]//span[contains(@class, 'swatch-attribute-selected-option')]" parameterized="true"/>
+        <element name="swatchAttributeOptions" type="text" selector="div.swatch-attribute-options"/>
+        <element name="nthSwatchOptionText" type="button" selector="div.swatch-option.text:nth-of-type({{n}})" parameterized="true"/>
+        <element name="productSwatch" type="button" selector="//div[@class='swatch-option'][@aria-label='{{var1}}']" parameterized="true"/>
+        <element name="visualSwatchOption" type="button" selector=".swatch-option[data-option-tooltip-value='#{{visualSwatchOption}}']" parameterized="true"/>
+        <element name="visualSwatchOptionText" type="button" selector=".swatch-option.text[data-option-tooltip-value='{{visualSwatchOptionText}}']" parameterized="true"/>
+        <element name="swatchOptionTooltip" type="block" selector="div.swatch-option-tooltip"/>
+        <element name="swatchAttributeSelectedOption" type="text" selector="#product-options-wrapper .swatch-option.selected"/>
+    </section>
+</sections>

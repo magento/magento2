@@ -5,10 +5,16 @@
  */
 namespace Magento\User\Controller\Adminhtml;
 
+use Magento\Framework\Intl\DateTimeFactory;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\TestFramework\Mail\Template\TransportBuilderMock;
+use Magento\TestFramework\Helper\Bootstrap;
+
 /**
  * Test class for \Magento\User\Controller\Adminhtml\Auth
  *
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -20,7 +26,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     {
         $this->dispatch('backend/admin/auth/forgotpassword');
         $expected = 'Password Help';
-        $this->assertContains($expected, $this->getResponse()->getBody());
+        $this->assertStringContainsString($expected, $this->getResponse()->getBody());
     }
 
     /**
@@ -35,7 +41,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->dispatch('backend/admin/auth/forgotpassword');
         $this->assertRedirect(
             $this->equalTo(
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                Bootstrap::getObjectManager()->get(
                     \Magento\Backend\Helper\Data::class
                 )->getHomePageUrl()
             )
@@ -51,21 +57,24 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function testEmailSendForgotPasswordAction()
     {
-        $transportBuilderMock = $this->prepareEmailMock(
-            1,
-            'admin_emails_forgot_email_template',
-            'general'
+        /** @var TransportBuilderMock $transportMock */
+        $transportMock = Bootstrap::getObjectManager()->get(
+            TransportBuilderMock::class
         );
-        $this->addMockToClass($transportBuilderMock, \Magento\User\Model\User::class);
-
         $this->getRequest()->setPostValue('email', 'adminUser@example.com');
         $this->dispatch('backend/admin/auth/forgotpassword');
         $this->assertRedirect(
             $this->equalTo(
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                Bootstrap::getObjectManager()->get(
                     \Magento\Backend\Helper\Data::class
                 )->getHomePageUrl()
             )
+        );
+        $message = $transportMock->getSentMessage();
+        $this->assertNotEmpty($message);
+        $this->assertEquals(
+            __('Password Reset Confirmation for %1', ['John Doe'])->render(),
+            $message->getSubject()
         );
     }
 
@@ -79,13 +88,13 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     public function testResetPasswordAction()
     {
         /** @var $user \Magento\User\Model\User */
-        $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $user = Bootstrap::getObjectManager()->create(
             \Magento\User\Model\User::class
         )->loadByUsername(
             'dummy_username'
         );
         $this->assertNotEmpty($user->getId(), 'Broken fixture');
-        $resetPasswordToken = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $resetPasswordToken = Bootstrap::getObjectManager()->get(
             \Magento\User\Helper\Data::class
         )->generateResetPasswordLinkToken();
         $user->changeResetPasswordLinkToken($resetPasswordToken);
@@ -98,6 +107,45 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->assertEquals('auth', $this->getRequest()->getControllerName());
         $this->assertEquals('resetpassword', $this->getRequest()->getActionName());
         $this->assertTrue((bool)strpos($this->getResponse()->getBody(), $resetPasswordToken));
+    }
+
+    /**
+     * Test reset password action extends expiry of token
+     *
+     * @covers \Magento\User\Controller\Adminhtml\Auth\ResetPassword::execute
+     * @covers \Magento\User\Controller\Adminhtml\Auth\ResetPassword::_validateResetPasswordLinkToken
+     * @magentoDataFixture Magento/User/_files/dummy_user.php
+     */
+    public function testResetPasswordActionWithTokenNearExpiry()
+    {
+        /** @var $user \Magento\User\Model\User */
+        $user = Bootstrap::getObjectManager()->create(
+            \Magento\User\Model\User::class
+        )->loadByUsername(
+            'dummy_username'
+        );
+        $this->assertNotEmpty($user->getId(), 'Broken fixture');
+        $resetPasswordToken = Bootstrap::getObjectManager()->get(
+            \Magento\User\Helper\Data::class
+        )->generateResetPasswordLinkToken();
+        $user->changeResetPasswordLinkToken($resetPasswordToken);
+
+        $anHourAgo = Bootstrap::getObjectManager()->create(DateTimeFactory::class)
+            ->create()
+            ->sub(\DateInterval::createFromDateString('1 hour'))
+            ->format(DateTime::DATETIME_PHP_FORMAT);
+        $user->setRpTokenCreatedAt($anHourAgo);
+        $user->save();
+
+        $this->getRequest()->setQueryValue('token', $resetPasswordToken)->setQueryValue('id', $user->getId());
+        $this->dispatch('backend/admin/auth/resetpassword');
+
+        $this->assertEquals('adminhtml', $this->getRequest()->getRouteName());
+        $this->assertEquals('auth', $this->getRequest()->getControllerName());
+        $this->assertEquals('resetpassword', $this->getRequest()->getActionName());
+        $this->assertTrue((bool)strpos($this->getResponse()->getBody(), $resetPasswordToken));
+
+        $this->assertNotEquals($anHourAgo, $user->reload()->getRpTokenCreatedAt());
     }
 
     /**
@@ -123,7 +171,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function testResetPasswordPostAction($password, $passwordConfirmation, $isPasswordChanged)
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
 
         /** @var $user \Magento\User\Model\User */
         $user = $objectManager->create(\Magento\User\Model\User::class);
@@ -203,7 +251,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
 
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\Backend\Helper\Data $backendHelper */
         $backendHelper = $objectManager->get(\Magento\Backend\Helper\Data::class);
@@ -218,7 +266,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function testResetPasswordPostActionWithInvalidPassword()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
 
         $user = $objectManager->create(\Magento\User\Model\User::class);
         $user->loadByUsername('dummy_username');
@@ -263,7 +311,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      * @param int $occurrenceNumber
      * @param string $templateId
      * @param string $sender
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function prepareEmailMock($occurrenceNumber, $templateId, $sender)
     {
@@ -311,11 +359,11 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     /**
      * Add mocked object to environment
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock
+     * @param \PHPUnit\Framework\MockObject\MockObject $transportBuilderMock
      * @param string $originalClassName
      */
     protected function addMockToClass(
-        \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock,
+        \PHPUnit\Framework\MockObject\MockObject $transportBuilderMock,
         $originalClassName
     ) {
         $userMock = $this->_objectManager->create(

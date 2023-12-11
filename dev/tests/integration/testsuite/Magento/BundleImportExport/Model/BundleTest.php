@@ -9,7 +9,10 @@ use Magento\CatalogImportExport\Model\AbstractProductExportImportTestCase;
 
 class BundleTest extends AbstractProductExportImportTestCase
 {
-    public function exportImportDataProvider()
+    /**
+     * @return array
+     */
+    public function exportImportDataProvider(): array
     {
         return [
             // @todo uncomment after MAGETWO-49677 resolved
@@ -45,17 +48,42 @@ class BundleTest extends AbstractProductExportImportTestCase
         ];
     }
 
-    public function importReplaceDataProvider()
+    /**
+     * Run import/export tests.
+     *
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
+     *
+     * @param array $fixtures
+     * @param string[] $skus
+     * @param string[] $skippedAttributes
+     * @return void
+     * @dataProvider exportImportDataProvider
+     */
+    public function testImportExport(array $fixtures, array $skus, array $skippedAttributes = []): void
     {
-        return $this->exportImportDataProvider();
+        $rollbacks = [];
+        foreach ($fixtures as $fixture) {
+            $rollbacks[] = str_replace('.php', '_rollback.php', $fixture);
+        }
+        $this->fixtures = $fixtures;
+        $this->executeFixtures($fixtures);
+        $this->modifyData($skus);
+        $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
+        $csvFile = $this->executeExportTest($skus, $skippedAttributes);
+        $this->executeImportReplaceTest($skus, $skippedAttributes, false, $csvFile);
+        $this->executeImportDeleteTest($skus, $csvFile);
+        $this->executeFixtures($rollbacks);
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product $expectedProduct
-     * @param \Magento\Catalog\Model\Product $actualProduct
+     * @inheritdoc
      */
-    protected function assertEqualsSpecificAttributes($expectedProduct, $actualProduct)
-    {
+    protected function assertEqualsSpecificAttributes(
+        \Magento\Catalog\Model\Product $expectedProduct,
+        \Magento\Catalog\Model\Product $actualProduct
+    ): void {
         $expectedBundleProductOptions = $expectedProduct->getExtensionAttributes()->getBundleProductOptions();
         $actualBundleProductOptions = $actualProduct->getExtensionAttributes()->getBundleProductOptions();
 

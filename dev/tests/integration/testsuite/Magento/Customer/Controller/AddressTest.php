@@ -9,6 +9,7 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
 {
@@ -18,7 +19,10 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
     /** @var FormKey */
     private $formKey;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         parent::setUp();
         $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
@@ -41,9 +45,9 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/address/index');
 
         $body = $this->getResponse()->getBody();
-        $this->assertContains('Default Billing Address', $body);
-        $this->assertContains('Default Shipping Address', $body);
-        $this->assertContains('Green str, 67', $body);
+        $this->assertStringContainsString('Default Billing Address', $body);
+        $this->assertStringContainsString('Default Shipping Address', $body);
+        $this->assertStringContainsString('Green str, 67', $body);
     }
 
     /**
@@ -55,8 +59,8 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/address/edit');
 
         $body = $this->getResponse()->getBody();
-        $this->assertContains('value="John"', $body);
-        $this->assertContains('value="Smith"', $body);
+        $this->assertStringContainsString('value="John"', $body);
+        $this->assertStringContainsString('value="Smith"', $body);
     }
 
     /**
@@ -150,8 +154,8 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
             $this->equalTo(
                 [
                     'One or more input exceptions have occurred.',
-                    'street is a required field.',
-                    'city is a required field.',
+                    '&quot;street&quot; is required. Enter and try again.',
+                    '&quot;city&quot; is required. Enter and try again.',
                 ]
             ),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
@@ -165,7 +169,7 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testDeleteAction()
     {
         $this->getRequest()->setParam('id', 1);
-        $this->getRequest()->setParam('form_key', $this->formKey->getFormKey());
+        $this->getRequest()->setParam('form_key', $this->formKey->getFormKey())->setMethod(HttpRequest::METHOD_POST);
         // we are overwriting the address coming from the fixture
         $this->dispatch('customer/address/delete');
 
@@ -183,7 +187,7 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testWrongAddressDeleteAction()
     {
         $this->getRequest()->setParam('id', 555);
-        $this->getRequest()->setParam('form_key', $this->formKey->getFormKey());
+        $this->getRequest()->setParam('form_key', $this->formKey->getFormKey())->setMethod(HttpRequest::METHOD_POST);
         // we are overwriting the address coming from the fixture
         $this->dispatch('customer/address/delete');
 

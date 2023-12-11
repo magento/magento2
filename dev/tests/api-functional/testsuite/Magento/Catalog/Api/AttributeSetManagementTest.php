@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Api;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -16,7 +17,7 @@ class AttributeSetManagementTest extends WebapiAbstract
      */
     private $createServiceInfo;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->createServiceInfo = [
             'rest' => [
@@ -60,11 +61,12 @@ class AttributeSetManagementTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Invalid value
      */
     public function testCreateThrowsExceptionIfGivenAttributeSetAlreadyHasId()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Invalid value');
+
         $entityTypeCode = 'catalog_product';
         $entityType = $this->getEntityTypeByCode($entityTypeCode);
         $attributeSetName = 'new_attribute_set';
@@ -81,11 +83,11 @@ class AttributeSetManagementTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Can not create attribute set based on not existing attribute set
      */
     public function testCreateThrowsExceptionIfGivenSkeletonIdIsInvalid()
     {
+        $this->expectException(\Exception::class);
+
         $attributeSetName = 'new_attribute_set';
         $arguments = [
             'attributeSet' => [
@@ -95,14 +97,18 @@ class AttributeSetManagementTest extends WebapiAbstract
             'skeletonId' => 0,
         ];
         $this->_webApiCall($this->createServiceInfo, $arguments);
+
+        $this->expectExceptionMessage(
+            "The attribute set couldn't be created because it's based on a non-existing attribute set."
+        );
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Can not create attribute set based on non product attribute set.
      */
     public function testCreateThrowsExceptionIfGivenSkeletonIdHasWrongEntityType()
     {
+        $this->expectException(\Exception::class);
+
         $attributeSetName = 'new_attribute_set';
         $arguments = [
             'attributeSet' => [
@@ -112,14 +118,18 @@ class AttributeSetManagementTest extends WebapiAbstract
             'skeletonId' => 7,
         ];
         $this->_webApiCall($this->createServiceInfo, $arguments);
+
+        $this->expectExceptionMessage(
+            "The attribute set couldn't be created because it's based on a non-product attribute set."
+        );
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Can not create attribute set based on not existing attribute set
      */
     public function testCreateThrowsExceptionIfGivenSkeletonAttributeSetDoesNotExist()
     {
+        $this->expectException(\Exception::class);
+
         $attributeSetName = 'new_attribute_set';
         $arguments = [
             'attributeSet' => [
@@ -129,14 +139,19 @@ class AttributeSetManagementTest extends WebapiAbstract
             'skeletonId' => 9999,
         ];
         $this->_webApiCall($this->createServiceInfo, $arguments);
+
+        $this->expectExceptionMessage(
+            "The attribute set couldn't be created because it's based on a non-existing attribute set."
+        );
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Attribute set name is empty.
      */
     public function testCreateThrowsExceptionIfAttributeSetNameIsEmpty()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The attribute set name is empty. Enter the name and try again.');
+
         $entityTypeCode = 'catalog_product';
         $entityType = $this->getEntityTypeByCode($entityTypeCode);
         $attributeSetName = '';
@@ -156,7 +171,7 @@ class AttributeSetManagementTest extends WebapiAbstract
         $entityTypeCode = 'catalog_product';
         $entityType = $this->getEntityTypeByCode($entityTypeCode);
         $attributeSetName = 'Default';
-        $expectedMessage = 'An attribute set named "Default" already exists.';
+        $expectedMessage = 'A "Default" attribute set name already exists. Create a new name and try again.';
 
         $arguments = [
             'attributeSet' => [
@@ -170,7 +185,7 @@ class AttributeSetManagementTest extends WebapiAbstract
             $this->_webApiCall($this->createServiceInfo, $arguments);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."

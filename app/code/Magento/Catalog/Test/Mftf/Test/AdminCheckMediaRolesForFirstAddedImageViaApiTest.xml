@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckMediaRolesForFirstAddedImageViaApiTest">
+        <annotations>
+            <stories value="Add Simple Product with image via API"/>
+            <title value="Check that added image for created product has selected image roles."/>
+            <description value="Login as admin, create simple product, add image to created product (via API).Go to
+                Admin Product Edit page for created product to check that added image has selected image roles."/>
+            <group value="catalog"/>
+            <severity value="MAJOR"/>
+            <group value="pr_exclude"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <createData entity="SimpleOutOfStockProduct" stepKey="createSimpleProduct"/>
+            <createData entity="ApiProductAttributeMediaGalleryEntryWithoutTypesTestImage" stepKey="createSimpleProductImage">
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToSimpleProduct">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenProductImagesSectionActionGroup" stepKey="openProductImagesSection"/>
+        <actionGroup ref="AssertAdminProductImageRolesSelectedActionGroup" stepKey="checkImageRolesSelected">
+            <argument name="imageFileName" value="$createSimpleProductImage.entry[content][name]$"/>
+        </actionGroup>
+    </test>
+</tests>

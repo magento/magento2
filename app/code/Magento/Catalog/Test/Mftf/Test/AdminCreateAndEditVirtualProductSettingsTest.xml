@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateAndEditVirtualProductSettingsTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create/Edit virtual product in Admin"/>
+            <title value="Admin should be able to set/edit other product information when creating/editing a virtual product"/>
+            <description value="Admin should be able to set/edit other product information when creating/editing a virtual product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3245"/>
+            <group value="Catalog"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <before>
+            <!-- Create related products -->
+            <createData entity="SimpleProduct2" stepKey="createFirstRelatedProduct"/>
+            <createData entity="SimpleProduct2" stepKey="createSecondRelatedProduct"/>
+            <createData entity="SimpleProduct2" stepKey="createThirdRelatedProduct"/>
+
+            <!-- Create website -->
+            <createData entity="secondCustomWebsite" stepKey="createWebsite"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete created virtual product -->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="defaultVirtualProduct"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+
+            <!-- Delete website -->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="$createWebsite.website[name]$"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
+            <!-- Delete related products -->
+            <deleteData createDataKey="createFirstRelatedProduct" stepKey="deleteFirstRelatedProduct"/>
+            <deleteData createDataKey="createSecondRelatedProduct" stepKey="deleteSecondRelatedProduct"/>
+            <deleteData createDataKey="createThirdRelatedProduct" stepKey="deleteThirdRelatedProduct"/>
+
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <comment userInput="remove me" stepKey="disableWYSIWYG"/>
+
+        <!-- Create new virtual product -->
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createVirtualProduct">
+            <argument name="productType" value="virtual"/>
+        </actionGroup>
+
+        <!-- Fill all main fields -->
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillMainProductForm">
+            <argument name="product" value="defaultVirtualProduct"/>
+        </actionGroup>
+
+        <!-- Set Content to the product -->
+        <scrollTo selector="{{AdminProductContentSection.sectionHeader}}" x="0" y="-100" stepKey="scrollToContent"/>
+        <click selector="{{AdminProductContentSection.sectionHeader}}" stepKey="openContentDropDown"/>
+        <fillField selector="{{AdminProductContentSection.descriptionTextArea}}" userInput="{{ApiProductDescription.value}}" stepKey="fillLongDescription"/>
+        <fillField selector="{{AdminProductContentSection.shortDescriptionTextArea}}" userInput="{{ApiProductShortDescription.value}}" stepKey="fillShortDescription"/>
+
+        <!-- Add two related products -->
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addFirstRelatedProduct">
+            <argument name="sku" value="$$createFirstRelatedProduct.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addSecondRelatedProduct">
+            <argument name="sku" value="$$createSecondRelatedProduct.sku$$"/>
+        </actionGroup>
+
+        <!-- Set product in created Website -->
+        <actionGroup ref="AdminAssignProductInWebsiteActionGroup" stepKey="selectProductInWebsites">
+            <argument name="website" value="$createWebsite.website[name]$"/>
+        </actionGroup>
+
+        <!-- Set Design settings for the product -->
+        <actionGroup ref="AdminSetProductDesignSettingsActionGroup" stepKey="setProductDesignSettings">
+            <argument name="designSettings" value="simpleBlankDesignOneColumn"/>
+        </actionGroup>
+
+        <!-- Set Gift Options settings for the product -->
+        <actionGroup ref="AdminSwitchProductGiftMessageStatusActionGroup" stepKey="enableGiftMessageSettings">
+            <argument name="status" value="1"/>
+        </actionGroup>
+
+        <!-- Save product form-->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveButton"/>
+
+        <!-- Open product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+            <argument name="productUrl" value="{{defaultVirtualProduct.urlKey}}"/>
+        </actionGroup>
+
+        <!-- Assert two related products at the storefront -->
+        <seeElement selector="{{StorefrontProductRelatedProductsSection.relatedProductName($$createFirstRelatedProduct.name$$)}}" stepKey="seeFirstRelatedProductInStorefront"/>
+        <seeElement selector="{{StorefrontProductRelatedProductsSection.relatedProductName($$createSecondRelatedProduct.name$$)}}" stepKey="seeSecondRelatedProductInStorefront"/>
+
+        <!-- Assert product content -->
+        <see selector="{{StorefrontProductInfoMainSection.productDescription}}" userInput="{{ApiProductDescription.value}}" stepKey="seeLongDescriptionStorefront"/>
+        <see selector="{{StorefrontProductInfoMainSection.productShortDescription}}" userInput="{{ApiProductShortDescription.value}}" stepKey="seeShortDescriptionStorefront"/>
+
+        <!-- Assert product design settings "page layout 1 column" -->
+        <seeElement selector="{{StorefrontProductPageDesignSection.layoutOneColumn}}" stepKey="seeDesignChanges"/>
+
+        <!-- Assert Gift Option product settings is not present -->
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="defaultVirtualProduct"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openShoppingCart"/>
+        <dontSeeElement selector="{{StorefrontProductCartGiftOptionSection.giftOptions}}" stepKey="dontSeeGiftOption"/>
+
+        <!-- Open created product -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForVirtualProduct">
+            <argument name="product" value="defaultVirtualProduct"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
+            <argument name="product" value="defaultVirtualProduct"/>
+        </actionGroup>
+
+        <!-- Edit Content to the product -->
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToContentTab"/>
+        <actionGroup ref="AdminOpenContentSectionOnProductPageActionGroup" stepKey="openContentTab"/>
+        <actionGroup ref="AdminFillInProductDescriptionActionGroup" stepKey="editLongDescription">
+            <argument name="description" value="EDIT ~ {{ApiProductDescription.value}} ~ EDIT"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillInProductShortDescriptionActionGroup" stepKey="editShortDescription">
+            <argument name="shortDescription" value="EDIT ~ {{ApiProductShortDescription.value}} ~ EDIT"/>
+        </actionGroup>
+
+
+        <!-- Edit product Search Engine Optimization settings -->
+        <actionGroup ref="AdminChangeProductSEOSettingsActionGroup" stepKey="editProductSEOSettings">
+            <argument name="productName" value="SimpleProduct.name"/>
+        </actionGroup>
+
+        <!-- Edit related products -->
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addThirdRelatedProduct">
+            <argument name="sku" value="$$createThirdRelatedProduct.sku$$"/>
+        </actionGroup>
+
+        <!-- Assert product in assigned to websites -->
+        <actionGroup ref="AssertProductIsAssignedToWebsiteActionGroup" stepKey="seeCustomWebsiteIsChecked">
+            <argument name="website" value="$createWebsite.website[name]$"/>
+        </actionGroup>
+
+        <!-- Edit product in Websites -->
+        <actionGroup ref="AdminUnassignProductInWebsiteActionGroup" stepKey="uncheckProductInWebsites">
+            <argument name="website" value="$createWebsite.website[name]$"/>
+        </actionGroup>
+
+        <!-- Edit Design settings for the product -->
+        <actionGroup ref="AdminSetProductDesignSettingsActionGroup" stepKey="editProductDesignSettings">
+            <argument name="designSettings" value="simpleLumaDesignTwoColumnsRight"/>
+        </actionGroup>
+
+        <!-- Edit Gift Option product settings -->
+        <actionGroup ref="AdminSwitchProductGiftMessageStatusActionGroup" stepKey="disableGiftMessageSettings"/>
+
+        <!-- Save product form -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
+
+        <!-- Verify Url Key after changing -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="{{SimpleProduct.urlKey}}"/>
+        </actionGroup>
+
+        <!-- Assert three related products at the storefront -->
+        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup" stepKey="seeFirstRelatedProduct">
+            <argument name="productName" value="$$createThirdRelatedProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup" stepKey="seeSecondRelatedProduct">
+            <argument name="productName" value="$$createSecondRelatedProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup" stepKey="seeThirdRelatedProduct">
+            <argument name="productName" value="$$createThirdRelatedProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Assert product content -->
+        <actionGroup ref="AssertStorefrontProductDescriptionActionGroup" stepKey="seeEditedLongDescriptionStorefront">
+            <argument name="productDescription" value="EDIT ~ {{ApiProductDescription.value}} ~ EDIT"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontShortProductDescriptionActionGroup" stepKey="seeEditedShortDescriptionStorefront">
+            <argument name="productShortDescription" value="EDIT ~ {{ApiProductShortDescription.value}} ~ EDIT"/>
+        </actionGroup>
+
+        <!-- Assert product design settings "right bar is present at product page with 2 columns" -->
+        <seeElement selector="{{StorefrontProductPageDesignSection.layoutTwoColumnsRight}}" stepKey="seeNewDesignChanges"/>
+
+        <!-- Assert Gift Option product settings  -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <dontSeeElement selector="{{StorefrontProductCartGiftOptionSection.giftOptions}}" stepKey="dontSeeGiftOptionBtn"/>
+
+        <comment userInput="remove me" stepKey="enableWYSIWYG"/>
+    </test>
+</tests>

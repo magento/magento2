@@ -37,7 +37,7 @@ class CreditmemoListTest extends WebapiAbstract
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }
@@ -84,7 +84,7 @@ class CreditmemoListTest extends WebapiAbstract
         $searchCriteriaBuilder->addFilters([$stateFilter]);
         $searchCriteriaBuilder->addFilters([$incrementFilter, $zeroStatusFilter]);
         $searchCriteriaBuilder->addSortOrder($sortOrder);
-
+        $searchCriteriaBuilder->setPageSize(20);
         $searchData = $searchCriteriaBuilder->create()->__toArray();
 
         $requestData = ['searchCriteria' => $searchData];

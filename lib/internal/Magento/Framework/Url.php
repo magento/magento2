@@ -7,9 +7,11 @@
 namespace Magento\Framework;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Url\HostChecker;
 
+// phpcs:disable Magento2.Annotation
 /**
  * URL
  *
@@ -62,8 +64,9 @@ use Magento\Framework\Url\HostChecker;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class Url extends \Magento\Framework\DataObject implements \Magento\Framework\UrlInterface
+class Url extends \Magento\Framework\DataObject implements \Magento\Framework\UrlInterface, ResetAfterRequestInterface
 {
     /**
      * Configuration data cache
@@ -110,7 +113,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @var bool
      */
-    protected $_useSession;
+    protected $_useSession = false;
 
     /**
      * Url security info list
@@ -291,10 +294,9 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      */
     public function getUseSession()
     {
-        if ($this->_useSession === null) {
-            $this->_useSession = $this->_sidResolver->getUseSessionInUrl();
-        }
-        return $this->_useSession;
+        trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
+
+        return false;
     }
 
     /**
@@ -426,8 +428,10 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      */
     public function setScope($params)
     {
-        $this->setData('scope', $this->_scopeResolver->getScope($params));
-        $this->getRouteParamsResolver()->setScope($this->_scopeResolver->getScope($params));
+        $scope = $this->_scopeResolver->getScope($params);
+        $this->setData('scope', $scope);
+        $this->getRouteParamsResolver()->setScope($scope);
+
         return $this;
     }
 
@@ -494,6 +498,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param string $data
      * @return \Magento\Framework\UrlInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _setRoutePath($data)
     {
@@ -502,11 +507,14 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         }
 
         $this->unsetData('route_path');
-        $routePieces = explode('/', $data);
-
-        $route = array_shift($routePieces);
-        if ('*' === $route) {
-            $route = $this->_getRequest()->getRouteName();
+        $route = '';
+        $routePieces = [];
+        if (!empty($data)) {
+            $routePieces = explode('/', $data);
+            $route = array_shift($routePieces);
+            if ('*' === $route) {
+                $route = $this->_getRequest()->getRouteName();
+            }
         }
         $this->_setRouteName($route);
 
@@ -675,8 +683,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     }
 
     /**
-     * Set Action name
-     * Reseted route path if action name has change
+     * Set Action name, reseated route path if action name has change
      *
      * @param string $data
      * @return \Magento\Framework\UrlInterface
@@ -757,16 +764,12 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     }
 
     /**
-     * Add session param
-     *
-     * @return \Magento\Framework\UrlInterface
+     * @inheritDoc
      */
     public function addSessionParam()
     {
-        $this->setQueryParam(
-            $this->_sidResolver->getSessionIdQueryParam($this->_session),
-            $this->_session->getSessionId()
-        );
+        trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
+
         return $this;
     }
 
@@ -924,11 +927,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             unset($routeParams['_query']);
         }
 
-        $noSid = null;
-        if (isset($routeParams['_nosid'])) {
-            $noSid = (bool)$routeParams['_nosid'];
-            unset($routeParams['_nosid']);
-        }
+        unset($routeParams['_nosid']);
         $url = $this->getRouteUrl($routePath, $routeParams);
 
         /**
@@ -938,15 +937,11 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             if (is_string($query)) {
                 $this->_setQuery($query);
             } elseif (is_array($query)) {
-                $this->addQueryParams($query, !empty($routeParams['_current']));
+                $this->addQueryParams($query);
             }
             if ($query === false) {
                 $this->addQueryParams([]);
             }
-        }
-
-        if ($noSid !== true) {
-            $this->_prepareSessionUrl($url);
         }
 
         $query = $this->_getQuery($escapeQuery);
@@ -972,18 +967,10 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param string $url
      *
      * @return \Magento\Framework\UrlInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _prepareSessionUrl($url)
     {
-        if (!$this->getUseSession()) {
-            return $this;
-        }
-        $sessionId = $this->_session->getSessionIdForHost($url);
-        if ($this->_sidResolver->getUseSessionVar() && !$sessionId) {
-            $this->setQueryParam('___SID', $this->_isSecure() ? 'S' : 'U');
-        } elseif ($sessionId) {
-            $this->setQueryParam($this->_sidResolver->getSessionIdQueryParam($this->_session), $sessionId);
-        }
         return $this;
     }
 
@@ -1004,8 +991,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         }
         $url = $this->getScheme() . '://' . $this->getHost() . $port . $this->getPath();
 
-        $this->_prepareSessionUrl($url);
-
         $query = $this->_getQuery();
         if ($query) {
             $url .= '?' . $query;
@@ -1024,10 +1009,15 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param string $value
      * @return string
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
+     * @see \Magento\Framework\Escaper::escapeUrl
      */
     public function escape($value)
     {
+        if ($value === null) {
+            return '';
+        }
+
         $value = str_replace('"', '%22', $value);
         $value = str_replace("'", '%27', $value);
         $value = str_replace('>', '%3E', $value);
@@ -1067,15 +1057,10 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
              */
             // @codingStandardsIgnoreEnd
             function ($match) {
-                if ($this->useSessionIdForUrl($match[2] == 'S' ? true : false)) {
-                    return $match[1] . $this->_sidResolver->getSessionIdQueryParam($this->_session) . '='
-                        . $this->_session->getSessionId() . (isset($match[3]) ? $match[3] : '');
-                } else {
-                    if ($match[1] == '?') {
-                        return isset($match[3]) ? '?' : '';
-                    } elseif ($match[1] == '&amp;' || $match[1] == '&') {
-                        return isset($match[3]) ? $match[3] : '';
-                    }
+                if ($match[1] == '?') {
+                    return isset($match[3]) ? '?' : '';
+                } elseif ($match[1] == '&amp;' || $match[1] == '&') {
+                    return $match[3] ?? '';
                 }
             },
             $html
@@ -1118,7 +1103,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     }
 
     /**
-     * Return frontend redirect URL with SID and other session parameters if any
+     * Return frontend redirect URL without SID
      *
      * @param string $url
      *
@@ -1129,7 +1114,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         $this->_prepareSessionUrl($url);
         $query = $this->_getQuery(false);
         if ($query) {
-            $url .= (strpos($url, '?') === false ? '?' : '&') . $query;
+            $url .= (strpos((string)$url, '?') === false ? '?' : '&') . $query;
         }
 
         return $url;
@@ -1176,7 +1161,8 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Gets URL modifier.
      *
      * @return \Magento\Framework\Url\ModifierInterface
-     * @deprecated 100.1.0
+     * @deprecated 101.0.0
+     * @see \Magento\Framework\Url\ModifierInterface
      */
     private function getUrlModifier()
     {
@@ -1193,7 +1179,8 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Get escaper
      *
      * @return Escaper
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
+     * @see \Magento\Framework\Escaper
      */
     private function getEscaper()
     {
@@ -1202,5 +1189,15 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
                 ->get(\Magento\Framework\Escaper::class);
         }
         return $this->escaper;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_data = [];
+        $this->cacheUrl = [];
+        self::$_configDataCache = null;
     }
 }

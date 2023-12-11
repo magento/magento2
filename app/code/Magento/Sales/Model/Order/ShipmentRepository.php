@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -43,7 +44,7 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
     /**
      * @param Metadata $metadata
      * @param SearchResultFactory $searchResultFactory
-     * @param CollectionProcessorInterface $collectionProcessor
+     * @param CollectionProcessorInterface|null $collectionProcessor
      */
     public function __construct(
         Metadata $metadata,
@@ -52,7 +53,9 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
     ) {
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;
-        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
+        $this->collectionProcessor = $collectionProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+        );
     }
 
     /**
@@ -66,14 +69,16 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
     public function get($id)
     {
         if (!$id) {
-            throw new InputException(__('Id required'));
+            throw new InputException(__('An ID is needed. Set the ID and try again.'));
         }
 
         if (!isset($this->registry[$id])) {
             /** @var \Magento\Sales\Api\Data\ShipmentInterface $entity */
             $entity = $this->metadata->getNewInstance()->load($id);
             if (!$entity->getEntityId()) {
-                throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
+                throw new NoSuchEntityException(
+                    __("The entity that was requested doesn't exist. Verify the entity and try again.")
+                );
             }
 
             $this->registry[$id] = $entity;
@@ -112,7 +117,7 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
 
             unset($this->registry[$entity->getEntityId()]);
         } catch (\Exception $e) {
-            throw new CouldNotDeleteException(__('Could not delete shipment'), $e);
+            throw new CouldNotDeleteException(__("The shipment couldn't be deleted."), $e);
         }
 
         return true;
@@ -143,8 +148,10 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
         try {
             $this->metadata->getMapper()->save($entity);
             $this->registry[$entity->getEntityId()] = $entity;
+        } catch (\Magento\Framework\Validator\Exception $exception) {
+            throw new CouldNotSaveException(__($exception->getMessage()), $exception);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not save shipment'), $e);
+            throw new CouldNotSaveException(__("The shipment couldn't be saved."), $e);
         }
 
         return $this->registry[$entity->getEntityId()];
@@ -158,21 +165,5 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
     public function create()
     {
         return $this->metadata->getNewInstance();
-    }
-
-    /**
-     * Retrieve collection processor
-     *
-     * @deprecated 100.2.0
-     * @return CollectionProcessorInterface
-     */
-    private function getCollectionProcessor()
-    {
-        if (!$this->collectionProcessor) {
-            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
-            );
-        }
-        return $this->collectionProcessor;
     }
 }

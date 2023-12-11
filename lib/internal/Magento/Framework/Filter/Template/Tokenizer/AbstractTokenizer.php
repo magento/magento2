@@ -33,7 +33,8 @@ abstract class AbstractTokenizer
      */
     public function next()
     {
-        if ($this->_currentIndex + 1 >= strlen($this->_string)) {
+        $stringLength = $this->_string !== null ? strlen($this->_string) : 0;
+        if ($this->_currentIndex + 1 >= $stringLength) {
             return false;
         }
 
@@ -94,7 +95,7 @@ abstract class AbstractTokenizer
      */
     public function setString($value)
     {
-        $this->_string = urldecode($value);
+        $this->_string = rawurldecode($value);
         $this->reset();
     }
 
@@ -115,7 +116,7 @@ abstract class AbstractTokenizer
      */
     public function isWhiteSpace()
     {
-        return trim($this->char()) != $this->char();
+        return $this->_string === '' ?: trim((string)$this->char()) !== $this->char();
     }
 
     /**

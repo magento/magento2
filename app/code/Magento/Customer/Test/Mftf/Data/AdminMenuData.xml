@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdminMenuCustomers">
+        <data key="pageTitle">Customers</data>
+        <data key="title">Customers</data>
+        <data key="dataUiId">magento-customer-customer</data>
+    </entity>
+    <entity name="AdminMenuCustomersAllCustomers">
+        <data key="pageTitle">Customers</data>
+        <data key="title">All Customers</data>
+        <data key="dataUiId">magento-customer-customer-manage</data>
+    </entity>
+    <entity name="AdminMenuCustomersCustomerGroups">
+        <data key="pageTitle">Customer Groups</data>
+        <data key="title">Customer Groups</data>
+        <data key="dataUiId">magento-customer-customer-group</data>
+    </entity>
+    <entity name="AdminMenuCustomersNowOnline">
+        <data key="pageTitle">Customers Now Online</data>
+        <data key="title">Now Online</data>
+        <data key="dataUiId">magento-customer-customer-online</data>
+    </entity>
+</entities>

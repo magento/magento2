@@ -8,6 +8,8 @@ namespace Magento\User\Block\User\Edit\Tab;
 use Magento\Backend\Block\Widget\Grid\Column;
 
 /**
+ * Roles grid
+ *
  * @api
  * @since 100.0.2
  */
@@ -68,6 +70,8 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Adds column filter to collection
+     *
      * @param Column $column
      * @return $this
      */
@@ -92,6 +96,8 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepares collection
+     *
      * @return $this
      */
     protected function _prepareCollection()
@@ -103,6 +109,8 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepares columns
+     *
      * @return $this
      */
     protected function _prepareColumns()
@@ -126,6 +134,8 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Get grid url
+     *
      * @return string
      */
     public function getGridUrl()
@@ -135,13 +145,20 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Gets selected roles
+     *
      * @param bool $json
      * @return array|string
      */
     public function getSelectedRoles($json = false)
     {
-        if ($this->getRequest()->getParam('user_roles') != "") {
-            return $this->getRequest()->getParam('user_roles');
+        $userRoles = $this->getRequest()->getParam('user_roles');
+        if ($userRoles) {
+            if ($json) {
+                $result = json_decode($userRoles);
+                return $result ? $this->_jsonEncoder->encode($result) : '{}';
+            }
+            return $this->escapeJs($this->escapeHtml($userRoles));
         }
         /* @var $user \Magento\User\Model\User */
         $user = $this->_coreRegistry->registry('permissions_user');

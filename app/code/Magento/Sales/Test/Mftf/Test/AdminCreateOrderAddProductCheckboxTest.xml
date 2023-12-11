@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderAddProductCheckboxTest">
+        <annotations>
+            <title value="Create Order in Admin and Add Product"/>
+            <stories value="Create order and add product using checkbox"/>
+            <description value="Create order in Admin panel, add product by clicking checkbox, and verify it is checked"/>
+            <features value="Sales"/>
+            <severity value="AVERAGE"/>
+            <group value="Sales"/>
+        </annotations>
+
+        <before>
+            <!-- Create simple customer -->
+            <createData entity="Simple_US_Customer_CA" stepKey="createSimpleCustomer"/>
+
+            <!-- Create simple product -->
+            <createData entity="ApiProductWithDescription" stepKey="createSimpleProduct"/>
+
+            <!-- Login to Admin Panel -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <!-- Initiate create new order -->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$createSimpleCustomer$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminAddSimpleProductToOrderAndCheckCheckboxActionGroup" stepKey="clickAddProducts">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+
+         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillSkuFilterBundle"/>
+         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchBundle"/>
+         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToCheckColumn"/>
+         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectProduct"/>
+         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="verifyProductChecked"/>
+
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createSimpleCustomer" stepKey="deleteSimpleCustomer"/>
+        </after>
+    </test>
+</tests>

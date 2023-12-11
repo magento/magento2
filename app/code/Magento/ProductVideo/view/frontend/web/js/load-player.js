@@ -7,7 +7,11 @@
  @version 0.0.1
  @requires jQuery & jQuery UI
  */
-define(['jquery', 'jquery/ui'], function ($) {
+define([
+    'jquery',
+    'jquery-ui-modules/widget',
+    'vimeoWrapper'
+], function ($) {
     'use strict';
 
     var videoRegister = {
@@ -88,6 +92,7 @@ define(['jquery', 'jquery/ui'], function ($) {
             this._playing = this._autoplay || false;
             this._loop = this.element.data('loop');
             this._rel = this.element.data('related');
+            this.useYoutubeNocookie = this.element.data('youtubenocookie') || false;
 
             this._responsive = this.element.data('responsive') !== false;
 
@@ -127,13 +132,6 @@ define(['jquery', 'jquery/ui'], function ($) {
         },
 
         /**
-         * Destroyer
-         */
-        destroy: function () {
-            this._player.destroy();
-        },
-
-        /**
          * Calculates ratio for responsive videos
          * @private
          */
@@ -156,7 +154,7 @@ define(['jquery', 'jquery/ui'], function ($) {
 
             this._initialize();
 
-            this.element.append('<div/>');
+            this.element.append('<div></div>');
 
             this._on(window, {
 
@@ -164,6 +162,12 @@ define(['jquery', 'jquery/ui'], function ($) {
                  * Handle event
                  */
                 'youtubeapiready': function () {
+                    var host = 'https://www.youtube.com';
+
+                    if (self.useYoutubeNocookie) {
+                        host = 'https://www.youtube-nocookie.com';
+                    }
+
                     if (self._player !== undefined) {
                         return;
                     }
@@ -182,6 +186,7 @@ define(['jquery', 'jquery/ui'], function ($) {
                         width: self._width,
                         videoId: self._code,
                         playerVars: self._params,
+                        host: host,
                         events: {
 
                             /**
@@ -233,6 +238,14 @@ define(['jquery', 'jquery/ui'], function ($) {
                 if (videoRegister.isLoaded('youtube')) {
                     $(window).trigger('youtubeapiready');
                 }
+
+                return;
+            }
+
+            // if script already loaded by other library
+            if (window.YT) {
+                videoRegister.register('youtube', true);
+                $(window).trigger('youtubeapiready');
 
                 return;
             }
@@ -289,9 +302,8 @@ define(['jquery', 'jquery/ui'], function ($) {
          * stops and unloads player
          * @private
          */
-        destroy: function () {
+        _destroy: function () {
             this.stop();
-            this._player.destroy();
         }
     });
 
@@ -304,7 +316,8 @@ define(['jquery', 'jquery/ui'], function ($) {
         _create: function () {
             var timestamp,
                 additionalParams = '',
-                src;
+                src,
+                id;
 
             this._initialize();
             timestamp = new Date().getTime();
@@ -322,10 +335,11 @@ define(['jquery', 'jquery/ui'], function ($) {
                 this._code +
                 timestamp +
                 additionalParams;
+            id = 'vimeo' + this._code + timestamp;
             this.element.append(
-                $('<iframe/>')
+                $('<iframe></iframe>')
                     .attr('frameborder', 0)
-                    .attr('id', 'vimeo' + this._code + timestamp)
+                    .attr('id', id)
                     .attr('width', this._width)
                     .attr('height', this._height)
                     .attr('src', src)
@@ -333,11 +347,13 @@ define(['jquery', 'jquery/ui'], function ($) {
                     .attr('mozallowfullscreen', '')
                     .attr('allowfullscreen', '')
                     .attr('referrerPolicy', 'origin')
+                    .attr('allow', 'autoplay')
             );
-            this._player = window.$f(this.element.children(':first')[0]);
 
-            // Froogaloop throws error without a registered ready event
-            this._player.addEvent('ready', function (id) {
+            /* eslint-disable no-undef */
+            this._player = new Vimeo.Player(this.element.children(':first')[0]);
+
+            this._player.ready().then(function () {
                 $('#' + id).closest('.fotorama__stage__frame').addClass('fotorama__product-video--loaded');
             });
         },
@@ -346,7 +362,7 @@ define(['jquery', 'jquery/ui'], function ($) {
          * Play command for Vimeo
          */
         play: function () {
-            this._player.api('play');
+            this._player.play();
             this._playing = true;
         },
 
@@ -354,7 +370,7 @@ define(['jquery', 'jquery/ui'], function ($) {
          * Pause command for Vimeo
          */
         pause: function () {
-            this._player.api('pause');
+            this._player.pause();
             this._playing = false;
         },
 
@@ -362,7 +378,7 @@ define(['jquery', 'jquery/ui'], function ($) {
          * Stop command for Vimeo
          */
         stop: function () {
-            this._player.api('unload');
+            this._player.unload();
             this._playing = false;
         },
 

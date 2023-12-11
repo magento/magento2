@@ -10,6 +10,9 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Search\Request\Builder;
 
+/**
+ * Search API for all requests.
+ */
 class Search implements SearchInterface
 {
     /**
@@ -51,7 +54,7 @@ class Search implements SearchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function search(SearchCriteriaInterface $searchCriteria)
     {
@@ -68,6 +71,16 @@ class Search implements SearchInterface
 
         $this->requestBuilder->setFrom($searchCriteria->getCurrentPage() * $searchCriteria->getPageSize());
         $this->requestBuilder->setSize($searchCriteria->getPageSize());
+
+        /**
+         * This added in Backward compatibility purposes.
+         * Temporary solution for an existing API of a fulltext search request builder.
+         * It must be moved to different API.
+         * Scope to split Search request builder API in MC-16461.
+         */
+        if (method_exists($this->requestBuilder, 'setSort')) {
+            $this->requestBuilder->setSort($searchCriteria->getSortOrders());
+        }
         $request = $this->requestBuilder->create();
         $searchResponse = $this->searchEngine->search($request);
 

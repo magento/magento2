@@ -18,7 +18,7 @@ use Magento\Ui\Component\Form\Field;
  * Tier prices modifier adds price type option to tier prices.
  *
  * @api
- * @since 101.1.0
+ * @since 102.0.0
  */
 class TierPrice extends AbstractModifier
 {
@@ -45,8 +45,8 @@ class TierPrice extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
-     * @since 101.1.0
+     * @inheritdoc
+     * @since 102.0.0
      */
     public function modifyData(array $data)
     {
@@ -54,8 +54,11 @@ class TierPrice extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
-     * @since 101.1.0
+     * Add tier price info to meta array.
+     *
+     * @since 102.0.0
+     * @param array $meta
+     * @return array
      */
     public function modifyMeta(array $meta)
     {
@@ -112,9 +115,13 @@ class TierPrice extends AbstractModifier
                             'dataType' => Price::NAME,
                             'component' => 'Magento_Ui/js/form/components/group',
                             'label' => __('Price'),
-                            'enableLabel' => true,
+                            'showLabel' => false,
                             'dataScope' => '',
                             'additionalClasses' => 'control-grouped',
+                            'imports' => [
+                                'currency' => '${ $.parentName }.website_id:currency',
+                                '__disableTmpl' => ['currency' => false],
+                            ],
                             'sortOrder' => isset($priceMeta['arguments']['data']['config']['sortOrder'])
                                 ? $priceMeta['arguments']['data']['config']['sortOrder'] : 40,
                         ],
@@ -135,6 +142,10 @@ class TierPrice extends AbstractModifier
                                             . ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE,
                                         ProductPriceOptionsInterface::VALUE_PERCENT => '${ $.parentName }.'
                                             . ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PERCENTAGE_VALUE,
+                                        '__disableTmpl' => [
+                                            ProductPriceOptionsInterface::VALUE_FIXED => false,
+                                            ProductPriceOptionsInterface::VALUE_PERCENT => false,
+                                        ],
                                     ],
                                 ],
                             ],
@@ -150,8 +161,8 @@ class TierPrice extends AbstractModifier
                                     'dataType' => Price::NAME,
                                     'addbefore' => '%',
                                     'validation' => [
-                                        'validate-number' => true,
-                                        'less-than-equals-to' => 100
+                                        'required-entry' => true,
+                                        'validate-positive-percent-decimal' => true
                                     ],
                                     'visible' => $firstOption
                                         && $firstOption['value'] == ProductPriceOptionsInterface::VALUE_PERCENT,

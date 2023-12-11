@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page layout="2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="sidebar.main.account_nav">
+            <arguments>
+                <argument name="block_title" translate="true" xsi:type="string">My Account</argument>
+                <argument name="block_css" xsi:type="string">block-collapsible-nav</argument>
+            </arguments>
+        </referenceBlock>
+        <move element="page.main.title" destination="content.top" before="-"/>
+    </body>
+</page>

@@ -9,6 +9,10 @@ namespace Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Catalog\Pricing\Price\BasePrice;
+use Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator;
+use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Catalog product option select type model
@@ -18,6 +22,9 @@ use Magento\Framework\Model\AbstractModel;
  * @method \Magento\Catalog\Model\Product\Option\Value setOptionId(int $value)
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) - added use of constants instead of string literals:
+ *      BasePrice::PRICE_CODE - instead of 'base_price'
+ *      RegularPrice::PRICE_CODE - instead of 'regular_price'
  * @since 100.0.2
  */
 class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface
@@ -25,20 +32,22 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     /**
      * Option type percent
      */
-    const TYPE_PERCENT = 'percent';
+    public const TYPE_PERCENT = 'percent';
 
     /**#@+
      * Constants
      */
-    const KEY_TITLE = 'title';
-    const KEY_SORT_ORDER = 'sort_order';
-    const KEY_PRICE = 'price';
-    const KEY_PRICE_TYPE = 'price_type';
-    const KEY_SKU = 'sku';
-    const KEY_OPTION_TYPE_ID = 'option_type_id';
+    public const KEY_TITLE = 'title';
+    public const KEY_SORT_ORDER = 'sort_order';
+    public const KEY_PRICE = 'price';
+    public const KEY_PRICE_TYPE = 'price_type';
+    public const KEY_SKU = 'sku';
+    public const KEY_OPTION_TYPE_ID = 'option_type_id';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var array
+     */
     protected $_values = [];
 
     /**
@@ -52,11 +61,14 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     protected $_option;
 
     /**
-     * Value collection factory
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory
      */
     protected $_valueCollectionFactory;
+
+    /**
+     * @var CustomOptionPriceCalculator
+     */
+    private $customOptionPriceCalculator;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -65,6 +77,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param CustomOptionPriceCalculator|null $customOptionPriceCalculator
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -72,9 +85,13 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
         \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory $valueCollectionFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        CustomOptionPriceCalculator $customOptionPriceCalculator = null
     ) {
         $this->_valueCollectionFactory = $valueCollectionFactory;
+        $this->customOptionPriceCalculator = $customOptionPriceCalculator
+            ?? ObjectManager::getInstance()->get(CustomOptionPriceCalculator::class);
+
         parent::__construct(
             $context,
             $registry,
@@ -85,6 +102,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Override parent _construct method
+     *
      * @return void
      */
     protected function _construct()
@@ -93,6 +112,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Add value to values array
+     *
      * @codeCoverageIgnoreStart
      * @param mixed $value
      * @return $this
@@ -104,6 +125,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Returns array of values
+     *
      * @return array
      */
     public function getValues()
@@ -112,6 +135,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Set values array
+     *
      * @param array $values
      * @return $this
      */
@@ -122,6 +147,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Unset all from values array
+     *
      * @return $this
      */
     public function unsetValues()
@@ -131,6 +158,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Set option
+     *
      * @param Option $option
      * @return $this
      */
@@ -141,6 +170,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Unset option
+     *
      * @return $this
      */
     public function unsetOption()
@@ -160,6 +191,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Set product
+     *
      * @param Product $product
      * @return $this
      */
@@ -172,6 +205,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     //@codeCoverageIgnoreEnd
 
     /**
+     * Get product
+     *
      * @return Product
      */
     public function getProduct()
@@ -183,22 +218,21 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Save array of values
+     *
      * @return $this
      */
     public function saveValues()
     {
-        foreach ($this->getValues() as $value) {
-            $this->setData(
-                $value
-            )->setData(
-                'option_id',
-                $this->getOption()->getId()
-            )->setData(
-                'store_id',
-                $this->getOption()->getStoreId()
-            );
+        $option = $this->getOption();
 
-            if ($this->getData('is_delete') == '1') {
+        foreach ($this->getValues() as $value) {
+            $this->isDeleted(false);
+            $this->setData($value)
+                ->setData('option_id', $option->getId())
+                ->setData('store_id', $option->getStoreId());
+
+            if ((bool) $this->getData('is_delete') === true) {
                 if ($this->getId()) {
                     $this->deleteValues($this->getId());
                     $this->delete();
@@ -207,23 +241,20 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
                 $this->save();
             }
         }
-        //eof foreach()
+
         return $this;
     }
 
     /**
-     * Return price. If $flag is true and price is percent
-     *  return converted percent to price
+     * Return price. If $flag is true and price is percent return converted percent to price
      *
      * @param bool $flag
      * @return float|int
      */
     public function getPrice($flag = false)
     {
-        if ($flag && $this->getPriceType() == self::TYPE_PERCENT) {
-            $basePrice = $this->getOption()->getProduct()->getFinalPrice();
-            $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
-            return $price;
+        if ($flag) {
+            return $this->customOptionPriceCalculator->getOptionPriceByPriceCode($this);
         }
         return $this->_getData(self::KEY_PRICE);
     }
@@ -235,13 +266,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      */
     public function getRegularPrice()
     {
-        if ($this->getPriceType() == self::TYPE_PERCENT) {
-            $basePrice = $this->getOption()->getProduct()->getPriceInfo()
-                ->getPrice('regular_price')->getAmount()->getValue();
-            $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
-            return $price;
-        }
-        return $this->_getData(self::KEY_PRICE);
+        return $this->customOptionPriceCalculator->getOptionPriceByPriceCode($this, RegularPrice::PRICE_CODE);
     }
 
     /**
@@ -263,6 +288,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Returns values by option
+     *
      * @param array $optionIds
      * @param int $option_id
      * @param int $store_id
@@ -282,6 +309,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Delete value by option
+     *
      * @param int $option_id
      * @return $this
      */
@@ -292,6 +321,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Delete values by option
+     *
      * @param int $option_type_id
      * @return $this
      */

@@ -19,14 +19,14 @@ use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
  * Class processes values using backend model which declared in system.xml.
  *
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  */
 class ValueProcessor
 {
     /**
      * Placeholder for the output of sensitive data.
      */
-    const SAFE_PLACEHOLDER = '******';
+    public const SAFE_PLACEHOLDER = '******';
 
     /**
      * System configuration structure factory.
@@ -56,6 +56,9 @@ class ValueProcessor
      */
     private $jsonSerializer;
 
+    /** @var Structure */
+    private $configStructure;
+
     /**
      * @param ScopeInterface $scope The object for managing configuration scope
      * @param StructureFactory $structureFactory The system configuration structure factory.
@@ -83,21 +86,17 @@ class ValueProcessor
      * @param string $value The value to process
      * @param string $path The configuration path for getting backend model. E.g. scope_id/group_id/field_id
      * @return string processed value result
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function process($scope, $scopeCode, $value, $path)
     {
-        $areaScope = $this->scope->getCurrentScope();
-        $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
-        /** @var Structure $configStructure */
-        $configStructure = $this->configStructureFactory->create();
-        $this->scope->setCurrentScope($areaScope);
+        $configStructure = $this->getConfigStructure();
 
         /** @var Field $field */
         $field = $configStructure->getElementByConfigPath($path);
 
         /** @var Value $backendModel */
-        $backendModel = $field && $field->hasBackendModel()
+        $backendModel = $field instanceof Field && $field->hasBackendModel()
             ? $field->getBackendModel()
             : $this->configValueFactory->create();
 
@@ -117,5 +116,22 @@ class ValueProcessor
          * It should be converted to string for displaying.
          */
         return is_array($processedValue) ? $this->jsonSerializer->serialize($processedValue) : $processedValue;
+    }
+
+    /**
+     * Retrieve config structure
+     *
+     * @return Structure
+     */
+    private function getConfigStructure(): Structure
+    {
+        if (empty($this->configStructure)) {
+            $areaScope = $this->scope->getCurrentScope();
+            $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
+            /** @var Structure $configStructure */
+            $this->configStructure = $this->configStructureFactory->create();
+            $this->scope->setCurrentScope($areaScope);
+        }
+        return $this->configStructure;
     }
 }

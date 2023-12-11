@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminChangeCustomerOptionFileActionGroup">
+        <annotations>
+            <description>Change custom option file on admin order page.</description>
+        </annotations>
+        <arguments>
+            <argument name="file" type="string" defaultValue="{{TestImageNew.file}}"/>
+        </arguments>
+
+        <click selector="{{AdminOrderFormItemsSection.configure}}" stepKey="clickConfigure"/>
+        <waitForPageLoad stepKey="waitForAjaxLoad"/>
+        <waitForElementVisible selector="{{AdminOrderFormCustomOptionsSection.linkChange}}" stepKey="waitForLinkChange"/>
+        <click selector="{{AdminOrderFormCustomOptionsSection.linkChange}}" stepKey="clickLinkChange"/>
+        <waitForPageLoad stepKey="waitForChangeLoad"/>
+        <waitForElementVisible selector="{{AdminOrderFormCustomOptionsSection.file}}" stepKey="waitForAttachImage"/>
+        <attachFile selector="{{AdminOrderFormCustomOptionsSection.file}}" userInput="{{file}}" stepKey="changeAttachImage"/>
+        <waitForPageLoad stepKey="waitForImageUploaded"/>
+        <click selector="{{AdminOrderFormCustomOptionsSection.buttonOk}}" stepKey="clickButtonOK"/>
+        <waitForPageLoad stepKey="waitForCustomOptionApplied"/>
+        <waitForElementNotVisible selector="{{AdminOrderFormCustomOptionsSection.buttonOk}}" stepKey="waitForOkButtonGone"/>
+    </actionGroup>
+</actionGroups>

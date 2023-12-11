@@ -11,7 +11,7 @@ use Magento\Catalog\Model\Category;
  * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
  * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
  * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  */
 class ProductIndexerTest extends \PHPUnit\Framework\TestCase
 {
@@ -37,7 +37,7 @@ class ProductIndexerTest extends \PHPUnit\Framework\TestCase
      */
     private $categoryRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Indexer\Model\Indexer::class
@@ -217,5 +217,20 @@ class ProductIndexerTest extends \PHPUnit\Framework\TestCase
         $result = array_slice($result, 2);
 
         return array_slice($result, 0, 4);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $reflection = new \ReflectionObject($this);
+        foreach ($reflection->getProperties() as $property) {
+            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
+                $property->setAccessible(true);
+                $property->setValue($this, null);
+            }
+        }
     }
 }

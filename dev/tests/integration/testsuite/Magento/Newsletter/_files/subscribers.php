@@ -3,9 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../Magento/Store/_files/core_fixturestore.php';
-require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/core_fixturestore.php');
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer.php');
 
 $currentStore = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
     \Magento\Store\Model\StoreManagerInterface::class
@@ -28,7 +29,7 @@ $firstSubscriberId = $subscriber->getId();
 
 $subscriber = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Newsletter\Model\Subscriber::class);
-$subscriber->setStoreId($otherStore)
+$subscriber->setStoreId($currentStore)
     // Intentionally setting ID to 0 instead of 2 to test fallback mechanism in Subscriber model
     ->setCustomerId(0)
     ->setSubscriberEmail('customer_two@example.com')

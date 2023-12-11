@@ -15,7 +15,7 @@ define([
 
     return Component.extend({
         defaults: {
-            template: 'Magento_Paypal/payment/paypal-express-bml',
+            template: 'Magento_Paypal/payment/payflow-express-bml',
             billingAgreement: ''
         },
 
@@ -76,7 +76,6 @@ define([
         continueToPayPal: function () {
             if (additionalValidators.validate()) {
                 //update payment method information if additional data was changed
-                this.selectPaymentMethod();
                 setPaymentMethodAction(this.messageContainer).done(
                     function () {
                         customerData.invalidate(['cart']);

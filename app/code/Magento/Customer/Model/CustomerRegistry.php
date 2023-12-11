@@ -3,20 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Model\Data\CustomerSecure;
 use Magento\Customer\Model\Data\CustomerSecureFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Registry for \Magento\Customer\Model\Customer
+ *
+ * @api
  */
-class CustomerRegistry
+class CustomerRegistry implements ResetAfterRequestInterface
 {
-    const REGISTRY_SEPARATOR = ':';
+    public const REGISTRY_SEPARATOR = ':';
 
     /**
      * @var CustomerFactory
@@ -101,8 +105,10 @@ class CustomerRegistry
     public function retrieveByEmail($customerEmail, $websiteId = null)
     {
         if ($websiteId === null) {
-            $websiteId = $this->storeManager->getStore()->getWebsiteId();
+            $websiteId = $this->storeManager->getStore()->getWebsiteId()
+                ?: $this->storeManager->getDefaultStoreView()->getWebsiteId();
         }
+
         $emailKey = $this->getEmailKey($customerEmail, $websiteId);
         if (isset($this->customerRegistryByEmail[$emailKey])) {
             return $this->customerRegistryByEmail[$emailKey];
@@ -111,9 +117,7 @@ class CustomerRegistry
         /** @var Customer $customer */
         $customer = $this->customerFactory->create();
 
-        if (isset($websiteId)) {
-            $customer->setWebsiteId($websiteId);
-        }
+        $customer->setWebsiteId($websiteId);
 
         $customer->loadByEmail($customerEmail);
         if (!$customer->getEmail()) {
@@ -195,7 +199,7 @@ class CustomerRegistry
             $websiteId = $this->storeManager->getStore()->getWebsiteId();
         }
         $emailKey = $this->getEmailKey($customerEmail, $websiteId);
-        if ($emailKey) {
+        if (isset($this->customerRegistryByEmail[$emailKey])) {
             /** @var Customer $customer */
             $customer = $this->customerRegistryByEmail[$emailKey];
             unset($this->customerRegistryByEmail[$emailKey]);
@@ -228,5 +232,15 @@ class CustomerRegistry
         $emailKey = $this->getEmailKey($customer->getEmail(), $customer->getWebsiteId());
         $this->customerRegistryByEmail[$emailKey] = $customer;
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->customerRegistryById = [];
+        $this->customerRegistryByEmail = [];
+        $this->customerSecureRegistryById = [];
     }
 }

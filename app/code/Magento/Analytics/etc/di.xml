@@ -1,0 +1,277 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Analytics\ReportXml\ConfigInterface" type="Magento\Analytics\ReportXml\Config" />
+    <preference for="Magento\Analytics\Model\ConfigInterface" type="Magento\Analytics\Model\Config" />
+    <preference for="Magento\Analytics\Model\ReportWriterInterface" type="Magento\Analytics\Model\ReportWriter" />
+    <preference for="Magento\Analytics\Api\LinkProviderInterface" type="Magento\Analytics\Model\LinkProvider" />
+    <preference for="Magento\Analytics\Api\Data\LinkInterface" type="Magento\Analytics\Model\Link" />
+    <preference for="Magento\Analytics\Model\Connector\Http\ClientInterface" type="Magento\Analytics\Model\Connector\Http\Client\Curl" />
+    <preference for="Magento\Analytics\Model\ExportDataHandlerInterface" type="Magento\Analytics\Model\ExportDataHandlerNotification" />
+    <preference for="Magento\Analytics\Model\Connector\Http\ConverterInterface" type="Magento\Analytics\Model\Connector\Http\JsonConverter" />
+    <type name="Magento\Analytics\Model\Connector">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="signUp" xsi:type="string">Magento\Analytics\Model\Connector\SignUpCommand</item>
+                <item name="update" xsi:type="string">Magento\Analytics\Model\Connector\UpdateCommand</item>
+                <item name="notifyDataChanged" xsi:type="string">Magento\Analytics\Model\Connector\NotifyDataChangedCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <!--Configuration for \Magento\Analytics\ReportXml\Config-->
+    <type name="Magento\Analytics\ReportXml\Config">
+        <arguments>
+            <argument name="data" xsi:type="object">Magento\Analytics\ReportXml\Config\Data</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Analytics\ReportXml\Config\Data" type="Magento\Framework\Config\Data">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Analytics\ReportXml\Config\Reader</argument>
+            <argument name="cacheId" xsi:type="string">Magento_Analytics_ReportXml_CacheId</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Analytics\ReportXml\Config\SchemaLocator" type="Magento\Framework\Config\SchemaLocator">
+        <arguments>
+            <argument name="realPath" xsi:type="string">urn:magento:module:Magento_Analytics:etc/reports.xsd</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Analytics\ReportXml\Config\Reader\Xml" type="Magento\Framework\Config\Reader\Filesystem">
+        <arguments>
+            <argument name="converter" xsi:type="object">Magento\Analytics\ReportXml\Config\Converter\Xml</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Analytics\ReportXml\Config\SchemaLocator</argument>
+            <argument name="fileName" xsi:type="string">reports.xml</argument>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="/config/report" xsi:type="string">name</item>
+                <item name="/config/report/source/link-source" xsi:type="array">
+                    <item name="name" xsi:type="string">name</item>
+                    <item name="alias" xsi:type="string">alias</item>
+                </item>
+                <item name="/config/report/source/attribute" xsi:type="string">name</item>
+                <item name="/config/report/source/link-source/attribute" xsi:type="string">name</item>
+                <!-- filter conditions for main source-->
+                <item name="/config/report/source(/filter)+" xsi:type="string">glue</item>
+                <item name="/config/report/source(/filter)+/condition" xsi:type="array">
+                    <item name="attribute" xsi:type="string">attribute</item>
+                    <item name="operator" xsi:type="string">operator</item>
+                </item>
+                <!-- filter conditions for joined source-->
+                <item name="/config/report/source/link-source(/filter)+" xsi:type="string">glue</item>
+                <item name="/config/report/source/link-source(/filter)+/condition" xsi:type="array">
+                    <item name="attribute" xsi:type="string">attribute</item>
+                    <item name="operator" xsi:type="string">operator</item>
+                </item>
+                <!-- join conditions for joined source-->
+                <item name="/config/report/source/link-source/using" xsi:type="string">glue</item>
+                <item name="/config/report/source/link-source/using/condition" xsi:type="array">
+                    <item name="attribute" xsi:type="string">attribute</item>
+                    <item name="operator" xsi:type="string">operator</item>
+                </item>
+                <item name="/config/report/source/link-source/using(/filter)+" xsi:type="string">glue</item>
+                <item name="/config/report/source/link-source/using(/filter)+/condition" xsi:type="array">
+                    <item name="attribute" xsi:type="string">attribute</item>
+                    <item name="operator" xsi:type="string">operator</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Analytics\ReportXml\Config\Reader">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="xml" xsi:type="object">Magento\Analytics\ReportXml\Config\Reader\Xml</item>
+            </argument>
+        </arguments>
+    </type>
+    <!--Configuration for \Magento\Analytics\Model\Config-->
+    <type name="Magento\Analytics\Model\Config">
+        <arguments>
+            <argument name="data" xsi:type="object">Magento\Analytics\Model\Config\Data</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Analytics\Model\Config\Data" type="Magento\Framework\Config\Data">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Analytics\Model\Config\Reader</argument>
+            <argument name="cacheId" xsi:type="string">Magento_Analytics_CacheId</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Analytics\Model\Config\SchemaLocator" type="Magento\Framework\Config\SchemaLocator">
+        <arguments>
+            <argument name="realPath" xsi:type="string">urn:magento:module:Magento_Analytics:etc/analytics.xsd</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Analytics\Model\Config\Reader\Xml" type="Magento\Framework\Config\Reader\Filesystem">
+        <arguments>
+            <argument name="converter" xsi:type="object">Magento\Analytics\ReportXml\Config\Converter\Xml</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Analytics\Model\Config\SchemaLocator</argument>
+            <argument name="fileName" xsi:type="string">analytics.xml</argument>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="/config/file" xsi:type="string">name</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- -->
+    <type name="Magento\Analytics\ReportXml\QueryFactory">
+        <arguments>
+            <argument name="assemblers" xsi:type="array">
+                <item name="from" xsi:type="object">Magento\Analytics\ReportXml\DB\Assembler\FromAssembler</item>
+                <item name="filter" xsi:type="object">Magento\Analytics\ReportXml\DB\Assembler\FilterAssembler</item>
+                <item name="join" xsi:type="object">Magento\Analytics\ReportXml\DB\Assembler\JoinAssembler</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Model\Config\Reader">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="xml" xsi:type="object">Magento\Analytics\Model\Config\Reader\Xml</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Model\StoreConfigurationProvider">
+        <arguments>
+            <argument name="configPaths" xsi:type="array">
+                <item name="0" xsi:type="string">web/unsecure/base_url</item>
+                <item name="1" xsi:type="string">currency/options/base</item>
+                <item name="2" xsi:type="string">general/locale/timezone</item>
+                <item name="3" xsi:type="string">general/country/default</item>
+                <item name="4" xsi:type="string">carriers/dhl/title</item>
+                <item name="5" xsi:type="string">carriers/dhl/active</item>
+                <item name="6" xsi:type="string">carriers/fedex/title</item>
+                <item name="7" xsi:type="string">carriers/fedex/active</item>
+                <item name="8" xsi:type="string">carriers/flatrate/title</item>
+                <item name="9" xsi:type="string">carriers/flatrate/active</item>
+                <item name="10" xsi:type="string">carriers/tablerate/title</item>
+                <item name="11" xsi:type="string">carriers/tablerate/active</item>
+                <item name="12" xsi:type="string">carriers/freeshipping/title</item>
+                <item name="13" xsi:type="string">carriers/freeshipping/active</item>
+                <item name="14" xsi:type="string">carriers/ups/title</item>
+                <item name="15" xsi:type="string">carriers/ups/active</item>
+                <item name="16" xsi:type="string">carriers/usps/title</item>
+                <item name="17" xsi:type="string">carriers/usps/active</item>
+                <item name="18" xsi:type="string">payment/free/title</item>
+                <item name="19" xsi:type="string">payment/free/active</item>
+                <item name="20" xsi:type="string">payment/checkmo/title</item>
+                <item name="21" xsi:type="string">payment/checkmo/active</item>
+                <item name="22" xsi:type="string">payment/purchaseorder/title</item>
+                <item name="23" xsi:type="string">payment/purchaseorder/active</item>
+                <item name="24" xsi:type="string">payment/banktransfer/title</item>
+                <item name="25" xsi:type="string">payment/banktransfer/active</item>
+                <item name="26" xsi:type="string">payment/cashondelivery/title</item>
+                <item name="27" xsi:type="string">payment/cashondelivery/active</item>
+                <item name="28" xsi:type="string">payment/paypal_billing_agreement/title</item>
+                <item name="29" xsi:type="string">payment/paypal_billing_agreement/active</item>
+                <item name="30" xsi:type="string">analytics/general/vertical</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Model\Config\Source\Vertical">
+        <arguments>
+            <argument name="verticals" xsi:type="array">
+                <item name="0" xsi:type="string" translatable="true">Apps and Games</item>
+                <item name="1" xsi:type="string" translatable="true">Athletic/Sporting Goods</item>
+                <item name="2" xsi:type="string" translatable="true">Art and Design</item>
+                <item name="3" xsi:type="string" translatable="true">Auto Parts</item>
+                <item name="4" xsi:type="string" translatable="true">Baby/Children’s Apparel, Gear and Toys</item>
+                <item name="5" xsi:type="string" translatable="true">Beauty and Cosmetics</item>
+                <item name="6" xsi:type="string" translatable="true">Books, Music and Magazines</item>
+                <item name="7" xsi:type="string" translatable="true">Crafts and Stationery</item>
+                <item name="8" xsi:type="string" translatable="true">Consumer Electronics</item>
+                <item name="9" xsi:type="string" translatable="true">Deal Site</item>
+                <item name="10" xsi:type="string" translatable="true">Fashion Apparel and Accessories</item>
+                <item name="11" xsi:type="string" translatable="true">Food, Beverage and Grocery</item>
+                <item name="12" xsi:type="string" translatable="true">Home Goods and Furniture</item>
+                <item name="13" xsi:type="string" translatable="true">Home Improvement</item>
+                <item name="14" xsi:type="string" translatable="true">Jewelry and Watches</item>
+                <item name="15" xsi:type="string" translatable="true">Mass Merchant</item>
+                <item name="16" xsi:type="string" translatable="true">Office Supplies</item>
+                <item name="17" xsi:type="string" translatable="true">Outdoor and Camping Gear</item>
+                <item name="18" xsi:type="string" translatable="true">Pet Goods</item>
+                <item name="19" xsi:type="string" translatable="true">Pharma and Medical Devices</item>
+                <item name="20" xsi:type="string" translatable="true">Technology B2B</item>
+                <item name="21" xsi:type="string" translatable="true">Other</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\Backend\Baseurl">
+        <plugin name="updateAnalyticsSubscription" type="Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin" />
+    </type>
+    <virtualType name="SignUpResponseResolver" type="Magento\Analytics\Model\Connector\Http\ResponseResolver">
+        <arguments>
+            <argument name="responseHandlers" xsi:type="array">
+                <item name="201" xsi:type="object">\Magento\Analytics\Model\Connector\ResponseHandler\SignUp</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="UpdateResponseResolver" type="Magento\Analytics\Model\Connector\Http\ResponseResolver">
+        <arguments>
+            <argument name="responseHandlers" xsi:type="array">
+                <item name="201" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\Update</item>
+                <item name="401" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\ReSignUp</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="OtpResponseResolver" type="Magento\Analytics\Model\Connector\Http\ResponseResolver">
+        <arguments>
+            <argument name="responseHandlers" xsi:type="array">
+                <item name="201" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\OTP</item>
+                <item name="401" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\ReSignUp</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="NotifyDataChangedResponseResolver" type="Magento\Analytics\Model\Connector\Http\ResponseResolver">
+        <arguments>
+            <argument name="responseHandlers" xsi:type="array">
+                <item name="401" xsi:type="object">Magento\Analytics\Model\Connector\ResponseHandler\ReSignUp</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Analytics\Model\Connector\SignUpCommand">
+        <arguments>
+            <argument name="responseResolver" xsi:type="object">SignUpResponseResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Model\Connector\UpdateCommand">
+        <arguments>
+            <argument name="responseResolver" xsi:type="object">UpdateResponseResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Model\Connector\OTPRequest">
+        <arguments>
+            <argument name="responseResolver" xsi:type="object">OtpResponseResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Model\Connector\NotifyDataChangedCommand">
+        <arguments>
+            <argument name="responseResolver" xsi:type="object">NotifyDataChangedResponseResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="analytics/url/signup" xsi:type="string">1</item>
+                <item name="analytics/url/update" xsi:type="string">1</item>
+                <item name="analytics/url/bi_essentials" xsi:type="string">1</item>
+                <item name="analytics/url/otp" xsi:type="string">1</item>
+                <item name="analytics/url/report" xsi:type="string">1</item>
+                <item name="analytics/url/notify_data_changed" xsi:type="string">1</item>
+                <item name="analytics/general/token" xsi:type="string">1</item>
+            </argument>
+            <argument name="environment" xsi:type="array">
+                <item name="crontab/default/jobs/analytics_collect_data/schedule/cron_expr" xsi:type="string">1</item>
+                <item name="crontab/default/jobs/analytics_update/schedule/cron_expr" xsi:type="string">1</item>
+                <item name="crontab/default/jobs/analytics_subscribe/schedule/cron_expr" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\ReportXml\ConnectionFactory">
+        <arguments>
+            <argument name="connectionFactory" xsi:type="object">Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactory</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Integration\Model\Validator\BearerTokenValidator">
+        <plugin name="allow_bearer_token" type="Magento\Analytics\Plugin\BearerTokenValidatorPlugin"/>
+    </type>
+</config>

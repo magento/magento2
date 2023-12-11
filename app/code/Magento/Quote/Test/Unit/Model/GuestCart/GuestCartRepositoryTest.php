@@ -4,32 +4,41 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model\GuestCart;
 
-class GuestCartRepositoryTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\GuestCart\GuestCartRepository;
+use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class GuestCartRepositoryTest extends TestCase
 {
     /**
-     * @var \Magento\Quote\Model\GuestCart\GuestCartRepository
+     * @var GuestCartRepository
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $quoteRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $quoteIdMaskFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $quoteIdMaskMock;
 
@@ -43,11 +52,11 @@ class GuestCartRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $cartId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
-        $this->quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $objectManager = new ObjectManager($this);
+        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
+        $this->quoteMock = $this->createMock(Quote::class);
 
         $this->maskedCartId = 'f216207248d65c789b17be8545e0aa73';
         $this->cartId = 123;
@@ -59,7 +68,7 @@ class GuestCartRepositoryTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->model = $objectManager->getObject(
-            \Magento\Quote\Model\GuestCart\GuestCartRepository::class,
+            GuestCartRepository::class,
             [
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock

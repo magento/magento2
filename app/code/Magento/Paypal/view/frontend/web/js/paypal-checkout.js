@@ -7,7 +7,7 @@ define([
     'jquery',
     'Magento_Ui/js/modal/confirm',
     'Magento_Customer/js/customer-data',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'mage/mage'
 ], function ($, confirm, customerData) {
     'use strict';
@@ -89,7 +89,7 @@ define([
                 }
                 $(ppCheckoutInput).val(returnUrl);
 
-                $form.submit();
+                $form.trigger('submit');
             } else {
                 $.mage.redirect(returnUrl);
             }

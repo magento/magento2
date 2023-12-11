@@ -5,44 +5,46 @@
  */
 namespace Magento\Checkout\Model;
 
+use Magento\Checkout\Api\Data\TotalsInformationInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\CartTotalRepositoryInterface;
+
 /**
- * Class TotalsInformationManagement
+ * Class for management of totals information.
  */
 class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInformationManagementInterface
 {
     /**
-     * Cart total repository.
-     *
-     * @var \Magento\Quote\Api\CartTotalRepositoryInterface
+     * @var CartTotalRepositoryInterface
      */
     protected $cartTotalRepository;
 
     /**
      * Quote repository.
      *
-     * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @var CartRepositoryInterface
      */
     protected $cartRepository;
 
     /**
-     * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepository
-     * @param \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalRepository
+     * @param CartRepositoryInterface $cartRepository
+     * @param CartTotalRepositoryInterface $cartTotalRepository
      * @codeCoverageIgnore
      */
     public function __construct(
-        \Magento\Quote\Api\CartRepositoryInterface $cartRepository,
-        \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalRepository
+        CartRepositoryInterface $cartRepository,
+        CartTotalRepositoryInterface $cartTotalRepository
     ) {
         $this->cartRepository = $cartRepository;
         $this->cartTotalRepository = $cartTotalRepository;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function calculate(
         $cartId,
-        \Magento\Checkout\Api\Data\TotalsInformationInterface $addressInformation
+        TotalsInformationInterface $addressInformation
     ) {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->cartRepository->get($cartId);
@@ -52,9 +54,22 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
             $quote->setBillingAddress($addressInformation->getAddress());
         } else {
             $quote->setShippingAddress($addressInformation->getAddress());
-            $quote->getShippingAddress()->setCollectShippingRates(true)->setShippingMethod(
-                $addressInformation->getShippingCarrierCode() . '_' . $addressInformation->getShippingMethodCode()
-            );
+            if ($addressInformation->getShippingCarrierCode() && $addressInformation->getShippingMethodCode()) {
+                $shippingMethod = implode(
+                    '_',
+                    [$addressInformation->getShippingCarrierCode(), $addressInformation->getShippingMethodCode()]
+                );
+                $quoteShippingAddress = $quote->getShippingAddress();
+                if ($quoteShippingAddress->getShippingMethod() &&
+                    $quoteShippingAddress->getShippingMethod() !== $shippingMethod
+                ) {
+                    $quoteShippingAddress->setShippingAmount(0);
+                    $quoteShippingAddress->setBaseShippingAmount(0);
+                }
+                $quoteShippingAddress->setCollectShippingRates(true)
+                    ->setShippingMethod($shippingMethod);
+                $quoteShippingAddress->save();
+            }
         }
         $quote->collectTotals();
 
@@ -62,6 +77,8 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
     }
 
     /**
+     * Check if quote have items.
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void

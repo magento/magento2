@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Payment\Test\Unit\Model\Config\Source;
 
-use \Magento\Payment\Model\Config\Source\Allspecificcountries;
+use Magento\Payment\Model\Config\Source\Allspecificcountries;
+use PHPUnit\Framework\TestCase;
 
-class AllspecificcountriesTest extends \PHPUnit\Framework\TestCase
+class AllspecificcountriesTest extends TestCase
 {
     public function testToOptionArray()
     {

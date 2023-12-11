@@ -6,14 +6,18 @@
 
 namespace Magento\Framework\Model\ResourceModel\Db\Collection;
 
-use \Magento\Framework\App\ResourceConnection\SourceProviderInterface;
-use \Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Abstract Resource Collection
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 abstract class AbstractCollection extends AbstractDb implements SourceProviderInterface
 {
@@ -44,6 +48,13 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @var array|null
      */
     protected $_fieldsToSelect = null;
+
+    /**
+     * Expression fields to select in query.
+     *
+     * @var array
+     */
+    private $expressionFieldsToSelect = [];
 
     /**
      * Fields initial fields to select like id_field
@@ -97,7 +108,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * Event manager proxy
      *
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -105,7 +116,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param ManagerInterface $eventManager
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      */
@@ -113,7 +124,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
+        ManagerInterface $eventManager,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
@@ -130,8 +141,24 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @return void
      */
-    protected function _construct()
+    protected function _construct() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_fieldsToSelect = null;
+        $this->expressionFieldsToSelect = [];
+        $this->_initialFieldsToSelect = null;
+        $this->_fieldsToSelectChanged = false;
+        $this->_joinedTables = [];
+        $this->_resetItemsDataChanged = false;
+        $this->_construct();
+        $this->_initSelect();
     }
 
     /**
@@ -170,7 +197,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _initSelect()
     {
@@ -205,7 +232,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $columnsToSelect = [];
         foreach ($columns as $columnEntry) {
             list($correlationName, $column, $alias) = $columnEntry;
-            if ($correlationName !== 'main_table') {
+            if ($correlationName !== 'main_table' || isset($this->expressionFieldsToSelect[$alias])) {
                 // Add joined fields to select
                 if ($column instanceof \Zend_Db_Expr) {
                     $column = $column->__toString();
@@ -232,12 +259,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                     $column = $field;
                 }
 
-                if ($alias !== null &&
-                    in_array($alias, $columnsToSelect) ||
-                    // If field already joined from another table
-                    $alias === null &&
-                    isset($alias, $columnsToSelect)
-                ) {
+                if ($alias !== null && in_array($alias, $columnsToSelect)) {
                     continue;
                 }
 
@@ -347,6 +369,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         }
 
         $this->getSelect()->columns([$alias => $fullExpression]);
+        $this->expressionFieldsToSelect[$alias] = $fullExpression;
 
         return $this;
     }
@@ -458,9 +481,8 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     public function getResource()
     {
         if (empty($this->_resource)) {
-            $this->_resource = \Magento\Framework\App\ObjectManager::getInstance()->create(
-                $this->getResourceModelName()
-            );
+            // phpcs:ignore Magento2.PHP.AutogeneratedClassNotInConstructor
+            $this->_resource = ObjectManager::getInstance()->create($this->getResourceModelName());
         }
         return $this->_resource;
     }
@@ -496,21 +518,20 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * Join table to collection select
      *
-     * @param string $table
+     * @param string|array $table
      * @param string $cond
-     * @param string $cols
+     * @param string|array $cols
      * @return $this
      */
     public function join($table, $cond, $cols = '*')
     {
+        $alias = $table;
         if (is_array($table)) {
             foreach ($table as $k => $v) {
                 $alias = $k;
                 $table = $v;
                 break;
             }
-        } else {
-            $alias = $table;
         }
 
         if (!isset($this->_joinedTables[$alias])) {
@@ -614,7 +635,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     public function __wakeup()
     {
         parent::__wakeup();
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->_eventManager = $objectManager->get(\Magento\Framework\Event\ManagerInterface::class);
+        // phpcs:ignore Magento2.PHP.AutogeneratedClassNotInConstructor
+        $this->_eventManager = ObjectManager::getInstance()->get(ManagerInterface::class);
     }
 }

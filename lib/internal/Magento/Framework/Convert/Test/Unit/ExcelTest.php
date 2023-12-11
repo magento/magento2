@@ -1,40 +1,56 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Magento_Convert Test Case for \Magento\Framework\Convert\Excel Export
  */
+
 namespace Magento\Framework\Convert\Test\Unit;
 
-class ExcelTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Convert\Excel;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Filesystem\File\Write;
+use PHPUnit\Framework\TestCase;
+
+class ExcelTest extends TestCase
 {
     /**
-     * Test data
+     * Test excel data
      *
      * @var array
      */
     private $_testData = [
         [
             'ID', 'Name', 'Email', 'Group', 'Telephone', '+Telephone', 'ZIP', '0ZIP', 'Country', 'State/Province',
-            'Symbol=', 'Symbol-', 'Symbol+'
+            'Symbol=', 'Symbol-', 'Symbol+', 'NumberWithSpace', 'NumberWithTabulation'
         ],
         [
             1, 'Jon Doe', 'jon.doe@magento.com', 'General', '310-111-1111', '+310-111-1111', 90232, '090232',
-            'United States', 'California', '=', '-', '+'
+            'United States', 'California', '=', '-', '+', ' 3111', '\t3111'
         ],
     ];
 
+    /**
+     * @var string[]
+     */
     protected $_testHeader = [
         'HeaderID', 'HeaderName', 'HeaderEmail', 'HeaderGroup', 'HeaderPhone', 'Header+Phone', 'HeaderZIP',
-        'Header0ZIP', 'HeaderCountry', 'HeaderRegion', 'HeaderSymbol=', 'HeaderSymbol-', 'HeaderSymbol+'
+        'Header0ZIP', 'HeaderCountry', 'HeaderRegion', 'HeaderSymbol=', 'HeaderSymbol-', 'HeaderSymbol+',
+        'HeaderNumberWithSpace', 'HeaderNumberWithTabulation'
     ];
 
+    /**
+     * @var string[]
+     */
     protected $_testFooter = [
         'FooterID', 'FooterName', 'FooterEmail', 'FooterGroup', 'FooterPhone', 'Footer+Phone', 'FooterZIP',
-        'Footer0ZIP', 'FooterCountry', 'FooterRegion', 'FooterSymbol=', 'FooterSymbol-', 'FooterSymbol+'
+        'Footer0ZIP', 'FooterCountry', 'FooterRegion', 'FooterSymbol=', 'FooterSymbol-', 'FooterSymbol+',
+        'FooterNumberWithSpace', 'FooterNumberWithTabulation'
     ];
 
     /**
@@ -70,7 +86,7 @@ class ExcelTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvert()
     {
-        $convert = new \Magento\Framework\Convert\Excel(new \ArrayIterator($this->_testData));
+        $convert = new Excel(new \ArrayIterator($this->_testData));
         $convert->setDataHeader($this->_testHeader);
         $convert->setDataFooter($this->_testFooter);
         $this->assertXmlStringEqualsXmlString(
@@ -87,11 +103,15 @@ class ExcelTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvertCallback()
     {
-        $convert = new \Magento\Framework\Convert\Excel(
+        $convert = new Excel(
             new \ArrayIterator($this->_testData),
             [$this, 'callbackMethod']
         );
-        $this->assertContains('_TRUE_', $convert->convert(), 'Failed asserting that callback method is called.');
+        $this->assertStringContainsString(
+            '_TRUE_',
+            $convert->convert(),
+            'Failed asserting that callback method is called.'
+        );
     }
 
     /**
@@ -102,22 +122,22 @@ class ExcelTest extends \PHPUnit\Framework\TestCase
      */
     protected function _writeFile($callback = false)
     {
-        $name = md5(microtime());
+        $name = hash('md5', (string)microtime());
         $file = TESTS_TEMP_DIR . '/' . $name . '.xml';
 
-        $stream = new \Magento\Framework\Filesystem\File\Write(
+        $stream = new Write(
             $file,
-            new \Magento\Framework\Filesystem\Driver\File(),
+            new File(),
             'w+'
         );
         $stream->lock();
 
         if (!$callback) {
-            $convert = new \Magento\Framework\Convert\Excel(new \ArrayIterator($this->_testData));
+            $convert = new Excel(new \ArrayIterator($this->_testData));
             $convert->setDataHeader($this->_testHeader);
             $convert->setDataFooter($this->_testFooter);
         } else {
-            $convert = new \Magento\Framework\Convert\Excel(
+            $convert = new Excel(
                 new \ArrayIterator($this->_testData),
                 [$this, 'callbackMethod']
             );
@@ -154,6 +174,10 @@ class ExcelTest extends \PHPUnit\Framework\TestCase
     public function testWriteCallback()
     {
         $file = $this->_writeFile(true);
-        $this->assertContains('_TRUE_', file_get_contents($file), 'Failed asserting that callback method is called.');
+        $this->assertStringContainsString(
+            '_TRUE_',
+            file_get_contents($file),
+            'Failed asserting that callback method is called.'
+        );
     }
 }

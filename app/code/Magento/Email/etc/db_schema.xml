@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="email_template" resource="default" engine="innodb" comment="Email Templates">
+        <column xsi:type="int" name="template_id" unsigned="true" nullable="false" identity="true"
+                comment="Template ID"/>
+        <column xsi:type="varchar" name="template_code" nullable="false" length="150" comment="Template Name"/>
+        <column xsi:type="text" name="template_text" nullable="false" comment="Template Content"/>
+        <column xsi:type="text" name="template_styles" nullable="true" comment="Templste Styles"/>
+        <column xsi:type="int" name="template_type" unsigned="true" nullable="true" identity="false"
+                comment="Template Type"/>
+        <column xsi:type="varchar" name="template_subject" nullable="false" length="200" comment="Template Subject"/>
+        <column xsi:type="varchar" name="template_sender_name" nullable="true" length="200"
+                comment="Template Sender Name"/>
+        <column xsi:type="varchar" name="template_sender_email" nullable="true" length="200"
+                comment="Template Sender Email"/>
+        <column xsi:type="timestamp" name="added_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Date of Template Creation"/>
+        <column xsi:type="timestamp" name="modified_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Date of Template Modification"/>
+        <column xsi:type="varchar" name="orig_template_code" nullable="true" length="200"
+                comment="Original Template Code"/>
+        <column xsi:type="text" name="orig_template_variables" nullable="true" comment="Original Template Variables"/>
+        <column xsi:type="boolean" name="is_legacy" nullable="false"
+                default="false" comment="Should the template render in legacy mode"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="template_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="EMAIL_TEMPLATE_TEMPLATE_CODE">
+            <column name="template_code"/>
+        </constraint>
+        <index referenceId="EMAIL_TEMPLATE_ADDED_AT" indexType="btree">
+            <column name="added_at"/>
+        </index>
+        <index referenceId="EMAIL_TEMPLATE_MODIFIED_AT" indexType="btree">
+            <column name="modified_at"/>
+        </index>
+    </table>
+</schema>

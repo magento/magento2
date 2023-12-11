@@ -3,29 +3,42 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup\Test\Unit;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager\ConfigLoader;
+use Magento\Framework\App\State;
+use Magento\Framework\Backup\Db;
 use Magento\Framework\Backup\Factory;
+use Magento\Framework\Backup\Filesystem;
+use Magento\Framework\Backup\Filesystem\Helper;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\ObjectManager\ConfigLoaderInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\BackupRollback;
 use Magento\Framework\Setup\LoggerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BackupRollbackTest extends \PHPUnit\Framework\TestCase
+class BackupRollbackTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManager;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     private $log;
 
     /**
-     * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject
+     * @var DirectoryList|MockObject
      */
     private $directoryList;
 
@@ -35,22 +48,22 @@ class BackupRollbackTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit_Framework_MockObject_MockObject
+     * @var File|MockObject
      */
     private $file;
 
     /**
-     * @var \Magento\Framework\Backup\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     private $filesystem;
 
     /**
-     * @var \Magento\Framework\Backup\Filesystem\Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Helper|MockObject
      */
     private $helper;
 
     /**
-     * @var \Magento\Framework\Backup\Db|\PHPUnit_Framework_MockObject_MockObject
+     * @var Db|MockObject
      */
     private $database;
 
@@ -59,11 +72,11 @@ class BackupRollbackTest extends \PHPUnit\Framework\TestCase
      */
     private $path;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->log = $this->createMock(\Magento\Framework\Setup\LoggerInterface::class);
-        $this->directoryList = $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->log = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->directoryList = $this->createMock(DirectoryList::class);
         $this->path = realpath(__DIR__);
         $this->directoryList->expects($this->any())
             ->method('getRoot')
@@ -71,32 +84,32 @@ class BackupRollbackTest extends \PHPUnit\Framework\TestCase
         $this->directoryList->expects($this->any())
             ->method('getPath')
             ->willReturn($this->path);
-        $this->file = $this->createMock(\Magento\Framework\Filesystem\Driver\File::class);
-        $this->filesystem = $this->createMock(\Magento\Framework\Backup\Filesystem::class);
-        $this->database = $this->createMock(\Magento\Framework\Backup\Db::class);
-        $this->helper = $this->createMock(\Magento\Framework\Backup\Filesystem\Helper::class);
+        $this->file = $this->createMock(File::class);
+        $this->filesystem = $this->createMock(Filesystem::class);
+        $this->database = $this->createMock(Db::class);
+        $this->helper = $this->createMock(Helper::class);
         $this->helper->expects($this->any())
             ->method('getInfo')
             ->willReturn(['writable' => true, 'size' => 100]);
-        $configLoader = $this->createMock(\Magento\Framework\App\ObjectManager\ConfigLoader::class);
+        $configLoader = $this->createMock(ConfigLoader::class);
         $configLoader->expects($this->any())
             ->method('load')
             ->willReturn([]);
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [
-                    \Magento\Framework\App\State::class, $this->createMock(\Magento\Framework\App\State::class)
+                    State::class, $this->createMock(State::class)
                 ],
-                [\Magento\Framework\ObjectManager\ConfigLoaderInterface::class, $configLoader],
-            ]));
+                [ConfigLoaderInterface::class, $configLoader],
+            ]);
         $this->objectManager->expects($this->any())
             ->method('create')
-            ->will($this->returnValueMap([
-                [\Magento\Framework\Backup\Filesystem\Helper::class, [], $this->helper],
-                [\Magento\Framework\Backup\Filesystem::class, [], $this->filesystem],
-                [\Magento\Framework\Backup\Db::class, [], $this->database],
-            ]));
+            ->willReturnMap([
+                [Helper::class, [], $this->helper],
+                [Filesystem::class, [], $this->filesystem],
+                [Db::class, [], $this->database],
+            ]);
         $this->model = new BackupRollback(
             $this->objectManager,
             $this->log,
@@ -116,12 +129,10 @@ class BackupRollbackTest extends \PHPUnit\Framework\TestCase
         $this->model->codeBackup(time());
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This backup type \'txt\' is not supported.
-     */
     public function testCodeBackupWithInvalidType()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('This backup type \\\'txt\\\' is not supported.');
         $this->model->codeBackup(time(), 'txt');
     }
 
@@ -136,24 +147,20 @@ class BackupRollbackTest extends \PHPUnit\Framework\TestCase
         $this->model->codeRollback('12345_filesystem_code.tgz');
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The rollback file does not exist.
-     */
     public function testCodeRollbackWithInvalidFilePath()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('The rollback file doesn\'t exist. Verify the file and try again.');
         $this->file->expects($this->once())
             ->method('isExists')
             ->willReturn(false);
         $this->model->codeRollback('12345_filesystem_code.tgz');
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid rollback file.
-     */
     public function testCodeRollbackWithInvalidFileType()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('The rollback file is invalid. Verify the file and try again.');
         $this->model->codeRollback('RollbackFile_A.txt');
     }
 
@@ -181,6 +188,7 @@ class BackupRollbackTest extends \PHPUnit\Framework\TestCase
     public function testDbBackup()
     {
         $this->setupDbBackupRollback();
+        $this->database->expects($this->once())->method('getBackupFilename')->willReturn('RollbackFile_A.gz');
         $this->database->expects($this->once())->method('create');
         $this->file->expects($this->once())->method('isExists')->willReturn(false);
         $this->file->expects($this->once())->method('createDirectory');
@@ -190,12 +198,20 @@ class BackupRollbackTest extends \PHPUnit\Framework\TestCase
     public function testDbRollback()
     {
         $this->setupDbBackupRollback();
+
         $this->database->expects($this->once())->method('rollback');
+        $this->database->expects($this->exactly(2))->method('getBackupFilename')
+            ->willReturnOnConsecutiveCalls('test', '1510140748_db_test_backup');
+        $this->database->expects($this->once())->method('getTime')->willReturn(1510140748);
+        $this->database->expects($this->once())->method('getType')->willReturn('db');
+        $this->database->expects($this->once())->method('setName')->with(' test backup');
+
         $this->file->expects($this->once())
             ->method('isExists')
-            ->with($this->path . '/backups/12345_db.sql')
+            ->with($this->path . '/backups/1510140748_db_test_backup.sql')
             ->willReturn(true);
-        $this->model->dbRollback('12345_db.sql');
+
+        $this->model->dbRollback('1510140748_db_test_backup.sql');
     }
 
     private function setupCodeBackupRollback()
@@ -226,9 +242,6 @@ class BackupRollbackTest extends \PHPUnit\Framework\TestCase
             ->method('setBackupExtension');
         $this->database->expects($this->once())
             ->method('setTime');
-        $this->database->expects($this->once())
-            ->method('getBackupFilename')
-            ->willReturn('RollbackFile_A.gz');
         $this->database->expects($this->atLeastOnce())
             ->method('getBackupPath')
             ->willReturn('pathToFile/12345_db.sql');

@@ -1,0 +1,6 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+interface CategoryInterface {
+    cms_block: CmsBlock @doc(description: "Contains a category CMS block.") @resolver(class: "Magento\\CatalogCmsGraphQl\\Model\\Resolver\\Category\\Block")
+}

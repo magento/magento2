@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCustomerRemoveProductFromWishlistUsingSidebarActionGroup">
+        <annotations>
+            <description>Removes the provided Product from the Wish List side bar menu. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+
+        <waitForElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductRemoveByName(product.name)}}" stepKey="WaitForWishlistItemToLoadInSidebar" />
+        <click selector="{{StorefrontCustomerWishlistSidebarSection.ProductRemoveByName(product.name)}}" stepKey="RemoveProductFromWishlistUsingSidebarClickRemoveItemFromWishlist"/>
+        <waitForElement selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="RemoveProductFromWishlistUsingSidebarWaitForSuccessMessage"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="{{product.name}} has been removed from your Wish List." stepKey="RemoveProductFromWishlistUsingSidebarSeeProductNameRemovedFromWishlist"/>
+    </actionGroup>
+</actionGroups>

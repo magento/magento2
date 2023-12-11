@@ -1,0 +1,29 @@
+{
+  "test_table": {
+    "column": {
+      "smallint": true,
+      "tinyint": true,
+      "bigint": true,
+      "float": true,
+      "double": true,
+      "decimal": true,
+      "date": true,
+      "timestamp": true,
+      "datetime": true,
+      "longtext": true,
+      "mediumtext": true,
+      "varchar": true,
+      "mediumblob": true,
+      "blob": true,
+      "boolean": true,
+      "varbinary_rename": true
+    },
+    "index": {
+      "TEST_TABLE_TINYINT_BIGINT": true
+    },
+    "constraint": {
+      "TEST_TABLE_SMALLINT_BIGINT": true,
+      "TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF": true
+    }
+  }
+}

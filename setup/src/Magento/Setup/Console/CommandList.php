@@ -6,10 +6,11 @@
 
 namespace Magento\Setup\Console;
 
-use Zend\ServiceManager\ServiceManager;
+use Magento\Setup\Console\Command\TablesWhitelistGenerateCommand;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
- * Class CommandList contains predefined list of commands for Setup
+ * Class CommandList contains predefined list of commands for Setup.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -43,7 +44,6 @@ class CommandList
             \Magento\Setup\Console\Command\AdminUserCreateCommand::class,
             \Magento\Setup\Console\Command\BackupCommand::class,
             \Magento\Setup\Console\Command\ConfigSetCommand::class,
-            \Magento\Setup\Console\Command\CronRunCommand::class,
             \Magento\Setup\Console\Command\DbDataUpgradeCommand::class,
             \Magento\Setup\Console\Command\DbSchemaUpgradeCommand::class,
             \Magento\Setup\Console\Command\DbStatusCommand::class,
@@ -65,19 +65,16 @@ class CommandList
             \Magento\Setup\Console\Command\ModuleDisableCommand::class,
             \Magento\Setup\Console\Command\ModuleStatusCommand::class,
             \Magento\Setup\Console\Command\ModuleUninstallCommand::class,
-            \Magento\Setup\Console\Command\MaintenanceAllowIpsCommand::class,
-            \Magento\Setup\Console\Command\MaintenanceDisableCommand::class,
-            \Magento\Setup\Console\Command\MaintenanceEnableCommand::class,
-            \Magento\Setup\Console\Command\MaintenanceStatusCommand::class,
+            \Magento\Setup\Console\Command\ModuleConfigStatusCommand::class,
             \Magento\Setup\Console\Command\RollbackCommand::class,
             \Magento\Setup\Console\Command\UpgradeCommand::class,
             \Magento\Setup\Console\Command\UninstallCommand::class,
-            \Magento\Setup\Console\Command\DeployStaticContentCommand::class,
+            \Magento\Setup\Console\Command\DeployStaticContentCommand::class
         ];
     }
 
     /**
-     * Gets list of command instances
+     * Gets list of command instances.
      *
      * @return \Symfony\Component\Console\Command\Command[]
      * @throws \Exception
@@ -90,6 +87,7 @@ class CommandList
             if (class_exists($class)) {
                 $commands[] = $this->serviceManager->get($class);
             } else {
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception('Class ' . $class . ' does not exist');
             }
         }

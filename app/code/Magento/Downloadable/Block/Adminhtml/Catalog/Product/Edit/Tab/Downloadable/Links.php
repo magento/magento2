@@ -10,6 +10,9 @@ namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Download
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @deprecated 100.3.1 in favor of new class which adds grid links
+ * @see \Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Links
  */
 class Links extends \Magento\Backend\Block\Template
 {
@@ -30,7 +33,7 @@ class Links extends \Magento\Backend\Block\Template
     /**
      * @var string
      */
-    protected $_template = 'product/edit/downloadable/links.phtml';
+    protected $_template = 'Magento_Downloadable::product/edit/downloadable/links.phtml';
 
     /**
      * Downloadable file
@@ -177,7 +180,7 @@ class Links extends \Magento\Backend\Block\Template
             \Magento\Backend\Block\Widget\Button::class
         )->setData(
             [
-                'label' => __('Add New Link'),
+                'label' => $this->escapeHtmlAttr(__('Add New Link')),
                 'id' => 'add_link_item',
                 'class' => 'action-add',
                 'data_attribute' => ['action' => 'add-link'],
@@ -395,7 +398,7 @@ class Links extends \Magento\Backend\Block\Template
      */
     public function getUploadUrl($type)
     {
-        return $this->_urlFactory->create()->addSessionParam()->getUrl(
+        return $this->_urlFactory->create()->getUrl(
             'adminhtml/downloadable_file/upload',
             ['type' => $type, '_secure' => true]
         );
@@ -434,6 +437,8 @@ class Links extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Is single store mode
+     *
      * @return bool
      */
     public function isSingleStoreMode()
@@ -442,8 +447,11 @@ class Links extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Get base currency code
+     *
      * @param null|string|bool|int|\Magento\Store\Model\Store $storeId $storeId
      * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getBaseCurrencyCode($storeId)
     {
@@ -451,8 +459,11 @@ class Links extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Get base currency symbol
+     *
      * @param null|string|bool|int|\Magento\Store\Model\Store $storeId $storeId
      * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getBaseCurrencySymbol($storeId)
     {

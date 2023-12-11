@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportProductsWithDeleteBehaviorTest">
+        <annotations>
+            <description value="Verify Magento native import products with delete behavior."/>
+            <stories value="Verify Magento native import products with delete behavior."/>
+            <features value="Import/Export"/>
+            <title value="Verify Magento native import products with delete behavior."/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MAGETWO-30587"/>
+            <group value="importExport"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!--Create Simple product-->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+                <field key="name">Simple Product for Test</field>
+                <field key="sku">Simple Product for Test</field>
+            </createData>
+            <!--Create Virtual product-->
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct">
+                <field key="name">Virtual Product for Test</field>
+                <field key="sku">Virtual Product for Test</field>
+            </createData>
+            <!-- Create Downloadable product -->
+            <createData entity="ApiDownloadableProduct" stepKey="createDownloadableProduct">
+                <field key="name">Api Downloadable Product for Test</field>
+                <field key="sku">Api Downloadable Product for Test</field>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <amOnPage url="{{AdminImportIndexPage.url}}" stepKey="goToImportIndexPage"/>
+        <selectOption selector="{{AdminImportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>
+        <waitForElementVisible selector="{{AdminImportMainSection.importBehavior}}" stepKey="waitForImportBehaviorElementVisible"/>
+        <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="Delete" stepKey="selectDeleteOption"/>
+        <attachFile selector="{{AdminImportMainSection.selectFileToImport}}" userInput="catalog_products.csv" stepKey="attachFileForImport"/>
+        <click selector="{{AdminImportHeaderSection.checkDataButton}}" stepKey="clickCheckDataButton"/>
+        <click selector="{{AdminImportMainSection.importButton}}" stepKey="clickImportButton"/>
+        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="Import successfully done" stepKey="assertSuccessMessage"/>
+        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="Created: 0, Updated: 0, Deleted: 3" stepKey="assertNotice"/>
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchSimpleProductOnBackend">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage"/>
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchVirtualProductOnBackend">
+            <argument name="product" value="$$createVirtualProduct$$"/>
+        </actionGroup>
+        <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage1"/>
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchDownloadableProductOnBackend">
+            <argument name="product" value="$$createDownloadableProduct$$"/>
+        </actionGroup>
+        <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage2"/>
+    </test>
+</tests>

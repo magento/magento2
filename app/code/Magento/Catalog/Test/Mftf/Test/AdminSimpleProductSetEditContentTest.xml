@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSimpleProductSetEditContentTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create/edit simple product"/>
+            <title value="Admin should be able to set/edit product Content when editing a simple product"/>
+            <description value="Admin should be able to set/edit product Content when editing a simple product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3422"/>
+            <group value="Catalog"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <before>
+            <!--Admin Login-->
+            <actionGroup stepKey="loginToAdminPanel" ref="AdminLoginActionGroup"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+        </before>
+        <after>
+            <!-- Delete simple product -->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="SimpleProduct"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <!--Admin Logout-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Create product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+
+        <!--Add content-->
+        <!--A generic scroll scrolls past this element, in doing this it fails to execute certain actions on the element and others below it. By scrolling slightly above it it resolves this issue.-->
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollTo"/>
+        <actionGroup ref="AdminOpenContentSectionOnProductPageActionGroup" stepKey="openDescriptionDropDown"/>
+        <actionGroup ref="AdminFillInProductDescriptionActionGroup" stepKey="fillLongDescription">
+            <argument name="description" value="This is the long description"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillInProductShortDescriptionActionGroup" stepKey="fillShortDescription">
+            <argument name="shortDescription" value="This is the short description"/>
+        </actionGroup>
+
+        <!--save the product-->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
+
+        <!--Edit content-->
+        <actionGroup ref="AdminOpenContentSectionOnProductPageActionGroup" stepKey="openDescriptionDropDownEdit"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToEdit"/>
+        <actionGroup ref="AdminFillInProductDescriptionActionGroup" stepKey="editLongDescription">
+            <argument name="description" value="EDIT ~ This is the long description ~ EDIT"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillInProductShortDescriptionActionGroup" stepKey="editShortDescription">
+            <argument name="shortDescription" value="EDIT ~ This is the short description ~ EDIT"/>
+        </actionGroup>
+
+        <!--save the product-->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButtonAfterEdit"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShownAgain">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
+
+        <!--Checking content admin-->
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openDescriptionDropDownAgain"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToAgain"/>
+        <actionGroup ref="AssertProductDescriptionInProductEditFormActionGroup" stepKey="seeLongDescriptionAdmin">
+            <argument name="productDescription" value="EDIT ~ This is the long description ~ EDIT"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductShortDescriptionOnProductEditFormActionGroup" stepKey="seeShortDescriptionAdmin">
+            <argument name="productShortDescription" value="EDIT ~ This is the short description ~ EDIT"/>
+        </actionGroup>
+
+        <!--Checking content storefront-->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToStorefront">
+            <argument name="productUrl" value="{{SimpleProduct.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefront"/>
+        <actionGroup ref="AssertStorefrontProductDescriptionActionGroup" stepKey="seeLongDescriptionStorefront">
+            <argument name="productDescription" value="EDIT ~ This is the long description ~ EDIT"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontShortProductDescriptionActionGroup" stepKey="seeShortDescriptionStorefront">
+            <argument name="productShortDescription" value="EDIT ~ This is the short description ~ EDIT"/>
+        </actionGroup>
+    </test>
+</tests>

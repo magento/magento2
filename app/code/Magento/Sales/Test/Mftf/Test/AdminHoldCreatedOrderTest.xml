@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminHoldCreatedOrderTest">
+        <annotations>
+            <group value="sales"/>
+            <stories value="Hold Created Order"/>
+            <title value="Hold the created order"/>
+            <description value="Create an order and hold the order"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-16160"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!--Set default flat rate shipping method settings-->
+            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+
+            <!--Create simple customer-->
+            <createData entity="Simple_US_Customer_CA" stepKey="simpleCustomer"/>
+
+            <!-- Create Simple Products -->
+            <createData entity="SimpleProduct2" stepKey="simpleProduct">
+                <field key="price">10.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1">
+                <field key="price">20.00</field>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Create new customer order-->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+
+        <!--Add Simple product to order-->
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToTheOrder">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+
+        <!--Add second product to order-->
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSecondProductToTheOrder">
+            <argument name="product" value="$$simpleProduct1$$"/>
+        </actionGroup>
+
+        <!--Select FlatRate shipping method-->
+        <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
+
+        <!-- Verify order information -->
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+
+        <!-- Hold the Order -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.hold}}" stepKey="clickOnHoldButton"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You put the order on hold" stepKey="seeSuccessHoldMessage"/>
+
+        <!--Assert Order Status and Unhold button-->
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="On Hold" stepKey="seeOrderStatusOnHold"/>
+        <seeElement selector="{{AdminOrderDetailsMainActionsSection.unhold}}" stepKey="seeUnholdButton"/>
+
+        <!--Assert invoice, cancel, reorder, ship, and edit buttons are unavailable-->
+        <dontSeeElement selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="dontSeeInvoiceButton"/>
+        <dontSeeElement selector="{{AdminOrderDetailsMainActionsSection.cancel}}" stepKey="dontSeeCancelButton"/>
+        <dontSeeElement selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="dontSeeReorderButton"/>
+        <dontSeeElement selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="dontSeeShipButton"/>
+        <dontSeeElement selector="{{AdminOrderDetailsMainActionsSection.edit}}" stepKey="dontSeeEditButton"/>
+
+        <!--Log in to Storefront as Customer  -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
+            <argument name="Customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+
+        <!-- Assert OrderId and status in frontend order grid -->
+        <click selector="{{StorefrontCustomerSidebarSection.sidebarCurrentTab('My Orders')}}" stepKey="clickOnMyOrders"/>
+        <waitForPageLoad stepKey="waitForOrderDetailsToLoad"/>
+        <actionGroup ref="AdminCheckOrderStatusInGridActionGroup" stepKey="seeOrderStatusInGrid">
+            <argument name="orderId" value="$orderNumber"/>
+            <argument name="status" value="On Hold"/>
+        </actionGroup>
+    </test>
+</tests>

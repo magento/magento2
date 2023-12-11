@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminApplyTierPriceToProductWithPercentageDiscountTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="MC-5517 - System tries to save 0 in Advanced Pricing which is invalid for Discount field"/>
+            <title value="You should be able to apply tier price to a product with float percent discount."/>
+            <description value="You should be able to apply tier price to a product with float percent discount."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MAGETWO-96881"/>
+            <group value="product"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">100</field>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminInBefore"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="loginAsAdmin"/>
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct1">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="clickOnAdvancedPricingButtonForAssert"/>
+        <actionGroup ref="AssertAdminProductFormAdvancedPricingAddTierPriceActionGroup" stepKey="assertProductTierPriceInput"/>
+        <actionGroup ref="AdminProductFormDoneAdvancedPricingDialogActionGroup" stepKey="doneButtonAfterAssert"/>
+
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToTopOfPage"/>
+        <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="clickOnAdvancedPricingButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCustomerGroupPriceAddButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="addCustomerGroupAllGroupsQty1PriceDiscountAndpercent"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductTierPriceQtyInput"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectProductTierPriceValueType"/>
+
+        <actionGroup ref="AdminProductFormAdvancedPricingAddTierPriceActionGroup" stepKey="selectProductTierPricePriceInput">
+            <argument name="website" value="{{tierPrice01PercentDiscount.website}}"/>
+            <argument name="customerGroup" value="{{tierPrice01PercentDiscount.customer_group}}"/>
+            <argument name="quantity" value="{{tierPrice01PercentDiscount.qty}}"/>
+            <argument name="priceType" value="Discount"/>
+            <argument name="amount" value="{{tierPrice01PercentDiscount.price}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminProductFormDoneAdvancedPricingDialogActionGroup" stepKey="clickDoneButton"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goProductPageOnStorefront">
+            <argument name="productUrl" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad1"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('99.90')}}" stepKey="assertProductFinalPriceProductPage"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('Regular Price')}}" stepKey="assertRegularPriceProductPage"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceOld('100')}}" stepKey="assertRegularPriceAmountProductPage"/>
+
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad2"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('99.90')}}" stepKey="assertProductFinalPriceCategoryPage"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('Regular Price')}}" stepKey="assertRegularPriceLabelCategoryPage"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceOld('100')}}" stepKey="assertRegularPriceAmountCategoryPage"/>
+    </test>
+</tests>

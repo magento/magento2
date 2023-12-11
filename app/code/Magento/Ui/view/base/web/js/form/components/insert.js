@@ -201,7 +201,7 @@ define([
             var links  = {};
 
             _.each(data, function (value, key) {
-                if (value.split('.')[0] === ns) {
+                if (typeof value === 'string' && value.split('.')[0] === ns) {
                     links[key] = value;
                 }
             });
@@ -237,10 +237,21 @@ define([
          * @param {*} data
          */
         onRender: function (data) {
+            var resp;
+
             this.loading(false);
-            this.set('content', data);
-            this.isRendered = true;
-            this.startRender = false;
+
+            try {
+                resp = JSON.parse(data);
+
+                if (resp.ajaxExpired) {
+                    window.location.href = resp.ajaxRedirect;
+                }
+            } catch (e) {
+                this.set('content', data);
+                this.isRendered = true;
+                this.startRender = false;
+            }
         },
 
         /**

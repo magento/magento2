@@ -3,120 +3,160 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Layer\Filter;
 
+use Magento\Catalog\Model\Layer;
+use Magento\Catalog\Model\Layer\Filter\Item;
+use Magento\Catalog\Model\Layer\Filter\ItemFactory;
+use Magento\Catalog\Model\Layer\State;
+use Magento\Catalog\Model\ResourceModel\Layer\Filter\DecimalFactory;
+use Magento\CatalogSearch\Model\Layer\Filter\Decimal;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\CatalogSearch\Model\Layer\Filter\Decimal
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DecimalTest extends \PHPUnit\Framework\TestCase
+class DecimalTest extends TestCase
 {
+    /**
+     * @var Item|MockObject
+     */
     private $filterItem;
 
     /**
-     * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection|MockObject
+     * @var Collection|MockObject
      */
     private $fulltextCollection;
 
     /**
-     * @var \Magento\Catalog\Model\Layer|MockObject
+     * @var Layer|MockObject
      */
     private $layer;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Layer\Filter\Decimal
+     * @var Decimal
      */
     private $target;
 
-    /** @var \Magento\Framework\App\RequestInterface|MockObject */
+    /**
+     * @var RequestInterface|MockObject
+     */
     private $request;
 
-    /** @var  \Magento\Catalog\Model\Layer\State|MockObject */
+    /**
+     * @var State|MockObject
+     */
     private $state;
 
-    /** @var  \Magento\Catalog\Model\Layer\Filter\ItemFactory|MockObject */
+    /**
+     * @var ItemFactory|MockObject
+     */
     private $filterItemFactory;
 
-    /** @var  \Magento\Eav\Model\Entity\Attribute|MockObject */
+    /**
+     * @var Attribute|MockObject
+     */
     private $attribute;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getParam'])
+            ->onlyMethods(['getParam'])
             ->getMockForAbstractClass();
 
-        $this->layer = $this->getMockBuilder(\Magento\Catalog\Model\Layer::class)
+        $this->layer = $this->getMockBuilder(Layer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getState', 'getProductCollection'])
+            ->onlyMethods(['getState', 'getProductCollection'])
             ->getMock();
-        $this->filterItemFactory = $this->getMockBuilder(
-            \Magento\Catalog\Model\Layer\Filter\ItemFactory::class
-        )
+        $this->filterItemFactory = $this->getMockBuilder(ItemFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
-        $this->filterItem = $this->getMockBuilder(
-            \Magento\Catalog\Model\Layer\Filter\Item::class
-        )
+        $this->filterItem = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setFilter', 'setLabel', 'setValue', 'setCount'])
+            ->addMethods(['setFilter', 'setLabel', 'setValue', 'setCount'])
             ->getMock();
         $this->filterItem->expects($this->any())
-            ->method($this->anything())
-            ->will($this->returnSelf());
+            ->method($this->anything())->willReturnSelf();
         $this->filterItemFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->filterItem));
+            ->willReturnCallback(
+                function (array $data) {
+                    return new Item(
+                        $this->createMock(\Magento\Framework\UrlInterface::class),
+                        $this->createMock(\Magento\Theme\Block\Html\Pager::class),
+                        $data
+                    );
+                }
+            );
 
-        $this->fulltextCollection = $this->fulltextCollection = $this->getMockBuilder(
-            \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class
+        $this->fulltextCollection = $this->getMockBuilder(
+            Collection::class
         )
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->layer->expects($this->any())
             ->method('getProductCollection')
-            ->will($this->returnValue($this->fulltextCollection));
+            ->willReturn($this->fulltextCollection);
 
         $filterDecimalFactory =
-            $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Layer\Filter\DecimalFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+            $this->getMockBuilder(DecimalFactory::class)
+                ->disableOriginalConstructor()
+                ->onlyMethods(['create'])
+                ->getMock();
         $resource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->addMethods([])
             ->getMock();
         $filterDecimalFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resource));
+            ->willReturn($resource);
 
-        $this->attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
+        $this->attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode', 'getFrontend', 'getIsFilterable'])
+            ->onlyMethods(['getAttributeCode', 'getFrontend'])
+            ->addMethods(['getIsFilterable'])
             ->getMock();
 
-        $this->state = $this->getMockBuilder(\Magento\Catalog\Model\Layer\State::class)
+        $this->state = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addFilter'])
+            ->onlyMethods(['addFilter'])
             ->getMock();
         $this->layer->expects($this->any())
             ->method('getState')
-            ->will($this->returnValue($this->state));
+            ->willReturn($this->state);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
+        $priceFormatter = $this->createMock(PriceCurrencyInterface::class);
+        $priceFormatter->method('format')
+            ->willReturnCallback(
+                function ($number) {
+                    return sprintf('$%01.2f', $number);
+                }
+            );
         $this->target = $objectManagerHelper->getObject(
-            \Magento\CatalogSearch\Model\Layer\Filter\Decimal::class,
+            Decimal::class,
             [
                 'filterItemFactory' => $this->filterItemFactory,
                 'layer' => $this->layer,
                 'filterDecimalFactory' => $filterDecimalFactory,
+                'priceCurrency' => $priceFormatter,
             ]
         );
 
@@ -124,32 +164,31 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $requestValue
-     * @param $idValue
-     * @param $isIdUsed
+     * @param int|null $requestValue
+     * @param int|null|bool $idValue
+     *
+     * @return void
      * @dataProvider applyWithEmptyRequestDataProvider
      */
-    public function testApplyWithEmptyRequest($requestValue, $idValue)
+    public function testApplyWithEmptyRequest(?int $requestValue, $idValue): void
     {
         $requestField = 'test_request_var';
         $idField = 'id';
 
         $this->target->setRequestVar($requestField);
 
-        $this->request->expects($this->at(0))
+        $this->request
             ->method('getParam')
             ->with($requestField)
-            ->will(
-                $this->returnCallback(
-                    function ($field) use ($requestField, $idField, $requestValue, $idValue) {
-                        switch ($field) {
-                            case $requestField:
-                                return $requestValue;
-                            case $idField:
-                                return $idValue;
-                        }
+            ->willReturnCallback(
+                function ($field) use ($requestField, $idField, $requestValue, $idValue) {
+                    switch ($field) {
+                        case $requestField:
+                            return $requestValue;
+                        case $idField:
+                            return $idValue;
                     }
-                )
+                }
             );
 
         $result = $this->target->apply($this->request);
@@ -159,25 +198,28 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function applyWithEmptyRequestDataProvider()
+    public function applyWithEmptyRequestDataProvider(): array
     {
         return [
             [
                 'requestValue' => null,
-                'id' => 0,
+                'id' => 0
             ],
             [
                 'requestValue' => 0,
-                'id' => false,
+                'id' => false
             ],
             [
                 'requestValue' => 0,
-                'id' => null,
+                'id' => null
             ]
         ];
     }
 
-    public function testApply()
+    /**
+     * @return void
+     */
+    public function testApply(): void
     {
         $filter = '10-150';
         $requestVar = 'test_request_var';
@@ -185,29 +227,32 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
         $this->target->setRequestVar($requestVar);
         $this->request->expects($this->exactly(1))
             ->method('getParam')
-            ->will(
-                $this->returnCallback(
-                    function ($field) use ($requestVar, $filter) {
-                        $this->assertTrue(in_array($field, [$requestVar, 'id']));
-                        return $filter;
-                    }
-                )
+            ->willReturnCallback(
+                function ($field) use ($requestVar, $filter) {
+                    $this->assertContains($field, [$requestVar, 'id']);
+                    return $filter;
+                }
             );
 
         $attributeCode = 'AttributeCode';
         $this->attribute->expects($this->any())
             ->method('getAttributeCode')
-            ->will($this->returnValue($attributeCode));
+            ->willReturn($attributeCode);
 
         $this->fulltextCollection->expects($this->once())
             ->method('addFieldToFilter')
-            ->with($attributeCode)
-            ->will($this->returnSelf());
+            ->with($attributeCode)->willReturnSelf();
 
         $this->target->apply($this->request);
     }
 
-    public function testItemData()
+    /**
+     * @param array $facets
+     * @param array $expected
+     * @dataProvider itemDataDataProvider
+     * @return void
+     */
+    public function testItemData(array $facets, array $expected): void
     {
         $this->fulltextCollection->expects($this->any())
             ->method('getSize')
@@ -215,15 +260,41 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
 
         $this->fulltextCollection->expects($this->any())
             ->method('getFacetedData')
-            ->willReturn([
-                '2_10' => ['count' => 5],
-                '*_*' => ['count' => 2]
-            ]);
-        $this->assertEquals(
+            ->willReturn($facets);
+        $actual = [];
+        foreach ($this->target->getItems() as $item) {
+            $actual[] = ['label' => $item->getLabel(), 'value' => $item->getValue(), 'count' => $item->getCount()];
+        }
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @return array
+     */
+    public function itemDataDataProvider(): array
+    {
+        return [
             [
-                $this->filterItem
+                [
+                    '0_10' => ['count' => 5],
+                    '10_20' => ['count' => 2],
+                    '30_' => ['count' => 1]
+                ],
+                [
+                    ['label' => '$10.00 - $19.99', 'value' => '10-20', 'count' => '2'],
+                    ['label' => '$30.00 and above', 'value' => '30-', 'count' => '1'],
+                ]
             ],
-            $this->target->getItems()
-        );
+            [
+                [
+                    '*_100' => ['count' => 3],
+                    '200_*' => ['count' => 1],
+                ],
+                [
+                    ['label' => '$0.00 - $99.99', 'value' => '-100', 'count' => '3'],
+                    ['label' => '$200.00 and above', 'value' => '200-', 'count' => '1'],
+                ]
+            ]
+        ];
     }
 }

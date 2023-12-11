@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ApplyCatalogRuleForSimpleProductWithCustomOptionsTest" deprecated="Use StorefrontApplyCatalogRuleForSimpleProductsWithCustomOptionsTest instead">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Apply catalog price rule"/>
+            <title value="Deprecated. Admin should be able to apply the catalog price rule for simple product with 3 custom options"/>
+            <description value="Admin should be able to apply the catalog price rule for simple product with 3 custom options"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14769"/>
+            <group value="CatalogRule"/>
+            <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StorefrontApplyCatalogRuleForSimpleProductsWithCustomOptionsTest instead</issueId>
+            </skip>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct1">
+            <requiredEntity createDataKey="createCategory"/>
+            <field key="price">56.78</field>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">56.78</field>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createProduct3">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">56.78</field>
+            </createData>
+
+            <!-- Update all products to have custom options -->
+            <updateData createDataKey="createProduct1" entity="productWithCustomOptions" stepKey="updateProductWithOptions1"/>
+            <updateData createDataKey="createProduct2" entity="productWithCustomOptions" stepKey="updateProductWithOptions2"/>
+            <updateData createDataKey="createProduct3" entity="productWithCustomOptions" stepKey="updateProductWithOptions3"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete products and category -->
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="createProduct3" stepKey="deleteProduct3"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Delete the catalog price rule -->
+            <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage"/>
+            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
+                <argument name="name" value="{{_defaultCatalogRule.name}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
+            </actionGroup>
+
+            <!-- Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- 1. Begin creating a new catalog price rule -->
+        <actionGroup ref="NewCatalogPriceRuleByUIWithConditionIsCategoryActionGroup" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">
+            <argument name ="categoryId" value="$createCategory.id$"/>
+        </actionGroup>
+
+        <!-- Select not logged in customer group -->
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
+
+        <!-- Save and apply the new catalog price rule -->
+        <actionGroup ref="SaveAndApplyCatalogPriceRuleActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+
+        <!-- Navigate to category on store front -->
+        <amOnPage url="{{StorefrontProductPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage"/>
+
+        <!-- Check product 1 price on store front category page -->
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct1.name$)}}" userInput="$51.10" stepKey="storefrontProduct1Price"/>
+
+        <!-- Check product 1 regular price on store front category page -->
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct1.name$)}}" userInput="$56.78" stepKey="storefrontProduct1RegularPrice"/>
+
+        <!-- Check product 2 price on store front category page -->
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct2.name$)}}" userInput="$51.10" stepKey="storefrontProduct2Price"/>
+
+        <!-- Check product 2 regular price on store front category page -->
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct2.name$)}}" userInput="$56.78" stepKey="storefrontProduct2RegularPrice"/>
+
+        <!-- Check product 3 price on store front category page -->
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct3.name$)}}" userInput="$51.10" stepKey="storefrontProduct3Price"/>
+
+        <!-- Check product 3 regular price on store front category page -->
+        <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct3.name$)}}" userInput="$56.78" stepKey="storefrontProduct3RegularPrice"/>
+
+        <!-- Navigate to product 1 on store front -->
+        <amOnPage url="{{StorefrontProductPage.url($createProduct1.custom_attributes[url_key]$)}}" stepKey="goToProductPage1"/>
+
+        <!-- Assert regular and special price after selecting ProductOptionValueDropdown1 -->
+        <actionGroup ref="StorefrontSelectCustomOptionDropDownAndAssertPricesActionGroup" stepKey="storefrontSelectCustomOptionAndAssertPrices1">
+            <argument name="customOption" value="{{ProductOptionValueDropdown1.title}} +$0.01"/>
+            <argument name="productPrice" value="$56.79"/>
+            <argument name="productFinalPrice" value="$51.11"/>
+        </actionGroup>
+
+        <!-- Add product 1 to cart -->
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="cartAddSimpleProduct1ToCart">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+
+        <!-- Navigate to product 2 on store front -->
+        <amOnPage url="{{StorefrontProductPage.url($createProduct1.custom_attributes[url_key]$)}}" stepKey="goToProductPage2"/>
+
+        <!-- Assert regular and special price after selecting ProductOptionValueDropdown3 -->
+        <actionGroup ref="StorefrontSelectCustomOptionDropDownAndAssertPricesActionGroup" stepKey="storefrontSelectCustomOptionAndAssertPrices2">
+            <argument name="customOption" value="{{ProductOptionValueDropdown3.title}} +$5.11"/>
+            <argument name="productPrice" value="$62.46"/>
+            <argument name="productFinalPrice" value="$56.21"/>
+        </actionGroup>
+
+        <!-- Add product 2 to cart -->
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="cartAddSimpleProduct2ToCart">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+
+        <!-- Navigate to product 3 on store front -->
+        <amOnPage url="{{StorefrontProductPage.url($createProduct3.custom_attributes[url_key]$)}}" stepKey="goToProductPage3"/>
+
+        <!-- Add product 3 to cart with no custom option -->
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="cartAddSimpleProduct3ToCart">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+
+        <!-- Assert sub total on mini shopping cart -->
+        <actionGroup ref="AssertSubTotalOnStorefrontMiniCartActionGroup" stepKey="assertSubTotalOnStorefrontMiniCart">
+            <argument name="subTotal" value="$158.42"/>
+        </actionGroup>
+
+        <!-- Navigate to checkout shipping page -->
+        <amOnPage stepKey="navigateToShippingPage" url="{{CheckoutShippingPage.url}}"/>
+        <waitForPageLoad stepKey="waitFoCheckoutShippingPageLoad"/>
+
+        <!-- Fill Shipping information -->
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="fillOrderShippingInfo">
+            <argument name="customerVar" value="Simple_US_Customer"/>
+            <argument name="customerAddressVar" value="US_Address_TX"/>
+        </actionGroup>
+
+        <!-- Verify order summary on payment page -->
+        <actionGroup ref="VerifyCheckoutPaymentOrderSummaryActionGroup" stepKey="verifyCheckoutPaymentOrderSummaryActionGroup">
+            <argument name="orderSummarySubTotal" value="$158.42"/>
+            <argument name="orderSummaryShippingTotal" value="$15.00"/>
+            <argument name="orderSummaryTotal" value="$173.42"/>
+        </actionGroup>
+    </test>
+</tests>

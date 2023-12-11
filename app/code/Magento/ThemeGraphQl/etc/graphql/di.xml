@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="head_shortcut_icon" xsi:type="string">design/head/shortcut_icon</item>
+                <item name="default_title" xsi:type="string">design/head/default_title</item>
+                <item name="title_prefix" xsi:type="string">design/head/title_prefix</item>
+                <item name="title_suffix" xsi:type="string">design/head/title_suffix</item>
+                <item name="default_description" xsi:type="string">design/head/default_description</item>
+                <item name="default_keywords" xsi:type="string">design/head/default_keywords</item>
+                <item name="head_includes" xsi:type="string">design/head/includes</item>
+                <item name="demonotice" xsi:type="string">design/head/demonotice</item>
+                <item name="header_logo_src" xsi:type="string">design/header/logo_src</item>
+                <item name="logo_width" xsi:type="string">design/header/logo_width</item>
+                <item name="logo_height" xsi:type="string">design/header/logo_height</item>
+                <item name="logo_alt" xsi:type="string">design/header/logo_alt</item>
+                <item name="welcome" xsi:type="string">design/header/welcome</item>
+                <item name="absolute_footer" xsi:type="string">design/footer/absolute_footer</item>
+                <item name="copyright" xsi:type="string">design/footer/copyright</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Data\Collection">
+        <plugin name="currentPageDetection" disabled="true"/>
+    </type>
+</config>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCustomerDownloadableProductsSection">
+        <element name="productName" type="text" selector="//table[@id='my-downloadable-products-table']//strong[contains(@class, 'product-name') and normalize-space(.)='{{productName}}']" parameterized="true"/>
+        <element name="downloadableLink" type="button" selector="//table[@id='my-downloadable-products-table']//a[contains(@class, 'download')]"/>
+        <element name="downloadableLinkByOrderNumber" type="button" parameterized="true" selector="//table[@id='my-downloadable-products-table']//td[@data-th='Order #']//a[contains(.,'{{orderNumber}}')]/ancestor::tr//a[contains(@class, 'download')]"/>
+    </section>
+</sections>

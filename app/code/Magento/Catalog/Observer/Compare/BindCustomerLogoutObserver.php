@@ -15,6 +15,11 @@ use Magento\Catalog\Model\Product\Compare\Item;
 class BindCustomerLogoutObserver implements ObserverInterface
 {
     /**
+     * @var Item
+     */
+    private $item;
+
+    /**
      * @param Item $item
      */
     public function __construct(

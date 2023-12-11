@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateAndDeleteBackupsTest">
+        <annotations>
+            <features value="Backup"/>
+            <stories value="Create and delete backups"/>
+            <title value="Create and delete backups"/>
+            <description value="An admin user can create a backup of each type and delete each backup."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-94176"/>
+            <group value="backup"/>
+            <skip>
+                <issueId value="DEPRECATED">Magento backup functionality is deprecated</issueId>
+            </skip>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{EnableBackupFunctionality.path}} {{EnableBackupFunctionality.value}}" stepKey="setEnableBackup"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{DisableBackupFunctionality.path}} {{DisableBackupFunctionality.value}}" stepKey="setDisableBackup"/>
+        </after>
+
+        <!--Login to admin area-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <!--Go to backup index page-->
+        <actionGroup ref="AdminBackupIndexPageOpenActionGroup" stepKey="navigateToBackupPage"/>
+
+        <!--Create system backup-->
+        <actionGroup ref="CreateSystemBackupActionGroup" stepKey="createSystemBackup"/>
+
+        <!--Create database/media backup-->
+        <actionGroup ref="CreateMediaBackupActionGroup" stepKey="createMediaBackup"/>
+
+        <!--Create database backup-->
+        <actionGroup ref="CreateDatabaseBackupActionGroup" stepKey="createDatabaseBackup"/>
+
+        <!--Delete system backup-->
+        <actionGroup ref="AdminBackupDeleteActionGroup" stepKey="deleteSystemBackup">
+            <argument name="backup" value="SystemBackup"/>
+        </actionGroup>
+
+        <!--Delete database/media backup-->
+        <actionGroup ref="AdminBackupDeleteActionGroup" stepKey="deleteMediaBackup">
+            <argument name="backup" value="MediaBackup"/>
+        </actionGroup>
+
+        <!--Delete database backup-->
+        <actionGroup ref="AdminBackupDeleteActionGroup" stepKey="deleteDatabaseBackup">
+            <argument name="backup" value="DatabaseBackup"/>
+        </actionGroup>
+
+    </test>
+</tests>

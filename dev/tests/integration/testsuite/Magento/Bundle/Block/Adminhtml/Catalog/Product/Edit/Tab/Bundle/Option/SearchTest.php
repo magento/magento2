@@ -26,6 +26,6 @@ class SearchTest extends \PHPUnit\Framework\TestCase
         $block->setIndex($indexValue);
 
         $html = $block->toHtml();
-        $this->assertContains($indexValue, $html);
+        $this->assertStringContainsString($indexValue, $html);
     }
 }

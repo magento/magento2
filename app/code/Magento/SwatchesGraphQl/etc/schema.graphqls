@@ -1,0 +1,80 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+interface ProductInterface {
+    swatch_image: String @doc(description: "The file name of a swatch image.")
+}
+
+input ProductFilterInput {
+    swatch_image: FilterTypeInput @doc(description: "The file name of a swatch image.")
+}
+
+input ProductSortInput {
+    swatch_image: SortEnum @doc(description: "Indicates the criteria to sort swatches.")
+}
+
+interface SwatchLayerFilterItemInterface @typeResolver(class: "Magento\\SwatchesGraphQl\\Model\\Resolver\\SwatchLayerFilterItemResolver")
+{
+    swatch_data: SwatchData @doc(description: "Data required to render a swatch filter item.")
+}
+
+type SwatchLayerFilterItem implements LayerFilterItemInterface, SwatchLayerFilterItemInterface
+{
+
+}
+
+type SwatchData @doc(description: "Describes the swatch type and a value.") {
+    type: String @doc(description: "The type of swatch filter item: 1 - text; 2 - image.")
+    value: String @doc(description: "The value for the swatch item. It could be text or an image link.")
+}
+
+type ConfigurableProductOptionsValues {
+    swatch_data: SwatchDataInterface @doc(description: "Swatch data for a configurable product option.") @resolver(class: "Magento\\SwatchesGraphQl\\Model\\Resolver\\Product\\Options\\SwatchData")
+}
+
+interface SwatchDataInterface @typeResolver(class: "Magento\\SwatchesGraphQl\\Model\\Resolver\\Product\\Options\\SwatchDataTypeResolver") {
+    value: String @doc(description: "The value can be represented as color (HEX code), image link, or text.")
+}
+
+type ImageSwatchData implements SwatchDataInterface {
+    thumbnail: String @doc(description: "The URL assigned to the thumbnail of the swatch image.")
+}
+
+type TextSwatchData implements SwatchDataInterface {
+
+}
+
+type ColorSwatchData implements SwatchDataInterface {
+
+}
+
+type ConfigurableProductOptionValue {
+    swatch: SwatchDataInterface @resolver(class: "Magento\\SwatchesGraphQl\\Model\\Resolver\\Product\\Options\\SwatchData") @doc(description: "The URL assigned to the thumbnail of the swatch image.")
+}
+
+type CatalogAttributeMetadata implements CustomAttributeMetadataInterface @doc(description: "Swatch attribute metadata.") {
+    swatch_input_type: SwatchInputTypeEnum @doc(description: "Input type of the swatch attribute option.")
+    update_product_preview_image: Boolean @doc(description: "Whether update product preview image or not.")
+    use_product_image_for_swatch: Boolean @doc(description: "Whether use product image for swatch or not.")
+}
+
+enum SwatchInputTypeEnum @doc(description: "Swatch attribute metadata input types.") {
+    BOOLEAN
+    DATE
+    DATETIME
+    DROPDOWN
+    FILE
+    GALLERY
+    HIDDEN
+    IMAGE
+    MEDIA_IMAGE
+    MULTILINE
+    MULTISELECT
+    PRICE
+    SELECT
+    TEXT
+    TEXTAREA
+    UNDEFINED
+    VISUAL
+    WEIGHT
+}

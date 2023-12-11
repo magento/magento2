@@ -31,29 +31,30 @@ class Generator extends AbstractSchemaGenerator
     /**
      * Error response schema
      */
-    const ERROR_SCHEMA = '#/definitions/error-response';
+    private const ERROR_SCHEMA = '#/definitions/error-response';
+
+    private const UNAUTHORIZED_DESCRIPTION = '401 Unauthorized';
+
+    protected const ARRAY_SIGNIFIER = '[0]';
 
     /**
-     * Unauthorized description
+     * Wrapper node for XML requests
      */
-    const UNAUTHORIZED_DESCRIPTION = '401 Unauthorized';
-
-    /** Array signifier */
-    const ARRAY_SIGNIFIER = '[]';
+    private const XML_SCHEMA_PARAMWRAPPER = 'request';
 
     /**
      * Swagger factory instance.
      *
      * @var SwaggerFactory
      */
-    protected $swaggerFactory;
+    protected SwaggerFactory $swaggerFactory;
 
     /**
      * Magento product metadata
      *
      * @var ProductMetadataInterface
      */
-    protected $productMetadata;
+    protected ProductMetadataInterface $productMetadata;
 
     /**
      * A map of Tags
@@ -67,7 +68,7 @@ class Generator extends AbstractSchemaGenerator
      *
      * @var array
      */
-    protected $tags = [];
+    protected array $tags = [];
 
     /**
      * A map of definition
@@ -81,7 +82,7 @@ class Generator extends AbstractSchemaGenerator
      * Note: definitionName is converted from class name
      * @var array
      */
-    protected $definitions = [];
+    protected array $definitions = [];
 
     /**
      * List of simple parameter types not to be processed by the definitions generator
@@ -89,7 +90,7 @@ class Generator extends AbstractSchemaGenerator
      *
      * @var string[]
      */
-    protected $simpleTypeList = [
+    protected array $simpleTypeList = [
         'bool'                              => 'boolean',
         'boolean'                           => 'boolean',
         'int'                               => 'integer',
@@ -134,7 +135,7 @@ class Generator extends AbstractSchemaGenerator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function generateSchema($requestedServiceMetadata, $requestScheme, $requestHost, $endpointUrl)
     {
@@ -164,7 +165,7 @@ class Generator extends AbstractSchemaGenerator
                     $swagger->addPath(
                         $this->convertPathParams($uri),
                         $httpOperation,
-                        $this->generatePathInfo($httpOperation, $httpMethodData, $serviceName)
+                        $this->generatePathInfo($httpOperation, $httpMethodData, $serviceName, $uri)
                     );
                 }
             }
@@ -194,24 +195,52 @@ class Generator extends AbstractSchemaGenerator
     }
 
     /**
+     * List out consumes data type
+     *
+     * @return array
+     */
+    private function getConsumableDatatypes()
+    {
+        return [
+            'application/json',
+            'application/xml',
+        ];
+    }
+
+    /**
+     * List out produces data type
+     *
+     * @return array
+     */
+    private function getProducibleDatatypes()
+    {
+        return [
+            'application/json',
+            'application/xml',
+        ];
+    }
+
+    /**
      * Generate path info based on method data
      *
      * @param string $methodName
      * @param array $httpMethodData
      * @param string $tagName
+     * @param string $uri
      * @return array
      */
-    protected function generatePathInfo($methodName, $httpMethodData, $tagName)
+    protected function generatePathInfo(string $methodName, array $httpMethodData, string $tagName, string $uri): array
     {
         $methodData = $httpMethodData[Converter::KEY_METHOD];
+        $uri = ucwords(str_replace(['/{', '}/', '{', '}'], '/', $uri), "/");
 
-        $operationId = $this->typeProcessor->getOperationName($tagName, $methodData[Converter::KEY_METHOD]);
-        $operationId .= ucfirst($methodName);
-
+        $operationId = ucfirst($methodName) . str_replace(['/', '-'], '', $uri);
         $pathInfo = [
             'tags' => [$tagName],
             'description' => $methodData['documentation'],
             'operationId' => $operationId,
+            'consumes' => $this->getConsumableDatatypes(),
+            'produces' => $this->getProducibleDatatypes(),
         ];
 
         $parameters = $this->generateMethodParameters($httpMethodData, $operationId);
@@ -298,10 +327,10 @@ class Generator extends AbstractSchemaGenerator
             if (!isset($parameterInfo['type'])) {
                 return [];
             }
-            $description = isset($parameterInfo['documentation']) ? $parameterInfo['documentation'] : null;
+            $description = $parameterInfo['documentation'] ?? null;
 
             /** Get location of parameter */
-            if (strpos($httpMethodData['uri'], '{' . $parameterName . '}') !== false) {
+            if (strpos($httpMethodData['uri'], (string) ('{' . $parameterName . '}')) !== false) {
                 $parameters[] = $this->generateMethodPathParameter($parameterName, $parameterInfo, $description);
             } elseif (strtoupper($httpMethodData['httpOperation']) === 'GET') {
                 $parameters = $this->generateMethodQueryParameters(
@@ -403,11 +432,11 @@ class Generator extends AbstractSchemaGenerator
             if (!empty($description)) {
                 $result['description'] = $description;
             }
-            $trimedTypeName = rtrim($typeName, '[]');
+            $trimedTypeName = $typeName !== null ? rtrim($typeName, '[]') : '';
             if ($simpleType = $this->getSimpleType($trimedTypeName)) {
                 $result['items'] = ['type' => $simpleType];
             } else {
-                if (strpos($typeName, '[]') !== false) {
+                if ($typeName && strpos($typeName, '[]') !== false) {
                     $result['items'] = ['$ref' => $this->getDefinitionReference($trimedTypeName)];
                 } else {
                     $result = ['$ref' => $this->getDefinitionReference($trimedTypeName)];
@@ -602,7 +631,7 @@ class Generator extends AbstractSchemaGenerator
     /**
      * Get the CamelCased type name in 'hyphen-separated-lowercase-words' format
      *
-     * e.g. test-module5-v1-entity-all-soap-and-rest
+     * E.g. test-module5-v1-entity-all-soap-and-rest
      *
      * @param string $typeName
      * @return string
@@ -679,14 +708,14 @@ class Generator extends AbstractSchemaGenerator
             // Primitive type or array of primitive types
             return [
                 $this->handlePrimitive($name, $prefix) => [
-                    'type' => substr($type, -2) === '[]' ? $type : $this->getSimpleType($type),
+                    'type' => ($type && substr($type, -2) === '[]') ? $type : $this->getSimpleType($type),
                     'description' => $description
                 ]
             ];
         }
         if ($this->typeProcessor->isArrayType($type)) {
             // Array of complex type
-            $arrayType = substr($type, 0, -2);
+            $arrayType = $type !== null ? substr($type, 0, -2) : '';
             return $this->handleComplex($name, $arrayType, $prefix, true);
         } else {
             // Complex type
@@ -705,25 +734,27 @@ class Generator extends AbstractSchemaGenerator
      */
     private function handleComplex($name, $type, $prefix, $isArray)
     {
-        $parameters = $this->typeProcessor->getTypeData($type)['parameters'];
+        $typeData = $this->typeProcessor->getTypeData($type);
+        $parameters = $typeData['parameters'] ?? [];
         $queryNames = [];
         foreach ($parameters as $subParameterName => $subParameterInfo) {
             $subParameterType = $subParameterInfo['type'];
-            $subParameterDescription = isset($subParameterInfo['documentation'])
-                ? $subParameterInfo['documentation']
-                : null;
+            $subParameterDescription = $subParameterInfo['documentation'] ?? null;
             $subPrefix = $prefix
                 ? $prefix . '[' . $name . ']'
                 : $name;
             if ($isArray) {
                 $subPrefix .= self::ARRAY_SIGNIFIER;
             }
-            $queryNames = array_merge(
-                $queryNames,
-                $this->getQueryParamNames($subParameterName, $subParameterType, $subParameterDescription, $subPrefix)
+            $queryNames[] = $this->getQueryParamNames(
+                $subParameterName,
+                $subParameterType,
+                $subParameterDescription,
+                $subPrefix
             );
         }
-        return $queryNames;
+
+        return array_merge([], ...$queryNames);
     }
 
     /**
@@ -749,9 +780,10 @@ class Generator extends AbstractSchemaGenerator
     private function convertPathParams($uri)
     {
         $parts = explode('/', $uri);
-        for ($i=0; $i < count($parts); $i++) {
-            if (strpos($parts[$i], ':') === 0) {
-                $parts[$i] = '{' . substr($parts[$i], 1) . '}';
+        $count = count($parts);
+        for ($i=0; $i < $count; $i++) {
+            if (strpos($parts[$i] ?? '', ':') === 0) {
+                $parts[$i] = '{' . substr($parts[$i] ?? '', 1) . '}';
             }
         }
         return implode('/', $parts);
@@ -841,6 +873,17 @@ class Generator extends AbstractSchemaGenerator
             $description
         );
         $bodySchema['type'] = 'object';
+
+        /*
+         * Make sure we have a proper XML wrapper for request parameters for the XML format.
+         */
+        if (!isset($bodySchema['xml']) || !is_array($bodySchema['xml'])) {
+            $bodySchema['xml'] = [];
+        }
+        if (!isset($bodySchema['xml']['name']) || empty($bodySchema['xml']['name'])) {
+            $bodySchema['xml']['name'] = self::XML_SCHEMA_PARAMWRAPPER;
+        }
+
         return $bodySchema;
     }
 
@@ -862,9 +905,17 @@ class Generator extends AbstractSchemaGenerator
             if (isset($parameters['result']['type'])) {
                 $schema = $this->getObjectSchema($parameters['result']['type'], $description);
             }
-            $responses['200']['description'] = '200 Success.';
+
+            // Some methods may have a non-standard HTTP success code.
+            $specificResponseData = $parameters['result']['response_codes']['success'] ?? [];
+            // Default HTTP success code to 200 if nothing has been supplied.
+            $responseCode = $specificResponseData['code'] ?? '200';
+            // Default HTTP response status to 200 Success if nothing has been supplied.
+            $responseDescription = $specificResponseData['description'] ?? '200 Success.';
+
+            $responses[$responseCode]['description'] = $responseDescription;
             if (!empty($schema)) {
-                $responses['200']['schema'] = $schema;
+                $responses[$responseCode]['schema'] = $schema;
             }
         }
         return $responses;

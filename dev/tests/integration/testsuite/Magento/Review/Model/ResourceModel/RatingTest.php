@@ -18,7 +18,7 @@ class RatingTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDbIsolation enabled
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Store\Model\StoreManagerInterface::class)
@@ -77,7 +77,8 @@ class RatingTest extends \PHPUnit\Framework\TestCase
      */
     public function testRatingSaveWithError()
     {
-        $this->expectException('Exception', 'Rolled back transaction has not been completed correctly');
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Rolled back transaction has not been completed correctly');
         $rating = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Review\Model\Rating::class
         );

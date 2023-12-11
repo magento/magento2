@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="DeleteTaxRateEntityTest">
+        <annotations>
+            <stories value="Delete Tax Rate"/>
+            <title value="Delete tax rate"/>
+            <description value="Test log in to Tax Rate and Delete Tax Rate"/>
+            <testCaseId value="MC-5801"/>
+            <severity value="CRITICAL"/>
+            <group value="tax"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="defaultTaxRate" stepKey="initialTaxRate"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <!-- Search the tax rate on tax grid page -->
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex1"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clickClearFilters"/>
+        <actionGroup ref="AdminFilterTaxRateByCodeActionGroup" stepKey="filterByCode">
+            <argument name="taxRateCode" value="$$initialTaxRate.code$$" />
+        </actionGroup>
+        <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="clickFirstRow"/>
+        <actionGroup ref="AdminDeleteTaxRateActionGroup" stepKey="deleteTaxRate"/>
+
+        <see selector="{{AdminMessagesSection.success}}" userInput="You Deleted the tax rate." stepKey="seeSuccess1"/>
+
+        <!-- Confirm Deleted TaxIdentifier(from the above step) on the tax rate grid page -->
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex2"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickClearFilters2"/>
+        <actionGroup ref="AdminFillTaxIdentifierFilterOnTaxRateGridActionGroup" stepKey="fillTaxIdentifierField3">
+            <argument name="taxRateCode" value="{{defaultTaxRate.code}}"/>
+        </actionGroup> 
+        <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch2"/>
+        <see selector="{{AdminTaxRateGridSection.emptyText}}" userInput="We couldn't find any records." stepKey="seeSuccess"/>
+
+        <!-- Confirm Deleted TaxIdentifier on the tax rule grid page -->
+        <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleIndex3"/>
+        <actionGroup ref="AdminClickAddTaxRuleButtonActionGroup" stepKey="clickAddNewTaxRuleButton"/>
+        <fillField selector="{{AdminTaxRuleFormSection.taxRateSearch}}" userInput="$$initialTaxRate.code$$" stepKey="fillTaxRateSearch"/>
+        <wait stepKey="waitForSearch" time="5" />
+        <dontSee selector="{{AdminTaxRuleFormSection.fieldTaxRate}}" userInput="$$initialTaxRate.code$$" stepKey="dontSeeInTaxRuleForm"/>
+    </test>
+</tests>

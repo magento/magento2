@@ -25,7 +25,10 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
      */
     protected $dateTime;
 
-    public function setUp()
+    /**
+     * @ingeritdoc
+     */
+    protected function setUp(): void
     {
         $this->dateTime = Bootstrap::getObjectManager()->create(DateTime::class);
         $this->scheduleFactory = Bootstrap::getObjectManager()->create(ScheduleFactory::class);
@@ -55,14 +58,35 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * If there's a job already locked, should not be able to lock another job
+     * If the job is already locked but lock time less than 1 day ago, attempting to lock it again should fail
+     */
+    public function testTryLockJobAlreadyLockedSucceeds()
+    {
+        $offsetInThePast = 2*24*60*60;
+
+        $oldSchedule = $this->scheduleFactory->create()
+            ->setCronExpr("* * * * *")
+            ->setJobCode("test_job")
+            ->setStatus(Schedule::STATUS_RUNNING)
+            ->setCreatedAt(date('Y-m-d H:i:s', $this->dateTime->gmtTimestamp() - $offsetInThePast))
+            ->setScheduledAt(date('Y-m-d H:i', $this->dateTime->gmtTimestamp() - $offsetInThePast + 60))
+            ->setExecutedAt(date('Y-m-d H:i', $this->dateTime->gmtTimestamp() - $offsetInThePast + 61));
+        $oldSchedule->save();
+
+        $schedule = $this->createSchedule("test_job", Schedule::STATUS_PENDING);
+
+        $this->assertTrue($schedule->tryLockJob());
+    }
+
+    /**
+     * If there's a job already has running status, should  be able to set this status for another job
      */
     public function testTryLockJobOtherLockedFails()
     {
         $this->createSchedule("test_job", Schedule::STATUS_RUNNING);
         $schedule = $this->createSchedule("test_job", Schedule::STATUS_PENDING, 60);
 
-        $this->assertFalse($schedule->tryLockJob());
+        $this->assertTrue($schedule->tryLockJob());
     }
 
     /**
@@ -90,8 +114,8 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
             ->setCronExpr("* * * * *")
             ->setJobCode($jobCode)
             ->setStatus($status)
-            ->setCreatedAt(strftime('%Y-%m-%d %H:%M:%S', $this->dateTime->gmtTimestamp()))
-            ->setScheduledAt(strftime('%Y-%m-%d %H:%M', $this->dateTime->gmtTimestamp() + $timeOffset));
+            ->setCreatedAt(date('Y-m-d H:i:s', $this->dateTime->gmtTimestamp()))
+            ->setScheduledAt(date('Y-m-d H:i', $this->dateTime->gmtTimestamp() + $timeOffset));
         $schedule->save();
 
         return $schedule;

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontUpdateShoppingCartWhileUpdateMinicartTest">
+        <annotations>
+            <stories value="Shopping Cart"/>
+            <title value="Check updating shopping cart while updating items from minicart"/>
+            <description value="Check updating shopping cart while updating items from minicart"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MAGETWO-97280"/>
+            <useCaseId value="MAGETWO-71344"/>
+            <group value="checkout"/>
+        </annotations>
+
+        <before>
+            <!--Create product-->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+        </before>
+
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct" />
+        </after>
+
+        <!--Add product to cart-->
+        <amOnPage url="$$createProduct.custom_attributes[url_key]$$.html" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+
+        <!--Go to Shopping cart and check Qty-->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCart"/>
+        <grabValueFrom selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}" stepKey="grabQtyShoppingCart"/>
+        <assertEquals stepKey="assertQtyShoppingCart">
+			<actualResult type="const">$grabQtyShoppingCart</actualResult>
+			<expectedResult type="const">1</expectedResult>
+        </assertEquals>
+
+        <!--Open minicart and change Qty-->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniCart"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.quantity}}" stepKey="waitForElementQty"/>
+        <pressKey selector="{{StorefrontMinicartSection.itemQuantity($$createProduct.name$$)}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::BACKSPACE]" stepKey="deleteFiled"/>
+        <fillField selector="{{StorefrontMinicartSection.itemQuantity($$createProduct.name$$)}}"  userInput="5" stepKey="changeQty"/>
+        <click selector="{{StorefrontMinicartSection.itemQuantityUpdate($$createProduct.name$$)}}" stepKey="updateQty"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+
+       <!--Check Qty in shopping cart after updating-->
+        <grabValueFrom selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}" stepKey="grabQtyShoppingCart1"/>
+        <assertEquals stepKey="assertQtyShoppingCart1">
+			<actualResult type="const">$grabQtyShoppingCart1</actualResult>
+			<expectedResult type="const">5</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+        <test name="AdminCreateCustomStoreViewStatusEnabledVerifyBackendAndFrontendTest">
+            <annotations>
+                <stories value="Create Store View"/>
+                <title value="Create Custom Store View Status Enabled and Verify Backend and Frontend"/>
+                <description value="Test log in to Stores and Create Custom Store View Status Enabled and Verify Backend and Frontend Test"/>
+                <testCaseId value="MC-14306"/>
+                <severity value="CRITICAL"/>
+                <group value="store"/>
+                <group value="mtf_migrated"/>
+            </annotations>
+            <before>
+                <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+                <!-- Create store -->
+                <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createStore">
+                    <argument name="website" value="{{_defaultWebsite.name}}"/>
+                    <argument name="storeGroupName" value="{{customStore.name}}"/>
+                    <argument name="storeGroupCode" value="{{customStore.code}}"/>
+                </actionGroup>
+            </before>
+            <after>
+                <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteStore">
+                    <argument name="storeGroupName" value="customStore.name"/>
+                </actionGroup>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                    <argument name="indices" value=""/>
+                </actionGroup>
+                <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            </after>
+
+            <!--Create custom store view-->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+                <argument name="StoreGroup" value="customStore"/>
+                <argument name="customStore" value="storeViewData"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
+            <!--Save the above store view and verify AssertStoreViewSuccessSaveMessage-->
+            <actionGroup ref="AdminCreateStoreViewSaveActionGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>
+
+            <!--Search store view(from above step) in grid and verify AssertStoreInGrid-->
+            <actionGroup ref="AssertStoreViewInGridActionGroup" stepKey="searchStoreViewInGrid">
+                <argument name="storeViewName" value="{{storeViewData.name}}"/>
+            </actionGroup>
+
+            <!--Go to store view form page and verify AssertStoreForm-->
+            <actionGroup ref="AssertStoreViewFormActionGroup" stepKey="verifyStoreViewForm">
+                <argument name="storeDropdown" value="{{customStore.name}}"/>
+                <argument name="storeViewName" value="{{storeViewData.name}}"/>
+                <argument name="storeViewCode" value="{{storeViewData.code}}"/>
+                <argument name="status" value="Enabled"/>
+            </actionGroup>
+
+            <!--Go to store configuration page and verify AssertStoreBackend-->
+            <actionGroup ref="AssertStoreConfigurationBackendActionGroup" stepKey="verifyValuesOnStoreBackend">
+                <argument name="website" value="{{_defaultWebsite.name}}"/>
+                <argument name="customStore" value="{{customStore.name}}"/>
+                <argument name="storeView1" value="{{storeViewData.name}}"/>
+            </actionGroup>
+
+            <!--Go to storefront and verify AssertStoreFrontend-->
+            <actionGroup ref="AssertStorefrontStoreVisibleInFooterActionGroup" stepKey="verifyValuesOnStoreFrontend">
+                <argument name="customStore" value="{{customStore.name}}"/>
+            </actionGroup>
+        </test>
+</tests>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSelectClearShoppingCartConfigurationActionGroup">
+        <annotations>
+            <description>Enable/Disable clear shopping cart store configuration using UI.</description>
+        </annotations>
+        <arguments>
+            <argument name="value" type="string" defaultValue="{{EnableClearShoppingCart.textValue}}"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminCheckoutConfigSection.clearShoppingCartEnabledInherit}}" stepKey="waitForClearShoppingCartEnabledInherit" />
+        <uncheckOption selector="{{AdminCheckoutConfigSection.clearShoppingCartEnabledInherit}}" stepKey="uncheckUseSystem" />
+        <waitForElementVisible selector="{{AdminCheckoutConfigSection.clearShoppingCartEnabled}}" stepKey="waitForClearShoppingCartEnabled" />
+        <selectOption selector="{{AdminCheckoutConfigSection.clearShoppingCartEnabled}}" userInput="{{value}}" stepKey="fillClearShoppingCartEnabled" />
+    </actionGroup>
+</actionGroups>

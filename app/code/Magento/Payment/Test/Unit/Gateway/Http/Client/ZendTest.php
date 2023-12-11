@@ -3,70 +3,77 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Payment\Test\Unit\Gateway\Http\Client;
 
+use Laminas\Http\Exception\RuntimeException;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
+use Magento\Framework\HTTP\LaminasClient;
+use Magento\Framework\HTTP\LaminasClientFactory;
 use Magento\Payment\Gateway\Http\Client\Zend;
+use Magento\Payment\Gateway\Http\ClientException;
+use Magento\Payment\Gateway\Http\ConverterException;
 use Magento\Payment\Gateway\Http\ConverterInterface;
-use Magento\Framework\HTTP\ZendClientFactory;
-use Magento\Framework\HTTP\ZendClient;
 use Magento\Payment\Gateway\Http\TransferInterface;
+use Magento\Payment\Model\Method\Logger;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ZendTest
- */
-class ZendTest extends \PHPUnit\Framework\TestCase
+class ZendTest extends TestCase
 {
     /** @var Zend */
     protected $model;
 
     /**
-     * @var ConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConverterInterface|MockObject
      */
     protected $converterMock;
 
     /**
-     * @var ZendClientFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var LaminasClientFactory|MockObject
      */
-    protected $zendClientFactoryMock;
+    protected $clientFactoryMock;
 
     /**
-     * @var ZendClient|\PHPUnit_Framework_MockObject_MockObject
+     * @var LaminasClient|MockObject
      */
     protected $clientMock;
 
     /**
-     * @var TransferInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TransferInterface|MockObject
      */
     protected $transferObjectMock;
 
     /**
-     * @var \Magento\Payment\Model\Method\Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var Logger|MockObject
      */
     protected $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->converterMock = $this->getMockBuilder(\Magento\Payment\Gateway\Http\ConverterInterface::class)
+        $this->converterMock = $this->getMockBuilder(ConverterInterface::class)
             ->getMockForAbstractClass();
 
-        $this->zendClientFactoryMock = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClientFactory::class)
+        $this->clientFactoryMock = $this->getMockBuilder(LaminasClientFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->clientMock = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClient::class)
+        $this->clientMock = $this->getMockBuilder(LaminasClient::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->loggerMock = $this->getMockBuilder(\Magento\Payment\Model\Method\Logger::class)
+        $this->loggerMock = $this->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->transferObjectMock = $this->getMockBuilder(\Magento\Payment\Gateway\Http\TransferInterface::class)
+        $this->transferObjectMock = $this->getMockBuilder(TransferInterface::class)
             ->getMockForAbstractClass();
 
         $this->model = new Zend(
-            $this->zendClientFactoryMock,
+            $this->clientFactoryMock,
             $this->loggerMock,
             $this->converterMock
         );
@@ -77,14 +84,15 @@ class ZendTest extends \PHPUnit\Framework\TestCase
         $this->setClientTransferObjects();
         $responseBody = 'Response body content';
 
-        $zendHttpResponseMock = $this->getMockBuilder(
-            \Zend_Http_Response::class
-        )->disableOriginalConstructor()->getMock();
-        $zendHttpResponseMock->expects($this->once())->method('getBody')->willReturn($responseBody);
+        $httpResponseMock = $this->getMockBuilder(
+            Response::class
+        )->disableOriginalConstructor()
+            ->getMock();
+        $httpResponseMock->expects($this->once())->method('getBody')->willReturn($responseBody);
 
-        $this->clientMock->expects($this->once())->method('request')->willReturn($zendHttpResponseMock);
+        $this->clientMock->expects($this->once())->method('send')->willReturn($httpResponseMock);
         $this->converterMock->expects($this->once())->method('convert')->with($responseBody);
-        $this->zendClientFactoryMock->expects($this->once())
+        $this->clientFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->clientMock);
 
@@ -93,20 +101,19 @@ class ZendTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Tests failing client gateway request
-     *
-     * @expectedException  \Magento\Payment\Gateway\Http\ClientException
      */
     public function testPlaceRequestClientFail()
     {
+        $this->expectException(ClientException::class);
         $this->setClientTransferObjects();
 
         $this->clientMock->expects($this->once())
-            ->method('request')
-            ->willThrowException(new \Zend_Http_Client_Exception);
+            ->method('send')
+            ->willThrowException(new RuntimeException());
 
         $this->converterMock->expects($this->never())->method('convert');
 
-        $this->zendClientFactoryMock->expects($this->once())
+        $this->clientFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->clientMock);
 
@@ -115,26 +122,26 @@ class ZendTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Tests failing response converting
-     *
-     * @expectedException  \Magento\Payment\Gateway\Http\ConverterException
      */
     public function testPlaceRequestConvertResponseFail()
     {
+        $this->expectException(ConverterException::class);
         $this->setClientTransferObjects();
         $responseBody = 'Response body content';
 
-        $zendHttpResponseMock = $this->getMockBuilder(
-            \Zend_Http_Response::class
-        )->disableOriginalConstructor()->getMock();
-        $zendHttpResponseMock->expects($this->once())->method('getBody')->willReturn($responseBody);
+        $httpResponseMock = $this->getMockBuilder(
+            Response::class
+        )->disableOriginalConstructor()
+            ->getMock();
+        $httpResponseMock->expects($this->once())->method('getBody')->willReturn($responseBody);
 
-        $this->clientMock->expects($this->once())->method('request')->willReturn($zendHttpResponseMock);
+        $this->clientMock->expects($this->once())->method('send')->willReturn($httpResponseMock);
         $this->converterMock->expects($this->once())
             ->method('convert')
             ->with($responseBody)
-            ->willThrowException(new \Magento\Payment\Gateway\Http\ConverterException(__()));
+            ->willThrowException(new ConverterException(__()));
 
-        $this->zendClientFactoryMock->expects($this->once())
+        $this->clientFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->clientMock);
 
@@ -144,7 +151,7 @@ class ZendTest extends \PHPUnit\Framework\TestCase
     private function setClientTransferObjects()
     {
         $config = ['key1' => 'value1', 'key2' => 'value2'];
-        $method = \Zend_Http_Client::POST;
+        $method = Request::METHOD_POST;
         $headers = ['key1' => 'value1', 'key2' => 'value2'];
         $body = 'Body content';
         $uri = 'https://example.com/listener';
@@ -157,9 +164,9 @@ class ZendTest extends \PHPUnit\Framework\TestCase
         $this->transferObjectMock->expects($this->once())->method('shouldEncode')->willReturn($shouldEncode);
         $this->transferObjectMock->expects(static::atLeastOnce())->method('getUri')->willReturn($uri);
 
-        $this->clientMock->expects($this->once())->method('setConfig')->with($config)->willReturnSelf();
+        $this->clientMock->expects($this->once())->method('setOptions')->with($config)->willReturnSelf();
         $this->clientMock->expects($this->once())->method('setMethod')->with($method)->willReturnSelf();
-        $this->clientMock->expects($this->once())->method('setParameterPost')->with($body)->willReturnSelf();
+        $this->clientMock->expects($this->once())->method('setParameterPost')->with([$body])->willReturnSelf();
         $this->clientMock->expects($this->once())->method('setHeaders')->with($headers)->willReturnSelf();
         $this->clientMock->expects($this->once())->method('setUrlEncodeBody')->with($shouldEncode)->willReturnSelf();
         $this->clientMock->expects($this->once())->method('setUri')->with($uri)->willReturnSelf();

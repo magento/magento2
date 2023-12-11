@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminOrderDetailsMainActionsSection">
+        <element name="back" type="button" selector="#back" timeout="30"/>
+        <element name="cancel" type="button" selector="#order-view-cancel-button" timeout="30"/>
+        <element name="orderEntityId" type="input" selector="#sales_order_view input[name='order_id']" timeout="30"/>
+        <element name="sendEmail" type="button" selector="#send_notification" timeout="30"/>
+        <element name="creditMemo" type="button" selector="#order_creditmemo" timeout="30"/>
+        <element name="hold" type="button" selector="#order-view-hold-button" timeout="30"/>
+        <element name="invoice" type="button" selector="#order_invoice" timeout="30"/>
+        <element name="invoiceTab" type="button" selector="#sales_order_view_tabs_order_invoices" timeout="30"/>
+        <element name="ship" type="button" selector="#order_ship" timeout="30"/>
+        <element name="reorder" type="button" selector="#order_reorder" timeout="30"/>
+        <element name="edit" type="button" selector="#order_edit" timeout="30"/>
+        <element name="modalOk" type="button" selector=".action-accept"/>
+        <element name="unhold" type="button" selector="#order-view-unhold-button" timeout="30"/>
+        <element name="invoiceBtn" type="button" selector="//button[@title='Invoice']"/>
+        <element name="shipBtn" type="button" selector="//button[@title='Ship']"/>
+        <element name="shipmentsTab" type="button" selector="#sales_order_view_tabs_order_shipments"/>
+        <element name="authorize" type="button" selector="#order_authorize"/>
+        <element name="ok" type="button" selector=".//*[@data-role='action']"/>
+    </section>
+</sections>

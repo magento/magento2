@@ -8,7 +8,7 @@
  */
 define([
     'jquery',
-    'jquery/ui'
+    'jquery-ui-modules/widget'
 ], function ($) {
     'use strict';
 
@@ -85,7 +85,7 @@ define([
             $('html, body').animate({
                 scrollTop: $(this.options.bundleOptionsContainer).offset().top
             }, 600);
-            $('#product-options-wrapper > fieldset').focus();
+            $('#product-options-wrapper > fieldset').trigger('focus');
         },
 
         /**

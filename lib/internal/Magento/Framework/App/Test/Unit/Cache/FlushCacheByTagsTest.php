@@ -3,38 +3,54 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit\Cache;
 
-class FlushCacheByTagsTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Cache\FlushCacheByTags;
+use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\Cache\Tag\Resolver;
+use Magento\Framework\App\Cache\Type\FrontendPool;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Unit tests for the \Magento\Framework\App\Cache\FlushCacheByTags class.
+ */
+class FlushCacheByTagsTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\StateInterface
+     * @var MockObject|StateInterface
      */
     private $cacheState;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\Type\FrontendPool
+     * @var MockObject|FrontendPool
      */
     private $frontendPool;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\Tag\Resolver
+     * @var MockObject|Resolver
      */
     private $tagResolver;
 
     /**
-     * @var \Magento\Framework\App\Cache\FlushCacheByTags
+     * @var FlushCacheByTags
      */
     private $plugin;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->cacheState = $this->getMockForAbstractClass(\Magento\Framework\App\Cache\StateInterface::class);
-        $this->frontendPool = $this->createMock(\Magento\Framework\App\Cache\Type\FrontendPool::class);
-        $this->tagResolver = $this->createMock(\Magento\Framework\App\Cache\Tag\Resolver::class);
+        $this->cacheState = $this->getMockForAbstractClass(StateInterface::class);
+        $this->frontendPool = $this->createMock(FrontendPool::class);
+        $this->tagResolver = $this->createMock(Resolver::class);
 
-        $this->plugin = new \Magento\Framework\App\Cache\FlushCacheByTags(
+        $this->plugin = new FlushCacheByTags(
             $this->frontendPool,
             $this->cacheState,
             ['test'],
@@ -42,58 +58,47 @@ class FlushCacheByTagsTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testAroundSave()
+    /**
+     * @return void
+     */
+    public function testAfterSave(): void
     {
-        $resource = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\AbstractResource::class)
+        $resource = $this->getMockBuilder(AbstractResource::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $model = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
+        $model = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $result = $this->plugin->aroundSave(
+        $this->tagResolver->expects($this->atLeastOnce())->method('getTags')->with($model)->willReturn([]);
+
+        $result = $this->plugin->afterSave(
             $resource,
-            function () use ($resource) {
-                return $resource;
-            },
+            $resource,
             $model
         );
+
         $this->assertSame($resource, $result);
     }
 
-    public function testAroundDelete()
+    /**
+     * @return void
+     */
+    public function testAfterDelete(): void
     {
-        $resource = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\AbstractResource::class)
+        $resource = $this->getMockBuilder(AbstractResource::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $model = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
+        $model = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $result = $this->plugin->aroundDelete(
+        $this->tagResolver->expects($this->atLeastOnce())->method('getTags')->with($model)->willReturn([]);
+
+        $result = $this->plugin->afterDelete(
             $resource,
-            function () use ($resource) {
-                return $resource;
-            },
+            $resource,
             $model
         );
-        $this->assertSame($resource, $result);
-    }
 
-    public function testAroundSaveWithInterface()
-    {
-        $resource = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\AbstractResource::class)
-
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $model = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $result = $this->plugin->aroundSave(
-            $resource,
-            function () use ($resource) {
-                return $resource;
-            },
-            $model
-        );
         $this->assertSame($resource, $result);
     }
 }

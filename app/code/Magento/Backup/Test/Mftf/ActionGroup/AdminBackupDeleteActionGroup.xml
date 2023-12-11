@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminBackupDeleteActionGroup">
+        <annotations>
+            <description>Deletes a Backup using provided Backup Entity.</description>
+        </annotations>
+        <arguments>
+            <argument name="backup"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{AdminGridTableSection.backupTypeByName(backup.name)}}" stepKey="seeBackupInGrid"/>
+        <executeJS function="return document.evaluate(&quot;{{AdminGridTableSection.backupTypeByName(backup.name)}}&quot;, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotLength-1" stepKey="expectedDatabaseBackupCount"/>
+        <click selector="{{AdminGridTableSection.backupRowCheckbox(backup.name)}}" stepKey="selectBackupRow"/>
+        <selectOption selector="{{AdminGridActionSection.actionSelect}}" userInput="Delete" stepKey="selectDeleteAction"/>
+        <click selector="{{AdminGridActionSection.submitButton}}" stepKey="clickSubmit"/>
+        <waitForPageLoad stepKey="waitForConfirmWindowToAppear"/>
+        <see selector="{{AdminConfirmationModalSection.message}}" userInput="Are you sure you want to delete the selected backup(s)?" stepKey="seeConfirmationModal"/>
+        <waitForPageLoad stepKey="waitForSubmitAction"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickOkConfirmDelete"/>
+        <executeJS function="return document.evaluate(&quot;{{AdminGridTableSection.backupTypeByName(backup.name)}}&quot;, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotLength" stepKey="resultingDatabaseBackupCount"/>
+        <assertEquals stepKey="assertDatabaseBackupDeleted">
+            <actualResult type="variable">$resultingDatabaseBackupCount</actualResult>
+            <expectedResult type="variable">$expectedDatabaseBackupCount</expectedResult>
+        </assertEquals>
+        <comment userInput="BIC workaround" stepKey="dontSeeBackupInGrid"/>
+    </actionGroup>
+</actionGroups>

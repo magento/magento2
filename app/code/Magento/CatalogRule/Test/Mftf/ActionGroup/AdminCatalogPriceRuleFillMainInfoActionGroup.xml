@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCatalogPriceRuleFillMainInfoActionGroup">
+        <annotations>
+            <description>Fill Catalog Price Rule main info fields: Name, Description, Active (1/0), Priority.</description>
+        </annotations>
+        <arguments>
+            <argument name="name" type="string" defaultValue="{{_defaultCatalogRule.name}}"/>
+            <argument name="description" type="string" defaultValue="{{_defaultCatalogRule.description}}"/>
+            <argument name="active" type="string" defaultValue="1"/>
+            <argument name="websites" type="string" defaultValue="'Main Website'"/>
+            <argument name="groups" type="string" defaultValue="'NOT LOGGED IN','General','Wholesale','Retailer'"/>
+            <argument name="fromDate" type="string" defaultValue=""/>
+            <argument name="toDate" type="string" defaultValue=""/>
+            <argument name="priority" type="string" defaultValue=""/>
+        </arguments>
+
+        <fillField selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{name}}" stepKey="fillName"/>
+        <fillField selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{description}}" stepKey="fillDescription"/>
+        <conditionalClick selector="{{AdminNewCatalogPriceRule.isActive}}" dependentSelector="{{AdminNewCatalogPriceRule.activeByStatus(active)}}" visible="false" stepKey="fillActive"/>
+        <selectOption selector="{{AdminNewCatalogPriceRule.websites}}" parameterArray="[{{websites}}]" stepKey="selectSpecifiedWebsites"/>
+        <selectOption selector="{{AdminNewCatalogPriceRule.customerGroups}}" parameterArray="[{{groups}}]" stepKey="selectSpecifiedCustomerGroups"/>
+        <fillField selector="{{AdminNewCatalogPriceRule.fromDate}}" userInput="{{fromDate}}" stepKey="fillFromDate"/>
+        <fillField selector="{{AdminNewCatalogPriceRule.toDate}}" userInput="{{toDate}}" stepKey="fillToDate"/>
+        <fillField selector="{{AdminNewCatalogPriceRule.priority}}" userInput="{{priority}}" stepKey="fillPriority"/>
+    </actionGroup>
+</actionGroups>

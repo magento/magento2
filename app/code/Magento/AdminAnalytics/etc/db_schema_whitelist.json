@@ -1,0 +1,12 @@
+{
+    "admin_analytics_usage_version_log": {
+        "column": {
+            "id": true,
+            "last_viewed_in_version": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "ADMIN_ANALYTICS_USAGE_VERSION_LOG_LAST_VIEWED_IN_VERSION": true
+        }
+    }
+}

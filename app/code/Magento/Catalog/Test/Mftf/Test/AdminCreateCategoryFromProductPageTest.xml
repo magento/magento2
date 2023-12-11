@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCategoryFromProductPageTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create/Edit Category in Admin"/>
+            <title value="Admin should be able to create category from the product page"/>
+            <description value="Admin should be able to create category from the product page" />
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-234"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <createData entity="SimpleTwo" stepKey="simpleProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <!-- Delete the created data -->
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminDeleteCategoryByNameActionGroup" stepKey="deleteCategory">
+                <argument name="categoryName" value="{{_defaultCategory.name}}"/>
+            </actionGroup>
+            <comment userInput="BIC workaround" stepKey="getRidOfCreatedCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!-- Go to created product in admin -->
+        <comment userInput="BIC workaround" stepKey="visitAdminProductPage"/>
+        <comment userInput="BIC workaround" stepKey="clickClearFiltersInitial"/>
+        <comment userInput="BIC workaround" stepKey="findCreatedProduct"/>
+        <comment userInput="BIC workaround" stepKey="waitForFiltersToBeApplied"/>
+        <comment userInput="BIC workaround" stepKey="clickOnProductPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="navigateToProductPage">
+            <argument name="productId" value="$simpleProduct.id$"/>
+        </actionGroup>
+
+        <!-- Fill out the form for the new category -->
+        <actionGroup ref="FillNewProductCategoryActionGroup" stepKey="FillNewProductCategory">
+            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
+
+        <!-- Check in admin that category was created -->
+        <comment userInput="BIC workaround" stepKey="checkIfCategoryPresent"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryAdminPage"/>
+        <actionGroup ref="AdminCategoriesExpandAllActionGroup" stepKey="expandAllCategories"/>
+        <see userInput="{{_defaultCategory.name}}" selector="{{AdminCategorySidebarTreeSection.treeContainer}}" stepKey="assertCategoryOnAdminPage"/>
+
+        <!-- Check on storefront that category was created -->
+        <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="goToCategoryStorefrontPage">
+            <argument name="categoryUrl" value="{{_defaultCategory.urlKey}}"/>
+        </actionGroup>
+        <see userInput="{{_defaultCategory.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryNameOnStorefront"/>
+    </test>
+</tests>

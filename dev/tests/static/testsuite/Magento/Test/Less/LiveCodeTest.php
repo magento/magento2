@@ -6,17 +6,18 @@
 
 namespace Magento\Test\Less;
 
-use Magento\Framework\App\Utility;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
-use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\LessWrapper;
 use Magento\Framework\App\Utility\Files;
 use Magento\Test\Php\LiveCodeTest as PHPCodeTest;
+use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Set of tests for static code style
  */
-class LiveCodeTest extends \PHPUnit\Framework\TestCase
+class LiveCodeTest extends TestCase
 {
+    private const FILE_EXTENSION = 'less';
     /**
      * @var string
      */
@@ -27,7 +28,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$reportDir = BP . '/dev/tests/static/report';
         if (!is_dir(self::$reportDir)) {
@@ -42,24 +43,16 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      */
     public function testCodeStyle()
     {
-        $reportFile = self::$reportDir . '/less_report.txt';
-        $wrapper = new LessWrapper();
-        $codeSniffer = new CodeSniffer(realpath(__DIR__ . '/_files/lesscs'), $reportFile, $wrapper);
-
-        if (!$codeSniffer->canRun()) {
-            $this->markTestSkipped('PHP Code Sniffer is not installed.');
-        }
-
-        $codeSniffer->setExtensions([LessWrapper::LESS_FILE_EXTENSION]);
-
-        $fileList = PHPCodeTest::getWhitelist([LessWrapper::LESS_FILE_EXTENSION], __DIR__, __DIR__);
-
+        $reportFile = self::$reportDir . '/csless_report.txt';
+        $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
+        $codeSniffer->setExtensions([self::FILE_EXTENSION]);
+        $fileList = PHPCodeTest::getWhitelist([self::FILE_EXTENSION], __DIR__, __DIR__);
         $result = $codeSniffer->run($this->filterFiles($fileList));
-
+        $report = file_exists($reportFile) ? file_get_contents($reportFile) : '';
         $this->assertEquals(
             0,
             $result,
-            "PHP Code Sniffer has found {$result} error(s): See detailed report in {$reportFile}"
+            "PHP Code Sniffer detected {$result} violation(s): " . PHP_EOL . $report
         );
     }
 

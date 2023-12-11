@@ -6,7 +6,13 @@
 namespace Magento\Widget\Model\Widget;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Config\Dom\ValidationException;
+use Magento\Framework\Config\Dom\ValidationSchemaException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Simplexml\Element;
+use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
 
 /**
  * Widget Instance Model
@@ -15,34 +21,40 @@ use Magento\Framework\Serialize\Serializer\Json;
  * @method string getTitle()
  * @method \Magento\Widget\Model\Widget\Instance setTitle(string $value)
  * @method \Magento\Widget\Model\Widget\Instance setStoreIds(string $value)
- * @method \Magento\Widget\Model\Widget\Instance setWidgetParameters(string $value)
+ * @method \Magento\Widget\Model\Widget\Instance setWidgetParameters(string|array $value)
  * @method int getSortOrder()
  * @method \Magento\Widget\Model\Widget\Instance setSortOrder(int $value)
  * @method \Magento\Widget\Model\Widget\Instance setThemeId(int $value)
  * @method int getThemeId()
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
  */
 class Instance extends \Magento\Framework\Model\AbstractModel
 {
-    const SPECIFIC_ENTITIES = 'specific';
+    public const SPECIFIC_ENTITIES = 'specific';
 
-    const ALL_ENTITIES = 'all';
+    public const ALL_ENTITIES = 'all';
 
-    const DEFAULT_LAYOUT_HANDLE = 'default';
+    public const DEFAULT_LAYOUT_HANDLE = 'default';
 
-    const PRODUCT_LAYOUT_HANDLE = 'catalog_product_view';
+    public const PRODUCT_LAYOUT_HANDLE = 'catalog_product_view';
 
-    const SINGLE_PRODUCT_LAYOUT_HANLDE = 'catalog_product_view_id_{{ID}}';
+    /**
+     * @deprecated see self::SINGLE_PRODUCT_LAYOUT_HANDLE
+     */
+    public const SINGLE_PRODUCT_LAYOUT_HANLDE = self::SINGLE_PRODUCT_LAYOUT_HANDLE;
 
-    const PRODUCT_TYPE_LAYOUT_HANDLE = 'catalog_product_view_type_{{TYPE}}';
+    public const SINGLE_PRODUCT_LAYOUT_HANDLE = 'catalog_product_view_id_{{ID}}';
 
-    const ANCHOR_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_type_layered';
+    public const PRODUCT_TYPE_LAYOUT_HANDLE = 'catalog_product_view_type_{{TYPE}}';
 
-    const NOTANCHOR_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_type_default';
+    public const ANCHOR_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_type_layered';
 
-    const SINGLE_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_id_{{ID}}';
+    public const NOTANCHOR_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_type_default';
+
+    public const SINGLE_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_id_{{ID}}';
 
     /**
      * @var array
@@ -55,7 +67,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     protected $_specificEntitiesLayoutHandles = [];
 
     /**
-     * @var \Magento\Framework\Simplexml\Element
+     * @var Element
      */
     protected $_widgetConfigXml = null;
 
@@ -92,6 +104,18 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     protected $_relatedCacheTypes;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Type
+     * @since 101.0.4
+     */
+    protected $_productType;
+
+    /**
+     * @var \Magento\Widget\Model\Config\Reader
+     * @since 101.0.4
+     */
+    protected $_reader;
+
+    /**
      * @var \Magento\Framework\Escaper
      */
     protected $_escaper;
@@ -117,6 +141,11 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     private $serializer;
 
     /**
+     * @var ValidatorFactory
+     */
+    private $xmlValidatorFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Escaper $escaper
@@ -134,6 +163,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * @param array $relatedCacheTypes
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param ValidatorFactory|null $xmlValidatorFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -153,7 +183,8 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $relatedCacheTypes = [],
         array $data = [],
-        Json $serializer = null
+        Json $serializer = null,
+        ValidatorFactory $xmlValidatorFactory = null
     ) {
         $this->_escaper = $escaper;
         $this->_viewFileSystem = $viewFileSystem;
@@ -166,7 +197,8 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         $this->conditionsHelper = $conditionsHelper;
         $this->_directory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->_namespaceResolver = $namespaceResolver;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->xmlValidatorFactory = $xmlValidatorFactory ?? ObjectManager::getInstance()->get(ValidatorFactory::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -188,12 +220,12 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         $this->_specificEntitiesLayoutHandles = [
             'anchor_categories' => self::SINGLE_CATEGORY_LAYOUT_HANDLE,
             'notanchor_categories' => self::SINGLE_CATEGORY_LAYOUT_HANDLE,
-            'all_products' => self::SINGLE_PRODUCT_LAYOUT_HANLDE,
+            'all_products' => self::SINGLE_PRODUCT_LAYOUT_HANDLE,
         ];
         foreach (array_keys($this->_productType->getTypes()) as $typeId) {
             $layoutHandle = str_replace('{{TYPE}}', $typeId, self::PRODUCT_TYPE_LAYOUT_HANDLE);
             $this->_layoutHandles[$typeId . '_products'] = $layoutHandle;
-            $this->_specificEntitiesLayoutHandles[$typeId . '_products'] = self::SINGLE_PRODUCT_LAYOUT_HANLDE;
+            $this->_specificEntitiesLayoutHandles[$typeId . '_products'] = self::SINGLE_PRODUCT_LAYOUT_HANDLE;
         }
     }
 
@@ -236,7 +268,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
                     ];
                     if ($pageGroupData['for'] == self::SPECIFIC_ENTITIES) {
                         $layoutHandleUpdates = [];
-                        foreach (explode(',', $pageGroupData['entities']) as $entity) {
+                        foreach (explode(',', $pageGroupData['entities'] ?? '') as $entity) {
                             $layoutHandleUpdates[] = str_replace(
                                 '{{ID}}',
                                 $entity,
@@ -324,6 +356,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Setter
+     *
      * Prepare widget type
      *
      * @param string $type
@@ -337,17 +370,19 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Getter
+     *
      * Prepare widget type
      *
      * @return string
      */
     public function getType()
     {
-        return $this->_getData('instance_type');
+        return (string) $this->_getData('instance_type');
     }
 
     /**
      * Getter.
+     *
      * If not set return default
      *
      * @return string
@@ -363,6 +398,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Getter
+     *
      * Explode to array if string setted
      *
      * @return array
@@ -377,6 +413,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Getter
+     *
      * Unserialize if serialized string setted
      *
      * @return array
@@ -454,24 +491,36 @@ class Instance extends \Magento\Framework\Model\AbstractModel
                 $isReadable = $configFile
                     && $this->_directory->isReadable($this->_directory->getRelativePath($configFile));
                 if ($isReadable) {
-                    $config = $this->_reader->readFile($configFile);
-                    $widgetName = isset($this->_widgetConfigXml['name']) ? $this->_widgetConfigXml['name'] : null;
-                    $themeWidgetConfig = null;
-                    if ($widgetName !== null) {
-                        foreach ($config as $widget) {
-                            if (isset($widget['name']) && $widgetName === $widget['name']) {
-                                $themeWidgetConfig = $widget;
-                                break;
-                            }
-                        }
-                    }
-                    if ($themeWidgetConfig) {
-                        $this->_widgetConfigXml = array_replace_recursive($this->_widgetConfigXml, $themeWidgetConfig);
-                    }
+                    $this->addThemeWidgetConfig($configFile);
                 }
             }
         }
         return $this->_widgetConfigXml;
+    }
+
+    /**
+     * Add config data from theme config xml.
+     *
+     * @param string $configFile
+     */
+    private function addThemeWidgetConfig(string $configFile): void
+    {
+        $config = $this->_reader->readFile($configFile);
+        $widgetName = isset($this->_widgetConfigXml['name']) ? $this->_widgetConfigXml['name'] : null;
+        $themeWidgetConfig = null;
+
+        if ($widgetName !== null) {
+            foreach ($config as $widget) {
+                if (isset($widget['name']) && $widgetName === $widget['name']) {
+                    $themeWidgetConfig = $widget;
+                    break;
+                }
+            }
+        }
+
+        if ($themeWidgetConfig) {
+            $this->_widgetConfigXml = array_replace_recursive($this->_widgetConfigXml, $themeWidgetConfig);
+        }
     }
 
     /**
@@ -525,29 +574,49 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      */
     public function getWidgetSupportedTemplatesByContainer($containerName)
     {
-        $templates = [];
         $widgetTemplates = $this->getWidgetTemplates();
         $widgetConfig = $this->getWidgetConfigAsArray();
         if (isset($widgetConfig)) {
-            if (!isset($widgetConfig['supported_containers'])) {
-                return $widgetTemplates;
-            }
-            $configNodes = $widgetConfig['supported_containers'];
-            foreach ($configNodes as $node) {
-                if (isset($node['container_name']) && (string)$node['container_name'] == $containerName) {
-                    if (isset($node['template'])) {
-                        $templateChildren = $node['template'];
-                        foreach ($templateChildren as $template) {
-                            if (isset($widgetTemplates[(string)$template])) {
-                                $templates[] = $widgetTemplates[(string)$template];
-                            }
+            return $this->getWidgetTemplatesFromConfig($widgetConfig, $widgetTemplates, $containerName);
+        } else {
+            return $widgetTemplates;
+        }
+    }
+
+    /**
+     * Return widget templates from widget config.
+     *
+     * @param array $widgetConfig
+     * @param array $widgetTemplates
+     * @param string $containerName
+     * @return array
+     */
+    private function getWidgetTemplatesFromConfig(
+        array $widgetConfig,
+        array $widgetTemplates,
+        string $containerName
+    ): array {
+        $templates = [];
+
+        if (!isset($widgetConfig['supported_containers'])) {
+            return $widgetTemplates;
+        }
+
+        $configNodes = $widgetConfig['supported_containers'];
+
+        foreach ($configNodes as $node) {
+            if (isset($node['container_name']) && (string)$node['container_name'] == $containerName) {
+                if (isset($node['template'])) {
+                    $templateChildren = $node['template'];
+                    foreach ($templateChildren as $template) {
+                        if (isset($widgetTemplates[(string)$template])) {
+                            $templates[] = $widgetTemplates[(string)$template];
                         }
                     }
                 }
             }
-        } else {
-            return $widgetTemplates;
         }
+
         return $templates;
     }
 
@@ -570,11 +639,12 @@ class Instance extends \Magento\Framework\Model\AbstractModel
                 'module' => \Magento\Framework\View\Element\AbstractBlock::extractModuleName($this->getType())
             ]
         );
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         if (!$this->getId() && !$this->isCompleteToCreate() || $templatePath && !is_readable($templateFilename)) {
             return '';
         }
         $parameters = $this->getWidgetParameters();
-        $xml = '<body><referenceContainer name="' . $container . '">';
+        $xml = '<body><referenceContainer name="' . $this->_escaper->escapeHtmlAttr($container) . '">';
         $template = '';
         if (isset($parameters['template'])) {
             unset($parameters['template']);
@@ -592,7 +662,9 @@ class Instance extends \Magento\Framework\Model\AbstractModel
             } elseif (is_array($value)) {
                 $value = implode(',', $value);
             }
+            $this->validateWidgetParameters($name);
             if ($name && strlen((string)$value)) {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $value = html_entity_decode($value);
                 $xml .= '<action method="setData">' .
                     '<argument name="name" xsi:type="string">' .
@@ -606,7 +678,46 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         }
         $xml .= '</block></referenceContainer></body>';
 
+        $this->validateLayoutUpdateXml($xml);
+
         return $xml;
+    }
+
+    /**
+     * Check if generated layout update xml is valid.
+     *
+     * @param string $xml
+     * @return void
+     * @throws LocalizedException
+     */
+    private function validateLayoutUpdateXml(string $xml): void
+    {
+        $xmlValidator = $this->xmlValidatorFactory->create();
+
+        try {
+            if (!$xmlValidator->isValid($xml)) {
+                throw new LocalizedException(__('Layout update is invalid'));
+            }
+        } catch (ValidationException|ValidationSchemaException $e) {
+            throw new LocalizedException(__('Layout update is invalid'));
+        }
+    }
+
+    /**
+     * Check if widget parameter doesn't contains payload
+     *
+     * @param string $param
+     * @throws LocalizedException
+     */
+    private function validateWidgetParameters(string $param): void
+    {
+        try {
+            if (!preg_match('/^\w+$/', $param)) {
+                throw new LocalizedException(__('Layout update is invalid'));
+            }
+        } catch (ValidationException|ValidationSchemaException $e) {
+            throw new LocalizedException(__('Layout update is invalid'));
+        }
     }
 
     /**

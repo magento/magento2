@@ -3,14 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\AdvancedPricingImportExport\Model\Export;
 
+use Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing as ExportAdvancedPricing;
+use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as ImportAdvancedPricing;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
+use Magento\ImportExport\Model\Export\Adapter\Csv as ExportAdapterCsv;
+use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\Source\Csv as ImportSourceCsv;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Indexer\TestCase;
 
-class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
+/**
+ * Test for \Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class AdvancedPricingTest extends TestCase
 {
     /**
-     * @var \Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing
+     * @var ExportAdvancedPricing
      */
     protected $model;
 
@@ -20,38 +37,59 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Filesystem
+     * @var Filesystem
      */
     protected $fileSystem;
 
-    protected function setUp()
+    /**
+     * @var Write
+     */
+    private $directory;
+
+    // @codingStandardsIgnoreStart
+    public static function setUpBeforeClass(): void
+    {
+        $db = Bootstrap::getInstance()
+            ->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+        if (!$db->isDbDumpExists()) {
+            throw new \LogicException('DB dump does not exist.');
+        }
+        $db->restoreFromDbDump();
+
+        parent::setUpBeforeClass();
+    }
+
+    // @codingStandardsIgnoreEnd
+
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->fileSystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
-        $this->model = $this->objectManager->create(
-            \Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing::class
-        );
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->fileSystem = $this->objectManager->get(Filesystem::class);
+        $this->directory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
+        $this->model = $this->objectManager->create(ExportAdvancedPricing::class);
     }
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testExport()
     {
-        $productRepository = $this->objectManager->create(
-            \Magento\Catalog\Api\ProductRepositoryInterface::class
-        );
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         $index = 0;
         $ids = [];
         $origPricingData = [];
+        $skus = ['simple'];
         while (isset($skus[$index])) {
-            $ids[$index] = $productRepository->get($skus[$index])->getId();
-            $origPricingData[$index] = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
+            $ids[$index] = $productRepository->get($skus[$index])
+                ->getId();
+            $origPricingData[$index] = $this->objectManager->create(Product::class)
                 ->load($ids[$index])
                 ->getTierPrices();
             $index++;
@@ -66,12 +104,14 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
 
         while ($index > 0) {
             $index--;
-            $newPricingData = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
+            $newPricingData = $this->objectManager->create(Product::class)
                 ->load($ids[$index])
                 ->getTierPrices();
             $this->assertEquals(count($origPricingData[$index]), count($newPricingData));
             $this->assertEqualsOtherThanSkippedAttributes($origPricingData[$index], $newPricingData, []);
         }
+
+        $this->removeImportedProducts($skus);
     }
 
     /**
@@ -82,11 +122,11 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
      */
     private function assertDiscountTypes($exportContent)
     {
-        $this->assertContains(
-            '2.0000,8.0000,Fixed',
+        $this->assertStringContainsString(
+            '2.0000,8.000000,Fixed',
             $exportContent
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             '10.0000,50.00,Discount',
             $exportContent
         );
@@ -94,23 +134,22 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/price/scope 1
      * @magentoDataFixture Magento/AdvancedPricingImportExport/_files/product_with_second_website.php
      */
     public function testExportMultipleWebsites()
     {
-        $productRepository = $this->objectManager->create(
-            \Magento\Catalog\Api\ProductRepositoryInterface::class
-        );
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         $index = 0;
         $ids = [];
         $origPricingData = [];
         $skus = ['AdvancedPricingSimple 1', 'AdvancedPricingSimple 2'];
         while (isset($skus[$index])) {
-            $ids[$index] = $productRepository->get($skus[$index])->getId();
-            $origPricingData[$index] = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
+            $ids[$index] = $productRepository->get($skus[$index])
+                ->getId();
+            $origPricingData[$index] = $this->objectManager->create(Product::class)
                 ->load($ids[$index])
                 ->getTierPrices();
             $index++;
@@ -119,7 +158,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
         $csvfile = uniqid('importexport_') . '.csv';
 
         $exportContent = $this->exportData($csvfile);
-        $this->assertContains(
+        $this->assertStringContainsString(
             '"AdvancedPricingSimple 2",test,"ALL GROUPS",3.0000,5.0000',
             $exportContent
         );
@@ -127,12 +166,116 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
 
         while ($index > 0) {
             $index--;
-            $newPricingData = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
+            $newPricingData = $this->objectManager->create(Product::class)
                 ->load($ids[$index])
                 ->getTierPrices();
             $this->assertEquals(count($origPricingData[$index]), count($newPricingData));
             $this->assertEqualsOtherThanSkippedAttributes($origPricingData[$index], $newPricingData, []);
         }
+        $this->removeImportedProducts($skus);
+    }
+
+    /**
+     * Export and Import of Advanced Pricing with different Price Types.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/two_simple_products_with_tier_price.php
+     * @return void
+     */
+    public function testExportImportOfAdvancedPricing(): void
+    {
+        $simpleSku = 'simple';
+        $secondSimpleSku = 'second_simple';
+        $csvfile = $this->directory->getAbsolutePath(uniqid('importexport_') . '.csv');
+        $exportContent = $this->exportData($csvfile);
+        $this->assertStringContainsString(
+            \sprintf('%s,"All Websites [USD]","ALL GROUPS",10.0000,3.00,Discount', $secondSimpleSku),
+            $exportContent
+        );
+        $this->assertStringContainsString(
+            \sprintf('%s,"All Websites [USD]",General,5.0000,95.000000,Fixed', $simpleSku),
+            $exportContent
+        );
+        $this->updateTierPriceDataInCsv($csvfile);
+        $this->importData($csvfile);
+
+        /** @var  ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $firstProductTierPrices = $productRepository->get('simple')->getTierPrices();
+        $secondProductTierPrices = $productRepository->get('second_simple')->getTierPrices();
+
+        $this->assertSame(
+            ['0', '1'],
+            [
+                $firstProductTierPrices[0]->getExtensionAttributes()->getWebsiteId(),
+                $firstProductTierPrices[0]->getCustomerGroupId(),
+            ]
+        );
+
+        $this->assertEqualsWithDelta(
+            ['5.0000', '90.000000'],
+            [
+                $firstProductTierPrices[0]->getQty(),
+                $firstProductTierPrices[0]->getValue(),
+            ],
+            0.1
+        );
+
+        $this->assertSame(
+            ['0', \Magento\Customer\Model\Group::CUST_GROUP_ALL],
+            [
+                $secondProductTierPrices[0]->getExtensionAttributes()->getWebsiteId(),
+                $secondProductTierPrices[0]->getCustomerGroupId(),
+            ]
+        );
+
+        $this->assertEqualsWithDelta(
+            ['5.00', '10.0000'],
+            [
+                $secondProductTierPrices[0]->getExtensionAttributes()->getPercentageValue(),
+                $secondProductTierPrices[0]->getQty(),
+            ],
+            0.1
+        );
+
+        $this->removeImportedProducts([$simpleSku, $secondSimpleSku]);
+    }
+
+    /**
+     * Update tier price data in CSV.
+     *
+     * @param string $csvfile
+     * @return void
+     */
+    private function updateTierPriceDataInCsv(string $csvfile): void
+    {
+        $csvNewData = [
+            0 => [
+                0 => 'sku',
+                1 => 'tier_price_website',
+                2 => 'tier_price_customer_group',
+                3 => 'tier_price_qty',
+                4 => 'tier_price',
+                5 => 'tier_price_value_type',
+            ],
+            1 => [
+                0 => 'simple',
+                1 => 'All Websites [USD]',
+                2 => 'General',
+                3 => '5',
+                4 => '90',
+                5 => 'Fixed',
+            ],
+            2 => [
+                0 => 'second_simple',
+                1 => 'All Websites [USD]',
+                2 => 'ALL GROUPS',
+                3 => '10',
+                4 => '5',
+                5 => 'Discount',
+            ],
+        ];
+
+        $this->updateCsvFile($csvfile, $csvNewData);
     }
 
     /**
@@ -141,14 +284,14 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
      */
     private function exportData($csvFile)
     {
-        $this->model->setWriter(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                \Magento\ImportExport\Model\Export\Adapter\Csv::class,
-                ['fileSystem' => $this->fileSystem, 'destination' => $csvFile]
-            )
-        );
+        $writer = Bootstrap::getObjectManager()->create(ExportAdapterCsv::class, ['fileSystem' => $this->fileSystem]);
+
+        $this->model->setWriter($writer);
         $exportContent = $this->model->export();
         $this->assertNotEmpty($exportContent);
+
+        $driver = $this->directory->getDriver();
+        $driver->filePutContents($this->directory->getAbsolutePath($csvFile), $exportContent);
 
         return $exportContent;
     }
@@ -158,21 +301,18 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
      */
     private function importData($csvFile)
     {
-        /** @var \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing $importModel */
-        $importModel = $this->objectManager->create(
-            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class
-        );
-        $directory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        /** @var ImportAdvancedPricing $importModel */
+        $importModel = $this->objectManager->create(ImportAdvancedPricing::class);
         $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            ImportSourceCsv::class,
             [
                 'file' => $csvFile,
-                'directory' => $directory
+                'directory' => $this->directory
             ]
         );
         $errors = $importModel->setParameters(
             [
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                'behavior' => Import::BEHAVIOR_APPEND,
                 'entity' => 'advanced_pricing'
             ]
         )->setSource(
@@ -199,5 +339,52 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
                 );
             }
         }
+    }
+
+    /**
+     * Cleanup test by removing imported product.
+     *
+     * @param string[] $skus
+     * @return void
+     */
+    private function removeImportedProducts(array $skus): void
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
+        /** @var ProductRepositoryInterface $productRepository */
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+
+        foreach ($skus as $sku) {
+            try {
+                $productRepository->deleteById($sku);
+            } catch (NoSuchEntityException $e) {
+                // product already deleted
+            }
+        }
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
+    }
+
+    /**
+     * Appends csv data to the file
+     *
+     * @param string $filePath
+     * @param array $csv
+     * @return void
+     */
+    private function updateCsvFile(string $filePath, array $csv): void
+    {
+        $driver = $this->directory->getDriver();
+        $driver->deleteFile($filePath);
+        $fileResource = $driver->fileOpen($filePath, 'w');
+
+        foreach ($csv as $dataRow) {
+            $driver->filePutCsv($fileResource, $dataRow);
+        }
+
+        $driver->fileClose($fileResource);
     }
 }

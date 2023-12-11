@@ -3,31 +3,41 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\Setup;
 
-class TaxSetupTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\ProductTypes\ConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Setup\SalesSetup;
+use Magento\Sales\Setup\SalesSetupFactory;
+use Magento\Tax\Setup\TaxSetup;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class TaxSetupTest extends TestCase
 {
     /**
-     * @var \Magento\Tax\Setup\TaxSetup
+     * @var TaxSetup
      */
     protected $taxSetup;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $typeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->typeConfigMock = $this->createMock(\Magento\Catalog\Model\ProductTypes\ConfigInterface::class);
+        $this->typeConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
 
-        $salesSetup = $this->createMock(\Magento\Sales\Setup\SalesSetup::class);
-        $salesSetupFactory = $this->createPartialMock(\Magento\Sales\Setup\SalesSetupFactory::class, ['create']);
-        $salesSetupFactory->expects($this->any())->method('create')->will($this->returnValue($salesSetup));
+        $salesSetup = $this->createMock(SalesSetup::class);
+        $salesSetupFactory = $this->createPartialMock(SalesSetupFactory::class, ['create']);
+        $salesSetupFactory->expects($this->any())->method('create')->willReturn($salesSetup);
 
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $this->taxSetup = $helper->getObject(
-            \Magento\Tax\Setup\TaxSetup::class,
+            TaxSetup::class,
             [
                 'productTypeConfig' => $this->typeConfigMock,
                 'salesSetupFactory' => $salesSetupFactory,
@@ -44,8 +54,8 @@ class TaxSetupTest extends \PHPUnit\Framework\TestCase
             'filter'
         )->with(
             'taxable'
-        )->will(
-            $this->returnValue($refundable)
+        )->willReturn(
+            $refundable
         );
         $this->assertEquals($refundable, $this->taxSetup->getTaxableItems());
     }

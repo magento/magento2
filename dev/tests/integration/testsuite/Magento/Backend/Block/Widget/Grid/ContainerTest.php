@@ -29,7 +29,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->assertStringEndsWith('widget', $block->getHeaderCssClass());
-        $this->assertContains('two', $block->getHeaderText());
+        $this->assertStringContainsString('two', $block->getHeaderText());
         $this->assertInstanceOf(\Magento\Backend\Block\Widget\Grid::class, $block->getChildBlock('grid'));
         $this->assertEquals('four', $block->getAddButtonLabel());
         $this->assertEquals('five', $block->getBackButtonLabel());

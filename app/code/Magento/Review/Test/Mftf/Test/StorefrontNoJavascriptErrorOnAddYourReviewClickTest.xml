@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontNoJavascriptErrorOnAddYourReviewClickTest">
+        <annotations>
+            <features value="Review"/>
+            <stories value="Storefront Add Review"/>
+            <title value="Storefront no javascript error on 'Add Your Review' click test"/>
+            <description value="Verify no javascript error occurs when customer clicks 'Add Your Review' link"/>
+            <severity value="MAJOR"/>
+            <group value="review"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="textProductAttribute" stepKey="createProductAttribute"/>
+            <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
+            <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/$$createAttributeSet.attribute_set_id$$/"
+                      stepKey="onAttributeSetEdit"/>
+            <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
+                <argument name="group" value="Product Details"/>
+                <argument name="attribute" value="$$createProductAttribute.attribute_code$$"/>
+            </actionGroup>
+            <actionGroup ref="SaveAttributeSetActionGroup" stepKey="SaveAttributeSet"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProductWithCustomAttributeSet" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <requiredEntity createDataKey="createAttributeSet"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProductCustom"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+            <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
+        <dontSeeElement selector="{{StorefrontProductInfoDetailsSection.productNameForReview}}" stepKey="dontSeeReviewTab"/>
+        <click selector="{{StorefrontProductInfoMainSection.addReviewLink}}" stepKey="clickAddReview"/>
+        <dontSeeJsError stepKey="dontSeeJsError"/>
+        <seeElement selector="{{StorefrontProductInfoDetailsSection.productNameForReview}}" stepKey="seeReviewTab"/>
+    </test>
+</tests>

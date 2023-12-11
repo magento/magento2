@@ -24,9 +24,9 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     /**
      * Possible customer address types
      */
-    const TYPE_BILLING = 'billing';
+    public const TYPE_BILLING = 'billing';
 
-    const TYPE_SHIPPING = 'shipping';
+    public const TYPE_SHIPPING = 'shipping';
 
     /**
      * @var \Magento\Sales\Model\Order
@@ -142,7 +142,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     {
         $name = '';
         if ($this->getPrefix()) {
-            $name .= $this->getPrefix() . ' ';
+            $name .= __($this->getPrefix()) . ' ';
         }
         $name .= $this->getFirstname();
         if ($this->getMiddlename()) {
@@ -150,7 +150,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
         }
         $name .= ' ' . $this->getLastname();
         if ($this->getSuffix()) {
-            $name .= ' ' . $this->getSuffix();
+            $name .= ' ' . __($this->getSuffix());
         }
         return $name;
     }
@@ -173,7 +173,8 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
      * Enforce format of the street field
      *
      * @param array|string $key
-     * @param null $value
+     * @param array|string $value
+     *
      * @return \Magento\Framework\DataObject
      */
     public function setData($key, $value = null)
@@ -239,7 +240,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
         if (is_array($this->getData(OrderAddressInterface::STREET))) {
             return $this->getData(OrderAddressInterface::STREET);
         }
-        return explode(PHP_EOL, $this->getData(OrderAddressInterface::STREET));
+        return explode(PHP_EOL, $this->getData(OrderAddressInterface::STREET) ?? '');
     }
 
     /**
@@ -251,7 +252,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     public function getStreetLine($number)
     {
         $lines = $this->getStreet();
-        return isset($lines[$number - 1]) ? $lines[$number - 1] : '';
+        return $lines[$number - 1] ?? '';
     }
 
     //@codeCoverageIgnoreStart
@@ -508,7 +509,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setParentId($id)
     {
@@ -516,7 +517,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerAddressId($id)
     {
@@ -524,7 +525,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRegionId($id)
     {
@@ -532,7 +533,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStreet($street)
     {
@@ -540,7 +541,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerId($id)
     {
@@ -548,7 +549,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setFax($fax)
     {
@@ -556,7 +557,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRegion($region)
     {
@@ -564,7 +565,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPostcode($postcode)
     {
@@ -572,7 +573,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setLastname($lastname)
     {
@@ -580,7 +581,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCity($city)
     {
@@ -588,7 +589,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setEmail($email)
     {
@@ -596,15 +597,15 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTelephone($telephone)
     {
-        return $this->setData(OrderAddressInterface::TELEPHONE, $telephone);
+        return $this->setData(OrderAddressInterface::TELEPHONE, trim($telephone ?: ''));
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCountryId($id)
     {
@@ -612,7 +613,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setFirstname($firstname)
     {
@@ -620,7 +621,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setAddressType($addressType)
     {
@@ -628,7 +629,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPrefix($prefix)
     {
@@ -636,7 +637,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setMiddlename($middlename)
     {
@@ -644,7 +645,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSuffix($suffix)
     {
@@ -652,7 +653,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCompany($company)
     {
@@ -660,7 +661,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setVatId($id)
     {
@@ -668,7 +669,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setVatIsValid($vatIsValid)
     {
@@ -676,7 +677,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setVatRequestId($id)
     {
@@ -684,7 +685,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRegionCode($regionCode)
     {
@@ -692,7 +693,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setVatRequestDate($vatRequestDate)
     {
@@ -700,7 +701,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setVatRequestSuccess($vatRequestSuccess)
     {
@@ -708,7 +709,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Sales\Api\Data\OrderAddressExtensionInterface|null
      */
@@ -718,14 +719,27 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Sales\Api\Data\OrderAddressExtensionInterface $extensionAttributes
+     *
      * @return $this
      */
     public function setExtensionAttributes(\Magento\Sales\Api\Data\OrderAddressExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * @inheritdoc
+     * @since 102.0.3
+     */
+    public function beforeSave()
+    {
+        if ($this->getEmail() === null) {
+            $this->setEmail($this->getOrder()->getCustomerEmail());
+        }
+        return parent::beforeSave();
     }
 
     //@codeCoverageIgnoreEnd

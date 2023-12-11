@@ -24,8 +24,8 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
 
         $actions[] = [
             'url' => $this->getUrl('adminhtml/*/preview', ['id' => $row->getId()]),
-            'popup' => true,
             'caption' => __('Preview'),
+            'target' => '_blank'
         ];
 
         $this->getColumn()->setActions($actions);
@@ -41,7 +41,8 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
      */
     protected function _getEscapedValue($value)
     {
-        return addcslashes(htmlspecialchars($value), '\\\'');
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        return addcslashes($this->escapeHtml($value), '\\\'');
     }
 
     /**

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ModifyCustomAttributeValueActionGroup">
+        <annotations>
+            <description>Update value for custom attribute</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeValue" defaultValue="3.5" type="string"/>
+            <argument name="product" type="string" defaultValue="SKU0001"/>
+        </arguments>
+        <click selector="{{AdminProductGridSection.productRowBySku(product)}}" stepKey="clickOnSimpleProductRow"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <click selector="{{AdminProductMultiselectAttributeSection.option(attributeValue)}}" stepKey="selectFirstOption"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="save"/>
+        <waitForPageLoad stepKey="waitForProductSaved"/>
+    </actionGroup>
+</actionGroups>

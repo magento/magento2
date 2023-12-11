@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Shipping\Model\Carrier;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -14,37 +15,32 @@ use Magento\Framework\Xml\Security;
 /**
  * Abstract online shipping carrier model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
 abstract class AbstractCarrierOnline extends AbstractCarrier
 {
-    const USA_COUNTRY_ID = 'US';
+    public const USA_COUNTRY_ID = 'US';
 
-    const PUERTORICO_COUNTRY_ID = 'PR';
+    public const PUERTORICO_COUNTRY_ID = 'PR';
 
-    const GUAM_COUNTRY_ID = 'GU';
+    public const GUAM_COUNTRY_ID = 'GU';
 
-    const GUAM_REGION_CODE = 'GU';
+    public const GUAM_REGION_CODE = 'GU';
 
     /**
-     * Array of quotes
-     *
      * @var array
      */
     protected static $_quotesCache = [];
 
     /**
-     * Flag for check carriers for activity
-     *
      * @var string
      */
     protected $_activeFlag = 'active';
 
     /**
-     * Directory data
-     *
      * @var \Magento\Directory\Helper\Data
      */
     protected $_directoryData = null;
@@ -107,8 +103,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     protected $_rawRequest = null;
 
     /**
-     * The security scanner XML document
-     *
      * @var Security
      */
     protected $xmlSecurity;
@@ -171,7 +165,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param string $code
      * @return $this
-     * @api
      */
     public function setActiveFlag($code = 'active')
     {
@@ -183,11 +176,11 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     /**
      * Return code of carrier
      *
-     * @return string
+     * @return string|null
      */
     public function getCarrierCode()
     {
-        return isset($this->_code) ? $this->_code : null;
+        return $this->_code ?? null;
     }
 
     /**
@@ -195,7 +188,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param string $tracking
      * @return string|false
-     * @api
      */
     public function getTrackingInfo($tracking)
     {
@@ -215,6 +207,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
 
     /**
      * Check if carrier has shipping tracking option available
+     *
      * All \Magento\Usa carriers have shipping tracking option available
      *
      * @return boolean
@@ -267,7 +260,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param RateRequest $request
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @api
      */
     public function getAllItems(RateRequest $request)
     {
@@ -301,10 +293,25 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param \Magento\Framework\DataObject $request
      * @return $this|bool|\Magento\Framework\DataObject
+     * @deprecated 100.2.6
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function proccessAdditionalValidation(\Magento\Framework\DataObject $request)
+    {
+        return $this->processAdditionalValidation($request);
+    }
+
+    /**
+     * Processing additional validation to check if carrier applicable.
+     *
+     * @param \Magento\Framework\DataObject $request
+     * @return $this|bool|\Magento\Framework\DataObject
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 100.2.6
+     */
+    public function processAdditionalValidation(\Magento\Framework\DataObject $request)
     {
         //Skip by item validation if there is no items in request
         if (!count($this->getAllItems($request))) {
@@ -384,8 +391,8 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
 
     /**
      * Checks whether some request to rates have already been done, so we have cache for it
-     * Used to reduce number of same requests done to carrier service during one session
      *
+     * Used to reduce number of same requests done to carrier service during one session
      * Returns cached response or null
      *
      * @param string|array $requestParams
@@ -395,7 +402,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     {
         $key = $this->_getQuotesCacheKey($requestParams);
 
-        return isset(self::$_quotesCache[$key]) ? self::$_quotesCache[$key] : null;
+        return self::$_quotesCache[$key] ?? null;
     }
 
     /**
@@ -421,6 +428,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      */
     protected function _prepareServiceName($name)
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $name = html_entity_decode((string)$name);
         $name = strip_tags(preg_replace('#&\w+;#', '', $name));
 
@@ -428,8 +436,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     }
 
     /**
-     * Prepare shipment request.
-     * Validate and correct request information
+     * Prepare shipment request. Validate and correct request information
      *
      * @param \Magento\Framework\DataObject $request
      * @return void
@@ -438,10 +445,10 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     {
         $phonePattern = '/[\s\_\-\(\)]+/';
         $phoneNumber = $request->getShipperContactPhoneNumber();
-        $phoneNumber = preg_replace($phonePattern, '', $phoneNumber);
+        $phoneNumber = is_string($phoneNumber) ? preg_replace($phonePattern, '', $phoneNumber) : '';
         $request->setShipperContactPhoneNumber($phoneNumber);
         $phoneNumber = $request->getRecipientContactPhoneNumber();
-        $phoneNumber = preg_replace($phonePattern, '', $phoneNumber);
+        $phoneNumber = is_string($phoneNumber) ? preg_replace($phonePattern, '', $phoneNumber) : '';
         $request->setRecipientContactPhoneNumber($phoneNumber);
     }
 
@@ -543,15 +550,13 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     }
 
     /**
-     * For multi package shipments. Delete requested shipments if the current shipment
-     * request is failed
+     * For multi package shipments. Delete requested shipments if the current shipment. Request is failed
      *
      * @param array $data
      * @return bool
      *
      * @todo implement rollback logic
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @api
      */
     public function rollBack($data)
     {
@@ -602,7 +607,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param null|string $carrierMethodCode
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @api
      */
     public function isGirthAllowed($countyDest = null, $carrierMethodCode = null)
     {
@@ -610,9 +614,10 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     }
 
     /**
+     * Set Raw Request
+     *
      * @param \Magento\Framework\DataObject|null $request
      * @return $this
-     * @api
      */
     public function setRawRequest($request)
     {
@@ -627,7 +632,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param string $cost
      * @param string $method
      * @return float|string
-     * @api
      */
     public function getMethodPrice($cost, $method = '')
     {
@@ -637,7 +641,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
             'free_shipping_enable'
         ) && $this->getConfigData(
             'free_shipping_subtotal'
-        ) <= $this->_rawRequest->getBaseSubtotalInclTax() ? '0.00' : $this->getFinalPriceWithHandlingFee(
+        ) <= $this->_rawRequest->getValueWithDiscount() ? '0.00' : $this->getFinalPriceWithHandlingFee(
             $cost
         );
     }
@@ -649,13 +653,11 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param string $customSimplexml
      * @return \SimpleXMLElement|bool
      * @throws LocalizedException
-     *
-     * @api
      */
     public function parseXml($xmlContent, $customSimplexml = 'SimpleXMLElement')
     {
         if (!$this->xmlSecurity->scan($xmlContent)) {
-            throw new LocalizedException(__('Security validation of XML document has been failed.'));
+            throw new LocalizedException(__('The security validation of the XML document has failed.'));
         }
 
         $xmlElement = simplexml_load_string($xmlContent, $customSimplexml);
@@ -665,6 +667,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
 
     /**
      * Checks if shipping method can collect rates
+     *
      * @return bool
      */
     public function canCollectRates()
@@ -674,6 +677,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
 
     /**
      * Debug errors if showmethod is unset
+     *
      * @param Error $errors
      *
      * @return void

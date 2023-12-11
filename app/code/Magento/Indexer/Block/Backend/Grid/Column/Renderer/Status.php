@@ -5,6 +5,9 @@
  */
 namespace Magento\Indexer\Block\Backend\Grid\Column\Renderer;
 
+/**
+ * Renderer for 'Status' column in indexer grid
+ */
 class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
@@ -27,7 +30,7 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
                 $text = __('Ready');
                 break;
             case \Magento\Framework\Indexer\StateInterface::STATUS_WORKING:
-                $class = 'grid-severity-major';
+                $class = 'grid-severity-minor';
                 $text = __('Processing');
                 break;
         }

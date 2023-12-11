@@ -5,16 +5,47 @@
  */
 namespace Magento\Backend\Block\Widget;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 /**
  * Button widget
  *
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
- * @api
  * @since 100.0.2
  */
 class Button extends \Magento\Backend\Block\Widget
 {
+    /**
+     * @var Random
+     */
+    private $random;
+
+    /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
+    /**
+     * @param Context $context
+     * @param array $data
+     * @param Random|null $random
+     * @param SecureHtmlRenderer|null $htmlRenderer
+     */
+    public function __construct(
+        Context $context,
+        array $data = [],
+        ?Random $random = null,
+        ?SecureHtmlRenderer $htmlRenderer = null
+    ) {
+        parent::__construct($context, $data);
+        $this->random = $random ?? ObjectManager::getInstance()->get(Random::class);
+        $this->secureRenderer = $htmlRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+    }
+
     /**
      * Define block template
      *
@@ -90,11 +121,15 @@ class Button extends \Magento\Backend\Block\Widget
             'title' => $title,
             'type' => $this->getType(),
             'class' => join(' ', $classes),
-            'onclick' => $this->getOnClick(),
-            'style' => $this->getStyle(),
             'value' => $this->getValue(),
             'disabled' => $disabled,
         ];
+        if ($this->hasData('onclick_attribute')) {
+            $attributes['onclick'] = $this->getData('onclick_attribute');
+        }
+        if ($this->hasData('backend_button_widget_hook_id')) {
+            $attributes['backend-button-widget-hook-id'] = $this->getData('backend_button_widget_hook_id');
+        }
         if ($this->getDataAttribute()) {
             foreach ($this->getDataAttribute() as $key => $attr) {
                 $attributes['data-' . $key] = is_scalar($attr) ? $attr : json_encode($attr);
@@ -120,5 +155,31 @@ class Button extends \Magento\Backend\Block\Widget
         }
 
         return $html;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function _beforeToHtml()
+    {
+        parent::_beforeToHtml();
+
+        $buttonId = 'buttonId' .$this->random->getRandomString(10);
+        $this->setData('backend_button_widget_hook_id', $buttonId);
+
+        $afterHtml = $this->getAfterHtml();
+        if ($this->getOnClick()) {
+            $afterHtml .= $this->secureRenderer->renderEventListenerAsTag(
+                'onclick',
+                $this->getOnClick(),
+                "*[backend-button-widget-hook-id='$buttonId']"
+            );
+        }
+        if ($this->getStyle()) {
+            $afterHtml .= $this->secureRenderer->renderStyleAsTag($this->getStyle(), "#{$this->getId()}");
+        }
+        $this->setAfterHtml($afterHtml);
+
+        return $this;
     }
 }

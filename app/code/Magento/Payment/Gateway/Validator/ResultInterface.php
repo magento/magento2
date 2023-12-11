@@ -28,4 +28,12 @@ interface ResultInterface
      * @return Phrase[]
      */
     public function getFailsDescription();
+
+    /**
+     * Returns list of error codes.
+     *
+     * @return string[]
+     * @since 100.3.0
+     */
+    public function getErrorCodes();
 }

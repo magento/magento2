@@ -7,23 +7,32 @@
 namespace Magento\Weee\Model\Total\Quote;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Quote\Api\Data\ShippingAssignmentInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address\Total;
 use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Store\Model\Store;
 use Magento\Tax\Model\Sales\Total\Quote\CommonTaxCollector;
+use Magento\Weee\Helper\Data as WeeHelper;
 
+/**
+ * Calculate totals for Quote
+ */
 class Weee extends AbstractTotal
 {
     /**
      * Constant for weee item code prefix
      */
-    const ITEM_CODE_WEEE_PREFIX = 'weee';
+    public const ITEM_CODE_WEEE_PREFIX = 'weee';
     /**
      * Constant for weee item type
      */
-    const ITEM_TYPE = 'weee';
+    public const ITEM_TYPE = 'weee';
 
     /**
-     * @var \Magento\Weee\Helper\Data
+     * @var WeeHelper
      */
     protected $weeeData;
 
@@ -33,7 +42,7 @@ class Weee extends AbstractTotal
     protected $_store;
 
     /**
-     * Counter
+     * Counter to keep track of count for weee
      *
      * @var int
      */
@@ -66,11 +75,11 @@ class Weee extends AbstractTotal
     protected $priceCurrency;
 
     /**
-     * @param \Magento\Weee\Helper\Data $weeeData
+     * @param WeeHelper $weeeData
      * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
-        \Magento\Weee\Helper\Data $weeeData,
+        WeeHelper $weeeData,
         PriceCurrencyInterface $priceCurrency
     ) {
         $this->priceCurrency = $priceCurrency;
@@ -82,15 +91,15 @@ class Weee extends AbstractTotal
     /**
      * Collect Weee amounts for the quote / order
      *
-     * @param \Magento\Quote\Model\Quote $quote
-     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
-     * @param \Magento\Quote\Model\Quote\Address\Total $total
+     * @param Quote $quote
+     * @param ShippingAssignmentInterface $shippingAssignment
+     * @param Total $total
      * @return $this
      */
     public function collect(
-        \Magento\Quote\Model\Quote $quote,
-        \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
-        \Magento\Quote\Model\Quote\Address\Total $total
+        Quote $quote,
+        ShippingAssignmentInterface $shippingAssignment,
+        Total $total
     ) {
         AbstractTotal::collect($quote, $shippingAssignment, $total);
         $this->_store = $quote->getStore();
@@ -130,16 +139,16 @@ class Weee extends AbstractTotal
     /**
      * Calculate item fixed tax and prepare information for discount and regular taxation
      *
-     * @param   \Magento\Quote\Model\Quote\Address $address
-     * @param   \Magento\Quote\Model\Quote\Address\Total $total
-     * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @return  void|$this
+     * @param Address $address
+     * @param Total $total
+     * @param AbstractItem $item
+     * @return void|$this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function process(
-        \Magento\Quote\Model\Quote\Address $address,
-        \Magento\Quote\Model\Quote\Address\Total $total,
+        Address $address,
+        Total $total,
         $item
     ) {
         $attributes = $this->weeeData->getProductWeeeAttributes(
@@ -236,6 +245,7 @@ class Weee extends AbstractTotal
 
         $this->processTotalAmount(
             $total,
+            $address,
             $totalRowValueExclTax,
             $baseTotalRowValueExclTax,
             $totalRowValueInclTax,
@@ -248,15 +258,17 @@ class Weee extends AbstractTotal
     /**
      * Process row amount based on FPT total amount configuration setting
      *
-     * @param   \Magento\Quote\Model\Quote\Address\Total $total
-     * @param   float $rowValueExclTax
-     * @param   float $baseRowValueExclTax
-     * @param   float $rowValueInclTax
-     * @param   float $baseRowValueInclTax
-     * @return  $this
+     * @param Total $total
+     * @param Address $address
+     * @param float $rowValueExclTax
+     * @param float $baseRowValueExclTax
+     * @param float $rowValueInclTax
+     * @param float $baseRowValueInclTax
+     * @return $this
      */
     protected function processTotalAmount(
         $total,
+        $address,
         $rowValueExclTax,
         $baseRowValueExclTax,
         $rowValueInclTax,
@@ -275,12 +287,13 @@ class Weee extends AbstractTotal
         $total->setBaseSubtotalInclTax(
             $total->getBaseSubtotalInclTax() + $this->priceCurrency->round($baseRowValueInclTax)
         );
+        $address->setBaseSubtotalTotalInclTax($total->getBaseSubtotalInclTax());
+        $address->setSubtotalInclTax($total->getSubtotalInclTax());
         return $this;
     }
 
     /**
-     * Increment and return counter. This function is intended to be used to generate temporary
-     * id for an item.
+     * Increment and return counter. This function is intended to be used to generate temporary id for an item.
      *
      * @return int
      */
@@ -292,25 +305,25 @@ class Weee extends AbstractTotal
     /**
      * Recalculate parent item amounts based on children results
      *
-     * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @return  void
-     *
+     * @param AbstractItem $item
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function recalculateParent(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
+    protected function recalculateParent(AbstractItem $item)
     {
         $associatedTaxables = [];
         foreach ($item->getChildren() as $child) {
-            $associatedTaxables = array_merge($associatedTaxables, $child->getAssociatedTaxables());
+            $associatedTaxables[] = $child->getAssociatedTaxables();
         }
+        $associatedTaxables = array_merge([], ...$associatedTaxables);
         $item->setAssociatedTaxables($associatedTaxables);
     }
 
     /**
      * Reset information about Tax and Wee on FPT for shopping cart item
      *
-     * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @return  void
+     * @param AbstractItem $item
+     * @return void
      */
     protected function resetItemData($item)
     {
@@ -332,24 +345,24 @@ class Weee extends AbstractTotal
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote $quote
-     * @param \Magento\Quote\Model\Quote\Address\Total $total
+     * Return `null` instead of original empty array
+     *
+     * @param Quote $quote
+     * @param Total $total
      * @return array|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
+    public function fetch(Quote $quote, Total $total)
     {
         return null;
     }
 
     /**
-     * Process model configuration array.
-     * This method can be used for changing totals collect sort order
+     * Process model configuration array. This method can be used for changing totals collect sort order
      *
-     * @param   array $config
-     * @param   Store $store
-     * @return  array
-     *
+     * @param array $config
+     * @param Store $store
+     * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function processConfigArray($config, $store)
@@ -360,7 +373,7 @@ class Weee extends AbstractTotal
     /**
      * No aggregated label for fixed product tax
      *
-     * TODO: fix
+     * @TODO: fix
      * @return string
      */
     public function getLabel()

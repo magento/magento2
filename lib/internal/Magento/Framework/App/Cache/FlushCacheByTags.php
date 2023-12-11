@@ -1,10 +1,16 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Cache;
+
+use Magento\Framework\App\Cache\Tag\Resolver;
+use Magento\Framework\App\Cache\Type\FrontendPool;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 
 /**
  * Automatic cache cleaner plugin
@@ -12,7 +18,7 @@ namespace Magento\Framework\App\Cache;
 class FlushCacheByTags
 {
     /**
-     * @var Type\FrontendPool
+     * @var FrontendPool
      */
     private $cachePool;
 
@@ -27,23 +33,21 @@ class FlushCacheByTags
     private $cacheState;
 
     /**
-     * @var Tag\Resolver
+     * @var Resolver
      */
     private $tagResolver;
 
     /**
-     * FlushCacheByTags constructor.
-     *
-     * @param Type\FrontendPool $cachePool
+     * @param FrontendPool $cachePool
      * @param StateInterface $cacheState
-     * @param array $cacheList
-     * @param Tag\Resolver $tagResolver
+     * @param string[] $cacheList
+     * @param Resolver $tagResolver
      */
     public function __construct(
-        \Magento\Framework\App\Cache\Type\FrontendPool $cachePool,
-        \Magento\Framework\App\Cache\StateInterface $cacheState,
+        FrontendPool $cachePool,
+        StateInterface $cacheState,
         array $cacheList,
-        \Magento\Framework\App\Cache\Tag\Resolver $tagResolver
+        Resolver $tagResolver
     ) {
         $this->cachePool = $cachePool;
         $this->cacheState = $cacheState;
@@ -52,20 +56,19 @@ class FlushCacheByTags
     }
 
     /**
-     * Clean cache on save object
+     * Clean cache when object is saved
      *
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $subject
-     * @param \Closure $proceed
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return \Magento\Framework\Model\ResourceModel\AbstractResource
+     * @param AbstractResource $subject
+     * @param AbstractResource $result
+     * @param AbstractModel $object
+     * @return AbstractResource
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(
-        \Magento\Framework\Model\ResourceModel\AbstractResource $subject,
-        \Closure $proceed,
-        \Magento\Framework\Model\AbstractModel $object
-    ) {
-        $result = $proceed($object);
+    public function afterSave(
+        AbstractResource $subject,
+        AbstractResource $result,
+        AbstractModel $object
+    ): AbstractResource {
         $tags = $this->tagResolver->getTags($object);
         $this->cleanCacheByTags($tags);
 
@@ -73,41 +76,42 @@ class FlushCacheByTags
     }
 
     /**
-     * Clean cache on delete object
+     * Clean cache when object is deleted
      *
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $subject
-     * @param \Closure $proceed
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return \Magento\Framework\Model\ResourceModel\AbstractResource
+     * @param AbstractResource $subject
+     * @param AbstractResource $result
+     * @param AbstractModel $object
+     * @return AbstractResource
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDelete(
-        \Magento\Framework\Model\ResourceModel\AbstractResource $subject,
-        \Closure $proceed,
-        \Magento\Framework\Model\AbstractModel $object
-    ) {
+    public function afterDelete(
+        AbstractResource $subject,
+        AbstractResource $result,
+        AbstractModel $object
+    ): AbstractResource {
         $tags = $this->tagResolver->getTags($object);
-        $result = $proceed($object);
         $this->cleanCacheByTags($tags);
+
         return $result;
     }
 
     /**
      * Clean cache by tags
      *
-     * @param  string[] $tags
+     * @param string[] $tags
      * @return void
      */
-    private function cleanCacheByTags($tags)
+    private function cleanCacheByTags(array $tags): void
     {
-        if (empty($tags)) {
+        if (!$tags) {
             return;
         }
+        $uniqueTags = null;
         foreach ($this->cacheList as $cacheType) {
             if ($this->cacheState->isEnabled($cacheType)) {
                 $this->cachePool->get($cacheType)->clean(
-                    \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-                    array_unique($tags)
+                    \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                    $uniqueTags = $uniqueTags ?? \array_unique($tags)
                 );
             }
         }

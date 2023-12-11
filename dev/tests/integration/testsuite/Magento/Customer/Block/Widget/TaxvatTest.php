@@ -22,8 +22,14 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Block\Widget\Taxvat::class
         );
 
-        $this->assertContains('title="Tax&#x2F;VAT&#x20;number"', $block->toHtml());
-        $this->assertNotContains('required', $block->toHtml());
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Customer\Model\Attribute::class
+        );
+        $model->loadByCode('customer', 'taxvat');
+        $attributeLabel = $model->getStoreLabel();
+
+        $this->assertStringContainsString('title="' . $block->escapeHtmlAttr($attributeLabel) . '"', $block->toHtml());
+        $this->assertStringNotContainsString('required', $block->toHtml());
     }
 
     /**
@@ -38,17 +44,18 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
         );
         $model->loadByCode('customer', 'taxvat')->setIsRequired(true);
         $model->save();
+        $attributeLabel = $model->getStoreLabel();
 
         /** @var \Magento\Customer\Block\Widget\Taxvat $block */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Customer\Block\Widget\Taxvat::class
         );
 
-        $this->assertContains('title="Tax&#x2F;VAT&#x20;number"', $block->toHtml());
-        $this->assertContains('required', $block->toHtml());
+        $this->assertStringContainsString('title="' . $block->escapeHtmlAttr($attributeLabel) . '"', $block->toHtml());
+        $this->assertStringContainsString('required', $block->toHtml());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var \Magento\Eav\Model\Config $eavConfig */
         $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);

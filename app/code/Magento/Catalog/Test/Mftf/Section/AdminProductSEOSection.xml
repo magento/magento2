@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductSEOSection">
+        <element name="sectionHeader" type="button" selector="div[data-index='search-engine-optimization']" timeout="30"/>
+        <element name="urlKeyInput" type="input" selector="input[name='product[url_key]']"/>
+        <element name="useDefaultUrl" type="checkbox" selector="input[name='use_default[url_key]']"/>
+        <element name="urlKeyRedirectCheckbox" type="checkbox" selector="input[name='product[url_key_create_redirect]']"/>
+        <element name="metaTitleInput" type="input" selector="input[name='product[meta_title]']"/>
+        <element name="metaKeywordsInput" type="textarea" selector="textarea[name='product[meta_keyword]']"/>
+        <element name="metaDescriptionInput" type="textarea" selector="textarea[name='product[meta_description]']"/>
+    </section>
+</sections>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AssignCustomOrderStatusNotVisibleOnStorefrontTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Assign Custom Order Status"/>
+            <title value="Assign custom order status not visible on storefront test"/>
+            <description value="Assign custom order status not visible on storefront"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-16053"/>
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!-- Create product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Disable created order status -->
+            <magentoCLI command="config:set {{EnableCheckmoOrderStatusPending.path}} {{EnableCheckmoOrderStatusPending.value}}" stepKey="rollbackNewOrderStatus"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+
+            <!-- Logout customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+
+            <!-- Delete product -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+
+            <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <!-- Unassign order status -->
+            <!-- Must unassign status before canceling order in cases where test fails before creating the order but after creating the custom order status -->
+            <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatus"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStatusPageLoad"/>
+            <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterStatusGrid">
+                <argument name="statusLabel" value="{{defaultOrderStatus.label}}"/>
+                <argument name="statusCode" value="{{defaultOrderStatus.status}}"/>
+            </actionGroup>
+            <click selector="{{AdminOrderStatusGridSection.unassign}}" stepKey="unassignOrderStatus"/>
+            <waitForPageLoad stepKey="waitForGridLoad"/>
+
+            <!-- Cancel order -->
+            <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToAdminOrdersPage"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+            <actionGroup ref="AdminChangeStatusOfAllOrdersFromGridActionGroup" stepKey="cancelOrder"/>
+
+            <!-- Unassign order status -->
+            <!-- Must unassign status after canceling order in cases where test does not fail before creating the order -->
+            <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatus2"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStatusPageLoad2"/>
+            <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterStatusGrid2">
+                <argument name="statusLabel" value="{{defaultOrderStatus.label}}"/>
+                <argument name="statusCode" value="{{defaultOrderStatus.status}}"/>
+            </actionGroup>
+            <click selector="{{AdminOrderStatusGridSection.unassign}}" stepKey="unassignOrderStatus2"/>
+            <waitForPageLoad stepKey="waitForGridLoad2"/>
+
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Create order status -->
+        <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatusPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderStatusPageLoad"/>
+        <actionGroup ref="AdminClickCreateNewStatusButtonOnOrderStatusPageActionGroup" stepKey="clickCreateNewStatus"/>
+
+        <!-- Fill form and validate message -->
+        <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAndClickSave">
+            <argument name="status" value="{{defaultOrderStatus.status}}"/>
+            <argument name="label" value="{{defaultOrderStatus.label}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertOrderStatusFormSaveSuccess" stepKey="seeFormSaveSuccess"/>
+
+        <!-- Assign status to state -->
+        <click selector="{{AdminOrderStatusGridSection.assignStatusToStateBtn}}" stepKey="clickAssignStatusBtn"/>
+        <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderStatus}}" userInput="{{defaultOrderStatus.status}}" stepKey="selectOrderStatus"/>
+        <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderState}}" userInput="{{OrderState.new}}" stepKey="selectOrderState"/>
+        <checkOption selector="{{AdminAssignOrderStatusToStateSection.orderStatusAsDefault}}" stepKey="orderStatusAsDefault"/>
+        <uncheckOption selector="{{AdminAssignOrderStatusToStateSection.visibleOnStorefront}}" stepKey="visibleOnStorefront"/>
+        <click selector="{{AdminAssignOrderStatusToStateSection.saveStatusAssignment}}" stepKey="clickSaveStatus"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You assigned the order status." stepKey="seeSuccess"/>
+
+        <!-- Prepare data for constraints -->
+        <magentoCLI command="config:set {{EnableCheckmoOrderStatusPending.path}} {{defaultOrderStatus.label}}" stepKey="enableNewOrderStatus"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatusPageToAssertChanges"/>
+        <!-- Assert order status in grid -->
+        <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterOrderStatusGrid">
+            <argument name="statusLabel" value="{{defaultOrderStatus.label}}"/>
+            <argument name="statusCode" value="{{defaultOrderStatus.status}}"/>
+        </actionGroup>
+        <see selector="{{AdminOrderStatusGridSection.gridCell('1', 'State Code and Title')}}" userInput="new[{{defaultOrderStatus.label}}]" stepKey="seeOrderStatusInOrderGrid"/>
+
+        <!-- Create order and grab order id -->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup"  stepKey="orderSelectFlatRateShipping"/>
+        <actionGroup ref="SelectCheckMoneyPaymentMethodActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="createNewOrder"/>
+        <comment userInput="BIC workaround" stepKey="getOrderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+
+        <!-- Assert order status is correct -->
+        <comment userInput="BIC workaround" stepKey="goToOrdersPage"/>
+        <comment userInput="BIC workaround" stepKey="filterOrdersGridById"/>
+        <comment userInput="BIC workaround" stepKey="clickCreatedOrderInGrid"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="{$orderId}"/>
+        </actionGroup>
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{defaultOrderStatus.label}}" stepKey="seeOrderStatus"/>
+
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForCustomerLogin"/>
+
+        <!-- Open My Orders -->
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToCustomerDashboardPage"/>
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToMyOrdersPage">
+            <argument name="menu" value="My Orders"/>
+        </actionGroup>
+
+        <!-- Assert order not visible on My Orders -->
+        <see selector="{{StorefrontOrderInformationMainSection.emptyMessage}}" userInput="You have placed no orders." stepKey="seeEmptyMessage"/>
+        <comment userInput="BIC workaround" stepKey="goToAdminOrdersPage"/>
+        <comment userInput="BIC workaround" stepKey="filterOrdersGridByOrderId"/>
+        <comment userInput="BIC workaround" stepKey="selectOrder"/>
+        <comment userInput="BIC workaround" stepKey="selectCancelOrderAction"/>
+        <comment userInput="BIC workaround" stepKey="seeSuccessMessage"/>
+        <comment userInput="BIC workaround" stepKey="goToOrderStatus"/>
+        <comment userInput="BIC workaround" stepKey="waitForStatusPageLoad"/>
+        <comment userInput="BIC workaround" stepKey="filterStatusGrid"/>
+        <comment userInput="BIC workaround" stepKey="unassignOrderStatus"/>
+        <comment userInput="BIC workaround" stepKey="seeMessage"/>
+
+    </test>
+</tests>

@@ -3,11 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Shipping\Test\Unit\Model\Shipping;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Shipment;
+use Magento\Sales\Model\Order\Shipment\Track;
+use Magento\Sales\Model\Order\Shipment\TrackFactory;
+use Magento\Shipping\Model\Carrier\AbstractCarrier;
+use Magento\Shipping\Model\CarrierFactory;
+use Magento\Shipping\Model\Shipping\LabelGenerator;
+use Magento\Shipping\Model\Shipping\Labels;
+use Magento\Shipping\Model\Shipping\LabelsFactory;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class LabelGeneratorTest
@@ -16,61 +32,64 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LabelGeneratorTest extends \PHPUnit\Framework\TestCase
+class LabelGeneratorTest extends TestCase
 {
     const CARRIER_CODE = 'fedex';
 
     const CARRIER_TITLE = 'Fedex carrier';
 
     /**
-     * @var \Magento\Shipping\Model\CarrierFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CarrierFactory|MockObject
      */
     private $carrierFactory;
 
     /**
-     * @var \Magento\Shipping\Model\Shipping\LabelsFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var LabelsFactory|MockObject
      */
     private $labelsFactory;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\TrackFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var TrackFactory|MockObject
      */
     private $trackFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     private $filesystem;
 
     /**
-     * @var \Magento\Shipping\Model\Shipping\LabelGenerator
+     * @var LabelGenerator
      */
     private $labelGenerator;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
-        $this->carrierFactory = $this->getMockBuilder(\Magento\Shipping\Model\CarrierFactory::class)
+        $this->carrierFactory = $this->getMockBuilder(CarrierFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->labelsFactory = $this->getMockBuilder(\Magento\Shipping\Model\Shipping\LabelsFactory::class)
+        $this->labelsFactory = $this->getMockBuilder(LabelsFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
-        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->trackFactory = $this->getMockBuilder(\Magento\Sales\Model\Order\Shipment\TrackFactory::class)
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->trackFactory = $this->getMockBuilder(TrackFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
-        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $this->filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->labelGenerator = new \Magento\Shipping\Model\Shipping\LabelGenerator(
+        $this->labelGenerator = new LabelGenerator(
             $this->carrierFactory,
             $this->labelsFactory,
             $this->scopeConfig,
@@ -80,13 +99,15 @@ class LabelGeneratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Magento\Shipping\Model\Shipping\LabelGenerator
      * @param array $info
+     *
+     * @return void
+     * @covers \Magento\Shipping\Model\Shipping\LabelGenerator
      * @dataProvider labelInfoDataProvider
      */
-    public function testAddTrackingNumbersToShipment(array $info)
+    public function testAddTrackingNumbersToShipment(array $info): void
     {
-        $order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
         $order->expects(static::once())
@@ -95,9 +116,9 @@ class LabelGeneratorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->getShippingMethodMock());
 
         /**
-         * @var $shipmentMock \Magento\Sales\Model\Order\Shipment|\PHPUnit_Framework_MockObject_MockObject
+         * @var $shipmentMock \Magento\Sales\Model\Order\Shipment|MockObject
          */
-        $shipmentMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Shipment::class)
+        $shipmentMock = $this->getMockBuilder(Shipment::class)
             ->disableOriginalConstructor()
             ->getMock();
         $shipmentMock->expects(static::once())->method('getOrder')->willReturn($order);
@@ -107,7 +128,7 @@ class LabelGeneratorTest extends \PHPUnit\Framework\TestCase
             ->with(self::CARRIER_CODE)
             ->willReturn($this->getCarrierMock());
 
-        $labelsMock = $this->getMockBuilder(\Magento\Shipping\Model\Shipping\Labels::class)
+        $labelsMock = $this->getMockBuilder(Labels::class)
             ->disableOriginalConstructor()
             ->getMock();
         $labelsMock->expects(static::once())
@@ -121,7 +142,7 @@ class LabelGeneratorTest extends \PHPUnit\Framework\TestCase
 
         $this->filesystem->expects(static::once())
             ->method('getDirectoryWrite')
-            ->willReturn($this->createMock(\Magento\Framework\Filesystem\Directory\WriteInterface::class));
+            ->willReturn($this->getMockForAbstractClass(WriteInterface::class));
 
         $this->scopeConfig->expects(static::once())
             ->method('getValue')
@@ -135,47 +156,54 @@ class LabelGeneratorTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($labelsMock);
 
-        $trackMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Shipment\Track::class)
-            ->setMethods(['setNumber', 'setCarrierCode', 'setTitle'])
+        $trackMock = $this->getMockBuilder(Track::class)
+            ->onlyMethods(['setNumber', 'setCarrierCode', 'setTitle'])
             ->disableOriginalConstructor()
             ->getMock();
-
-        $i = 0;
         $trackingNumbers = is_array($info['tracking_number']) ? $info['tracking_number'] : [$info['tracking_number']];
+
+        $setNumberWithArgs = $setCarrierCodeWithArgs = $setTitleWithArgs = $willReturnArgs = [];
+
         foreach ($trackingNumbers as $trackingNumber) {
-            $trackMock->expects(static::at($i++))
-                ->method('setNumber')
-                ->with($trackingNumber)
-                ->willReturnSelf();
-            $trackMock->expects(static::at($i++))
-                ->method('setCarrierCode')
-                ->with(self::CARRIER_CODE)
-                ->willReturnSelf();
-            $trackMock->expects(static::at($i++))
-                ->method('setTitle')
-                ->with(self::CARRIER_TITLE)
-                ->willReturnSelf();
+            $setNumberWithArgs[] = [$trackingNumber];
+            $willReturnArgs[] = $trackMock;
+
+            $setCarrierCodeWithArgs[] = [self::CARRIER_CODE];
+
+            $setTitleWithArgs[] = [self::CARRIER_TITLE];
         }
+        $trackMock
+            ->method('setNumber')
+            ->withConsecutive(...$setNumberWithArgs)
+            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+        $trackMock
+            ->method('setCarrierCode')
+            ->withConsecutive(...$setCarrierCodeWithArgs)
+            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+        $trackMock
+            ->method('setTitle')
+            ->withConsecutive(...$setTitleWithArgs)
+            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
 
         $this->trackFactory->expects(static::any())
             ->method('create')
             ->willReturn($trackMock);
 
         /**
-         * @var $requestMock \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+         * @var $requestMock \Magento\Framework\App\RequestInterface|MockObject
          */
-        $requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->labelGenerator->create($shipmentMock, $requestMock);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
-    private function getShippingMethodMock()
+    private function getShippingMethodMock(): MockObject
     {
-        $shippingMethod = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $shippingMethod = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCarrierCode'])
+            ->addMethods(['getCarrierCode'])
             ->getMock();
         $shippingMethod->expects(static::once())
             ->method('getCarrierCode')
@@ -185,13 +213,13 @@ class LabelGeneratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
-    private function getCarrierMock()
+    private function getCarrierMock(): MockObject
     {
-        $carrierMock = $this->getMockBuilder(\Magento\Shipping\Model\Carrier\AbstractCarrier::class)
+        $carrierMock = $this->getMockBuilder(AbstractCarrier::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isShippingLabelsAvailable', 'getCarrierCode'])
+            ->onlyMethods(['isShippingLabelsAvailable', 'getCarrierCode'])
             ->getMockForAbstractClass();
         $carrierMock->expects(static::once())
             ->method('isShippingLabelsAvailable')
@@ -205,12 +233,13 @@ class LabelGeneratorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $info
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     *
+     * @return MockObject
      */
-    private function getResponseMock(array $info)
+    private function getResponseMock(array $info): MockObject
     {
-        $responseMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
-            ->setMethods(['hasErrors', 'hasInfo', 'getInfo'])
+        $responseMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['hasErrors', 'hasInfo', 'getInfo'])
             ->disableOriginalConstructor()
             ->getMock();
         $responseMock->expects(static::once())
@@ -229,11 +258,11 @@ class LabelGeneratorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function labelInfoDataProvider()
+    public function labelInfoDataProvider(): array
     {
         return [
             [['tracking_number' => ['111111', '222222', '333333'], 'label_content' => 'some']],
-            [['tracking_number' => '111111', 'label_content' => 'some']],
+            [['tracking_number' => '111111', 'label_content' => 'some']]
         ];
     }
 }

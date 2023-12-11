@@ -3,11 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\I18n\Dictionary;
 
-use \Magento\Setup\Module\I18n\Dictionary\Phrase;
+use Magento\Setup\Module\I18n\Dictionary\Phrase;
+use PHPUnit\Framework\TestCase;
 
-class PhraseTest extends \PHPUnit\Framework\TestCase
+class PhraseTest extends TestCase
 {
     /**
      * @param array $constructArguments
@@ -55,7 +58,8 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
      */
     public function testWrongParametersWhilePhraseCreation($constructArguments, $message)
     {
-        $this->expectException('DomainException', $message);
+        $this->expectException('DomainException');
+        $this->expectExceptionMessage($message);
 
         new Phrase(...array_values($constructArguments));
     }
@@ -117,12 +121,10 @@ class PhraseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['context_value1'], $phrase->getContextValue());
     }
 
-    /**
-     * @expectedException \DomainException
-     * @expectedExceptionMessage Context value is empty
-     */
     public function testAddEmptyContextValue()
     {
+        $this->expectException('DomainException');
+        $this->expectExceptionMessage('Context value is empty');
         $phrase = new Phrase('phrase', 'translation', 'context_type', 'context_value1');
         $phrase->addContextValue(null);
     }

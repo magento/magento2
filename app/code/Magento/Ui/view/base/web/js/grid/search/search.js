@@ -11,8 +11,9 @@ define([
     'uiLayout',
     'mage/translate',
     'mageUtils',
-    'uiElement'
-], function (_, layout, $t, utils, Element) {
+    'uiElement',
+    'jquery'
+], function (_, layout, $t, utils, Element, $) {
     'use strict';
 
     return Element.extend({
@@ -21,6 +22,7 @@ define([
             placeholder: $t('Search by keyword'),
             label: $t('Keyword'),
             value: '',
+            keywordUpdated: false,
             previews: [],
             chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
             statefull: {
@@ -29,14 +31,18 @@ define([
             tracks: {
                 value: true,
                 previews: true,
-                inputValue: true
+                inputValue: true,
+                focused: true,
+                keywordUpdated: true
             },
             imports: {
                 inputValue: 'value',
-                updatePreview: 'value'
+                updatePreview: 'value',
+                focused: false
             },
             exports: {
-                value: '${ $.provider }:params.search'
+                value: '${ $.provider }:params.search',
+                keywordUpdated: '${ $.provider }:params.keywordUpdated'
             },
             modules: {
                 chips: '${ $.chipsProvider }'
@@ -89,6 +95,18 @@ define([
         },
 
         /**
+         * Click To ScrollTop.
+         */
+        scrollTo: function ($data) {
+            $('html, body').animate({
+                scrollTop: 0
+            }, 'slow', function () {
+                $data.focused = false;
+                $data.focused = true;
+            });
+        },
+
+        /**
          * Resets input value to the last applied state.
          *
          * @returns {Search} Chainable.
@@ -102,13 +120,14 @@ define([
         /**
          * Applies search query.
          *
-         * @param {String} [value=inputValue] - If not specfied, then
+         * @param {String} [value=inputValue] - If not specified, then
          *      value of the input field will be used.
          * @returns {Search} Chainable.
          */
         apply: function (value) {
             value = value || this.inputValue;
 
+            this.keywordUpdated = this.value !== value;
             this.value = this.inputValue = value.trim();
 
             return this;

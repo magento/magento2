@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCategoryWithCustomRootCategoryTest">
+        <annotations>
+            <stories value="Create categories"/>
+            <title value="Create category in the custom root category that is used for custom website"/>
+            <description value="Login as admin and create a root category with nested sub category and verify category in store front "/>
+            <testCaseId value="MC-5272"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStore">
+                <argument name="storeGroupName" value="customStoreGroup.name"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCreatedNewRootCategory">
+                <argument name="categoryEntity" value="NewRootCategory"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+        <!--Create Root Category-->
+        <actionGroup ref="AdminCreateRootCategory" stepKey="createNewRootCategory">
+            <argument name="categoryEntity" value="NewRootCategory"/>
+        </actionGroup>
+        <!--Create subcategory-->
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="openCreatedCategory">
+            <argument name="Category" value="NewRootCategory"/>
+        </actionGroup>
+
+        <actionGroup ref="CreateCategoryActionGroup" stepKey="createSubcategory">
+            <argument name="categoryEntity" value="SimpleSubCategory"/>
+        </actionGroup>
+        <!--Create a Store-->
+        <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStore">
+            <argument name="website" value="{{_defaultWebsite.name}}"/>
+            <argument name="store" value="{{customStoreGroup.name}}"/>
+            <argument name="rootCategory" value="{{NewRootCategory.name}}"/>
+        </actionGroup>
+        <!--Create a Store View-->
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+            <argument name="StoreGroup" value="customStoreGroup"/>
+            <argument name="customStore" value="customStore"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <!--Go to store front page-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomepage"/>
+        <!--Verify subcategory displayed in store front page-->
+        <actionGroup ref="StorefrontSwitchStoreActionGroup" stepKey="switchToCustomStore">
+            <argument name="storeName" value="{{customStoreGroup.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCatergoryNameInStoreFront">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
+    </test>
+</tests>

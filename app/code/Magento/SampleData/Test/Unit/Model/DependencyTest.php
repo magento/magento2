@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
+
 namespace Magento\SampleData\Test\Unit\Model;
 
 use Magento\Framework\Component\ComponentRegistrar;
@@ -12,35 +14,51 @@ use Magento\Framework\Config\Composer\Package;
 use Magento\Framework\Config\Composer\PackageFactory;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Phrase;
 use Magento\SampleData\Model\Dependency;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DependencyTest extends \PHPUnit\Framework\TestCase
+/**
+ * Provides tests for Dependency model of SampleData module
+ *
+ * @covers \Magento\SampleData\Model\Dependency
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class DependencyTest extends TestCase
 {
     /**
-     * @dataProvider dataPackagesFromComposerSuggest
      * @param string[] $moduleDirectories
      * @param callable $composerJsonGenerator
      * @param string[] $suggestionsFromLockFile
      * @param string[] $expectedPackages
+     * @return void
+     * @throws FileSystemException
+     *
+     * @dataProvider dataPackagesFromComposerSuggest
      */
     public function testPackagesFromComposerSuggest(
         array $moduleDirectories,
         callable $composerJsonGenerator,
         array $suggestionsFromLockFile,
         array $expectedPackages
-    ) {
-        /** @var ComposerInformation|\PHPUnit_Framework_MockObject_MockObject $composerInformation */
+    ): void {
+        /** @var ComposerInformation|MockObject $composerInformation */
         $composerInformation = $this->getMockBuilder(ComposerInformation::class)
             ->disableOriginalConstructor()
             ->getMock();
         $composerInformation->method('getSuggestedPackages')
             ->willReturn($suggestionsFromLockFile);
 
-        /** @var Filesystem|\PHPUnit_Framework_MockObject_MockObject $filesystem */
-        $filesystem = $this->getMockBuilder(Filesystem::class)->disableOriginalConstructor()->getMock();
+        /** @var Filesystem|MockObject $filesystem */
+        $filesystem = $this->getMockBuilder(Filesystem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        /** @var PackageFactory|\PHPUnit_Framework_MockObject_MockObject $packageFactory */
+        /** @var PackageFactory|MockObject $packageFactory */
         $packageFactory = $this->getMockBuilder(PackageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -50,16 +68,15 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 return new Package($args['json']);
             });
 
-        /** @var ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject $componentRegistrar */
-        $componentRegistrar = $this->getMockBuilder(ComponentRegistrarInterface::class)
-            ->getMockForAbstractClass();
+        /** @var ComponentRegistrarInterface|MockObject $componentRegistrar */
+        $componentRegistrar = $this->getMockBuilder(
+            ComponentRegistrarInterface::class
+        )->getMockForAbstractClass();
         $componentRegistrar->method('getPaths')
             ->with(ComponentRegistrar::MODULE)
-            ->willReturn(
-                $moduleDirectories
-            );
+            ->willReturn($moduleDirectories);
 
-        $directoryReadFactory = $this->getMockBuilder(Filesystem\Directory\ReadInterfaceFactory::class)
+        $directoryReadFactory = $this->getMockBuilder(ReadFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -75,7 +92,13 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertEquals($expectedPackages, $dependency->getSampleDataPackages());
     }
-    public static function dataPackagesFromComposerSuggest()
+
+    /**
+     * Data provider for testPackagesFromComposerSuggest
+     *
+     * @return array
+     */
+    public static function dataPackagesFromComposerSuggest(): array
     {
         return [
             [
@@ -88,7 +111,8 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 'composerJsonGenerator' => function (DependencyTest $test) {
                     return [
                         [
-                            ['path' => 'app/code/LocalModule'],
+                            'app/code/LocalModule',
+                            DriverPool::FILE,
                             $test->stubComposerJsonReader(
                                 [
                                     'name' => 'local/module',
@@ -99,11 +123,13 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                             )
                         ],
                         [
-                            ['path' => 'app/code/LocalModuleWithoutComposerJson'],
+                            'app/code/LocalModuleWithoutComposerJson',
+                            DriverPool::FILE,
                             $test->stubFileNotFoundReader()
                         ],
                         [
-                            ['path' => 'vendor/company/module'],
+                            'vendor/company/module',
+                            DriverPool::FILE,
                             $test->stubComposerJsonReader(
                                 [
                                     'name' => 'company/module',
@@ -114,7 +140,8 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                             )
                         ],
                         [
-                            ['path' => 'vendor/company2/module/src/..'],
+                            'vendor/company2/module/src/..',
+                            DriverPool::FILE,
                             $test->stubComposerJsonReader(
                                 [
                                     'name' => 'company2/module',
@@ -125,26 +152,30 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                             )
                         ],
                         [
-                            ['path' => 'vendor/company2/module/src'],
+                            'vendor/company2/module/src',
+                            DriverPool::FILE,
                             $test->stubFileNotFoundReader()
                         ],
                         [
-                            ['path' => 'vendor/company/module/..'],
+                            'vendor/company/module/..',
+                            DriverPool::FILE,
                             $test->stubFileNotFoundReader()
                         ],
                         [
-                            ['path' => 'app/code/LocalModuleWithoutComposerJson/..'],
+                            'app/code/LocalModuleWithoutComposerJson/..',
+                            DriverPool::FILE,
                             $test->stubFileNotFoundReader()
                         ],
                         [
-                            ['path' => 'app/code/LocalModule/..'],
+                            'app/code/LocalModule/..',
+                            DriverPool::FILE,
                             $test->stubFileNotFoundReader()
                         ],
                     ];
                 },
                 'suggestions' => [
-                    'magento/foo-sample-data' => Dependency::SAMPLE_DATA_SUGGEST . '100.0.0',
-                    'thirdparty/bar-sample-data' => Dependency::SAMPLE_DATA_SUGGEST . '1.2.3',
+                    'magento/foo-sample-data' => Dependency::SAMPLE_DATA_SUGGEST . ' 100.0.0',
+                    'thirdparty/bar-sample-data' => Dependency::SAMPLE_DATA_SUGGEST . ' 1.2.3',
                     'thirdparty/something-else' => 'Just a suggested package',
                 ],
                 'expectedPackages' => [
@@ -158,9 +189,13 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function stubComposerJsonReader(array $composerJsonContent)
+    /**
+     * @param array $composerJsonContent
+     * @return ReadInterface|MockObject
+     */
+    public function stubComposerJsonReader(array $composerJsonContent): MockObject
     {
-        $stub = $this->getMockBuilder(Filesystem\Directory\ReadInterface::class)
+        $stub = $this->getMockBuilder(ReadInterface::class)
             ->getMockForAbstractClass();
         $stub->method('isExist')
             ->with('composer.json')
@@ -174,9 +209,12 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         return $stub;
     }
 
-    public function stubFileNotFoundReader()
+    /**
+     * @return ReadInterface|MockObject
+     */
+    public function stubFileNotFoundReader(): MockObject
     {
-        $stub = $this->getMockBuilder(Filesystem\Directory\ReadInterface::class)
+        $stub = $this->getMockBuilder(ReadInterface::class)
             ->getMockForAbstractClass();
         $stub->method('isExist')
             ->with('composer.json')

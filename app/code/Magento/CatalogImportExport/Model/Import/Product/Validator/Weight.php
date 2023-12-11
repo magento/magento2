@@ -10,12 +10,14 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 class Weight extends AbstractImportValidator implements RowValidatorInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isValid($value)
     {
         $this->_clearMessages();
-        if (!empty($value['weight']) && (!is_numeric($value['weight']) || $value['weight'] < 0)) {
+        if (!empty($value['weight']) && (!is_numeric($value['weight']) || $value['weight'] < 0)
+            && $value['weight'] !== $this->context->getEmptyAttributeValueConstant()
+        ) {
             $this->_addMessages(
                 [
                     sprintf(

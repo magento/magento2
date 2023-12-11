@@ -1,0 +1,2 @@
+sku,name,short_description,product_type,attribute_set_code,price,qty,additional_attributes
+simple,Simple Product,,simple,Default,10,100,varchar_attribute=

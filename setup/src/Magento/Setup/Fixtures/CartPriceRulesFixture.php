@@ -61,7 +61,7 @@ class CartPriceRulesFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD)
      */
     public function execute()
@@ -115,6 +115,8 @@ class CartPriceRulesFixture extends Fixture
     }
 
     /**
+     * Generate condition.
+     *
      * @param int $ruleId
      * @param array $categoriesArray
      * @return array
@@ -160,6 +162,8 @@ class CartPriceRulesFixture extends Fixture
     }
 
     /**
+     * Generate rules.
+     *
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param array $categoriesArray
      * @return void
@@ -186,7 +190,7 @@ class CartPriceRulesFixture extends Fixture
                 'uses_per_customer'     => '',
                 'from_date'             => '',
                 'to_date'               => '',
-                'sort_order'            => '',
+                'sort_order'            => '100',
                 'is_rss'                => '1',
                 'rule'                  => $this->generateCondition($i, $categoriesArray),
                 'simple_action'             => 'by_percent',
@@ -195,7 +199,7 @@ class CartPriceRulesFixture extends Fixture
                 'discount_step'             => '',
                 'apply_to_shipping'         => '0',
                 'simple_free_shipping'      => '0',
-                'stop_rules_processing'     => '0',
+                'stop_rules_processing'     => '1',
                 'reward_points_delta'       => '',
                 'store_labels'              => [
                     0 => '',
@@ -245,6 +249,8 @@ class CartPriceRulesFixture extends Fixture
     }
 
     /**
+     * Generate advanced condition.
+     *
      * @param int $ruleId
      * @param array $categoriesArray
      * @return array
@@ -258,7 +264,7 @@ class CartPriceRulesFixture extends Fixture
                 'type'      => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                 'attribute' => 'category_ids',
                 'operator'  => '==',
-                'value'     => $categoriesArray[($ruleId / 4) % count($categoriesArray)][0],
+                'value'     => $categoriesArray[intdiv($ruleId, 4) % count($categoriesArray)][0],
             ];
 
             $subtotal = [0, 5, 10, 15];
@@ -299,18 +305,18 @@ class CartPriceRulesFixture extends Fixture
         } else {
             // Shipping Region
             $regions = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
-                        'Delaware', 'District of Columbia', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois',
-                        'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts',
-                        'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada',
-                        'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-                        'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
-                        'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
-                        'Wisconsin', 'Wyoming'];
+                'Delaware', 'District of Columbia', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois',
+                'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts',
+                'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada',
+                'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
+                'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
+                'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
+                'Wisconsin', 'Wyoming'];
             $firstCondition = [
                 'type'      => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                 'attribute' => 'region',
                 'operator'  => '==',
-                'value'     => $regions[($ruleId / 4) % 50],
+                'value'     => $regions[intdiv($ruleId, 4) % 50],
             ];
 
             $subtotals = [0, 5, 10, 15];
@@ -345,6 +351,8 @@ class CartPriceRulesFixture extends Fixture
     }
 
     /**
+     * Generate advanced rules.
+     *
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param array $categoriesArray
      * @return void
@@ -377,7 +385,7 @@ class CartPriceRulesFixture extends Fixture
                 'uses_per_customer'     => '',
                 'from_date'             => '',
                 'to_date'               => '',
-                'sort_order'            => '',
+                'sort_order'            => '50',
                 'is_rss'                => '1',
                 'rule'                  => $this->generateAdvancedCondition($i, $categoriesArray),
                 'simple_action'             => 'cart_fixed',
@@ -436,7 +444,7 @@ class CartPriceRulesFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getActionTitle()
     {
@@ -444,7 +452,7 @@ class CartPriceRulesFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function introduceParamLabels()
     {

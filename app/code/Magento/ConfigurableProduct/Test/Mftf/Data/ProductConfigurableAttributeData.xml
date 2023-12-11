@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="colorProductAttribute" type="product_attribute">
+        <data key="default_label" unique="suffix">Color</data>
+        <data key="input_type">Dropdown</data>
+        <data key="attribute_quantity">1</data>
+    </entity>
+    <entity name="colorProductAttribute1" type="product_attribute">
+        <data key="name" unique="suffix">White</data>
+        <data key="price">1.00</data>
+    </entity>
+    <entity name="colorProductAttribute2" type="product_attribute">
+        <data key="name" unique="suffix">Red</data>
+        <data key="price">2.00</data>
+    </entity>
+    <entity name="colorProductAttribute3" type="product_attribute">
+        <data key="name" unique="suffix">Blue</data>
+        <data key="price">3.00</data>
+    </entity>
+    <entity name="colorProductAttribute4" type="product_attribute">
+        <data key="name" unique="suffix">Orange</data>
+        <data key="price">99.99</data>
+    </entity>
+    <entity name="productAttributeColor" type="product_attribute">
+        <data key="default_label" unique="suffix">color</data>
+        <data key="input_type">Dropdown</data>
+        <data key="attribute_quantity">1</data>
+    </entity>
+    <entity name="colorDefaultProductAttribute" type="product_attribute">
+        <data key="default_label">Color</data>
+        <data key="input_type">Dropdown</data>
+        <data key="attribute_quantity">2</data>
+    </entity>
+    <entity name="colorDefaultProductAttribute1" type="product_attribute">
+        <data key="name">Green</data>
+        <data key="price">4.00</data>
+    </entity>
+    <entity name="colorDefaultProductAttribute2" type="product_attribute">
+        <data key="name">Black</data>
+        <data key="price">5.00</data>
+    </entity>
+    <entity name="colorConfigurableProductAttribute1" type="product_attribute">
+        <data key="name" unique="suffix">Green</data>
+        <data key="sku" unique="suffix">sku-green</data>
+        <data key="type_id">simple</data>
+        <data key="price">1</data>
+        <data key="visibility">1</data>
+        <data key="quantity">1</data>
+        <data key="weight">1</data>
+    </entity>
+    <entity name="colorConfigurableProductAttribute2" type="product_attribute">
+        <data key="name" unique="suffix">Red</data>
+        <data key="sku" unique="suffix">sku-red</data>
+        <data key="type_id">simple</data>
+        <data key="price">2</data>
+        <data key="visibility">1</data>
+        <data key="quantity">10</data>
+        <data key="weight">1</data>
+    </entity>
+
+    <entity name="colorConfigurableProductAttribute3" type="product_attribute">
+        <data key="name" unique="suffix">Black</data>
+        <data key="sku" unique="suffix">sku-black</data>
+        <data key="type_id">simple</data>
+        <data key="price">2</data>
+        <data key="visibility">1</data>
+        <data key="quantity">6</data>
+        <data key="weight">1</data>
+    </entity>
+</entities>

@@ -5,9 +5,12 @@
  */
 namespace Magento\OfflinePayments\Model;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * Class Purchaseorder
  *
+ * Update additional payments fields and validate the payment data
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
  *
  * @api
@@ -15,11 +18,9 @@ namespace Magento\OfflinePayments\Model;
  */
 class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
 {
-    const PAYMENT_METHOD_PURCHASEORDER_CODE = 'purchaseorder';
+    public const PAYMENT_METHOD_PURCHASEORDER_CODE = 'purchaseorder';
 
     /**
-     * Payment method code
-     *
      * @var string
      */
     protected $_code = self::PAYMENT_METHOD_PURCHASEORDER_CODE;
@@ -35,8 +36,6 @@ class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_infoBlockType = \Magento\OfflinePayments\Block\Info\Purchaseorder::class;
 
     /**
-     * Availability option
-     *
      * @var bool
      */
     protected $_isOffline = true;
@@ -46,11 +45,25 @@ class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @param \Magento\Framework\DataObject|mixed $data
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function assignData(\Magento\Framework\DataObject $data)
     {
         $this->getInfoInstance()->setPoNumber($data->getPoNumber());
+        return $this;
+    }
+
+    /**
+     * Validate payment method information object
+     *
+     * @return $this
+     * @throws LocalizedException
+     * @since 100.2.3
+     */
+    public function validate()
+    {
+        parent::validate();
+
         return $this;
     }
 }

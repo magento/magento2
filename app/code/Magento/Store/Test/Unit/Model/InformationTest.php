@@ -3,12 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Store\Test\Unit\Model;
 
+use Magento\Directory\Model\CountryFactory;
+use Magento\Directory\Model\RegionFactory;
+use Magento\Framework\DataObject;
+use Magento\Store\Model\Address\Renderer;
 use Magento\Store\Model\Information;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class InformationTest extends \PHPUnit\Framework\TestCase
+class InformationTest extends TestCase
 {
     /**
      * @var Information
@@ -16,22 +24,22 @@ class InformationTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|MockObject
      */
     protected $store;
 
     /**
-     * @var \Magento\Store\Model\Address\Renderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Renderer|MockObject
      */
     protected $renderer;
 
     /**
-     * @var \Magento\Directory\Model\RegionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var RegionFactory|MockObject
      */
     protected $regionFactory;
 
     /**
-     * @var \Magento\Directory\Model\CountryFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CountryFactory|MockObject
      */
     protected $countryFactory;
 
@@ -43,7 +51,7 @@ class InformationTest extends \PHPUnit\Framework\TestCase
     /**
      * Init mocks for tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $mockData = $this->mockConfigData = [
             Information::XML_PATH_STORE_INFO_NAME => 'Country Furnishings',
@@ -58,15 +66,15 @@ class InformationTest extends \PHPUnit\Framework\TestCase
             Information::XML_PATH_STORE_INFO_VAT_NUMBER => '123456789',
         ];
 
-        $this->store = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->store = $this->createMock(Store::class);
 
         $this->store->expects($this->any())
             ->method('getConfig')
             ->willReturnCallback(function ($path) use ($mockData) {
-                return isset($mockData[$path]) ? $mockData[$path] : null;
+                return $mockData[$path] ?? null;
             });
 
-        $this->renderer = $this->getMockBuilder(\Magento\Store\Model\Address\Renderer::class)
+        $this->renderer = $this->getMockBuilder(Renderer::class)
             ->disableOriginalConstructor()
             ->setMethods(['format'])
             ->getMock();
@@ -77,18 +85,24 @@ class InformationTest extends \PHPUnit\Framework\TestCase
                 return implode("\n", $storeInfo->getData());
             });
 
-        $region = $this->createPartialMock(\Magento\Framework\DataObject::class, ['load', 'getName']);
+        $region = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['load', 'getName'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $region->expects($this->once())->method('load')->willReturnSelf();
         $region->expects($this->once())->method('getName')->willReturn('Rohan');
 
-        $this->regionFactory = $this->createMock(\Magento\Directory\Model\RegionFactory::class);
+        $this->regionFactory = $this->createMock(RegionFactory::class);
         $this->regionFactory->expects($this->once())->method('create')->willReturn($region);
 
-        $country = $this->createPartialMock(\Magento\Framework\DataObject::class, ['loadByCode', 'getName']);
+        $country = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['loadByCode', 'getName'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $country->expects($this->once())->method('loadByCode')->with('ED')->willReturnSelf();
         $country->expects($this->once())->method('getName')->willReturn('Edoras');
 
-        $this->countryFactory = $this->createMock(\Magento\Directory\Model\CountryFactory::class);
+        $this->countryFactory = $this->createMock(CountryFactory::class);
         $this->countryFactory->expects($this->once())->method('create')->willReturn($country);
 
         $this->model = new Information(

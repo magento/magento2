@@ -30,9 +30,13 @@ define([
          * @returns {Object} Chainable.
          */
         initialize: function () {
-            this._super()
-                .initIdsStorage()
-                .initDataStorage();
+            this._super();
+
+            if (window.checkout && window.checkout.baseUrl) {
+                this.initIdsStorage();
+            }
+
+            this.initDataStorage();
 
             return this;
         },
@@ -85,12 +89,17 @@ define([
          * @returns {Object}
          */
         getIdentifiers: function () {
-            var result = {};
+            var result = {},
+                productCurrentScope = this.data.productCurrentScope,
+                scopeId = productCurrentScope === 'store' ? window.checkout.storeId :
+                    productCurrentScope === 'group' ? window.checkout.storeGroupId :
+                        window.checkout.websiteId;
 
             _.each(this.data.items, function (item, key) {
-                result[key] = {
+                result[productCurrentScope + '-' + scopeId + '-' + key] = {
                     'added_at': new Date().getTime() / 1000,
-                    'product_id': key
+                    'product_id': key,
+                    'scope_id': scopeId
                 };
             }, this);
 

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="BankTransferEnableConfigData">
+        <data key="path">payment/banktransfer/active</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="BankTransferDisabledConfigData">
+        <data key="path">payment/banktransfer/active</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="PurchaseOrderEnableConfigData">
+        <data key="path">payment/purchaseorder/active</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="PurchaseOrderDisabledConfigData">
+        <data key="path">payment/purchaseorder/active</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="CashOnDeliveryEnableConfigData">
+        <data key="path">payment/cashondelivery/active</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="CashOnDeliveryDisabledConfigData">
+        <data key="path">payment/cashondelivery/active</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="CashOnDeliveryApplicableSpecificCountryConfigData">
+        <data key="path">payment/cashondelivery/allowspecific</data>
+        <data key="scope_id">1</data>
+        <data key="label">Specific Countries</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="CashOnDeliveryApplicableAllAllowedCountryConfigData">
+        <data key="path">payment/cashondelivery/allowspecific</data>
+        <data key="scope_id">1</data>
+        <data key="label">All Allowed Countries</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="CashOnDeliveryAllAllowedCountryConfigData">
+        <data key="path">payment/cashondelivery/specificcountry</data>
+        <data key="scope_id">1</data>
+        <data key="label">All Allowed Countries</data>
+        <data key="value">''</data>
+    </entity>
+</entities>

@@ -4,16 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Product options block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Option\Value;
 
 /**
+ * Product options block
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
@@ -40,7 +38,7 @@ class Options extends \Magento\Framework\View\Element\Template
     protected $_registry = null;
 
     /**
-     * Catalog product
+     * Product
      *
      * @var Product
      */
@@ -60,6 +58,11 @@ class Options extends \Magento\Framework\View\Element\Template
      * @var \Magento\Catalog\Helper\Data
      */
     protected $_catalogData;
+
+    /**
+     * @var \Magento\Framework\Stdlib\ArrayUtils
+     */
+    private $arrayUtils;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -94,7 +97,7 @@ class Options extends \Magento\Framework\View\Element\Template
      * Retrieve product object
      *
      * @return Product
-     * @throws \LogicExceptions
+     * @throws \LogicException
      */
     public function getProduct()
     {
@@ -121,6 +124,8 @@ class Options extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get group of option.
+     *
      * @param string $type
      * @return string
      */
@@ -142,6 +147,8 @@ class Options extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Check if block has options.
+     *
      * @return bool
      */
     public function hasOptions()
@@ -160,11 +167,24 @@ class Options extends \Magento\Framework\View\Element\Template
      */
     protected function _getPriceConfiguration($option)
     {
-        $optionPrice = $this->pricingHelper->currency($option->getPrice(true), false, false);
+        $optionPrice = $option->getPrice(true);
+        if ($option->getPriceType() !== Value::TYPE_PERCENT) {
+            $optionPrice = $this->pricingHelper->currency($optionPrice, false, false);
+        }
         $data = [
             'prices' => [
                 'oldPrice' => [
-                    'amount' => $this->pricingHelper->currency($option->getRegularPrice(), false, false),
+                    'amount' => $this->_catalogData->getTaxPrice(
+                        $option->getProduct(),
+                        $option->getRegularPrice(),
+                        true,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        false
+                    ),
                     'adjustments' => [],
                 ],
                 'basePrice' => [
@@ -195,7 +215,7 @@ class Options extends \Magento\Framework\View\Element\Template
                 ],
             ],
             'type' => $option->getPriceType(),
-            'name' => $option->getTitle()
+            'name' => $option->getTitle(),
         ];
         return $data;
     }
@@ -231,7 +251,7 @@ class Options extends \Magento\Framework\View\Element\Template
         //pass the return array encapsulated in an object for the other modules to be able to alter it eg: weee
         $this->_eventManager->dispatch('catalog_product_option_price_configuration_after', ['configObj' => $configObj]);
 
-        $config=$configObj->getConfig();
+        $config = $configObj->getConfig();
 
         return $this->_jsonEncoder->encode($config);
     }

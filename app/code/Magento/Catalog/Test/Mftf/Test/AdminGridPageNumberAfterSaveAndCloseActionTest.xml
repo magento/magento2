@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminGridPageNumberAfterSaveAndCloseActionTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Catalog grid"/>
+            <title value="Checking Catalog grid page number after Save and Close action"/>
+            <description value="Checking Catalog grid page number after Save and Close action"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-16472"/>
+            <useCaseId value="MC-17332"/>
+            <group value="Catalog"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Clear product grid-->
+            <comment userInput="Clear product grid" stepKey="commentClearProductGrid"/>
+            <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="goToProductCatalog"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridToDefaultView"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteProductIfTheyExist"/>
+            <createData stepKey="category1" entity="SimpleSubCategory"/>
+            <createData stepKey="product1" entity="SimpleProduct">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <createData stepKey="category2" entity="SimpleSubCategory"/>
+            <createData stepKey="product2" entity="SimpleProduct">
+                <requiredEntity createDataKey="category2"/>
+            </createData>
+        </before>
+        <after>
+
+            <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="goToProductCatalog"/>
+            <click selector="{{AdminDataGridPaginationSection.previousPage}}" stepKey="clickPrevPageOrderGrid"/>
+            <actionGroup ref="AdminDataGridDeleteCustomPerPageActionGroup" stepKey="deleteCustomAddedPerPage">
+                <argument name="perPage" value="ProductPerPage.productCount"/>
+            </actionGroup>
+            <deleteData stepKey="deleteCategory1" createDataKey="category1"/>
+            <deleteData stepKey="deleteProduct1" createDataKey="product1"/>
+            <deleteData stepKey="deleteCategory2" createDataKey="category2"/>
+            <deleteData stepKey="deleteProduct2" createDataKey="product2"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="goToProductCatalog"/>
+        <actionGroup ref="AdminDataGridSelectCustomPerPageActionGroup" stepKey="select1OrderPerPage">
+            <argument name="perPage" value="ProductPerPage.productCount"/>
+        </actionGroup>
+        <!--Go to the next page and edit the product-->
+        <comment userInput="Go to the next page and edit the product" stepKey="commentEdiProduct"/>
+        <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="clickNextPageOrderGrid"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct2">
+            <argument name="product" value="$$product2$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminFormSaveAndCloseActionGroup" stepKey="saveAndCloseProduct"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="2" stepKey="seeOnSecondPageOrderGrid"/>
+    </test>
+</tests>

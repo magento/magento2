@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductAttributeSetGridSection">
+        <element name="filter" type="input" selector="#setGrid_filter_set_name"/>
+        <element name="searchBtn" type="button" selector="#container button[title='Search']" timeout="30"/>
+        <element name="nthRow" type="block" selector="#setGrid_table tbody tr:nth-of-type({{var1}})" parameterized="true"/>
+        <element name="AttributeSetName" type="text" selector="//td[contains(text(), '{{var1}}')]" parameterized="true"/>
+        <element name="addAttributeSetBtn" type="button" selector="button.add-set" timeout="30"/>
+        <element name="resetFilter" type="button" selector="button[data-action='grid-filter-reset']" timeout="30"/>
+        <element name="selectAttributeTitle" type="text" selector="//div[contains(text(),'Select Attribute')]" timeout="30"/>
+        <element name="searchAttributeByFilter" type="button" selector="//div[@class='data-grid-filters-action-wrap']//button[contains(text(),'Filters')]" timeout="30"/>
+        <element name="setAttributeCode" type="input" selector="//input[@name='attribute_code']" timeout="30"/>
+        <element name="applyFilter" type="button" selector="//button[@class='action-secondary' and @data-action='grid-filter-apply']" timeout="30"/>
+        <element name="selectFromAttributeResult" type="checkbox" selector="//div[@class='data-grid-cell-content' and contains(text(),'{{var1}}')]/../..//input[@data-action='select-row']" parameterized="true"/>
+        <element name="addSelected" type="button" selector="//button//span[contains(text(),'Add Selected')]"/>
+    </section>
+</sections>

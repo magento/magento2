@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminShippingMethodFedExSection">
+        <element name="carriersFedExTab" type="button" selector="#carriers_fedex-head"/>
+        <element name="carriersFedExActive" type="input" selector="#carriers_fedex_active_inherit"/>
+        <element name="carriersFedExTitle" type="input" selector="#carriers_fedex_title_inherit"/>
+        <element name="carriersFedExAccountId" type="input" selector="#carriers_fedex_account"/>
+        <element name="carriersFedExApiKey" type="input" selector="#carriers_fedex_api_key"/>
+        <element name="carriersFedExSecretKey" type="input" selector="#carriers_fedex_secret_key"/>
+        <element name="carriersFedExSandboxMode" type="input" selector="#carriers_fedex_sandbox_mode_inherit"/>
+        <element name="carriersFedExShipmentRequestType" type="input" selector="#carriers_fedex_shipment_requesttype_inherit"/>
+        <element name="carriersFedExPackaging" type="input" selector="#carriers_fedex_packaging_inherit"/>
+        <element name="carriersFedExPickupType" type="input" selector="#carriers_fedex_pickup_type"/>
+        <element name="carriersFedExUnitOfMeasure" type="input" selector="#carriers_fedex_unit_of_measure_inherit"/>
+        <element name="carriersFedExMaxPackageWeight" type="input" selector="#carriers_fedex_max_package_weight_inherit"/>
+        <element name="carriersFedExHandlingType" type="input" selector="#carriers_fedex_handling_type_inherit"/>
+        <element name="carriersFedExHandlingAction" type="select" selector="#carriers_fedex_handling_action_inherit"/>
+        <element name="carriersFedExFreeMethod" type="input" selector="#carriers_fedex_free_method_inherit"/>
+        <element name="carriersFedExSpecificErrMsg" type="input" selector="#carriers_fedex_specificerrmsg_inherit"/>
+        <element name="carriersFedExAllowSpecific" type="input" selector="#carriers_fedex_sallowspecific_inherit"/>
+        <element name="carriersFedExSpecificCountry" type="input" selector="#carriers_fedex_specificcountry"/>
+    </section>
+</sections>

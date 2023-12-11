@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFilterLegacyGridActionGroup">
+        <arguments>
+            <argument name="value" type="string"/>
+            <argument name="field" type="string" defaultValue="{{AdminLegacyDataGridFilterSection.inputFieldByNameAttr('name')}}"/>
+            <argument name="button" type="string" defaultValue="{{AdminLegacyDataGridFilterSection.apply}}"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="waitForResetFilters" />
+        <click selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="resetFilters" />
+        <waitForPageLoad stepKey="waitForFilterReset" />
+        <fillField selector="{{field}}" userInput="{{value}}" stepKey="fillFieldInFilter"/>
+        <click selector="{{button}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitForFiltersApply" />
+    </actionGroup>
+</actionGroups>

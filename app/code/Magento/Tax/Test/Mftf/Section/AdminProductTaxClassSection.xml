@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductTaxClassSection">
+        <element name="additionalSettings" type="text" selector="#details-summarybase_fieldset"/>
+        <element name="additionalSettingsCond" type="text" selector="//summary[@id='details-summarybase_fieldset' and @aria-expanded='true']"/>
+        <element name="productTaxClass" type="button" selector="//div[contains(@class, 'field-tax_product_class')]//span[text()='Add New Tax Class']"/>
+        <element name="TaxClassName" type="block" selector="//div[contains(@class, 'field-tax_product_class')]//input[@class='mselect-input']"/>
+        <element name="confirm" type="button" selector="//div[contains(@class, 'field-tax_product_class')]//span[@class='mselect-save']"/>
+    </section>
+</sections>

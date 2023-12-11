@@ -27,6 +27,10 @@
                 <disable>0</disable>
                 <host>localhost</host>
                 <port>25</port>
+                <password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <set_return_path>0</set_return_path>
+                <transport>sendmail</transport>
+                <auth>none</auth>
             </smtp>
         </system>
         <trans_email>

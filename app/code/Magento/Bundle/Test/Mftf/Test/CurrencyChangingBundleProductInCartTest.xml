@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+        <test name="CurrencyChangingBundleProductInCartTest">
+            <annotations>
+                <features value="Bundle"/>
+                <stories value="Check that after changing currency price of cart is correct when the bundle product added to the cart"/>
+                <title value="User should be able change the currency and get right price in cart when the bundle product added to the cart"/>
+                <description value="User should be able change the currency and add one more product in cart and get right price in previous currency"/>
+                <severity value="BLOCKER"/>
+                <testCaseId value="MAGETWO-94467"/>
+                <group value="Bundle"/>
+                <group value="cloud"/>
+            </annotations>
+            <before>
+                <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+                <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+                <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                    <argument name="indices" value=""/>
+                </actionGroup>
+            </before>
+            <after>
+                <!-- Delete the bundled product -->
+                <actionGroup stepKey="deleteBundle" ref="DeleteProductUsingProductGridActionGroup">
+                    <argument name="product" value="BundleProduct"/>
+                </actionGroup>
+                <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="ClearFiltersAfter"/>
+                <comment userInput="BIC workaround" stepKey="waitForClearFilter"/>
+                <!--Clear Configs-->
+                <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
+                <waitForPageLoad stepKey="waitForAdminLoginPageLoad"/>
+                <amOnPage url="{{ConfigCurrencySetupPage.url}}" stepKey="navigateToConfigCurrencySetupPage"/>
+                <waitForPageLoad stepKey="waitForConfigCurrencySetupPageForUnselectEuroCurrency"/>
+                <unselectOption selector="{{CurrencySetupSection.allowCurrencies}}" userInput="Euro" stepKey="unselectEuro"/>
+                <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+                <click selector="{{CurrencySetupSection.currencyOptions}}" stepKey="closeOptions"/>
+                <waitForPageLoad stepKey="waitForCloseOptions"/>
+                <click stepKey="saveUnselectedConfigs" selector="{{AdminConfigSection.saveButton}}"/>
+                <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+                <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+                <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            </after>
+            <!--Go to bundle product creation page-->
+            <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToBundleProductCreationPage">
+                <argument name="attributeSetId" value="{{BundleProduct.set}}"/>
+                <argument name="productType" value="{{BundleProduct.type}}"/>
+            </actionGroup>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
+            <actionGroup ref="FillMainBundleProductFormActionGroup" stepKey="fillMainFieldsForBundle"/>
+            <!-- Add Option, a "Radio Buttons" type option -->
+            <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts2">
+                <argument name="x" value="0"/>
+                <argument name="n" value="1"/>
+                <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
+                <argument name="prodTwoSku" value="$$simpleProduct2.sku$$"/>
+                <argument name="optionTitle" value="Option"/>
+                <argument name="inputType" value="radio"/>
+            </actionGroup>
+            <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('0', '0')}}" stepKey="userDefinedQuantitiyOptionProduct0"/>
+            <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('0', '1')}}" stepKey="userDefinedQuantitiyOptionProduct1"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+            <amOnPage url="{{ConfigCurrencySetupPage.url}}" stepKey="navigateToConfigCurrencySetupPage"/>
+            <waitForPageLoad stepKey="waitForConfigCurrencySetupPage"/>
+            <conditionalClick selector="{{CurrencySetupSection.currencyOptions}}" dependentSelector="{{CurrencySetupSection.allowCurrencies}}" visible="false" stepKey="openOptions"/>
+            <waitForPageLoad stepKey="waitForOptions"/>
+            <selectOption selector="{{CurrencySetupSection.allowCurrencies}}" parameterArray="['Euro', 'US Dollar']" stepKey="selectCurrencies"/>
+            <click stepKey="saveConfigs" selector="{{AdminConfigSection.saveButton}}"/>
+            <!-- Go to storefront BundleProduct -->
+            <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>
+            <waitForPageLoad stepKey="waitForStorefront"/>
+            <actionGroup ref="StoreFrontAddProductToCartFromBundleWithCurrencyActionGroup" stepKey="addProduct1ToCartAndChangeCurrencyToEuro">
+                <argument name="product" value="$$simpleProduct1$$"/>
+                <argument name="currency" value="EUR - Euro"/>
+            </actionGroup>
+            <actionGroup ref="StoreFrontAddProductToCartFromBundleWithCurrencyActionGroup" stepKey="addProduct2ToCartAndChangeCurrencyToUSD">
+                <argument name="product" value="$$simpleProduct2$$"/>
+                <argument name="currency" value="USD - US Dollar"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniCart"/>
+            <see stepKey="seeCartSubtotal" userInput="$12,300.00"/>
+        </test>
+</tests>

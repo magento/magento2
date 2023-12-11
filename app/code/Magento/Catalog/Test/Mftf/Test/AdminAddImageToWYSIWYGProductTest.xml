@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddImageToWYSIWYGProductTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Default WYSIWYG toolbar configuration with Magento Media Gallery"/>
+            <title value="Admin should be able to add image to WYSIWYG Editor on Product Page"/>
+            <description value="Admin should be able to add image to WYSIWYG Editor on Product Page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-25763"/>
+            <group value="catalog"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <actionGroup ref="CliMediaGalleryEnhancedEnableActionGroup" stepKey="enableOldMediaGallery">
+                <argument name="enabled" value="0"/>
+            </actionGroup>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
+        </before>
+
+        <after>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="NavigateToMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandStorageRootFolder">
+                <argument name="FolderName" value="Storage Root"/>
+            </actionGroup>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+                <argument name="FolderName" value="wysiwyg"/>
+            </actionGroup>
+            <actionGroup ref="DeleteFolderActionGroup" stepKey="DeleteFolderFromMediaGallery">
+                <argument name="Image" value="{{ImageFolder.name}}"/>
+            </actionGroup>
+            <actionGroup ref="CliMediaGalleryEnhancedEnableActionGroup" stepKey="disableOldMediaGallery">
+                <argument name="enabled" value="1"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="navigateToNewProduct"/>
+        <comment userInput="BIC workaround" stepKey="waitForPageLoadProductCreatePage"/>
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillBasicProductInfo" />
+
+        <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
+        <scrollTo selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToDescription"/>
+        <waitForElementVisible selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForDescription" />
+        <scrollTo selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToDescriptionAgain"/>
+        <click selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon1" />
+        <click selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowse1" />
+        <waitForPageLoad stepKey="waitForBrowseModal" />
+        <waitForElement selector="{{MediaGallerySection.CancelBtn}}" stepKey="waitForCancelBtn1" />
+        <see selector="{{MediaGallerySection.CancelBtn}}" userInput="Cancel" stepKey="seeCancelBtn1" />
+        <see selector="{{MediaGallerySection.CreateFolder}}" userInput="Create Folder" stepKey="seeCreateFolderBtn1" />
+        <dontSeeElement selector="{{MediaGallerySection.InsertFile}}" stepKey="dontSeeAddSelectedBtn1" />
+        <click selector="{{MediaGallerySection.CreateFolder}}" stepKey="createFolder1" />
+        <waitForElement selector="{{MediaGallerySection.FolderName}}" stepKey="waitForPopUp1" />
+        <fillField selector="{{MediaGallerySection.FolderName}}" userInput="{{ImageFolder.name}}" stepKey="fillFolderName1" />
+        <click selector="{{MediaGallerySection.AcceptFolderName}}" stepKey="acceptFolderName11" />
+        <conditionalClick selector="{{MediaGallerySection.StorageRootArrow}}" dependentSelector="{{MediaGallerySection.checkIfArrowExpand}}" stepKey="clickStorageRootArrowIfClosed" visible="true"/>
+        <waitForPageLoad stepKey="waitForStorageRootLoadingMaskDisappear"/>
+        <conditionalClick selector="{{MediaGallerySection.WysiwygArrow}}" dependentSelector="{{MediaGallerySection.checkIfWysiwygArrowExpand}}" stepKey="clickWysiwygArrowIfClosed" visible="true"/>
+        <waitForText userInput="{{ImageFolder.name}}" stepKey="waitForNewFolder1" />
+        <click userInput="{{ImageFolder.name}}" stepKey="clickOnCreatedFolder1" />
+        <waitForPageLoad stepKey="waitForLoading4"/>
+        <attachFile selector="{{MediaGallerySection.BrowseUploadImage}}" userInput="{{ImageUpload1.value}}" stepKey="uploadImage1"/>
+        <waitForPageLoad stepKey="waitForFileUpload1"/>
+        <waitForElementVisible  selector="{{MediaGallerySection.image(ImageUpload1.value)}}" stepKey="waitForUploadImage1" />
+        <seeElement selector="{{MediaGallerySection.imageSelected(ImageUpload1.value)}}" stepKey="seeImageSelected1" />
+        <see selector="{{MediaGallerySection.DeleteSelectedBtn}}" userInput="Delete Selected" stepKey="seeDeleteBtn1"/>
+        <click selector="{{MediaGallerySection.DeleteSelectedBtn}}" stepKey="clickDeleteSelected1" />
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForConfirmDelete1"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete1" />
+        <waitForElementNotVisible selector="{{MediaGallerySection.image(ImageUpload1.value)}}" stepKey="waitForImageDeleted1" />
+        <dontSeeElement selector="{{MediaGallerySection.image(ImageUpload1.value)}}" stepKey="dontSeeImage1" />
+        <dontSeeElement selector="{{MediaGallerySection.InsertFile}}" stepKey="dontSeeAddSelectedBtn2" />
+        <click userInput="{{ImageFolder.name}}" stepKey="selectCreatedFolder1" />
+        <waitForPageLoad stepKey="waitForSelectFolder"/>
+        <attachFile selector="{{MediaGallerySection.BrowseUploadImage}}" userInput="{{ImageUpload1.value}}" stepKey="uploadImage2"/>
+        <waitForPageLoad stepKey="waitForFileUpload2"/>
+        <waitForElementVisible selector="{{MediaGallerySection.image(ImageUpload1.value)}}" stepKey="waitForUploadImage2" />
+        <click selector="{{MediaGallerySection.InsertFile}}" stepKey="clickInsertBtn1" />
+        <waitForElementVisible selector="{{MediaGallerySection.ImageDescription}}" stepKey="waitForImageDescriptionButton1" />
+        <fillField selector="{{MediaGallerySection.ImageDescription}}" userInput="{{ImageUpload1.content}}" stepKey="fillImageDescription1" />
+        <fillField selector="{{MediaGallerySection.Height}}" userInput="{{ImageUpload1.height}}" stepKey="fillImageHeight1" />
+        <click selector="{{MediaGallerySection.OkBtn}}" stepKey="clickOkBtn1" />
+        <scrollTo selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToTinyMCE" />
+        <click selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon2" />
+        <click selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowse2" />
+        <waitForPageLoad stepKey="waitForLoading13"/>
+        <waitForElementVisible selector="{{MediaGallerySection.CancelBtn}}" stepKey="waitForCancelButton2"/>
+        <see selector="{{MediaGallerySection.CancelBtn}}" userInput="Cancel" stepKey="seeCancelBtn2" />
+        <waitForElementVisible selector="{{MediaGallerySection.CreateFolder}}" stepKey="waitForCreateFolderBtn2"/>
+        <see selector="{{MediaGallerySection.CreateFolder}}" userInput="Create Folder" stepKey="seeCreateFolderBtn2" />
+        <see selector="{{MediaGallerySection.FolderContainer}}" userInput="Storage Root" stepKey="seeFolderContainer" />
+        <click userInput="Storage Root" stepKey="clickOnRootFolder" />
+        <waitForPageLoad stepKey="waitForLoading15"/>
+        <dontSeeElement selector="{{MediaGallerySection.InsertFile}}" stepKey="dontSeeAddSelectedBtn3" />
+        <comment userInput="BIC workaround" stepKey="uploadImage3"/>
+        <comment userInput="BIC workaround" stepKey="waitForFileUpload3"/>
+        <comment userInput="BIC workaround" stepKey="waitForUploadImage3"/>
+        <comment userInput="BIC workaround" stepKey="waitForDeletebtn"/>
+        <comment userInput="BIC workaround" stepKey="seeDeleteBtn2"/>
+        <comment userInput="BIC workaround" stepKey="clickDeleteSelected2"/>
+        <comment userInput="BIC workaround" stepKey="waitForConfirm3"/>
+        <comment userInput="BIC workaround" stepKey="confirmDelete2"/>
+        <comment userInput="BIC workaround" stepKey="dontSeeAddSelectedBtn4"/>
+        <click userInput="{{ImageFolder.name}}" stepKey="selectCreatedFolder2" />
+        <waitForPageLoad stepKey="waitForSelectFolder2"/>
+        <attachFile selector="{{MediaGallerySection.BrowseUploadImage}}" userInput="{{ImageUpload3.value}}" stepKey="uploadImage4"/>
+        <waitForPageLoad stepKey="waitForFileUpload4"/>
+        <waitForElementVisible selector="{{MediaGallerySection.image(ImageUpload3.value)}}" stepKey="waitForUploadImage4" />
+        <click selector="{{MediaGallerySection.InsertFile}}" stepKey="clickInsertBtn" />
+        <waitForPageLoad stepKey="waitForLoading11" />
+        <waitForElementVisible selector="{{MediaGallerySection.OkBtn}}" stepKey="waitForOkBtn2" />
+        <fillField selector="{{MediaGallerySection.ImageDescription}}" userInput="{{ImageUpload3.content}}" stepKey="fillImageDescription2" />
+        <fillField selector="{{MediaGallerySection.Height}}" userInput="{{ImageUpload3.height}}" stepKey="fillImageHeight2" />
+        <click selector="{{MediaGallerySection.OkBtn}}" stepKey="clickOkBtn2" />
+        <waitForPageLoad stepKey="waitForPageLoad6"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="navigateToProductPage">
+            <argument name="productUrl" value="{{_defaultProduct.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForPageLoad7"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.mediaDescription}}" stepKey="assertMediaDescription"/>
+        <seeElementInDOM selector="{{StorefrontCategoryMainSection.imageSource(ImageUpload3.fileName)}}" stepKey="assertMediaSource3"/>
+        <seeElementInDOM selector="{{StorefrontCategoryMainSection.imageSource(ImageUpload1.fileName)}}" stepKey="assertMediaSource1"/>
+    </test>
+</tests>

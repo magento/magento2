@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Model\Oauth\Consumer\Validator;
 
 use Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength;
+use PHPUnit\Framework\TestCase;
 
-class KeyLengthTest extends \PHPUnit\Framework\TestCase
+class KeyLengthTest extends TestCase
 {
     /**
      * Sample length
@@ -16,11 +18,11 @@ class KeyLengthTest extends \PHPUnit\Framework\TestCase
     const KEY_LENGTH = 32;
 
     /**
-     * @var \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength
+     * @var KeyLength
      */
     protected $keyLengthValidator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $options = ['length' => KeyLengthTest::KEY_LENGTH];
         $this->keyLengthValidator = new KeyLength($options);
@@ -58,12 +60,10 @@ class KeyLengthTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->keyLengthValidator->getMessages());
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Invalid type given for Key. String expected
-     */
     public function testIsValidInvalidType()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Invalid type given for Key. String expected');
         $invalidTokenType = 1;
         $this->keyLengthValidator->isValid($invalidTokenType);
     }

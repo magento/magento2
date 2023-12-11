@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="ReviewOrderSection">
+        <element name="shippingMethodBasePrice" type="text" selector="//div[@class='block-content'][position()={{shippingMethodPosition}}]//div[@class='box box-shipping-method'][position()=1]//span[@class='price']" parameterized="true"/>
+        <element name="shippingMethodSubtotalPrice" type="text" selector="//div[@class='block-content'][position()={{shippingMethodPosition}}]//td[@class='amount'][contains(@data-th,'{{priceType}}')]//span[@class='price']" parameterized="true"/>
+    </section>
+</sections>

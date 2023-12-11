@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCartToolbarSection">
+        <element name="toolbarNumber" type="text" selector="div.toolbar > .pager > .toolbar-amount > .toolbar-number" />
+        <element name="toolbarPager" type="text" selector="div.toolbar > .pager > .pages" />
+        <element name="toolbarNextPage" type="text" selector="div.toolbar > .pager > .pages > .pages-items > .pages-item-next" />
+        <element name="toolbarPreviousPage" type="text" selector="div.toolbar > .pager > .pages > .pages-item-previous" />
+    </section>
+</sections>

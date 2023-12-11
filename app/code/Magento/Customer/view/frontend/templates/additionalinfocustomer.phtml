@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
@@ -13,6 +10,6 @@
  *
  */
 ?>
-<?php if ($this->helper('Magento\Checkout\Helper\Data')->isContextCheckout()): ?>
+<?php if ($this->helper(\Magento\Checkout\Helper\Data::class)->isContextCheckout()) : ?>
     <input name="context" type="hidden" value="checkout" />
 <?php endif; ?>

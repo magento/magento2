@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\Block;
 
+use Magento\Framework\Cache\LockGuardedCacheLoader;
+
 /**
  * Constructor modification point for Magento\Backend\Block\AbstractBlock.
  *
@@ -17,7 +19,7 @@ namespace Magento\Backend\Block;
  * the classes they were introduced for.
  *
  * @api
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD)
  * @since 100.0.2
  */
 class Context extends \Magento\Framework\View\Element\Context
@@ -44,8 +46,9 @@ class Context extends \Magento\Framework\View\Element\Context
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+     * @param \Magento\Framework\AuthorizationInterface $authorization
+     * @param LockGuardedCacheLoader|null $lockQuery
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -67,7 +70,8 @@ class Context extends \Magento\Framework\View\Element\Context
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        \Magento\Framework\AuthorizationInterface $authorization
+        \Magento\Framework\AuthorizationInterface $authorization,
+        LockGuardedCacheLoader $lockQuery = null
     ) {
         $this->_authorization = $authorization;
         parent::__construct(
@@ -87,7 +91,8 @@ class Context extends \Magento\Framework\View\Element\Context
             $escaper,
             $filterManager,
             $localeDate,
-            $inlineTranslation
+            $inlineTranslation,
+            $lockQuery
         );
     }
 

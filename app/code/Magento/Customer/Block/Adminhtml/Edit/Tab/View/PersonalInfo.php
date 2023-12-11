@@ -23,39 +23,29 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * since his last activity. Used only if it's impossible to get such setting
      * from configuration.
      */
-    const DEFAULT_ONLINE_MINUTES_INTERVAL = 15;
+    public const DEFAULT_ONLINE_MINUTES_INTERVAL = 15;
 
     /**
-     * Customer
-     *
      * @var \Magento\Customer\Api\Data\CustomerInterface
      */
     protected $customer;
 
     /**
-     * Customer log
-     *
      * @var \Magento\Customer\Model\Log
      */
     protected $customerLog;
 
     /**
-     * Customer logger
-     *
      * @var \Magento\Customer\Model\Logger
      */
     protected $customerLogger;
 
     /**
-     * Customer registry
-     *
      * @var \Magento\Customer\Model\CustomerRegistry
      */
     protected $customerRegistry;
 
     /**
-     * Account management
-     *
      * @var AccountManagementInterface
      */
     protected $accountManagement;
@@ -68,43 +58,31 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     protected $groupRepository;
 
     /**
-     * Customer data factory
-     *
      * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
      */
     protected $customerDataFactory;
 
     /**
-     * Address helper
-     *
      * @var \Magento\Customer\Helper\Address
      */
     protected $addressHelper;
 
     /**
-     * Date time
-     *
      * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $dateTime;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $coreRegistry;
 
     /**
-     * Address mapper
-     *
      * @var Mapper
      */
     protected $addressMapper;
 
     /**
-     * Data object helper
-     *
      * @var \Magento\Framework\Api\DataObjectHelper
      */
     protected $dataObjectHelper;
@@ -152,13 +130,12 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     /**
      * Set customer registry
      *
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $customerRegistry
      * @return void
      * @deprecated 100.1.0
      */
     public function setCustomerRegistry(\Magento\Customer\Model\CustomerRegistry $customerRegistry)
     {
-
         $this->customerRegistry = $customerRegistry;
     }
 
@@ -315,11 +292,11 @@ class PersonalInfo extends \Magento\Backend\Block\Template
         try {
             $address = $this->accountManagement->getDefaultBillingAddress($this->getCustomer()->getId());
         } catch (NoSuchEntityException $e) {
-            return __('The customer does not have default billing address.');
+            return $this->escapeHtml(__('The customer does not have default billing address.'));
         }
 
         if ($address === null) {
-            return __('The customer does not have default billing address.');
+            return $this->escapeHtml(__('The customer does not have default billing address.'));
         }
 
         return $this->addressHelper->getFormatTypeRenderer(
@@ -440,7 +417,8 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      */
     public function getStoreLastLoginDate()
     {
-        $date = strtotime($this->getCustomerLog()->getLastLoginAt());
+        $lastLogin = $this->getCustomerLog()->getLastLoginAt();
+        $date = $lastLogin !== null ? strtotime($lastLogin) : false;
 
         if ($date) {
             $date = $this->_localeDate->scopeDate($this->getCustomer()->getStoreId(), $date, true);
@@ -461,7 +439,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
             'customer/online_customers/online_minutes_interval',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        return intval($configValue) > 0 ? intval($configValue) : self::DEFAULT_ONLINE_MINUTES_INTERVAL;
+        return (int)$configValue > 0 ? (int)$configValue : self::DEFAULT_ONLINE_MINUTES_INTERVAL;
     }
 
     /**

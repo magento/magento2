@@ -1,0 +1,144 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+namespace Magento\Framework\MessageQueue\Test\Unit\Topology\Config\RemoteService;
+
+use Magento\Framework\Communication\Config\ReflectionGenerator;
+use Magento\Framework\MessageQueue\DefaultValueProvider;
+use Magento\Framework\MessageQueue\Topology\Config\RemoteService\Reader;
+use Magento\Framework\ObjectManager\ConfigInterface as ObjectManagerConfig;
+use Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ReaderTest extends TestCase
+{
+    /**
+     * @var Reader
+     */
+    private $reader;
+
+    /**
+     * @var DefaultValueProvider|MockObject
+     */
+    protected $defaultValueProvider;
+
+    /**
+     * @var ObjectManagerConfig|MockObject
+     */
+    protected $objectManagerConfig;
+
+    /**
+     * @var ReflectionGenerator|MockObject
+     */
+    protected $reflectionGenerator;
+
+    /**
+     * @var ServiceMethodsMap|MockObject
+     */
+    protected $serviceMethodsMap;
+
+    /**
+     * Initialize parameters
+     */
+    protected function setUp(): void
+    {
+        $objectManager = new ObjectManager($this);
+        $this->defaultValueProvider = $this->createMock(DefaultValueProvider::class);
+        $this->objectManagerConfig = $this->createMock(ObjectManagerConfig::class);
+        $this->reflectionGenerator = $this->createMock(ReflectionGenerator::class);
+        $this->serviceMethodsMap = $this->createMock(ServiceMethodsMap::class);
+        $this->reader = $objectManager->getObject(
+            Reader::class,
+            [
+                'defaultValueProvider' => $this->defaultValueProvider,
+                'objectManagerConfig' => $this->objectManagerConfig,
+                'reflectionGenerator' => $this->reflectionGenerator,
+                'serviceMethodsMap' => $this->serviceMethodsMap,
+            ]
+        );
+    }
+
+    public function testRead()
+    {
+        $this->defaultValueProvider->expects($this->any())->method('getConnection')->willReturn('amqp');
+        $this->defaultValueProvider->expects($this->any())->method('getExchange')->willReturn('magento');
+
+        $this->objectManagerConfig->expects($this->any())->method('getPreferences')->willReturn(
+            [
+                'Some\Service\NameInterface' => 'Some\Service\NameInterfaceRemote',
+                'Some\Service\NonRemoteInterface' => 'Some\Service\NonRemote'
+            ]
+        );
+
+        $this->serviceMethodsMap->expects($this->any())->method('getMethodsMap')->willReturn(
+            ['methodOne' => 'string', 'methodTwo' => 'string']
+        );
+
+        $this->reflectionGenerator->expects($this->exactly(2))->method('generateTopicName')->willReturnMap(
+            [
+                ['Some\Service\NameInterface', 'methodOne', 'topicOne'],
+                ['Some\Service\NameInterface', 'methodTwo', 'topicTwo']
+            ]
+        );
+
+        $expectedResult = [
+            'magento' => [
+                'name' => 'magento',
+                'type' => 'topic',
+                'connection' => 'amqp',
+                'durable' => true,
+                'autoDelete' => false,
+                'internal' => false,
+                'bindings' => [
+                    'topicOne--magento--queue.topicOne' => [
+                        'id' => 'topicOne--magento--queue.topicOne',
+                        'destinationType' => 'queue',
+                        'destination' => 'queue.topicOne',
+                        'disabled' => false,
+                        'topic' => 'topicOne',
+                        'arguments' => []
+                    ],
+                    'topicTwo--magento--queue.topicTwo' => [
+                        'id' => 'topicTwo--magento--queue.topicTwo',
+                        'destinationType' => 'queue',
+                        'destination' => 'queue.topicTwo',
+                        'disabled' => false,
+                        'topic' => 'topicTwo',
+                        'arguments' => []
+                    ]
+                ],
+                'arguments' => []
+            ]
+        ];
+
+        $this->assertEquals($expectedResult, $this->reader->read());
+    }
+
+    public function testReadInvalidService()
+    {
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage('Service interface was expected, "Some\Service\NameInterface" given');
+        $this->defaultValueProvider->expects($this->any())->method('getConnection')->willReturn('amqp');
+        $this->defaultValueProvider->expects($this->any())->method('getExchange')->willReturn('magento');
+
+        $this->objectManagerConfig->expects($this->any())->method('getPreferences')->willReturn(
+            [
+                'Some\Service\NameInterface' => 'Some\Service\NameInterfaceRemote',
+                'Some\Service\NonRemoteInterface' => 'Some\Service\NonRemote'
+            ]
+        );
+
+        $this->serviceMethodsMap->expects($this->any())->method('getMethodsMap')
+            ->willThrowException(new \Exception(''));
+
+        $this->reflectionGenerator->expects($this->exactly(0))->method('generateTopicName');
+
+        $this->reader->read();
+    }
+}

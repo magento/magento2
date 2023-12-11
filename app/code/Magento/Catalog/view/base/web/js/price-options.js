@@ -9,7 +9,7 @@ define([
     'mage/template',
     'priceUtils',
     'priceBox',
-    'jquery/ui'
+    'jquery-ui-modules/widget'
 ], function ($, _, mageTemplate, utils) {
     'use strict';
 
@@ -20,8 +20,10 @@ define([
         optionConfig: {},
         optionHandlers: {},
         optionTemplate: '<%= data.label %>' +
-        '<% if (data.finalPrice.value) { %>' +
+        '<% if (data.finalPrice.value > 0) { %>' +
         ' +<%- data.finalPrice.formatted %>' +
+        '<% } else if (data.finalPrice.value < 0) { %>' +
+        ' <%- data.finalPrice.formatted %>' +
         '<% } %>',
         controlContainer: 'dd'
     };
@@ -180,7 +182,7 @@ define([
                             }, 0);
                             toTemplate.data[type] = {
                                 value: value,
-                                formatted: utils.formatPrice(value, format)
+                                formatted: utils.formatPriceLocale(value, format)
                             };
                         });
 

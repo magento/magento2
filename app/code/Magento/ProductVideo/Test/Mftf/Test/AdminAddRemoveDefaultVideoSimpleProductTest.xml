@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddRemoveDefaultVideoSimpleProductTest">
+        <annotations>
+            <features value="ProductVideo"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <title value="Admin should be able to add/remove default product video for a Simple Product"/>
+            <description value="Admin should be able to add/remove default product video for a Simple Product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-111"/>
+            <testCaseId value="MC-206"/>
+            <group value="catalog"/>
+            <group value="productVideo"/>
+            <skip>
+                <issueId value="MC-33903"/>
+            </skip>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setYoutubeApiKeyConfig"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <!-- Login to Admin page -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <createData entity="DefaultProductVideoConfig" stepKey="setYoutubeApiKeyDefaultConfig"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Logout from Admin page -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Open product edit page -->
+        <amOnPage url="{{AdminProductEditPage.url($createProduct.id$)}}" stepKey="goToProductEditPage"/>
+        <!-- Add product video -->
+        <actionGroup ref="AddProductVideoActionGroup" stepKey="addProductVideo"/>
+        <!-- Save product form -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+        <!-- Assert product video present in product edit page -->
+        <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertProductVideoPresentInProductEditPage"/>
+
+        <!-- Open storefront product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToStorefrontProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <!-- Assert product video present in the storefront product page -->
+        <actionGroup ref="AssertProductVideoStorefrontProductPageActionGroup" stepKey="assertProductVideoPresentInStorefrontProductPage"/>
+
+        <!-- Open product edit page to remove product video -->
+        <amOnPage url="{{AdminProductEditPage.url($createProduct.id$)}}" stepKey="goToProductEditPageToRemoveVideo"/>
+        <!-- Remove product video -->
+        <actionGroup ref="RemoveProductVideoActionGroup" stepKey="removeProductVideo"/>
+        <!-- Save product form -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductFormAfterRemoveVideo"/>
+        <!-- Assert product video absent in product edit page -->
+        <actionGroup ref="AssertProductVideoNotInAdminProductPageActionGroup" stepKey="assertProductVideoAbsentInProductEditPage"/>
+
+        <!-- Open storefront product page after removing product video -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToStorefrontProductPageAfterRemoveVideo">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <!-- Assert product video absent in the storefront product page -->
+        <actionGroup ref="AssertProductVideoNotInStorefrontProductPageActionGroup" stepKey="assertProductVideoAbsentInStorefrontProductPage"/>
+    </test>
+</tests>

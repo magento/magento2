@@ -7,6 +7,9 @@ namespace Magento\TestFramework\CodingStandard\Tool;
 
 use PHP_CodeSniffer\Runner;
 
+/**
+ * Unit test to check CodeSniffer tool.
+ */
 class CodeSnifferTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -25,11 +28,11 @@ class CodeSnifferTest extends \PHPUnit\Framework\TestCase
     const RULE_SET = 'some/ruleset/directory';
 
     /**
-     * Report file
+     * Report file path
      */
     const REPORT_FILE = 'some/report/file.xml';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_wrapper = $this->createMock(\Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper::class);
         $this->_tool = new \Magento\TestFramework\CodingStandard\Tool\CodeSniffer(
@@ -48,8 +51,8 @@ class CodeSnifferTest extends \PHPUnit\Framework\TestCase
             'files' => $whiteList,
             'standards' => [self::RULE_SET],
             'extensions' => $extensions,
-            'warningSeverity' => 0,
             'reports' => ['full' => self::REPORT_FILE],
+            'reportWidth' => 120
         ];
 
         $this->_tool->setExtensions($extensions);

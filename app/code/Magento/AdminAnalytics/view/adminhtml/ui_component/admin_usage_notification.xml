@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">admin_usage_notification.admin_usage_notification_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Admin Usage Notification</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <namespace>admin_usage_notification</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>admin_usage_notification.admin_usage_notification_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="admin_usage_notification_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="data" xsi:type="array">
+                        <item name="enableLogAction" xsi:type="url" path="adminAnalytics/config/enableAdminUsage"/>
+                        <item name="disableLogAction" xsi:type="url" path="adminAnalytics/config/disableAdminUsage"/>
+
+                    </item>
+                </item>
+            </argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <dataProvider class="Magento\AdminAnalytics\Ui\DataProvider\AdminUsageNotificationDataProvider" name="admin_usage_notification_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <modal name="notification_modal_1" component="Magento_AdminAnalytics/js/modal/component">
+        <settings>
+            <state>true</state>
+            <options>
+                <option name="modalClass" xsi:type="string">admin-usage-notification</option>
+                <option name="title" xsi:type="string" translate="true">Allow Adobe to collect usage data to improve user experience and offer in-product guidance</option>
+                <option name="autoOpen" xsi:type="boolean">true</option>
+                <option name="type" xsi:type="string">popup</option>
+                <option name="clickableOverlay" xsi:type="boolean">false</option>
+                <option name="responsive" xsi:type="boolean">true</option>
+                <option name="innerScroll" xsi:type="boolean">false</option>
+                <option name="buttons" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="text" xsi:type="string" translate="true">Don't Allow</item>
+                        <item name="class" xsi:type="string">action-secondary</item>
+                        <item name="actions" xsi:type="array">
+                            <item name="0" xsi:type="string">disableAdminUsage</item>
+                        </item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="text" xsi:type="string" translate="true">Allow</item>
+                        <item name="class" xsi:type="string">action-primary</item>
+                        <item name="actions" xsi:type="array">
+                            <item name="0" xsi:type="string">enableAdminUsage</item>
+                        </item>
+                    </item>
+                </option>
+            </options>
+        </settings>
+        <fieldset name="notification_fieldset">
+            <settings>
+                <label/>
+            </settings>
+            <container name="notification_text" template="ui/form/components/complex">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                        <item name="additionalClasses" xsi:type="string">release-notification-text</item>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[<p>By clicking on <b>Allow</b>, you agree that we may collect anonymous usage data from you to:</p> <ol class="modal-list"> <li>Help us improve the Magento Admin user experience</li> <li>Provide interactive in-product guidance, such as technical support and tips to improve utilization of the product from within the Admin UI. This may include notifications of new features, product support/guidance, onboarding information, tooltips, and more.</li> </ol> <p>All usage data that we collect for this purpose cannot be used to individually identify you and is used only to improve the Magento Admin UI and related products and services.</p> <p>You can learn more and opt-out at any time by following the instructions in <a href="https://experienceleague.adobe.com/docs/commerce-admin/config/advanced/admin.html">merchant documentation</a>.</p>]]></item>
+                    </item>
+                </argument>
+            </container>
+        </fieldset>
+    </modal>
+</form>

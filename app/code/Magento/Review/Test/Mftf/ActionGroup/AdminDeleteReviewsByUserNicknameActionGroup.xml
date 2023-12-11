@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteReviewsByUserNicknameActionGroup">
+        <arguments>
+            <argument name="nickname" type="string" defaultValue="{{simpleProductReview.nickname}}"/>
+        </arguments>
+        <fillField selector="{{AdminReviewGridSection.nickname}}" userInput="{{nickname}}" stepKey="fillNickname"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <selectOption selector="{{AdminReviewGridSection.massActions}}" userInput="selectAll" stepKey="selectAll"/>
+        <selectOption selector="{{AdminReviewGridSection.massActionsSelect}}" userInput="delete" stepKey="clickDeleteActionDropdown"/>
+        <click selector="{{AdminReviewGridSection.submit}}" stepKey="clickSubmit"/>
+        <waitForElementVisible selector="{{AdminReviewGridSection.acceptModal}}" stepKey="waitForModalPopUp"/>
+        <click selector="{{AdminReviewGridSection.acceptModal}}" stepKey="confirmProductDelete"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="record(s) have been deleted." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

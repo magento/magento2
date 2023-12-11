@@ -5,40 +5,48 @@
  */
 namespace Magento\Customer\Ui\Component\Listing\Column;
 
-use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
+use Magento\Framework\App\ObjectManager;
+use Magento\Customer\Model\AccountConfirmation;
 
+/**
+ * Class Confirmation column.
+ */
 class Confirmation extends Column
 {
     /**
-     * @var ScopeConfigInterface
+     * @var AccountConfirmation
      */
-    private $scopeConfig;
+    private $accountConfirmation;
 
     /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface $scopeConfig @deprecated
      * @param array $components
      * @param array $data
+     * @param AccountConfirmation|null $accountConfirmation
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         ScopeConfigInterface $scopeConfig,
         array $components,
-        array $data
+        array $data,
+        AccountConfirmation $accountConfirmation = null
     ) {
-        $this->scopeConfig = $scopeConfig;
+        $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
+            ->get(AccountConfirmation::class);
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -58,7 +66,7 @@ class Confirmation extends Column
      */
     private function getFieldLabel(array $item)
     {
-        if ($this->isConfirmationRequired($item)) {
+        if ($this->getIsConfirmationRequired($item)) {
             if ($item[$this->getData('name')] === null) {
                 return __('Confirmed');
             }
@@ -68,17 +76,25 @@ class Confirmation extends Column
     }
 
     /**
-     * Check if confirmation is required
+     * Retrieve is confirmation required flag for customer considering requested website may not exist.
      *
-     * @param array $item
+     * @param array $customer
      * @return bool
      */
-    private function isConfirmationRequired(array $item)
+    private function getIsConfirmationRequired(array $customer): bool
     {
-        return (bool)$this->scopeConfig->getValue(
-            AccountManagement::XML_PATH_IS_CONFIRM,
-            ScopeInterface::SCOPE_WEBSITES,
-            $item['website_id'][0]
-        );
+        try {
+            return $this->accountConfirmation->isConfirmationRequired(
+                $customer['website_id'][0] ?? null,
+                $customer[$customer['id_field_name']],
+                $customer['email']
+            );
+        } catch (NoSuchEntityException $e) {
+            return $this->accountConfirmation->isConfirmationRequired(
+                null,
+                $customer[$customer['id_field_name']],
+                $customer['email']
+            );
+        }
     }
 }

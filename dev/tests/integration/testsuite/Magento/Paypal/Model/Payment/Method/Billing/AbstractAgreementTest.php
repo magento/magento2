@@ -6,18 +6,32 @@
 namespace Magento\Paypal\Model\Payment\Method\Billing;
 
 use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 
-class AbstractAgreementTest extends \PHPUnit\Framework\TestCase
+class AbstractAgreementTest extends \Magento\TestFramework\Indexer\TestCase
 {
     /** @var \Magento\Paypal\Model\Method\Agreement */
     protected $_model;
 
-    protected function setUp()
+    public static function setUpBeforeClass(): void
+    {
+        $db = Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+        if (!$db->isDbDumpExists()) {
+            throw new \LogicException('DB dump does not exist.');
+        }
+        $db->restoreFromDbDump();
+
+        parent::setUpBeforeClass();
+    }
+
+    protected function setUp(): void
     {
         $config = $this->getMockBuilder(\Magento\Paypal\Model\Config::class)->disableOriginalConstructor()->getMock();
-        $config->expects($this->any())->method('isMethodAvailable')->will($this->returnValue(true));
+        $config->expects($this->any())->method('isMethodAvailable')->willReturn(true);
         $proMock = $this->getMockBuilder(\Magento\Paypal\Model\Pro::class)->disableOriginalConstructor()->getMock();
-        $proMock->expects($this->any())->method('getConfig')->will($this->returnValue($config));
+        $proMock->expects($this->any())->method('getConfig')->willReturn($config);
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Paypal\Model\Method\Agreement::class,
             ['data' => [$proMock]]
@@ -71,5 +85,13 @@ class AbstractAgreementTest extends \PHPUnit\Framework\TestCase
             'REF-ID-TEST-678',
             $info->getAdditionalInformation(AbstractAgreement::PAYMENT_INFO_REFERENCE_ID)
         );
+    }
+
+    /**
+     * teardown
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
     }
 }

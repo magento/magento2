@@ -21,40 +21,40 @@ class Vat
     /**
      * Config paths to VAT related customer groups
      */
-    const XML_PATH_CUSTOMER_VIV_INTRA_UNION_GROUP = 'customer/create_account/viv_intra_union_group';
+    public const XML_PATH_CUSTOMER_VIV_INTRA_UNION_GROUP = 'customer/create_account/viv_intra_union_group';
 
-    const XML_PATH_CUSTOMER_VIV_DOMESTIC_GROUP = 'customer/create_account/viv_domestic_group';
+    public const XML_PATH_CUSTOMER_VIV_DOMESTIC_GROUP = 'customer/create_account/viv_domestic_group';
 
-    const XML_PATH_CUSTOMER_VIV_INVALID_GROUP = 'customer/create_account/viv_invalid_group';
+    public const XML_PATH_CUSTOMER_VIV_INVALID_GROUP = 'customer/create_account/viv_invalid_group';
 
-    const XML_PATH_CUSTOMER_VIV_ERROR_GROUP = 'customer/create_account/viv_error_group';
+    public const XML_PATH_CUSTOMER_VIV_ERROR_GROUP = 'customer/create_account/viv_error_group';
 
     /**
      * VAT class constants
      */
-    const VAT_CLASS_DOMESTIC = 'domestic';
+    public const VAT_CLASS_DOMESTIC = 'domestic';
 
-    const VAT_CLASS_INTRA_UNION = 'intra_union';
+    public const VAT_CLASS_INTRA_UNION = 'intra_union';
 
-    const VAT_CLASS_INVALID = 'invalid';
+    public const VAT_CLASS_INVALID = 'invalid';
 
-    const VAT_CLASS_ERROR = 'error';
+    public const VAT_CLASS_ERROR = 'error';
 
     /**
      * WSDL of VAT validation service
      *
      */
-    const VAT_VALIDATION_WSDL_URL = 'http://ec.europa.eu/taxation_customs/vies/services/checkVatService?wsdl';
+    public const VAT_VALIDATION_WSDL_URL = 'https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
 
     /**
      * Config path to option that enables/disables automatic group assignment based on VAT
      */
-    const XML_PATH_CUSTOMER_GROUP_AUTO_ASSIGN = 'customer/create_account/auto_group_assign';
+    public const XML_PATH_CUSTOMER_GROUP_AUTO_ASSIGN = 'customer/create_account/auto_group_assign';
 
     /**
      * Config path to UE country list
      */
-    const XML_PATH_EU_COUNTRIES_LIST = 'general/country/eu_countries';
+    public const XML_PATH_EU_COUNTRIES_LIST = 'general/country/eu_countries';
 
     /**
      * @var ScopeConfigInterface
@@ -179,15 +179,25 @@ class Vat
             return $gatewayResponse;
         }
 
+        $countryCodeForVatNumber = $this->getCountryCodeForVatNumber($countryCode);
+        $requesterCountryCodeForVatNumber = $this->getCountryCodeForVatNumber($requesterCountryCode);
+
         try {
             $soapClient = $this->createVatNumberValidationSoapClient();
 
             $requestParams = [];
-            $requestParams['countryCode'] = $countryCode;
-            $requestParams['vatNumber'] = str_replace([' ', '-'], ['', ''], $vatNumber);
-            $requestParams['requesterCountryCode'] = $requesterCountryCode;
-            $requestParams['requesterVatNumber'] = str_replace([' ', '-'], ['', ''], $requesterVatNumber);
-
+            $requestParams['countryCode'] = $countryCodeForVatNumber;
+            $vatNumber = $vatNumber !== null ? $vatNumber : '';
+            $vatNumberSanitized = $this->isCountryInEU($countryCode)
+                ? str_replace([' ', '-', $countryCodeForVatNumber], ['', '', ''], $vatNumber)
+                : str_replace([' ', '-'], ['', ''], $vatNumber);
+            $requestParams['vatNumber'] = $vatNumberSanitized;
+            $requestParams['requesterCountryCode'] = $requesterCountryCodeForVatNumber;
+            $requesterVatNumber = $requesterVatNumber !== null ? $requesterVatNumber : '';
+            $reqVatNumSanitized = $this->isCountryInEU($requesterCountryCode)
+                ? str_replace([' ', '-', $requesterCountryCodeForVatNumber], ['', '', ''], $requesterVatNumber)
+                : str_replace([' ', '-'], ['', ''], $requesterVatNumber);
+            $requestParams['requesterVatNumber'] = $reqVatNumSanitized;
             // Send request to service
             $result = $soapClient->checkVatApprox($requestParams);
 
@@ -202,6 +212,11 @@ class Vat
                 $gatewayResponse->setRequestMessage(__('Please enter a valid VAT number.'));
             }
         } catch (\Exception $exception) {
+            $this->logger->error(
+                sprintf('VAT Number validation failed with message: %s', $exception->getMessage()),
+                ['exception' => $exception]
+            );
+
             $gatewayResponse->setIsValid(false);
             $gatewayResponse->setRequestDate('');
             $gatewayResponse->setRequestIdentifier('');
@@ -292,8 +307,26 @@ class Vat
     {
         $euCountries = explode(
             ',',
-            $this->scopeConfig->getValue(self::XML_PATH_EU_COUNTRIES_LIST, ScopeInterface::SCOPE_STORE, $storeId)
+            $this->scopeConfig->getValue(self::XML_PATH_EU_COUNTRIES_LIST, ScopeInterface::SCOPE_STORE, $storeId) ?? ''
         );
         return in_array($countryCode, $euCountries);
+    }
+
+    /**
+     * Returns the country code to use in the VAT number which is not always the same as the normal country code
+     *
+     * @param string $countryCode
+     * @return string
+     */
+    private function getCountryCodeForVatNumber(string $countryCode): string
+    {
+        // Greece uses a different code for VAT numbers then its country code
+        // See: http://ec.europa.eu/taxation_customs/vies/faq.html#item_11
+        // And https://en.wikipedia.org/wiki/VAT_identification_number:
+        // "The full identifier starts with an ISO 3166-1 alpha-2 (2 letters) country code
+        // (except for Greece, which uses the ISO 639-1 language code EL for the Greek language,
+        // instead of its ISO 3166-1 alpha-2 country code GR)"
+
+        return $countryCode === 'GR' ? 'EL' : $countryCode;
     }
 }

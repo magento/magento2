@@ -5,10 +5,13 @@
  */
 namespace Magento\Catalog\Model\Indexer;
 
+use Magento\TestFramework\Helper\Bootstrap;
+
 /**
+ * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  */
-class FlatTest extends \PHPUnit\Framework\TestCase
+class FlatTest extends \Magento\TestFramework\Indexer\TestCase
 {
     /**
      * @var int
@@ -53,9 +56,19 @@ class FlatTest extends \PHPUnit\Framework\TestCase
      */
     protected static $totalBefore = 0;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::loadAttributeCodes();
+
+        $db = Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+        if (!$db->isDbDumpExists()) {
+            throw new \LogicException('DB dump does not exist.');
+        }
+        $db->restoreFromDbDump();
+
+        parent::setUpBeforeClass();
     }
 
     public function testEntityItemsBefore()
@@ -63,7 +76,7 @@ class FlatTest extends \PHPUnit\Framework\TestCase
         $category = $this->instantiateCategoryModel();
         $result = $category->getCollection()->getAllIds();
         $this->assertNotEmpty($result);
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
     }
 
     /**
@@ -71,6 +84,8 @@ class FlatTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_category true
      * @magentoAppArea frontend
+     *
+     * @magentoDbIsolation disabled
      */
     public function testReindexAll()
     {
@@ -105,16 +120,20 @@ class FlatTest extends \PHPUnit\Framework\TestCase
      * Populate EAV category data`
      *
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_category true
+     *
+     * @magentoDbIsolation disabled
      */
     public function testCreateCategory()
     {
         $this->createSubCategoriesInDefaultCategory();
 
         $result = $this->getLoadedDefaultCategory()->getCollection()->getItems();
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
 
         $this->assertEquals(self::$defaultCategoryId, $result[self::$categoryOne]->getParentId());
         $this->assertEquals(self::$categoryOne, $result[self::$categoryTwo]->getParentId());
+
+        $this->removeSubCategoriesInDefaultCategory();
     }
 
     /**
@@ -123,6 +142,8 @@ class FlatTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_category true
      * @magentoAppArea frontend
+     *
+     * @magentoDbIsolation disabled
      */
     public function testFlatAfterCreate()
     {
@@ -150,18 +171,24 @@ class FlatTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(self::$categoryOne, $categoryTwo->getParentId());
         $this->checkCategoryData($categoryTwo);
+
+        $this->removeSubCategoriesInDefaultCategory();
     }
 
     /**
      * Move category and populate EAV category data
      *
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_category true
+     *
+     * @magentoDbIsolation disabled
      */
     public function testMoveCategory()
     {
         $this->moveSubCategoriesInDefaultCategory();
         $categoryTwo = $this->getLoadedCategory(self::$categoryTwo);
         $this->assertEquals($categoryTwo->getData('parent_id'), self::$defaultCategoryId);
+
+        $this->removeSubCategoriesInDefaultCategory();
     }
 
     /**
@@ -170,6 +197,8 @@ class FlatTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_category true
      * @magentoAppArea frontend
+     *
+     * @magentoDbIsolation disabled
      */
     public function testFlatAfterMove()
     {
@@ -188,6 +217,8 @@ class FlatTest extends \PHPUnit\Framework\TestCase
 
         $categoryTwo = $this->getLoadedCategory(self::$categoryTwo);
         $this->checkCategoryData($categoryTwo);
+
+        $this->removeSubCategoriesInDefaultCategory();
     }
 
     /**
@@ -205,7 +236,7 @@ class FlatTest extends \PHPUnit\Framework\TestCase
         $category = $this->instantiateCategoryModel();
         $result = $category->getCollection()->getAllIds();
         $this->assertNotEmpty($result);
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
         $this->assertCount($countBeforeModification, $result);
     }
 
@@ -215,6 +246,7 @@ class FlatTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_category true
      * @magentoAppArea frontend
+     * @magentoDbIsolation disabled
      */
     public function testFlatAfterDeleted()
     {
@@ -317,19 +349,21 @@ class FlatTest extends \PHPUnit\Framework\TestCase
      */
     private function createSubCategoriesInDefaultCategory()
     {
-        $this->executeWithFlatEnabledInAdminArea(function () {
-            $category = $this->getLoadedDefaultCategory();
+        $this->executeWithFlatEnabledInAdminArea(
+            function () {
+                $category = $this->getLoadedDefaultCategory();
 
-            $categoryOne = $this->instantiateCategoryModel();
-            $categoryOne->setName('Category One')->setPath($category->getPath())->setIsActive(true);
-            $category->getResource()->save($categoryOne);
-            self::$categoryOne = $categoryOne->getId();
+                $categoryOne = $this->instantiateCategoryModel();
+                $categoryOne->setName('Category One')->setPath($category->getPath())->setIsActive(true);
+                $category->getResource()->save($categoryOne);
+                self::$categoryOne = $categoryOne->getId();
 
-            $categoryTwo = $this->instantiateCategoryModel();
-            $categoryTwo->setName('Category Two')->setPath($categoryOne->getPath())->setIsActive(true);
-            $category->getResource()->save($categoryTwo);
-            self::$categoryTwo = $categoryTwo->getId();
-        });
+                $categoryTwo = $this->instantiateCategoryModel();
+                $categoryTwo->setName('Category Two')->setPath($categoryOne->getPath())->setIsActive(true);
+                $category->getResource()->save($categoryTwo);
+                self::$categoryTwo = $categoryTwo->getId();
+            }
+        );
     }
 
     /**
@@ -340,11 +374,13 @@ class FlatTest extends \PHPUnit\Framework\TestCase
      */
     private function moveSubCategoriesInDefaultCategory()
     {
-        $this->executeWithFlatEnabledInAdminArea(function () {
-            $this->createSubCategoriesInDefaultCategory();
-            $categoryTwo = $this->getLoadedCategory(self::$categoryTwo);
-            $categoryTwo->move(self::$defaultCategoryId, self::$categoryOne);
-        });
+        $this->executeWithFlatEnabledInAdminArea(
+            function () {
+                $this->createSubCategoriesInDefaultCategory();
+                $categoryTwo = $this->getLoadedCategory(self::$categoryTwo);
+                $categoryTwo->move(self::$defaultCategoryId, self::$categoryOne);
+            }
+        );
     }
 
     /**
@@ -355,15 +391,29 @@ class FlatTest extends \PHPUnit\Framework\TestCase
      */
     private function deleteSubCategoriesInDefaultCategory()
     {
-        $this->executeWithFlatEnabledInAdminArea(function () {
-            $this->createSubCategoriesInDefaultCategory();
+        $this->executeWithFlatEnabledInAdminArea(
+            function () {
+                $this->createSubCategoriesInDefaultCategory();
+                $this->removeSubCategoriesInDefaultCategory();
+            }
+        );
+    }
 
-            $category = $this->instantiateCategoryModel();
-            $category->load(self::$categoryTwo);
-            $category->delete();
-            $category->load(self::$categoryOne);
-            $category->delete();
-        });
+    /**
+     * Invoke business logic:
+     * - delete created categories
+     */
+    private function removeSubCategoriesInDefaultCategory()
+    {
+        $this->executeWithFlatEnabledInAdminArea(
+            function () {
+                $category = $this->instantiateCategoryModel();
+                $category->load(self::$categoryTwo);
+                $category->delete();
+                $category->load(self::$categoryOne);
+                $category->delete();
+            }
+        );
     }
 
     /**

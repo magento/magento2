@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurationEnableDisableAnalyticsTest">
+        <annotations>
+            <features value="Analytics"/>
+            <stories value="Enable/disable Advanced Reporting"/>
+            <title value="Enable Disable Advanced Reporting"/>
+            <description value="An admin user can enable/disable Advanced Reporting."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-66465"/>
+            <group value="analytics"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+        <actionGroup ref="AdminOpenConfigGeneralAnalyticsPageActionGroup" stepKey="amOnAdminConfig"/>
+        <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingServiceLabel}}" userInput="Advanced Reporting Service" stepKey="seeAdvancedReportingServiceLabelEnabled"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingService}}" userInput="Enable" stepKey="selectAdvancedReportingServiceEnabled"/>
+        <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingIndustryLabel}}" userInput="Industry" stepKey="seeAdvancedReportingIndustryLabel"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingIndustry}}" userInput="Apps and Games" stepKey="selectAdvancedReportingIndustry"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveConfigButton1"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccess"/>
+        <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingService}}" userInput="Enable" stepKey="seeAdvancedReportingServiceEnabled"/>
+        <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingServiceStatus}}" userInput="Subscription status: Pending" stepKey="seeAdvancedReportingServiceStatusEnabled"/>
+        <!--Disable Advanced Reporting-->
+        <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingServiceLabel}}" userInput="Advanced Reporting Service" stepKey="seeAdvancedReportingServiceLabelDisabled"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingService}}" userInput="Disable" stepKey="selectAdvancedReportingServiceDisabled"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveConfigButton2"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccess2"/>
+        <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingService}}" userInput="Disable" stepKey="seeAdvancedReportingServiceDisabled"/>
+        <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingServiceStatus}}" userInput="Subscription status: Disabled" stepKey="seeAdvancedReportingServiceStatusDisabled"/>
+    </test>
+</tests>

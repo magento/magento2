@@ -9,6 +9,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Backup\Filesystem\Iterator\Filter;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Filter\ExcludeFilter;
+use Magento\Framework\App\State;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Checks permissions to files and folders.
@@ -24,6 +26,11 @@ class FilePermissions
      * @var DirectoryList
      */
     protected $directoryList;
+
+    /**
+     * @var State
+     */
+    private $state;
 
     /**
      * List of required writable directories for installation
@@ -63,13 +70,16 @@ class FilePermissions
     /**
      * @param Filesystem $filesystem
      * @param DirectoryList $directoryList
+     * @param State $state
      */
     public function __construct(
         Filesystem $filesystem,
-        DirectoryList $directoryList
+        DirectoryList $directoryList,
+        State $state = null
     ) {
         $this->filesystem = $filesystem;
         $this->directoryList = $directoryList;
+        $this->state = $state ?: ObjectManager::getInstance()->get(State::class);
     }
 
     /**
@@ -83,10 +93,16 @@ class FilePermissions
             $data = [
                 DirectoryList::CONFIG,
                 DirectoryList::VAR_DIR,
-                DirectoryList::MEDIA,
-                DirectoryList::STATIC_VIEW,
-                DirectoryList::GENERATED,
+                DirectoryList::MEDIA
             ];
+            if ($this->state->getMode() !== State::MODE_PRODUCTION) {
+                $data[] = DirectoryList::GENERATED;
+                /**
+                 * Static files may be pre-generated on separate machine.
+                 */
+                $data[] = DirectoryList::STATIC_VIEW;
+            }
+
             foreach ($data as $code) {
                 $this->installationWritableDirectories[$code] = $this->directoryList->getPath($code);
             }
@@ -248,6 +264,7 @@ class FilePermissions
                 if ($associative) {
                     $missingPaths[$missingPath] = $this->nonWritablePathsInDirectories[$missingPath];
                 } else {
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $missingPaths = array_merge(
                         $missingPaths,
                         $this->nonWritablePathsInDirectories[$missingPath]

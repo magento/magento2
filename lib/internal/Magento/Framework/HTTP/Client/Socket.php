@@ -12,9 +12,8 @@
 namespace Magento\Framework\HTTP\Client;
 
 /**
- * @SuppressWarnings(PHPMD.UnusedPrivateField)
- */
-/**
+ * Socket client
+ *
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 class Socket implements \Magento\Framework\HTTP\ClientInterface
@@ -26,7 +25,6 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
     private $_host = 'localhost';
 
     /**
-     * Port
      * @var int
      */
     private $_port = 80;
@@ -56,19 +54,16 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
     private $_cookies = [];
 
     /**
-     * Response headers
      * @var array
      */
     private $_responseHeaders = [];
 
     /**
-     * Response body
      * @var string
      */
     private $_responseBody = '';
 
     /**
-     * Response status
      * @var int
      */
     private $_responseStatus = 0;
@@ -134,6 +129,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Set headers from hash
+     *
      * @param array $headers
      * @return void
      */
@@ -167,6 +163,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Authorization: Basic header
+     *
      * Login credentials support
      *
      * @param string $login username
@@ -235,8 +232,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
     }
 
     /**
-     * Set host, port from full url
-     * and return relative url
+     * Set host, port from full url and return relative url
      *
      * @param string $uri ex. http://google.com/index.php?a=b
      * @return string ex. /index.php?a=b
@@ -273,7 +269,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * Make POST request
      *
      * @param string $uri
-     * @param array $params
+     * @param array|string $params use string in case of JSON or XML POST request
      * @return void
      */
     public function post($uri, $params)
@@ -313,7 +309,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
         }
         $out = [];
         foreach ($this->_responseHeaders['Set-Cookie'] as $row) {
-            $values = explode("; ", $row);
+            $values = explode("; ", $row ?? '');
             $c = count($values);
             if (!$c) {
                 continue;
@@ -330,6 +326,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
     /**
      * Get cookies array with details
      * (domain, expire time etc)
+     *
      * @return array
      */
     public function getCookiesFull()
@@ -339,7 +336,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
         }
         $out = [];
         foreach ($this->_responseHeaders['Set-Cookie'] as $row) {
-            $values = explode("; ", $row);
+            $values = explode("; ", $row ?? '');
             $c = count($values);
             if (!$c) {
                 continue;
@@ -356,7 +353,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
             }
             for ($i = 0; $i < $c; $i++) {
                 list($subkey, $val) = explode("=", $values[$i]);
-                $out[trim($key)][trim($subkey)] = trim($val);
+                $out[trim($key)][trim($subkey)] = $val !== null ? trim($val) : '';
             }
         }
         return $out;
@@ -422,9 +419,10 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
 
         $line = explode(" ", $responseLine, 3);
         if (count($line) != 3) {
+            // phpstan:ignore "Result of method Magento\Framework\HTTP\Client\Socket::doError() (void) is used."
             return $this->doError("Invalid response line returned from server: " . $responseLine);
         }
-        $this->_responseStatus = intval($line[1]);
+        $this->_responseStatus = (int)$line[1];
         $this->processResponseHeaders();
 
         $this->processRedirect();
@@ -437,13 +435,14 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      *
      * @return void
      */
-    protected function processRedirect()
+    protected function processRedirect() // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
         // TODO: implement redirects support
     }
 
     /**
      * Get response status code
+     *
      * @see \Magento\Framework\HTTP\Client#getStatus()
      *
      * @return int
@@ -455,16 +454,19 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Make request
+     *
      * @param string $method
      * @param string $uri
-     * @param array $params
+     * @param array|string $params use string in case of JSON or XML POST request
      * @return void
+     * @throws \Exception
      */
     protected function makeRequest($method, $uri, $params = [])
     {
         $errno = $errstr = '';
         $this->_sock = @fsockopen($this->_host, $this->_port, $errno, $errstr, $this->_timeout);
         if (!$this->_sock) {
+            // phpstan:ignore "Result of method Magento\Framework\HTTP\Client\Socket::doError() (void) is used."
             return $this->doError(sprintf("[errno: %d] %s", $errno, $errstr));
         }
 
@@ -473,8 +475,8 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
 
         $appendHeaders = [];
         $paramsStr = false;
-        if ($isPost && count($params)) {
-            $paramsStr = http_build_query($params);
+        if ($isPost && $params) {
+            $paramsStr = is_array($params) ? http_build_query($params) : $params;
             $appendHeaders['Content-type'] = 'application/x-www-form-urlencoded';
             $appendHeaders['Content-length'] = strlen($paramsStr);
         }
@@ -492,17 +494,20 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Throw error exception
+     *
      * @param string $string
      * @return void
      * @throws \Exception
      */
     public function doError($string)
     {
+        // phpcs:ignore Magento2.Exceptions.DirectThrow
         throw new \Exception($string);
     }
 
     /**
      * Convert headers hash to string
+     *
      * @param array $append
      * @return string
      */
@@ -526,7 +531,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setOptions($arr)
+    public function setOptions($arr) // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
         // Stub
     }
@@ -539,7 +544,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setOption($name, $value)
+    public function setOption($name, $value) // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
         // Stub
     }

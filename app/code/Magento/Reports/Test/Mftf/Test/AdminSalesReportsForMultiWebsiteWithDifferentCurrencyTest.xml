@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSalesReportsForMultiWebsiteWithDifferentCurrencyTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Admin Sales Reports  For Multi Website With Different Currency(USD And EUR) Test"/>
+            <title value="Admin Sales Reports For Multi Website With Different Currency Test"/>
+            <description value="Admin Sales Reports (Coupon, invoice, shipment,tax and refund) For Multi Website With Different Currency Test"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-414"/>
+            <group value="combinedReports"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlEnable"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+                <argument name="productId" value="$createProduct.id$"/>
+            </actionGroup>
+            <actionGroup ref="ProductSetWebsiteActionGroup" stepKey="assignProductToSecondWebsite">
+                <argument name="website" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminNavigateToCurrencySetupPageActionGroup" stepKey="goToCurrencySetupPage"/>
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="switchToMainWebsite">
+                <argument name="website" value="customWebsite"/>
+            </actionGroup>
+            <uncheckOption selector="{{AdminConfigSection.allowedCurrencyCheckbox}}" stepKey="uncheckUseSystemValueDisplayCurrency"/>
+            <uncheckOption selector="{{AdminConfigSection.defaultCurrencyCheckbox}}" stepKey="uncheckUseSystemValueAllowedCurrency"/>
+            <selectOption selector="{{AdminConfigSection.defaultCurrency}}" userInput="Euro" stepKey="selectAllowedDisplayCurrency"/>
+            <selectOption selector="{{AdminConfigSection.allowedCurrencies}}" parameterArray="['Euro']" stepKey="selectDefaultDisplayCurrency"/>
+            <actionGroup ref="SaveStoreConfigurationActionGroup" stepKey="saveStoreConfiguration"/>
+
+            <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="gotToCurrencyRatesPageSecondTime"/>
+            <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForLoadRatesPageSecondTime"/>
+            <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="setCurrencyRates">
+                <argument name="firstCurrency" value="USD"/>
+                <argument name="secondCurrency" value="EUR"/>
+                <argument name="rate" value="0.8"/>
+            </actionGroup>
+
+            <createData entity="defaultTaxRule" stepKey="createTaxRule"/>
+            <actionGroup ref="AdminCreateTwoWebsiteCartPriceRuleActionGroup" stepKey="createCartPriceRule">
+                <argument name="ruleName" value="CatPriceRule"/>
+                <argument name="couponCode" value="CatPriceRule.coupon_code"/>
+                <argument name="websiteName" value="customWebsite.name"/>
+            </actionGroup>
+
+        </before>
+        <after>
+            <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlDisable"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersFilters"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
+                <argument name="ruleName" value="{{CatPriceRule.name}}"/>
+            </actionGroup>
+            <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Create customer account for Second Website-->
+        <actionGroup ref="StorefrontOpenProductPageUsingStoreCodeInUrlActionGroup" stepKey="openProductPageUsingStoreCodeInUrl">
+            <argument name="product" value="$createProduct$"/>
+            <argument name="storeView" value="customStore"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProductToCart"/>
+        <!-- Go to Checkout -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+
+        <!-- Fill all required fields with valid data and select Flat Rate, price = 5, shipping -->
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
+            <argument name="shippingMethod" value="Flat Rate"/>
+            <argument name="customerAddressVar" value="US_Address_CA" />
+        </actionGroup>
+
+        <!-- Click Apply Discount Code: section is expanded. Input promo code, apply and see success message -->
+        <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyCoupon">
+            <argument name="discountCode" value="{{CatPriceRule.coupon_code}}"/>
+        </actionGroup>
+
+        <!-- Apply button is disappeared -->
+        <dontSeeElement selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="dontSeeApplyButton"/>
+
+        <!-- Cancel coupon button is appeared -->
+        <waitForElementVisible selector="{{DiscountSection.CancelCouponBtn}}" stepKey="waitCancelButtonAppears"/>
+        <seeElement selector="{{DiscountSection.CancelCouponBtn}}" stepKey="seeCancelCouponButton"/>
+
+        <!-- Order summary contains information about applied code -->
+        <waitForElementVisible selector="{{CheckoutPaymentSection.discount}}" stepKey="waitForDiscountCouponInSummaryBlock"/>
+        <seeElement selector="{{CheckoutPaymentSection.discount}}" stepKey="seeDiscountCouponInSummaryBlock"/>
+
+        <!-- Select payment solution -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="clickCheckMoneyOrderPayment"/>
+
+        <!-- Place Order: order is successfully placed -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumberEUR"/>
+
+        <!--   Create Invoice and Shipment      -->
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$grabOrderNumberEUR"/>
+        </actionGroup>
+        <click selector="{{AdminOrdersGridSection.viewLink('$grabOrderNumberEUR')}}" stepKey="clickOnViewLink"/>
+        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
+        <actionGroup ref="AdminCreateInvoiceAndShipmentActionGroup" stepKey="createShipmentForFirstOrderEUR"/>
+
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersFilters"/>
+
+        <generateDate stepKey="generateEndDate" date="+1 day" format="m/d/Y"/>
+        <generateDate stepKey="generateStartDate" date="-1 day" format="m/d/Y"/>
+
+        <!-- Generate Invoice report -->
+        <amOnPage url="{{InvoiceReportPage.url}}" stepKey="goToInvoiceReportPage"/>
+        <waitForPageLoad stepKey="waitForInvoiceReportPageLoad"/>
+
+        <click selector="{{ReportMainSection.storeViewDropdown}}" stepKey="clickInvoiceWebsiteSwitchDropdown"/>
+        <waitForElementVisible selector="{{ReportMainSection.websiteByName('Main Website')}}" stepKey="waitForInvoiceWebsiteAreVisible"/>
+        <click selector="{{ReportMainSection.websiteByName(customWebsite.name)}}" stepKey="clickInvoiceWebsiteByName"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmInvoiceStoreSwitch"/>
+
+        <actionGroup ref="GenerateOrderReportActionGroup" stepKey="generateReportInvoiceOrderEUR">
+            <argument name="orderFromDate" value="$generateStartDate"/>
+            <argument name="orderToDate" value="$generateEndDate"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForGenerateReportInvoiceOrderEUR"/>
+
+        <grabTextFrom selector="{{ReportMainSection.invoiceAmount}}" stepKey="grabInvoiceAmountEURO"/>
+
+        <assertStringContainsString stepKey="checkInvoiceCurrencySymbolEuro">
+            <actualResult type="variable">$grabInvoiceAmountEURO</actualResult>
+            <expectedResult type="string">€</expectedResult>
+        </assertStringContainsString>
+
+        <!-- Generate Coupon report -->
+        <amOnPage url="{{CouponReportPage.url}}" stepKey="goToCouponReportPage"/>
+        <waitForPageLoad stepKey="waitForCouponReportPageLoad"/>
+
+        <click selector="{{ReportMainSection.storeViewDropdown}}" stepKey="clickWebsiteSwitchDropdown"/>
+        <waitForElementVisible selector="{{ReportMainSection.websiteByName('Main Website')}}" stepKey="waitForWebsiteAreVisible"/>
+        <click selector="{{ReportMainSection.websiteByName(customWebsite.name)}}" stepKey="clickWebsiteByName"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreSwitch"/>
+
+        <actionGroup ref="GenerateOrderReportActionGroup" stepKey="generateReportCouponOrderEUR">
+            <argument name="orderFromDate" value="$generateStartDate"/>
+            <argument name="orderToDate" value="$generateEndDate"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForGenerateReportCouponOrderEUR"/>
+
+        <grabTextFrom selector="{{ReportMainSection.amount}}" stepKey="grabOrderAmountEURO"/>
+
+        <assertStringContainsString stepKey="checkCurrencySymbolEuro">
+            <actualResult type="variable">$grabOrderAmountEURO</actualResult>
+            <expectedResult type="string">€</expectedResult>
+        </assertStringContainsString>
+
+        <!-- Generate Shipping report -->
+        <amOnPage url="{{ShipmentReportPage.url}}" stepKey="goToShipmentReportPage"/>
+        <waitForPageLoad stepKey="waitForShipmentReportPageLoad"/>
+
+        <click selector="{{ReportMainSection.storeViewDropdown}}" stepKey="clickShipmentWebsiteSwitchDropdown"/>
+        <waitForElementVisible selector="{{ReportMainSection.websiteByName('Main Website')}}" stepKey="waitForShipmentWebsiteAreVisible"/>
+        <click selector="{{ReportMainSection.websiteByName(customWebsite.name)}}" stepKey="clickShipmentWebsiteByName"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmShipmentStoreSwitch"/>
+
+        <actionGroup ref="GenerateOrderReportActionGroup" stepKey="generateReportShipmentOrderEUR">
+            <argument name="orderFromDate" value="$generateStartDate"/>
+            <argument name="orderToDate" value="$generateEndDate"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForGenerateReportShipmentOrderEUR"/>
+
+        <grabTextFrom selector="{{ReportMainSection.shippingAmount}}" stepKey="grabShipmentAmountEURO"/>
+        <assertStringContainsString stepKey="checkShipmentCurrencySymbolEuro">
+            <actualResult type="variable">$grabShipmentAmountEURO</actualResult>
+            <expectedResult type="string">€</expectedResult>
+        </assertStringContainsString>
+
+        <!-- Generate Shipping report -->
+        <amOnPage url="{{TaxReportPage.url}}" stepKey="goToTaxReportPage"/>
+        <waitForPageLoad stepKey="waitForTaxReportPageLoad"/>
+
+        <click selector="{{ReportMainSection.storeViewDropdown}}" stepKey="clickTaxWebsiteSwitchDropdown"/>
+        <waitForElementVisible selector="{{ReportMainSection.websiteByName('Main Website')}}" stepKey="waitForTaxWebsiteAreVisible"/>
+        <click selector="{{ReportMainSection.websiteByName(customWebsite.name)}}" stepKey="clickTaxWebsiteByName"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmTaxStoreSwitch"/>
+
+        <actionGroup ref="GenerateOrderReportActionGroup" stepKey="generateReportTaxOrderEUR">
+            <argument name="orderFromDate" value="$generateStartDate"/>
+            <argument name="orderToDate" value="$generateEndDate"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForGenerateReportTaxOrderEUR"/>
+
+        <grabTextFrom selector="{{ReportMainSection.taxAmount}}" stepKey="grabTaxAmountEURO"/>
+        <assertStringContainsString stepKey="checkTaxCurrencySymbolEuro">
+            <actualResult type="variable">$grabTaxAmountEURO</actualResult>
+            <expectedResult type="string">€</expectedResult>
+        </assertStringContainsString>
+
+        <!--  Refund Order And Generate Refund Report      -->
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrdersRefund"/>
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridByIdRefund">
+            <argument name="orderId" value="$grabOrderNumberEUR"/>
+        </actionGroup>
+        <click selector="{{AdminOrdersGridSection.viewLink('$grabOrderNumberEUR')}}" stepKey="clickOnViewLinkRefund"/>
+        <waitForPageLoad stepKey="waitForOrderPageToLoadRefund"/>
+
+        <actionGroup ref="AdminOpenAndFillCreditMemoRefundActionGroup" stepKey="fillCreditMemoRefund">
+            <argument name="itemQtyToRefund" value="1"/>
+            <argument name="shippingRefund" value="0"/>
+            <argument name="adjustmentRefund" value="5"/>
+            <argument name="adjustmentFee" value="10"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickRefundOfflineOnNewMemoPageActionGroup" stepKey="clickRefundOffline"/>
+
+        <amOnPage url="{{RefundReportPage.url}}" stepKey="goToRefundReportPage"/>
+        <waitForPageLoad stepKey="waitForRefundReportPageLoad"/>
+
+        <click selector="{{ReportMainSection.storeViewDropdown}}" stepKey="clickRefundWebsiteSwitchDropdown"/>
+        <waitForElementVisible selector="{{ReportMainSection.websiteByName('Main Website')}}" stepKey="waitForRefundWebsiteAreVisible"/>
+        <click selector="{{ReportMainSection.websiteByName(customWebsite.name)}}" stepKey="clickRefundWebsiteByName"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmRefundStoreSwitch"/>
+
+        <actionGroup ref="GenerateOrderReportActionGroup" stepKey="generateReportRefundOrderEUR">
+            <argument name="orderFromDate" value="$generateStartDate"/>
+            <argument name="orderToDate" value="$generateEndDate"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForGenerateReportRefundOrderEUR"/>
+
+        <grabTextFrom selector="{{ReportMainSection.refundAmount}}" stepKey="grabRefundAmountEURO"/>
+        <assertStringContainsString stepKey="checkRefundCurrencySymbolEuro">
+            <actualResult type="variable">$grabRefundAmountEURO</actualResult>
+            <expectedResult type="string">€</expectedResult>
+        </assertStringContainsString>
+    </test>
+</tests>

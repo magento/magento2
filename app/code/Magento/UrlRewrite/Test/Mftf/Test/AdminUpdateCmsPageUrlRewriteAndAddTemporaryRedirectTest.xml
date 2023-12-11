@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateCmsPageUrlRewriteAndAddTemporaryRedirectTest">
+        <annotations>
+            <stories value="Update URL rewrite"/>
+            <title value="Update Cms Page URL Rewrites, Temporary redirect type"/>
+            <description value="Login as Admin and update Cms Page Url Rewrite and add Temporary redirect type"/>
+            <testCaseId value=""/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <createData entity="simpleCmsPage" stepKey="createCMSPage"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCMSPage" stepKey="deleteCMSPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Open CMS Edit Page and Get the CMS ID -->
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
+            <argument name="CMSPage" value="$$createCMSPage$$"/>
+        </actionGroup>
+        <grabFromCurrentUrl stepKey="cmsId" regex="#\/([0-9]*)?\/$#"/>
+
+        <!-- Search and Select Edit option for created cms page in grid -->
+        <actionGroup ref="AdminSearchAndSelectUrlRewriteInGridActionGroup" stepKey="editUrlRewrite">
+            <argument name="requestPath" value="$$createCMSPage.identifier$$"/>
+        </actionGroup>
+
+        <!-- Open UrlRewrite Edit page and update the fields  -->
+        <actionGroup ref="AdminUpdateUrlRewriteActionGroup" stepKey="updateCmsPageUrlRewrite">
+            <argument name="storeValue" value="Default Store View"/>
+            <argument name="requestPath" value="{{defaultCmsPage.title}}"/>
+            <argument name="redirectTypeValue" value="Temporary (302)"/>
+            <argument name="description" value="Update Cms Page Url Rewrite"/>
+        </actionGroup>
+
+        <!-- Assert Cms Page Url Rewrite in grid -->
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByNewRequestPath">
+            <argument name="redirectPath" value="{{defaultCmsPage.title}}"/>
+            <argument name="redirectType" value="Temporary (302)"/>
+            <argument name="targetPath" value="cms/page/view/page_id/{$cmsId}"/>
+        </actionGroup>
+
+        <!-- Assert Updated Request Path directs to the CMS Page on Store Front -->
+        <actionGroup ref="NavigateToStorefrontForCreatedPageActionGroup" stepKey="navigateToTheStoreFront">
+            <argument name="page" value="{{defaultCmsPage.title}}"/>
+        </actionGroup>
+
+        <!-- Assert updated CMS redirect in Store Front -->
+        <actionGroup ref="AssertStoreFrontCMSPageActionGroup" stepKey="assertCMSPage">
+            <argument name="cmsTitle" value="$$createCMSPage.title$$"/>
+            <argument name="cmsContent" value="$$createCMSPage.content$$"/>
+            <argument name="cmsContentHeading" value="$$createCMSPage.content_heading$$"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -11,7 +11,8 @@
 
 namespace ArgumentSequence;
 
-class ContextObject implements \Magento\Framework\ObjectManager\ContextInterface
+use Magento\Framework\ObjectManager\ContextInterface;
+class ContextObject implements ContextInterface
 {
 }
 class ParentRequiredObject
@@ -40,6 +41,15 @@ class ParentClass
 
     protected $parentOptionalScalar;
 
+    /**
+     * ParentClass constructor.
+     * @param ContextObject $contextObject
+     * @param ParentRequiredObject $parentRequiredObject
+     * @param array $parentRequiredScalar
+     * @param ParentOptionalObject|null $parentOptionalObject
+     * @param array $data
+     * @param array $parentOptionalScalar
+     */
     public function __construct(
         ContextObject $contextObject,
         ParentRequiredObject $parentRequiredObject,

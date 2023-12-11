@@ -6,19 +6,20 @@
 
 namespace Magento\Setup\Model;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Magento\Setup\Module\ResourceFactory;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Magento\Framework\App\ErrorHandler;
-use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Setup\LoggerInterface;
+use Magento\Setup\Module\ResourceFactory;
 
 /**
+ * Factory for \Magento\Setup\Model\Installer
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InstallerFactory
 {
     /**
-     * Zend Framework's service locator
+     * Laminas Framework's service locator
      *
      * @var ServiceLocatorInterface
      */
@@ -30,13 +31,13 @@ class InstallerFactory
     private $resourceFactory;
 
     /**
-     * Constructor
-     *
      * @param ServiceLocatorInterface $serviceLocator
      * @param ResourceFactory $resourceFactory
      */
-    public function __construct(ServiceLocatorInterface $serviceLocator, ResourceFactory $resourceFactory)
-    {
+    public function __construct(
+        ServiceLocatorInterface $serviceLocator,
+        ResourceFactory $resourceFactory
+    ) {
         $this->serviceLocator = $serviceLocator;
         $this->resourceFactory = $resourceFactory;
         // For Setup Wizard we are using our customized error handler
@@ -49,6 +50,7 @@ class InstallerFactory
      *
      * @param LoggerInterface $log
      * @return Installer
+     * @throws \Magento\Setup\Exception
      */
     public function create(LoggerInterface $log)
     {
@@ -82,7 +84,7 @@ class InstallerFactory
     }
 
     /**
-     * creates Resource Factory
+     * Create Resource Factory
      *
      * @return Resource
      */

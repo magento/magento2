@@ -1,12 +1,14 @@
 <?php
 /**
- * Application area list
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\App\AreaList;
 
+/**
+ * Proxy for area list.
+ */
 class Proxy extends \Magento\Framework\App\AreaList implements
     \Magento\Framework\ObjectManager\NoninterceptableInterface
 {
@@ -56,6 +58,8 @@ class Proxy extends \Magento\Framework\App\AreaList implements
     }
 
     /**
+     * Remove links to other objects.
+     *
      * @return array
      */
     public function __sleep()

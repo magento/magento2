@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCustomersDeleteSystemCustomerGroupTest">
+        <annotations>
+            <features value="Customer"/>
+            <title value="System Customer Groups"/>
+            <description value="Admin should not be able to delete system customer groups"/>
+            <stories value="Delete System Customer Group" />
+            <testCaseId value="MC-14588" />
+            <severity value="MAJOR"/>
+            <group value="customers"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Verify Not Logged In customer group-->
+        <!--Go to Customer Group grid page-->
+        <actionGroup ref="AdminOpenCustomerGroupsGridPageActionGroup" stepKey="openCustomerGroupGridPageToCheckNotLoggedInGroup"/>
+        <actionGroup ref="AdminFilterCustomerGroupByNameActionGroup" stepKey="filterCustomerGroupsByNotLoggedInGroup">
+            <argument name="customerGroupName" value="{{NotLoggedInCustomerGroup.code}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenCustomerGroupEditPageFromGridActionGroup" stepKey="openNotLoggedInCustomerGroupEditPage">
+            <argument name="groupCode" value="{{NotLoggedInCustomerGroup.code}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertDeleteCustomerGroupButtonMissingActionGroup" stepKey="verifyThereIsNoDeleteButtonForNotLoggedInGroup"/>
+
+        <!--Verify General customer group-->
+        <!--Go to Customer Group grid page-->
+        <actionGroup ref="AdminOpenCustomerGroupsGridPageActionGroup" stepKey="openCustomerGroupGridPageToCheckGeneralGroup"/>
+        <actionGroup ref="AdminFilterCustomerGroupByNameActionGroup" stepKey="filterCustomerGroupsByGeneralGroup">
+            <argument name="customerGroupName" value="{{GeneralCustomerGroup.code}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenCustomerGroupEditPageFromGridActionGroup" stepKey="openGeneralCustomerGroupEditPage">
+            <argument name="groupCode" value="{{GeneralCustomerGroup.code}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertDeleteCustomerGroupButtonMissingActionGroup" stepKey="verifyThereIsNoDeleteButtonForGeneralGroup"/>
+    </test>
+</tests>

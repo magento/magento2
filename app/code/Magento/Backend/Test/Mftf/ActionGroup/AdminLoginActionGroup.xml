@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminLoginActionGroup">
+        <annotations>
+            <description>Login to Backend Admin using provided User Data. PLEASE NOTE: This Action Group does NOT validate that you are Logged In.</description>
+        </annotations>
+        <arguments>
+            <argument name="username" type="string" defaultValue="{{_ENV.MAGENTO_ADMIN_USERNAME}}"/>
+            <argument name="password" type="string" defaultValue="{{_CREDS.magento/MAGENTO_ADMIN_PASSWORD}}"/>
+        </arguments>
+
+        <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
+        <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{username}}" stepKey="fillUsername"/>
+        <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{password}}" stepKey="fillPassword"/>
+        <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>
+
+        <closeAdminNotification stepKey="closeAdminNotification"/>
+    </actionGroup>
+</actionGroups>

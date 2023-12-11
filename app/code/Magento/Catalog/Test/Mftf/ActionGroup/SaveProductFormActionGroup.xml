@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SaveProductFormActionGroup">
+        <annotations>
+            <description>Clicks on the Save button. Validates that the Success Message is present and correct.</description>
+        </annotations>
+
+        <scrollToTopOfPage stepKey="scrollTopPageProduct"/>
+        <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveProductButton"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitProductSaveSuccessMessage"/>
+        <dontSee selector="{{AdminProductMessagesSection.saveProductWarningMessage}}" stepKey="dontSeeWarningMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product." stepKey="seeSaveConfirmation"/>
+    </actionGroup>
+</actionGroups>

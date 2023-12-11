@@ -24,23 +24,23 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
     protected $_eventManager = null;
 
     /**
-     * AbstractEav constructor.
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param null $connectionName
-     * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
+     * @param string $connectionName
+     * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        $connectionName = null
+        $connectionName = null,
+        ?\Magento\Framework\EntityManager\MetadataPool $metadataPool = null
     ) {
         $this->_eventManager = $eventManager;
-        parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
+        parent::__construct($context, $tableStrategy, $eavConfig, $connectionName, $metadataPool);
     }
 
     /**
@@ -70,7 +70,6 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
     /**
      * Rebuild index data by entities
      *
-     *
      * @param int|array $processIds
      * @return $this
      * @throws \Exception
@@ -82,13 +81,14 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
         $this->_prepareIndex($processIds);
         $this->_prepareRelationIndex($processIds);
         $this->_removeNotVisibleEntityFromIndex();
+
         return $this;
     }
 
     /**
      * Rebuild index data by attribute id
-     * If attribute is not indexable remove data by attribute
      *
+     * If attribute is not indexable remove data by attribute
      *
      * @param int $attributeId
      * @param bool $isIndexable
@@ -114,8 +114,8 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
     /**
      * Prepare data index for indexable attributes
      *
-     * @param array $entityIds      the entity ids limitation
-     * @param int $attributeId      the attribute id limitation
+     * @param array $entityIds the entity ids limitation
+     * @param int $attributeId the attribute id limitation
      * @return $this
      */
     abstract protected function _prepareIndex($entityIds = null, $attributeId = null);
@@ -159,11 +159,12 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      * @param array $parentIds the parent entity ids limitation
      * @return \Magento\Framework\DB\Select
      */
-    protected function _prepareRelationIndexSelect($parentIds = null)
+    protected function _prepareRelationIndexSelect(array $parentIds = null)
     {
         $connection = $this->getConnection();
         $idxTable = $this->getIdxTable();
         $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
+
         $select = $connection->select()->from(
             ['l' => $this->getTable('catalog_product_relation')],
             []
@@ -178,6 +179,14 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
         )->join(
             ['i' => $idxTable],
             'l.child_id = i.entity_id AND cs.store_id = i.store_id',
+            []
+        )->join(
+            ['sw' => $this->getTable('store_website')],
+            "cs.website_id = sw.website_id",
+            []
+        )->join(
+            ['cpw' => $this->getTable('catalog_product_website')],
+            'i.entity_id = cpw.product_id AND sw.website_id = cpw.website_id',
             []
         )->group(
             ['parent_id', 'i.attribute_id', 'i.store_id', 'i.value', 'l.child_id']
@@ -235,7 +244,8 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
 
     /**
      * Retrieve condition for retrieve indexable attribute select
-     * the catalog/eav_attribute table must have alias is ca
+     *
+     * The catalog/eav_attribute table must have alias is ca
      *
      * @return string
      */

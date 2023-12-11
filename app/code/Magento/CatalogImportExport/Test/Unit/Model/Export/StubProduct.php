@@ -3,9 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogImportExport\Test\Unit\Model\Export;
 
-class StubProduct extends \Magento\CatalogImportExport\Model\Export\Product
+use Magento\CatalogImportExport\Model\Export\Product;
+
+/**
+ * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
+ */
+class StubProduct extends Product
 {
     /**
      * Disable parent constructor

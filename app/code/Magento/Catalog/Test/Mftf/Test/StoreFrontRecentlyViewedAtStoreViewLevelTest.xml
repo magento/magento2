@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontRecentlyViewedAtStoreViewLevelTest">
+        <annotations>
+            <stories value="Recently Viewed Product"/>
+            <title value="Recently Viewed Product at store view level"/>
+            <description value="Recently Viewed Product should not be displayed on second store view, if configured as, Per Store View "/>
+            <testCaseId value="MC-32112"/>
+            <severity value="CRITICAL"/>
+            <group value="catalog"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create Simple Product and Category -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct3">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct4">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!--Create storeView 1-->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewOne">
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
+            <!--  Set Stores > Configurations > Catalog > Recently Viewed/Compared Products > Show for Current = store view-->
+            <magentoCLI command="config:set {{RecentlyViewedProductScopeStore.path}} {{RecentlyViewedProductScopeStore.value}}" stepKey="RecentlyViewedProductScopeStore"/>
+        </before>
+
+        <after>
+            <!-- Delete Product and Category -->
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createSimpleProduct3" stepKey="deleteSimpleProduct3"/>
+            <deleteData createDataKey="createSimpleProduct4" stepKey="deleteSimpleProduct4"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <waitForPageLoad time="30" stepKey="waitForPageLoadWebSite"/>
+            <magentoCLI command="config:set {{RecentlyViewedProductScopeWebsite.path}} {{RecentlyViewedProductScopeWebsite.value}}" stepKey="RecentlyViewedProductScopeWebsite"/>
+            <!--Delete store views-->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteFirstStoreView">
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+
+            <!-- Clear Widget-->
+            <actionGroup ref="AdminEditCMSPageContentActionGroup" stepKey="clearRecentlyViewedWidgetsFromCMSContent">
+                <argument name="content" value="{{CmsHomePageContent.content}}"/>
+                <argument name="pageId" value="{{CmsHomePageContent.page_id}}"/>
+            </actionGroup>
+
+            <!-- Logout Admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterDeletion"/>
+        </after>
+
+        <!--Create widget for recently viewed products-->
+        <actionGroup ref="AdminEditCMSPageContentActionGroup" stepKey="clearRecentlyViewedWidgetsFromCMSContentBefore">
+            <argument name="content" value="{{CmsHomePageContent.content}}"/>
+            <argument name="pageId" value="{{CmsHomePageContent.page_id}}"/>
+        </actionGroup>
+
+        <amOnPage url="{{AdminCmsPageEditPage.url(CmsHomePageContent.page_id)}}" stepKey="navigateToEditHomePagePage"/>
+        <waitForPageLoad time="50" stepKey="waitForContentPageToLoad"/>
+
+        <actionGroup ref="AdminInsertRecentlyViewedWidgetActionGroup" stepKey="insertRecentlyViewedWidget">
+            <argument name="attributeSelector1" value="show_attributes"/>
+            <argument name="attributeSelector2" value="show_buttons"/>
+            <argument name="productAttributeSection1" value="1"/>
+            <argument name="productAttributeSection2" value="4"/>
+            <argument name="buttonToShowSection1" value="1"/>
+            <argument name="buttonToShowSection2" value="3"/>
+        </actionGroup>
+
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterWidgetCreated"/>
+
+        <!-- Navigate to product 3 on store front -->
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct2.custom_attributes[url_key]$)}}" stepKey="goToStore1ProductPage2"/>
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct3.custom_attributes[url_key]$)}}" stepKey="goToStore1ProductPage3"/>
+        <!-- Go to Home Page -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage"/>
+        <actionGroup ref="AssertSeeProductDetailsOnStorefrontRecentlyViewedWidgetActionGroup" stepKey="assertStore1RecentlyViewedProduct2">
+            <argument name="productName" value="$$createSimpleProduct2.name$$"/>
+            <argument name="productPosition" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AssertSeeProductDetailsOnStorefrontRecentlyViewedWidgetActionGroup" stepKey="assertStore1RecentlyViewedProduct3">
+            <argument name="productName" value="$$createSimpleProduct3.name$$"/>
+            <argument name="productPosition" value="1"/>
+        </actionGroup>
+
+        <!-- Switch store view -->
+        <waitForPageLoad time="40" stepKey="waitForStorefrontPageLoad"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStoreViewActionGroup">
+            <argument name="storeView" value="customStoreEN"/>
+        </actionGroup>
+
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct1.custom_attributes[url_key]$)}}" stepKey="goToStore2ProductPage1"/>
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct2.custom_attributes[url_key]$)}}" stepKey="goToStore2ProductPage2"/>
+
+        <!-- Go to Home Page -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStoreViewHomePage"/>
+        <actionGroup ref="AssertSeeProductDetailsOnStorefrontRecentlyViewedWidgetActionGroup" stepKey="assertNextStore1RecentlyViewedProduct1">
+            <argument name="productName" value="$$createSimpleProduct1.name$$"/>
+            <argument name="productPosition" value="2"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertSeeProductDetailsOnStorefrontRecentlyViewedWidgetActionGroup" stepKey="assertNextStore1RecentlyViewedProduct2">
+            <argument name="productName" value="$$createSimpleProduct2.name$$"/>
+            <argument name="productPosition" value="1"/>
+        </actionGroup>
+
+        <grabTextFrom selector="{{StoreFrontRecentlyViewedProductSection.ProductName('2')}}" stepKey="grabDontSeeHomeProduct3"/>
+         <assertStringNotContainsString stepKey="assertNotSeeProduct3">
+			<actualResult type="const">$grabDontSeeHomeProduct3</actualResult>
+			<expectedResult type="const">$$createSimpleProduct3.name$$</expectedResult>
+        </assertStringNotContainsString>
+
+        <actionGroup ref="StorefrontSwitchDefaultStoreViewActionGroup" stepKey="switchToDefualtStoreView"/>
+
+        <actionGroup ref="AssertSeeProductDetailsOnStorefrontRecentlyViewedWidgetActionGroup" stepKey="assertSwitchStore1RecentlyViewedProduct2">
+            <argument name="productName" value="$$createSimpleProduct2.name$$"/>
+            <argument name="productPosition" value="2"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertSeeProductDetailsOnStorefrontRecentlyViewedWidgetActionGroup" stepKey="assertSwitchStore1RecentlyViewedProduct3">
+            <argument name="productName" value="$$createSimpleProduct3.name$$"/>
+            <argument name="productPosition" value="1"/>
+        </actionGroup>
+
+        <grabTextFrom selector="{{StoreFrontRecentlyViewedProductSection.ProductName('2')}}" stepKey="grabDontSeeHomeProduct1"/>
+        <assertStringNotContainsString stepKey="assertNotSeeProduct1">
+			<actualResult type="const">$grabDontSeeHomeProduct1</actualResult>
+			<expectedResult type="const">$$createSimpleProduct1.name$$</expectedResult>
+        </assertStringNotContainsString>
+    </test>
+</tests>

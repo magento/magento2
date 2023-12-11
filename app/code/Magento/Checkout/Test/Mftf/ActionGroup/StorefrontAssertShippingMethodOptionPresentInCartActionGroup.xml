@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Assert shipping method name and price are present in cart -->
+    <actionGroup name="StorefrontAssertShippingMethodOptionPresentInCartActionGroup">
+        <arguments>
+            <argument name="methodName" type="string"/>
+            <argument name="price" type="string"/>
+        </arguments>
+        <see selector="{{CheckoutCartSummarySection.methodName}}" userInput="{{methodName}}" stepKey="seeShippingName"/>
+        <see selector="{{CheckoutCartSummarySection.shippingPrice}}" userInput="{{price}}" stepKey="seeShippingPrice"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminChangeStorefrontThemeActionGroup">
+        <arguments>
+            <argument name="theme" type="string"/>
+            <argument name="scopeColumn" type="string" defaultValue="Store View"/>
+            <argument name="scopeName" type="string" defaultValue="{{_defaultStore.name}}"/>
+        </arguments>
+        <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPage"/>
+        <click selector="{{AdminDesignConfigSection.scopeEditLinkByName(scopeColumn, scopeName)}}" stepKey="editScopeConfig"/>
+        <selectOption selector="{{AdminDesignConfigSection.appliedTheme}}" userInput="{{theme}}" stepKey="selectTheme"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

@@ -4,14 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Wishlist\Block\Customer\Sidebar $block */
 ?>
 <?php
-$wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
+$wishlstViewModel = $block->getData('wishlistDataViewModel');
 ?>
-<?php if ($wishlistHelper->isAllow()) : ?>
+<?php if ($wishlstViewModel->isAllow()): ?>
     <div class="block block-wishlist" data-bind="scope: 'wishlist'">
         <div class="block-title">
             <strong role="heading" aria-level="2"><?= $block->escapeHtml($block->getTitle()) ?></strong>
@@ -22,7 +20,9 @@ $wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
         <div class="block-content">
             <strong class="subtitle"><?= $block->escapeHtml(__('Last Added Items')) ?></strong>
             <!-- ko if: wishlist().counter -->
-                <ol class="product-items no-display" id="wishlist-sidebar" data-bind="foreach: wishlist().items, css: {'no-display': null}">
+                <ol class="product-items no-display"
+                    id="wishlist-sidebar"
+                    data-bind="foreach: wishlist().items, css: {'no-display': null}">
                     <li class="product-item">
                         <div class="product-item-info">
                             <a class="product-item-photo" data-bind="attr: { href: product_url, title: product_name }">
@@ -39,10 +39,18 @@ $wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
                                     <!-- ko if: product_is_saleable_and_visible -->
                                     <div class="actions-primary">
                                         <!-- ko if: product_has_required_options -->
-                                        <a href="#" data-bind="attr: {'data-post': add_to_cart_params}" class="action tocart primary"><span><?= $block->escapeHtml(__('Add to Cart')) ?></span></a>
+                                        <a href="#"
+                                           data-bind="attr: {'data-post': add_to_cart_params}"
+                                           class="action tocart primary">
+                                            <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
+                                        </a>
                                         <!-- /ko -->
                                         <!-- ko ifnot: product_has_required_options -->
-                                            <button type="button" class="action tocart primary" data-bind="attr: {'data-post': add_to_cart_params}"><span><?= $block->escapeHtml(__('Add to Cart')) ?></span></button>
+                                            <button type="button"
+                                                    class="action tocart primary"
+                                                    data-bind="attr: {'data-post': add_to_cart_params}">
+                                                <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
+                                            </button>
                                         <!-- /ko -->
                                     </div>
                                     <!-- /ko -->
@@ -61,8 +69,10 @@ $wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
                 <div class="actions-toolbar no-display" data-bind="css: {'no-display': null}">
                     <div class="primary">
                         <a class="action details"
-                           href="<?= $block->escapeUrl($this->helper('Magento\Wishlist\Helper\Data')->getListUrl()) ?>"
-                           title="<?= $block->escapeHtmlAttr(__('Go to Wish List')) ?>"><span><?= $block->escapeHtml(__('Go to Wish List')) ?></span></a>
+                           href="<?= $block->escapeUrl($wishlstViewModel->getListUrl()) ?>"
+                           title="<?= $block->escapeHtmlAttr(__('Go to Wish List')) ?>">
+                            <span><?= $block->escapeHtml(__('Go to Wish List')) ?></span>
+                        </a>
                     </div>
                 </div>
             <!-- /ko -->

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+        <test name="AdminUpdateStoreViewTest">
+            <annotations>
+                <stories value="Update Store View"/>
+                <title value="Update Store View and Verify Backend and Frontend"/>
+                <description value="Test log in to Stores and Update Store View Test"/>
+                <testCaseId value="MC-14316"/>
+                <severity value="CRITICAL"/>
+                <group value="store"/>
+                <group value="mtf_migrated"/>
+                <group value="cloud"/>
+            </annotations>
+            <before>
+                <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+                <!--Create custom store view-->
+                <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createNewStoreView">
+                    <argument name="StoreGroup" value="_defaultStoreGroup"/>
+                    <argument name="customStore" value="storeViewData"/>
+                </actionGroup>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                    <argument name="indices" value=""/>
+                </actionGroup>
+            </before>
+            <after>
+                <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
+                    <argument name="customStore" value="storeViewData"/>
+                </actionGroup>
+                <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteUpdatedStoreView">
+                    <argument name="customStore" value="SecondStoreUnique"/>
+                </actionGroup>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                    <argument name="indices" value=""/>
+                </actionGroup>
+                <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            </after>
+
+            <!--Search created store view in grid-->
+            <actionGroup ref="AssertStoreViewInGridActionGroup" stepKey="searchCreatedStoreViewInGrid">
+                <argument name="storeViewName" value="{{storeViewData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenStoreInFirstRowInStoresGridActionGroup" stepKey="clickStoreViewFirstRowInGrid"/>
+
+            <!--Update created store view as per requirements-->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="updateStoreView">
+                <argument name="StoreGroup" value="_defaultStoreGroup"/>
+                <argument name="customStore" value="SecondStoreUnique"/>
+            </actionGroup>
+            <!--Save the updated Store view and verify AssertStoreViewSuccessSaveMessage-->
+            <actionGroup ref="AdminCreateStoreViewSaveActionGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage">
+            </actionGroup>
+
+            <!--Search updated store view in grid and verify AssertStoreViewInGridMessage-->
+            <actionGroup ref="AssertStoreViewInGridActionGroup" stepKey="verifyUpdatedStoreViewInGrid">
+                <argument name="storeViewName" value="{{SecondStoreUnique.name}}"/>
+            </actionGroup>
+
+            <!--Go to store view form page and verify AssertStoreForm-->
+            <actionGroup ref="AssertStoreViewFormActionGroup" stepKey="verifyStoreViewForm">
+                <argument name="storeDropdown" value="{{_defaultStoreGroup.name}}"/>
+                <argument name="storeViewName" value="{{SecondStoreUnique.name}}"/>
+                <argument name="storeViewCode" value="{{SecondStoreUnique.code}}"/>
+                <argument name="status" value="Enabled"/>
+            </actionGroup>
+
+            <!--Go to store configuration page and verify AssertStoreBackend-->
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToConfigStoreConfigurationPage"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSystemStoreConfigurationPageLoad"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickDefaultConfigButton"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeAssertStoreViewInDefaultConfigDropdown"/>
+            <actionGroup ref="AssertStoreConfigurationBackendActionGroup" stepKey="seeAssertUpdateStoreViewInDefaultConfigDropdown">
+                <argument name="storeView1" value="{{storeViewData.name}}"/>
+                <argument name="storeView2" value="{{SecondStoreUnique.name}}"/>
+            </actionGroup>
+
+            <!--Go to storefront and verify AssertStoreFrontend-->
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToStorefrontPage"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectStoreSwitcher"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForFirstStoreView"/>
+            <actionGroup ref="AssertStorefrontStoreVisibleInHeaderActionGroup" stepKey="seeAssertStoreViewOnStorefront">
+                <argument name="store" value="{{storeViewData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AssertStorefrontStoreVisibleInHeaderActionGroup" stepKey="seeAssertUpdatedStoreViewOnStorefront">
+                <argument name="store" value="{{SecondStoreUnique.name}}"/>
+            </actionGroup>
+        </test>
+</tests>

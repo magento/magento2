@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="catalog">
+            <group id="search">
+                <!-- Elasticsearch 7 -->
+                <field id="elasticsearch7_server_hostname" translate="label" type="text" sortOrder="61"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Elasticsearch Server Hostname</label>
+                    <depends>
+                        <field id="engine">elasticsearch7</field>
+                    </depends>
+                </field>
+
+                <field id="elasticsearch7_server_port" translate="label" type="text" sortOrder="62" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Elasticsearch Server Port</label>
+                    <depends>
+                        <field id="engine">elasticsearch7</field>
+                    </depends>
+                </field>
+
+                <field id="elasticsearch7_index_prefix" translate="label" type="text" sortOrder="63" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Elasticsearch Index Prefix</label>
+                    <depends>
+                        <field id="engine">elasticsearch7</field>
+                    </depends>
+                </field>
+
+                <field id="elasticsearch7_enable_auth" translate="label" type="select" sortOrder="64" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Enable Elasticsearch HTTP Auth</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="engine">elasticsearch7</field>
+                    </depends>
+                </field>
+
+                <field id="elasticsearch7_username" translate="label" type="text" sortOrder="65" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Elasticsearch HTTP Username</label>
+                    <depends>
+                        <field id="engine">elasticsearch7</field>
+                        <field id="elasticsearch7_enable_auth">1</field>
+                    </depends>
+                </field>
+
+                <field id="elasticsearch7_password" translate="label" type="text" sortOrder="66" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Elasticsearch HTTP Password</label>
+                    <depends>
+                        <field id="engine">elasticsearch7</field>
+                        <field id="elasticsearch7_enable_auth">1</field>
+                    </depends>
+                </field>
+
+                <field id="elasticsearch7_server_timeout" translate="label" type="text" sortOrder="67" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Elasticsearch Server Timeout</label>
+                    <depends>
+                        <field id="engine">elasticsearch7</field>
+                    </depends>
+                </field>
+
+                <field id="elasticsearch7_test_connect_wizard" translate="button_label" sortOrder="68" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label/>
+                    <button_label>Test Connection</button_label>
+                    <frontend_model>Magento\Elasticsearch7\Block\Adminhtml\System\Config\TestConnection</frontend_model>
+                    <depends>
+                        <field id="engine">elasticsearch7</field>
+                    </depends>
+                </field>
+                <field id="elasticsearch7_minimum_should_match" translate="label" type="text" sortOrder="93" showInDefault="1">
+                    <label>Minimum Terms to Match</label>
+                    <depends>
+                        <field id="engine">elasticsearch7</field>
+                    </depends>
+                    <comment><![CDATA[<a href="https://experienceleague.adobe.com/docs/commerce-admin/catalog/catalog/search/search-configuration.html">Learn more</a> about valid syntax.]]></comment>
+                    <backend_model>Magento\Elasticsearch\Model\Config\Backend\MinimumShouldMatch</backend_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

@@ -1,0 +1,55 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="admin__field" visible="visible" css="$data.additionalClasses">
+    <label class="admin__field-label" if="$data.label" attr="for: uid">
+        <span translate="label" attr="'data-config-scope': $data.scopeLabel"></span>
+    </label>
+
+    <div class="admin__field-control" css="'_with-tooltip': $data.tooltip">
+        <div class="file-uploader image-uploader" data-role="drop-zone" css="_loading: isLoading">
+            <div class="file-uploader-area">
+                <input type="file" afterRender="onElementRender" attr="id: uid, name: inputName, multiple: isMultipleFiles" disable="disabled" />
+                <label class="file-uploader-button action-default" attr="for: uid, disabled: disabled" disable="disabled" translate="'Upload'"></label>
+                <label
+                    data-bind="event: {change: addFileFromMediaGallery, click: openMediaBrowserDialog}"
+                    class="file-uploader-button action-default"
+                    attr="id: mediaGalleryUid, disabled: disabled"
+                    data-force_static_path="1"
+                    translate="'Select from Gallery'"></label>
+                <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"></render>
+                <p class="image-upload-requirements">
+                    <span if="$data.maxFileSize">
+                        <span translate="'Maximum file size'"></span>: <text args="formatSize($data.maxFileSize)"></text>.
+                    </span>
+                    <span if="$data.allowedExtensions">
+                        <span translate="'Allowed file types'"></span>: <text args="getAllowedFileExtensionsInCommaDelimitedFormat()"></text>.
+                    </span>
+                </p>
+            </div>
+
+            <render args="tooltipTpl" if="$data.tooltip"></render>
+
+            <div class="admin__field-note" if="$data.notice" attr="id: noticeId">
+                <!-- ko with: {noticeUnsanitizedHtml: notice} -->
+                <span html="noticeUnsanitizedHtml"></span>
+                <!-- /ko -->
+            </div>
+
+            <label class="admin__field-error" if="error" attr="for: uid" text="error"></label>
+
+            <each args="data: value, as: '$file'" render="$parent.getPreviewTmpl($file)"></each>
+
+            <div if="!hasData()" class="image image-placeholder" click="triggerImageUpload">
+                <div class="file-uploader-summary product-image-wrapper">
+                    <div class="file-uploader-spinner image-uploader-spinner"></div>
+                    <p class="image-placeholder-text" translate="'Browse to find or drag image here'"></p>
+                </div>
+            </div>
+        </div>
+        <render args="$data.service.template" if="$data.hasService()"></render>
+    </div>
+</div>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUnassignCustomOrderStatusTest">
+        <annotations>
+            <stories value="UnassignCustomOrderStatus"/>
+            <title value="Admin Unassign Custom Order Status Test"/>
+            <description value="Test log in to Sales and Unassign Custom Order Status Test"/>
+            <testCaseId value="MC-16060"/>
+            <severity value="CRITICAL"/>
+            <group value="Sales"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Go to new order status page-->
+        <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatusPage"/>
+        <actionGroup ref="AdminClickCreateNewStatusButtonOnOrderStatusPageActionGroup" stepKey="clickCreateNewStatus"/>
+
+        <!--Fill the form and validate save success message-->
+        <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAndClickSave">
+            <argument name="status" value="{{defaultOrderStatus.status}}"/>
+            <argument name="label" value="{{defaultOrderStatus.label}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertOrderStatusFormSaveSuccess" stepKey="seeFormSaveSuccess"/>
+
+        <!--Open the created order status in grid page and change the order state to Pending and verify save message-->
+        <actionGroup ref="AssertOrderStatusExistsInGrid" stepKey="searchCreatedOrderStatus">
+            <argument name="status" value="{{defaultOrderStatus.status}}"/>
+            <argument name="label" value="{{defaultOrderStatus.label}}"/>
+        </actionGroup>
+        <click selector="{{AdminOrderStatusGridSection.assignStatusToStateBtn}}" stepKey="clickAssignStatusToStateButton"/>
+        <waitForPageLoad stepKey="waitForAssignOrderStatusToStateLoad"/>
+        <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderStatus}}" userInput="{{defaultOrderStatus.label}}" stepKey="selectOrderStatus"/>
+        <waitForPageLoad stepKey="waitForOrderStatusLoad"/>
+        <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderState}}" userInput="Pending" stepKey="selectPendingInOrderState"/>
+        <click selector="{{AdminAssignOrderStatusToStateSection.saveStatusAssignment}}" stepKey="clickSaveStatusAssignmentButton"/>
+
+        <!--Verify the order status grid page shows the updated order status-->
+        <actionGroup ref="AssertOrderStatusExistsInGrid" stepKey="searchUpdatedOrderStatus">
+            <argument name="status" value="{{defaultOrderStatus.status}}"/>
+            <argument name="label" value="{{defaultOrderStatus.label}}"/>
+        </actionGroup>
+
+        <!--Click unassign and verify AssertOrderStatusSuccessUnassignMessage-->
+        <click selector="{{AdminOrderStatusGridSection.unassign}}" stepKey="clickUnassign"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessageVisible" />
+        <waitForText selector="{{AdminMessagesSection.success}}" time="30" userInput="You have unassigned the order status." stepKey="seeAssertOrderStatusSuccessUnassignMessage"/>
+
+        <!--Verify the order status grid page shows the updated order status and verify AssertOrderStatusInGrid-->
+        <actionGroup ref="AssertOrderStatusExistsInGrid" stepKey="seeAssertOrderStatusInGrid">
+            <argument name="status" value="{{defaultOrderStatus.status}}"/>
+            <argument name="label" value="{{defaultOrderStatus.label}}"/>
+        </actionGroup>
+
+        <!--Verify the order status grid page shows the updated order status and verify AssertOrderStatusNotAssigned-->
+        <dontSee selector="{{AdminOrderStatusGridSection.stateCodeAndTitleDataColumn}}" stepKey="seeEmptyStateCodeAndTitleValue"/>
+        <dontSee selector="{{AdminOrderStatusGridSection.unassign}}" stepKey="seeAssertOrderStatusNotAssigned"/>
+    </test>
+</tests>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Assert product video in Storefront Product page -->
+    <actionGroup name="AssertProductVideoStorefrontProductPageActionGroup">
+        <annotations>
+            <description>Validates that the provided Video is present on the Storefront Product page.</description>
+        </annotations>
+        <arguments>
+            <argument name="videoType" type="string" defaultValue="youtube"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productVideo(videoType)}}" stepKey="waitVideoElementVisible"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productVideo(videoType)}}" stepKey="seeProductVideoDataType"/>
+    </actionGroup>
+</actionGroups>

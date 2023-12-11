@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ShoppingCartAndMiniShoppingCartPerCustomerTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Shopping Cart and Mini Shopping Cart per Customer"/>
+            <title value="Shopping cart and mini shopping cart per customer test"/>
+            <description value="Shopping cart and mini shopping cart per customer with enabled cached"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14730"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+
+            <!-- Create two customers -->
+            <createData entity="Simple_US_Customer" stepKey="createFirstCustomer"/>
+            <createData entity="Simple_US_CA_Customer" stepKey="createSecondCustomer"/>
+
+            <!-- Create products -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+
+            <!-- Create simple product -->
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create simple product with custom options -->
+            <createData entity="_defaultProduct" stepKey="createSimpleProductWithCustomOptions">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <updateData createDataKey="createSimpleProductWithCustomOptions" entity="productWithDropdownAndFieldOptions" stepKey="updateProductWithCustomOption"/>
+        </before>
+        <after>
+            <!-- Delete products -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createSimpleProductWithCustomOptions" stepKey="deleteSimpleProductWithCustomOptions"/>
+
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Delete customers -->
+            <deleteData createDataKey="createFirstCustomer" stepKey="deleteFirstCustomer"/>
+            <deleteData createDataKey="createSecondCustomer" stepKey="deleteSecondCustomer"/>
+        </after>
+
+        <!-- Login as first customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccountAsFirstCustomer">
+            <argument name="Customer" value="$$createFirstCustomer$$"/>
+        </actionGroup>
+
+        <!-- Assert cart is empty -->
+        <actionGroup ref="AssertShoppingCartIsEmptyActionGroup" stepKey="seeEmptyShoppingCartForFirstCustomer"/>
+
+        <!-- Go to first product page -->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToFirstProductPage"/>
+        <waitForPageLoad stepKey="waitForFirstProductPageLoad"/>
+
+        <!-- Add the product to the shopping cart -->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addFirstProductToCart">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Go to the second product page -->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProductWithCustomOptions.custom_attributes[url_key]$$)}}" stepKey="goToSecondProductPage"/>
+        <waitForPageLoad stepKey="waitForSecondProductPageLoad"/>
+
+        <!-- Fill the custom options values -->
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectFirstOption">
+            <argument name="attributeLabel" value="{{ProductOptionValueDropdown.title}}"/>
+            <argument name="optionLabel" value="{{ProductOptionValueWithSkuDropdown1.title}}"/>
+        </actionGroup>
+        <fillField selector="{{StorefrontProductInfoMainSection.productOptionFieldInput(ProductOptionField.title)}}" userInput="OptionField" stepKey="fillProductOptionInputField"/>
+
+        <!-- Add the product to the shopping cart -->
+        <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addSecondProductToCart">
+            <argument name="productName" value="$$createSimpleProductWithCustomOptions.name$$"/>
+        </actionGroup>
+
+        <!-- Logout first customer -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="firstCustomerLogout"/>
+
+        <!-- Login as second customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccountAsSecondCustomer">
+            <argument name="Customer" value="$$createSecondCustomer$$"/>
+        </actionGroup>
+
+        <!-- Assert cart is empty -->
+        <actionGroup ref="AssertShoppingCartIsEmptyActionGroup" stepKey="seeEmptyShoppingCartForSecondCustomer"/>
+
+        <!-- Go to first product page -->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+
+         <!-- Add the product to the shopping cart -->
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+            <argument name="productQty" value="{{quoteQty2Price123.qty}}"/>
+        </actionGroup>
+
+        <!-- Logout second customer -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="secondCustomerLogout"/>
+
+        <!-- Login as first customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsFirstCustomer">
+            <argument name="Customer" value="$$createFirstCustomer$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnPageShoppingCart"/>
+
+        <!-- Assert first products present in shopping cart -->
+        <actionGroup ref="StorefrontCheckCartSimpleProductActionGroup" stepKey="checkFirstProductInCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="productQuantity" value="ApiSimpleSingleQty.quantity"/>
+        </actionGroup>
+
+        <!-- Assert second products present in shopping cart -->
+        <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProductWithCustomOptions.name$$)}}" stepKey="assertProductName"/>
+        <see selector="{{CheckoutCartProductSection.ProductPriceByName($$createSimpleProductWithCustomOptions.name$$)}}" userInput="{{quoteQty2Subtotal266.currency}}{{quoteQty2Subtotal266.price}}" stepKey="assertProductPrice"/>
+        <see selector="{{CheckoutCartProductSection.ProductOptionByNameAndAttribute($$createSimpleProductWithCustomOptions.name$$, ProductOptionField.title)}}" userInput="OptionField" stepKey="seeFieldOption"/>
+        <see selector="{{CheckoutCartProductSection.ProductOptionByNameAndAttribute($$createSimpleProductWithCustomOptions.name$$, ProductOptionValueDropdown.title)}}" userInput="{{ProductOptionValueWithSkuDropdown1.title}}" stepKey="seeDropDownOption"/>
+
+        <!-- Assert subtotal and grand total -->
+        <waitForPageLoad stepKey="waitForPriceLoad"/>
+        <see selector="{{StorefrontProductPageSection.subTotal}}" userInput="{{quoteQty2Subtotal266.currency}}{{quoteQty2Subtotal266.subtotal}}" stepKey="seeFirstCustomerSubTotal"/>
+        <waitForText selector="{{StorefrontProductPageSection.orderTotal}}" userInput="{{quoteQty2Subtotal266.currency}}{{quoteQty2Subtotal266.total}}" stepKey="seeFirstCustomerOrderTotal"/>
+
+        <!-- Assert products in mini cart for first customer -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFrontHomePage"/>
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertFirstProductInMiniCart">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertSecondProductInMiniCart">
+            <argument name="productName" value="$$createSimpleProductWithCustomOptions.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertMiniShoppingCartSubTotalActionGroup" stepKey="assertMiniCartSubTotal">
+            <argument name="dataQuote" value="quoteQty2Subtotal266"/>
+        </actionGroup>
+
+        <!-- Logout first customer -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFirstCustomer"/>
+
+        <!-- Login as second customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsSecondCustomer">
+            <argument name="Customer" value="$$createSecondCustomer$$"/>
+        </actionGroup>
+
+        <!-- Assert first products present in shopping cart -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnShoppingCartPage"/>
+        <actionGroup ref="StorefrontCheckCartSimpleProductActionGroup" stepKey="checkProductInCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="productQuantity" value="quoteQty2Price123.qty"/>
+        </actionGroup>
+
+        <!-- Assert subtotal and grand total -->
+        <waitForPageLoad stepKey="waitForPriceLoad2"/>
+        <see selector="{{StorefrontProductPageSection.subTotal}}" userInput="{{quoteQty2Price123.currency}}{{quoteQty2Price123.subtotal}}" stepKey="seeSecondCustomerSubTotal"/>
+        <waitForText selector="{{StorefrontProductPageSection.orderTotal}}" userInput="{{quoteQty2Price123.currency}}{{quoteQty2Price123.total}}" stepKey="seeSecondCustomerOrderTotal"/>
+
+        <!-- Assert product in mini cart -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertProductInMiniCart">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+            <argument name="productPrice" value="$$createSimpleProduct.price$$"/>
+            <argument name="cartSubtotal" value="{{quoteQty2Price123.currency}}{{quoteQty2Price123.subtotal}}"/>
+            <argument name="qty" value="{{quoteQty2Price123.qty}}"/>
+        </actionGroup>
+
+        <!-- Logout second customer -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutSecondCustomer"/>
+    </test>
+</tests>

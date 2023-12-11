@@ -1,36 +1,42 @@
 <?php
 /**
- * Backend area front name resolver. Reads front name from configuration
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\App\Area;
 
+use Laminas\Uri\Uri;
+use Magento\Backend\App\Config;
 use Magento\Backend\Setup\ConfigOptionsList;
+use Magento\Framework\App\Area\FrontNameResolverInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
 /**
+ * Front name resolver for backend area.
+ *
  * @api
  * @since 100.0.2
  */
-class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolverInterface
+class FrontNameResolver implements FrontNameResolverInterface
 {
-    const XML_PATH_USE_CUSTOM_ADMIN_PATH = 'admin/url/use_custom_path';
+    public const XML_PATH_USE_CUSTOM_ADMIN_PATH = 'admin/url/use_custom_path';
 
-    const XML_PATH_CUSTOM_ADMIN_PATH = 'admin/url/custom_path';
+    public const XML_PATH_CUSTOM_ADMIN_PATH = 'admin/url/custom_path';
 
-    const XML_PATH_USE_CUSTOM_ADMIN_URL = 'admin/url/use_custom';
+    public const XML_PATH_USE_CUSTOM_ADMIN_URL = 'admin/url/use_custom';
 
-    const XML_PATH_CUSTOM_ADMIN_URL = 'admin/url/custom';
+    public const XML_PATH_CUSTOM_ADMIN_URL = 'admin/url/custom';
 
     /**
      * Backend area code
      */
-    const AREA_CODE = 'adminhtml';
+    public const AREA_CODE = 'adminhtml';
 
     /**
      * @var array
@@ -60,18 +66,34 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
     private $scopeConfig;
 
     /**
-     * @param \Magento\Backend\App\Config $config
+     * @var Uri
+     */
+    private $uri;
+
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @param Config $config
      * @param DeploymentConfig $deploymentConfig
      * @param ScopeConfigInterface $scopeConfig
+     * @param Uri $uri
+     * @param RequestInterface $request
      */
     public function __construct(
-        \Magento\Backend\App\Config $config,
+        Config $config,
         DeploymentConfig $deploymentConfig,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        Uri $uri = null,
+        RequestInterface $request = null
     ) {
         $this->config = $config;
         $this->defaultFrontName = $deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME);
         $this->scopeConfig = $scopeConfig;
+        $this->uri = $uri ?: ObjectManager::getInstance()->get(Uri::class);
+        $this->request = $request ?: ObjectManager::getInstance()->get(RequestInterface::class);
     }
 
     /**
@@ -102,10 +124,18 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
         if ($this->scopeConfig->getValue(self::XML_PATH_USE_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE)) {
             $backendUrl = $this->scopeConfig->getValue(self::XML_PATH_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE);
         } else {
-            $backendUrl = $this->scopeConfig->getValue(Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE);
+            $backendUrl = $this->config->getValue(Store::XML_PATH_UNSECURE_BASE_URL);
+            if ($backendUrl === null) {
+                $backendUrl = $this->scopeConfig->getValue(
+                    Store::XML_PATH_UNSECURE_BASE_URL,
+                    ScopeInterface::SCOPE_STORE
+                );
+            }
         }
-        $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
-        return stripos($this->getHostWithPort($backendUrl), $host) !== false;
+        $host = (string) $this->request->getServer('HTTP_HOST', '');
+        $hostWithPort = $this->getHostWithPort($backendUrl);
+
+        return !($hostWithPort === null || $host === '') && stripos($hostWithPort, $host) !== false;
     }
 
     /**
@@ -116,12 +146,14 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
      */
     private function getHostWithPort($url)
     {
-        $scheme = parse_url(trim($url), PHP_URL_SCHEME);
-        $host = parse_url(trim($url), PHP_URL_HOST);
-        $port = parse_url(trim($url), PHP_URL_PORT);
+        $this->uri->parse($url);
+        $scheme = $this->uri->getScheme();
+        $host = $this->uri->getHost();
+        $port = $this->uri->getPort();
+
         if (!$port) {
-            $port = isset($this->standardPorts[$scheme]) ? $this->standardPorts[$scheme] : null;
+            $port = $this->standardPorts[$scheme] ?? null;
         }
-        return isset($port) ? $host . ':' . $port : $host;
+        return $port !== null ? $host . ':' . $port : $host;
     }
 }

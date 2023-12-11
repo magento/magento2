@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SetConditionForActionsInCartPriceRuleActionGroup">
+        <annotations>
+            <description>Sets the provided Condition (Actions Aggregator/Value, Child Attribute and Action Value) for Actions on the Admin Cart Price Rule creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="actionsAggregator" type="string" defaultValue="ANY"/>
+            <argument name="actionsValue" type="string" defaultValue="FALSE"/>
+            <argument name="childAttribute" type="string" defaultValue="Category"/>
+            <argument name="actionValue" type="string"/>
+        </arguments>
+
+        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickOnActionTab"/>
+        <click selector="{{AdminCartPriceRulesFormSection.condition('ALL')}}" stepKey="clickToChooseOption"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.actionsAggregator}}" userInput="{{actionsAggregator}}" stepKey="selectCondition"/>
+        <click selector="{{AdminCartPriceRulesFormSection.condition('TRUE')}}" stepKey="clickToChooseOption2"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.actionsValue}}" userInput="{{actionsValue}}" stepKey="selectCondition2"/>
+        <click selector="{{AdminCartPriceRulesFormSection.conditions}}" stepKey="selectActionConditions"/>
+        <waitForPageLoad stepKey="waitForDropDownOpened"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.childAttribute}}" userInput="{{childAttribute}}" stepKey="selectAttribute"/>
+        <waitForPageLoad stepKey="waitForOperatorOpened"/>
+        <click selector="{{AdminCartPriceRulesFormSection.condition('...')}}" stepKey="clickToChooseOption3"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.actionValue}}" userInput="{{actionValue}}" stepKey="fillActionValue"/>
+        <click selector="{{AdminCartPriceRulesFormSection.applyAction}}" stepKey="applyAction"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveButton"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

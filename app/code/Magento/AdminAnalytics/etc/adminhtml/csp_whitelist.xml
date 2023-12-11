@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
+        <policies>
+            <policy id="script-src">
+                <values>
+                    <value id="aptrinsic" type="host">*.aptrinsic.com</value>
+                </values>
+            </policy>
+            <policy id="style-src">
+                <values>
+                    <value id="aptrinsic" type="host">*.aptrinsic.com</value>
+                    <value id="fonts_googleapis" type="host">fonts.googleapis.com</value>
+                </values>
+            </policy>
+            <policy id="img-src">
+                <values>
+                    <value id="aptrinsic" type="host">*.aptrinsic.com</value>
+                    <value id="storage_googleapis" type="host">storage.googleapis.com</value>
+                </values>
+            </policy>
+            <policy id="connect-src">
+                <values>
+                    <value id="aptrinsic" type="host">*.aptrinsic.com</value>
+                </values>
+            </policy>
+            <policy id="font-src">
+                <values>
+                    <value id="fonts_gstatic" type="host">fonts.gstatic.com</value>
+                </values>
+            </policy>
+        </policies>
+</csp_whitelist>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAttributeTextSwatchesCanBeFiledTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Unable to add more attributes in size"/>
+            <title value="Check that attribute text swatches can be filed"/>
+            <description value="Check that attribute text swatches can be filed"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-96710"/>
+            <useCaseId value="MAGETWO-96409"/>
+            <group value="backend"/>
+            <group value="ui"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        </before>
+        <after>
+            <!-- Delete all 10 store views -->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView1">
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView2">
+                <argument name="customStore" value="NewStoreViewData"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView3">
+                <argument name="customStore" value="storeViewData"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView4">
+                <argument name="customStore" value="storeViewData1"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView5">
+                <argument name="customStore" value="storeViewData2"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView6">
+                <argument name="customStore" value="storeViewData3"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView7">
+                <argument name="customStore" value="storeViewData4"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView8">
+                <argument name="customStore" value="storeViewData5"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView9">
+                <argument name="customStore" value="storeViewData6"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView10">
+                <argument name="customStore" value="storeViewData7"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Create 10 store views -->
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView1">
+            <argument name="customStore" value="customStore"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView2">
+            <argument name="customStore" value="NewStoreViewData"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView3">
+            <argument name="customStore" value="storeViewData"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView4">
+            <argument name="customStore" value="storeViewData1"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView5">
+            <argument name="customStore" value="storeViewData2"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView6">
+            <argument name="customStore" value="storeViewData3"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView7">
+            <argument name="customStore" value="storeViewData4"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView8">
+            <argument name="customStore" value="storeViewData5"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView9">
+            <argument name="customStore" value="storeViewData6"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView10">
+            <argument name="customStore" value="storeViewData7"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
+        <!--Navigate to Product attribute page-->
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="navigateToNewProductAttributePage"/>
+        <fillField userInput="test_label" selector="{{AttributePropertiesSection.DefaultLabel}}" stepKey="fillDefaultLabel"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="Text Swatch" stepKey="selectInputType"/>
+        <click selector="{{AttributePropertiesSection.addSwatch}}" stepKey="clickAddSwatch"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+
+        <!-- Fill Swatch and Description fields for Admin -->
+        <fillField selector="{{AttributeManageSwatchSection.swatchField('Admin')}}" userInput="test" stepKey="fillSwatchForAdmin"/>
+        <fillField selector="{{AttributeManageSwatchSection.descriptionField('Admin')}}" userInput="test" stepKey="fillDescriptionForAdmin"/>
+
+        <!-- Grab value Swatch and Description fields for Admin -->
+        <grabValueFrom selector="{{AttributeManageSwatchSection.swatchField('Admin')}}" stepKey="grabSwatchForAdmin"/>
+        <grabValueFrom selector="{{AttributeManageSwatchSection.descriptionField('Admin')}}" stepKey="grabDescriptionForAdmin"/>
+
+        <!-- Check that Swatch and Description fields for Admin are not empty-->
+        <assertNotEmpty stepKey="checkSwatchFieldForAdmin">
+			<actualResult type="const">$grabSwatchForAdmin</actualResult>
+        </assertNotEmpty>
+        <assertNotEmpty stepKey="checkDescriptionFieldForAdmin">
+			<actualResult type="const">$grabDescriptionForAdmin</actualResult>
+        </assertNotEmpty>
+    </test>
+</tests>

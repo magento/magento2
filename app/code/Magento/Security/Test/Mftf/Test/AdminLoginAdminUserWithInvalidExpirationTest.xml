@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+
+    <test name="AdminLoginAdminUserWithInvalidExpirationTest">
+        <annotations>
+            <features value="Security"/>
+            <stories value="Try to login as a user with an invalid expiration date."/>
+            <title value="Try to login as a user with an invalid expiration date"/>
+            <description value="Try to login as a user with an invalid expiration date."/>
+            <testCaseId value=""/>
+            <severity value="CRITICAL"/>
+            <group value="security"/>
+            <group value="pr_exclude"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="openNewUserPage" />
+        <generateDate date="+2 minute" format="M d, Y g:i:s A" stepKey="expiresDateTime"/>
+        <actionGroup ref="AdminFillInUserWithExpirationActionGroup" stepKey="fillInNewUserWithValidExpiration">
+            <argument name="expires_at" value="{$expiresDateTime}"/>
+        </actionGroup>
+        <grabValueFrom selector="{{AdminNewUserFormSection.username}}" stepKey="grabUsername"/>
+        <grabValueFrom selector="{{AdminNewUserFormSection.password}}" stepKey="grabPassword"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click selector="{{AdminNewUserFormSection.userInfoTab}}" stepKey="openUserInfoTab"/>
+        <actionGroup ref="AdminSaveUserSuccessActionGroup" stepKey="saveNewUserWithValidExpirationSuccess"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        <wait time="120" stepKey="waitForUserToExpire"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewAdmin">
+            <argument name="username" value="{$grabUsername}"/>
+            <argument name="password" value="{$grabPassword}"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginMessage" />
+
+        <!-- delete user -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteUser">
+            <argument name="user" value="NewAdminUser" />
+        </actionGroup>
+    </test>
+</tests>

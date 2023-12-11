@@ -5,9 +5,17 @@
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
+/**
+ * Testing markAsRead controller.
+ *
+ * @magentoAppArea adminhtml
+ */
 class MarkAsReadTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
-    public function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
         $this->resource = 'Magento_AdminNotification::mark_as_read';
         $this->uri = 'backend/admin/notification/markasread';

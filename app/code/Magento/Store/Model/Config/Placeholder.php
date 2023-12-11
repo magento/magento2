@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Store\Model\Config;
 
 /**
@@ -32,8 +33,8 @@ class Placeholder
      */
     public function __construct(\Magento\Framework\App\RequestInterface $request, $urlPaths, $urlPlaceholder)
     {
-        $this->request = $request;
-        $this->urlPaths = $urlPaths;
+        $this->request        = $request;
+        $this->urlPaths       = $urlPaths;
         $this->urlPlaceholder = $urlPlaceholder;
     }
 
@@ -42,17 +43,30 @@ class Placeholder
      *
      * @param array $data
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function process(array $data = [])
     {
-        foreach (array_keys($data) as $key) {
-            $this->_processData($data, $key);
+        if (empty($data)) {
+            return [];
         }
+        array_walk_recursive(
+            $data,
+            function (&$value, $key, $data) {
+                if (is_string($value) && str_contains($value, '{')) {  // If _getPlaceholder() would do nothing, skip
+                    $value = $this->_processPlaceholders($value, $data);
+                }
+            },
+            $data
+        );
         return $data;
     }
 
     /**
      * Process array data recursively
+     *
+     * @deprecated 101.0.4 This method isn't used in process() implementation anymore
+     * @see process()
      *
      * @param array &$data
      * @param string $path
@@ -90,9 +104,10 @@ class Placeholder
 
             if ($url) {
                 $value = str_replace('{{' . $placeholder . '}}', $url, $value);
-            } elseif (strpos($value, $this->urlPlaceholder) !== false) {
-                // localhost is replaced for cli requests, for http requests method getDistroBaseUrl is used
-                $value = str_replace($this->urlPlaceholder, 'http://localhost/', $value);
+            } elseif (strpos($value, (string)$this->urlPlaceholder) !== false) {
+                $distroBaseUrl = $this->request->getDistroBaseUrl();
+
+                $value = str_replace($this->urlPlaceholder, $distroBaseUrl, $value);
             }
 
             if (null !== $this->_getPlaceholder($value)) {
@@ -112,10 +127,9 @@ class Placeholder
     {
         if (is_string($value) && preg_match('/{{(.*)}}.*/', $value, $matches)) {
             $placeholder = $matches[1];
-            if ($placeholder == 'unsecure_base_url' || $placeholder == 'secure_base_url' || strpos(
-                $value,
-                $this->urlPlaceholder
-            ) !== false
+            if ($placeholder == 'unsecure_base_url' ||
+                $placeholder == 'secure_base_url' ||
+                strpos($value, (string)$this->urlPlaceholder) !== false
             ) {
                 return $placeholder;
             }
@@ -132,7 +146,7 @@ class Placeholder
      */
     protected function _getValue($path, array $data)
     {
-        $keys = explode('/', $path);
+        $keys = explode('/', (string)$path);
         foreach ($keys as $key) {
             if (is_array($data) && (isset($data[$key]) || array_key_exists($key, $data))) {
                 $data = $data[$key];
@@ -146,6 +160,9 @@ class Placeholder
     /**
      * Set array value by path
      *
+     * @deprecated 101.0.4 This method isn't used in process() implementation anymore
+     * @see process()
+     *
      * @param array &$container
      * @param string $path
      * @param string $value
@@ -153,13 +170,13 @@ class Placeholder
      */
     protected function _setValue(array &$container, $path, $value)
     {
-        $segments = explode('/', $path);
-        $currentPointer = & $container;
+        $segments = explode('/', (string)$path);
+        $currentPointer = &$container;
         foreach ($segments as $segment) {
             if (!isset($currentPointer[$segment])) {
                 $currentPointer[$segment] = [];
             }
-            $currentPointer = & $currentPointer[$segment];
+            $currentPointer = &$currentPointer[$segment];
         }
         $currentPointer = $value;
     }

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontFPTTaxInformationInShoppingCartForGuestPhysicalQuoteTest">
+        <annotations>
+            <features value="Tax"/>
+            <stories value="Shopping cart taxes"/>
+            <title value="Tax information are updating/recalculating on fly in shopping cart for Guest (physical quote)"/>
+            <description value="Tax information are updating/recalculating on fly in shopping cart for Guest (physical quote)"/>
+            <severity value="CRITICAL"/>
+            <useCaseId value="MC-294"/>
+            <testCaseId value="MC-28592"/>
+            <group value="checkout"/>
+            <group value="tax"/>
+            <group value="weee"/>
+        </annotations>
+
+        <before>
+            <!-- Preconditions  -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="navigateToTaxRatesPage"/>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
+            <!--  Tax Rule is created based on default tax rates (Stores>Tax Rule) US-CA-*-Rate 1 = 8.2500 US-NY-*-Rate 1 = 8.3750 -->
+            <createData entity="SimpleTaxRule" stepKey="createTaxRule"/>
+            <!--  Fixed Product Tax attribute is created and added to default attribute set -->
+            <createData entity="FPTProductAttribute" stepKey="createProductFPTAttribute"/>
+            <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet">
+                <requiredEntity createDataKey="createProductFPTAttribute"/>
+            </createData>
+            <!--  Tax configuration (Store>Configuration; Sales>Tax) -->
+            <createData entity="Tax_Config_CA" stepKey="taxConfigurationForCA"/>
+            <!--  Store>Configuration; Sales>Tax FPT Enable -->
+            <createData entity="WeeeConfigEnable" stepKey="enableFPT"/>
+            <!--  Simple product is created  Price = 10;  FPT United States/California/10,United States/New York/20 -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+                <field key="price">10.00</field>
+            </createData>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
+                <argument name="productId" value="$createSimpleProduct.id$"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFPTValue1">
+                <argument name="FPTAttributeCode" value="$createProductFPTAttribute.attribute_code$"/>
+                <argument name="stateForFPT" value="California"/>
+                <argument name="valueForFPT" value="10"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFPTValue2">
+                <argument name="FPTAttributeCode" value="$createProductFPTAttribute.attribute_code$"/>
+                <argument name="stateForFPT" value="New York"/>
+                <argument name="valueForFPT" value="20"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBrokenIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
+            <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
+            <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
+            <createData entity="WeeeConfigDisable" stepKey="disableFPT"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBrokenIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+
+        <!--  Test Steps  -->
+        <!--  Step 1: Go to Storefront as Guest -->
+        <!--  Step 2: Add simple product to shopping cart -->
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct.custom_attributes[url_key]$)}}" stepKey="amOnSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="cartAddSimpleProductToCart">
+            <argument name="productName" value="$createSimpleProduct.name$"/>
+        </actionGroup>
+        <!--  Step 3: Go to Shopping Cart -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
+        <!--  Step 4: Open Estimate Shipping and Tax section -->
+        <actionGroup ref="StorefrontCheckoutCartFillEstimateShippingAndTaxActionGroup" stepKey="setEstimateShippingAndTaxInitialAddressToUnitedStates">
+            <argument name="country" value="United States"/>
+            <argument name="state" value="California"/>
+            <argument name="postcode" value="*"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontCheckoutCartTaxAmountFPTActionGroup" stepKey="checkTaxAmountCA"/>
+        <!--  Step 5: Change Data -->
+        <actionGroup ref="StorefrontCheckoutCartFillEstimateShippingAndTaxActionGroup" stepKey="setEstimateShippingAndTaxAddressToSwitzerland">
+            <argument name="country" value="Switzerland"/>
+            <argument name="state" value="Aargau"/>
+            <argument name="postcode" value="1234"/>
+        </actionGroup>
+        <!--  Step 6: Select shipping rate again(it need for get new totals request - performance reason) -->
+        <click selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="selectFlatRateShippingMethod"/>
+        <scrollTo selector="{{CheckoutCartSummarySection.taxAmount}}" stepKey="scrollToTaxSummary" />
+        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$0.00" stepKey="checkTaxAmountZero" />
+        <dontSeeElement selector="{{CheckoutCartSummarySection.amountFPT}}" stepKey="checkFPTIsNotDisplayed" />
+        <!--  Step 7: Change Data -->
+        <actionGroup ref="StorefrontCheckoutCartFillEstimateShippingAndTaxActionGroup" stepKey="setEstimateShippingAndTaxAddressToUnitedStates">
+            <argument name="country" value="United States"/>
+            <argument name="state" value="New York"/>
+            <argument name="postcode" value="12345"/>
+        </actionGroup>
+        <!--  Step 8: Select shipping rate again(it need for get new totals request - performance reason) -->
+        <click selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="selectFlatRateShippingMethodAgain"/>
+        <actionGroup ref="AssertStorefrontCheckoutCartTaxAmountFPTActionGroup" stepKey="checkTaxAmountNY">
+            <argument name="FPTAmount" value="$20"/>
+            <argument name="taxAmount" value="$0.84"/>
+            <argument name="rate" value="US-NY-*-Rate 1 (8.375%)"/>
+        </actionGroup>
+    </test>
+</tests>

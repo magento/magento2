@@ -131,5 +131,78 @@ define([
             model.deleteRecord(1, 1);
             expect(model.recordData()).toEqual([]);
         });
+
+        it('"initHeader" sortOrder', function () {
+            var labels = [{
+                    name: 'Name 1',
+                    config: {
+                        label: 'Label 1',
+                        validation: false,
+                        columnsHeaderClasses: '',
+                        sortOrder: 10
+                    }
+                }, {
+                    name: 'Name 2',
+                    config: {
+                        label: 'Label 2',
+                        validation: false,
+                        columnsHeaderClasses: '',
+                        sortOrder: 5
+                    }
+                }],
+                result = [{
+                    defaultLabelVisible: true,
+                    label: 'Label 2',
+                    name: 'Name 2',
+                    required: false,
+                    columnsHeaderClasses: '',
+                    sortOrder: 5
+                }, {
+                    defaultLabelVisible: true,
+                    label: 'Label 1',
+                    name: 'Name 1',
+                    required: false,
+                    columnsHeaderClasses: '',
+                    sortOrder: 10
+                }];
+
+            model.childTemplate = {
+                children: labels
+            };
+            expect(JSON.stringify(model.labels())).toEqual(JSON.stringify(result));
+        });
+
+        it('Check _updatePagesQuantity method call.', function () {
+            model._updatePagesQuantity = jasmine.createSpy();
+
+            model.reload();
+
+            expect(model._updatePagesQuantity).toHaveBeenCalled();
+        });
+
+        it('Check number of pages is updated after reloading dynamic-rows.', function () {
+            model.pageSize = 1;
+            model.relatedData = [
+                {
+                    name: 'first'
+                },
+                {
+                    name: 'second'
+                },
+                {
+                    name: 'third'
+                }
+            ];
+
+            model.reload();
+            expect(model.pages()).toEqual(3);
+
+            model.currentPage(3);
+            model.pageSize = 2;
+
+            model.reload();
+            expect(model.pages()).toEqual(2);
+            expect(model.currentPage()).toEqual(2);
+        });
     });
 });

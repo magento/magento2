@@ -5,8 +5,13 @@
  */
 namespace Magento\Framework\App\PageCache;
 
+use Magento\Framework\App\State as AppState;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Builtin cache processor
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Kernel
 {
@@ -14,11 +19,12 @@ class Kernel
      * @var \Magento\PageCache\Model\Cache\Type
      *
      * @deprecated 100.1.0
+     * @see Nothing
      */
     protected $cache;
 
     /**
-     * @var Identifier
+     * @var \Magento\Framework\App\PageCache\IdentifierInterface
      */
     protected $identifier;
 
@@ -53,55 +59,60 @@ class Kernel
     private $httpFactory;
 
     /**
+     * @var AppState
+     */
+    private $state;
+
+    /**
+     * @var \Magento\Framework\App\PageCache\IdentifierInterface
+     */
+    private $identifierForSave;
+
+    /**
      * @param Cache $cache
-     * @param Identifier $identifier
+     * @param \Magento\Framework\App\PageCache\IdentifierInterface $identifier
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Framework\App\Http\Context|null $context
      * @param \Magento\Framework\App\Http\ContextFactory|null $contextFactory
      * @param \Magento\Framework\App\Response\HttpFactory|null $httpFactory
      * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
+     * @param AppState|null $state
+     * @param \Magento\PageCache\Model\Cache\Type|null $fullPageCache
+     * @param  \Magento\Framework\App\PageCache\IdentifierInterface|null $identifierForSave
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\PageCache\Cache $cache,
-        \Magento\Framework\App\PageCache\Identifier $identifier,
+        \Magento\Framework\App\PageCache\IdentifierInterface $identifier,
         \Magento\Framework\App\Request\Http $request,
         \Magento\Framework\App\Http\Context $context = null,
         \Magento\Framework\App\Http\ContextFactory $contextFactory = null,
         \Magento\Framework\App\Response\HttpFactory $httpFactory = null,
-        \Magento\Framework\Serialize\SerializerInterface $serializer = null
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null,
+        AppState $state = null,
+        \Magento\PageCache\Model\Cache\Type $fullPageCache = null,
+        \Magento\Framework\App\PageCache\IdentifierInterface $identifierForSave = null
     ) {
         $this->cache = $cache;
         $this->identifier = $identifier;
         $this->request = $request;
-
-        if ($context) {
-            $this->context = $context;
-        } else {
-            $this->context = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\App\Http\Context::class
-            );
-        }
-        if ($contextFactory) {
-            $this->contextFactory = $contextFactory;
-        } else {
-            $this->contextFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\App\Http\ContextFactory::class
-            );
-        }
-        if ($httpFactory) {
-            $this->httpFactory = $httpFactory;
-        } else {
-            $this->httpFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\App\Response\HttpFactory::class
-            );
-        }
-        if ($serializer) {
-            $this->serializer = $serializer;
-        } else {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Serialize\SerializerInterface::class
-            );
-        }
+        $this->context = $context ?? ObjectManager::getInstance()->get(\Magento\Framework\App\Http\Context::class);
+        $this->contextFactory = $contextFactory ?? ObjectManager::getInstance()->get(
+            \Magento\Framework\App\Http\ContextFactory::class
+        );
+        $this->httpFactory = $httpFactory ?? ObjectManager::getInstance()->get(
+            \Magento\Framework\App\Response\HttpFactory::class
+        );
+        $this->serializer = $serializer ?? ObjectManager::getInstance()->get(
+            \Magento\Framework\Serialize\SerializerInterface::class
+        );
+        $this->state = $state ?? ObjectManager::getInstance()->get(AppState::class);
+        $this->fullPageCache = $fullPageCache ?? ObjectManager::getInstance()->get(
+            \Magento\PageCache\Model\Cache\Type::class
+        );
+        $this->identifierForSave = $identifierForSave ?? ObjectManager::getInstance()->get(
+            \Magento\Framework\App\PageCache\IdentifierInterface::class
+        );
     }
 
     /**
@@ -112,7 +123,7 @@ class Kernel
     public function load()
     {
         if ($this->request->isGet() || $this->request->isHead()) {
-            $responseData = $this->getCache()->load($this->identifier->getValue());
+            $responseData = $this->fullPageCache->load($this->identifier->getValue());
             if (!$responseData) {
                 return false;
             }
@@ -131,27 +142,34 @@ class Kernel
      *
      * @param \Magento\Framework\App\Response\Http $response
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function process(\Magento\Framework\App\Response\Http $response)
     {
-        if (preg_match('/public.*s-maxage=(\d+)/', $response->getHeader('Cache-Control')->getFieldValue(), $matches)) {
+        $cacheControlHeader = $response->getHeader('Cache-Control');
+        if ($cacheControlHeader
+            && preg_match('/public.*s-maxage=(\d+)/', $cacheControlHeader->getFieldValue(), $matches)
+        ) {
             $maxAge = $matches[1];
             $response->setNoCacheHeaders();
             if (($response->getHttpResponseCode() == 200 || $response->getHttpResponseCode() == 404)
+                && !$response instanceof NotCacheableInterface
                 && ($this->request->isGet() || $this->request->isHead())
             ) {
                 $tagsHeader = $response->getHeader('X-Magento-Tags');
-                $tags = $tagsHeader ? explode(',', $tagsHeader->getFieldValue()) : [];
+                $tags = $tagsHeader ? explode(',', $tagsHeader->getFieldValue() ?? '') : [];
 
                 $response->clearHeader('Set-Cookie');
-                $response->clearHeader('X-Magento-Tags');
+                if ($this->state->getMode() != AppState::MODE_DEVELOPER) {
+                    $response->clearHeader('X-Magento-Tags');
+                }
                 if (!headers_sent()) {
                     header_remove('Set-Cookie');
                 }
 
-                $this->getCache()->save(
+                $this->fullPageCache->save(
                     $this->serializer->serialize($this->getPreparedData($response)),
-                    $this->identifier->getValue(),
+                    $this->identifierForSave->getValue(),
                     $tags,
                     $maxAge
                 );
@@ -202,20 +220,5 @@ class Kernel
         }
 
         return $response;
-    }
-
-    /**
-     * TODO: Workaround to support backwards compatibility, will rework to use Dependency Injection in MAGETWO-49547
-     *
-     * @return \Magento\PageCache\Model\Cache\Type
-     */
-    private function getCache()
-    {
-        if (!$this->fullPageCache) {
-            $this->fullPageCache = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\PageCache\Model\Cache\Type::class
-            );
-        }
-        return $this->fullPageCache;
     }
 }

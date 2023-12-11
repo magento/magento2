@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\App\DeploymentConfig;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -10,10 +11,12 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Phrase;
 
 /**
  * Deployment configuration writer to files: env.php, config.php.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Writer
 {
@@ -107,7 +110,8 @@ class Writer
      *      ],
      *      true,
      *      null,
-     *      []
+     *      [],
+     *      false
      * )
      * ```
      *
@@ -115,11 +119,12 @@ class Writer
      * @param bool $override Whether values should be overridden
      * @param string $pool The file pool (deprecated)
      * @param array $comments The array of comments
+     * @param bool $lock Whether the file should be locked while writing
      * @return void
      * @throws FileSystemException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function saveConfig(array $data, $override = false, $pool = null, array $comments = [])
+    public function saveConfig(array $data, $override = false, $pool = null, array $comments = [], bool $lock = false)
     {
         foreach ($data as $fileKey => $config) {
             $paths = $this->configFilePool->getPaths();
@@ -141,10 +146,15 @@ class Writer
                 $contents = $this->formatter->format($config, $comments);
                 try {
                     $writeFilePath = $paths[$fileKey];
-                    $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile($writeFilePath, $contents);
+                    $directoryWrite = $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG);
+                    if ($directoryWrite instanceof Write) {
+                        $directoryWrite->writeFile($writeFilePath, $contents, 'w+', $lock);
+                    } else {
+                        $directoryWrite->writeFile($writeFilePath, $contents);
+                    }
                 } catch (FileSystemException $e) {
                     throw new FileSystemException(
-                        new Phrase('Deployment config file %1 is not writable.', [$paths[$fileKey]])
+                        new Phrase('The "%1" deployment config file isn\'t writable.', [$paths[$fileKey]])
                     );
                 }
                 if (function_exists('opcache_invalidate')) {

@@ -1,0 +1,39 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Query {
+    currency: Currency @resolver(class: "Magento\\DirectoryGraphQl\\Model\\Resolver\\Currency") @doc(description: "Return information about the store's currency.") @cache(cacheIdentity: "Magento\\DirectoryGraphQl\\Model\\Resolver\\Currency\\Identity")
+    countries: [Country] @resolver(class: "Magento\\DirectoryGraphQl\\Model\\Resolver\\Countries") @doc(description: "The countries query provides information for all countries.") @cache(cacheIdentity: "Magento\\DirectoryGraphQl\\Model\\Resolver\\Country\\Identity")
+    country (id: String): Country @resolver(class: "Magento\\DirectoryGraphQl\\Model\\Resolver\\Country") @doc(description: "The countries query provides information for a single country.") @cache(cacheIdentity: "Magento\\DirectoryGraphQl\\Model\\Resolver\\Country\\Identity")
+}
+
+type Currency {
+    base_currency_code: String @doc(description: "The base currency set for the store, such as USD.")
+    base_currency_symbol: String @doc(description: "The symbol for the specified base currency, such as $.")
+    default_display_currecy_code: String @deprecated(reason: "Symbol was missed. Use `default_display_currency_code`.")
+    default_display_currency_code: String @doc(description: "The currency that is displayed by default, such as USD.")
+    default_display_currecy_symbol: String @deprecated(reason: "Symbol was missed. Use `default_display_currency_code`.")
+    default_display_currency_symbol: String @doc(description: "The currency symbol that is displayed by default, such as $.")
+    available_currency_codes: [String] @doc(description: "An array of three-letter currency codes accepted by the store, such as USD and EUR.")
+    exchange_rates: [ExchangeRate] @doc(description: "An array of exchange rates for currencies defined in the store.")
+}
+
+type ExchangeRate @doc(description: "Lists the exchange rate.") {
+    currency_to: String @doc(description: "Specifies the store’s default currency to exchange to.")
+    rate: Float @doc(description: "The exchange rate for the store’s default currency.")
+}
+
+type Country {
+    id: String @doc(description: "The unique ID for a `Country` object.")
+    two_letter_abbreviation: String @doc(description: "The two-letter abbreviation of the country, such as US.")
+    three_letter_abbreviation: String @doc(description: "The three-letter abbreviation of the country, such as USA.")
+    full_name_locale: String @doc(description: "The name of the country in the current locale.")
+    full_name_english: String @doc(description: "The name of the country in English.")
+    available_regions: [Region] @doc(description: "An array of regions within a particular country.")
+}
+
+type Region {
+    id: Int @doc(description: "The unique ID for a `Region` object.")
+    code: String @doc(description: "The two-letter code for the region, such as TX for Texas.")
+    name: String @doc(description: "The name of the region, such as Texas.")
+}

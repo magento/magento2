@@ -4,19 +4,25 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/../../../Magento/Catalog/_files/multiple_products_rollback.php';
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/multiple_products_rollback.php');
+
+$objectManager = Bootstrap::getObjectManager();
 /** @var \Magento\Framework\Registry $registry */
-$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+$registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-/** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
-$product->load(3);
-if ($product->getId()) {
-    $product->delete();
+try {
+    $product = $productRepository->get('bundle-product');
+    $productRepository->delete($product);
+} catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
+    //Product already removed
 }
 
 $registry->unregister('isSecureArea');

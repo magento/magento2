@@ -3,151 +3,185 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Directory\Test\Unit\Model;
 
-use Magento\Store\Model\ScopeInterface;
+use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Directory\Model\Currency\Import\Factory;
+use Magento\Directory\Model\CurrencyFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Mail\Template\TransportBuilder;
+use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Translate\Inline\StateInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Directory\Model\Observer;
+use Magento\Directory\Model\Currency\Import\ImportInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
+ * Unit test for \Magento\Directory\Model\Observer
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ObserverTest extends \PHPUnit\Framework\TestCase
+class ObserverTest extends TestCase
 {
-    /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
-    protected $objectManager;
+    /**
+     * @var string
+     */
+    private const STUB_SENDER = 'Sender';
 
-    /** @var Observer */
-    protected $observer;
+    /**
+     * @var string
+     */
+    private const STUB_ERROR_TEMPLATE = 'currency_import_error_email_template';
 
-    /** @var  \Magento\Directory\Model\Currency\Import\Factory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $importFactory;
+    /**
+     * @var Factory|MockObject
+     */
+    private $importFactoryMock;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $scopeConfig;
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private $scopeConfigMock;
 
-    /** @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit_Framework_MockObject_MockObject */
-    protected $transportBuilder;
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManagerMock;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $storeManager;
+    /**
+     * @var TransportBuilder|MockObject
+     */
+    private $transportBuilderMock;
 
-    /** @var \Magento\Directory\Model\CurrencyFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $currencyFactory;
+    /**
+     * @var CurrencyFactory|MockObject
+     */
+    private $currencyFactoryMock;
 
-    /** @var \Magento\Framework\Translate\Inline\StateInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $inlineTranslation;
+    /**
+     * @var StateInterface|MockObject
+     */
+    private $inlineTranslationMock;
 
-    protected function setUp()
+    /**
+     * @var Observer
+     */
+    private $model;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
-
-        $this->importFactory = $this->getMockBuilder(\Magento\Directory\Model\Currency\Import\Factory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\MutableScopeConfig::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
-            ->getMock();
-        $this->transportBuilder = $this->getMockBuilder(\Magento\Framework\Mail\Template\TransportBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->currencyFactory = $this->getMockBuilder(\Magento\Directory\Model\CurrencyFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->inlineTranslation = $this->getMockBuilder(\Magento\Framework\Translate\Inline\StateInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->observer = $this->objectManager->getObject(
-            \Magento\Directory\Model\Observer::class,
+        $this->importFactoryMock = $this->createMock(Factory::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->transportBuilderMock = $this->createMock(TransportBuilder::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->currencyFactoryMock = $this->createMock(CurrencyFactory::class);
+        $this->inlineTranslationMock = $this->getMockForAbstractClass(StateInterface::class);
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(
+            Observer::class,
             [
-                'importFactory' => $this->importFactory,
-                'scopeConfig' => $this->scopeConfig,
-                'transportBuilder' => $this->transportBuilder,
-                'storeManager' => $this->storeManager,
-                'currencyFactory' => $this->currencyFactory,
-                'inlineTranslation' => $this->inlineTranslation
+                'importFactory' => $this->importFactoryMock,
+                'scopeConfig' => $this->scopeConfigMock,
+                'transportBuilder' => $this->transportBuilderMock,
+                'storeManager' => $this->storeManagerMock,
+                'currencyFactory' => $this->currencyFactoryMock,
+                'inlineTranslation' => $this->inlineTranslationMock
             ]
         );
     }
 
-    public function testScheduledUpdateCurrencyRates()
-    {
-        $this->scopeConfig
-            ->expects($this->at(0))
-            ->method('getValue')
-            ->with(Observer::IMPORT_ENABLE, ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue(1));
-        $this->scopeConfig
-            ->expects($this->at(1))
-            ->method('getValue')
-            ->with(Observer::CRON_STRING_PATH, ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue('cron-path'));
-        $this->scopeConfig
-            ->expects($this->at(2))
-            ->method('getValue')
-            ->with(Observer::IMPORT_SERVICE, ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue('import-service'));
-        $importInterfaceMock = $this->getMockBuilder(\Magento\Directory\Model\Currency\Import\Webservicex::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['fetchRates', 'getMessages'])
-            ->getMock();
-        $importInterfaceMock->expects($this->once())
-            ->method('fetchRates')
-            ->will($this->returnValue([]));
-        $importInterfaceMock->expects($this->once())
-            ->method('getMessages')
-            ->will($this->returnValue([]));
-
-        $this->importFactory
-            ->expects($this->once())
-            ->method('create')
-            ->with('import-service')
-            ->will($this->returnValue($importInterfaceMock));
-
-        $currencyMock = $this->getMockBuilder(\Magento\Directory\Model\Currency::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['saveRates', '__wakeup', '__sleep'])
-            ->getMock();
-        $currencyMock->expects($this->once())
-            ->method('saveRates')
-            ->will($this->returnValue(null));
-        $this->currencyFactory
-            ->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($currencyMock));
-
-        $this->observer->scheduledUpdateCurrencyRates(null);
-    }
-
     /**
-     * @expectedException \Exception
+     * @return void
      */
-    public function testScheduledUpdateCurrencyRatesThrowsException()
+    public function testScheduledUpdateCurrencyRates(): void
     {
-        $this->scopeConfig->expects($this->exactly(3))
+        $importWarnings = ['WARNING: error1', 'WARNING: error2'];
+        $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
-            ->willReturnMap(
+            ->withConsecutive(
                 [
-                    [Observer::IMPORT_ENABLE, ScopeInterface::SCOPE_STORE, null, 1],
-                    [Observer::CRON_STRING_PATH, ScopeInterface::SCOPE_STORE, null, 'cron-path'],
-                    [Observer::IMPORT_SERVICE, ScopeInterface::SCOPE_STORE, null, 'import-service']
+                    Observer::IMPORT_ENABLE,
+                    ScopeInterface::SCOPE_STORE
+                ],
+                [
+                    Observer::CRON_STRING_PATH,
+                    ScopeInterface::SCOPE_STORE
+                ],
+                [
+                    Observer::IMPORT_SERVICE,
+                    ScopeInterface::SCOPE_STORE
+                ],
+                [
+                    Observer::XML_PATH_ERROR_RECIPIENT,
+                    ScopeInterface::SCOPE_STORE
+                ],
+                [
+                    Observer::XML_PATH_ERROR_TEMPLATE,
+                    ScopeInterface::SCOPE_STORE
+                ],
+                [
+                    Observer::XML_PATH_ERROR_IDENTITY,
+                    ScopeInterface::SCOPE_STORE
                 ]
+            )->willReturnOnConsecutiveCalls(
+                1,
+                '* * * * *',
+                'fixerio',
+                'test1@email.com,test2@email.com',
+                self::STUB_ERROR_TEMPLATE,
+                self::STUB_SENDER
             );
+        $import = $this->getMockForAbstractClass(ImportInterface::class);
+        $import->expects($this->once())->method('fetchRates')
+            ->willReturn([]);
+        $import->expects($this->once())->method('getMessages')
+            ->willReturn(['error1', 'error2']);
+        $this->importFactoryMock->expects($this->once())->method('create')
+            ->with('fixerio')
+            ->willReturn($import);
+        $this->transportBuilderMock->expects($this->once())
+            ->method('setTemplateIdentifier')
+            ->with(self::STUB_ERROR_TEMPLATE)
+            ->willReturnSelf();
+        $this->transportBuilderMock->expects($this->once())
+            ->method('setTemplateOptions')
+            ->with(['area' => FrontNameResolver::AREA_CODE, 'store' => Store::DEFAULT_STORE_ID])
+            ->willReturnSelf();
+        $this->transportBuilderMock->expects($this->once())
+            ->method('setTemplateVars')
+            ->with(['warnings' => join("\n", $importWarnings)])
+            ->willReturnSelf();
+        $this->transportBuilderMock->expects($this->once())
+            ->method('setFrom')
+            ->with(self::STUB_SENDER)
+            ->willReturnSelf();
 
-        $this->importFactory
-            ->expects($this->once())
-            ->method('create')
-            ->with('import-service')
-            ->willThrowException(new \Exception());
+        $this->transportBuilderMock->expects($this->once())
+            ->method('addTo')
+            ->with(['test1@email.com', 'test2@email.com'])
+            ->willReturnSelf();
+        $transport = $this->getMockForAbstractClass(TransportInterface::class);
 
-        $this->observer->scheduledUpdateCurrencyRates(null);
+        $this->transportBuilderMock->expects($this->once())
+            ->method('getTransport')
+            ->willReturn($transport);
+
+        $transport->expects($this->once())
+            ->method('sendMessage')
+            ->willReturnSelf();
+        $this->inlineTranslationMock->expects($this->once())->method('suspend')->willReturnSelf();
+        $this->inlineTranslationMock->expects($this->once())->method('resume')->willReturnSelf();
+
+        $this->model->scheduledUpdateCurrencyRates([]);
     }
 }

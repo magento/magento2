@@ -5,9 +5,9 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
+use Magento\Store\Model\Store;
+
 /**
- * Class CategoryProcessor
- *
  * @api
  * @since 100.0.2
  */
@@ -16,7 +16,7 @@ class CategoryProcessor
     /**
      * Delimiter in category path.
      */
-    const DELIMITER_CATEGORY = '/';
+    public const DELIMITER_CATEGORY = '/';
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
@@ -66,6 +66,8 @@ class CategoryProcessor
     }
 
     /**
+     * Initialize categories
+     *
      * @return $this
      */
     protected function initCategories()
@@ -75,6 +77,7 @@ class CategoryProcessor
             $collection->addAttributeToSelect('name')
                 ->addAttributeToSelect('url_key')
                 ->addAttributeToSelect('url_path');
+            $collection->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
             /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
             foreach ($collection as $category) {
                 $structure = explode(self::DELIMITER_CATEGORY, $category->getPath());
@@ -85,7 +88,7 @@ class CategoryProcessor
                     $path = [];
                     for ($i = 1; $i < $pathSize; $i++) {
                         $name = $collection->getItemById((int)$structure[$i])->getName();
-                        $path[] = $this->quoteDelimiter($name);
+                        $path[] = $name !== null ? $this->quoteDelimiter($name) : '';
                     }
                     /** @var string $index */
                     $index = $this->standardizeString(
@@ -103,7 +106,6 @@ class CategoryProcessor
      *
      * @param string $name
      * @param int $parentId
-     *
      * @return int
      */
     protected function createCategory($name, $parentId)
@@ -119,9 +121,9 @@ class CategoryProcessor
         $category->setIsActive(true);
         $category->setIncludeInMenu(true);
         $category->setAttributeSetId($category->getDefaultAttributeSetId());
+        $category->setStoreId(Store::DEFAULT_STORE_ID);
         $category->save();
         $this->categoriesCache[$category->getId()] = $category;
-
         return $category->getId();
     }
 
@@ -129,13 +131,12 @@ class CategoryProcessor
      * Returns ID of category by string path creating nonexistent ones.
      *
      * @param string $categoryPath
-     *
      * @return int
      */
     protected function upsertCategory($categoryPath)
     {
         /** @var string $index */
-        $index = $this->standardizeString($categoryPath);
+        $index = $categoryPath !== null ? $this->standardizeString($categoryPath) : '';
 
         if (!isset($this->categories[$index])) {
             $pathParts = preg_split('~(?<!\\\)' . preg_quote(self::DELIMITER_CATEGORY, '~') . '~', $categoryPath);
@@ -160,13 +161,12 @@ class CategoryProcessor
      *
      * @param string $categoriesString
      * @param string $categoriesSeparator
-     *
      * @return array
      */
     public function upsertCategories($categoriesString, $categoriesSeparator)
     {
         $categoriesIds = [];
-        $categories = explode($categoriesSeparator, $categoriesString);
+        $categories = $categoriesString !== null ? explode($categoriesSeparator, $categoriesString) : [];
 
         foreach ($categories as $category) {
             try {
@@ -229,7 +229,7 @@ class CategoryProcessor
      */
     public function getCategoryById($categoryId)
     {
-        return isset($this->categoriesCache[$categoryId]) ? $this->categoriesCache[$categoryId] : null;
+        return $this->categoriesCache[$categoryId] ?? null;
     }
 
     /**

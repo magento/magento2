@@ -1,146 +1,235 @@
 <?php
 /**
- * Grouped Products Price Indexer Resource model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price;
 
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Indexer\DimensionalIndexerInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructureFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
+use Magento\GroupedProduct\Model\ResourceModel\Product\Link;
+use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedType;
 
-class Grouped extends DefaultPrice implements GroupedInterface
+/**
+ * Calculate minimal and maximal prices for Grouped products
+ *
+ * Use calculated price for relation products
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Grouped implements DimensionalIndexerInterface
 {
     /**
-     * Prefix for temporary table support.
+     * @var IndexTableStructureFactory
      */
-    const TRANSIT_PREFIX = 'transit_';
+    private $indexTableStructureFactory;
 
     /**
-     * @inheritdoc
+     * @var TableMaintainer
      */
-    protected function reindex($entityIds = null)
-    {
-        $this->_prepareGroupedProductPriceData($entityIds);
+    private $tableMaintainer;
+
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * @var ResourceConnection
+     */
+    private $resource;
+
+    /**
+     * @var string
+     */
+    private $connectionName;
+
+    /**
+     * @var AdapterInterface
+     */
+    private $connection;
+
+    /**
+     * @var bool
+     */
+    private $fullReindexAction;
+
+    /**
+     * @param IndexTableStructureFactory $indexTableStructureFactory
+     * @param TableMaintainer $tableMaintainer
+     * @param MetadataPool $metadataPool
+     * @param ResourceConnection $resource
+     * @param string $connectionName
+     * @param bool $fullReindexAction
+     */
+    public function __construct(
+        IndexTableStructureFactory $indexTableStructureFactory,
+        TableMaintainer $tableMaintainer,
+        MetadataPool $metadataPool,
+        ResourceConnection $resource,
+        $connectionName = 'indexer',
+        $fullReindexAction = false
+    ) {
+        $this->indexTableStructureFactory = $indexTableStructureFactory;
+        $this->tableMaintainer = $tableMaintainer;
+        $this->connectionName = $connectionName;
+        $this->metadataPool = $metadataPool;
+        $this->resource = $resource;
+        $this->fullReindexAction = $fullReindexAction;
     }
 
     /**
-     * Calculate minimal and maximal prices for Grouped products
-     * Use calculated price for relation products
-     *
-     * @param int|array $entityIds  the parent entity ids limitation
-     * @return $this
+     * @inheritDoc
      */
-    protected function _prepareGroupedProductPriceData($entityIds = null)
+    public function executeByDimensions(array $dimensions, \Traversable $entityIds)
     {
-        if (!$this->hasEntity() && empty($entityIds)) {
-            return $this;
-        }
-
-        $connection = $this->getConnection();
-        $table = $this->getIdxTable();
-
-        if (!$this->tableStrategy->getUseIdxTable()) {
-            $additionalIdxTable = $connection->getTableName(self::TRANSIT_PREFIX . $this->getIdxTable());
-            $connection->createTemporaryTableLike($additionalIdxTable, $table);
-            $query = $connection->insertFromSelect(
-                $this->_prepareGroupedProductPriceDataSelect($entityIds),
-                $additionalIdxTable,
-                []
-            );
-            $connection->query($query);
-
-            $select = $connection->select()->from($additionalIdxTable);
-            $query = $connection->insertFromSelect(
-                $select,
-                $table,
-                [],
-                \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
-            );
-            $connection->query($query);
-            $connection->dropTemporaryTable($additionalIdxTable);
-        } else {
-            $query = $this->_prepareGroupedProductPriceDataSelect($entityIds)->insertFromSelect($table);
-            $connection->query($query);
-        }
-        return $this;
+        /** @var IndexTableStructure $temporaryPriceTable */
+        $temporaryPriceTable = $this->indexTableStructureFactory->create([
+            'tableName' => $this->tableMaintainer->getMainTmpTable($dimensions),
+            'entityField' => 'entity_id',
+            'customerGroupField' => 'customer_group_id',
+            'websiteField' => 'website_id',
+            'taxClassField' => 'tax_class_id',
+            'originalPriceField' => 'price',
+            'finalPriceField' => 'final_price',
+            'minPriceField' => 'min_price',
+            'maxPriceField' => 'max_price',
+            'tierPriceField' => 'tier_price',
+        ]);
+        $select = $this->prepareGroupedProductPriceDataSelect($dimensions, iterator_to_array($entityIds));
+        $this->tableMaintainer->insertFromSelect(
+            $select,
+            $temporaryPriceTable->getTableName(),
+            [
+            "entity_id",
+            "customer_group_id",
+            "website_id",
+            "tax_class_id",
+            "price",
+            "final_price",
+            "min_price",
+            "max_price",
+            "tier_price",
+            ]
+        );
     }
 
     /**
      * Prepare data index select for Grouped products prices
      *
-     * @param int|array $entityIds  the parent entity ids limitation
+     * @param array $dimensions
+     * @param array $entityIds the parent entity ids limitation
      * @return \Magento\Framework\DB\Select
+     * @throws \Exception
      */
-    protected function _prepareGroupedProductPriceDataSelect($entityIds = null)
+    private function prepareGroupedProductPriceDataSelect(array $dimensions, array $entityIds)
     {
-        $connection = $this->getConnection();
-        $table = $this->getIdxTable();
-        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
-        $select = $connection->select()->from(
+        $select = $this->getConnection()->select();
+
+        $select->from(
             ['e' => $this->getTable('catalog_product_entity')],
             'entity_id'
-        )->joinLeft(
-            ['l' => $this->getTable('catalog_product_link')],
-            'e.' . $linkField . ' = l.product_id AND l.link_type_id=' .
-            \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED,
-            []
-        )->join(
-            ['cg' => $this->getTable('customer_group')],
-            '',
-            ['customer_group_id']
         );
-        $this->_addWebsiteJoinToSelect($select, true);
-        $this->_addProductWebsiteJoinToSelect($select, 'cw.website_id', 'e.entity_id');
-        $minCheckSql = $connection->getCheckSql('le.required_options = 0', 'i.min_price', 0);
-        $maxCheckSql = $connection->getCheckSql('le.required_options = 0', 'i.max_price', 0);
-        $select->columns(
-            'website_id',
-            'cw'
-        )->joinLeft(
+
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $select->joinLeft(
+            ['l' => $this->getTable('catalog_product_link')],
+            'e.' . $linkField . ' = l.product_id AND l.link_type_id=' . Link::LINK_TYPE_GROUPED,
+            []
+        );
+        //additional information about inner products
+        $select->joinLeft(
             ['le' => $this->getTable('catalog_product_entity')],
             'le.entity_id = l.linked_product_id',
             []
-        )->joinLeft(
-            ['i' => $table],
-            'i.entity_id = l.linked_product_id AND i.website_id = cw.website_id' .
-            ' AND i.customer_group_id = cg.customer_group_id',
+        );
+        $select->columns(
             [
-                'tax_class_id' => $this->getConnection()->getCheckSql(
-                    'MIN(i.tax_class_id) IS NULL',
-                    '0',
-                    'MIN(i.tax_class_id)'
-                ),
+                'i.customer_group_id',
+                'i.website_id',
+            ]
+        );
+        $taxClassId = $this->getConnection()->getCheckSql('MIN(i.tax_class_id) IS NULL', '0', 'MIN(i.tax_class_id)');
+        $minCheckSql = $this->getConnection()->getCheckSql('le.required_options = 0', 'i.min_price', 0);
+        $maxCheckSql = $this->getConnection()->getCheckSql('le.required_options = 0', 'i.max_price', 0);
+        $select->join(
+            ['i' => $this->getMainTable($dimensions)],
+            'i.entity_id = l.linked_product_id',
+            [
+                'tax_class_id' => $taxClassId,
                 'price' => new \Zend_Db_Expr('NULL'),
                 'final_price' => new \Zend_Db_Expr('NULL'),
                 'min_price' => new \Zend_Db_Expr('MIN(' . $minCheckSql . ')'),
                 'max_price' => new \Zend_Db_Expr('MAX(' . $maxCheckSql . ')'),
                 'tier_price' => new \Zend_Db_Expr('NULL'),
             ]
-        )->group(
-            ['e.entity_id', 'cg.customer_group_id', 'cw.website_id']
-        )->where(
+        );
+        // customer group website limitations
+        $select->joinLeft(
+            ['cgw' => $this->getTable('customer_group_excluded_website')],
+            'i.customer_group_id = cgw.customer_group_id AND i.website_id = cgw.website_id',
+            []
+        );
+        $select->group(
+            ['e.entity_id', 'i.customer_group_id', 'i.website_id']
+        );
+        $select->where(
             'e.type_id=?',
-            $this->getTypeId()
+            GroupedType::TYPE_CODE
         );
 
         if ($entityIds !== null) {
-            $select->where('e.entity_id IN(?)', $entityIds);
+            $select->where('e.entity_id IN(?)', $entityIds, \Zend_Db::INT_TYPE);
         }
 
-        /**
-         * Add additional external limitation
-         */
-        $this->_eventManager->dispatch(
-            'catalog_product_prepare_index_select',
-            [
-                'select' => $select,
-                'entity_field' => new \Zend_Db_Expr('e.entity_id'),
-                'website_field' => new \Zend_Db_Expr('cw.website_id'),
-                'store_field' => new \Zend_Db_Expr('cs.store_id')
-            ]
-        );
+        // exclude websites that are limited for customer group
+        $select->where('cgw.website_id IS NULL');
+
         return $select;
+    }
+
+    /**
+     * Get main table
+     *
+     * @param array $dimensions
+     * @return string
+     */
+    private function getMainTable($dimensions)
+    {
+        if ($this->fullReindexAction) {
+            return $this->tableMaintainer->getMainReplicaTable($dimensions);
+        }
+        return $this->tableMaintainer->getMainTableByDimensions($dimensions);
+    }
+
+    /**
+     * Get connection
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @throws \DomainException
+     */
+    private function getConnection(): \Magento\Framework\DB\Adapter\AdapterInterface
+    {
+        if ($this->connection === null) {
+            $this->connection = $this->resource->getConnection($this->connectionName);
+        }
+
+        return $this->connection;
+    }
+
+    /**
+     * Get table
+     *
+     * @param string $tableName
+     * @return string
+     */
+    private function getTable($tableName)
+    {
+        return $this->resource->getTableName($tableName, $this->connectionName);
     }
 }

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="ProductsListWidget" type="widget">
+        <data key="type">Catalog Products List</data>
+        <data key="design_theme">Magento Luma</data>
+        <data key="name" unique="suffix">TestWidget</data>
+        <data key="sort_order">0</data>
+        <array key="store_ids">
+            <item>All Store Views</item>
+        </array>
+        <data key="condition">SKU</data>
+        <data key="display_on">All Pages</data>
+        <data key="container">Main Content Area</data>
+    </entity>
+    <entity name="CatalogCategoryLinkSpecifiedCategory" type="widget">
+        <data key="type">Catalog Category Link</data>
+        <data key="design_theme">Magento Luma</data>
+        <data key="name" unique="suffix">TestCategoryLinkWidgetOnSpecifiedCategory</data>
+        <array key="store_ids">
+            <item>All Store Views</item>
+        </array>
+        <data key="sort_order">0</data>
+        <data key="page">catalog_category_view</data>
+        <data key="template">Category Link Block Template</data>
+        <data key="condition">SKU</data>
+        <data key="display_on">Anchor Categories</data>
+        <data key="container">Main Content Area</data>
+    </entity>
+    <entity name="DynamicBlocksRotatorWidget" type="widget">
+        <data key="type">Dynamic Blocks Rotator</data>
+        <data key="design_theme">Magento Luma</data>
+        <data key="name" unique="suffix">TestBannerWidget</data>
+        <array key="store_ids">
+            <item>All Store Views</item>
+        </array>
+        <data key="condition">SKU</data>
+        <data key="display_on">All Pages</data>
+        <data key="container">Main Content Area</data>
+        <data key="display_mode">Cart Price Rule Related</data>
+        <data key="restrict_type">Header</data>
+    </entity>
+    <entity name="DefaultOrderBySKUWidget" type="widget">
+        <data key="type">Order by SKU</data>
+        <data key="design_theme">Magento Luma</data>
+        <data key="name" unique="suffix">Test Widget</data>
+        <array key="store_ids">
+            <item>All Store Views</item>
+        </array>
+        <data key="sort_order">0</data>
+        <data key="display_on">All Pages</data>
+        <data key="container">Sidebar Main</data>
+    </entity>
+</entities>

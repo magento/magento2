@@ -117,7 +117,7 @@ class Template
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getSerializer()
     {

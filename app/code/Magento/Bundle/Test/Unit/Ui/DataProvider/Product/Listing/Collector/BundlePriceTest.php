@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Test\Unit\Ui\DataProvider\Product\Listing\Collector;
 
 use Magento\Bundle\Ui\DataProvider\Product\Listing\Collector\BundlePrice;
@@ -14,8 +16,10 @@ use Magento\Catalog\Model\ProductRender\FormattedPriceInfoBuilder;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BundlePriceTest extends \PHPUnit\Framework\TestCase
+class BundlePriceTest extends TestCase
 {
     /**
      * @var BundlePrice
@@ -23,21 +27,21 @@ class BundlePriceTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrencyInterface|MockObject
      */
     private $priceCurrencyMock;
 
     /**
-     * @var PriceInfoInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceInfoInterfaceFactory|MockObject
      */
     private $priceInfoFactory;
 
     /**
-     * @var FormattedPriceInfoBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormattedPriceInfoBuilder|MockObject
      */
     private $formattedPriceInfoBuilder;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->getMockForAbstractClass();
@@ -71,13 +75,13 @@ class BundlePriceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $productRender = $this->getMockBuilder(ProductRenderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $amount = $this->getMockBuilder(AmountInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $minAmount = $this->getMockBuilder(AmountInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $priceInfo = $this->getMockBuilder(PriceInfoInterface::class)
             ->setMethods(
                 [

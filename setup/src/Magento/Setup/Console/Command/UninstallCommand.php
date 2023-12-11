@@ -50,5 +50,6 @@ class UninstallCommand extends AbstractSetupCommand
             $installer = $this->installerFactory->create(new ConsoleLogger($output));
             $installer->uninstall();
         }
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }

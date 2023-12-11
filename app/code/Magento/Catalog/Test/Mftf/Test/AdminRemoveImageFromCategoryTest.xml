@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRemoveImageFromCategoryTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <title value="Admin should be able to remove image from a Category"/>
+            <description value="Admin should be able to remove image from a Category"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-212"/>
+            <group value="Catalog"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="DeleteCategory">
+                <argument name="categoryEntity" value="SimpleSubCategory"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Go to create a new category with image -->
+        <actionGroup ref="GoToCreateCategoryPageActionGroup" stepKey="goToCreateCategoryPage"/>
+        <actionGroup ref="FillCategoryFormActionGroup" stepKey="fillCategoryForm">
+            <argument name="categoryEntity" value="SimpleSubCategory"/>
+        </actionGroup>
+        <actionGroup ref="AddCategoryImageActionGroup" stepKey="addCategoryImage"/>
+        <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategoryForm"/>
+        <actionGroup ref="CheckCategoryImageInAdminActionGroup" stepKey="checkCategoryImageInAdmin"/>
+
+        <!-- Remove image from category -->
+        <actionGroup ref="RemoveCategoryImageActionGroup" stepKey="removeCategoryImage"/>
+        <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategoryFormAfterRemove"/>
+
+        <actionGroup ref="CheckCategoryOnStorefrontActionGroup" stepKey="CheckCategoryOnStorefront">
+            <argument name="categoryEntity" value="SimpleSubCategory"/>
+        </actionGroup>
+
+        <!-- Verify category with no image in storefront -->
+        <dontSee selector="{{StorefrontCategoryMainSection.categoryImage}}" stepKey="dontSeeImage"/>
+    </test>
+</tests>

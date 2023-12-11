@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminGotoSelectValueAttributePageActionGroup">
+        <annotations>
+            <description>Goes to the select values page from each attribute to include in the product.</description>
+        </annotations>
+
+        <arguments>
+            <argument name="defaultLabelAttribute" type="string" defaultValue="{{colorProductAttribute.default_label}}"/>
+        </arguments>
+
+        <switchToIFrame stepKey="switchOutOfIFrame"/>
+        <waitForPageLoad stepKey="waitForFilters"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickOnFilters"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}"  userInput="{{defaultLabelAttribute}}" stepKey="fillFilterAttributeCodeField"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton"/>
+
+    </actionGroup>
+</actionGroups>

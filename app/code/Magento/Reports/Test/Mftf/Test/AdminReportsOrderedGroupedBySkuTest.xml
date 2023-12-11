@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminReportsOrderedGroupedBySkuTest">
+        <annotations>
+            <stories value="Grouped by SKU on report"/>
+            <title value="Verify grouped by SKU on report"/>
+            <description value="Verify the list of configurable product grouped by SKU, on report page 'Reports > Products > Ordered'"/>
+            <severity value="MAJOR"/>
+            <group value="reports"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createConfigurableProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersVirtual"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addSkuFilterVirtual">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="applyGridFilterVirtual"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteVirtualProducts">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <comment userInput="BIC workaround" stepKey="deleteAttributeSet"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Add first configurable product to order-->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToFirstOrderWithExistingCustomer">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="AddConfigurableProductToOrderActionGroup" stepKey="addFirstConfigurableProductToOrder">
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="attribute" value="colorProductAttribute"/>
+            <argument name="option" value="colorProductAttribute1"/>
+        </actionGroup>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitFirstOrder" />
+
+        <!--Add second configurable product to order-->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToSecondOrderWithExistingCustomer">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="AddConfigurableProductToOrderActionGroup" stepKey="addSecondConfigurableProductToOrder">
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="attribute" value="colorProductAttribute"/>
+            <argument name="option" value="colorProductAttribute2"/>
+        </actionGroup>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitSecondOrder" />
+
+        <!-- Get date -->
+        <generateDate stepKey="generateStartDate" date="-1 minute" format="m/d/Y"/>
+        <generateDate stepKey="generateEndDate" date="+1 minute" format="m/d/Y"/>
+        <actionGroup ref="AdminGenerateProductsOrderedReportActionGroup" stepKey="generateReport">
+            <argument name="orderFromDate" value="$generateStartDate"/>
+            <argument name="orderToDate" value="$generateEndDate" />
+        </actionGroup>
+
+        <!-- Verify data -->
+        <grabTextFrom selector="{{SoldReportFilterSection.gridProduct}}" stepKey="grabData"/>
+        <assertStringContainsString stepKey="assertFirst">
+            <actualResult type="string">{$grabData}</actualResult>
+            <expectedResult type="string">{{_defaultProduct.sku}}-{{colorProductAttribute1.name}}</expectedResult>
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="assertSecond">
+            <actualResult type="string">{$grabData}</actualResult>
+            <expectedResult type="string">{{_defaultProduct.sku}}-{{colorProductAttribute2.name}}</expectedResult>
+        </assertStringContainsString>
+    </test>
+</tests>

@@ -14,7 +14,7 @@ class XmlFilesTest extends \PHPUnit\Framework\TestCase
      */
     protected $validationStateMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $this->validationStateMock->method('isValidationRequired')

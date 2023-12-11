@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Exception;
 
 use Magento\Framework\Phrase;
@@ -11,6 +12,7 @@ use Magento\Framework\Phrase;
  * Serialization Exception
  *
  * @api
+ * @since 100.0.2
  */
 class SerializationException extends LocalizedException
 {
@@ -22,7 +24,7 @@ class SerializationException extends LocalizedException
     /**
      * @deprecated
      */
-    const TYPE_MISMATCH = 'Invalid type for value: "%value". Expected Type: "%type".';
+    const TYPE_MISMATCH = 'The "%value" value\'s type is invalid. The "%type" type was expected. Verify and try again.';
 
     /**
      * @param \Magento\Framework\Phrase $phrase

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRemoveImageAffectsAllScopesTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="MAGETWO-66442: Changes in default scope not effect product images in other scopes"/>
+            <title value="Effect of product images changes in default scope to other scopes"/>
+            <description value="Product image should be deleted from all scopes"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-94265"/>
+            <group value="Catalog"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!--Create 2 websites (with stores, store views)-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="_defaultProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore" after="createWebsite">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView" after="createNewStore">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite" after="createCustomStoreView">
+                <argument name="newWebsiteName" value="{{secondCustomWebsite.name}}"/>
+                <argument name="websiteCode" value="{{secondCustomWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createSecondStore" after="createSecondWebsite">
+                <argument name="website" value="{{secondCustomWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
+                <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView2"  after="createSecondStore">
+                <argument name="StoreGroup" value="SecondStoreGroupUnique"/>
+                <argument name="customStore" value="SecondStoreUnique"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
+                <argument name="websiteName" value="{{secondCustomWebsite.name}}"/>
+            </actionGroup>
+            <deleteData createDataKey="category" stepKey="deletePreReqCategory"/>
+            <deleteData createDataKey="product" stepKey="deleteFirstProduct"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Create product-->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
+
+        <!--Open created product-->
+        <click selector="{{AdminProductGridSection.productGridNameProduct($$product.name$$)}}" stepKey="createdProduct"/>
+        <waitForPageLoad stepKey="waitForOpenedCreatedProduct"/>
+
+        <!-- Add image to product -->
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addFirstImageForProduct">
+            <argument name="image" value="TestImageNew"/>
+        </actionGroup>
+
+        <!-- Add second image to product -->
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addSecondImageForProduct">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <!--"Product in Websites": select both Websites-->
+        <actionGroup ref="ProductSetWebsiteActionGroup" stepKey="ProductSetWebsite1">
+            <argument name="website" value="{{customWebsite.name}}"/>
+        </actionGroup>
+        <actionGroup ref="ProductSetWebsiteActionGroup" stepKey="ProductSetWebsite2">
+            <argument name="website" value="{{secondCustomWebsite.name}}"/>
+        </actionGroup>
+
+        <!--Go to "Catalog" -> "Products". Open created product-->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductPage"/>
+        <click selector="{{AdminProductGridSection.productGridNameProduct($$product.name$$)}}" stepKey="openCreatedProduct"/>
+        <waitForPageLoad stepKey="waitForCreatedProductOpened"/>
+
+        <!--Delete Image 1-->
+        <actionGroup ref="RemoveProductImageActionGroup" stepKey="removeProductImage"/>
+
+        <!--Click "Save" in the upper right corner-->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductFormAfterRemove"/>
+
+        <!--Switch to "Store view 1"-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="selectStoreView">
+            <argument name="storeViewName" value="{{customStore.name}}"/>
+        </actionGroup>
+
+        <!-- Assert product first image not in admin product form -->
+        <actionGroup ref="AssertProductImageNotInAdminProductPageActionGroup" stepKey="assertProductImageNotInAdminProductPage">
+            <argument name="image" value="TestImageNew"/>
+        </actionGroup>
+
+        <!--Switch to "Store view 2"-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="selectSecondStoreView">
+            <argument name="storeViewName" value="{{SecondStoreUnique.name}}"/>
+        </actionGroup>
+
+        <!-- Verify that Image 1 is deleted from the Second Store View list -->
+        <actionGroup ref="AssertProductImageNotInAdminProductPageActionGroup" stepKey="assertProductImageNotInSecondStoreViewPage">
+            <argument name="image" value="TestImageNew"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckValidatorConfigurableProductTest">
+        <annotations>
+            <stories value="Configurable Product"/>
+            <title value="Check that validator works correctly when creating Configurations for Configurable Products"/>
+            <description value="Verify validator works correctly for Configurable Products"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-95995"/>
+            <useCaseId value="MAGETWO-95834"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <!--Login as admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create Category-->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <!--Create Configurable product-->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{ApiConfigurableProduct.name}}-thisIsShortName"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clickClearFilters"/>
+            <!-- Remove attribute -->
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteAttribute">
+                <argument name="ProductAttribute" value="productDropDownAttribute"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+
+        <!-- Find the product that we just created using the product grid -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"
+            dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedProduct">
+            <argument name="product" value="ApiConfigurableProduct"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductFilterLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductPage"/>
+
+        <!-- Create configurations based off the Text Swatch we created earlier -->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations"/>
+
+        <!--Create new attribute-->
+        <waitForElementVisible stepKey="waitForNewAttributePageOpened" selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="clickCreateNewAttribute" after="waitForNewAttributePageOpened"/>
+        <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="enterAttributePanelIFrame" after="clickCreateNewAttribute"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.defaultLabel}}" time="30" stepKey="waitForIframeLoad" after="enterAttributePanelIFrame"/>
+        <fillField selector="{{AdminNewAttributePanel.defaultLabel}}" userInput="{{productDropDownAttribute.attribute_code}}" stepKey="fillDefaultLabel" after="waitForIframeLoad"/>
+        <selectOption selector="{{AdminNewAttributePanel.inputType}}" userInput="{{colorProductAttribute.input_type}}" stepKey="selectAttributeInputType" after="fillDefaultLabel"/>
+        <!--Add option to attribute-->
+        <click selector="{{AdminNewAttributePanel.addOption}}" stepKey="clickAddOption1" after="selectAttributeInputType"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.isDefault('1')}}" time="30" stepKey="waitForOptionRow1" after="clickAddOption1"/>
+        <fillField selector="{{AdminNewAttributePanel.optionAdminValue('0')}}" userInput="ThisIsLongNameNameLengthMoreThanSixtyFourThisIsLongNameNameLength" stepKey="fillAdminLabel1" after="waitForOptionRow1"/>
+        <fillField selector="{{AdminNewAttributePanel.optionDefaultStoreValue('0')}}" userInput="{{colorProductAttribute1.name}}" stepKey="fillDefaultLabel1" after="fillAdminLabel1"/>
+
+        <!--Save attribute-->
+        <click selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="clickOnNewAttributePanel"/>
+        <waitForPageLoad stepKey="waitForSaveAttribute"/>
+        <switchToIFrame stepKey="switchOutOfIFrame"/>
+
+        <!--Find attribute in grid and select-->
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="clickOnFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.attributeCodeFilterInput}}" userInput="{{productDropDownAttribute.attribute_code}}" stepKey="fillFilterAttributeCodeField"/>
+        <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminDataGridTableSection.rowCheckbox('1')}}" stepKey="clickOnFirstCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextStep1"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute(productDropDownAttribute.attribute_code)}}" stepKey="waitForNextPageOpened"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute(productDropDownAttribute.attribute_code)}}" stepKey="clickSelectAll"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextStep2"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" stepKey="waitForNextPageOpened2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" stepKey="clickOnApplySinglePriceToAllSkus"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.singlePrice}}" userInput="10" stepKey="enterAttributePrice"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="100" stepKey="enterAttributeQuantity"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextStep3"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextPageOpened3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="generateProducts"/>
+        <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveButtonVisible"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
+        <waitForElementVisible selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="waitForPopUpVisible"/>
+        <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
+        <dontSeeElement selector="{{AdminMessagesSection.success}}" stepKey="dontSeeSaveProductMessage"/>
+
+        <!--Close modal window-->
+        <click selector="{{AdminChooseAffectedAttributeSetPopup.closePopUp}}" stepKey="clickOnClosePopup"/>
+        <waitForElementNotVisible selector="{{AdminChooseAffectedAttributeSetPopup.closePopUp}}" stepKey="waitForDialogClosed"/>
+
+        <!--See that validation message is shown under the fields-->
+        <scrollTo selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" stepKey="scrollTConfigurationTab"/>
+        <see userInput="Please enter less or equal than 64 symbols." selector="{{AdminProductFormConfigurationsSection.confProductSkuMessage('0')}}" stepKey="SeeValidationMessage"/>
+
+        <!--Edit "SKU" with valid quantity-->
+        <fillField stepKey="fillValidValue" selector="{{AdminProductFormConfigurationsSection.confProductSku('0')}}" userInput="{{ApiConfigurableProduct.name}}-thisIsShortName"/>
+
+        <!--Click on "Save"-->
+        <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveBtnVisible"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProductAgain"/>
+
+        <!--Click on "Confirm". Product is saved, success message appears -->
+        <waitForElementVisible selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="waitPopUpVisible"/>
+        <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmPopup"/>
+        <seeElement selector="{{AdminMessagesSection.success}}" stepKey="seeSaveProductMessage"/>
+    </test>
+</tests>

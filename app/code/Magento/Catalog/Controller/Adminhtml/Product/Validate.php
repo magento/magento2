@@ -6,17 +6,22 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
+use Magento\CatalogUrlRewrite\Model\Product\Validator as ProductUrlRewriteValidator;
+use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 
 /**
  * Product validate
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
+class Validate extends Product implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
@@ -56,6 +61,16 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
     private $storeManager;
 
     /**
+     * @var ProductUrlPathGenerator
+     */
+    private $productUrlPathGenerator;
+
+    /**
+     * @var ProductUrlRewriteValidator
+     */
+    private $productUrlRewriteValidator;
+
+    /**
      * @param Action\Context $context
      * @param Builder $productBuilder
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
@@ -63,6 +78,8 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param ProductUrlRewriteValidator $productUrlRewriteValidator
+     * @param ProductUrlPathGenerator $productUrlPathGenerator
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -71,7 +88,9 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
         \Magento\Catalog\Model\Product\Validator $productValidator,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Magento\Catalog\Model\ProductFactory $productFactory
+        \Magento\Catalog\Model\ProductFactory $productFactory,
+        ProductUrlRewriteValidator $productUrlRewriteValidator,
+        ProductUrlPathGenerator $productUrlPathGenerator
     ) {
         $this->_dateFilter = $dateFilter;
         $this->productValidator = $productValidator;
@@ -79,6 +98,8 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
         $this->productFactory = $productFactory;
+        $this->productUrlRewriteValidator = $productUrlRewriteValidator;
+        $this->productUrlPathGenerator = $productUrlPathGenerator;
     }
 
     /**
@@ -128,16 +149,27 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
             $resource->getAttribute('news_from_date')->setMaxValue($product->getNewsToDate());
             $resource->getAttribute('custom_design_from')->setMaxValue($product->getCustomDesignTo());
 
+            if (!$product->getUrlKey()) {
+                $urlKey = $this->productUrlPathGenerator->getUrlKey($product);
+                $product->setUrlKey($urlKey);
+            }
+            $this->productUrlRewriteValidator->validateUrlKeyConflicts($product);
             $this->productValidator->validate($product, $this->getRequest(), $response);
         } catch (\Magento\Eav\Model\Entity\Attribute\Exception $e) {
             $response->setError(true);
             $response->setAttribute($e->getAttributeCode());
             $response->setMessages([$e->getMessage()]);
+        } catch (UrlAlreadyExistsException $e) {
+            $this->messageManager->addExceptionMessage($e);
+            $layout = $this->layoutFactory->create();
+            $layout->initMessages();
+            $response->setError(true);
+            $response->setHtmlMessage($layout->getMessagesBlock()->getGroupedHtml());
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $response->setError(true);
             $response->setMessages([$e->getMessage()]);
         } catch (\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $layout = $this->layoutFactory->create();
             $layout->initMessages();
             $response->setError(true);

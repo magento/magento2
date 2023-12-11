@@ -9,6 +9,7 @@ namespace Magento\Catalog\Block\Product;
  * Test class for \Magento\Catalog\Block\Product\New.
  *
  * @magentoDataFixture Magento/Catalog/_files/products_new.php
+ * @magentoDbIsolation disabled
  */
 class NewTest extends \PHPUnit\Framework\TestCase
 {
@@ -17,7 +18,7 @@ class NewTest extends \PHPUnit\Framework\TestCase
      */
     protected $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /**
          * @var \Magento\Customer\Api\GroupManagementInterface $groupManagement
@@ -109,7 +110,7 @@ class NewTest extends \PHPUnit\Framework\TestCase
 
         $html = $this->_block->toHtml();
         $this->assertNotEmpty($html);
-        $this->assertContains('New Product', $html);
+        $this->assertStringContainsString('New Product', $html);
         $this->assertInstanceOf(
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
             $this->_block->getProductCollection()

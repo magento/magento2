@@ -5,6 +5,7 @@
  */
 
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
+use Magento\Catalog\Api\Data\ProductExtensionInterfaceFactory;
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
 
@@ -19,10 +20,15 @@ $tierPrices = [];
 $tierPriceFactory = $objectManager->get(\Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory::class);
 /** @var  $tpExtensionAttributes */
 $tpExtensionAttributesFactory = $objectManager->get(ProductTierPriceExtensionFactory::class);
+/** @var  $productExtensionAttributes */
+$productExtensionAttributesFactory = $objectManager->get(ProductExtensionInterfaceFactory::class);
 
 $adminWebsite = $objectManager->get(\Magento\Store\Api\WebsiteRepositoryInterface::class)->get('admin');
 $tierPriceExtensionAttributes1 = $tpExtensionAttributesFactory->create()
     ->setWebsiteId($adminWebsite->getId());
+$productExtensionAttributesWebsiteIds = $productExtensionAttributesFactory->create(
+    ['website_ids' => $adminWebsite->getId()]
+);
 
 $tierPrices[] = $tierPriceFactory->create(
     [
@@ -54,6 +60,16 @@ $tierPrices[] = $tierPriceFactory->create(
     ]
 )->setExtensionAttributes($tierPriceExtensionAttributes1);
 
+$tierPrices[] = $tierPriceFactory->create(
+    [
+        'data' => [
+            'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
+            'qty' => 3.2,
+            'value' => 6,
+        ]
+    ]
+)->setExtensionAttributes($tierPriceExtensionAttributes1);
+
 $tierPriceExtensionAttributes2 = $tpExtensionAttributesFactory->create()
     ->setWebsiteId($adminWebsite->getId())
     ->setPercentageValue(50);
@@ -79,9 +95,10 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setPrice(10)
     ->setWeight(1)
     ->setShortDescription("Short description")
-    ->setTaxClassId(0)
+    ->setTaxClassId(2)
     ->setTierPrices($tierPrices)
     ->setDescription('Description with <b>html tag</b>')
+    ->setExtensionAttributes($productExtensionAttributesWebsiteIds)
     ->setMetaTitle('meta title')
     ->setMetaKeyword('meta keyword')
     ->setMetaDescription('meta description')

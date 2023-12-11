@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdvancedReportingButtonTest">
+        <annotations>
+            <features value="Analytics"/>
+            <stories value="Advanced Reporting"/>
+            <title value="Assert the Advanced Reporting page is opened by dashboard link"/>
+            <description value="Check the ability to navigate to the Advanced Reporting page through the Advanced Reporting button on the dashboard"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-28376"/>
+            <group value="analytics"/>
+            <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Navigate through Advanced Reporting button on dashboard to Sign Up page-->
+        <amOnPage url="{{AdminDashboardPage.url}}" stepKey="amOnDashboardPage"/>
+        <waitForPageLoad stepKey="waitForDashboardPageLoad"/>
+        <click selector="{{AdminAdvancedReportingSection.goToAdvancedReporting}}" stepKey="clickGoToAdvancedReporting"/>
+        <actionGroup ref="AssertAdminAdvancedReportingPageUrlActionGroup" stepKey="assertAdvancedReportingPageUrl"/>
+    </test>
+</tests>

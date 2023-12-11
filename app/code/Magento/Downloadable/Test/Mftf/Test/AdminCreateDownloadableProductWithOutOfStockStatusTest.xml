@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateDownloadableProductWithOutOfStockStatusTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create Downloadable Product"/>
+            <title value="Create downloadable product with out of stock status test"/>
+            <description value="Admin should be able to create downloadable product with out of stock status"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14509"/>
+            <group value="Downloadable"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
+            <!-- Create category -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Delete created downloadable product -->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="DownloadableProductOutOfStock"/>
+            </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Create Downloadable product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createProduct">
+            <argument name="productType" value="downloadable"/>
+        </actionGroup>
+
+        <!-- Fill downloadable product values -->
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillDownloadableProductForm">
+            <argument name="product" value="DownloadableProductOutOfStock"/>
+        </actionGroup>
+
+        <!-- Add downloadable product to category -->
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
+
+        <!-- Fill downloadable link information before the creation link -->
+        <actionGroup ref="AdminAddDownloadableLinkInformationActionGroup" stepKey="addDownloadableLinkInformation"/>
+
+        <!-- Links can be purchased separately -->
+        <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOptionPurchaseSeparately"/>
+
+        <!-- Add first downloadable link -->
+        <actionGroup ref="AddDownloadableProductLinkWithMaxDownloadsActionGroup" stepKey="addFirstDownloadableProductLink">
+            <argument name="link" value="downloadableLinkWithMaxDownloads"/>
+        </actionGroup>
+
+        <!-- Add second downloadable link -->
+        <actionGroup ref="AddDownloadableProductLinkActionGroup" stepKey="addSecondDownloadableProductLink">
+            <argument name="link" value="downloadableLink"/>
+        </actionGroup>
+
+        <!-- Save product -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+        <!-- Assert product is out of stock -->
+        <amOnPage url="{{DownloadableProductOutOfStock.urlKey}}.html" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <see selector="{{StorefrontProductInfoMainSection.productStockStatus}}" userInput="OUT OF STOCK" stepKey="seeProductStatusInStoreFront"/>
+
+        <!-- Find downloadable product in grid -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedConfigurableProduct">
+            <argument name="product" value="DownloadableProductOutOfStock"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProduct"/>
+
+        <!-- Assert downloadable links in product form -->
+        <scrollTo selector="{{AdminProductDownloadableSection.sectionLinkGrid}}" stepKey="scrollToLinks"/>
+        <seeInField selector="{{AdminProductDownloadableSection.addLinkTitleInput('0')}}" userInput="{{downloadableLinkWithMaxDownloads.title}}" stepKey="seeFirstLinkTitle"/>
+        <seeInField selector="{{AdminProductDownloadableSection.addLinkTitleInput('1')}}" userInput="{{downloadableLink.title}}" stepKey="seeSecondLinkTitle"/>
+    </test>
+</tests>

@@ -3,8 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\Framework\Validator\EmailAddress;
+use Magento\Framework\Validator\ValidateException;
+use Magento\Framework\Validator\ValidatorChain;
 use Magento\ImportExport\Model\Import;
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
@@ -12,6 +16,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 /**
  * Import entity abstract customer model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -25,34 +30,36 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * Names that begins with underscore is not an attribute. This name convention is for
      * to avoid interference with same attribute name.
      */
-    const COLUMN_WEBSITE = '_website';
+    public const COLUMN_WEBSITE = '_website';
 
-    const COLUMN_EMAIL = '_email';
+    public const COLUMN_EMAIL = '_email';
 
-    const COLUMN_DEFAULT_BILLING = 'default_billing';
+    public const COLUMN_DEFAULT_BILLING = 'default_billing';
 
-    const COLUMN_DEFAULT_SHIPPING = 'default_shipping';
+    public const COLUMN_DEFAULT_SHIPPING = 'default_shipping';
 
     /**#@-*/
 
     /**#@+
      * Error codes
      */
-    const ERROR_WEBSITE_IS_EMPTY = 'websiteIsEmpty';
+    public const ERROR_WEBSITE_IS_EMPTY = 'websiteIsEmpty';
 
-    const ERROR_EMAIL_IS_EMPTY = 'emailIsEmpty';
+    public const ERROR_EMAIL_IS_EMPTY = 'emailIsEmpty';
 
-    const ERROR_INVALID_WEBSITE = 'invalidWebsite';
+    public const ERROR_INVALID_WEBSITE = 'invalidWebsite';
 
-    const ERROR_INVALID_EMAIL = 'invalidEmail';
+    public const ERROR_INVALID_EMAIL = 'invalidEmail';
 
-    const ERROR_VALUE_IS_REQUIRED = 'valueIsRequired';
+    public const ERROR_VALUE_IS_REQUIRED = 'valueIsRequired';
 
-    const ERROR_CUSTOMER_NOT_FOUND = 'customerNotFound';
-
-    /**#@-*/
+    public const ERROR_CUSTOMER_NOT_FOUND = 'customerNotFound';
 
     /**#@-*/
+
+    /**
+     * @var string[]
+     */
     protected $_ignoredAttributes = ['website_id', 'store_id',
         self::COLUMN_DEFAULT_BILLING, self::COLUMN_DEFAULT_SHIPPING];
 
@@ -76,7 +83,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     protected $needColumnCheck = true;
 
     /**
-     * {@inheritdoc}
+     * @var string
      */
     protected $masterAttributeCode = '_email';
 
@@ -122,7 +129,10 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
         );
 
         $this->addMessageTemplate(self::ERROR_WEBSITE_IS_EMPTY, __('Please specify a website.'));
-        $this->addMessageTemplate(self::ERROR_EMAIL_IS_EMPTY, __('Please specify an email.'));
+        $this->addMessageTemplate(
+            self::ERROR_EMAIL_IS_EMPTY,
+            __("An email wasn't specified. Enter the email and try again.")
+        );
         $this->addMessageTemplate(self::ERROR_INVALID_WEBSITE, __('We found an invalid value in a website column.'));
         $this->addMessageTemplate(self::ERROR_INVALID_EMAIL, __('Please enter a valid email.'));
         $this->addMessageTemplate(self::ERROR_VALUE_IS_REQUIRED, __('Please make sure attribute "%s" is not empty.'));
@@ -220,6 +230,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * @param array $rowData
      * @param int $rowNumber
      * @return bool
+     * @throws ValidateException
      */
     protected function _checkUniqueKey(array $rowData, $rowNumber)
     {
@@ -231,7 +242,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $email = strtolower($rowData[static::COLUMN_EMAIL]);
             $website = $rowData[static::COLUMN_WEBSITE];
 
-            if (!\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
+            if (!ValidatorChain::is($email, EmailAddress::class)) {
                 $this->addRowError(static::ERROR_INVALID_EMAIL, $rowNumber, static::COLUMN_EMAIL);
             } elseif (!isset($this->_websiteCodeToId[$website])) {
                 $this->addRowError(static::ERROR_INVALID_WEBSITE, $rowNumber, static::COLUMN_WEBSITE);
@@ -260,9 +271,9 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      */
     protected function getSelectAttrIdByValue(array $attributeParameters, $value)
     {
-        return isset($attributeParameters['options'][strtolower($value)])
-            ? $attributeParameters['options'][strtolower($value)]
-            : 0;
+        $value = is_string($value) ? strtolower($value) : '';
+
+        return $attributeParameters['options'][$value] ?? 0;
     }
 
     /**

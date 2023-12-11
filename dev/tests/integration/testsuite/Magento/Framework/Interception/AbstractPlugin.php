@@ -5,28 +5,40 @@
  */
 namespace Magento\Framework\Interception;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Class GeneralTest
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * Config reader
+     *
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configReader;
 
     /**
+     * Object Manager
+     *
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
+     * Applicartion Object Manager
+     *
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $applicationObjectManager;
 
-    public function setUp()
+    /**
+     * Set up
+     */
+    protected function setUp(): void
     {
         if (!$this->_objectManager) {
             return;
@@ -36,11 +48,19 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
         \Magento\Framework\App\ObjectManager::setInstance($this->_objectManager);
     }
 
-    public function tearDown()
+    /**
+     * Tear down
+     */
+    protected function tearDown(): void
     {
         \Magento\Framework\App\ObjectManager::setInstance($this->applicationObjectManager);
     }
 
+    /**
+     * Set up Interception Config
+     *
+     * @param array $pluginConfig
+     */
     public function setUpInterceptionConfig($pluginConfig)
     {
         $config = new \Magento\Framework\Interception\ObjectManager\Config\Developer();
@@ -51,24 +71,32 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'read'
-        )->will(
-            $this->returnValue($pluginConfig)
+        )->willReturn(
+            $pluginConfig
         );
 
         $areaList = $this->createMock(\Magento\Framework\App\AreaList::class);
-        $areaList->expects($this->any())->method('getCodes')->will($this->returnValue([]));
+        $areaList->expects($this->any())->method('getCodes')->willReturn([]);
         $configScope = new \Magento\Framework\Config\Scope($areaList, 'global');
         $cache = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
-        $cache->expects($this->any())->method('load')->will($this->returnValue(false));
+        $cacheManager = $this->createMock(\Magento\Framework\Interception\Config\CacheManager::class);
+        $cacheManager->method('load')->willReturn(null);
         $definitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
         $relations = new \Magento\Framework\ObjectManager\Relations\Runtime();
+        $configLoader = $this->createMock(ConfigLoaderInterface::class);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $directoryList = $this->createMock(DirectoryList::class);
+        $configWriter = $this->createMock(PluginListGenerator::class);
         $interceptionConfig = new Config\Config(
             $this->_configReader,
             $configScope,
             $cache,
             $relations,
             $config,
-            $definitions
+            $definitions,
+            'interception',
+            null,
+            $cacheManager
         );
         $interceptionDefinitions = new Definition\Runtime();
         $json = new \Magento\Framework\Serialize\Serializer\Json();
@@ -82,6 +110,10 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
             \Magento\Framework\ObjectManager\DefinitionInterface::class          => $definitions,
             \Magento\Framework\Interception\DefinitionInterface::class           => $interceptionDefinitions,
             \Magento\Framework\Serialize\SerializerInterface::class              => $json,
+            \Magento\Framework\Interception\ConfigLoaderInterface::class         => $configLoader,
+            \Psr\Log\LoggerInterface::class                                      => $logger,
+            \Magento\Framework\App\Filesystem\DirectoryList::class               => $directoryList,
+            \Magento\Framework\App\ObjectManager\ConfigWriterInterface::class    => $configWriter
         ];
         $this->_objectManager = new \Magento\Framework\ObjectManager\ObjectManager(
             $factory,
@@ -96,8 +128,8 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
                 'preferences' => [
                     \Magento\Framework\Interception\PluginListInterface::class =>
                         \Magento\Framework\Interception\PluginList\PluginList::class,
-                    \Magento\Framework\Interception\ChainInterface::class =>
-                        \Magento\Framework\Interception\Chain\Chain::class,
+                    \Magento\Framework\Interception\ConfigWriterInterface::class =>
+                        \Magento\Framework\Interception\PluginListGenerator::class
                 ],
             ]
         );

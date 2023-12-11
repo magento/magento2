@@ -19,29 +19,39 @@ class ValidationMessage
 
     /**
      * @var \Magento\Framework\Locale\CurrencyInterface
+     * @deprecated 101.0.3 since 101.0.0
+     * @see no alternatives
      */
     private $currency;
+
+    /**
+     * @var \Magento\Framework\Pricing\Helper\Data
+     */
+    private $priceHelper;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Locale\CurrencyInterface $currency
+     * @param \Magento\Framework\Pricing\Helper\Data $priceHelper
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Locale\CurrencyInterface $currency
+        \Magento\Framework\Locale\CurrencyInterface $currency,
+        \Magento\Framework\Pricing\Helper\Data $priceHelper = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
         $this->currency = $currency;
+        $this->priceHelper = $priceHelper ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Pricing\Helper\Data::class);
     }
 
     /**
      * Get validation message.
      *
      * @return \Magento\Framework\Phrase
-     * @throws \Zend_Currency_Exception
      */
     public function getMessage()
     {
@@ -50,13 +60,11 @@ class ValidationMessage
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if (!$message) {
-            $currencyCode = $this->storeManager->getStore()->getCurrentCurrencyCode();
-            $minimumAmount = $this->currency->getCurrency($currencyCode)->toCurrency(
-                $this->scopeConfig->getValue(
-                    'sales/minimum_order/amount',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                )
-            );
+            $minimumAmount =  $this->priceHelper->currency($this->scopeConfig->getValue(
+                'sales/minimum_order/amount',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ), true, false);
+
             $message = __('Minimum order amount is %1', $minimumAmount);
         } else {
             //Added in order to address the issue: https://github.com/magento/magento2/issues/8287

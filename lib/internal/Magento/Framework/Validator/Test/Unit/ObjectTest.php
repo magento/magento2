@@ -3,28 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Validator\Test\Unit;
 
-class ObjectTest extends \PHPUnit\Framework\TestCase
+use Laminas\Validator\Callback;
+use Laminas\Validator\Identical;
+use Magento\Framework\Validator\StringLength;
+use Magento\Framework\Validator\DataObject;
+use PHPUnit\Framework\TestCase;
+
+class ObjectTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Validator\DataObject
+     * @var DataObject
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_model = new \Magento\Framework\Validator\DataObject();
+        $this->_model = new DataObject();
 
-        $fieldOneExactValue = new \Zend_Validate_Identical('field_one_value');
+        $fieldOneExactValue = new Identical('field_one_value');
         $fieldOneExactValue->setMessage("'field_one' does not match expected value");
-        $fieldOneLength = new \Zend_Validate_StringLength(['min' => 10]);
+        $fieldOneLength = new StringLength(['min' => 10]);
 
-        $fieldTwoExactValue = new \Zend_Validate_Identical('field_two_value');
+        $fieldTwoExactValue = new Identical('field_two_value');
         $fieldTwoExactValue->setMessage("'field_two' does not match expected value");
-        $fieldTwoLength = new \Zend_Validate_StringLength(['min' => 5]);
+        $fieldTwoLength = new StringLength(['min' => 5]);
 
-        $entityValidity = new \Zend_Validate_Callback([$this, 'isEntityValid']);
+        $entityValidity = new Callback([$this, 'isEntityValid']);
         $entityValidity->setMessage('Entity is not valid.');
 
         $this->_model->addRule(
@@ -44,7 +52,7 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_model = null;
     }
@@ -62,14 +70,14 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
 
     public function testAddRule()
     {
-        $actualResult = $this->_model->addRule(new \Zend_Validate_Identical('field_one_value'), 'field_one');
+        $actualResult = $this->_model->addRule(new Identical('field_one_value'), 'field_one');
         $this->assertSame($this->_model, $actualResult, 'Methods chaining is broken.');
     }
 
     public function testGetMessages()
     {
         $messages = $this->_model->getMessages();
-        $this->assertInternalType('array', $messages);
+        $this->assertIsArray($messages);
     }
 
     /**
@@ -92,6 +100,9 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function validateDataProvider()
     {
         return [

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminOrderFormCustomOptionsSection">
+        <element name="quantity" type="input" selector="//input[@id='product_composite_configure_input_qty']"/>
+        <element name="file" type="file" selector="//input[@type='file'][contains(@class, 'product-custom-option')]" />
+        <element name="buttonOk" type="button" selector="//button[contains(@class, 'action-primary')][@data-role='action']" timeout="30"/>
+        <element name="linkChange" type="text" selector="//div[contains(@class, 'entry-edit')]//a[contains(text(),'Change')]"/>
+    </section>
+</sections>

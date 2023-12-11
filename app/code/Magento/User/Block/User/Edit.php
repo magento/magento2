@@ -10,14 +10,11 @@ namespace Magento\User\Block\User;
  * User edit page
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -87,7 +84,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * - click "Delete User" at top left part of the page;
      *
      * @return \Magento\Framework\Phrase
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getDeleteMessage()
     {
@@ -100,7 +97,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Magento\User\Controller\Adminhtml\User\Delete
      *
      * @return string
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getDeleteUrl()
     {
@@ -113,7 +110,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * to create a new user account OR to edit the previously created user account
      *
      * @return int
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getObjectId()
     {
@@ -121,6 +118,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
+     * Get text to be used in the header
+     *
      * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()

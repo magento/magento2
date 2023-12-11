@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminExpandProductAttributesTabActionGroup">
+        <annotations>
+            <description>Expands the 'Attributes' tab on the Admin Product page.</description>
+        </annotations>
+
+        <!--Scroll to element to avoid test order flakiness-->
+        <waitForElement selector="{{AdminProductAttributeSection.attributeSectionHeader}}" stepKey="waitForSection"/>
+        <executeJS function="return document.evaluate(&quot;{{AdminProductAttributeSection.attributeSectionHeader}}&quot;, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.getBoundingClientRect().y" stepKey="sectionPosition"/>
+        <executeJS function="return document.querySelector(&quot;{{AdminHeaderSection.pageMainActions}}&quot;).getBoundingClientRect().height" stepKey="floatingHeaderHeight"/>
+        <executeJS function="window.scrollTo({top: {$sectionPosition}-{$floatingHeaderHeight}})" stepKey="scrollToAttributesTab"/>
+        <conditionalClick selector="{{AdminProductAttributeSection.attributeSectionHeader}}" dependentSelector="{{AdminProductAttributeSection.attributeSection}}" visible="false" stepKey="expandAttributesTab"/>
+    </actionGroup>
+</actionGroups>

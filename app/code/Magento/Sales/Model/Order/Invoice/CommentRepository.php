@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Order\Invoice;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Sales\Api\Data\InvoiceCommentInterface;
@@ -14,7 +15,13 @@ use Magento\Sales\Api\Data\InvoiceCommentInterfaceFactory;
 use Magento\Sales\Api\Data\InvoiceCommentSearchResultInterfaceFactory;
 use Magento\Sales\Api\InvoiceCommentRepositoryInterface;
 use Magento\Sales\Model\Spi\InvoiceCommentResourceInterface;
+use Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender;
+use Magento\Sales\Api\InvoiceRepositoryInterface;
+use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CommentRepository implements InvoiceCommentRepositoryInterface
 {
     /**
@@ -38,21 +45,47 @@ class CommentRepository implements InvoiceCommentRepositoryInterface
     private $collectionProcessor;
 
     /**
+     * @var InvoiceCommentSender
+     */
+    private $invoiceCommentSender;
+
+    /**
+     * @var InvoiceRepositoryInterface
+     */
+    private $invoiceRepository;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param InvoiceCommentResourceInterface $commentResource
      * @param InvoiceCommentInterfaceFactory $commentFactory
      * @param InvoiceCommentSearchResultInterfaceFactory $searchResultFactory
      * @param CollectionProcessorInterface $collectionProcessor
+     * @param InvoiceCommentSender|null $invoiceCommentSender
+     * @param InvoiceRepositoryInterface|null $invoiceRepository
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         InvoiceCommentResourceInterface $commentResource,
         InvoiceCommentInterfaceFactory $commentFactory,
         InvoiceCommentSearchResultInterfaceFactory $searchResultFactory,
-        CollectionProcessorInterface $collectionProcessor
+        CollectionProcessorInterface $collectionProcessor,
+        InvoiceCommentSender $invoiceCommentSender = null,
+        InvoiceRepositoryInterface $invoiceRepository = null,
+        LoggerInterface $logger = null
     ) {
         $this->commentResource = $commentResource;
         $this->commentFactory = $commentFactory;
         $this->searchResultFactory = $searchResultFactory;
         $this->collectionProcessor = $collectionProcessor;
+        $this->invoiceCommentSender = $invoiceCommentSender
+            ?:ObjectManager::getInstance()->get(InvoiceCommentSender::class);
+        $this->invoiceRepository = $invoiceRepository
+            ?:ObjectManager::getInstance()->get(InvoiceRepositoryInterface::class);
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -99,6 +132,14 @@ class CommentRepository implements InvoiceCommentRepositoryInterface
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__('Could not save the invoice comment.'), $e);
         }
+
+        try {
+            $invoice = $this->invoiceRepository->get($entity->getParentId());
+            $this->invoiceCommentSender->send($invoice, $entity->getIsCustomerNotified(), $entity->getComment());
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
+        }
+
         return $entity;
     }
 }

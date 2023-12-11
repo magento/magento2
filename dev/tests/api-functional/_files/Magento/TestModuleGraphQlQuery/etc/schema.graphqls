@@ -1,0 +1,44 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Query {
+    testItem(id: Int!) : TestItemOutput @resolver(class: "Magento\\TestModuleGraphQlQuery\\Model\\Resolver\\Item")
+    testUnion: TestUnion @resolver(class: "Magento\\TestModuleGraphQlQuery\\Model\\Resolver\\TestUnion")
+    testQueryWithNestedMandatoryInputArguments(input: TestInputQueryWithMandatoryArgumentsInput): TestItemOutput
+    testQueryWithTopLevelMandatoryInputArguments(topLevelArgument: String!): TestItemOutput
+}
+
+type Mutation {
+    testItem(id: Int!) : MutationItemOutput @resolver(class: "Magento\\TestModuleGraphQlQuery\\Model\\Resolver\\Item")
+}
+
+type TestItemOutput {
+    item_id: Int
+    name: String
+}
+
+type MutationItemOutput {
+    item_id: Int
+    name: String
+}
+
+union TestUnion @doc(description: "some kind of union") @typeResolver(class: "Magento\\TestModuleGraphQlQuery\\Model\\Resolver\\UnionTypeResolver")  =
+    TypeCustom1 | TypeCustom2
+
+type TypeCustom1 {
+    custom_name1: String
+}
+
+type TypeCustom2 {
+    custom_name2: String
+}
+
+input TestInputQueryWithMandatoryArgumentsInput {
+    query_id: String!
+    query_items: [QueryWithMandatoryArgumentsInput!]!
+}
+
+input QueryWithMandatoryArgumentsInput {
+    query_item_id: Int!
+    quantity: Float
+}

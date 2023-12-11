@@ -9,7 +9,9 @@ namespace Magento\Framework\Simplexml;
  * Base class for simplexml based configurations
  *
  * @api
+ * @since 100.0.2
  */
+#[\AllowDynamicProperties]
 class Config
 {
     /**
@@ -30,6 +32,7 @@ class Config
      * Xpath describing nodes in configuration that need to be extended
      *
      * @example <allResources extends="/config/modules//resource"/>
+     * @var string
      */
     protected $_xpathExtends = "//*[@extends]";
 

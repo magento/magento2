@@ -74,8 +74,8 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
         UrlRewriteBunchReplacer $urlRewriteBunchReplacer,
         DatabaseMapPool $databaseMapPool,
         $dataUrlRewriteClassNames = [
-        DataCategoryUrlRewriteDatabaseMap::class,
-        DataProductUrlRewriteDatabaseMap::class
+            DataCategoryUrlRewriteDatabaseMap::class,
+            DataProductUrlRewriteDatabaseMap::class
         ]
     ) {
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
@@ -88,6 +88,8 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
     }
 
     /**
+     * Execute observer functional
+     *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
@@ -101,12 +103,22 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
                 ScopeInterface::SCOPE_STORE,
                 $category->getStoreId()
             );
+            $catRewritesEnabled = $this->isCategoryRewritesEnabled();
+
             $category->setData('save_rewrites_history', $saveRewritesHistory);
             $categoryUrlRewriteResult = $this->categoryUrlRewriteGenerator->generate($category, true);
+
+            if ($catRewritesEnabled) {
+                $productUrlRewriteResult = $this->urlRewriteHandler->generateProductUrlRewrites($category);
+            }
+
             $this->urlRewriteHandler->deleteCategoryRewritesForChildren($category);
             $this->urlRewriteBunchReplacer->doBunchReplace($categoryUrlRewriteResult);
-            $productUrlRewriteResult = $this->urlRewriteHandler->generateProductUrlRewrites($category);
-            $this->urlRewriteBunchReplacer->doBunchReplace($productUrlRewriteResult);
+
+            if ($catRewritesEnabled) {
+                $this->urlRewriteBunchReplacer->doBunchReplace($productUrlRewriteResult);
+            }
+
             //frees memory for maps that are self-initialized in multiple classes that were called by the generators
             $this->resetUrlRewritesDataMaps($category);
         }
@@ -123,5 +135,15 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
         foreach ($this->dataUrlRewriteClassNames as $className) {
             $this->databaseMapPool->resetMap($className, $category->getEntityId());
         }
+    }
+
+    /**
+     * Check config value of generate_category_product_rewrites
+     *
+     * @return bool
+     */
+    private function isCategoryRewritesEnabled()
+    {
+        return (bool)$this->scopeConfig->getValue('catalog/seo/generate_category_product_rewrites');
     }
 }

@@ -7,6 +7,13 @@
  */
 namespace Magento\Framework\Session;
 
+use Magento\Framework\App\State;
+
+/**
+ * Resolves SID by processing request parameters.
+ *
+ * @deprecated 102.0.2 SIDs in URLs are no longer used
+ */
 class SidResolver implements SidResolverInterface
 {
     /**
@@ -21,11 +28,13 @@ class SidResolver implements SidResolverInterface
 
     /**
      * @var \Magento\Framework\UrlInterface
+     * @deprecated 102.0.5 Not used anymore.
      */
     protected $urlBuilder;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
+     * @deprecated 102.0.5 Not used anymore.
      */
     protected $request;
 
@@ -44,10 +53,10 @@ class SidResolver implements SidResolverInterface
     /**
      * Use session in URL flag
      *
-     * @var bool
+     * @var bool|null
      * @see \Magento\Framework\UrlInterface
      */
-    protected $_useSessionInUrl = true;
+    protected $_useSessionInUrl = false;
 
     /**
      * @var string
@@ -60,13 +69,16 @@ class SidResolver implements SidResolverInterface
      * @param \Magento\Framework\App\RequestInterface $request
      * @param string $scopeType
      * @param array $sidNameMap
+     * @param State|null $appState
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\App\RequestInterface $request,
         $scopeType,
-        array $sidNameMap = []
+        array $sidNameMap = [],
+        State $appState = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->urlBuilder = $urlBuilder;
@@ -76,34 +88,21 @@ class SidResolver implements SidResolverInterface
     }
 
     /**
-     * @param SessionManagerInterface $session
-     * @return string
+     * @inheritDoc
      */
     public function getSid(SessionManagerInterface $session)
     {
-        $sidKey = null;
-        $useSidOnFrontend = $this->scopeConfig->getValue(
-            self::XML_PATH_USE_FRONTEND_SID,
-            $this->_scopeType
-        );
-        if ($useSidOnFrontend && $this->request->getQuery(
-            $this->getSessionIdQueryParam($session),
-            false
-        ) && $this->urlBuilder->isOwnOriginUrl()
-        ) {
-            $sidKey = $this->request->getQuery($this->getSessionIdQueryParam($session));
-        }
-        return $sidKey;
+        trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
+
+        return null;
     }
 
     /**
-     * Get session id query param
-     *
-     * @param SessionManagerInterface $session
-     * @return string
+     * @inheritDoc
      */
     public function getSessionIdQueryParam(SessionManagerInterface $session)
     {
+        trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
         $sessionName = $session->getName();
         if ($sessionName && isset($this->sidNameMap[$sessionName])) {
             return $this->sidNameMap[$sessionName];
@@ -112,48 +111,42 @@ class SidResolver implements SidResolverInterface
     }
 
     /**
-     * Set use session var instead of SID for URL
-     *
-     * @param bool $var
-     * @return $this
+     * @inheritDoc
      */
     public function setUseSessionVar($var)
     {
-        $this->_useSessionVar = (bool)$var;
+        trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
+
         return $this;
     }
 
     /**
-     * Retrieve use flag session var instead of SID for URL
-     *
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @inheritDoc
      */
     public function getUseSessionVar()
     {
-        return $this->_useSessionVar;
+        trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
+
+        return false;
     }
 
     /**
-     * Set Use session in URL flag
-     *
-     * @param bool $flag
-     * @return $this
+     * @inheritDoc
      */
     public function setUseSessionInUrl($flag = true)
     {
-        $this->_useSessionInUrl = (bool)$flag;
+        trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
+
         return $this;
     }
 
     /**
-     * Retrieve use session in URL flag
-     *
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @inheritDoc
      */
     public function getUseSessionInUrl()
     {
-        return $this->_useSessionInUrl;
+        trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
+
+        return false;
     }
 }

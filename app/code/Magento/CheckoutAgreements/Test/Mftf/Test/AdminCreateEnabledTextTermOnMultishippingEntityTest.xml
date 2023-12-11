@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateEnabledTextTermOnMultishippingEntityTest">
+        <annotations>
+            <features value="CheckoutAgreements"/>
+            <stories value="Checkout agreements"/>
+            <title value="Create enabled text checkout multishipping agreement"/>
+            <description value="Admin should be able to create enabled text checkout multishipping agreement"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14670"/>
+            <group value="checkoutAgreements"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!--Enable flat rate shipping-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set checkout/options/enable_agreements 1" stepKey="setEnableTermsOnCheckout"/>
+
+            <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createdCustomer"/>
+            <createData entity="SimpleTwo" stepKey="createdProduct1"/>
+            <createData entity="SimpleTwo" stepKey="createdProduct2"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+        </before>
+        <after>
+            <!-- Disable shipping method for customer with default address -->
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
+            <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
+
+            <deleteData createDataKey="createdCustomer" stepKey="deletedCustomer"/>
+            <deleteData createDataKey="createdProduct1" stepKey="deletedProduct1"/>
+            <deleteData createDataKey="createdProduct2" stepKey="deletedProduct2"/>
+
+            <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
+            <actionGroup ref="AdminDeleteAllTermConditionsActionGroup" stepKey="deleteAllTerms"/>
+            <comment userInput="BIC workaround" stepKey="openTermToDelete"/>
+            <comment userInput="BIC workaround" stepKey="deleteOpenedTerm"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminTermsConditionsOpenNewTermPageActionGroup" stepKey="openNewTerm"/>
+        <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">
+            <argument name="term" value="activeTextTerm"/>
+        </actionGroup>
+        <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveNewTerm"/>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createdCustomer$$" />
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProduct1ToTheCart">
+            <argument name="product" value="$$createdProduct1$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProduct2ToTheCart">
+            <argument name="product" value="$$createdProduct2$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontTermRequireMessageInMultishippingCheckoutActionGroup" stepKey="assertTermInCheckout">
+            <argument name="termCheckboxText" value="{{activeTextTerm.checkboxText}}"/>
+        </actionGroup>
+    </test>
+</tests>

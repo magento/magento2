@@ -11,7 +11,7 @@
             <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.import.history.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">importHistoryGrid</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\ImportExport\Model\ResourceModel\History\Collection</argument>
+                    <argument name="dataSource" xsi:type="object" shared="false">Magento\ImportExport\Model\ResourceModel\History\Collection</argument>
                     <argument name="default_sort" xsi:type="string">history_id</argument>
                     <argument name="default_dir" xsi:type="string">desc</argument>
                 </arguments>

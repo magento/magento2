@@ -3,10 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Interception\Test\Unit\Config;
 
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Config\ScopeListInterface;
+use Magento\Framework\Interception\Config\CacheManager;
+use Magento\Framework\Interception\Config\Config;
+use Magento\Framework\Interception\ObjectManager\ConfigInterface;
+use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item;
+use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item\Enhanced;
+use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer;
+use Magento\Framework\ObjectManager\Config\Reader\Dom;
+use Magento\Framework\ObjectManager\DefinitionInterface;
+use Magento\Framework\ObjectManager\Relations\Runtime;
+use Magento\Framework\ObjectManager\RelationsInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/../Custom/Module/Model/Item.php';
 require_once __DIR__ . '/../Custom/Module/Model/Item/Enhanced.php';
@@ -19,58 +33,54 @@ require_once __DIR__ . '/../Custom/Module/Model/ItemPlugin/Advanced.php';
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $configScopeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $readerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $cacheMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $omConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $definitionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $relationsMock;
 
-    /** @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $serializerMock;
+    /**
+     * @var CacheManager|MockObject
+     */
+    private $cacheManagerMock;
 
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /** @var ObjectManager */
     private $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->readerMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Reader\Dom::class);
-        $this->configScopeMock = $this->createMock(\Magento\Framework\Config\ScopeListInterface::class);
-        $this->cacheMock = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
+        $this->readerMock = $this->createMock(Dom::class);
+        $this->configScopeMock = $this->getMockForAbstractClass(ScopeListInterface::class);
         $this->omConfigMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Interception\ObjectManager\ConfigInterface::class
+            ConfigInterface::class
         );
-        $this->definitionMock = $this->createMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
+        $this->definitionMock = $this->getMockForAbstractClass(DefinitionInterface::class);
         $this->relationsMock = $this->getMockForAbstractClass(
-            \Magento\Framework\ObjectManager\RelationsInterface::class
+            RelationsInterface::class
         );
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
-        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->cacheManagerMock = $this->createMock(CacheManager::class);
+        $this->objectManagerHelper = new ObjectManager($this);
     }
 
     /**
@@ -83,29 +93,29 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $readerMap = include __DIR__ . '/../_files/reader_mock_map.php';
         $this->readerMock->expects($this->any())
             ->method('read')
-            ->will($this->returnValueMap($readerMap));
+            ->willReturnMap($readerMap);
         $this->configScopeMock->expects($this->any())
             ->method('getAllScopes')
-            ->will($this->returnValue(['global', 'backend', 'frontend']));
+            ->willReturn(['global', 'backend', 'frontend']);
         // turn cache off
-        $this->cacheMock->expects($this->any())
+        $this->cacheManagerMock->expects($this->any())
             ->method('load')
-            ->will($this->returnValue(false));
+            ->willReturn(null);
         $this->omConfigMock->expects($this->any())
             ->method('getOriginalInstanceType')
-            ->will($this->returnValueMap(
+            ->willReturnMap(
                 [
                     [
-                        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer::class,
-                        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer::class,
+                        ItemContainer::class,
+                        ItemContainer::class,
                     ],
                     [
-                        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class,
-                        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class,
+                        Item::class,
+                        Item::class,
                     ],
                     [
-                        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item\Enhanced::class,
-                        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item\Enhanced::class,
+                        Enhanced::class,
+                        Enhanced::class,
                     ],
                     [
                         \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer\Enhanced::class,
@@ -116,43 +126,37 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                         \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer\Proxy::class,
                     ],
                     [
-                        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemProxy::class,
-                        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemProxy::class,
+                        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item\Proxy::class,
+                        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item\Proxy::class,
                     ],
                     [
-                        \Magento\Framework\Interception\Custom\Module\Model\Backslash\ItemProxy::class,
-                        \Magento\Framework\Interception\Custom\Module\Model\Backslash\ItemProxy::class
+                        \Magento\Framework\Interception\Custom\Module\Model\Backslash\Item\Proxy::class,
+                        \Magento\Framework\Interception\Custom\Module\Model\Backslash\Item\Proxy::class
                     ],
                     [
                         'virtual_custom_item',
-                        \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class
+                        Item::class
                     ],
                 ]
-            ));
-        $this->definitionMock->expects($this->any())->method('getClasses')->will($this->returnValue(
+            );
+        $this->definitionMock->expects($this->any())->method('getClasses')->willReturn(
             [
-                \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemProxy::class,
-                \Magento\Framework\Interception\Custom\Module\Model\Backslash\ItemProxy::class
+                \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item\Proxy::class,
+                \Magento\Framework\Interception\Custom\Module\Model\Backslash\Item\Proxy::class
             ]
-        ));
-        $this->relationsMock->expects($this->any())->method('has')->will($this->returnValue($expectedResult));
-        $this->relationsMock->expects($this->any())->method('getParents')->will($this->returnValue($entityParents));
-
-        $this->serializerMock->expects($this->once())
-            ->method('serialize');
-
-        $this->serializerMock->expects($this->never())->method('unserialize');
+        );
+        $this->relationsMock->expects($this->any())->method('has')->willReturn($expectedResult);
+        $this->relationsMock->expects($this->any())->method('getParents')->willReturn($entityParents);
 
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Framework\Interception\Config\Config::class,
+            Config::class,
             [
                 'reader' => $this->readerMock,
                 'scopeList' => $this->configScopeMock,
-                'cache' => $this->cacheMock,
+                'cacheManager' => $this->cacheManagerMock,
                 'relations' => $this->relationsMock,
                 'omConfig' => $this->omConfigMock,
                 'classDefinitions' => $this->definitionMock,
-                'serializer' => $this->serializerMock
             ]
         );
 
@@ -168,75 +172,70 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $cacheId = 'interception';
         $interceptionData = [
-            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer::class => true,
-            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class => true,
-            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item\Enhanced::class => true,
+            ItemContainer::class => true,
+            Item::class => true,
+            Enhanced::class => true,
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer\Enhanced::class => true,
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer\Proxy::class => true,
-            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemProxy::class => false,
+            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item\Proxy::class => false,
             'virtual_custom_item' => true
         ];
         $this->readerMock->expects($this->never())->method('read');
-        $this->cacheMock->expects($this->never())->method('save');
-        $serializedValue = 'serializedData';
-        $this->cacheMock->expects($this->any())
+        $this->cacheManagerMock->expects($this->never())->method('save');
+        $this->cacheManagerMock->expects($this->any())
             ->method('load')
             ->with($cacheId)
-            ->will($this->returnValue($serializedValue));
-
-        $this->serializerMock->expects($this->never())->method('serialize');
-        $this->serializerMock->expects($this->once())
-            ->method('unserialize')
-            ->with($serializedValue)
             ->willReturn($interceptionData);
 
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Framework\Interception\Config\Config::class,
+            Config::class,
             [
                 'reader' => $this->readerMock,
                 'scopeList' => $this->configScopeMock,
-                'cache' => $this->cacheMock,
+                'cacheManager' => $this->cacheManagerMock,
                 'relations' => $this->objectManagerHelper->getObject(
-                    \Magento\Framework\ObjectManager\Relations\Runtime::class
+                    Runtime::class
                 ),
                 'omConfig' => $this->omConfigMock,
                 'classDefinitions' => $this->definitionMock,
                 'cacheId' => $cacheId,
-                'serializer' => $this->serializerMock
             ]
         );
 
         $this->assertEquals($expectedResult, $model->hasPlugins($type));
     }
 
+    /**
+     * @return array
+     */
     public function hasPluginsDataProvider()
     {
         return [
             // item container has plugins only in the backend scope
             [
-                true, \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer::class,
+                true, ItemContainer::class,
                 []
             ],
             [
-                true, \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class,
+                true, Item::class,
                 []
             ],
             [
-                true, \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item\Enhanced::class,
+                true, Enhanced::class,
                 []
             ],
             [
                 // the following model has only inherited plugins
                 true, \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer\Proxy::class,
-                [\Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer::class]
+                [ItemContainer::class]
             ],
             [
                 // the following model has only inherited plugins
                 true, \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer\Proxy::class,
-                [\Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer::class]
+                [ItemContainer::class]
             ],
             [
-                false, \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemProxy::class,
+                false, \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item\Proxy::class,
                 []
             ],
             [

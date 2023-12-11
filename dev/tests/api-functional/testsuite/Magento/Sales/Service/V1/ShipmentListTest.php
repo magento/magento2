@@ -23,7 +23,7 @@ class ShipmentListTest extends WebapiAbstract
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -67,7 +67,7 @@ class ShipmentListTest extends WebapiAbstract
         $searchCriteriaBuilder->addFilters([$filter1, $filter2]);
         $searchCriteriaBuilder->addFilters([$filter3]);
         $searchCriteriaBuilder->addSortOrder($sortOrder);
-
+        $searchCriteriaBuilder->setPageSize(20);
         $searchData = $searchCriteriaBuilder->create()->__toArray();
 
         $requestData = ['searchCriteria' => $searchData];
@@ -91,5 +91,7 @@ class ShipmentListTest extends WebapiAbstract
         $this->assertEquals($searchData, $result['search_criteria']);
         $this->assertEquals('100000002', $result['items'][0]['increment_id']);
         $this->assertEquals('100000003', $result['items'][1]['increment_id']);
+        $this->assertEquals(base64_encode('shipping_label_100000002'), $result['items'][0]['shipping_label']);
+        $this->assertEquals(base64_encode('shipping_label_100000003'), $result['items'][1]['shipping_label']);
     }
 }

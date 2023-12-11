@@ -40,6 +40,14 @@
         &:extend(.abs-status all);
     }
 
+    .table-wrapper.table-returns {
+        .returns-details {
+            &.hidden {
+                display: none;
+            }
+        }
+    }
+
     .block-returns-comments {
         .returns-comments {
             dt,
@@ -182,6 +190,20 @@
             .actions-track {
                 float: right;
                 margin-top: 12px;
+            }
+        }
+    }
+}
+
+#registrant-options {
+    .item {
+        .control {
+            table {
+                .col.qty {
+                    .input-qty {
+                        display: none;
+                    }
+                }
             }
         }
     }

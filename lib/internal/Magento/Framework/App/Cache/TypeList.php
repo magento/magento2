@@ -8,6 +8,9 @@ namespace Magento\Framework\App\Cache;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Application cache type list
+ */
 class TypeList implements TypeListInterface
 {
     const INVALIDATED_TYPES = 'core_cache_invalidate';
@@ -68,9 +71,7 @@ class TypeList implements TypeListInterface
     protected function _getTypeInstance($type)
     {
         $config = $this->_config->getType($type);
-        if (!isset($config['instance'])) {
-            return null;
-        }
+
         return $this->_factory->get($config['instance']);
     }
 
@@ -132,7 +133,7 @@ class TypeList implements TypeListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTypeLabels()
     {

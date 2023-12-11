@@ -11,6 +11,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
  * Interface UiComponentInterface
  *
  * @api
+ * @since 100.0.2
  */
 interface UiComponentInterface extends BlockInterface
 {
@@ -52,6 +53,8 @@ interface UiComponentInterface extends BlockInterface
     public function addComponent($name, UiComponentInterface $component);
 
     /**
+     * Get component
+     *
      * @param string $name
      * @return UiComponentInterface
      */

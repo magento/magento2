@@ -7,7 +7,9 @@
 
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
-class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
+class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue implements HttpPostActionInterface
 {
     /**
      * Save Newsletter queue
@@ -86,7 +88,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
 
             $this->_redirect('*/*');
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $id = $this->getRequest()->getParam('id');
             if ($id) {
                 $this->_redirect('*/*/edit', ['id' => $id]);

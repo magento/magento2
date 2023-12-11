@@ -6,11 +6,24 @@
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Helper\Product\Flat\Indexer;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\StoreManagerInterface;
+use Zend_Db;
 
 /**
- * Class FlatTableBuilder
+ * Class for building flat index
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FlatTableBuilder
@@ -23,25 +36,25 @@ class FlatTableBuilder
     /**
      * Path to maximum available amount of indexes for flat indexer
      */
-    const XML_NODE_MAX_INDEX_COUNT = 'catalog/product/flat/max_index_count';
+    public const XML_NODE_MAX_INDEX_COUNT = 'catalog/product/flat/max_index_count';
 
     /**
-     * @var \Magento\Catalog\Helper\Product\Flat\Indexer
+     * @var Indexer
      */
     protected $_productIndexerHelper;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @var AdapterInterface
      */
     protected $_connection;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @var ScopeConfigInterface $config
      */
     protected $_config;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -51,23 +64,23 @@ class FlatTableBuilder
     protected $_tableData;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var ResourceConnection
      */
     protected $resource;
 
     /**
-     * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper
+     * @param Indexer $productIndexerHelper
      * @param ResourceConnection $resource
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param ScopeConfigInterface $config
+     * @param StoreManagerInterface $storeManager
      * @param TableDataInterface $tableData
      */
     public function __construct(
-        \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper,
-        \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Indexer\Product\Flat\TableDataInterface $tableData
+        Indexer $productIndexerHelper,
+        ResourceConnection $resource,
+        ScopeConfigInterface $config,
+        StoreManagerInterface $storeManager,
+        TableDataInterface $tableData
     ) {
         $this->_productIndexerHelper = $productIndexerHelper;
         $this->resource = $resource;
@@ -113,7 +126,7 @@ class FlatTableBuilder
      *
      * @param int|string $storeId
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -127,7 +140,7 @@ class FlatTableBuilder
             self::XML_NODE_MAX_INDEX_COUNT
         );
         if ($maxIndex && count($indexesNeed) > $maxIndex) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __(
                     'The Flat Catalog module has a limit of %2$d filterable and/or sortable attributes.'
                     . 'Currently there are %1$d of them.'
@@ -140,14 +153,14 @@ class FlatTableBuilder
 
         $indexKeys = [];
         $indexProps = array_values($indexesNeed);
-        $upperPrimaryKey = strtoupper(\Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_PRIMARY);
+        $upperPrimaryKey = strtoupper(AdapterInterface::INDEX_TYPE_PRIMARY);
         foreach ($indexProps as $i => $indexProp) {
             $indexName = $this->_connection->getIndexName(
                 $this->_getTemporaryTableName($this->_productIndexerHelper->getFlatTableName($storeId)),
                 $indexProp['fields'],
                 $indexProp['type']
             );
-            $indexProp['type'] = strtoupper($indexProp['type']);
+            $indexProp['type'] = strtoupper($indexProp['type'] ?? '');
             if ($indexProp['type'] == $upperPrimaryKey) {
                 $indexKey = $upperPrimaryKey;
             } else {
@@ -163,7 +176,7 @@ class FlatTableBuilder
         }
         $indexesNeed = array_combine($indexKeys, $indexProps);
 
-        /** @var $table \Magento\Framework\DB\Ddl\Table */
+        /** @var $table Table */
         $table = $this->_connection->newTable(
             $this->_getTemporaryTableName($this->_productIndexerHelper->getFlatTableName($storeId))
         );
@@ -210,6 +223,8 @@ class FlatTableBuilder
      * @param int|string $storeId
      * @param string $valueFieldSuffix
      * @return void
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     protected function _fillTemporaryFlatTable(array $tables, $storeId, $valueFieldSuffix)
     {
@@ -225,14 +240,14 @@ class FlatTableBuilder
         $websiteId = (int)$this->_storeManager->getStore($storeId)->getWebsiteId();
 
         unset($tables[$entityTableName]);
-
-        $allColumns = array_values(
+        $allColumns = [];
+        $allColumns[] = array_values(
             array_unique(
                 array_merge(['entity_id', $linkField, 'type_id', 'attribute_set_id'], $columnsList)
             )
         );
 
-        /* @var $status \Magento\Eav\Model\Entity\Attribute */
+        /* @var $status Attribute */
         $status = $this->_productIndexerHelper->getAttribute('status');
         $statusTable = $this->_getTemporaryTableName($status->getBackendTable());
         $statusConditions = [
@@ -247,7 +262,7 @@ class FlatTableBuilder
 
         $select->from(
             ['et' => $entityTemporaryTableName],
-            $allColumns
+            array_merge([], ...$allColumns)
         )->joinInner(
             ['e' => $this->resource->getTableName('catalog_product_entity')],
             'e.entity_id = et.entity_id',
@@ -261,7 +276,7 @@ class FlatTableBuilder
             implode(' AND ', $statusConditions),
             []
         )->where(
-            $statusExpression . ' = ' . \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+            $statusExpression . ' = ' . Status::STATUS_ENABLED
         );
 
         foreach ($tables as $tableName => $columns) {
@@ -275,7 +290,7 @@ class FlatTableBuilder
                 sprintf('e.%1$s = %2$s.%1$s', $linkField, $temporaryTableName),
                 $columnsNames
             );
-            $allColumns = array_merge($allColumns, $columnsNames);
+            $allColumns[] = $columnsNames;
 
             foreach ($columnsNames as $name) {
                 $columnValueName = $name . $valueFieldSuffix;
@@ -289,10 +304,10 @@ class FlatTableBuilder
                     sprintf('e.%1$s = %2$s.%1$s', $linkField, $temporaryValueTableName),
                     $columnValueNames
                 );
-                $allColumns = array_merge($allColumns, $columnValueNames);
+                $allColumns[] = $columnValueNames;
             }
         }
-        $sql = $select->insertFromSelect($temporaryFlatTableName, $allColumns, false);
+        $sql = $select->insertFromSelect($temporaryFlatTableName, array_merge([], ...$allColumns), false);
         $this->_connection->query($sql);
     }
 
@@ -318,7 +333,7 @@ class FlatTableBuilder
         $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         foreach ($tables as $tableName => $columns) {
             foreach ($columns as $attribute) {
-                /* @var $attribute \Magento\Eav\Model\Entity\Attribute */
+                /* @var $attribute Attribute */
                 $attributeCode = $attribute->getAttributeCode();
                 if ($attribute->getBackend()->getType() != 'static') {
                     $joinCondition = sprintf('t.%s = e.%s', $linkField, $linkField) .
@@ -327,7 +342,7 @@ class FlatTableBuilder
                         ' AND t.store_id = ' .
                         $storeId .
                         ' AND t.value IS NOT NULL';
-                    /** @var $select \Magento\Framework\DB\Select */
+                    /** @var $select Select */
                     $select = $this->_connection->select()
                         ->joinInner(
                             ['e' => $this->resource->getTableName('catalog_product_entity')],
@@ -339,21 +354,38 @@ class FlatTableBuilder
                             [$attributeCode => 't.value']
                         );
                     if (!empty($changedIds)) {
-                        $select->where($this->_connection->quoteInto('et.entity_id IN (?)', $changedIds));
+                        $select->where(
+                            $this->_connection->quoteInto('et.entity_id IN (?)', $changedIds, Zend_Db::INT_TYPE)
+                        );
                     }
                     $sql = $select->crossUpdateFromSelect(['et' => $temporaryFlatTableName]);
                     $this->_connection->query($sql);
                 }
 
                 //Update not simple attributes (eg. dropdown)
-                if (isset($flatColumns[$attributeCode . $valueFieldSuffix])) {
-                    $select = $this->_connection->select()->joinInner(
-                        ['t' => $this->_productIndexerHelper->getTable('eav_attribute_option_value')],
-                        't.option_id = et.' . $attributeCode . ' AND t.store_id=' . $storeId,
-                        [$attributeCode . $valueFieldSuffix => 't.value']
-                    );
+                $columnName = $attributeCode . $valueFieldSuffix;
+                if (isset($flatColumns[$columnName])) {
+                    $columnValue = $this->_connection->getIfNullSql('ts.value', 't0.value');
+                    $select = $this->_connection->select();
+                    $select->joinLeft(
+                        ['t0' => $this->_productIndexerHelper->getTable('eav_attribute_option_value')],
+                        't0.option_id = et.' . $attributeCode . ' AND t0.store_id = 0',
+                        []
+                    )->joinLeft(
+                        ['ts' => $this->_productIndexerHelper->getTable('eav_attribute_option_value')],
+                        'ts.option_id = et.' . $attributeCode . ' AND ts.store_id = ' . $storeId,
+                        []
+                    )->columns(
+                        [$columnName => $columnValue]
+                    )->where($columnValue . ' IS NOT NULL');
                     if (!empty($changedIds)) {
-                        $select->where($this->_connection->quoteInto('et.entity_id IN (?)', $changedIds));
+                        $select->where(
+                            $this->_connection->quoteInto(
+                                'et.entity_id IN (?)',
+                                $changedIds,
+                                Zend_Db::INT_TYPE
+                            )
+                        );
                     }
                     $sql = $select->crossUpdateFromSelect(['et' => $temporaryFlatTableName]);
                     $this->_connection->query($sql);
@@ -374,13 +406,15 @@ class FlatTableBuilder
     }
 
     /**
-     * @return \Magento\Framework\EntityManager\MetadataPool
+     * Get metadata pool
+     *
+     * @return MetadataPool
      */
     private function getMetadataPool()
     {
         if (null === $this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+            $this->metadataPool = ObjectManager::getInstance()
+                ->get(MetadataPool::class);
         }
         return $this->metadataPool;
     }

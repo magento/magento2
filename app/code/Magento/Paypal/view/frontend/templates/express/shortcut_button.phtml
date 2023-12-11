@@ -1,0 +1,17 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
+/**
+ * @var \Magento\Paypal\Block\Express\InContext\SmartButton $block
+ */
+$widget = $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonDecode($block->getJsInitParams());
+$widgetConfig = $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode(
+    $widget['Magento_Paypal/js/in-context/product-express-checkout']
+);
+?>
+<div id ="paypal-smart-button" data-mage-init='{"Magento_Paypal/js/in-context/product-express-checkout"
+:<?= /* @noEscape */ $widgetConfig ?>}'></div>

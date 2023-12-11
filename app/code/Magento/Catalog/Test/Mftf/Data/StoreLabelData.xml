@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="Option1Store0" type="StoreLabel">
+        <data key="store_id">0</data>
+        <data key="label">option1</data>
+    </entity>
+    <entity name="Option1Store1" type="StoreLabel">
+        <data key="store_id">1</data>
+        <data key="label">option1</data>
+    </entity>
+    <entity name="Option2Store0" type="StoreLabel">
+        <data key="store_id">0</data>
+        <data key="label">option2</data>
+    </entity>
+    <entity name="Option2Store1" type="StoreLabel">
+        <data key="store_id">1</data>
+        <data key="label">option2</data>
+    </entity>
+    <entity name="Option3Store0" type="StoreLabel">
+        <data key="store_id">0</data>
+        <data key="label">option3</data>
+    </entity>
+    <entity name="Option3Store1" type="StoreLabel">
+        <data key="store_id">1</data>
+        <data key="label">option3</data>
+    </entity>
+    <entity name="Option4Store0" type="StoreLabel">
+        <data key="store_id">0</data>
+        <data key="label">option4</data>
+    </entity>
+    <entity name="Option4Store1" type="StoreLabel">
+        <data key="store_id">1</data>
+        <data key="label">option4</data>
+    </entity>
+    <entity name="Option5Store0" type="StoreLabel">
+        <data key="store_id">0</data>
+        <data key="label">option5</data>
+    </entity>
+    <entity name="Option5Store1" type="StoreLabel">
+        <data key="store_id">1</data>
+        <data key="label">option5</data>
+    </entity>
+    <entity name="Option6Store0" type="StoreLabel">
+        <data key="store_id">0</data>
+        <data key="label">option6</data>
+    </entity>
+    <entity name="Option6Store1" type="StoreLabel">
+        <data key="store_id">1</data>
+        <data key="label">option6</data>
+    </entity>
+    <entity name="Option7Store0" type="StoreLabel">
+        <data key="store_id">0</data>
+        <data key="label">Green</data>
+    </entity>
+    <entity name="Option8Store1" type="StoreLabel">
+        <data key="store_id">1</data>
+        <data key="label">Green</data>
+    </entity>
+    <entity name="Option9Store0" type="StoreLabel">
+        <data key="store_id">0</data>
+        <data key="label">Red</data>
+    </entity>
+    <entity name="Option10Store1" type="StoreLabel">
+        <data key="store_id">1</data>
+        <data key="label">Red</data>
+    </entity>
+    <entity name="Option11Store0" type="StoreLabel">
+        <data key="store_id">0</data>
+        <data key="label">Blue</data>
+    </entity>
+    <entity name="Option11Store1" type="StoreLabel">
+        <data key="store_id">1</data>
+        <data key="label">Blue</data>
+    </entity>
+    <entity name="Option12Store1" type="StoreLabel">
+        <data key="store_id">1</data>
+        <data key="label">3.5</data>
+    </entity>
+    <entity name="Option13Store1" type="StoreLabel">
+        <data key="store_id">1</data>
+        <data key="label">10.12</data>
+    </entity>
+    <entity name="Option14Store1" type="StoreLabel">
+        <data key="store_id">1</data>
+        <data key="label">36</data>
+    </entity>
+</entities>

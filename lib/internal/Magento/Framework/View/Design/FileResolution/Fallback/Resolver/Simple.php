@@ -20,15 +20,11 @@ use Magento\Framework\View\Design\ThemeInterface;
 class Simple implements Fallback\ResolverInterface
 {
     /**
-     * Directory read factory
-     *
      * @var ReadFactory
      */
     protected $readFactory;
 
     /**
-     * Fallback factory
-     *
      * @var RulePool
      */
     protected $rulePool;
@@ -49,11 +45,10 @@ class Simple implements Fallback\ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolve($type, $file, $area = null, ThemeInterface $theme = null, $locale = null, $module = null)
     {
-
         $params = ['area' => $area, 'theme' => $theme, 'locale' => $locale];
         foreach ($params as $key => $param) {
             if ($param === null) {
@@ -63,9 +58,7 @@ class Simple implements Fallback\ResolverInterface
         if (!empty($module)) {
             $params['module_name'] = $module;
         }
-        $path = $this->resolveFile($this->rulePool->getRule($type), $file, $params);
-
-        return $path;
+        return $this->resolveFile($this->rulePool->getRule($type), $file, $params);
     }
 
     /**
@@ -77,7 +70,7 @@ class Simple implements Fallback\ResolverInterface
      */
     public static function assertFilePathFormat($filePath)
     {
-        if (strpos(str_replace('\\', '/', $filePath), './') !== false) {
+        if ($filePath && strpos(str_replace('\\', '/', $filePath), './') !== false) {
             throw new \InvalidArgumentException("File path '{$filePath}' is forbidden for security reasons.");
         }
     }
@@ -92,7 +85,7 @@ class Simple implements Fallback\ResolverInterface
     private function checkFilePathAccess($fileName, $filePath)
     {
         // Check if file name not contains any references '/./', '/../'
-        if (strpos(str_replace('\\', '/', $fileName), './') === false) {
+        if (!$fileName || strpos(str_replace('\\', '/', $fileName), './') === false) {
             return true;
         }
 
@@ -103,7 +96,8 @@ class Simple implements Fallback\ResolverInterface
         $fileRead = $this->readFactory->create($realPath);
 
         // Check if file path starts with web lib directory path
-        if (strpos($fileRead->getAbsolutePath(), $directoryWeb->getAbsolutePath()) === 0) {
+        $absolutePath = $directoryWeb->getAbsolutePath();
+        if ($absolutePath && strpos($fileRead->getAbsolutePath(), $absolutePath) === 0) {
             return true;
         }
 
@@ -139,7 +133,7 @@ class Simple implements Fallback\ResolverInterface
     protected function getDirectoryList()
     {
         if (null === $this->directoryList) {
-            $this->directoryList = \Magento\Framework\App\ObjectManager::getInstance()->get(DirectoryList::class);
+            $this->directoryList = ObjectManager::getInstance()->get(DirectoryList::class);
         }
 
         return $this->directoryList;

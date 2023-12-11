@@ -19,12 +19,12 @@ class Archive
     /**
      * Archiver is used for compress.
      */
-    const DEFAULT_ARCHIVER = 'gz';
+    public const DEFAULT_ARCHIVER = 'gz';
 
     /**
      * Default packer for directory.
      */
-    const TAPE_ARCHIVER = 'tar';
+    public const TAPE_ARCHIVER = 'tar';
 
     /**
      * Current archiver is used for compress.
@@ -62,8 +62,8 @@ class Archive
      */
     protected function _getArchiver($extension)
     {
-        $extension = strtolower($extension);
-        $format = isset($this->_formats[$extension]) ? $this->_formats[$extension] : self::DEFAULT_ARCHIVER;
+        $extension = $extension !== null ? strtolower($extension) : '';
+        $format = $this->_formats[$extension] ?? self::DEFAULT_ARCHIVER;
         $class = '\\Magento\Framework\Archive\\' . ucfirst($format);
         $this->_archiver = new $class();
         return $this->_archiver;
@@ -96,14 +96,14 @@ class Archive
     {
         $archivers = $this->_getArchivers($destination);
         $interimSource = '';
-        for ($i = 0; $i < count($archivers); $i++) {
-            if ($i == count($archivers) - 1) {
+        for ($i = 0, $count = count($archivers); $i < $count; $i++) {
+            if ($i == $count - 1) {
                 $packed = $destination;
             } else {
                 $packed = dirname($destination) . '/~tmp-' . microtime(true) . $archivers[$i] . '.' . $archivers[$i];
             }
             $source = $this->_getArchiver($archivers[$i])->pack($source, $packed, $skipRoot);
-            if ($interimSource && $i < count($archivers)) {
+            if ($interimSource && $i < $count) {
                 unlink($interimSource);
             }
             $interimSource = $source;
@@ -113,6 +113,7 @@ class Archive
 
     /**
      * Unpack file from archivers are parsed from extension.
+     *
      * If $tillTar == true unpack file from archivers till
      * meet TAR archiver.
      *

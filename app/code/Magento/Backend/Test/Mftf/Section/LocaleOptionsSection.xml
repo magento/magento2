@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="LocaleOptionsSection">
+        <element name="sectionHeader" type="text" selector="#general_locale-head"/>
+        <element name="timezone" type="select" selector="#general_locale_timezone"/>
+        <element name="locale" type="select" selector="#general_locale_code"/>
+        <element name="localeEnabled" type="select" selector="#general_locale_code:enabled"/>
+        <element name="localeDisabled" type="select" selector="#general_locale_code[disabled=disabled]"/>
+        <element name="useDefault" type="checkbox" selector="#general_locale_timezone_inherit"/>
+        <element name="defaultLocale" type="checkbox" selector="#general_locale_code_inherit"/>
+        <element name="checkIfTabExpand" type="button" selector="#general_locale-head:not(.open)"/>
+        <element name="timeZoneDropdown" type="select" selector="//select[@id='general_locale_timezone']"/>
+        <element name="changeStoreConfigButton" type="button" selector="//button[@id='store-change-button']"/>
+        <element name="changeStoreConfigToSpecificWebsite" type="select" selector="//a[contains(text(),'{{var}}')]" parameterized="true"/>
+        <element name="changeWebsiteConfirmButton" type="button" selector="//button[@class='action-primary action-accept']/span"/>
+    </section>
+</sections>

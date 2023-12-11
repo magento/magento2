@@ -15,6 +15,9 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 
+/**
+ * Generate list of urls.
+ */
 class CategoryUrlRewriteGenerator
 {
     /** Entity type code */
@@ -27,7 +30,7 @@ class CategoryUrlRewriteGenerator
 
     /**
      * @var \Magento\Catalog\Model\Category
-     * @deprecated 100.1.4
+     * @deprecated 100.1.0
      */
     protected $category;
 
@@ -50,6 +53,11 @@ class CategoryUrlRewriteGenerator
      * @var \Magento\UrlRewrite\Model\MergeDataProvider
      */
     private $mergeDataProviderPrototype;
+
+    /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
 
     /**
      * @var bool
@@ -84,6 +92,8 @@ class CategoryUrlRewriteGenerator
     }
 
     /**
+     * Generate list of urls.
+     *
      * @param \Magento\Catalog\Model\Category $category
      * @param bool $overrideStoreUrls
      * @param int|null $rootCategoryId
@@ -122,6 +132,8 @@ class CategoryUrlRewriteGenerator
             if (!$this->isGlobalScope($storeId)
                 && $this->isOverrideUrlsForStore($storeId, $categoryId, $overrideStoreUrls)
             ) {
+                $category = clone $category; // prevent undesired side effects on original object
+                $category->setStoreId($storeId);
                 $this->updateCategoryUrlForStore($storeId, $category);
                 $mergeDataProvider->merge($this->generateForSpecificStoreView($storeId, $category, $rootCategoryId));
             }
@@ -131,6 +143,8 @@ class CategoryUrlRewriteGenerator
     }
 
     /**
+     * Checks if urls should be overridden for store.
+     *
      * @param int $storeId
      * @param int $categoryId
      * @param bool $overrideStoreUrls

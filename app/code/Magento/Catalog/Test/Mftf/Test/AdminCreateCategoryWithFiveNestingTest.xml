@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCategoryWithFiveNestingTest">
+        <annotations>
+            <stories value="Create categories"/>
+            <title value="Create category with five nesting"/>
+            <description value="Login as admin and create nested sub category and verify the subcategory displayed in store front page  "/>
+            <testCaseId value="MC-5271"/>
+            <severity value="CRITICAL"/>
+            <group value="Catalog"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryPage"/>
+            <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(FirstLevelSubCat.name)}}" stepKey="clickCategoryLink"/>
+            <click selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="clickDelete"/>
+            <waitForElementVisible selector="{{AdminCategoryModalSection.message}}" stepKey="waitForConfirmationModal"/>
+            <see selector="{{AdminCategoryModalSection.message}}" userInput="Are you sure you want to delete this category?" stepKey="seeDeleteConfirmationMessage"/>
+            <click selector="{{AdminCategoryModalSection.ok}}" stepKey="confirmDelete"/>
+            <waitForPageLoad time="60" stepKey="waitForDeleteToFinish"/>
+            <see selector="You deleted the category." stepKey="seeDeleteSuccess"/>
+            <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandToSeeAllCategories"/>
+            <dontSee selector="{{AdminCategorySidebarTreeSection.categoryInTree(FirstLevelSubCat.name)}}" stepKey="dontSeeCategoryInTree"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Create Category with Five Nesting -->
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+        <!--Create Nested First Category-->
+        <actionGroup ref="AdminClickAddSubcategoryButtonActionGroup" stepKey="clickOnAddSubCategoryButton"/>
+        <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="fillFirstSubCategoryName">
+            <argument name="categoryName" value="{{FirstLevelSubCat.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveFirstSubCategory"/>
+        <!-- Verify success message -->
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
+        <!--Create Nested Second Sub Category-->
+        <actionGroup ref="AdminClickAddSubcategoryButtonActionGroup" stepKey="clickOnAddSubCategoryButton1"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="fillSecondSubCategoryName">
+            <argument name="categoryName" value="{{SecondLevelSubCat.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSecondSubCategory"/>
+        <!-- Verify success message -->
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage1"/>
+        <!--Create Nested Third Sub Category/>-->
+        <actionGroup ref="AdminClickAddSubcategoryButtonActionGroup" stepKey="clickOnAddSubCategoryButton2"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="fillThirdSubCategoryName">
+            <argument name="categoryName" value="{{ThirdLevelSubCat.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveThirdSubCategory"/>
+        <!-- Verify success message -->
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage2"/>
+        <!--Create Nested fourth Sub Category />-->
+        <actionGroup ref="AdminClickAddSubcategoryButtonActionGroup" stepKey="clickOnAddSubCategoryButton3"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="fillFourthSubCategoryName">
+            <argument name="categoryName" value="{{FourthLevelSubCat.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveFourthSubCategory"/>
+        <!-- Verify success message -->
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage3"/>
+        <!--Create Nested fifth Sub Category />-->
+        <actionGroup ref="AdminClickAddSubcategoryButtonActionGroup" stepKey="clickOnAddSubCategoryButton4"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="fillFifthSubCategoryName">
+            <argument name="categoryName" value="{{FifthLevelCat.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveFifthLevelCategory"/>
+        <!-- Verify success message -->
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage4"/>
+        <amOnPage url="/{{FirstLevelSubCat.urlKey}}/{{SecondLevelSubCat.urlKey}}/{{ThirdLevelSubCat.urlKey}}/{{FourthLevelSubCat.urlKey}}/{{FifthLevelCat.urlKey}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
+        <waitForPageLoad time="60" stepKey="waitForStoreFrontPageLoad"/>
+        <!--<Verify category displayed in store front page-->
+        <grabMultiple selector=".breadcrumbs li"  stepKey="breadcrumbs"/>
+        <assertEquals  stepKey="verifyTheCategoryInStoreFrontPage">
+            <expectedResult type="array">['Home', {{FirstLevelSubCat.name}}, {{SecondLevelSubCat.name}}, {{ThirdLevelSubCat.name}}, {{FourthLevelSubCat.name}}, {{FifthLevelCat.name}} ]</expectedResult>
+            <actualResult type="variable">breadcrumbs</actualResult>
+        </assertEquals>
+    </test>
+</tests>

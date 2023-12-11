@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
 
 /**
  * Catalog product controller
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class Product extends \Magento\Backend\App\Action

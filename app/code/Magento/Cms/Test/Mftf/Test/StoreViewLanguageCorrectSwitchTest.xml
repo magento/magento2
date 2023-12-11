@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreViewLanguageCorrectSwitchTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Store view language"/>
+            <title value="Check that Store View(language) switches correct"/>
+            <description value="Check that Store View(language) switches correct"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-96388"/>
+            <useCaseId value="MAGETWO-57337"/>
+            <group value="Cms"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Create Cms Pages -->
+            <createData entity="_newDefaultCmsPage" stepKey="createFirstCmsPage"/>
+            <createData entity="_newDefaultCmsPage" stepKey="createSecondCmsPage"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createFirstCmsPage" stepKey="deleteFirstCmsPage"/>
+            <deleteData createDataKey="createSecondCmsPage" stepKey="deleteSecondCmsPage"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
+                <argument name="customStore" value="NewStoreViewData"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Create StoreView -->
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+            <argument name="customStore" value="NewStoreViewData"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
+        <!-- Add StoreView To Cms Page-->
+        <actionGroup ref="AddStoreViewToCmsPageActionGroup" stepKey="gotToCmsPage">
+            <argument name="CMSPage" value="$$createSecondCmsPage$$"/>
+            <argument name="storeViewName" value="{{NewStoreViewData.name}}"/>
+        </actionGroup>
+
+        <!-- Check that Cms Page is open -->
+        <amOnPage url="{{StorefrontHomePage.url}}/$$createFirstCmsPage.identifier$$" stepKey="gotToFirstCmsPage"/>
+        <see userInput="$$createFirstCmsPage.title$$" stepKey="seePageTitle"/>
+
+        <!-- Switch StoreView and check that Cms Page is open -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToCustomStoreView">
+            <argument name="storeView" value="NewStoreViewData"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontHomePage.url}}/$$createSecondCmsPage.identifier$$" stepKey="gotToSecondCmsPage"/>
+        <see userInput="$$createSecondCmsPage.title$$" stepKey="seePageTitle1"/>
+
+        <!--Open first Cms page on custom store view-->
+        <amOnPage url="{{StorefrontHomePage.url}}/$$createFirstCmsPage.identifier$$" stepKey="gotToFirstCmsPage1"/>
+        <see userInput="Whoops, our bad..." stepKey="seePageError"/>
+
+        <!--Switch to default store view and check Cms page-->
+        <actionGroup ref="StorefrontSwitchDefaultStoreViewActionGroup" stepKey="switchToDefualtStoreView"/>
+        <see userInput="$$createFirstCmsPage.title$$" stepKey="seePageTitle2"/>
+    </test>
+</tests>

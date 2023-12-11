@@ -3,30 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Deploy\Test\Unit\Model;
 
-use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacade;
+use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
 use Magento\Deploy\App\Mode\ConfigProvider;
 use Magento\Deploy\Model\Filesystem;
 use Magento\Deploy\Model\Mode;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\State;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\LocalizedException;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @inheritdoc
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ModeTest extends \PHPUnit\Framework\TestCase
+class ModeTest extends TestCase
 {
     /**
      * @var Mode
@@ -83,7 +87,7 @@ class ModeTest extends \PHPUnit\Framework\TestCase
      */
     private $emulatedAreaProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->inputMock = $this->getMockBuilder(InputInterface::class)
             ->getMockForAbstractClass();
@@ -124,7 +128,8 @@ class ModeTest extends \PHPUnit\Framework\TestCase
             $this->filesystemMock,
             $this->configProvider,
             $this->processorFacadeFactory,
-            $this->emulatedAreaProcessor
+            $this->emulatedAreaProcessor,
+            new MaintenanceModeEnabler($this->maintenanceMock)
         );
     }
 
@@ -137,7 +142,7 @@ class ModeTest extends \PHPUnit\Framework\TestCase
                 [State::PARAM_MODE => State::MODE_DEVELOPER]
             );
 
-        $this->assertSame(null, $this->model->getMode());
+        $this->assertNull($this->model->getMode());
         $this->assertSame(State::MODE_DEVELOPER, $this->model->getMode());
     }
 
@@ -179,11 +184,10 @@ class ModeTest extends \PHPUnit\Framework\TestCase
     /**
      * Test that previous mode will be enabled after error during static generation call.
      * We need this to be sure that mode will be reverted to it previous tate.
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testEnableDeveloperModeOnFail()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $mode = State::MODE_DEVELOPER;
         $dataStorage = [
             ConfigFilePool::APP_ENV => [
@@ -226,7 +230,7 @@ class ModeTest extends \PHPUnit\Framework\TestCase
             ->method('getConfigs')
             ->with('developer', 'production')
             ->willReturn([
-                'dev/debug/debug_logging' => 0
+                'dev/debug/debug_logging' => 0,
             ]);
         $this->emulatedAreaProcessor->expects($this->once())
             ->method('process')
@@ -239,7 +243,7 @@ class ModeTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->processorFacade);
         $this->processorFacade
             ->expects($this->once())
-            ->method('process')
+            ->method('processWithLockTarget')
             ->with(
                 'dev/debug/debug_logging',
                 0,

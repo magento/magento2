@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="ShippingMethodsUpsTypeConfig" dataType="shipping_methods_ups_type_config" type="create" auth="adminFormKey" url="admin/system_config/save/section/carriers/" method="POST">
+        <object key="groups" dataType="shipping_methods_ups_type_config">
+            <object key="ups" dataType="shipping_methods_ups_type_config">
+                <object key="fields" dataType="shipping_methods_ups_type_config">
+                    <object key="type" dataType="ups_type_inherit">
+                        <field key="inherit">boolean</field>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+</operations>

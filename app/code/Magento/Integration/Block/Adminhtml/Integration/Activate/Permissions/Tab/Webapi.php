@@ -105,7 +105,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function canShowTab()
     {
@@ -116,7 +116,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @codeCoverageIgnore
      */
@@ -126,7 +126,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @codeCoverageIgnore
      */
@@ -136,7 +136,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @codeCoverageIgnore
      */
@@ -162,13 +162,38 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     public function getResourcesTreeJson()
     {
-        $aclResourcesTree = $this->_integrationData->mapResources($this->getAclResources());
+        $aclResourcesTree = $this->_integrationData->mapResources(
+            $this->getAclResources(),
+            $this->getSelectedResources()
+        );
 
-        return $this->encoder->encode($aclResourcesTree);
+        return $this->encoder->encode($this->disableAclTreeNodes($aclResourcesTree));
     }
 
     /**
-     * Return an array of selected resource ids.
+     * Mark tree nodes as disabled
+     *
+     * @param array $aclResourcesTree
+     * @return array
+     */
+    private function disableAclTreeNodes(array $aclResourcesTree)
+    {
+        $output = [];
+        foreach ($aclResourcesTree as $node) {
+            if (!isset($node['state']['selected']) || $node['state']['selected'] !== true) {
+                continue;
+            }
+            $node['state']['disabled'] = true;
+            if (isset($node['children'])) {
+                $node['children'] = $this->disableAclTreeNodes($node['children']);
+            }
+            $output[] = $node;
+        }
+        return $output;
+    }
+
+    /**
+     * Return json encoded array of selected resource ids.
      *
      * If everything is allowed then iterate through all
      * available resources to generate a comprehensive array of all resource ids, rather than just
@@ -178,11 +203,21 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     public function getSelectedResourcesJson()
     {
+        return $this->encoder->encode($this->getSelectedResources());
+    }
+
+    /**
+     * Return an array of selected resource ids.
+     *
+     * @return string[]
+     */
+    private function getSelectedResources()
+    {
         $selectedResources = $this->_selectedResources;
         if ($this->isEverythingAllowed()) {
             $selectedResources = $this->_getAllResourceIds($this->getAclResources());
         }
-        return $this->encoder->encode($selectedResources);
+        return $selectedResources;
     }
 
     /**
@@ -224,11 +259,11 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     {
         $resourceIds = [];
         foreach ($resources as $resource) {
-            $resourceIds[] = $resource['id'];
+            $resourceIds[] = [$resource['id']];
             if (isset($resource['children'])) {
-                $resourceIds = array_merge($resourceIds, $this->_getAllResourceIds($resource['children']));
+                $resourceIds[] = $this->_getAllResourceIds($resource['children']);
             }
         }
-        return $resourceIds;
+        return array_merge([], ...$resourceIds);
     }
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<req:KnownTrackingRequest xmlns:req="http://www.dhl.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.dhl.com TrackingRequestKnown-1.0.xsd" schemaVersion="1.0">
+	<Request>
+		<ServiceHeader>
+			<MessageTime>2002-06-25T11:28:56-08:00</MessageTime>
+			<MessageReference>MAGE_TRCK_28TO32_Char_CHECKED</MessageReference>
+			<SiteID>CustomerSiteID</SiteID>
+			<Password>CustomerPassword</Password>
+		</ServiceHeader>
+	</Request>
+	<LanguageCode>EN</LanguageCode>
+	<AWBNumber>4781585060</AWBNumber>
+	<LevelOfDetails>ALL_CHECK_POINTS</LevelOfDetails>
+</req:KnownTrackingRequest>

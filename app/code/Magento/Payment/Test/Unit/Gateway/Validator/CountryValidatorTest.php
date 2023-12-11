@@ -3,72 +3,96 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Payment\Test\Unit\Gateway\Validator;
 
-class CountryValidatorTest extends \PHPUnit\Framework\TestCase
+use Magento\Payment\Gateway\ConfigInterface;
+use Magento\Payment\Gateway\Validator\CountryValidator;
+use Magento\Payment\Gateway\Validator\Result;
+use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CountryValidatorTest extends TestCase
 {
-    /** @var \Magento\Payment\Gateway\Validator\CountryValidator */
+    /**
+     * @var CountryValidator
+     */
     protected $model;
 
     /**
-     * @var \Magento\Payment\Gateway\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Payment\Gateway\Validator\ResultInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultInterfaceFactory|MockObject
      */
     protected $resultFactoryMock;
 
     /**
-     * @var \Magento\Payment\Gateway\Validator\Result|\PHPUnit_Framework_MockObject_MockObject
+     * @var Result|MockObject
      */
     protected $resultMock;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(\Magento\Payment\Gateway\ConfigInterface::class)
+        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
             ->getMockForAbstractClass();
-        $this->resultFactoryMock = $this->getMockBuilder(
-            \Magento\Payment\Gateway\Validator\ResultInterfaceFactory::class
-        )->setMethods(['create'])
+        $this->resultFactoryMock = $this->getMockBuilder(ResultInterfaceFactory::class)
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultMock = $this->getMockBuilder(\Magento\Payment\Gateway\Validator\Result::class)
+        $this->resultMock = $this->getMockBuilder(Result::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = new \Magento\Payment\Gateway\Validator\CountryValidator(
+        $this->model = new CountryValidator(
             $this->resultFactoryMock,
             $this->configMock
         );
     }
 
     /**
+     * @param $storeId
+     * @param $country
+     * @param $allowspecific
+     * @param $specificcountry
+     * @param $isValid
+     *
+     * @return void
      * @dataProvider validateAllowspecificTrueDataProvider
      */
-    public function testValidateAllowspecificTrue($storeId, $country, $allowspecific, $specificcountry, $isValid)
-    {
+    public function testValidateAllowspecificTrue(
+        $storeId,
+        $country,
+        $allowspecific,
+        $specificcountry,
+        $isValid
+    ): void {
         $validationSubject = ['storeId' => $storeId, 'country' => $country];
 
-        $this->configMock->expects($this->at(0))
+        $this->configMock
             ->method('getValue')
-            ->with('allowspecific', $storeId)
-            ->willReturn($allowspecific);
-        $this->configMock->expects($this->at(1))
-            ->method('getValue')
-            ->with('specificcountry', $storeId)
-            ->willReturn($specificcountry);
+            ->withConsecutive(['allowspecific', $storeId], ['specificcountry', $storeId])
+            ->willReturnOnConsecutiveCalls($allowspecific, $specificcountry);
 
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
-            ->with(['isValid' => $isValid, 'failsDescription' => []])
+            ->with(['isValid' => $isValid, 'failsDescription' => [], 'errorCodes' => []])
             ->willReturn($this->resultMock);
 
         $this->assertSame($this->resultMock, $this->model->validate($validationSubject));
     }
 
-    public function validateAllowspecificTrueDataProvider()
+    /**
+     * @return array
+     */
+    public function validateAllowspecificTrueDataProvider(): array
     {
         return [
             [1, 'US', 1, 'US,UK,CA', true], //$storeId, $country, $allowspecific, $specificcountry, $isValid
@@ -79,24 +103,27 @@ class CountryValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider validateAllowspecificFalseDataProvider
      */
-    public function testValidateAllowspecificFalse($storeId, $allowspecific, $isValid)
+    public function testValidateAllowspecificFalse($storeId, $allowspecific, $isValid): void
     {
         $validationSubject = ['storeId' => $storeId];
 
-        $this->configMock->expects($this->at(0))
+        $this->configMock
             ->method('getValue')
             ->with('allowspecific', $storeId)
             ->willReturn($allowspecific);
 
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
-            ->with(['isValid' => $isValid, 'failsDescription' => []])
+            ->with(['isValid' => $isValid, 'failsDescription' => [], 'errorCodes' => []])
             ->willReturn($this->resultMock);
 
         $this->assertSame($this->resultMock, $this->model->validate($validationSubject));
     }
 
-    public function validateAllowspecificFalseDataProvider()
+    /**
+     * @return array
+     */
+    public function validateAllowspecificFalseDataProvider(): array
     {
         return [
             [1, 0, true] //$storeId, $allowspecific, $isValid

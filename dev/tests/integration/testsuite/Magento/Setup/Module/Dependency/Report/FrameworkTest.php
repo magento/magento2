@@ -29,7 +29,7 @@ class FrameworkTest extends \PHPUnit\Framework\TestCase
      */
     protected $builder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fixtureDir = realpath(__DIR__ . '/../_files') . '/';
         $this->fixtureDirModule = $this->fixtureDir . 'code/Magento/FirstModule/';
@@ -77,7 +77,7 @@ class FrameworkTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         if (file_exists($this->sourceFilename)) {
             unlink($this->sourceFilename);

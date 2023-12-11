@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Theme\Model\Config;
 
 use Magento\Email\Model\Template;
@@ -20,7 +21,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $templateFactoryMock;
 
@@ -29,7 +30,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      */
     private $templateModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Framework\App\AreaList::class)
@@ -55,11 +56,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Email/Model/_files/email_template.php
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The email_header_template contains an incorrect configuration. The template has a
      */
     public function testValidateHasRecursiveReference()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         if (!$this->templateModel->getId()) {
             $this->fail('Cannot load Template model');
         }
@@ -95,6 +96,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $designElementMock->expects($this->once())->method('getValue')->willReturn($this->templateModel->getId());
 
         $this->model->validate($designConfigMock);
+
+        $this->expectExceptionMessage(
+            'The "email_header_template" template contains an incorrect configuration, with a reference to itself. '
+            . 'Remove or change the reference, then try again.'
+        );
     }
 
     /**

@@ -31,13 +31,27 @@ define([
          */
         dataFilter: function (data) {
             var providerData = this.idsStorage.prepareData(customerData.get(this.identifiersConfig.provider)().items),
-                result = {};
+                result = {},
+                productCurrentScope,
+                scopeId;
 
-            _.each(data, function (value, key) {
-                if (!providerData[key]) {
-                    result[key] = value;
-                }
-            });
+            if (typeof this.data.productCurrentScope !== 'undefined' && window.checkout && window.checkout.baseUrl) {
+                productCurrentScope = this.data.productCurrentScope;
+                scopeId = productCurrentScope === 'store' ? window.checkout.storeId :
+                    productCurrentScope === 'group' ? window.checkout.storeGroupId :
+                        window.checkout.websiteId;
+                _.each(data, function (value, key) {
+                    if (!providerData[productCurrentScope + '-' + scopeId + '-' + key]) {
+                        result[key] = value;
+                    }
+                });
+            } else {
+                _.each(data, function (value, key) {
+                    if (!providerData[key]) {
+                        result[key] = value;
+                    }
+                });
+            }
 
             return result;
         },

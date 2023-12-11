@@ -3,14 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Bundle\Pricing\Adjustment;
 
+use Magento\Bundle\Model\Option;
 use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Pricing\Price\BundleSelectionFactory;
+use Magento\Bundle\Pricing\Price\BundleSelectionPrice;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\Adjustment\Calculator as CalculatorBase;
 use Magento\Framework\Pricing\Amount\AmountFactory;
+use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
@@ -21,7 +26,7 @@ use Magento\Tax\Helper\Data as TaxHelper;
  * Bundle price calculator
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Calculator implements BundleCalculatorInterface
+class Calculator implements BundleCalculatorInterface, ResetAfterRequestInterface
 {
     /**
      * @var CalculatorBase
@@ -51,7 +56,7 @@ class Calculator implements BundleCalculatorInterface
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Framework\Pricing\Amount\AmountInterface[]
+     * @var AmountInterface[]
      */
     private $optionAmount = [];
 
@@ -66,7 +71,7 @@ class Calculator implements BundleCalculatorInterface
      * @param BundleSelectionFactory $bundleSelectionFactory
      * @param TaxHelper $taxHelper
      * @param PriceCurrencyInterface $priceCurrency
-     * @param SelectionPriceListProviderInterface|null $selectionPriceListProvider
+     * @param SelectionPriceListProviderInterface $selectionPriceListProvider
      */
     public function __construct(
         CalculatorBase $calculator,
@@ -74,7 +79,7 @@ class Calculator implements BundleCalculatorInterface
         BundleSelectionFactory $bundleSelectionFactory,
         TaxHelper $taxHelper,
         PriceCurrencyInterface $priceCurrency,
-        SelectionPriceListProviderInterface $selectionPriceListProvider = null
+        SelectionPriceListProviderInterface $selectionPriceListProvider
     ) {
         $this->calculator = $calculator;
         $this->amountFactory = $amountFactory;
@@ -91,7 +96,9 @@ class Calculator implements BundleCalculatorInterface
      * @param SaleableInterface $saleableItem
      * @param null|bool|string|array $exclude
      * @param null|array $context
-     * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     *
+     * @return AmountInterface
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getAmount($amount, SaleableInterface $saleableItem, $exclude = null, $context = [])
@@ -105,7 +112,8 @@ class Calculator implements BundleCalculatorInterface
      * @param float $amount
      * @param Product $saleableItem
      * @param null|bool|string|array $exclude
-     * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     *
+     * @return AmountInterface
      */
     public function getMinRegularAmount($amount, Product $saleableItem, $exclude = null)
     {
@@ -118,7 +126,8 @@ class Calculator implements BundleCalculatorInterface
      * @param float $amount
      * @param Product $saleableItem
      * @param null|bool|string|array $exclude
-     * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     *
+     * @return AmountInterface
      */
     public function getMaxAmount($amount, Product $saleableItem, $exclude = null)
     {
@@ -131,7 +140,8 @@ class Calculator implements BundleCalculatorInterface
      * @param float $amount
      * @param Product $saleableItem
      * @param null|bool|string|array $exclude
-     * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     *
+     * @return AmountInterface
      */
     public function getMaxRegularAmount($amount, Product $saleableItem, $exclude = null)
     {
@@ -146,7 +156,8 @@ class Calculator implements BundleCalculatorInterface
      * @param bool $searchMin
      * @param float $baseAmount
      * @param bool $useRegularPrice
-     * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     *
+     * @return AmountInterface
      */
     public function getOptionsAmount(
         Product $saleableItem,
@@ -173,7 +184,8 @@ class Calculator implements BundleCalculatorInterface
      *
      * @param float $amount
      * @param Product $saleableItem
-     * @return \Magento\Framework\Pricing\Amount\AmountInterface|void
+     *
+     * @return AmountInterface|void
      */
     public function getAmountWithoutOption($amount, Product $saleableItem)
     {
@@ -194,30 +206,17 @@ class Calculator implements BundleCalculatorInterface
      */
     protected function getSelectionAmounts(Product $bundleProduct, $searchMin, $useRegularPrice = false)
     {
-        return $this->getSelectionPriceListProvider()->getPriceList($bundleProduct, $searchMin, $useRegularPrice);
-    }
-
-    /**
-     * @return SelectionPriceListProviderInterface
-     * @deprecated 100.2.0
-     */
-    private function getSelectionPriceListProvider()
-    {
-        if (null === $this->selectionPriceListProvider) {
-            $this->selectionPriceListProvider = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(SelectionPriceListProviderInterface::class);
-        }
-
-        return $this->selectionPriceListProvider;
+        return $this->selectionPriceListProvider->getPriceList($bundleProduct, $searchMin, $useRegularPrice);
     }
 
     /**
      * Check this option if it should be skipped
      *
-     * @param \Magento\Bundle\Model\Option $option
+     * @param Option $option
      * @param bool $canSkipRequiredOption
      * @return bool
-     * @deprecated 100.2.0
+     * @deprecated 100.2.0 Not used anymore.
+     * @see Nothing
      */
     protected function canSkipOption($option, $canSkipRequiredOption)
     {
@@ -229,7 +228,8 @@ class Calculator implements BundleCalculatorInterface
      *
      * @param Product $bundleProduct
      * @return bool
-     * @deprecated 100.2.0
+     * @deprecated 100.2.0 Not used anymore.
+     * @see Nothing
      */
     protected function hasRequiredOption($bundleProduct)
     {
@@ -248,6 +248,7 @@ class Calculator implements BundleCalculatorInterface
      * @param Product $saleableItem
      * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
      * @deprecated 100.2.0
+     * @see Nothing
      */
     protected function getBundleOptions(Product $saleableItem)
     {
@@ -263,17 +264,16 @@ class Calculator implements BundleCalculatorInterface
      *
      * @param float $basePriceValue
      * @param Product $bundleProduct
-     * @param \Magento\Bundle\Pricing\Price\BundleSelectionPrice[] $selectionPriceList
+     * @param BundleSelectionPrice[] $selectionPriceList
      * @param null|bool|string|array $exclude
-     * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @return AmountInterface
      */
     public function calculateBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude = null)
     {
         if ($bundleProduct->getPriceType() == Price::PRICE_TYPE_FIXED) {
             return $this->calculateFixedBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude);
-        } else {
-            return $this->calculateDynamicBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude);
         }
+        return $this->calculateDynamicBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude);
     }
 
     /**
@@ -281,14 +281,14 @@ class Calculator implements BundleCalculatorInterface
      *
      * @param float $basePriceValue
      * @param Product $bundleProduct
-     * @param \Magento\Bundle\Pricing\Price\BundleSelectionPrice[] $selectionPriceList
-     * @param null|bool|string|arrayy $exclude
-     * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @param BundleSelectionPrice[] $selectionPriceList
+     * @param null|bool|string|array $exclude
+     * @return AmountInterface
      */
     protected function calculateFixedBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude)
     {
         $fullAmount = $basePriceValue;
-        /** @var $option \Magento\Bundle\Model\Option */
+        /** @var $option Option */
         foreach ($selectionPriceList as $selectionPrice) {
             $fullAmount += ($selectionPrice->getValue() * $selectionPrice->getQuantity());
         }
@@ -300,9 +300,9 @@ class Calculator implements BundleCalculatorInterface
      *
      * @param float $basePriceValue
      * @param Product $bundleProduct
-     * @param \Magento\Bundle\Pricing\Price\BundleSelectionPrice[] $selectionPriceList
+     * @param BundleSelectionPrice[] $selectionPriceList
      * @param null|bool|string|array $exclude
-     * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @return AmountInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function calculateDynamicBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude)
@@ -327,7 +327,7 @@ class Calculator implements BundleCalculatorInterface
         $store = $bundleProduct->getStore();
         $roundingMethod = $this->taxHelper->getCalculationAlgorithm($store);
         foreach ($amountList as $amountInfo) {
-            /** @var \Magento\Framework\Pricing\Amount\AmountInterface $itemAmount */
+            /** @var AmountInterface $itemAmount */
             $itemAmount = $amountInfo['amount'];
             $qty = $amountInfo['quantity'];
 
@@ -365,10 +365,10 @@ class Calculator implements BundleCalculatorInterface
     /**
      * Create selection price list for the retrieved options
      *
-     * @param \Magento\Bundle\Model\Option $option
+     * @param Option $option
      * @param Product $bundleProduct
      * @param bool $useRegularPrice
-     * @return \Magento\Bundle\Pricing\Price\BundleSelectionPrice[]
+     * @return BundleSelectionPrice[]
      */
     public function createSelectionPriceList($option, $bundleProduct, $useRegularPrice = false)
     {
@@ -398,10 +398,10 @@ class Calculator implements BundleCalculatorInterface
     /**
      * Find minimal or maximal price for existing options
      *
-     * @param \Magento\Bundle\Model\Option $option
-     * @param \Magento\Bundle\Pricing\Price\BundleSelectionPrice[] $selectionPriceList
+     * @param Option $option
+     * @param BundleSelectionPrice[] $selectionPriceList
      * @param bool $searchMin
-     * @return \Magento\Bundle\Pricing\Price\BundleSelectionPrice[]
+     * @return BundleSelectionPrice[]
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function processOptions($option, $selectionPriceList, $searchMin = true)
@@ -428,5 +428,13 @@ class Calculator implements BundleCalculatorInterface
             }
         }
         return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->optionAmount = [];
     }
 }

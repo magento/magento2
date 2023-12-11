@@ -20,7 +20,10 @@ define([
             loading:        false,
             visible:        true,
             template:       'ui/content/content',
-            additionalClasses: {}
+            additionalClasses: {},
+            ignoreTmpls: {
+                content: true
+            }
         },
 
         /**
@@ -165,6 +168,15 @@ define([
             this.content(content);
 
             return this;
+        },
+
+        /**
+         * Content getter
+         *
+         * @returns {String}
+         */
+        getContentUnsanitizedHtml: function () {
+            return this.content();
         }
     });
 });

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Security\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -33,7 +34,7 @@ class SecurityManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->accountManagement = $this->objectManager->create(
@@ -47,7 +48,7 @@ class SecurityManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * Tear down
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager = null;
         $this->accountManagement  = null;
@@ -103,18 +104,17 @@ class SecurityManagerTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store customer/password/max_number_password_reset_requests 1
      * @magentoConfigFixture current_store customer/password/min_time_between_password_reset_requests 0
      * @magentoConfigFixture current_store contact/email/recipient_email hi@example.com
-     * @expectedException \Magento\Framework\Exception\SecurityViolationException
-     * @expectedExceptionMessage Too many password reset requests. Please wait and try again or contact hi@example.com.
      * @magentoDbIsolation enabled
      */
     public function testPerformSecurityCheckLimitNumber()
     {
+        $this->expectException(\Magento\Framework\Exception\SecurityViolationException::class);
+
         $attempts = 2;
         $requestType = \Magento\Security\Model\PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST;
         $longIp = 127001;
         $accountReference = 'customer@example.com';
 
-        $i = 0;
         try {
             for ($i = 0; $i < $attempts; $i++) {
                 $this->securityManager->performSecurityCheck($requestType, $accountReference, $longIp);
@@ -125,6 +125,11 @@ class SecurityManagerTest extends \PHPUnit\Framework\TestCase
                 __($e->getMessage())
             );
         }
+
+        $this->expectExceptionMessage(
+            'We received too many requests for password resets. '
+            . 'Please wait and try again later or contact hi@example.com.'
+        );
     }
 
     /**
@@ -134,18 +139,17 @@ class SecurityManagerTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store customer/password/max_number_password_reset_requests 0
      * @magentoConfigFixture current_store customer/password/min_time_between_password_reset_requests 1
      * @magentoConfigFixture current_store contact/email/recipient_email hi@example.com
-     * @expectedException \Magento\Framework\Exception\SecurityViolationException
-     * @expectedExceptionMessage Too many password reset requests. Please wait and try again or contact hi@example.com.
      * @magentoDbIsolation enabled
      */
     public function testPerformSecurityCheckLimitTime()
     {
+        $this->expectException(\Magento\Framework\Exception\SecurityViolationException::class);
+
         $attempts = 2;
         $requestType = \Magento\Security\Model\PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST;
         $longIp = 127001;
         $accountReference = 'customer@example.com';
 
-        $i = 0;
         try {
             for ($i = 0; $i < $attempts; $i++) {
                 $this->securityManager->performSecurityCheck($requestType, $accountReference, $longIp);
@@ -158,5 +162,10 @@ class SecurityManagerTest extends \PHPUnit\Framework\TestCase
         }
 
         $this->fail('Something went wrong. Please check method execution logic.');
+
+        $this->expectExceptionMessage(
+            'We received too many requests for password resets. '
+            . 'Please wait and try again later or contact hi@example.com.'
+        );
     }
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminThemeSection">
+        <!--All rows in a specific Column e.g. {{Section.rowsInColumn('columnName')}}-->
+        <element name="allRowsInColumn" type="text" selector="//tr/td[contains(@class, '{{column}}')]" parameterized="true"/>
+        <!--selector for Theme Title column since it needs to be handled separately-->
+        <element name="rowsInThemeTitleColumn" type="text" selector="//tbody/tr/td[contains(@class, 'parent_theme')]/preceding-sibling::td"/>
+        <element name="rowsInColumn" type="text" selector="//tbody/tr/td[contains(@class, '{{column}}')]" parameterized="true"/>
+        <!--Specific cell e.g. {{Section.gridCell('Name')}}-->
+        <element name="gridCell" type="text" selector="//table//div[contains(text(), '{{gridCellText}}')]" parameterized="true"/>
+        <element name="gridCellUpdated" type="text" selector="//tbody//tr//div[contains(text(), '{{gridCellText}}')]" parameterized="true"/>
+        <element name="columnHeader" type="text" selector="//thead/tr/th[contains(@class, 'data-grid-th')]/span[text() = '{{label}}']" parameterized="true" timeout="30"/>
+        <element name="viewAction" type="button" selector="tr.data-row > td.data-grid-actions-cell > a.action-menu-item"/>
+        <element name="viewActionByTheme" type="button" selector="//tr[contains(@class,'data-row')]//td[1]//div[@class='data-grid-cell-content' and text()='{{theme}}']//ancestor::tr//td[@class='data-grid-actions-cell']/a[@class='action-menu-item']" parameterized="true"/>
+    </section>
+</sections>

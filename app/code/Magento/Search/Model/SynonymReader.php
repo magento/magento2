@@ -5,7 +5,6 @@
  */
 namespace Magento\Search\Model;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
@@ -28,8 +27,6 @@ use Magento\Framework\Registry;
 class SynonymReader extends AbstractModel
 {
     /**
-     * Event prefix
-     *
      * @var string
      * @since 100.1.0
      */
@@ -52,7 +49,7 @@ class SynonymReader extends AbstractModel
      * @param DbCollection $resourceCollection
      * @param array $data
      */
-    public function __construct(
+    public function __construct( //phpcs:ignore Generic.CodeAnalysis.UselessOverridingMethod
         \Magento\Framework\Model\Context $context,
         Registry $registry,
         AbstractResource $resource = null,
@@ -78,11 +75,12 @@ class SynonymReader extends AbstractModel
      *
      * @param string $phrase
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @since 100.1.0
      */
     public function loadByPhrase($phrase)
     {
-        $this->_getResource()->loadByPhrase($this, strtolower($phrase));
+        $this->_getResource()->loadByPhrase($this, $phrase !== null ? strtolower($phrase) : '');
         $this->_afterLoad();
         $this->setOrigData();
         return $this;

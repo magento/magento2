@@ -9,6 +9,7 @@ namespace Magento\Framework\Mail;
  * Mail Template interface
  *
  * @api
+ * @since 100.0.2
  */
 interface TemplateInterface extends \Magento\Framework\App\TemplateTypesInterface
 {

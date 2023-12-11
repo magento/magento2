@@ -8,15 +8,19 @@
  */
 define([
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'Magento_Ui/js/modal/alert',
+    'jquery-ui-modules/widget',
+    'mage/mage',
+    'mage/translate'
+], function ($, alert) {
     'use strict';
 
     $.widget('mage.requireCookie', {
         options: {
             event: 'click',
             noCookieUrl: 'enable-cookies',
-            triggers: ['.action.login', '.action.submit']
+            triggers: ['.action.login', '.action.submit'],
+            isRedirectCmsPage: true
         },
 
         /**
@@ -49,8 +53,16 @@ define([
             if (navigator.cookieEnabled) {
                 return;
             }
+
             event.preventDefault();
-            window.location = this.options.noCookieUrl;
+
+            if (this.options.isRedirectCmsPage) {
+                window.location = this.options.noCookieUrl;
+            } else {
+                alert({
+                    content: $.mage.__('Cookies are disabled in your browser.')
+                });
+            }
         }
     });
 

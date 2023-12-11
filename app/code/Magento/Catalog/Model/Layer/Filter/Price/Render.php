@@ -72,6 +72,8 @@ class Render
     }
 
     /**
+     * Prepare range data
+     *
      * @param int $range
      * @param int[] $dbRanges
      * @return array
@@ -81,12 +83,10 @@ class Render
         if (empty($dbRanges)) {
             return [];
         }
-        $lastIndex = array_keys($dbRanges);
-        $lastIndex = $lastIndex[count($lastIndex) - 1];
 
         foreach ($dbRanges as $index => $count) {
-            $fromPrice = $index == 1 ? '' : ($index - 1) * $range;
-            $toPrice = $index == $lastIndex ? '' : $index * $range;
+            $fromPrice = $index == 1 ? 0 : ($index - 1) * $range;
+            $toPrice = $index * $range;
             $this->itemDataBuilder->addItemData(
                 $this->renderRangeLabel($fromPrice, $toPrice),
                 $fromPrice . '-' . $toPrice,

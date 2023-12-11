@@ -9,8 +9,6 @@ namespace Magento\Review\Model\ResourceModel\Rating;
  * Rating collection resource model
  *
  * @api
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
@@ -26,7 +24,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_ratingCollectionF;
 
     /**
-     * Add store data flag
      * @var bool
      */
     protected $_addStoreDataFlag = false;
@@ -130,7 +127,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         if (!is_array($storeId)) {
             $storeId = [$storeId === null ? -1 : $storeId];
         }
-        if (empty($storeId)) {
+        if ($storeId == 0) {
             return $this;
         }
         if (!$this->_isStoreJoined) {
@@ -141,7 +138,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 'main_table.rating_id = store.rating_id',
                 []
             );
-            //        ->group('main_table.rating_id')
             $this->_isStoreJoined = true;
         }
         $inCondition = $connection->prepareSqlCondition('store.store_id', ['in' => $storeId]);
@@ -315,7 +311,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         if (is_array($data) && count($data) > 0) {
             foreach ($data as $row) {
                 $item = $this->getItemById($row['rating_id']);
-                $item->setStores(array_merge($item->getStores(), [$row['store_id']]));
+                $stores = $item->getStores();
+                $stores[] = $row['store_id'];
+                $item->setStores(array_unique($stores));
             }
         }
         return $this;

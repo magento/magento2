@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var \Magento\Framework\Registry $registry */
@@ -17,7 +19,7 @@ $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
 
 foreach (['simple_10', 'simple_20', 'configurable', 'simple_30', 'simple_40', 'configurable_12345'] as $sku) {
     try {
-        $product = $productRepository->get($sku, false, null, true);
+        $product = $productRepository->get($sku, true);
 
         $stockStatus = $objectManager->create(\Magento\CatalogInventory\Model\Stock\Status::class);
         $stockStatus->load($product->getEntityId(), 'product_id');
@@ -29,7 +31,7 @@ foreach (['simple_10', 'simple_20', 'configurable', 'simple_30', 'simple_40', 'c
     }
 }
 
-require __DIR__ . '/configurable_attribute_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/configurable_attribute_rollback.php');
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

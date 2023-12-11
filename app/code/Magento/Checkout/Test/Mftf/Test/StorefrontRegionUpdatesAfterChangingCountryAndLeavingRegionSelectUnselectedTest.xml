@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontRegionUpdatesAfterChangingCountryAndLeavingRegionSelectUnselectedTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Region updates after changing country "/>
+            <title value="Region updates after changing country "/>
+            <description value="Region dupdates after changing country and leaving region select unselected"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="https://github.com/magento/magento2/issues/23460"/>
+            <group value="checkout"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- Login to storefront from customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage"/>
+
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToAddressBookPage">
+            <argument name="menu" value="Address Book"/>
+        </actionGroup>
+        <actionGroup ref="StoreFrontClickEditDefaultShippingAddressActionGroup" stepKey="clickEditAddress"/>
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.country}}" userInput="{{updateCustomerFranceAddress.country}}" stepKey="selectCountry"/>
+        <actionGroup ref="AdminSaveCustomerAddressActionGroup" stepKey="saveAddress"/>
+
+        <see selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" userInput="{{updateCustomerFranceAddress.country}}" stepKey="seeAssertCustomerDefaultShippingAddressCountry"/>
+    </test>
+</tests>

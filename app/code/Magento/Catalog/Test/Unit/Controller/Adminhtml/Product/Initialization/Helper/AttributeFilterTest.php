@@ -3,12 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AttributeFilterTest extends \PHPUnit\Framework\TestCase
+class AttributeFilterTest extends TestCase
 {
     /**
      * @var AttributeFilter
@@ -16,18 +23,18 @@ class AttributeFilterTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     protected $productMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectHelper = new ObjectManager($this);
         $this->model = $objectHelper->getObject(AttributeFilter::class);
     }
 
@@ -36,21 +43,38 @@ class AttributeFilterTest extends \PHPUnit\Framework\TestCase
      * @param array $useDefaults
      * @param array $expectedProductData
      * @param array $initialProductData
+     * @param mixed $attributeList
      * @dataProvider setupInputDataProvider
      */
     public function testPrepareProductAttributes(
-        $requestProductData,
-        $useDefaults,
-        $expectedProductData,
-        $initialProductData
-    ) {
+        array $requestProductData,
+        array $useDefaults,
+        array $expectedProductData,
+        array $initialProductData,
+        mixed $attributeList
+    ): void {
+        /** @var MockObject | Product $productMockMap */
         $productMockMap = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData', 'getAttributes'])
             ->getMock();
 
         if (!empty($initialProductData)) {
             $productMockMap->expects($this->any())->method('getData')->willReturnMap($initialProductData);
+        }
+
+        if ($useDefaults) {
+            $productMockMap
+                ->expects($this->once())
+                ->method('getAttributes')
+                ->willReturn(
+                    $this->getProductAttributesMock($useDefaults)
+                );
+        } elseif ($attributeList) {
+            $productMockMap
+                ->expects($this->once())
+                ->method('getAttributes')
+                ->willReturn($attributeList);
         }
 
         $actualProductData = $this->model->prepareProductAttributes($productMockMap, $requestProductData, $useDefaults);
@@ -61,143 +85,279 @@ class AttributeFilterTest extends \PHPUnit\Framework\TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function setupInputDataProvider()
+    public function setupInputDataProvider(): array
     {
         return [
-            'create_new_product' => [
+            'test case for create new product without custom attribute' => [
                 'productData' => [
                     'name' => 'testName',
                     'sku' => 'testSku',
                     'price' => '100',
-                    'description' => ''
+                    'description' => '',
                 ],
                 'useDefaults' => [],
                 'expectedProductData' => [
                     'name' => 'testName',
                     'sku' => 'testSku',
-                    'price' => '100'
+                    'price' => '100',
                 ],
-                'initialProductData' => []
+                'initialProductData' => [],
+                'attributeList' => null
             ],
-            'update_product_without_use_defaults' => [
+            'test case for create new product with custom attribute' => [
+                'productData' => [
+                    'name' => 'testName',
+                    'sku' => 'testSku',
+                    'price' => '100',
+                    'description' => 'testDescription',
+                    'custom_attr' => ''
+                ],
+                'useDefaults' => [],
+                'expectedProductData' => [
+                    'name' => 'testName',
+                    'sku' => 'testSku',
+                    'price' => '100',
+                    'description' => 'testDescription',
+                    'custom_attr' => ''
+                ],
+                'initialProductData' => [],
+                'attributeList' => [
+                    'custom_attr' => new DataObject(
+                        ['frontend_type' => 'frontend', 'backend_type' => 'backend',
+                            'is_user_defined' => '1', 'is_required' => '0',
+                            'additional_data' => 'swatch_input_type: visual'
+                        ]
+                    )
+                ]
+            ],
+            'test case for update product without use_defaults' => [
                 'productData' => [
                     'name' => 'testName2',
                     'sku' => 'testSku2',
                     'price' => '101',
                     'description' => '',
-                    'special_price' => null
+                    'special_price' => null,
                 ],
                 'useDefaults' => [],
-                'expectedProductData' => [
-                    'name' => 'testName2',
-                    'sku' => 'testSku2',
-                    'price' => '101',
-                    'special_price' => null
-                ],
-                'initialProductData' => [
-                    ['name', 'testName2'],
-                    ['sku', 'testSku2'],
-                    ['price', '101'],
-                    ['special_price', null]
-                ]
-            ],
-            'update_product_without_use_defaults_2' => [
-                'productData' => [
-                    'name' => 'testName2',
-                    'sku' => 'testSku2',
-                    'price' => '101',
-                    'description' => 'updated description',
-                    'special_price' => null
-                ],
-                'useDefaults' => [],
-                'expectedProductData' => [
-                    'name' => 'testName2',
-                    'sku' => 'testSku2',
-                    'price' => '101',
-                    'description' => 'updated description',
-                    'special_price' => null
-                ],
-                'initialProductData' => [
-                    ['name', 'testName2'],
-                    ['sku', 'testSku2'],
-                    ['price', '101'],
-                    ['special_price', null]
-                ]
-            ],
-            'update_product_with_use_defaults' => [
-                'productData' => [
-                    'name' => 'testName2',
-                    'sku' => 'testSku2',
-                    'price' => '101',
-                    'description' => '',
-                    'special_price' => null
-                ],
-                'useDefaults' => [
-                    'description' => '0'
-                ],
                 'expectedProductData' => [
                     'name' => 'testName2',
                     'sku' => 'testSku2',
                     'price' => '101',
                     'special_price' => null,
-                    'description' => ''
                 ],
                 'initialProductData' => [
                     ['name', 'testName2'],
                     ['sku', 'testSku2'],
                     ['price', '101'],
                     ['special_price', null],
-                    ['description', 'descr text']
+                ],
+                'attributeList' => null
+            ],
+            'test case for update product with custom attribute' => [
+                'productData' => [
+                    'name' => 'testName2',
+                    'sku' => 'testSku2',
+                    'price' => '101',
+                    'description' => 'testDescription',
+                    'custom_attr' => '',
+                ],
+                'useDefaults' => [],
+                'expectedProductData' => [
+                    'name' => 'testName2',
+                    'sku' => 'testSku2',
+                    'price' => '101',
+                    'description' => 'testDescription',
+                    'custom_attr' => '',
+                ],
+                'initialProductData' => [
+                    ['name', 'testName2'],
+                    ['sku', 'testSku2'],
+                    ['price', '101'],
+                    ['custom_attr', ''],
+                ],
+                'attributeList' => [
+                    'custom_attr' => new DataObject(
+                        ['frontend_type' => 'frontend', 'backend_type' => 'backend',
+                            'is_user_defined' => '1', 'is_required' => '0',
+                            'additional_data' => 'swatch_input_type: visual'
+                        ]
+                    )
                 ]
             ],
-            'update_product_with_use_defaults_2' => [
+            'test case for update product without use_defaults_2' => [
+                'productData' => [
+                    'name' => 'testName2',
+                    'sku' => 'testSku2',
+                    'price' => '101',
+                    'description' => 'updated description',
+                    'special_price' => null,
+                ],
+                'useDefaults' => [],
+                'expectedProductData' => [
+                    'name' => 'testName2',
+                    'sku' => 'testSku2',
+                    'price' => '101',
+                    'description' => 'updated description',
+                    'special_price' => null,
+                ],
+                'initialProductData' => [
+                    ['name', 'testName2'],
+                    ['sku', 'testSku2'],
+                    ['price', '101'],
+                    ['special_price', null],
+                ],
+                'attributeList' => null
+            ],
+            'test case for update product with use_defaults' => [
+                'productData' => [
+                    'name' => 'testName2',
+                    'sku' => 'testSku2',
+                    'price' => '101',
+                    'description' => '',
+                    'special_price' => null,
+                ],
+                'useDefaults' => [
+                    'description' => '0',
+                ],
+                'expectedProductData' => [
+                    'name' => 'testName2',
+                    'sku' => 'testSku2',
+                    'price' => '101',
+                    'special_price' => null,
+                    'description' => '',
+                ],
+                'initialProductData' => [
+                    ['name', 'testName2'],
+                    ['sku', 'testSku2'],
+                    ['price', '101'],
+                    ['special_price', null],
+                    ['description', 'descr text'],
+                ],
+                'attributeList' => null
+            ],
+            'test case for update product with use_defaults_2' => [
                 'requestProductData' => [
                     'name' => 'testName3',
                     'sku' => 'testSku3',
                     'price' => '103',
                     'description' => 'descr modified',
-                    'special_price' => '100'
+                    'special_price' => '100',
                 ],
                 'useDefaults' => [
-                    'description' => '0'
+                    'description' => '0',
                 ],
                 'expectedProductData' => [
                     'name' => 'testName3',
                     'sku' => 'testSku3',
                     'price' => '103',
                     'special_price' => '100',
-                    'description' => 'descr modified'
+                    'description' => 'descr modified',
                 ],
                 'initialProductData' => [
-                    ['name', null,'testName2'],
+                    ['name', null, 'testName2'],
                     ['sku', null, 'testSku2'],
                     ['price', null, '101'],
-                    ['description', null, 'descr text']
-                ]
+                    ['description', null, 'descr text'],
+                ],
+                'attributeList' => null
             ],
-            'update_product_with_use_defaults_3' => [
+            'test case for update product with use_defaults_3' => [
                 'requestProductData' => [
                     'name' => 'testName3',
                     'sku' => 'testSku3',
                     'price' => '103',
-                    'special_price' => '100'
+                    'special_price' => '100',
+                    'description' => 'descr modified',
                 ],
                 'useDefaults' => [
-                    'description' => '1'
+                    'description' => '1',
                 ],
                 'expectedProductData' => [
                     'name' => 'testName3',
                     'sku' => 'testSku3',
                     'price' => '103',
                     'special_price' => '100',
+                    'description' => false,
                 ],
                 'initialProductData' => [
-                    ['name', null,'testName2'],
+                    ['name', null, 'testName2'],
                     ['sku', null, 'testSku2'],
                     ['price', null, '101'],
-                    ['description', null, 'descr text']
-                ]
+                    ['description', null, 'descr text'],
+                ],
+                'attributeList' => null
+            ],
+            'test case for update product with empty string attribute' => [
+                'requestProductData' => [
+                    'name' => 'testName3',
+                    'sku' => 'testSku3',
+                    'price' => '103',
+                    'special_price' => '100',
+                    'custom_attribute' => '',
+                ],
+                'useDefaults' => [],
+                'expectedProductData' => [
+                    'name' => 'testName3',
+                    'sku' => 'testSku3',
+                    'price' => '103',
+                    'special_price' => '100',
+                    'custom_attribute' => '',
+                ],
+                'initialProductData' => [
+                    ['name', null, 'testName2'],
+                    ['sku', null, 'testSku2'],
+                    ['price', null, '101'],
+                    ['custom_attribute', null, '0'],
+                ],
+                'attributeList' => null
+            ],
+            'update_product_with_multi_select_attribute' => [
+                'requestProductData' => [
+                    'name' => 'testName3',
+                    'sku' => 'testSku3',
+                    'price' => '103',
+                    'special_price' => '100',
+                    'multi_select_attribute' => 'test',
+                ],
+                'useDefaults' => ['multi_select_attribute' => '1'],
+                'expectedProductData' => [
+                    'name' => 'testName3',
+                    'sku' => 'testSku3',
+                    'price' => '103',
+                    'special_price' => '100',
+                    'multi_select_attribute' => false,
+                ],
+                'initialProductData' => [
+                    ['name', null, 'testName2'],
+                    ['sku', null, 'testSku2'],
+                    ['price', null, '101'],
+                    ['multi_select_attribute', null, 'test'],
+                ],
+                'attributeList' => null
             ],
         ];
+    }
+
+    /**
+     * @param array $useDefaults
+     * @return array
+     */
+    private function getProductAttributesMock(array $useDefaults): array
+    {
+        $returnArray = [];
+        foreach ($useDefaults as $attributecode => $isDefault) {
+            if ($isDefault === '1') {
+                /** @var Attribute | MockObject $attribute */
+                $attribute = $this->getMockBuilder(Attribute::class)
+                    ->disableOriginalConstructor()
+                    ->getMock();
+                $attribute->expects($this->any())
+                    ->method('getBackendType')
+                    ->willReturn('varchar');
+
+                $returnArray[$attributecode] = $attribute;
+            }
+        }
+        return $returnArray;
     }
 }

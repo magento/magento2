@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CheckSelectedShippingAddressInCheckoutActionGroup">
+        <annotations>
+            <description>Validates that the provided Customer and Address details are listed on the Storefront Checkout page under the 'Shipping Address' section when multiple Addresses are present for a Customer.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerVar"/>
+            <argument name="customerAddressVar"/>
+        </arguments>
+        <waitForElement selector="{{CheckoutShippingSection.shippingTab}}" time="30" stepKey="waitForShippingSectionLoaded"/>
+        <see selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerVar.firstname}}" stepKey="VerifyFirstNameInSelectedAddress"/>
+        <see selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerVar.lastname}}" stepKey="VerifyLastNameInSelectedAddress"/>
+        <see selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.street[0]}}" stepKey="VerifyStreetInSelectedAddress"/>
+        <see selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.city}}" stepKey="VerifyCityInSelectedAddress"/>
+        <see selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.postcode}}" stepKey="VerifyZipInSelectedAddress"/>
+        <see selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.telephone}}" stepKey="VerifyPhoneInSelectedAddress"/>
+    </actionGroup>
+</actionGroups>

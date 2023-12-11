@@ -20,20 +20,31 @@ class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
      */
     protected $currencySymbolModel;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         $this->currencySymbolModel = Bootstrap::getObjectManager()->create(
             \Magento\CurrencySymbol\Model\System\Currencysymbol::class
         );
     }
 
-    protected function tearDown()
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
     {
         $this->currencySymbolModel = null;
         Bootstrap::getObjectManager()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class)->reinit();
         Bootstrap::getObjectManager()->create(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
     }
 
+    /**
+     * Test that getCurrencySymbolsData method returns valid data
+     *
+     * @return void
+     */
     public function testGetCurrencySymbolsData()
     {
         $currencySymbolsData = $this->currencySymbolModel->getCurrencySymbolsData();
@@ -80,8 +91,37 @@ class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('@', $this->currencySymbolModel->getCurrencySymbol('EUR'), 'Symbol not set correctly.');
     }
 
+    /**
+     * Test that method returns valid data
+     *
+     * @return void
+     */
     public function testGetCurrencySymbolNonExistent()
     {
         $this->assertFalse($this->currencySymbolModel->getCurrencySymbol('AUD'));
+    }
+
+    /**
+     * Test that default symbol can be set to use explicitly in the system
+     *
+     * @return void
+     */
+    public function testSetCurrencySymbolLikeParent()
+    {
+        $currencySymbolsData = ['USD' => '$'];
+        $this->currencySymbolModel->setCurrencySymbolsData($currencySymbolsData);
+
+        //Verify if the new symbol is set
+        $this->assertEquals(
+            '$',
+            $this->currencySymbolModel->getCurrencySymbolsData()['USD']['displaySymbol'],
+            'Symbol was not correctly set.'
+        );
+
+        $this->assertEquals(
+            false,
+            $this->currencySymbolModel->getCurrencySymbolsData()['USD']['inherited'],
+            'Symbol\'s inheritance was not correctly set.'
+        );
     }
 }

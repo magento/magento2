@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurableProductOutOfStockTestDeleteChildrenTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Product visibility when in stock/out of stock"/>
+            <title value="Configurable Product goes 'Out of Stock' if all associated Simple Products are deleted"/>
+            <description value="Configurable Product goes 'Out of Stock' if all associated Simple Products are deleted"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3042"/>
+            <group value="ConfigurableProduct"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->
+            <!-- Create the category to put the product in -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+
+            <!-- Create the configurable product based on the data in the /data folder -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Make the configurable product have two options, that are children of the default attribute set -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Create the 2 children that will be a part of the configurable product -->
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+
+            <!-- Assign the two products to the configurable product -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+
+            <!-- log in -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+
+        <!-- Check to make sure that the configurable product shows up as in stock -->
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToConfigProductPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStoreFrontLoad"/>
+        <actionGroup ref="StorefrontCheckProductStockStatus" stepKey="checkForOutOfStock">
+            <argument name="productUrlKey" value="$createConfigProduct.custom_attributes[url_key]$"/>
+            <argument name="productName" value="$createConfigProduct.name$"/>
+            <argument name="stockStatus" value="IN STOCK"/>
+        </actionGroup>
+
+        <!-- Delete the first simple product -->
+        <actionGroup stepKey="deleteProduct1" ref="DeleteProductBySkuActionGroup">
+            <argument name="sku" value="{{ApiSimpleOne.sku}}"/>
+        </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+
+        <!-- Check to make sure that the configurable product shows up as in stock -->
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToConfigProductPage2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStoreFrontLoad2"/>
+        <actionGroup ref="StorefrontCheckProductStockStatus" stepKey="checkForOutOfStock2">
+            <argument name="productUrlKey" value="$createConfigProduct.custom_attributes[url_key]$"/>
+            <argument name="productName" value="$createConfigProduct.name$"/>
+            <argument name="stockStatus" value="IN STOCK"/>
+        </actionGroup>
+
+        <!-- Delete the second simple product -->
+        <actionGroup stepKey="deleteProduct2" ref="DeleteProductBySkuActionGroup">
+            <argument name="sku" value="{{ApiSimpleTwo.sku}}"/>
+        </actionGroup>
+
+        <!-- Check to make sure that the configurable product shows up as out of stock -->
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToConfigProductPage3"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStoreFrontLoad3"/>
+        <actionGroup ref="StorefrontCheckProductStockStatus" stepKey="checkForOutOfStock3">
+            <argument name="productUrlKey" value="$createConfigProduct.custom_attributes[url_key]$"/>
+            <argument name="productName" value="$createConfigProduct.name$"/>
+            <argument name="stockStatus" value="OUT OF STOCK"/>
+        </actionGroup>
+    </test>
+</tests>

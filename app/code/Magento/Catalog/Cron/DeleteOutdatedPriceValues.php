@@ -12,8 +12,10 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Store\Model\Store;
 
 /**
+ * Cron job for removing outdated prices.
+ *
  * Cron operation is responsible for deleting all product prices on WEBSITE level
- * in case 'Catalog Price Scope' configuratoin parameter is set to GLOBAL.
+ * in case 'Catalog Price Scope' configuration parameter is set to GLOBAL.
  */
 class DeleteOutdatedPriceValues
 {
@@ -48,27 +50,46 @@ class DeleteOutdatedPriceValues
     }
 
     /**
-     * Delete all price values for non-admin stores if PRICE_SCOPE is global
+     * Delete all price values for non-admin stores if PRICE_SCOPE is set to global.
      *
      * @return void
      */
     public function execute()
     {
-        $priceScope = $this->scopeConfig->getValue(Store::XML_PATH_PRICE_SCOPE);
-        if ($priceScope == Store::PRICE_SCOPE_GLOBAL) {
-            /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $priceAttribute */
-            $priceAttribute = $this->attributeRepository
-                ->get(ProductAttributeInterface::ENTITY_TYPE_CODE, ProductAttributeInterface::CODE_PRICE);
-            $connection = $this->resource->getConnection();
-            $conditions = [
-                $connection->quoteInto('attribute_id = ?', $priceAttribute->getId()),
-                $connection->quoteInto('store_id != ?', Store::DEFAULT_STORE_ID),
-            ];
-
-            $connection->delete(
-                $priceAttribute->getBackend()->getTable(),
-                $conditions
-            );
+        if (!$this->isPriceScopeSetToGlobal()) {
+            return;
         }
+
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $priceAttribute */
+        $priceAttribute = $this->attributeRepository
+            ->get(ProductAttributeInterface::ENTITY_TYPE_CODE, ProductAttributeInterface::CODE_PRICE);
+        $connection = $this->resource->getConnection();
+        $conditions = [
+            $connection->quoteInto('attribute_id = ?', $priceAttribute->getId()),
+            $connection->quoteInto('store_id != ?', Store::DEFAULT_STORE_ID),
+        ];
+
+        $connection->delete(
+            $priceAttribute->getBackend()->getTable(),
+            $conditions
+        );
+    }
+
+    /**
+     * Checks if price scope config option explicitly equal to global value.
+     *
+     * Such strict comparison is required to prevent price deleting when
+     * price scope config option is null for some reason.
+     *
+     * @return bool
+     */
+    private function isPriceScopeSetToGlobal()
+    {
+        $priceScope = $this->scopeConfig->getValue(Store::XML_PATH_PRICE_SCOPE);
+        if ($priceScope === null) {
+            return false;
+        }
+
+        return (int)$priceScope === Store::PRICE_SCOPE_GLOBAL;
     }
 }

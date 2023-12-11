@@ -10,6 +10,8 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
  * Class ShipmentCreateTest
+ *
+ * Test shipment save API
  */
 class ShipmentCreateTest extends WebapiAbstract
 {
@@ -24,7 +26,7 @@ class ShipmentCreateTest extends WebapiAbstract
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -43,13 +45,13 @@ class ShipmentCreateTest extends WebapiAbstract
                 'qty' => $orderItem->getQtyOrdered(),
                 'additional_data' => null,
                 'description' => null,
-                'entity_id' => null,
+                'entity_id' => 1,
                 'name' => null,
                 'parent_id' => null,
                 'price' => null,
                 'product_id' => null,
                 'row_total' => null,
-                'sku' => null,
+                'sku' => 'simple',
                 'weight' => null,
             ],
         ];

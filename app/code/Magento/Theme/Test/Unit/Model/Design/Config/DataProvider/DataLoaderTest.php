@@ -3,13 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Design\Config\DataProvider;
 
+use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Theme\Api\Data\DesignConfigDataInterface;
+use Magento\Theme\Api\Data\DesignConfigInterface;
+use Magento\Theme\Api\DesignConfigRepositoryInterface;
 use Magento\Theme\Model\Design\Config\DataProvider\DataLoader;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DataLoaderTest extends \PHPUnit\Framework\TestCase
+class DataLoaderTest extends TestCase
 {
     /**
      * @var DataLoader
@@ -17,47 +24,47 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\Request\DataPersistorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataPersistorInterface|MockObject
      */
     protected $dataPersistor;
 
     /**
-     * @var \Magento\Theme\Api\DesignConfigRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DesignConfigRepositoryInterface|MockObject
      */
     protected $designConfigRepository;
 
     /**
-     * @var \Magento\Theme\Api\Data\DesignConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DesignConfigInterface|MockObject
      */
     protected $designConfig;
 
     /**
-     * @var \Magento\Theme\Api\Data\DesignConfigDataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DesignConfigDataInterface|MockObject
      */
     protected $designConfigData;
 
     /**
-     * @var \Magento\Theme\Api\Data\DesignConfigExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Api\Data\DesignConfigExtensionInterface|MockObject
      */
     protected $designConfigExtension;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dataPersistor = $this->getMockBuilder(\Magento\Framework\App\Request\DataPersistorInterface::class)
+        $this->dataPersistor = $this->getMockBuilder(DataPersistorInterface::class)
             ->getMockForAbstractClass();
-        $this->designConfigRepository = $this->getMockBuilder(\Magento\Theme\Api\DesignConfigRepositoryInterface::class)
+        $this->designConfigRepository = $this->getMockBuilder(DesignConfigRepositoryInterface::class)
             ->getMockForAbstractClass();
-        $this->designConfig = $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigInterface::class)
+        $this->designConfig = $this->getMockBuilder(DesignConfigInterface::class)
             ->getMockForAbstractClass();
-        $this->designConfigData = $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigDataInterface::class)
+        $this->designConfigData = $this->getMockBuilder(DesignConfigDataInterface::class)
             ->getMockForAbstractClass();
         $this->designConfigExtension = $this->getMockBuilder(
             \Magento\Theme\Api\Data\DesignConfigExtensionInterface::class
@@ -108,11 +115,11 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->getData();
 
-        $this->assertTrue(is_array($result));
-        $this->assertTrue(array_key_exists($scope, $result));
-        $this->assertTrue(is_array($result[$scope]));
-        $this->assertTrue(array_key_exists('scope', $result[$scope]));
-        $this->assertTrue(array_key_exists('scope_id', $result[$scope]));
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey($scope, $result);
+        $this->assertIsArray($result[$scope]);
+        $this->assertArrayHasKey('scope', $result[$scope]);
+        $this->assertArrayHasKey('scope_id', $result[$scope]);
         $this->assertEquals($scope, $result[$scope]['scope']);
         $this->assertEquals($scopeId, $result[$scope]['scope_id']);
     }

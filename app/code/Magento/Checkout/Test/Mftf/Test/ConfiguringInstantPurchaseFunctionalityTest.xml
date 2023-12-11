@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ConfiguringInstantPurchaseFunctionalityTest">
+        <annotations>
+            <features value="One Page Checkout"/>
+            <stories value="Configuring instant purchase"/>
+            <title value="Configuring instant purchase functionality test"/>
+            <description value="Configuring instant purchase"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-6436"/>
+            <group value="checkout"/>
+            <skip>
+                <issueId value="MQE-1576"/>
+            </skip>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Configure Paypal Payflow Pro payment method -->
+            <createData entity="PaypalPayflowProConfig" stepKey="configurePaypalPayflowProPayment"/>
+            <!-- Enable Paypal Payflow Pro with Vault -->
+            <createData entity="EnablePaypalPayflowProWithVault" stepKey="enablePaypalPayflowProPaymentWithVault"/>
+
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!-- Create product -->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Set configs to default -->
+            <createData entity="DefaultPaypalPayflowProConfig" stepKey="defaultPaypalPayflowProConfig"/>
+            <createData entity="RollbackPaypalPayflowPro" stepKey="rollbackPaypalPayflowProConfig"/>
+
+            <!-- Delete product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+
+            <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <!-- Admin logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Create store views -->
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createFirstStoreView">
+            <argument name="customStore" value="storeViewData1"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
+            <argument name="customStore" value="storeViewData2"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
+        <!-- Login to Frontend -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+
+        <!-- Customer placed order with payment method save -->
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
+
+        <!-- Fill Paypal card data -->
+        <click selector="{{StorefrontPaypalCheckoutSection.creditCard}}" stepKey="selectPaypalPaymentMethod"/>
+        <waitForPageLoad stepKey="waitForPaypalFormLoad"/>
+        <scrollTo selector="{{StorefrontPaypalCheckoutSection.creditCard}}" stepKey="scrollToCreditCardSection"/>
+        <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardDataPaypal">
+            <argument name="cardData" value="Visa3DSecureCard"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForFillCardData"/>
+
+        <!-- Place order -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+
+        <!-- Go to Configuration > Sales -->
+        <actionGroup ref="AdminOpenInstantPurchaseConfigPageActionGroup" stepKey="openInstantPurchaseConfigPage"/>
+
+        <!-- Enable Instant Purchase -->
+        <actionGroup ref="AdminChangeInstantPurchaseStatusActionGroup" stepKey="enableInstantPurchase"/>
+
+        <!-- Switch to specific store view -->
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToSpecificStoreView">
+            <argument name="storeView" value="storeViewData1.name"/>
+        </actionGroup>
+
+        <!-- Change button text on a single store view -->
+        <actionGroup ref="AdminChangeInstantPurchaseButtonTextActionGroup" stepKey="changeInstantPurchaseButtonText">
+            <argument name="buttonText" value="Quick Buy"/>
+        </actionGroup>
+
+        <!-- Verify changes on the front-end by opening a simple product as a logged in customer with saved card and address on given store view:
+             1. Go to Storefront page -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefrontPage"/>
+
+        <!-- 2. Switch store view -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="SwitchStoreView">
+            <argument name="storeView" value="storeViewData1"/>
+        </actionGroup>
+
+        <!-- 3. Assert customer is logged with saved card with address -->
+        <actionGroup ref="OpenStorefrontCustomerStoredPaymentMethodsPageActionGroup" stepKey="openStorefrontCustomerStoredPaymentMethodsPage"/>
+        <actionGroup ref="AssertStorefrontCustomerSavedCardActionGroup" stepKey="assertCustomerPaymentMethod">
+                <argument name="card" value="Visa3DSecureCardInfo"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToAddressBook">
+            <argument name="menu" value="Address Book"/>
+        </actionGroup>
+        <see selector="{{CheckoutOrderSummarySection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}} {{US_Address_TX.city}}, {{US_Address_TX.state}}, {{US_Address_TX.postcode}}" stepKey="checkShippingAddress"/>
+
+        <!-- Open product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <!-- Quick Buy button shows up. Clicking it opens review popup -->
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeQuickBuyButton">
+            <argument name="selector" value="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}"/>
+            <argument name="userInput" value="Quick Buy"/>
+        </actionGroup>
+        <click selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="clickQuickBuyButton"/>
+        <waitForElementVisible selector="{{StorefrontInstantPurchasePopupSection.modalTitle}}" stepKey="waitForPopUpTitleVisible"/>
+        <see selector="{{StorefrontInstantPurchasePopupSection.modalTitle}}" userInput="Instant Purchase Confirmation" stepKey="seeReviewPopUp"/>
+        <click selector="{{StorefrontInstantPurchasePopupSection.cancel}}" stepKey="closeModalPopup"/>
+        <waitForPageLoad stepKey="waitForClosing"/>
+
+        <!-- Verify changes on the front-end by opening a simple product as a logged in customer with saved card and address on a store view for which description was not changed
+             1. New customer session should be started to verify changes -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- 2. Switch store view which description was not changed -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="SwitchToSecondStoreView">
+            <argument name="storeView" value="storeViewData2"/>
+        </actionGroup>
+
+        <!-- 3. Assert customer is logged with saved card and address -->
+        <actionGroup ref="OpenStorefrontCustomerStoredPaymentMethodsPageActionGroup" stepKey="openStorefrontCustomerPaymentMethodsPage"/>
+        <actionGroup ref="AssertStorefrontCustomerSavedCardActionGroup" stepKey="assertPaymentMethod">
+            <argument name="card" value="Visa3DSecureCardInfo"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="openAddressBook">
+            <argument name="menu" value="Address Book"/>
+        </actionGroup>
+        <see selector="{{CheckoutOrderSummarySection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}} {{US_Address_TX.city}}, {{US_Address_TX.state}}, {{US_Address_TX.postcode}}" stepKey="seeShippingAddress"/>
+
+        <!-- Open product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openCreatedProductPage">
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <!-- Instant Purchase button shows up. Clicking it opens review popup. -->
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeInstantPurchaseButton">
+            <argument name="selector" value="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}"/>
+            <argument name="userInput" value="Instant Purchase"/>
+        </actionGroup>
+        <click selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="clickInstantPurchaseButton"/>
+        <waitForElementVisible selector="{{StorefrontInstantPurchasePopupSection.modalTitle}}" stepKey="waitForPopUpVisible"/>
+        <see selector="{{StorefrontInstantPurchasePopupSection.modalTitle}}" userInput="Instant Purchase Confirmation" stepKey="seeReviewPopUpTitle"/>
+        <click selector="{{StorefrontInstantPurchasePopupSection.cancel}}" stepKey="closeModalPopUp"/>
+        <waitForPageLoad stepKey="waitForModalClosing"/>
+
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="createdCustomerLogout"/>
+
+        <!-- Return to configuration and disable Instant Purchase in a specific store view -->
+        <actionGroup ref="AdminOpenInstantPurchaseConfigPageActionGroup" stepKey="openInstantPurchasePage"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToFirstSpecificStoreView">
+            <argument name="storeView" value="storeViewData1.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeInstantPurchaseStatusActionGroup" stepKey="disableInstantPurchase">
+            <argument name="status" value="0"/>
+        </actionGroup>
+
+        <!-- Verify changes on the front-end by opening a simple product as a logged in customer with saved card and address in the specific store view
+             1. New customer session should be started to verify changes -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCreatedCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- 2. Switch store view -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStoreView">
+            <argument name="storeView" value="storeViewData1"/>
+        </actionGroup>
+
+        <!-- 3. Assert customer is logged with saved card and address -->
+        <actionGroup ref="OpenStorefrontCustomerStoredPaymentMethodsPageActionGroup" stepKey="openCustomerPaymentMethodsPage"/>
+        <actionGroup ref="AssertStorefrontCustomerSavedCardActionGroup" stepKey="assertCartPaymentMethod">
+            <argument name="card" value="Visa3DSecureCardInfo"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToAddressBookPage">
+            <argument name="menu" value="Address Book"/>
+        </actionGroup>
+        <see selector="{{CheckoutOrderSummarySection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}} {{US_Address_TX.city}}, {{US_Address_TX.state}}, {{US_Address_TX.postcode}}" stepKey="assertCustomerShippingAddress"/>
+
+        <!-- Open product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductIndexPage">
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <!-- Quick Buy button is not visible -->
+        <actionGroup ref="AssertStorefrontElementInvisibleActionGroup" stepKey="dontSeeQuickBuyButton">
+            <argument name="selector" value="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}"/>
+            <argument name="userInput" value="Quick Buy"/>
+        </actionGroup>
+
+        <!-- Verify changes on the front-end by opening a simple product as a logged in customer with saved card and address in the other store view
+             1. New customer session should be started to verify changes -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLoginToStorefront">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- 2. Switch store view -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToSecondStoreView">
+            <argument name="storeView" value="storeViewData2"/>
+        </actionGroup>
+
+        <!-- 3. Assert customer is logged with saved card and address -->
+        <actionGroup ref="OpenStorefrontCustomerStoredPaymentMethodsPageActionGroup" stepKey="goToStorefrontCustomerPaymentMethodsPage"/>
+        <actionGroup ref="AssertStorefrontCustomerSavedCardActionGroup" stepKey="assertCardPaymentMethod">
+            <argument name="card" value="Visa3DSecureCardInfo"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="openAddressBookPage">
+            <argument name="menu" value="Address Book"/>
+        </actionGroup>
+        <see selector="{{CheckoutOrderSummarySection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}} {{US_Address_TX.city}}, {{US_Address_TX.state}}, {{US_Address_TX.postcode}}" stepKey="seeCustomerShippingAddress"/>
+
+        <!-- Open product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToProductPage">
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <!-- Instant Purchase button is still visible -->
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeInstantPurchaseBtn">
+            <argument name="selector" value="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}"/>
+            <argument name="userInput" value="Instant Purchase"/>
+        </actionGroup>
+
+        <!-- Delete store views -->
+        <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteFirstStoreView">
+            <argument name="customStore" value="storeViewData1"/>
+        </actionGroup>
+        <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteSecondStoreView">
+            <argument name="customStore" value="storeViewData2"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex2">
+            <argument name="indices" value=""/>
+        </actionGroup>
+    </test>
+</tests>

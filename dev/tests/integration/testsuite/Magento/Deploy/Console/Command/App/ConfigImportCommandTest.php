@@ -5,25 +5,27 @@
  */
 namespace Magento\Deploy\Console\Command\App;
 
+use Magento\Config\Model\Config\Backend\Currency\Cron;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Console\Cli;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Flag;
 use Magento\Framework\FlagFactory;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\GroupFactory;
 use Magento\Store\Model\StoreFactory;
 use Magento\Store\Model\WebsiteFactory;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Console\Cli;
-use Magento\Framework\Filesystem;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Deploy\Model\DeploymentConfig\Hash;
-use Magento\Framework\App\Config\ReinitableConfigInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable
  */
 class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
 {
@@ -85,7 +87,7 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->reader = $this->objectManager->get(DeploymentConfig\Reader::class);
@@ -105,7 +107,7 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
@@ -136,7 +138,7 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
         $commandTester->execute([], ['interactive' => false]);
 
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
-        $this->assertContains('Nothing to import.', $commandTester->getDisplay());
+        $this->assertStringContainsString('Nothing to import.', $commandTester->getDisplay());
         $this->assertEmpty($this->hash->get());
     }
 
@@ -160,7 +162,7 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
         $command = $this->objectManager->create(ConfigImportCommand::class);
         $commandTester = new CommandTester($command);
 
-        $this->runConfigImportCommand($commandTester);
+        $this->runConfigImportCommand($commandTester, 'Stores were processed');
 
         /** @var StoreFactory $storeFactory */
         $storeFactory = $this->objectManager->get(StoreFactory::class);
@@ -189,7 +191,7 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
             require __DIR__ . '/../../../_files/scopes/config_with_changed_stores.php'
         );
 
-        $this->runConfigImportCommand($commandTester);
+        $this->runConfigImportCommand($commandTester, 'Stores were processed');
 
         $store = $storeFactory->create();
         $store->getResource()->load($store, 'test', 'code');
@@ -212,7 +214,7 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
             require __DIR__ . '/../../../_files/scopes/config_with_removed_stores.php'
         );
 
-        $this->runConfigImportCommand($commandTester);
+        $this->runConfigImportCommand($commandTester, 'Stores were processed');
 
         $group = $groupFactory->create();
         $group->getResource()->load($group, 'test_website_store', 'code');
@@ -221,9 +223,9 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
         $website = $websiteFactory->create();
         $website->getResource()->load($website, 'test_website', 'code');
 
-        $this->assertSame(null, $store->getId());
-        $this->assertSame(null, $website->getId());
-        $this->assertSame(null, $group->getId());
+        $this->assertNull($store->getId());
+        $this->assertNull($website->getId());
+        $this->assertNull($group->getId());
     }
 
     /**
@@ -246,7 +248,7 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
         $importCommandTester = new CommandTester($importCommand);
         $importCommandTester->execute([]);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             'Scopes data should have at least one not admin website, group and store.',
             $importCommandTester->getDisplay()
         );
@@ -304,7 +306,7 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([], ['interactive' => false]);
 
-        $this->assertContains('System config was processed', $commandTester->getDisplay());
+        $this->assertStringContainsString('System config was processed', $commandTester->getDisplay());
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
 
         $this->writeConfig(
@@ -314,7 +316,7 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
 
         $commandTester->execute([]);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             'Invalid Secure Base URL. Value must be a URL or one of placeholders: {{base_url}},{{unsecure_base_url}}',
             $commandTester->getDisplay()
         );
@@ -324,7 +326,7 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
 
         $commandTester->execute([]);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             'Import failed: Sorry, the default display currency you selected is not available in allowed currencies.',
             $commandTester->getDisplay()
         );
@@ -337,8 +339,66 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
 
         $commandTester->execute([]);
 
-        $this->assertContains('Nothing to import', $commandTester->getDisplay());
+        $this->assertStringContainsString('Nothing to import', $commandTester->getDisplay());
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
+    }
+
+    /**
+     * @magentoDbIsolation disabled
+     */
+    public function testImportCurrencyImportSchedule()
+    {
+        $this->assertEmpty($this->hash->get());
+
+        $dumpCommand = $this->objectManager->create(ApplicationDumpCommand::class);
+        $dumpCommandTester = new CommandTester($dumpCommand);
+        $dumpCommandTester->execute([]);
+        $dumpedData = $this->reader->load(ConfigFilePool::APP_CONFIG);
+
+        $command = $this->objectManager->create(ConfigImportCommand::class);
+        $commandTester = new CommandTester($command);
+
+        /** @var Cron $currencyImportSettings */
+        $currencyImportSettings = $this->objectManager->get(Cron::class);
+        /** @var $valueFactory \Magento\Framework\App\Config\ValueFactory */
+        $reflectionProperty = new \ReflectionProperty(
+            $currencyImportSettings,
+            '_configValueFactory'
+        );
+        $reflectionProperty->setAccessible(true);
+        $valueFactory = $reflectionProperty->getValue($currencyImportSettings);
+        /** @var $configValue \Magento\Framework\App\Config\ValueInterface */
+        $configValue = $valueFactory->create();
+
+        $hour = 6;
+        $min = 30;
+        $data = [
+            'system' => [
+                'default' => [
+                    'currency' => [
+                        'import' => [
+                            'enabled' => '1',
+                            'service' => 'fixerio',
+                            'time' => sprintf("%02d", $hour) . ',' . sprintf("%02d", $min) . ',00',
+                            'frequency' => 'D',
+                            'error_email_identity' => 'general',
+                            'error_email_template' => 'currency_import_error_email_template',
+                        ],
+                    ],
+                ],
+            ]
+        ];
+
+        $this->writeConfig(
+            $dumpedData,
+            $data
+        );
+        $this->runConfigImportCommand($commandTester, 'System config was processed');
+
+        $configValue->load(Cron::CRON_STRING_PATH, 'path');
+        $configValue->getFieldsetDataValue('path');
+        $time = $configValue->getValue();
+        $this->assertSame($time, "$min $hour * * *");
     }
 
     /**
@@ -393,16 +453,16 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
      *
      * @param $commandTester
      */
-    private function runConfigImportCommand($commandTester)
+    private function runConfigImportCommand($commandTester, $assertPartialString)
     {
         $this->appConfig->reinit();
         $commandTester->execute([], ['interactive' => false]);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             'Processing configurations data from configuration file...',
             $commandTester->getDisplay()
         );
-        $this->assertContains('Stores were processed', $commandTester->getDisplay());
+        $this->assertStringContainsString($assertPartialString, $commandTester->getDisplay());
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
     }
 }

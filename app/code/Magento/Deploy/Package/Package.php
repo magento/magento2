@@ -11,6 +11,8 @@ use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
 
 /**
  * Deployment Package
+ *
+ * @api
  */
 class Package
 {
@@ -150,6 +152,8 @@ class Package
     }
 
     /**
+     * Get area.
+     *
      * @return string
      */
     public function getArea()
@@ -158,6 +162,8 @@ class Package
     }
 
     /**
+     * Get parent.
+     *
      * @return Package
      */
     public function getParent()
@@ -166,6 +172,8 @@ class Package
     }
 
     /**
+     * Get theme.
+     *
      * @return string
      */
     public function getTheme()
@@ -174,6 +182,8 @@ class Package
     }
 
     /**
+     * Get locale.
+     *
      * @return string
      */
     public function getLocale()
@@ -204,15 +214,19 @@ class Package
     }
 
     /**
+     * Get param.
+     *
      * @param string $name
      * @return mixed|null
      */
     public function getParam($name)
     {
-        return isset($this->params[$name]) ? $this->params[$name] : null;
+        return $this->params[$name] ?? null;
     }
 
     /**
+     * Set param.
+     *
      * @param string $name
      * @param mixed $value
      * @return bool
@@ -241,7 +255,7 @@ class Package
      */
     public function getFile($fileId)
     {
-        return isset($this->files[$fileId]) ? $this->files[$fileId] : false;
+        return $this->files[$fileId] ?? false;
     }
 
     /**
@@ -320,7 +334,10 @@ class Package
      */
     public function deleteFile($fileId)
     {
+        $file = $this->files[$fileId];
+        $deployedFileId = $file->getDeployedFileId();
         unset($this->files[$fileId]);
+        unset($this->map[$deployedFileId]);
     }
 
     /**
@@ -348,6 +365,8 @@ class Package
     }
 
     /**
+     * Set parent.
+     *
      * @param Package $parent
      * @return bool
      */
@@ -368,6 +387,8 @@ class Package
     }
 
     /**
+     * Get state.
+     *
      * @return int
      */
     public function getState()
@@ -376,6 +397,8 @@ class Package
     }
 
     /**
+     * Set state.
+     *
      * @param int $state
      * @return bool
      */
@@ -386,6 +409,8 @@ class Package
     }
 
     /**
+     * Get inheritance level.
+     *
      * @return int
      */
     public function getInheritanceLevel()
@@ -422,9 +447,9 @@ class Package
     {
         $map = [];
         foreach ($this->getParentPackages() as $parentPackage) {
-            $map = array_merge($map, $parentPackage->getMap());
+            $map[] = $parentPackage->getMap();
         }
-        return $map;
+        return array_merge([], ...$map);
     }
 
     /**
@@ -438,12 +463,12 @@ class Package
         $files = [];
         foreach ($this->getParentPackages() as $parentPackage) {
             if ($type === null) {
-                $files = array_merge($files, $parentPackage->getFiles());
+                $files[] = $parentPackage->getFiles();
             } else {
-                $files = array_merge($files, $parentPackage->getFilesByType($type));
+                $files[] = $parentPackage->getFilesByType($type);
             }
         }
-        return $files;
+        return array_merge([], ...$files);
     }
 
     /**
@@ -477,6 +502,8 @@ class Package
     }
 
     /**
+     * Get pre processors.
+     *
      * @return Processor\ProcessorInterface[]
      */
     public function getPreProcessors()
@@ -485,6 +512,8 @@ class Package
     }
 
     /**
+     * Get post processors.
+     *
      * @return Processor\ProcessorInterface[]
      */
     public function getPostProcessors()
@@ -508,7 +537,7 @@ class Package
         $area,
         $theme,
         $locale,
-        array & $result = [],
+        array &$result = [],
         ThemeInterface $themeModel = null
     ) {
         if (($package->getArea() != $area) || ($package->getTheme() != $theme) || ($package->getLocale() != $locale)) {

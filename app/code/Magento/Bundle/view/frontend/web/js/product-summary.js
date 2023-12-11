@@ -9,7 +9,7 @@
 define([
     'jquery',
     'mage/template',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'Magento_Bundle/js/price-bundle'
 ], function ($, mageTemplate) {
     'use strict';
@@ -56,8 +56,9 @@ define([
 
             // Clear Summary box
             this.element.html('');
-
-            $.each(this.cache.currentElement.selected, $.proxy(this._renderOption, this));
+            this.cache.currentElement.positions.forEach(function (optionId) {
+                this._renderOption(optionId, this.cache.currentElement.selected[optionId]);
+            }, this);
             this.element
                 .parents(this.options.bundleSummaryContainer)
                 .toggleClass('empty', !this.cache.currentElementCount); // Zero elements equal '.empty' container
@@ -76,7 +77,7 @@ define([
                     .closest(this.options.summaryContainer)
                     .find(this.options.templates.summaryBlock)
                     .html();
-                template = mageTemplate($.trim(template), {
+                template = mageTemplate(template.trim(), {
                     data: {
                         _label_: this.cache.currentElement.options[key].title
                     }
@@ -106,7 +107,7 @@ define([
                 .closest(this.options.summaryContainer)
                 .find(this.options.templates.optionBlock)
                 .html();
-            template = mageTemplate($.trim(template), {
+            template = mageTemplate(template.trim(), {
                 data: {
                     _quantity_: this.cache.currentElement.options[this.cache.currentKey].selections[optionIndex].qty,
                     _label_: this.cache.currentElement.options[this.cache.currentKey].selections[optionIndex].name

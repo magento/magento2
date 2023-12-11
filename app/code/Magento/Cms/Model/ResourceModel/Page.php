@@ -33,8 +33,6 @@ class Page extends AbstractDb
     protected $_store = null;
 
     /**
-     * Store manager
-     *
      * @var StoreManagerInterface
      */
     protected $_storeManager;
@@ -117,19 +115,24 @@ class Page extends AbstractDb
 
         if (!$this->isValidPageIdentifier($object)) {
             throw new LocalizedException(
-                __('The page URL key contains capital letters or disallowed symbols.')
+                __(
+                    "The page URL key can't use capital letters or disallowed symbols. "
+                    . "Remove the letters and symbols and try again."
+                )
             );
         }
 
         if ($this->isNumericPageIdentifier($object)) {
             throw new LocalizedException(
-                __('The page URL key cannot be made of only numbers.')
+                __("The page URL key can't use only numbers. Add letters or words and try again.")
             );
         }
         return parent::_beforeSave($object);
     }
 
     /**
+     * Get page identifier
+     *
      * @param AbstractModel $object
      * @param string $value
      * @param string|null $field
@@ -248,7 +251,7 @@ class Page extends AbstractDb
      */
     protected function isNumericPageIdentifier(AbstractModel $object)
     {
-        return preg_match('/^[0-9]+$/', $object->getData('identifier'));
+        return preg_match('/^[0-9]+$/', $object->getData('identifier') ?? '');
     }
 
     /**
@@ -259,12 +262,11 @@ class Page extends AbstractDb
      */
     protected function isValidPageIdentifier(AbstractModel $object)
     {
-        return preg_match('/^[a-z0-9][a-z0-9_\/-]+(\.[a-z0-9_-]+)?$/', $object->getData('identifier'));
+        return preg_match('/^[a-z0-9][a-z0-9_\/-]+(\.[a-z0-9_-]+)?$/', $object->getData('identifier') ?? '');
     }
 
     /**
-     * Check if page identifier exist for specific store
-     * return page id if page exists
+     * Check if page identifier exist for specific store, return page id if page exists
      *
      * @param string $identifier
      * @param int $storeId

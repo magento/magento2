@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="_defaultCatalogRule" type="catalogRule">
+        <data key="name" unique="suffix">CatalogPriceRule</data>
+        <data key="description">Catalog Price Rule Description</data>
+        <data key="is_active">1</data>
+        <array key="customer_group_ids">
+            <item>0</item>
+        </array>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <data key="simple_action">by_percent</data>
+        <data key="discount_amount">10</data>
+    </entity>
+
+    <entity name="CatalogRuleByFixed" type="catalogRule">
+        <data key="name" unique="suffix">CatalogPriceRule</data>
+        <data key="description">Catalog Price Rule Description</data>
+        <data key="is_active">1</data>
+        <array key="customer_group_ids">
+            <item>0</item>
+        </array>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <data key="simple_action">by_fixed</data>
+        <data key="discount_amount">12.3</data>
+    </entity>
+
+    <entity name="CatalogRuleToPercent" type="catalogRule">
+        <data key="name" unique="suffix">CatalogPriceRule</data>
+        <data key="description">Catalog Price Rule Description</data>
+        <data key="is_active">1</data>
+        <array key="customer_group_ids">
+            <item>0</item>
+        </array>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <data key="simple_action">to_percent</data>
+        <data key="discount_amount">90</data>
+    </entity>
+
+    <entity name="CatalogRuleToFixed" type="catalogRule">
+        <data key="name" unique="suffix">CatalogPriceRule</data>
+        <data key="description">Catalog Price Rule Description</data>
+        <data key="is_active">1</data>
+        <array key="customer_group_ids">
+            <item>0</item>
+        </array>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <data key="simple_action">to_fixed</data>
+        <data key="discount_amount">110.7</data>
+    </entity>
+
+    <entity name="CatalogRuleByPercentWith96Amount" type="catalogRule">
+        <data key="name" unique="suffix">CatalogPriceRule</data>
+        <data key="description">Catalog Price Rule Description</data>
+        <data key="is_active">1</data>
+        <array key="customer_group_ids">
+            <item>0</item>
+        </array>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <data key="simple_action">by_percent</data>
+        <data key="discount_amount">96</data>
+    </entity>
+
+    <entity name="CatalogRuleWithAllCustomerGroups" type="catalogRule">
+        <data key="name" unique="suffix">CatalogPriceRule</data>
+        <data key="description">Catalog Price Rule Description</data>
+        <data key="is_active">1</data>
+        <array key="customer_group_ids">
+            <item>0</item>
+            <item>1</item>
+            <item>2</item>
+            <item>3</item>
+        </array>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <data key="simple_action">by_percent</data>
+        <data key="discount_amount">10</data>
+    </entity>
+
+    <entity name="InactiveCatalogRule" type="catalogRule">
+        <data key="name" unique="suffix">InactiveCatalogRule</data>
+        <data key="description">Inactive Catalog Price Rule Description</data>
+        <data key="is_active">0</data>
+        <array key="customer_group_ids">
+            <item>1</item>
+        </array>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <data key="simple_action">by_fixed</data>
+        <data key="discount_amount">10.000000</data>
+    </entity>
+
+    <entity name="CatalogRuleWithoutDiscount" type="catalogRule">
+        <data key="name" unique="suffix">CatalogPriceRuleWithoutDiscount</data>
+        <data key="description">Catalog Price Rule Description</data>
+        <data key="is_active">1</data>
+        <array key="customer_group_ids">
+            <item>0</item>
+        </array>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <data key="simple_action">by_percent</data>
+        <data key="discount_amount">0</data>
+    </entity>
+
+    <entity name="ActiveCatalogPriceRuleWithConditions" type="catalogRule">
+        <data key="name" unique="suffix">Active Catalog Rule with conditions </data>
+        <data key="description">Rule Description</data>
+        <data key="is_active">1</data>
+        <array key="customer_group_ids">
+            <item>0</item>
+            <item>1</item>
+            <item>2</item>
+            <item>3</item>
+        </array>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <data key="simple_action">by_percent</data>
+        <data key="discount_amount">10</data>
+    </entity>
+
+    <!-- DO NOT USE IN OTHER TESTS AS IT WILL BREAK THE EXISTING TESTS -->
+    <entity name="DeleteActiveCatalogPriceRuleWithConditions" type="catalogRule">
+        <data key="name" unique="suffix">Delete Active Catalog Rule with conditions </data>
+        <data key="description">Rule Description</data>
+        <data key="is_active">1</data>
+        <array key="customer_group_ids">
+            <item>0</item>
+            <item>1</item>
+            <item>2</item>
+            <item>3</item>
+        </array>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <data key="simple_action">by_percent</data>
+        <data key="discount_amount">10</data>
+    </entity>
+    <entity name="SimpleCatalogPriceRule">
+        <data key="name" unique="suffix">Catalog Price Rule1</data>
+        <data key="description">Description for Cart Price Rule</data>
+        <data key="is_active">Yes</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">NOT LOGGED IN</data>
+        <data key="coupon_type">No Coupon</data>
+        <data key="simple_action">Percent of product price discount</data>
+        <data key="discount_amount">50</data>
+        <data key="maximumQtyDiscount">0</data>
+        <data key="discount_step">0</data>
+        <data key="apply_to_shipping">0</data>
+        <data key="simple_free_shipping">For matching items only</data>
+        <data key="defaultRuleLabelAllStoreViews">Free Shipping in conditions</data>
+        <data key="defaultStoreView">Free Shipping in conditions</data>
+    </entity>
+
+    <entity name="catalogRuleWithInvalid" type="catalogRule">
+        <data key="name" unique="suffix">CatalogPriceRule</data>
+        <data key="description">Catalog Price Rule Description</data>
+        <data key="is_active">1</data>
+        <array key="customer_group_ids">
+            <item>0</item>
+        </array>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <data key="simple_action">by_percent</data>
+        <data key="discount_amount">10</data>
+        <data key="priority">ten</data>
+    </entity>
+</entities>

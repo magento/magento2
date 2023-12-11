@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="GuestCheckoutWithEnabledPersistentTest">
+        <annotations>
+            <features value="Persistent"/>
+            <stories value="Guest checkout"/>
+            <title value="Guest Checkout with Enabled Persistent"/>
+            <description value="Checkout data must be restored after page checkout reload."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-92453"/>
+            <group value="persistent"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="PersistentConfigEnabled" stepKey="enablePersistent"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <createData entity="PersistentConfigDefault" stepKey="setDefaultPersistentState"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+        <!-- Add simple product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart1">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <!-- Navigate to checkout -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="navigateToCheckoutFromMinicart"/>
+        <!-- Fill Shipping Address form -->
+        <waitForElementVisible selector="{{CheckoutShippingGuestInfoSection.email}}" stepKey="waitForEmailFieldVisible" />
+        <fillField selector="{{CheckoutShippingGuestInfoSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="enterEmail"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="enterLastName"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.street}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="enterStreet"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.city}}" userInput="{{CustomerAddressSimple.city}}" stepKey="enterCity"/>
+        <selectOption selector="{{CheckoutShippingGuestInfoSection.region}}" userInput="{{CustomerAddressSimple.state}}" stepKey="selectRegion"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.postcode}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="enterPostcode"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.telephone}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="enterTelephone"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <waitForElementClickable selector="{{CheckoutShippingGuestInfoSection.firstShippingMethod}}" stepKey="waitForFirstShippingMethodClickable" />
+        <click selector="{{CheckoutShippingGuestInfoSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
+        <!-- Check that have the same values after page reload -->
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="amOnCheckoutShippingInfoPage"/>
+        <seeInField selector="{{CheckoutShippingGuestInfoSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="seeEmailOnCheckout" />
+        <seeInField selector="{{CheckoutShippingGuestInfoSection.firstName}}" userInput="{{CustomerEntityOne.firstName}}" stepKey="seeFirstnameOnCheckout" />
+        <seeInField selector="{{CheckoutShippingGuestInfoSection.lastName}}" userInput="{{CustomerEntityOne.lastName}}" stepKey="seeLastnameOnCheckout" />
+        <seeInField selector="{{CheckoutShippingGuestInfoSection.street}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeStreetOnCheckout" />
+        <seeInField selector="{{CheckoutShippingGuestInfoSection.city}}" userInput="{{CustomerAddressSimple.city}}" stepKey="seeCityOnCheckout" />
+        <seeInField selector="{{CheckoutShippingGuestInfoSection.region}}" userInput="{{CustomerAddressSimple.state}}" stepKey="seeStateOnCheckout" />
+        <seeInField selector="{{CheckoutShippingGuestInfoSection.postcode}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="seePostcodeOnCheckout" />
+        <seeInField selector="{{CheckoutShippingGuestInfoSection.telephone}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="seePhoneOnCheckout" />
+        <!-- Click next button to open payment section -->
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="guestSelectCheckMoneyOrderPayment" />
+        <!-- Reload payment section -->
+        <amOnPage url="{{GuestCheckoutReviewAndPaymentsPage.url}}" stepKey="amOnCheckoutPaymentsPage"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton2"/>
+        <!-- Check that address block contains correct information -->
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{CustomerAddressSimple.firstName}}" stepKey="seeBilllingFirstName" />
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{CustomerAddressSimple.lastName}}" stepKey="seeBilllingLastName" />
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeBilllingStreet" />
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{CustomerAddressSimple.city}}" stepKey="seeBilllingCity" />
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{CustomerAddressSimple.state}}" stepKey="seeBilllingState" />
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="seeBilllingPostcode" />
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="seeBilllingTelephone" />
+        <!-- Check that "Ship To" block contains correct information -->
+        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.firstName}}" stepKey="seeShipToFirstName" />
+        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.lastName}}" stepKey="seeShipToLastName" />
+        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeShipToStreet" />
+        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.city}}" stepKey="seeShipToCity" />
+        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.state}}" stepKey="seeShipToState" />
+        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="seeShipToPostcode" />
+        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="seeShipToTelephone" />
+    </test>
+</tests>

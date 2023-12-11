@@ -6,11 +6,15 @@
 
 namespace Magento\Catalog\Helper\Product;
 
+use Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Result\Page as ResultPage;
 
 /**
  * Catalog category helper
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class View extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -22,29 +26,21 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
     protected $messageGroups;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Catalog product
-     *
      * @var \Magento\Catalog\Helper\Product
      */
     protected $_catalogProduct = null;
 
     /**
-     * Catalog design
-     *
      * @var \Magento\Catalog\Model\Design
      */
     protected $_catalogDesign;
 
     /**
-     * Catalog session
-     *
      * @var \Magento\Catalog\Model\Session
      */
     protected $_catalogSession;
@@ -60,6 +56,16 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
     protected $categoryUrlPathGenerator;
 
     /**
+     * @var \Magento\Framework\Stdlib\StringUtils
+     */
+    private $string;
+
+    /**
+     * @var LayoutUpdateManager
+     */
+    private $layoutUpdateManager;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\Helper\Context $context
@@ -70,6 +76,9 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param array $messageGroups
+     * @param \Magento\Framework\Stdlib\StringUtils|null $string
+     * @param LayoutUpdateManager|null $layoutUpdateManager
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -79,7 +88,9 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator,
-        array $messageGroups = []
+        array $messageGroups = [],
+        \Magento\Framework\Stdlib\StringUtils $string = null,
+        ?LayoutUpdateManager $layoutUpdateManager = null
     ) {
         $this->_catalogSession = $catalogSession;
         $this->_catalogDesign = $catalogDesign;
@@ -88,7 +99,53 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         $this->messageGroups = $messageGroups;
         $this->messageManager = $messageManager;
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
+        $this->string = $string ?: ObjectManager::getInstance()->get(\Magento\Framework\Stdlib\StringUtils::class);
+        $this->layoutUpdateManager = $layoutUpdateManager
+            ?? ObjectManager::getInstance()->get(LayoutUpdateManager::class);
         parent::__construct($context);
+    }
+
+    /**
+     * Add meta information from product to layout
+     *
+     * @param \Magento\Framework\View\Result\Page $resultPage
+     * @param \Magento\Catalog\Model\Product $product
+     * @return $this
+     */
+    private function preparePageMetadata(ResultPage $resultPage, $product)
+    {
+        $pageLayout = $resultPage->getLayout();
+        $pageConfig = $resultPage->getConfig();
+
+        $metaTitle = $product->getMetaTitle();
+        $productMetaTitle = $metaTitle ? $this->addConfigValues($metaTitle) : null;
+        $pageConfig->setMetaTitle($productMetaTitle);
+        $pageConfig->getTitle()->set($metaTitle ?: $product->getName());
+
+        $keyword = $product->getMetaKeyword();
+        $currentCategory = $this->_coreRegistry->registry('current_category');
+        if ($keyword) {
+            $pageConfig->setKeywords($keyword);
+        } elseif ($currentCategory) {
+            $pageConfig->setKeywords($product->getName());
+        }
+
+        $pageConfig->setDescription($product->getMetaDescription());
+
+        if ($this->_catalogProduct->canUseCanonicalTag()) {
+            $pageConfig->addRemotePageAsset(
+                $product->getUrlModel()->getUrl($product, ['_ignore_category' => true]),
+                'canonical',
+                ['attributes' => ['rel' => 'canonical']]
+            );
+        }
+
+        $pageMainTitle = $pageLayout->getBlock('page.main.title');
+        if ($pageMainTitle) {
+            $pageMainTitle->setPageTitle($product->getName());
+        }
+
+        return $this;
     }
 
     /**
@@ -120,18 +177,18 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         // Load default page handles and page configurations
         if ($params && $params->getBeforeHandles()) {
             foreach ($params->getBeforeHandles() as $handle) {
-                $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
                 $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], $handle, false);
+                $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
             }
         }
 
-        $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku]);
         $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], null, false);
+        $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku]);
 
         if ($params && $params->getAfterHandles()) {
             foreach ($params->getAfterHandles() as $handle) {
-                $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
                 $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], $handle, false);
+                $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
             }
         }
 
@@ -144,6 +201,9 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
                     $update->addUpdate($layoutUpdate);
                 }
             }
+        }
+        if ($settings->getPageLayoutHandles()) {
+            $resultPage->addPageLayoutHandles($settings->getPageLayoutHandles());
         }
 
         $currentCategory = $this->_coreRegistry->registry('current_category');
@@ -225,6 +285,25 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         $this->initProductLayout($resultPage, $product, $params);
+        $this->preparePageMetadata($resultPage, $product);
         return $this;
+    }
+
+    /**
+     * Add Prefix and Suffix as per the configuration.
+     *
+     * @param string $title
+     * @return string
+     */
+    private function addConfigValues(string $title): string
+    {
+        $preparedTitle = $this->scopeConfig->getValue(
+            'design/head/title_prefix',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ) . ' ' . $title . ' ' . $this->scopeConfig->getValue(
+            'design/head/title_suffix',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        return trim($preparedTitle);
     }
 }

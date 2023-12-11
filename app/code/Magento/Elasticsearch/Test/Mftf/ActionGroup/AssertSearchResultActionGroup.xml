@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertSearchResultActionGroup">
+        <annotations>
+            <description>Check search result on Storefront</description>
+        </annotations>
+        <arguments>
+            <argument name="keyword" defaultValue="Simple Product A" type="string"/>
+            <argument name="product" type="string" defaultValue="Simple Product A"/>
+        </arguments>
+        <fillField userInput="{{keyword}}" selector="{{StorefrontQuickSearchSection.searchPhrase}}" stepKey="fillSearchBar"/>
+        <waitForPageLoad stepKey="waitForSearchButton"/>
+        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="checkUrl"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo(product)}}" stepKey="foundProductAOnPage"/>
+    </actionGroup>
+</actionGroups>

@@ -3,22 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit\Utility;
 
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\DirSearch;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FilesTest extends \PHPUnit\Framework\TestCase
+/**
+ * Test for Utility/Files class.
+ *
+ */
+class FilesTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Component\DirSearch|\PHPUnit_Framework_MockObject_MockObject
+     * @var DirSearch|MockObject
      */
     private $dirSearchMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->dirSearchMock = $this->createMock(\Magento\Framework\Component\DirSearch::class);
+        $objectManager = new ObjectManager($this);
+        $this->dirSearchMock = $this->createMock(DirSearch::class);
         $fileUtilities = $objectManager->getObject(
             Files::class,
             [
@@ -28,7 +38,7 @@ class FilesTest extends \PHPUnit\Framework\TestCase
         Files::setInstance($fileUtilities);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Files::setInstance();
     }
@@ -44,6 +54,21 @@ class FilesTest extends \PHPUnit\Framework\TestCase
         $actual = Files::init()->getConfigFiles('some.file', ['some.other.file'], false);
         $this->assertSame($expected, $actual);
         // Check that the result is cached (collectFiles() is called only once)
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testGetDbSchemaFiles()
+    {
+        $this->dirSearchMock->expects($this->once())
+            ->method('collectFiles')
+            ->with(ComponentRegistrar::MODULE, '/etc/db_schema.xml')
+            ->willReturn(['First/Module/etc/db_schema.xml', 'Second/Module/etc/db_schema.xml']);
+
+        $expected = [
+            'First/Module/etc/db_schema.xml' => ['First/Module/etc/db_schema.xml'],
+            'Second/Module/etc/db_schema.xml' => ['Second/Module/etc/db_schema.xml'],
+        ];
+        $actual = Files::init()->getDbSchemaFiles('db_schema.xml', ['Second/Module/etc/db_schema.xml']);
         $this->assertSame($expected, $actual);
     }
 

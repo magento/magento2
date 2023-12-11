@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminEditTextEditorProductAttributeTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="MAGETWO-51484-Input type configuration for custom Product Attributes"/>
+            <group value="Catalog"/>
+            <title value="Admin are able to change Input Type of Text Editor product attribute"/>
+            <description value="Admin are able to change Input Type of Text Editor product attribute"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-6215"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
+            <createData stepKey="myProductAttributeCreation" entity="productAttributeWysiwyg"/>
+            <createData stepKey="myProductAttributeSetAssign" entity="AddToDefaultSet">
+                <requiredEntity createDataKey="myProductAttributeCreation"/>
+            </createData>
+        </before>
+        <actionGroup ref="NavigateToCreatedProductAttributeActionGroup" stepKey="navigateToAttribute">
+            <argument name="ProductAttribute" value="productAttributeWysiwyg"/>
+        </actionGroup>
+        <seeOptionIsSelected selector="{{AttributePropertiesSection.InputType}}" userInput="Text Editor" stepKey="seeTextEditorSelected" />
+        <see selector="{{AttributePropertiesSection.InputType}}" userInput="Text Area" stepKey="seeTextArea1" />
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="Text Area"  stepKey="selectTextArea" />
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStorefrontPropertiesTab1"/>
+        <dontSeeElement selector="{{StorefrontPropertiesSection.EnableWYSIWYG}}" stepKey="dontSeeWYSIWYGEnableField1" />
+        <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute1" />
+        <waitForPageLoad stepKey="waitForPageLoad3" />
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="navigateToNewProduct">
+            <argument name="attributeSetId" value="{{AddToDefaultSet.attributeSetId}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad4"/>
+        <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
+        <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
+        <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillQuantity">
+            <argument name="productQty" value="{{_defaultProduct.quantity}}"/>
+        </actionGroup>
+        <dontSeeElement selector="{{AdminProductFormSection.divByDataIndex($$myProductAttributeCreation.attribute_code$$)}} {{TinyMCESection.TinyMCE}}" stepKey="dontSeeTinyMCE" />
+        <fillField selector="{{AdminProductFormSection.divByDataIndex($$myProductAttributeCreation.attribute_code$$)}} {{TinyMCESection.Content}}" userInput="Text Area" stepKey="fillContentTextarea" />
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
+        <!-- Go to storefront product page, assert product content -->
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad5"/>
+        <see userInput="Text Area" stepKey="seeText2" />
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttributeGrid2"/>
+        <click selector="{{AdminProductAttributeGridSection.AttributeCode($$myProductAttributeCreation.attribute_code$$)}}" stepKey="navigateToAttributeEditPage2" />
+        <waitForPageLoad stepKey="waitForPageLoad7" />
+        <seeOptionIsSelected selector="{{AttributePropertiesSection.InputType}}" userInput="Text Area" stepKey="seeTextAreaSelected" />
+        <see selector="{{AttributePropertiesSection.InputType}}" userInput="Text Editor" stepKey="seeTextEditor" />
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="Text Editor"  stepKey="selectEditor" />
+        <see userInput="Text Editor input type requires WYSIWYG to be enabled in Stores > Configuration > Content Management." stepKey="seeHintMsg" />
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStorefrontPropertiesTab2"/>
+        <dontSeeElement selector="{{StorefrontPropertiesSection.EnableWYSIWYG}}" stepKey="dontSeeWYSIWYGEnableField2" />
+        <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute8" />
+        <waitForPageLoad stepKey="waitForPageLoad8"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGrid"/>
+        <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending" />
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.enabledFilters}}" visible="true" stepKey="clearAllExistingFilter"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingAfterFilterIsCleared"/>
+        <fillField selector="{{AdminProductGridFilterSection.basicSearchFilter}}" userInput="{{_defaultProduct.name}}" stepKey="addSearchFilterForTestProduct"/>
+        <click selector="{{AdminProductGridFilterSection.basicSearchFilterButton}}" stepKey="clickOnBasicSearchFilterButton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingAfterBasicFilter"/>
+        <click selector="{{AdminProductGridActionSection.productName(_defaultProduct.name)}}"  stepKey="navigateToEditProduct" />
+        <waitForPageLoad stepKey="waitForPageLoad10" />
+        <seeElement selector="{{AdminProductFormSection.divByDataIndex($$myProductAttributeCreation.attribute_code$$)}} {{TinyMCESection.TinyMCE}}" stepKey="seePoweredBy"/>
+        <after>
+            <deleteData createDataKey="myProductAttributeCreation" stepKey="deletePreReqProductAttribute" />
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

@@ -10,6 +10,7 @@ namespace Magento\Framework\HTTP;
  * Interface for HTTP clients
  *
  * @api
+ * @since 100.0.2
  */
 interface ClientInterface
 {
@@ -99,7 +100,7 @@ interface ClientInterface
      * Make POST request
      *
      * @param string $uri full uri
-     * @param array $params POST fields array
+     * @param array|string $params POST fields array or string in case of JSON or XML data
      * @return void
      */
     public function post($uri, $params);

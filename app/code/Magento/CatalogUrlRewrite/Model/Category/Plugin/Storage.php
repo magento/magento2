@@ -6,11 +6,15 @@
 namespace Magento\CatalogUrlRewrite\Model\Category\Plugin;
 
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 use Magento\UrlRewrite\Model\StorageInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product;
 
+/**
+ * Storage Plugin
+ */
 class Storage
 {
     /**
@@ -24,18 +28,28 @@ class Storage
     private $productResource;
 
     /**
+     * @var MergeDataProviderFactory
+     */
+    private $mergeDataProviderFactory;
+
+    /**
      * @param UrlFinderInterface $urlFinder
      * @param Product $productResource
+     * @param MergeDataProviderFactory $mergeDataProviderFactory
      */
     public function __construct(
         UrlFinderInterface $urlFinder,
-        Product $productResource
+        Product $productResource,
+        MergeDataProviderFactory $mergeDataProviderFactory
     ) {
         $this->urlFinder = $urlFinder;
         $this->productResource = $productResource;
+        $this->mergeDataProviderFactory = $mergeDataProviderFactory;
     }
 
     /**
+     * Save product/category urlRewrite association
+     *
      * @param \Magento\UrlRewrite\Model\StorageInterface $object
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $result
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urls
@@ -53,13 +67,15 @@ class Storage
                 'product_id' => $record->getEntityId(),
             ];
         }
-        if ($toSave) {
+        if (count($toSave) > 0) {
             $this->productResource->saveMultiple($toSave);
         }
         return $result;
     }
 
     /**
+     * Remove product/category urlRewrite association
+     *
      * @param \Magento\UrlRewrite\Model\StorageInterface $object
      * @param array $data
      * @return void
@@ -71,6 +87,8 @@ class Storage
     }
 
     /**
+     * Filter urls
+     *
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urls
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
@@ -92,10 +110,22 @@ class Storage
                 }
             }
         }
-        return $data ? $this->urlFinder->findAllByData($data) : [];
+
+        $existingUrls = $data ? $this->urlFinder->findAllByData($data) : [];
+        $mergeDataProviderForNewUrls = $this->mergeDataProviderFactory->create();
+        $mergeDataProviderForOldUrls = $this->mergeDataProviderFactory->create();
+        $mergeDataProviderForNewUrls->merge($filteredUrls);
+        $mergeDataProviderForOldUrls->merge($existingUrls);
+
+        return array_intersect_key(
+            $mergeDataProviderForOldUrls->getData(),
+            $mergeDataProviderForNewUrls->getData()
+        );
     }
 
     /**
+     * Check if url is correct
+     *
      * @param UrlRewrite $url
      * @return bool
      */

@@ -3,107 +3,141 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Block\Order;
 
-class RecentTest extends \PHPUnit\Framework\TestCase
+use Magento\Customer\Model\Session;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\Layout;
+use Magento\Sales\Block\Order\Recent;
+use Magento\Sales\Model\Order\Config;
+use Magento\Sales\Model\ResourceModel\Order\Collection;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class RecentTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Block\Order\Recent
+     * @var Recent
      */
     protected $block;
 
     /**
-     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $orderCollectionFactory;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|MockObject
      */
     protected $customerSession;
 
     /**
-     * @var \Magento\Sales\Model\Order\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     protected $orderConfig;
 
-    protected function setUp()
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
+    protected $storeManagerMock;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
-        $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
+        $this->context = $this->createMock(Context::class);
         $this->orderCollectionFactory = $this->createPartialMock(
-            \Magento\Sales\Model\ResourceModel\Order\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
-        $this->customerSession = $this->createPartialMock(\Magento\Customer\Model\Session::class, ['getCustomerId']);
+        $this->customerSession = $this->createPartialMock(Session::class, ['getCustomerId']);
         $this->orderConfig = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Config::class,
+            Config::class,
             ['getVisibleOnFrontStatuses']
         );
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
+            ->getMockForAbstractClass();
     }
 
-    public function testConstructMethod()
+    /**
+     * @return void
+     */
+    public function testConstructMethod(): void
     {
-        $data = [];
-        $attribute = ['customer_id', 'status'];
+        $attribute = ['customer_id', 'store_id', 'status'];
         $customerId = 25;
-        $layout = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getBlock']);
+        $storeId = 4;
+        $layout = $this->createPartialMock(Layout::class, ['getBlock']);
         $this->context->expects($this->once())
             ->method('getLayout')
-            ->will($this->returnValue($layout));
+            ->willReturn($layout);
         $this->customerSession->expects($this->once())
             ->method('getCustomerId')
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
 
         $statuses = ['pending', 'processing', 'complete'];
         $this->orderConfig->expects($this->once())
             ->method('getVisibleOnFrontStatuses')
-            ->will($this->returnValue($statuses));
+            ->willReturn($statuses);
 
-        $orderCollection = $this->createPartialMock(\Magento\Sales\Model\ResourceModel\Order\Collection::class, [
-                'addAttributeToSelect',
-                'addFieldToFilter',
-                'addAttributeToFilter',
-                'addAttributeToSort',
-                'setPageSize',
-                'load'
-            ]);
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
+            ->getMockForAbstractClass();
+        $storeMock = $this->getMockBuilder(StoreInterface::class)
+            ->getMockForAbstractClass();
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
+        $storeMock->expects($this->any())->method('getId')->willReturn($storeId);
+
+        $orderCollection = $this->createPartialMock(Collection::class, [
+            'addAttributeToSelect',
+            'addFieldToFilter',
+            'addAttributeToFilter',
+            'addAttributeToSort',
+            'setPageSize',
+            'load'
+        ]);
         $this->orderCollectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($orderCollection));
-        $orderCollection->expects($this->at(0))
+            ->willReturn($orderCollection);
+        $orderCollection
             ->method('addAttributeToSelect')
-            ->with($this->equalTo('*'))
-            ->will($this->returnSelf());
-        $orderCollection->expects($this->at(1))
-            ->method('addAttributeToFilter')
-            ->with($attribute[0], $this->equalTo($customerId))
-            ->willReturnSelf();
-        $orderCollection->expects($this->at(2))
-            ->method('addAttributeToFilter')
-            ->with($attribute[1], $this->equalTo(['in' => $statuses]))
-            ->will($this->returnSelf());
-        $orderCollection->expects($this->at(3))
-            ->method('addAttributeToSort')
-            ->with('created_at', 'desc')
-            ->will($this->returnSelf());
-        $orderCollection->expects($this->at(4))
+            ->with('*')
+            ->willReturn($orderCollection);
+        $orderCollection
+            ->method('load')
+            ->willReturn($orderCollection);
+        $orderCollection
             ->method('setPageSize')
             ->with('5')
-            ->will($this->returnSelf());
-        $orderCollection->expects($this->at(5))
-            ->method('load')
-            ->will($this->returnSelf());
-        $this->block = new \Magento\Sales\Block\Order\Recent(
+            ->willReturn($orderCollection);
+        $orderCollection
+            ->method('addAttributeToSort')
+            ->with('created_at', 'desc')
+            ->willReturn($orderCollection);
+        $orderCollection
+            ->method('addAttributeToFilter')
+            ->withConsecutive(
+                [$attribute[0], $customerId],
+                [$attribute[1], $storeId],
+                [$attribute[2], ['in' => $statuses]]
+            )->willReturnOnConsecutiveCalls($orderCollection, $orderCollection, $orderCollection);
+        $this->block = new Recent(
             $this->context,
             $this->orderCollectionFactory,
             $this->customerSession,
             $this->orderConfig,
-            $data
+            [],
+            $this->storeManagerMock
         );
         $this->assertEquals($orderCollection, $this->block->getOrders());
     }

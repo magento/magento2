@@ -5,7 +5,7 @@
 
 define([
     'jquery',
-    'jquery/ui'
+    'jquery-ui-modules/widget'
 ], function ($) {
     'use strict';
 
@@ -18,7 +18,7 @@ define([
                 headings;
 
             if (products.length > this.options.productsInRow) {
-                headings = $('<table/>')
+                headings = $('<table></table>')
                     .addClass('comparison headings data table')
                     .insertBefore(elem.closest('.container'));
 
@@ -35,7 +35,7 @@ define([
 
                         thCopy.css('height', height)
                             .appendTo(headings)
-                            .wrap('<tr />');
+                            .wrap('<tr></tr>');
                     });
                 });
             }

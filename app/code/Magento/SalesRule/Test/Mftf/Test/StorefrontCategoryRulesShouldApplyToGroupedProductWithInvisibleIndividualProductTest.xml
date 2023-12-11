@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCategoryRulesShouldApplyToGroupedProductWithInvisibleIndividualProductTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Create cart price rule"/>
+            <title value="Category rules should apply to grouped product with invisible individual products"/>
+            <description value="Category rules should apply to grouped product with invisible individual products"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-31863"/>
+            <group value="SalesRule"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <createData entity="ApiCategory" stepKey="createCategoryOne"/>
+            <createData entity="ApiSimpleProduct" stepKey="createFirstSimpleProduct">
+                <field key ="price">100</field>
+                <field key="visibility">1</field>
+                <requiredEntity createDataKey="createCategoryOne"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createSecondSimpleProduct">
+                <field key ="price">200</field>
+                <field key="visibility">1</field>
+                <requiredEntity createDataKey="createCategoryOne"/>
+            </createData>
+            <createData entity="ApiCategory" stepKey="createCategoryTwo"/>
+            <createData entity="ApiSimpleProduct" stepKey="createThirdSimpleProduct">
+                <field key ="price">300</field>
+                <field key="visibility">1</field>
+                <requiredEntity createDataKey="createCategoryTwo"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createFourthSimpleProduct">
+                <field key ="price">400</field>
+                <field key="visibility">1</field>
+                <requiredEntity createDataKey="createCategoryTwo"/>
+            </createData>
+            <createData entity="ApiGroupedProduct2" stepKey="createGroupedProduct">
+                <requiredEntity createDataKey="createCategoryOne"/>
+            </createData>
+            <createData entity="OneSimpleProductLink" stepKey="addFirstProduct">
+                <requiredEntity createDataKey="createGroupedProduct"/>
+                <requiredEntity createDataKey="createFirstSimpleProduct"/>
+            </createData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addFirstProduct" stepKey="addSecondProduct">
+                <requiredEntity createDataKey="createGroupedProduct"/>
+                <requiredEntity createDataKey="createSecondSimpleProduct"/>
+            </updateData>
+            <createData entity="ApiGroupedProduct2" stepKey="createSecondGroupedProduct">
+                <requiredEntity createDataKey="createCategoryTwo"/>
+            </createData>
+            <createData entity="OneSimpleProductLink" stepKey="addThirdProduct">
+                <requiredEntity createDataKey="createSecondGroupedProduct"/>
+                <requiredEntity createDataKey="createThirdSimpleProduct"/>
+            </createData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addThirdProduct" stepKey="addFourthProduct">
+                <requiredEntity createDataKey="createSecondGroupedProduct"/>
+                <requiredEntity createDataKey="createFourthSimpleProduct"/>
+            </updateData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <deleteData createDataKey="createThirdSimpleProduct" stepKey="deleteThirdSimpleProduct"/>
+            <deleteData createDataKey="createFourthSimpleProduct" stepKey="deleteFourthSimpleProduct"/>
+            <deleteData createDataKey="createGroupedProduct" stepKey="deleteGroupedProduct"/>
+            <deleteData createDataKey="createSecondGroupedProduct" stepKey="deleteSecondGroupedProduct"/>
+            <deleteData createDataKey="createCategoryOne" stepKey="deleteCategoryOne"/>
+            <deleteData createDataKey="createCategoryTwo" stepKey="deleteCategoryTwo"/>
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteCartPriceRule"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+        <!-- Start to create new cart price rule via Category conditions -->
+        <actionGroup ref="AdminCreateCartPriceRuleWithConditionIsCategoryActionGroup" stepKey="createCartPriceRuleWithCondition">
+            <argument name="ruleName" value="TestSalesRule"/>
+            <argument name="actionValue" value="$createCategoryTwo.id$"/>
+        </actionGroup>
+        <!-- Add SecondGroupedProduct to the cart -->
+        <actionGroup ref="StorefrontAddGroupedProductWithTwoLinksToCartActionGroup" stepKey="addSecondGroupedProductToCart">
+            <argument name="product" value="$createSecondGroupedProduct$"/>
+            <argument name="linkedProduct1Name" value="$createThirdSimpleProduct.name$"/>
+            <argument name="linkedProduct2Name" value="$createFourthSimpleProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="openTheCartWithSecondGroupedProduct"/>
+        <!-- Discount  amount is not applied -->
+        <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="checkDiscountIsNotApplied">
+            <argument name="subtotal" value="$700.00"/>
+            <argument name="shipping" value="$10.00"/>
+            <argument name="total" value="$710.00"/>
+         </actionGroup>
+        <!-- Discount is absent in cart subtotal -->
+        <dontSeeElement selector="{{CheckoutCartSummarySection.discountLabel}}" stepKey="discountIsNotApplied"/>
+         <!-- Add FirstGroupedProduct to the cart -->
+        <actionGroup ref="StorefrontAddGroupedProductWithTwoLinksToCartActionGroup" stepKey="addFirsGroupedProductToCart">
+            <argument name="product" value="$createGroupedProduct$"/>
+            <argument name="linkedProduct1Name" value="$createFirstSimpleProduct.name$"/>
+            <argument name="linkedProduct2Name" value="$createSecondSimpleProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="openTheCartWithFirstAndSecondGroupedProducts"/>
+        <waitForPageLoad stepKey="waitForGrandTotalToLoad"/>
+        <waitForElementVisible time="30" selector="{{CheckoutCartSummarySection.estimateShippingAndTaxForm}}" stepKey="waitForEstimateShippingAndTaxForm"/>
+        <waitForElementVisible time="30" selector="{{CheckoutCartSummarySection.shippingMethodForm}}" stepKey="waitForShippingMethodForm"/>
+        <waitForElementVisible time="30" selector="{{CheckoutCartSummarySection.total}}" stepKey="waitForTotalElement"/>
+        <actionGroup ref="StorefrontCartEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxSection" />
+        <!-- Discount amount is applied for product from first category only -->
+        <actionGroup ref="StorefrontCheckCartTotalWithDiscountCategoryActionGroup" stepKey="checkDiscountIsApplied">
+            <argument name="subtotal" value="$1,000.00"/>
+            <argument name="shipping" value="$20.00"/>
+            <argument name="discount" value="150.00"/>
+            <argument name="total" value="$870.00"/>
+        </actionGroup>
+    </test>
+</tests>

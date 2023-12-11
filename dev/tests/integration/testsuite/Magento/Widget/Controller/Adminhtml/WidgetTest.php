@@ -15,14 +15,14 @@ class WidgetTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
      */
     public function testLoadOptionsAction()
     {
-        $this->getRequest()->setPostValue(
+        $this->getRequest()->setParam(
             'widget',
             '{"widget_type":"Magento\\\\Cms\\\\Block\\\\Widget\\\\Page\\\\Link","values":{}}'
         );
         $this->dispatch('backend/admin/widget/loadOptions');
         $output = $this->getResponse()->getBody();
         //searching for label with text "CMS Page"
-        $this->assertContains(
+        $this->assertStringContainsString(
             'data-ui-id="wysiwyg-widget-options-fieldset-element-label-parameters-page-id-label" >' . '<span>CMS Page',
             $output
         );

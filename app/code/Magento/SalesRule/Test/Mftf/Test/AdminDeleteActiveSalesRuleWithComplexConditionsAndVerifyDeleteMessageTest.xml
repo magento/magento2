@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteActiveSalesRuleWithComplexConditionsAndVerifyDeleteMessageTest">
+        <annotations>
+            <stories value="Delete Sales Rule"/>
+            <title value="Delete Active Sales Rule With Complex Conditions And Verify Delete Message"/>
+            <description value="Test log in to Cart Price Rule and Delete Active Sales Rule With Complex Conditions Test"/>
+            <testCaseId value="MC-15450"/>
+            <severity value="CRITICAL"/>
+            <group value="salesRule"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create active cart price rule-->
+            <actionGroup ref="AdminCreateCartPriceRuleRuleInfoSectionActionGroup" stepKey="createActiveCartPriceRuleRuleInfoSection">
+                <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions"/>
+            </actionGroup>
+            <!-- Expand the conditions section -->
+            <conditionalClick selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" visible="true" stepKey="clickToExpandConditions"/>
+            <!-- Fill condition 1: Subtotal -->
+            <click selector="{{AdminCartPriceRulesFormSection.newCondition}}" stepKey="clickNewCondition1"/>
+            <selectOption selector="{{AdminCartPriceRulesFormSection.conditionSelect}}" userInput="Subtotal" stepKey="selectCondition1"/>
+            <waitForPageLoad stepKey="waitForConditionLoad1"/>
+            <click selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="clickEllipsis1"/>
+            <fillField selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1')}}" userInput="{{ActiveSalesRuleWithComplexConditions.subtotal}}" stepKey="fillSubtotalParameter1"/>
+            <!-- Fill condition 2: Country -->
+            <click selector="{{AdminCartPriceRulesFormSection.newCondition}}" stepKey="clickNewCondition2"/>
+            <selectOption selector="{{AdminCartPriceRulesFormSection.conditionSelect}}" userInput="Shipping Country" stepKey="selectCondition2"/>
+            <waitForPageLoad stepKey="waitForConditionLoad2"/>
+            <click selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="clickEllipsis2"/>
+            <selectOption selector="{{AdminCartPriceRulesFormSection.selectCountryDropdown}}" userInput="{{ActiveSalesRuleWithComplexConditions.shippingCountry}}" stepKey="fillShippingCountryParameter2"/>
+            <!-- Fill condition 3: Shipping Postcode-->
+            <click selector="{{AdminCartPriceRulesFormSection.newCondition}}" stepKey="clickNewCondition3"/>
+            <selectOption selector="{{AdminCartPriceRulesFormSection.conditionSelect}}" userInput="Shipping Postcode" stepKey="selectCondition3"/>
+            <waitForPageLoad stepKey="waitForConditionLoad3"/>
+            <click selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="clickEllipsis3"/>
+            <fillField selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--3')}}" userInput="{{ActiveSalesRuleWithComplexConditions.shippingPostcode}}" stepKey="fillShippingPostcodeParameter"/>
+            <!--Fill values for Action Section-->
+            <actionGroup ref="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup" stepKey="createActiveCartPriceRuleActionsSection">
+                <argument name="rule" value="ActiveSalesRuleWithComplexConditions"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateCartPriceRuleActionsSectionShippingAmountActionGroup" stepKey="createActiveCartPriceRuleShippingAmountActionsSection"/>
+            <actionGroup ref="AdminCreateCartPriceRuleActionsSectionSubsequentRulesActionGroup" stepKey="createActiveCartPriceRuleDiscardSubsequentRulesActionsSection"/>
+            <actionGroup ref="AdminCreateCartPriceRuleActionsSectionFreeShippingActionGroup" stepKey="createActiveCartPriceRuleFreeShippingActionsSection">
+                <argument name="freeShippingOption" value="{{ActiveSalesRuleWithComplexConditions.simple_free_shipping}}"/>
+            </actionGroup>
+            <!--Fill values for Labels Section-->
+            <actionGroup ref="AdminCreateCartPriceRuleLabelsSectionActionGroup" stepKey="createActiveCartPriceRuleLabelsSection">
+                <argument name="rule" value="ActiveSalesRuleWithComplexConditions"/>
+            </actionGroup>
+            <generateDate date="+1 minute" format="m/d/Y" stepKey="generateStartDate"/>
+            <fillField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="{$generateStartDate}" stepKey="fillStartDate"/>
+            <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="assertVerifyCartPriceRuleSuccessSaveMessage"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Delete active cart price rule-->
+        <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteActiveCartPriceRule">
+            <argument name="ruleName" value="{{ActiveSalesRuleWithComplexConditions.name}}"/>
+        </actionGroup>
+
+        <!--Go to grid and verify AssertCartPriceRuleIsNotPresentedInGrid-->
+        <actionGroup ref="AdminCartPriceRuleNotInGridActionGroup" stepKey="searchAndVerifyActiveCartPriceRuleNotInGrid">
+            <argument name="ruleName" value="ActiveSalesRuleWithComplexConditions.name"/>
+        </actionGroup>
+    </test>
+</tests>

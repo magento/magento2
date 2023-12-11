@@ -3,44 +3,52 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Module\ModuleList;
+use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Console\Command\ConfigSetCommand;
+use Magento\Setup\Model\ConfigModel;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
+class ConfigSetCommandTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ConfigModel
+     * @var MockObject|ConfigModel
      */
     private $configModel;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
+     * @var MockObject|DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Console\Command\ConfigSetCommand
+     * @var MockObject|ConfigSetCommand
      */
     private $command;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $option = $this->createMock(\Magento\Framework\Setup\Option\TextConfigOption::class);
+        $option = $this->createMock(TextConfigOption::class);
         $option
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('db-host'));
-        $this->configModel = $this->createMock(\Magento\Setup\Model\ConfigModel::class);
+            ->willReturn('db-host');
+        $this->configModel = $this->createMock(ConfigModel::class);
         $this->configModel
             ->expects($this->exactly(2))
             ->method('getAvailableOptions')
-            ->will($this->returnValue([$option]));
-        $moduleList = $this->createMock(\Magento\Framework\Module\ModuleList::class);
-        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+            ->willReturn([$option]);
+        $moduleList = $this->createMock(ModuleList::class);
+        $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
         $this->command = new ConfigSetCommand($this->configModel, $moduleList, $this->deploymentConfig);
     }
 
@@ -49,7 +57,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
         $this->deploymentConfig
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->configModel
             ->expects($this->once())
             ->method('process')
@@ -67,12 +75,12 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
         $this->deploymentConfig
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('localhost'));
+            ->willReturn('localhost');
         $this->configModel
             ->expects($this->once())
             ->method('process')
             ->with(['db-host' => 'host']);
-        $this->checkInteraction(true);
+        $this->checkInteraction('Y');
     }
 
     public function testExecuteInteractiveWithNo()
@@ -80,43 +88,43 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
         $this->deploymentConfig
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('localhost'));
+            ->willReturn('localhost');
         $this->configModel
             ->expects($this->once())
             ->method('process')
             ->with([]);
-        $this->checkInteraction(false);
+        $this->checkInteraction('n');
     }
 
     /**
      * Checks interaction with users on CLI
      *
-     * @param bool $interactionType
+     * @param string $interactionType
      * @return void
      */
     private function checkInteraction($interactionType)
     {
-        $dialog = $this->createMock(\Symfony\Component\Console\Helper\DialogHelper::class);
+        $dialog = $this->createMock(QuestionHelper::class);
         $dialog
             ->expects($this->once())
-            ->method('askConfirmation')
-            ->will($this->returnValue($interactionType));
+            ->method('ask')
+            ->willReturn($interactionType);
 
-        /** @var \Symfony\Component\Console\Helper\HelperSet|\PHPUnit_Framework_MockObject_MockObject $helperSet */
-        $helperSet = $this->createMock(\Symfony\Component\Console\Helper\HelperSet::class);
+        /** @var HelperSet|MockObject $helperSet */
+        $helperSet = $this->createMock(HelperSet::class);
         $helperSet
             ->expects($this->once())
             ->method('get')
-            ->with('dialog')
-            ->will($this->returnValue($dialog));
+            ->with('question')
+            ->willReturn($dialog);
         $this->command->setHelperSet($helperSet);
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['--db-host' => 'host']);
-        if ($interactionType) {
+        if (strtolower($interactionType) === 'y') {
             $message = 'You saved the new configuration.' . PHP_EOL;
         } else {
-            $message = 'You made no changes to the configuration.'.PHP_EOL;
+            $message = 'You made no changes to the configuration.' . PHP_EOL;
         }
         $this->assertSame(
             $message,

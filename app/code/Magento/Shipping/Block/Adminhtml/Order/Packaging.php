@@ -3,7 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Shipping\Block\Adminhtml\Order;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Shipping\Helper\Carrier;
 
 /**
  * Adminhtml shipment packaging
@@ -44,6 +48,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      * @param array $data
+     * @param Carrier|null $carrierHelper
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -51,12 +56,14 @@ class Packaging extends \Magento\Backend\Block\Template
         \Magento\Shipping\Model\Carrier\Source\GenericInterface $sourceSizeModel,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
-        array $data = []
+        array $data = [],
+        ?Carrier $carrierHelper = null
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_coreRegistry = $coreRegistry;
         $this->_sourceSizeModel = $sourceSizeModel;
         $this->_carrierFactory = $carrierFactory;
+        $data['carrierHelper'] = $carrierHelper ?? ObjectManager::getInstance()->get(Carrier::class);
         parent::__construct($context, $data);
     }
 
@@ -74,6 +81,7 @@ class Packaging extends \Magento\Backend\Block\Template
      * Configuration for popup window for packaging
      *
      * @return string
+     * @SuppressWarnings(PHPMD.RequestAwareBlockMethod)
      */
     public function getConfigDataJson()
     {
@@ -86,7 +94,7 @@ class Packaging extends \Magento\Backend\Block\Template
         $itemsName = [];
         $itemsWeight = [];
         $itemsProductId = [];
-
+        $itemsOrderItemId = [];
         if ($shipmentId) {
             $urlParams['shipment_id'] = $shipmentId;
             $createLabelUrl = $this->getUrl('adminhtml/order_shipment/createLabel', $urlParams);
@@ -372,7 +380,7 @@ class Packaging extends \Magento\Backend\Block\Template
     public function getCustomValueCurrencyCode()
     {
         $orderInfo = $this->getShipment()->getOrder();
-        return $orderInfo->getBaseCurrency()->getCurrencyCode();
+        return $orderInfo->getOrderCurrency()->getCurrencyCode();
     }
 
     /**

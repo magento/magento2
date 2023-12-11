@@ -5,6 +5,9 @@
  */
 namespace Magento\Config\Model\ResourceModel;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
+
 /**
  * Core Resource Resource Model
  *
@@ -16,13 +19,22 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
     \Magento\Framework\App\Config\ConfigResource\ConfigInterface
 {
     /**
+     * @var PoisonPillPutInterface
+     */
+    private $pillPut;
+
+    /**
      * Define main table
      *
+     * @param PoisonPillPutInterface|null $pillPut
      * @return void
      */
-    protected function _construct()
-    {
+    protected function _construct(
+        PoisonPillPutInterface $pillPut = null
+    ) {
         $this->_init('core_config_data', 'config_id');
+        $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(PoisonPillPutInterface::class);
     }
 
     /**
@@ -34,7 +46,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
      * @param int $scopeId
      * @return $this
      */
-    public function saveConfig($path, $value, $scope, $scopeId)
+    public function saveConfig($path, $value, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeId = 0)
     {
         $connection = $this->getConnection();
         $select = $connection->select()->from(
@@ -59,6 +71,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
         } else {
             $connection->insert($this->getMainTable(), $newData);
         }
+        $this->pillPut->put();
         return $this;
     }
 
@@ -70,7 +83,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
      * @param int $scopeId
      * @return $this
      */
-    public function deleteConfig($path, $scope, $scopeId)
+    public function deleteConfig($path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeId = 0)
     {
         $connection = $this->getConnection();
         $connection->delete(
@@ -81,6 +94,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
                 $connection->quoteInto('scope_id = ?', $scopeId)
             ]
         );
+        $this->pillPut->put();
         return $this;
     }
 }

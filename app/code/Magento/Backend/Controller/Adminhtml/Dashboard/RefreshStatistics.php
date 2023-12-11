@@ -6,25 +6,41 @@
 
 namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 
-class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Statistics
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Stdlib\DateTime\Filter\Date;
+use Magento\Reports\Controller\Adminhtml\Report\Statistics;
+use Psr\Log\LoggerInterface;
+
+/**
+ * Refresh Dashboard statistics action.
+ */
+class RefreshStatistics extends Statistics implements HttpPostActionInterface
 {
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @param Context $context
+     * @param Date $dateFilter
      * @param array $reportTypes
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param LoggerInterface $logger
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
+        Context $context,
+        Date $dateFilter,
         array $reportTypes,
-        \Psr\Log\LoggerInterface $logger
+        LoggerInterface $logger
     ) {
         parent::__construct($context, $dateFilter, $reportTypes);
         $this->logger = $logger;
     }
 
     /**
+     * Refresh statistics.
+     *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
@@ -34,9 +50,9 @@ class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Sta
             foreach ($collectionsNames as $collectionName) {
                 $this->_objectManager->create($collectionName)->aggregate();
             }
-            $this->messageManager->addSuccess(__('We updated lifetime statistic.'));
+            $this->messageManager->addSuccessMessage(__('We updated lifetime statistic.'));
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t refresh lifetime statistics.'));
+            $this->messageManager->addErrorMessage(__('We can\'t refresh lifetime statistics.'));
             $this->logger->critical($e);
         }
 

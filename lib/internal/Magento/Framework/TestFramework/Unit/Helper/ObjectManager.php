@@ -5,13 +5,20 @@
  */
 namespace Magento\Framework\TestFramework\Unit\Helper;
 
+use Magento\Framework\GetParameterClassTrait;
+use PHPUnit\Framework\MockObject\MockObject;
+
 /**
  * Helper class for basic object retrieving, such as blocks, models etc...
  *
+ * @deprecated Class under test should be instantiated with `new` keyword with explicit dependencies declaration
+ * @see https://github.com/magento/magento2/pull/29272
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ObjectManager
 {
+    use GetParameterClassTrait;
+
     /**
      * Special cases configuration
      *
@@ -23,8 +30,6 @@ class ObjectManager
     ];
 
     /**
-     * Test object
-     *
      * @var \PHPUnit\Framework\TestCase
      */
     protected $_testObject;
@@ -44,7 +49,7 @@ class ObjectManager
      *
      * @param string $argClassName
      * @param array $originalArguments
-     * @return null|object|\PHPUnit_Framework_MockObject_MockObject
+     * @return null|object|MockObject
      */
     protected function _createArgumentMock($argClassName, array $originalArguments)
     {
@@ -82,7 +87,7 @@ class ObjectManager
     /**
      * Retrieve specific mock of core resource model
      *
-     * @return \Magento\Framework\Module\ResourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Module\ResourceInterface|MockObject
      */
     protected function _getResourceModelMock()
     {
@@ -108,7 +113,7 @@ class ObjectManager
      * Retrieve mock of core translator model
      *
      * @param string $className
-     * @return \Magento\Framework\TranslateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\TranslateInterface|MockObject
      */
     protected function _getTranslatorMock($className)
     {
@@ -130,7 +135,7 @@ class ObjectManager
      * Get mock without call of original constructor
      *
      * @param string $className
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function _getMockWithoutConstructorCall($className)
     {
@@ -152,9 +157,7 @@ class ObjectManager
      */
     public function getObject($className, array $arguments = [])
     {
-        if (is_subclass_of($className, \Magento\Framework\Api\AbstractSimpleObjectBuilder::class)
-            || is_subclass_of($className, \Magento\Framework\Api\Builder::class)
-        ) {
+        if (is_subclass_of($className, \Magento\Framework\Api\AbstractSimpleObjectBuilder::class)) {
             return $this->getBuilder($className, $arguments);
         }
         $constructArguments = $this->getConstructArguments($className, $arguments);
@@ -213,12 +216,13 @@ class ObjectManager
                             if (isset($arguments[$parameterName])) {
                                 $args[] = $arguments[$parameterName];
                             } else {
-                                if ($parameter->isArray()) {
+                                if ($parameter->getType() && $parameter->getType()->getName() === 'array') {
                                     $args[] = [];
                                 } elseif ($parameter->allowsNull()) {
                                     $args[] = null;
                                 } else {
-                                    $mock = $this->_getMockWithoutConstructorCall($parameter->getClass()->getName());
+                                    $parameterClass = $this->getParameterClass($parameter);
+                                    $mock = $this->_getMockWithoutConstructorCall($parameterClass->getName());
                                     $args[] = $mock;
                                 }
                             }
@@ -262,9 +266,10 @@ class ObjectManager
                 $defaultValue = $parameter->getDefaultValue();
             }
 
+            $object = null;
             try {
-                if ($parameter->getClass()) {
-                    $argClassName = $parameter->getClass()->getName();
+                if ($parameterClass = $this->getParameterClass($parameter)) {
+                    $argClassName = $parameterClass->getName();
                 }
                 $object = $this->_getMockObject($argClassName, $arguments);
             } catch (\ReflectionException $e) {
@@ -292,7 +297,7 @@ class ObjectManager
      *
      * @param string $className
      * @param array $data
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      * @throws \InvalidArgumentException
      */
     public function getCollectionMock($className, array $data)
@@ -326,17 +331,16 @@ class ObjectManager
      *
      * @param string $argClassName
      * @param array $arguments
-     * @return null|object|\PHPUnit_Framework_MockObject_MockObject
+     * @return null|object|MockObject
      */
     private function _getMockObject($argClassName, array $arguments)
     {
+        // phpstan:ignore
         if (is_subclass_of($argClassName, \Magento\Framework\Api\ExtensibleObjectBuilder::class)) {
-            $object = $this->getBuilder($argClassName, $arguments);
-            return $object;
-        } else {
-            $object = $this->_createArgumentMock($argClassName, $arguments);
-            return $object;
+            return $this->getBuilder($argClassName, $arguments);
         }
+
+        return $this->_createArgumentMock($argClassName, $arguments);
     }
 
     /**

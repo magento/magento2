@@ -3,9 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Config\Controller\Adminhtml\System\Config;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Config\Controller\Adminhtml\System\AbstractConfig;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * System Configuration Save Controller
@@ -13,7 +16,7 @@ use Magento\Config\Controller\Adminhtml\System\AbstractConfig;
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends AbstractConfig
+class Save extends AbstractConfig implements HttpPostActionInterface
 {
     /**
      * Backend Config Model Factory
@@ -52,6 +55,80 @@ class Save extends AbstractConfig
         $this->_configFactory = $configFactory;
         $this->_cache = $cache;
         $this->string = $string;
+    }
+
+    /**
+     * Save configuration state
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
+     *
+     * @param array $configState
+     * @return bool
+     */
+    public function _saveState($configState = []): bool
+    {
+        return parent::_saveState($configState);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _isAllowed()
+    {
+        return parent::_isAllowed() && $this->isSectionAllowed();
+    }
+
+    /**
+     * Checks if user has access to section.
+     *
+     * @return bool
+     */
+    private function isSectionAllowed(): bool
+    {
+        $sectionId = $this->_request->getParam('section');
+        $isAllowed = $this->_configStructure->getElement($sectionId)->isAllowed();
+        if (!$isAllowed) {
+            $groups = $this->getRequest()->getPost('groups');
+            $fieldPath = $this->getFirstFieldPath($groups, $sectionId);
+
+            $fieldPaths = $this->_configStructure->getFieldPaths();
+            $fieldPath = $fieldPaths[$fieldPath][0] ?? $sectionId;
+            $explodedConfigPath = explode('/', $fieldPath);
+            $configSectionId = $explodedConfigPath[0] ?? $sectionId;
+
+            $isAllowed = $this->_configStructure->getElement($configSectionId)->isAllowed();
+        }
+
+        return $isAllowed;
+    }
+
+    /**
+     * Return field path as string.
+     *
+     * @param array $elements
+     * @param string $fieldPath
+     * @return string
+     */
+    private function getFirstFieldPath(array $elements, string $fieldPath): string
+    {
+        $groupData = [];
+        foreach ($elements as $elementName => $element) {
+            if (!empty($element)) {
+                $fieldPath .= '/' . $elementName;
+
+                if (!empty($element['fields'])) {
+                    $groupData = $element['fields'];
+                } elseif (!empty($element['groups'])) {
+                    $groupData = $element['groups'];
+                }
+
+                if (!empty($groupData)) {
+                    $fieldPath = $this->getFirstFieldPath($groupData, $fieldPath);
+                }
+                break;
+            }
+        }
+
+        return $fieldPath;
     }
 
     /**
@@ -145,21 +222,15 @@ class Save extends AbstractConfig
     {
         try {
             // custom save logic
-            $this->_saveSection();
-            $section = $this->getRequest()->getParam('section');
-            $website = $this->getRequest()->getParam('website');
-            $store = $this->getRequest()->getParam('store');
+            $configData = $this->getConfigData();
 
-            $configData = [
-                'section' => $section,
-                'website' => $website,
-                'store' => $store,
-                'groups' => $this->_getGroupsForSave(),
-            ];
-            /** @var \Magento\Config\Model\Config $configModel  */
+            /** @var \Magento\Config\Model\Config $configModel */
             $configModel = $this->_configFactory->create(['data' => $configData]);
             $configModel->save();
-
+            $this->_eventManager->dispatch(
+                'admin_system_config_save',
+                ['configData' => $configData, 'request' => $this->getRequest()]
+            );
             $this->messageManager->addSuccess(__('You saved the configuration.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $messages = explode("\n", $e->getMessage());
@@ -183,5 +254,116 @@ class Save extends AbstractConfig
                 '_nosid' => true
             ]
         );
+    }
+
+    /**
+     * Filter paths that are not defined.
+     *
+     * @param string $prefix Path prefix
+     * @param array $groups Groups data.
+     * @param string[] $systemXmlConfig Defined paths.
+     * @return array Filtered groups.
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function filterPaths(string $prefix, array $groups, array $systemXmlConfig): array
+    {
+        $flippedXmlConfig = array_flip($systemXmlConfig);
+        $filtered = [];
+        foreach ($groups as $groupName => $childPaths) {
+            //When group accepts arbitrary fields and clones them we allow it
+            $group = $this->_configStructure->getElement($prefix . '/' . $groupName);
+            if (array_key_exists('clone_fields', $group->getData()) && $group->getData()['clone_fields']) {
+                $filtered[$groupName] = $childPaths;
+                continue;
+            }
+
+            $filtered[$groupName] = ['fields' => [], 'groups' => []];
+            //Processing fields
+            if (array_key_exists('fields', $childPaths)) {
+                foreach ($childPaths['fields'] as $field => $fieldData) {
+                    //Constructing config path for the $field
+                    $path = $prefix . '/' . $groupName . '/' . $field;
+                    $element = $this->_configStructure->getElement($path);
+                    if ($element
+                        && ($elementData = $element->getData())
+                        && array_key_exists('config_path', $elementData)
+                    ) {
+                        $path = $elementData['config_path'];
+                    }
+                    //Checking whether it exists in system.xml
+                    if (array_key_exists($path, $flippedXmlConfig)) {
+                        $filtered[$groupName]['fields'][$field] = $fieldData;
+                    }
+                }
+            }
+            //Recursively filtering this group's groups.
+            if (array_key_exists('groups', $childPaths) && $childPaths['groups']) {
+                $filteredGroups = $this->filterPaths(
+                    $prefix . '/' . $groupName,
+                    $childPaths['groups'],
+                    $systemXmlConfig
+                );
+                if ($filteredGroups) {
+                    $filtered[$groupName]['groups'] = $filteredGroups;
+                }
+            }
+
+            $filtered[$groupName] = array_filter($filtered[$groupName]);
+        }
+
+        return array_filter($filtered);
+    }
+
+    /**
+     * Filters nodes by checking whether they exist in system.xml.
+     *
+     * @param array $configData
+     * @return array
+     */
+    public function filterNodes(array $configData): array
+    {
+        if (!empty($configData['groups'])) {
+            //Full list of paths defined in system.xml
+            $fieldPaths = $this->_configStructure->getFieldPaths();
+            $systemXmlConfig = array_merge(array_keys($fieldPaths), ...array_values($fieldPaths));
+            $configData['groups'] = $this->filterPaths($configData['section'], $configData['groups'], $systemXmlConfig);
+        }
+        return $configData;
+    }
+
+    /**
+     * Get Config data from Request
+     *
+     * @return array
+     * @throws LocalizedException
+     */
+    public function getConfigData()
+    {
+        $this->_saveSection();
+        $section = $this->getRequest()->getParam('section');
+        $website = $this->getRequest()->getParam('website');
+        $store = $this->getRequest()->getParam('store');
+        $configData = [
+            'section' => $section,
+            'website' => $website,
+            'store' => $store,
+            'groups' => $this->_getGroupsForSave(),
+        ];
+        $configData = $this->filterNodes($configData);
+
+        $groups = $this->getRequest()->getParam('groups');
+
+        if (isset($groups['country']['fields'])) {
+            if (isset($groups['country']['fields']['eu_countries'])) {
+                $countries = $groups['country']['fields']['eu_countries'];
+                if (empty($countries['value']) &&
+                    !isset($countries['inherit'])) {
+                    throw new LocalizedException(
+                        __('Something went wrong while saving this configuration.')
+                    );
+                }
+            }
+        }
+        return $configData;
     }
 }

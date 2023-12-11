@@ -5,6 +5,21 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Config\Model\ResourceModel\Config\Data;
+use Magento\Directory\Model\CurrencyFactory;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\App\Cache\Type\Config;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Store\Model\ResourceModel\Store\CollectionFactory;
+
 /**
  * Core Website model
  *
@@ -28,9 +43,9 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     \Magento\Framework\App\ScopeInterface,
     \Magento\Store\Api\Data\WebsiteInterface
 {
-    const ENTITY = 'store_website';
+    public const ENTITY = 'store_website';
 
-    const CACHE_TAG = 'website';
+    public const CACHE_TAG = 'website';
 
     /**
      * @var bool
@@ -160,20 +175,37 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     protected $_currencyFactory;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Config\Model\ResourceModel\Config\Data $configDataResource
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
-     * @param \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeListFactory
-     * @param \Magento\Store\Model\GroupFactory $storeGroupFactory
-     * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @var PoisonPillPutInterface
+     */
+    private $pillPut;
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $_coreConfig;
+
+    /**
+     * @var TypeListInterface
+     */
+    private TypeListInterface $typeList;
+
+    /**
+     * @param Context $context
+     * @param Registry $registry
+     * @param ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
+     * @param Data $configDataResource
+     * @param ScopeConfigInterface $coreConfig
+     * @param CollectionFactory $storeListFactory
+     * @param GroupFactory $storeGroupFactory
+     * @param WebsiteFactory $websiteFactory
+     * @param StoreManagerInterface $storeManager
+     * @param CurrencyFactory $currencyFactory
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
      * @param array $data
+     * @param PoisonPillPutInterface|null $pillPut
+     * @param TypeListInterface|null $typeList
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -190,7 +222,9 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        PoisonPillPutInterface $pillPut = null,
+        TypeListInterface $typeList = null
     ) {
         parent::__construct(
             $context,
@@ -208,10 +242,12 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
         $this->_websiteFactory = $websiteFactory;
         $this->_storeManager = $storeManager;
         $this->_currencyFactory = $currencyFactory;
+        $this->pillPut = $pillPut ?: ObjectManager::getInstance()->get(PoisonPillPutInterface::class);
+        $this->typeList = $typeList ?: ObjectManager::getInstance()->get(TypeListInterface::class);
     }
 
     /**
-     * init model
+     * Init model
      *
      * @return void
      */
@@ -495,6 +531,8 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
+     * Get default group id
+     *
      * @return mixed
      */
     public function getDefaultGroupId()
@@ -511,6 +549,8 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
+     * Get code
+     *
      * @return mixed
      */
     public function getCode()
@@ -543,7 +583,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * @return $this
+     * @inheritdoc
      */
     public function beforeDelete()
     {
@@ -566,6 +606,13 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     public function afterDelete()
     {
         $this->_storeManager->reinitStores();
+        $types = [
+            'full_page',
+            Config::TYPE_IDENTIFIER
+        ];
+        foreach ($types as $type) {
+            $this->typeList->cleanType($type);
+        }
         parent::afterDelete();
         return $this;
     }
@@ -580,8 +627,10 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     {
         if ($this->isObjectNew()) {
             $this->_storeManager->reinitStores();
+        } else {
+            $this->typeList->invalidate(['full_page', Config::TYPE_IDENTIFIER]);
         }
-
+        $this->pillPut->put();
         return parent::afterSave();
     }
 
@@ -635,8 +684,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * Retrieve default stores select object
-     * Select fields website_id, store_id
+     * Retrieve default stores select object, select fields website_id, store_id
      *
      * @param bool $withDefault include/exclude default admin website
      * @return \Magento\Framework\DB\Select
@@ -671,7 +719,18 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
+     */
+    public function getCacheTags()
+    {
+        $identities = $this->getIdentities();
+        $parentTags = parent::getCacheTags();
+
+        return array_unique(array_merge($identities, $parentTags));
+    }
+
+    /**
+     * @inheritdoc
      * @since 100.1.0
      */
     public function getScopeType()
@@ -680,7 +739,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.0
      */
     public function getScopeTypeName()
@@ -689,7 +748,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExtensionAttributes()
     {
@@ -697,7 +756,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setExtensionAttributes(
         \Magento\Store\Api\Data\WebsiteExtensionInterface $extensionAttributes

@@ -3,42 +3,48 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit\Language;
 
-use \Magento\Framework\App\Language\Config;
+use Magento\Framework\App\Language\Config;
+use Magento\Framework\Config\Dom;
+use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\Config\DomFactory;
+use Magento\Framework\Config\ValidationStateInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for configuration of language
  */
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
-    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    /** @var UrnResolver */
     protected $urnResolver;
 
-    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    /** @var UrnResolver */
     protected $urnResolverMock;
 
     /** @var Config */
     protected $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        $this->urnResolverMock = $this->createMock(\Magento\Framework\Config\Dom\UrnResolver::class);
+        $this->urnResolver = new UrnResolver();
+        $this->urnResolverMock = $this->createMock(UrnResolver::class);
         $this->urnResolverMock->expects($this->any())
             ->method('getRealPath')
             ->with('urn:magento:framework:App/Language/package.xsd')
             ->willReturn($this->urnResolver->getRealPath('urn:magento:framework:App/Language/package.xsd'));
-        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationStateMock = $this->getMockForAbstractClass(ValidationStateInterface::class);
         $validationStateMock->method('isValidationRequired')
             ->willReturn(true);
-        $domFactoryMock = $this->createMock(\Magento\Framework\Config\DomFactory::class);
+        $domFactoryMock = $this->createMock(DomFactory::class);
         $domFactoryMock->expects($this->once())
             ->method('createDom')
             ->willReturnCallback(
                 function ($arguments) use ($validationStateMock) {
-                    return new \Magento\Framework\Config\Dom(
+                    return new Dom(
                         $arguments['xml'],
                         $validationStateMock,
                         [],

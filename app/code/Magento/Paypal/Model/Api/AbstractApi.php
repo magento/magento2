@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Model\Api;
 
 use Magento\Payment\Helper\Formatter;
@@ -377,6 +379,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
                 $callback = $this->_exportToRequestFilters[$key];
                 $privateKey = $result[$key];
                 $publicKey = $map[$this->_globalMap[$key]];
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $result[$key] = call_user_func([$this, $callback], $privateKey, $publicKey);
             }
         }
@@ -399,6 +402,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
             }
             if (isset($response[$key]) && isset($this->_importFromRequestFilters[$key])) {
                 $callback = $this->_importFromRequestFilters[$key];
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $response[$key] = call_user_func([$this, $callback], $response[$key], $key, $map[$key]);
             }
         }
@@ -410,7 +414,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      *
      * Returns true if there were line items added
      *
-     * @param array &$request
+     * @param array $request
      * @param int $i
      * @return true|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -425,8 +429,8 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
         if ($this->_lineItemTotalExportMap) {
             foreach ($this->_cart->getAmounts() as $key => $total) {
                 if (isset($this->_lineItemTotalExportMap[$key])) {
-                    // !empty($total)
                     $privateKey = $this->_lineItemTotalExportMap[$key];
+                    $total = round((float) $total, 2);
                     $request[$privateKey] = $this->formatPrice($total);
                 }
             }
@@ -451,9 +455,10 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
 
     /**
      * Prepare shipping options request
+     *
      * Returns false if there are no shipping options
      *
-     * @param array &$request
+     * @param array $request
      * @param int $i
      * @return bool
      */
@@ -517,7 +522,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
     }
 
     /**
-     * region_id workaround: PayPal requires state code, try to find one in the address
+     * Region_id workaround: PayPal requires state code, try to find one in the address
      *
      * @param \Magento\Framework\DataObject $address
      * @return string
@@ -574,6 +579,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
 
     /**
      * Filter qty in API calls
+     *
      * Paypal note: The value for quantity must be a positive integer. Null, zero, or negative numbers are not allowed.
      *
      * @param float|string|int $value
@@ -581,7 +587,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      */
     protected function _filterQty($value)
     {
-        return intval($value);
+        return (int)$value;
     }
 
     /**

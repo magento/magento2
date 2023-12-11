@@ -15,12 +15,12 @@ interface AttributeOptionManagementInterface
     /**
      * Add option to attribute
      *
-     * @param string $attributeCode
      * @param int $entityType
+     * @param string $attributeCode
      * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
      * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\InputException
-     * @return bool
+     * @return string
      */
     public function add($entityType, $attributeCode, $option);
 

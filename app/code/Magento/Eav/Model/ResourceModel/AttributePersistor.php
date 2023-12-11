@@ -6,18 +6,15 @@
 
 namespace Magento\Eav\Model\ResourceModel;
 
-use Magento\Catalog\Model\Product;
 use Magento\Eav\Api\AttributeRepositoryInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Model\Entity\ScopeInterface;
-use Magento\Framework\EntityManager\MetadataPool;
 
 /**
- * Class AttributePersistor
+ * Class AttributePersistor persists attributes
  */
 class AttributePersistor
 {
@@ -67,6 +64,8 @@ class AttributePersistor
     }
 
     /**
+     * Registers delete
+     *
      * @param string $entityType
      * @param int $link
      * @param string $attributeCode
@@ -78,6 +77,8 @@ class AttributePersistor
     }
 
     /**
+     * Registers update
+     *
      * @param string $entityType
      * @param int $link
      * @param string $attributeCode
@@ -90,6 +91,8 @@ class AttributePersistor
     }
 
     /**
+     * Registers Insert
+     *
      * @param string $entityType
      * @param int $link
      * @param string $attributeCode
@@ -102,6 +105,8 @@ class AttributePersistor
     }
 
     /**
+     * Process deletes
+     *
      * @param string $entityType
      * @param \Magento\Framework\Model\Entity\ScopeInterface[] $context
      * @return void
@@ -132,6 +137,8 @@ class AttributePersistor
     }
 
     /**
+     * Process inserts
+     *
      * @param string $entityType
      * @param \Magento\Framework\Model\Entity\ScopeInterface[] $context
      * @return void
@@ -144,6 +151,31 @@ class AttributePersistor
             return;
         }
         $metadata = $this->metadataPool->getMetadata($entityType);
+        $insertData = $this->prepareInsertDataForMultipleSave($entityType, $context);
+
+        foreach ($insertData as $table => $tableData) {
+            foreach ($tableData as $data) {
+                $metadata->getEntityConnection()->insertArray(
+                    $table,
+                    $data['columns'],
+                    $data['data'],
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_IGNORE
+                );
+            }
+        }
+    }
+
+    /**
+     * Prepare data for insert multiple rows
+     *
+     * @param string $entityType
+     * @param \Magento\Framework\Model\Entity\ScopeInterface[] $context
+     * @return array
+     */
+    private function prepareInsertDataForMultipleSave($entityType, $context)
+    {
+        $metadata = $this->metadataPool->getMetadata($entityType);
+        $insertData = [];
         foreach ($this->insert[$entityType] as $link => $data) {
             foreach ($data as $attributeCode => $attributeValue) {
                 /** @var AbstractAttribute $attribute */
@@ -151,22 +183,26 @@ class AttributePersistor
                     $metadata->getEavEntityType(),
                     $attributeCode
                 );
-
+                $attributeTable = $attribute->getBackend()->getTable();
                 $conditions = $this->buildInsertConditions($attribute, $metadata, $context, $link);
                 $value = $this->prepareValue($entityType, $attributeValue, $attribute);
 
                 foreach ($conditions as $condition) {
                     $condition['value'] = $value;
-                    $metadata->getEntityConnection()->insertOnDuplicate(
-                        $attribute->getBackend()->getTable(),
-                        $condition
-                    );
+                    $columns = array_keys($condition);
+                    $columnsHash = implode('', $columns);
+                    $insertData[$attributeTable][$columnsHash]['columns'] = $columns;
+                    $insertData[$attributeTable][$columnsHash]['data'][] = array_values($condition);
                 }
             }
         }
+
+        return $insertData;
     }
 
     /**
+     * Process updates
+     *
      * @param string $entityType
      * @param \Magento\Framework\Model\Entity\ScopeInterface[] $context
      * @return void
@@ -302,10 +338,14 @@ class AttributePersistor
         $this->processDeletes($entityType, $context);
         $this->processInserts($entityType, $context);
         $this->processUpdates($entityType, $context);
-        unset($this->delete, $this->insert, $this->update);
+        $this->delete = [];
+        $this->insert = [];
+        $this->update = [];
     }
 
     /**
+     * Prepares value
+     *
      * @param string $entityType
      * @param string $value
      * @param AbstractAttribute $attribute
@@ -328,6 +368,8 @@ class AttributePersistor
     }
 
     /**
+     * Gets scope value
+     *
      * @param ScopeInterface $scope
      * @param AbstractAttribute $attribute
      * @param bool $useDefault

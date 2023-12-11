@@ -72,7 +72,7 @@ City,City
 "We're sorry, an error has occurred while generating this content.","We're sorry, an error has occurred while generating this content."
 "Invalid sender data","Invalid sender data"
 Title,Title
-"Load default template","Load default template"
+"Load Default Template","Load Default Template"
 Template,Template
 "Are you sure you want to strip tags?","Are you sure you want to strip tags?"
 "Are you sure you want to delete this template?","Are you sure you want to delete this template?"
@@ -98,3 +98,4 @@ Action,Action
 "Email template chosen based on theme fallback, when the ""Default"" option is selected.","Email template chosen based on theme fallback, when the ""Default"" option is selected."
 "Header Template","Header Template"
 "Footer Template","Footer Template"
+"Unable to send mail. Please try again later.","Unable to send mail. Please try again later."

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminNavigateMultipleUpSellProductsTest">
+        <annotations>
+            <stories value="Up Sell products"/>
+            <title value="Promote Multiple Products (Simple, Configurable) as Up-Sell Products"/>
+            <description value="Login as admin and add simple and configurable Products as Up-Sell products"/>
+            <testCaseId value="MC-8902"/>
+            <severity value="BLOCKER"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <!--Create Simple Products-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory1"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory1"/>
+            </createData>
+            <createData entity="SimpleSubCategory" stepKey="createCategory2"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct1">
+                <requiredEntity createDataKey="createCategory2"/>
+            </createData>
+
+            <!-- Create the configurable product with product Attribute options-->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="delete">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+
+            <!--Login as admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <!--Logout as admin-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!--Delete created data-->
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCategory1" stepKey="deleteSubCategory1"/>
+            <deleteData createDataKey="createCategory2" stepKey="deleteCategory2"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deletecreateConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deletecreateConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+
+        <!--Open Product Index Page-->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+
+        <!--Select SimpleProduct -->
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedProduct">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="openFirstProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductToLoad"/>
+
+        <!--Add SimpleProduct1 and ConfigProduct as Up sell products-->
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnRelatedProducts"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnAddUpSellProducts"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForTheProductToLoad"/>
+        <actionGroup ref="AddUpSellProductBySkuActionGroup" stepKey="selectTheSimpleProduct2">
+            <argument name="sku" value="$$createSimpleProduct1.sku$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="addSelectedProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductToBeAdded"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnAddUpSellProductsButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterConfigurableProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForTheConfigProductToLoad"/>
+        <actionGroup ref="AddUpSellProductBySkuActionGroup" stepKey="selectTheConfigProduct">
+            <argument name="sku" value="$$createConfigProduct.sku$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="addSelectedProductButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForConfigProductToBeAdded"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnRelatedProducts1"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoading1"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
+
+        <!--Go to Product Index Page -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="clickOnBackButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductsToBeLoaded"/>
+
+        <!--Select Configurable Product-->
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findConfigProduct">
+            <argument name="product" value="$$createConfigProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="openConfigProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForConfigProductToLoad"/>
+
+        <!--Add  SimpleProduct1 as Up Sell Product-->
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnRelatedProductsHeader"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnAddUpSellProductsButton1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterSimpleProduct2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForTheSimpleProduct2ToBeLoaded"/>
+        <actionGroup ref="AddUpSellProductBySkuActionGroup" stepKey="selectSimpleProduct1">
+            <argument name="sku" value="$$createSimpleProduct1.sku$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="addSimpleProduct2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSimpleProductToBeAdded"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToTheSaveButton"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoading2"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown1">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForUpdatesTobeSaved1"/>
+
+        <!--Go to SimpleProduct store front page-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToSimpleProductFrontPage">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProduct"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeProductName">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+        <scrollTo stepKey="scrollToTheUpSellHeading" selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}"/>
+
+        <!--Verify Up Sell Products displayed in SimpleProduct page-->
+        <see stepKey="seeTheUpSellHeading" selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}" userInput="We found other products you might like!"/>
+        <actionGroup ref="StorefrontAssertUpSellProductOnProductPageActionGroup" stepKey="seeSimpleProduct1">
+            <argument name="productName" value="$$createSimpleProduct1.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertUpSellProductOnProductPageActionGroup" stepKey="seeConfigProduct">
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
+        </actionGroup>
+
+        <!--Go to Config Product store front page-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToConfigProductFrontPage">
+            <argument name="product" value="$$createConfigProduct$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForConfigProductToBeLoaded"/>
+        <scrollTo stepKey="scrollToTheUpSellHeading1" selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}"/>
+
+        <!--Verify Up Sell Products displayed in ConfigProduct page-->
+        <see stepKey="seeTheUpSellHeading1" selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}" userInput="We found other products you might like!"/>
+        <actionGroup ref="StorefrontAssertUpSellProductOnProductPageActionGroup" stepKey="seeSimpleProduct2">
+            <argument name="productName" value="$$createSimpleProduct1.name$$"/>
+        </actionGroup>
+
+        <!--Go to SimpleProduct1 store front page-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToSimpleProduct1FrontPage">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSimpleProduct1ToBeLoaded"/>
+
+        <!--Verify No Up Sell Products displayed in SimplProduct1 page-->
+        <dontSee stepKey="dontSeeTheUpSellHeading1" selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}" userInput="We found other products you might like!"/>
+    </test>
+</tests>

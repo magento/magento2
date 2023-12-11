@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontFillBillingAddressActionGroup">
+      <arguments>
+          <argument name="address" defaultValue="CustomerUKAddress" type="entity"/>
+      </arguments>
+        <fillField selector="{{CheckoutPaymentSection.guestFirstName}}" userInput="{{address.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector="{{CheckoutPaymentSection.guestLastName}}" userInput="{{address.lastname}}" stepKey="enterLastName"/>
+        <fillField selector="{{CheckoutPaymentSection.guestStreet}}" userInput="{{address.street[0]}}" stepKey="enterStreet"/>
+        <fillField selector="{{CheckoutPaymentSection.guestCity}}" userInput="{{address.city}}" stepKey="enterCity"/>
+        <fillField selector="{{CheckoutPaymentSection.guestPostcode}}" userInput="{{address.postcode}}" stepKey="enterPostcode"/>
+        <selectOption selector="{{CheckoutPaymentSection.guestCountry}}" userInput="{{address.country_id}}" stepKey="enterCountry"/>
+        <fillField selector="{{CheckoutPaymentSection.guestTelephone}}" userInput="{{address.telephone}}" stepKey="enterTelephone"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+    </actionGroup>
+</actionGroups>

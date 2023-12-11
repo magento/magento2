@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCategoryUrlRewriteAndAddNoRedirectTest">
+        <annotations>
+            <stories value="Create category URL rewrite"/>
+            <title value="Create category URL rewrite, with no redirect"/>
+            <description value="Login as admin and create category UrlRewrite with No redirect"/>
+            <testCaseId value="MC-5335"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <createData entity="_defaultCategory" stepKey="category"/>
+       </before>
+        <after>
+            <deleteData createDataKey="category" stepKey="deleteRootCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Open Url Rewrite Index Page and update the Custom Url Rewrite, Store, Request Path, Redirect Type and Description -->
+        <actionGroup ref="AdminAddUrlRewriteActionGroup" stepKey="addUrlRewrite">
+            <argument name="category" value="$$category.name$$"/>
+            <argument name="customUrlRewriteValue" value="For Category"/>
+            <argument name="storeValue" value="Default Store View"/>
+            <argument name="requestPath" value="newrequestpath.html"/>
+            <argument name="redirectTypeValue" value="No"/>
+            <argument name="description" value="End To End Test"/>
+        </actionGroup>
+
+        <!-- Get Category ID -->
+        <actionGroup ref="OpenCategoryFromCategoryTreeActionGroup" stepKey="getCategoryId">
+            <argument name="category" value="$$category.name$$"/>
+        </actionGroup>
+        <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#"/>
+
+        <!-- Assert Redirect path, Target Path and Redirect type in grid -->
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath">
+            <argument name="redirectPath" value="newrequestpath.html" />
+            <argument name="redirectType" value="No" />
+            <argument name="targetPath" value="catalog/category/view/id/{$categoryId}"/>
+        </actionGroup>
+    </test>
+</tests>

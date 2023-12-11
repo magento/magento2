@@ -3,18 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Convert\Test\Unit;
 
-use \Magento\Framework\Convert\ConvertArray;
+use Magento\Framework\Convert\ConvertArray;
+use PHPUnit\Framework\TestCase;
 
-class ConvertArrayTest extends \PHPUnit\Framework\TestCase
+class ConvertArrayTest extends TestCase
 {
     /**
      * @var ConvertArray
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new ConvertArray();
     }
@@ -32,12 +35,12 @@ XML;
         $this->assertEquals($expectedResult, $result->asXML());
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Associative and numeric keys must not be mixed at one level.
-     */
     public function testAssocToXmlExceptionByKey()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage(
+            'Associative and numeric keys can\'t be mixed at one level. Verify and try again.'
+        );
         $data = [
             'one' => [
                 100,
@@ -50,11 +53,11 @@ XML;
     /**
      * @param array $array
      * @param string $rootName
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider assocToXmlExceptionDataProvider
      */
     public function testAssocToXmlException($array, $rootName = '_')
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->_model->assocToXml($array, $rootName);
     }
 

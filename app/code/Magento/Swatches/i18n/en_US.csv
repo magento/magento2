@@ -1,4 +1,4 @@
-"Admin is a required field in the each row","Admin is a required field in the each row"
+"Admin is a required field in each row","Admin is a required field in each row"
 "Update Product Preview Image","Update Product Preview Image"
 "Filtering by this attribute will update the product image on catalog page","Filtering by this attribute will update the product image on catalog page"
 "Use Product Image for Swatch if Possible","Use Product Image for Swatch if Possible"
@@ -41,3 +41,4 @@ Admin,Admin
 "The value of Admin must be unique.","The value of Admin must be unique."
 "The value of Admin must be unique. (%1)","The value of Admin must be unique. (%1)"
 Description,Description
+More,More

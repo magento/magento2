@@ -3,41 +3,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Mview\Test\Unit\View;
 
-use \Magento\Framework\Mview\View\SubscriptionFactory;
+use Magento\Framework\Mview\View\SubscriptionFactory;
+use Magento\Framework\Mview\View\SubscriptionInterface;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SubscriptionFactoryTest extends \PHPUnit\Framework\TestCase
+class SubscriptionFactoryTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Mview\View\SubscriptionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubscriptionFactory|MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->model = new SubscriptionFactory($this->objectManagerMock);
     }
 
     public function testCreate()
     {
         $subscriptionInterfaceMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Mview\View\SubscriptionInterface::class,
+            SubscriptionInterface::class,
             [],
             '',
             false
         );
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with(\Magento\Framework\Mview\View\SubscriptionInterface::class, ['some_data'])
-            ->will($this->returnValue($subscriptionInterfaceMock));
+            ->with(SubscriptionInterface::class, ['some_data'])
+            ->willReturn($subscriptionInterfaceMock);
         $this->assertEquals($subscriptionInterfaceMock, $this->model->create(['some_data']));
     }
 }

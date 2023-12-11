@@ -3,32 +3,39 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Layer\Category;
 
-use \Magento\Catalog\Model\Layer\Category\StateKey;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Layer\Category\StateKey;
+use Magento\Customer\Model\Session;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class StateKeyTest extends \PHPUnit\Framework\TestCase
+class StateKeyTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Category\StateKey
+     * @var StateKey
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->customerSessionMock = $this->createMock(Session::class);
         $this->model = new StateKey($this->storeManagerMock, $this->customerSessionMock);
     }
 
@@ -38,14 +45,14 @@ class StateKeyTest extends \PHPUnit\Framework\TestCase
      */
     public function testToString()
     {
-        $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
-        $categoryMock->expects($this->once())->method('getId')->will($this->returnValue('1'));
+        $categoryMock = $this->createMock(Category::class);
+        $categoryMock->expects($this->once())->method('getId')->willReturn('1');
 
-        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
-        $storeMock->expects($this->once())->method('getId')->will($this->returnValue('2'));
+        $storeMock = $this->createMock(Store::class);
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
+        $storeMock->expects($this->once())->method('getId')->willReturn('2');
 
-        $this->customerSessionMock->expects($this->once())->method('getCustomerGroupId')->will($this->returnValue('3'));
+        $this->customerSessionMock->expects($this->once())->method('getCustomerGroupId')->willReturn('3');
 
         $this->assertEquals('STORE_2_CAT_1_CUSTGROUP_3', $this->model->toString($categoryMock));
     }

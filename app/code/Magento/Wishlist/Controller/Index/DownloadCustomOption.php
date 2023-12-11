@@ -3,15 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Wishlist\Controller\Index;
 
+use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Framework\App\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 
-class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex
+/**
+ * Class DownloadCustomOption. Represents request-flow logic for option's file download
+ */
+class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
@@ -26,6 +33,8 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex
     private $json;
 
     /**
+     * Constructor method
+     *
      * @param Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileResponseFactory
      * @param Json|null $json
@@ -45,7 +54,6 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex
      *
      * @return \Magento\Framework\Controller\Result\Forward
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {
@@ -62,9 +70,9 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex
         }
 
         $optionId = null;
-        if (strpos($option->getCode(), \Magento\Catalog\Model\Product\Type\AbstractType::OPTION_PREFIX) === 0) {
+        if ($option->getCode() && strpos($option->getCode(), AbstractType::OPTION_PREFIX) === 0) {
             $optionId = str_replace(
-                \Magento\Catalog\Model\Product\Type\AbstractType::OPTION_PREFIX,
+                AbstractType::OPTION_PREFIX,
                 '',
                 $option->getCode()
             );
@@ -89,15 +97,18 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex
             $secretKey = $this->getRequest()->getParam('key');
 
             if ($secretKey == $info['secret_key']) {
-                $this->_fileResponseFactory->create(
+                return $this->_fileResponseFactory->create(
                     $info['title'],
                     ['value' => $info['quote_path'], 'type' => 'filename'],
-                    DirectoryList::ROOT
+                    DirectoryList::MEDIA,
+                    $info['type']
                 );
             }
         } catch (\Exception $e) {
             $resultForward->forward('noroute');
             return $resultForward;
         }
+
+        return $resultForward;
     }
 }

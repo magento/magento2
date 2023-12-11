@@ -1,0 +1,65 @@
+{
+    "directory_country": {
+        "column": {
+            "country_id": true,
+            "iso2_code": true,
+            "iso3_code": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "directory_country_format": {
+        "column": {
+            "country_format_id": true,
+            "country_id": true,
+            "type": true,
+            "format": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "DIRECTORY_COUNTRY_FORMAT_COUNTRY_ID_TYPE": true
+        }
+    },
+    "directory_country_region": {
+        "column": {
+            "region_id": true,
+            "country_id": true,
+            "code": true,
+            "default_name": true
+        },
+        "index": {
+            "DIRECTORY_COUNTRY_REGION_COUNTRY_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "directory_country_region_name": {
+        "column": {
+            "locale": true,
+            "region_id": true,
+            "name": true
+        },
+        "index": {
+            "DIRECTORY_COUNTRY_REGION_NAME_REGION_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "DIR_COUNTRY_REGION_NAME_REGION_ID_DIR_COUNTRY_REGION_REGION_ID": true
+        }
+    },
+    "directory_currency_rate": {
+        "column": {
+            "currency_from": true,
+            "currency_to": true,
+            "rate": true
+        },
+        "index": {
+            "DIRECTORY_CURRENCY_RATE_CURRENCY_TO": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

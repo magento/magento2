@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Framework\HTTP\Client;
 
 /**
@@ -10,6 +13,7 @@ namespace Magento\Framework\HTTP\Client;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @api
  */
 class Curl implements \Magento\Framework\HTTP\ClientInterface
 {
@@ -26,7 +30,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     protected $_host = 'localhost';
 
     /**
-     * Port
      * @var int
      */
     protected $_port = 80;
@@ -56,19 +59,16 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     protected $_cookies = [];
 
     /**
-     * Response headers
      * @var array
      */
     protected $_responseHeaders = [];
 
     /**
-     * Response body
      * @var string
      */
     protected $_responseBody = '';
 
     /**
-     * Response status
      * @var int
      */
     protected $_responseStatus = 0;
@@ -107,9 +107,9 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     protected $_headerCount = 0;
 
     /**
-     * Set request timeout, msec
+     * Set request timeout
      *
-     * @param int $value
+     * @param int $value value in seconds
      * @return void
      */
     public function setTimeout($value)
@@ -161,6 +161,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Authorization: Basic header
+     *
      * Login credentials support
      *
      * @param string $login username
@@ -209,6 +210,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Clear cookies
+     *
      * @return void
      */
     public function removeCookies()
@@ -276,7 +278,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
         }
         $out = [];
         foreach ($this->_responseHeaders['Set-Cookie'] as $row) {
-            $values = explode("; ", $row);
+            $values = explode("; ", $row ?? '');
             $c = count($values);
             if (!$c) {
                 continue;
@@ -293,6 +295,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     /**
      * Get cookies array with details
      * (domain, expire time etc)
+     *
      * @return array
      */
     public function getCookiesFull()
@@ -302,7 +305,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
         }
         $out = [];
         foreach ($this->_responseHeaders['Set-Cookie'] as $row) {
-            $values = explode("; ", $row);
+            $values = explode("; ", $row ?? '');
             $c = count($values);
             if (!$c) {
                 continue;
@@ -319,7 +322,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
             }
             for ($i = 0; $i < $c; $i++) {
                 list($subkey, $val) = explode("=", $values[$i]);
-                $out[trim($key)][trim($subkey)] = trim($val);
+                $out[trim($key)][trim($subkey)] = $val !== null ? trim($val) : '';
             }
         }
         return $out;
@@ -327,6 +330,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Get response status code
+     *
      * @see lib\Magento\Framework\HTTP\Client#getStatus()
      *
      * @return int
@@ -345,6 +349,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param string $method
      * @param string $uri
      * @param array|string $params - use $params as a string in case of JSON or XML POST request.
+     *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -352,6 +357,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     protected function makeRequest($method, $uri, $params = [])
     {
         $this->_ch = curl_init();
+        $this->curlOption(CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS | CURLPROTO_FTP | CURLPROTO_FTPS);
         $this->curlOption(CURLOPT_URL, $uri);
         if ($method == 'POST') {
             $this->curlOption(CURLOPT_POST, 1);
@@ -410,12 +416,14 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Throw error exception
+     *
      * @param string $string
      * @return void
      * @throws \Exception
      */
     public function doError($string)
     {
+        //  phpcs:ignore Magento2.Exceptions.DirectThrow
         throw new \Exception($string);
     }
 
@@ -430,12 +438,13 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      */
     protected function parseHeaders($ch, $data)
     {
+        $data = $data !== null ? $data : '';
         if ($this->_headerCount == 0) {
             $line = explode(" ", trim($data), 3);
-            if (count($line) != 3) {
+            if (count($line) < 2) {
                 $this->doError("Invalid response line returned from server: " . $data);
             }
-            $this->_responseStatus = intval($line[1]);
+            $this->_responseStatus = (int)$line[1];
         } else {
             $name = $value = '';
             $out = explode(": ", trim($data), 2);
@@ -445,11 +454,8 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
             }
 
             if (strlen($name)) {
-                if ("Set-Cookie" == $name) {
-                    if (!isset($this->_responseHeaders[$name])) {
-                        $this->_responseHeaders[$name] = [];
-                    }
-                    $this->_responseHeaders[$name][] = $value;
+                if ('set-cookie' === strtolower($name)) {
+                    $this->_responseHeaders['Set-Cookie'][] = $value;
                 } else {
                     $this->_responseHeaders[$name] = $value;
                 }
@@ -464,7 +470,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * Set curl option directly
      *
      * @param string $name
-     * @param string $value
+     * @param mixed $value
      * @return void
      */
     protected function curlOption($name, $value)
@@ -474,6 +480,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Set curl options array directly
+     *
      * @param array $arr
      * @return void
      */
@@ -484,6 +491,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Set CURL options overrides array
+     *
      * @param array $arr
      * @return void
      */
@@ -496,7 +504,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * Set curl option
      *
      * @param string $name
-     * @param string $value
+     * @param mixed $value
      * @return void
      */
     public function setOption($name, $value)

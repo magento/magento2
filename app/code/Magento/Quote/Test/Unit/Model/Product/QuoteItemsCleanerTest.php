@@ -3,33 +3,42 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model\Product;
 
-class QuoteItemsCleanerTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Quote\Model\Product\QuoteItemsCleaner;
+use Magento\Quote\Model\ResourceModel\Quote\Item;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class QuoteItemsCleanerTest extends TestCase
 {
     /**
-     * @var \Magento\Quote\Model\Product\QuoteItemsCleaner
+     * @var QuoteItemsCleaner
      */
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\ResourceModel\Quote\Item
+     * @var MockObject|Item
      */
     private $itemResourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->itemResourceMock = $this->createMock(\Magento\Quote\Model\ResourceModel\Quote\Item::class);
-        $this->model = new \Magento\Quote\Model\Product\QuoteItemsCleaner($this->itemResourceMock);
+        $this->itemResourceMock = $this->createMock(Item::class);
+        $this->model = new QuoteItemsCleaner($this->itemResourceMock);
     }
 
     public function testExecute()
     {
         $tableName = 'table_name';
-        $productMock = $this->createMock(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $productMock = $this->getMockForAbstractClass(ProductInterface::class);
         $productMock->expects($this->once())->method('getId')->willReturn(1);
 
-        $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->itemResourceMock->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $this->itemResourceMock->expects($this->once())->method('getMainTable')->willReturn($tableName);
 

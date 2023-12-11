@@ -8,10 +8,11 @@ namespace Magento\Sales\Model\ResourceModel;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Sales\Model\Grid\LastUpdateTimeCache;
 use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface;
 
 /**
- * Class Grid
+ * Sales order grid resource model.
  */
 class Grid extends AbstractGrid
 {
@@ -46,6 +47,16 @@ class Grid extends AbstractGrid
     private $notSyncedDataProvider;
 
     /**
+     * @var LastUpdateTimeCache
+     */
+    private $lastUpdateTimeCache;
+
+    /**
+     * Order grid rows batch size
+     */
+    const BATCH_SIZE = 100;
+
+    /**
      * @param Context $context
      * @param string $mainTableName
      * @param string $gridTableName
@@ -53,7 +64,8 @@ class Grid extends AbstractGrid
      * @param array $joins
      * @param array $columns
      * @param string $connectionName
-     * @param NotSyncedDataProviderInterface $notSyncedDataProvider
+     * @param NotSyncedDataProviderInterface|null $notSyncedDataProvider
+     * @param LastUpdateTimeCache|null $lastUpdateTimeCache
      */
     public function __construct(
         Context $context,
@@ -63,15 +75,19 @@ class Grid extends AbstractGrid
         array $joins = [],
         array $columns = [],
         $connectionName = null,
-        NotSyncedDataProviderInterface $notSyncedDataProvider = null
+        NotSyncedDataProviderInterface $notSyncedDataProvider = null,
+        LastUpdateTimeCache $lastUpdateTimeCache = null
     ) {
         $this->mainTableName = $mainTableName;
         $this->gridTableName = $gridTableName;
         $this->orderIdField = $orderIdField;
         $this->joins = $joins;
         $this->columns = $columns;
-        $this->notSyncedDataProvider =
-            $notSyncedDataProvider ?: ObjectManager::getInstance()->get(NotSyncedDataProviderInterface::class);
+        $this->notSyncedDataProvider = $notSyncedDataProvider ??
+            ObjectManager::getInstance()->get(NotSyncedDataProviderInterface::class);
+        $this->lastUpdateTimeCache = $lastUpdateTimeCache ??
+            ObjectManager::getInstance()->get(LastUpdateTimeCache::class);
+
         parent::__construct($context, $connectionName);
     }
 
@@ -88,15 +104,20 @@ class Grid extends AbstractGrid
     {
         $select = $this->getGridOriginSelect()
             ->where(($field ?: $this->mainTableName . '.entity_id') . ' = ?', $value);
-        return $this->getConnection()->query(
-            $this->getConnection()
-                ->insertFromSelect(
-                    $select,
-                    $this->getTable($this->gridTableName),
-                    array_keys($this->columns),
-                    AdapterInterface::INSERT_ON_DUPLICATE
-                )
-        );
+        $sql = $this->getConnection()
+            ->insertFromSelect(
+                $select,
+                $this->getTable($this->gridTableName),
+                array_keys($this->columns),
+                AdapterInterface::INSERT_ON_DUPLICATE
+            );
+
+        $this->addCommitCallback(function () use ($sql) {
+            $this->getConnection()->query($sql);
+        });
+
+        // need for backward compatibility
+        return $this->getConnection()->query($sql);
     }
 
     /**
@@ -104,28 +125,35 @@ class Grid extends AbstractGrid
      *
      * Only orders created/updated since the last method call will be added.
      *
-     * @return \Zend_Db_Statement_Interface
+     * @return void
      */
     public function refreshBySchedule()
     {
-        $select = $this->getGridOriginSelect()
-            ->where(
-                $this->mainTableName . '.entity_id IN (?)',
-                $this->notSyncedDataProvider->getIds($this->mainTableName, $this->gridTableName)
+        $lastUpdatedAt = null;
+        $notSyncedIds = $this->notSyncedDataProvider->getIds($this->mainTableName, $this->gridTableName);
+        foreach (array_chunk($notSyncedIds, self::BATCH_SIZE) as $bunch) {
+            $select = $this->getGridOriginSelect()->where($this->mainTableName . '.entity_id IN (?)', $bunch);
+            $fetchResult = $this->getConnection()->fetchAll($select);
+            $this->getConnection()->insertOnDuplicate(
+                $this->getTable($this->gridTableName),
+                $fetchResult,
+                array_keys($this->columns)
             );
 
-        return $this->getConnection()->query(
-            $this->getConnection()
-                ->insertFromSelect(
-                    $select,
-                    $this->getTable($this->gridTableName),
-                    array_keys($this->columns),
-                    AdapterInterface::INSERT_ON_DUPLICATE
-                )
-        );
+            $timestamps = array_column($fetchResult, 'updated_at');
+            if ($timestamps) {
+                $lastUpdatedAt = max(max($timestamps), $lastUpdatedAt);
+            }
+        }
+
+        if ($lastUpdatedAt) {
+            $this->lastUpdateTimeCache->save($this->gridTableName, $lastUpdatedAt);
+        }
     }
 
     /**
+     * Get order id field.
+     *
      * @return string
      */
     public function getOrderIdField()

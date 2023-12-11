@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="BaseCurrencyRUBConfigData">
+        <data key="path">currency/options/base</data>
+        <data key="label">Russian Ruble</data>
+        <data key="value">RUB</data>
+    </entity>
+    <entity name="CurrencyConverterApiKeyConfigData">
+        <data key="path">currency/currencyconverterapi/api_key</data>
+        <data key="value">{{_CREDS.magento/currency_currencyconverterapi_api_key}}</data>
+    </entity>
+    <entity name="DefaultCurrencyConverterApiKeyConfigData">
+        <data key="path">currency/currencyconverterapi/api_key</data>
+        <data key="value">''</data>
+    </entity>
+</entities>

@@ -4,30 +4,46 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-?>
-<?php
-/** @var $block \Magento\GoogleAdwords\Block\Code */
-?>
-<!-- Google Code for Sale Conversion Page -->
-<script>
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\GoogleAdwords\Block\Code;
+use Magento\GoogleAdwords\Helper\Data;
+
+/** @var Escaper $escaper */
+/** @var SecureHtmlRenderer $secureRenderer */
+/** @var Code $block */
+/** @var Data $helper */
+$helper = $block->getHelper();
+
+$scriptString = <<<script
     /* <![CDATA[ */
-    var google_conversion_id = <?= /* @escapeNotVerified */ $block->getHelper()->getConversionId() ?>;
-    var google_conversion_language = "<?= /* @escapeNotVerified */ $block->getHelper()->getConversionLanguage() ?>";
-    var google_conversion_format = "<?= /* @escapeNotVerified */ $block->getHelper()->getConversionFormat() ?>";
-    var google_conversion_color = "<?= /* @escapeNotVerified */ $block->getHelper()->getConversionColor() ?>";
-    var google_conversion_label = "<?= /* @escapeNotVerified */ $block->getHelper()->getConversionLabel() ?>";
-    var google_conversion_value = <?= /* @escapeNotVerified */ $block->getHelper()->getConversionValue() ?>;
-    <?php if($block->getHelper()->hasSendConversionValueCurrency() && $block->getHelper()->getConversionValueCurrency()): ?>
-    var google_conversion_currency = "<?= /* @escapeNotVerified */ $block->getHelper()->getConversionValueCurrency() ?>";
-    <?php endif; ?>
+    var google_conversion_id = {$escaper->escapeJs($helper->getConversionId())};
+    var google_conversion_language = "{$escaper->escapeJs($helper->getConversionLanguage())}";
+    var google_conversion_format = "{$escaper->escapeJs($helper->getConversionFormat())}";
+    var google_conversion_color = "{$escaper->escapeJs($helper->getConversionColor())}";
+    var google_conversion_label = "{$escaper->escapeJs($helper->getConversionLabel())}";
+    var google_conversion_value = {$escaper->escapeJs($helper->getConversionValue())};
+script;
+
+if ($helper->hasSendConversionValueCurrency() && $helper->getConversionValueCurrency()) {
+        $scriptString .= <<<script
+    var google_conversion_currency = "{$escaper->escapeJs($helper->getConversionValueCurrency())}";
+script;
+}
+
+$scriptString .= <<<script
     /* ]]> */
-</script>
-<script src="<?= /* @escapeNotVerified */ $block->getHelper()->getConversionJsSrc() ?>"></script>
+script;
+?>
+<?= /** @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
+<script src="<?= $escaper->escapeUrl($helper->getConversionJsSrc()); ?>"></script>
 <noscript>
     <div style="display:inline;">
-        <img height="1" width="1" style="border-style:none;" alt=""
-             src="<?= /* @escapeNotVerified */ $block->getHelper()->getConversionImgSrc() ?>"/>
+        <img height="1"
+             width="1"
+             style="border-style:none;"
+             alt=""
+             src="<?= $escaper->escapeUrl($helper->getConversionImgSrc()); ?>"/>
     </div>
 </noscript>
 <!-- END Google Code for Sale Conversion Page -->

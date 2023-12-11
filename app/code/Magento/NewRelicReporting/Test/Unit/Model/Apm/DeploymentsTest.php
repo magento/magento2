@@ -3,66 +3,67 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\NewRelicReporting\Test\Unit\Model\Apm;
 
+use Laminas\Http\Exception\RuntimeException;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
+use Magento\Framework\HTTP\LaminasClient;
+use Magento\Framework\HTTP\LaminasClientFactory;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\NewRelicReporting\Model\Apm\Deployments;
-use \Magento\Framework\HTTP\ZendClient;
+use Magento\NewRelicReporting\Model\Config;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-/**
- * Class DeploymentsTest
- */
-class DeploymentsTest extends \PHPUnit\Framework\TestCase
+class DeploymentsTest extends TestCase
 {
     /**
-     * @var \Magento\NewRelicReporting\Model\Apm\Deployments
+     * @var Deployments
      */
     protected $model;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Framework\HTTP\ZendClientFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var LaminasClientFactory|MockObject
      */
-    protected $zendClientFactoryMock;
+    protected $httpClientFactoryMock;
 
     /**
-     * @var \Magento\Framework\HTTP\ZendClient|\PHPUnit_Framework_MockObject_MockObject
+     * @var LaminasClient|MockObject
      */
-    protected $zendClientMock;
+    protected $httpClientMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     protected $loggerMock;
 
-    protected function setUp()
+    /**
+     * @var SerializerInterface|MockObject
+     */
+    private $serializerMock;
+
+    protected function setUp(): void
     {
-        $this->zendClientFactoryMock = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClientFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->zendClientMock = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClient::class)
-            ->setMethods(['request', 'setUri', 'setMethod', 'setHeaders', 'setParameterPost'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->configMock = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Config::class)
-            ->setMethods(['getNewRelicApiUrl', 'getNewRelicApiKey', 'getNewRelicAppName', 'getNewRelicAppId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->httpClientFactoryMock = $this->createMock(LaminasClientFactory::class);
+        $this->httpClientMock = $this->createMock(LaminasClient::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->configMock = $this->createMock(Config::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
 
         $this->model = new Deployments(
             $this->configMock,
             $this->loggerMock,
-            $this->zendClientFactoryMock
+            $this->httpClientFactoryMock,
+            $this->serializerMock
         );
     }
 
@@ -75,24 +76,28 @@ class DeploymentsTest extends \PHPUnit\Framework\TestCase
     {
         $data = $this->getDataVariables();
 
-        $this->zendClientMock->expects($this->once())
+        $this->httpClientMock->expects($this->once())
             ->method('setUri')
             ->with($data['self_uri'])
             ->willReturnSelf();
 
-        $this->zendClientMock->expects($this->once())
+        $this->httpClientMock->expects($this->once())
             ->method('setMethod')
             ->with($data['method'])
             ->willReturnSelf();
 
-        $this->zendClientMock->expects($this->once())
+        $this->httpClientMock->expects($this->once())
             ->method('setHeaders')
             ->with($data['headers'])
             ->willReturnSelf();
 
-        $this->zendClientMock->expects($this->once())
-            ->method('setParameterPost')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->with($data['params'])
+            ->willReturn(json_encode($data['params']));
+        $this->httpClientMock->expects($this->once())
+            ->method('setRawBody')
+            ->with(json_encode($data['params']))
             ->willReturnSelf();
 
         $this->configMock->expects($this->once())
@@ -106,28 +111,29 @@ class DeploymentsTest extends \PHPUnit\Framework\TestCase
             ->willReturn($data['api_key']);
 
         $this->configMock->expects($this->once())
-            ->method('getNewRelicAppName')
-            ->willReturn($data['app_name']);
-
-        $this->configMock->expects($this->once())
             ->method('getNewRelicAppId')
             ->willReturn($data['app_id']);
 
-        $zendHttpResponseMock = $this->getMockBuilder(
-            \Zend_Http_Response::class
-        )->disableOriginalConstructor()->getMock();
-        $zendHttpResponseMock->expects($this->any())->method('getStatus')->willReturn($data['status_ok']);
-        $zendHttpResponseMock->expects($this->once())->method('getBody')->willReturn($data['response_body']);
+        $httpResponseMock = $this->getMockBuilder(
+            Response::class
+        )->disableOriginalConstructor()
+            ->getMock();
+        $httpResponseMock->expects($this->any())->method('getStatusCode')->willReturn($data['status_ok']);
+        $httpResponseMock->expects($this->once())->method('getBody')->willReturn($data['response_body']);
 
-        $this->zendClientMock->expects($this->once())->method('request')->willReturn($zendHttpResponseMock);
+        $this->httpClientMock->expects($this->once())->method('send')->willReturn($httpResponseMock);
 
-        $this->zendClientFactoryMock->expects($this->once())
+        $this->httpClientFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($this->zendClientMock);
+            ->willReturn($this->httpClientMock);
 
-        $this->assertInternalType(
-            'string',
-            $this->model->setDeployment($data['description'], $data['change'], $data['user'])
+        $this->assertIsString(
+            $this->model->setDeployment(
+                $data['description'],
+                $data['change'],
+                $data['user'],
+                $data['revision']
+            )
         );
     }
 
@@ -140,24 +146,28 @@ class DeploymentsTest extends \PHPUnit\Framework\TestCase
     {
         $data = $this->getDataVariables();
 
-        $this->zendClientMock->expects($this->once())
+        $this->httpClientMock->expects($this->once())
             ->method('setUri')
             ->with($data['uri'])
             ->willReturnSelf();
 
-        $this->zendClientMock->expects($this->once())
+        $this->httpClientMock->expects($this->once())
             ->method('setMethod')
             ->with($data['method'])
             ->willReturnSelf();
 
-        $this->zendClientMock->expects($this->once())
+        $this->httpClientMock->expects($this->once())
             ->method('setHeaders')
             ->with($data['headers'])
             ->willReturnSelf();
 
-        $this->zendClientMock->expects($this->once())
-            ->method('setParameterPost')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->with($data['params'])
+            ->willReturn(json_encode($data['params']));
+        $this->httpClientMock->expects($this->once())
+            ->method('setRawBody')
+            ->with(json_encode($data['params']))
             ->willReturnSelf();
 
         $this->configMock->expects($this->once())
@@ -169,28 +179,29 @@ class DeploymentsTest extends \PHPUnit\Framework\TestCase
             ->willReturn($data['api_key']);
 
         $this->configMock->expects($this->once())
-            ->method('getNewRelicAppName')
-            ->willReturn($data['app_name']);
-
-        $this->configMock->expects($this->once())
             ->method('getNewRelicAppId')
             ->willReturn($data['app_id']);
 
-        $zendHttpResponseMock = $this->getMockBuilder(
-            \Zend_Http_Response::class
-        )->disableOriginalConstructor()->getMock();
-        $zendHttpResponseMock->expects($this->any())->method('getStatus')->willReturn($data['status_bad']);
+        $httpResponseMock = $this->getMockBuilder(
+            Response::class
+        )->disableOriginalConstructor()
+            ->getMock();
+        $httpResponseMock->expects($this->any())->method('getStatusCode')->willReturn($data['status_bad']);
 
-        $this->zendClientMock->expects($this->once())->method('request')->willReturn($zendHttpResponseMock);
+        $this->httpClientMock->expects($this->once())->method('send')->willReturn($httpResponseMock);
         $this->loggerMock->expects($this->once())->method('warning');
 
-        $this->zendClientFactoryMock->expects($this->once())
+        $this->httpClientFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($this->zendClientMock);
+            ->willReturn($this->httpClientMock);
 
-        $this->assertInternalType(
-            'bool',
-            $this->model->setDeployment($data['description'], $data['change'], $data['user'])
+        $this->assertIsBool(
+            $this->model->setDeployment(
+                $data['description'],
+                $data['change'],
+                $data['user'],
+                $data['revision']
+            )
         );
     }
 
@@ -201,24 +212,28 @@ class DeploymentsTest extends \PHPUnit\Framework\TestCase
     {
         $data = $this->getDataVariables();
 
-        $this->zendClientMock->expects($this->once())
+        $this->httpClientMock->expects($this->once())
             ->method('setUri')
             ->with($data['uri'])
             ->willReturnSelf();
 
-        $this->zendClientMock->expects($this->once())
+        $this->httpClientMock->expects($this->once())
             ->method('setMethod')
             ->with($data['method'])
             ->willReturnSelf();
 
-        $this->zendClientMock->expects($this->once())
+        $this->httpClientMock->expects($this->once())
             ->method('setHeaders')
             ->with($data['headers'])
             ->willReturnSelf();
 
-        $this->zendClientMock->expects($this->once())
-            ->method('setParameterPost')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->with($data['params'])
+            ->willReturn(json_encode($data['params']));
+        $this->httpClientMock->expects($this->once())
+            ->method('setRawBody')
+            ->with(json_encode($data['params']))
             ->willReturnSelf();
 
         $this->configMock->expects($this->once())
@@ -230,65 +245,72 @@ class DeploymentsTest extends \PHPUnit\Framework\TestCase
             ->willReturn($data['api_key']);
 
         $this->configMock->expects($this->once())
-            ->method('getNewRelicAppName')
-            ->willReturn($data['app_name']);
-
-        $this->configMock->expects($this->once())
             ->method('getNewRelicAppId')
             ->willReturn($data['app_id']);
 
-        $this->zendClientMock->expects($this->once())->method('request')->willThrowException(
-            new \Zend_Http_Client_Exception()
+        $this->httpClientMock->expects($this->once())->method('send')->willThrowException(
+            new RuntimeException()
         );
         $this->loggerMock->expects($this->once())->method('critical');
 
-        $this->zendClientFactoryMock->expects($this->once())
+        $this->httpClientFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($this->zendClientMock);
+            ->willReturn($this->httpClientMock);
 
-        $this->assertInternalType(
-            'bool',
-            $this->model->setDeployment($data['description'], $data['change'], $data['user'])
+        $this->assertIsBool(
+            $this->model->setDeployment(
+                $data['description'],
+                $data['change'],
+                $data['user'],
+                $data['revision']
+            )
         );
     }
 
-    private function getDataVariables()
+    /**
+     * @return array
+     */
+    private function getDataVariables(): array
     {
         $description = 'Event description';
         $change = 'flush the cache username';
         $user = 'username';
         $uri = 'https://example.com/listener';
-        $selfUri = 'https://api.newrelic.com/deployments.xml';
+        $selfUri = 'https://api.newrelic.com/v2/applications/%s/deployments.json';
         $apiKey = '1234';
         $appName = 'app_name';
         $appId = 'application_id';
-        $method = ZendClient::POST;
-        $headers = ['x-api-key' => $apiKey];
+        $method = Request::METHOD_POST;
+        $headers = ['Api-Key' => $apiKey, 'Content-Type' => 'application/json'];
         $responseBody = 'Response body content';
         $statusOk = '200';
         $statusBad = '401';
+        $revision = 'f81d42327219e17b1427096c354e9b8209939d4dd586972f12f0352f8343b91b';
         $params = [
-            'deployment[app_name]'       => $appName,
-            'deployment[application_id]' => $appId,
-            'deployment[description]'    => $description,
-            'deployment[changelog]'      => $change,
-            'deployment[user]'           => $user
+            'deployment' => [
+                'description' => $description,
+                'changelog' => $change,
+                'user' => $user,
+                'revision' => $revision
+            ]
         ];
 
+        $selfUri = sprintf($selfUri, $appId);
         return ['description' => $description,
-                 'change' => $change,
-                 'user' => $user,
-                 'uri' => $uri,
-                 'self_uri' => $selfUri,
-                 'api_key' => $apiKey,
-                 'app_name' => $appName,
-                 'app_id' => $appId,
-                 'method' => $method,
-                 'headers' => $headers,
-                 'status_ok' => $statusOk,
-                 'status_bad' => $statusBad,
-                 'response_body' => $responseBody,
-                 'params' => $params
-                ];
+            'change' => $change,
+            'user' => $user,
+            'uri' => $uri,
+            'self_uri' => $selfUri,
+            'api_key' => $apiKey,
+            'app_name' => $appName,
+            'app_id' => $appId,
+            'method' => $method,
+            'headers' => $headers,
+            'status_ok' => $statusOk,
+            'status_bad' => $statusBad,
+            'response_body' => $responseBody,
+            'params' => $params,
+            'revision' => $revision
+        ];
     }
 }

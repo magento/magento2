@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateSimpleProductWithRegularPriceInStockNotVisibleIndividuallyTest">
+        <annotations>
+            <stories value="Update Simple Product"/>
+            <title value="Update Simple Product with Regular Price (In Stock) Not Visible Individually"/>
+            <description value="Test log in to Update Simple Product and Update Simple Product with Regular Price (In Stock) Not Visible Individually"/>
+            <testCaseId value="MC-10803"/>
+            <severity value="CRITICAL"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleSubCategory" stepKey="initialCategoryEntity"/>
+            <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct">
+                <requiredEntity createDataKey="initialCategoryEntity"/>
+            </createData>
+            <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
+            <deleteData stepKey="deleteSimpleSubCategory2" createDataKey="categoryEntity"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
+                <argument name="sku" value="{{simpleProductNotVisibleIndividually.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Search default simple product in the grid page -->
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openProductCatalogPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterProductGrid"/>
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="clickFirstRowToOpenDefaultSimpleProduct">
+            <argument name="productSku" value="$initialSimpleProduct.sku$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitUntilProductIsOpened"/>
+
+        <!-- Update simple product with regular price(in stock) -->
+        <actionGroup ref="FillMainProductFormByStringActionGroup" stepKey="fillSimpleProductName">
+            <argument name="productName" value="{{simpleProductNotVisibleIndividually.name}}"/>
+            <argument name="productSku" value="{{simpleProductNotVisibleIndividually.sku}}"/>
+            <argument name="productPrice" value="{{simpleProductNotVisibleIndividually.price}}"/>
+            <argument name="productQuantity" value="{{simpleProductNotVisibleIndividually.quantity}}"/>
+            <argument name="productStatus" value="{{simpleProductNotVisibleIndividually.status}}"/>
+            <argument name="productWeight" value="{{simpleProductNotVisibleIndividually.weight}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillSimpleProductSku"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillSimpleProductPrice"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillSimpleProductQuantity"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectStockStatusInStock"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillSimpleProductWeight"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickCategoriesDropDown"/>
+        <actionGroup ref="SetCategoryByNameActionGroup" stepKey="fillSearchForInitialCategory">
+            <argument name="categoryName" value="$$initialCategoryEntity.name$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategory1"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="unselectInitialCategory"/>
+        <actionGroup ref="SetCategoryByNameActionGroup" stepKey="fillSearchCategory">
+            <argument name="categoryName" value="$$categoryEntity.name$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategory2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnCategory"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneAdvancedCategorySelect"/>
+        <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="{{simpleProductNotVisibleIndividually.visibility}}" stepKey="selectVisibility"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickAdminProductSEOSection"/>
+        <actionGroup ref="SetProductUrlKeyByStringActionGroup" stepKey="fillSimpleProductUrlKey">
+            <argument name="urlKey" value="{{simpleProductNotVisibleIndividually.urlKey}}"/>
+        </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
+
+        <!-- Verify customer see success message -->
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeAssertSimpleProductSaveSuccessMessage">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
+
+        <!-- Search updated simple product(from above step) in the grid page -->
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPageToSearchUpdatedSimpleProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickClearAll"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickFiltersButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillSimpleProductNameInNameFilter"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductSku"/>
+        <actionGroup ref="FilterProductGridBySkuAndNameActionGroup" stepKey="clickApplyFiltersButton">
+            <argument name="product" value="simpleProductNotVisibleIndividually"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyUpdatedSimpleProductVisibleInGrid"/>
+        <waitForPageLoad stepKey="waitUntilSimpleProductPageIsOpened"/>
+
+         <!--Verify customer see updated simple product in the product form page-->
+        <actionGroup ref="AdminAssertProductInfoOnEditPageActionGroup" stepKey="seeSimpleProductName">
+            <argument name="productName" value="{{simpleProductNotVisibleIndividually.name}}"/>
+            <argument name="productSku" value="{{simpleProductNotVisibleIndividually.sku}}"/>
+            <argument name="productPrice" value="{{simpleProductNotVisibleIndividually.price}}"/>
+            <argument name="productQuantity" value="{{simpleProductNotVisibleIndividually.quantity}}"/>
+            <argument name="productWeight" value="{{simpleProductNotVisibleIndividually.weightNoDecimals}}"/>
+            <argument name="productVisibility" value="{{simpleProductNotVisibleIndividually.visibility}}"/>
+            <argument name="categoryName" value="$$categoryEntity.name$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSimpleProductSku"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSimpleProductPrice"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSimpleProductQuantity"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSimpleProductStockStatus"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSimpleProductWeight"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickCategoriesDropDownToVerify"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSelectedCategories"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSimpleProductVisibility"/>
+        <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSectionHeader"/>
+        <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{simpleProductNotVisibleIndividually.urlKey}}" stepKey="seeSimpleProductUrlKey"/>
+
+        <!--Verify customer don't see updated simple product link on magento storefront page -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToMagentoStorefrontPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStoreFrontProductPageLoad"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillSimpleProductSkuInSearchTextBox">
+            <argument name="phrase" value="{{simpleProductNotVisibleIndividually.sku}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextBoxButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch"/>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeSimpleProductNameOnMagentoStorefrontPage">
+            <argument name="productName" value="{{simpleProductNotVisibleIndividually.name}}"/>
+        </actionGroup>
+    </test>
+</tests>

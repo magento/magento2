@@ -3,21 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Exception;
 
-use Magento\Framework\Exception\InputException;
+use GraphQL\Error\ProvidesExtensions;
+use Magento\Framework\Exception\AggregateExceptionInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
+use GraphQL\Error\ClientAware;
 
 /**
  * Exception for GraphQL to be thrown when user supplies invalid input
+ *
+ * @api
  */
-class GraphQlInputException extends InputException implements \GraphQL\Error\ClientAware
+// phpcs:disable Generic.Files.LineLength.TooLong
+class GraphQlInputException extends LocalizedException implements AggregateExceptionInterface, ClientAware, ProvidesExtensions
 {
+    public const EXCEPTION_CATEGORY = 'graphql-input';
+
     /**
      * @var boolean
      */
     private $isSafe;
+
+    /**
+     * The array of errors that have been added via the addError() method
+     *
+     * @var \Magento\Framework\Exception\LocalizedException[]
+     */
+    private $errors = [];
 
     /**
      * Initialize object
@@ -34,18 +50,51 @@ class GraphQlInputException extends InputException implements \GraphQL\Error\Cli
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function isClientSafe()
+    public function isClientSafe() : bool
     {
         return $this->isSafe;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function getCategory()
+    public function getCategory() : string
     {
-        return 'graphql-input';
+        return self::EXCEPTION_CATEGORY;
+    }
+
+    /**
+     * Add child error if used as aggregate exception
+     *
+     * @param LocalizedException $exception
+     * @return $this
+     */
+    public function addError(LocalizedException $exception): self
+    {
+        $this->errors[] = $exception;
+        return $this;
+    }
+
+    /**
+     * Get child errors if used as aggregate exception
+     *
+     * @return LocalizedException[]
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
+    }
+
+    /**
+     * Get error category
+     *
+     * @return array
+     */
+    public function getExtensions(): array
+    {
+        $exceptionCategory['category'] = $this->getCategory();
+        return $exceptionCategory;
     }
 }

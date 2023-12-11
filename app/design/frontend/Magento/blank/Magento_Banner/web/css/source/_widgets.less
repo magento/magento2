@@ -8,7 +8,6 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
-
     .block-banners,
     .block-banners-inline {
         &:extend(.abs-margin-for-blocks-and-widgets);
@@ -22,7 +21,7 @@
         }
 
         .banner-item-content {
-            .lib-css(margin-bottom, @indent__base);
+            margin-bottom: @indent__base;
 
             img {
                 display: block;

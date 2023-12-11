@@ -14,11 +14,13 @@ define([
         /**
          * @param {*} postCode
          * @param {*} countryId
+         * @param {Array} postCodesPatterns
          * @return {Boolean}
          */
-        validate: function (postCode, countryId) {
-            var patterns = window.checkoutConfig.postCodes[countryId],
-                pattern, regex;
+        validate: function (postCode, countryId, postCodesPatterns) {
+            var pattern, regex,
+                patterns = postCodesPatterns ? postCodesPatterns[countryId] :
+                    window.checkoutConfig.postCodes[countryId];
 
             this.validatedPostCodeExample = [];
 

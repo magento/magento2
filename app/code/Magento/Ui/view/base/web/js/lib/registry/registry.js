@@ -6,18 +6,16 @@
 /**
  * @api
  */
-/* global WeakMap */
 define([
     'jquery',
-    'underscore',
-    'es6-collections'
+    'underscore'
 ], function ($, _) {
     'use strict';
 
     var privateData = new WeakMap();
 
     /**
-     * Extarcts private items storage associated
+     * Extracts private item storage associated
      * with a provided registry instance.
      *
      * @param {Object} container
@@ -39,7 +37,7 @@ define([
     }
 
     /**
-     * Wrapper function used for convinient access to the elements.
+     * Wrapper function used for convenient access to the elements.
      * See 'async' method for examples of usage and comparison
      * with a regular 'get' method.
      *
@@ -139,7 +137,7 @@ define([
      * which matches specified search criteria.
      *
      * @param {Object} data - Data object where to perform a lookup.
-     * @param {(String|Object|Function)} query - Seach criteria.
+     * @param {(String|Object|Function)} query - Search criteria.
      * @param {Boolean} findAll - Flag that defines whether to
      *      search for all applicable items or to stop on a first found entry.
      * @returns {Array|Object|*}
@@ -322,8 +320,8 @@ define([
 
         /**
          * Creates a wrapper function over the provided search query
-         * in order to provide somehow more convinient access to the
-         * registrie's items.
+         * in order to provide somehow more convenient access to the
+         * registry's items.
          *
          * @param {(String|Object|Function)} query - Search criteria.
          *      See 'get' method for the syntax examples.

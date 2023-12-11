@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableProductVariationsTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Configurable Product"/>
+            <title value="Customer should get the right options list"/>
+            <description value="Customer should get the right options list for each variation of configurable product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-23027"/>
+            <useCaseId value="MC-22732"/>
+            <group value="configurable_product"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <!-- Add first attribute with options -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createFirstAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createFirstAttributeFirstOption">
+                <requiredEntity createDataKey="createFirstAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createFirstAttributeSecondOption">
+                <requiredEntity createDataKey="createFirstAttribute"/>
+            </createData>
+            <!-- Add second attribute with options -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createSecondAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createSecondAttributeFirstOption">
+                <requiredEntity createDataKey="createSecondAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createSecondAttributeSecondOption">
+                <requiredEntity createDataKey="createSecondAttribute"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{BaseConfigurableProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <deleteData createDataKey="createFirstAttribute" stepKey="deleteFirstAttribute"/>
+            <deleteData createDataKey="createSecondAttribute" stepKey="deleteSecondAttribute"/>
+            <comment userInput="BIC workaround" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="navigateToCreateProductPage">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <actionGroup ref="SetCategoryByNameActionGroup" stepKey="addCategoryToProduct">
+            <argument name="categoryName" value="$createCategory.name$"/>
+        </actionGroup>
+        <actionGroup ref="SetProductUrlKeyByStringActionGroup" stepKey="fillUrlKey">
+            <argument name="urlKey" value="{{BaseConfigurableProduct.urlKey}}"/>
+        </actionGroup>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>
+        <actionGroup ref="AdminSelectAttributeInConfigurableAttributesGrid" stepKey="checkFirstAttribute">
+            <argument name="attributeCode" value="$createFirstAttribute.attribute_code$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectAttributeInConfigurableAttributesGrid" stepKey="checkSecondAttribute">
+            <argument name="attributeCode" value="$createSecondAttribute.attribute_code$"/>
+        </actionGroup>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton"/>
+        <waitForPageLoad stepKey="waitForStepLoad"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute($createFirstAttribute.default_frontend_label$)}}" stepKey="clickFirstAttributeSelectAll"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute($createSecondAttribute.default_frontend_label$)}}" stepKey="clickSecondAttributeSelectAll"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickSecondNextStep"/>
+        <waitForElement selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitThirdNextButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickThirdStep"/>
+        <waitForElement selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitGenerateConfigurationsButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickToGenerateConfigurations"/>
+
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.variationsGrid}}" stepKey="waitForVariationsGrid"/>
+        <actionGroup ref="AdminChangeConfigurableProductVariationQty" stepKey="setFirstVariationQuantity">
+            <argument name="rowIndex" value="0"/>
+            <argument name="quantity" value="0"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeConfigurableProductVariationQty" stepKey="setSecondVariationQuantity">
+            <argument name="rowIndex" value="1"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeConfigurableProductVariationQty" stepKey="setThirdVariationQuantity">
+            <argument name="rowIndex" value="2"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeConfigurableProductVariationQty" stepKey="setFourthVariationQuantity">
+            <argument name="rowIndex" value="3"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <actionGroup ref="SaveConfigurableProductActionGroup" stepKey="saveConfigurableProduct">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSectionHeader"/>
+        <grabValueFrom selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="grabUrlKey"/>
+        <amOnPage url="{$grabUrlKey}.html" stepKey="amOnConfigurableProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productOptionSelect($createFirstAttribute.default_frontend_label$)}}" stepKey="waitForFirstSelect"/>
+        <selectOption userInput="$createFirstAttributeFirstOption.option[store_labels][0][label]$" selector="{{StorefrontProductInfoMainSection.productOptionSelect($createFirstAttribute.default_frontend_label$)}}" stepKey="selectFirstAttributeFirstOption"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productOptionSelect($createSecondAttribute.default_frontend_label$)}}" stepKey="waitForSecondSelect"/>
+        <selectOption userInput="$createSecondAttributeSecondOption.option[store_labels][0][label]$" selector="{{StorefrontProductInfoMainSection.productOptionSelect($createSecondAttribute.default_frontend_label$)}}" stepKey="selectSecondAttributeSecondOption"/>
+    </test>
+</tests>

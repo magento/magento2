@@ -3,33 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Payment\Test\Unit\Model\Method\Specification;
 
-/**
- * Composite Test
- */
-class CompositeTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Payment\Model\Method\Specification\Composite;
+use Magento\Payment\Model\Method\Specification\Factory;
+use Magento\Payment\Model\Method\SpecificationInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CompositeTest extends TestCase
 {
     /**
-     * @var \Magento\Payment\Model\Method\Specification\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|MockObject
      */
     protected $factoryMock;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->factoryMock = $this->createMock(\Magento\Payment\Model\Method\Specification\Factory::class);
+        $this->factoryMock = $this->createMock(Factory::class);
     }
 
     /**
      * @param array $specifications
-     * @return \Magento\Payment\Model\Method\Specification\Composite
+     *
+     * @return object
      */
-    protected function createComposite($specifications = [])
+    protected function createComposite(array $specifications = [])
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         return $objectManager->getObject(
-            \Magento\Payment\Model\Method\Specification\Composite::class,
+            Composite::class,
             ['factory' => $this->factoryMock, 'specifications' => $specifications]
         );
     }
@@ -38,52 +48,43 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
      * @param bool $firstSpecificationResult
      * @param bool $secondSpecificationResult
      * @param bool $compositeResult
+     *
+     * @return void
      * @dataProvider compositeDataProvider
      */
-    public function testComposite($firstSpecificationResult, $secondSpecificationResult, $compositeResult)
-    {
+    public function testComposite(
+        bool $firstSpecificationResult,
+        bool $secondSpecificationResult,
+        bool $compositeResult
+    ): void {
         $method = 'method-name';
 
-        $specificationFirst = $this->createMock(\Magento\Payment\Model\Method\SpecificationInterface::class);
+        $specificationFirst = $this->getMockForAbstractClass(SpecificationInterface::class);
         $specificationFirst->expects(
             $this->once()
         )->method(
             'isSatisfiedBy'
         )->with(
             $method
-        )->will(
-            $this->returnValue($firstSpecificationResult)
+        )->willReturn(
+            $firstSpecificationResult
         );
 
-        $specificationSecond = $this->createMock(\Magento\Payment\Model\Method\SpecificationInterface::class);
+        $specificationSecond = $this->getMockForAbstractClass(SpecificationInterface::class);
         $specificationSecond->expects(
             $this->any()
         )->method(
             'isSatisfiedBy'
         )->with(
             $method
-        )->will(
-            $this->returnValue($secondSpecificationResult)
+        )->willReturn(
+            $secondSpecificationResult
         );
 
-        $this->factoryMock->expects(
-            $this->at(0)
-        )->method(
-            'create'
-        )->with(
-            'SpecificationFirst'
-        )->will(
-            $this->returnValue($specificationFirst)
-        );
-        $this->factoryMock->expects(
-            $this->at(1)
-        )->method(
-            'create'
-        )->with(
-            'SpecificationSecond'
-        )->will(
-            $this->returnValue($specificationSecond)
-        );
+        $this->factoryMock
+            ->method('create')
+            ->withConsecutive(['SpecificationFirst'], ['SpecificationSecond'])
+            ->willReturnOnConsecutiveCalls($specificationFirst, $specificationSecond);
 
         $composite = $this->createComposite(['SpecificationFirst', 'SpecificationSecond']);
 
@@ -97,7 +98,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function compositeDataProvider()
+    public function compositeDataProvider(): array
     {
         return [
             [true, true, true],

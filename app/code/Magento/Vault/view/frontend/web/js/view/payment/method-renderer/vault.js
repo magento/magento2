@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 /*browser:true*/
-/*global define*/
+
 define(
     [
         'Magento_Checkout/js/view/payment/default',
@@ -102,6 +102,24 @@ define(
                 return window.checkoutConfig.payment.ccform.icons.hasOwnProperty(type) ?
                     window.checkoutConfig.payment.ccform.icons[type]
                     : false;
+            },
+
+            /**
+             * Return state of place order button.
+             *
+             * @return {Boolean}
+             */
+            isButtonActive: function () {
+                return this.isActive() && this.isPlaceOrderActionAllowed();
+            },
+
+            /**
+             * Check if payment is active.
+             *
+             * @return {Boolean}
+             */
+            isActive: function () {
+                return this.isChecked() === this.getId();
             },
 
             /**

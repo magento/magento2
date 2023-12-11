@@ -3,22 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Component;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\Processor;
+use Magento\Ui\Component\ExportButton;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ExportButtonTest
- */
-class ExportButtonTest extends \PHPUnit\Framework\TestCase
+class ExportButtonTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|MockObject
      */
     private $context;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $urlBuilderMock;
 
@@ -28,21 +33,21 @@ class ExportButtonTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Ui\Component\ExportButton
+     * @var ExportButton
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
+        $this->context = $this->getMockBuilder(ContextInterface::class)
             ->getMockForAbstractClass();
         $this->objectManager = new ObjectManager($this);
 
-        $this->urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->model = $this->objectManager->getObject(
-            \Magento\Ui\Component\ExportButton::class,
+            ExportButton::class,
             [
                 'urlBuilder' => $this->urlBuilderMock,
                 'context' => $this->context,
@@ -53,23 +58,46 @@ class ExportButtonTest extends \PHPUnit\Framework\TestCase
     public function testGetComponentName()
     {
         $this->context->expects($this->never())->method('getProcessor');
-        $this->assertEquals(\Magento\Ui\Component\ExportButton::NAME, $this->model->getComponentName());
+        $this->assertEquals(ExportButton::NAME, $this->model->getComponentName());
     }
 
     public function testPrepare()
     {
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+        $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
+        $this->context->expects($this->any())
+            ->method('getRequestParam')
+            ->with('test_asterisk')
+            ->willReturn('test_asterisk_value');
         $option = ['label' => 'test label', 'value' => 'test value', 'url' => 'test_url'];
-        $data = ['config' => ['options' => [$option]]];
+        $data = [
+            'config' => [
+                'options' => [
+                    $option
+                ],
+                'additionalParams' => [
+                    'test_key' => 'test_value',
+                    'test_asterisk' => '*'
+                ]
+            ],
+        ];
+        $expected = $data;
+        $expected['config']['options'][0]['url'] = [
+            'test_key' => 'test_value',
+            'test_asterisk' => 'test_asterisk_value',
+        ];
         $this->model->setData($data);
-
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->with('test_url')
-            ->willReturnArgument(0);
-        $this->assertNull($this->model->prepare());
+            ->willReturnArgument(1);
+
+        self::assertNull($this->model->prepare());
+        self::assertEquals(
+            $expected,
+            $this->model->getData()
+        );
     }
 }

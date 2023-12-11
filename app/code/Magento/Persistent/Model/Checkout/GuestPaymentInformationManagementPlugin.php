@@ -11,6 +11,8 @@ use Magento\Checkout\Model\Session;
 
 /**
  * Plugin to convert shopping cart from persistent cart to guest cart before order save when customer not logged in
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class GuestPaymentInformationManagementPlugin
 {
@@ -93,7 +95,7 @@ class GuestPaymentInformationManagementPlugin
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeSavePaymentInformationAndPlaceOrder(
+    public function beforeSavePaymentInformation(
         GuestPaymentInformationManagement $subject,
         $cartId,
         $email,
@@ -108,8 +110,8 @@ class GuestPaymentInformationManagementPlugin
             $this->customerSession->setCustomerId(null);
             $this->customerSession->setCustomerGroupId(null);
             $this->quoteManager->convertCustomerCartToGuest();
-            /** @var \Magento\Quote\Api\Data\CartInterface $quote */
-            $quote = $this->cartRepository->get($this->checkoutSession->getQuote()->getId());
+            $quoteId = $this->checkoutSession->getQuoteId();
+            $quote = $this->cartRepository->get($quoteId);
             $quote->setCustomerEmail($email);
             $quote->getAddressesCollection()->walk('setEmail', ['email' => $email]);
             $this->cartRepository->save($quote);

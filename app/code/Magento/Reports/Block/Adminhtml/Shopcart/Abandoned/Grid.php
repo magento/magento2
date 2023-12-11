@@ -5,6 +5,10 @@
  */
 namespace Magento\Reports\Block\Adminhtml\Shopcart\Abandoned;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\Parameters;
+use Magento\Framework\Url\DecoderInterface;
+
 /**
  * Adminhtml abandoned shopping carts report grid block
  *
@@ -16,6 +20,16 @@ namespace Magento\Reports\Block\Adminhtml\Shopcart\Abandoned;
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 {
     /**
+     * @var DecoderInterface
+     */
+    private $urlDecoder;
+
+    /**
+     * @var Parameters
+     */
+    private $parameters;
+
+    /**
      * @var \Magento\Reports\Model\ResourceModel\Quote\CollectionFactory
      */
     protected $_quotesFactory;
@@ -24,19 +38,27 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Reports\Model\ResourceModel\Quote\CollectionFactory $quotesFactory
+     * @param DecoderInterface|null $urlDecoder
+     * @param Parameters|null $parameters
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Reports\Model\ResourceModel\Quote\CollectionFactory $quotesFactory,
+        DecoderInterface $urlDecoder = null,
+        Parameters $parameters = null,
         array $data = []
     ) {
         $this->_quotesFactory = $quotesFactory;
         parent::__construct($context, $backendHelper, $data);
+        $this->urlDecoder = $urlDecoder ?? ObjectManager::getInstance()->get(DecoderInterface::class);
+        $this->parameters = $parameters ?? ObjectManager::getInstance()->get(Parameters::class);
     }
 
     /**
+     * Grid constructor
+     *
      * @return void
      */
     protected function _construct()
@@ -46,6 +68,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     }
 
     /**
+     * Prepare collection
+     *
      * @return \Magento\Backend\Block\Widget\Grid
      */
     protected function _prepareCollection()
@@ -55,8 +79,12 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 
         $filter = $this->getParam($this->getVarNameFilter(), []);
         if ($filter) {
-            $filter = base64_decode($filter);
-            parse_str(urldecode($filter), $data);
+            // this is a replacement for base64_decode()
+            $filter = $this->urlDecoder->decode($filter);
+
+            // this is a replacement for parse_str()
+            $this->parameters->fromString($filter);
+            $data = $this->parameters->toArray();
         }
 
         if (!empty($data)) {
@@ -67,11 +95,16 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 
         $this->setCollection($collection);
         parent::_prepareCollection();
+        if ($this->_isExport) {
+            $collection->setPageSize(null);
+        }
         $this->getCollection()->resolveCustomerNames();
         return $this;
     }
 
     /**
+     * Add column filter to collection
+     *
      * @param array $column
      *
      * @return $this
@@ -90,6 +123,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     }
 
     /**
+     * Prepare columns
+     *
      * @return \Magento\Backend\Block\Widget\Grid\Extended
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -223,6 +258,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     }
 
     /**
+     * Get rows url
+     *
      * @param \Magento\Framework\DataObject $row
      *
      * @return string

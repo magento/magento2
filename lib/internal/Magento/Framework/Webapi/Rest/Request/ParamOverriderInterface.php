@@ -27,6 +27,7 @@ namespace Magento\Framework\Webapi\Rest\Request;
  * adding to the parameter list for ParamsOverrider's dependency injection configuration.
  *
  * @api
+ * @since 100.0.2
  */
 interface ParamOverriderInterface
 {
@@ -34,6 +35,7 @@ interface ParamOverriderInterface
      * Returns the overridden value to use.
      *
      * @return string|int|null
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getOverriddenValue();
 }

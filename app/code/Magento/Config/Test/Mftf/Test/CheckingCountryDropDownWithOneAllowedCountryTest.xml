@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CheckingCountryDropDownWithOneAllowedCountryTest">
+        <annotations>
+            <features value="Config"/>
+            <stories value="Additional blank option in country dropdown"/>
+            <title value="Checking country drop-down with one allowed country"/>
+            <description value="Check country drop-down with one allowed country"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-28511"/>
+            <group value="configuration"/>
+        </annotations>
+        <before>
+            <createData entity="EnableAdminAccountAllowCountry" stepKey="setAllowedCountries"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <createData entity="DisableAdminAccountAllowCountry" stepKey="setDefaultValueForAllowCountries"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="CustomerEntityOne.email"/>
+            </actionGroup>
+            <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearFilters"/>
+            <waitForPageLoad stepKey="WaitForPageToLoad"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+         <!--Create a customer account from Storefront-->
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="CustomerEntityOne"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+            <argument name="messageType" value="success"/>
+            <argument name="message" value="Thank you for registering with Main Website Store."/>
+        </actionGroup>
+        <click selector="{{CheckoutPaymentSection.addressBook}}" stepKey="goToAddressBook"/>
+        <click selector="{{StorefrontCustomerAddressSection.country}}" stepKey="clickToExpandCountryDropDown"/>
+        <see selector="{{StorefrontCustomerAddressSection.country}}" userInput="United States" stepKey="seeSelectedCountry"/>
+        <dontSee selector="{{StorefrontCustomerAddressSection.country}}" userInput="Brazil" stepKey="canNotSeeSelectedCountry"/>
+        <createData entity="DisableAdminAccountAllowCountry" stepKey="setDefaultValueForAllowCountries"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <reloadPage stepKey="realoadPageAfterConfigChanged"/>
+        <see selector="{{StorefrontCustomerAddressSection.country}}" userInput="United States" stepKey="seeUnitedStatesCountry"/>
+        <see selector="{{StorefrontCustomerAddressSection.country}}" userInput="Brazil" stepKey="seeBrazilCountry"/>
+    </test>
+</tests>

@@ -27,11 +27,11 @@ class GridTest extends \PHPUnit\Framework\TestCase
 
         $html = $block->toHtml();
 
-        $regexpTemplate = '/<button [^>]* onclick="temp_id[^"]*\\.%s/i';
+        $regexpTemplate = '/\<script.*?\>.*?temp_id[^"]*\\.%s/is';
         $jsFuncs = ['doFilter', 'resetFilter'];
         foreach ($jsFuncs as $func) {
             $regexp = sprintf($regexpTemplate, $func);
-            $this->assertRegExp($regexp, $html);
+            $this->assertMatchesRegularExpression($regexp, $html);
         }
     }
 }

@@ -6,8 +6,9 @@
 define([
     'underscore',
     'uiRegistry',
-    'Magento_Ui/js/dynamic-rows/dynamic-rows'
-], function (_, registry, dynamicRows) {
+    'Magento_Ui/js/dynamic-rows/dynamic-rows',
+    'jquery'
+], function (_, registry, dynamicRows, $) {
     'use strict';
 
     return dynamicRows.extend({
@@ -211,12 +212,13 @@ define([
             );
 
             tmpData = data.slice(this.pageSize * (this.currentPage() - 1),
-                                 this.pageSize * (this.currentPage() - 1) + this.pageSize);
+                                 this.pageSize * (this.currentPage() - 1) + parseInt(this.pageSize, 10));
 
             this.source.set(this.dataScope + '.' + this.index, []);
 
             _.each(tmpData, function (row, index) {
                 path = this.dataScope + '.' + this.index + '.' + (this.startIndex + index);
+                row.attributes = $('<i></i>').text(row.attributes).html();
                 this.source.set(path, row);
             }, this);
 
@@ -224,11 +226,11 @@ define([
             this.parsePagesData(data);
 
             // Render
-            dataCount = data.length;
+            dataCount = tmpData.length;
             elemsCount = this.elems().length;
 
             if (dataCount > elemsCount) {
-                this.getChildItems().each(function (elemData, index) {
+                tmpData.each(function (elemData, index) {
                     this.addChild(elemData, this.startIndex + index);
                 }, this);
             } else {
@@ -238,6 +240,15 @@ define([
             }
 
             this.generateAssociatedProducts();
+        },
+
+        /**
+         * Set initial property to records data
+         *
+         * @returns {Object} Chainable.
+         */
+        setInitialProperty: function () {
+            return this;
         },
 
         /**
@@ -349,8 +360,6 @@ define([
             );
 
             _.each(data, function (row) {
-                var attributesText;
-
                 if (row.productId) {
                     index = _.indexOf(productIdsToDelete, row.productId);
 
@@ -364,36 +373,8 @@ define([
                         );
                     }
                 }
+                product = this.getProductData(row);
 
-                attributesText = '';
-                _.each(row.options, function (attribute) {
-                    if (attributesText) {
-                        attributesText += ', ';
-                    }
-                    attributesText += attribute['attribute_label'] + ': ' + attribute.label;
-                }, this);
-
-                product = {
-                    'id': row.productId,
-                    'product_link': row.productUrl,
-                    'name': row.name,
-                    'sku': row.sku,
-                    'status': row.status,
-                    'price': row.price,
-                    'price_currency': row.priceCurrency,
-                    'price_string': row.priceCurrency + row.price,
-                    'weight': row.weight,
-                    'qty': row.quantity,
-                    'variationKey': row.variationKey,
-                    'configurable_attribute': row.attribute,
-                    'thumbnail_image': row.images.preview,
-                    'media_gallery': row['media_gallery'],
-                    'swatch_image': row['swatch_image'],
-                    'small_image': row['small_image'],
-                    image: row.image,
-                    'thumbnail': row.thumbnail,
-                    'attributes': attributesText
-                };
                 product[this.changedFlag] = true;
                 product[this.canEditField] = row.editable;
                 product[this.newProductField] = row.newProduct;
@@ -410,6 +391,47 @@ define([
             }, this);
 
             this.unionInsertData(tmpArray);
+        },
+
+        /**
+         *
+         * @param {Object} row
+         * @returns {Object}
+         */
+        getProductData: function (row) {
+            var product,
+                attributesText = '';
+
+            _.each(row.options, function (attribute) {
+                if (attributesText) {
+                    attributesText += ', ';
+                }
+                attributesText += attribute['attribute_label'] + ': ' + attribute.label;
+            }, this);
+
+            product = {
+                'id': row.productId,
+                'product_link': row.productUrl,
+                'name': row.name,
+                'sku': row.sku,
+                'status': row.status,
+                'price': row.price,
+                'price_currency': row.priceCurrency,
+                'price_string': row.priceCurrency + row.price,
+                'weight': row.weight,
+                'qty': row.quantity,
+                'variationKey': row.variationKey,
+                'configurable_attribute': row.attribute,
+                'thumbnail_image': row.images.preview,
+                'media_gallery': row['media_gallery'],
+                'swatch_image': row['swatch_image'],
+                'small_image': row['small_image'],
+                image: row.image,
+                'thumbnail': row.thumbnail,
+                'attributes': attributesText
+            };
+
+            return product;
         },
 
         /**

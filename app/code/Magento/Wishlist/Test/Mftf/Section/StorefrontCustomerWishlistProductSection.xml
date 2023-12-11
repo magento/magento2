@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCustomerWishlistProductSection">
+        <element name="ProductTitleByName" type="button" selector="//main//li//a[contains(text(), '{{var1}}')]" parameterized="true"/>
+        <element name="ProductPriceByName" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//span[@class='price']" parameterized="true"/>
+        <element name="ProductImageByName" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//img[@class='product-image-photo']" parameterized="true"/>
+        <element name="ProductInfoByName" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//div[@class='product-item-info']" parameterized="true"/>
+        <element name="ProductAddToCartByName" type="button" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//button[contains(@class, 'action tocart primary')]" parameterized="true"/>
+        <element name="ProductImageByImageName" type="text" selector="//main//li//a//img[contains(@src, '{{var1}}')]" parameterized="true"/>
+        <element name="ProductDescription" type="input" selector="//a[contains(text(), '{{productName}}')]/ancestor::div[@class='product-item-info']//textarea[@class='product-item-comment']" parameterized="true"/>
+        <element name="ProductQuantity" type="input" selector="//a[contains(text(), '{{productName}}')]/ancestor::div[@class='product-item-info']//input[@class='input-text qty']" parameterized="true"/>
+        <element name="ProductQuantityByQuantity" type="input" selector="//a[contains(text(), '{{productName}}')]/ancestor::div[@class='product-item-info']//input[@value='{{productQuantity}}']" parameterized="true"/>
+        <element name="ProductUpdateWishList" type="button" selector=".column.main .actions-toolbar .action.update" timeout="30"/>
+        <element name="ProductAddAllToCart" type="button" selector=".column.main .actions-toolbar .action.tocart" timeout="30"/>
+        <element name="productShareWishList" type="button" selector="button.action.share" timeout="30" />
+        <element name="ProductSuccessUpdateMessage" type="text" selector="//div[1]/div[2]/div/div/div"/>
+        <element name="productSuccessShareMessage" type="text" selector="div.message-success"/>
+        <element name="pager" type="block" selector=".toolbar .pager"/>
+        <element name="wishlistEmpty" type="block" selector=".form-wishlist-items .message.info.empty"/>
+        <element name="removeProduct" type="button" selector=".products-grid a.btn-remove" timeout="30"/>
+        <element name="editProduct" type="button" selector=".products-grid a.action.edit" timeout="30"/>
+        <element name="productSeeDetailsByName" type="block" selector="//a[contains(text(), '{{productName}}')]/ancestor::div/div[contains(@class, 'product-item-tooltip')]" parameterized="true"/>
+        <element name="productSeeDetailsLabelByName" type="block" selector="//a[contains(text(), '{{productName}}')]/ancestor::div/div[contains(@class, 'product-item-tooltip')]//dt[@class='label']" parameterized="true"/>
+        <element name="productSeeDetailsValueByName" type="block" selector="//a[contains(text(), '{{productName}}')]/ancestor::div/div[contains(@class, 'product-item-tooltip')]//dd[@class='values']" parameterized="true"/>
+    </section>
+</sections>

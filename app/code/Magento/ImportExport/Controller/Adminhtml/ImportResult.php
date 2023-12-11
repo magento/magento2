@@ -5,90 +5,95 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml;
 
-use Magento\Backend\App\Action;
-use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\ImportExport\Helper\Report;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\History as ModelHistory;
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
+use Magento\ImportExport\Model\Import\RenderErrorMessages;
+use Magento\ImportExport\Model\Report\ReportProcessorInterface;
 
 /**
  * Import controller
  */
 abstract class ImportResult extends Import
 {
-    const IMPORT_HISTORY_FILE_DOWNLOAD_ROUTE = '*/history/download';
+    public const IMPORT_HISTORY_FILE_DOWNLOAD_ROUTE = '*/history/download';
 
     /**
      * Limit view errors
      */
-    const LIMIT_ERRORS_MESSAGE = 100;
+    public const LIMIT_ERRORS_MESSAGE = 100;
 
     /**
-     * @var \Magento\ImportExport\Model\Report\ReportProcessorInterface
+     * @var ReportProcessorInterface
      */
-    protected $reportProcessor;
+    protected ReportProcessorInterface $reportProcessor;
 
     /**
-     * @var \Magento\ImportExport\Model\History
+     * @var ModelHistory
      */
-    protected $historyModel;
+    protected ModelHistory $historyModel;
 
     /**
-     * @var \Magento\ImportExport\Helper\Report
+     * @var Report
      */
-    protected $reportHelper;
+    protected Report $reportHelper;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor
-     * @param \Magento\ImportExport\Model\History $historyModel
-     * @param \Magento\ImportExport\Helper\Report $reportHelper
+     * @var Escaper|null
+     */
+    protected $escaper;
+
+    /**
+     * @var RenderErrorMessages
+     */
+    private RenderErrorMessages $renderErrorMessages;
+
+    /**
+     * @param Context $context
+     * @param ReportProcessorInterface $reportProcessor
+     * @param ModelHistory $historyModel
+     * @param Report $reportHelper
+     * @param Escaper|null $escaper
+     * @param RenderErrorMessages|null $renderErrorMessages
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor,
-        \Magento\ImportExport\Model\History $historyModel,
-        \Magento\ImportExport\Helper\Report $reportHelper
+        Context $context,
+        ReportProcessorInterface $reportProcessor,
+        ModelHistory $historyModel,
+        Report $reportHelper,
+        Escaper $escaper = null,
+        ?RenderErrorMessages $renderErrorMessages = null
     ) {
         parent::__construct($context);
         $this->reportProcessor = $reportProcessor;
         $this->historyModel = $historyModel;
         $this->reportHelper = $reportHelper;
+        $this->escaper = $escaper
+            ?? ObjectManager::getInstance()->get(Escaper::class);
+        $this->renderErrorMessages = $renderErrorMessages ??
+            ObjectManager::getInstance()->get(RenderErrorMessages::class);
     }
 
     /**
-     * @param \Magento\Framework\View\Element\AbstractBlock $resultBlock
+     * Add Error Messages for Import
+     *
+     * @param AbstractBlock $resultBlock
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @return $this
      */
     protected function addErrorMessages(
-        \Magento\Framework\View\Element\AbstractBlock $resultBlock,
+        AbstractBlock $resultBlock,
         ProcessingErrorAggregatorInterface $errorAggregator
     ) {
         if ($errorAggregator->getErrorsCount()) {
-            $message = '';
-            $counter = 0;
-            foreach ($this->getErrorMessages($errorAggregator) as $error) {
-                $message .= ++$counter . '. ' . $error . '<br>';
-                if ($counter >= self::LIMIT_ERRORS_MESSAGE) {
-                    break;
-                }
-            }
-            if ($errorAggregator->hasFatalExceptions()) {
-                foreach ($this->getSystemExceptions($errorAggregator) as $error) {
-                    $message .= $error->getErrorMessage()
-                        . ' <a href="#" onclick="$(this).next().show();$(this).hide();return false;">'
-                        . __('Show more') . '</a><div style="display:none;">' . __('Additional data') . ': '
-                        . $error->getErrorDescription() . '</div>';
-                }
-            }
             try {
                 $resultBlock->addNotice(
-                    '<strong>' . __('Following Error(s) has been occurred during importing process:') . '</strong><br>'
-                    . '<div class="import-error-wrapper">' . __('Only the first 100 errors are shown. ')
-                    . '<a href="'
-                    . $this->createDownloadUrlImportHistoryFile($this->createErrorReport($errorAggregator))
-                    . '">' . __('Download full report') . '</a><br>'
-                    . '<div class="import-error-list">' . $message . '</div></div>'
+                    $this->renderErrorMessages->renderMessages($errorAggregator)
                 );
             } catch (\Exception $e) {
                 foreach ($this->getErrorMessages($errorAggregator) as $errorMessage) {
@@ -101,51 +106,46 @@ abstract class ImportResult extends Import
     }
 
     /**
-     * @param \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface $errorAggregator
+     * Get all Error Messages from Import Results
+     *
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @return array
      */
     protected function getErrorMessages(ProcessingErrorAggregatorInterface $errorAggregator)
     {
-        $messages = [];
-        $rowMessages = $errorAggregator->getRowsGroupedByErrorCode([], [AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION]);
-        foreach ($rowMessages as $errorCode => $rows) {
-            $messages[] = $errorCode . ' ' . __('in row(s):') . ' ' . implode(', ', $rows);
-        }
-        return $messages;
+        return $this->renderErrorMessages->getErrorMessages($errorAggregator);
     }
 
     /**
+     * Get System Generated Exception
+     *
      * @param ProcessingErrorAggregatorInterface $errorAggregator
-     * @return \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError[]
+     * @return ProcessingError[]
      */
     protected function getSystemExceptions(ProcessingErrorAggregatorInterface $errorAggregator)
     {
-        return $errorAggregator->getErrorsByCode([AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION]);
+        return $this->renderErrorMessages->getSystemExceptions($errorAggregator);
     }
 
     /**
+     * Generate Error Report File
+     *
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @return string
      */
     protected function createErrorReport(ProcessingErrorAggregatorInterface $errorAggregator)
     {
-        $this->historyModel->loadLastInsertItem();
-        $sourceFile = $this->reportHelper->getReportAbsolutePath($this->historyModel->getImportedFile());
-        $writeOnlyErrorItems = true;
-        if ($this->historyModel->getData('execution_time') == ModelHistory::IMPORT_VALIDATION) {
-            $writeOnlyErrorItems = false;
-        }
-        $fileName = $this->reportProcessor->createReport($sourceFile, $errorAggregator, $writeOnlyErrorItems);
-        $this->historyModel->addErrorReportFile($fileName);
-        return $fileName;
+        return $this->renderErrorMessages->createErrorReport($errorAggregator);
     }
 
     /**
+     * Get Import History Url
+     *
      * @param string $fileName
      * @return string
      */
     protected function createDownloadUrlImportHistoryFile($fileName)
     {
-        return $this->getUrl(self::IMPORT_HISTORY_FILE_DOWNLOAD_ROUTE, ['filename' => $fileName]);
+        return $this->renderErrorMessages->createDownloadUrlImportHistoryFile($fileName);
     }
 }

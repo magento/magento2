@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Customer\Block\Account\Dashboard\Info $block */
 ?>
 <div class="block block-dashboard-info">
@@ -20,6 +18,7 @@
                     <?= $block->escapeHtml($block->getName()) ?><br>
                     <?= $block->escapeHtml($block->getCustomer()->getEmail()) ?><br>
                 </p>
+                <?= $block->getChildHtml('customer.account.dashboard.info.extra'); ?>
             </div>
             <div class="box-actions">
                 <a class="action edit" href="<?= $block->escapeUrl($block->getUrl('customer/account/edit')) ?>">
@@ -43,13 +42,13 @@
                             <?= $block->escapeHtml(__('You aren\'t subscribed to our newsletter.')) ?>
                         <?php endif; ?>
                     </p>
-                    <?php /* Extensions placeholder */ ?>
-                    <?= $block->getChildHtml('customer.account.dashboard.info.extra') ?>
                 </div>
                 <div class="box-actions">
-                    <a class="action edit" href="<?= $block->escapeUrl($block->getUrl('newsletter/manage')) ?>"><span><?= $block->escapeHtml(__('Edit')) ?></span></a>
+                    <a class="action edit" href="<?= $block->escapeUrl($block->getUrl('newsletter/manage')) ?>">
+                        <span><?= $block->escapeHtml(__('Edit')) ?></span></a>
                 </div>
             </div>
         <?php endif; ?>
+        <?= $block->getChildHtml('additional_blocks'); ?>
     </div>
 </div>

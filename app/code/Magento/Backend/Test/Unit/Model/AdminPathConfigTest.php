@@ -3,25 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model;
 
+use Magento\Backend\App\ConfigInterface;
 use Magento\Backend\Model\AdminPathConfig;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AdminPathConfigTest extends \PHPUnit\Framework\TestCase
+class AdminPathConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $coreConfig;
 
     /**
-     * @var \Magento\Backend\App\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     protected $backendConfig;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     protected $url;
 
@@ -30,22 +38,22 @@ class AdminPathConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected $adminPathConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->coreConfig = $this->getMockForAbstractClass(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class,
+            ScopeConfigInterface::class,
             [],
             '',
             false
         );
         $this->backendConfig = $this->getMockForAbstractClass(
-            \Magento\Backend\App\ConfigInterface::class,
+            ConfigInterface::class,
             [],
             '',
             false
         );
         $this->url = $this->getMockForAbstractClass(
-            \Magento\Framework\UrlInterface::class,
+            UrlInterface::class,
             [],
             '',
             false,
@@ -59,7 +67,7 @@ class AdminPathConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetCurrentSecureUrl()
     {
         $request = $this->getMockForAbstractClass(
-            \Magento\Framework\App\RequestInterface::class,
+            RequestInterface::class,
             [],
             '',
             false,
@@ -76,17 +84,35 @@ class AdminPathConfigTest extends \PHPUnit\Framework\TestCase
      * @param $unsecureBaseUrl
      * @param $useSecureInAdmin
      * @param $secureBaseUrl
+     * @param $useCustomUrl
+     * @param $customUrl
      * @param $expected
      * @dataProvider shouldBeSecureDataProvider
      */
-    public function testShouldBeSecure($unsecureBaseUrl, $useSecureInAdmin, $secureBaseUrl, $expected)
-    {
-        $coreConfigValueMap = [
-            [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, 'default', null, $unsecureBaseUrl],
-            [\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL, 'default', null, $secureBaseUrl],
-        ];
-        $this->coreConfig->expects($this->any())->method('getValue')->will($this->returnValueMap($coreConfigValueMap));
-        $this->backendConfig->expects($this->any())->method('isSetFlag')->willReturn($useSecureInAdmin);
+    public function testShouldBeSecure(
+        $unsecureBaseUrl,
+        $useSecureInAdmin,
+        $secureBaseUrl,
+        $useCustomUrl,
+        $customUrl,
+        $expected
+    ) {
+        $coreConfigValueMap = $this->returnValueMap([
+            [Store::XML_PATH_UNSECURE_BASE_URL, 'default', null, $unsecureBaseUrl],
+            [Store::XML_PATH_SECURE_BASE_URL, 'default', null, $secureBaseUrl],
+            ['admin/url/custom', 'default', null, $customUrl],
+        ]);
+        $backendConfigFlagsMap = $this->returnValueMap([
+            [Store::XML_PATH_SECURE_IN_ADMINHTML, $useSecureInAdmin],
+            ['admin/url/use_custom', $useCustomUrl],
+        ]);
+        $this->coreConfig->expects($this->atLeast(1))->method('getValue')
+            ->will($coreConfigValueMap);
+        $this->coreConfig->expects($this->atMost(2))->method('getValue')
+            ->will($coreConfigValueMap);
+
+        $this->backendConfig->expects($this->atMost(2))->method('isSetFlag')
+            ->will($backendConfigFlagsMap);
         $this->assertEquals($expected, $this->adminPathConfig->shouldBeSecure(''));
     }
 
@@ -96,13 +122,13 @@ class AdminPathConfigTest extends \PHPUnit\Framework\TestCase
     public function shouldBeSecureDataProvider()
     {
         return [
-            ['http://localhost/', false, 'default', false],
-            ['http://localhost/', true, 'default', false],
-            ['https://localhost/', false, 'default', true],
-            ['https://localhost/', true, 'default', true],
-            ['http://localhost/', false, 'https://localhost/', false],
-            ['http://localhost/', true, 'https://localhost/', true],
-            ['https://localhost/', true, 'https://localhost/', true],
+            ['http://localhost/', false, 'default', false, '', false],
+            ['http://localhost/', true, 'default', false, '', false],
+            ['https://localhost/', false, 'default', false, '', true],
+            ['https://localhost/', true, 'default', false, '', true],
+            ['http://localhost/', false, 'https://localhost/', false, '', false],
+            ['http://localhost/', true, 'https://localhost/', false, '', true],
+            ['https://localhost/', true, 'https://localhost/', false, '', true],
         ];
     }
 

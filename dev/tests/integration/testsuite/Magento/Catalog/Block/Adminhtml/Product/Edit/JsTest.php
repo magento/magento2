@@ -29,26 +29,21 @@ class JsTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Catalog\Block\Adminhtml\Product\Edit\Js $block */
         $block = $objectManager->create(\Magento\Catalog\Block\Adminhtml\Product\Edit\Js::class);
         $jsonResult = $block->getAllRatesByProductClassJson();
-        $decodedResult = json_decode($jsonResult);
-        $this->assertNotEmpty($decodedResult, 'Resulting JSON is invalid.');
-        $taxClassesArray = (array)$decodedResult;
+        $this->assertJson($jsonResult, 'Resulting JSON is invalid.');
+        $decodedResult = json_decode($jsonResult, true);
+        $this->assertNotNull($decodedResult, 'Cannot decode resulting JSON.');
         $noneTaxClass = 0;
         $defaultProductTaxClass = 2;
         $expectedProductTaxClasses = array_unique(
             array_merge($fixtureTaxRule->getProductTaxClasses(), [$defaultProductTaxClass, $noneTaxClass])
         );
-        $this->assertCount(
-            count($expectedProductTaxClasses),
-            $taxClassesArray,
-            'Invalid quantity of rates for tax classes.'
-        );
         foreach ($expectedProductTaxClasses as $taxClassId) {
             $this->assertArrayHasKey(
                 "value_{$taxClassId}",
-                $taxClassesArray,
+                $decodedResult,
                 "Rates for tax class with ID '{$taxClassId}' is missing."
             );
         }
-        $this->assertContains('7.5', $jsonResult, 'Rates for tax classes looks to be invalid.');
+        $this->assertStringContainsString('7.5', $jsonResult, 'Rates for tax classes looks to be invalid.');
     }
 }

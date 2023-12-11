@@ -3,13 +3,11 @@
  * See COPYING.txt for license details.
  */
 
-/* global WeakMap */
 define([
     'ko',
     'underscore',
     'mage/utils/wrapper',
-    'uiEvents',
-    'es6-collections'
+    'uiEvents'
 ], function (ko, _, wrapper, Events) {
     'use strict';
 
@@ -109,7 +107,7 @@ define([
     wrapper.extend(ko, {
 
         /**
-         * Extends kncokouts' 'applyBindings'
+         * Extends knockouts' 'applyBindings'
          * to track nodes associated with model.
          *
          * @param {Function} orig - Original 'applyBindings' method.
@@ -136,7 +134,7 @@ define([
         },
 
         /**
-         * Extends kncokouts' cleanNode
+         * Extends knockouts' cleanNode
          * to track nodes associated with model.
          *
          * @param {Function} orig - Original 'cleanNode' method.

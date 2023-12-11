@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminEditRelatedBundleProductTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Create/Edit bundle product in Admin"/>
+            <title value="Admin should be able to set/edit Related Products information when editing a bundle product"/>
+            <description value="Admin should be able to set/edit Related Products information when editing a bundle product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3342"/>
+            <group value="Bundle"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!--Admin login-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct0"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete the bundled product -->
+            <actionGroup stepKey="deleteBundle" ref="DeleteProductUsingProductGridActionGroup">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <!--Logging out-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="simpleProduct0" stepKey="deleteSimpleProduct0"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+        </after>
+
+        <!-- Create a bundle product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPageBundle"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateBundleProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillBundleProductNameAndSku">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct0">
+            <argument name="sku" value="$$simpleProduct0.sku$$"/>
+        </actionGroup>
+
+        <!--Save the product-->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
+
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct1">
+            <argument name="sku" value="$$simpleProduct1.sku$$"/>
+        </actionGroup>
+
+        <!--Remove previous related product-->
+        <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.removeRelatedProduct($$simpleProduct0.sku$$)}}" stepKey="removeRelatedProduct"/>
+
+        <!--Save the product-->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButtonAfterEdit"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShownAgain">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
+
+        <!--See related product in admin-->
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollTo"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openDropDownIfClosedRelatedSee"/>
+        <actionGroup ref="AssertTextInAdminProductRelatedUpSellCrossSellSectionActionGroup" stepKey="seeRelatedProduct">
+            <argument name="element" value="AdminProductFormRelatedUpSellCrossSellSection.relatedProductSectionText"/>
+            <argument name="expectedText" value="$$simpleProduct1.name$$"/>
+        </actionGroup>
+
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexer">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
+        <!--See related product in storefront-->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToStorefront">
+            <argument name="productUrl" value="{{BundleProduct.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefront"/>
+        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup" stepKey="seeRelatedProductInStorefront">
+            <argument name="productName" value="$$simpleProduct1.name$$"/>
+        </actionGroup>
+    </test>
+</tests>

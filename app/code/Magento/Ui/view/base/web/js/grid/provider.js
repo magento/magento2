@@ -14,13 +14,16 @@ define([
     'uiLayout',
     'Magento_Ui/js/modal/alert',
     'mage/translate',
-    'uiElement'
-], function ($, _, utils, resolver, layout, alert, $t, Element) {
+    'uiElement',
+    'uiRegistry',
+    'Magento_Ui/js/grid/data-storage'
+], function ($, _, utils, resolver, layout, alert, $t, Element, registry) {
     'use strict';
 
     return Element.extend({
         defaults: {
             firstLoad: true,
+            lastError: false,
             storageConfig: {
                 component: 'Magento_Ui/js/grid/data-storage',
                 provider: '${ $.storageConfig.name }',
@@ -30,7 +33,11 @@ define([
             listens: {
                 params: 'onParamsChange',
                 requestConfig: 'updateRequestConfig'
-            }
+            },
+            ignoreTmpls: {
+                data: true
+            },
+            triggerDataReload: false
         },
 
         /**
@@ -72,7 +79,8 @@ define([
         clearData: function () {
             this.setData({
                 items: [],
-                totalRecords: 0
+                totalRecords: 0,
+                showTotalRecords: true
             });
 
             return this;
@@ -120,7 +128,7 @@ define([
 
             request
                 .done(this.onReload)
-                .fail(this.onError);
+                .fail(this.onError.bind(this));
 
             return request;
         },
@@ -133,6 +141,8 @@ define([
             // after the initial loading has been made.
             if (!this.firstLoad) {
                 this.reload();
+            } else {
+                this.triggerDataReload = true;
             }
         },
 
@@ -143,6 +153,10 @@ define([
             if (xhr.statusText === 'abort') {
                 return;
             }
+            this.trigger('reloaded');
+            this.set('lastError', true);
+            this.firstLoad = false;
+            this.triggerDataReload = false;
 
             alert({
                 content: $t('Something went wrong.')
@@ -156,9 +170,14 @@ define([
          */
         onReload: function (data) {
             this.firstLoad = false;
-
+            this.set('lastError', false);
             this.setData(data)
                 .trigger('reloaded');
+
+            if (this.triggerDataReload) {
+                this.triggerDataReload = false;
+                this.reload();
+            }
         },
 
         /**
@@ -167,9 +186,9 @@ define([
          * @param {Object} requestConfig
          */
         updateRequestConfig: function (requestConfig) {
-            if (this.storage()) {
-                _.extend(this.storage().requestConfig, requestConfig);
-            }
+            registry.get(this.storageConfig.provider, function (storage) {
+                _.extend(storage.requestConfig, requestConfig);
+            });
         }
     });
 });

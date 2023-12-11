@@ -8,8 +8,8 @@
     <?= $block->getChildHtml('shipment_items') ?>
     <div class="actions-toolbar">
         <div class="secondary">
-            <a href="<?= /* @escapeNotVerified */ $block->getBackUrl() ?>" class="action back">
-                <span><?= /* @escapeNotVerified */ $block->getBackTitle() ?></span>
+            <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
+                <span><?= $block->escapeHtml($block->getBackTitle()) ?></span>
             </a>
         </div>
     </div>

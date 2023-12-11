@@ -17,9 +17,8 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
     /** @var AddressMetadataInterface */
     private $serviceTwo;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        CacheCleaner::cleanAll();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->configure(
             [
@@ -267,7 +266,7 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

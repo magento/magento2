@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateTaxRateAllPostCodesTest">
+        <annotations>
+            <stories value="Create tax rate"/>
+            <title value="Create tax rate, all postcodes"/>
+            <description value="Tests log into Create tax rate and create all postcodes"/>
+            <testCaseId value="MC-5318"/>
+            <severity value="CRITICAL"/>
+            <group value="tax"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clickClearFilters"/>
+            <actionGroup ref="AdminFilterTaxRateByCodeActionGroup" stepKey="filterByCode">
+                <argument name="taxRateCode" value="{{SimpleTaxRate.code}}" />
+            </actionGroup>
+            <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="clickFirstRow"/>
+            <actionGroup ref="AdminDeleteTaxRateActionGroup" stepKey="deleteTaxRate"/>
+        </after>
+
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex1"/>
+        <!-- Create a tax rate with * for postcodes -->
+        <click selector="{{AdminTaxRateGridSection.add}}" stepKey="clickAddNewTaxRateButton"/>
+        <fillField selector="{{AdminTaxRateFormSection.taxIdentifier}}" userInput="{{SimpleTaxRate.code}}" stepKey="fillRuleName"/>
+        <fillField selector="{{AdminTaxRateFormSection.zipCode}}" userInput="*" stepKey="fillPostCode"/>
+        <selectOption selector="{{AdminTaxRateFormSection.country}}" userInput="Australia" stepKey="selectCountry1"/>
+        <fillField selector="{{AdminTaxRateFormSection.rate}}" userInput="20" stepKey="fillRate"/>
+        <click selector="{{AdminTaxRateFormSection.save}}" stepKey="clickSave"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the tax rate." stepKey="seeSuccess"/>
+
+        <!-- Verify the tax rate grid page shows the tax rate we just created -->
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex2"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickClearFilters1"/>
+        <actionGroup ref="AdminFillTaxIdentifierFilterOnTaxRateGridActionGroup" stepKey="fillNameFilter">
+            <argument name="taxRateCode" value="{{SimpleTaxRate.code}}"/>
+        </actionGroup>    
+        <selectOption selector="{{AdminTaxRateGridSection.filterByCountry}}" userInput="Australia" stepKey="fillCountryFilter"/>
+        <fillField selector="{{AdminTaxRateGridSection.filterByPostCode}}" userInput="*" stepKey="fillPostCodeFilter"/>
+        <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch"/>
+        <see selector="{{AdminTaxRateGridSection.grid}}" userInput="{{SimpleTaxRate.code}}" stepKey="seeRuleName"/>
+        <see selector="{{AdminTaxRateGridSection.grid}}" userInput="Australia" stepKey="seeCountry"/>
+        <see selector="{{AdminTaxRateGridSection.grid}}" userInput="*" stepKey="seePostCode"/>
+
+        <!-- Go to the tax rate edit page for our new tax rate -->
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex3"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickClearFilters2"/>
+        <actionGroup ref="AdminFillTaxIdentifierFilterOnTaxRateGridActionGroup" stepKey="fillNameFilter2">
+            <argument name="taxRateCode" value="{{SimpleTaxRate.code}}"/>
+        </actionGroup> 
+        <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch2"/>
+        <click selector="{{AdminTaxRateGridSection.nthRow('1')}}" stepKey="clickFirstRow"/>
+
+        <!-- Verify we see expected values on the tax rate edit page -->
+        <seeInField selector="{{AdminTaxRateFormSection.taxIdentifier}}" userInput="{{SimpleTaxRate.code}}" stepKey="seeRuleName2"/>
+        <seeInField selector="{{AdminTaxRateFormSection.zipCode}}" userInput="*" stepKey="seeZipCode"/>
+        <seeOptionIsSelected selector="{{AdminTaxRateFormSection.country}}" userInput="Australia" stepKey="seeCountry2"/>
+        <seeInField selector="{{AdminTaxRateFormSection.rate}}" userInput="20.0000" stepKey="seeRate"/>
+
+        <!-- Go to the tax rule grid page and verify our tax rate can be used in the rule -->
+        <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleIndex1"/>
+        <click selector="{{AdminGridMainControls.add}}" stepKey="clickAddNewTaxRule"/>
+        <see selector="{{AdminTaxRulesSection.taxRateMultiSelectItems}}" userInput="{{SimpleTaxRate.code}}" stepKey="seeTaxRateOnNewTaxRulePage"/>
+    </test>
+</tests>

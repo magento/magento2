@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontMissingPagerShoppingCartWith20ProductsTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Check if the cart pager is missing with 20 cart items"/>
+            <title value="Test if the cart pager is missing with 20 cart items."/>
+            <description value="Test if the cart pager is missing with 20 cart items."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14698"/>
+            <group value="shoppingCart"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!--Set the default number of items on cart which is 20-->
+            <magentoCLI stepKey="allowSpecificValue" command="config:set checkout/cart/number_items_to_display_pager 20" />
+            <createData entity="SimpleTwo" stepKey="simpleProduct1"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem1">
+                <argument name="product" value="$$simpleProduct1$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct2"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem2">
+                <argument name="product" value="$$simpleProduct2$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct3"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem3">
+                <argument name="product" value="$$simpleProduct3$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct4"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem4">
+                <argument name="product" value="$$simpleProduct4$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct5"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem5">
+                <argument name="product" value="$$simpleProduct5$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct6"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem6">
+                <argument name="product" value="$$simpleProduct6$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct7"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem7">
+                <argument name="product" value="$$simpleProduct7$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct8"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem8">
+                <argument name="product" value="$$simpleProduct8$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct9"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem9">
+                <argument name="product" value="$$simpleProduct9$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct10"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem10">
+                <argument name="product" value="$$simpleProduct10$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct11"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem11">
+                <argument name="product" value="$$simpleProduct11$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct12"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem12">
+                <argument name="product" value="$$simpleProduct12$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct13"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem13">
+                <argument name="product" value="$$simpleProduct13$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct14"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem14">
+                <argument name="product" value="$$simpleProduct14$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct15"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem15">
+                <argument name="product" value="$$simpleProduct15$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct16"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem16">
+                <argument name="product" value="$$simpleProduct16$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct17"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem17">
+                <argument name="product" value="$$simpleProduct17$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct18"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem18">
+                <argument name="product" value="$$simpleProduct18$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct19"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem19">
+                <argument name="product" value="$$simpleProduct19$$"/>
+            </actionGroup>
+            <createData entity="SimpleTwo" stepKey="simpleProduct20"/>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem20">
+                <argument name="product" value="$$simpleProduct20$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteCartItem1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteCartItem2"/>
+            <deleteData createDataKey="simpleProduct3" stepKey="deleteCartItem3"/>
+            <deleteData createDataKey="simpleProduct4" stepKey="deleteCartItem4"/>
+            <deleteData createDataKey="simpleProduct5" stepKey="deleteCartItem5"/>
+            <deleteData createDataKey="simpleProduct6" stepKey="deleteCartItem6"/>
+            <deleteData createDataKey="simpleProduct7" stepKey="deleteCartItem7"/>
+            <deleteData createDataKey="simpleProduct8" stepKey="deleteCartItem8"/>
+            <deleteData createDataKey="simpleProduct9" stepKey="deleteCartItem9"/>
+            <deleteData createDataKey="simpleProduct10" stepKey="deleteCartItem10"/>
+            <deleteData createDataKey="simpleProduct11" stepKey="deleteCartItem11"/>
+            <deleteData createDataKey="simpleProduct12" stepKey="deleteCartItem12"/>
+            <deleteData createDataKey="simpleProduct13" stepKey="deleteCartItem13"/>
+            <deleteData createDataKey="simpleProduct14" stepKey="deleteCartItem14"/>
+            <deleteData createDataKey="simpleProduct15" stepKey="deleteCartItem15"/>
+            <deleteData createDataKey="simpleProduct16" stepKey="deleteCartItem16"/>
+            <deleteData createDataKey="simpleProduct17" stepKey="deleteCartItem17"/>
+            <deleteData createDataKey="simpleProduct18" stepKey="deleteCartItem18"/>
+            <deleteData createDataKey="simpleProduct19" stepKey="deleteCartItem19"/>
+            <deleteData createDataKey="simpleProduct20" stepKey="deleteCartItem20"/>
+        </after>
+        <!-- Go to the shopping cart and check if the pager is missing-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage" />
+        <actionGroup ref="AssertPagerTextIsNotVisibleActionGroup" stepKey="VerifyMissingPagerText" >
+            <argument name="text" value="Items 1 to 20"/>
+        </actionGroup>
+    </test>
+</tests>

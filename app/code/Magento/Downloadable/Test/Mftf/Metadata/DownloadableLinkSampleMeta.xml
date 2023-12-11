@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateDownloadableSample" dataType="downloadable_sample" type="create" auth="adminOauth" url="/V1/products/{sku}/downloadable-links/samples" method="POST">
+        <contentType>application/json</contentType>
+        <object dataType="downloadable_sample" key="sample">
+            <field key="title">string</field>
+            <field key="sort_order">integer</field>
+            <field key="sample_type">string</field>
+            <field key="sample_file">string</field>
+            <field key="sample_file_content">sample_file_content</field>
+            <field key="sample_url">string</field>
+        </object>
+        <field key="isGlobalScopeContent">boolean</field>
+    </operation>
+</operations>

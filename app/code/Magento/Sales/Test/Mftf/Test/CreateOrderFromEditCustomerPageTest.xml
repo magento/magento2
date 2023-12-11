@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CreateOrderFromEditCustomerPageTest">
+        <annotations>
+            <group value="Sales"/>
+            <stories value="Create Order"/>
+            <title value="Create order from edit customer page and add products to wish list and shopping cart"/>
+            <description value="Create an order from edit customer page and add products to the wish list and shopping cart "/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-16161"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
+
+            <createData entity="Simple_US_Customer_CA" stepKey="simpleCustomer"/>
+
+            <createData entity="SimpleProduct2" stepKey="simpleProduct">
+                <field key="price">10.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1">
+                <field key="price">20.00</field>
+            </createData>
+
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <field key="price">30.00</field>
+            </createData>
+
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        </before>
+        <after>
+            <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigurableProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteProductAttribute"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomerIndexPage"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCustomerGridFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$$simpleCustomer.id$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterTheCustomer"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnEditButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCustomerEditPageToLoad"/>
+        <actionGroup ref="AdminClickCreateOrderOnEditCustomerPageActionGroup" stepKey="clickOnCreateOrderButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderPageToLoad"/>
+        <actionGroup ref="AdminSelectStoreViewOnCreateOrderPageIfRequestedActionGroup" stepKey="selectStoreViewIfAppears"/>
+
+        <actionGroup ref="AddConfigurableProductToOrderFromAdminActionGroup" stepKey="addConfigurableProductToOrder">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="attribute" value="$$createConfigProductAttribute$$"/>
+            <argument name="option" value="$$getConfigAttributeOption1$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSecondSimpleProductToOrder">
+            <argument name="product" value="$$simpleProduct1$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminSelectValueFromActionSelectInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="moveProductToWishList">
+            <argument name="product" value="$$simpleProduct$$"/>
+            <argument name="option" value="Move to Wish List"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectValueFromActionSelectInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="moveConfigurableProductToWishList">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="option" value="Move to Wish List"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickUpdateItemsAndQuantitesOnCreateOrderPageActionGroup" stepKey="clickOnUpdateItemsAndQuantity"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForAdminCreateOrderWishListSectionPageLoad"/>
+
+        <actionGroup ref="AdminSeeProductInWishlistOnCreateOrderPageActionGroup" stepKey="seeSimpleProductInWishList">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSeeProductInWishlistOnCreateOrderPageActionGroup" stepKey="seeConfigurableProductInWishList">
+            <argument name="product" value="$$createConfigProduct$$"/>
+        </actionGroup>
+
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCheckBoxToVisible"/>
+        <actionGroup ref="AdminSelectAddToOrderCheckboxForSimpleProductInWishListSectionOnCreateOrderPageActionGroup" stepKey="selectProductToAddToOrder">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickUpdateChangesOnCreateOrderPageActionGroup" stepKey="clickUpdateChangesButton"/>
+
+        <actionGroup ref="AdminClickConfigureAndAddToOrderForConfigurableProductInWishListSectionOnCreateOrderPageActionGroup" stepKey="AddConfigurableProductToOrder">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="productAttribute" value="$$createConfigProductAttribute$$"/>
+            <argument name="option" value="$$getConfigAttributeOption1$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForConfigurablePopover"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectConfigurableOption"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOkButton"/>
+        <comment userInput="Action should be removed but replaced with comment due to backward compatibility" stepKey="clickOnUpdateButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForAdminOrderItemsOrderedSectionPageLoad1"/>
+
+        <actionGroup ref="AdminAssertProductByNameInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeSimpleProductInOrderItemGrid">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductByNameInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeConfigProductInOrderItemGrid">
+            <argument name="product" value="$$createConfigProduct$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminSelectValueFromActionSelectInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="moveFirstSimpleProductToShoppingCart">
+            <argument name="product" value="$$simpleProduct$$"/>
+            <argument name="option" value="Move to Shopping Cart"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectValueFromActionSelectInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="moveSecondSimpleProductToShoppingCart">
+            <argument name="product" value="$$simpleProduct1$$"/>
+            <argument name="option" value="Move to Shopping Cart"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickUpdateItemsAndQuantitesOnCreateOrderPageActionGroup" stepKey="clickOnUpdateItems"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForAdminCreateOrderShoppingCartSectionPageLoad"/>
+
+        <actionGroup ref="AdminAssertProductInShoppingCartSectionActionGroup" stepKey="seeProductInShoppingCart">
+            <argument name="product" value="$$simpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInShoppingCartSectionActionGroup" stepKey="seeSecondProductInShoppingCart">
+            <argument name="product" value="$$simpleProduct1.name$$"/>
+        </actionGroup>
+
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForAddToOrderCheckBox"/>
+        <actionGroup ref="AdminSelectAddToOrderCheckboxInShoppingCartOnCreateOrderPageActionGroup" stepKey="selectFirstProduct">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectAddToOrderCheckboxInShoppingCartOnCreateOrderPageActionGroup" stepKey="selectSecondProduct">
+            <argument name="product" value="$$simpleProduct1$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickUpdateChangesOnCreateOrderPageActionGroup" stepKey="clickOnUpdateButton1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForAdminCreateOrderShoppingCartSectionPageLoad1"/>
+
+        <dontSee selector="{{AdminCreateOrderShoppingCartSection.shoppingCartBlock}}" userInput="$$simpleProduct.name$$" stepKey="donSeeProductInShoppingCart"/>
+        <dontSee selector="{{AdminCreateOrderShoppingCartSection.shoppingCartBlock}}" userInput="$$simpleProduct1.name$$" stepKey="dontSeeSecondProductInShoppingCart"/>
+
+        <dontSee selector="{{AdminCreateOrderWishListSection.wishListBlock}}" userInput="$$simpleProduct.name$$" stepKey="seeSimpleProductInWishList1"/>
+        <dontSee selector="{{AdminCreateOrderWishListSection.wishListBlock}}" userInput="$$createConfigProduct.name$$" stepKey="seeConfigurableProductInWishList1"/>
+
+        <actionGroup ref="AdminAssertProductByNameInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeSimpleProductInOrderItemGrid1">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductByNameInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeConfigProductInOrderItemGrid1">
+            <argument name="product" value="$$createConfigProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductByNameInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeSecondProductInOrderItemGrid1">
+            <argument name="product" value="$$simpleProduct1$$"/>
+        </actionGroup>
+
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForShippingSection"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openShippingMethod"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForShippingMethods"/>
+        <actionGroup ref="OrderSelectFreeShippingActionGroup" stepKey="chooseShippingMethod"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
+
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage1">
+            <argument name="customerId" value="$$simpleCustomer.id$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterTheCustomer1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnEditButton1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCustomerEditPageToLoad1"/>
+
+        <actionGroup ref="AdminClickOrdersItemOnCustomerEditPageActionGroup" stepKey="clickOnOrdersButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderPageToOpen"/>
+        <actionGroup ref="AdminOpenOrderByIdFromOrdersGridOnCustomerEditPageActionGroup" stepKey="selectOnOrderID">
+            <argument name="orderId" value="$orderId"/>
+        </actionGroup>
+
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderInformationToLoad"/>
+        <actionGroup ref="AdminAssertProductOnTheOrderViewPageActionGroup" stepKey="seeConfigurableProductInGrid">
+            <argument name="product" value="$$createConfigProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductOnTheOrderViewPageActionGroup" stepKey="seeFirstProductInGrid">
+            <argument name="product" value="$$createConfigProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductOnTheOrderViewPageActionGroup" stepKey="seeSecondProductInGrid">
+            <argument name="product" value="$$createConfigProduct$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeProductStatus"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeConfigurableProductSubtotal"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeFirstProductSubtotal"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSecondProductSubtotal"/>
+        <actionGroup ref="AdminAssertTotalsOnOrderViewPageActionGroup" stepKey="checkSubtotal">
+                <argument name="subtotal" value="{{AdminOrderMultipleProducts.subtotal}}"/>
+                <argument name="shippingAndHandling" value="{{AdminOrderMultipleProducts.shipping}}"/>
+                <argument name="grandTotal" value="{{AdminOrderMultipleProducts.grandTotal}}"/>
+         </actionGroup>
+         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="checkShippingAndHandling"/>
+         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="checkGrandTotal"/>
+    </test>
+</tests>

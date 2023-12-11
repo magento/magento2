@@ -3,177 +3,395 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Handler;
 
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Address;
+use Magento\Sales\Model\ResourceModel\Order\Address\Collection;
+use Magento\Sales\Model\ResourceModel\Order\Handler\State;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class StateTest
- */
-class StateTest extends \PHPUnit\Framework\TestCase
+class StateTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Handler\State
+     * @var State
      */
     protected $state;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order|MockObject
      */
     protected $orderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->orderMock = $this->createPartialMock(\Magento\Sales\Model\Order::class, [
-                '__wakeup',
-                'getId',
-                'hasCustomerNoteNotify',
-                'getCustomerNoteNotify',
-                'isCanceled',
-                'canUnhold',
-                'canInvoice',
-                'canShip',
-                'getBaseGrandTotal',
-                'canCreditmemo',
-                'getState',
-                'setState',
-                'getTotalRefunded',
-                'hasForcedCanCreditmemo',
-                'getIsInProcess',
-                'getConfig',
-            ]);
+        $this->orderMock = $this->getMockBuilder(Order::class)
+            ->addMethods(['hasCustomerNoteNotify', 'hasForcedCanCreditmemo', 'getIsInProcess'])
+            ->onlyMethods(
+                [
+                    'getId',
+                    'getCustomerNoteNotify',
+                    'isCanceled',
+                    'canUnhold',
+                    'canInvoice',
+                    'canShip',
+                    'getBaseGrandTotal',
+                    'canCreditmemo',
+                    'getTotalRefunded',
+                    'getConfig',
+                    'getIsVirtual',
+                    'getIsNotVirtual',
+                    'getStatus',
+                    'getAllItems'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->orderMock->expects($this->any())
             ->method('getConfig')
             ->willReturnSelf();
-        $this->addressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
-        $this->addressCollectionMock = $this->createMock(
-            \Magento\Sales\Model\ResourceModel\Order\Address\Collection::class
-        );
-        $this->state = new \Magento\Sales\Model\ResourceModel\Order\Handler\State();
+        $this->state = new State();
     }
 
     /**
-     * test check order - order without id
+     * @param bool $canCreditmemo
+     * @param int $callCanCreditmemoNum
+     * @param bool $canShip
+     * @param int $callCanSkipNum
+     * @param string $currentState
+     * @param string $expectedState
+     * @param bool $isInProcess
+     * @param int $callGetIsInProcessNum
+     * @param bool $isCanceled
+     * @param bool $canUnhold
+     * @param bool $isNotVirtual
+     * @dataProvider stateCheckDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
-    public function testCheckOrderEmpty()
-    {
-        $this->orderMock->expects($this->once())
-            ->method('getBaseGrandTotal')
-            ->willReturn(100);
-        $this->orderMock->expects($this->never())
-            ->method('setState');
-
-        $this->state->check($this->orderMock);
-    }
-
-    /**
-     * test check order - set state complete
-     */
-    public function testCheckSetStateComplete()
-    {
+    public function testCheck(
+        bool $canCreditmemo,
+        int $callCanCreditmemoNum,
+        bool $canShip,
+        int $callCanSkipNum,
+        string $currentState,
+        string $expectedState,
+        bool $isInProcess,
+        int $callGetIsInProcessNum,
+        bool $isCanceled,
+        bool $canUnhold,
+        bool $isNotVirtual
+    ) {
+        $this->orderMock->setState($currentState);
         $this->orderMock->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue(1));
-        $this->orderMock->expects($this->once())
             ->method('isCanceled')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
+            ->willReturn($isCanceled);
+        $this->orderMock->expects($this->any())
             ->method('canUnhold')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
+            ->willReturn($canUnhold);
+        $this->orderMock->expects($this->any())
             ->method('canInvoice')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
+            ->willReturn(false);
+        $this->orderMock->expects($this->exactly($callCanSkipNum))
             ->method('canShip')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
-            ->method('getBaseGrandTotal')
-            ->will($this->returnValue(100));
-        $this->orderMock->expects($this->once())
+            ->willReturn($canShip);
+        $this->orderMock->expects($this->exactly($callCanCreditmemoNum))
             ->method('canCreditmemo')
-            ->will($this->returnValue(true));
-        $this->orderMock->expects($this->exactly(2))
-            ->method('getState')
-            ->will($this->returnValue(Order::STATE_PROCESSING));
-        $this->orderMock->expects($this->once())
-            ->method('setState')
-            ->with(Order::STATE_COMPLETE)
-            ->will($this->returnSelf());
-        $this->assertEquals($this->state, $this->state->check($this->orderMock));
-    }
-
-    /**
-     * test check order - set state closed
-     */
-    public function testCheckSetStateClosed()
-    {
-        $this->orderMock->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue(1));
-        $this->orderMock->expects($this->once())
-            ->method('isCanceled')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
-            ->method('canUnhold')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
-            ->method('canInvoice')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
-            ->method('canShip')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
-            ->method('getBaseGrandTotal')
-            ->will($this->returnValue(100));
-        $this->orderMock->expects($this->once())
-            ->method('canCreditmemo')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->exactly(2))
-            ->method('getTotalRefunded')
-            ->will($this->returnValue(null));
-        $this->orderMock->expects($this->once())
-            ->method('hasForcedCanCreditmemo')
-            ->will($this->returnValue(true));
-        $this->orderMock->expects($this->exactly(2))
-            ->method('getState')
-            ->will($this->returnValue(Order::STATE_PROCESSING));
-        $this->orderMock->expects($this->once())
-            ->method('setState')
-            ->with(Order::STATE_CLOSED)
-            ->will($this->returnSelf());
-        $this->assertEquals($this->state, $this->state->check($this->orderMock));
-    }
-
-    /**
-     * test check order - set state processing
-     */
-    public function testCheckSetStateProcessing()
-    {
-        $this->orderMock->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue(1));
-        $this->orderMock->expects($this->once())
-            ->method('isCanceled')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
-            ->method('canUnhold')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
-            ->method('canInvoice')
-            ->will($this->returnValue(false));
-        $this->orderMock->expects($this->once())
-            ->method('canShip')
-            ->will($this->returnValue(true));
-        $this->orderMock->expects($this->once())
-            ->method('getState')
-            ->will($this->returnValue(Order::STATE_NEW));
-        $this->orderMock->expects($this->once())
+            ->willReturn($canCreditmemo);
+        $this->orderMock->expects($this->exactly($callGetIsInProcessNum))
             ->method('getIsInProcess')
-            ->will($this->returnValue(true));
-        $this->orderMock->expects($this->once())
-            ->method('setState')
-            ->with(Order::STATE_PROCESSING)
-            ->will($this->returnSelf());
-        $this->assertEquals($this->state, $this->state->check($this->orderMock));
+            ->willReturn($isInProcess);
+        $this->orderMock->method('getIsNotVirtual')
+            ->willReturn($isNotVirtual);
+        $this->orderMock->method('getAllItems')
+            ->willReturn([]);
+        if (!$isNotVirtual) {
+            $this->orderMock->method('getIsVirtual')
+                ->willReturn(!$isNotVirtual);
+            $this->orderMock->method('getStatus')
+                ->willReturn($expectedState);
+        }
+        $this->state->check($this->orderMock);
+        $this->assertEquals($expectedState, $this->orderMock->getState());
+    }
+
+    /**
+     * Data provider for testCheck
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return array
+     */
+    public function stateCheckDataProvider()
+    {
+        return [
+            'processing - !canCreditmemo!canShip -> closed' => [
+                'can_credit_memo' => false,
+                'can_credit_memo_invoke_count' => 1,
+                'can_ship' => false,
+                'call_can_skip_num' => 1,
+                'current_state' => Order::STATE_PROCESSING,
+                'expected_state' => Order::STATE_CLOSED,
+                'is_in_process' => false,
+                'get_is_in_process_invoke_count' => 0,
+                'is_canceled' => false,
+                'can_unhold' => false,
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
+            'complete - !canCreditmemo,!canShip -> closed' => [
+                'can_credit_memo' => false,
+                'can_credit_memo_invoke_count' => 1,
+                'can_ship' => false,
+                'call_can_skip_num' => 1,
+                'current_state' => Order::STATE_COMPLETE,
+                'expected_state' => Order::STATE_CLOSED,
+                'is_in_process' => false,
+                'get_is_in_process_invoke_count' => 0,
+                'is_canceled' => false,
+                'can_unhold' => false,
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
+            'processing - !canCreditmemo,canShip -> processing' => [
+                'can_credit_memo' => false,
+                'can_credit_memo_invoke_count' => 1,
+                'can_ship' => true,
+                'call_can_skip_num' => 2,
+                'current_state' => Order::STATE_PROCESSING,
+                'expected_state' => Order::STATE_PROCESSING,
+                'is_in_process' => false,
+                'get_is_in_process_invoke_count' => 0,
+                'is_canceled' => false,
+                'can_unhold' => false,
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
+            'complete - !canCreditmemo,canShip -> complete' => [
+                'can_credit_memo' => false,
+                'can_credit_memo_invoke_count' => 1,
+                'can_ship' => true,
+                'call_can_skip_num' => 1,
+                'current_state' => Order::STATE_COMPLETE,
+                'expected_state' => Order::STATE_COMPLETE,
+                'is_in_process' => false,
+                'get_is_in_process_invoke_count' => 0,
+                'is_canceled' => false,
+                'can_unhold' => false,
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
+            'processing - canCreditmemo,!canShip -> complete' => [
+                'can_credit_memo' => true,
+                'can_credit_memo_invoke_count' => 1,
+                'can_ship' => false,
+                'call_can_skip_num' => 1,
+                'current_state' => Order::STATE_PROCESSING,
+                'expected_state' => Order::STATE_COMPLETE,
+                'is_in_process' => false,
+                'get_is_in_process_invoke_count' => 0,
+                'is_canceled' => false,
+                'can_unhold' => false,
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
+            'complete - canCreditmemo,!canShip -> complete' => [
+                'can_credit_memo' => true,
+                'can_credit_memo_invoke_count' => 1,
+                'can_ship' => false,
+                'call_can_skip_num' => 0,
+                'current_state' => Order::STATE_COMPLETE,
+                'expected_state' => Order::STATE_COMPLETE,
+                'is_in_process' => false,
+                'get_is_in_process_invoke_count' => 0,
+                'is_canceled' => false,
+                'can_unhold' => false,
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
+            'processing - canCreditmemo, canShip -> processing' => [
+                'can_credit_memo' => true,
+                'can_credit_memo_invoke_count' => 1,
+                'can_ship' => true,
+                'call_can_skip_num' => 1,
+                'current_state' => Order::STATE_PROCESSING,
+                'expected_state' => Order::STATE_PROCESSING,
+                'is_in_process' => false,
+                'get_is_in_process_invoke_count' => 0,
+                'is_canceled' => false,
+                'can_unhold' => false,
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
+            'complete - canCreditmemo, canShip -> complete' => [
+                'can_credit_memo' => true,
+                'can_credit_memo_invoke_count' => 1,
+                'can_ship' => true,
+                'call_can_skip_num' => 0,
+                'current_state' => Order::STATE_COMPLETE,
+                'expected_state' => Order::STATE_COMPLETE,
+                'is_in_process' => false,
+                'get_is_in_process_invoke_count' => 0,
+                'is_canceled' => false,
+                'can_unhold' => false,
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
+            'new - canCreditmemo, canShip, IsInProcess -> processing' => [
+                'can_credit_memo' => true,
+                'can_credit_memo_invoke_count' => 1,
+                'can_ship' => true,
+                'call_can_skip_num' => 1,
+                'current_state' => Order::STATE_NEW,
+                'expected_state' => Order::STATE_PROCESSING,
+                'is_in_process' => true,
+                'get_is_in_process_invoke_count' => 1,
+                'is_canceled' => false,
+                'can_unhold' => false,
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
+            'new - canCreditmemo, !canShip, IsInProcess -> processing' => [
+                'can_credit_memo' => true,
+                'can_credit_memo_invoke_count' => 1,
+                'can_ship' => false,
+                'call_can_skip_num' => 1,
+                'current_state' => Order::STATE_NEW,
+                'expected_state' => Order::STATE_COMPLETE,
+                'is_in_process' => true,
+                'get_is_in_process_invoke_count' => 1,
+                'is_canceled' => false,
+                'can_unhold' => false,
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
+            'new - canCreditmemo, canShip, !IsInProcess -> new' => [
+                'can_credit_memo' => true,
+                'can_credit_memo_invoke_count' => 0,
+                'can_ship' => true,
+                'call_can_skip_num' => 0,
+                'current_state' => Order::STATE_NEW,
+                'expected_state' => Order::STATE_NEW,
+                'is_in_process' => false,
+                'get_is_in_process_invoke_count' => 1,
+                'is_canceled' => false,
+                'can_unhold' => false,
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
+            'hold - canUnhold -> hold' => [
+                'can_credit_memo' => true,
+                'can_credit_memo_invoke_count' => 0,
+                'can_ship' => true,
+                'call_can_skip_num' => 0,
+                'current_state' => Order::STATE_HOLDED,
+                'expected_state' => Order::STATE_HOLDED,
+                'is_in_process' => false,
+                'get_is_in_process_invoke_count' => 0,
+                'is_canceled' => false,
+                'can_unhold' => true,
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
+            'payment_review - canUnhold -> payment_review' => [
+                'can_credit_memo' => true,
+                'can_credit_memo_invoke_count' => 0,
+                'can_ship' => true,
+                'call_can_skip_num' => 0,
+                'current_state' => Order::STATE_PAYMENT_REVIEW,
+                'expected_state' => Order::STATE_PAYMENT_REVIEW,
+                'is_in_process' => false,
+                'get_is_in_process_invoke_count' => 0,
+                'is_canceled' => false,
+                'can_unhold' => true,
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
+            'pending_payment - canUnhold -> pending_payment' => [
+                'can_credit_memo' => true,
+                'can_credit_memo_invoke_count' => 0,
+                'can_ship' => true,
+                'call_can_skip_num' => 0,
+                'current_state' => Order::STATE_PENDING_PAYMENT,
+                'expected_state' => Order::STATE_PENDING_PAYMENT,
+                'is_in_process' => false,
+                'get_is_in_process_invoke_count' => 0,
+                'is_canceled' => false,
+                'can_unhold' => true,
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
+            'cancelled - isCanceled -> cancelled' => [
+                'can_credit_memo' => true,
+                'can_credit_memo_invoke_count' => 0,
+                'can_ship' => true,
+                'call_can_skip_num' => 0,
+                'current_state' => Order::STATE_HOLDED,
+                'expected_state' => Order::STATE_HOLDED,
+                'is_in_process' => false,
+                'get_is_in_process_invoke_count' => 0,
+                'is_canceled' => true,
+                'can_unhold' => false,
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
+            'processing - !canCreditmemo!canShip -> complete(virtual product)' => [
+                'can_credit_memo' => false,
+                'can_credit_memo_invoke_count' => 1,
+                'can_ship' => false,
+                'call_can_skip_num' => 2,
+                'current_state' => Order::STATE_PROCESSING,
+                'expected_state' => Order::STATE_COMPLETE,
+                'is_in_process' => false,
+                'get_is_in_process_invoke_count' => 0,
+                'is_canceled' => false,
+                'can_unhold' => false,
+                'is_not_virtual' => false,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
+            'complete - !canCreditmemo, !canShip - closed(virtual product)' => [
+                'can_credit_memo' => false,
+                'can_credit_memo_invoke_count' => 1,
+                'can_ship' => false,
+                'call_can_skip_num' => 1,
+                'current_state' => Order::STATE_COMPLETE,
+                'expected_state' => Order::STATE_CLOSED,
+                'is_in_process' => false,
+                'get_is_in_process_invoke_count' => 0,
+                'is_canceled' => false,
+                'can_unhold' => false,
+                'is_not_virtual' => false,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
+            'processing - canCreditmemo, !canShip, !isPartiallyRefundedOrderShipped -> processing' => [
+                'can_credit_memo' => true,
+                'can_credit_memo_invoke_count' => 1,
+                'can_ship' => true,
+                'call_can_skip_num' => 1,
+                'current_state' => Order::STATE_PROCESSING,
+                'expected_state' => Order::STATE_PROCESSING,
+                'is_in_process' => true,
+                'get_is_in_process_invoke_count' => 0,
+                'is_canceled' => false,
+                'can_unhold' => false,
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => false
+            ],
+            'processing - canCreditmemo, !canShip, isPartiallyRefundedOrderShipped -> complete' => [
+                'can_credit_memo' => true,
+                'can_credit_memo_invoke_count' => 1,
+                'can_ship' => false,
+                'call_can_skip_num' => 1,
+                'current_state' => Order::STATE_PROCESSING,
+                'expected_state' => Order::STATE_COMPLETE,
+                'is_in_process' => true,
+                'get_is_in_process_invoke_count' => 0,
+                'is_canceled' => false,
+                'can_unhold' => false,
+                'is_not_virtual' => true,
+                'isPartiallyRefundedOrderShipped' => true
+            ],
+        ];
     }
 }

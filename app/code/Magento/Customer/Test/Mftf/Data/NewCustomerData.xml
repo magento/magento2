@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="Simple_UK_Customer_For_Shipment" type="customer">
+        <data key="firstName">John</data>
+        <data key="lastName">Doe</data>
+        <data key="email">johndoe@example.com</data>
+        <data key="company">Test Company</data>
+        <data key="streetFirstLine">39 St Maurices Road</data>
+        <data key="streetSecondLine">ap. 654</data>
+        <data key="city">PULDAGON</data>
+        <data key="telephone">077 5866 0667</data>
+        <data key="country">United Kingdom</data>
+        <data key="region"> </data>
+        <data key="postcode">KW1 7NQ</data>
+    </entity>
+    <entity name="Simple_US_CA_Customer_For_Shipment" type="customer">
+        <data key="firstName">John</data>
+        <data key="lastName">Doe</data>
+        <data key="email">johndoeusca@example.com</data>
+        <data key="company">Magento</data>
+        <data key="streetFirstLine">123 Alphabet Drive</data>
+        <data key="streetSecondLine">ap. 350</data>
+        <data key="city">Los Angeles</data>
+        <data key="telephone">555-55-555-55</data>
+        <data key="country">United States</data>
+        <data key="region">California</data>
+        <data key="postcode">90240</data>
+    </entity>
+</entities>

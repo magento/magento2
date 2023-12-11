@@ -5,9 +5,10 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 
-class UpdateQty extends \Magento\Backend\App\Action
+class UpdateQty extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -24,7 +25,7 @@ class UpdateQty extends \Magento\Backend\App\Action
     /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
-    protected $pagePageFactory;
+    protected $resultPageFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory

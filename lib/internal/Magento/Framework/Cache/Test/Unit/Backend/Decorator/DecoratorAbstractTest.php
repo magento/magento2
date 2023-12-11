@@ -3,25 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * \Magento\Framework\Cache\Backend\Decorator\AbstractDecorator test case
  */
 namespace Magento\Framework\Cache\Test\Unit\Backend\Decorator;
 
-class DecoratorAbstractTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Cache\Backend\Decorator\AbstractDecorator;
+use PHPUnit\Framework\TestCase;
+
+class DecoratorAbstractTest extends TestCase
 {
     /**
      * @var \Zend_Cache_Backend_File
      */
     protected $_mockBackend;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_mockBackend = $this->createMock(\Zend_Cache_Backend_File::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_mockBackend);
     }
@@ -31,18 +35,18 @@ class DecoratorAbstractTest extends \PHPUnit\Framework\TestCase
         $options = ['concrete_backend' => $this->_mockBackend, 'testOption' => 'testOption'];
 
         $decorator = $this->getMockForAbstractClass(
-            \Magento\Framework\Cache\Backend\Decorator\AbstractDecorator::class,
+            AbstractDecorator::class,
             [$options]
         );
 
         $backendProperty = new \ReflectionProperty(
-            \Magento\Framework\Cache\Backend\Decorator\AbstractDecorator::class,
+            AbstractDecorator::class,
             '_backend'
         );
         $backendProperty->setAccessible(true);
 
         $optionsProperty = new \ReflectionProperty(
-            \Magento\Framework\Cache\Backend\Decorator\AbstractDecorator::class,
+            AbstractDecorator::class,
             '_decoratorOptions'
         );
         $optionsProperty->setAccessible(true);
@@ -54,20 +58,24 @@ class DecoratorAbstractTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param array options
-     * @expectedException \Zend_Cache_Exception
+     * @param array $options
      * @dataProvider constructorExceptionDataProvider
      */
     public function testConstructorException($options)
     {
-        $this->getMockForAbstractClass(\Magento\Framework\Cache\Backend\Decorator\AbstractDecorator::class, [$options]);
+        $this->expectException('Zend_Cache_Exception');
+        $this->getMockForAbstractClass(AbstractDecorator::class, [$options]);
     }
 
+    /**
+     * @return array
+     */
     public function constructorExceptionDataProvider()
     {
         return [
             'empty' => [[]],
-            'wrong_class' => [['concrete_backend' => $this->getMockBuilder('Test_Class')->getMock()]]
+            'wrong_class' => [['concrete_backend' => $this->getMockBuilder('Test_Class')
+                ->getMock()]]
         ];
     }
 
@@ -79,13 +87,16 @@ class DecoratorAbstractTest extends \PHPUnit\Framework\TestCase
         $this->_mockBackend->expects($this->once())->method($methodName);
 
         $decorator = $this->getMockForAbstractClass(
-            \Magento\Framework\Cache\Backend\Decorator\AbstractDecorator::class,
+            AbstractDecorator::class,
             [['concrete_backend' => $this->_mockBackend]]
         );
 
         call_user_func([$decorator, $methodName], null, null);
     }
 
+    /**
+     * @return array
+     */
     public function allMethodsDataProvider()
     {
         $return = [];

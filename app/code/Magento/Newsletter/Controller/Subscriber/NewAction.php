@@ -7,21 +7,51 @@
 namespace Magento\Newsletter\Controller\Subscriber;
 
 use Magento\Customer\Api\AccountManagementInterface as CustomerAccountManagement;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
+use Magento\Framework\Validator\EmailAddress as EmailValidator;
+use Magento\Newsletter\Controller\Subscriber as SubscriberController;
+use Magento\Newsletter\Model\Subscriber;
+use Magento\Newsletter\Model\SubscriptionManagerInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
 
 /**
+ * New newsletter subscription action
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class NewAction extends \Magento\Newsletter\Controller\Subscriber
+class NewAction extends SubscriberController implements HttpPostActionInterface
 {
     /**
      * @var CustomerAccountManagement
      */
     protected $customerAccountManagement;
+
+    /**
+     * @var EmailValidator
+     */
+    private $emailValidator;
+
+    /**
+     * @var SubscriptionManagerInterface
+     */
+    private $subscriptionManager;
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
 
     /**
      * Initialize dependencies.
@@ -32,6 +62,9 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
      * @param StoreManagerInterface $storeManager
      * @param CustomerUrl $customerUrl
      * @param CustomerAccountManagement $customerAccountManagement
+     * @param SubscriptionManagerInterface $subscriptionManager
+     * @param EmailValidator|null $emailValidator
+     * @param CustomerRepositoryInterface|null $customerRepository
      */
     public function __construct(
         Context $context,
@@ -39,9 +72,16 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
         Session $customerSession,
         StoreManagerInterface $storeManager,
         CustomerUrl $customerUrl,
-        CustomerAccountManagement $customerAccountManagement
+        CustomerAccountManagement $customerAccountManagement,
+        SubscriptionManagerInterface $subscriptionManager,
+        EmailValidator $emailValidator = null,
+        CustomerRepositoryInterface $customerRepository = null
     ) {
         $this->customerAccountManagement = $customerAccountManagement;
+        $this->subscriptionManager = $subscriptionManager;
+        $this->emailValidator = $emailValidator ?: ObjectManager::getInstance()->get(EmailValidator::class);
+        $this->customerRepository = $customerRepository ?: ObjectManager::getInstance()
+            ->get(CustomerRepositoryInterface::class);
         parent::__construct(
             $context,
             $subscriberFactory,
@@ -55,16 +95,17 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
      * Validates that the email address isn't being used by a different account.
      *
      * @param string $email
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return void
      */
     protected function validateEmailAvailable($email)
     {
         $websiteId = $this->_storeManager->getStore()->getWebsiteId();
-        if ($this->_customerSession->getCustomerDataObject()->getEmail() !== $email
-            && !$this->customerAccountManagement->isEmailAvailable($email, $websiteId)
+        if ($this->_customerSession->isLoggedIn()
+            && ($this->_customerSession->getCustomerDataObject()->getEmail() !== $email
+            && !$this->customerAccountManagement->isEmailAvailable($email, $websiteId))
         ) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('This email address is already assigned to another user.')
             );
         }
@@ -73,19 +114,19 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
     /**
      * Validates that if the current user is a guest, that they can subscribe to a newsletter.
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return void
      */
     protected function validateGuestSubscription()
     {
-        if ($this->_objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        if ($this->_objectManager->get(ScopeConfigInterface::class)
                 ->getValue(
-                    \Magento\Newsletter\Model\Subscriber::XML_PATH_ALLOW_GUEST_SUBSCRIBE_FLAG,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    Subscriber::XML_PATH_ALLOW_GUEST_SUBSCRIBE_FLAG,
+                    ScopeInterface::SCOPE_STORE
                 ) != 1
             && !$this->_customerSession->isLoggedIn()
         ) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __(
                     'Sorry, but the administrator denied subscription for guests. Please <a href="%1">register</a>.',
                     $this->_customerUrl->getRegisterUrl()
@@ -98,21 +139,20 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
      * Validates the format of the email address
      *
      * @param string $email
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return void
      */
     protected function validateEmailFormat($email)
     {
-        if (!\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a valid email address.'));
+        if (!$this->emailValidator->isValid($email)) {
+            throw new LocalizedException(__('Please enter a valid email address.'));
         }
     }
 
     /**
      * New subscription action
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @return void
+     * @return Redirect
      */
     public function execute()
     {
@@ -124,30 +164,69 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
                 $this->validateGuestSubscription();
                 $this->validateEmailAvailable($email);
 
-                $subscriber = $this->_subscriberFactory->create()->loadByEmail($email);
+                $websiteId = (int)$this->_storeManager->getStore()->getWebsiteId();
+                /** @var Subscriber $subscriber */
+                $subscriber = $this->_subscriberFactory->create()->loadBySubscriberEmail($email, $websiteId);
                 if ($subscriber->getId()
-                    && $subscriber->getSubscriberStatus() == \Magento\Newsletter\Model\Subscriber::STATUS_SUBSCRIBED
-                ) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
+                    && (int)$subscriber->getSubscriberStatus() === Subscriber::STATUS_SUBSCRIBED) {
+                    throw new LocalizedException(
                         __('This email address is already subscribed.')
                     );
                 }
 
-                $status = $this->_subscriberFactory->create()->subscribe($email);
-                if ($status == \Magento\Newsletter\Model\Subscriber::STATUS_NOT_ACTIVE) {
-                    $this->messageManager->addSuccess(__('The confirmation request has been sent.'));
-                } else {
-                    $this->messageManager->addSuccess(__('Thank you for your subscription.'));
-                }
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addException(
-                    $e,
-                    __('There was a problem with the subscription: %1', $e->getMessage())
+                $storeId = (int)$this->_storeManager->getStore()->getId();
+                $currentCustomerId = $this->getCustomerId($email, $websiteId);
+
+                $subscriber = $currentCustomerId
+                    ? $this->subscriptionManager->subscribeCustomer($currentCustomerId, $storeId)
+                    : $this->subscriptionManager->subscribe($email, $storeId);
+                $message = $this->getSuccessMessage((int)$subscriber->getSubscriberStatus());
+                $this->messageManager->addSuccessMessage($message);
+            } catch (LocalizedException $e) {
+                $this->messageManager->addComplexErrorMessage(
+                    'localizedSubscriptionErrorMessage',
+                    ['message' => $e->getMessage()]
                 );
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong with the subscription.'));
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong with the subscription.'));
             }
         }
-        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+        /** @var Redirect $redirect */
+        $redirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        // phpcs:ignore Magento2.Legacy.ObsoleteResponse
+        $redirectUrl = $this->_redirect->getRedirectUrl();
+        return $redirect->setUrl($redirectUrl);
+    }
+
+    /**
+     * Check if customer with provided email exists and return its id
+     *
+     * @param string $email
+     * @param int $websiteId
+     * @return int|null
+     */
+    private function getCustomerId(string $email, int $websiteId): ?int
+    {
+        try {
+            $customer = $this->customerRepository->get($email, $websiteId);
+            return (int)$customer->getId();
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Get success message
+     *
+     * @param int $status
+     * @return Phrase
+     */
+    private function getSuccessMessage(int $status): Phrase
+    {
+        if ($status === Subscriber::STATUS_NOT_ACTIVE) {
+            return __('The confirmation request has been sent.');
+        }
+
+        return __('Thank you for your subscription.');
     }
 }

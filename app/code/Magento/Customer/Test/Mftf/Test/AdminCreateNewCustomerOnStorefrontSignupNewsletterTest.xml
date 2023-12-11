@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateNewCustomerOnStorefrontSignupNewsletterTest">
+        <annotations>
+            <stories value="Create New Customer"/>
+            <title value="Create New Customer on Storefront, Sign-up Newsletter"/>
+            <description value="Test log in to Create New Customer and Create New Customer on Storefront, Sign-up Newsletter"/>
+            <testCaseId value="MC-10914"/>
+            <severity value="CRITICAL"/>
+            <group value="customer"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteNewUser">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Create new customer on storefront and signup news letter-->
+        <actionGroup ref="StorefrontCreateCustomerSignedUpNewsletterActionGroup" stepKey="createCustomer">
+            <argument name="customer" value="CustomerEntityOne" />
+        </actionGroup>
+
+        <!--Assert verify created new customer in grid-->
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="navigateToCustomers"/>
+        <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="clickFilterButton"/>
+        <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerFiltersSection.emailInput}}" stepKey="filterEmail"/>
+        <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="clickApplyFilter"/>
+        <see selector="{{AdminCustomerGridSection.customerGrid}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="seeAssertCustomerFirstNameInGrid"/>
+        <see selector="{{AdminCustomerGridSection.customerGrid}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="seeAssertCustomerLastNameInGrid"/>
+        <see selector="{{AdminCustomerGridSection.customerGrid}}" userInput="{{CustomerEntityOne.email}}" stepKey="seeAssertCustomerEmailInGrid"/>
+
+        <!--Assert verify created new customer is subscribed to newsletter-->
+        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickFirstRowEditLink"/>
+        <click selector="{{AdminEditCustomerInformationSection.newsLetter}}" stepKey="clickNewsLetter"/>
+        <waitForPageLoad stepKey="waitForNewsletterTabToOpen"/>
+        <seeCheckboxIsChecked selector="{{AdminEditCustomerNewsletterSection.subscribedStatus('1')}}" stepKey="seeAssertSubscribedToNewsletterCheckboxIsChecked"/>
+    </test>
+</tests>

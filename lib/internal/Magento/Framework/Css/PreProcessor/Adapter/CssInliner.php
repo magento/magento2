@@ -5,7 +5,9 @@
  */
 namespace Magento\Framework\Css\PreProcessor\Adapter;
 
-use Pelago\Emogrifier;
+use Magento\Framework\App\State;
+use Pelago\Emogrifier\CssInliner as EmogrifierCssInliner;
+use Symfony\Component\CssSelector\Exception\ParseException;
 
 /**
  * This class will inline the css of an html to each tag to be used for applications such as a styled email.
@@ -13,13 +15,31 @@ use Pelago\Emogrifier;
 class CssInliner
 {
     /**
-     * @var Emogrifier
+     * @var State
      */
-    private $emogrifier;
+    private $appState;
 
-    public function __construct()
+    /**
+     * @var string
+     */
+    private $html = '';
+
+    /**
+     * @var string
+     */
+    private $css = '';
+
+    /**
+     * @var bool
+     */
+    private $disableStyleBlocksParsing = false;
+
+    /**
+     * @param State $appState
+     */
+    public function __construct(State $appState)
     {
-        $this->emogrifier = new Emogrifier();
+        $this->appState = $appState;
     }
 
     /**
@@ -30,7 +50,7 @@ class CssInliner
      */
     public function setHtml($html)
     {
-        $this->emogrifier->setHtml($html);
+        $this->html = $html;
     }
 
     /**
@@ -41,7 +61,7 @@ class CssInliner
      */
     public function setCss($css)
     {
-        $this->emogrifier->setCss($css);
+        $this->css = $css;
     }
 
     /**
@@ -51,7 +71,7 @@ class CssInliner
      */
     public function disableStyleBlocksParsing()
     {
-        $this->emogrifier->disableStyleBlocksParsing();
+        $this->disableStyleBlocksParsing = true;
     }
 
     /**
@@ -59,9 +79,19 @@ class CssInliner
      *
      * @return string
      * @throws \BadMethodCallException
+     * @throws ParseException
      */
     public function process()
     {
-        return $this->emogrifier->emogrify();
+        $emogrifier = EmogrifierCssInliner::fromHtml($this->html);
+        $emogrifier->setDebug($this->appState->getMode() === State::MODE_DEVELOPER);
+
+        if ($this->disableStyleBlocksParsing) {
+            $emogrifier->disableStyleBlocksParsing();
+        }
+
+        $emogrifier->inlineCss($this->css);
+
+        return $emogrifier->render();
     }
 }

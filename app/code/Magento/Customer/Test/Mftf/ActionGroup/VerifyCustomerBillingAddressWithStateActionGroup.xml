@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="VerifyCustomerBillingAddressWithStateActionGroup">
+        <annotations>
+            <description>Goes to the Storefront Customer Dashboard Address area. Validates that the provided Customer Billing Address, including the State, is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="address"/>
+        </arguments>
+
+        <amOnPage url="customer/address/index/" stepKey="goToAddressPage"/>
+        <waitForPageLoad stepKey="waitForAddressPageLoad"/>
+
+        <!--Verify customer default billing address-->
+        <see selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" userInput="{{address.firstname}} {{address.lastname}}" stepKey="seeAssertCustomerDefaultBillingAddressFirstnameAndLastname"/>
+        <see selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" userInput="{{address.company}}" stepKey="seeAssertCustomerDefaultBillingAddressCompany"/>
+        <see selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" userInput="{{address.street[0]}}" stepKey="seeAssertCustomerDefaultBillingAddressStreet"/>
+        <see selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" userInput="{{address.street[1]}}" stepKey="seeAssertCustomerDefaultBillingAddressStreet1"/>
+        <see selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" userInput="{{address.city}}, {{address.state}}, {{address.postcode}}" stepKey="seeAssertCustomerDefaultBillingAddressCityAndPostcode"/>
+        <see selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" userInput="{{address.country}}" stepKey="seeAssertCustomerDefaultBillingAddressCountry"/>
+        <see selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" userInput="{{address.telephone}}" stepKey="seeAssertCustomerDefaultBillingAddressTelephone"/>
+    </actionGroup>
+</actionGroups>

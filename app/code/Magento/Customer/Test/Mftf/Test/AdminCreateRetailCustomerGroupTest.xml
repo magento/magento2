@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateRetailCustomerGroupTest">
+        <annotations>
+            <features value="Create retail customer group"/>
+            <stories value="Create customer group"/>
+            <title value="Create retail customer group"/>
+            <description value="Create retail customer group"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-5301"/>
+            <group value="customer"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminDeleteCustomerGroupActionGroup" stepKey="deleteCustomerGroup">
+                <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Steps: 1. Log in to backend as admin user.
+                    2. Navigate to Stores > Other Settings > Customer Groups.
+                    3. Start to create new Customer Group.
+                    4. Fill in all data according to data set.   Tax Class  -  "Retail customer"
+                    5. Click "Save Customer Group" button. -->
+        <!-- Assert "You saved the customer group." success message displayed  -->
+        <!-- Assert created Customer Group displayed In Grid  -->
+        <actionGroup ref="AdminCreateCustomerGroupActionGroup" stepKey="createCustomerGroup">
+            <argument name="groupName" value="{{CustomCustomerGroup.code}}"/>
+            <argument name="taxClass" value="{{CustomCustomerGroup.tax_class_name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCustomerGroupPresentInGrid" stepKey="assertCustomerGroupDisplayedInGrid">
+            <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
+        </actionGroup>
+
+        <!--  6. Go to Catalog -> Products  -> click  "Add Product" button -> click "Advanced Pricing" link -> Customer Group Price -> click  "Add" button  -->
+        <!--  Assert: Customer Group Displayed On Product Form  -->
+        <actionGroup ref="AdminAssertCustomerGroupOnProductForm" stepKey="assertCustomerGroupDisplayedOnProductForm">
+            <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
+        </actionGroup>
+
+        <!--  7. Go to Customers -> All Customers  -> click  "Add New Customer" button -->
+        <!--  Assert   created  Customer Group  displayed On Customer Form -->
+        <actionGroup ref="AdminAssertCustomerGroupOnCustomerForm" stepKey="assertCustomerGroupDisplayedOnCustomerForm">
+            <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
+        </actionGroup>
+
+        <!-- 8. Go to Marketing - Catalog Price Rule - click  "Add New Rule" button  -->
+        <!--   Assert   created  Customer Group  displayed On Catalog Price Rule Form -->
+        <actionGroup ref="AdminAssertCustomerGroupOnCatalogPriceRuleForm" stepKey="assertCustomerGroupDisplayedOnCatalogPriceRuleForm">
+            <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
+        </actionGroup>
+
+        <!-- 9. Go to Marketing - Cart Price Rule - click  "Add New Rule" button -->
+        <!--   Assert   created  Customer Group  displayed On Cart Price Rule Form -->
+        <actionGroup ref="AdminAssertCustomerGroupOnCartPriceRuleForm" stepKey="assertCustomerGroupDisplayedOnCartPriceRuleForm">
+            <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
+        </actionGroup>
+    </test>
+</tests>

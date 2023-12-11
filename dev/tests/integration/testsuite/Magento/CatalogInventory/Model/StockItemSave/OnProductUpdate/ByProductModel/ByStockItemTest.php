@@ -45,7 +45,7 @@ class ByStockItemTest extends \PHPUnit\Framework\TestCase
         StockItemInterface::IS_IN_STOCK => false,
     ];
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
@@ -58,6 +58,7 @@ class ByStockItemTest extends \PHPUnit\Framework\TestCase
      * Test saving of stock item by product data via product model (deprecated)
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testSave()
     {
@@ -75,6 +76,7 @@ class ByStockItemTest extends \PHPUnit\Framework\TestCase
      * product model (deprecated)
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testSaveManuallyCreatedStockItem()
     {
@@ -95,6 +97,7 @@ class ByStockItemTest extends \PHPUnit\Framework\TestCase
      * product repository (deprecated)
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
      */
     public function testSaveManuallyUpdatedStockItem()
     {
@@ -109,5 +112,92 @@ class ByStockItemTest extends \PHPUnit\Framework\TestCase
         $product->save();
 
         $this->stockItemDataChecker->checkStockItemData('simple', $this->stockItemData);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
+     */
+    public function testAutomaticIsInStockUpdate(): void
+    {
+        // 1. Set qty to 0 and check that is_in_stock is updated automatically to false
+        $this->updateStockDataAndCheck(
+            [
+                StockItemInterface::QTY => 0,
+            ],
+            [
+                StockItemInterface::QTY => 0,
+                StockItemInterface::IS_IN_STOCK => false,
+                StockItemInterface::STOCK_STATUS_CHANGED_AUTO => true,
+            ]
+        );
+        // 2. Set qty to 10 and check that is_in_stock is updated automatically to true
+        $this->updateStockDataAndCheck(
+            [
+                StockItemInterface::QTY => 10,
+            ],
+            [
+                StockItemInterface::QTY => 10,
+                StockItemInterface::IS_IN_STOCK => true,
+                StockItemInterface::STOCK_STATUS_CHANGED_AUTO => true,
+            ]
+        );
+        // 3. Set is_in_stock to false and check that is_in_stock is set to false
+        // and stock_status_changed_auto is set to false
+        $this->updateStockDataAndCheck(
+            [
+                StockItemInterface::IS_IN_STOCK => false,
+            ],
+            [
+                StockItemInterface::QTY => 10,
+                StockItemInterface::IS_IN_STOCK => false,
+                StockItemInterface::STOCK_STATUS_CHANGED_AUTO => false,
+            ]
+        );
+        // 4. Set qty to 0 and check that is_in_stock is still false
+        // and stock_status_changed_auto is also false
+        $this->updateStockDataAndCheck(
+            [
+                StockItemInterface::QTY => 0,
+            ],
+            [
+                StockItemInterface::QTY => 0,
+                StockItemInterface::IS_IN_STOCK => false,
+                StockItemInterface::STOCK_STATUS_CHANGED_AUTO => false,
+            ]
+        );
+        // 5. Set qty to 10 and check that is_in_stock is still false
+        // and stock_status_changed_auto is also false
+        $this->updateStockDataAndCheck(
+            [
+                StockItemInterface::QTY => 10,
+            ],
+            [
+                StockItemInterface::QTY => 10,
+                StockItemInterface::IS_IN_STOCK => false,
+                StockItemInterface::STOCK_STATUS_CHANGED_AUTO => false,
+            ]
+        );
+    }
+
+    /**
+     * @param $dataToUpdate
+     * @param $expectedData
+     * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function updateStockDataAndCheck($dataToUpdate, $expectedData): void
+    {
+        /** @var Product $product */
+        $product = $this->productRepository->get('simple', false, null, true);
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+        $this->dataObjectHelper->populateWithArray(
+            $stockItem,
+            $dataToUpdate,
+            StockItemInterface::class
+        );
+        $product->save();
+
+        $this->stockItemDataChecker->checkStockItemData('simple', $expectedData);
     }
 }

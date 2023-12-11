@@ -1,0 +1,24 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--@subject {{trans "New admin user '%user_name' created" user_name=$user.username}} @-->
+<!--@vars {
+"var store.frontend_name":"Store Name",
+"var user.username":"User Name",
+"var user.firstname":"User First Name",
+"var user.lastname":"User Last Name",
+"var user.email":"User Email",
+"var store_email":"Store Email",
+"var store_phone":"Store Phone"
+} @-->
+
+{{trans "Hello,"}}
+
+{{trans "A new admin account was created for %first_name, %last_name using %email." first_name=$user.firstname last_name=$user.lastname email=$user.email}}
+{{trans "If you have not authorized this action, please contact us immediately at %store_email" store_email=$store_email |escape}}{{depend store_phone}} {{trans "or call us at %store_phone" store_phone=$store_phone |escape}}{{/depend}}.
+
+{{trans "Thanks,"}}
+{{var store.frontend_name}}

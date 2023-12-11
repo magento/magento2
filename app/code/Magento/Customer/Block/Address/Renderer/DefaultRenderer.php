@@ -8,6 +8,7 @@ namespace Magento\Customer\Block\Address\Renderer;
 use Magento\Customer\Model\Address\AddressModelInterface;
 use Magento\Customer\Model\Address\Mapper;
 use Magento\Customer\Model\Metadata\ElementFactory;
+use Magento\Directory\Model\Country\Format;
 use Magento\Framework\View\Element\AbstractBlock;
 
 /**
@@ -91,6 +92,8 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
     }
 
     /**
+     * Get the format of the address
+     *
      * @param AddressModelInterface|null $address
      * @return string
      * All new code should use renderArray based on Metadata service
@@ -106,8 +109,11 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Render address
      *
+     * @param AddressModelInterface $address
+     * @param string|null $format
+     * @return mixed
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -118,7 +124,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFormatArray($addressAttributes = null)
     {
@@ -133,8 +139,11 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Render address by attribute array
      *
+     * @param array $addressAttributes
+     * @param Format|null $format
+     * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -163,11 +172,11 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
             }
             $attributeCode = $attributeMetadata->getAttributeCode();
             if ($attributeCode == 'country_id' && isset($addressAttributes['country_id'])) {
-                $data['country'] = $this->_countryFactory->create()->loadByCode(
-                    $addressAttributes['country_id']
-                )->getName();
+                $data['country'] = $this->_countryFactory->create()
+                    ->loadByCode($addressAttributes['country_id'])
+                    ->getName($addressAttributes['locale'] ?? null);
             } elseif ($attributeCode == 'region' && isset($addressAttributes['region'])) {
-                $data['region'] = __($addressAttributes['region']);
+                $data['region'] = (string)__($addressAttributes['region']);
             } elseif (isset($addressAttributes[$attributeCode])) {
                 $value = $addressAttributes[$attributeCode];
                 $dataModel = $this->_elementFactory->create($attributeMetadata, $value, 'customer_address');
@@ -180,6 +189,9 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
                         $data[$key] = $v;
                     }
                 }
+                if (in_array($attributeCode, ['prefix','suffix'])) {
+                    $value = __($value);
+                }
                 $data[$attributeCode] = $value;
             }
         }
@@ -189,6 +201,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
             }
         }
         $format = $format !== null ? $format : $this->getFormatArray($addressAttributes);
+
         return $this->filterManager->template($format, ['variables' => $data]);
     }
 }

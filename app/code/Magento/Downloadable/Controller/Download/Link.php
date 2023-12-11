@@ -1,15 +1,21 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Controller\Download;
 
 use Magento\Downloadable\Helper\Download as DownloadHelper;
 use Magento\Downloadable\Model\Link\Purchased\Item as PurchasedLink;
 use Magento\Framework\App\ResponseInterface;
 
+/**
+ * Class Link executes download link action.
+ *
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
 class Link extends \Magento\Downloadable\Controller\Download
 {
     /**
@@ -29,12 +35,9 @@ class Link extends \Magento\Downloadable\Controller\Download
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {
-        $session = $this->_getCustomerSession();
-
         $id = $this->getRequest()->getParam('id', 0);
         /** @var PurchasedLink $linkPurchasedItem */
         $linkPurchasedItem = $this->_objectManager->create(
@@ -48,6 +51,7 @@ class Link extends \Magento\Downloadable\Controller\Download
             return $this->_redirect('*/customer/products');
         }
         if (!$this->_objectManager->get(\Magento\Downloadable\Helper\Data::class)->getIsShareable($linkPurchasedItem)) {
+            $session = $this->_getCustomerSession();
             $customerId = $session->getCustomerId();
             if (!$customerId) {
                 /** @var \Magento\Catalog\Model\Product $product */
@@ -117,9 +121,10 @@ class Link extends \Magento\Downloadable\Controller\Download
                     $linkPurchasedItem->setStatus(PurchasedLink::LINK_STATUS_EXPIRED);
                 }
                 $linkPurchasedItem->save();
+                // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
                 exit(0);
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('Something went wrong while getting the requested content.'));
+                $this->messageManager->addErrorMessage(__('Something went wrong while getting the requested content.'));
             }
         } elseif ($status == PurchasedLink::LINK_STATUS_EXPIRED) {
             $this->messageManager->addNotice(__('The link has expired.'));
@@ -127,7 +132,7 @@ class Link extends \Magento\Downloadable\Controller\Download
         ) {
             $this->messageManager->addNotice(__('The link is not available.'));
         } else {
-            $this->messageManager->addError(__('Something went wrong while getting the requested content.'));
+            $this->messageManager->addErrorMessage(__('Something went wrong while getting the requested content.'));
         }
         return $this->_redirect('*/customer/products');
     }

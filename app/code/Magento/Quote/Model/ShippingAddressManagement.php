@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Quote\Model;
 
+use Magento\Customer\Model\Config\Backend\Show\Customer;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -17,15 +19,11 @@ use Psr\Log\LoggerInterface as Logger;
 class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressManagementInterface
 {
     /**
-     * Quote repository.
-     *
      * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
     /**
-     * Logger.
-     *
      * @var Logger
      */
     protected $logger;
@@ -78,8 +76,9 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address)
     {
@@ -87,14 +86,18 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $quote = $this->quoteRepository->getActive($cartId);
         if ($quote->isVirtual()) {
             throw new NoSuchEntityException(
-                __('Cart contains virtual product(s) only. Shipping address is not applicable.')
+                __('The Cart includes virtual product(s) only, so a shipping address is not used.')
             );
         }
 
         $saveInAddressBook = $address->getSaveInAddressBook() ? 1 : 0;
         $sameAsBilling = $address->getSameAsBilling() ? 1 : 0;
         $customerAddressId = $address->getCustomerAddressId();
-        $this->addressValidator->validate($address);
+        if ($saveInAddressBook &&
+            !$this->scopeConfig->getValue(Customer::XML_PATH_CUSTOMER_ADDRESS_SHOW_COMPANY)) {
+            $address->setCompany(null);
+        }
+        $this->addressValidator->validateForCart($quote, $address);
         $quote->setShippingAddress($address);
         $address = $quote->getShippingAddress();
 
@@ -116,13 +119,13 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
             $address->save();
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new InputException(__('Unable to save address. Please check input data.'));
+            throw new InputException(__('The address failed to save. Verify the address and try again.'));
         }
         return $quote->getShippingAddress()->getId();
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function get($cartId)
     {
@@ -130,7 +133,7 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $quote = $this->quoteRepository->getActive($cartId);
         if ($quote->isVirtual()) {
             throw new NoSuchEntityException(
-                __('Cart contains virtual product(s) only. Shipping address is not applicable.')
+                __('The Cart includes virtual product(s) only, so a shipping address is not used.')
             );
         }
         /** @var \Magento\Quote\Model\Quote\Address $address */

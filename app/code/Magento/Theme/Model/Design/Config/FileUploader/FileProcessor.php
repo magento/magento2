@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Theme\Model\Design\Config\FileUploader;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -17,6 +18,8 @@ use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
+ * Design file processor.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FileProcessor
@@ -51,7 +54,7 @@ class FileProcessor
     /**
      * @var string
      */
-    const FILE_DIR = 'design/file';
+    public const FILE_DIR = 'design/file';
 
     /**
      * @param UploaderFactory $uploaderFactory
@@ -78,8 +81,8 @@ class FileProcessor
      * Save file to temp media directory
      *
      * @param  string $fileId
+     *
      * @return array
-     * @throws LocalizedException
      */
     public function saveToTmp($fileId)
     {
@@ -112,7 +115,7 @@ class FileProcessor
      */
     protected function prepareFile($file)
     {
-        return ltrim(str_replace('\\', '/', $file), '/');
+        return $file !== null ? ltrim(str_replace('\\', '/', $file), '/') : '';
     }
 
     /**
@@ -160,7 +163,7 @@ class FileProcessor
     {
         $metadata = $this->metadataProvider->get();
         if (!(isset($metadata[$code]) && isset($metadata[$code]['backend_model']))) {
-            throw new LocalizedException(__('Backend model is not specified for %1', $code));
+            throw new LocalizedException(__('The backend model isn\'t specified for "%1".', $code));
         }
         return $this->backendModelFactory->createByPath($metadata[$code]['path']);
     }

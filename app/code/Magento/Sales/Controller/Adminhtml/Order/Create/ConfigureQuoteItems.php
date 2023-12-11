@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
 class ConfigureQuoteItems extends \Magento\Sales\Controller\Adminhtml\Order\Create
@@ -19,12 +20,16 @@ class ConfigureQuoteItems extends \Magento\Sales\Controller\Adminhtml\Order\Crea
         try {
             $quoteItemId = (int)$this->getRequest()->getParam('id');
             if (!$quoteItemId) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Quote item id is not received.'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('The quote item ID needs to be received. Set the ID and try again.')
+                );
             }
 
             $quoteItem = $this->_objectManager->create(\Magento\Quote\Model\Quote\Item::class)->load($quoteItemId);
             if (!$quoteItem->getId()) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Quote item is not loaded.'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('The quote item needs to be loaded. Load the item and try again.')
+                );
             }
 
             $configureResult->setOk(true);

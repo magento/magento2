@@ -7,7 +7,6 @@ namespace Magento\Framework\Data\Form;
 
 use Magento\Framework\Data\Form\Filter\FilterInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Phrase;
 
 class FilterFactory
 {

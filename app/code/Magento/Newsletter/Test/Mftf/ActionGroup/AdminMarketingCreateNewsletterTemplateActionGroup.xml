@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Create New Template -->
+    <actionGroup name="AdminMarketingCreateNewsletterTemplateActionGroup">
+        <arguments>
+            <argument name="name" type="string"/>
+            <argument name="subject" type="string"/>
+            <argument name="senderName" type="string"/>
+            <argument name="senderEmail" type="string"/>
+            <argument name="templateContent" type="string"/>
+        </arguments>
+        <!--Filling All Required Fields-->
+        <fillField stepKey="fillTemplateNameField" selector="{{BasicFieldNewsletterSection.templateName}}" userInput="{{name}}"/>
+        <fillField stepKey="fillTemplateSubjectField" selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{subject}}"/>
+        <fillField stepKey="fillSenderNameField" selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{senderName}}"/>
+        <fillField stepKey="fillSenderEmailField" selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{senderEmail}}"/>
+        <waitForElementVisible stepKey="waitForTemplateContentField" selector="{{TinyMCESection.Content}}"/>
+        <fillField stepKey="fillTemplateContentField" selector="{{TinyMCESection.Content}}" userInput="{{templateContent}}"/>
+        <!--Saving Created Template-->
+        <click stepKey="clickSaveTemplateButton" selector="{{AdminNewsletterMainActionsSection.saveTemplateButton}}"/>
+    </actionGroup>
+</actionGroups>

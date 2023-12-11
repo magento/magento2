@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminGridFilterControls">
+        <element name="filters" type="button" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] button[data-action='grid-filter-expand']" timeout="5"/>
+        <element name="applyFilters" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
+        <element name="cancel" type="button" selector="button[data-action='grid-filter-cancel']" timeout="30"/>
+        <element name="clearAll" type="button" selector="(//*[contains(@class, 'admin__data-grid-header')][contains(@data-bind, 'afterRender: \$data.setToolbarNode')]//button[contains(@data-action, 'reset')])[1]" timeout="5"/>
+    </section>
+</sections>

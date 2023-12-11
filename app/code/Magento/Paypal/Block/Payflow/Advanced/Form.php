@@ -15,7 +15,7 @@ class Form extends \Magento\Paypal\Block\Payflow\Link\Form
     /**
      * @var string
      */
-    protected $_template = 'payflowadvanced/info.phtml';
+    protected $_template = 'Magento_Paypal::payflowadvanced/info.phtml';
 
     /**
      * Get frame action URL

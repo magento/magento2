@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCustomerStoredPaymentMethodsSection">
+        <element name="cardNumber" type="text" selector="td.card-number"/>
+        <element name="expirationDate" type="text" selector="td.card-expire"/>
+        <element name="deleteBtn" type="button" selector=".//*[contains(text(),'{{var1}}')]/../td[@class='col actions']//button" parameterized="true"/>
+        <element name="delete" type="button" selector="(//*[@class='action primary']/span)[2]"/>
+        <element name="deleteMessage" type="text" selector="//div[@class='modal-content']//div[text()='Are you sure you want to delete this card: 0002?']"/>
+        <element name="successMessage" type="text" selector=".//*[@class='message-success success message']/div"/>
+    </section>
+</sections>

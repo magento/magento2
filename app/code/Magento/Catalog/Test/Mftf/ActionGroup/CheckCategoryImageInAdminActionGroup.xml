@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CheckCategoryImageInAdminActionGroup">
+        <annotations>
+            <description>Requires navigation to the Category creation/edit page. Click on the Upload button. Validates that the Image exists.</description>
+        </annotations>
+
+        <conditionalClick selector="{{AdminCategoryContentSection.sectionHeader}}" dependentSelector="{{AdminCategoryContentSection.uploadButton}}" visible="false" stepKey="openContentSection"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{AdminCategoryContentSection.uploadButton}}" stepKey="seeImageSectionIsReady"/>
+        <grabTextFrom selector="{{AdminCategoryContentSection.imageFileName}}" stepKey="grabCategoryFileName"/>
+        <assertRegExp stepKey="assertEquals" message="pass">
+            <expectedResult type="string">/magento-logo(_[0-9]+)*?\.png$/</expectedResult>
+            <actualResult type="variable">grabCategoryFileName</actualResult>
+        </assertRegExp>
+    </actionGroup>
+</actionGroups>

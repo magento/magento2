@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace  Magento\Sales\Model\Order\Email\Container;
+
+namespace Magento\Sales\Model\Order\Email\Container;
 
 use Magento\Store\Model\Store;
 
 /**
  * Interface \Magento\Sales\Model\Order\Email\Container\IdentityInterface
+ * @api
  *
  */
 interface IdentityInterface

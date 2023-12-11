@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateImageSwatchTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Create/configure swatches"/>
+            <title value="Admin can create product attribute with image swatch"/>
+            <description value="Admin can create product attribute with image swatch"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3077"/>
+            <group value="Swatches"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
+                <argument name="sku" value="{{BaseConfigurableProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute"/>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="NavigateToAndResetProductAttributeGridToDefaultViewActionGroup" stepKey="resetProductAttributeFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+
+        <!-- Begin creating a new product attribute of type "Image Swatch" -->
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="goToNewProductAttributePage"/>
+        <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillDefaultLabel"/>
+
+        <!-- Select visual swatch -->
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="swatch_visual" stepKey="selectInputType"/>
+
+        <!-- This hack is because the same <input type="file"> is re-purposed used for all uploads. -->
+        <executeJS function="HTMLInputElement.prototype.click = function() { if(this.type !== 'file') HTMLElement.prototype.click.call(this); };" stepKey="disableClick"/>
+
+        <!-- Set swatch image #1 -->
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch1"/>
+        <actionGroup ref="OpenSwatchMenuByIndexActionGroup" stepKey="clickSwatch1">
+            <argument name="index" value="0"/>
+        </actionGroup>
+        <click selector="{{AdminManageSwatchSection.nthUploadFile('1')}}" stepKey="clickUploadFile1"/>
+        <attachFile selector="input[name='datafile']" userInput="adobe-thumb.jpg" stepKey="attachFile1"/>
+        <waitForElementNotVisible selector="{{AdminManageSwatchSection.swatchWindowUnavailable('0')}}" stepKey="waitForImageUploaded"/>
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('0')}}" userInput="adobe-thumb" stepKey="fillAdmin1"/>
+        <click selector="{{AdminManageSwatchSection.swatchWindow('0')}}" stepKey="clicksWatchWindow1"/>
+
+        <!-- Set swatch image #2 -->
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch2"/>
+        <actionGroup ref="OpenSwatchMenuByIndexActionGroup" stepKey="clickSwatch2">
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <click selector="{{AdminManageSwatchSection.nthUploadFile('2')}}" stepKey="clickUploadFile2"/>
+        <attachFile selector="input[name='datafile']" userInput="adobe-small.jpg" stepKey="attachFile2"/>
+        <waitForElementNotVisible selector="{{AdminManageSwatchSection.swatchWindowUnavailable('1')}}" stepKey="waitForImageUploaded2"/>
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('1')}}" userInput="adobe-small" stepKey="fillAdmin2"/>
+        <click selector="{{AdminManageSwatchSection.swatchWindow('1')}}" stepKey="clicksWatchWindow2"/>
+
+        <!-- Set swatch image #3 -->
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch3"/>
+        <actionGroup ref="OpenSwatchMenuByIndexActionGroup" stepKey="clickSwatch3">
+            <argument name="index" value="2"/>
+        </actionGroup>
+        <click selector="{{AdminManageSwatchSection.nthUploadFile('3')}}" stepKey="clickUploadFile3"/>
+        <attachFile selector="input[name='datafile']" userInput="adobe-base.jpg" stepKey="attachFile3"/>
+        <waitForElementNotVisible selector="{{AdminManageSwatchSection.swatchWindowUnavailable('2')}}" stepKey="waitForImageUploaded3"/>
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('2')}}" userInput="adobe-base" stepKey="fillAdmin3"/>
+
+        <!-- Set scope -->
+        <click selector="{{AttributePropertiesSection.AdvancedProperties}}" stepKey="expandAdvancedProperties"/>
+        <selectOption selector="{{AttributePropertiesSection.Scope}}" userInput="1" stepKey="selectGlobalScope"/>
+
+        <scrollToTopOfPage stepKey="scrollToTabs"/>
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStorefrontPropertiesTab"/>
+        <waitForElementVisible selector="{{AdvancedAttributePropertiesSection.UseInProductListing}}" stepKey="waitForTabSwitch"/>
+        <selectOption selector="{{AdvancedAttributePropertiesSection.UseInProductListing}}" userInput="Yes" stepKey="useInProductListing"/>
+
+        <!-- Save the new product attribute -->
+        <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit1"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccess"/>
+
+        <!-- Verify after round trip to the server -->
+        <grabAttributeFrom selector="{{AdminManageSwatchSection.nthSwatch('1')}}" userInput="style" stepKey="grabSwatch1"/>
+        <assertStringContainsString stepKey="assertSwatch1">
+            <expectedResult type="string">adobe-thumb</expectedResult>
+            <actualResult type="string">{$grabSwatch1}</actualResult>
+        </assertStringContainsString>
+        <grabAttributeFrom selector="{{AdminManageSwatchSection.nthSwatch('2')}}" userInput="style" stepKey="grabSwatch2"/>
+        <assertStringContainsString stepKey="assertSwatch2">
+            <expectedResult type="string">adobe-small</expectedResult>
+            <actualResult type="string">{$grabSwatch2}</actualResult>
+        </assertStringContainsString>
+        <grabAttributeFrom selector="{{AdminManageSwatchSection.nthSwatch('3')}}" userInput="style" stepKey="grabSwatch3"/>
+        <assertStringContainsString stepKey="assertSwatch3">
+            <expectedResult type="string">adobe-base</expectedResult>
+            <actualResult type="string">{$grabSwatch3}</actualResult>
+        </assertStringContainsString>
+
+        <!-- Create a configurable product to verify the storefront with -->
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToCreateConfigurableProduct">
+            <argument name="attributeSetId" value="{{BaseConfigurableProduct.attribute_set_id}}"/>
+            <argument name="productType" value="{{BaseConfigurableProduct.type_id}}"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$createCategory.name$]" stepKey="fillCategory"/>
+
+        <!-- Create configurations based off the Image Swatch we created earlier -->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickFilters"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillFilterAttributeCodeField"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="clickOnSelectAll"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="1" stepKey="enterAttributeQuantity"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
+        <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
+
+        <!-- Go to the product page and see text swatch options -->
+        <amOnPage url="{{BaseConfigurableProduct.sku}}.html" stepKey="amOnProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+
+        <!-- Verify the storefront -->
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOption('1')}}" userInput="style" stepKey="grabSwatch4"/>
+        <assertStringContainsString stepKey="assertSwatch4">
+            <expectedResult type="string">adobe-thumb</expectedResult>
+            <actualResult type="string">{$grabSwatch4}</actualResult>
+        </assertStringContainsString>
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOption('2')}}" userInput="style" stepKey="grabSwatch5"/>
+        <assertStringContainsString stepKey="assertSwatch5">
+            <expectedResult type="string">adobe-small</expectedResult>
+            <actualResult type="string">{$grabSwatch5}</actualResult>
+        </assertStringContainsString>
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOption('3')}}" userInput="style" stepKey="grabSwatch6"/>
+        <assertStringContainsString stepKey="assertSwatch6">
+            <expectedResult type="string">adobe-base</expectedResult>
+            <actualResult type="string">{$grabSwatch6}</actualResult>
+        </assertStringContainsString>
+
+        <!-- Go to the product listing page and see text swatch options -->
+        <amOnPage url="$createCategory.custom_attributes[url_key]$.html" stepKey="goToCategoryPageStorefront"/>
+        <waitForPageLoad stepKey="waitForProductListingPage"/>
+
+        <!-- Verify the storefront -->
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOption('1')}}" userInput="style" stepKey="grabSwatch7"/>
+        <assertStringContainsString stepKey="assertSwatch7">
+            <expectedResult type="string">adobe-thumb</expectedResult>
+            <actualResult type="string">{$grabSwatch7}</actualResult>
+        </assertStringContainsString>
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOption('2')}}" userInput="style" stepKey="grabSwatch8"/>
+        <assertStringContainsString stepKey="assertSwatch8">
+            <expectedResult type="string">adobe-small</expectedResult>
+            <actualResult type="string">{$grabSwatch8}</actualResult>
+        </assertStringContainsString>
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOption('3')}}" userInput="style" stepKey="grabSwatch9"/>
+        <assertStringContainsString stepKey="assertSwatch9">
+            <expectedResult type="string">adobe-base</expectedResult>
+            <actualResult type="string">{$grabSwatch9}</actualResult>
+        </assertStringContainsString>
+    </test>
+</tests>

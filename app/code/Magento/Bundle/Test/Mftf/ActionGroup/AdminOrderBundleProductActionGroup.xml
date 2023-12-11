@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOrderConfigureBundleProduct">
+        <arguments>
+            <argument name="productNumber" type="string" defaultValue="1"/>
+            <argument name="productQty" type="string" defaultValue="1"/>
+        </arguments>
+        <click selector="{{AdminOrderFormItemsOrderedSection.configureButtonBySku}}" stepKey="clickConfigure"/>
+        <waitForPageLoad stepKey="waitForConfigurePageLoad"/>
+        <checkOption selector="{{AdminOrderBundleProductSection.bundleProductCheckbox(productNumber)}}" stepKey="checkProduct"/>
+        <fillField selector="{{AdminOrderFormConfigureProductSection.quantity}}" userInput="{{productQty}}" stepKey="fillProductQty"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOk"/>
+    </actionGroup>
+</actionGroups>

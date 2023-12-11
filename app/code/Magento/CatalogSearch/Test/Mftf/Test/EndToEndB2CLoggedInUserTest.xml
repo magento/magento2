@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="EndToEndB2CLoggedInUserTest">
+        <!-- Step 2: User searches for product -->
+        <comment userInput="Start of searching products" stepKey="startOfSearchingProducts" after="endOfBrowsingCatalog"/>
+        <!-- Advanced Search with Product 1 Data -->
+        <comment userInput="Advanced search" stepKey="commentAdvancedSearch" after="startOfSearchingProducts"/>
+        <actionGroup ref="StorefrontOpenAdvancedSearchActionGroup" stepKey="searchOpenAdvancedSearchForm" after="commentAdvancedSearch"/>
+        <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
+        <fillField userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontCatalogSearchAdvancedFormSection.ProductName}}" stepKey="searchAdvancedFillProductName" after="searchOpenAdvancedSearchForm"/>
+        <fillField userInput="$$createSimpleProduct1.sku$$" selector="{{StorefrontCatalogSearchAdvancedFormSection.SKU}}" stepKey="searchAdvancedFillSKU" after="searchAdvancedFillProductName"/>
+        <fillField userInput="$$createSimpleProduct1.price$$" selector="{{StorefrontCatalogSearchAdvancedFormSection.PriceFrom}}" stepKey="searchAdvancedFillPriceFrom" after="searchAdvancedFillSKU"/>
+        <fillField userInput="$$createSimpleProduct1.price$$" selector="{{StorefrontCatalogSearchAdvancedFormSection.PriceTo}}" stepKey="searchAdvancedFillPriceTo" after="searchAdvancedFillPriceFrom"/>
+        <click selector="{{StorefrontCatalogSearchAdvancedFormSection.SubmitButton}}" stepKey="searchClickAdvancedSearchSubmitButton" after="searchAdvancedFillPriceTo"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSearchProductsloaded" after="searchClickAdvancedSearchSubmitButton"/>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="searchCheckAdvancedSearchResult" after="waitForSearchProductsloaded"/>
+        <!-- Results returned will be different with ES vs MySQL -->
+        <see userInput="1" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productCount}} span" stepKey="searchAdvancedAssertProductCount" after="searchCheckAdvancedSearchResult"/>
+        <actionGroup ref="StorefrontCheckCategorySimpleProductActionGroup" stepKey="searchAssertSimpleProduct1" after="searchAdvancedAssertProductCount">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="searchAdvancedGrabSimpleProduct1ImageSrc" after="searchAssertSimpleProduct1"/>
+        <assertNotRegExp stepKey="searchAdvancedAssertSimpleProduct1ImageNotDefault" after="searchAdvancedGrabSimpleProduct1ImageSrc">
+			<actualResult type="const">$searchAdvancedGrabSimpleProduct1ImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
+        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="searchClickSimpleProduct1View" after="searchAdvancedAssertSimpleProduct1ImageNotDefault"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSearchSimpleProduct1Viewloaded" after="searchClickSimpleProduct1View"/>
+        <actionGroup ref="StorefrontCheckSimpleProductActionGroup" stepKey="searchAssertSimpleProduct1Page" after="waitForSearchSimpleProduct1Viewloaded">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="searchAdvancedGrabSimpleProduct1PageImageSrc" after="searchAssertSimpleProduct1Page"/>
+        <assertNotRegExp stepKey="searchAdvancedAssertSimpleProduct1PageImageNotDefault" after="searchAdvancedGrabSimpleProduct1PageImageSrc">
+			<actualResult type="const">$searchAdvancedGrabSimpleProduct1PageImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/image\.jpg/'</expectedResult>
+        </assertNotRegExp>
+
+        <!-- Quick Search with common part of product names -->
+        <comment userInput="Quick search" stepKey="commentQuickSearch" after="searchAdvancedAssertSimpleProduct1PageImageNotDefault"/>
+        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchQuickSearchCommonPart" after="commentQuickSearch">
+            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
+            <argument name="phrase" value="CONST.apiSimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectSearchFilterCategoryActionGroup" stepKey="searchSelectFilterCategoryCommonPart" after="searchQuickSearchCommonPart">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+        <see userInput="3" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="searchAssertFilterCategoryProductCountCommonPart" after="searchSelectFilterCategoryCommonPart"/>
+
+        <!-- Search simple product 1 -->
+        <comment userInput="Search simple product 1" stepKey="commentSearchSimpleProduct1" after="searchAssertFilterCategoryProductCountCommonPart"/>
+        <actionGroup ref="StorefrontCheckCategorySimpleProductActionGroup" stepKey="searchAssertFilterCategorySimpleProduct1" after="commentSearchSimpleProduct1">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct1.name$$)}}" userInput="src" stepKey="searchGrabSimpleProduct1ImageSrc" after="searchAssertFilterCategorySimpleProduct1"/>
+        <assertNotRegExp stepKey="searchAssertSimpleProduct1ImageNotDefault" after="searchGrabSimpleProduct1ImageSrc">
+			<actualResult type="const">$searchGrabSimpleProduct1ImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
+        <!-- Search simple product2 -->
+        <actionGroup ref="StorefrontCheckCategorySimpleProductActionGroup" stepKey="searchAssertFilterCategorySimpleProduct2" after="searchAssertSimpleProduct1ImageNotDefault">
+            <argument name="product" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct2.name$$)}}" userInput="src" stepKey="searchGrabSimpleProduct2ImageSrc" after="searchAssertFilterCategorySimpleProduct2"/>
+        <assertNotRegExp stepKey="searchAssertSimpleProduct2ImageNotDefault" after="searchGrabSimpleProduct2ImageSrc">
+			<actualResult type="const">$searchGrabSimpleProduct2ImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
+
+        <!-- Quick Search with non-existent product name -->
+        <comment userInput="Quick Search with non-existent product name" stepKey="commentQuickSearchWithNonExistentProductName" after="searchAssertSimpleProduct2ImageNotDefault" />
+        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchFillQuickSearchNonExistent" after="commentQuickSearchWithNonExistentProductName">
+            <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
+            <argument name="phrase" value="CONST.nonexistentProductName"/>
+        </actionGroup>
+        <see userInput="Your search returned no results." selector="{{StorefrontCatalogSearchMainSection.message}}" stepKey="searchAssertQuickSearchMessageNonExistent" after="searchFillQuickSearchNonExistent"/>
+        <comment userInput="End of searching products" stepKey="endOfSearchingProducts" after="searchAssertQuickSearchMessageNonExistent" />
+    </test>
+</tests>

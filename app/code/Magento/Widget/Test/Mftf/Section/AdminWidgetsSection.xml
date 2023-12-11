@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminWidgetsSection">
+        <element name="widgetTitleSearch" type="input" selector="#widgetInstanceGrid_filter_title"/>
+        <element name="searchButton" type="button" selector=".action-default.scalable.action-secondary"/>
+        <element name="searchResult" type="text" selector="#widgetInstanceGrid_table>tbody>tr:nth-child(1)"/>
+        <element name="resetFilter" type="button" selector="button[data-action='grid-filter-reset']"/>
+        <element name="massActionSelect" type="select" selector="#widgetInstanceGrid_massaction-mass-select"/>
+        <element name="massActionSelectOptionAll" type="select" selector="//*[@id='widgetInstanceGrid_massaction-mass-select']//option[@value='selectAll']"/>
+        <element name="massActionSelectElement" type="multiselect" selector="#widgetInstanceGrid_massaction-select" />
+        <element name="massActionSelectAction" type="multiselect" selector="//*[@id='widgetInstanceGrid_massaction-select']//option[contains(., 'Action')]" />
+        <element name="massActionSelectActionDelete" type="multiselect" selector="//*[@id='widgetInstanceGrid_massaction-select']//option[@value='delete']" />
+        <element name="massActionSelectActionDeleteSubmit" type="button" selector="#widgetInstanceGrid_massaction-form button.action-default"/>
+        <element name="WidgetViewModalAccept" type="button" selector=".modal-popup.confirm._show .action-accept"/>
+        <element name="WidgetViewModalDismiss" type="button" selector=".modal-popup.confirm._show .action-dismiss"/>
+        <element name="WidgetViewModalClose" type="button" selector=".modal-popup.confirm._show .action-close"/>
+        <element name="WidgetViewGridRow" type="text" selector="table.data-grid tbody tr[data-role=row]:nth-of-type({{row}})" parameterized="true"/>
+        <element name="WidgetViewGridInstanceRow" type="text" selector="table.data-grid tbody tr[data-role=row]:nth-of-type({{row}})" parameterized="true"/>
+        <element name="WidgetViewGridInstanceId" type="text" selector="table.data-grid tbody tr[data-role=row]:nth-of-type({{row}}) td[data-column=instance_id]" parameterized="true"/>
+    </section>
+</sections>

@@ -19,7 +19,6 @@ define([
     ko.bindingHandlers.optgroup = {
         /**
          * @param {*} element
-         * @returns {Object}
          */
         init: function (element) {
             if (ko.utils.tagNameLower(element) !== 'select') {
@@ -30,11 +29,6 @@ define([
             while (element.length > 0) {
                 element.remove(0);
             }
-
-            // Ensures that the binding processor doesn't try to bind the options
-            return {
-                'controlsDescendantBindings': true
-            };
         },
 
         /**
@@ -222,10 +216,14 @@ define([
                     ko.utils.setTextContent(option, allBindings.get('optionsCaption'));
                     ko.selectExtensions.writeValue(option, undefined);
                 } else if (typeof arrayEntry[optionsValue] === 'undefined') { // empty value === optgroup
-                    option = utils.template(optgroupTmpl, {
-                        label: arrayEntry[optionsText],
-                        title: arrayEntry[optionsText + 'title']
-                    });
+                    if (arrayEntry.__disableTmpl) {
+                        option = '<optgroup label="' + arrayEntry[optionsText] + '"></optgroup>';
+                    } else {
+                        option = utils.template(optgroupTmpl, {
+                            label: arrayEntry[optionsText],
+                            title: arrayEntry[optionsText + 'title']
+                        });
+                    }
                     option = ko.utils.parseHtmlFragment(option)[0];
 
                 } else {
@@ -246,7 +244,7 @@ define([
 
                 // IE6 doesn't like us to assign selection to OPTION nodes before they're added to the document.
                 // That's why we first added them without selection. Now it's time to set the selection.
-                if (previousSelectedValues.length) {
+                if (previousSelectedValues.length && newOptions.value) {
                     isSelected = ko.utils.arrayIndexOf(
                         previousSelectedValues,
                         ko.selectExtensions.readValue(newOptions.value)
@@ -267,7 +265,7 @@ define([
              * @returns {Array}
              */
             function strPad(string, times) {
-                return (new Array(times + 1)).join(string);
+                return new Array(times + 1).join(string);
             }
 
             /**
@@ -307,6 +305,10 @@ define([
                         obj.disabled = disabled;
                     }
 
+                    if (option.hasOwnProperty('__disableTmpl')) {
+                        obj.__disableTmpl = option.__disableTmpl;
+                    }
+
                     label = label.replace(nbspRe, '').trim();
 
                     if (Array.isArray(value)) {
@@ -325,5 +327,4 @@ define([
             }
         }
     };
-    ko.bindingHandlers.selectedOptions.after.push('optgroup');
 });

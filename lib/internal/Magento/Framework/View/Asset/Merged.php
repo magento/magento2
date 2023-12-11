@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\View\Asset;
 
+use Magento\Framework\App\ObjectManager;
+
 /**
  * \Iterator that aggregates one or more assets and provides a single public file with equivalent behavior
  */
@@ -13,7 +15,7 @@ class Merged implements \Iterator
     /**
      * Directory for dynamically generated public view files, relative to STATIC_VIEW
      */
-    const CACHE_VIEW_REL = '_cache';
+    public const CACHE_VIEW_REL = '_cache';
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -41,26 +43,38 @@ class Merged implements \Iterator
     protected $contentType;
 
     /**
+     * @var \Magento\Framework\App\View\Deployment\Version\StorageInterface
+     */
+    private $versionStorage;
+
+    /**
      * @var bool
      */
     protected $isInitialized = false;
 
     /**
+     * Merged constructor.
+     *
      * @param \Psr\Log\LoggerInterface $logger
      * @param MergeStrategyInterface $mergeStrategy
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param MergeableInterface[] $assets
+     * @param \Magento\Framework\App\View\Deployment\Version\StorageInterface $versionStorage
      * @throws \InvalidArgumentException
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         MergeStrategyInterface $mergeStrategy,
         \Magento\Framework\View\Asset\Repository $assetRepo,
-        array $assets
+        array $assets,
+        \Magento\Framework\App\View\Deployment\Version\StorageInterface $versionStorage = null
     ) {
         $this->logger = $logger;
         $this->mergeStrategy = $mergeStrategy;
         $this->assetRepo = $assetRepo;
+        $this->versionStorage = $versionStorage ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\App\View\Deployment\Version\StorageInterface::class
+        );
 
         if (!$assets) {
             throw new \InvalidArgumentException('At least one asset has to be passed for merging.');
@@ -116,15 +130,24 @@ class Merged implements \Iterator
             $paths[] = $asset->getPath();
         }
         $paths = array_unique($paths);
+
+        $version = $this->versionStorage->load();
+        if ($version) {
+            $paths[] = $version;
+        }
+
+        // md5() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $filePath = md5(implode('|', $paths)) . '.' . $this->contentType;
         return $this->assetRepo->createArbitrary($filePath, self::getRelativeDir());
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return AssetInterface
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         $this->initialize();
@@ -132,8 +155,9 @@ class Merged implements \Iterator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         $this->initialize();
@@ -141,8 +165,9 @@ class Merged implements \Iterator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         $this->initialize();
@@ -150,8 +175,9 @@ class Merged implements \Iterator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->initialize();
@@ -159,8 +185,9 @@ class Merged implements \Iterator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         $this->initialize();

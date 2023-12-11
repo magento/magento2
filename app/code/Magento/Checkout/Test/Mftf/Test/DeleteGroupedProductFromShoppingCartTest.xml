@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="DeleteGroupedProductFromShoppingCartTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Delete Products from Shopping Cart"/>
+            <title value="Delete grouped product from shopping cart test"/>
+            <description value="Delete grouped product from shopping cart"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14694"/>
+            <group value="checkout"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- Create grouped product with three simple products -->
+            <createData entity="SimpleProduct2" stepKey="createFirstSimpleProduct"/>
+            <createData entity="SimpleProduct2" stepKey="createSecondSimpleProduct"/>
+            <createData entity="SimpleProduct2" stepKey="createThirdSimpleProduct"/>
+            <createData entity="ApiGroupedProduct" stepKey="createGroupedProduct"/>
+            <createData entity="OneSimpleProductLink" stepKey="addFirstProductToLink">
+                <requiredEntity createDataKey="createGroupedProduct"/>
+                <requiredEntity createDataKey="createFirstSimpleProduct"/>
+            </createData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addFirstProductToLink" stepKey="addSecondProductTwo">
+                <requiredEntity createDataKey="createGroupedProduct"/>
+                <requiredEntity createDataKey="createSecondSimpleProduct"/>
+            </updateData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addFirstProductToLink" stepKey="addThirdProductThree">
+                <requiredEntity createDataKey="createGroupedProduct"/>
+                <requiredEntity createDataKey="createThirdSimpleProduct"/>
+            </updateData>
+        </before>
+        <after>
+            <!-- Delete grouped product data -->
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createThirdSimpleProduct" stepKey="deleteThirdProduct"/>
+            <deleteData createDataKey="createGroupedProduct" stepKey="deleteGroupedProduct"/>
+        </after>
+
+        <!-- Add grouped product to the cart -->
+        <actionGroup ref="StorefrontAddThreeGroupedProductToTheCartActionGroup" stepKey="addGropedProductsToTheCart">
+            <argument name="urlKey" value="$$createGroupedProduct.custom_attributes[url_key]$$"/>
+            <argument name="product1" value="$$createFirstSimpleProduct.name$$"/>
+            <argument name="product2" value="$$createSecondSimpleProduct.name$$"/>
+            <argument name="product3" value="$$createThirdSimpleProduct.name$$"/>
+            <argument name="qty1" value="1"/>
+            <argument name="qty2" value="1"/>
+            <argument name="qty3" value="1"/>
+        </actionGroup>
+
+        <!-- Remove products from cart -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCart"/>
+        <click selector="{{CheckoutCartProductSection.removeProductByName($$createFirstSimpleProduct.name$$)}}" stepKey="deleteFirstProductFromCheckoutCart"/>
+        <click selector="{{CheckoutCartProductSection.removeProductByName($$createSecondSimpleProduct.name$$)}}" stepKey="deleteSecondProductFromCheckoutCart"/>
+        <click selector="{{CheckoutCartProductSection.removeProductByName($$createThirdSimpleProduct.name$$)}}" stepKey="deleteThirdProductFromCheckoutCart"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see userInput="You have no items in your shopping cart." stepKey="seeNoItemsInShoppingCart"/>
+    </test>
+</tests>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderForCustomerWithTwoAddressesTaxableAndNonTaxableTest">
+        <annotations>
+            <title value="Tax should not be displayed for non taxable address"/>
+            <stories value="MC-21699: Tax does not change when changing the billing address from Admin Panel"/>
+            <description value="Tax should not be displayed for non taxable address when switching from taxable address"/>
+            <testCaseId value="MC-21721"/>
+            <features value="Sales"/>
+            <severity value="BLOCKER"/>
+            <group value="Sales"/>
+        </annotations>
+        <before>
+            <!--Enable flat rate shipping-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <!--Enable free shipping method -->
+            <magentoCLI command="config:set {{EnableFreeShippingConfigData.path}} {{EnableFreeShippingConfigData.value}}" stepKey="enableFreeShipping"/>
+            <!--Create customer-->
+            <createData entity="Customer_With_Different_Default_Billing_Shipping_Addresses" stepKey="simpleCustomer"/>
+            <!--Create category-->
+            <createData entity="_defaultCategory" stepKey="category1"/>
+            <!--Create product1-->
+            <createData entity="_defaultProduct" stepKey="product1">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <!--Create tax rule for US-CA-->
+            <createData entity="defaultTaxRule" stepKey="createTaxRule"/>
+            <!--Login as admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <!--Step 1: Create new order for customer-->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+        <!--Step 2: Add product1 to the order-->
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$$product1$$"/>
+        </actionGroup>
+        <!--Step 2: Select taxable address as billing address-->
+        <selectOption selector="{{AdminOrderFormBillingAddressSection.selectAddress}}" userInput="{{US_Address_CA.state}}" stepKey="selectTaxableAddress" />
+        <waitForPageLoad stepKey="waitForChangeBillingAddress"/>
+        <!--Step 3: Set shipping address same as billing -->
+        <checkOption selector="{{AdminOrderFormShippingAddressSection.SameAsBilling}}" stepKey="checkSameAsBillingAddressCheckbox"/>
+        <waitForPageLoad stepKey="waitForChangeShippingAddress"/>
+        <!--Step 3: Select FlatRate shipping method-->
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <!--Step 4: Verify that tax is applied to the order-->
+        <seeElement selector="{{AdminOrderFormTotalSection.total('Tax')}}" stepKey="seeTax" />
+        <!--Step 5: Select non taxable address as billing address-->
+        <selectOption selector="{{AdminOrderFormBillingAddressSection.selectAddress}}" userInput="{{US_Address_TX.state}}" stepKey="selectNonTaxableAddress" />
+        <!--Step 6: Change shipping method to Free-->
+        <actionGroup ref="ChangeShippingMethodActionGroup" stepKey="changeShippingMethod">
+            <argument name="shippingMethod" value="freeshipping_freeshipping"/>
+        </actionGroup>
+        <!--Step 7: Verify that tax is not applied to the order-->
+        <dontSeeElement selector="{{AdminOrderFormTotalSection.total('Tax')}}" stepKey="dontSeeTax" />
+        <after>
+            <!--Delete product1-->
+            <deleteData createDataKey="product1" stepKey="deleteProduct1"/>
+            <!--Delete category-->
+            <deleteData createDataKey="category1" stepKey="deleteCategory1"/>
+            <!--Delete customer-->
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+            <!--Delete tax rule-->
+            <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
+            <!--Logout-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!--Disable free shipping method -->
+            <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
+            <!-- Disable shipping method for customer with default address -->
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
+        </after>
+    </test>
+</tests>

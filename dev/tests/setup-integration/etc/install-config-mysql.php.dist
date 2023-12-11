@@ -1,0 +1,36 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+return [
+    'default' => [
+        'db-host' => '{{db-host}}',
+        'db-user' => '{{db-user}}',
+        'db-password' => '{{db-password}}',
+        'db-name' => '{{db-name}}',
+        'db-init-statements' => '{{db-init-statements}}',
+        'db-prefix' => '',
+        'backend-frontname' => 'admin',
+        'admin-user' => 'admin',
+        'admin-password' => '123123q',
+        'admin-email' => \Magento\TestFramework\Bootstrap::ADMIN_EMAIL,
+        'admin-firstname' => \Magento\TestFramework\Bootstrap::ADMIN_FIRSTNAME,
+        'admin-lastname' => \Magento\TestFramework\Bootstrap::ADMIN_LASTNAME,
+        'enable-modules' => 'Magento_TestSetupModule2,Magento_TestSetupModule1,Magento_Backend',
+        'disable-modules' => 'all'
+    ],
+    'shard_one' => [
+        'host' => '{{db-host}}',
+        'username' => '{{db-user}}',
+        'password' => '{{db-password}}',
+        'dbname' => '{{db-sales}}'
+    ],
+    'shard_two' => [
+        'host' => '{{db-host}}',
+        'username' => '{{db-user}}',
+        'password' => '{{db-password}}',
+        'dbname' => '{{db-checkout}}'
+    ]
+];

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminProductFormAdvancedPricingAddTierPriceActionGroup">
+        <annotations>
+            <description>Add new tier price on Advanced Pricing dialog on the Admin Product creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="website" type="string" defaultValue="All Websites [USD]"/>
+            <argument name="customerGroup" type="string" defaultValue="ALL GROUPS"/>
+            <argument name="quantity" type="string" defaultValue="1"/>
+            <argument name="priceType" type="string" defaultValue="Fixed"/>
+            <argument name="amount" type="string" defaultValue="10"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForGroupPriceAddButtonAppears"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="clickCustomerGroupPriceAddButton"/>
+        <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.lastTierPriceWebsite}}" stepKey="waitForPriceWebsiteInputAppears"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.lastTierPriceWebsite}}" userInput="{{website}}" stepKey="selectWebsite"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.lastTierPriceCustomerGroup}}" userInput="{{customerGroup}}" stepKey="selectCustomerGroup"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.lastTierPriceQty}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.lastTierPriceType}}" userInput="{{priceType}}" stepKey="selectPriceType"/>
+        <executeJS function="return '{{priceType}}' == 'Discount' ? &quot;{{AdminProductFormAdvancedPricingSection.lastTierPriceDiscountAmount}}&quot; : &quot;{{AdminProductFormAdvancedPricingSection.lastTierPriceFixedAmount}}&quot;" stepKey="priceAmountSelector"/>
+        <waitForElementVisible selector="{$priceAmountSelector}" stepKey="waitPriceAmountFieldAppers"/>
+        <fillField selector="{$priceAmountSelector}" userInput="{{amount}}" stepKey="fillPriceAmount"/>
+    </actionGroup>
+</actionGroups>

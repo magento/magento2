@@ -3,19 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\I18n\Parser;
 
-class AbstractParserTest extends \PHPUnit\Framework\TestCase
+use Magento\Setup\Module\I18n\Parser\AbstractParser;
+use Magento\Setup\Module\I18n\Parser\AdapterInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AbstractParserTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Module\I18n\Parser\AbstractParser|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractParser|MockObject
      */
     protected $_parserMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_parserMock = $this->getMockForAbstractClass(
-            \Magento\Setup\Module\I18n\Parser\AbstractParser::class,
+            AbstractParser::class,
             [],
             '',
             false
@@ -29,15 +36,19 @@ class AbstractParserTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateOptions($options, $message)
     {
-        $this->expectException('InvalidArgumentException', $message);
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage($message);
 
         $this->_parserMock->addAdapter(
             'php',
-            $this->createMock(\Magento\Setup\Module\I18n\Parser\AdapterInterface::class)
+            $this->getMockForAbstractClass(AdapterInterface::class)
         );
         $this->_parserMock->parse($options);
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderForValidateOptions()
     {
         return [
@@ -54,6 +65,6 @@ class AbstractParserTest extends \PHPUnit\Framework\TestCase
 
     public function getPhrases()
     {
-        $this->assertInternalType('array', $this->_parserMock->getPhrases());
+        $this->assertIsArray($this->_parserMock->getPhrases());
     }
 }

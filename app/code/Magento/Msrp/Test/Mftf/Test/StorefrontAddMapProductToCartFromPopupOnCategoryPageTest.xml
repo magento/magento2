@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddMapProductToCartFromPopupOnCategoryPageTest">
+        <annotations>
+            <features value="Msrp"/>
+            <stories value="Minimum advertised price"/>
+            <title value="Add simple product with minimum advertised price to cart from popup on category page"/>
+            <description value="Check that simple product with minimum advertised price is successfully added to cart from popup on category page"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-40419"/>
+            <useCaseId value="MC-35640"/>
+            <group value="msrp"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- Enable Minimum advertised Price -->
+            <createData entity="MsrpEnableMAP" stepKey="enableMAP"/>
+
+            <!-- Display Price in Popup -->
+            <createData entity="MsrpDisplayPriceOnGesture" stepKey="displayPriceOnGesture"/>
+
+            <!-- Create category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+
+            <!-- Create product with MAP -->
+            <createData entity="SimpleProductWithMsrp" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete product and category -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Disable Minimum advertised Price -->
+            <createData entity="MsrpDisableMAP" stepKey="disableMAP"/>
+        </after>
+
+        <!-- Open created category on Storefront -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+
+        <!-- Grab and verify MAP price -->
+        <grabTextFrom selector="{{StorefrontCategoryProductSection.mapPrice($createProduct.name$)}}" stepKey="grabMapPrice"/>
+        <assertEquals stepKey="assertMapPrice">
+            <actualResult type="variable">grabMapPrice</actualResult>
+            <expectedResult type="string">${{ApiProductMsrp.value}}</expectedResult>
+        </assertEquals>
+
+        <!-- Open 'Click for price' popup and click 'Add to Cart' button -->
+        <click selector="{{StorefrontCategoryProductSection.clickForPrice($createProduct.name$)}}" stepKey="clickForPrice"/>
+        <waitForElementVisible selector="{{StorefrontMsrpPopupSection.addToCartButton}}" stepKey="waitForAddToCartButton"/>
+        <click selector="{{StorefrontMsrpPopupSection.addToCartButton}}" stepKey="clickAddToCartButton"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added $createProduct.name$ to your shopping cart." stepKey="assertSuccessMessage"/>
+    </test>
+</tests>

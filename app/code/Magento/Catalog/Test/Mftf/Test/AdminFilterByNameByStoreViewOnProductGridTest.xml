@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminFilterByNameByStoreViewOnProductGridTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Filter products"/>
+            <title value="Product grid filtering by store view level attribute"/>
+            <description value="Verify that products grid can be filtered on all store view level by attribute"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-28534"/>
+            <useCaseId value="MC-37347"/>
+            <group value="catalog"/>
+            <group value="cloud_smoke"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct2"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToEditPage">
+            <argument name="productId" value="$$createSimpleProduct1.id$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToDefaultStoreView">
+            <argument name="storeView" value="_defaultStore.name"/>
+        </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
+        <click selector="{{AdminProductFormSection.productNameUseDefault}}" stepKey="uncheckUseDefault"/>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="$$createSimpleProduct2.name$$" stepKey="fillNewName"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterGridByName">
+            <argument name="name" value="$$createSimpleProduct2.name$$"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductGridSection.productRowBySku('$$createSimpleProduct2.sku$$')}}" stepKey="seeProduct2InGrid"/>
+        <dontSeeElement selector="{{AdminProductGridSection.productRowBySku('$$createSimpleProduct1.sku$$')}}" stepKey="dontSeeProduct1InGrid"/>
+    </test>
+</tests>

@@ -24,7 +24,7 @@ class OrderListTest extends WebapiAbstract
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -33,6 +33,73 @@ class OrderListTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/Sales/_files/order_list.php
      */
     public function testOrderList()
+    {
+        $searchData = $this->getSearchData();
+
+        $requestData = ['searchCriteria' => $searchData];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_READ_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_READ_NAME . 'getList',
+            ],
+        ];
+
+        $result = $this->_webApiCall($serviceInfo, $requestData);
+        $this->assertArrayHasKey('items', $result);
+        $this->assertCount(2, $result['items']);
+        $this->assertArrayHasKey('search_criteria', $result);
+        $this->assertEquals($searchData, $result['search_criteria']);
+        $this->assertEquals('100000002', $result['items'][0]['increment_id']);
+        $this->assertEquals('100000001', $result['items'][1]['increment_id']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Sales/_files/order_list_with_tax.php
+     */
+    public function testOrderListExtensionAttributes()
+    {
+        $searchData = $this->getSearchData();
+
+        $requestData = ['searchCriteria' => $searchData];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_READ_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_READ_NAME . 'getList',
+            ],
+        ];
+
+        $result = $this->_webApiCall($serviceInfo, $requestData);
+
+        $expectedTax = [
+            'code' => 'US-NY-*-Rate 1',
+            'type' => 'shipping'
+        ];
+        $appliedTaxes = $result['items'][0]['extension_attributes']['applied_taxes'];
+        $this->assertEquals($expectedTax['code'], $appliedTaxes[0]['code']);
+        $appliedTaxes = $result['items'][0]['extension_attributes']['item_applied_taxes'];
+        $this->assertEquals($expectedTax['type'], $appliedTaxes[0]['type']);
+        $this->assertNotEmpty($appliedTaxes[0]['applied_taxes']);
+        $this->assertTrue($result['items'][0]['extension_attributes']['converting_from_quote']);
+        $this->assertArrayHasKey('payment_additional_info', $result['items'][0]['extension_attributes']);
+        $this->assertNotEmpty($result['items'][0]['extension_attributes']['payment_additional_info']);
+    }
+
+    /**
+     * Get search data for request.
+     *
+     * @return array
+     */
+    private function getSearchData() : array
     {
         /** @var \Magento\Framework\Api\SortOrderBuilder $sortOrderBuilder */
         $sortOrderBuilder = $this->objectManager->get(
@@ -68,27 +135,9 @@ class OrderListTest extends WebapiAbstract
         $searchCriteriaBuilder->addFilters([$filter1]);
         $searchCriteriaBuilder->addFilters([$filter2, $filter3]);
         $searchCriteriaBuilder->addSortOrder($sortOrder);
+        $searchCriteriaBuilder->setPageSize(20);
         $searchData = $searchCriteriaBuilder->create()->__toArray();
 
-        $requestData = ['searchCriteria' => $searchData];
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
-            ],
-            'soap' => [
-                'service' => self::SERVICE_READ_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_READ_NAME . 'getList',
-            ],
-        ];
-
-        $result = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertArrayHasKey('items', $result);
-        $this->assertCount(2, $result['items']);
-        $this->assertArrayHasKey('search_criteria', $result);
-        $this->assertEquals($searchData, $result['search_criteria']);
-        $this->assertEquals('100000002', $result['items'][0]['increment_id']);
-        $this->assertEquals('100000001', $result['items'][1]['increment_id']);
+        return $searchData;
     }
 }

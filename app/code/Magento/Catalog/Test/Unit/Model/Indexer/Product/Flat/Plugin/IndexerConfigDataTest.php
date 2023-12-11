@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Plugin;
 
 use Magento\Catalog\Model\Indexer\Product\Flat\Plugin\IndexerConfigData as IndexerConfigDataPlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Model\Indexer\Product\Flat\State as ProductFlatIndexerState;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Indexer\Model\Config\Data as ConfigData;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class IndexerConfigDataTest extends \PHPUnit\Framework\TestCase
+class IndexerConfigDataTest extends TestCase
 {
     /**
      * @var IndexerConfigDataPlugin
@@ -23,16 +27,16 @@ class IndexerConfigDataTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ProductFlatIndexerState|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductFlatIndexerState|MockObject
      */
     private $indexerStateMock;
 
     /**
-     * @var ConfigData|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigData|MockObject
      */
     private $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexerStateMock = $this->getMockBuilder(ProductFlatIndexerState::class)
             ->disableOriginalConstructor()

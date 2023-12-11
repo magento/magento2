@@ -9,8 +9,6 @@ use Magento\Framework\View\Xsd\Media\TypeDataExtractorPool;
 
 /**
  * Class Converter convert xml to appropriate array
- *
- * @package Magento\Framework\Config
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
@@ -103,7 +101,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             }
         }
         if (!count($result)) {
-            $result = $node->nodeValue;
+            $result = (
+                $node->nodeValue !== null
+                && strtolower($node->nodeValue) !== 'true'
+                && strtolower($node->nodeValue) !== 'false'
+            ) ? $node->nodeValue : filter_var($node->nodeValue, FILTER_VALIDATE_BOOLEAN);
         }
         return $result;
     }

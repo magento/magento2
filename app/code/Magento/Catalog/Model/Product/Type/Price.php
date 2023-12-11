@@ -3,28 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Product\Type;
 
 use Magento\Catalog\Model\Product;
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Store\Api\Data\WebsiteInterface;
 
 /**
  * Product type price model
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
-class Price
+class Price implements ResetAfterRequestInterface
 {
     /**
      * Product price cache tag
      */
-    const CACHE_TAG = 'PRODUCT_PRICE';
+    public const CACHE_TAG = 'PRODUCT_PRICE';
 
     /**
      * @var array
@@ -39,8 +44,6 @@ class Price
     protected $_eventManager;
 
     /**
-     * Customer session
-     *
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
@@ -51,15 +54,11 @@ class Price
     protected $_localeDate;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Rule factory
-     *
      * @var \Magento\CatalogRule\Model\ResourceModel\RuleFactory
      */
     protected $_ruleFactory;
@@ -184,6 +183,8 @@ class Price
     }
 
     /**
+     * Retrieve final price for child product
+     *
      * @param Product $product
      * @param float $productQty
      * @param Product $childProduct
@@ -198,7 +199,7 @@ class Price
     }
 
     /**
-     * Gets the 'tear_price' array from the product
+     * Gets the 'tier_price' array from the product
      *
      * @param Product $product
      * @param string $key
@@ -256,7 +257,7 @@ class Price
 
         $tierPrice = $product->getTierPrice($qty);
         if (is_numeric($tierPrice)) {
-            $finalPrice = min($finalPrice, $tierPrice);
+            $finalPrice = min($finalPrice, (float) $tierPrice);
         }
         return $finalPrice;
     }
@@ -292,7 +293,7 @@ class Price
 
         $custGroup = $this->_getCustomerGroupId($product);
         if ($qty) {
-            $prevQty = 1;
+            $prevQty = 0;
             $prevPrice = $product->getPrice();
             $prevGroup = $allGroupsId;
 
@@ -341,7 +342,7 @@ class Price
             }
         }
 
-        return $prices ? $prices : [];
+        return $prices ?: [];
     }
 
     /**
@@ -373,14 +374,14 @@ class Price
             if (array_key_exists('website_price', $price)) {
                 $value = $price['website_price'];
             } else {
-                $value = $price['price'];
+                $value = $price['price'] ?? 0;
             }
             $tierPrice->setValue($value);
             $tierPrice->setQty($price['price_qty']);
             if (isset($price['percentage_value'])) {
                 $tierPrice->getExtensionAttributes()->setPercentageValue($price['percentage_value']);
             }
-            $websiteId = isset($price['website_id']) ? $price['website_id'] : $this->getWebsiteForPriceScope();
+            $websiteId = $price['website_id'] ?? $this->getWebsiteForPriceScope();
             $tierPrice->getExtensionAttributes()->setWebsiteId($websiteId);
             $prices[] = $tierPrice;
         }
@@ -428,6 +429,8 @@ class Price
     }
 
     /**
+     * Retrieve customer group id from product
+     *
      * @param Product $product
      * @return int
      */
@@ -453,7 +456,7 @@ class Price
             $product->getSpecialPrice(),
             $product->getSpecialFromDate(),
             $product->getSpecialToDate(),
-            $product->getStore()
+            WebsiteInterface::ADMIN_CODE
         );
     }
 
@@ -472,16 +475,18 @@ class Price
     /**
      * Get formatted by currency tier price
      *
-     * @param   float $qty
-     * @param   Product $product
-     * @return  array|float
+     * @param float $qty
+     * @param Product $product
+     *
+     * @return array|float
+     * @since 102.0.6
      */
-    public function getFormatedTierPrice($qty, $product)
+    public function getFormattedTierPrice($qty, $product)
     {
         $price = $product->getTierPrice($qty);
         if (is_array($price)) {
             foreach (array_keys($price) as $index) {
-                $price[$index]['formated_price'] = $this->priceCurrency->convertAndFormat(
+                $price[$index]['formatted_price'] = $this->priceCurrency->convertAndFormat(
                     $price[$index]['website_price']
                 );
             }
@@ -493,14 +498,46 @@ class Price
     }
 
     /**
+     * Get formatted by currency tier price
+     *
+     * @param float $qty
+     * @param Product $product
+     *
+     * @return array|float
+     *
+     * @deprecated 102.0.6
+     * @see getFormattedTierPrice()
+     */
+    public function getFormatedTierPrice($qty, $product)
+    {
+        return $this->getFormattedTierPrice($qty, $product);
+    }
+
+    /**
      * Get formatted by currency product price
      *
-     * @param   Product $product
-     * @return  array || float
+     * @param Product $product
+     *
+     * @return array|float
+     * @since 102.0.6
+     */
+    public function getFormattedPrice($product)
+    {
+        return $this->priceCurrency->format($product->getFinalPrice());
+    }
+
+    /**
+     * Get formatted by currency product price
+     *
+     * @param Product $product
+     * @return array || float
+     *
+     * @deprecated 102.0.6
+     * @see getFormattedPrice()
      */
     public function getFormatedPrice($product)
     {
-        return $this->priceCurrency->format($product->getFinalPrice());
+        return $this->getFormattedPrice($product);
     }
 
     /**
@@ -517,7 +554,7 @@ class Price
         $optionIds = $product->getCustomOption('option_ids');
         if ($optionIds) {
             $basePrice = $finalPrice;
-            foreach (explode(',', $optionIds->getValue()) as $optionId) {
+            foreach (explode(',', $optionIds->getValue() ?? '') as $optionId) {
                 if ($option = $product->getOptionById($optionId)) {
                     $confItemOption = $product->getCustomOption('option_' . $option->getId());
 
@@ -570,7 +607,7 @@ class Price
             $specialPrice,
             $specialPriceFrom,
             $specialPriceTo,
-            $sId
+            WebsiteInterface::ADMIN_CODE
         );
 
         if ($rulePrice === false) {
@@ -606,7 +643,7 @@ class Price
     ) {
         if ($specialPrice !== null && $specialPrice != false) {
             if ($this->_localeDate->isScopeDateInInterval($store, $specialPriceFrom, $specialPriceTo)) {
-                $finalPrice = min($finalPrice, $specialPrice);
+                $finalPrice = min($finalPrice, (float) $specialPrice);
             }
         }
         return $finalPrice;
@@ -620,5 +657,13 @@ class Price
     public function isTierPriceFixed()
     {
         return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        self::$attributeCache = [];
     }
 }

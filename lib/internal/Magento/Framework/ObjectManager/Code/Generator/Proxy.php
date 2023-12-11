@@ -1,25 +1,31 @@
 <?php
 /**
- * Proxy generator
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\ObjectManager\Code\Generator;
+
+use Magento\Framework\GetReflectionMethodReturnTypeValueTrait;
 
 class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
 {
+    use GetReflectionMethodReturnTypeValueTrait;
+
     /**
      * Entity type
      */
-    const ENTITY_TYPE = 'proxy';
+    public const ENTITY_TYPE = 'proxy';
 
     /**
      * Marker interface
      */
-    const NON_INTERCEPTABLE_INTERFACE = \Magento\Framework\ObjectManager\NoninterceptableInterface::class;
+    public const NON_INTERCEPTABLE_INTERFACE = \Magento\Framework\ObjectManager\NoninterceptableInterface::class;
 
     /**
+     * Returns default result class name
+     *
      * @param string $modelClassName
      * @return string
      */
@@ -65,6 +71,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
                 'tags' => [['name' => 'var', 'description' => 'bool']],
             ],
         ];
+
         return $properties;
     }
 
@@ -91,8 +98,16 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         ];
         $methods[] = [
             'name' => '__clone',
-            'body' => "\$this->_subject = clone \$this->_getSubject();",
+            'body' => "if (\$this->_subject) {\n" .
+                "    \$this->_subject = clone \$this->_getSubject();\n" .
+                "}\n",
             'docblock' => ['shortDescription' => 'Clone proxied instance'],
+        ];
+
+        $methods[] = [
+            'name' => '__debugInfo',
+            'body' => "return ['i' => \$this->_subject];",
+            'docblock' => ['shortDescription' => 'Debug proxied instance'],
         ];
 
         $methods[] = [
@@ -112,15 +127,28 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         $reflectionClass = new \ReflectionClass($this->getSourceClassName());
         $publicMethods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
         foreach ($publicMethods as $method) {
-            if (!($method->isConstructor() ||
+            if (!(
+                    $method->isConstructor() ||
                     $method->isFinal() ||
                     $method->isStatic() ||
-                    $method->isDestructor()) && !in_array(
-                        $method->getName(),
-                        ['__sleep', '__wakeup', '__clone']
-                    )
+                    $method->isDestructor()
+                )
+                && !in_array(
+                    $method->getName(),
+                    ['__sleep', '__wakeup', '__clone', '__debugInfo', '_resetState']
+                )
             ) {
                 $methods[] = $this->_getMethodInfo($method);
+            }
+            if ($method->getName() === '_resetState') {
+                $methods[] = [
+                    'name' => '_resetState',
+                    'returnType' => 'void',
+                    'body' => "if (\$this->_subject) {\n" .
+                        "    \$this->_subject->_resetState(); \n" .
+                        "}\n",
+                    'docblock' => ['shortDescription' => 'Reset state of proxied instance'],
+                ];
             }
         }
 
@@ -128,6 +156,8 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
     }
 
     /**
+     * Generates code
+     *
      * @return string
      */
     protected function _generateCode()
@@ -141,6 +171,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
             $this->_classGenerator->setExtendedClass($typeName);
             $this->_classGenerator->setImplementedInterfaces(['\\' . self::NON_INTERCEPTABLE_INTERFACE]);
         }
+
         return parent::_generateCode();
     }
 
@@ -155,15 +186,22 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         $parameterNames = [];
         $parameters = [];
         foreach ($method->getParameters() as $parameter) {
-            $parameterNames[] = '$' . $parameter->getName();
+            $name = $parameter->isVariadic() ? '... $' . $parameter->getName() : '$' . $parameter->getName();
+            $parameterNames[] = $name;
             $parameters[] = $this->_getMethodParameterInfo($parameter);
         }
 
+        $returnTypeValue = $this->getReturnTypeValue($method);
         $methodInfo = [
             'name' => $method->getName(),
             'parameters' => $parameters,
-            'body' => $this->_getMethodBody($method->getName(), $parameterNames),
+            'body' => $this->_getMethodBody(
+                $method->getName(),
+                $parameterNames,
+                $returnTypeValue === 'void'
+            ),
             'docblock' => ['shortDescription' => '{@inheritdoc}'],
+            'returntype' => $returnTypeValue,
         ];
 
         return $methodInfo;
@@ -212,20 +250,28 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
      *
      * @param string $name
      * @param array $parameters
+     * @param bool $withoutReturn
      * @return string
      */
-    protected function _getMethodBody($name, array $parameters = [])
-    {
+    protected function _getMethodBody(
+        $name,
+        array $parameters = [],
+        bool $withoutReturn = false
+    ) {
         if (count($parameters) == 0) {
             $methodCall = sprintf('%s()', $name);
         } else {
             $methodCall = sprintf('%s(%s)', $name, implode(', ', $parameters));
         }
-        return 'return $this->_getSubject()->' . $methodCall . ';';
+
+        return ($withoutReturn ? '' : 'return ')
+            . '$this->_getSubject()->' . $methodCall . ';';
     }
 
     /**
-     * {@inheritdoc}
+     * Validates data
+     *
+     * @return bool
      */
     protected function _validateData()
     {
@@ -241,6 +287,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
                 $result = false;
             }
         }
+
         return $result;
     }
 }

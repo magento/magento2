@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CatalogProductListWidgetOrderTest" deprecated="Use CatalogProductListCheckWidgetOrderTest instead">
+        <annotations>
+            <features value="CatalogWidget"/>
+            <stories value="MC-5905: Wrong sorting on Products component"/>
+            <title value="Deprecated. Checking order of products in the 'catalog Products List' widget"/>
+            <description value="Check that products are ordered with recently added products first"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-13794"/>
+            <group value="CatalogWidget"/>
+            <group value="WYSIWYGDisabled"/>
+            <skip>
+                <issueId value="DEPRECATED">Use CatalogProductListCheckWidgetOrderTest instead</issueId>
+            </skip>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
+            <createData entity="SimpleProduct" stepKey="createFirstProduct">
+                <requiredEntity createDataKey="simplecategory"/>
+                <field key="price">10</field>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSecondProduct">
+                <requiredEntity createDataKey="simplecategory"/>
+                <field key="price">20</field>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createThirdProduct">
+                <requiredEntity createDataKey="simplecategory"/>
+                <field key="price">30</field>
+            </createData>
+            <createData entity="_defaultCmsPage" stepKey="createPreReqPage"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+        </before>
+        <!--Open created cms page-->
+        <comment userInput="Open created cms page" stepKey="commentOpenCreatedCmsPage"/>
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage1">
+            <argument name="CMSPage" value="$$createPreReqPage$$"/>
+        </actionGroup>
+        <!--Add widget to cms page-->
+        <comment userInput="Add widget to cms page" stepKey="commentAddWidgetToCmsPage"/>
+        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
+        <waitForPageLoad stepKey="waitForPageLoad1" />
+        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog Products List" stepKey="selectCatalogProductsList" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear1" />
+        <click selector="{{WidgetSection.AddParam}}" stepKey="clickAddParamBtn" />
+        <waitForElementVisible selector="{{WidgetSection.ConditionsDropdown}}" stepKey="waitForDropdownVisible"/>
+        <selectOption selector="{{WidgetSection.ConditionsDropdown}}" userInput="Category" stepKey="selectCategoryCondition" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear2" />
+        <click selector="{{WidgetSection.RuleParam}}" stepKey="clickRuleParam" />
+        <waitForElementVisible selector="{{WidgetSection.Chooser}}" stepKey="waitForElement" />
+        <click selector="{{WidgetSection.Chooser}}" stepKey="clickChooser" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear3" />
+        <click selector="{{WidgetSection.PreCreateCategory('$$simplecategory.name$$')}}" stepKey="selectCategory" />
+        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
+        <waitForPageLoad stepKey="waitForPageLoad2" />
+        <!--Save cms page and go to Storefront-->
+        <comment userInput="Save cms page and go to Storefront" stepKey="commentSaveCmsPageAndGoToStorefront"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
+        <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+        <amOnPage url="$$createPreReqPage.identifier$$" stepKey="amOnPageTestPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad3" />
+        <!--Check order of products: recently added first-->
+        <comment userInput="Check order of products: recently added first" stepKey="commentCheckOrderOfProductsRecentlyAddedFirst"/>
+        <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByName('1','$$createThirdProduct.name$$')}}" stepKey="seeElementByName1"/>
+        <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByName('2','$$createSecondProduct.name$$')}}" stepKey="seeElementByName2"/>
+        <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByName('3','$$createFirstProduct.name$$')}}" stepKey="seeElementByName3"/>
+        <after>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <deleteData createDataKey="createPreReqPage" stepKey="deletePreReqPage" />
+            <deleteData createDataKey="simplecategory" stepKey="deleteSimpleCategory"/>
+            <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createThirdProduct" stepKey="deleteThirdProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

@@ -6,9 +6,10 @@
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Integration\Model\Integration as IntegrationModel;
 
-class TokensDialog extends \Magento\Integration\Controller\Adminhtml\Integration
+class TokensDialog extends \Magento\Integration\Controller\Adminhtml\Integration implements HttpGetActionInterface
 {
     /**
      * Set success message based on Integration activation or re-authorization.
@@ -50,12 +51,12 @@ class TokensDialog extends \Magento\Integration\Controller\Adminhtml\Integration
                 $this->_integrationService->get($integrationId)->getData()
             );
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $this->_redirect('*/*');
             return;
         } catch (\Exception $e) {
             $this->_logger->critical($e);
-            $this->messageManager->addError(__('Internal error. Check exception log for details.'));
+            $this->messageManager->addErrorMessage(__('Internal error. Check exception log for details.'));
             $this->_redirect('*/*');
             return;
         }

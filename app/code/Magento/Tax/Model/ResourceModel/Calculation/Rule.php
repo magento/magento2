@@ -6,9 +6,7 @@
 namespace Magento\Tax\Model\ResourceModel\Calculation;
 
 /**
- * Tax rate resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Tax rule resource model
  */
 class Rule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

@@ -8,11 +8,6 @@ namespace Magento\SalesRule\Model;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
-/**
- * Class Utility
- *
- * @package Magento\SalesRule\Model
- */
 class Utility
 {
     /**
@@ -91,7 +86,7 @@ class Utility
          */
         if ($rule->getCouponType() != \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON) {
             $couponCode = $address->getQuote()->getCouponCode();
-            if (strlen($couponCode)) {
+            if ($couponCode !== null && strlen($couponCode)) {
                 /** @var \Magento\SalesRule\Model\Coupon $coupon */
                 $coupon = $this->couponFactory->create();
                 $coupon->load($couponCode, 'code');
@@ -153,6 +148,8 @@ class Utility
     }
 
     /**
+     * Set discount amount (found min)
+     *
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param float $qty
@@ -189,11 +186,12 @@ class Utility
     ) {
         $discountAmount = $discountData->getAmount();
         $baseDiscountAmount = $discountData->getBaseAmount();
+        $rowTotalInclTax = $item->getRowTotalInclTax();
+        $baseRowTotalInclTax = $item->getBaseRowTotalInclTax();
 
-        //TODO Seems \Magento\Quote\Model\Quote\Item\AbstractItem::getDiscountPercent() returns float value
-        //that can not be used as array index
-        $percentKey = $item->getDiscountPercent();
-        if ($percentKey) {
+        $percentKey = (string)$item->getDiscountPercent();
+        $rowTotal = $item->getRowTotal();
+        if ($percentKey && $rowTotal > 0) {
             $delta = isset($this->_roundingDeltas[$percentKey]) ? $this->_roundingDeltas[$percentKey] : 0;
             $baseDelta = isset($this->_baseRoundingDeltas[$percentKey]) ? $this->_baseRoundingDeltas[$percentKey] : 0;
 
@@ -203,6 +201,23 @@ class Utility
             $this->_roundingDeltas[$percentKey] = $discountAmount - $this->priceCurrency->round($discountAmount);
             $this->_baseRoundingDeltas[$percentKey] = $baseDiscountAmount
                 - $this->priceCurrency->round($baseDiscountAmount);
+        }
+
+        /**
+         * When we have 100% discount check if totals will not be negative
+         */
+
+        if ($item->getDiscountPercent() == 100) {
+            $discountDelta = $rowTotalInclTax - $discountAmount;
+            $baseDiscountDelta = $baseRowTotalInclTax - $baseDiscountAmount;
+
+            if ($discountDelta < 0) {
+                $discountAmount += $discountDelta;
+            }
+
+            if ($baseDiscountDelta < 0) {
+                $baseDiscountAmount += $baseDiscountDelta;
+            }
         }
 
         $discountData->setAmount($this->priceCurrency->round($discountAmount));
@@ -274,6 +289,8 @@ class Utility
     }
 
     /**
+     * Resets rounding deltas data.
+     *
      * @return void
      */
     public function resetRoundingDeltas()

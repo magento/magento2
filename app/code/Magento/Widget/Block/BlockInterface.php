@@ -3,22 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+namespace Magento\Widget\Block;
 
 /**
  * Widget Block Interface
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-namespace Magento\Widget\Block;
-
-/**
- * Interface \Magento\Widget\Block\BlockInterface
- *
+ * @api
  */
 interface BlockInterface
 {
     /**
      * Add data to the widget.
+     *
      * Retains previous data in the widget.
      *
      * @param array $arr
@@ -35,7 +33,7 @@ interface BlockInterface
      *
      * @param string|array $key
      * @param mixed $value
-     * @return \Magento\Framework\DataObject
+     * @return $this
      */
     public function setData($key, $value = null);
 }

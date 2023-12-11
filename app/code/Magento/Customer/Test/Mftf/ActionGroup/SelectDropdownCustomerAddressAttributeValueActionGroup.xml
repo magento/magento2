@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SelectDropdownCustomerAddressAttributeValueActionGroup">
+        <annotations>
+            <description>Selects the provided Option in the provided Customer Address Attribute drop down menu. Clicks on Save.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerAddressAttribute"/>
+            <argument name="optionValue" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminEditCustomerAddressesSection.dropDownAttribute(customerAddressAttribute.code)}}" stepKey="waitForSelectOption"/>
+        <selectOption selector="{{AdminEditCustomerAddressesSection.dropDownAttribute(customerAddressAttribute.code)}}" userInput="{{optionValue}}" stepKey="selectOptionValue"/>
+        <click selector="{{AdminEditCustomerAddressesSection.save}}" stepKey="saveAddress"/>
+        <waitForPageLoad stepKey="waitForAddressSaved"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+        <test name="EndToEndB2CAdminTest">
+            <!--Create Bundle Product-->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageBundle" after="seeSimpleProductInGrid"/>
+            <waitForPageLoad stepKey="waitForProductPageLoadBundle" after="visitAdminProductPageBundle"/>
+            <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateBundleProduct" after="waitForProductPageLoadBundle">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
+
+            <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{BundleProduct.sku}}" stepKey="fillBundleName" after="goToCreateBundleProduct"/>
+            <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{BundleProduct.name}}" stepKey="fillBundleSku" after="fillBundleName"/>
+            <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption3" after="fillBundleSku"/>
+            <waitForElementVisible selector="{{AdminProductFormBundleSection.firstOptionTitle}}" stepKey="waitForBundleOptions" after="clickAddOption3"/>
+            <fillField selector="{{AdminProductFormBundleSection.firstOptionTitle}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle" after="waitForBundleOptions"/>
+            <selectOption selector="{{AdminProductFormBundleSection.firstInputType}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType" after="fillOptionTitle"/>
+            <waitForElementVisible selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="waitForAddProductsToBundle" after="selectInputType"/>
+            <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="clickAddProductsToOption" after="waitForAddProductsToBundle"/>
+            <waitForPageLoad stepKey="waitForPageLoadAfterBundleProducts" after="clickAddProductsToOption"/>
+            <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions" after="waitForPageLoadAfterBundleProducts">
+                <argument name="product" value="SimpleProduct"/>
+            </actionGroup>
+            <actionGroup ref="AdminCheckFirstCheckboxInAddProductsToOptionPanelGridActionGroup" stepKey="selectFirstGridRow" after="filterBundleProductOptions"/>
+            <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts" after="selectFirstGridRow"/>
+            <fillField selector="{{AdminProductFormBundleSection.firstProductQuantity}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty" after="clickAddSelectedBundleProducts"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveBundleProduct" after="fillProductDefaultQty"/>
+            <actionGroup ref="ViewBundleProductInAdminGridActionGroup" stepKey="viewBundleProductInGrid" after="saveBundleProduct">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
+
+            <!--@TODO Move cleanup to "after" when MQE-830 is resolved-->
+            <comment userInput="Clean up bundle product" stepKey="cleanUpBundleProduct" after="deleteSimpleProduct"/>
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteBundleProduct" after="cleanUpBundleProduct">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters" after="deleteBundleProduct"/>
+        </test>
+</tests>

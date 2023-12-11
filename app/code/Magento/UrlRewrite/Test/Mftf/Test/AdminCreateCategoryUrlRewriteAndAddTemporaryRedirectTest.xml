@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCategoryUrlRewriteAndAddTemporaryRedirectTest">
+        <annotations>
+            <stories value="Create category URL rewrite"/>
+            <title value="Create category URL rewrite, with temporary redirect"/>
+            <description value="Login as admin and create category UrlRewrite with Temporary redirect"/>
+            <testCaseId value="MC-5336"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <createData entity="_defaultCategory" stepKey="category"/>
+       </before>
+        <after>
+            <deleteData createDataKey="category" stepKey="deleteRootCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Open Url Rewrite Index Page and update the Custom Url Rewrite, Store, Request Path, Redirect Type and Description -->
+        <actionGroup ref="AdminAddUrlRewriteActionGroup" stepKey="addUrlRewrite">
+            <argument name="category" value="$$category.name$$"/>
+            <argument name="customUrlRewriteValue" value="For Category"/>
+            <argument name="storeValue" value="Default Store View"/>
+            <argument name="requestPath" value="newrequestpath.html"/>
+            <argument name="redirectTypeValue" value="Temporary (302)"/>
+            <argument name="description" value="End To End Test"/>
+        </actionGroup>
+
+        <!-- Assert Redirect path, Target Path and Redirect type in grid -->
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath">
+            <argument name="redirectPath" value="newrequestpath.html" />
+            <argument name="redirectType" value="Temporary (302)" />
+            <argument name="targetPath" value="$$category.name_lwr$$.html"/>
+        </actionGroup>
+
+        <!--Assert Updated path directs to the category storefront -->
+        <actionGroup ref="AssertStorefrontUrlRewriteRedirectActionGroup" stepKey="openStorefrontUrlRedirectPath">
+            <argument name="category" value="$$category.name$$"/>
+            <argument name="newRequestPath" value="newrequestpath.html"/>
+        </actionGroup>
+    </test>
+</tests>

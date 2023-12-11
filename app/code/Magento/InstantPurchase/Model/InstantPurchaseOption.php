@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\InstantPurchase\Model;
 
 use Magento\Customer\Model\Address;
@@ -15,26 +16,27 @@ use InvalidArgumentException;
  * Option to make instant purchase.
  *
  * @api
+ * @since 100.2.0
  */
 class InstantPurchaseOption
 {
     /**
-     * @var PaymentTokenInterface
+     * @var PaymentTokenInterface|null
      */
     private $paymentToken;
 
     /**
-     * @var AddressIn
+     * @var Address|null
      */
     private $shippingAddress;
 
     /**
-     * @var Address
+     * @var Address|null
      */
     private $billingAddress;
 
     /**
-     * @var ShippingMethodInterface
+     * @var ShippingMethodInterface|null
      */
     private $shippingMethod;
 
@@ -81,6 +83,7 @@ class InstantPurchaseOption
      * Checks if option available
      *
      * @return bool
+     * @since 100.2.0
      */
     public function isAvailable(): bool
     {
@@ -97,11 +100,14 @@ class InstantPurchaseOption
      *
      * @return PaymentTokenInterface
      * @throws LocalizedException if payment token is not defined
+     * @since 100.2.0
      */
     public function getPaymentToken(): PaymentTokenInterface
     {
         if (!isset($this->paymentToken)) {
-            throw new LocalizedException(__('Payment method is not defined for instance purchase.'));
+            throw new LocalizedException(
+                __("A payment method isn't defined for instance purchase. Verify and try again.")
+            );
         }
         return $this->paymentToken;
     }
@@ -111,6 +117,7 @@ class InstantPurchaseOption
      *
      * @return Address
      * @throws LocalizedException if shipping address is not defined
+     * @since 100.2.0
      */
     public function getShippingAddress(): Address
     {
@@ -125,6 +132,7 @@ class InstantPurchaseOption
      *
      * @return Address
      * @throws LocalizedException if billing address is not defined
+     * @since 100.2.0
      */
     public function getBillingAddress(): Address
     {
@@ -139,6 +147,7 @@ class InstantPurchaseOption
      *
      * @return ShippingMethodInterface
      * @throws LocalizedException if shipping method is not defined
+     * @since 100.2.0
      */
     public function getShippingMethod(): ShippingMethodInterface
     {

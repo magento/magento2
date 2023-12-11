@@ -3,15 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Interception\Test\Unit\Code\Generator;
 
 use Composer\Autoload\ClassLoader;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\Interception\Code\Generator\Interceptor;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Framework\Interception\Code\Generator\ReflectionIntersectionTypeSample;
+use Magento\Framework\Interception\Code\Generator\ReflectionUnionTypeSample;
+use Magento\Framework\Interception\Code\Generator\Sample;
+use Magento\Framework\Interception\Code\Generator\SampleBackendMenu;
+use Magento\Framework\Interception\Code\Generator\TSample;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class InterceptorTest extends \PHPUnit\Framework\TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class InterceptorTest extends TestCase
 {
     /**
      * @var Io|MockObject
@@ -21,7 +31,7 @@ class InterceptorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ioGenerator = $this->getMockBuilder(Io::class)
             ->disableOriginalConstructor()
@@ -80,15 +90,30 @@ class InterceptorTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                \Magento\Framework\Interception\Code\Generator\Sample::class,
-                \Magento\Framework\Interception\Code\Generator\Sample\Interceptor::class,
+                Sample::class,
+                Sample\Interceptor::class,
                 'Interceptor'
             ],
             [
-                \Magento\Framework\Interception\Code\Generator\TSample::class,
-                \Magento\Framework\Interception\Code\Generator\TSample\Interceptor::class,
+                TSample::class,
+                TSample\Interceptor::class,
                 'TInterceptor'
-            ]
+            ],
+            [
+                SampleBackendMenu::class,
+                SampleBackendMenu\Interceptor::class,
+                'SampleBackendMenuInterceptor',
+            ],
+            [
+                ReflectionUnionTypeSample::class,
+                ReflectionUnionTypeSample\Interceptor::class,
+                'ReflectionUnionTypeSampleInterceptor',
+            ],
+            [
+                ReflectionIntersectionTypeSample::class,
+                ReflectionIntersectionTypeSample\Interceptor::class,
+                'ReflectionIntersectionTypeSampleInterceptor',
+            ],
         ];
     }
 }

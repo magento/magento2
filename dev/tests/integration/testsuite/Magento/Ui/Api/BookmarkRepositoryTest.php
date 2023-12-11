@@ -29,7 +29,7 @@ class BookmarkRepositoryTest extends \PHPUnit\Framework\TestCase
     /** @var SearchCriteriaBuilder */
     private $searchCriteriaBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->repository = $objectManager->create(BookmarkRepository::class);

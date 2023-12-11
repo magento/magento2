@@ -10,6 +10,17 @@
     <preference for="Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface" type="Magento\Config\Model\Config\Backend\File\RequestData" />
     <preference for="Magento\Framework\App\Config\ConfigResource\ConfigInterface" type="Magento\Config\Model\ResourceModel\Config" />
     <preference for="Magento\Framework\App\Config\CommentParserInterface" type="Magento\Config\Model\Config\Parser\Comment" />
+    <preference for="Magento\Config\Model\Config\Structure\ElementVisibilityInterface" type="Magento\Config\Model\Config\Structure\ElementVisibilityComposite" />
+    <preference for="Magento\Config\Console\Command\LocaleEmulatorInterface" type="Magento\Config\Console\Command\LocaleEmulator" />
+    <type name="Magento\Config\Model\Config\Structure\ElementVisibilityComposite">
+        <arguments>
+            <argument name="visibility" xsi:type="array">
+                <item name="productionVisibility" xsi:type="object">Magento\Config\Model\Config\Structure\ConcealInProductionConfigList</item>
+                <item name="concealInProduction" xsi:type="object">Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProduction</item>
+                <item name="concealInProductionWithoutScdOnDemand" xsi:type="object">Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProductionWithoutScdOnDemand</item>
+            </argument>
+        </arguments>
+    </type>
     <virtualType name="Magento\Framework\View\TemplateEngine\Xhtml\ConfigCompiler" type="Magento\Framework\View\TemplateEngine\Xhtml\Compiler" shared="false">
         <arguments>
             <argument name="compilerText" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Text</argument>
@@ -77,6 +88,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Lock\Backend\Cache">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+        </arguments>
+    </type>
     <type name="Magento\Config\App\Config\Type\System">
         <arguments>
             <argument name="source" xsi:type="object">systemConfigSourceAggregatedProxy</argument>
@@ -85,8 +101,16 @@
             <argument name="preProcessor" xsi:type="object">Magento\Framework\App\Config\PreProcessorComposite</argument>
             <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Serialize</argument>
             <argument name="reader" xsi:type="object">Magento\Config\App\Config\Type\System\Reader\Proxy</argument>
+            <argument name="lockQuery" xsi:type="object">systemConfigQueryLocker</argument>
         </arguments>
     </type>
+
+    <virtualType name="systemConfigQueryLocker" type="Magento\Framework\Cache\LockGuardedCacheLoader">
+        <arguments>
+            <argument name="locker" xsi:type="object">Magento\Framework\Lock\Proxy</argument>
+        </arguments>
+    </virtualType>
+
     <type name="Magento\Config\App\Config\Type\System\Reader">
         <arguments>
             <argument name="source" xsi:type="object">systemConfigSourceAggregated</argument>
@@ -194,6 +218,10 @@
     <virtualType name="appDumpSystemSource" type="Magento\Config\App\Config\Source\DumpConfigSourceAggregated">
         <arguments>
             <argument name="sources" xsi:type="array">
+                <item name="structure" xsi:type="array">
+                    <item name="source" xsi:type="object">Magento\Config\App\Config\Source\ConfigStructureSource</item>
+                    <item name="sortOrder" xsi:type="string">1</item>
+                </item>
                 <item name="modular" xsi:type="array">
                     <item name="source" xsi:type="object">Magento\Config\App\Config\Source\ModularConfigSource</item>
                     <item name="sortOrder" xsi:type="string">10</item>
@@ -282,6 +310,12 @@
     <type name="Magento\Config\Console\Command\ConfigShowCommand">
         <arguments>
             <argument name="configSource" xsi:type="object">configShowSourceAggregated</argument>
+            <argument name="localeEmulator" xsi:type="object">Magento\Config\Console\Command\LocaleEmulatorInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Console\Command\ConfigSetCommand">
+        <arguments>
+            <argument name="localeEmulator" xsi:type="object">Magento\Config\Console\Command\LocaleEmulatorInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Console\CommandListInterface">
@@ -296,10 +330,21 @@
         <arguments>
             <argument name="processors" xsi:type="array">
                 <item name="default" xsi:type="string">Magento\Config\Console\Command\ConfigSet\DefaultProcessor</item>
-                <item name="lock" xsi:type="string">Magento\Config\Console\Command\ConfigSet\LockProcessor</item>
+                <item name="lock-env" xsi:type="string">Magento\Config\Console\Command\ConfigSet\VirtualLockEnvProcessor</item>
+                <item name="lock-config" xsi:type="string">Magento\Config\Console\Command\ConfigSet\VirtualLockConfigProcessor</item>
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Config\Console\Command\ConfigSet\VirtualLockEnvProcessor" type="Magento\Config\Console\Command\ConfigSet\LockProcessor">
+        <arguments>
+            <argument name="target" xsi:type="string">app_env</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Config\Console\Command\ConfigSet\VirtualLockConfigProcessor" type="Magento\Config\Console\Command\ConfigSet\LockProcessor">
+        <arguments>
+            <argument name="target" xsi:type="string">app_config</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Deploy\Model\DeploymentConfig\ImporterPool">
         <arguments>
             <argument name="importers" xsi:type="array">
@@ -320,6 +365,36 @@
                 <item name="web/unsecure/base_url" xsi:type="string">1</item>
             </argument>
             <argument name="excludeList" xsi:type="object">Magento\Config\Model\Config\Export\ExcludeList</argument>
+        </arguments>
+    </type>
+    <virtualType name="adminhtmlConfigStructureData" type="\Magento\Config\Model\Config\Structure\Data">
+        <arguments>
+            <argument name="configScope" xsi:type="object">adminhtmlConfigScope</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="adminhtmlConfigStructure" type="Magento\Config\Model\Config\Structure">
+        <arguments>
+            <argument name="structureData" xsi:type="object">adminhtmlConfigStructureData</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Config\App\Config\Source\ConfigStructureSource">
+        <arguments>
+            <argument name="structure" xsi:type="object">adminhtmlConfigStructure</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config">
+        <arguments>
+            <argument name="configStructure" xsi:type="object">\Magento\Config\Model\Config\Structure\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Cache\TypeList">
+        <plugin name="warm_config_cache" type="Magento\Config\Plugin\Framework\App\Cache\TypeList\WarmConfigCache"/>
+    </type>
+    <type name="Magento\Framework\App\State\ReloadProcessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="Magento_Config::config" xsi:type="object">Magento\Config\App\Config\ReloadConfig</item>
+            </argument>
         </arguments>
     </type>
 </config>

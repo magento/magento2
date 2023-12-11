@@ -6,11 +6,12 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 
-class View extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
+class View extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View implements HttpGetActionInterface
 {
 
     /**
@@ -43,16 +44,17 @@ class View extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\V
     {
         $invoice = $this->getInvoice();
         if (!$invoice) {
-            /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
-            $resultForward = $this->resultForwardFactory->create();
-            return $resultForward->forward('noroute');
+            /** @var \Magento\Framework\Controller\Result\RedirectFactory $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setPath('sales/invoice');
+            return $resultRedirect;
         }
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Sales::sales_order');
         $resultPage->getConfig()->getTitle()->prepend(__('Invoices'));
-        $resultPage->getConfig()->getTitle()->prepend(sprintf("#%s", $invoice->getIncrementId()));
+        $resultPage->getConfig()->getTitle()->prepend(__('View Invoice #%1', $invoice->getIncrementId()));
         $resultPage->getLayout()->getBlock(
             'sales_invoice_view'
         )->updateBackButtonUrl(

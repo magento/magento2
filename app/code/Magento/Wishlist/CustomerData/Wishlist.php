@@ -7,6 +7,7 @@ namespace Magento\Wishlist\CustomerData;
 
 use Magento\Catalog\Model\Product\Image\NotLoadInfoImageException;
 use Magento\Customer\CustomerData\SectionSourceInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Wishlist section
@@ -39,25 +40,35 @@ class Wishlist implements SectionSourceInterface
     protected $block;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface
+     */
+    private $itemResolver;
+
+    /**
      * @param \Magento\Wishlist\Helper\Data $wishlistHelper
      * @param \Magento\Wishlist\Block\Customer\Sidebar $block
      * @param \Magento\Catalog\Helper\ImageFactory $imageHelperFactory
      * @param \Magento\Framework\App\ViewInterface $view
+     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface|null $itemResolver
      */
     public function __construct(
         \Magento\Wishlist\Helper\Data $wishlistHelper,
         \Magento\Wishlist\Block\Customer\Sidebar $block,
         \Magento\Catalog\Helper\ImageFactory $imageHelperFactory,
-        \Magento\Framework\App\ViewInterface $view
+        \Magento\Framework\App\ViewInterface $view,
+        \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface $itemResolver = null
     ) {
         $this->wishlistHelper = $wishlistHelper;
         $this->imageHelperFactory = $imageHelperFactory;
         $this->block = $block;
         $this->view = $view;
+        $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface::class
+        );
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSectionData()
     {
@@ -69,6 +80,8 @@ class Wishlist implements SectionSourceInterface
     }
 
     /**
+     * Get counter
+     *
      * @return string
      */
     protected function getCounter()
@@ -122,7 +135,9 @@ class Wishlist implements SectionSourceInterface
     {
         $product = $wishlistItem->getProduct();
         return [
-            'image' => $this->getImageData($product),
+            'image' => $this->getImageData($this->itemResolver->getFinalProduct($wishlistItem)),
+            'product_sku' => $product->getSku(),
+            'product_id' => $product->getId(),
             'product_url' => $this->wishlistHelper->getProductUrl($wishlistItem),
             'product_name' => $product->getName(),
             'product_price' => $this->block->getProductPriceHtml(
@@ -133,8 +148,8 @@ class Wishlist implements SectionSourceInterface
             ),
             'product_is_saleable_and_visible' => $product->isSaleable() && $product->isVisibleInSiteVisibility(),
             'product_has_required_options' => $product->getTypeInstance()->hasRequiredOptions($product),
-            'add_to_cart_params' => $this->wishlistHelper->getAddToCartParams($wishlistItem, true),
-            'delete_item_params' => $this->wishlistHelper->getRemoveParams($wishlistItem, true),
+            'add_to_cart_params' => $this->wishlistHelper->getAddToCartParams($wishlistItem),
+            'delete_item_params' => $this->wishlistHelper->getRemoveParams($wishlistItem),
         ];
     }
 
@@ -142,8 +157,7 @@ class Wishlist implements SectionSourceInterface
      * Retrieve product image data
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Block\Product\Image
-     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @return array
      */
     protected function getImageData($product)
     {
@@ -151,29 +165,11 @@ class Wishlist implements SectionSourceInterface
         $helper = $this->imageHelperFactory->create()
             ->init($product, 'wishlist_sidebar_block');
 
-        $template = $helper->getFrame()
-            ? 'Magento_Catalog/product/image'
-            : 'Magento_Catalog/product/image_with_borders';
-
-        try {
-            $imagesize = $helper->getResizedImageInfo();
-        } catch (NotLoadInfoImageException $exception) {
-            $imagesize = [$helper->getWidth(), $helper->getHeight()];
-        }
-
-        $width = $helper->getFrame()
-            ? $helper->getWidth()
-            : $imagesize[0];
-
-        $height = $helper->getFrame()
-            ? $helper->getHeight()
-            : $imagesize[1];
-
         return [
-            'template' => $template,
+            'template' => 'Magento_Catalog/product/image_with_borders',
             'src' => $helper->getUrl(),
-            'width' => $width,
-            'height' => $height,
+            'width' => $helper->getWidth(),
+            'height' => $helper->getHeight(),
             'alt' => $helper->getLabel(),
         ];
     }

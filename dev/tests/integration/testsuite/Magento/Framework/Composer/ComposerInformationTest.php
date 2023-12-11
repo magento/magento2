@@ -20,7 +20,7 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Filesystem\DirectoryList
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Filesystem\DirectoryList
      */
     private $directoryList;
 
@@ -34,7 +34,10 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
      */
     private $composerFactory;
 
-    public function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }
@@ -57,11 +60,6 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
             ['root' => __DIR__ . '/_files/' . $composerDir, 'config' => $directories]
         );
 
-        $this->filesystem = $this->objectManager->create(
-            \Magento\Framework\Filesystem::class,
-            ['directoryList' => $this->directoryList]
-        );
-
         $this->composerJsonFinder = new ComposerJsonFinder($this->directoryList);
         $this->composerFactory = new ComposerFactory($this->directoryList, $this->composerJsonFinder);
     }
@@ -81,7 +79,7 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
             ['composerFactory' => $this->composerFactory]
         );
 
-        $this->assertEquals("~5.5.0|~5.6.0|~7.0.0", $composerInfo->getRequiredPhpVersion());
+        $this->assertEquals("~8.1.0", $composerInfo->getRequiredPhpVersion());
     }
 
     /**
@@ -92,7 +90,7 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
     public function testGetRequiredExtensions($composerDir)
     {
         $this->setupDirectory($composerDir);
-        $expectedExtensions = ['ctype', 'gd', 'spl', 'dom', 'simplexml', 'mcrypt', 'hash', 'curl', 'iconv', 'intl'];
+        $expectedExtensions = ['ctype', 'gd', 'spl', 'dom', 'simplexml', 'hash', 'curl', 'iconv', 'intl'];
 
         /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
         $composerInfo = $this->objectManager->create(

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Test\Php;
 
@@ -11,6 +12,10 @@ use Magento\TestFramework\CodingStandard\Tool\CodeMessDetector;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
 use Magento\TestFramework\CodingStandard\Tool\CopyPasteDetector;
+use Magento\TestFramework\CodingStandard\Tool\PhpCompatibility;
+use Magento\TestFramework\CodingStandard\Tool\PhpStan;
+use Magento\TestFramework\Utility\AddedFiles;
+use Magento\TestFramework\Utility\FilesSearch;
 use PHPMD\TextUI\Command;
 
 /**
@@ -33,7 +38,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$pathToSource = BP;
         self::$reportDir = self::$pathToSource . '/dev/tests/static/report';
@@ -68,19 +73,28 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      * @param array $fileTypes
      * @param string $changedFilesBaseDir
      * @param string $baseFilesFolder
+     * @param string $whitelistFile
      * @return array
      */
-    public static function getWhitelist($fileTypes = ['php'], $changedFilesBaseDir = '', $baseFilesFolder = '')
-    {
+    public static function getWhitelist(
+        $fileTypes = ['php'],
+        $changedFilesBaseDir = '',
+        $baseFilesFolder = '',
+        $whitelistFile = '/_files/whitelist/common.txt'
+    ) {
         $changedFiles = self::getChangedFilesList($changedFilesBaseDir);
         if (empty($changedFiles)) {
             return [];
         }
 
         $globPatternsFolder = ('' !== $baseFilesFolder) ? $baseFilesFolder : self::getBaseFilesFolder();
-        $directoriesToCheck = Files::init()->readLists($globPatternsFolder . '/_files/whitelist/common.txt');
+        try {
+            $directoriesToCheck = Files::init()->readLists($globPatternsFolder . $whitelistFile);
+        } catch (\Exception $e) {
+            // no directories matched white list
+            return [];
+        }
         $targetFiles = self::filterFiles($changedFiles, $fileTypes, $directoriesToCheck);
-
         return $targetFiles;
     }
 
@@ -101,30 +115,19 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      */
     private static function getChangedFilesList($changedFilesBaseDir)
     {
-        $changedFiles = [];
-
-        $globFilesListPattern = ($changedFilesBaseDir ?: self::getChangedFilesBaseDir()) . '/_files/changed_files*';
-        $listFiles = glob($globFilesListPattern);
-        if (count($listFiles)) {
-            foreach ($listFiles as $listFile) {
-                $changedFiles = array_merge(
-                    $changedFiles,
-                    file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
-                );
-            }
-        } else {
-            // if no list files, probably, this is the dev environment
-            @exec('git diff --name-only', $changedFiles);
-        }
-
-        array_walk(
-            $changedFiles,
-            function (&$file) {
-                $file = BP . '/' . $file;
+        return FilesSearch::getFilesFromListFile(
+            $changedFilesBaseDir ?: self::getChangedFilesBaseDir(),
+            'changed_files*',
+            function () {
+                // if no list files, probably, this is the dev environment
+                // phpcs:disable Generic.PHP.NoSilencedErrors,Magento2.Security.InsecureFunction
+                @exec('git diff --name-only', $changedFiles);
+                @exec('git diff --cached --name-only', $addedFiles);
+                // phpcs:enable
+                $changedFiles = array_unique(array_merge($changedFiles, $addedFiles));
+                return $changedFiles;
             }
         );
-
-        return $changedFiles;
     }
 
     /**
@@ -160,9 +163,12 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             };
         } else {
             $allowedDirectories = array_map('realpath', $allowedDirectories);
-            usort($allowedDirectories, function ($dir1, $dir2) {
-                return strlen($dir1) - strlen($dir2);
-            });
+            usort(
+                $allowedDirectories,
+                function ($dir1, $dir2) {
+                    return strlen($dir1) - strlen($dir2);
+                }
+            );
             $fileIsInAllowedDirectory = function ($file) use ($allowedDirectories) {
                 foreach ($allowedDirectories as $directory) {
                     if (strpos($file, $directory) === 0) {
@@ -194,18 +200,57 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      */
     private function getFullWhitelist()
     {
-        return Files::init()->readLists(__DIR__ . '/_files/whitelist/common.txt');
+        try {
+            return Files::init()->readLists(__DIR__ . '/_files/whitelist/common.txt');
+        } catch (\Exception $e) {
+            // nothing is whitelisted
+            return [];
+        }
     }
 
+    /**
+     * Returns whether a full scan was requested.
+     *
+     * This can be set in the `phpunit.xml` used to run these test cases, by setting the constant
+     * `TESTCODESTYLE_IS_FULL_SCAN` to `1`, e.g.:
+     * ```xml
+     * <php>
+     *     <!-- TESTCODESTYLE_IS_FULL_SCAN - specify if full scan should be performed for test code style test -->
+     *     <const name="TESTCODESTYLE_IS_FULL_SCAN" value="0"/>
+     * </php>
+     * ```
+     *
+     * @return bool
+     */
+    private function isFullScan(): bool
+    {
+        return defined('TESTCODESTYLE_IS_FULL_SCAN') && TESTCODESTYLE_IS_FULL_SCAN === '1';
+    }
+
+    /**
+     * Test code quality using phpcs
+     */
     public function testCodeStyle()
     {
-        $whiteList = defined('TESTCODESTYLE_IS_FULL_SCAN') && TESTCODESTYLE_IS_FULL_SCAN === '1'
-            ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml']);
-
         $reportFile = self::$reportDir . '/phpcs_report.txt';
+        if (!file_exists($reportFile)) {
+            touch($reportFile);
+        }
         $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
-        $result = $codeSniffer->run($whiteList);
-        $report = file_exists($reportFile) ? file_get_contents($reportFile) : '';
+        $fileList = $this->isFullScan() ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml']);
+        $ignoreList = Files::init()->readLists(__DIR__ . '/_files/phpcs/ignorelist/*.txt');
+        if ($ignoreList) {
+            $ignoreListPattern = sprintf('#(%s)#i', implode('|', $ignoreList));
+            $fileList = array_filter(
+                $fileList,
+                function ($path) use ($ignoreListPattern) {
+                    return !preg_match($ignoreListPattern, $path);
+                }
+            );
+        }
+
+        $result = $codeSniffer->run($fileList);
+        $report = file_get_contents($reportFile);
         $this->assertEquals(
             0,
             $result,
@@ -213,6 +258,9 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Test code quality using phpmd
+     */
     public function testCodeMess()
     {
         $reportFile = self::$reportDir . '/phpmd_report.txt';
@@ -221,8 +269,19 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         if (!$codeMessDetector->canRun()) {
             $this->markTestSkipped('PHP Mess Detector is not available.');
         }
+        $fileList = self::getWhitelist(['php']);
+        $ignoreList = Files::init()->readLists(__DIR__ . '/_files/phpmd/ignorelist/*.txt');
+        if ($ignoreList) {
+            $ignoreListPattern = sprintf('#(%s)#i', implode('|', $ignoreList));
+            $fileList = array_filter(
+                $fileList,
+                function ($path) use ($ignoreListPattern) {
+                    return !preg_match($ignoreListPattern, $path);
+                }
+            );
+        }
 
-        $result = $codeMessDetector->run(self::getWhitelist(['php']));
+        $result = $codeMessDetector->run($fileList);
 
         $output = "";
         if (file_exists($reportFile)) {
@@ -241,6 +300,9 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * Test code quality using phpcpd
+     */
     public function testCopyPaste()
     {
         $reportFile = self::$reportDir . '/phpcpd_report.xml';
@@ -252,21 +314,123 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
 
         $blackList = [];
         foreach (glob(__DIR__ . '/_files/phpcpd/blacklist/*.txt') as $list) {
-            $blackList = array_merge($blackList, file($list, FILE_IGNORE_NEW_LINES));
+            $blackList[] = file($list, FILE_IGNORE_NEW_LINES);
         }
+        $blackList = array_merge([], ...$blackList);
 
         $copyPasteDetector->setBlackList($blackList);
 
         $result = $copyPasteDetector->run([BP]);
 
-        $output = "";
-        if (file_exists($reportFile)) {
-            $output = file_get_contents($reportFile);
-        }
+        $output = file_exists($reportFile) ? file_get_contents($reportFile) : '';
 
         $this->assertTrue(
             $result,
             "PHP Copy/Paste Detector has found error(s):" . PHP_EOL . $output
+        );
+    }
+
+    /**
+     * Tests whitelisted files for strict type declarations.
+     */
+    public function testStrictTypes()
+    {
+        $changedFiles = AddedFiles::getAddedFilesList(self::getChangedFilesBaseDir());
+
+        try {
+            $blackList = Files::init()->readLists(
+                self::getBaseFilesFolder() . '/_files/blacklist/strict_type.txt'
+            );
+        } catch (\Exception $e) {
+            // nothing matched black list
+            $blackList = [];
+        }
+
+        $toBeTestedFiles = array_diff(
+            self::filterFiles($changedFiles, ['php'], []),
+            $blackList
+        );
+
+        $filesMissingStrictTyping = [];
+        foreach ($toBeTestedFiles as $fileName) {
+            $file = file_get_contents($fileName);
+            if (strstr($file, 'strict_types=1') === false) {
+                $filesMissingStrictTyping[] = $fileName;
+            }
+        }
+
+        $this->assertCount(
+            0,
+            $filesMissingStrictTyping,
+            "Following files are missing strict type declaration:"
+            . PHP_EOL
+            . implode(PHP_EOL, $filesMissingStrictTyping)
+        );
+    }
+
+    /**
+     * Test code quality using PHPStan
+     *
+     * @throws \Exception
+     */
+    public function testPhpStan()
+    {
+        $reportFile = self::$reportDir . '/phpstan_report.txt';
+        $confFile = __DIR__ . '/_files/phpstan/phpstan.neon';
+
+        if (!file_exists($reportFile)) {
+            touch($reportFile);
+        }
+
+        $fileList = self::getWhitelist(['php']);
+        $blackList = Files::init()->readLists(__DIR__ . '/_files/phpstan/blacklist/*.txt');
+        if ($blackList) {
+            $blackListPattern = sprintf('#(%s)#i', implode('|', $blackList));
+            $fileList = array_filter(
+                $fileList,
+                function ($path) use ($blackListPattern) {
+                    return !preg_match($blackListPattern, $path);
+                }
+            );
+        }
+
+        $phpStan = new PhpStan($confFile, $reportFile);
+        $exitCode = $phpStan->run($fileList);
+        $report = file_get_contents($reportFile);
+
+        $errorMessage = empty($report) ?
+            'PHPStan command run failed.' : 'PHPStan detected violation(s):' . PHP_EOL . $report;
+        $this->assertEquals(0, $exitCode, $errorMessage);
+    }
+
+    /**
+     * Tests whitelisted fixtures for reuse other fixtures.
+     */
+    public function testFixtureReuse()
+    {
+        $changedFiles =  self::getWhitelist(['php']);
+        $toBeTestedFiles = self::filterFiles($changedFiles, ['php'], []);
+
+        $filesWithIncorrectReuse = [];
+        foreach ($toBeTestedFiles as $fileName) {
+            //check only _files and Fixtures directory
+            if (!preg_match('/integration.+\/(_files|Fixtures)/', $fileName)) {
+                continue;
+            }
+            $file = str_replace(["\n", "\r"], '', file_get_contents($fileName));
+            if (preg_match('/(?<![\=\s*])\b(require|require_once|include)\b/', $file)) {
+                $filesWithIncorrectReuse[] = $fileName;
+            }
+        }
+
+        $this->assertEquals(
+            0,
+            count($filesWithIncorrectReuse),
+            "The following files incorrectly reuse fixtures:"
+            . PHP_EOL
+            . implode(PHP_EOL, $filesWithIncorrectReuse)
+            . PHP_EOL
+            . 'Please use Magento\TestFramework\Workaround\Override\Fixture\Resolver::requireDataFixture'
         );
     }
 }

@@ -3,38 +3,53 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Page;
 
-use Magento\Framework;
+use Magento\Framework\View\Layout\Reader\Context;
+use Magento\Framework\View\Model\PageLayout\Config\BuilderInterface;
+use Magento\Framework\View\Page\Builder;
+use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\Layout\Reader;
+use Magento\Framework\View\PageLayout\Config as PageLayoutConfig;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class BuilderTest
  * @covers \Magento\Framework\View\Page\Builder
  */
 class BuilderTest extends \Magento\Framework\View\Test\Unit\Layout\BuilderTest
 {
-    const CLASS_NAME = \Magento\Framework\View\Page\Builder::class;
+    const CLASS_NAME = Builder::class;
 
     /**
      * @param array $arguments
-     * @return \Magento\Framework\View\Page\Builder
+     * @return object
      */
     protected function getBuilder($arguments)
     {
-        $arguments['pageConfig'] = $this->createMock(\Magento\Framework\View\Page\Config::class);
+        $arguments['pageConfig'] = $this->createMock(Config::class);
         $arguments['pageConfig']->expects($this->once())->method('setBuilder');
         $arguments['pageConfig']->expects($this->once())->method('getPageLayout')
-            ->will($this->returnValue('test_layout'));
+            ->willReturn('test_layout');
 
-        $readerContext = $this->createMock(\Magento\Framework\View\Layout\Reader\Context::class);
+        $readerContext = $this->createMock(Context::class);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $layout */
+        /** @var MockObject $layout */
         $layout = & $arguments['layout'];
-        $layout->expects($this->once())->method('getReaderContext')->will($this->returnValue($readerContext));
+        $layout->expects($this->once())->method('getReaderContext')->willReturn($readerContext);
 
-        $arguments['pageLayoutReader'] = $this->createMock(\Magento\Framework\View\Page\Layout\Reader::class);
+        $arguments['pageLayoutReader'] = $this->createMock(Reader::class);
         $arguments['pageLayoutReader']->expects($this->once())->method('read')->with($readerContext, 'test_layout');
+        $pageLayoutConfig = $this->createMock(PageLayoutConfig::class);
+        $arguments['pageLayoutBuilder'] = $this->getMockForAbstractClass(BuilderInterface::class);
+        $arguments['pageLayoutBuilder']->expects($this->once())
+            ->method('getPageLayoutsConfig')
+            ->willReturn($pageLayoutConfig);
+        $pageLayoutConfig->expects($this->once())
+            ->method('hasPageLayout')
+            ->with('test_layout')
+            ->willReturn(true);
 
         return parent::getBuilder($arguments);
     }
@@ -42,10 +57,11 @@ class BuilderTest extends \Magento\Framework\View\Test\Unit\Layout\BuilderTest
     /**
      * @return array
      */
-    protected function getLayoutMockMethods()
+    protected function getLayoutMockMethods(): array
     {
         $result = parent::getLayoutMockMethods();
         $result[] = 'getReaderContext';
+
         return $result;
     }
 }

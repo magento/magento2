@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CheckStaticBlocksTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="MAGETWO-91559 - Static blocks with same ID appear in place of correct block"/>
+            <title value="Check static blocks: ID should be unique per Store View"/>
+            <description value="Check static blocks: ID should be unique per Store View"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-25828"/>
+            <group value="Cms"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createNewStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="DeleteCMSBlockActionGroup" stepKey="deleteCMSBlock"/>
+            <actionGroup ref="DeleteCMSBlockActionGroup" stepKey="deleteSecondCMSBlock"/>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Go to Cms blocks page-->
+        <actionGroup ref="AdminOpenCmsBlocksGridActionGroup" stepKey="navigateToCMSBlocksGrid"/>
+        <actionGroup ref="AssertAdminProperUrlIsShownActionGroup" stepKey="verifyPageIsOpened">
+                <argument name="target_path" value="cms/block/"/>
+        </actionGroup>
+
+        <!--Click to create new block-->
+        <actionGroup ref="AdminPressAddNewCmsBlockButtonActionGroup" stepKey="clickOnAddNewBlockButton"/>
+        <actionGroup ref="AssertAdminProperUrlIsShownActionGroup" stepKey="verifyNewCmsBlockPageIsOpened">
+            <argument name="target_path" value="cms/block/new"/>
+        </actionGroup>
+        <actionGroup ref="FillOutBlockContent" stepKey="FillOutBlockContent"/>
+        <actionGroup ref="AdminPressSaveCmsBlockButtonActionGroup" stepKey="saveCmsBlock"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="You saved the block."/>
+        </actionGroup>
+
+        <!--Add new BLock with the same data-->
+        <actionGroup ref="AdminOpenCmsBlocksGridActionGroup" stepKey="openCmsBlocksGrid"/>
+        <actionGroup ref="AdminPressAddNewCmsBlockButtonActionGroup" stepKey="pressAddNewBlockButton"/>
+        <actionGroup ref="AssertAdminProperUrlIsShownActionGroup" stepKey="assertNewCmsBlockPageIsOpened">
+            <argument name="target_path" value="cms/block/new"/>
+        </actionGroup>
+        <actionGroup ref="FillOutBlockContent" stepKey="FillOutBlockContent1"/>
+        <actionGroup ref="AdminPressSaveCmsBlockButtonActionGroup" stepKey="clickOnSaveButton"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertErrorMessage">
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="A block identifier with the same properties already exists in the selected store."/>
+        </actionGroup>
+
+        <!--Add new BLock with the same data for another store view-->
+        <actionGroup ref="AdminOpenCmsBlocksGridActionGroup" stepKey="goToCmsBlocksGrid"/>
+        <actionGroup ref="AdminPressAddNewCmsBlockButtonActionGroup" stepKey="clickToAddNewButton"/>
+        <actionGroup ref="AssertAdminProperUrlIsShownActionGroup" stepKey="confirmNewCmsBlockPageIsOpened">
+            <argument name="target_path" value="cms/block/new"/>
+        </actionGroup>
+        <actionGroup ref="FillOutBlockContent" stepKey="FillOutBlockContent2"/>
+
+        <actionGroup ref="AdminSelectCMSBlockStoreViewActionGroup" stepKey="selectCustomStoreView">
+             <argument name="storeViewName" value="{{customStore.name}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminPressSaveCmsBlockButtonActionGroup" stepKey="saveNewCmsBlock"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="verifyBlockIsSaved">
+            <argument name="message" value="You saved the block."/>
+        </actionGroup>
+    </test>
+</tests>

@@ -6,22 +6,17 @@
 
 namespace Magento\Framework\Reflection;
 
-use Magento\Framework\Phrase;
-use Magento\Framework\Api\AttributeValue;
-use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
-use Zend\Code\Reflection\ClassReflection;
-use Zend\Code\Reflection\MethodReflection;
 
 /**
  * Determines the name to use for fields in a data output array given method metadata.
  */
 class FieldNamer
 {
-    const IS_METHOD_PREFIX = 'is';
-    const HAS_METHOD_PREFIX = 'has';
-    const GETTER_PREFIX = 'get';
-    
+    public const IS_METHOD_PREFIX = 'is';
+    public const HAS_METHOD_PREFIX = 'has';
+    public const GETTER_PREFIX = 'get';
+
     /**
      * Converts a method's name into a data field name.
      *
@@ -30,6 +25,7 @@ class FieldNamer
      */
     public function getFieldNameForMethodName($methodName)
     {
+        $methodName = $methodName ?? ''; // @phpstan-ignore-line
         if (substr($methodName, 0, 2) === self::IS_METHOD_PREFIX) {
             return SimpleDataObjectConverter::camelCaseToSnakeCase(substr($methodName, 2));
         } elseif (substr($methodName, 0, 3) === self::HAS_METHOD_PREFIX) {

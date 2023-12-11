@@ -9,8 +9,7 @@
     <body>
         <referenceContainer name="after.body.start">
             <block class="Magento\Paypal\Block\Express\InContext\Component"
-                   name="paypal.express-in-context.component"
-                   template="Magento_Paypal::express/in-context/component.phtml">
+                   name="paypal.express-in-context.component">
                 <arguments>
                     <argument name="is_button_context" xsi:type="boolean">true</argument>
                 </arguments>

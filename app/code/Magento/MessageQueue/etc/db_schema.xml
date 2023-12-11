@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="queue_lock" resource="default" engine="innodb"
+           comment="Messages that were processed are inserted here to be locked.">
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true"
+                comment="Message ID"/>
+        <column xsi:type="varchar" name="message_code" nullable="false" length="255" default="" comment="Message Code"/>
+        <column xsi:type="timestamp" name="created_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="QUEUE_LOCK_MESSAGE_CODE">
+            <column name="message_code"/>
+        </constraint>
+    </table>
+    <table name="queue_poison_pill" resource="default" engine="innodb" comment="Sequence table for poison pill versions">
+        <column xsi:type="varchar" name="version" length="255" nullable="false" comment="Poison Pill version."/>
+    </table>
+</schema>

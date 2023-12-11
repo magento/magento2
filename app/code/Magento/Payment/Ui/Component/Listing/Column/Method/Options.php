@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 namespace Magento\Payment\Ui\Component\Listing\Column\Method;
 
 /**
- * Class Options
+ * Class Options for Listing Column Method
  */
 class Options implements \Magento\Framework\Data\OptionSourceInterface
 {
@@ -25,8 +26,9 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
      *
      * @param \Magento\Payment\Helper\Data $paymentHelper
      */
-    public function __construct(\Magento\Payment\Helper\Data $paymentHelper)
-    {
+    public function __construct(
+        \Magento\Payment\Helper\Data $paymentHelper
+    ) {
         $this->paymentHelper = $paymentHelper;
     }
 
@@ -40,6 +42,7 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
         if ($this->options === null) {
             $this->options = $this->paymentHelper->getPaymentMethodList(true, true);
         }
+
         return $this->options;
     }
 }

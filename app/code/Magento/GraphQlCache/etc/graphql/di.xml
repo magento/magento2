@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\App\FrontControllerInterface">
+        <plugin name="graphql-dispatch-plugin" type="Magento\GraphQlCache\Controller\Plugin\GraphQl"/>
+        <plugin name="front-controller-builtin-cache" type="Magento\PageCache\Model\App\FrontController\BuiltinPlugin"/>
+        <plugin name="front-controller-varnish-cache" type="Magento\PageCache\Model\App\FrontController\VarnishPlugin"/>
+    </type>
+    <type name="Magento\Framework\GraphQl\Query\ResolverInterface">
+        <plugin name="cache" type="Magento\GraphQlCache\Model\Plugin\Query\Resolver" sortOrder="10"/>
+    </type>
+    <type name="Magento\Framework\App\PageCache\Identifier">
+        <plugin name="core-app-area-design-exception-plugin"
+                type="Magento\GraphQlCache\Model\Plugin\App\PageCache\Identifier" sortOrder="1"/>
+    </type>
+    <type name="Magento\Framework\Controller\ResultInterface">
+        <plugin name="graphql-result-plugin" type="Magento\GraphQlCache\Controller\Plugin\GraphQl"/>
+        <plugin name="result-builtin-cache" type="Magento\PageCache\Model\Controller\Result\BuiltinPlugin"/>
+        <plugin name="result-varnish-cache" type="Magento\PageCache\Model\Controller\Result\VarnishPlugin"/>
+    </type>
+    <type name="Magento\Integration\Api\UserTokenIssuerInterface">
+        <plugin name="set-context-after-token" type="Magento\GraphQlCache\Model\Plugin\Auth\TokenIssuer"/>
+    </type>
+    <type name="Magento\Integration\Api\UserTokenRevokerInterface">
+        <plugin name="set-guest-after-revoke" type="Magento\GraphQlCache\Model\Plugin\Auth\TokenRevoker"/>
+    </type>
+</config>

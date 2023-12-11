@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="CatalogPriceScopeWebsite" type="catalog_price_config_state">
+        <requiredEntity type="scope">scopeWebsite</requiredEntity>
+        <requiredEntity type="default_product_price">defaultProductPrice</requiredEntity>
+    </entity>
+    <entity name="scopeWebsite" type="scope">
+        <data key="value">1</data>
+    </entity>
+    <entity name="defaultProductPrice" type="default_product_price">
+        <data key="value">0</data>
+    </entity>
+
+    <entity name="DefaultConfigCatalogPrice" type="catalog_price_config_state">
+        <requiredEntity type="scope">scopeGlobal</requiredEntity>
+        <requiredEntity type="default_product_price">defaultProductPrice</requiredEntity>
+    </entity>
+    <entity name="scopeGlobal" type="scope">
+        <data key="value">0</data>
+    </entity>
+    <entity name="defaultProductPrice" type="default_product_price">
+        <data key="value"/>
+    </entity>
+    <entity name="CustomCatalogPrices">
+        <data key="path">tax/calculation/price_includes_tax</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="CustomDisplayProductPricesInCatalog">
+        <data key="path">tax/display/type</data>
+        <data key="value">3</data>
+    </entity>
+    <entity name="CatalogPrices">
+        <data key="path">tax/calculation/price_includes_tax</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="DisplayProductPricesInCatalog">
+        <data key="path">tax/display/type</data>
+        <data key="value">1</data>
+    </entity>
+</entities>

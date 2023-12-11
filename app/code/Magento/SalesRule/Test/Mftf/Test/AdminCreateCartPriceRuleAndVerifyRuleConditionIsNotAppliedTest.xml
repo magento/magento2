@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCartPriceRuleAndVerifyRuleConditionIsNotAppliedTest">
+        <annotations>
+            <stories value="Create Sales Rule"/>
+            <title value="Create Cart Price Rule And Verify Rule Condition Is Not Applied"/>
+            <description value="Test log in to Cart Price Rules and Create Cart Price Rule And Verify Rule Condition Is Not Applied"/>
+            <testCaseId value="MC-15606"/>
+            <severity value="CRITICAL"/>
+            <group value="SalesRule"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{EnableFlatRateDefaultPriceConfigData.path}} {{EnableFlatRateDefaultPriceConfigData.value}}" stepKey="enableFlatRateDefaultPrice"/>
+            <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteProduct" createDataKey="initialSimpleProduct"/>
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCreatedCartPriceRule">
+                <argument name="ruleName" value="{{CartPriceRuleConditionNotApplied.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
+        </after>
+
+        <!--Create cart price rule as per data and verify AssertCartPriceRuleSuccessSaveMessage-->
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{CartPriceRuleConditionNotApplied.name}}" stepKey="fillRuleName"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.description}}" userInput="{{CartPriceRuleConditionNotApplied.description}}" stepKey="fillDescription"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="{{CartPriceRuleConditionNotApplied.websites}}" stepKey="selectWebsites"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" parameterArray="[{{CartPriceRuleConditionNotApplied.customerGroups}}]" stepKey="selectCustomerGroup"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="{{CartPriceRuleConditionNotApplied.coupon_type}}" stepKey="selectCouponType"/>
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" stepKey="scrollToConditionsHeader"/>
+
+        <!-- Fill condition 1: Total Items Quantity -->
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" visible="true" stepKey="expandConditions"/>
+        <click selector="{{AdminCartPriceRulesFormSection.newCondition}}" stepKey="clickNewCondition"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.conditionSelect}}" userInput="Total Items Quantity" stepKey="selectCondition"/>
+        <waitForPageLoad stepKey="waitForConditionLoad"/>
+        <click selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="clickEllipsis"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1')}}" userInput="{{CartPriceRuleConditionNotApplied.totalItemQuantity}}" stepKey="fillTotalItemQuantity"/>
+        <actionGroup ref="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup" stepKey="createActiveCartPriceRuleActionsSection">
+            <argument name="rule" value="CartPriceRuleConditionNotApplied"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateCartPriceRuleActionsSectionFreeShippingActionGroup" stepKey="createActiveCartPriceRuleFreeShippingActionsSection">
+            <argument name="freeShippingOption" value="{{CartPriceRuleConditionNotApplied.simple_free_shipping}}"/>
+        </actionGroup>
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.labelsHeader}}" stepKey="scrollToLabelsHeader"/>
+        <actionGroup ref="AdminCreateCartPriceRuleLabelsSectionActionGroup" stepKey="createActiveCartPriceRuleLabelsSection">
+            <argument name="rule" value="CartPriceRuleConditionNotApplied"/>
+        </actionGroup>
+        <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="seeAssertCartPriceRuleSuccessSaveMessage"/>
+
+        <!--Search created cart price rule in grid-->
+        <actionGroup ref="AdminFilterCartPriceRuleActionGroup" stepKey="searchCreatedCartPriceRuleInGrid">
+            <argument name="ruleName" value="CartPriceRuleConditionNotApplied.name"/>
+        </actionGroup>
+
+        <!--Go to cart price rule form page and verify AssertCartPriceRuleForm-->
+        <waitForPageLoad stepKey="waitForAdminCartPriceRuleEditPageLoad"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{CartPriceRuleConditionNotApplied.name}}" stepKey="seeRuleName"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.description}}" userInput="{{CartPriceRuleConditionNotApplied.description}}" stepKey="seeDescription"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="{{CartPriceRuleConditionNotApplied.websites}}" stepKey="seeWebsites"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="{{CartPriceRuleConditionNotApplied.customerGroups}}" stepKey="seeCustomerGroup"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="{{CartPriceRuleConditionNotApplied.coupon_type}}" stepKey="seeCouponType"/>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" visible="true" stepKey="clickToExpandConditions"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1')}}" userInput="{{CartPriceRuleConditionNotApplied.totalItemQuantity}}" stepKey="seeTotalItemQuantity"/>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.actionsHeader}}" visible="true" stepKey="clickExpandActions"/>
+        <see selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="{{CartPriceRuleConditionNotApplied.simple_action}}" stepKey="seeActionApplyType"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="{{CartPriceRuleConditionNotApplied.discount_amount}}" stepKey="seeDiscountAmount"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.freeShipping}}" userInput="{{CartPriceRuleConditionNotApplied.simple_free_shipping}}" stepKey="seeFreeShipping"/>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.labelsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.labelsHeader}}" visible="true" stepKey="clickToExpandLabels"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.defaultRuleLabelAllStoreViews}}" userInput="{{CartPriceRuleConditionNotApplied.defaultRuleLabelAllStoreViews}}" stepKey="seeDefaultRuleLabelAllStoreViews"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.defaultStoreView}}" userInput="{{CartPriceRuleConditionNotApplied.defaultStoreView}}" stepKey="seeDefaultStoreView"/>
+
+        <!--Go to storefront page and verify created product-->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
+            <argument name="product" value="$$initialSimpleProduct$$"/>
+        </actionGroup>
+        <fillField selector="{{StorefrontProductInfoMainSection.qty}}" userInput="2" stepKey="fillProductQuantity"/>
+        <!--Click on Add To Cart button-->
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="clickOnAddToCartButton"/>
+        <!--Click on mini cart-->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+
+        <!--Open mini cart and verify Shopping cart subtotal equals to grand total-->
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="verifyCartSubtotalEqualsGrandTotal">
+            <argument name="productName" value="$$initialSimpleProduct.name$$"/>
+            <argument name="productPrice" value="$560.00"/>
+            <argument name="cartSubtotal" value="$1,120.00" />
+            <argument name="qty" value="2"/>
+        </actionGroup>
+
+        <!--Click on view and edit cart link-->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
+        <waitForPageLoad stepKey="waitForViewAndEditCartToOpen"/>
+        <!--Verify AssertCartPriceRuleConditionIsNotApplied(Shopping cart subtotal equals to grand total - price rule has not been applied)-->
+        <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssert">
+            <argument name="subtotal" value="$1,120.00"/>
+            <argument name="shipping" value="$10.00"/>
+            <argument name="shippingMethod" value="Flat Rate - Fixed"/>
+            <argument name="total" value="$1,130.00"/>
+        </actionGroup>
+        <dontSee selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="dontSeeAssertDiscountAmountForRuleConditionNotApplied"/>
+    </test>
+</tests>

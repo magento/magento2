@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrderRateDisplayWhenChooseThreeAllowedCurrenciesTest" extends="AdminOrderRateDisplayedInOneLineTest">
+        <annotations>
+            <features value="CurrencySymbol"/>
+            <stories value="Currency rates order page"/>
+            <title value="Order rate converting currency for 'Base Currency' and 'Default Display Currency' displayed correct"/>
+            <description value="Order rate converting currency for 'Base Currency' and 'Default Display Currency' displayed correct"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-17255" />
+            <useCaseId value="MAGETWO-67450"/>
+            <group value="currency"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create product-->
+            <createData entity="SimpleProduct2" stepKey="createNewProduct"/>
+            <!--Set Currency options for Website-->
+            <magentoCLI command="config:set --scope={{SetCurrencyUSDBaseConfig.scope}} --scope-code={{SetCurrencyUSDBaseConfig.scope_code}} {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="setCurrencyBaseUSDWebsites"/>
+            <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfigForUSD.scope}} --scope-code={{SetAllowedCurrenciesConfigForUSD.scope_code}} {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForEUR.value}},{{SetAllowedCurrenciesConfigForRUB.value}}" stepKey="setAllowedCurrencyWebsitesEURandRUBandUSD"/>
+            <magentoCLI command="config:set --scope={{SetDefaultCurrencyEURConfig.scope}} --scope-code={{SetDefaultCurrencyEURConfig.scope_code}} {{SetDefaultCurrencyEURConfig.path}} {{SetDefaultCurrencyEURConfig.value}}" stepKey="setCurrencyDefaultEURWebsites"/>
+        </before>
+        <after>
+            <!--Delete created product-->
+            <comment userInput="Delete created product" stepKey="commentDeleteCreatedProduct"/>
+            <deleteData createDataKey="createNewProduct" stepKey="deleteNewProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Set currency rates-->
+        <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="gotToCurrencyRatesPageSecondTime"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForLoadRatesPageSecondTime"/>
+        <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="setCurrencyRates">
+            <argument name="firstCurrency" value="USD"/>
+            <argument name="secondCurrency" value="RUB"/>
+            <argument name="rate" value="0.8"/>
+        </actionGroup>
+        <!--Open created product on Storefront and place for order-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToNewProductPage">
+            <argument name="product" value="$createNewProduct$"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForNewProductPagePageLoad"/>
+        <actionGroup ref="StorefrontSwitchCurrencyActionGroup" stepKey="switchCurrency">
+            <argument name="currency" value="RUB"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontNewProductPage">
+            <argument name="productName" value="$$createNewProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutNewProductFromMinicart" />
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutNewFillingShippingSection">
+        </actionGroup>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="guestSelectNewCheckMoneyOrderPayment" />
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceNewOrder">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+        </actionGroup>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabNewOrderNumber"/>
+        <!--Open order and check rates display in one line-->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openNewOrderById">
+            <argument name="orderId" value="$grabNewOrderNumber"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCurrencyInOrderActionGroup" stepKey="seeUSDandEURRate">
+            <argument name="rate" value="EUR / USD rate"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCurrencyInOrderActionGroup" stepKey="seeRUBandEURRate">
+            <argument name="rate" value="RUB / USD rate:"/>
+        </actionGroup>
+        <grabMultiple selector="{{AdminOrderDetailsInformationSection.rate}}" stepKey="grabRates" />
+        <assertEquals stepKey="assertRates">
+            <actualResult type="variable">grabRates</actualResult>
+            <expectedResult type="array">['EUR / USD rate:', 'RUB / USD rate:']</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontBundleProductDetailsTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Bundle product details page"/>
+            <title value="Customer should be able to see basic bundle product details"/>
+            <description value="Customer should be able to see basic bundle product details"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-230"/>
+            <group value="Bundle"/>
+        </annotations>
+        <before>
+            <!--Creating Data-->
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <!-- Admin Login-->
+            <actionGroup stepKey="loginToAdminPanel" ref="AdminLoginActionGroup"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- go to bundle product creation page-->
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToBundleProductCreationPage">
+            <argument name="attributeSetId" value="{{BundleProduct.set}}"/>
+            <argument name="productType" value="{{BundleProduct.type}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
+
+        <!--Add description-->
+        <click selector="{{AdminProductFormBundleSection.contentDropDown}}" stepKey="openDescriptionDropDown"/>
+        <scrollTo selector="{{AdminProductFormBundleSection.contentDropDown}}" stepKey="scrollToError"/>
+        <fillField selector="{{AdminProductFormBundleSection.longDescription}}" userInput="This is the long description" stepKey="fillLongDescription"/>
+        <fillField selector="{{AdminProductFormBundleSection.shortDescription}}" userInput="This is the short description" stepKey="fillShortDescription"/>
+
+        <!-- Add options -->
+        <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
+        <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption"/>
+        <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle"/>
+        <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType"/>
+        <actionGroup ref="AdminClickAddProductToOptionActionGroup" stepKey="clickAddProductsToOption"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions">
+            <argument name="product" value="$$simpleProduct1$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminCheckFirstCheckboxInAddProductsToOptionPanelGridActionGroup" stepKey="selectFirstGridRow"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions2">
+            <argument name="product" value="$$simpleProduct2$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminCheckFirstCheckboxInAddProductsToOptionPanelGridActionGroup" stepKey="selectFirstGridRow2"/>
+        <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts"/>
+        <actionGroup ref="AdminFillBundleItemQtyActionGroup" stepKey="fillProductDefaultQty1">
+            <argument name="optionIndex" value="0"/>
+            <argument name="productIndex" value="0"/>
+            <argument name="qty" value="{{BundleProduct.defaultQuantity}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminFillBundleItemQtyActionGroup" stepKey="fillProductDefaultQty2">
+            <argument name="optionIndex" value="0"/>
+            <argument name="productIndex" value="1"/>
+            <argument name="qty" value="{{BundleProduct.defaultQuantity}}"/>
+        </actionGroup>
+
+        <!--Create a basic bundle product-->
+        <actionGroup ref="CreateBasicBundleProductActionGroup" stepKey="createBundledProductForTwoSimpleProducts">
+            <argument name="bundleProduct" value="BundleProduct"/>
+        </actionGroup>
+
+        <!--save the product-->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButtonAgain"/>
+        <see userInput="You saved the product." stepKey="messageYouSavedTheProductIsShownAgain"/>
+
+        <!--Checking details-->
+        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageToLoad"/>
+        <see selector="{{BundleStorefrontSection.shortDescriptionText}}" userInput="This is the short description" stepKey="seeShortDescription"/>
+        <see selector="{{BundleStorefrontSection.longDescriptionText}}" userInput="This is the long description" stepKey="seeLongDescription"/>
+        <click selector="{{BundleStorefrontSection.bundleOptionSelector}}" stepKey="clickOnCustomizationOption"/>
+        <see selector="{{BundleStorefrontSection.bundleOptionSelection('1')}}" userInput="{{BundleProduct.defaultQuantity}} x $$simpleProduct1.name$$" stepKey="seeOption1"/>
+        <see selector="{{BundleStorefrontSection.bundleOptionSelection('2')}}" userInput="{{BundleProduct.defaultQuantity}} x $$simpleProduct2.name$$" stepKey="seeOption2"/>
+    </test>
+</tests>

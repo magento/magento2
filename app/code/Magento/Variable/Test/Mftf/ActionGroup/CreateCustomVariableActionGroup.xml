@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateCustomVariableActionGroup">
+        <annotations>
+            <description>Goes to the Custom Variable creation page. Fills in the Custom Variable details. PLEASE NOTE: The Custom Variable details are Hardcoded using 'customVariable'.</description>
+        </annotations>
+
+        <amOnPage url="{{AdminNewVariablePage.url}}" stepKey="goToNewCustomVarialePage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <fillField selector="{{CustomVariableSection.variableCode}}" userInput="{{customVariable.code}}" stepKey="fillVariableCode"/>
+        <fillField selector="{{CustomVariableSection.variableName}}" userInput="{{customVariable.name}}" stepKey="fillVariableName"/>
+        <fillField selector="{{CustomVariableSection.variableHTML}}" userInput="{{customVariable.html}}" stepKey="fillVariableHtml"/>
+        <fillField selector="{{CustomVariableSection.variablePlain}}" userInput="{{customVariable.plain}}" stepKey="fillVariablePlain"/>
+        <click selector="{{CustomVariableSection.saveCustomVariable}}" stepKey="clickSaveVariable"/>
+    </actionGroup>
+</actionGroups>

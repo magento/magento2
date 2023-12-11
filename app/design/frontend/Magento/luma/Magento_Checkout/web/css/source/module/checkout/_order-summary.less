@@ -49,6 +49,10 @@
             }
         }
 
+        .discount.coupon {
+            display: none;
+        }
+
         .grand.incl {
             & + .grand.excl {
                 .mark,
@@ -66,6 +70,7 @@
 
         .not-calculated {
             font-style: italic;
+            white-space: normal;
         }
 
         //
@@ -78,15 +83,7 @@
                 border-bottom: @border-width__base solid @border-color__base;
                 .lib-css(padding, @indent__s @indent__xl @indent__s 0);
                 cursor: pointer;
-                .lib-icon-font(
-                @icon-down,
-                @_icon-font-size: 12px,
-                @_icon-font-line-height: 12px,
-                @_icon-font-text-hide: true,
-                @_icon-font-margin: 3px 0 0,
-                @_icon-font-position: after,
-                @_icon-font-display: block
-                );
+                .lib-icon-font(@icon-down, @_icon-font-size: 12px, @_icon-font-line-height: 12px, @_icon-font-text-hide: true, @_icon-font-margin: 3px 0 0, @_icon-font-position: after, @_icon-font-display: block);
                 margin-bottom: 0;
                 position: relative;
 
@@ -105,15 +102,16 @@
 
             &.active {
                 > .title {
-                    .lib-icon-font-symbol(
-                    @_icon-font-content: @icon-up,
-                    @_icon-font-position: after
-                    );
+                    .lib-icon-font-symbol(@_icon-font-content: @icon-up, @_icon-font-position: after);
                 }
             }
 
             .product {
                 position: relative;
+                .item-options {
+                    &:extend(.abs-product-options-list all);
+                    &:extend(.abs-add-clearfix all);
+                }
             }
         }
 
@@ -133,6 +131,10 @@
         }
 
         .product-item {
+            .product-item-details {
+                &:extend(.abs-add-clearfix all);
+            }
+
             .product-item-inner {
                 display: table;
                 margin: 0 0 @indent__s;
@@ -140,14 +142,14 @@
             }
 
             .product-item-name-block {
-                display: table-cell;
+                display: block;
                 padding-right: @indent__xs;
                 text-align: left;
             }
 
             .subtotal {
-                display: table-cell;
-                text-align: right;
+                display: block;
+                text-align: left;
             }
 
             .price {
@@ -161,6 +163,10 @@
                         .lib-font-size(10);
                     }
                 }
+            }
+
+            .message {
+                margin-top: 10px;
             }
         }
 
@@ -211,6 +217,30 @@
         .modal-header {
             .action-close {
                 display: none;
+            }
+        }
+    }
+}
+
+//
+//  Tablet
+//  _____________________________________________
+
+@media only screen and (max-width: @screen__m) {
+    .opc-block-summary {
+        .product-item {
+            .product-item-inner {
+                display: block;
+            }
+
+            .product-item-name-block {
+                display: block;
+                text-align: left;
+            }
+
+            .subtotal {
+                display: block;
+                text-align: left;
             }
         }
     }

@@ -11,7 +11,6 @@ var config = {
             'translateInline':        'mage/translate-inline',
             'sticky':                 'mage/sticky',
             'tabs':                   'mage/tabs',
-            'zoom':                   'mage/zoom',
             'collapsible':            'mage/collapsible',
             'dropdownDialog':         'mage/dropdown',
             'dropdown':               'mage/dropdowns',
@@ -27,16 +26,42 @@ var config = {
             'menu':                   'mage/menu',
             'popupWindow':            'mage/popup-window',
             'validation':             'mage/validation/validation',
-            'welcome':                'Magento_Theme/js/view/welcome'
+            'breadcrumbs':            'Magento_Theme/js/view/breadcrumbs',
+            'jquery/ui':              'jquery/compat',
+            'cookieStatus':           'Magento_Theme/js/cookie-status'
         }
     },
-    paths: {
-        'jquery/ui': 'jquery/jquery-ui'
-    },
     deps: [
-        'jquery/jquery.mobile.custom',
         'mage/common',
         'mage/dataPost',
         'mage/bootstrap'
-    ]
+    ],
+    config: {
+        mixins: {
+            'Magento_Theme/js/view/breadcrumbs': {
+                'Magento_Theme/js/view/add-home-breadcrumb': true
+            }
+        }
+    }
 };
+
+/* eslint-disable max-depth */
+/**
+ * Adds polyfills only for browser contexts which prevents bundlers from including them.
+ */
+if (typeof window !== 'undefined' && window.document) {
+    /**
+     * Polyfill localStorage and sessionStorage for browsers that do not support them.
+     */
+    try {
+        if (!window.localStorage || !window.sessionStorage) {
+            throw new Error();
+        }
+
+        localStorage.setItem('storage_test', 1);
+        localStorage.removeItem('storage_test');
+    } catch (e) {
+        config.deps.push('mage/polyfill');
+    }
+}
+/* eslint-enable max-depth */

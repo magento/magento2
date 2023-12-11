@@ -103,11 +103,6 @@ define([
 
                         if (component) {
                             component.visible(visible);
-
-                            /*eslint-disable max-depth */
-                            if (_.isFunction(component.clear)) {
-                                component.clear();
-                            }
                         }
                     }
                 }, this);

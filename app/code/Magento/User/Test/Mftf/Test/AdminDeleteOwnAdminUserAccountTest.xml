@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteOwnAdminUserAccountTest">
+        <annotations>
+            <features value="User"/>
+            <stories value="Delete Admin User"/>
+            <title value="Admin user is not able to delete the own account"/>
+            <description value="Admin user is not able to delete the own account"/>
+            <testCaseId value="MC-14271"/>
+            <severity value="MAJOR"/>
+            <group value="user"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <!--Create New Admin User-->
+            <executeJS function="return '{{DefaultAdminUser.password}}'" stepKey="adminPassword" />
+            <createData entity="NewAdminUser" stepKey="user">
+                <field key="current_password">{$adminPassword}</field>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUser">
+                <argument name="username" value="$$user.username$$"/>
+                <argument name="password" value="$$user.password$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete New Admin User -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAdmin"/>
+            <actionGroup ref="AdminOpenAdminUsersPageActionGroup" stepKey="goToAllUsersPage"/>
+            <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="deleteUser">
+                <argument name="userName" value="$$user.username$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
+        </after>
+
+        <!--Assert Impossible Delete Your Own Account-->
+        <actionGroup ref="AdminOpenUserEditPageActionGroup" stepKey="openUserEditPageForDeleting">
+            <argument name="user" value="$$user$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminImpossibleDeleteYourOwnAccountActionGroup" stepKey="assertErrorMessage">
+            <argument name="currentAdminPassword" value="$$user.password$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminUserInGridActionGroup" stepKey="assertUserInGrid">
+            <argument name="userName" value="$$user.username$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logOutAsNewUser"/>
+    </test>
+</tests>

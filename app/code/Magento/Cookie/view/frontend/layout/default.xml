@@ -9,6 +9,11 @@
     <body>
         <referenceContainer name="after.body.start">
             <block class="Magento\Cookie\Block\Html\Notices" name="cookie_notices" template="Magento_Cookie::html/notices.phtml"/>
+            <block class="Magento\Framework\View\Element\Js\Cookie" name="cookie_config" template="Magento_Cookie::html/cookie.phtml">
+                <arguments>
+                    <argument name="session_config" xsi:type="object">Magento\Cookie\Block\DataProviders\SessionConfig</argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>

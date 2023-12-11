@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateDuplicatedCmsBlockTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="CMS Block Duplication and Reset Removal MAGETWO-88797"/>
+            <title value="Admin should be able to duplicate a CMS block"/>
+            <description value="Admin should be able to duplicate a CMS block"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-89185"/>
+            <group value="Cms"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+        </before>
+        <after>
+            <actionGroup ref="deleteBlock" stepKey="deleteCreatedBlock">
+                <argument name="Block" value="_defaultBlock"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Navigate to create cms block page and verify save split button -->
+        <actionGroup ref="VerifyCmsBlockSaveSplitButtonActionGroup" stepKey="verifyCmsBlockSaveButton" />
+        <!--Create new CMS Block page-->
+        <actionGroup ref="FillOutBlockContent" stepKey="FillOutBlockContent"/>
+        <!-- Click save and duplicate action -->
+        <actionGroup ref="SaveAndDuplicateCMSBlockWithSplitButtonActionGroup" stepKey="clickSaveAndDuplicateButton" />
+
+        <!--Verify duplicated CMS Block Page-->
+        <seeElement selector="{{BlockNewPageBasicFieldsSection.isActive('0')}}" stepKey="seeBlockNotEnable" />
+        <actionGroup ref="AssertBlockContent" stepKey="assertContent"/>
+        <!-- Click save and close button -->
+        <actionGroup ref="SaveAndCloseCMSBlockWithSplitButtonActionGroup" stepKey="saveAndCloseAction" />
+        <seeElement selector="div[data-role='grid-wrapper']" stepKey="seeGridPage" />
+    </test>
+</tests>

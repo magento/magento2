@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontPrintOrderGuestTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Print Order"/>
+            <title value="Print Order from Guest on Frontend"/>
+            <description value="Print Order from Guest on Frontend"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-28494"/>
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <magentoCLI command="downloadable:domains:add" arguments="example.com static.magento.com" stepKey="addDownloadableDomain"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+
+            <!-- Create downloadable Product -->
+            <createData entity="DownloadableProductWithTwoLink100" stepKey="downloadableProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">280</field>
+            </createData>
+            <createData entity="downloadableLink1" stepKey="addDownloadableLink1">
+                <requiredEntity createDataKey="downloadableProduct"/>
+            </createData>
+            <createData entity="downloadableLink2" stepKey="addDownloadableLink2">
+                <requiredEntity createDataKey="downloadableProduct"/>
+            </createData>
+
+            <!-- Check Links can be purchased separately for Downloadable Product -->
+            <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToDownloadableProduct">
+                <argument name="product" value="$downloadableProduct$"/>
+            </actionGroup>
+            <waitForPageLoad stepKey="waitForPageLoad"/>
+            <scrollTo selector="{{AdminProductDownloadableSection.sectionHeader}}" stepKey="scrollToDownloadableInformation"/>
+            <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOption"/>
+            <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+            <grabValueFrom selector="{{AdminProductDownloadableSection.addLinkTitleInput('0')}}" stepKey="grabLink"/>
+
+            <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSave"/>
+
+            <!-- Create configurable Product -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption3" stepKey="createConfigProductAttributeOption3">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="3" stepKey="getConfigAttributeOption3">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <field key="price">40</field>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <field key="price">40</field>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct3">
+                <field key="price">40</field>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption3"/>
+            </createData>
+
+            <createData entity="ConfigurableProductThreeOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+                <requiredEntity createDataKey="getConfigAttributeOption3"/>
+            </createData>
+
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild3">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct3"/>
+            </createData>
+
+            <!-- Grab attribute name for Configurable Product -->
+            <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToConfigurableProduct">
+                <argument name="product" value="$createConfigProduct$"/>
+            </actionGroup>
+            <grabTextFrom selector="{{AdminConfigurableProductFormSection.currentAttribute}}" stepKey="grabAttribute"/>
+            <assertNotEmpty stepKey="assertNotEmpty">
+                <actualResult type="const">$grabAttribute</actualResult>
+            </assertNotEmpty>
+
+            <!-- Create bundle Product -->
+            <createData entity="SimpleSubCategory" stepKey="createSubCategory"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1">
+                <field key="price">100.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2">
+                <field key="price">560.00</field>
+            </createData>
+            <createData entity="BundleProductPriceViewRange" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="createSubCategory"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption1_1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <field key="required">True</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="simpleProduct1"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct2">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="simpleProduct2"/>
+            </createData>
+
+            <!-- Grab bundle option name for Bundle Product -->
+            <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToBundleProduct">
+                <argument name="product" value="$createBundleProduct$"/>
+            </actionGroup>
+            <grabTextFrom selector="{{AdminProductFormBundleSection.currentBundleOption}}" stepKey="grabBundleOption"/>
+            <assertNotEmpty stepKey="assertBundleOptionNotEmpty">
+                <actualResult type="const">$grabBundleOption</actualResult>
+            </assertNotEmpty>
+
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductGridFilters"/>
+
+            <!-- Create sales rule -->
+            <createData entity="ActiveSalesRuleCoupon50" stepKey="createCartPriceRule"/>
+            <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
+                <requiredEntity createDataKey="createCartPriceRule"/>
+            </createData>
+
+            <!-- Create Customer Account -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+
+            <!-- Place order with options according to dataset -->
+            <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="newOrder">
+                <argument name="customer" value="$createCustomer$"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminFilterProductInCreateOrderActionGroup" stepKey="filterConfigProduct">
+                <argument name="productSKU" value="$createConfigProduct.sku$"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminAddToOrderConfigurableProductActionGroup" stepKey="addConfProduct">
+                <argument name="attribute" value="{$grabAttribute}"/>
+                <argument name="option" value="$getConfigAttributeOption1.label$"/>
+                <argument name="quantity" value="3"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminFilterProductInCreateOrderActionGroup" stepKey="filterBundleProduct">
+                <argument name="productSKU" value="$createBundleProduct.sku$"/>
+            </actionGroup>
+            <actionGroup ref="AdminAddToOrderBundleProductActionGroup" stepKey="addBundleProduct">
+                <argument name="option" value="{$grabBundleOption}"/>
+                <argument name="selectedProductName" value="$simpleProduct1.name$"/>
+                <argument name="quantity" value="2"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminFilterProductInCreateOrderActionGroup" stepKey="filterDownloadableProduct">
+                <argument name="productSKU" value="$downloadableProduct.sku$"/>
+            </actionGroup>
+            <actionGroup ref="AdminAddToOrderDownloadableProductActionGroup" stepKey="addDownloadableProduct">
+                <argument name="link" value="{$grabLink}"/>
+                <argument name="quantity" value="1"/>
+            </actionGroup>
+
+            <!-- add Coupon -->
+            <actionGroup ref="AdminAddToOrderCouponCodeActionGroup" stepKey="addCoupon">
+                <argument name="couponCode" value="$createCouponForCartPriceRule.code$"/>
+            </actionGroup>
+
+            <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillOrder">
+                <argument name="customer" value="$createCustomer$"/>
+                <argument name="address" value="US_Address_TX"/>
+            </actionGroup>
+
+            <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRate"/>
+            <actionGroup ref="SelectCheckMoneyPaymentMethodActionGroup" stepKey="selectCheckMoneyPayment"/>
+        </before>
+        <after>
+            <magentoCLI command="downloadable:domains:remove" arguments="example.com static.magento.com" stepKey="removeDownloadableDomain"/>
+            <deleteData createDataKey="downloadableProduct" stepKey="deleteProduct"/>
+
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigChildProduct3" stepKey="deleteConfigChildProduct3"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="createSubCategory" stepKey="deleteCategory1"/>
+
+            <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+
+        <comment userInput="BIC workaround" stepKey="getOrderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty">
+            <actualResult type="const">$orderNumber</actualResult>
+        </assertNotEmpty>
+
+        <!-- Find the Order on frontend > Navigate to: Orders and Returns -->
+        <amOnPage url="{{StorefrontGuestOrderSearchPage.url}}" stepKey="amOnOrdersAndReturns"/>
+        <waitForPageLoad stepKey="waiForStorefrontPage"/>
+
+        <!-- Fill the form with correspondent Order data -->
+        <actionGroup ref="StorefrontFillOrdersAndReturnsFormActionGroup" stepKey="fillOrder">
+            <argument name="orderNumber" value="{$orderNumber}"/>
+            <argument name="customer" value="$createCustomer$"/>
+        </actionGroup>
+
+        <!-- Click on the "Continue" button -->
+        <click selector="{{StorefrontGuestOrderSearchSection.continue}}" stepKey="clickContinue"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <!--  Click on the "Print Order" button -->
+        <click selector="{{StorefrontGuestOrderViewSection.printOrder}}" stepKey="printOrder"/>
+        <helper class="Magento\Sales\Test\Mftf\Helper\SalesHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered">
+            <argument name="expectedUrl">sales/guest/print/order_id/</argument>
+            <argument name="expectedUrlComparisonType">COMPARISON_PATH_SUBSET_MATCH</argument>
+        </helper>
+
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintWindowToOpen" />
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToWindow"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintTabToOpen"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToTab"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintPreviewToLoad"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="seePrintPage"/>
+
+        <!-- AssertSalesPrintOrderProducts -->
+        <see userInput="$createBundleProduct.name$" selector="{{StorefrontOrderDetailsSection.productNameCell}}" stepKey="seeBundleProduct"/>
+        <see userInput="$downloadableProduct.name$" selector="{{StorefrontOrderDetailsSection.productNameCell}}" stepKey="seeDownloadableProduct"/>
+        <see userInput="$createConfigProduct.name$" selector="{{StorefrontOrderDetailsSection.productNameCell}}" stepKey="seeConfigurableProduct"/>
+
+        <!-- AssertSalesPrintOrderBillingAddress -->
+        <scrollTo selector="{{StorefrontOrderDetailsSection.orderDetailsBlock}}" stepKey="scrollToFooter"/>
+        <actionGroup ref="AssertSalesPrintOrderBillingAddress" stepKey="assertSalesPrintOrderBillingAddress">
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+
+        <!-- AssertSalesPrintOrderGrandTotal -->
+        <see userInput="$357.43" selector="{{StorefrontOrderDetailsSection.grandTotalPrice}}" stepKey="assertSalesPrintOrderGrandTotal"/>
+
+        <!-- AssertSalesPrintOrderPaymentMethod  -->
+        <see userInput="Check / Money order" selector="{{StorefrontOrderDetailsSection.paymentMethod}}" stepKey="assertSalesPrintOrderPaymentMethod"/>
+
+        <!-- AssertSalesRuleOnPrintOrder -->
+        <see userInput="-$270.00" selector="{{StorefrontOrderDetailsSection.discountSalesRule}}" stepKey="assertSalesRuleOnPrintOrder"/>
+
+        <!-- AssertShippingMethodOnPrintOrder -->
+        <see userInput="Flat Rate - Fixed" selector="{{StorefrontOrderDetailsSection.shippingMethod}}" stepKey="assertShippingMethodOnPrintOrder"/>
+        <switchToPreviousTab stepKey="switchToPreviousTab"/>
+    </test>
+</tests>

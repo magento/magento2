@@ -5,13 +5,16 @@
  */
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\QuoteRepository;
+use Magento\SalesRule\Model\ResourceModel\Coupon\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require 'fixed_discount.php';
+Resolver::getInstance()->requireDataFixture('Magento/Paypal/_files/fixed_discount.php');
 
 /** @var ObjectManagerInterface $objectManager */
 $objectManager = Bootstrap::getObjectManager();
@@ -55,19 +58,21 @@ for ($i = 1; $i <= 3; $i++) {
         ->setName('Simple ' . $i)
         ->setSku('simple' . $i)
         ->setAttributeSetId(4)
-        ->setStockData(
-            [
-                'qty' => 10,
-                'is_in_stock' => 10,
-            ]
-        )
         ->setPrice(5.69 + $i * 2)
         ->setWeight(1);
+
+    /** @var StockItemInterface $stockItem */
+    $stockItem = $objectManager->create(StockItemInterface::class);
+    $stockItem->setQty(10)
+        ->setIsInStock(true);
+    $extensionAttributes = $product->getExtensionAttributes();
+    $extensionAttributes->setStockItem($stockItem);
+
     $item = $productRepository->save($product);
     $quote->addProduct($item, $i);
 }
 
-$quote->setCouponCode($coupon->getCode());
+$quote->setCouponCode('10_discount');
 $quote->collectTotals();
 
 /** @var QuoteRepository $quoteRepository */

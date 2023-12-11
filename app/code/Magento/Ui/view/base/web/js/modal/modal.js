@@ -14,8 +14,10 @@ define([
     'text!ui/template/modal/modal-slide.html',
     'text!ui/template/modal/modal-custom.html',
     'Magento_Ui/js/lib/key-codes',
-    'jquery/ui',
-    'mage/translate'
+    'jquery-ui-modules/widget',
+    'jquery-ui-modules/core',
+    'mage/translate',
+    'jquery/z-index'
 ], function ($, _, template, popupTpl, slideTpl, customTpl, keyCodes) {
     'use strict';
 
@@ -23,7 +25,7 @@ define([
      * Detect browser transition end event.
      * @return {String|undefined} - transition event.
      */
-    var transitionEvent =  (function () {
+    var transitionEvent = (function () {
         var transition,
             elementStyle = document.createElement('div').style,
             transitions = {
@@ -104,11 +106,12 @@ define([
                 /**
                  * Escape key press handler,
                  * close modal window
+                 * @param {Object} event - event
                  */
-                escapeKey: function () {
+                escapeKey: function (event) {
                     if (this.options.isOpen && this.modal.find(document.activeElement).length ||
                         this.options.isOpen && this.modal[0] === document.activeElement) {
-                        this.closeModal();
+                        this.closeModal(event);
                     }
                 }
             }
@@ -130,7 +133,10 @@ define([
             this._createWrapper();
             this._renderModal();
             this._createButtons();
-            $(this.options.trigger).on('click', _.bind(this.toggleModal, this));
+
+            if (this.options.trigger) {
+                $(document).on('click', this.options.trigger, _.bind(this.toggleModal, this));
+            }
             this._on(this.modal.find(this.options.modalCloseBtn), {
                 'click': this.options.modalCloseBtnHandler ? this.options.modalCloseBtnHandler : this.closeModal
             });
@@ -187,7 +193,7 @@ define([
          * @param {String} title
          */
         setTitle: function (title) {
-            var $title = $(this.options.modalTitle),
+            var $title = this.modal.find(this.options.modalTitle),
                 $subTitle = this.modal.find(this.options.modalSubTitle);
 
             $title.text(title);
@@ -255,15 +261,15 @@ define([
                 infelicity;
 
             if (type === 'opened' && this.options.focus) {
-                this.modal.find($(this.options.focus)).focus();
+                this.modal.find($(this.options.focus)).trigger('focus');
             } else if (type === 'opened' && !this.options.focus) {
-                this.modal.find(this.options.focusableScope).focus();
+                this.modal.find(this.options.focusableScope).trigger('focus');
             } else if (position === 'end') {
-                this.modal.find(this.options.modalCloseBtn).focus();
+                this.modal.find(this.options.modalCloseBtn).trigger('focus');
             } else if (position === 'start') {
                 infelicity = 2; //Constant for find last focusable element
                 focusableElements = this.modal.find(':focusable');
-                focusableElements.eq(focusableElements.length - infelicity).focus();
+                focusableElements.eq(focusableElements.length - infelicity).trigger('focus');
             }
         },
 
@@ -271,18 +277,18 @@ define([
          * Set events listener when modal is opened.
          */
         _setKeyListener: function () {
-            this.modal.find(this.options.focusableStart).bind('focusin', this._tabSwitcher);
-            this.modal.find(this.options.focusableEnd).bind('focusin', this._tabSwitcher);
-            this.modal.bind('keydown', this.keyEventSwitcher);
+            this.modal.find(this.options.focusableStart).on('focusin', this._tabSwitcher);
+            this.modal.find(this.options.focusableEnd).on('focusin', this._tabSwitcher);
+            this.modal.on('keydown', this.keyEventSwitcher);
         },
 
         /**
          * Remove events listener when modal is closed.
          */
         _removeKeyListener: function () {
-            this.modal.find(this.options.focusableStart).unbind('focusin', this._tabSwitcher);
-            this.modal.find(this.options.focusableEnd).unbind('focusin', this._tabSwitcher);
-            this.modal.unbind('keydown', this.keyEventSwitcher);
+            this.modal.find(this.options.focusableStart).off('focusin', this._tabSwitcher);
+            this.modal.find(this.options.focusableEnd).off('focusin', this._tabSwitcher);
+            this.modal.off('keydown', this.keyEventSwitcher);
         },
 
         /**
@@ -326,7 +332,7 @@ define([
         _close: function () {
             var trigger = _.bind(this._trigger, this, 'closed', this.modal);
 
-            $(this.focussedElement).focus();
+            $(this.focussedElement).trigger('focus');
             this._destroyOverlay();
             this._unsetActive();
             _.defer(trigger, this);
@@ -336,11 +342,18 @@ define([
          * Set z-index and margin for modal and overlay.
          */
         _setActive: function () {
-            var zIndex = this.modal.zIndex();
+            var zIndex = this.modal.zIndex(),
+                baseIndex = zIndex + this._getVisibleCount();
 
+            if (this.modal.data('active')) {
+                return;
+            }
+
+            this.modal.data('active', true);
+
+            this.overlay.zIndex(++baseIndex);
             this.prevOverlayIndex = this.overlay.zIndex();
-            this.modal.zIndex(zIndex + this._getVisibleCount());
-            this.overlay.zIndex(zIndex + (this._getVisibleCount() - 1));
+            this.modal.zIndex(this.overlay.zIndex() + 1);
 
             if (this._getVisibleSlideCount()) {
                 this.modal.css('marginLeft', this.options.modalLeftMargin * this._getVisibleSlideCount());
@@ -352,9 +365,10 @@ define([
          */
         _unsetActive: function () {
             this.modal.removeAttr('style');
+            this.modal.data('active', false);
 
             if (this.overlay) {
-                this.overlay.zIndex(this.prevOverlayIndex);
+                this.overlay.zIndex(this.prevOverlayIndex - 1);
             }
         },
 
@@ -428,7 +442,7 @@ define([
             }
             events = $._data(this.overlay.get(0), 'events');
             events ? this.prevOverlayHandler = events.click[0].handler : false;
-            this.options.clickableOverlay ? this.overlay.unbind().on('click', outerClickHandler) : false;
+            this.options.clickableOverlay ? this.overlay.off().on('click', outerClickHandler) : false;
         },
 
         /**
@@ -436,7 +450,7 @@ define([
          */
         _destroyOverlay: function () {
             if (this._getVisibleCount()) {
-                this.overlay.unbind().on('click', this.prevOverlayHandler);
+                this.overlay.off().on('click', this.prevOverlayHandler);
             } else {
                 $(this.options.appendTo).removeClass(this.options.parentModalClass);
                 this.overlay.remove();

@@ -6,6 +6,7 @@
 namespace Magento\Store\Model;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\ResourceModel\StoreWebsiteRelation;
 
@@ -16,22 +17,23 @@ use Magento\Store\Model\ResourceModel\StoreWebsiteRelation;
  */
 class StoreManager implements
     \Magento\Store\Model\StoreManagerInterface,
-    \Magento\Store\Api\StoreWebsiteRelationInterface
+    \Magento\Store\Api\StoreWebsiteRelationInterface,
+    ResetAfterRequestInterface
 {
     /**
      * Application run code
      */
-    const PARAM_RUN_CODE = 'MAGE_RUN_CODE';
+    public const PARAM_RUN_CODE = 'MAGE_RUN_CODE';
 
     /**
      * Application run type (store|website)
      */
-    const PARAM_RUN_TYPE = 'MAGE_RUN_TYPE';
+    public const PARAM_RUN_TYPE = 'MAGE_RUN_TYPE';
 
     /**
-     * Wether single store mode enabled or not
+     * Whether single store mode enabled or not
      */
-    const XML_PATH_SINGLE_STORE_MODE_ENABLED = 'general/single_store_mode/enabled';
+    public const XML_PATH_SINGLE_STORE_MODE_ENABLED = 'general/single_store_mode/enabled';
 
     /**
      * @var \Magento\Store\Api\StoreRepositoryInterface
@@ -49,8 +51,6 @@ class StoreManager implements
     protected $websiteRepository;
 
     /**
-     * Scope config
-     *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfig;
@@ -68,7 +68,7 @@ class StoreManager implements
     /**
      * Default store code
      *
-     * @var string
+     * @var string|int|\Magento\Store\Api\Data\StoreInterface
      */
     protected $currentStoreId = null;
 
@@ -87,6 +87,8 @@ class StoreManager implements
     protected $isSingleStoreAllowed;
 
     /**
+     * StoreManager constructor.
+     *
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
      * @param \Magento\Store\Api\GroupRepositoryInterface $groupRepository
      * @param \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository
@@ -114,7 +116,7 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCurrentStore($store)
     {
@@ -122,7 +124,7 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setIsSingleStoreModeAllowed($value)
     {
@@ -130,7 +132,7 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function hasSingleStore()
     {
@@ -139,7 +141,7 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isSingleStoreMode()
     {
@@ -147,7 +149,7 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getStore($storeId = null)
     {
@@ -171,7 +173,7 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getStores($withDefault = false, $codeKey = false)
     {
@@ -190,7 +192,7 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getWebsite($websiteId = null)
     {
@@ -210,7 +212,7 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getWebsites($withDefault = false, $codeKey = false)
     {
@@ -229,12 +231,15 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function reinitStores()
     {
         $this->currentStoreId = null;
-        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, [StoreResolver::CACHE_TAG, Store::CACHE_TAG]);
+        $this->cache->clean(
+            \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+            [StoreResolver::CACHE_TAG, Store::CACHE_TAG, Website::CACHE_TAG, Group::CACHE_TAG]
+        );
         $this->scopeConfig->clean();
         $this->storeRepository->clean();
         $this->websiteRepository->clean();
@@ -242,7 +247,7 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultStoreView()
     {
@@ -252,7 +257,7 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getGroup($groupId = null)
     {
@@ -267,7 +272,7 @@ class StoreManager implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getGroups($withDefault = false)
     {
@@ -291,14 +296,17 @@ class StoreManager implements
      */
     protected function isSingleStoreModeEnabled()
     {
-        return (bool)$this->scopeConfig->getValue(
+        return $this->scopeConfig->isSetFlag(
             self::XML_PATH_SINGLE_STORE_MODE_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
     /**
+     * Get Store Website Relation
+     *
      * @deprecated 100.2.0
+     * @see Nothing
      * @return StoreWebsiteRelation
      */
     private function getStoreWebsiteRelation()
@@ -312,5 +320,24 @@ class StoreManager implements
     public function getStoreByWebsiteId($websiteId)
     {
         return $this->getStoreWebsiteRelation()->getStoreByWebsiteId($websiteId);
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return ['currentStoreId' => $this->currentStoreId];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->currentStoreId = null;
     }
 }

@@ -7,10 +7,15 @@
 namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
+use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
+use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
 
 /**
  * Catalog entity abstract model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -19,14 +24,14 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 {
     /**
-     * Store manager
+     * Store manager to get the store information
      *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Model factory
+     * Model factory to create a model object
      *
      * @var \Magento\Catalog\Model\Factory
      */
@@ -37,16 +42,18 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
      * @param array $data
+     * @param UniqueValidationInterface|null $uniqueValidator
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Factory $modelFactory,
-        $data = []
+        $data = [],
+        UniqueValidationInterface $uniqueValidator = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_modelFactory = $modelFactory;
-        parent::__construct($context, $data);
+        parent::__construct($context, $data, $uniqueValidator);
     }
 
     /**
@@ -78,24 +85,22 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _isApplicableAttribute($object, $attribute)
     {
-        $applyTo = $attribute->getApplyTo();
+        $applyTo = $attribute->getApplyTo() ?: [];
         return (count($applyTo) == 0 || in_array($object->getTypeId(), $applyTo))
-            && $attribute->isInSet($object->getAttributeSetId());
+            && $attribute->isInSet($object->getAttributeSetId() ?? $this->getEntityType()->getDefaultAttributeSetId());
     }
 
     /**
      * Check whether attribute instance (attribute, backend, frontend or source) has method and applicable
      *
-     * @param AbstractAttribute|\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
-     * |\Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
-     * |\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource $instance
+     * @param AbstractAttribute|AbstractBackend|AbstractFrontend|AbstractSource $instance
      * @param string $method
      * @param array $args array of arguments
      * @return boolean
      */
     protected function _isCallableAttributeInstance($instance, $method, $args)
     {
-        if ($instance instanceof \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+        if ($instance instanceof AbstractBackend
             && ($method == 'beforeSave' || $method == 'afterSave')
         ) {
             $attributeCode = $instance->getAttribute()->getAttributeCode();
@@ -112,6 +117,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 
     /**
      * Retrieve select object for loading entity attributes values
+     *
      * Join attribute store value
      *
      * @param \Magento\Framework\DataObject $object
@@ -141,7 +147,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             ->select()
             ->from(['attr_table' => $table], [])
             ->where("attr_table.{$this->getLinkField()} = ?", $object->getData($this->getLinkField()))
-            ->where('attr_table.store_id IN (?)', $storeIds);
+            ->where('attr_table.store_id IN (?)', $storeIds, \Zend_Db::INT_TYPE);
 
         if ($setId) {
             $select->join(
@@ -180,7 +186,10 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     protected function _saveAttributeValue($object, $attribute, $value)
     {
         $connection = $this->getConnection();
-        $storeId = (int) $this->_storeManager->getStore($object->getStoreId())->getId();
+        $hasSingleStore = $this->_storeManager->hasSingleStore();
+        $storeId = $hasSingleStore
+            ? $this->getDefaultStoreId()
+            : (int) $this->_storeManager->getStore($object->getStoreId())->getId();
         $table = $attribute->getBackend()->getTable();
 
         /**
@@ -189,15 +198,18 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
          * In this case we clear all not default values
          */
         $entityIdField = $this->getLinkField();
-        if ($this->_storeManager->hasSingleStore()) {
-            $storeId = $this->getDefaultStoreId();
+        $conditions = [
+            'attribute_id = ?' => $attribute->getAttributeId(),
+            "{$entityIdField} = ?" => $object->getData($entityIdField),
+            'store_id <> ?' => $storeId
+        ];
+        if ($hasSingleStore
+            && !$object->isObjectNew()
+            && $this->isAttributePresentForNonDefaultStore($attribute, $conditions)
+        ) {
             $connection->delete(
                 $table,
-                [
-                    'attribute_id = ?' => $attribute->getAttributeId(),
-                    "{$entityIdField} = ?" => $object->getData($entityIdField),
-                    'store_id <> ?' => $storeId
-                ]
+                $conditions
             );
         }
 
@@ -234,6 +246,28 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         }
 
         return $this;
+    }
+
+    /**
+     * Check if attribute present for non default Store View.
+     *
+     * Prevent "delete" query locking in a case when nothing to delete
+     *
+     * @param AbstractAttribute $attribute
+     * @param array $conditions
+     *
+     * @return boolean
+     */
+    private function isAttributePresentForNonDefaultStore($attribute, $conditions)
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()->from($attribute->getBackend()->getTable());
+        foreach ($conditions as $condition => $conditionValue) {
+            $select->where($condition, $conditionValue);
+        }
+        $select->limit(1);
+
+        return !empty($connection->fetchRow($select));
     }
 
     /**
@@ -291,7 +325,25 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _updateAttribute($object, $attribute, $valueId, $value)
     {
-        return $this->_saveAttributeValue($object, $attribute, $value);
+        $entity = $attribute->getEntity();
+        $row = $this->getAttributeRow($entity, $object, $attribute);
+        $hasSingleStore = $this->_storeManager->hasSingleStore();
+        $storeId = $hasSingleStore
+            ? $this->getDefaultStoreId()
+            : (int) $this->_storeManager->getStore($object->getStoreId())->getId();
+        if ($valueId > 0 && array_key_exists('store_id', $row) && $storeId === $row['store_id']) {
+            $table = $attribute->getBackend()->getTable();
+            $connection = $this->getConnection();
+            $connection->update(
+                $table,
+                ['value' => $this->_prepareValueForSave($value, $attribute)],
+                sprintf('%s=%d', $connection->quoteIdentifier('value_id'), $valueId)
+            );
+
+            return $this;
+        } else {
+            return $this->_saveAttributeValue($object, $attribute, $value);
+        }
     }
 
     /**
@@ -435,7 +487,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      *
      * @param AbstractAttribute $attribute
      * @param mixed $value New value of the attribute.
-     * @param array &$origData
+     * @param array $origData
      * @return bool
      */
     protected function _canUpdateAttribute(AbstractAttribute $attribute, $value, array &$origData)
@@ -458,7 +510,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * Retrieve attribute's raw value from DB.
      *
      * @param int $entityId
-     * @param int|string|array $attribute atrribute's ids or codes
+     * @param int|string|array $attribute attribute's ids or codes
      * @param int|\Magento\Store\Model\Store $store
      * @return bool|string|array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -527,15 +579,23 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         $store = (int) $store;
         if ($typedAttributes) {
             foreach ($typedAttributes as $table => $_attributes) {
+                $defaultJoinCondition = [
+                    $connection->quoteInto(
+                        'default_value.attribute_id IN (?)',
+                        array_keys($_attributes),
+                        \Zend_Db::INT_TYPE
+                    ),
+                    "default_value.{$this->getLinkField()} = e.{$this->getLinkField()}",
+                    'default_value.store_id = 0',
+                ];
+
                 $select = $connection->select()
-                    ->from(['default_value' => $table], ['attribute_id'])
-                    ->join(
-                        ['e' => $this->getTable($this->getEntityTable())],
-                        'e.' . $this->getLinkField() . ' = ' . 'default_value.' . $this->getLinkField(),
-                        ''
-                    )->where('default_value.attribute_id IN (?)', array_keys($_attributes))
-                    ->where("e.entity_id = :entity_id")
-                    ->where('default_value.store_id = ?', 0);
+                    ->from(['e' => $this->getTable($this->getEntityTable())], [])
+                    ->joinLeft(
+                        ['default_value' => $table],
+                        implode(' AND ', $defaultJoinCondition),
+                        []
+                    )->where("e.entity_id = :entity_id");
 
                 $bind = ['entity_id' => $entityId];
 
@@ -545,8 +605,17 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                         'default_value.value',
                         'store_value.value'
                     );
+                    $attributeIdExpr = $connection->getCheckSql(
+                        'store_value.attribute_id IS NULL',
+                        'default_value.attribute_id',
+                        'store_value.attribute_id'
+                    );
                     $joinCondition = [
-                        $connection->quoteInto('store_value.attribute_id IN (?)', array_keys($_attributes)),
+                        $connection->quoteInto(
+                            'store_value.attribute_id IN (?)',
+                            array_keys($_attributes),
+                            \Zend_Db::INT_TYPE
+                        ),
                         "store_value.{$this->getLinkField()} = e.{$this->getLinkField()}",
                         'store_value.store_id = :store_id',
                     ];
@@ -554,25 +623,29 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                     $select->joinLeft(
                         ['store_value' => $table],
                         implode(' AND ', $joinCondition),
-                        ['attr_value' => $valueExpr]
+                        ['attribute_id' => $attributeIdExpr, 'attr_value' => $valueExpr]
                     );
 
                     $bind['store_id'] = $store;
                 } else {
-                    $select->columns(['attr_value' => 'value'], 'default_value');
+                    $select->columns(
+                        ['attribute_id' => 'attribute_id', 'attr_value' => 'value'],
+                        'default_value'
+                    );
                 }
 
                 $result = $connection->fetchPairs($select, $bind);
                 foreach ($result as $attrId => $value) {
-                    $attrCode = $typedAttributes[$table][$attrId];
-                    $attributesData[$attrCode] = $value;
+                    if ($attrId !== '') {
+                        $attrCode = $typedAttributes[$table][$attrId];
+                        $attributesData[$attrCode] = $value;
+                    }
                 }
             }
         }
 
-        if (is_array($attributesData) && sizeof($attributesData) == 1) {
-            $_data = each($attributesData);
-            $attributesData = $_data[1];
+        if (is_array($attributesData) && count($attributesData) == 1) {
+            $attributesData = array_shift($attributesData);
         }
 
         return $attributesData === false ? false : $attributesData;

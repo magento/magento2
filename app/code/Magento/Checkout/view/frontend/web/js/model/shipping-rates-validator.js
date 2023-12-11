@@ -17,6 +17,7 @@ define([
     'mage/translate',
     'uiRegistry',
     'Magento_Checkout/js/model/shipping-address/form-popup-state',
+    'Magento_Checkout/js/model/shipping-service',
     'Magento_Checkout/js/model/quote'
 ], function (
     $,
@@ -28,20 +29,22 @@ define([
     defaultValidator,
     $t,
     uiRegistry,
-    formPopUpState
+    formPopUpState,
+    shippingService
 ) {
     'use strict';
 
     var checkoutConfig = window.checkoutConfig,
         validators = [],
         observedElements = [],
-        postcodeElement = null,
+        postcodeElements = [],
         postcodeElementName = 'postcode';
 
     validators.push(defaultValidator);
 
     return {
         validateAddressTimeout: 0,
+        validateZipCodeTimeout: 0,
         validateDelay: 2000,
 
         /**
@@ -101,7 +104,7 @@ define([
 
             if (element.index === postcodeElementName) {
                 this.bindHandler(element, delay);
-                postcodeElement = element;
+                postcodeElements.push(element);
             }
         },
 
@@ -133,10 +136,22 @@ define([
                 });
             } else {
                 element.on('value', function () {
+                    clearTimeout(self.validateZipCodeTimeout);
+                    self.validateZipCodeTimeout = setTimeout(function () {
+                        if (element.index === postcodeElementName) {
+                            self.postcodeValidation(element);
+                        } else {
+                            $.each(postcodeElements, function (index, elem) {
+                                self.postcodeValidation(elem);
+                            });
+                        }
+                    }, delay);
+
                     if (!formPopUpState.isVisible()) {
+                        // Prevent shipping methods showing none available whilst we resolve
+                        shippingService.isLoading(true);
                         clearTimeout(self.validateAddressTimeout);
                         self.validateAddressTimeout = setTimeout(function () {
-                            self.postcodeValidation();
                             self.validateFields();
                         }, delay);
                     }
@@ -148,8 +163,8 @@ define([
         /**
          * @return {*}
          */
-        postcodeValidation: function () {
-            var countryId = $('select[name="country_id"]').val(),
+        postcodeValidation: function (postcodeElement) {
+            var countryId = $('select[name="country_id"]:visible').val(),
                 validationResult,
                 warnMessage;
 
@@ -178,8 +193,8 @@ define([
          */
         validateFields: function () {
             var addressFlat = addressConverter.formDataProviderToFlatData(
-                    this.collectObservedData(),
-                    'shippingAddress'
+                this.collectObservedData(),
+                'shippingAddress'
                 ),
                 address;
 

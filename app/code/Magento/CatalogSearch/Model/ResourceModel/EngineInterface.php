@@ -3,27 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * CatalogSearch Index Engine Interface
- */
 namespace Magento\CatalogSearch\Model\ResourceModel;
 
 /**
+ * CatalogSearch Index Engine Interface
+ *
  * @api
  * @since 100.0.2
  */
 interface EngineInterface
 {
+    /**
+     * Field prefix constant
+     *
+     * @deprecated mysql search engine has been removed
+     * @see \Magento\Framework\Search\EngineResolverInterface
+     */
     const FIELD_PREFIX = 'attr_';
 
     /**
-     * Scope identifier
+     * Scope identifier constant
+     *
+     * @deprecated since using engine resolver
+     * @see \Magento\Framework\Search\EngineResolverInterface
      */
     const SCOPE_IDENTIFIER = 'scope';
 
     /**
      * Configuration path by which current indexer handler stored
+     *
+     * @deprecated since using engine resolver
+     * @see \Magento\Framework\Search\EngineResolverInterface
      */
     const CONFIG_ENGINE_PATH = 'catalog/search/engine';
 
@@ -55,7 +65,7 @@ interface EngineInterface
      *
      * @param array $index
      * @param string $separator
-     * @return string
+     * @return array
      */
     public function prepareEntityIndex($index, $separator = ' ');
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontSwatchColorActionGroup">
+        <annotations>
+            <description>Validates that the Storefront Product has the provided Swatch with the provided Color.</description>
+        </annotations>
+        <arguments>
+            <argument name="nthSwatch" type="string" defaultValue="1"/>
+            <argument name="expectedRgb" type="string" defaultValue="rgb(231, 77, 60)"/>
+        </arguments>
+
+        <executeJS function="return document.evaluate(&quot;//div[@class='swatch-option color'][{{nthSwatch}}]&quot;,
+document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.style.cssText" stepKey="grabStyle1" />
+        <assertEquals stepKey="assertStyle1">
+            <actualResult type="string">{$grabStyle1}</actualResult>
+            <expectedResult type="string">background: center center no-repeat {{expectedRgb}};</expectedResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

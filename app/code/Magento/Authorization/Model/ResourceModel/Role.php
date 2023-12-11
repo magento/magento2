@@ -68,6 +68,7 @@ class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         if (!$role->getTreeLevel()) {
+            $treeLevel = 0;
             if ($role->getPid() > 0) {
                 $select = $this->getConnection()->select()->from(
                     $this->getMainTable(),
@@ -79,8 +80,6 @@ class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $binds = ['pid' => (int)$role->getPid()];
 
                 $treeLevel = $this->getConnection()->fetchOne($select, $binds);
-            } else {
-                $treeLevel = 0;
             }
 
             $role->setTreeLevel($treeLevel + 1);
@@ -119,6 +118,8 @@ class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection->delete($this->getMainTable(), ['parent_id = ?' => (int)$role->getId()]);
 
         $connection->delete($this->_ruleTable, ['role_id = ?' => (int)$role->getId()]);
+
+        $this->_cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [\Magento\Backend\Block\Menu::CACHE_TAGS]);
 
         return $this;
     }

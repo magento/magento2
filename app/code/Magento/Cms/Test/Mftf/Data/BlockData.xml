@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="Sales25offBlock" type="block">
+        <data key="title" unique="suffix">Sales25off</data>
+        <data key="identifier" unique="suffix">Sales25off</data>
+        <data key="store_id">All Store Views</data>
+        <data key="content">sales25off everything!</data>
+        <data key="is_active">0</data>
+    </entity>
+    <entity name="ActiveTestBlock" type="block">
+        <data key="title" unique="suffix">Test Block</data>
+        <data key="identifier" unique="suffix">ActiveTestBlock</data>
+        <data key="store_id">All Store Views</data>
+        <data key="content">Test Block content</data>
+        <data key="is_active">1</data>
+    </entity>
+</entities>

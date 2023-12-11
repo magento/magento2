@@ -55,12 +55,12 @@
                     <item name="option_id1" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">Option One</item>
                         <item name="url" xsi:type="string">*/*/option1</item>
-                        <item name="complete" xsi:type="string">Test</item>
+                        <item name="complete" xsi:type="string" translate="true">Test</item>
                     </item>
                     <item name="option_id2" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">Option Two</item>
                         <item name="url" xsi:type="string">*/*/option2</item>
-                        <item name="confirm" xsi:type="string">Are you sure?</item>
+                        <item name="confirm" xsi:type="string" translate="true">Are you sure?</item>
                     </item>
                     <item name="option_id3" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">Option Three</item>

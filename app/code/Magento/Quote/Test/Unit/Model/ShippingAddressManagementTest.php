@@ -1,282 +1,167 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model;
 
-use \Magento\Quote\Model\ShippingAddressManagement;
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\TotalsCollector;
+use Magento\Quote\Model\QuoteAddressValidator;
+use Magento\Quote\Model\ShippingAddressManagement;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
-class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
+class ShippingAddressManagementTest extends TestCase
 {
     /**
      * @var ShippingAddressManagement
      */
-    protected $service;
+    private ShippingAddressManagement $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var CartRepositoryInterface
      */
-    protected $quoteRepositoryMock;
+    private $quoteRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteAddressValidator
      */
-    protected $quoteAddressMock;
+    private $addressValidatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface
      */
-    protected $validatorMock;
+    private $loggerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var AddressRepositoryInterface
      */
-    protected $scopeConfigMock;
+    private $addressRepositoryMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ScopeConfigInterface
      */
-    protected $objectManager;
+    private $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var TotalsCollector
      */
-    protected $totalsCollectorMock;
+    private $totalsCollectorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Quote
      */
-    private $addressRepository;
+    private $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @inheritdoc
      */
-    private $amountErrorMessageMock;
-
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-
-        $this->quoteAddressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, [
-                'setSameAsBilling',
-                'setCollectShippingRates',
-                '__wakeup',
-                'collectTotals',
-                'save',
-                'getId',
-                'getCustomerAddressId',
-                'getSaveInAddressBook',
-                'getSameAsBilling',
-                'importCustomerAddressData',
-                'setSaveInAddressBook',
-            ]);
-        $this->validatorMock = $this->createMock(\Magento\Quote\Model\QuoteAddressValidator::class);
-        $this->totalsCollectorMock = $this->createMock(\Magento\Quote\Model\Quote\TotalsCollector::class);
-        $this->addressRepository = $this->createMock(\Magento\Customer\Api\AddressRepositoryInterface::class);
-
-        $this->amountErrorMessageMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage::class,
-            ['getMessage']
-        );
-
-        $this->service = $this->objectManager->getObject(
-            \Magento\Quote\Model\ShippingAddressManagement::class,
-            [
-                'quoteRepository' => $this->quoteRepositoryMock,
-                'addressValidator' => $this->validatorMock,
-                'logger' => $this->createMock(\Psr\Log\LoggerInterface::class),
-                'scopeConfig' => $this->scopeConfigMock,
-                'totalsCollector' => $this->totalsCollectorMock,
-                'addressRepository' => $this->addressRepository
-            ]
+        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->addressValidatorMock = $this->createMock(QuoteAddressValidator::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->addressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->totalsCollectorMock = $this->createMock(TotalsCollector::class);
+        $this->quoteMock = $this->createMock(Quote::class);
+        $this->model = new ShippingAddressManagement(
+            $this->quoteRepositoryMock,
+            $this->addressValidatorMock,
+            $this->loggerMock,
+            $this->addressRepositoryMock,
+            $this->scopeConfigMock,
+            $this->totalsCollectorMock
         );
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expected ExceptionMessage error345
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @dataProvider assignDataProvider
      */
-    public function testSetAddressValidationFailed()
+    public function testAssign(bool $saveInAddressBook, bool $showCompany): void
     {
-        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
-        $this->quoteRepositoryMock->expects($this->once())
+        $cartId = $customerId = 123;
+        $addressMock = $this->getMockBuilder(AddressInterface::class)
+            ->addMethods(['setCollectShippingRates', 'save', 'importCustomerAddressData'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->quoteMock
+            ->expects($this->once())
+            ->method('isVirtual')
+            ->willReturn(false);
+        $this->quoteRepositoryMock
+            ->expects($this->once())
             ->method('getActive')
-            ->with('cart654')
-            ->will($this->returnValue($quoteMock));
-
-        $this->validatorMock->expects($this->once())->method('validate')
-            ->will($this->throwException(new \Magento\Framework\Exception\NoSuchEntityException(__('error345'))));
-
-        $this->service->assign('cart654', $this->quoteAddressMock);
-    }
-
-    public function testSetAddress()
-    {
-        $addressId = 1;
-        $customerAddressId = 150;
-
-        $quoteMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote::class,
-            ['getIsMultiShipping', 'isVirtual', 'validateMinimumAmount', 'setShippingAddress', 'getShippingAddress']
-        );
-        $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')
-            ->with('cart867')
-            ->willReturn($quoteMock);
-        $quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
-        $quoteMock->expects($this->once())
-            ->method('setShippingAddress')
-            ->with($this->quoteAddressMock)
-            ->willReturnSelf();
-
-        $this->quoteAddressMock->expects($this->once())->method('getSaveInAddressBook')->willReturn(1);
-        $this->quoteAddressMock->expects($this->once())->method('getSameAsBilling')->willReturn(1);
-        $this->quoteAddressMock->expects($this->once())->method('getCustomerAddressId')->willReturn($customerAddressId);
-
-        $customerAddressMock = $this->createMock(\Magento\Customer\Api\Data\AddressInterface::class);
-
-        $this->addressRepository->expects($this->once())
-            ->method('getById')
-            ->with($customerAddressId)
-            ->willReturn($customerAddressMock);
-
-        $this->validatorMock->expects($this->once())->method('validate')
-            ->with($this->quoteAddressMock)
+            ->with($cartId)
+            ->willReturn($this->quoteMock);
+        $addressMock
+            ->expects($this->once())
+            ->method('getSaveInAddressBook')
+            ->willReturn($saveInAddressBook);
+        $addressMock
+            ->expects($this->once())
+            ->method('getSameAsBilling')
             ->willReturn(true);
-
-        $quoteMock->expects($this->exactly(3))->method('getShippingAddress')->willReturn($this->quoteAddressMock);
-        $this->quoteAddressMock->expects($this->once())
+        $addressMock
+            ->expects($this->once())
+            ->method('getCustomerAddressId')
+            ->willReturn($customerId);
+        $addressMock
+            ->expects($saveInAddressBook && !$showCompany ? $this->once() : $this->never())
+            ->method('setCompany')
+            ->with(null);
+        $addressMock
+            ->expects($this->once())
             ->method('importCustomerAddressData')
-            ->with($customerAddressMock)
-            ->willReturnSelf();
-
-        $this->quoteAddressMock->expects($this->once())->method('setSameAsBilling')->with(1)->willReturnSelf();
-        $this->quoteAddressMock->expects($this->once())->method('setSaveInAddressBook')->with(1)->willReturnSelf();
-        $this->quoteAddressMock->expects($this->once())
-            ->method('setCollectShippingRates')
-            ->with(true)
-            ->willReturnSelf();
-
-        $this->quoteAddressMock->expects($this->once())->method('save')->willReturnSelf();
-        $this->quoteAddressMock->expects($this->once())->method('getId')->will($this->returnValue($addressId));
-
-        $this->assertEquals($addressId, $this->service->assign('cart867', $this->quoteAddressMock));
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Cart contains virtual product(s) only. Shipping address is not applicable
-     */
-    public function testSetAddressForVirtualProduct()
-    {
-        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
-        $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')
-            ->with('cart867')
-            ->will($this->returnValue($quoteMock));
-        $quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(true));
-        $quoteMock->expects($this->never())->method('setShippingAddress');
-
-        $this->quoteAddressMock->expects($this->never())->method('getCustomerAddressId');
-        $this->quoteAddressMock->expects($this->never())->method('setSaveInAddressBook');
-
-        $quoteMock->expects($this->never())->method('save');
-
-        $this->service->assign('cart867', $this->quoteAddressMock);
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Unable to save address. Please check input data.
-     */
-    public function testSetAddressWithInabilityToSaveQuote()
-    {
-        $this->quoteAddressMock->expects($this->once())->method('save')->willThrowException(
-            new \Exception('Unable to save address. Please check input data.')
-        );
-
-        $customerAddressId = 150;
-
-        $quoteMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote::class,
-            ['getIsMultiShipping', 'isVirtual', 'validateMinimumAmount', 'setShippingAddress', 'getShippingAddress']
-        );
-        $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')
-            ->with('cart867')
-            ->willReturn($quoteMock);
-        $quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
-        $quoteMock->expects($this->once())
+            ->willReturn($addressMock);
+        $addressMock
+            ->expects($this->once())
+            ->method('setSameAsBilling')
+            ->with(true);
+        $addressMock
+            ->expects($this->once())
+            ->method('setSaveInAddressBook')
+            ->with($saveInAddressBook);
+        $addressMock->method('setCollectShippingRates');
+        $addressMock->method('save');
+        $this->scopeConfigMock
+            ->expects($saveInAddressBook ? $this->once() : $this->never())
+            ->method('getValue')
+            ->willReturn($showCompany);
+        $this->addressValidatorMock
+            ->expects($this->once())
+            ->method('validateForCart');
+        $this->quoteMock
+            ->expects($this->once())
             ->method('setShippingAddress')
-            ->with($this->quoteAddressMock)
-            ->willReturnSelf();
-
-        $customerAddressMock = $this->createMock(\Magento\Customer\Api\Data\AddressInterface::class);
-
-        $this->addressRepository->expects($this->once())
-            ->method('getById')
-            ->with($customerAddressId)
-            ->willReturn($customerAddressMock);
-
-        $this->validatorMock->expects($this->once())->method('validate')
-            ->with($this->quoteAddressMock)
-            ->willReturn(true);
-
-        $this->quoteAddressMock->expects($this->once())->method('getSaveInAddressBook')->willReturn(1);
-        $this->quoteAddressMock->expects($this->once())->method('getSameAsBilling')->willReturn(1);
-        $this->quoteAddressMock->expects($this->once())->method('getCustomerAddressId')->willReturn($customerAddressId);
-
-        $quoteMock->expects($this->exactly(2))->method('getShippingAddress')->willReturn($this->quoteAddressMock);
-        $this->quoteAddressMock->expects($this->once())
-            ->method('importCustomerAddressData')
-            ->with($customerAddressMock)
-            ->willReturnSelf();
-
-        $this->quoteAddressMock->expects($this->once())->method('setSameAsBilling')->with(1)->willReturnSelf();
-        $this->quoteAddressMock->expects($this->once())->method('setSaveInAddressBook')->with(1)->willReturnSelf();
-        $this->quoteAddressMock->expects($this->once())
-            ->method('setCollectShippingRates')
-            ->with(true)
-            ->willReturnSelf();
-
-        $this->service->assign('cart867', $this->quoteAddressMock);
-    }
-
-    public function testGetAddress()
-    {
-        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
-        $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with('cartId')->will(
-            $this->returnValue($quoteMock)
-        );
-
-        $addressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
-        $quoteMock->expects($this->any())->method('getShippingAddress')->will($this->returnValue($addressMock));
-        $quoteMock->expects($this->any())->method('isVirtual')->will($this->returnValue(false));
-        $this->assertEquals($addressMock, $this->service->get('cartId'));
+            ->with($addressMock);
+        $this->quoteMock
+            ->method('getShippingAddress')
+            ->willReturn($addressMock);
+        $this->model->assign($cartId, $addressMock);
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Cart contains virtual product(s) only. Shipping address is not applicable
+     * @return array
      */
-    public function testGetAddressOfQuoteWithVirtualProducts()
+    public function assignDataProvider(): array
     {
-        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
-        $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with('cartId')->will(
-            $this->returnValue($quoteMock)
-        );
-
-        $quoteMock->expects($this->any())->method('isVirtual')->will($this->returnValue(true));
-        $quoteMock->expects($this->never())->method('getShippingAddress');
-
-        $this->service->get('cartId');
+        return [
+            [true, true],
+            [true, false],
+            [false, true],
+            [false, false],
+        ];
     }
 }

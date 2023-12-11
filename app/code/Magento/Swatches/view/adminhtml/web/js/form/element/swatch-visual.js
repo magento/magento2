@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-/* global $break $ FORM_KEY */
+/* global FORM_KEY */
 
 /**
  * @api
@@ -184,11 +184,11 @@ define([
                         display: 'none'
                     }).appendTo($('body'));
 
-                    this.iframe = $('<iframe />', {
+                    this.iframe = $('<iframe></iframe>', {
                         name: 'upload_iframe_' + elementName
                     }).appendTo(this.wrapper);
 
-                    this.form = $('<form />', {
+                    this.form = $('<form></form>', {
                         name: 'swatch_form_image_upload_' + elementName,
                         target: 'upload_iframe_' + elementName,
                         method: 'post',
@@ -240,7 +240,7 @@ define([
                     };
 
                 swatchComponents.iframe.off('load');
-                swatchComponents.iframe.load(iframeHandler);
+                swatchComponents.iframe.on('load', iframeHandler);
                 swatchComponents.form.submit();
                 $(this).val('');
             });
@@ -250,7 +250,7 @@ define([
              */
             $(container).on('click', '.btn_choose_file_upload', function () {
                 swatchComponents.inputFile.attr('data-called-by', $(this).data('class'));
-                swatchComponents.inputFile.click();
+                swatchComponents.inputFile.trigger('click');
             });
 
             /**
@@ -305,9 +305,21 @@ define([
          */
         initialize: function () {
             this._super()
-                .initOldCode();
+                .initOldCode()
+                .on('value', this.onChangeColor.bind(this));
 
             return this;
+        },
+
+        /**
+         * Handler function that execute when color changes.
+         *
+         * @param {String} data - color
+         */
+        onChangeColor: function (data) {
+            if (!data) {
+                jQuery('.' + this.elementName).parent().removeClass('unavailable');
+            }
         },
 
         /**
@@ -316,7 +328,7 @@ define([
          * @returns {Object} Chainable.
          */
         initOldCode: function () {
-            jQuery.async('.' + this.elementName, function (elem) {
+            jQuery.async('.' + this.elementName, this.name, function (elem) {
                 oldCode(this.value(), elem.parentElement, this.uploadUrl, this.elementName);
             }.bind(this));
 
@@ -336,9 +348,15 @@ define([
             this.elementName = this.prefixElementName + recordId;
 
             this.inputName = prefixName + '[' + this.elementName + ']';
-            this.dataScope = 'data.' + this.prefixName + '.' + this.elementName;
+            this.exportDataLink = 'data.' + this.prefixName + '.' + this.elementName;
+            this.exports.value = this.provider + ':' + this.exportDataLink;
+        },
 
-            this.links.value = this.provider + ':' + this.dataScope;
+        /** @inheritdoc */
+        destroy: function () {
+            this._super();
+
+            this.source.remove(this.exportDataLink);
         },
 
         /**

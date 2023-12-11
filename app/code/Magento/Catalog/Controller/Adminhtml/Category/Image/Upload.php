@@ -5,12 +5,13 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category\Image;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class Upload
  */
-class Upload extends \Magento\Backend\App\Action
+class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
      * Image uploader
@@ -54,14 +55,6 @@ class Upload extends \Magento\Backend\App\Action
 
         try {
             $result = $this->imageUploader->saveFileToTmpDir($imageId);
-
-            $result['cookie'] = [
-                'name' => $this->_getSession()->getName(),
-                'value' => $this->_getSession()->getSessionId(),
-                'lifetime' => $this->_getSession()->getCookieLifetime(),
-                'path' => $this->_getSession()->getCookiePath(),
-                'domain' => $this->_getSession()->getCookieDomain(),
-            ];
         } catch (\Exception $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
         }

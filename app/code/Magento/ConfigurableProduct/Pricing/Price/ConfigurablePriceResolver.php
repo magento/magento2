@@ -19,13 +19,13 @@ class ConfigurablePriceResolver implements PriceResolverInterface
 
     /**
      * @var PriceCurrencyInterface
-     * @deprecated 100.1.1
+     * @deprecated 100.0.2
      */
     protected $priceCurrency;
 
     /**
      * @var Configurable
-     * @deprecated 100.1.1
+     * @deprecated 100.0.2
      */
     protected $configurable;
 
@@ -64,7 +64,7 @@ class ConfigurablePriceResolver implements PriceResolverInterface
 
         foreach ($this->lowestPriceOptionsProvider->getProducts($product) as $subProduct) {
             $productPrice = $this->priceResolver->resolvePrice($subProduct);
-            $price = $price ? min($price, $productPrice) : $productPrice;
+            $price = isset($price) ? min($price, $productPrice) : $productPrice;
         }
 
         return (float)$price;

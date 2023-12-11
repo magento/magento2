@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CatalogStorefrontConfiguration" dataType="catalog_storefront_config" type="create" auth="adminFormKey" url="/admin/system_config/save/section/catalog/" method="POST">
+        <object key="groups" dataType="catalog_storefront_config">
+            <object key="frontend" dataType="catalog_storefront_config">
+                <object key="fields" dataType="catalog_storefront_config">
+                    <object key="list_mode" dataType="list_mode">
+                        <field key="value">string</field>
+                    </object>
+                    <object key="grid_per_page_values" dataType="grid_per_page_values">
+                        <field key="value">string</field>
+                    </object>
+                    <object key="grid_per_page" dataType="grid_per_page">
+                        <field key="value">string</field>
+                    </object>
+                    <object key="list_per_page_values" dataType="list_per_page_values">
+                        <field key="value">string</field>
+                    </object>
+                    <object key="list_per_page" dataType="list_per_page">
+                        <field key="value">string</field>
+                    </object>
+                    <object key="default_sort_by" dataType="default_sort_by">
+                        <field key="value">string</field>
+                    </object>
+                    <object key="list_allow_all" dataType="list_allow_all">
+                        <field key="value">integer</field>
+                    </object>
+                    <object key="remember_pagination" dataType="remember_pagination">
+                        <field key="value">integer</field>
+                    </object>
+                    <object key="flat_catalog_category" dataType="flat_catalog_category">
+                        <field key="value">integer</field>
+                    </object>
+                    <object key="flat_catalog_product" dataType="flat_catalog_product">
+                        <field key="value">integer</field>
+                    </object>
+                    <object key="swatches_per_product" dataType="swatches_per_product">
+                        <field key="value">string</field>
+                    </object>
+                    <object key="show_swatches_in_product_list" dataType="show_swatches_in_product_list">
+                        <field key="value">integer</field>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+
+    <operation name="DefaultCatalogStorefrontConfiguration" dataType="default_catalog_storefront_config" type="create" auth="adminFormKey" url="/admin/system_config/save/section/catalog/" method="POST">
+        <object key="groups" dataType="default_catalog_storefront_config">
+            <object key="frontend" dataType="default_catalog_storefront_config">
+                <object key="fields" dataType="default_catalog_storefront_config">
+                    <object key="list_mode" dataType="default_catalog_storefront_config">
+                        <object key="inherit" dataType="catalogStorefrontFlagZero">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="grid_per_page_values" dataType="default_catalog_storefront_config">
+                        <object key="inherit" dataType="catalogStorefrontFlagZero">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="grid_per_page" dataType="default_catalog_storefront_config">
+                        <object key="inherit" dataType="catalogStorefrontFlagZero">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="list_per_page_values" dataType="default_catalog_storefront_config">
+                        <object key="inherit" dataType="catalogStorefrontFlagZero">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="list_per_page" dataType="default_catalog_storefront_config">
+                        <object key="inherit" dataType="catalogStorefrontFlagZero">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="default_sort_by" dataType="default_catalog_storefront_config">
+                        <object key="inherit" dataType="catalogStorefrontFlagZero">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="remember_pagination" dataType="default_catalog_storefront_config">
+                        <object key="inherit" dataType="catalogStorefrontFlagZero">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="flat_catalog_category" dataType="default_catalog_storefront_config">
+                        <object key="inherit" dataType="catalogStorefrontFlagZero">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="swatches_per_product" dataType="default_catalog_storefront_config">
+                        <object key="inherit" dataType="catalogStorefrontFlagZero">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="show_swatches_in_product_list" dataType="default_catalog_storefront_config">
+                        <object key="inherit" dataType="catalogStorefrontFlagZero">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="list_allow_all" dataType="list_allow_all">
+                        <field key="value">integer</field>
+                    </object>
+                    <object key="flat_catalog_product" dataType="flat_catalog_product">
+                        <field key="value">integer</field>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+</operations>

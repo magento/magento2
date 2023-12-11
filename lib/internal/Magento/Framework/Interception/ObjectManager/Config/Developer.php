@@ -58,8 +58,8 @@ class Developer extends \Magento\Framework\ObjectManager\Config\Config implement
     public function getInstanceType($instanceName)
     {
         $type = parent::getInstanceType($instanceName);
-        if ($this->interceptionConfig && $this->interceptionConfig->hasPlugins($instanceName)
-            && $this->interceptableValidator->validate($instanceName)
+        if ($this->interceptionConfig && $this->interceptionConfig->hasPlugins($type)
+            && $this->interceptableValidator->validate($type)
         ) {
             return $type . '\\Interceptor';
         }

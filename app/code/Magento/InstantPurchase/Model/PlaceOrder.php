@@ -13,15 +13,23 @@ use Magento\InstantPurchase\Model\QuoteManagement\Purchase;
 use Magento\InstantPurchase\Model\QuoteManagement\QuoteCreation;
 use Magento\InstantPurchase\Model\QuoteManagement\QuoteFilling;
 use Magento\InstantPurchase\Model\QuoteManagement\ShippingConfiguration;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Store\Model\Store;
+use \Throwable;
 
 /**
  * Place an order using instant purchase option.
  *
  * @api
+ * @since 100.2.0
  */
 class PlaceOrder
 {
+    /**
+     * @var CartRepositoryInterface
+     */
+    private $quoteRepository;
+
     /**
      * @var QuoteCreation
      */
@@ -49,6 +57,7 @@ class PlaceOrder
 
     /**
      * PlaceOrder constructor.
+     * @param CartRepositoryInterface $quoteRepository
      * @param QuoteCreation $quoteCreation
      * @param QuoteFilling $quoteFilling
      * @param ShippingConfiguration $shippingConfiguration
@@ -56,12 +65,14 @@ class PlaceOrder
      * @param Purchase $purchase
      */
     public function __construct(
+        CartRepositoryInterface $quoteRepository,
         QuoteCreation $quoteCreation,
         QuoteFilling $quoteFilling,
         ShippingConfiguration $shippingConfiguration,
         PaymentConfiguration $paymentConfiguration,
         Purchase $purchase
     ) {
+        $this->quoteRepository = $quoteRepository;
         $this->quoteCreation = $quoteCreation;
         $this->quoteFilling = $quoteFilling;
         $this->shippingConfiguration = $shippingConfiguration;
@@ -79,6 +90,8 @@ class PlaceOrder
      * @param array $productRequest
      * @return int order identifier
      * @throws LocalizedException if order can not be placed.
+     * @throws Throwable if unpredictable error occurred.
+     * @since 100.2.0
      */
     public function placeOrder(
         Store $store,
@@ -98,17 +111,28 @@ class PlaceOrder
             $product,
             $productRequest
         );
-        $quote = $this->shippingConfiguration->configureShippingMethod(
-            $quote,
-            $instantPurchaseOption->getShippingMethod()
-        );
-        $quote = $this->paymentConfiguration->configurePayment(
-            $quote,
-            $instantPurchaseOption->getPaymentToken()
-        );
-        $orderId = $this->purchase->purchase(
-            $quote
-        );
-        return $orderId;
+
+        $quote->collectTotals();
+        $this->quoteRepository->save($quote);
+        $quote = $this->quoteRepository->get($quote->getId());
+
+        try {
+            $quote = $this->shippingConfiguration->configureShippingMethod(
+                $quote,
+                $instantPurchaseOption->getShippingMethod()
+            );
+            $quote = $this->paymentConfiguration->configurePayment(
+                $quote,
+                $instantPurchaseOption->getPaymentToken()
+            );
+            $orderId = $this->purchase->purchase(
+                $quote
+            );
+            return $orderId;
+        } catch (Throwable $e) {
+            $quote->setIsActive(false);
+            $this->quoteRepository->save($quote);
+            throw $e;
+        }
     }
 }

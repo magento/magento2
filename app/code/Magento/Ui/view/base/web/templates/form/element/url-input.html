@@ -1,0 +1,31 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--render select with link types-->
+<div class="admin__field url-input-container"
+     visible="visible"
+     css="$data.additionalClasses"
+     attr="'data-index': index">
+    <label class="admin__field-label" if="$data.label" visible="$data.labelVisible" attr="for: uid">
+        <span translate="label" attr="'data-config-scope': $data.scopeLabel"></span>
+    </label>
+    <div class="admin__field-control"
+         css="'_with-tooltip': $data.tooltip, '_with-reset': $data.showFallbackReset && $data.isDifferedFromDefault">
+            <div class="type-selector-input-container">
+                <!--render link types select-->
+                <render args="typeSelectorTemplate"></render>
+
+                <!--display field to insert link value based on link type-->
+                <div ko-scope="getLinkedElementName()" class="url-input-element-linked-element">
+                    <render></render>
+                    <label class="admin__field-error" visible="error" attr="for: uid" text="error"></label>
+                </div>
+            </div>
+
+        <!--display container to specify url options(Example: open in new tab)-->
+        <div render="settingTemplate" if="isDisplayAdditionalSettings"></div>
+    </div>
+</div>

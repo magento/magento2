@@ -2,7 +2,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/* global jQuery */
+
 /* eslint-disable max-nested-callbacks */
 define([
     'jquery',
@@ -34,6 +34,13 @@ define([
             });
             done();
         });
+    });
+
+    afterEach(function () {
+        try {
+            injector.clean();
+            injector.remove();
+        } catch (e) {}
     });
 
     describe('Magento_Catalog/js/storage-manager', function () {

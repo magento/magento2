@@ -42,7 +42,8 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      *
-     * @throws \InvalidArgumentException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -79,7 +80,7 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if cookie restriction mode is enabled for this store
      *
      * @return bool
-     * @since 100.2.0
+     * @since 100.1.3
      */
     public function isCookieRestrictionModeEnabled()
     {

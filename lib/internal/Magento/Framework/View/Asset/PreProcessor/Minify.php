@@ -26,13 +26,23 @@ class Minify implements PreProcessorInterface
     protected $minification;
 
     /**
+     * @var MinificationConfigProvider
+     */
+    private $minificationConfig;
+
+    /**
      * @param AdapterInterface $adapter
      * @param Minification $minification
+     * @param MinificationConfigProvider $minificationConfig
      */
-    public function __construct(AdapterInterface $adapter, Minification $minification)
-    {
+    public function __construct(
+        AdapterInterface $adapter,
+        Minification $minification,
+        MinificationConfigProvider $minificationConfig
+    ) {
         $this->adapter = $adapter;
         $this->minification = $minification;
+        $this->minificationConfig = $minificationConfig;
     }
 
     /**
@@ -43,7 +53,7 @@ class Minify implements PreProcessorInterface
      */
     public function process(PreProcessor\Chain $chain)
     {
-        if ($this->minification->isEnabled(pathinfo($chain->getTargetAssetPath(), PATHINFO_EXTENSION)) &&
+        if ($this->minificationConfig->isMinificationEnabled($chain->getTargetAssetPath()) &&
             $this->minification->isMinifiedFilename($chain->getTargetAssetPath()) &&
             !$this->minification->isMinifiedFilename($chain->getOrigAssetPath())
         ) {

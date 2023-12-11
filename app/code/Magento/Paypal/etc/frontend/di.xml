@@ -40,6 +40,7 @@
         <arguments>
             <argument name="secureUrlList" xsi:type="array">
                 <item name="paypal_billing" xsi:type="string">/paypal/billing/</item>
+                <item name="paypal_billing_agreement" xsi:type="string">/paypal/billing_agreement/</item>
                 <item name="paypal_bml" xsi:type="string">/paypal/bml/</item>
                 <item name="paypal_hostedpro" xsi:type="string">/paypal/hostedpro/</item>
                 <item name="paypal_ipn" xsi:type="string">/paypal/ipn/</item>
@@ -86,7 +87,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Paypal\Block\Express\InContext\Minicart\Button">
+    <type name="Magento\Paypal\Block\Express\InContext\Minicart\SmartButton">
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="template" xsi:type="string">Magento_Paypal::express/in-context/shortcut/button.phtml</item>
@@ -95,6 +96,14 @@
                 <item name="link_data_action" xsi:type="string">paypal-in-context-checkout</item>
             </argument>
             <argument name="payment" xsi:type="object">Magento\Paypal\Model\Express</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Paypal\Block\Express\InContext\SmartButton">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="alias" xsi:type="string">product.info.addtocart.paypalexpress</item>
+                <item name="template" xsi:type="string">express/shortcut_button.phtml</item>
+            </argument>
         </arguments>
     </type>
 
@@ -115,5 +124,80 @@
     </type>
     <type name="Magento\Quote\Model\QuoteRepository\SaveHandler">
         <plugin name="paypal-cartitem" type="Magento\Paypal\Model\Express\QuotePlugin"/>
+    </type>
+
+    <type name="Magento\Paypal\Model\SmartButtonConfig">
+        <arguments>
+            <argument name="defaultStyles" xsi:type="array">
+                <item name="checkout" xsi:type="array">
+                    <item name="layout" xsi:type="string">vertical</item>
+                    <item name="size" xsi:type="string">responsive</item>
+                    <item name="color" xsi:type="string">gold</item>
+                    <item name="shape" xsi:type="string">rect</item>
+                    <item name="label" xsi:type="string">paypal</item>
+                </item>
+                <item name="cart" xsi:type="array">
+                    <item name="layout" xsi:type="string">vertical</item>
+                    <item name="size" xsi:type="string">responsive</item>
+                    <item name="color" xsi:type="string">gold</item>
+                    <item name="shape" xsi:type="string">rect</item>
+                    <item name="label" xsi:type="string">paypal</item>
+                </item>
+                <item name="mini_cart" xsi:type="array">
+                    <item name="layout" xsi:type="string">vertical</item>
+                    <item name="size" xsi:type="string">responsive</item>
+                    <item name="color" xsi:type="string">gold</item>
+                    <item name="shape" xsi:type="string">rect</item>
+                    <item name="label" xsi:type="string">paypal</item>
+                </item>
+                <item name="product" xsi:type="array">
+                    <item name="layout" xsi:type="string">vertical</item>
+                    <item name="size" xsi:type="string">responsive</item>
+                    <item name="color" xsi:type="string">gold</item>
+                    <item name="shape" xsi:type="string">pill</item>
+                    <item name="label" xsi:type="string">buynow</item>
+                </item>
+            </argument>
+            <argument name="localeResolver" xsi:type="object">Magento\Paypal\Model\Express\LocaleResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Paypal\Block\Express\InContext\Component">
+        <arguments>
+            <argument name="localeResolver" xsi:type="object">Magento\Paypal\Model\Express\LocaleResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Controller\Index\Index">
+        <plugin name="sdk_url_configuration" type="Magento\Paypal\Plugin\CheckoutIndex" />
+    </type>
+    <type name="Magento\Paypal\Model\SdkUrl">
+        <arguments>
+            <argument name="disallowedFundingMap" xsi:type="array">
+                <item name="CREDIT" xsi:type="string">credit</item>
+                <item name="VENMO" xsi:type="string">venmo</item>
+                <item name="CARD" xsi:type="string">card</item>
+                <item name="ELV" xsi:type="string">sepa</item>
+            </argument>
+            <argument name="unsupportedPaymentMethods" xsi:type="array">
+                <item name="bancontact" xsi:type="string">bancontact</item>
+                <item name="eps" xsi:type="string">eps</item>
+                <item name="giropay" xsi:type="string">giropay</item>
+                <item name="ideal" xsi:type="string">ideal</item>
+                <item name="mybank" xsi:type="string">mybank</item>
+                <item name="p24" xsi:type="string">p24</item>
+                <item name="sofort" xsi:type="string">sofort</item>
+            </argument>
+            <argument name="supportedPaymentMethods" xsi:type="array">
+                <item name="venmo" xsi:type="string">venmo</item>
+                <item name="paylater" xsi:type="string">paylater</item>
+            </argument>
+            <argument name="localeResolver" xsi:type="object">Magento\Paypal\Model\Express\LocaleResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Block\Onepage">
+        <arguments>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="payLater" xsi:type="object">Magento\Paypal\Block\PayLater\LayoutProcessor</item>
+            </argument>
+        </arguments>
     </type>
 </config>

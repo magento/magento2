@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCategorySidebarSection">
+        <element name="layeredFilterBlock" type="block" selector="#layered-filter-block"/>
+        <element name="filterOptionTitle" type="button" selector="//div[@class='filter-options-title'][text() = '{{var}}']" parameterized="true" timeout="30"/>
+        <element name="attributeNthOption" type="button" selector="div.{{attributeLabel}} a:nth-of-type({{n}}) div" parameterized="true" timeout="30"/>
+        <element name="expandedSwatchThumbnails" type="block" selector="//div[@aria-expanded='true' and contains(text(),'{{attribute_code}}')]/..//div[contains(@class,'{{swatch_types}}')]" parameterized="true"/>
+        <element name="swatchThumbnailsImgLayeredNav" type="block" selector="//div[@class='image' and contains(@style,'{{swatch_thumb}}')]" parameterized="true"/>
+        <element name="swatchTextLayeredNav" type="block" selector="//div[@class='swatch-option text ' and @data-option-label='{{args}}']" parameterized="true"/>
+        <element name="swatchTextLayeredNavHover" type="block" selector="//div[@class='title' and text()='{{args}}']" parameterized="true"/>
+        <element name="swatchSelectedInFilteredProd" type="block" selector="//div[@class='swatch-option {{args}} selected']" parameterized="true"/>
+        <element name="swatchTextFilteredProdHover" type="block" selector="//div[@class='swatch-option-tooltip']//div[@class='title' and contains(text(),'{{args}}')]" parameterized="true"/>
+    </section>
+</sections>

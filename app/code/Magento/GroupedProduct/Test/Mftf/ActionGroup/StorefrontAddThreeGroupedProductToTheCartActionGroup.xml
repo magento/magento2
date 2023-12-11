@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Check that required fields are actually required-->
+    <actionGroup name="StorefrontAddThreeGroupedProductToTheCartActionGroup">
+        <annotations>
+            <description>Goes to the provided URL for a Grouped Product. Validates that the provided Products and Quantities are present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="urlKey" type="string"/>
+            <argument name="product1" type="string"/>
+            <argument name="product2" type="string"/>
+            <argument name="product3" type="string"/>
+            <argument name="qty1" type="string"/>
+            <argument name="qty2" type="string"/>
+            <argument name="qty3" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{StorefrontProductPage.url(urlKey)}}" stepKey="OpenStoreFrontProductPage"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <fillField stepKey="fillQuantityForProduct1" selector="{{StorefrontProductPageSection.qtyInputWithProduct(product1)}}" userInput="{{qty1}}"/>
+        <fillField stepKey="fillQuantityForProduct2" selector="{{StorefrontProductPageSection.qtyInputWithProduct(product2)}}" userInput="{{qty2}}"/>
+        <fillField stepKey="fillQuantityForProduct3" selector="{{StorefrontProductPageSection.qtyInputWithProduct(product3)}}" userInput="{{qty3}}"/>
+        <waitForElementClickable selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="waitForAddToCart"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="clickOnAddToCartButton"/>
+    </actionGroup>
+</actionGroups>

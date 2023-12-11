@@ -9,6 +9,8 @@
  */
 namespace Magento\Test\Bootstrap;
 
+use Magento\TestFramework\MemoryLimit;
+
 class MemoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -17,26 +19,28 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     protected $_object;
 
     /**
-     * @var \Magento\TestFramework\MemoryLimit|\PHPUnit_Framework_MockObject_MockObject
+     * @var MemoryLimit|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_memoryLimit;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_activationPolicy;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_memoryLimit = $this->createPartialMock(\Magento\TestFramework\MemoryLimit::class, ['printStats']);
-        $this->_activationPolicy = $this->createPartialMock(\stdClass::class, ['register_shutdown_function']);
+        $this->_memoryLimit = $this->createPartialMock(MemoryLimit::class, ['printStats']);
+        $this->_activationPolicy = $this->getMockBuilder(\stdClass::class)
+            ->addMethods(['register_shutdown_function'])
+            ->getMock();
         $this->_object = new \Magento\TestFramework\Bootstrap\Memory(
             $this->_memoryLimit,
             [$this->_activationPolicy, 'register_shutdown_function']
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_memoryLimit = null;
         $this->_activationPolicy = null;
@@ -44,11 +48,12 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Activation policy is expected to be a callable.
      */
     public function testConstructorException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Activation policy is expected to be a callable.');
+
         new \Magento\TestFramework\Bootstrap\Memory($this->_memoryLimit, 'non_existing_callable');
     }
 
@@ -60,8 +65,8 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'printStats'
-        )->will(
-            $this->returnValue('Dummy Statistics')
+        )->willReturn(
+            'Dummy Statistics'
         );
         $this->_object->displayStats();
     }

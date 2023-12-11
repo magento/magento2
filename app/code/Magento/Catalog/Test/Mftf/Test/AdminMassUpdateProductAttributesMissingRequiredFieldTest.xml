@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMassUpdateProductAttributesMissingRequiredFieldTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Mass update product attributes"/>
+            <title value="Mass update product attributes - missing required field"/>
+            <description value="Mass update product attributes - missing required field"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-55"/>
+            <group value="Catalog"/>
+            <group value="Product Attributes"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProductOne">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createProductTwo">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
+            <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+        <actionGroup ref="AdminDataGridSelectPerPageActionGroup" stepKey="selectNumberOfProductsPerPage">
+            <argument name="perPage" value="100"/>
+        </actionGroup>
+        <actionGroup ref="SearchProductGridByKeyword2ActionGroup" stepKey="searchByKeyword">
+            <argument name="keyword" value="api-simple-product"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminCheckProductOnProductGridActionGroup" stepKey="clickCheckbox1">
+            <argument name="product" value="$createProductOne$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminCheckProductOnProductGridActionGroup" stepKey="clickCheckbox2">
+            <argument name="product" value="$createProductTwo$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminClickMassUpdateProductAttributesActionGroup" stepKey="clickDropdown"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOption"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBulkUpdatePage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeInUrl"/>
+
+        <actionGroup ref="AdminCheckNameToggleOnProductsMassAttributesUpdateActionGroup" stepKey="toggleToChangeName"/>
+
+        <actionGroup ref="AdminClickSaveOnProductsMassAttributesUpdateActionGroup" stepKey="save"/>
+        <see stepKey="seeError" selector="{{AdminEditProductAttributesSection.NameError}}" userInput="This is a required field"/>
+    </test>
+</tests>

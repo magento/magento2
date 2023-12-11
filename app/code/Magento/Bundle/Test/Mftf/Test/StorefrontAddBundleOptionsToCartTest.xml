@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddBundleOptionsToCartTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="MAGETWO-95813: Only two bundle options are added to the cart"/>
+            <title value="Checking adding of bundle options to the cart"/>
+            <description value="Verifying adding of bundle options to the cart"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-95933"/>
+            <group value="Bundle"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct3"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct4"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct5"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct6"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct7"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct8"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct9"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct10"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="simpleProduct3" stepKey="deleteSimpleProduct3"/>
+            <deleteData createDataKey="simpleProduct4" stepKey="deleteSimpleProduct4"/>
+            <deleteData createDataKey="simpleProduct5" stepKey="deleteSimpleProduct5"/>
+            <deleteData createDataKey="simpleProduct6" stepKey="deleteSimpleProduct6"/>
+            <deleteData createDataKey="simpleProduct7" stepKey="deleteSimpleProduct7"/>
+            <deleteData createDataKey="simpleProduct8" stepKey="deleteSimpleProduct8"/>
+            <deleteData createDataKey="simpleProduct9" stepKey="deleteSimpleProduct9"/>
+            <deleteData createDataKey="simpleProduct10" stepKey="deleteSimpleProduct10"/>
+            <!--delete created bundle product-->
+            <actionGroup stepKey="deleteProduct1" ref="DeleteProductBySkuActionGroup">
+                <argument name="sku" value="{{BundleProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clickClearFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Start creating a bundle product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillNameAndSku">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+
+        <!-- Add Option One, a "Checkbox" type option, with tree products -->
+        <actionGroup ref="AddBundleOptionWithThreeProductsActionGroup" stepKey="addBundleOptionWithTreeProducts">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
+            <argument name="prodTwoSku" value="$$simpleProduct2.sku$$"/>
+            <argument name="prodTreeSku" value="$$simpleProduct3.sku$$"/>
+            <argument name="optionTitle" value="Option One"/>
+            <argument name="inputType" value="checkbox"/>
+        </actionGroup>
+
+        <!-- Add Option Two, a "Radio Buttons" type option, with one product -->
+        <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOptionWithOneProduct">
+            <argument name="x" value="1"/>
+            <argument name="n" value="2"/>
+            <argument name="prodOneSku" value="$$simpleProduct4.sku$$"/>
+            <argument name="prodTwoSku" value=""/>
+            <argument name="optionTitle" value="Option Two"/>
+            <argument name="inputType" value="radio"/>
+        </actionGroup>
+
+        <!-- Add Option Tree, a "Checkbox" type option, with six products -->
+        <actionGroup ref="AddBundleOptionWithSixProductsActionGroup" stepKey="addBundleOptionWithSixProducts">
+            <argument name="x" value="2"/>
+            <argument name="n" value="3"/>
+            <argument name="prodOneSku" value="$$simpleProduct5.sku$$"/>
+            <argument name="prodTwoSku" value="$$simpleProduct6.sku$$"/>
+            <argument name="prodTreeSku" value="$$simpleProduct7.sku$$"/>
+            <argument name="prodFourSku" value="$$simpleProduct8.sku$$"/>
+            <argument name="prodFiveSku" value="$$simpleProduct9.sku$$"/>
+            <argument name="prodSixSku" value="$$simpleProduct10.sku$$"/>
+            <argument name="optionTitle" value="Option Tree"/>
+            <argument name="inputType" value="checkbox"/>
+        </actionGroup>
+
+        <!-- Save product-->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+        <!--Go to Storefront and open Bundle Product page-->
+        <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>
+        <waitForPageLoad stepKey="waitForStorefront"/>
+
+        <!--Click "Customize and Add to Cart" button-->
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomize"/>
+
+        <!--Assert Bundle Product Price-->
+        <grabTextFrom selector="{{StorefrontBundledSection.bundleProductsPrice}}" stepKey="grabProductsPrice"/>
+        <assertEquals message="ExpectedPrice" stepKey="assertBundleProductPrice">
+			<actualResult type="const">$grabProductsPrice</actualResult>
+			<expectedResult type="string">$123.00</expectedResult>
+        </assertEquals>
+
+        <!--Chose all products from 1st & 3rd options -->
+        <click stepKey="selectProduct1" selector="{{StorefrontBundledSection.productCheckbox('1','1')}}"/>
+        <click stepKey="selectProduct2" selector="{{StorefrontBundledSection.productCheckbox('1','2')}}"/>
+        <click stepKey="selectProduct3" selector="{{StorefrontBundledSection.productCheckbox('1','3')}}"/>
+        <click stepKey="selectProduct5" selector="{{StorefrontBundledSection.productCheckbox('3','1')}}"/>
+        <click stepKey="selectProduct6" selector="{{StorefrontBundledSection.productCheckbox('3','2')}}"/>
+        <click stepKey="selectProduct7" selector="{{StorefrontBundledSection.productCheckbox('3','3')}}"/>
+        <click stepKey="selectProduct8" selector="{{StorefrontBundledSection.productCheckbox('3','4')}}"/>
+        <click stepKey="selectProduct9" selector="{{StorefrontBundledSection.productCheckbox('3','5')}}"/>
+        <click stepKey="selectProduct10" selector="{{StorefrontBundledSection.productCheckbox('3','6')}}"/>
+
+        <!--Click "Add to Cart" button-->
+        <click selector="{{StorefrontBundleProductActionSection.addToCartButton}}" stepKey="clickAddBundleProductToCart"/>
+        <waitForPageLoad time="30" stepKey="waitForAddBundleProductPageLoad"/>
+
+        <!--Click "mini cart" icon-->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <waitForPageLoad stepKey="waitForDetailsOpen"/>
+
+        <!--Check all products and Cart Subtotal -->
+        <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssert" after="waitForDetailsOpen">
+            <argument name="subtotal" value="1,968.00"/>
+            <argument name="shipping" value="5.00"/>
+            <argument name="shippingMethod" value="Flat Rate - Fixed"/>
+            <argument name="total" value="1,973.00"/>
+        </actionGroup>
+    </test>
+</tests>

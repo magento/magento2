@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateDatetimeProductAttributeTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Datetime product attributes support"/>
+            <title value="Datetime product attribute type is supported"/>
+            <description value="Admin should be able to create datetime product attribute"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-21451"/>
+            <group value="catalog"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteAttribute">
+                <argument name="ProductAttribute" value="DatetimeProductAttribute"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="resetGridFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Generate the datetime default value -->
+        <generateDate date="now" format="n/j/y g:i A" stepKey="generateDefaultValue"/>
+        <!-- Create new datetime product attribute -->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
+        <actionGroup ref="CreateProductAttributeWithDatetimeFieldActionGroup" stepKey="createAttribute">
+            <argument name="attribute" value="DatetimeProductAttribute"/>
+            <argument name="date" value="{$generateDefaultValue}"/>
+        </actionGroup>
+        <!-- Navigate to created product attribute -->
+        <actionGroup ref="NavigateToCreatedProductAttributeActionGroup" stepKey="navigateToAttribute">
+            <argument name="ProductAttribute" value="DatetimeProductAttribute"/>
+        </actionGroup>
+        <!-- Check the saved datetime default value -->
+        <actionGroup ref="AdminNavigateToProductAttributeAdvancedSectionActionGroup" stepKey="goToAdvancedSection"/>
+        <scrollTo selector="{{AdvancedAttributePropertiesSection.defaultValueDatetime}}" stepKey="scrollToDefaultValue"/>
+        <seeInField userInput="{$generateDefaultValue}"
+             selector="{{AdvancedAttributePropertiesSection.defaultValueDatetime}}"
+             stepKey="checkDefaultValue"/>
+    </test>
+</tests>

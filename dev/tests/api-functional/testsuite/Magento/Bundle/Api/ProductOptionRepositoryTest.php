@@ -31,8 +31,8 @@ class ProductOptionRepositoryTest extends \Magento\TestFramework\TestCase\Webapi
                     'position' => 0,
                     'can_change_quantity' => 1,
                     'is_default' => false,
-                    'price' => null,
-                    'price_type' => null,
+                    'price' => 2.75,
+                    'price_type' => 0,
                 ],
             ],
         ];
@@ -72,8 +72,8 @@ class ProductOptionRepositoryTest extends \Magento\TestFramework\TestCase\Webapi
                         'position' => 0,
                         'can_change_quantity' => 1,
                         'is_default' => false,
-                        'price' => null,
-                        'price_type' => null,
+                        'price' => 2.75,
+                        'price_type' => 0,
                     ],
                 ],
             ],
@@ -96,10 +96,11 @@ class ProductOptionRepositoryTest extends \Magento\TestFramework\TestCase\Webapi
 
     /**
      * @magentoApiDataFixture Magento/Bundle/_files/product.php
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testRemove()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $productSku = 'bundle-product';
 
         $optionId = $this->getList($productSku)[0]['option_id'];

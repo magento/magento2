@@ -1,11 +1,11 @@
 <?php
 /**
- * @category    Magento
- * @package     Magento_Sales
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order;
+
+use Magento\Sales\Model\ConfigInterface;
 
 /**
  * Adminhtml sales order view
@@ -46,14 +46,14 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Sales\Model\Config $salesConfig
+     * @param ConfigInterface $salesConfig
      * @param \Magento\Sales\Helper\Reorder $reorderHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Sales\Model\Config $salesConfig,
+        ConfigInterface $salesConfig,
         \Magento\Sales\Helper\Reorder $reorderHelper,
         array $data = []
     ) {
@@ -182,7 +182,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                     'class' => __('unhold'),
                     'id' => 'order-view-unhold-button',
                     'data_attribute' => [
-                        'url' => $this->getUnHoldUrl()
+                        'url' => $this->getUnholdUrl()
                     ]
                 ]
             );
@@ -447,6 +447,9 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getBackUrl()
     {
+        if ($this->getRequest()->getParam('customer_id')) {
+            return $this->getUrl('customer/index/edit', ['id'=> $this->getRequest()->getParam('customer_id')]);
+        }
         if ($this->getOrder() && $this->getOrder()->getBackUrl()) {
             return $this->getOrder()->getBackUrl();
         }
@@ -466,6 +469,8 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
+     * Get edit message
+     *
      * @param \Magento\Sales\Model\Order $order
      * @return \Magento\Framework\Phrase
      */
@@ -486,6 +491,8 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
+     * Get non editable types
+     *
      * @param \Magento\Sales\Model\Order $order
      * @return array
      */

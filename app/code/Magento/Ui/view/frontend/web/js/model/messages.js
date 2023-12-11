@@ -48,6 +48,10 @@ define([
             message = messageObj.message.replace(expr, function (varName) {
                 varName = varName.substr(1);
 
+                if (!isNaN(varName)) {
+                    varName--;
+                }
+
                 if (messageObj.parameters.hasOwnProperty(varName)) {
                     return messageObj.parameters[varName];
                 }
@@ -55,7 +59,7 @@ define([
                 return messageObj.parameters.shift();
             });
             this.clear();
-            this.errorMessages.push(message);
+            type.push(message);
 
             return true;
         },

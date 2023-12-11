@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontProductPageGalleryThumbnailDragActionGroup">
+        <annotations>
+            <description>Check functional of drag actions in the thumbnail ribbon on the product page</description>
+        </annotations>
+        <arguments>
+            <argument name="dragPointImage" type="string" />
+            <argument name="currentImage" type="string"/>
+            <argument name="firstImage" type="string" />
+        </arguments>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImage(currentImage)}}" stepKey="seeMainImageBeforeDragActions"/>
+        <dontSeeElement selector="{{StorefrontProductMediaSection.fotoramaPrevButton}}" stepKey="dontSeePrevButtonBeforeDragActions"/>
+        <dragAndDrop selector1="{{StorefrontProductMediaSection.productImageInFotorama(dragPointImage)}}" selector2="{{StorefrontProductMediaSection.productImageInFotorama(dragPointImage)}}" x="-300" y="0" stepKey="dragRibbonForward"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImage(currentImage)}}" stepKey="seeMainImageDontChangeAfterDrag"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaPrevButton}}" stepKey="waitPrevButton"/>
+        <seeElement selector="{{StorefrontProductMediaSection.fotoramaPrevButton}}" stepKey="seePrevButton"/>
+        <dontSeeElement selector="{{StorefrontProductMediaSection.productImageInFotorama(firstImage)}}" stepKey="dontSeeFirstImageInRibbonAfterDrag"/>
+        <dragAndDrop selector1="{{StorefrontProductMediaSection.productImageInFotorama(dragPointImage)}}" selector2="{{StorefrontProductMediaSection.productImageInFotorama(dragPointImage)}}" x="300" y="0" stepKey="dragBackRibbon"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImage(currentImage)}}" stepKey="seeMainImageDontChangeAfterBackDrag"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImageInFotorama(firstImage)}}" stepKey="seeFirstImageInRibbonAfterBackDrag"/>
+        <dontSeeElement selector="{{StorefrontProductMediaSection.fotoramaPrevButton}}" stepKey="dontSeePrevButtonAfterBackDrag"/>
+    </actionGroup>
+</actionGroups>

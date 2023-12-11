@@ -19,7 +19,9 @@ define([
         defaults: {
             template: 'ui/grid/paging/paging',
             totalTmpl: 'ui/grid/paging-total',
-            pageSize: 20,
+            totalRecords: 0,
+            showTotalRecords: true,
+            pages: 1,
             current: 1,
             selectProvider: 'ns = ${ $.ns }, index = ids',
 
@@ -33,9 +35,11 @@ define([
             },
 
             imports: {
-                pageSize: '${ $.sizesConfig.name }:value',
                 totalSelected: '${ $.selectProvider }:totalSelected',
-                totalRecords: '${ $.provider }:data.totalRecords'
+                totalRecords: '${ $.provider }:data.totalRecords',
+                showTotalRecords: '${ $.provider }:data.showTotalRecords',
+                filters: '${ $.provider }:params.filters',
+                keywordUpdated: '${ $.provider }:params.keywordUpdated'
             },
 
             exports: {
@@ -43,11 +47,23 @@ define([
                 current: '${ $.provider }:params.paging.current'
             },
 
+            links: {
+                options: '${ $.sizesConfig.name }:options',
+                pageSize: '${ $.sizesConfig.name }:value'
+            },
+
+            statefull: {
+                pageSize: true,
+                current: true
+            },
+
             listens: {
                 'pages': 'onPagesChange',
                 'pageSize': 'onPageSizeChange',
                 'totalRecords': 'updateCounter',
-                '${ $.provider }:params.filters': 'goFirst'
+                'showTotalRecords': 'updateShowTotalRecords',
+                '${ $.provider }:params.filters': 'goFirst',
+                '${ $.provider }:params.search': 'onSearchUpdate'
             },
 
             modules: {
@@ -78,6 +94,7 @@ define([
                 .track([
                     'totalSelected',
                     'totalRecords',
+                    'showTotalRecords',
                     'pageSize',
                     'pages',
                     'current'
@@ -173,7 +190,9 @@ define([
          * @returns {Paging} Chainable.
          */
         goFirst: function () {
-            this.current = 1;
+            if (!_.isUndefined(this.filters)) {
+                this.current = 1;
+            }
 
             return this;
         },
@@ -217,16 +236,24 @@ define([
         },
 
         /**
+         * Updates show total records flag.
+         */
+        updateShowTotalRecords: function () {
+            if (this.showTotalRecords === undefined) {
+                this.showTotalRecords = true;
+            }
+            return this;
+        },
+
+        /**
          * Calculates new page cursor based on the
          * previous and current page size values.
-         *
-         * @returns {Number} Updated cursor value.
          */
         updateCursor: function () {
-            var cursor  = this.current - 1,
-                size    = this.pageSize,
-                oldSize = this.previousSize,
-                delta   = cursor * (oldSize  - size) / size;
+            var cursor = this.current - 1,
+                size = this.pageSize,
+                oldSize = _.isUndefined(this.previousSize) ? this.pageSize : this.previousSize,
+                delta = cursor * (oldSize - size) / size;
 
             delta = size > oldSize ?
                 Math.ceil(delta) :
@@ -271,6 +298,17 @@ define([
          */
         onPagesChange: function () {
             this.updateCursor();
+        },
+
+        /**
+         * Resent the pagination to Page 1 on search keyword update
+         */
+        onSearchUpdate: function () {
+            if (!_.isUndefined(this.keywordUpdated) && this.keywordUpdated) {
+                this.goFirst();
+            }
+
+            return this;
         }
     });
 });

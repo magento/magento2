@@ -57,13 +57,13 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
         $payload = $this->getAttributeData();
         $payload['attributeSetId'] = -1;
 
-        $expectedMessage = 'AttributeSet with id "%1" does not exist.';
+        $expectedMessage = 'The AttributeSet with a "%1" ID doesn\'t exist. Verify the attributeSet and try again.';
 
         try {
             $this->_webApiCall($this->getAssignServiceInfo(), $payload);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
@@ -80,13 +80,13 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
     {
         $payload = $this->getAttributeData();
         $payload['attributeGroupId'] = -1;
-        $expectedMessage = 'Group with id "%1" does not exist.';
+        $expectedMessage = 'The group with the "%1" ID doesn\'t exist. Verify the ID and try again.';
 
         try {
             $this->_webApiCall($this->getAssignServiceInfo(), $payload);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
@@ -103,13 +103,14 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
     {
         $payload = $this->getAttributeData();
         $payload['attributeCode'] = 'badCode';
-        $expectedMessage = 'Attribute with attributeCode "%1" does not exist.';
+        $expectedMessage =
+            'The attribute with a "%1" attributeCode doesn\'t exist. Verify the attribute and try again.';
 
         try {
             $this->_webApiCall($this->getAssignServiceInfo(), $payload);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."

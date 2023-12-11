@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDisablingSwatchTooltipsTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Swatch Tooltip Status Change"/>
+            <title value="Admin disabling swatch tooltips test."/>
+            <description value="Verify possibility to disable/enable swatch tooltips."/>
+            <severity value="AVERAGE"/>
+            <group value="Swatches"/>
+        </annotations>
+        <before>
+            <!-- Create category -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+
+            <!-- Log in -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Clean up our modifications to the existing color attribute -->
+            <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
+            <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="color"
+                       stepKey="fillFilter"/>
+            <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="clickSearch"/>
+            <click selector="{{AdminProductAttributeGridSection.AttributeCode('color')}}" stepKey="clickRowToEdit"/>
+            <click selector="{{AdminManageSwatchSection.nthDelete('1')}}" stepKey="deleteSwatch1"/>
+            <waitForPageLoad stepKey="waitToClickSave"/>
+            <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit"/>
+
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
+
+            <!-- Delete category -->
+            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+
+            <!-- Enable swatch tooltips -->
+            <magentoCLI command="config:set catalog/frontend/show_swatch_tooltip 1" stepKey="disableTooltips"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterEnabling"/>
+        </after>
+
+        <!-- Go to the edit page for the "color" attribute -->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
+        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="color"
+                   stepKey="fillFilter"/>
+        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="clickSearch"/>
+        <click selector="{{AdminProductAttributeGridSection.AttributeCode('color')}}" stepKey="clickRowToEdit"/>
+
+        <!-- Change to visual swatches -->
+        <selectOption selector="{{AdminNewAttributePanel.inputType}}" userInput="swatch_visual"
+                      stepKey="selectVisualSwatch"/>
+
+        <!-- Set swatch using the color picker -->
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch1"/>
+        <actionGroup ref="OpenSwatchMenuByIndexActionGroup" stepKey="clickSwatch1">
+            <argument name="index" value="0"/>
+        </actionGroup>
+        <click selector="{{AdminManageSwatchSection.nthChooseColor('1')}}" stepKey="clickChooseColor1"/>
+        <actionGroup ref="SetColorPickerByHexActionGroup" stepKey="fillHex1">
+            <argument name="nthColorPicker" value="1"/>
+            <argument name="hexColor" value="e74c3c"/>
+        </actionGroup>
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('0')}}" userInput="red" stepKey="fillAdmin1"/>
+        <waitForPageLoad stepKey="waitToClickSave"/>
+
+        <!-- Save -->
+        <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit1"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccess"/>
+
+        <!-- Assert that the Save was successful after round trip to server -->
+        <actionGroup ref="AssertSwatchColorActionGroup" stepKey="assertSwatchAdmin">
+            <argument name="nthSwatch" value="1"/>
+            <argument name="expectedStyle" value="background: rgb(231, 77, 60);"/>
+        </actionGroup>
+
+        <!-- Create a configurable product to verify the storefront with -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="clickOnAddProductToggle"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickOnAddConfigurableProduct">
+            <argument name="productType" value="configurable"/>
+        </actionGroup>
+        <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}"
+                   stepKey="fillName"/>
+        <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}"
+                   stepKey="fillSKU"/>
+        <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}"
+                   stepKey="fillPrice"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillQuantity">
+            <argument name="productQty" value="{{_defaultProduct.quantity}}"/>
+        </actionGroup>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}"
+                                    parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+        <fillField userInput="{{_defaultProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}"
+                   stepKey="fillUrlKey"/>
+
+        <!-- Create configurations based on the Swatch we created earlier -->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}"
+               stepKey="clickCreateConfigurations"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickFilters"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" userInput="color"
+                   stepKey="fillFilterAttributeCodeField"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="clickOnSelectAll"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyUniquePricesByAttributeToEachSku}}"
+               stepKey="clickOnApplyUniquePricesByAttributeToEachSku"/>
+        <selectOption selector="{{AdminCreateProductConfigurationsPanel.selectAttribute}}" userInput="Color"
+                      stepKey="selectAttributes"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attribute1}}" userInput="10"
+                   stepKey="fillAttributePrice1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}"
+               stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="99"
+                   stepKey="enterAttributeQuantity"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}"
+                          dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true"
+                          stepKey="clickOnConfirmInPopup"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
+        <seeInTitle userInput="{{_defaultProduct.name}}" stepKey="seeProductNameInTitle"/>
+
+        <!-- Go to the product page and see swatch options -->
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="amOnProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+
+        <!-- Verify that the storefront shows the swatches too -->
+        <actionGroup ref="AssertStorefrontSwatchColorActionGroup" stepKey="assertSwatchStorefront">
+            <argument name="nthSwatch" value="1"/>
+            <argument name="expectedRgb" value="rgb(231, 77, 60)"/>
+        </actionGroup>
+
+        <!-- Verify swatch tooltips are visible-->
+        <moveMouseOver selector="{{StorefrontProductInfoMainSection.nthSwatchOption('1')}}" stepKey="hoverEnabledSwatch"/>
+        <wait time="1" stepKey="waitForTooltip1"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.swatchOptionTooltip}}" stepKey="swatchTooltipVisible"/>
+
+        <!-- Disable swatch tooltips -->
+        <magentoCLI command="config:set catalog/frontend/show_swatch_tooltip 0" stepKey="disableTooltips"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterDisabling">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+
+        <!-- Verify swatch tooltips are not visible -->
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForPageReload"/>
+        <moveMouseOver selector="{{StorefrontProductInfoMainSection.nthSwatchOption('1')}}" stepKey="hoverDisabledSwatch"/>
+        <wait time="1" stepKey="waitForTooltip2"/>
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.swatchOptionTooltip}}" stepKey="swatchTooltipNotVisible"/>
+    </test>
+</tests>

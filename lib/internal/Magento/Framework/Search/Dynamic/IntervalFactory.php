@@ -5,12 +5,12 @@
  */
 namespace Magento\Framework\Search\Dynamic;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Search\EngineResolverInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class IntervalFactory
 {
@@ -26,20 +26,16 @@ class IntervalFactory
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param ScopeConfigInterface $scopeConfig
-     * @param string $configPath
+     * @param EngineResolverInterface $engineResolver
      * @param string[] $intervals
-     * @param string $scope
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        ScopeConfigInterface $scopeConfig,
-        $configPath,
-        $intervals,
-        $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+        EngineResolverInterface $engineResolver,
+        $intervals
     ) {
         $this->objectManager = $objectManager;
-        $configValue = $scopeConfig->getValue($configPath, $scope);
+        $configValue = $engineResolver->getCurrentSearchEngine();
         if (isset($intervals[$configValue])) {
             $this->interval = $intervals[$configValue];
         } else {
@@ -58,7 +54,7 @@ class IntervalFactory
         $interval = $this->objectManager->create($this->interval, $data);
         if (!$interval instanceof IntervalInterface) {
             throw new \LogicException(
-                'Interval not instance of interface \Magento\Framework\Search\Dynamic\IntervalInterface'
+                'Interval not instance of interface ' . IntervalInterface::class
             );
         }
         return $interval;

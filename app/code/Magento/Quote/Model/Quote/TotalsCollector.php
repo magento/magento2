@@ -7,12 +7,13 @@
 
 namespace Magento\Quote\Model\Quote;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Model\Quote\Address\Total\Collector;
 use Magento\Quote\Model\Quote\Address\Total\CollectorFactory;
 use Magento\Quote\Model\Quote\Address\Total\CollectorInterface;
 
 /**
- * Class TotalsCollector
+ * Composite object for collecting total.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TotalsCollector
@@ -52,8 +53,6 @@ class TotalsCollector
     protected $collectorList;
 
     /**
-     * Quote validator
-     *
      * @var \Magento\Quote\Model\QuoteValidator
      */
     protected $quoteValidator;
@@ -69,6 +68,11 @@ class TotalsCollector
     protected $shippingAssignmentFactory;
 
     /**
+     * @var QuantityCollector
+     */
+    private $quantityCollector;
+
+    /**
      * @param Collector $totalCollector
      * @param CollectorFactory $totalCollectorFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -78,6 +82,7 @@ class TotalsCollector
      * @param \Magento\Quote\Model\ShippingFactory $shippingFactory
      * @param \Magento\Quote\Model\ShippingAssignmentFactory $shippingAssignmentFactory
      * @param \Magento\Quote\Model\QuoteValidator $quoteValidator
+     * @param QuantityCollector $quantityCollector
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -89,7 +94,8 @@ class TotalsCollector
         \Magento\Quote\Model\Quote\TotalsCollectorList $collectorList,
         \Magento\Quote\Model\ShippingFactory $shippingFactory,
         \Magento\Quote\Model\ShippingAssignmentFactory $shippingAssignmentFactory,
-        \Magento\Quote\Model\QuoteValidator $quoteValidator
+        \Magento\Quote\Model\QuoteValidator $quoteValidator,
+        QuantityCollector $quantityCollector = null
     ) {
         $this->totalCollector = $totalCollector;
         $this->totalCollectorFactory = $totalCollectorFactory;
@@ -100,9 +106,13 @@ class TotalsCollector
         $this->shippingFactory = $shippingFactory;
         $this->shippingAssignmentFactory = $shippingAssignmentFactory;
         $this->quoteValidator = $quoteValidator;
+        $this->quantityCollector = $quantityCollector
+            ?: ObjectManager::getInstance()->get(QuantityCollector::class);
     }
 
     /**
+     * Collect quote totals.
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @return Address\Total
      */
@@ -115,6 +125,8 @@ class TotalsCollector
     }
 
     /**
+     * Collect quote.
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @return \Magento\Quote\Model\Quote\Address\Total
      */
@@ -128,7 +140,7 @@ class TotalsCollector
             ['quote' => $quote]
         );
 
-        $this->_collectItemsQtys($quote);
+        $this->quantityCollector->collectItemsQtys($quote);
 
         $total->setSubtotal(0);
         $total->setBaseSubtotal(0);
@@ -172,13 +184,15 @@ class TotalsCollector
     }
 
     /**
+     * Validate coupon code.
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @return $this
      */
     protected function _validateCouponCode(\Magento\Quote\Model\Quote $quote)
     {
         $code = $quote->getData('coupon_code');
-        if (strlen($code)) {
+        if ($code !== null && strlen($code)) {
             $addressHasCoupon = false;
             $addresses = $quote->getAllAddresses();
             if (count($addresses) > 0) {
@@ -200,37 +214,19 @@ class TotalsCollector
      *
      * @param \Magento\Quote\Model\Quote $quote
      * @return $this
+     * @deprecated
+     * @see \Magento\Quote\Model\Quote\QuantityCollector
      */
     protected function _collectItemsQtys(\Magento\Quote\Model\Quote $quote)
     {
-        $quote->setItemsCount(0);
-        $quote->setItemsQty(0);
-        $quote->setVirtualItemsQty(0);
+        $this->quantityCollector->collectItemsQtys($quote);
 
-        foreach ($quote->getAllVisibleItems() as $item) {
-            if ($item->getParentItem()) {
-                continue;
-            }
-
-            $children = $item->getChildren();
-            if ($children && $item->isShipSeparately()) {
-                foreach ($children as $child) {
-                    if ($child->getProduct()->getIsVirtual()) {
-                        $quote->setVirtualItemsQty($quote->getVirtualItemsQty() + $child->getQty() * $item->getQty());
-                    }
-                }
-            }
-
-            if ($item->getProduct()->getIsVirtual()) {
-                $quote->setVirtualItemsQty($quote->getVirtualItemsQty() + $item->getQty());
-            }
-            $quote->setItemsCount($quote->getItemsCount() + 1);
-            $quote->setItemsQty((float)$quote->getItemsQty() + $item->getQty());
-        }
         return $this;
     }
 
     /**
+     * Collect address total.
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @param Address $address
      * @return Address\Total
@@ -264,7 +260,7 @@ class TotalsCollector
             /** @var CollectorInterface $collector */
             $collector->collect($quote, $shippingAssignment, $total);
         }
-        
+
         $this->eventManager->dispatch(
             'sales_quote_address_collect_totals_after',
             [
@@ -273,7 +269,7 @@ class TotalsCollector
                 'total' => $total
             ]
         );
-
+        $total->setBaseSubtotalTotalInclTax($total->getBaseSubtotalInclTax());
         $address->addData($total->getData());
         $address->setAppliedTaxes($total->getAppliedTaxes());
         return $total;

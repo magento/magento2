@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddUniqueImageToConfigurableProductOptionActionGroup">
+        <annotations>
+            <description>Adds the provided Image to a Configurable Product on the Admin Product creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="image" defaultValue="ProductImage"/>
+            <argument name="frontend_label" type="string"/>
+            <argument name="label" type="string"/>
+        </arguments>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyUniqueImagesToEachSkus}}" stepKey="clickOnApplyUniqueImagesToEachSku"/>
+        <selectOption userInput="{{frontend_label}}" selector="{{AdminCreateProductConfigurationsPanel.selectImagesButton}}" stepKey="selectOption"/>
+        <attachFile selector="{{AdminCreateProductConfigurationsPanel.uploadImagesButton(label)}}" userInput="{{image.file}}" stepKey="uploadFile"/>
+        <waitForElementNotVisible selector="{{AdminCreateProductConfigurationsPanel.uploadProgressBar}}" stepKey="waitForUpload"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.imageFile(image.fileName)}}" stepKey="waitForThumbnail"/>
+    </actionGroup>
+</actionGroups>

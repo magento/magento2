@@ -1,21 +1,29 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Group;
 
 use Magento\Customer\Api\Data\GroupInterfaceFactory;
-use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
 
-class Save extends \Magento\Customer\Controller\Adminhtml\Group
+/**
+ * Controller class Save. Performs save action of customers group
+ */
+class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
      */
     protected $dataObjectProcessor;
+
+    /**
+     * @var \Magento\Customer\Api\Data\GroupExtensionInterfaceFactory
+     */
+    private $groupExtensionInterfaceFactory;
 
     /**
      *
@@ -26,6 +34,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param \Magento\Customer\Api\Data\GroupExtensionInterfaceFactory $groupExtensionInterfaceFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -34,9 +43,12 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
         GroupInterfaceFactory $groupDataFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        \Magento\Customer\Api\Data\GroupExtensionInterfaceFactory $groupExtensionInterfaceFactory
     ) {
         $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->groupExtensionInterfaceFactory = $groupExtensionInterfaceFactory
+            ?: ObjectManager::getInstance()->get(\Magento\Customer\Api\Data\GroupExtensionInterfaceFactory::class);
         parent::__construct(
             $context,
             $coreRegistry,
@@ -75,9 +87,11 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
         $customerGroup = null;
         if ($taxClass) {
             $id = $this->getRequest()->getParam('id');
+            $websitesToExclude = empty($this->getRequest()->getParam('customer_group_excluded_websites'))
+                ? [] : $this->getRequest()->getParam('customer_group_excluded_websites');
             $resultRedirect = $this->resultRedirectFactory->create();
             try {
-                $customerGroupCode = (string)$this->getRequest()->getParam('code');
+                $customerGroupCode = trim((string)$this->getRequest()->getParam('code'));
                 if ($id !== null) {
                     $customerGroup = $this->groupRepository->getById((int)$id);
                     $customerGroupCode = $customerGroupCode ?: $customerGroup->getCode();
@@ -87,12 +101,18 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
                 $customerGroup->setCode(!empty($customerGroupCode) ? $customerGroupCode : null);
                 $customerGroup->setTaxClassId($taxClass);
 
+                if ($websitesToExclude !== null) {
+                    $customerGroupExtensionAttributes = $this->groupExtensionInterfaceFactory->create();
+                    $customerGroupExtensionAttributes->setExcludeWebsiteIds($websitesToExclude);
+                    $customerGroup->setExtensionAttributes($customerGroupExtensionAttributes);
+                }
+
                 $this->groupRepository->save($customerGroup);
 
-                $this->messageManager->addSuccess(__('You saved the customer group.'));
+                $this->messageManager->addSuccessMessage(__('You saved the customer group.'));
                 $resultRedirect->setPath('customer/group');
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 if ($customerGroup != null) {
                     $this->storeCustomerGroupDataToSession(
                         $this->dataObjectProcessor->buildOutputDataArray(

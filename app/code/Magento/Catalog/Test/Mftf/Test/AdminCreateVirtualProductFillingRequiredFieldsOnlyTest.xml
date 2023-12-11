@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateVirtualProductFillingRequiredFieldsOnlyTest">
+        <annotations>
+            <stories value="Create virtual product"/>
+            <title value="Create virtual product filling required fields only"/>
+            <description value="Test log in to Create virtual product and Create virtual product filling required fields only"/>
+            <testCaseId value="MC-6031"/>
+            <severity value="CRITICAL"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility"
+                 stepKey="openProductCatalogPage"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility"
+                 stepKey="clickAddProductToggle"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility"
+                 stepKey="waitForProductToggleToSelectProduct"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="clickVirtualProduct">
+            <argument name="productType" value="virtual"/>
+        </actionGroup>
+
+        <!-- Create virtual product with required fields only -->
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillProductName">
+            <argument name="product" value="virtualProductWithRequiredFields"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility"
+                 stepKey="fillProductSku"/>
+        <actionGroup ref="AdminFillProductPriceFieldAndPressEnterOnProductEditPageActionGroup" stepKey="fillProductPrice">
+            <argument name="price" value="{{virtualProductWithRequiredFields.price}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
+
+        <!-- Verify we see success message -->
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeAssertVirtualProductSuccessMessage">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
+
+        <!-- Verify we see created virtual product(from the above step) on the product grid page -->
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage1"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility"
+                 stepKey="clickSelector"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility"
+                 stepKey="clickFilter"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility"
+                 stepKey="fillProductName1"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility"
+                 stepKey="fillVirtualProductSku"/>
+        <actionGroup ref="FilterProductGridBySkuAndNameActionGroup" stepKey="clickSearch2">
+            <argument name="product" value="virtualProductWithRequiredFields"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility"
+                 stepKey="waitForProductSearch"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeVirtualProductName">
+            <argument name="column" value="Name"/>
+            <argument name="value" value="{{virtualProductWithRequiredFields.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeVirtualProductSku">
+            <argument name="column" value="SKU"/>
+            <argument name="value" value="{{virtualProductWithRequiredFields.sku}}"/>
+        </actionGroup>
+    </test>
+</tests>

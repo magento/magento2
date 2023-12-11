@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCustomerWishListShareOptionsInputValidationTest">
+        <annotations>
+            <features value="Wishlist"/>
+            <stories value="MAGETWO-8709"/>
+            <group value="wishlist"/>
+            <title value="When user tries to set the Email Text Length Limit higher then 10,000 then validation message occurs"/>
+            <description value="When user tries to set the Email Text Length Limit higher then 10,000 then validation message occurs"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="N/a"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="setEmailTextLengthLimitActionGroup" stepKey="rollbackEmailTextLengthLimit">
+                <argument name="emailTextLengthLimit" value="{{Wishlist.default_email_text_length_limit}}"/>
+            </actionGroup>
+            <checkOption selector="{{WishListShareOptionsSection.useSystemValueForWishListEmailTextLimit}}" stepKey="checkUseSystemValueForWishListEmailTextLimit"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <actionGroup ref="setEmailTextLengthLimitActionGroup" stepKey="setEmailTextLengthLimitToMin">
+            <argument name="emailTextLengthLimit" value="{{Wishlist.min_email_text_length_limit}}"/>
+        </actionGroup>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccessMessageForMinimum"/>
+        <grabValueFrom selector="{{WishListShareOptionsSection.emailTextLengthLimitInput}}" stepKey="minimumWishListTextLengthLimit"/>
+        <assertEquals stepKey="AssertMinimumTextLengthLimitIsApplied">
+            <expectedResult type="string">{{Wishlist.min_email_text_length_limit}}</expectedResult>
+            <actualResult type="variable">minimumWishListTextLengthLimit</actualResult>
+        </assertEquals>
+
+        <actionGroup ref="setEmailTextLengthLimitActionGroup" stepKey="setEmailTextLengthLimitToMax">
+            <argument name="emailTextLengthLimit" value="{{Wishlist.max_email_text_length_limit}}"/>
+        </actionGroup>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccessMessageForMaximum"/>
+        <grabValueFrom selector="{{WishListShareOptionsSection.emailTextLengthLimitInput}}" stepKey="maximumWishListTextLengthLimit"/>
+        <assertEquals stepKey="AssertMaximumTextLengthLimitIsApplied">
+            <expectedResult type="string">{{Wishlist.max_email_text_length_limit}}</expectedResult>
+            <actualResult type="variable">maximumWishListTextLengthLimit</actualResult>
+        </assertEquals>
+
+        <actionGroup ref="setEmailTextLengthLimitActionGroup" stepKey="setEmailTextLengthLimitToLowerThanMin">
+            <argument name="emailTextLengthLimit" value="0"/>
+        </actionGroup>
+        <dontSee selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="dontSeeSuccessMessageForLowerThanMinimum"/>
+        <grabTextFrom selector="{{WishListShareOptionsSection.emailTextLengthLimitMessage}}" stepKey="enterWishListTextLengthLimitLowerThanMinimum"/>
+        <assertEquals stepKey="AssertTextLengthLimitIsNotAppliedWhenLowerThanMinimum">
+            <expectedResult type="string">The value is not within the specified range.</expectedResult>
+            <actualResult type="variable">enterWishListTextLengthLimitLowerThanMinimum</actualResult>
+        </assertEquals>
+
+        <actionGroup ref="setEmailTextLengthLimitActionGroup" stepKey="setEmailTextLengthLimitToHigherThanMaximum">
+            <argument name="emailTextLengthLimit" value="10001"/>
+        </actionGroup>
+        <dontSee selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="dontSeeSuccessMessageForHigherThanMaximum"/>
+        <grabTextFrom selector="{{WishListShareOptionsSection.emailTextLengthLimitMessage}}" stepKey="enterWishListTextLengthLimitHigherThanMaximum"/>
+        <assertEquals stepKey="AssertTextLengthLimitIsNotAppliedWhenHigherThanMaximum">
+            <expectedResult type="string">The value is not within the specified range.</expectedResult>
+            <actualResult type="variable">enterWishListTextLengthLimitHigherThanMaximum</actualResult>
+        </assertEquals>
+    </test>
+</tests>

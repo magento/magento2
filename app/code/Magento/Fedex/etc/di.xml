@@ -10,9 +10,8 @@
         <arguments>
             <argument name="sensitive" xsi:type="array">
                 <item name="carriers/fedex/account" xsi:type="string">1</item>
-                <item name="carriers/fedex/key" xsi:type="string">1</item>
-                <item name="carriers/fedex/meter_number" xsi:type="string">1</item>
-                <item name="carriers/fedex/password" xsi:type="string">1</item>
+                <item name="carriers/fedex/api_key" xsi:type="string">1</item>
+                <item name="carriers/fedex/secret_key" xsi:type="string">1</item>
                 <item name="carriers/fedex/production_webservices_url" xsi:type="string">1</item>
                 <item name="carriers/fedex/sandbox_webservices_url" xsi:type="string">1</item>
                 <item name="carriers/fedex/smartpost_hubid" xsi:type="string">1</item>
@@ -21,5 +20,11 @@
                 <item name="carriers/fedex/sandbox_mode" xsi:type="string">1</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Shipping\Block\DataProviders\Tracking\DeliveryDateTitle">
+        <plugin name="update_delivery_date_title" type="Magento\Fedex\Plugin\Block\DataProviders\Tracking\ChangeTitle"/>
+    </type>
+    <type name="Magento\Shipping\Block\Tracking\Popup">
+        <plugin name="update_delivery_date_value" type="Magento\Fedex\Plugin\Block\Tracking\PopupDeliveryDate"/>
     </type>
 </config>

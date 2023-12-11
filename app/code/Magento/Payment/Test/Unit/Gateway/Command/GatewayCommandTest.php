@@ -3,190 +3,207 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Payment\Test\Unit\Gateway\Command;
 
+use Magento\Payment\Gateway\Command\CommandException;
 use Magento\Payment\Gateway\Command\GatewayCommand;
+use Magento\Payment\Gateway\ErrorMapper\ErrorMessageMapperInterface;
 use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\TransferFactoryInterface;
+use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Gateway\Response\HandlerInterface;
+use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ValidatorInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GatewayCommandTest extends \PHPUnit\Framework\TestCase
+class GatewayCommandTest extends TestCase
 {
-    /** @var GatewayCommand */
-    protected $command;
-
     /**
-     * @var BuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GatewayCommand
      */
-    protected $requestBuilderMock;
+    private $command;
 
     /**
-     * @var TransferFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BuilderInterface|MockObject
      */
-    protected $transferFactoryMock;
+    private $requestBuilder;
 
     /**
-     * @var ClientInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TransferFactoryInterface|MockObject
      */
-    protected $clientMock;
+    private $transferFactory;
 
     /**
-     * @var HandlerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientInterface|MockObject
      */
-    protected $responseHandlerMock;
+    private $client;
 
     /**
-     * @var ValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var HandlerInterface|MockObject
      */
-    protected $validatorMock;
+    private $responseHandler;
 
     /**
-     * @var LoggerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var ValidatorInterface|MockObject
+     */
+    private $validator;
+
+    /**
+     * @var LoggerInterface|MockObject
      */
     private $logger;
 
-    protected function setUp()
+    /**
+     * @var ErrorMessageMapperInterface|MockObject
+     */
+    private $errorMessageMapper;
+
+    protected function setUp(): void
     {
-        $this->requestBuilderMock = $this->createMock(
-            BuilderInterface::class
-        );
-        $this->transferFactoryMock = $this->createMock(
-            TransferFactoryInterface::class
-        );
-        $this->clientMock = $this->createMock(
-            ClientInterface::class
-        );
-        $this->responseHandlerMock = $this->createMock(
-            HandlerInterface::class
-        );
-        $this->validatorMock = $this->createMock(
-            ValidatorInterface::class
-        );
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->requestBuilder = $this->getMockForAbstractClass(BuilderInterface::class);
+        $this->transferFactory = $this->getMockForAbstractClass(TransferFactoryInterface::class);
+        $this->client = $this->getMockForAbstractClass(ClientInterface::class);
+        $this->responseHandler = $this->getMockForAbstractClass(HandlerInterface::class);
+        $this->validator = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->errorMessageMapper = $this->getMockForAbstractClass(ErrorMessageMapperInterface::class);
 
         $this->command = new GatewayCommand(
-            $this->requestBuilderMock,
-            $this->transferFactoryMock,
-            $this->clientMock,
+            $this->requestBuilder,
+            $this->transferFactory,
+            $this->client,
             $this->logger,
-            $this->responseHandlerMock,
-            $this->validatorMock
+            $this->responseHandler,
+            $this->validator,
+            $this->errorMessageMapper
         );
     }
 
     public function testExecute()
     {
         $commandSubject = ['authorize'];
-        $request = [
-            'request_field1' => 'request_value1',
-            'request_field2' => 'request_value2'
-        ];
-        $response = ['response_field1' => 'response_value1'];
-        $validationResult = $this->getMockBuilder(
-            \Magento\Payment\Gateway\Validator\ResultInterface::class
-        )
-            ->getMockForAbstractClass();
+        $this->processRequest($commandSubject, true);
 
-        $transferO = $this->getMockBuilder(
-            \Magento\Payment\Gateway\Http\TransferInterface::class
-        )
-            ->getMockForAbstractClass();
-
-        $this->requestBuilderMock->expects(static::once())
-            ->method('build')
-            ->with($commandSubject)
-            ->willReturn($request);
-
-        $this->transferFactoryMock->expects(static::once())
-            ->method('create')
-            ->with($request)
-            ->willReturn($transferO);
-
-        $this->clientMock->expects(static::once())
-            ->method('placeRequest')
-            ->with($transferO)
-            ->willReturn($response);
-        $this->validatorMock->expects(static::once())
-            ->method('validate')
-            ->with(array_merge($commandSubject, ['response' =>$response]))
-            ->willReturn($validationResult);
-        $validationResult->expects(static::once())
-            ->method('isValid')
-            ->willReturn(true);
-
-        $this->responseHandlerMock->expects(static::once())
-            ->method('handle')
-            ->with($commandSubject, $response);
+        $this->responseHandler->method('handle')
+            ->with($commandSubject, ['response_field1' => 'response_value1']);
 
         $this->command->execute($commandSubject);
     }
 
+    /**
+     * Checks a case when request fails.
+     */
     public function testExecuteValidationFail()
     {
-        $this->expectException(
-            \Magento\Payment\Gateway\Command\CommandException::class
-        );
-
+        $this->expectException(CommandException::class);
+        $this->expectExceptionMessage('Transaction has been declined. Please try again later.');
         $commandSubject = ['authorize'];
+        $validationFailures = [
+            __('Failure #1'),
+            __('Failure #2'),
+        ];
+
+        $this->processRequest($commandSubject, false, $validationFailures);
+
+        $this->logger->expects(self::exactly(count($validationFailures)))
+            ->method('critical')
+            ->withConsecutive(
+                [self::equalTo('Payment Error: ' . $validationFailures[0])],
+                [self::equalTo('Payment Error: ' . $validationFailures[1])]
+            );
+
+        $this->command->execute($commandSubject);
+    }
+
+    /**
+     * Checks a case when request fails and response errors are mapped.
+     */
+    public function testExecuteValidationFailWithMappedErrors()
+    {
+        $this->expectException(CommandException::class);
+        $this->expectExceptionMessage('Failure Mapped');
+        $commandSubject = ['authorize'];
+        $validationFailures = [
+            __('Failure #1'),
+            __('Failure #2'),
+        ];
+        $errorCodes = ['401'];
+
+        $this->processRequest($commandSubject, false, $validationFailures, $errorCodes);
+
+        $this->errorMessageMapper->method('getMessage')
+            ->willReturnMap(
+                [
+                    ['401', 'Unauthorized'],
+                    ['Failure #1', 'Failure Mapped'],
+                    ['Failure #2', null]
+                ]
+            );
+
+        $this->logger->expects(self::exactly(count(array_merge($validationFailures, $errorCodes))))
+            ->method('critical')
+            ->withConsecutive(
+                [self::equalTo('Payment Error: Unauthorized')],
+                [self::equalTo('Payment Error: Failure Mapped')],
+                [self::equalTo('Payment Error: Failure #2')]
+            );
+
+        $this->command->execute($commandSubject);
+    }
+
+    /**
+     * Performs command actions like request, response and validation.
+     *
+     * @param array $commandSubject
+     * @param bool $validationResult
+     * @param array $validationFailures
+     * @param array $errorCodes
+     */
+    private function processRequest(
+        array $commandSubject,
+        bool $validationResult,
+        array $validationFailures = [],
+        array $errorCodes = []
+    ) {
         $request = [
             'request_field1' => 'request_value1',
             'request_field2' => 'request_value2'
         ];
         $response = ['response_field1' => 'response_value1'];
-        $validationFailures = [
-            __('Failure #1'),
-            __('Failure #2'),
-        ];
-        $validationResult = $this->getMockBuilder(
-            \Magento\Payment\Gateway\Validator\ResultInterface::class
-        )
+        $transferO = $this->getMockBuilder(TransferInterface::class)
             ->getMockForAbstractClass();
 
-        $transferO = $this->getMockBuilder(
-            \Magento\Payment\Gateway\Http\TransferInterface::class
-        )
-            ->getMockForAbstractClass();
-
-        $this->requestBuilderMock->expects(static::once())
-            ->method('build')
+        $this->requestBuilder->method('build')
             ->with($commandSubject)
             ->willReturn($request);
 
-        $this->transferFactoryMock->expects(static::once())
-            ->method('create')
+        $this->transferFactory->method('create')
             ->with($request)
             ->willReturn($transferO);
 
-        $this->clientMock->expects(static::once())
-            ->method('placeRequest')
+        $this->client->method('placeRequest')
             ->with($transferO)
             ->willReturn($response);
-        $this->validatorMock->expects(static::once())
-            ->method('validate')
-            ->with(array_merge($commandSubject, ['response' =>$response]))
+
+        $result = $this->getMockBuilder(ResultInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->validator->method('validate')
+            ->with(array_merge($commandSubject, ['response' => $response]))
+            ->willReturn($result);
+        $result->method('isValid')
             ->willReturn($validationResult);
-        $validationResult->expects(static::once())
-            ->method('isValid')
-            ->willReturn(false);
-        $validationResult->expects(static::once())
-            ->method('getFailsDescription')
-            ->willReturn(
-                $validationFailures
-            );
-
-        $this->logger->expects(static::exactly(count($validationFailures)))
-            ->method('critical')
-            ->withConsecutive(
-                [$validationFailures[0]],
-                [$validationFailures[1]]
-            );
-
-        $this->command->execute($commandSubject);
+        $result->method('getFailsDescription')
+            ->willReturn($validationFailures);
+        $result->method('getErrorCodes')
+            ->willReturn($errorCodes);
     }
 }

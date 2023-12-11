@@ -3,22 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Mview\View;
 
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DB\Adapter\ConnectionException;
+use Magento\Framework\DB\Sql\Expression;
+use Magento\Framework\Exception\RuntimeException;
+use Magento\Framework\Mview\Config;
+use Magento\Framework\Mview\View\AdditionalColumnsProcessor\ProcessorFactory;
 use Magento\Framework\Phrase;
 
+/**
+ * Class Changelog for manipulations with the mview_state table.
+ */
 class Changelog implements ChangelogInterface
 {
     /**
      * Suffix for changelog table
      */
-    const NAME_SUFFIX = 'cl';
+    public const NAME_SUFFIX = 'cl';
 
     /**
      * Column name of changelog entity
      */
-    const COLUMN_NAME = 'entity_id';
+    public const COLUMN_NAME = 'entity_id';
+
+    /**
+     * Column name for Version ID
+     */
+    public const VERSION_ID_COLUMN_NAME = 'version_id';
 
     /**
      * Database connection
@@ -40,25 +54,45 @@ class Changelog implements ChangelogInterface
     protected $resource;
 
     /**
-     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @var Config
      */
-    public function __construct(\Magento\Framework\App\ResourceConnection $resource)
-    {
+    private $mviewConfig;
+
+    /**
+     * @var ProcessorFactory
+     */
+    private $additionalColumnsProcessorFactory;
+
+    /**
+     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param Config $mviewConfig
+     * @param ProcessorFactory $additionalColumnsProcessorFactory
+     * @throws ConnectionException
+     */
+    public function __construct(
+        \Magento\Framework\App\ResourceConnection $resource,
+        Config $mviewConfig,
+        ProcessorFactory $additionalColumnsProcessorFactory
+    ) {
         $this->connection = $resource->getConnection();
         $this->resource = $resource;
         $this->checkConnection();
+        $this->mviewConfig = $mviewConfig;
+        $this->additionalColumnsProcessorFactory = $additionalColumnsProcessorFactory;
     }
 
     /**
      * Check DB connection
      *
      * @return void
-     * @throws \Exception
+     * @throws ConnectionException
      */
     protected function checkConnection()
     {
         if (!$this->connection) {
-            throw new \Exception('Write DB connection is not available');
+            throw new ConnectionException(
+                new Phrase("The write connection to the database isn't available. Please try again later.")
+            );
         }
     }
 
@@ -75,7 +109,7 @@ class Changelog implements ChangelogInterface
             $table = $this->connection->newTable(
                 $changelogTableName
             )->addColumn(
-                'version_id',
+                self::VERSION_ID_COLUMN_NAME,
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
                 ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
@@ -87,8 +121,44 @@ class Changelog implements ChangelogInterface
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
                 'Entity ID'
             );
+
+            foreach ($this->initAdditionalColumnData() as $columnData) {
+                /** @var AdditionalColumnProcessorInterface $processor */
+                $processorClass = $columnData['processor'];
+                $processor = $this->additionalColumnsProcessorFactory->create($processorClass);
+                $processor->processColumnForCLTable($table, $columnData['cl_name']);
+            }
+
             $this->connection->createTable($table);
         }
+    }
+
+    /**
+     * Retrieve additional column data
+     *
+     * @return array
+     * @throws \Exception
+     */
+    private function initAdditionalColumnData(): array
+    {
+        $config = $this->mviewConfig->getView($this->getViewId());
+        $additionalColumns = [];
+
+        if (!$config) {
+            return $additionalColumns;
+        }
+
+        foreach ($config['subscriptions'] as $subscription) {
+            if (isset($subscription['additional_columns'])) {
+                foreach ($subscription['additional_columns'] as $additionalColumn) {
+                    //We are gatherig unique change log column names in order to create them later
+                    $additionalColumns[$additionalColumn['cl_name']] = $additionalColumn;
+                    $additionalColumns[$additionalColumn['cl_name']]['processor'] = $subscription['processor'];
+                }
+            }
+        }
+
+        return $additionalColumns;
     }
 
     /**
@@ -121,7 +191,7 @@ class Changelog implements ChangelogInterface
             throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
         }
 
-        $this->connection->delete($changelogTableName, ['version_id <= ?' => (int)$versionId]);
+        $this->connection->delete($changelogTableName, ['version_id < ?' => (int)$versionId]);
 
         return true;
     }
@@ -131,7 +201,7 @@ class Changelog implements ChangelogInterface
      *
      * @param int $fromVersionId
      * @param int $toVersionId
-     * @return int[]
+     * @return array
      * @throws ChangelogTableNotExistsException
      */
     public function getList($fromVersionId, $toVersionId)
@@ -154,14 +224,15 @@ class Changelog implements ChangelogInterface
             (int)$toVersionId
         );
 
-        return $this->connection->fetchCol($select);
+        return array_map('intval', $this->connection->fetchCol($select));
     }
 
     /**
      * Get maximum version_id from changelog
+     *
      * @return int
      * @throws ChangelogTableNotExistsException
-     * @throws \Exception
+     * @throws RuntimeException
      */
     public function getVersion()
     {
@@ -169,11 +240,18 @@ class Changelog implements ChangelogInterface
         if (!$this->connection->isTableExists($changelogTableName)) {
             throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
         }
-        $row = $this->connection->fetchRow('SHOW TABLE STATUS LIKE ?', [$changelogTableName]);
-        if (isset($row['Auto_increment'])) {
-            return (int)$row['Auto_increment'] - 1;
+        $select = $this->connection->select()->from($changelogTableName)->order('version_id DESC')->limit(1);
+        $row = $this->connection->fetchRow($select);
+        if (!$row) {
+            return 0;
         } else {
-            throw new \Exception("Table status for `{$changelogTableName}` is incorrect. Can`t fetch version id.");
+            if (is_array($row) && array_key_exists('version_id', $row)) {
+                return (int)$row['version_id'];
+            } else {
+                throw new RuntimeException(
+                    new Phrase("Table status for %1 is incorrect. Can`t fetch version id.", [$changelogTableName])
+                );
+            }
         }
     }
 
@@ -182,13 +260,15 @@ class Changelog implements ChangelogInterface
      *
      * Build a changelog name by concatenating view identifier and changelog name suffix.
      *
-     * @throws \Exception
+     * @throws \DomainException
      * @return string
      */
     public function getName()
     {
-        if (strlen($this->viewId) == 0) {
-            throw new \Exception("View's identifier is not set");
+        if (!$this->viewId || strlen($this->viewId) == 0) {
+            throw new \DomainException(
+                new Phrase("View's identifier is not set")
+            );
         }
         return $this->viewId . '_' . self::NAME_SUFFIX;
     }
@@ -216,10 +296,24 @@ class Changelog implements ChangelogInterface
     }
 
     /**
+     * Get view's identifier
+     *
      * @return string
      */
     public function getViewId()
     {
         return $this->viewId;
+    }
+
+    /**
+     * Add list of ids to changelog
+     *
+     * @param array $ids
+     * @return void
+     */
+    public function addList(array $ids): void
+    {
+        $changelogTableName = $this->resource->getTableName($this->getName());
+        $this->connection->insertArray($changelogTableName, ['entity_id'], $ids);
     }
 }

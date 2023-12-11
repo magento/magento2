@@ -11,9 +11,6 @@
             <template>
                 <minify_html>0</minify_html>
             </template>
-            <static>
-                <sign>1</sign>
-            </static>
         </dev>
         <system>
             <media_storage_configuration>
@@ -28,7 +25,18 @@
             <dashboard>
                 <enable_charts>1</enable_charts>
             </dashboard>
+            <upload_configuration>
+                <enable_resize>1</enable_resize>
+                <max_width>1920</max_width>
+                <max_height>1200</max_height>
+            </upload_configuration>
         </system>
+        <admin>
+            <grid>
+                <limit_total_number_of_products>0</limit_total_number_of_products>
+                <records_limit>20000</records_limit>
+            </grid>
+        </admin>
         <general>
             <validator_data>
                 <input_types>
@@ -42,6 +50,10 @@
             <seo>
                 <use_rewrites>0</use_rewrites>
             </seo>
+            <secure>
+                <use_in_frontend>1</use_in_frontend>
+                <use_in_adminhtml>1</use_in_adminhtml>
+            </secure>
         </web>
     </default>
     <stores>

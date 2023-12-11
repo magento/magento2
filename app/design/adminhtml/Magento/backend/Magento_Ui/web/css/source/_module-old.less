@@ -78,7 +78,7 @@
 
         &.ui-state-active {
             z-index: 2;
-            background: #FFF;
+            background: @color-white;
             padding: 1px (@spacing-m - 1px);
             border: 2px solid #eb5202;
             margin: -1px;
@@ -180,14 +180,14 @@
     .lib-clearfix();
 
     [data-part=left] {
-        display: inline-block;
+        display: block;
         width: 45%;
         float: left;
         text-align: left;
     }
 
     [data-part=right] {
-        display: inline-block;
+        display: block;
         width: 45%;
         text-align: right;
         float: right;
@@ -340,11 +340,24 @@
     }
 
     .weight-switcher {
-        margin-bottom: 18px;
+        .lib-vendor-prefix-flex-grow(1);
+        margin-top: 18px;
 
-        .addafter {
-            margin-top: 30px;
-            position: absolute;
+        .admin__control-switcher {
+            .label {
+                display: block;
+                float: none;
+                text-align: left;
+                width: auto;
+            }
+
+            .admin__field-option {
+                position: relative;
+            }
+
+            .admin__control-radio {
+                position: absolute;
+            }
         }
 
         .mage-error {

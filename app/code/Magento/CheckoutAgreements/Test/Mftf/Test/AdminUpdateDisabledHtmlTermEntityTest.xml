@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateDisabledHtmlTermEntityTest">
+        <annotations>
+            <features value="CheckoutAgreements"/>
+            <stories value="Checkout agreements"/>
+            <title value="Update disabled HTML checkout agreement"/>
+            <description value="Admin should be able to update disabled HTML checkout agreement"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14664"/>
+            <group value="checkoutAgreements"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set checkout/options/enable_agreements 1" stepKey="setEnableTermsOnCheckout"/>
+
+            <createData entity="SimpleTwo" stepKey="createProduct"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
+            <deleteData createDataKey="createProduct" stepKey="deletedProduct"/>
+
+            <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
+            <actionGroup ref="AdminDeleteAllTermConditionsActionGroup" stepKey="deleteAllTerms"/>
+            <comment userInput="BIC workaround" stepKey="openTermToDelete"/>
+            <comment userInput="BIC workaround" stepKey="deleteOpenedTerm"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <actionGroup ref="AdminTermsConditionsOpenNewTermPageActionGroup" stepKey="openNewTerm"/>
+        <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">
+            <argument name="term" value="disabledHtmlTerm"/>
+        </actionGroup>
+        <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveNewTerm"/>
+
+        <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGrid"/>
+        <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openUpdateTerm">
+            <argument name="termName" value="{{disabledHtmlTerm.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillUpdateTerm">
+            <argument name="term" value="activeTextTerm"/>
+        </actionGroup>
+        <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveUpdateTerm"/>
+
+        <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openNewTermsGrid"/>
+        <actionGroup ref="AssertAdminTermsConditionsInGridActionGroup" stepKey="assertTermInGrid">
+            <argument name="termName" value="{{activeTextTerm.name}}"/>
+        </actionGroup>
+
+        <openNewTab stepKey="openStorefrontTab"/>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToTheCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProcessCheckoutToPaymentActionGroup" stepKey="processCheckoutToThePaymentMethodsPage"/>
+        <actionGroup ref="AssertStorefrontTermInCheckoutActionGroup" stepKey="assertTermInCheckout">
+            <argument name="termCheckboxText" value="{{activeTextTerm.checkboxText}}"/>
+        </actionGroup>
+        <closeTab stepKey="closeStorefrontTab"/>
+    </test>
+</tests>

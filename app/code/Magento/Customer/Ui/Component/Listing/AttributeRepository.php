@@ -11,11 +11,16 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataManagementInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\MetadataManagementInterface;
+use Magento\Customer\Model\AttributeMetadataDataProvider;
 use Magento\Customer\Model\Indexer\Attribute\Filter;
+use Magento\Framework\App\ObjectManager;
 
+/**
+ * Attribute Repository Managment
+ */
 class AttributeRepository
 {
-    const BILLING_ADDRESS_PREFIX = 'billing_';
+    public const BILLING_ADDRESS_PREFIX = 'billing_';
 
     /**
      * @var array
@@ -48,27 +53,38 @@ class AttributeRepository
     protected $attributeFilter;
 
     /**
+     * @var AttributeMetadataDataProvider
+     */
+    private $attributeMetadataDataProvider;
+
+    /**
      * @param CustomerMetadataManagementInterface $customerMetadataManagement
      * @param AddressMetadataManagementInterface $addressMetadataManagement
      * @param CustomerMetadataInterface $customerMetadata
      * @param AddressMetadataInterface $addressMetadata
      * @param Filter $attributeFiltering
+     * @param AttributeMetadataDataProvider|null $attributeMetadataDataProvider
      */
     public function __construct(
         CustomerMetadataManagementInterface $customerMetadataManagement,
         AddressMetadataManagementInterface $addressMetadataManagement,
         CustomerMetadataInterface $customerMetadata,
         AddressMetadataInterface $addressMetadata,
-        Filter $attributeFiltering
+        Filter $attributeFiltering,
+        ?AttributeMetadataDataProvider $attributeMetadataDataProvider = null
     ) {
         $this->customerMetadataManagement = $customerMetadataManagement;
         $this->addressMetadataManagement = $addressMetadataManagement;
         $this->customerMetadata = $customerMetadata;
         $this->addressMetadata = $addressMetadata;
         $this->attributeFilter = $attributeFiltering;
+        $this->attributeMetadataDataProvider = $attributeMetadataDataProvider
+            ?? ObjectManager::getInstance()->get(AttributeMetadataDataProvider::class);
     }
 
     /**
+     * Returns attribute list for current customer
+     *
      * @return array
      */
     public function getList()
@@ -93,6 +109,8 @@ class AttributeRepository
     }
 
     /**
+     * Returns attribute list for given entity type code
+     *
      * @param AttributeMetadataInterface[] $metadata
      * @param string $entityTypeCode
      * @param MetadataManagementInterface $management
@@ -104,6 +122,7 @@ class AttributeRepository
         /** @var AttributeMetadataInterface $attribute */
         foreach ($metadata as $attribute) {
             $attributeCode = $attribute->getAttributeCode();
+            $attributeModel = $this->attributeMetadataDataProvider->getAttribute($entityTypeCode, $attributeCode);
             if ($entityTypeCode == AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {
                 $attributeCode = self::BILLING_ADDRESS_PREFIX . $attribute->getAttributeCode();
             }
@@ -120,6 +139,7 @@ class AttributeRepository
                 AttributeMetadataInterface::VALIDATION_RULES => $attribute->getValidationRules(),
                 AttributeMetadataInterface::REQUIRED => $attribute->isRequired(),
                 'entity_type_code' => $entityTypeCode,
+                'grid_filter_condition_type' => $attributeModel->getGridFilterConditionType()
             ];
         }
 
@@ -136,17 +156,27 @@ class AttributeRepository
     {
         /** @var \Magento\Customer\Api\Data\OptionInterface $option */
         foreach ($options as &$option) {
-            $option = ['label' => (string)$option->getLabel(), 'value' => $option->getValue()];
+            $value = $option->getValue();
+            if (is_array($option->getOptions())) {
+                $value = $this->getOptionArray($option->getOptions());
+            }
+            $option = [
+                'label' => (string)$option->getLabel(),
+                'value' => $value,
+                '__disableTmpl' => true
+            ];
         }
         return $options;
     }
 
     /**
+     * Return customer group's metadata by given group code
+     *
      * @param string $code
-     * @return []
+     * @return array | null
      */
     public function getMetadataByCode($code)
     {
-        return isset($this->getList()[$code]) ? $this->getList()[$code] : null;
+        return $this->getList()[$code] ?? null;
     }
 }

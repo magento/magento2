@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\BasePackageInfo;
+use Magento\Setup\Model\BasePackageInfo;
 
 /**
  * Tests BasePackageInfo
@@ -15,21 +16,21 @@ use \Magento\Setup\Model\BasePackageInfo;
 class BasePackageInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\FileSystem\Directory\ReadFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\FileSystem\Directory\ReadFactory
      */
     private $readFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\FileSystem\Directory\ReadInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\FileSystem\Directory\ReadInterface
      */
     private $readerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\BasePackageInfo
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\BasePackageInfo
      */
     private $basePackageInfo;
 
-    public function setup()
+    protected function setup(): void
     {
         $this->readFactoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         $this->readerMock = $this->getMockForAbstractClass(
@@ -48,8 +49,8 @@ class BasePackageInfoTest extends \PHPUnit\Framework\TestCase
         $this->readerMock->expects($this->once())->method('isExist')->willReturn(false);
         $this->readerMock->expects($this->never())->method('isReadable');
         $this->readerMock->expects($this->never())->method('readFile');
-        $this->expectException(
-            \Magento\Setup\Exception::class,
+        $this->expectException(\Magento\Setup\Exception::class);
+        $this->expectExceptionMessage(
             sprintf('Could not locate %s file.', BasePackageInfo::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE)
         );
         $this->basePackageInfo->getPaths();
@@ -61,8 +62,8 @@ class BasePackageInfoTest extends \PHPUnit\Framework\TestCase
         $this->readerMock->expects($this->once())->method('isExist')->willReturn(true);
         $this->readerMock->expects($this->once())->method('isReadable')->willReturn(false);
         $this->readerMock->expects($this->never())->method('readFile');
-        $this->expectException(
-            \Magento\Setup\Exception::class,
+        $this->expectException(\Magento\Setup\Exception::class);
+        $this->expectExceptionMessage(
             sprintf('Could not read %s file.', BasePackageInfo::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE)
         );
         $this->basePackageInfo->getPaths();
@@ -75,8 +76,7 @@ class BasePackageInfoTest extends \PHPUnit\Framework\TestCase
         $this->readerMock->expects($this->once())->method('isReadable')->willReturn(true);
         $jsonData = json_encode(
             [
-                BasePackageInfo::COMPOSER_KEY_EXTRA =>
-                [
+                BasePackageInfo::COMPOSER_KEY_EXTRA => [
                     __FILE__,
                     __FILE__
                 ]
@@ -95,10 +95,8 @@ class BasePackageInfoTest extends \PHPUnit\Framework\TestCase
         $this->readerMock->expects($this->once())->method('isReadable')->willReturn(true);
         $jsonData = json_encode(
             [
-                BasePackageInfo::COMPOSER_KEY_EXTRA =>
-                [
-                    BasePackageInfo::COMPOSER_KEY_MAP =>
-                    [
+                BasePackageInfo::COMPOSER_KEY_EXTRA => [
+                    BasePackageInfo::COMPOSER_KEY_MAP => [
                         [
                             __FILE__,
                             __FILE__

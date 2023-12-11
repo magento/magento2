@@ -3,69 +3,88 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+namespace Magento\Backend\Test\Unit\Model\Menu\Director;
+
+use Magento\Backend\Model\Menu\Builder;
+use Magento\Backend\Model\Menu\Builder\AbstractCommand;
+use Magento\Backend\Model\Menu\Builder\CommandFactory;
+use Magento\Backend\Model\Menu\Director\Director;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test class for \Magento\Backend\Model\Menu\Director\Director
  */
-namespace Magento\Backend\Test\Unit\Model\Menu\Director;
-
-class DirectorTest extends \PHPUnit\Framework\TestCase
+class DirectorTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\Model\Menu\Director\Director
+     * @var Director
      */
-    protected $_model;
+    protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
-    protected $_commandFactoryMock;
+    protected $commandFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
-    protected $_builderMock;
+    protected $builderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
-    protected $_logger;
+    protected $logger;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
-    protected $_commandMock;
+    protected $commandMock;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
-        $this->_builderMock = $this->createMock(\Magento\Backend\Model\Menu\Builder::class);
-        $this->_logger = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->_commandMock = $this->createPartialMock(
-            \Magento\Backend\Model\Menu\Builder\AbstractCommand::class,
+        $this->builderMock = $this->createMock(Builder::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->commandMock = $this->createPartialMock(
+            AbstractCommand::class,
             ['getId', '_execute', 'execute', 'chain']
         );
-        $this->_commandFactoryMock = $this->createPartialMock(
-            \Magento\Backend\Model\Menu\Builder\CommandFactory::class,
+        $this->commandFactoryMock = $this->createPartialMock(
+            CommandFactory::class,
             ['create']
         );
-        $this->_commandFactoryMock->expects(
+        $this->commandFactoryMock->expects(
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($this->_commandMock)
+        )->willReturn(
+            $this->commandMock
         );
 
-        $this->_commandMock->expects($this->any())->method('getId')->will($this->returnValue(true));
-        $this->_model = new \Magento\Backend\Model\Menu\Director\Director($this->_commandFactoryMock);
+        $this->commandMock->expects($this->any())->method('getId')->willReturn(true);
+        $this->model = new Director($this->commandFactoryMock);
     }
 
-    public function testDirectWithExistKey()
+    /**
+     * @return void
+     */
+    public function testDirectWithExistKey(): void
     {
         $config = [['type' => 'update'], ['type' => 'remove'], ['type' => 'added']];
-        $this->_builderMock->expects($this->at(2))->method('processCommand')->with($this->_commandMock);
-        $this->_logger->expects($this->at(1))->method('debug');
-        $this->_commandMock->expects($this->at(1))->method('getId');
-        $this->_model->direct($config, $this->_builderMock, $this->_logger);
+        $this->builderMock
+            ->method('processCommand')
+            ->with($this->commandMock);
+        $this->logger
+            ->method('debug');
+        $this->commandMock
+            ->method('getId');
+        $this->model->direct($config, $this->builderMock, $this->logger);
     }
 }

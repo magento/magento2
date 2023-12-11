@@ -3,11 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Webapi;
 
 /**
  * Interface to locate types for custom attributes
+ *
+ * @api
  */
 interface CustomAttributeTypeLocatorInterface
 {
@@ -24,7 +27,7 @@ interface CustomAttributeTypeLocatorInterface
      * Get list of all Data Interface corresponding to complex custom attribute types
      *
      * @return string[] array of Data Interface class names
-     * @deprecated
+     * @deprecated 102.0.0
      * @see \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface::getDataTypes()
      */
     public function getAllServiceDataInterfaces();

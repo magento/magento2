@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteCmsPageUrlRewriteWithPermanentRedirectTest">
+        <annotations>
+            <stories value="Delete CMS Page URL rewrite with Permanent Redirect"/>
+            <title value="Delete CMS Page URL rewrite with Permanent Redirect"/>
+            <description value="Log in to admin and delete CMS Page URL rewrite with Permanent Redirect"/>
+            <testCaseId value="MC-14649"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="simpleCmsPage" stepKey="createCMSPage"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCMSPage" stepKey="deleteCMSPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminGoToAddNewUrlRewritePageActionGroup" stepKey="openUrlRewriteEditPage"/>
+        <actionGroup ref="AdminCreateNewUrlRewriteForCmsPageActionGroup" stepKey="selectForCsmPageType">
+            <argument name="customUrlRewriteValue" value="For CMS page'"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectCmsPageFromGridForNewUrlRewriteActionGroup" stepKey="selectCmsPge">
+            <argument name="cmsPageUrlKey" value="$$createCMSPage.identifier$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillNewCmsPageUrlRewriteFormActionGroup" stepKey="fillTheForm">
+            <argument name="storeValue" value="Default Store View"/>
+            <argument name="requestPath" value="permanentrequestpath.html"/>
+            <argument name="redirectTypeValue" value="Permanent (301)"/>
+            <argument name="description" value="cms_default_permanent_redirect"/>
+        </actionGroup>
+
+        <!-- Delete the URL Rewrite for CMS Page with permanent redirect-->
+        <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deletePermanentUrlRewrite">
+            <argument name="requestPath" value="permanentrequestpath.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="You deleted the URL rewrite."/>
+        </actionGroup>
+
+        <!-- Verify AssertPageByUrlRewriteIsNotFound -->
+        <actionGroup ref="AssertPageByUrlRewriteIsNotFoundActionGroup" stepKey="assertPageByUrlRewriteIsNotFound">
+            <argument name="requestPath" value="permanentrequestpath.html"/>
+        </actionGroup>
+    </test>
+</tests>

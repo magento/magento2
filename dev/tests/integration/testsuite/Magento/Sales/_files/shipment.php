@@ -3,22 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-require 'default_rollback.php';
-require __DIR__ . '/../../../Magento/Sales/_files/order.php';
 
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
+use Magento\Sales\Model\Order\ShipmentFactory;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/default_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order.php');
+
+$objectManager = Bootstrap::getObjectManager();
+/** @var Order $order */
+$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
 $payment = $order->getPayment();
-$paymentInfoBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get(\Magento\Payment\Helper\Data::class)
-    ->getInfoBlock($payment);
+$paymentInfoBlock = Bootstrap::getObjectManager()->get(\Magento\Payment\Helper\Data::class)->getInfoBlock($payment);
 $payment->setBlockMock($paymentInfoBlock);
 
-/** @var \Magento\Sales\Model\Order\Shipment $shipment */
-$shipment = $objectManager->create(\Magento\Sales\Model\Order\Shipment::class);
-$shipment->setOrder($order);
-
-$shipmentItem = $objectManager->create(\Magento\Sales\Model\Order\Shipment\Item::class);
-$shipmentItem->setOrderItem($orderItem);
-$shipment->addItem($shipmentItem);
+$items = [];
+foreach ($order->getItems() as $orderItem) {
+    $items[$orderItem->getId()] = $orderItem->getQtyOrdered();
+}
+$shipment = Bootstrap::getObjectManager()->get(ShipmentFactory::class)->create($order, $items);
 $shipment->setPackages([['1'], ['2']]);
 $shipment->setShipmentStatus(\Magento\Sales\Model\Order\Shipment::STATUS_NEW);
 

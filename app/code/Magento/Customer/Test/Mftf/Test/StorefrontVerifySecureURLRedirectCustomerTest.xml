@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifySecureURLRedirectCustomerTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Storefront Secure URLs"/>
+            <title value="Verify Secure URLs For Storefront Customer Pages"/>
+            <description value="Verify that the Secure URL configuration applies to the Customer pages on the Storefront"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-15618"/>
+            <group value="customer"/>
+            <group value="configuration"/>
+            <group value="secure_storefront_url"/>
+        </annotations>
+        <before>
+            <amOnPage url="/" stepKey="goToHomePage"/>
+            <executeJS function="return window.location.host" stepKey="hostname"/>
+            <magentoCLI command="config:set web/secure/base_url https://{$hostname}/" stepKey="setSecureBaseURL"/>
+            <magentoCLI command="config:set web/secure/use_in_frontend 1" stepKey="useSecureURLsOnStorefront"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set web/secure/use_in_frontend 0" stepKey="dontUseSecureURLsOnStorefront"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        </after>
+        <executeJS function="return window.location.host" stepKey="hostname"/>
+        <amOnUrl url="http://{$hostname}/customer" stepKey="goToUnsecureCustomerURL"/>
+        <seeCurrentUrlEquals url="https://{$hostname}/customer" stepKey="seeSecureCustomerURL"/>
+        <amOnUrl url="http://{$hostname}/customer/section/load" stepKey="goToUnsecureCustomerSectionLoadURL"/>
+        <seeCurrentUrlEquals url="http://{$hostname}/customer/section/load" stepKey="seeUnsecureCustomerSectionLoadURL"/>
+    </test>
+</tests>

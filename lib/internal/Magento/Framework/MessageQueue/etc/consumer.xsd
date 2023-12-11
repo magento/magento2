@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="consumer" type="consumerType" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+        <xs:unique name="consumer-unique-name">
+            <xs:selector xpath="consumer"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+    </xs:element>
+    <xs:complexType name="consumerType">
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:string" name="queue" use="optional"/>
+        <xs:attribute type="handlerType" name="handler" use="optional"/>
+        <xs:attribute type="xs:string" name="consumerInstance" use="optional"/>
+        <xs:attribute type="xs:string" name="connection" use="optional" />
+        <xs:attribute type="xs:integer" name="maxMessages" use="optional"/>
+        <xs:attribute type="xs:integer" name="maxIdleTime" use="optional"/>
+        <xs:attribute type="xs:integer" name="sleep" use="optional"/>
+        <xs:attribute type="xs:boolean" name="onlySpawnWhenMessageAvailable" use="optional"/>
+    </xs:complexType>
+    <xs:simpleType name="handlerType">
+        <xs:annotation>
+            <xs:documentation>
+                Handler is expected in a format "Vendor\Module\Api\ServiceName::methodName".
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z0-9\\]+::[a-zA-Z0-9]+" />
+            <xs:minLength value="5" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

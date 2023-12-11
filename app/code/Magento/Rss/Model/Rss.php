@@ -3,10 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Rss\Model;
 
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\FeedFactoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Rss\DataProviderInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
@@ -23,9 +30,14 @@ class Rss
     protected $dataProvider;
 
     /**
-     * @var \Magento\Framework\App\CacheInterface
+     * @var CacheInterface
      */
     protected $cache;
+
+    /**
+     * @var FeedFactoryInterface
+     */
+    private $feedFactory;
 
     /**
      * @var SerializerInterface
@@ -35,18 +47,23 @@ class Rss
     /**
      * Rss constructor
      *
-     * @param \Magento\Framework\App\CacheInterface $cache
+     * @param CacheInterface $cache
      * @param SerializerInterface|null $serializer
+     * @param FeedFactoryInterface|null $feedFactory
      */
     public function __construct(
-        \Magento\Framework\App\CacheInterface $cache,
-        SerializerInterface $serializer = null
+        CacheInterface $cache,
+        SerializerInterface $serializer = null,
+        FeedFactoryInterface $feedFactory = null
     ) {
         $this->cache = $cache;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->feedFactory = $feedFactory ?: ObjectManager::getInstance()->get(FeedFactoryInterface::class);
     }
 
     /**
+     * Returns feeds
+     *
      * @return array
      */
     public function getFeeds()
@@ -54,45 +71,48 @@ class Rss
         if ($this->dataProvider === null) {
             return [];
         }
-        $cache = false;
-        if ($this->dataProvider->getCacheKey() && $this->dataProvider->getCacheLifetime()) {
-            $cache = $this->cache->load($this->dataProvider->getCacheKey());
-        }
+        $cacheKey = $this->dataProvider->getCacheKey();
+        $cacheLifeTime = $this->dataProvider->getCacheLifetime();
 
+        $cache = $cacheKey && $cacheLifeTime ? $this->cache->load($cacheKey) : false;
         if ($cache) {
             return $this->serializer->unserialize($cache);
         }
 
-        $data = $this->dataProvider->getRssData();
+        // serializing data to make sure all Phrase objects converted to a string
+        $serializedData = $this->serializer->serialize($this->dataProvider->getRssData());
 
-        if ($this->dataProvider->getCacheKey() && $this->dataProvider->getCacheLifetime()) {
-            $this->cache->save(
-                $this->serializer->serialize($data),
-                $this->dataProvider->getCacheKey(),
-                ['rss'],
-                $this->dataProvider->getCacheLifetime()
-            );
+        if ($cacheKey && $cacheLifeTime) {
+            $this->cache->save($serializedData, $cacheKey, ['rss'], $cacheLifeTime);
         }
 
-        return $data;
+        return $this->serializer->unserialize($serializedData);
     }
 
     /**
+     * Sets data provider
+     *
      * @param DataProviderInterface $dataProvider
      * @return $this
      */
     public function setDataProvider(DataProviderInterface $dataProvider)
     {
         $this->dataProvider = $dataProvider;
+
         return $this;
     }
 
     /**
+     * Returns rss xml
+     *
      * @return string
+     * @throws InputException
+     * @throws RuntimeException
      */
     public function createRssXml()
     {
-        $rssFeedFromArray = \Zend_Feed::importArray($this->getFeeds(), 'rss');
-        return $rssFeedFromArray->saveXML();
+        $feed = $this->feedFactory->create($this->getFeeds(), FeedFactoryInterface::FORMAT_RSS);
+
+        return $feed->getFormattedContent();
     }
 }

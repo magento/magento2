@@ -9,13 +9,16 @@ namespace Magento\CatalogSearch\Model\Search\RequestGenerator;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 
 /**
+ * Catalog search reguest generator interface.
+ *
  * @api
  * @since 100.1.6
  */
 interface GeneratorInterface
 {
     /**
-     * Get filter data for specific attribute
+     * Get filter data for specific attribute.
+     *
      * @param Attribute $attribute
      * @param string $filterName
      * @return array
@@ -24,7 +27,8 @@ interface GeneratorInterface
     public function getFilterData(Attribute $attribute, $filterName);
 
     /**
-     * Get aggregation data for specific attribute
+     * Get aggregation data for specific attribute.
+     *
      * @param Attribute $attribute
      * @param string $bucketName
      * @return array

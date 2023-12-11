@@ -8,8 +8,11 @@
 namespace Magento\GroupedProduct\Model\Product\Type;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\File\UploaderFactory;
 
 /**
+ * Grouped product type model
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -100,6 +103,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Msrp\Helper\Data $msrpData
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param UploaderFactory|null $uploaderFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -117,7 +121,8 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Framework\App\State $appState,
         \Magento\Msrp\Helper\Data $msrpData,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        UploaderFactory $uploaderFactory = null
     ) {
         $this->productLinks = $catalogProductLink;
         $this->_storeManager = $storeManager;
@@ -134,7 +139,8 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             $coreRegistry,
             $logger,
             $productRepository,
-            $serializer
+            $serializer,
+            $uploaderFactory
         );
     }
 
@@ -208,7 +214,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             $collection = $this->getAssociatedProductCollection(
                 $product
             )->addAttributeToSelect(
-                ['name', 'price', 'special_price', 'special_from_date', 'special_to_date', 'tax_class_id']
+                ['name', 'price', 'special_price', 'special_from_date', 'special_to_date', 'tax_class_id', 'image']
             )->addFilterByRequiredOptions()->setPositionOrder()->addStoreFilter(
                 $this->getStoreFilter($product)
             )->addAttributeToFilter(
@@ -226,13 +232,15 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Flush Associated Products Cache
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
      * @since 100.1.0
      */
     public function flushAssociatedProductsCache($product)
     {
-        return $product->unsData($this->_keyAssociatedProducts);
+        return $product->unsetData($this->_keyAssociatedProducts);
     }
 
     /**
@@ -323,6 +331,8 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Returns product info
+     *
      * @param \Magento\Framework\DataObject $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @param bool $isStrictProcessMode
@@ -338,10 +348,15 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
         foreach ($associatedProducts as $subProduct) {
             if (!isset($productsInfo[$subProduct->getId()])) {
-                if ($isStrictProcessMode && !$subProduct->getQty()) {
+                if ($isStrictProcessMode && !$subProduct->getQty() && $subProduct->isSalable()) {
                     return __('Please specify the quantity of product(s).')->render();
                 }
-                $productsInfo[$subProduct->getId()] = intval($subProduct->getQty());
+                if (isset($buyRequest['qty']) && !isset($buyRequest['super_group'])) {
+                    $subProductQty = (float)$subProduct->getQty() * (float)$buyRequest['qty'];
+                    $productsInfo[$subProduct->getId()] = $subProduct->isSalable() ? $subProductQty : 0;
+                } else {
+                    $productsInfo[$subProduct->getId()] = $subProduct->isSalable() ? (float)$subProduct->getQty() : 0;
+                }
             }
         }
 
@@ -350,6 +365,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * Prepare product and its configuration to be added to some products list.
+     *
      * Perform standard preparation process and add logic specific to Grouped product type.
      *
      * @param \Magento\Framework\DataObject $buyRequest
@@ -423,6 +439,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * Retrieve products divided into groups required to purchase
+     *
      * At least one product in each group has to be purchased
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -436,8 +453,8 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Prepare selected qty for grouped product's options
      *
-     * @param  \Magento\Catalog\Model\Product $product
-     * @param  \Magento\Framework\DataObject $buyRequest
+     * @param \Magento\Catalog\Model\Product $product
+     * @param \Magento\Framework\DataObject $buyRequest
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -467,25 +484,30 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product)
     {
     }
+    //phpcs:enable
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function beforeSave($product)
     {
         //clear cached associated links
         $product->unsetData($this->_keyAssociatedProducts);
         if ($product->hasData('product_options') && !empty($product->getData('product_options'))) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Custom options for grouped product type are not supported');
         }
         return parent::beforeSave($product);
     }
 
     /**
+     * Returns msrp for children products
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return int
      */

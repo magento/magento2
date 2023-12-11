@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="QuickSearchWithTwoCharsEmptyResultsTest" extends="QuickSearchEmptyResultsTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Search Product on Storefront"/>
+            <title value="User should not get search results on query that only contains two characters"/>
+            <description value="Use of 2 character query to return no products"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14794"/>
+            <group value="CatalogSearch"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set {{MinimalQueryLengthFourConfigData.path}} {{MinimalQueryLengthFourConfigData.value}}" after="createSimpleProduct" stepKey="setMinimalQueryLengthToFour"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <magentoCLI command="config:set {{MinimalQueryLengthDefaultConfigData.path}} {{MinimalQueryLengthDefaultConfigData.value}}" after="deleteCategory" stepKey="setMinimalQueryLengthToFour"/>
+        </after>
+
+        <executeJS function="var s = '$createSimpleProduct.name$'; var ret=s.substring(0,{{MinimalQueryLengthFourConfigData.value}} - 1); return ret;" before="searchStorefront" stepKey="getFirstLessThenConfigLetters"/>
+
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" after="checkEmpty" stepKey="searchStorefrontConfigLetters">
+            <argument name="phrase" value="$createSimpleProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchTooShortStringActionGroup" after="searchStorefrontConfigLetters" stepKey="checkCannotSearchWithTooShortString">
+            <argument name="phrase" value="$getFirstLessThenConfigLetters"/>
+            <argument name="minQueryLength" value="{{MinimalQueryLengthFourConfigData.value}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchRelatedSearchTermsAppearsActionGroup" after="checkCannotSearchWithTooShortString" stepKey="checkRelatedSearchTerm">
+            <argument name="term" value="$createSimpleProduct.name$"/>
+        </actionGroup>
+    </test>
+</tests>

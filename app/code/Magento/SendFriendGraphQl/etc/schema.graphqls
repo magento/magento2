@@ -1,0 +1,48 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Mutation {
+    sendEmailToFriend (input: SendEmailToFriendInput @doc(description: "An input object that defines sender, recipients, and product.")): SendEmailToFriendOutput @resolver(class: "\\Magento\\SendFriendGraphQl\\Model\\Resolver\\SendEmailToFriend") @doc(description: "Send a message on behalf of a customer to the specified email addresses.")
+}
+
+input SendEmailToFriendInput @doc(description: "Defines the referenced product and the email sender and recipients.") {
+    product_id: Int! @doc(description: "The ID of the product that the sender is referencing.")
+    sender: SendEmailToFriendSenderInput! @doc(description: "Information about the customer and the content of the message.")
+    recipients: [SendEmailToFriendRecipientInput!]! @doc(description: "An array containing information about each recipient.")
+}
+
+input SendEmailToFriendSenderInput @doc(description: "Contains details about the sender.") {
+    name: String! @doc(description: "The name of the sender.")
+    email: String! @doc(description: "The email address of the sender.")
+    message: String! @doc(description: "The text of the message to be sent.")
+}
+
+input SendEmailToFriendRecipientInput @doc(description: "Contains details about a recipient.") {
+    name: String! @doc(description: "The name of the recipient.")
+    email: String! @doc(description: "The email address of the recipient.")
+}
+
+type SendEmailToFriendOutput @doc(description: "Contains information about the sender and recipients.") {
+    sender: SendEmailToFriendSender @doc(description: "Information about the customer and the content of the message.")
+    recipients: [SendEmailToFriendRecipient] @doc(description: "An array containing information about each recipient.")
+}
+
+type SendEmailToFriendSender @doc(description: "An output object that contains information about the sender.") {
+    name: String! @doc(description: "The name of the sender.")
+    email: String! @doc(description: "The email address of the sender.")
+    message: String! @doc(description: "The text of the message to be sent.")
+}
+
+type SendEmailToFriendRecipient @doc(description: "An output object that contains information about the recipient.") {
+    name: String! @doc(description: "The name of the recipient.")
+    email: String! @doc(description: "The email address of the recipient.")
+}
+
+type StoreConfig {
+    send_friend: SendFriendConfiguration @resolver(class: "\\Magento\\SendFriendGraphQl\\Model\\Resolver\\SendFriendConfiguration") @doc(description: "Email to a Friend configuration.")
+}
+
+type SendFriendConfiguration @doc(description: "Contains details about the configuration of the Email to a Friend feature.") {
+    enabled_for_customers: Boolean! @doc(description: "Indicates whether the Email to a Friend feature is enabled.")
+    enabled_for_guests: Boolean! @doc(description: "Indicates whether the Email to a Friend feature is enabled for guests.")
+}

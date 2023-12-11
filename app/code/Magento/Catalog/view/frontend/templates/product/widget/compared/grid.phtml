@@ -1,18 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved. 
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
- //@codingStandardsIgnoreFile
 ?>
 <?php
-/**
- * @var $block \Magento\Ui\Block\Wrapper
- */
+// phpcs:disable Magento2.PHP.ShortEchoSyntax.ShortEchoTag
+
+/** @var $block \Magento\Ui\Block\Wrapper */
 ?>
 
-<?php /* @escapeNotVerified */ echo $block->renderApp(
+<?php /* @noEscape */ echo $block->renderApp(
     [
         'widget_columns' => [
             'displayMode' => 'grid'

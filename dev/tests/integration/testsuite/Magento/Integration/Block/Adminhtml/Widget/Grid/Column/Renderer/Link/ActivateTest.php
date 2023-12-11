@@ -19,7 +19,7 @@ class ActivateTest extends \PHPUnit\Framework\TestCase
      */
     protected $activateLinkBlock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -34,14 +34,14 @@ class ActivateTest extends \PHPUnit\Framework\TestCase
     {
         $integration = $this->getFixtureIntegration();
         $buttonHtml = $this->activateLinkBlock->render($integration);
-        $this->assertContains('href="javascript:void(0);"', $buttonHtml);
-        $this->assertContains('title="Activate"', $buttonHtml);
-        $this->assertContains('data-row-id="' . $integration->getId() . '"', $buttonHtml);
-        $this->assertContains('data-row-dialog="permissions"', $buttonHtml);
-        $this->assertContains('data-row-is-reauthorize="0"', $buttonHtml);
-        $this->assertContains('data-row-is-token-exchange="0"', $buttonHtml);
-        $this->assertContains('onclick="integration.popup.show(this);', $buttonHtml);
-        $this->assertContains('>Activate</a>', $buttonHtml);
+        $this->assertStringContainsString('href="javascript:void(0);"', $buttonHtml);
+        $this->assertStringContainsString('title="Activate"', $buttonHtml);
+        $this->assertStringContainsString('data-row-id="' . $integration->getId() . '"', $buttonHtml);
+        $this->assertStringContainsString('data-row-dialog="permissions"', $buttonHtml);
+        $this->assertStringContainsString('data-row-is-reauthorize="0"', $buttonHtml);
+        $this->assertStringContainsString('data-row-is-token-exchange="0"', $buttonHtml);
+        $this->assertStringContainsString('onclick="integration.popup.show(this);', $buttonHtml);
+        $this->assertStringContainsString('>Activate</a>', $buttonHtml);
     }
 
     public function testRenderReauthorize()
@@ -49,14 +49,14 @@ class ActivateTest extends \PHPUnit\Framework\TestCase
         $integration = $this->getFixtureIntegration();
         $integration->setStatus(Integration::STATUS_ACTIVE);
         $buttonHtml = $this->activateLinkBlock->render($integration);
-        $this->assertContains('href="javascript:void(0);"', $buttonHtml);
-        $this->assertContains('title="Reauthorize"', $buttonHtml);
-        $this->assertContains('data-row-id="' . $integration->getId() . '"', $buttonHtml);
-        $this->assertContains('data-row-dialog="permissions"', $buttonHtml);
-        $this->assertContains('data-row-is-reauthorize="1"', $buttonHtml);
-        $this->assertContains('data-row-is-token-exchange="0"', $buttonHtml);
-        $this->assertContains('onclick="integration.popup.show(this);', $buttonHtml);
-        $this->assertContains('>Reauthorize</a>', $buttonHtml);
+        $this->assertStringContainsString('href="javascript:void(0);"', $buttonHtml);
+        $this->assertStringContainsString('title="Reauthorize"', $buttonHtml);
+        $this->assertStringContainsString('data-row-id="' . $integration->getId() . '"', $buttonHtml);
+        $this->assertStringContainsString('data-row-dialog="permissions"', $buttonHtml);
+        $this->assertStringContainsString('data-row-is-reauthorize="1"', $buttonHtml);
+        $this->assertStringContainsString('data-row-is-token-exchange="0"', $buttonHtml);
+        $this->assertStringContainsString('onclick="integration.popup.show(this);', $buttonHtml);
+        $this->assertStringContainsString('>Reauthorize</a>', $buttonHtml);
     }
 
     /**
@@ -72,14 +72,14 @@ class ActivateTest extends \PHPUnit\Framework\TestCase
         $integration->setEndpoint($endpoint);
         $integration->setIdentityLinkUrl($identityLinkUrl);
         $buttonHtml = $this->activateLinkBlock->render($integration);
-        $this->assertContains('href="javascript:void(0);"', $buttonHtml);
-        $this->assertContains('title="Reauthorize"', $buttonHtml);
-        $this->assertContains('data-row-id="' . $integration->getId() . '"', $buttonHtml);
-        $this->assertContains('data-row-dialog="permissions"', $buttonHtml);
-        $this->assertContains('data-row-is-reauthorize="1"', $buttonHtml);
-        $this->assertContains('data-row-is-token-exchange="' . $expectedResult . '"', $buttonHtml);
-        $this->assertContains('onclick="integration.popup.show(this);', $buttonHtml);
-        $this->assertContains('>Reauthorize</a>', $buttonHtml);
+        $this->assertStringContainsString('href="javascript:void(0);"', $buttonHtml);
+        $this->assertStringContainsString('title="Reauthorize"', $buttonHtml);
+        $this->assertStringContainsString('data-row-id="' . $integration->getId() . '"', $buttonHtml);
+        $this->assertStringContainsString('data-row-dialog="permissions"', $buttonHtml);
+        $this->assertStringContainsString('data-row-is-reauthorize="1"', $buttonHtml);
+        $this->assertStringContainsString('data-row-is-token-exchange="' . $expectedResult . '"', $buttonHtml);
+        $this->assertStringContainsString('onclick="integration.popup.show(this);', $buttonHtml);
+        $this->assertStringContainsString('>Reauthorize</a>', $buttonHtml);
     }
 
     public function renderTokenExchangeProvider()

@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Session;
 
-use \Magento\Framework\Session\Test\Unit\SessionManagerTest;
+use Magento\Framework\Session\Test\Unit\SessionManagerTest;
 
 /**
  * Mock session_regenerate_id to fail if false is passed

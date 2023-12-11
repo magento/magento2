@@ -42,18 +42,18 @@ define([
                 id: 3
             });
 
-            expect(multiSelect.allSelected()).toBeFalsy();
-            expect(multiSelect.excluded()).toEqual([]);
-            expect(multiSelect.selected()).toEqual([]);
+            expect(multiSelect.allSelected()).toBeFalse();
+            expect(multiSelect.excluded().toString()).toEqual('');
+            expect(multiSelect.selected().toString()).toEqual('');
         });
 
         it('Select specific several rows on several pages', function () {
             multiSelect.selected.push(4);
             multiSelect.selected.push(5);
 
-            expect(multiSelect.allSelected()).toBeFalsy();
-            expect(multiSelect.excluded()).toEqual([]);
-            expect(multiSelect.selected()).toEqual([4, 5]);
+            expect(multiSelect.allSelected()).toBeUndefined();
+            expect(multiSelect.excluded().toString()).toEqual('');
+            expect(multiSelect.selected().toString()).toEqual('4,5');
         });
 
         it('Select all rows on several pages', function () {
@@ -70,9 +70,9 @@ define([
             }]);
             multiSelect.selectPage();
 
-            expect(multiSelect.allSelected()).toBeFalsy();
-            expect(multiSelect.excluded()).toEqual([]);
-            expect(multiSelect.selected()).toEqual([1, 2, 3, 4]);
+            expect(multiSelect.allSelected()).toBeUndefined();
+            expect(multiSelect.excluded().toString()).toEqual('');
+            expect(multiSelect.selected().toString()).toEqual('1,2,3,4');
         });
 
         it('Select all rows on current page with some specific rows on another page', function () {
@@ -93,9 +93,9 @@ define([
                 id: 6
             }]);
             multiSelect.selected.push(6);
-            expect(multiSelect.allSelected()).toBeFalsy();
-            expect(multiSelect.excluded()).toEqual([5]);
-            expect(multiSelect.selected()).toEqual([3, 4, 6]);
+            expect(multiSelect.allSelected()).toBeUndefined();
+            expect(multiSelect.excluded().toString()).toEqual('5');
+            expect(multiSelect.selected().toString()).toEqual('3,4,6');
         });
 
         it('Select all rows on several pages without some specific rows', function () {
@@ -112,9 +112,9 @@ define([
             multiSelect.selectPage();
             multiSelect.selected.remove(4); // remove second
 
-            expect(multiSelect.allSelected()).toBeFalsy();
-            expect(multiSelect.excluded()).toEqual([4]);
-            expect(multiSelect.selected()).toEqual([3]);
+            expect(multiSelect.allSelected()).toBeUndefined();
+            expect(multiSelect.excluded().toString()).toEqual('4');
+            expect(multiSelect.selected().toString()).toEqual('3');
         });
 
         it('Select all rows all over the Grid', function () {
@@ -130,9 +130,22 @@ define([
                 id: 4
             }]);
 
-            expect(multiSelect.allSelected()).toBeFalsy();
-            expect(multiSelect.excluded()).toEqual([]);
-            expect(multiSelect.selected()).toEqual([3, 4, 1, 2]);
+            expect(multiSelect.allSelected()).toBeUndefined();
+            expect(multiSelect.excluded().toString()).toEqual('');
+            expect(multiSelect.selected().toString()).toEqual('3,4,1,2');
+        });
+
+        it('Select all rows all over the Grid and deselects all records', function () {
+            multiSelect.rows([{
+                id: 1
+            }, {
+                id: 2
+            }]);
+
+            multiSelect.selectAll();
+            multiSelect.deselectAll();
+            multiSelect.indetermine(2);
+            expect(multiSelect.togglePage().selected()).toEqual([1, 2]);
         });
 
         it('Select all rows all over the Grid without all rows on current page but with specific rows on another page',
@@ -155,9 +168,9 @@ define([
                     id: 6
                 }]);
 
-                expect(multiSelect.allSelected()).toBeFalsy();
-                expect(multiSelect.excluded()).toEqual([3, 4]);
-                expect(multiSelect.selected()).toEqual([5, 6]);
+                expect(multiSelect.allSelected()).toBeUndefined();
+                expect(multiSelect.excluded().toString()).toEqual('3,4');
+                expect(multiSelect.selected().toString()).toEqual('5,6');
             });
     });
 });

@@ -3,14 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit\View\Deployment;
 
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\State;
 use Magento\Framework\App\View\Deployment\Version;
+use Magento\Framework\App\View\Deployment\Version\StorageInterface;
+use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-/**
- * Class VersionTest
- */
-class VersionTest extends \PHPUnit\Framework\TestCase
+class VersionTest extends TestCase
 {
     /**
      * @var Version
@@ -18,29 +25,34 @@ class VersionTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|MockObject
      */
     private $appStateMock;
 
     /**
-     * @var \Magento\Framework\App\View\Deployment\Version\StorageInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StorageInterface|MockObject
      */
     private $versionStorageMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     private $loggerMock;
 
-    protected function setUp()
+    /**
+     * @var DeploymentConfig|MockObject
+     */
+    private $deploymentConfigMock;
+
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->appStateMock = $this->createMock(\Magento\Framework\App\State::class);
-        $this->versionStorageMock = $this->createMock(
-            \Magento\Framework\App\View\Deployment\Version\StorageInterface::class
-        );
-        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->object = new Version($this->appStateMock, $this->versionStorageMock);
+        $objectManager = new ObjectManager($this);
+        $this->appStateMock = $this->createMock(State::class);
+        $this->versionStorageMock = $this->getMockForAbstractClass(StorageInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
+
+        $this->object = new Version($this->appStateMock, $this->versionStorageMock, $this->deploymentConfigMock);
         $objectManager->setBackwardCompatibleProperty($this->object, 'logger', $this->loggerMock);
     }
 
@@ -53,18 +65,24 @@ class VersionTest extends \PHPUnit\Framework\TestCase
         $this->appStateMock
             ->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue($appMode));
-        $this->versionStorageMock->expects($this->once())->method('load')->will($this->returnValue('123'));
-        $this->versionStorageMock->expects($this->never())->method('save');
+            ->willReturn($appMode);
+        $this->versionStorageMock->expects($this->once())
+            ->method('load')
+            ->willReturn('123');
+        $this->versionStorageMock->expects($this->never())
+            ->method('save');
         $this->assertEquals('123', $this->object->getValue());
         $this->object->getValue(); // Ensure caching in memory
     }
 
+    /**
+     * @return array
+     */
     public function getValueFromStorageDataProvider()
     {
         return [
-            'default mode'      => [\Magento\Framework\App\State::MODE_DEFAULT],
-            'production mode'   => [\Magento\Framework\App\State::MODE_PRODUCTION],
+            'default mode'      => [State::MODE_DEFAULT],
+            'production mode'   => [State::MODE_PRODUCTION],
             'arbitrary mode'    => ['test'],
         ];
     }
@@ -80,17 +98,19 @@ class VersionTest extends \PHPUnit\Framework\TestCase
         $this->object->getValue();
     }
 
-    /**
-     * @expectedException \UnexpectedValueException
-     */
     public function testGetValueWithProductionModeAndException()
     {
+        $this->expectException('UnexpectedValueException');
         $this->versionStorageMock->expects($this->once())
             ->method('load')
             ->willReturn(false);
         $this->appStateMock->expects($this->once())
             ->method('getMode')
-            ->willReturn(\Magento\Framework\App\State::MODE_PRODUCTION);
+            ->willReturn(State::MODE_PRODUCTION);
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('getConfigData')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION)
+            ->willReturn(0);
         $this->loggerMock->expects($this->once())
             ->method('critical')
             ->with('Can not load static content version.');
@@ -98,14 +118,32 @@ class VersionTest extends \PHPUnit\Framework\TestCase
         $this->object->getValue();
     }
 
-    public function testGetValueWithProductionMode()
+    public function testGetValueWithDefaultMode()
     {
         $this->versionStorageMock->expects($this->once())
             ->method('load')
             ->willReturn(false);
         $this->appStateMock->expects($this->once())
             ->method('getMode')
-            ->willReturn(\Magento\Framework\App\State::MODE_DEFAULT);
+            ->willReturn(State::MODE_DEFAULT);
+        $this->versionStorageMock->expects($this->once())
+            ->method('save');
+
+        $this->assertNotNull($this->object->getValue());
+    }
+
+    public function testGetValueWithProductionModeAndEnabledSCDonDemand()
+    {
+        $this->versionStorageMock->expects($this->once())
+            ->method('load')
+            ->willReturn(false);
+        $this->appStateMock->expects($this->once())
+            ->method('getMode')
+            ->willReturn(State::MODE_PRODUCTION);
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('getConfigData')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION)
+            ->willReturn(1);
         $this->versionStorageMock->expects($this->once())
             ->method('save');
 

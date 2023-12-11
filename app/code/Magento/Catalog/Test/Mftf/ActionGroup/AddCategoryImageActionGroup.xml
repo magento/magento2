@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddCategoryImageActionGroup">
+        <annotations>
+            <description>Requires navigation to the Category creation/edit page. Adds the provided image to a Category. Validates that the Image exists.</description>
+        </annotations>
+        <arguments>
+            <argument name="image" defaultValue="ProductImage"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminCategoryContentSection.sectionHeader}}" dependentSelector="{{AdminCategoryContentSection.uploadButton}}" visible="false" stepKey="openContentSection"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{AdminCategoryContentSection.uploadButton}}" stepKey="seeImageSectionIsReady"/>
+        <attachFile selector="{{AdminCategoryContentSection.uploadImageFile}}" userInput="{{image.file}}" stepKey="uploadFile"/>
+        <comment userInput="BIC workaround" stepKey="waitForAjaxUpload"/>
+        <waitForElementVisible selector="{{AdminCategoryContentSection.imageFileName}}" stepKey="waitForLoading"/>
+        <grabTextFrom selector="{{AdminCategoryContentSection.imageFileName}}" stepKey="grabCategoryFileName"/>
+        <assertRegExp stepKey="assertEquals" message="pass">
+            <expectedResult type="string">/magento-logo(_[0-9]+)*?\.png$/</expectedResult>
+            <actualResult type="variable">grabCategoryFileName</actualResult>
+        </assertRegExp>
+    </actionGroup>
+</actionGroups>

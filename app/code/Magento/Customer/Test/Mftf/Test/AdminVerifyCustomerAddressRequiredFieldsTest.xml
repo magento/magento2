@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyCustomerAddressRequiredFieldsTest">
+        <annotations>
+            <stories value="Create customer"/>
+            <title value="Create customer, verify required fields on Addresses tab"/>
+            <description value="Login as admin and verify required fields on Address tab"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-5315"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Open Created Customer -->
+        <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="editCustomerForm">
+            <argument name="customer" value="Simple_Customer_Without_Address"/>
+        </actionGroup>
+        <click selector="{{AdminCustomerAccountInformationSection.addressesButton}}" stepKey="openAddressesTab"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <click selector="{{AdminEditCustomerAddressesSection.addNewAddress}}" stepKey="ClickOnAddNewAddressButton"/>
+        <waitForPageLoad stepKey="waitForAdressPageToLoad"/>
+        <click selector="{{AdminEditCustomerAddressesSection.save}}" stepKey="clickOnSaveButton"/>
+        <waitForPageLoad stepKey="waitForPageToBeSaved"/>
+
+        <!--Assert Required Field Messages -->
+        <seeElement selector="{{AdminCustomerAddressesSection.streetRequiredMessage}}" stepKey="seeStreetRequiredMessage"/>
+        <seeElement selector="{{AdminCustomerAddressesSection.cityRequiredMessage}}" stepKey="seeCityRequiredMessage"/>
+        <scrollTo selector="{{AdminEditCustomerAddressesSection.phone}}" x="0" y="-80" stepKey="scrollToPhone"/>
+        <seeElement selector="{{AdminCustomerAddressesSection.countryRequiredMessage}}" stepKey="seeCountryRequiredMessage"/>
+        <seeElement selector="{{AdminCustomerAddressesSection.postcodeRequiredMessage}}" stepKey="seePostcodeRequiredMessage"/>
+        <seeElement selector="{{AdminCustomerAddressesSection.phoneNumberRequiredMessage}}" stepKey="seePhoneNumberRequiredMessage"/>
+    </test>
+</tests>

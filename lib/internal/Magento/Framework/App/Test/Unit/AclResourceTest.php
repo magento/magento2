@@ -3,31 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\ResourceConnection\ConfigInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AclResourceTest extends \PHPUnit\Framework\TestCase
+class AclResourceTest extends TestCase
 {
-    const RESOURCE_NAME = \Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION;
+    const RESOURCE_NAME = ResourceConnection::DEFAULT_CONNECTION;
     const CONNECTION_NAME = 'connection-name';
     const TABLE_PREFIX = 'prefix_';
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     protected $config;
 
     /**
-     * @var ConnectionFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConnectionFactoryInterface|MockObject
      */
     protected $connectionFactory;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|MockObject
      */
     private $deploymentConfig;
 
@@ -37,25 +43,25 @@ class AclResourceTest extends \PHPUnit\Framework\TestCase
     protected $resource;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connectionFactory = $this->getMockBuilder(ConnectionFactoryInterface::class)
             ->setMethods(['create'])
             ->getMockForAbstractClass();
-        $this->config = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection\ConfigInterface::class)
+        $this->config = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConnectionName'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->config->expects($this->any())
             ->method('getConnectionName')
             ->with(self::RESOURCE_NAME)
-            ->will($this->returnValue(self::CONNECTION_NAME));
+            ->willReturn(self::CONNECTION_NAME);
 
-        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
         $this->deploymentConfig
             ->expects($this->any())
             ->method('get')
@@ -78,10 +84,10 @@ class AclResourceTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->connection = $this->getMockForAbstractClass(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->connection->expects($this->any())
             ->method('getTableName')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->resource = new ResourceConnection(
             $this->config,
@@ -90,12 +96,10 @@ class AclResourceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \DomainException
-     * @expectedExceptionMessage Connection "invalid" is not defined
-     */
     public function testGetConnectionFail()
     {
+        $this->expectException('DomainException');
+        $this->expectExceptionMessage('Connection "invalid" is not defined');
         $this->resource->getConnectionByName('invalid');
     }
 
@@ -103,7 +107,7 @@ class AclResourceTest extends \PHPUnit\Framework\TestCase
     {
         $this->connectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->connection));
+            ->willReturn($this->connection);
         $this->assertSame($this->connection, $this->resource->getConnection(self::RESOURCE_NAME));
         $this->assertSame($this->connection, $this->resource->getConnection(self::RESOURCE_NAME));
     }
@@ -118,7 +122,7 @@ class AclResourceTest extends \PHPUnit\Framework\TestCase
     {
         $this->connectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->connection));
+            ->willReturn($this->connection);
         $this->assertSame($expected, $this->resource->getTableName($modelEntity));
     }
 
@@ -145,7 +149,7 @@ class AclResourceTest extends \PHPUnit\Framework\TestCase
     {
         $this->connectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->connection));
+            ->willReturn($this->connection);
         $this->resource->setMappedTableName($tableName, $mappedName);
         $this->assertSame($expected, $this->resource->getTableName($modelEntity));
     }
@@ -172,10 +176,10 @@ class AclResourceTest extends \PHPUnit\Framework\TestCase
         $this->connection->expects($this->once())
             ->method('getIndexName')
             ->with($calculatedTableName, $fields, $indexType)
-            ->will($this->returnValue($expectedIdxName));
+            ->willReturn($expectedIdxName);
         $this->connectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->connection));
+            ->willReturn($this->connection);
 
         $this->assertEquals('idxName', $this->resource->getIdxName($table, $fields, $indexType));
     }
@@ -192,10 +196,10 @@ class AclResourceTest extends \PHPUnit\Framework\TestCase
         $this->connection->expects($this->once())
             ->method('getForeignKeyName')
             ->with($calculatedTableName, $columnName, $calculatedRefTableName, $refColumnName)
-            ->will($this->returnValue('fkName'));
+            ->willReturn('fkName');
         $this->connectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->connection));
+            ->willReturn($this->connection);
 
         $this->assertEquals('fkName', $this->resource->getFkName($table, $columnName, $refTable, $refColumnName));
     }
@@ -209,7 +213,7 @@ class AclResourceTest extends \PHPUnit\Framework\TestCase
 
         $this->connectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->connection));
+            ->willReturn($this->connection);
         $this->connection->expects($this->once())
             ->method('getTriggerName')
             ->with($tableName, $time, $event)

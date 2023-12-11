@@ -6,13 +6,16 @@
 namespace Magento\Eav\Model\Entity\Attribute\Source;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
+ * Eav attribute default source when values are coming from another table
+ *
  * @api
  * @since 100.0.2
  */
-class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
+class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource implements ResetAfterRequestInterface
 {
     /**
      * Default values for option cache
@@ -39,14 +42,17 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
+     * @param StoreManagerInterface|null $storeManager
      * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
-        \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->_attrOptionCollectionFactory = $attrOptionCollectionFactory;
         $this->_attrOptionFactory = $attrOptionFactory;
+        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -60,7 +66,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     {
         $storeId = $this->getAttribute()->getStoreId();
         if ($storeId === null) {
-            $storeId = $this->getStoreManager()->getStore()->getId();
+            $storeId = $this->storeManager->getStore()->getId();
         }
         if (!is_array($this->_options)) {
             $this->_options = [];
@@ -91,20 +97,6 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     }
 
     /**
-     * Get StoreManager dependency
-     *
-     * @return StoreManagerInterface
-     * @deprecated 100.1.6
-     */
-    private function getStoreManager()
-    {
-        if ($this->storeManager === null) {
-            $this->storeManager = ObjectManager::getInstance()->get(StoreManagerInterface::class);
-        }
-        return $this->storeManager;
-    }
-
-    /**
      * Retrieve Option values array by ids
      *
      * @param string|array $ids
@@ -127,12 +119,14 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     }
 
     /**
+     * Add an empty option to the array
+     *
      * @param array $options
      * @return array
      */
     private function addEmptyOption(array $options)
     {
-        array_unshift($options, ['label' => $this->getAttribute()->getIsRequired() ? '' : ' ', 'value' => '']);
+        array_unshift($options, ['label' => ' ', 'value' => '']);
         return $options;
     }
 
@@ -145,7 +139,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     public function getOptionText($value)
     {
         $isMultiple = false;
-        if (strpos($value, ',') !== false) {
+        if (is_string($value) && strpos($value, ',') !== false) {
             $isMultiple = true;
             $value = explode(',', $value);
         }
@@ -207,9 +201,13 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
             $collection,
             $attribute,
             $valueExpr
+        )->addOptionToCollection(
+            $collection,
+            $attribute,
+            $valueExpr
         );
 
-        $collection->getSelect()->order("{$attribute->getAttributeCode()} {$dir}");
+        $collection->getSelect()->order("{$attribute->getAttributeCode()}_order {$dir}");
 
         return $this;
     }
@@ -284,5 +282,14 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     public function getFlatUpdateSelect($store)
     {
         return $this->_attrOptionFactory->create()->getFlatUpdateSelect($this->getAttribute(), $store);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_optionsDefault = [];
+        $this->_options = null;
     }
 }

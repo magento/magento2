@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerConfigSection">
+        <element name="customerDataLifetime" type="input" selector="#customer_online_customers_section_data_lifetime"/>
+        <element name="accountSharingOptionsTab" type="button" selector="#customer_account_share-head"/>
+        <element name="shareCustomerAccountInherit" type="checkbox" selector="#customer_account_share_scope_inherit"/>
+        <element name="shareCustomerAccount" type="select" selector="#customer_account_share_scope"/>
+        <element name="showDateOfBirth" type="select" selector="#customer_address_dob_show"/>
+        <element name="showDateOfBirthInherit" type="select" selector="#customer_address_dob_show_inherit"/>
+        <element name="showTelephone" type="select" selector="#customer_address_telephone_show"/>
+        <element name="showTelephoneInherit" type="checkbox" selector="#customer_address_telephone_show_inherit"/>
+        <element name="showCompany" type="select" selector="#customer_address_company_show"/>
+        <element name="showCompanyInherit" type="select" selector="#customer_address_company_show_inherit"/>
+    </section>
+</sections>

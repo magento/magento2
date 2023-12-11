@@ -5,6 +5,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Model\ResourceModel\Group\Grid;
 
 class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
@@ -12,7 +13,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
     /** @var ServiceCollection */
     protected $collection;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Customer\Model\ResourceModel\Group\Grid\ServiceCollection::class
@@ -24,7 +25,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->setOrder('code', \Magento\Framework\Data\Collection::SORT_ORDER_ASC);
         $this->collection->loadData();
         $items = $this->collection->getItems();
-        $this->assertEquals(4, count($items));
+        $this->assertCount(4, $items);
 
         $this->assertEquals('General', $items[0]->getCode());
         $this->assertEquals('1', $items[0]->getId());
@@ -48,7 +49,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->addFieldToFilter(['code'], [['NOT LOGGED IN']]);
         $this->collection->loadData();
         $items = $this->collection->getItems();
-        $this->assertEquals(1, count($items));
+        $this->assertCount(1, $items);
 
         $this->assertEquals('NOT LOGGED IN', $items[0]->getCode());
         $this->assertEquals('0', $items[0]->getId());
@@ -60,7 +61,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->addFieldToFilter(['code', 'code'], ['General', 'Retailer']);
         $this->collection->loadData();
         $items = $this->collection->getItems();
-        $this->assertEquals(2, count($items));
+        $this->assertCount(2, $items);
 
         $this->assertEquals('General', $items[0]->getCode());
         $this->assertEquals('1', $items[0]->getId());
@@ -76,7 +77,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->addFieldToFilter('code', 'NOT LOGGED IN');
         $this->collection->loadData();
         $items = $this->collection->getItems();
-        $this->assertEquals(1, count($items));
+        $this->assertCount(1, $items);
 
         $this->assertEquals('NOT LOGGED IN', $items[0]->getCode());
         $this->assertEquals('0', $items[0]->getId());
@@ -88,7 +89,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection->addFieldToFilter('code', ['like' => 'NOT%']);
         $this->collection->loadData();
         $items = $this->collection->getItems();
-        $this->assertEquals(1, count($items));
+        $this->assertCount(1, $items);
 
         $this->assertEquals('NOT LOGGED IN', $items[0]->getCode());
         $this->assertEquals('0', $items[0]->getId());
@@ -96,20 +97,22 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage When passing an array of fields there must be at least one field in the array.
      */
     public function testAddToFilterException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The array of fields failed to pass. The array must include at one field.');
+
         $this->collection->addFieldToFilter([], 'not_array');
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage When passing in a field array there must be a matching condition array.
      */
     public function testAddToFilterExceptionArrayNotSymmetric()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The field array failed to pass. The array must have a matching condition array.');
+
         $this->collection->addFieldToFilter(['field2', 'field2'], ['condition1']);
     }
 }

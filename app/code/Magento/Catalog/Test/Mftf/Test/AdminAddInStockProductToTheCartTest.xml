@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddInStockProductToTheCartTest">
+        <annotations>
+            <stories value="Manage products"/>
+            <title value="Add In Stock Product to Cart"/>
+            <description value="Login as admin and add In Stock product to the cart"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-11065"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!--Create Category-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <!--Create Simple Product-->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+             <!--Delete created entity -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Open Product Index Page and filter the product-->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <!-- Update product Advanced Inventory setting -->
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="openSelectedProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductToLoad"/>
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="uncheckConfigSetting"/>
+        <actionGroup ref="AdminSetManageStockConfigActionGroup" stepKey="clickOnManageStock">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillAdvancedInventoryQtyActionGroup" stepKey="fillProductQty">
+            <argument name="qty" value="5"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="uncheckMiniQtyCheckBox"/>
+        <actionGroup ref="AdminSetMinAllowedQtyForProductActionGroup" stepKey="fillMiniAllowedQty">
+            <argument name="qty" value="4"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="uncheckMaxQtyCheckBox"/>
+        <actionGroup ref="AdminSetMaxAllowedQtyForProductActionGroup" stepKey="fillMaxAllowedQty">
+            <argument name="qty" value="1000"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetQtyUsesDecimalsConfigActionGroup" stepKey="selectQuatityUsesDecimal">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="uncheckNotifyBelowQtyheckBox"/>
+        <actionGroup ref="AdminSetNotifyBelowQtyValueActionGroup" stepKey="fillNotifyBelowQty">
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetStockStatusConfigActionGroup" stepKey="selectOutOfStock">
+            <argument name="stockStatus" value="In Stock"/>
+        </actionGroup>
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickOnDoneButton"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        <!--Verify product is visible in category front page -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategoryStoreFrontPage">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategoryPageToLoad"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCategoryInFrontPage">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="clickOnCategory"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeProductNameInCategoryPage">
+            <argument name="productName" value="{{SimpleProduct.name}}"/>
+        </actionGroup>
+        <!--Verify Product In Store Front-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToStorefrontPage">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductFrontPageToLoad"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeProductNameInStoreFront">
+            <argument name="productName" value="{{SimpleProduct.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeProductPriceInStoreFront">
+            <argument name="productPrice" value="{{SimpleProduct.price}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeProductSkuInStoreFront">
+            <argument name="productSku" value="{{SimpleProduct.sku}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckProductStockStatus" stepKey="seeProductStatusInStoreFront">
+            <argument name="productUrlKey" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+            <argument name="productName" value="$createSimpleProduct.name$"/>
+        </actionGroup>
+        <!--Add Product to the cart-->
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductQuantity"/>
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productQty" value="4"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addAdditionalProductToCart">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSuccessSaveMessage"/>
+        <seeElement selector="{{StorefrontMinicartSection.quantity(6)}}" stepKey="seeAddedProductQuantityInCart"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+        <executeJS function="return {{SimpleProduct.price}} * 5" stepKey="expectedCartSubtotal"/>
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="seeProductNameInMiniCart">
+            <argument name="productName" value="{{SimpleProduct.name}}"/>
+            <argument name="productPrice" value="{{SimpleProduct.price}}"/>
+            <argument name="cartSubtotal" value="{$expectedCartSubtotal}" />
+            <argument name="qty" value="5"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeProductPriceInMiniCart"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeCheckOutButtonInMiniCart"/>
+    </test>
+</tests>

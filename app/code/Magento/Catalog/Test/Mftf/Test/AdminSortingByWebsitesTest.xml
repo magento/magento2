@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSortingByWebsitesTest">
+        <annotations>
+            <stories value="View sorting by websites"/>
+            <title value="Sorting by websites in Admin"/>
+            <description value="Sorting products by websites in Admin"/>
+            <severity value="AVERAGE"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="productAssignedToCustomWebsite">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="productAssignedToMainWebsite">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterEnableWebUrlOptions"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="productAssignedToCustomWebsite" stepKey="deleteProductAssignedToCustomWebsite"/>
+            <deleteData createDataKey="productAssignedToMainWebsite" stepKey="deleteProductAssignedToMainWebsite"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteTestWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPage"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
+            <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="navigateToCatalogProductGrid"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickClearFiltersInitial"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="assignCustomWebsiteToProduct">
+            <argument name="product" value="$$productAssignedToCustomWebsite$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeWebSiteAssignedToProductActionGroup" stepKey="scrollToWebsites">
+            <argument name="website" value="{{customWebsite.name}}"/>
+            <argument name="websiteToDeselect" value="{{_defaultWebsite.name}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="expandSection"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageOpened"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="deselectMainWebsite"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectWebsite"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSave"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSaveProductMessageAgain"/>
+
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToCatalogProductGridToSortByWebsite"/>
+        <actionGroup ref="AdminSortProductsGridByActionGroup" stepKey="clickWebsitesHeaderToSortAsc">
+            <argument name="field" value="Websites"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="Main Website" stepKey="checkIfProduct1WebsitesAsc"/>
+        <actionGroup ref="AdminSortProductsGridByActionGroup" stepKey="clickWebsitesHeaderToSortDesc">
+            <argument name="field" value="Websites"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="{{customWebsite.name}}" stepKey="checkIfProduct1WebsitesDesc"/>
+    </test>
+</tests>

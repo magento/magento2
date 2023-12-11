@@ -6,14 +6,13 @@
 namespace Magento\Framework\DB;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\DB\Select;
 
 /**
  * Class TemporaryTableService creates a temporary table in mysql from a Magento\Framework\DB\Select.
- * Use this class to create an index with that that you want to query later for quick data access
+ * Use this class to create an index with that you want to query later for quick data access
  *
  * @api
- * @since 100.2.0
+ * @since 100.1.8
  */
 class TemporaryTableService
 {
@@ -44,7 +43,6 @@ class TemporaryTableService
      * @param \Magento\Framework\Math\Random $random
      * @param string[] $allowedIndexMethods
      * @param string[] $allowedEngines
-     * @since 100.2.0
      */
     public function __construct(
         \Magento\Framework\Math\Random $random,
@@ -80,7 +78,7 @@ class TemporaryTableService
      * @param string $dbEngine
      * @return string
      * @throws \InvalidArgumentException
-     * @since 100.2.0
+     * @since 100.1.8
      */
     public function createFromSelect(
         Select $select,
@@ -151,7 +149,7 @@ class TemporaryTableService
      *
      * @param string $name
      * @return bool
-     * @since 100.2.0
+     * @since 100.1.8
      */
     public function dropTable($name)
     {

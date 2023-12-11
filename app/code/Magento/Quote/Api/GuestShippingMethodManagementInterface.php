@@ -18,7 +18,7 @@ interface GuestShippingMethodManagementInterface
      * @param string $cartId The shopping cart ID.
      * @return \Magento\Quote\Api\Data\ShippingMethodInterface[] An array of shipping methods.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified quote does not exist.
-     * @throws \Magento\Framework\Exception\StateException The shipping address is not set.
+     * @throws \Magento\Framework\Exception\StateException The shipping address is missing.
      */
     public function getList($cartId);
 

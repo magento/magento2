@@ -5,7 +5,11 @@
  */
 namespace Magento\Framework\Image\Adapter;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+
 /**
+ * @magentoDataFixture Magento/Framework/Image/_files/image_fixture.php
  * @magentoAppIsolation enabled
  */
 class InterfaceTest extends \PHPUnit\Framework\TestCase
@@ -19,6 +23,19 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_GD2,
         \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_IM,
     ];
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+    }
 
     /**
      * Add adapters to each data provider case
@@ -46,7 +63,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      */
     protected function _getFixtureImageSize()
     {
-        return [311, 162];
+        return [311, 175];
     }
 
     /**
@@ -79,14 +96,14 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      */
     protected function _getFixture($pattern)
     {
-        $dir = dirname(__DIR__) . '/_files/';
-        $data = glob($dir . $pattern);
-
-        if (!empty($data)) {
-            return $data[0];
+        if (!$pattern) {
+            return null;
         }
-
-        return null;
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var $rootDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
+        $rootDirectory = $objectManager->get(\Magento\Framework\Filesystem\Directory\TargetDirectory::class)
+            ->getDirectoryWrite(DirectoryList::TMP);
+        return $rootDirectory->getAbsolutePath('image/test/' . $pattern);
     }
 
     /**
@@ -98,9 +115,13 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      */
     protected function _isFormatSupported($image, $adapter)
     {
+        if ($image === null || !file_exists($image)) {
+            return false;
+        }
         $data = pathinfo($image);
         $supportedTypes = $adapter->getSupportedFormats();
-        return $image && file_exists($image) && in_array(strtolower($data['extension']), $supportedTypes);
+
+        return isset($data['extension']) && in_array(strtolower($data['extension']), $supportedTypes);
     }
 
     /**
@@ -108,17 +129,17 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      * Mark test as skipped if not
      *
      * @param string $adapterType
-     * @return \Magento\Framework\Image\Adapter\AdapterInterface
+     * @return \Magento\Framework\Image\Adapter\AdapterInterface|null
      */
     protected function _getAdapter($adapterType)
     {
+        $adapter = null;
         try {
-            $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-            $adapter = $objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create($adapterType);
-            return $adapter;
+            $adapter = $this->objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create($adapterType);
         } catch (\Exception $e) {
             $this->markTestSkipped($e->getMessage());
         }
+        return $adapter;
     }
 
     /**
@@ -205,29 +226,36 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $image
-     * @param array $tempPath (dirName, newName)
+     * @param array $tmpDir (dirName, newName)
      * @param string $adapterType
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
      *
      * @dataProvider saveDataProvider
      * @depends testOpen
      */
-    public function testSave($image, $tempPath, $adapterType)
+    public function testSave($image, $tmpDir, $adapterType)
     {
         $adapter = $this->_getAdapter($adapterType);
         $adapter->open($image);
-        try {
-            call_user_func_array([$adapter, 'save'], $tempPath);
-            $tempPath = join('', $tempPath);
-            $this->assertFileExists($tempPath);
-            unlink($tempPath);
-        } catch (\Exception $e) {
-            $this->assertFalse(is_dir($tempPath[0]) && is_writable($tempPath[0]));
-        }
+
+        /** @var $rootDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
+        $rootDirectory = $this->objectManager->get(\Magento\Framework\Filesystem\Directory\TargetDirectory::class)
+            ->getDirectoryWrite(DirectoryList::TMP);
+
+        call_user_func_array([$adapter, 'save'], $tmpDir);
+        $tmpDir = join('', $tmpDir);
+        $this->assertTrue($rootDirectory->isExist($tmpDir));
+        $rootDirectory->delete($tmpDir);
     }
 
     public function saveDataProvider()
     {
-        $dir = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppTempDir() . '/';
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var $rootDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
+        $rootDirectory = $objectManager->get(\Magento\Framework\Filesystem\Directory\TargetDirectory::class)
+            ->getDirectoryWrite(DirectoryList::TMP);
+        $dir = $rootDirectory->getAbsolutePath('image/');
         return $this->_prepareData(
             [
                 [$this->_getFixture('image_adapters_test.png'), [$dir . uniqid('test_image_adapter')]],
@@ -338,6 +366,97 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test if alpha transparency is correctly handled
+     *
+     * @param string $image
+     * @param string $watermark
+     * @param int $alphaPercentage
+     * @param array $comparePoint1
+     * @param array $comparePoint2
+     * @param string $adapterType
+     *
+     * @dataProvider imageWatermarkWithAlphaTransparencyDataProvider
+     * @depends testOpen
+     * @depends testImageSize
+     */
+    public function testWatermarkWithAlphaTransparency(
+        $image,
+        $watermark,
+        $alphaPercentage,
+        $comparePoint1,
+        $comparePoint2,
+        $adapterType
+    ) {
+        $imageAdapter = $this->_getAdapter($adapterType);
+        $imageAdapter->open($image);
+
+        $watermarkAdapter = $this->_getAdapter($adapterType);
+        $watermarkAdapter->open($watermark);
+
+        list($comparePoint1X, $comparePoint1Y) = $comparePoint1;
+        list($comparePoint2X, $comparePoint2Y) = $comparePoint2;
+
+        $imageAdapter
+            ->setWatermarkImageOpacity($alphaPercentage)
+            ->setWatermarkPosition(\Magento\Framework\Image\Adapter\AbstractAdapter::POSITION_TOP_LEFT)
+            ->watermark($watermark);
+
+        $comparePoint1Color = $imageAdapter->getColorAt($comparePoint1X, $comparePoint1Y);
+        unset($comparePoint1Color['alpha']);
+
+        $comparePoint2Color = $imageAdapter->getColorAt($comparePoint2X, $comparePoint2Y);
+        unset($comparePoint2Color['alpha']);
+
+        $result = $this->_compareColors($comparePoint1Color, $comparePoint2Color);
+        $message = sprintf(
+            '%s should be different to %s due to alpha transparency',
+            join(',', $comparePoint1Color),
+            join(',', $comparePoint2Color)
+        );
+        $this->assertFalse($result, $message);
+    }
+
+    public function imageWatermarkWithAlphaTransparencyDataProvider()
+    {
+        return $this->_prepareData(
+            [
+                // Watermark with alpha channel, 25%
+                [
+                    $this->_getFixture('watermark_alpha_base_image.jpg'),
+                    $this->_getFixture('watermark_alpha.png'),
+                    25,
+                    [ 23, 3 ],
+                    [ 23, 30 ]
+                ],
+                // Watermark with alpha channel, 50%
+                [
+                    $this->_getFixture('watermark_alpha_base_image.jpg'),
+                    $this->_getFixture('watermark_alpha.png'),
+                    50,
+                    [ 23, 3 ],
+                    [ 23, 30 ]
+                ],
+                // Watermark with no alpha channel, 50%
+                [
+                    $this->_getFixture('watermark_alpha_base_image.jpg'),
+                    $this->_getFixture('watermark.png'),
+                    50,
+                    [ 3, 3 ],
+                    [ 23,3 ]
+                ],
+                // Watermark with no alpha channel, 100%
+                [
+                    $this->_getFixture('watermark_alpha_base_image.jpg'),
+                    $this->_getFixture('watermark.png'),
+                    100,
+                    [ 3, 3 ],
+                    [ 3, 60 ]
+                ],
+            ]
+        );
+    }
+
+    /**
      * Checks if watermark exists on the right position
      *
      * @param string $image
@@ -350,10 +469,10 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      * @param int $colorY
      * @param string $adapterType
      *
-     * @dataProvider imageWatermarkDataProvider
+     * @dataProvider imageWatermarkPositionDataProvider
      * @depends testOpen
      */
-    public function testWatermark(
+    public function testWatermarkPosition(
         $image,
         $watermark,
         $width,
@@ -387,7 +506,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($result, $message);
     }
 
-    public function imageWatermarkDataProvider()
+    public function imageWatermarkPositionDataProvider()
     {
         return $this->_prepareData(
             [
@@ -476,7 +595,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
                 break;
             case \Magento\Framework\Image\Adapter\AbstractAdapter::POSITION_TOP_LEFT:
                 $pixel['x'] = 1;
-                $pixel['y'] = 1;
+                $pixel['y'] = 10;
                 break;
             case \Magento\Framework\Image\Adapter\AbstractAdapter::POSITION_TOP_RIGHT:
                 $pixel['x'] = $adapter->getOriginalWidth() - 1;
@@ -548,9 +667,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $adapter = $this->_getAdapter($adapterType);
 
         /** @var \Magento\Framework\Filesystem\Directory\ReadFactory readFactory */
-        $readFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\Filesystem\Directory\ReadFactory::class
-        );
+        $readFactory = $this->objectManager->get(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         $reader = $readFactory->create(BP);
         $path = $reader->getAbsolutePath('lib/internal/LinLibertineFont/LinLibertine_Re-4.4.1.ttf');
         $adapter->createPngFromString('T', $path);
@@ -576,7 +693,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
             [
                 ['x' => 5, 'y' => 8],
                 'expectedColor1' => ['red' => 0, 'green' => 0, 'blue' => 0],
-                ['x' => 0, 'y' => 14],
+                ['x' => 0, 'y' => 11],
                 'expectedColor2' => ['red' => 255, 'green' => 255, 'blue' => 255],
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_GD2,
             ],
@@ -588,9 +705,9 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_IM
             ],
             [
-                ['x' => 1, 'y' => 14],
+                ['x' => 1, 'y' => 11],
                 'expectedColor1' => ['red' => 255, 'green' => 255, 'blue' => 255],
-                ['x' => 5, 'y' => 12],
+                ['x' => 5, 'y' => 11],
                 'expectedColor2' => ['red' => 0, 'green' => 0, 'blue' => 0],
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_GD2
             ],
@@ -606,18 +723,52 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateUploadFile()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $imageAdapter = $objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create();
+        $imageAdapter = $this->objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create();
         $this->assertTrue($imageAdapter->validateUploadFile($this->_getFixture('magento_thumbnail.jpg')));
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @dataProvider testValidateUploadFileExceptionDataProvider
+     * @param string $fileName
+     * @param string $expectedErrorMsg
+     * @param bool $useFixture
      */
-    public function testValidateUploadFileException()
+    public function testValidateUploadFileException($fileName, $expectedErrorMsg, $useFixture)
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $imageAdapter = $objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create();
-        $imageAdapter->validateUploadFile(__FILE__);
+        $this->expectException(\InvalidArgumentException::class);
+
+        $imageAdapter = $this->objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create();
+        $filePath = $useFixture ? $this->_getFixture($fileName) : $fileName;
+
+        try {
+            $imageAdapter->validateUploadFile($filePath);
+        } catch (\InvalidArgumentException $e) {
+            $this->assertEquals($expectedErrorMsg, $e->getMessage());
+            throw $e;
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function testValidateUploadFileExceptionDataProvider()
+    {
+        return [
+            'image_notfound' => [
+                'fileName' => 'notfound.png',
+                'expectedErrorMsg' => 'Upload file does not exist.',
+                'useFixture' => false
+            ],
+            'image_empty' => [
+                'fileName' => 'empty.png',
+                'expectedErrorMsg' => 'Wrong file size.',
+                'useFixture' => true
+            ],
+            'notanimage' => [
+                'fileName' => 'notanimage.txt',
+                'expectedErrorMsg' => 'Disallowed file type.',
+                'useFixture' => true
+            ]
+        ];
     }
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CustomerAccountShareConfig" dataType="customer_account_sharing_config" type="create" auth="adminFormKey" url="/admin/system_config/save/section/customer/"
+               successRegex="/messages-message-success/" returnRegex="" method="POST">
+        <object key="groups" dataType="customer_account_sharing_config">
+            <object key="account_share" dataType="customer_account_sharing_config">
+                <object key="fields" dataType="customer_account_sharing_config">
+                    <object key="scope" dataType="account_share_scope_value">
+                        <field key="value">string</field>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+    <operation name="CustomerAccountShareConfigInherit" dataType="customer_account_sharing_config_inherit" type="create" auth="adminFormKey" url="/admin/system_config/save/section/customer/"
+               method="POST">
+        <object key="groups" dataType="customer_account_sharing_config_inherit">
+            <object key="account_share" dataType="customer_account_sharing_config_inherit">
+                <object key="fields" dataType="customer_account_sharing_config_inherit">
+                    <object key="scope" dataType="account_share_scope_inherit">
+                        <field key="inherit">boolean</field>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+</operations>

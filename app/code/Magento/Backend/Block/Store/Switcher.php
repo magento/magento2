@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Backend\Block\Store;
+
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Store switcher block
@@ -17,7 +20,7 @@ class Switcher extends \Magento\Backend\Block\Template
     /**
      * URL for store switcher hint
      */
-    const HINT_URL = 'http://docs.magento.com/m2/ce/user_guide/configuration/scope.html';
+    public const HINT_URL = 'https://experienceleague.adobe.com/docs/commerce-admin/start/setup/websites-stores-views.html#scope-settings'; // @codingStandardsIgnoreLine
 
     /**
      * Name of website variable
@@ -65,27 +68,23 @@ class Switcher extends \Magento\Backend\Block\Template
     protected $_template = 'Magento_Backend::store/switcher.phtml';
 
     /**
-     * Website factory
-     *
      * @var \Magento\Store\Model\WebsiteFactory
      */
     protected $_websiteFactory;
 
     /**
-     * Store Group Factory
-     *
      * @var \Magento\Store\Model\GroupFactory
      */
     protected $_storeGroupFactory;
 
     /**
-     * Store Factory
-     *
      * @var \Magento\Store\Model\StoreFactory
      */
     protected $_storeFactory;
 
     /**
+     * Switcher constructor.
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param \Magento\Store\Model\GroupFactory $storeGroupFactory
@@ -106,13 +105,14 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
         parent::_construct();
 
-        $this->setUseConfirm(true);
+        $this->setUseConfirm($this->hasData('use_confirm') ? (bool)$this->getData('use_confirm') : true);
+
         $this->setUseAjax(true);
 
         $this->setShowManageStoresLink(0);
@@ -130,6 +130,8 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Get website collection.
+     *
      * @return \Magento\Store\Model\ResourceModel\Website\Collection
      */
     public function getWebsiteCollection()
@@ -169,6 +171,8 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Set website variable name.
+     *
      * @param string $varName
      * @return $this
      */
@@ -179,6 +183,8 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Get website variable name.
+     *
      * @return string
      */
     public function getWebsiteVarName()
@@ -191,6 +197,8 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Check if current website selected.
+     *
      * @param \Magento\Store\Model\Website $website
      * @return bool
      */
@@ -200,6 +208,8 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return website Id.
+     *
      * @return int|null
      */
     public function getWebsiteId()
@@ -211,6 +221,8 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return group collection provided website.
+     *
      * @param int|\Magento\Store\Model\Website $website
      * @return \Magento\Store\Model\ResourceModel\Group\Collection
      */
@@ -247,6 +259,8 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Sets store group variable name.
+     *
      * @param string $varName
      * @return $this
      */
@@ -257,6 +271,8 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return store group variable name.
+     *
      * @return string
      */
     public function getStoreGroupVarName()
@@ -269,6 +285,8 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Is provided group selected.
+     *
      * @param \Magento\Store\Model\Group $group
      * @return bool
      */
@@ -278,6 +296,8 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return store group Id.
+     *
      * @return int|null
      */
     public function getStoreGroupId()
@@ -289,6 +309,8 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return store collection.
+     *
      * @param \Magento\Store\Model\Group|int $group
      * @return \Magento\Store\Model\ResourceModel\Store\Collection
      */
@@ -328,6 +350,8 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return store Id.
+     *
      * @return int|null
      */
     public function getStoreId()
@@ -339,6 +363,8 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Check is provided store selected.
+     *
      * @param \Magento\Store\Model\Store $store
      * @return bool
      */
@@ -358,6 +384,8 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Sets store variable name.
+     *
      * @param string $varName
      * @return $this
      */
@@ -368,6 +396,8 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return store variable name.
+     *
      * @return mixed|string
      */
     public function getStoreVarName()
@@ -380,6 +410,8 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return switch url.
+     *
      * @return string
      */
     public function getSwitchUrl()
@@ -399,6 +431,8 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Checks if scope selected.
+     *
      * @return bool
      */
     public function hasScopeSelected()
@@ -413,14 +447,17 @@ class Switcher extends \Magento\Backend\Block\Template
      */
     public function getCurrentSelectionName()
     {
-        if (!($name = $this->getCurrentStoreName())) {
-            if (!($name = $this->getCurrentStoreGroupName())) {
-                if (!($name = $this->getCurrentWebsiteName())) {
-                    $name = $this->getDefaultSelectionName();
-                }
-            }
+        if ($this->getCurrentStoreName() !== '') {
+            return $this->getCurrentStoreName();
         }
-        return $name;
+        if ($this->getCurrentStoreGroupName() !== '') {
+            return $this->getCurrentStoreGroupName();
+        }
+
+        if ($this->getCurrentWebsiteName() !== '') {
+            return $this->getCurrentWebsiteName();
+        }
+        return $this->getDefaultSelectionName();
     }
 
     /**
@@ -430,13 +467,23 @@ class Switcher extends \Magento\Backend\Block\Template
      */
     public function getCurrentWebsiteName()
     {
-        if ($this->getWebsiteId() !== null) {
+        $websiteId = $this->getWebsiteId();
+        if ($websiteId !== null) {
+            if ($this->hasData('get_data_from_request')) {
+                $requestedWebsite = $this->getRequest()->getParams('website');
+                if (!empty($requestedWebsite)
+                    && array_key_exists('website', $requestedWebsite)) {
+                    $websiteId = $requestedWebsite['website'];
+                }
+            }
             $website = $this->_websiteFactory->create();
-            $website->load($this->getWebsiteId());
+            $website->load($websiteId);
             if ($website->getId()) {
                 return $website->getName();
             }
         }
+
+        return '';
     }
 
     /**
@@ -453,25 +500,40 @@ class Switcher extends \Magento\Backend\Block\Template
                 return $group->getName();
             }
         }
+
+        return '';
     }
 
     /**
      * Get current store view name
      *
      * @return string
+     * @throws LocalizedException
      */
     public function getCurrentStoreName()
     {
-        if ($this->getStoreId() !== null) {
+        $storeId = $this->getStoreId();
+        if ($storeId !== null) {
+            if ($this->hasData('get_data_from_request')) {
+                $requestedStore = $this->getRequest()->getParams('store');
+                if (!empty($requestedStore)
+                    && array_key_exists('store', $requestedStore)) {
+                    $storeId = $requestedStore['store'];
+                }
+            }
             $store = $this->_storeFactory->create();
-            $store->load($this->getStoreId());
+            $store->load($storeId);
             if ($store->getId()) {
                 return $store->getName();
             }
         }
+
+        return '';
     }
 
     /**
+     * Sets store ids.
+     *
      * @param array $storeIds
      * @return $this
      */
@@ -482,6 +544,8 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return store ids.
+     *
      * @return array
      */
     public function getStoreIds()
@@ -490,6 +554,8 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Check if system is run in the single store mode.
+     *
      * @return bool
      */
     public function isShow()
@@ -498,6 +564,8 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Render block.
+     *
      * @return string
      */
     protected function _toHtml()
@@ -542,13 +610,11 @@ class Switcher extends \Magento\Backend\Block\Template
         $html = '';
         $url = $this->getHintUrl();
         if ($url) {
-            $html = '<div class="admin__field-tooltip tooltip">' . '<a' . ' href="' . $this->escapeUrl(
-                $url
-            ) . '"' . ' onclick="this.target=\'_blank\'"' . ' title="' . __(
-                'What is this?'
-            ) . '"' . ' class="admin__field-tooltip-action action-help"><span>' . __(
-                'What is this?'
-            ) . '</span></a></span>' . ' </div>';
+            $html = '<div class="admin__field-tooltip tooltip"><a href="%s" onclick="this.target=\'_blank\'"  title="%s"
+            class="admin__field-tooltip-action action-help"><span>%s</span></a></div>';
+            $title = $this->escapeHtmlAttr(__('What is this?'));
+            $span = $this->escapeHtml(__('What is this?'));
+            $html = sprintf($html, $this->escapeUrl($url), $title, $span);
         }
         return $html;
     }

@@ -3,13 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Reflection\Test\Unit;
 
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\ExtensionAttributesProcessor;
+use Magento\Framework\Reflection\FieldNamer;
+use Magento\Framework\Reflection\MethodsMap;
+use Magento\Framework\Reflection\TypeCaster;
+use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DataObjectProcessorTest extends \PHPUnit\Framework\TestCase
+class DataObjectProcessorTest extends TestCase
 {
     /**
      * @var DataObjectProcessor
@@ -17,28 +27,33 @@ class DataObjectProcessorTest extends \PHPUnit\Framework\TestCase
     private $dataObjectProcessor;
 
     /**
-     * @var ExtensionAttributesProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var MethodsMap
+     */
+    private $methodsMapProcessor;
+
+    /**
+     * @var ExtensionAttributesProcessor|MockObject
      */
     private $extensionAttributesProcessorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $methodsMapProcessor = $objectManager->getObject(
-            \Magento\Framework\Reflection\MethodsMap::class,
+        $objectManager = new ObjectManager($this);
+        $this->methodsMapProcessor = $objectManager->getObject(
+            MethodsMap::class,
             [
-                'fieldNamer' => $objectManager->getObject(\Magento\Framework\Reflection\FieldNamer::class),
-                'typeProcessor' => $objectManager->getObject(\Magento\Framework\Reflection\TypeProcessor::class),
+                'fieldNamer' => $objectManager->getObject(FieldNamer::class),
+                'typeProcessor' => $objectManager->getObject(TypeProcessor::class),
             ]
         );
-        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturn('serializedData');
         $serializerMock->method('unserialize')
             ->willReturn(['unserializedData']);
 
         $objectManager->setBackwardCompatibleProperty(
-            $methodsMapProcessor,
+            $this->methodsMapProcessor,
             'serializer',
             $serializerMock
         );
@@ -46,68 +61,106 @@ class DataObjectProcessorTest extends \PHPUnit\Framework\TestCase
         $this->extensionAttributesProcessorMock = $this->getMockBuilder(ExtensionAttributesProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->dataObjectProcessor = $objectManager->getObject(
-            \Magento\Framework\Reflection\DataObjectProcessor::class,
-            [
-                'methodsMapProcessor' => $methodsMapProcessor,
-                'typeCaster' => $objectManager->getObject(\Magento\Framework\Reflection\TypeCaster::class),
-                'fieldNamer' => $objectManager->getObject(\Magento\Framework\Reflection\FieldNamer::class),
-                'extensionAttributesProcessor' => $this->extensionAttributesProcessorMock
-            ]
-        );
     }
 
     /**
      * @param array $extensionAttributes
-     * @param array $expectedOutputDataArray
-     *
+     * @param array $excludedMethodsClassMap
+     * @param array $expectedOutput
      * @dataProvider buildOutputDataArrayDataProvider
      */
-    public function testBuildOutputDataArray($extensionAttributes, $expectedOutputDataArray)
-    {
-        $objectManager =  new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var \Magento\Framework\Reflection\Test\Unit\TestDataObject $testDataObject */
+    public function testBuildOutputDataArray(
+        array $extensionAttributes,
+        array $excludedMethodsClassMap,
+        array $expectedOutput
+    ) {
+        $objectManager = new ObjectManager($this);
+
+        $this->dataObjectProcessor = $objectManager->getObject(
+            DataObjectProcessor::class,
+            [
+                'methodsMapProcessor' => $this->methodsMapProcessor,
+                'typeCaster' => $objectManager->getObject(TypeCaster::class),
+                'fieldNamer' => $objectManager->getObject(FieldNamer::class),
+                'extensionAttributesProcessor' => $this->extensionAttributesProcessorMock,
+                'excludedMethodsClassMap' => $excludedMethodsClassMap,
+            ]
+        );
+
+        /** @var TestDataObject $testDataObject */
         $testDataObject = $objectManager->getObject(
-            \Magento\Framework\Reflection\Test\Unit\TestDataObject::class,
+            TestDataObject::class,
             [
                 'extensionAttributes' => $this->getMockForAbstractClass(
-                    \Magento\Framework\Api\ExtensionAttributesInterface::class
+                    ExtensionAttributesInterface::class
                 )
             ]
         );
 
-        $this->extensionAttributesProcessorMock->expects($this->once())
+        if (in_array('getExtensionAttributes', $excludedMethodsClassMap[TestDataInterface::class] ?? [])) {
+            $expectedTimes = $this->never();
+        } else {
+            $expectedTimes = $this->once();
+        }
+
+        $this->extensionAttributesProcessorMock->expects($expectedTimes)
             ->method('buildOutputDataArray')
             ->willReturn($extensionAttributes);
 
         $outputData = $this->dataObjectProcessor
-            ->buildOutputDataArray($testDataObject, \Magento\Framework\Reflection\Test\Unit\TestDataInterface::class);
-        $this->assertEquals($expectedOutputDataArray, $outputData);
+            ->buildOutputDataArray($testDataObject, TestDataInterface::class);
+        $this->assertEquals($expectedOutput, $outputData);
     }
 
+    /**
+     * @return array
+     */
     public function buildOutputDataArrayDataProvider()
     {
-        $expectedOutputDataArray = [
+        $expectedOutput = [
             'id' => '1',
             'address' => 'someAddress',
             'default_shipping' => 'true',
             'required_billing' => 'false',
         ];
-        $extensionAttributeArray = [
+
+        $extensionAttributes = [
             'attribute1' => 'value1',
-            'attribute2' => 'value2'
+            'attribute2' => 'value2',
         ];
 
         return [
-            'No Attributes' => [[], $expectedOutputDataArray],
-            'With Attributes' => [
-                $extensionAttributeArray,
+            'No Extension Attributes or Excluded Methods' => [
+                [],
+                [],
+                $expectedOutput,
+            ],
+            'With Extension Attributes' => [
+                $extensionAttributes,
+                [],
                 array_merge(
-                    $expectedOutputDataArray,
-                    ['extension_attributes' => $extensionAttributeArray]
-                )
-            ]
+                    $expectedOutput,
+                    ['extension_attributes' => $extensionAttributes]
+                ),
+            ],
+            'With Excluded Method' => [
+                [],
+                [
+                    TestDataInterface::class => [
+                        'getAddress',
+                    ],
+                ],
+                array_diff_key($expectedOutput, array_flip(['address'])),
+            ],
+            'With getExtensionAttributes as Excluded Method' => [
+                $extensionAttributes,
+                [
+                    TestDataInterface::class => [
+                        'getExtensionAttributes',
+                    ],
+                ],
+                $expectedOutput,
+            ],
         ];
     }
 }

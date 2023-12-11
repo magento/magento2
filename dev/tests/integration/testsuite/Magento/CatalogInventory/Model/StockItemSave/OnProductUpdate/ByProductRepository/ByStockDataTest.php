@@ -32,7 +32,7 @@ class ByStockDataTest extends \PHPUnit\Framework\TestCase
         StockItemInterface::IS_IN_STOCK => false,
     ];
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
@@ -43,6 +43,7 @@ class ByStockDataTest extends \PHPUnit\Framework\TestCase
      * Test saving of stock item on product save by 'setStockData' method (deprecated) via product repository
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation enabled
      */
     public function testSaveBySetStockData()
     {
@@ -59,6 +60,7 @@ class ByStockDataTest extends \PHPUnit\Framework\TestCase
      * via product repository
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation enabled
      */
     public function testSaveBySetData()
     {

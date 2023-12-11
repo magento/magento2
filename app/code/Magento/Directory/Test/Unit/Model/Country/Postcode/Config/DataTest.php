@@ -3,30 +3,39 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Directory\Test\Unit\Model\Country\Postcode\Config;
 
-class DataTest extends \PHPUnit\Framework\TestCase
+use Magento\Directory\Model\Country\Postcode\Config\Data;
+use Magento\Directory\Model\Country\Postcode\Config\Reader;
+use Magento\Framework\App\Cache\Type\Config;
+use Magento\Framework\Serialize\SerializerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class DataTest extends TestCase
 {
     /**
-     * @var \Magento\Directory\Model\Country\Postcode\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var Reader|MockObject
      */
     private $readerMock;
 
     /**
-     * @var \Magento\Framework\App\Cache\Type\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $cacheMock;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->readerMock = $this->createMock(\Magento\Directory\Model\Country\Postcode\Config\Reader::class);
-        $this->cacheMock = $this->createMock(\Magento\Framework\App\Cache\Type\Config::class);
-        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->readerMock = $this->createMock(Reader::class);
+        $this->cacheMock = $this->createMock(Config::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
     }
 
     public function testGet()
@@ -38,7 +47,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->willReturn($expected);
-        $configData = new \Magento\Directory\Model\Country\Postcode\Config\Data(
+        $configData = new Data(
             $this->readerMock,
             $this->cacheMock,
             'country_postcodes',

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="DeleteCustomVariableActionGroup">
+        <annotations>
+            <description>Goes to the Custom Variable grid page. Deletes the Custom Variable. PLEASE NOTE: The Custom Variable that is deleted is Hardcoded using 'customVariable'.</description>
+        </annotations>
+
+        <amOnPage url="{{AdminVariablesPage.url}}" stepKey="goToVarialeGrid"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <click selector="{{CustomVariableSection.GridCustomVariableCode(customVariable.code)}}" stepKey="goToCustomVariableEditPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForElementVisible selector="{{CustomVariableSection.delete}}" stepKey="waitForDeleteBtn"/>
+        <click selector="{{CustomVariableSection.delete}}" stepKey="deleteCustomVariable"/>
+        <waitForText userInput="Are you sure you want to do this?" stepKey="waitForText"/>
+        <click selector="{{CustomVariableSection.confirmDelete}}" stepKey="confirmDelete"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+    </actionGroup>
+</actionGroups>

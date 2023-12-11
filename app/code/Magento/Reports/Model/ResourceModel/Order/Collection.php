@@ -7,11 +7,11 @@
 namespace Magento\Reports\Model\ResourceModel\Order;
 
 use Magento\Framework\DB\Select;
+use DateTimeZone;
 
 /**
  * Reports orders collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -19,14 +19,12 @@ use Magento\Framework\DB\Select;
 class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
 {
     /**
-     * Is live
-     *
      * @var bool
      */
     protected $_isLive = false;
 
     /**
-     * Sales amount expression
+     * The sales amount expression
      *
      * @var string
      */
@@ -81,7 +79,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Sales\Model\ResourceModel\Report\OrderFactory $reportOrderFactory
-     * @param null $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -160,7 +158,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
         if ($this->_isLive) {
             $this->_prepareSummaryLive($range, $customStart, $customEnd, $isFilter);
         } else {
-            $this->_prepareSummaryAggregated($range, $customStart, $customEnd, $isFilter);
+            $this->_prepareSummaryAggregated($range, $customStart, $customEnd);
         }
 
         return $this;
@@ -319,6 +317,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
     protected function _getRangeExpression($range)
     {
         switch ($range) {
+            case 'today':
             case '24h':
                 $expression = $this->getConnection()->getConcatSql(
                     [
@@ -352,7 +351,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
     protected function _getRangeExpressionForAttribute($range, $attribute)
     {
         $expression = $this->_getRangeExpression($range);
-        return str_replace('{{attribute}}', $this->getConnection()->quoteIdentifier($attribute), $expression);
+        return str_replace('{{attribute}}', $this->getConnection()->quoteIdentifier($attribute), (string) $expression);
     }
 
     /**
@@ -369,7 +368,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
         return str_replace(
             '{{attribute}}',
             $this->_reportOrderFactory->create()->getStoreTZOffsetQuery($this->getMainTable(), $attribute, $from, $to),
-            $this->_getRangeExpression($range)
+            (string) $this->_getRangeExpression($range)
         );
     }
 
@@ -413,16 +412,22 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
     public function getDateRange($range, $customStart, $customEnd, $returnObjects = false)
     {
         $dateEnd = new \DateTime();
-        $dateStart = new \DateTime();
+        $timezoneLocal = $this->_localeDate->getConfigTimezone();
+
+        $dateEnd->setTimezone(new DateTimeZone($timezoneLocal));
 
         // go to the end of a day
         $dateEnd->setTime(23, 59, 59);
 
+        $dateStart = clone $dateEnd;
         $dateStart->setTime(0, 0, 0);
 
         switch ($range) {
+            case 'today':
+                $dateEnd = new \DateTime('now', new \DateTimeZone($timezoneLocal));
+                break;
             case '24h':
-                $dateEnd = new \DateTime();
+                $dateEnd = new \DateTime('now', new \DateTimeZone($timezoneLocal));
                 $dateEnd->modify('+1 hour');
                 $dateStart = clone $dateEnd;
                 $dateStart->modify('-1 day');
@@ -446,7 +451,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
                 break;
 
             case 'custom':
-                $dateStart = $customStart ? $customStart : $dateEnd;
+                $dateStart = $customStart ? $customStart : $dateStart;
                 $dateEnd = $customEnd ? $customEnd : $dateEnd;
                 break;
 
@@ -467,7 +472,8 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
                 }
                 break;
         }
-
+        $dateStart->setTimezone(new DateTimeZone('UTC'));
+        $dateEnd->setTimezone(new DateTimeZone('UTC'));
         if ($returnObjects) {
             return [$dateStart, $dateEnd];
         } else {
@@ -770,11 +776,12 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      */
     public function addRevenueToSelect($convertCurrency = false)
     {
-        $expr = $this->getTotalsExpression(
+        $expr = $this->getTotalsExpressionWithDiscountRefunded(
             !$convertCurrency,
             $this->getConnection()->getIfNullSql('main_table.base_subtotal_refunded', 0),
             $this->getConnection()->getIfNullSql('main_table.base_subtotal_canceled', 0),
-            $this->getConnection()->getIfNullSql('main_table.base_discount_canceled', 0)
+            $this->getConnection()->getIfNullSql('ABS(main_table.base_discount_refunded)', 0),
+            $this->getConnection()->getIfNullSql('ABS(main_table.base_discount_canceled)', 0)
         );
         $this->getSelect()->columns(['revenue' => $expr]);
 
@@ -792,11 +799,12 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
         /**
          * calculate average and total amount
          */
-        $expr = $this->getTotalsExpression(
+        $expr = $this->getTotalsExpressionWithDiscountRefunded(
             $storeId,
             $this->getConnection()->getIfNullSql('main_table.base_subtotal_refunded', 0),
             $this->getConnection()->getIfNullSql('main_table.base_subtotal_canceled', 0),
-            $this->getConnection()->getIfNullSql('main_table.base_discount_canceled', 0)
+            $this->getConnection()->getIfNullSql('ABS(main_table.base_discount_refunded)', 0),
+            $this->getConnection()->getIfNullSql('ABS(main_table.base_discount_canceled)', 0)
         );
 
         $this->getSelect()->columns(
@@ -809,13 +817,15 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
     }
 
     /**
-     * Get SQL expression for totals
+     * Get SQL expression for totals.
      *
      * @param int $storeId
      * @param string $baseSubtotalRefunded
      * @param string $baseSubtotalCanceled
      * @param string $baseDiscountCanceled
      * @return string
+     * @deprecated 100.3.2
+     * @see getTotalsExpressionWithDiscountRefunded
      */
     protected function getTotalsExpression(
         $storeId,
@@ -825,9 +835,39 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
     ) {
         $template = ($storeId != 0)
             ? '(main_table.base_subtotal - %2$s - %1$s - ABS(main_table.base_discount_amount) - %3$s)'
-            : '((main_table.base_subtotal - %1$s - %2$s - ABS(main_table.base_discount_amount) - %3$s) '
-                . ' * main_table.base_to_global_rate)';
+            : '((main_table.base_subtotal - %1$s - %2$s - ABS(main_table.base_discount_amount) + %3$s) '
+            . ' * main_table.base_to_global_rate)';
         return sprintf($template, $baseSubtotalRefunded, $baseSubtotalCanceled, $baseDiscountCanceled);
+    }
+
+    /**
+     * Get SQL expression for totals with discount refunded.
+     *
+     * @param int $storeId
+     * @param string $baseSubtotalRefunded
+     * @param string $baseSubtotalCanceled
+     * @param string $baseDiscountRefunded
+     * @param string $baseDiscountCanceled
+     * @return string
+     */
+    private function getTotalsExpressionWithDiscountRefunded(
+        $storeId,
+        $baseSubtotalRefunded,
+        $baseSubtotalCanceled,
+        $baseDiscountRefunded,
+        $baseDiscountCanceled
+    ) {
+        $template = ($storeId != 0)
+            ? '(main_table.base_subtotal - %2$s - %1$s - (ABS(main_table.base_discount_amount) - %3$s - %4$s))'
+            : '((main_table.base_subtotal - %1$s - %2$s - (ABS(main_table.base_discount_amount) - %3$s - %4$s)) '
+                . ' * main_table.base_to_global_rate)';
+        return sprintf(
+            $template,
+            $baseSubtotalRefunded,
+            $baseSubtotalCanceled,
+            $baseDiscountRefunded,
+            $baseDiscountCanceled
+        );
     }
 
     /**

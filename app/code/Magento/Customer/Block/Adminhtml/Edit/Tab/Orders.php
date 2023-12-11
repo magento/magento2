@@ -35,6 +35,11 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $collectionFactory;
 
     /**
+     * @var \Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory
+     */
+    private $_collectionFactory;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory $collectionFactory
@@ -57,13 +62,14 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _construct()
     {
         parent::_construct();
         $this->setId('customer_orders_grid');
-        $this->setDefaultSort('created_at', 'desc');
+        $this->setDefaultSort('created_at');
+        $this->setDefaultDir('desc');
         $this->setUseAjax(true);
     }
 
@@ -102,11 +108,11 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('increment_id', ['header' => __('Order'), 'width' => '100', 'index' => 'increment_id']);
+        $this->addColumn('increment_id', ['header' => __('Order #'), 'width' => '100', 'index' => 'increment_id']);
 
         $this->addColumn(
             'created_at',
@@ -123,7 +129,8 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
                 'header' => __('Order Total'),
                 'index' => 'grand_total',
                 'type' => 'currency',
-                'currency' => 'order_currency_code'
+                'currency' => 'order_currency_code',
+                'rate'  => 1
             ]
         );
 
@@ -138,7 +145,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
             $this->addColumn(
                 'action',
                 [
-                    'header' => ' ',
+                    'header' => 'Action',
                     'filter' => false,
                     'sortable' => false,
                     'width' => '100px',
@@ -158,11 +165,14 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('sales/order/view', ['order_id' => $row->getId()]);
+        return $this->getUrl(
+            'sales/order/view',
+            ['order_id' => $row->getId(), 'customer_id' =>  $this->getRequest()->getParam('id')]
+        );
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getGridUrl()
     {

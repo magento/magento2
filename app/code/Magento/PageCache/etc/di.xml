@@ -35,8 +35,17 @@
     <type name="Magento\PageCache\Controller\Block">
         <arguments>
             <argument name="layoutCacheKey" xsi:type="object">Magento\Framework\View\Layout\LayoutCacheKeyInterface</argument>
+            <argument name="scopeConfig" xsi:type="object">Magento\Framework\App\Config\ScopeConfigInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Cache\RuntimeStaleCacheStateModifier">
+        <arguments>
+            <argument name="cacheTypes" xsi:type="array">
+                <item name="full_page_cache" xsi:type="const">Magento\PageCache\Model\Cache\Type::TYPE_IDENTIFIER</item>
+            </argument>
         </arguments>
     </type>
     <preference for="Magento\PageCache\Model\VclGeneratorInterface" type="Magento\PageCache\Model\Varnish\VclGenerator"/>
     <preference for="Magento\PageCache\Model\VclTemplateLocatorInterface" type="Magento\PageCache\Model\Varnish\VclTemplateLocator"/>
+    <preference for="Magento\PageCache\Model\Spi\PageCacheTagsPreprocessorInterface" type="Magento\PageCache\Model\PageCacheTagsPreprocessorComposite"/>
 </config>

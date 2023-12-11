@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Test\Unit\DB\Query;
 
 use Magento\Framework\DB\Query\BatchIterator;
@@ -10,8 +12,10 @@ use Magento\Framework\DB\Query\BatchIteratorFactory;
 use Magento\Framework\DB\Query\BatchRangeIteratorFactory;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Select;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class GeneratorTest extends \PHPUnit\Framework\TestCase
+class GeneratorTest extends TestCase
 {
     /**
      * @var Generator
@@ -19,29 +23,29 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $selectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $factoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $iteratorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $rangeFactoryMock;
 
     /**
      * Setup test dependencies.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->factoryMock = $this->createMock(BatchIteratorFactory::class);
         $this->rangeFactoryMock = $this->createPartialMock(BatchRangeIteratorFactory::class, ['create']);
@@ -86,12 +90,12 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     /**
      * Test batch generation with invalid select object.
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage  Select object must have correct "FROM" part
      * @return void
      */
     public function testGenerateWithoutFromPart()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('The select object must have the correct "FROM" part. Verify and try again.');
         $map = [
             [Select::FROM, []],
             [

@@ -5,14 +5,14 @@
 define([
     'jquery',
     'underscore',
-    'MutationObserver',
     'domReady!'
 ], function ($, _) {
     'use strict';
 
     var counter = 1,
         watchers,
-        globalObserver;
+        globalObserver,
+        disabledNodes = [];
 
     watchers = {
         selectors: {},
@@ -140,14 +140,14 @@ define([
     }
 
     /**
-     * Calls handlers assocoiated with an added node.
+     * Calls handlers associated with an added node.
      * Adds listeners for the node removal.
      *
      * @param {HTMLElement} node - Added node.
      */
     function processAdded(node) {
         _.each(watchers.selectors, function (listeners, selector) {
-            listeners.forEach(function (data) {
+            for (let data of listeners) {
                 if (!data.ctx.contains(node) || !$(node, data.ctx).is(selector)) {
                     return;
                 }
@@ -157,12 +157,12 @@ define([
                 } else if (data.type === 'remove') {
                     addRemovalListener(node, data);
                 }
-            });
+            }
         });
     }
 
     /**
-     * Calls handlers assocoiated with a removed node.
+     * Calls handlers associated with a removed node.
      *
      * @param {HTMLElement} node - Removed node.
      */
@@ -170,14 +170,14 @@ define([
         var nodeData    = getNodeData(node),
             listeners   = nodeData && nodeData.remove;
 
+
         if (!listeners) {
             return;
         }
 
-        listeners.forEach(function (data) {
+        for (let data of listeners) {
             trigger(node, data);
-        });
-
+        }
         removeNodeData(node);
     }
 
@@ -194,12 +194,12 @@ define([
 
         nodes = _.toArray(nodes).filter(isElementNode);
 
-        nodes.forEach(function (node) {
+        for (let node of nodes) {
             result.push(node);
 
             children = extractChildren(node);
-            result   = result.concat(children);
-        });
+            result.push(...children);
+        }
 
         return result;
     }
@@ -216,10 +216,10 @@ define([
         var removed = [],
             added = [];
 
-        mutations.forEach(function (record) {
-            removed = removed.concat(_.toArray(record.removedNodes));
-            added   = added.concat(_.toArray(record.addedNodes));
-        });
+        for (let record of mutations) {
+            removed.push(...record.removedNodes);
+            added.push(...record.addedNodes);
+        }
 
         removed = removed.filter(function (node) {
             var addIndex = added.indexOf(node),
@@ -238,11 +238,64 @@ define([
         };
     }
 
-    globalObserver = new MutationObserver(function (mutations) {
-        var changes = formChangesLists(mutations);
+    /**
+     * Verify if the DOM node is a child of a defined disabled node, if so we shouldn't observe provided mutation.
+     *
+     * @param {Object} mutation - a single mutation
+     * @returns {Boolean}
+     */
+    function shouldObserveMutation(mutation) {
+        var isDisabled;
 
-        changes.removed.forEach(processRemoved);
-        changes.added.forEach(processAdded);
+        if (disabledNodes.length > 0) {
+            // Iterate through the disabled nodes and determine if this mutation is occurring inside one of them
+            isDisabled = _.find(disabledNodes, function (node) {
+                return node === mutation.target || $.contains(node, mutation.target);
+            });
+
+            // If we find a matching node we should not observe the mutation
+            return !isDisabled;
+        }
+
+        return true;
+    }
+
+    /**
+     * Should we observe these mutations? Check the first and last mutation to determine if this is a disabled mutation,
+     * we check both the first and last in case one has been removed from the DOM during the process of the mutation.
+     *
+     * @param {Array} mutations - An array of mutation records.
+     * @returns {Boolean}
+     */
+    function shouldObserveMutations(mutations) {
+        var firstMutation,
+            lastMutation;
+
+        if (mutations.length > 0) {
+            firstMutation = mutations[0];
+            lastMutation = mutations[mutations.length - 1];
+
+            return shouldObserveMutation(firstMutation) && shouldObserveMutation(lastMutation);
+        }
+
+        return true;
+    }
+
+    globalObserver = new MutationObserver(function (mutations) {
+        var changes;
+
+        if (shouldObserveMutations(mutations)) {
+            let node;
+
+            changes = formChangesLists(mutations);
+
+            for (node of changes.removed) {
+                processRemoved(node);
+            }
+            for (node of changes.added) {
+                processAdded(node);
+            }
+        }
     });
 
     globalObserver.observe(document.body, {
@@ -251,6 +304,16 @@ define([
     });
 
     return {
+        /**
+         * Disable a node from being observed by the mutations, you may want to disable specific aspects of the
+         * application which are heavy on DOM changes. The observer running on some actions could cause significant
+         * delays and degrade the performance of that specific part of the application exponentially.
+         *
+         * @param {HTMLElement} node - a HTML node within the document
+         */
+        disableNode: function (node) {
+            disabledNodes.push(node);
+        },
 
         /**
          * Adds listener for the appearance of nodes that matches provided
@@ -274,10 +337,9 @@ define([
 
             nodes = $(selector, data.ctx).toArray();
 
-            nodes.forEach(function (node) {
+            for (let node of nodes) {
                 trigger(node, data);
-            });
-
+            }
             addSelectorListener(selector, data);
         },
 
@@ -309,9 +371,9 @@ define([
                 addSelectorListener(selector, data);
             }
 
-            nodes.forEach(function (node) {
+            for (let node of nodes) {
                 addRemovalListener(node, data);
-            });
+            }
         },
 
         /**

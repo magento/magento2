@@ -78,10 +78,12 @@ define([
              * Make options sections.
              */
             this.makeOptionSections = function () {
-                this.images = new self.makeImages(null);
-                this.price = self.price;
-                this.quantity = self.quantity;
-            };
+                return {
+                    images: new this.makeImages(null),
+                    price: this.price,
+                    quantity: this.quantity
+                };
+            }.bind(this);
 
             /**
              * @param {Object} images
@@ -152,7 +154,7 @@ define([
             //fill option section data
             this.attributes.each(function (attribute) {
                 attribute.chosen.each(function (option) {
-                    option.sections = ko.observable(new this.makeOptionSections());
+                    option.sections = ko.observable(this.makeOptionSections());
                 }, this);
             }, this);
             //reset section.attribute
@@ -235,11 +237,20 @@ define([
         getImageProperty: function (node) {
             var types = node.find('[data-role=gallery]').productGallery('option').types,
                 images = _.map(node.find('[data-role=image]'), function (image) {
-                    var imageData = $(image).data('imageData');
+                    var imageData = $(image).data('imageData'),
+                        positionElement;
 
                     imageData.galleryTypes = _.pluck(_.filter(types, function (type) {
                         return type.value === imageData.file;
                     }), 'code');
+
+                    //jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+                    positionElement =
+                        $(image).find('[name="product[media_gallery][images][' + imageData.file_id + '][position]"]');
+                    //jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+                    if (!_.isEmpty(positionElement.val())) {
+                        imageData.position = positionElement.val();
+                    }
 
                     return imageData;
                 });

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="EnableCheckmoOrderStatusPending">
+        <data key="path">payment/checkmo/order_status</data>
+        <data key="scope">payment</data>
+        <data key="scope_id">1</data>
+        <data key="label">Pending</data>
+        <data key="value">pending</data>
+    </entity>
+    <entity name="EnableFreeOrderStatusPending">
+        <data key="path">payment/free/order_status</data>
+        <data key="scope">payment</data>
+        <data key="scope_id">1</data>
+        <data key="label">Pending</data>
+        <data key="value">pending</data>
+    </entity>
+    <entity name="EnableFreeOrderStatusCustom">
+        <data key="path">payment/free/order_status</data>
+        <data key="scope">default</data>
+        <data key="scope_id">1</data>
+        <data key="label">Custom</data>
+        <data key="value">custom</data>
+    </entity>
+    <entity name="EnableFreeOrderPaymentAction">
+        <data key="path">payment/free/payment_action</data>
+        <data key="scope">default</data>
+        <data key="scope_id">1</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="DisableFreeOrderPaymentAutomaticInvoiceAction">
+        <data key="path">payment/free/payment_action</data>
+        <data key="scope">default</data>
+        <data key="scope_id">1</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnableFreeOrderPaymentAutomaticInvoiceAction">
+        <data key="path">payment/free/payment_action</data>
+        <data key="scope">default</data>
+        <data key="scope_id">1</data>
+        <data key="value">1</data>
+    </entity>
+</entities>

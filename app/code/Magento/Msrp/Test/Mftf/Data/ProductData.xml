@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="SimpleOutOfStockProductWithSpecialPriceCostAndMsrp" type="product" extends="SimpleOutOfStockProduct">
+        <requiredEntity type="custom_attribute_array">ApiProductSpecialPrice</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductCost</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductMsrp</requiredEntity>
+    </entity>
+    <entity name="SimpleProductWithMsrp" type="product" extends="SimpleProduct">
+        <data key="price">100.00</data>
+        <requiredEntity type="custom_attribute_array">ApiProductMsrp</requiredEntity>
+    </entity>
+    <entity name="SimpleProductMap1">
+        <data key="price">55.00</data>
+    </entity>
+    <entity name="SimpleProductMap2">
+        <data key="price">65.00</data>
+    </entity>
+    <entity name="SimpleProductMap3">
+        <data key="price">155.00</data>
+    </entity>
+</entities>

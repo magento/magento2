@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddSimpleProductToCartActionGroup">
+        <annotations>
+            <description>Only works on Storefront Product Page - Add Simple Product to Cart</description>
+        </annotations>
+        <arguments>
+            <argument name="product" defaultValue="product"/>
+        </arguments>
+
+        <amOnPage url="{{StorefrontProductPage.url(product.custom_attributes[url_key])}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <waitForElementClickable selector="{{StorefrontProductPageSection.addToCart}}" stepKey="waitForAddToCart"/>
+        <click selector="{{StorefrontProductPageSection.addToCart}}" stepKey="addToCart"/>
+        <comment userInput="Preserve BIC. StorefrontProductActionSection.addToCartButtonTitleIsAdding" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdding"/>
+        <comment userInput="Preserve BIC. StorefrontProductActionSection.addToCartButtonTitleIsAdded" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdded"/>
+        <comment userInput="Preserve BIC. StorefrontProductActionSection.addToCartButtonTitleIsAddToCart" stepKey="waitForElementVisibleAddToCartButtonTitleIsAddToCart"/>
+        <comment userInput="Preserve BIC." stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForProductAddedMessage"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{product.name}} to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

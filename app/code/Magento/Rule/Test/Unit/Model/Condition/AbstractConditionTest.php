@@ -3,20 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Rule\Test\Unit\Model\Condition;
 
-class AbstractConditionTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Model\AbstractModel;
+use Magento\Rule\Model\Condition\AbstractCondition;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AbstractConditionTest extends TestCase
 {
     /**
-     * @var AbstractCondition|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractCondition|MockObject
      */
     protected $_condition;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_condition = $this->getMockForAbstractClass(
-            \Magento\Rule\Model\Condition\AbstractCondition::class,
+            AbstractCondition::class,
             [],
             '',
             false,
@@ -40,6 +46,9 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('category_ids', $this->_condition->getMappedSqlField());
     }
 
+    /**
+     * @return array
+     */
     public function validateAttributeDataProvider()
     {
         return [
@@ -53,6 +62,8 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
             ['1', '==', 1, true],
             ['x', '==', 'x', true],
             ['x', '==', 0, false],
+            [null, '==', 0, false],
+            [null, '==', 0.00, false],
 
             [1, '!=', 1, false],
             [0, '!=', 1, true],
@@ -82,6 +93,10 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
             [1, '>=', '1', true],
             [1, '>=', 0, false],
             [0, '<', [1], false],
+
+            [[1], '!{}', [], false],
+            [[1], '!{}', [1], false],
+            [[1], '!{}', [0], false],
         ];
     }
 
@@ -118,7 +133,7 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
     public function testValidate($existingValue, $operator, $valueForValidate, $expectedResult)
     {
         $objectMock = $this->createPartialMock(
-            \Magento\Framework\Model\AbstractModel::class,
+            AbstractModel::class,
             ['hasData', 'load', 'getId', 'getData']
         );
         $objectMock->expects($this->once())
@@ -146,6 +161,9 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function validateAttributeArrayInputTypeDataProvider()
     {
         return [
@@ -164,6 +182,8 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
             [[3], '{}', [], false, 'grid'],
             [1, '{}', 1, false, 'grid'],
             [1, '!{}', [1, 2, 3], false, 'grid'],
+            [1, '!{}', [], false, 'grid'],
+            [[1], '!{}', [], false, 'grid'],
             [[1], '{}', null, false, 'grid'],
             [null, '{}', null, true, 'input'],
             [null, '!{}', null, false, 'input'],
@@ -202,7 +222,7 @@ class AbstractConditionTest extends \PHPUnit\Framework\TestCase
         $this->_condition
             ->expects($this->any())
             ->method('getInputType')
-            ->will($this->returnValue($inputType));
+            ->willReturn($inputType);
 
         $this->assertEquals(
             $expectedResult,

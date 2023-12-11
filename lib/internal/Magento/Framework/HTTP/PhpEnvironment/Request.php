@@ -5,28 +5,32 @@
  */
 namespace Magento\Framework\HTTP\PhpEnvironment;
 
+use Laminas\Http\Header\HeaderInterface;
+use Laminas\Stdlib\Parameters;
+use Laminas\Stdlib\ParametersInterface;
+use Laminas\Uri\UriFactory;
+use Laminas\Uri\UriInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
 use Magento\Framework\Stdlib\StringUtils;
-use Zend\Http\Header\HeaderInterface;
-use Zend\Stdlib\Parameters;
-use Zend\Stdlib\ParametersInterface;
-use Zend\Uri\UriFactory;
-use Zend\Uri\UriInterface;
 
 /**
+ * HTTP Request for current PHP environment.
+ *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class Request extends \Zend\Http\PhpEnvironment\Request
+class Request extends \Laminas\Http\PhpEnvironment\Request
 {
     /**#@+
      * Protocols
      */
-    const SCHEME_HTTP  = 'http';
-    const SCHEME_HTTPS = 'https';
+    public const SCHEME_HTTP  = 'http';
+    public const SCHEME_HTTPS = 'https';
     /**#@-*/
 
     // Configuration path for SSL Offload http header
-    const XML_PATH_OFFLOADER_HEADER = 'web/secure/offloader_header';
+    public const XML_PATH_OFFLOADER_HEADER = 'web/secure/offloader_header';
 
     /**
      * @var string
@@ -44,8 +48,6 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     protected $action;
 
     /**
-     * PATH_INFO
-     *
      * @var string
      */
     protected $pathInfo = '';
@@ -223,7 +225,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     public function setPathInfo($pathInfo = null)
     {
         if ($pathInfo === null) {
-            $requestUri = $this->getRequestUri();
+            $requestUri = $this->getRequestUri() ?? '';
             if ('/' == $requestUri) {
                 return $this;
             }
@@ -449,6 +451,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      *
      * @return \Magento\Framework\App\Config
      * @deprecated 100.1.0
+     * @see Nothing
      */
     private function getAppConfig()
     {
@@ -586,6 +589,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
 
     /**
      * Access values contained in the superglobals as public members
+     *
      * Order of precedence: 1. GET, 2. POST, 3. COOKIE, 4. SERVER, 5. ENV
      *
      * @see http://msdn.microsoft.com/en-us/library/system.web.httprequest.item.aspx
@@ -683,7 +687,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      *
      * @param string $name Header name to retrieve.
      * @param mixed|null $default Default value to use when the requested header is missing.
-     * @return bool|HeaderInterface
+     * @return bool|string
      */
     public function getHeader($name, $default = false)
     {
@@ -790,11 +794,13 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     public function getBaseUrl()
     {
         $url = urldecode(parent::getBaseUrl());
-        $url = str_replace('\\', '/', $url);
+        $url = str_replace(['\\', '/' . DirectoryList::PUB .'/'], '/', $url);
         return $url;
     }
 
     /**
+     * Get flag value for whether the request is forwarded or not.
+     *
      * @return bool
      * @codeCoverageIgnore
      */
@@ -804,6 +810,8 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     }
 
     /**
+     * Set flag value for whether the request is forwarded or not.
+     *
      * @param bool $forwarded
      * @return $this
      * @codeCoverageIgnore
@@ -812,5 +820,21 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     {
         $this->forwarded = $forwarded;
         return $this;
+    }
+
+    /**
+     * Retrieve debug info
+     *
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [
+            'pathInfo' => $this->pathInfo,
+            'requestString' => $this->requestString,
+            'module' => $this->module,
+            'controller' => $this->controller,
+            'action' => $this->action,
+        ];
     }
 }

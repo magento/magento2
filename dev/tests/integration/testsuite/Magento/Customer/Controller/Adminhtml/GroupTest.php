@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Controller\Adminhtml;
 
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -14,9 +16,13 @@ use Magento\TestFramework\Helper\Bootstrap;
 class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     const TAX_CLASS_ID = 3;
+
     const TAX_CLASS_NAME = 'Retail Customer';
+
     const CUSTOMER_GROUP_CODE = 'custom_group';
+
     const BASE_CONTROLLER_URL = 'http://localhost/index.php/backend/customer/group/';
+
     const CUSTOMER_GROUP_ID = 2;
 
     /** @var  \Magento\Framework\Session\SessionManagerInterface */
@@ -25,7 +31,12 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     /** @var  \Magento\Customer\Api\GroupRepositoryInterface */
     private $groupRepository;
 
-    public function setUp()
+    /**
+     * @inheritDoc
+     *
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     */
+    protected function setUp(): void
     {
         parent::setUp();
         $objectManager = Bootstrap::getObjectManager();
@@ -33,22 +44,25 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->groupRepository = $objectManager->get(\Magento\Customer\Api\GroupRepositoryInterface::class);
     }
 
-    public function tearDown()
-    {
-        parent::tearDown();
-        //$this->session->unsCustomerGroupData();
-    }
-
+    /**
+     * Test new group form.
+     */
     public function testNewActionNoCustomerGroupDataInSession()
     {
         $this->dispatch('backend/customer/group/new');
         $responseBody = $this->getResponse()->getBody();
-        $this->assertRegExp('/<h1 class\="page-title">\s*New Customer Group\s*<\/h1>/', $responseBody);
+        $this->assertMatchesRegularExpression(
+            '/<h1 class\="page-title">\s*New Customer Group\s*<\/h1>/',
+            $responseBody
+        );
         $expected = '<input id="customer_group_code" name="code"  '
             . 'data-ui-id="group-form-fieldset-element-text-code"  value=""';
-        $this->assertContains($expected, $responseBody);
+        $this->assertStringContainsString($expected, $responseBody);
     }
 
+    /**
+     * Test form filling with data in session.
+     */
     public function testNewActionWithCustomerGroupDataInSession()
     {
         /** @var \Magento\Customer\Api\Data\GroupInterfaceFactory $customerGroupFactory */
@@ -69,28 +83,37 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->session->setCustomerGroupData($customerGroupData);
         $this->dispatch('backend/customer/group/new');
         $responseBody = $this->getResponse()->getBody();
-        $this->assertRegExp('/<h1 class\="page-title">\s*New Customer Group\s*<\/h1>/', $responseBody);
+        $this->assertMatchesRegularExpression(
+            '/<h1 class\="page-title">\s*New Customer Group\s*<\/h1>/',
+            $responseBody
+        );
         $expected = '<input id="customer_group_code" name="code"  '
             . 'data-ui-id="group-form-fieldset-element-text-code"  value="' . self::CUSTOMER_GROUP_CODE . '"';
-        $this->assertContains($expected, $responseBody);
+        $this->assertStringContainsString($expected, $responseBody);
     }
 
     /**
+     * Test calling delete without an ID.
+     *
      * @magentoDataFixture Magento/Customer/_files/customer_group.php
      */
     public function testDeleteActionNoGroupId()
     {
+        $this->getRequest()->setMethod(\Magento\Framework\App\Request\Http::METHOD_POST);
         $this->dispatch('backend/customer/group/delete');
         $this->assertRedirect($this->stringStartsWith(self::BASE_CONTROLLER_URL));
     }
 
     /**
+     * Test deleting a group.
+     *
      * @magentoDataFixture Magento/Customer/_files/customer_group.php
      */
     public function testDeleteActionExistingGroup()
     {
         $groupId = $this->findGroupIdWithCode(self::CUSTOMER_GROUP_CODE);
         $this->getRequest()->setParam('id', $groupId);
+        $this->getRequest()->setMethod(\Magento\Framework\App\Request\Http::METHOD_POST);
         $this->dispatch('backend/customer/group/delete');
 
         /**
@@ -104,11 +127,14 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     }
 
     /**
+     * Tet deleting with wrong ID.
+     *
      * @magentoDataFixture Magento/Customer/_files/customer_group.php
      */
     public function testDeleteActionNonExistingGroupId()
     {
         $this->getRequest()->setParam('id', 10000);
+        $this->getRequest()->setMethod(\Magento\Framework\App\Request\Http::METHOD_POST);
         $this->dispatch('backend/customer/group/delete');
 
         /**
@@ -122,6 +148,8 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     }
 
     /**
+     * Test saving a valid group.
+     *
      * @magentoDataFixture Magento/Customer/_files/customer_group.php
      */
     public function testSaveActionExistingGroup()
@@ -130,6 +158,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->getRequest()->setParam('tax_class', self::TAX_CLASS_ID);
         $this->getRequest()->setParam('id', $groupId);
         $this->getRequest()->setParam('code', self::CUSTOMER_GROUP_CODE);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
         $this->dispatch('backend/customer/group/save');
 
@@ -161,42 +190,63 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         );
     }
 
+    /**
+     * Test saving an invalid group.
+     */
     public function testSaveActionCreateNewGroupWithoutCode()
     {
         $this->getRequest()->setParam('tax_class', self::TAX_CLASS_ID);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
         $this->dispatch('backend/customer/group/save');
 
         $this->assertSessionMessages(
-            $this->equalTo(['code is a required field.']),
+            $this->equalTo([htmlspecialchars('"code" is required. Enter and try again.')]),
             MessageInterface::TYPE_ERROR
         );
     }
 
+    /**
+     * Test saving an empty group.
+     */
     public function testSaveActionForwardNewCreateNewGroup()
     {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/group/save');
         $responseBody = $this->getResponse()->getBody();
-        $this->assertRegExp('/<h1 class\="page-title">\s*New Customer Group\s*<\/h1>/', $responseBody);
+        $this->assertMatchesRegularExpression(
+            '/<h1 class\="page-title">\s*New Customer Group\s*<\/h1>/',
+            $responseBody
+        );
     }
 
     /**
+     * Test saving an existing group.
+     *
      * @magentoDataFixture Magento/Customer/_files/customer_group.php
      */
     public function testSaveActionForwardNewEditExistingGroup()
     {
         $groupId = $this->findGroupIdWithCode(self::CUSTOMER_GROUP_CODE);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setParam('id', $groupId);
         $this->dispatch('backend/customer/group/save');
 
         $responseBody = $this->getResponse()->getBody();
-        $this->assertRegExp('/<h1 class\="page-title">\s*' . self::CUSTOMER_GROUP_CODE . '\s*<\/h1>/', $responseBody);
+        $this->assertMatchesRegularExpression(
+            '/<h1 class\="page-title">\s*' . self::CUSTOMER_GROUP_CODE . '\s*<\/h1>/',
+            $responseBody
+        );
     }
 
+    /**
+     * Test using an invalid ID.
+     */
     public function testSaveActionNonExistingGroupId()
     {
         $this->getRequest()->setParam('id', 10000);
         $this->getRequest()->setParam('tax_class', self::TAX_CLASS_ID);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
         $this->dispatch('backend/customer/group/save');
 
@@ -207,10 +257,12 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             MessageInterface::TYPE_ERROR
         );
         $this->assertRedirect($this->stringStartsWith(self::BASE_CONTROLLER_URL . 'edit/'));
-        $this->assertEquals(null, $this->session->getCustomerGroupData());
+        $this->assertNull($this->session->getCustomerGroupData());
     }
 
     /**
+     * Test using existing code.
+     *
      * @magentoDataFixture Magento/Customer/_files/customer_group.php
      */
     public function testSaveActionNewGroupWithExistingGroupCode()
@@ -220,6 +272,7 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
 
         $this->getRequest()->setParam('tax_class', self::TAX_CLASS_ID);
         $this->getRequest()->setParam('code', self::CUSTOMER_GROUP_CODE);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
         $this->dispatch('backend/customer/group/save');
 
@@ -232,6 +285,8 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     }
 
     /**
+     * Test saving an invalid group.
+     *
      * @magentoDataFixture Magento/Customer/_files/customer_group.php
      */
     public function testSaveActionNewGroupWithoutGroupCode()
@@ -240,11 +295,12 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $originalCode = $this->groupRepository->getById($groupId)->getCode();
 
         $this->getRequest()->setParam('tax_class', self::TAX_CLASS_ID);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
         $this->dispatch('backend/customer/group/save');
 
         $this->assertSessionMessages(
-            $this->equalTo(['code is a required field.']),
+            $this->equalTo([htmlspecialchars('"code" is required. Enter and try again.')]),
             MessageInterface::TYPE_ERROR
         );
         $this->assertSessionMessages($this->isEmpty(), MessageInterface::TYPE_SUCCESS);

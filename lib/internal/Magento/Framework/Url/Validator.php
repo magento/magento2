@@ -4,28 +4,37 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Validate URL
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Framework\Url;
 
-class Validator extends \Zend_Validate_Abstract
+use Laminas\Validator\AbstractValidator;
+use Laminas\Validator\Uri;
+
+/**
+ * URL validator
+ */
+class Validator extends AbstractValidator
 {
     /**#@+
      * Error keys
      */
-    const INVALID_URL = 'invalidUrl';
+    public const INVALID_URL = 'uriInvalid';
     /**#@-*/
 
     /**
-     * Object constructor
+     * @var Uri
      */
-    public function __construct()
+    private $validator;
+
+    /**
+     * @param Uri $validator
+     */
+    public function __construct(Uri $validator)
     {
+        parent::__construct();
         // set translated message template
-        $this->setMessage((string)new \Magento\Framework\Phrase("Invalid URL '%value%'."), self::INVALID_URL);
+        $this->setMessage((string)new \Magento\Framework\Phrase("Invalid URL '%value%'."), Uri::INVALID);
+        $this->validator = $validator;
+        $this->validator->setAllowRelative(false);
     }
 
     /**
@@ -33,7 +42,7 @@ class Validator extends \Zend_Validate_Abstract
      *
      * @var array
      */
-    protected $_messageTemplates = [self::INVALID_URL => "Invalid URL '%value%'."];
+    protected $messageTemplates = [Uri::INVALID => "Invalid URL '%value%'."];
 
     /**
      * Validate value
@@ -43,13 +52,17 @@ class Validator extends \Zend_Validate_Abstract
      */
     public function isValid($value)
     {
-        $this->_setValue($value);
+        $this->setValue($value);
 
-        if (!\Zend_Uri::check($value)) {
-            $this->_error(self::INVALID_URL);
-            return false;
+        $valid = $this->validator->isValid($value);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $protocol = parse_url($value ? $value : '', PHP_URL_SCHEME);
+        if ($valid && ($protocol === 'https' || $protocol === 'http')) {
+            return true;
         }
 
-        return true;
+        $this->error(Uri::INVALID);
+
+        return false;
     }
 }

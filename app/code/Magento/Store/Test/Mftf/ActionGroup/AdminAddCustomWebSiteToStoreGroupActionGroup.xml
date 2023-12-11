@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddCustomWebSiteToStoreGroupActionGroup">
+        <annotations>
+            <description>Goes to the Admin Stores grid page. Searches the grid for the provided Store Group. Edits the Store. Adds the provided Website to the Store. Clicks on Save. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeGroup" defaultValue="customStoreGroup"/>
+            <argument name="website" defaultValue="customWebsite"/>
+        </arguments>
+
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="resetSearchFilter"/>
+        <fillField userInput="{{storeGroup.name}}" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" stepKey="fillSearchStoreGroupField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <see userInput="{{storeGroup.name}}" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="verifyThatCorrectStoreGroupFound"/>
+        <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickEditExistingStoreRow"/>
+        <waitForPageLoad stepKey="waitForStoreGroupPageLoad"/>
+        <selectOption selector="{{AdminNewStoreGroupSection.storeGrpWebsiteDropdown}}" userInput="{{website.name}}" stepKey="selectWebsite"/>
+        <selectOption selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" userInput="Default Category" stepKey="chooseRootCategory"/>
+        <click selector="{{AdminNewStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreGroup"/>
+        <conditionalClick selector="{{AdminNewStoreGroupSection.acceptNewStoreGroupCreation}}" dependentSelector="{{AdminNewStoreGroupSection.acceptNewStoreGroupCreation}}" visible="true" stepKey="clickAcceptNewStoreGroupCreationButton"/>
+        <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageReload"/>
+        <see userInput="You saved the store." stepKey="seeSavedMessage"/>
+    </actionGroup>
+</actionGroups>

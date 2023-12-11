@@ -3,25 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Product\Type;
 
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
-use Magento\Framework\App\ScopeResolverInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product\Relation as ProductRelation;
 use Magento\ConfigurableProduct\Model\AttributeOptionProvider;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
-use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Catalog\Model\ResourceModel\Product\Relation as ProductRelation;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigurableTest extends \PHPUnit\Framework\TestCase
+class ConfigurableTest extends TestCase
 {
     /**
      * @var Configurable
@@ -34,46 +38,41 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resource;
 
     /**
-     * @var ProductRelation|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRelation|MockObject
      */
     private $relation;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connectionMock;
 
     /**
-     * @var AbstractAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractAttribute|MockObject
      */
     private $abstractAttribute;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     private $product;
 
     /**
-     * @var AttributeOptionProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeOptionProvider|MockObject
      */
     private $attributeOptionProvider;
 
     /**
-     * @var OptionProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var OptionProvider|MockObject
      */
     private $optionProvider;
 
-    /**
-     * @var ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $scopeResolver;
-
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->setMethods(['select', 'fetchAll', 'insertOnDuplicate'])
@@ -87,10 +86,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->relation = $this->getMockBuilder(ProductRelation::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->stockRegistryMock = $this->getMockBuilder(StockRegistryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
+        $scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->abstractAttribute = $this->getMockBuilder(AbstractAttribute::class)
@@ -98,7 +94,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->product = $this->getMockBuilder(Product::class)
-            ->setMethods(['__sleep', '__wakeup', 'getData'])
+            ->setMethods(['__sleep', 'getData'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->attributeOptionProvider = $this->getMockBuilder(AttributeOptionProvider::class)
@@ -126,7 +122,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             Configurable::class,
             [
                 'catalogProductRelation' => $this->relation,
-                'scopeResolver' => $this->scopeResolver,
+                'scopeResolver' => $scopeResolver,
                 'attributeOptionProvider' => $this->attributeOptionProvider,
                 'optionProvider' => $this->optionProvider,
                 'context' => $context
@@ -142,19 +138,48 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->optionProvider->expects($this->once())
             ->method('getProductEntityLinkField')
             ->willReturnSelf();
-        $this->connectionMock->expects($this->once())
-            ->method('insertOnDuplicate')
-            ->willReturnSelf();
-
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
         $this->resource->expects($this->any())->method('getTableName')->willReturn('table name');
 
-        $statement  = $this->getMockBuilder(\Zend_Db_Statement::class)->disableOriginalConstructor()->getMock();
-        $statement->method('fetchAll')->willReturn([1]);
+        $select = $this->getMockBuilder(Select::class)
+            ->setMethods(['from', 'where'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $select->expects($this->exactly(1))->method('from')->willReturnSelf();
+        $select->expects($this->exactly(1))->method('where')->willReturnSelf();
+
+        $this->connectionMock->expects($this->atLeastOnce())
+            ->method('select')
+            ->willReturn($select);
+
+        $existingProductIds = [1, 2];
+        $this->connectionMock->expects($this->once())
+            ->method('fetchCol')
+            ->with($select)
+            ->willReturn($existingProductIds);
+
+        $this->connectionMock->expects($this->once())
+            ->method('insertMultiple')
+            ->with(
+                'table name',
+                [
+                    ['product_id' => 3, 'parent_id' => 3],
+                    ['product_id' => 4, 'parent_id' => 3],
+                ]
+            )
+            ->willReturnSelf();
+
+        $this->connectionMock->expects($this->once())
+            ->method('delete')
+            ->with(
+                'table name',
+                ['parent_id = ?' => 3, 'product_id IN (?)' => [1]]
+            )
+            ->willReturnSelf();
 
         $this->assertSame(
             $this->configurable,
-            $this->configurable->saveProducts($this->product, [1, 2, 3])
+            $this->configurable->saveProducts($this->product, [2, 3, 4])
         );
     }
 

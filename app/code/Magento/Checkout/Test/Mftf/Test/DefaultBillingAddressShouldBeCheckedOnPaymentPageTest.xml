@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="DefaultBillingAddressShouldBeCheckedOnPaymentPageTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout via the Storefront"/>
+            <title value="The default billing address should be used on checkout"/>
+            <description value="Default billing address should be preselected on payments page on checkout if it exist"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-98892"/>
+            <useCaseId value="MAGETWO-70996"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!--Enable flat rate shipping-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!--Go to Storefront as Customer-->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+                <argument name="Customer" value="$$createCustomer$$" />
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Disable shipping method for customer with default address -->
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
+            <!--Logout from customer account-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- set shipping as default            -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+            <conditionalClick selector="{{AdminShippingMethodFlatRateSection.carriersFlatRateTab}}" dependentSelector="{{AdminShippingMethodFlatRateSection.carriersFlatRateActive}}" visible="false" stepKey="expandFlatRateTab"/>
+            <click selector="{{AdminShippingMethodFlatRateSection.carriersEnableFlatRateActive}}" stepKey="useDefaultValue"/>
+            <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfigs"/>
+            <waitForPageLoad stepKey="waitForPageLoad"/>
+            <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Add simple product to cart and go to checkout-->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <!-- Click "+ New Address" and Fill new address-->
+        <click selector="{{CheckoutShippingSection.newAddressButton}}" stepKey="addAddress"/>
+        <actionGroup ref="LoggedInCheckoutWithOneAddressFieldWithoutStateFieldActionGroup" stepKey="changeAddress">
+            <argument name="Address" value="UK_Not_Default_Address"/>
+            <argument name="classPrefix" value="._show"/>
+        </actionGroup>
+        <!--Click "Save Addresses" -->
+        <actionGroup ref="StorefrontCheckoutClickSaveAddressButtonActionGroup" stepKey="saveAddress"/>
+        <comment userInput="Adding the comment to replace waitForAddressSaved action for preserving Backward Compatibility" stepKey="waitForAddressSaved"/>
+        <dontSeeElement selector="{{StorefrontCheckoutAddressPopupSection.newAddressModalPopup}}" stepKey="dontSeeModalPopup"/>
+        <!--Select Shipping Rate "Flat Rate" and click "Next" button-->
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask2"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <!--Verify that "My billing and shipping address are the same" is unchecked and billing address is preselected-->
+        <dontSeeCheckboxIsChecked selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="shippingAndBillingAddressIsSameUnchecked"/>
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="assertBillingAddress"/>
+    </test>
+</tests>

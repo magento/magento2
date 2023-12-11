@@ -55,11 +55,7 @@ Inventory,Inventory
 "Only X left Threshold","Only X left Threshold"
 "Display Products Availability in Stock on Storefront","Display Products Availability in Stock on Storefront"
 "Product Stock Options","Product Stock Options"
-"
-                    Please note that these settings apply to individual items in the cart, not to the entire cart.
-                ","
-                    Please note that these settings apply to individual items in the cart, not to the entire cart.
-                "
+"Please note that these settings apply to individual items in the cart, not to the entire cart.","Please note that these settings apply to individual items in the cart, not to the entire cart."
 "Manage Stock","Manage Stock"
 Backorders,Backorders
 "Maximum Qty Allowed in Shopping Cart","Maximum Qty Allowed in Shopping Cart"
@@ -74,3 +70,6 @@ Stock,Stock
 "Use Config Settings","Use Config Settings"
 "Qty Uses Decimals","Qty Uses Decimals"
 "Allow Multiple Boxes for Shipping","Allow Multiple Boxes for Shipping"
+"Done","Done"
+"The requested qty exceeds the maximum qty allowed in shopping cart","The requested qty exceeds the maximum qty allowed in shopping cart"
+"You cannot use decimal quantity for this product.","You cannot use decimal quantity for this product."

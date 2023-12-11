@@ -3,100 +3,141 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
 
-class PluginTest extends \PHPUnit\Framework\TestCase
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Store\App\Response\Redirect;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Wishlist\Controller\Index\Index;
+use Magento\Wishlist\Controller\Index\Plugin;
+use Magento\Wishlist\Model\AuthenticationState;
+use Magento\Wishlist\Model\AuthenticationStateInterface;
+use Magento\Wishlist\Model\DataSerializer;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Test for wishlist plugin before dispatch
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class PluginTest extends TestCase
 {
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|MockObject
      */
     protected $customerSession;
 
     /**
-     * @var \Magento\Wishlist\Model\AuthenticationStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AuthenticationStateInterface|MockObject
      */
     protected $authenticationState;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $config;
 
     /**
-     * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RedirectInterface|MockObject
      */
     protected $redirector;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|MockObject
      */
     protected $request;
 
-    protected function setUp()
-    {
-        $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'authenticate',
-                'getBeforeWishlistUrl',
-                'setBeforeWishlistUrl',
-                'setBeforeWishlistRequest',
-                'getBeforeWishlistRequest',
-                'setBeforeRequestParams',
-                'setBeforeModuleName',
-                'setBeforeControllerName',
-                'setBeforeAction',
-            ])
-            ->getMock();
+    /**
+     * @var DataSerializer|MockObject
+     */
+    private $dataSerializer;
 
-        $this->authenticationState = $this->createMock(\Magento\Wishlist\Model\AuthenticationState::class);
-        $this->config = $this->createMock(\Magento\Framework\App\Config::class);
-        $this->redirector = $this->createMock(\Magento\Store\App\Response\Redirect::class);
-        $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
-        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+    /**
+     * @var FormKey|MockObject
+     */
+    private $formKey;
+
+    /**
+     * @var Validator|MockObject
+     */
+    private $formKeyValidator;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        $this->customerSession = $this->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'authenticate',
+                    'getBeforeWishlistUrl',
+                    'setBeforeWishlistUrl',
+                    'setBeforeWishlistRequest',
+                    'getBeforeWishlistRequest',
+                    'setBeforeRequestParams',
+                    'setBeforeModuleName',
+                    'setBeforeControllerName',
+                    'setBeforeAction',
+                ]
+            )->getMock();
+
+        $this->authenticationState = $this->createMock(AuthenticationState::class);
+        $this->config = $this->createMock(Config::class);
+        $this->redirector = $this->createMock(Redirect::class);
+        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->request = $this->createMock(Http::class);
+        $this->dataSerializer = $this->createMock(DataSerializer::class);
+        $this->formKey = $this->createMock(FormKey::class);
+        $this->formKeyValidator = $this->createMock(Validator::class);
     }
 
-    protected function tearDown()
+    /**
+     * @return Plugin
+     */
+    protected function getPlugin()
     {
-        unset(
+        return new Plugin(
             $this->customerSession,
             $this->authenticationState,
             $this->config,
             $this->redirector,
             $this->messageManager,
-            $this->request
+            $this->dataSerializer,
+            $this->formKey,
+            $this->formKeyValidator
         );
     }
 
-    protected function getPlugin()
-    {
-        return new \Magento\Wishlist\Controller\Index\Plugin(
-            $this->customerSession,
-            $this->authenticationState,
-            $this->config,
-            $this->redirector,
-            $this->messageManager
-        );
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
-     */
     public function testBeforeDispatch()
     {
+        $this->expectException('Magento\Framework\Exception\NotFoundException');
         $refererUrl = 'http://referer-url.com';
         $params = [
             'product' => 1,
+            'login' => [],
         ];
 
-        $actionFlag = $this->createMock(\Magento\Framework\App\ActionFlag::class);
-        $indexController = $this->createMock(\Magento\Wishlist\Controller\Index\Index::class);
+        $actionFlag = $this->createMock(ActionFlag::class);
+        $indexController = $this->createMock(Index::class);
 
         $actionFlag
             ->expects($this->once())
@@ -124,6 +165,11 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             ->method('getParams')
             ->willReturn($params);
 
+        $this->request
+            ->expects($this->exactly(2))
+            ->method('getActionName')
+            ->willReturn('add');
+
         $this->customerSession->expects($this->once())
             ->method('authenticate')
             ->willReturn(false);
@@ -136,7 +182,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->customerSession->expects($this->once())
             ->method('setBeforeWishlistRequest')
-            ->with($params)
+            ->with(['product' => 1])
             ->willReturnSelf();
         $this->customerSession->expects($this->once())
             ->method('getBeforeWishlistRequest')
@@ -161,7 +207,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $this->config
             ->expects($this->once())
             ->method('isSetFlag')
-            ->with('wishlist/general/active')
+            ->with('wishlist/general/active', ScopeInterface::SCOPE_STORES)
             ->willReturn(false);
 
         $this->getPlugin()->beforeDispatch($indexController, $this->request);

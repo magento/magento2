@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRequiredFieldsHaveRequiredFieldIndicatorTest">
+        <annotations>
+            <stories value="Verify the presence of required field indicators across different pages in Magento Admin"/>
+            <title value="Required fields should have the required asterisk indicator "/>
+            <description value="Verify that Required fields should have the required indicator icon next to the field name"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-94330"/>
+            <group value="Catalog"/>
+            <group value="cloud"/>
+        </annotations>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage"/>
+        <waitForElementVisible selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="waitForAddSubCategoryVisible"/>
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
+
+        <!-- Verify that the Category Name field has the required field name indicator -->
+        <executeJS function="{{AdminCategoryBasicFieldSection.RequiredFieldIndicator}}" stepKey="getRequiredFieldIndicator"/>
+        <assertEquals message="pass" stepKey="assertRequiredFieldIndicator1">
+			<actualResult type="variable">getRequiredFieldIndicator</actualResult>
+			<expectedResult type="string">"*"</expectedResult>
+        </assertEquals>
+
+        <executeJS function="{{AdminCategoryBasicFieldSection.RequiredFieldIndicatorColor}}" stepKey="getRequiredFieldIndicatorColor"/>
+        <assertEquals message="pass" stepKey="assertRequiredFieldIndicator2">
+			<actualResult type="variable">getRequiredFieldIndicatorColor</actualResult>
+			<expectedResult type="string">rgb(226, 38, 38)</expectedResult>
+        </assertEquals>
+
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="addProductDropdown"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="addSimpleProduct">
+            <argument name="productType" value="simple"/>
+        </actionGroup>
+
+        <!-- Verify that the Product Name and Sku fields have the required field name indicator -->
+        <executeJS function="{{AdminProductFormSection.RequiredNameIndicator}}" stepKey="productNameRequiredFieldIndicator"/>
+        <assertEquals message="pass" stepKey="assertRequiredFieldIndicator3">
+			<actualResult type="variable">productNameRequiredFieldIndicator</actualResult>
+			<expectedResult type="string">"*"</expectedResult>
+        </assertEquals>
+        <executeJS function="{{AdminProductFormSection.RequiredSkuIndicator}}" stepKey="productSkuRequiredFieldIndicator"/>
+        <assertEquals message="pass" stepKey="assertRequiredFieldIndicator4">
+			<actualResult type="variable">productSkuRequiredFieldIndicator</actualResult>
+			<expectedResult type="string">"*"</expectedResult>
+        </assertEquals>
+
+        <!-- Verify that the CMS page have the required field name indicator next to Page Title -->
+        <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="amOnPagePagesGrid"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad1"/>
+        <actionGroup ref="AdminClickAddNewPageOnPagesGridActionGroup" stepKey="clickAddNewPage"/>
+        <executeJS function="{{CmsNewPagePageBasicFieldsSection.RequiredFieldIndicator}}" stepKey="pageTitleRequiredFieldIndicator"/>
+        <assertEquals message="pass" stepKey="assertRequiredFieldIndicator5">
+			<actualResult type="variable">pageTitleRequiredFieldIndicator</actualResult>
+			<expectedResult type="string">"*"</expectedResult>
+        </assertEquals>
+
+    </test>
+</tests>

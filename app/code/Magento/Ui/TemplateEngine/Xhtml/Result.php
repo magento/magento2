@@ -5,15 +5,17 @@
  */
 namespace Magento\Ui\TemplateEngine\Xhtml;
 
-use Magento\Framework\View\Layout\Generator\Structure;
+use Magento\Framework\App\State;
+use Magento\Framework\Serialize\Serializer\JsonHexTag;
 use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Framework\View\TemplateEngine\Xhtml\Template;
-use Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface;
+use Magento\Framework\View\Layout\Generator\Structure;
 use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\Template;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class Result
+ * Convert DOMElement to string representation
  */
 class Result implements ResultInterface
 {
@@ -43,24 +45,40 @@ class Result implements ResultInterface
     protected $logger;
 
     /**
+     * @var JsonHexTag
+     */
+    private $jsonSerializer;
+
+    /**
+     * @var State
+     */
+    private $state;
+
+    /**
      * @param Template $template
      * @param CompilerInterface $compiler
      * @param UiComponentInterface $component
      * @param Structure $structure
      * @param LoggerInterface $logger
+     * @param JsonHexTag $jsonSerializer
+     * @param State $state
      */
     public function __construct(
         Template $template,
         CompilerInterface $compiler,
         UiComponentInterface $component,
         Structure $structure,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        JsonHexTag $jsonSerializer,
+        State $state
     ) {
         $this->template = $template;
         $this->compiler = $compiler;
         $this->component = $component;
         $this->structure = $structure;
         $this->logger = $logger;
+        $this->jsonSerializer = $jsonSerializer;
+        $this->state = $state;
     }
 
     /**
@@ -80,7 +98,9 @@ class Result implements ResultInterface
      */
     public function appendLayoutConfiguration()
     {
-        $layoutConfiguration = $this->wrapContent(json_encode($this->structure->generate($this->component)));
+        $layoutConfiguration = $this->wrapContent(
+            $this->jsonSerializer->serialize($this->structure->generate($this->component))
+        );
         $this->template->append($layoutConfiguration);
     }
 
@@ -103,9 +123,12 @@ class Result implements ResultInterface
             $this->compiler->compile($templateRootElement, $this->component, $this->component);
             $this->appendLayoutConfiguration();
             $result = $this->compiler->postprocessing($this->template->__toString());
-        } catch (\Exception $e) {
-            $this->logger->critical($e->getMessage());
+        } catch (\Throwable $e) {
+            $this->logger->critical($e);
             $result = $e->getMessage();
+            if ($this->state->getMode() === State::MODE_DEVELOPER) {
+                $result .= "<pre><code>Exception in {$e->getFile()}:{$e->getLine()}</code></pre>";
+            }
         }
         return $result;
     }

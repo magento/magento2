@@ -3,69 +3,130 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Filter;
+
+use Magento\Backend\Block\Context;
+use Magento\Backend\Block\Widget\Grid\Column;
+use Magento\Backend\Block\Widget\Grid\Column\Filter\Date;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Escaper;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Math\Random;
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Asset\Repository;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class DateTest to test Magento\Backend\Block\Widget\Grid\Column\Filter\Date
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DateTest extends \PHPUnit\Framework\TestCase
+class DateTest extends TestCase
 {
-    /** @var \Magento\Backend\Block\Widget\Grid\Column\Filter\Date */
+    /** @var Date */
     protected $model;
 
-    /** @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Random|MockObject */
     protected $mathRandomMock;
 
-    /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ResolverInterface|MockObject */
     protected $localeResolverMock;
 
-    /** @var \Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DateTimeFormatterInterface|MockObject */
     protected $dateTimeFormatterMock;
 
-    /** @var \Magento\Backend\Block\Widget\Grid\Column|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Column|MockObject */
     protected $columnMock;
 
-    /** @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var TimezoneInterface|MockObject */
     protected $localeDateMock;
 
-    protected function setUp()
+    /** @var Escaper|MockObject */
+    private $escaperMock;
+
+    /** @var Context|MockObject */
+    private $contextMock;
+
+    /**
+     * @var Http|MockObject
+     */
+    private $request;
+
+    /**
+     * @var Repository|MockObject
+     */
+    private $repositoryMock;
+
+    protected function setUp(): void
     {
-        $this->mathRandomMock = $this->getMockBuilder(\Magento\Framework\Math\Random::class)
+        $this->mathRandomMock = $this->getMockBuilder(Random::class)
             ->disableOriginalConstructor()
             ->setMethods(['getUniqueHash'])
             ->getMock();
 
-        $this->localeResolverMock = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
+        $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->dateTimeFormatterMock = $this
-            ->getMockBuilder(\Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface::class)
+            ->getMockBuilder(DateTimeFormatterInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        $this->columnMock = $this->getMockBuilder(\Magento\Backend\Block\Widget\Grid\Column::class)
+        $this->columnMock = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTimezone', 'getHtmlId', 'getId'])
             ->getMock();
 
-        $this->localeDateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
+        $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
+            ->getMockForAbstractClass();
+
+        $this->escaperMock = $this->getMockBuilder(Escaper::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->contextMock = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->contextMock->expects($this->once())->method('getEscaper')->willReturn($this->escaperMock);
+        $this->contextMock->expects($this->once())->method('getLocaleDate')->willReturn($this->localeDateMock);
+
+        $this->request = $this->getMockBuilder(Http::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->contextMock->expects($this->once())
+            ->method('getRequest')
+            ->willReturn($this->request);
+
+        $this->repositoryMock = $this->getMockBuilder(Repository::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getUrlWithParams'])
+            ->getMock();
+
+        $this->contextMock->expects($this->once())
+            ->method('getAssetRepository')
+            ->willReturn($this->repositoryMock);
+
+        $objectManagerHelper = new ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
-            \Magento\Backend\Block\Widget\Grid\Column\Filter\Date::class,
+            Date::class,
             [
                 'mathRandom' => $this->mathRandomMock,
                 'localeResolver' => $this->localeResolverMock,
                 'dateTimeFormatter' => $this->dateTimeFormatterMock,
-                'localeDate' => $this->localeDateMock
+                'localeDate' => $this->localeDateMock,
+                'context' => $this->contextMock,
             ]
         );
         $this->model->setColumn($this->columnMock);
@@ -85,6 +146,14 @@ class DateTest extends \PHPUnit\Framework\TestCase
             'from' => $yesterday->getTimestamp(),
             'to' => $tomorrow->getTimestamp()
         ];
+        $params = ['_secure' => false];
+        $fileId = 'Magento_Theme::calendar.png';
+        $fileUrl = 'file url';
+
+        $this->repositoryMock->expects($this->once())
+            ->method('getUrlWithParams')
+            ->with($fileId, $params)
+            ->willReturn($fileUrl);
 
         $this->mathRandomMock->expects($this->any())->method('getUniqueHash')->willReturn($uniqueHash);
         $this->columnMock->expects($this->once())->method('getHtmlId')->willReturn($id);
@@ -95,7 +164,25 @@ class DateTest extends \PHPUnit\Framework\TestCase
         $this->model->setValue($value);
 
         $output = $this->model->getHtml();
-        $this->assertContains('id="' . $uniqueHash . '_from" value="' . $yesterday->getTimestamp(), $output);
-        $this->assertContains('id="' . $uniqueHash . '_to" value="' . $tomorrow->getTimestamp(), $output);
+        $this->assertStringContainsString(
+            'id="' . $uniqueHash . '_from" value="' . $yesterday->getTimestamp(),
+            $output
+        );
+        $this->assertStringContainsString(
+            'id="' . $uniqueHash . '_to" value="' . $tomorrow->getTimestamp(),
+            $output
+        );
+    }
+
+    public function testGetEscapedValueEscapeString()
+    {
+        $value = "\"><img src=x onerror=alert(2) />";
+        $array = [
+            'orig_from' => $value,
+            'from' => $value,
+        ];
+        $this->model->setValue($array);
+        $this->escaperMock->expects($this->once())->method('escapeHtml')->with($value);
+        $this->model->getEscapedValue('from');
     }
 }

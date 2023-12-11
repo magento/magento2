@@ -3,22 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\Order\Email\Sender;
 
+use Magento\Framework\App\Area;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Sales\Model\Order\Email\Container\InvoiceIdentity;
 use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\ResourceModel\Order\Invoice as InvoiceResource;
-use Magento\Sales\Model\Order\Address\Renderer;
-use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\DataObject;
+use Magento\Store\Model\App\Emulation;
 
 /**
- * Class InvoiceSender
+ * Sends order invoice email to the customer.
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InvoiceSender extends Sender
@@ -53,15 +59,23 @@ class InvoiceSender extends Sender
     protected $eventManager;
 
     /**
+     * @var Emulation
+     */
+    private $appEmulation;
+
+    /**
      * @param Template $templateContainer
      * @param InvoiceIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
      * @param \Psr\Log\LoggerInterface $logger
+     * @param Renderer $addressRenderer
      * @param PaymentHelper $paymentHelper
      * @param InvoiceResource $invoiceResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
-     * @param Renderer $addressRenderer
      * @param ManagerInterface $eventManager
+     * @param Emulation|null $appEmulation
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Template $templateContainer,
@@ -72,7 +86,8 @@ class InvoiceSender extends Sender
         PaymentHelper $paymentHelper,
         InvoiceResource $invoiceResource,
         \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
-        ManagerInterface $eventManager
+        ManagerInterface $eventManager,
+        Emulation $appEmulation = null
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger, $addressRenderer);
         $this->paymentHelper = $paymentHelper;
@@ -80,6 +95,7 @@ class InvoiceSender extends Sender
         $this->globalConfig = $globalConfig;
         $this->addressRenderer = $addressRenderer;
         $this->eventManager = $eventManager;
+        $this->appEmulation = $appEmulation ?: ObjectManager::getInstance()->get(Emulation::class);
     }
 
     /**
@@ -96,25 +112,42 @@ class InvoiceSender extends Sender
      * @param Invoice $invoice
      * @param bool $forceSyncMode
      * @return bool
+     * @throws \Exception
      */
     public function send(Invoice $invoice, $forceSyncMode = false)
     {
-        $invoice->setSendEmail(true);
+        $this->identityContainer->setStore($invoice->getStore());
+        $invoice->setSendEmail($this->identityContainer->isEnabled());
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $order = $invoice->getOrder();
-
+            if ($this->checkIfPartialInvoice($order, $invoice)) {
+                $order->setBaseSubtotal((float) $invoice->getBaseSubtotal());
+                $order->setBaseTaxAmount((float) $invoice->getBaseTaxAmount());
+                $order->setBaseShippingAmount((float) $invoice->getBaseShippingAmount());
+            }
+            $paymentHTML = $this->getPaymentHtml($order);
+            $this->appEmulation->startEnvironmentEmulation($order->getStoreId(), Area::AREA_FRONTEND, true);
             $transport = [
                 'order' => $order,
+                'order_id' => $order->getId(),
                 'invoice' => $invoice,
+                'invoice_id' => $invoice->getId(),
                 'comment' => $invoice->getCustomerNoteNotify() ? $invoice->getCustomerNote() : '',
                 'billing' => $order->getBillingAddress(),
-                'payment_html' => $this->getPaymentHtml($order),
+                'payment_html' => $paymentHTML,
                 'store' => $order->getStore(),
                 'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
-                'formattedBillingAddress' => $this->getFormattedBillingAddress($order)
+                'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
+                'order_data' => [
+                    'customer_name' => $order->getCustomerName(),
+                    'is_not_virtual' => $order->getIsNotVirtual(),
+                    'email_customer_note' => $order->getEmailCustomerNote(),
+                    'frontend_status_label' => $order->getFrontendStatusLabel()
+                ]
             ];
             $transportObject = new DataObject($transport);
+            $this->appEmulation->stopEnvironmentEmulation();
 
             /**
              * Event argument `transport` is @deprecated. Use `transportObject` instead.
@@ -146,6 +179,7 @@ class InvoiceSender extends Sender
      *
      * @param Order $order
      * @return string
+     * @throws \Exception
      */
     protected function getPaymentHtml(Order $order)
     {
@@ -153,5 +187,19 @@ class InvoiceSender extends Sender
             $order->getPayment(),
             $this->identityContainer->getStore()->getStoreId()
         );
+    }
+
+    /**
+     * Check if the order contains partial invoice
+     *
+     * @param Order $order
+     * @param Invoice $invoice
+     * @return bool
+     */
+    private function checkIfPartialInvoice(Order $order, Invoice $invoice): bool
+    {
+        $totalQtyOrdered = (float) $order->getTotalQtyOrdered();
+        $totalQtyInvoiced = (float) $invoice->getTotalQty();
+        return $totalQtyOrdered !== $totalQtyInvoiced;
     }
 }

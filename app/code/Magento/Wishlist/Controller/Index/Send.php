@@ -6,19 +6,35 @@
  */
 namespace Magento\Wishlist\Controller\Index;
 
+use Magento\Captcha\Helper\Data as CaptchaHelper;
+use Magento\Captcha\Model\DefaultModel as CaptchaModel;
+use Magento\Captcha\Observer\CaptchaStringResolver;
+use Magento\Customer\Model\Customer;
 use Magento\Framework\App\Action;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Session\Generic as WishlistSession;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Validator\EmailAddress;
+use Magento\Framework\Validator\ValidateException;
+use Magento\Framework\Validator\ValidatorChain;
 use Magento\Framework\View\Result\Layout as ResultLayout;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
+ * Class Send Email Wishlist Controller
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Send extends \Magento\Wishlist\Controller\AbstractIndex
+class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\HttpPostActionInterface
 {
+    /**
+     * @var Escaper
+     */
+    private $escaper;
+
     /**
      * @var \Magento\Customer\Helper\View
      */
@@ -70,6 +86,16 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
     protected $storeManager;
 
     /**
+     * @var CaptchaHelper
+     */
+    private $captchaHelper;
+
+    /**
+     * @var CaptchaStringResolver
+     */
+    private $captchaStringResolver;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Customer\Model\Session $customerSession
@@ -81,6 +107,9 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
      * @param WishlistSession $wishlistSession
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
+     * @param CaptchaHelper|null $captchaHelper
+     * @param CaptchaStringResolver|null $captchaStringResolver
+     * @param Escaper|null $escaper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -94,7 +123,10 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
         \Magento\Customer\Helper\View $customerHelperView,
         WishlistSession $wishlistSession,
         ScopeConfigInterface $scopeConfig,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        ?CaptchaHelper $captchaHelper = null,
+        ?CaptchaStringResolver $captchaStringResolver = null,
+        Escaper $escaper = null
     ) {
         $this->_formKeyValidator = $formKeyValidator;
         $this->_customerSession = $customerSession;
@@ -106,6 +138,13 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
         $this->wishlistSession = $wishlistSession;
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
+        $this->captchaHelper = $captchaHelper ?: ObjectManager::getInstance()->get(CaptchaHelper::class);
+        $this->captchaStringResolver = $captchaStringResolver ?: ObjectManager::getInstance()->get(
+            CaptchaStringResolver::class
+        );
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
+            Escaper::class
+        );
         parent::__construct($context);
     }
 
@@ -113,7 +152,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
      * Share wishlist
      *
      * @return \Magento\Framework\Controller\Result\Redirect
-     * @throws NotFoundException
+     * @throws NotFoundException|ValidateException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -122,8 +161,22 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
     {
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $captchaForName = 'share_wishlist_form';
+        /** @var CaptchaModel $captchaModel */
+        $captchaModel = $this->captchaHelper->getCaptcha($captchaForName);
+
         if (!$this->_formKeyValidator->validate($this->getRequest())) {
             $resultRedirect->setPath('*/*/');
+            return $resultRedirect;
+        }
+
+        $isCorrectCaptcha = $this->validateCaptcha($captchaModel, $captchaForName);
+
+        $this->logCaptchaAttempt($captchaModel);
+
+        if (!$isCorrectCaptcha) {
+            $this->messageManager->addErrorMessage(__('Incorrect CAPTCHA'));
+            $resultRedirect->setPath('*/*/share');
             return $resultRedirect;
         }
 
@@ -144,16 +197,16 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
         if (strlen($message) > $textLimit) {
             $error = __('Message length must not exceed %1 symbols', $textLimit);
         } else {
-            $message = nl2br(htmlspecialchars($message));
+            $message = nl2br((string) $this->escaper->escapeHtml($message));
             if (empty($emails)) {
                 $error = __('Please enter an email address.');
             } else {
                 if (count($emails) > $emailsLeft) {
-                    $error = __('This wish list can be shared %1 more times.', $emailsLeft);
+                    $error = __('Maximum of %1 emails can be sent.', $emailsLeft);
                 } else {
                     foreach ($emails as $index => $email) {
-                        $email = trim($email);
-                        if (!\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
+                        $email = $email !== null ? trim($email) : '';
+                        if (!ValidatorChain::is($email, EmailAddress::class)) {
                             $error = __('Please enter a valid email address.');
                             break;
                         }
@@ -164,7 +217,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
         }
 
         if ($error) {
-            $this->messageManager->addError($error);
+            $this->messageManager->addErrorMessage($error);
             $this->wishlistSession->setSharingForm($this->getRequest()->getPostValue());
             $resultRedirect->setPath('*/*/share');
             return $resultRedirect;
@@ -230,12 +283,12 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
             $this->inlineTranslation->resume();
 
             $this->_eventManager->dispatch('wishlist_share', ['wishlist' => $wishlist]);
-            $this->messageManager->addSuccess(__('Your wish list has been shared.'));
+            $this->messageManager->addSuccessMessage(__('Your wish list has been shared.'));
             $resultRedirect->setPath('*/*', ['wishlist_id' => $wishlist->getId()]);
             return $resultRedirect;
         } catch (\Exception $e) {
             $this->inlineTranslation->resume();
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $this->wishlistSession->setSharingForm($this->getRequest()->getPostValue());
             $resultRedirect->setPath('*/*/share');
             return $resultRedirect;
@@ -264,7 +317,6 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
      *
      * @param int $wishlistId
      * @param \Magento\Framework\View\Result\Layout $resultLayout
-     * @return mixed
      */
     protected function getRssLink($wishlistId, ResultLayout $resultLayout)
     {
@@ -287,5 +339,47 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
         return $resultLayout->getLayout()
             ->getBlock('wishlist.email.items')
             ->toHtml();
+    }
+
+    /**
+     * Log customer action attempts
+     *
+     * @param CaptchaModel $captchaModel
+     * @return void
+     */
+    private function logCaptchaAttempt(CaptchaModel $captchaModel): void
+    {
+        /** @var  Customer $customer */
+        $customer = $this->_customerSession->getCustomer();
+        $email = '';
+
+        if ($customer->getId()) {
+            $email = $customer->getEmail();
+        }
+
+        $captchaModel->logAttempt($email);
+    }
+
+    /**
+     * Captcha validate logic
+     *
+     * @param CaptchaModel $captchaModel
+     * @param string $captchaFormName
+     * @return bool
+     */
+    private function validateCaptcha(CaptchaModel $captchaModel, string $captchaFormName) : bool
+    {
+        if ($captchaModel->isRequired()) {
+            $word = $this->captchaStringResolver->resolve(
+                $this->getRequest(),
+                $captchaFormName
+            );
+
+            if (!$captchaModel->isCorrect($word)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

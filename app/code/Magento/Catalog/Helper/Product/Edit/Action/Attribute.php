@@ -3,15 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * Adminhtml catalog product action attribute update helper
- */
 namespace Magento\Catalog\Helper\Product\Edit\Action;
 
 /**
- * Class Attribute
+ * Adminhtml catalog product action attribute update helper.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Attribute extends \Magento\Backend\Helper\Data
 {
@@ -32,7 +32,7 @@ class Attribute extends \Magento\Backend\Helper\Data
     /**
      * Excluded from batch update attribute codes
      *
-     * @var string[]
+     * @var array
      */
     protected $_excludedAttributes = ['url_key'];
 
@@ -92,6 +92,7 @@ class Attribute extends \Magento\Backend\Helper\Data
 
     /**
      * Return product collection with selected product filter
+     *
      * Product collection didn't load
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
@@ -171,8 +172,8 @@ class Attribute extends \Magento\Backend\Helper\Data
                 $this->getProductsSetIds()
             );
 
-            if ($this->_excludedAttributes) {
-                $this->_attributes->addFieldToFilter('attribute_code', ['nin' => $this->_excludedAttributes]);
+            if ($excludedAttributes = $this->getExcludedAttributes()) {
+                $this->_attributes->addFieldToFilter('attribute_code', ['nin' => $excludedAttributes]);
             }
 
             // check product type apply to limitation and remove attributes that impossible to change in mass-update
@@ -193,11 +194,24 @@ class Attribute extends \Magento\Backend\Helper\Data
     }
 
     /**
+     * Gets website id.
+     *
      * @param int $storeId
      * @return int
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getStoreWebsiteId($storeId)
     {
         return $this->_storeManager->getStore($storeId)->getWebsiteId();
+    }
+
+    /**
+     * Retrieve excluded attributes.
+     *
+     * @return array
+     */
+    public function getExcludedAttributes(): array
+    {
+        return $this->_excludedAttributes;
     }
 }

@@ -5,8 +5,9 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\Io\File;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Filesystem;
@@ -21,6 +22,7 @@ use Magento\Setup\Module\Di\App\Task\OperationException;
 use Magento\Setup\Module\Di\App\Task\OperationInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Magento\Framework\Console\Cli;
 
 /**
  * Command to run compile in single-tenant mode
@@ -72,6 +74,11 @@ class DiCompileCommand extends Command
     private $componentRegistrar;
 
     /**
+     * @var File
+     */
+    private $file;
+
+    /**
      * Constructor
      *
      * @param DeploymentConfig $deploymentConfig
@@ -81,6 +88,8 @@ class DiCompileCommand extends Command
      * @param Filesystem $filesystem
      * @param DriverInterface $fileDriver
      * @param \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
+     * @param File|null $file
+     * @throws \Magento\Setup\Exception
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
@@ -89,7 +98,8 @@ class DiCompileCommand extends Command
         ObjectManagerProvider $objectManagerProvider,
         Filesystem $filesystem,
         DriverInterface $fileDriver,
-        ComponentRegistrar $componentRegistrar
+        ComponentRegistrar $componentRegistrar,
+        File $file = null
     ) {
         $this->deploymentConfig = $deploymentConfig;
         $this->directoryList    = $directoryList;
@@ -98,11 +108,12 @@ class DiCompileCommand extends Command
         $this->filesystem       = $filesystem;
         $this->fileDriver       = $fileDriver;
         $this->componentRegistrar  = $componentRegistrar;
+        $this->file = $file ?: ObjectManager::getInstance()->get(File::class);
         parent::__construct();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -131,7 +142,7 @@ class DiCompileCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -141,7 +152,7 @@ class DiCompileCommand extends Command
                 $output->writeln($line);
             }
             // we must have an exit code higher than zero to indicate something was wrong
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+            return Cli::RETURN_FAILURE;
         }
 
         $modulePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
@@ -211,8 +222,9 @@ class DiCompileCommand extends Command
         } catch (OperationException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             // we must have an exit code higher than zero to indicate something was wrong
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+            return Cli::RETURN_FAILURE;
         }
+        return Cli::RETURN_SUCCESS;
     }
 
     /**
@@ -225,10 +237,10 @@ class DiCompileCommand extends Command
     {
         $modulesByBasePath = [];
         foreach ($modulePaths as $modulePath) {
-            $moduleDir = basename($modulePath);
-            $vendorPath = dirname($modulePath);
-            $vendorDir = basename($vendorPath);
-            $basePath = dirname($vendorPath);
+            $moduleDir = $this->file->getPathInfo($modulePath)['basename'];
+            $vendorPath = $this->fileDriver->getParentDirectory($modulePath);
+            $vendorDir = $this->file->getPathInfo($vendorPath)['basename'];
+            $basePath = $this->fileDriver->getParentDirectory($vendorPath);
             $modulesByBasePath[$basePath][$vendorDir][] = $moduleDir;
         }
 
@@ -239,7 +251,7 @@ class DiCompileCommand extends Command
                 $vendorPathsRegExps[] = $vendorDir
                     . '/(?:' . join('|', $vendorModules) . ')';
             }
-            $basePathsRegExps[] = $basePath
+            $basePathsRegExps[] = preg_quote($basePath, '#')
                 . '/(?:' . join('|', $vendorPathsRegExps) . ')';
         }
 
@@ -258,6 +270,13 @@ class DiCompileCommand extends Command
      */
     private function getExcludedLibraryPaths(array $libraryPaths)
     {
+        $libraryPaths = array_map(
+            function ($libraryPath) {
+                return preg_quote($libraryPath, '#');
+            },
+            $libraryPaths
+        );
+
         $excludedLibraryPaths = [
             '#^(?:' . join('|', $libraryPaths) . ')/([\\w]+/)?Test#',
             '#^(?:' . join('|', $libraryPaths) . ')/([\\w]+/)?tests#',
@@ -274,7 +293,7 @@ class DiCompileCommand extends Command
     private function getExcludedSetupPaths($setupPath)
     {
         return [
-            '#^(?:' . $setupPath . ')(/[\\w]+)*/Test#'
+            '#^(?:' . preg_quote($setupPath, '#') . ')(/[\\w]+)*/Test#'
         ];
     }
 
@@ -301,8 +320,8 @@ class DiCompileCommand extends Command
     {
         $this->objectManager->configure(
             [
-                'preferences' => [\Magento\Setup\Module\Di\Compiler\Config\WriterInterface::class =>
-                    \Magento\Setup\Module\Di\Compiler\Config\Writer\Filesystem::class,
+                'preferences' => [\Magento\Framework\App\ObjectManager\ConfigWriterInterface::class =>
+                    \Magento\Framework\App\ObjectManager\ConfigWriter\Filesystem::class,
                 ], \Magento\Setup\Module\Di\Compiler\Config\ModificationChain::class => [
                     'arguments' => [
                         'modificationsList' => [
@@ -351,12 +370,9 @@ class DiCompileCommand extends Command
     private function getOperationsConfiguration(
         array $compiledPathsList
     ) {
-        $excludePatterns = [];
-        foreach ($this->excludedPathsList as $excludedPaths) {
-            $excludePatterns = array_merge($excludedPaths, $excludePatterns);
-        }
+        $excludePatterns = array_merge([], ...array_values($this->excludedPathsList));
 
-        $operations = [
+        return [
             OperationFactory::PROXY_GENERATOR => [],
             OperationFactory::REPOSITORY_GENERATOR => [
                 'paths' => $compiledPathsList['application'],
@@ -389,9 +405,9 @@ class DiCompileCommand extends Command
                 $compiledPathsList['application'],
                 $compiledPathsList['library'],
                 $compiledPathsList['generated_helpers'],
-            ]
+            ],
+            OperationFactory::APPLICATION_ACTION_LIST_GENERATOR => [],
+            OperationFactory::PLUGIN_LIST_GENERATOR => [],
         ];
-
-        return $operations;
     }
 }

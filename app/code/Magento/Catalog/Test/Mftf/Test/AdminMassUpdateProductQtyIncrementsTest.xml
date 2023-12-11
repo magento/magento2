@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMassUpdateProductQtyIncrementsTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Mass update advanced inventory attributes"/>
+            <title value="Admin should be able to mass update product qty increments"/>
+            <description value="Admin should be able to mass update product qty increments"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-39359"/>
+            <useCaseId value="MC-36787"/>
+            <group value="catalog"/>
+            <group value="CatalogInventory"/>
+            <group value="product_attributes"/>
+            <skip>
+            <issueId value="ACQE-4352"/>
+            </skip>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProductOne">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createProductTwo">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
+            <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+        </after>
+        <!-- Navigate to products list page and select created products -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+        <actionGroup ref="SearchProductGridByKeyword2ActionGroup" stepKey="searchByKeyword">
+            <argument name="keyword" value="api-simple-product"/>
+        </actionGroup>
+        <actionGroup ref="SortProductsByIdDescendingActionGroup" stepKey="sortProductsByIdDescending"/>
+        <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="clickCheckbox1"/>
+        <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="clickCheckbox2"/>
+        <!-- Mass update qty increments -->
+        <actionGroup ref="AdminClickMassUpdateProductAttributesActionGroup" stepKey="clickMassUpdateProductAttributes"/>
+        <actionGroup ref="AdminMassUpdateProductQtyIncrementsActionGroup" stepKey="updateQtyIncrements">
+            <argument name="enableQtyIncrements" value="Yes"/>
+            <argument name="qtyIncrements" value="2"/>
+        </actionGroup>
+        <!-- Start message queue for product attribute consumer -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+            <argument name="consumerName" value="{{AdminProductAttributeUpdateMessageConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminProductAttributeUpdateMessageConsumerData.messageLimit}}"/>
+        </actionGroup>
+        <!-- Open first product for edit and assert that qty increment is updated -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$createProductOne.id$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink"/>
+        <seeOptionIsSelected selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrements}}" userInput="Yes" stepKey="assertEnableQtyIncrementsValue"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrementsUseConfigSettings}}" stepKey="assertEnableQtyIncrementsUseConfigSettings"/>
+        <seeInField selector="{{AdminProductFormAdvancedInventorySection.qtyIncrements}}" userInput="2" stepKey="assertQtyIncrementsValue"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductFormAdvancedInventorySection.qtyIncrementsUseConfigSettings}}" stepKey="assertQtyIncrementsUseConfigSettings"/>
+        <!-- Open second product for edit and assert that qty increment is updated -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage2">
+            <argument name="productId" value="$createProductTwo.id$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad2"/>
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink2"/>
+        <seeOptionIsSelected selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrements}}" userInput="Yes" stepKey="assertEnableQtyIncrementsValue2"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrementsUseConfigSettings}}" stepKey="assertEnableQtyIncrementsUseConfigSettings2"/>
+        <seeInField selector="{{AdminProductFormAdvancedInventorySection.qtyIncrements}}" userInput="2" stepKey="assertQtyIncrementsValue2"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductFormAdvancedInventorySection.qtyIncrementsUseConfigSettings}}" stepKey="assertQtyIncrementsUseConfigSettings2"/>
+    </test>
+</tests>

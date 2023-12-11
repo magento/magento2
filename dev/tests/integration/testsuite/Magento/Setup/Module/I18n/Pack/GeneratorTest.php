@@ -50,7 +50,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
      */
     protected $backupRegistrar;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_testDir = realpath(__DIR__ . '/_files');
         $this->_expectedDir = $this->_testDir . '/expected';
@@ -74,7 +74,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $paths->setAccessible(false);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         \Magento\Framework\System\Dirs::rm($this->_packPath);
         $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);
@@ -86,7 +86,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
 
     public function testGeneration()
     {
-        $this->assertFileNotExists($this->_packPath);
+        $this->assertFileDoesNotExist($this->_packPath);
 
         ComponentRegistrar::register(
             ComponentRegistrar::MODULE,

@@ -1,0 +1,8 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+interface ProductInterface {
+    related_products: [ProductInterface] @doc(description: "An array of products to be displayed in a Related Products block.") @resolver(class: "Magento\\RelatedProductGraphQl\\Model\\Resolver\\Batch\\RelatedProducts")
+    upsell_products: [ProductInterface] @doc(description: "Upsell Products")  @resolver(class: "Magento\\RelatedProductGraphQl\\Model\\Resolver\\Batch\\UpSellProducts") @doc(description: "An array of products to be displayed in an Upsell Products block.") 
+    crosssell_products: [ProductInterface] @doc(description: "Crosssell Products") @resolver(class: "Magento\\RelatedProductGraphQl\\Model\\Resolver\\Batch\\CrossSellProducts") @doc(description: "An array of products to be displayed in a Cross-sell Products block.") 
+}

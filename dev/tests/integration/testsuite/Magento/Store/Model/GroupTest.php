@@ -14,7 +14,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = Bootstrap::getObjectManager()->create(\Magento\Store\Model\Group::class);
     }

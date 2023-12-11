@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Data form abstract class
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Framework\Data\Form\Element;
 
+use Magento\Framework\Phrase;
+
+/**
+ * Label form element.
+ */
 class Label extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**
@@ -37,8 +37,13 @@ class Label extends \Magento\Framework\Data\Form\Element\AbstractElement
     public function getElementHtml()
     {
         $html = $this->getBold() ? '<div class="control-value special">' : '<div class="control-value">';
-        $html .= $this->getEscapedValue() . '</div>';
+        if (is_string($this->getValue()) || $this->getValue() instanceof Phrase) {
+            $html .= $this->getEscapedValue();
+        }
+
+        $html .= '</div>';
         $html .= $this->getAfterElementHtml();
+
         return $html;
     }
 }

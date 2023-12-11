@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CheckoutShippingMethodsSection">
+        <element name="shippingMethodSelectorNextButton" selector="#checkout-step-shipping_method button.button.action.continue.primary" type="button" timeout="30" />
+        <element name="next" type="button" selector="button.button.action.continue.primary" timeout="30"/>
+        <element name="firstShippingMethod" type="radio" selector="//*[@id='checkout-shipping-method-load']//input[@class='radio']"/>
+        <element name="shippingMethodRow" type="text" selector=".form.methods-shipping table tbody tr"/>
+        <element name="checkShippingMethodByName" type="radio" selector="//div[@id='checkout-shipping-method-load']//td[contains(., '{{var1}}')]/..//input" parameterized="true"/>
+        <element name="shippingMethodFlatRate" type="radio" selector="#checkout-shipping-method-load input[value='flatrate_flatrate']"/>
+        <element name="shippingMethodFreeShipping" type="radio" selector="#checkout-shipping-method-load input[value='freeshipping_freeshipping']" timeout="60"/>
+        <element name="shippingMethodRowByName" type="text" selector="//div[@id='checkout-shipping-method-load']//td[contains(., '{{var1}}')]/.." parameterized="true"/>
+        <element name="shipHereButton" type="button" selector="//div/following-sibling::div/button[contains(@class, 'action-select-shipping-item')]"/>
+        <element name="shippingMethodLoader" type="button" selector="//div[contains(@class, 'checkout-shipping-method')]/following-sibling::div[contains(@class, 'loading-mask')]"/>
+        <element name="freeShippingShippingMethod" type="input" selector="#s_method_freeshipping_freeshipping" timeout="30"/>
+        <element name="noQuotesMsg" type="text" selector="#checkout-step-shipping_method div"/>
+        <element name="price" type="text" selector="//*[@id='checkout-shipping-method-load']//td[@class='col col-price']"/>
+        <element name="shippingRatePriceByName" type="text" selector="//div[@id='checkout-shipping-method-load']//td[contains(., '{{var1}}')]/..//td//span[contains(@class, 'price')]" parameterized="true"/>
+        <element name="showShippingVatNumber" type="text" selector="div.shipping-address-item"/>
+        <element name="showBillingVatNumber" type="text" selector="div.billing-address-details"/>
+        <element name="showShippingInfoVatNumber" type="text" selector="div.shipping-information-content"/>
+    </section>
+</sections>

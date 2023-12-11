@@ -20,7 +20,7 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     /**
      * @var string
      */
-    protected $_template = 'product/edit/bundle.phtml';
+    protected $_template = 'Magento_Bundle::product/edit/bundle.phtml';
 
     /**
      * Core registry

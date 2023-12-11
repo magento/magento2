@@ -33,7 +33,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Framework\Api\DataObjectHelper */
     protected $dataObjectHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->repository = $this->_objectManager->create(\Magento\Customer\Api\AddressRepositoryInterface::class);
@@ -78,7 +78,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->_expectedAddresses = [$address, $address2];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
@@ -111,11 +111,12 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture  Magento/Customer/_files/customer_address.php
      * @magentoDataFixture  Magento/Customer/_files/customer_two_addresses.php
      * @magentoAppIsolation enabled
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with addressId = 4200
      */
     public function testSaveAddressesIdSetButNotAlreadyExisting()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with addressId = 4200');
+
         $proposedAddress = $this->_createSecondAddress()->setId(4200);
         $this->repository->save($proposedAddress);
     }
@@ -135,11 +136,12 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with addressId = 12345
      */
     public function testGetAddressByIdBadAddressId()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with addressId = 12345');
+
         $this->repository->getById(12345);
     }
 
@@ -160,6 +162,13 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         $expectedNewAddress = $this->_expectedAddresses[1];
         $expectedNewAddress->setId($savedAddress->getId());
         $expectedNewAddress->setRegion($this->_expectedAddresses[1]->getRegion());
+
+        $this->assertEquals($expectedNewAddress->getExtensionAttributes(), $savedAddress->getExtensionAttributes());
+        $this->assertEquals(
+            $expectedNewAddress->getRegion()->getExtensionAttributes(),
+            $savedAddress->getRegion()->getExtensionAttributes()
+        );
+
         $this->assertEquals($expectedNewAddress, $savedAddress);
     }
 
@@ -200,15 +209,50 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
             ->setId(null)
             ->setFirstname(null)
             ->setLastname(null)
-            ->setCustomerId(1);
+            ->setCustomerId(1)
+            ->setRegionId($invalidRegion = 10354);
         try {
             $this->repository->save($address);
         } catch (InputException $exception) {
             $this->assertEquals('One or more input exceptions have occurred.', $exception->getMessage());
             $errors = $exception->getErrors();
-            $this->assertCount(2, $errors);
-            $this->assertEquals('firstname is a required field.', $errors[0]->getLogMessage());
-            $this->assertEquals('lastname is a required field.', $errors[1]->getLogMessage());
+            $this->assertCount(3, $errors);
+            $this->assertEquals('"firstname" is required. Enter and try again.', $errors[0]->getLogMessage());
+            $this->assertEquals('"lastname" is required. Enter and try again.', $errors[1]->getLogMessage());
+            $this->assertEquals(
+                __(
+                    'Invalid value of "%value" provided for the %fieldName field.',
+                    ['fieldName' => 'regionId', 'value' => $invalidRegion]
+                ),
+                $errors[2]->getLogMessage()
+            );
+        }
+
+        $address->setCountryId($invalidCountry = 'invalid_id');
+        try {
+            $this->repository->save($address);
+        } catch (InputException $exception) {
+            $this->assertEquals(
+                'One or more input exceptions have occurred.',
+                $exception->getMessage()
+            );
+            $errors = $exception->getErrors();
+            $this->assertCount(3, $errors);
+            $this->assertEquals(
+                '"firstname" is required. Enter and try again.',
+                $errors[0]->getLogMessage()
+            );
+            $this->assertEquals(
+                '"lastname" is required. Enter and try again.',
+                $errors[1]->getLogMessage()
+            );
+            $this->assertEquals(
+                __(
+                    'Invalid value of "%value" provided for the %fieldName field.',
+                    ['fieldName' => 'countryId', 'value' => $invalidCountry]
+                ),
+                $errors[2]->getLogMessage()
+            );
         }
     }
 

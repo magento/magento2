@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\DB\Adapter;
 
 use Magento\Framework\DB\Ddl\Table;
@@ -11,6 +12,7 @@ use Magento\Framework\DB\Ddl\Table;
  * Magento Database Adapter Interface
  *
  * @api
+ * @since 100.0.2
  */
 interface AdapterInterface
 {
@@ -35,7 +37,7 @@ interface AdapterInterface
     const INSERT_ON_DUPLICATE = 1;
 
     const INSERT_IGNORE = 2;
-    
+
     /** Strategy for updating data in table. See https://dev.mysql.com/doc/refman/5.7/en/replace.html */
     const REPLACE = 4;
 
@@ -257,7 +259,7 @@ interface AdapterInterface
      *
      * @param string $tableName
      * @param string $columnName
-     * @param array|string $definition  string specific or universal array DB Server definition
+     * @param array|string $definition string specific or universal array DB Server definition
      * @param string $schemaName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
@@ -272,7 +274,7 @@ interface AdapterInterface
      * @param string $oldColumnName
      * @param string $newColumnName
      * @param array|string $definition
-     * @param boolean $flushData        flush table statistic
+     * @param boolean $flushData flush table statistic
      * @param string $schemaName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
@@ -322,8 +324,8 @@ interface AdapterInterface
      *
      * @param string $tableName
      * @param string $indexName
-     * @param string|array $fields  the table column name or array of ones
-     * @param string $indexType     the index type
+     * @param string|array $fields the table column name or array of ones
+     * @param string $indexType the index type
      * @param string $schemaName
      * @return \Zend_Db_Statement_Interface
      */
@@ -365,6 +367,7 @@ interface AdapterInterface
 
     /**
      * Add new Foreign Key to table
+     *
      * If Foreign Key with same name is exist - it will be deleted
      *
      * @param string $fkName
@@ -373,7 +376,6 @@ interface AdapterInterface
      * @param string $refTableName
      * @param string $refColumnName
      * @param string $onDelete
-     * @param string $onUpdate
      * @param boolean $purge trying remove invalid data
      * @param string $schemaName
      * @param string $refSchemaName
@@ -467,7 +469,7 @@ interface AdapterInterface
      *      array('value1', 'value2')
      *
      * @param   string $table
-     * @param   string[] $columns  the data array column map
+     * @param   string[] $columns the data array column map
      * @param   array $data
      * @return  int
      */
@@ -484,6 +486,7 @@ interface AdapterInterface
 
     /**
      * Inserts a table row with specified data
+     *
      * Special for Zero values to identity column
      *
      * @param string $table
@@ -495,9 +498,16 @@ interface AdapterInterface
     /**
      * Updates table rows with specified data based on a WHERE clause.
      *
-     * @param  mixed        $table The table to update.
-     * @param  array        $bind  Column-value pairs.
-     * @param  mixed        $where UPDATE WHERE clause(s).
+     * The $where parameter in this instance can be a single WHERE clause or an array containing a multiple.  In all
+     * instances, a WHERE clause can be a string or an instance of {@see Zend_Db_Expr}.  In the event you use an array,
+     * you may specify the clause as the key and a value to be bound to it as the value. E.g., ['amt > ?' => $amt]
+     *
+     * If the $where parameter is an array of multiple clauses, they will be joined by AND, with each clause wrapped in
+     * parenthesis.  If you wish to use an OR, you must give a single clause that is an instance of {@see Zend_Db_Expr}
+     *
+     * @param  mixed $table The table to update.
+     * @param  array $bind Column-value pairs.
+     * @param  mixed $where UPDATE WHERE clause(s).
      * @return int          The number of affected rows.
      */
     public function update($table, array $bind, $where = '');
@@ -505,8 +515,8 @@ interface AdapterInterface
     /**
      * Deletes table rows based on a WHERE clause.
      *
-     * @param  mixed        $table The table to update.
-     * @param  mixed        $where DELETE WHERE clause(s).
+     * @param  mixed $table The table to update.
+     * @param  mixed $where DELETE WHERE clause(s).
      * @return int          The number of affected rows.
      */
     public function delete($table, $where = '');
@@ -514,32 +524,34 @@ interface AdapterInterface
     /**
      * Prepares and executes an SQL statement with bound data.
      *
-     * @param  mixed  $sql  The SQL statement with placeholders.
+     * @param  mixed $sql The SQL statement with placeholders.
      *                      May be a string or \Magento\Framework\DB\Select.
-     * @param  mixed  $bind An array of data or data itself to bind to the placeholders.
+     * @param  mixed $bind An array of data or data itself to bind to the placeholders.
      * @return \Zend_Db_Statement_Interface
      */
     public function query($sql, $bind = []);
 
     /**
      * Fetches all SQL result rows as a sequential array.
+     *
      * Uses the current fetchMode for the adapter.
      *
-     * @param string|\Magento\Framework\DB\Select $sql  An SQL SELECT statement.
-     * @param mixed                 $bind Data to bind into SELECT placeholders.
-     * @param mixed                 $fetchMode Override current fetch mode.
+     * @param string|\Magento\Framework\DB\Select $sql An SQL SELECT statement.
+     * @param mixed $bind Data to bind into SELECT placeholders.
+     * @param mixed $fetchMode Override current fetch mode.
      * @return array
      */
     public function fetchAll($sql, $bind = [], $fetchMode = null);
 
     /**
      * Fetches the first row of the SQL result.
+     *
      * Uses the current fetchMode for the adapter.
      *
      * @param string|\Magento\Framework\DB\Select $sql An SQL SELECT statement.
      * @param mixed $bind Data to bind into SELECT placeholders.
-     * @param mixed                 $fetchMode Override current fetch mode.
-     * @return array
+     * @param mixed $fetchMode Override current fetch mode.
+     * @return mixed Array, object, or scalar depending on fetch mode.
      */
     public function fetchRow($sql, $bind = [], $fetchMode = null);
 
@@ -615,9 +627,9 @@ interface AdapterInterface
      * // $safe = "WHERE date < '2005-01-02'"
      * </code>
      *
-     * @param string  $text  The text with a placeholder.
-     * @param mixed   $value The value to quote.
-     * @param string  $type  OPTIONAL SQL datatype
+     * @param string $text The text with a placeholder.
+     * @param mixed $value The value to quote.
+     * @param string $type OPTIONAL SQL datatype
      * @param integer $count OPTIONAL count of placeholders to replace
      * @return string An SQL-safe quoted value placed into the original text.
      */
@@ -626,7 +638,7 @@ interface AdapterInterface
     /**
      * Quotes an identifier.
      *
-     * Accepts a string representing a qualified indentifier. For Example:
+     * Accepts a string representing a qualified identifier. For Example:
      * <code>
      * $adapter->quoteIdentifier('myschema.mytable')
      * </code>
@@ -714,7 +726,8 @@ interface AdapterInterface
 
     /**
      * Reset cached DDL data from cache
-     * if table name is null - reset all cached DDL data
+     *
+     * If table name is null - reset all cached DDL data
      *
      * @param string $tableName
      * @param string $schemaName OPTIONAL
@@ -734,10 +747,11 @@ interface AdapterInterface
 
     /**
      * Load DDL data from cache
+     *
      * Return false if cache does not exists
      *
      * @param string $tableCacheKey the table cache key
-     * @param int $ddlType          the DDL constant
+     * @param int $ddlType the DDL constant
      * @return string|array|int|false
      */
     public function loadDdlCache($tableCacheKey, $ddlType);
@@ -777,6 +791,7 @@ interface AdapterInterface
 
     /**
      * Prepare value for save in column
+     *
      * Return converted to column data type value
      *
      * @param array $column     the column describe array
@@ -806,6 +821,7 @@ interface AdapterInterface
 
     /**
      * Generate fragment of SQL, that combine together (concatenate) the results from data array
+     *
      * All arguments in data must be quoted
      *
      * @param array $data
@@ -816,6 +832,7 @@ interface AdapterInterface
 
     /**
      * Generate fragment of SQL that returns length of character string
+     *
      * The string argument must be quoted
      *
      * @param string $string
@@ -848,7 +865,7 @@ interface AdapterInterface
      *
      * @see INTERVAL_* constants for $unit
      *
-     * @param \Zend_Db_Expr|string $date   quoted field name or SQL statement
+     * @param \Zend_Db_Expr|string $date quoted field name or SQL statement
      * @param int $interval
      * @param string $unit
      * @return \Zend_Db_Expr
@@ -860,7 +877,7 @@ interface AdapterInterface
      *
      * @see INTERVAL_* constants for $unit
      *
-     * @param \Zend_Db_Expr|string $date   quoted field name or SQL statement
+     * @param \Zend_Db_Expr|string $date quoted field name or SQL statement
      * @param int|string $interval
      * @param string $unit
      * @return \Zend_Db_Expr
@@ -879,7 +896,7 @@ interface AdapterInterface
      * %m   Month, numeric (00..12)
      * %Y   Year, numeric, four digits
      *
-     * @param \Zend_Db_Expr|string $date   quoted field name or SQL statement
+     * @param \Zend_Db_Expr|string $date quoted field name or SQL statement
      * @param string $format
      * @return \Zend_Db_Expr
      */
@@ -916,7 +933,7 @@ interface AdapterInterface
      *
      * @see INTERVAL_* constants for $unit
      *
-     * @param \Zend_Db_Expr|string $date   quoted field name or SQL statement
+     * @param \Zend_Db_Expr|string $date quoted field name or SQL statement
      * @param string $unit
      * @return \Zend_Db_Expr
      */
@@ -924,6 +941,7 @@ interface AdapterInterface
 
     /**
      * Retrieve valid table name
+     *
      * Check table name length and allowed symbols
      *
      * @param string $tableName
@@ -934,19 +952,20 @@ interface AdapterInterface
     /**
      * Build a trigger name based on table name and trigger details
      *
-     * @param string $tableName  The table that is the subject of the trigger
-     * @param string $time  Either "before" or "after"
-     * @param string $event  The DB level event which activates the trigger, i.e. "update" or "insert"
+     * @param string $tableName The table that is the subject of the trigger
+     * @param string $time Either "before" or "after"
+     * @param string $event The DB level event which activates the trigger, i.e. "update" or "insert"
      * @return string
      */
     public function getTriggerName($tableName, $time, $event);
 
     /**
      * Retrieve valid index name
+     *
      * Check index name length and allowed symbols
      *
      * @param string $tableName
-     * @param string|array $fields  the columns list
+     * @param string|array $fields the columns list
      * @param string $indexType
      * @return string
      */
@@ -954,6 +973,7 @@ interface AdapterInterface
 
     /**
      * Retrieve valid foreign key name
+     *
      * Check foreign key name length and allowed symbols
      *
      * @param string $priTableName
@@ -1040,6 +1060,7 @@ interface AdapterInterface
 
     /**
      * Adds order by random to select object
+     *
      * Possible using integer field for optimization
      *
      * @param \Magento\Framework\DB\Select $select
@@ -1067,6 +1088,7 @@ interface AdapterInterface
 
     /**
      * Converts fetched blob into raw binary PHP data.
+     *
      * Some DB drivers return blobs as hex-coded strings, so we need to process them.
      *
      * @param mixed $value
@@ -1107,6 +1129,8 @@ interface AdapterInterface
     public function getTables($likeCondition = null);
 
     /**
+     * Generates case SQL fragment
+     *
      * Generate fragment of SQL, that check value against multiple condition cases
      * and return different result depends on them
      *

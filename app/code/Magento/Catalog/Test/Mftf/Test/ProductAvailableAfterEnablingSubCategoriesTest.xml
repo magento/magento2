@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ProductAvailableAfterEnablingSubCategoriesTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Categories"/>
+            <title value="Check that parent categories are showing products after enabling subcategories after fully reindex"/>
+            <description value="Check that parent categories are showing products after enabling subcategories after fully reindex"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MAGETWO-97370"/>
+            <useCaseId value="MAGETWO-96846"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="SubCategoryWithParent" stepKey="simpleSubCategory">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="is_active">false</field>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="simpleSubCategory"/>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AssertStorefrontProductAbsentOnCategoryPageActionGroup" stepKey="doNotSeeProductOnCategoryPage">
+            <argument name="categoryUrlKey" value="$$createCategory.name$$"/>
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="openCreatedSubCategory">
+            <argument name="Category" value="$$simpleSubCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnableCategoryActionGroup" stepKey="enableCategory"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="seeSuccessMessage"/>
+
+        <!--Run re-index task-->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value="catalog_product_price"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepage"/>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openEnabledCategory">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeCreatedProduct">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+    </test>
+</tests>

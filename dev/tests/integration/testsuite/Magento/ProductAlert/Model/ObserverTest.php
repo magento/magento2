@@ -3,60 +3,107 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ProductAlert\Model;
 
+use Magento\Framework\DB\Select;
+use Magento\ProductAlert\Model\ResourceModel\Price as PriceResource;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\MessageQueue\EnvironmentPreconditionException;
+use Magento\TestFramework\MessageQueue\PreconditionFailedException;
+use Magento\TestFramework\MessageQueue\PublisherConsumerController;
+use PHPUnit\Framework\TestCase;
+
 /**
- * @magentoAppIsolation enabled
+ * Test Product Alert observer
+ *
+ * @magentoDbIsolation disabled
  */
-class ObserverTest extends \PHPUnit\Framework\TestCase
+class ObserverTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var Observer
      */
-    protected $_objectManager;
+    private $observer;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var PriceResource
      */
-    protected $_customerSession;
+    private $priceResource;
 
     /**
-     * @var \Magento\Customer\Helper\View
+     * @inheritDoc
      */
-    protected $_customerViewHelper;
-
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_customerSession = $this->_objectManager->get(
-            \Magento\Customer\Model\Session::class
-        );
-        $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Api\AccountManagementInterface::class
-        );
-        $customer = $service->authenticate('customer@example.com', 'password');
-        $this->_customerSession->setCustomerDataAsLoggedIn($customer);
-        $this->_customerViewHelper = $this->_objectManager->create(\Magento\Customer\Helper\View::class);
+        $objectManager = Bootstrap::getObjectManager();
+        $this->observer =  $objectManager->get(Observer::class);
+        $this->priceResource = $objectManager->create(PriceResource::class);
     }
 
     /**
-     * @magentoConfigFixture current_store catalog/productalert/allow_price 1
+     * Test process() method
      *
+     * @magentoConfigFixture current_store catalog/productalert/allow_price 1
      * @magentoDataFixture Magento/ProductAlert/_files/product_alert.php
      */
     public function testProcess()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
-        $observer = $this->_objectManager->get(\Magento\ProductAlert\Model\Observer::class);
-        $observer->process();
+        $this->observer->process();
+        $this->assertProcessAlertByConsumer();
+    }
 
-        /** @var \Magento\TestFramework\Mail\Template\TransportBuilderMock $transportBuilder */
-        $transportBuilder = $this->_objectManager->get(
-            \Magento\TestFramework\Mail\Template\TransportBuilderMock::class
+    /**
+     * Waiting for execute consumer
+     *
+     * @return void
+     * @throws PreconditionFailedException
+     */
+    private function assertProcessAlertByConsumer(): void
+    {
+        /** @var PublisherConsumerController $publisherConsumerController */
+        $publisherConsumerController = Bootstrap::getObjectManager()->create(
+            PublisherConsumerController::class,
+            [
+                'consumers' => ['product_alert'],
+                'logFilePath' => TESTS_TEMP_DIR . "/MessageQueueTestLog.txt",
+                'maxMessages' => 1,
+                'appInitParams' => Bootstrap::getInstance()->getAppInitParams()
+            ]
         );
-        $this->assertContains(
-            'John Smith,',
-            $transportBuilder->getSentMessage()->getRawMessage()
+        try {
+            $publisherConsumerController->startConsumers();
+        } catch (EnvironmentPreconditionException $e) {
+            $this->markTestSkipped($e->getMessage());
+        } catch (PreconditionFailedException $e) {
+            $this->fail(
+                $e->getMessage()
+            );
+        }
+
+        sleep(15); // timeout to processing Magento queue
+
+        $publisherConsumerController->waitForAsynchronousResult(
+            function () {
+                return $this->loadLastPriceAlertStatus();
+            },
+            []
         );
+    }
+
+    /**
+     * Load last created price alert
+     *
+     * @return bool
+     */
+    private function loadLastPriceAlertStatus(): bool
+    {
+        $select = $this->priceResource->getConnection()->select();
+        $select->from($this->priceResource->getMainTable(), ['status'])
+            ->order($this->priceResource->getIdFieldName() . ' ' . Select::SQL_DESC)
+            ->limit(1);
+
+        return (bool)$this->priceResource->getConnection()->fetchOne($select);
     }
 }

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Model\ResourceModel\Order;
 
 use Magento\Framework\App\ResourceConnection;
@@ -187,7 +188,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->getConnection()->commit();
         } catch (\Exception $e) {
             $this->getConnection()->rollBack();
-            throw new LocalizedException(__('Cannot unassign status from state'));
+            throw new LocalizedException(__('The status needs to remain assigned to its state.'));
         }
 
         return $this;
@@ -205,7 +206,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->getConnection()->select()
                 ->from(['sss' => $this->stateTable], [])
                 ->where('state = ?', $state)
-                ->columns([new\Zend_Db_Expr('COUNT(1)')])
+                ->columns([new \Zend_Db_Expr('COUNT(1)')])
         ));
     }
 
@@ -256,7 +257,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         return (string)$this->getConnection()->fetchOne(
             $select = $this->getConnection()->select()
-                ->from(['sss' => $this->stateTable, []])
+                ->from(['sss' => $this->stateTable], [])
                 ->where('state = ?', $state)
                 ->limit(1)
                 ->columns(['status'])

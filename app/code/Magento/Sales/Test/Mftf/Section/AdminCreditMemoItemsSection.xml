@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCreditMemoItemsSection">
+        <element name="header" type="text" selector="#creditmemo_item_container span.title"/>
+        <element name="itemName" type="text" selector=".order-creditmemo-tables tbody:nth-of-type({{row}}) .col-product .product-title" parameterized="true"/>
+        <element name="itemSku" type="text" selector=".order-creditmemo-tables tbody:nth-of-type({{row}}) .col-product .product-sku-block" parameterized="true"/>
+        <element name="itemPrice" type="text" selector=".order-creditmemo-tables tbody:nth-of-type({{row}}) .col-price .price" parameterized="true"/>
+        <element name="itemQty" type="text" selector=".order-creditmemo-tables tbody:nth-of-type({{row}}) .col-ordered-qty .qty-table" parameterized="true"/>
+        <element name="itemReturnToStock" type="checkbox" selector=".order-creditmemo-tables tbody:nth-of-type({{row}}) .col-return-to-stock input" parameterized="true"/>
+        <element name="itemQtyToRefund" type="input" selector=".order-creditmemo-tables tbody:nth-of-type({{row}}) .col-refund .qty-input" parameterized="true"/>
+        <element name="itemSubtotal" type="text" selector=".order-creditmemo-tables tbody:nth-of-type({{row}}) .col-subtotal .price" parameterized="true"/>
+        <element name="itemTaxAmount" type="text" selector=".order-creditmemo-tables tbody:nth-of-type({{row}}) .col-tax-amount .price" parameterized="true"/>
+        <element name="itemDiscountAmount" type="text" selector=".order-creditmemo-tables tbody:nth-of-type({{row}}) .col-discont .price" parameterized="true"/>
+        <element name="itemTotal" type="text" selector=".order-creditmemo-tables tbody:nth-of-type({{row}}) .col-total .price" parameterized="true"/>
+        <element name="updateQty" type="button" selector=".order-creditmemo-tables tfoot button[data-ui-id='order-items-update-button']" timeout="30"/>
+        <element name="disabledUpdateQty" type="button" selector=".order-creditmemo-tables tfoot button[data-ui-id='order-items-update-button'].disabled" timeout="30"/>
+        <element name="nameColumn" type="text" selector=".order-creditmemo-tables .product-title"/>
+        <element name="skuColumn" type="text" selector=".order-creditmemo-tables .product-sku-block"/>
+        <element name="childItemQtyToRefund" type="input" selector=".order-creditmemo-tables tr:nth-child({{row}}) td .qty-input" parameterized="true"/>
+    </section>
+</sections>

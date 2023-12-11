@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductAttributeGridSection">
+        <element name="AttributeCode" type="text" selector="//td[contains(text(),'{{var1}}')]" parameterized="true" timeout="30"/>
+        <element name="createNewAttributeBtn" type="button" selector="#add"/>
+        <element name="GridFilterFrontEndLabel" type="input" selector="#attributeGrid_filter_frontend_label"/>
+        <element name="Search" type="button" selector="button[data-action=grid-filter-apply]" timeout="30"/>
+        <element name="ResetFilter" type="button" selector="button[data-action='grid-filter-reset']" timeout="30"/>
+        <element name="FirstRow" type="button" selector="//*[@id='attributeGrid_table']/tbody/tr[1]" timeout="30"/>
+        <element name="FilterByAttributeCode" type="input" selector="#attributeGrid_filter_attribute_code"/>
+        <element name="attributeLabelFilter" type="input" selector="//input[@name='frontend_label']"/>
+        <element name="attributeCodeColumn" type="text" selector="//div[@id='attributeGrid']//td[contains(@class,'col-attr-code col-attribute_code')]"/>
+        <element name="defaultLabelColumn" type="text" selector="//div[@id='attributeGrid']//table[@id='attributeGrid_table']//tbody//td[contains(@class,'col-label col-frontend_label')]"/>
+        <element name="isVisibleColumn" type="text" selector="//div[@id='attributeGrid']//td[contains(@class,'a-center col-is_visible')]"/>
+        <element name="scopeColumn" type="text" selector="//div[@id='attributeGrid']//td[contains(@class,'a-center col-is_global')]"/>
+        <element name="isSearchableColumn" type="text" selector="//div[@id='attributeGrid']//td[contains(@class,'a-center col-is_searchable')]"/>
+        <element name="isComparableColumn" type="text" selector="//div[@id='attributeGrid']//td[contains(@class,'a-center col-is_comparable')]"/>
+        <element name="addSelected" type="button" selector="//*[contains(text(),'Add Selected')]" timeout="30"/>
+        <element name="deleteSpecificColorAttribute" type="button" selector="//input[@value='{{var}}']/../..//button[@class='action- scalable delete delete-option']" parameterized="true"/>
+    </section>
+</sections>
+

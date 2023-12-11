@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="IdentityOfDefaultBillingAndShippingAddressTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Customer checkout"/>
+            <title value="Checking assignment of default billing address after placing an order"/>
+            <description value="In 'Address book' field 'Default Billing Address' should be the same as 'Default Shipping Address'"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-25738"/>
+            <useCaseId value="MAGETWO-62891"/>
+            <group value="checkout"/>
+            <group value="customer"/>
+        </annotations>
+
+        <before>
+            <!-- Create product -->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+        </before>
+
+        <!-- Go to Storefront Homepage -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontHomepage"/>
+
+        <!-- Fill out form for a new user with address -->
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="Simple_US_Customer_NY"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+            <argument name="messageType" value="success"/>
+            <argument name="message" value="Thank you for registering with Main Website Store."/>
+        </actionGroup>
+
+        <!-- Add product to cart -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrlKey" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$createProduct$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <!-- Proceed to Checkout -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutPage"/>
+
+        <!-- Fill Shipment form -->
+        <actionGroup ref="LoggedInUserCheckoutFillingShippingSectionActionGroup" stepKey="checkoutFillingShippingSection" >
+            <argument name="customerVar" value="Simple_US_Customer_NY" />
+            <argument name="customerAddressVar" value="US_Address_NY" />
+        </actionGroup>
+
+        <!-- Fill Cart data -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment" />
+        <checkOption selector="{{StorefrontCheckoutPaymentMethodSection.billingAddressSameAsShipping}}" stepKey="checkBillingAddressSameAsShippingCheckbox"/>
+
+        <!-- Place Order -->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeorder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+        </actionGroup>
+
+        <!-- Go To My Account Page -->
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage" />
+
+        <!-- Assert That Shipping And Billing Address are the same -->
+        <actionGroup ref="AssertThatShippingAndBillingAddressTheSame" stepKey="assertThatShippingAndBillingAddressTheSame"/>
+
+        <after>
+            <!-- Delete created Product -->
+            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
+
+            <!-- Logout Customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+
+            <!-- Delete Customer -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomerFromAdmin">
+                <argument name="customerEmail" value="Simple_US_Customer_NY.email"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCustomersGridFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+    </test>
+</tests>

@@ -6,9 +6,9 @@
 
 namespace Magento\Catalog\Pricing\Price;
 
-use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * As Low As shows minimal value of Tier Prices
@@ -29,35 +29,34 @@ class MinimalTierPriceCalculator implements MinimalPriceCalculatorInterface
     }
 
     /**
-     * Get raw value of "as low as" as a minimal among tier prices
-     * {@inheritdoc}
+     * Get raw value of "as low as" as a minimal among tier prices{@inheritdoc}
+     *
+     * @param SaleableInterface $saleableItem
+     * @return float|null
      */
     public function getValue(SaleableInterface $saleableItem)
     {
-        /** @var TierPrice $price */
-        $price = $saleableItem->getPriceInfo()->getPrice(TierPrice::PRICE_CODE);
-        $tierPriceList = $price->getTierPriceList();
-
-        $tierPrices = [];
-        foreach ($tierPriceList as $tierPrice) {
-            /** @var AmountInterface $price */
-            $price = $tierPrice['price'];
-            $tierPrices[] = $price->getValue();
-        }
-
-        return $tierPrices ? min($tierPrices) : null;
+        return $this->getAmount($saleableItem)?->getValue();
     }
 
     /**
-     * Return calculated amount object that keeps "as low as" value
-     * {@inheritdoc}
+     * Return calculated amount object that keeps "as low as" value{@inheritdoc}
+     *
+     * @param SaleableInterface $saleableItem
+     * @return AmountInterface|null
      */
     public function getAmount(SaleableInterface $saleableItem)
     {
-        $value = $this->getValue($saleableItem);
+        $minPrice = null;
+        /** @var TierPrice $price */
+        $tierPrice = $saleableItem->getPriceInfo()->getPrice(TierPrice::PRICE_CODE);
+        $tierPriceList = $tierPrice->getTierPriceList();
 
-        return $value === null
-            ? null
-            : $this->calculator->getAmount($value, $saleableItem);
+        if (count($tierPriceList)) {
+            usort($tierPriceList, fn ($tier1, $tier2) => $tier1['price']->getValue() <=> $tier2['price']->getValue());
+            $minPrice = array_shift($tierPriceList)['price'];
+        }
+
+        return $minPrice;
     }
 }

@@ -9,8 +9,6 @@ use Magento\Framework\Escaper;
 
 /**
  * Form select element
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Checkboxes extends AbstractElement
 {
@@ -110,83 +108,84 @@ class Checkboxes extends AbstractElement
     }
 
     /**
-     * @param mixed $value
-     * @return string|void
+     * Was given value selected?
+     *
+     * @param string $value
+     * @return string|null
      */
     public function getChecked($value)
     {
-        if ($checked = $this->getValue()) {
-        } elseif ($checked = $this->getData('checked')) {
-        } else {
-            return;
+        $checked = $this->getValue() ?? $this->getData('checked');
+        if (!$checked) {
+            return null;
         }
         if (!is_array($checked)) {
-            $checked = [strval($checked)];
+            $checked = [(string)$checked];
         } else {
             foreach ($checked as $k => $v) {
-                $checked[$k] = strval($v);
+                $checked[$k] = (string)$v;
             }
         }
-        if (in_array(strval($value), $checked)) {
+        if (in_array((string)$value, $checked)) {
             return 'checked';
         }
-        return;
+        return null;
     }
 
     /**
-     * @param mixed $value
-     * @return string
+     * Was value disabled for selection?
+     *
+     * @param string $value
+     * @return string|null
      */
     public function getDisabled($value)
     {
         if ($disabled = $this->getData('disabled')) {
             if (!is_array($disabled)) {
-                $disabled = [strval($disabled)];
+                $disabled = [(string)$disabled];
             } else {
                 foreach ($disabled as $k => $v) {
-                    $disabled[$k] = strval($v);
+                    $disabled[$k] = (string)$v;
                 }
             }
-            if (in_array(strval($value), $disabled)) {
+            if (in_array((string)$value, $disabled)) {
                 return 'disabled';
             }
         }
-        return;
+        return null;
     }
 
     /**
-     * @param mixed $value
-     * @return mixed
+     * Get onclick event handler.
+     *
+     * @param string $value
+     * @return string|null
      */
-    public function getOnclick($value)
+    public function getOnclick($value = '$value')
     {
         if ($onclick = $this->getData('onclick')) {
             return str_replace('$value', $value, $onclick);
         }
-        return;
+        return null;
     }
 
     /**
-     * @param mixed $value
-     * @return mixed
+     * Get onchange event handler.
+     *
+     * @param string $value
+     * @return string|null
      */
-    public function getOnchange($value)
+    public function getOnchange($value = '$value')
     {
         if ($onchange = $this->getData('onchange')) {
             return str_replace('$value', $value, $onchange);
         }
-        return;
+        return null;
     }
 
-    //    public function getName($value)
-    //    {
-    //        if ($name = $this->getData('name')) {
-    //            return str_replace('$value', $value, $name);
-    //        }
-    //        return ;
-    //    }
-
     /**
+     * Render a checkbox.
+     *
      * @param array $option
      * @return string
      */
