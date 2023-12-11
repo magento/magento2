@@ -2058,7 +2058,7 @@ class Product extends AbstractEntity
             if ('datetime' == $attribute->getBackendType()
                 && (
                     in_array($attribute->getAttributeCode(), $this->dateAttrCodes)
-                    || $attribute->getIsUserDefined()
+                    || $attribute->getFrontendInput() === 'date'
                 )
             ) {
                 $attrValue = $this->dateTime->formatDate($attrValue, false);

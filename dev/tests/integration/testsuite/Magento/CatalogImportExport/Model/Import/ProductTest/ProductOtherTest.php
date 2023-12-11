@@ -10,10 +10,13 @@ namespace Magento\CatalogImportExport\Model\Import\ProductTest;
 use Magento\Catalog\Helper\Data as CatalogConfig;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Catalog\Test\Fixture\Attribute as AttributeFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogImportExport\Model\Import\ProductTestBase;
 use Magento\CatalogInventory\Model\StockRegistry;
+use Magento\Directory\Helper\Data as DirectoryData;
 use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\ImportExport\Helper\Data;
@@ -820,5 +823,49 @@ class ProductOtherTest extends ProductTestBase
         $importModel->importSource();
         $simpleProduct = $this->getProductBySku($p1->getSku());
         $this->assertEquals(Product\Visibility::VISIBILITY_NOT_VISIBLE, (int) $simpleProduct->getVisibility());
+    }
+
+    #[
+        Config(DirectoryData::XML_PATH_DEFAULT_TIMEZONE, 'America/Chicago', ScopeConfigInterface::SCOPE_TYPE_DEFAULT),
+        DataFixture(
+            AttributeFixture::class,
+            ['frontend_input' => 'date', 'backend_type' => 'datetime', 'attribute_code' => 'date_attr'],
+            'date_attr'
+        ),
+        DataFixture(
+            AttributeFixture::class,
+            ['frontend_input' => 'datetime', 'backend_type' => 'datetime', 'attribute_code' => 'datetime_attr'],
+            'datetime_attr'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            ['datetime_attr' => '2015-07-19 08:30:00', 'date_attr' => '2017-02-07'],
+            'product'
+        ),
+        DataFixture(
+            CsvFileFixture::class,
+            [
+                'rows' => [
+                    ['sku', 'store_view_code', 'additional_attributes'],
+                    ['$product.sku$', 'default', 'datetime_attr=10/9/23, 1:15 PM,date_attr=12/11/23'],
+                ]
+            ],
+            'file'
+        ),
+    ]
+    public function testImportProductWithDateAndDatetimeAttributes(): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $sku = $fixtures->get('product')->getSku();
+        $pathToFile = $fixtures->get('file')->getAbsolutePath();
+        $product = $this->productRepository->get($sku, storeId: Store::DEFAULT_STORE_ID, forceReload: true);
+        $this->assertEquals('2015-07-19 08:30:00', $product->getDatetimeAttr());
+        $this->assertEquals('2017-02-07 00:00:00', $product->getDateAttr());
+        $importModel = $this->createImportModel($pathToFile);
+        $this->assertErrorsCount(0, $importModel->validateData());
+        $importModel->importData();
+        $product = $this->productRepository->get($sku, storeId: Store::DEFAULT_STORE_ID, forceReload: true);
+        $this->assertEquals('2023-10-09 18:15:00', $product->getDatetimeAttr());
+        $this->assertEquals('2023-12-11 00:00:00', $product->getDateAttr());
     }
 }
