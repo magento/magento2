@@ -305,16 +305,16 @@ class Rule extends AbstractResource
     public function getActiveAttributes()
     {
         $connection = $this->getConnection();
-        $subSelect = $connection->select();
-        $subSelect->reset();
-        $subSelect->from($this->getTable('salesrule_product_attribute'))
-                ->group('attribute_id');
         $select = $connection->select()->from(
-            ['a' => $subSelect],
-            new \Zend_Db_Expr('ea.attribute_code')
+            ['a' => $this->getTable('salesrule_product_attribute')],
+            new \Zend_Db_Expr('DISTINCT ea.attribute_code')
         )->joinInner(
             ['ea' => $this->getTable('eav_attribute')],
             'ea.attribute_id = a.attribute_id',
+            []
+        )->joinInner(
+            ['sr' => $this->getTable('salesrule')],
+            'a.' . $this->getLinkField() . ' = sr.' . $this->getLinkField() . ' AND sr.is_active = 1',
             []
         );
 
