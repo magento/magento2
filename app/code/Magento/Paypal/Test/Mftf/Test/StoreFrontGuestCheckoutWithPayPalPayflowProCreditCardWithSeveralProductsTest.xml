@@ -84,6 +84,7 @@
         <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumberToBeGrabbed"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
         <waitForText selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeSuccessMessage"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order # is: " stepKey="seeOrderMessageWithOrderId"/>
         <actionGroup ref="AssertShoppingCartIsEmptyActionGroup" stepKey="seeEmptyShoppingCartAfterPlacingAnOrder"/>
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
             <argument name="orderId" value="{$grabOrderNumber}"/>
@@ -96,6 +97,6 @@
             <argument name="grandTotal" value="384.00"/>
         </actionGroup>
         <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
-        <see selector="{{AdminOrderCommentsTabSection.orderComment}}" userInput="Authorized amount of $384.00. Transaction ID: &quot;{$grabATransactionID}&quot;" stepKey="seeOrderHistoryNotes"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderComment}}" userInput="Authorized amount of $384.00. Transaction ID: &quot;{$grabATransactionID}&quot;" stepKey="seeOrderHistoryNotes"/>
     </test>
 </tests>
