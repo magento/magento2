@@ -18,17 +18,11 @@ class PayflowProCcVaultAdditionalDataProvider implements AdditionalDataProviderI
     const CC_VAULT_CODE = 'payflowpro_cc_vault';
 
     /**
-     * @var ArrayManager
-     */
-    private $arrayManager;
-
-    /**
      * @param ArrayManager $arrayManager
      */
     public function __construct(
         ArrayManager $arrayManager
     ) {
-        $this->arrayManager = $arrayManager;
     }
 
     /**

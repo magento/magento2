@@ -16,19 +16,12 @@ use Magento\Paypal\Model\Config;
  */
 class PayflowProAdditionalDataProvider implements AdditionalDataProviderInterface
 {
-
-    /**
-     * @var ArrayManager
-     */
-    private $arrayManager;
-
     /**
      * @param ArrayManager $arrayManager
      */
     public function __construct(
         ArrayManager $arrayManager
     ) {
-        $this->arrayManager = $arrayManager;
     }
 
     /**

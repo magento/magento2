@@ -20,7 +20,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 abstract class AbstractResource
 {
     /**
-     * @var Json
+     * @var Json|null
      * @since 101.0.0
      */
     protected $serializer;

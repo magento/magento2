@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Asset;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
@@ -18,7 +19,7 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Source
+class Source implements ResetAfterRequestInterface
 {
     /**
      * @var \Magento\Framework\Filesystem
@@ -62,7 +63,7 @@ class Source
     private $readFactory;
 
     /**
-     * @var ThemeProviderInterface
+     * @var ThemeProviderInterface|null
      */
     private $themeProvider;
 
@@ -92,6 +93,14 @@ class Source
         $this->fallback = $fallback;
         $this->themeList = $themeList;
         $this->chainFactory = $chainFactory;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->themeProvider = null;
     }
 
     /**

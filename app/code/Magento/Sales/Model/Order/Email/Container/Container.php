@@ -6,6 +6,7 @@
 namespace Magento\Sales\Model\Order\Email\Container;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -15,7 +16,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @api
  * @since 100.0.2
  */
-abstract class Container implements IdentityInterface
+abstract class Container implements IdentityInterface, ResetAfterRequestInterface
 {
     /**
      * @var StoreManagerInterface
@@ -137,5 +138,14 @@ abstract class Container implements IdentityInterface
     public function getCustomerEmail()
     {
         return $this->customerEmail;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->customerEmail = null;
+        $this->customerName = null;
     }
 }

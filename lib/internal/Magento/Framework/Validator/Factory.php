@@ -7,6 +7,7 @@
 namespace Magento\Framework\Validator;
 
 use Magento\Framework\Module\Dir\Reader;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Translate\Adapter;
@@ -16,7 +17,7 @@ use Magento\Framework\Cache\FrontendInterface;
 /**
  * Factory for \Magento\Framework\Validator and \Magento\Framework\Validator\Builder.
  */
-class Factory
+class Factory implements ResetAfterRequestInterface
 {
     /**
      * cache key
@@ -29,7 +30,7 @@ class Factory
     /**
      * @var ObjectManagerInterface
      */
-    protected $_objectManager;
+    protected readonly ObjectManagerInterface $_objectManager;
 
     /**
      * Validator config files
@@ -46,7 +47,7 @@ class Factory
     /**
      * @var Reader
      */
-    private $moduleReader;
+    private readonly Reader $moduleReader;
 
     /**
      * Initialize dependencies
@@ -63,6 +64,12 @@ class Factory
     ) {
         $this->_objectManager = $objectManager;
         $this->moduleReader = $moduleReader;
+    }
+
+    public function _resetState(): void
+    {
+        $this->_configFiles = null;
+        $this->isDefaultTranslatorInitialized = false;
     }
 
     /**
