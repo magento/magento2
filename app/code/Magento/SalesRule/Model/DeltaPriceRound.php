@@ -7,12 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Model;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Round price and save rounding operation delta.
  */
-class DeltaPriceRound
+class DeltaPriceRound implements ResetAfterRequestInterface
 {
     /**
      * @var PriceCurrencyInterface
@@ -20,7 +21,7 @@ class DeltaPriceRound
     private $priceCurrency;
 
     /**
-     * @var float[]
+     * @var float[]|null
      */
     private $roundingDeltas;
 
@@ -30,6 +31,11 @@ class DeltaPriceRound
     public function __construct(PriceCurrencyInterface $priceCurrency)
     {
         $this->priceCurrency = $priceCurrency;
+    }
+
+    public function _resetState(): void
+    {
+        $this->roundingDeltas = null;
     }
 
     /**

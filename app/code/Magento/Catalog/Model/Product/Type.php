@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product\Type\Price\Factory as PriceFactory;
 use Magento\Catalog\Model\Product\Type\Simple;
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\PriceInfo\Factory as PriceInfoFactory;
 
 /**
@@ -21,7 +22,7 @@ use Magento\Framework\Pricing\PriceInfo\Factory as PriceInfoFactory;
  * @api
  * @since 100.0.2
  */
-class Type implements OptionSourceInterface
+class Type implements OptionSourceInterface, ResetAfterRequestInterface
 {
     const TYPE_SIMPLE = 'simple';
 
@@ -57,7 +58,7 @@ class Type implements OptionSourceInterface
     /**
      * Price models
      *
-     * @var array
+     * @var array|null|Price
      */
     protected $_priceModels;
 
@@ -108,6 +109,14 @@ class Type implements OptionSourceInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_priceModels = null;
+    }
+
+    /**
      * Factory to product singleton product type instances
      *
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
@@ -136,7 +145,7 @@ class Type implements OptionSourceInterface
      * Product type price model factory
      *
      * @param string $productType
-     * @return \Magento\Catalog\Model\Product\Type\Price
+     * @return Price
      */
     public function priceFactory($productType)
     {
