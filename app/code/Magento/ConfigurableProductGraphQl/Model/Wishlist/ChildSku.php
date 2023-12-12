@@ -42,7 +42,7 @@ class ChildSku implements ResolverInterface
         $superAttribute = $optionsArray['super_attribute'];
         $totalSelected = array_filter($superAttribute);
 
-        if(count($totalSelected) > 0) {
+        if (count($totalSelected) > 0) {
             $optionProduct = $product->getCustomOption('simple_product')->getProduct();
             return $optionProduct->getSku();
         } else {
