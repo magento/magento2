@@ -31,7 +31,7 @@ Extension developers can interact with the Magento_NewRelicReporting module. For
 
 ## Additional information
 
-[Learn more about New Relic Reporting](https://docs.magento.com/user-guide/reports/new-relic-reporting.html).
+[Learn more about New Relic Reporting](https://experienceleague.adobe.com/docs/commerce-admin/start/reporting/new-relic-reporting.html).
 
 ### Console commands
 

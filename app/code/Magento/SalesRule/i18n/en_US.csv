@@ -99,7 +99,8 @@ FOUND,FOUND
 "NOT FOUND","NOT FOUND"
 "If an item is %1 in the cart with %2 of these conditions true:","If an item is %1 in the cart with %2 of these conditions true:"
 "total quantity","total quantity"
-"total amount","total amount"
+"total amount (excl. tax)","total amount (excl. tax)"
+"total amount (incl. tax)","total amount (incl. tax)"
 is,is
 "is not","is not"
 "equals or greater than","equals or greater than"
