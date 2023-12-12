@@ -34,7 +34,7 @@ class CheckAvailability implements ResolverInterface
     /**
      * Product type code
      */
-    private const PRODUCT_TYPE = "bundle";
+    private const PRODUCT_TYPE_BUNDLE = "bundle";
 
     /**
      * @var StockStatusRepositoryInterface
@@ -76,13 +76,13 @@ class CheckAvailability implements ResolverInterface
         $requestedQty = 0;
         $previousQty = 0;
 
-        if ($cartItem->getProductType() == self::PRODUCT_TYPE) {
+        if ($cartItem->getProductType() == self::PRODUCT_TYPE_BUNDLE) {
             $qtyOptions = $cartItem->getQtyOptions();
-            $requestedQty = $cartItem->getQtyToAdd() ? $cartItem->getQtyToAdd() : $cartItem->getQty();
-            $previousQty = $cartItem->getPreviousQty() ? $cartItem->getPreviousQty() : 0;
+            $requestedQty = $cartItem->getQtyToAdd() ?? $cartItem->getQty();
+            $previousQty = $cartItem->getPreviousQty() ?? 0;
             $totalReqQty = $previousQty + $requestedQty;
-            foreach($qtyOptions as $qtyOption)
-            {
+
+            foreach($qtyOptions as $qtyOption) {
                 $productId = (int) $qtyOption->getProductId();
                 $requiredItemQty = (float) $qtyOption->getValue();
                 if ($totalReqQty) {
@@ -96,9 +96,9 @@ class CheckAvailability implements ResolverInterface
         } else {
             foreach ($cartItem->getQuote()->getItems() as $item) {
 
-                if($item->getItemId() == $cartItem->getItemId() && $item->getQtyToAdd()) {
-                    $requestedQty = (float)$item->getQtyToAdd();
-                    $previousQty = $item->getPreviousQty() ? (float)$item->getPreviousQty() : 0;
+                if ($item->getItemId() == $cartItem->getItemId()) {
+                    $requestedQty = $item->getQtyToAdd() ?? $item->getQty();
+                    $previousQty = $item->getPreviousQty() ?? 0;
                 }
             }
             $requiredItemQty =  $requestedQty + $previousQty;
