@@ -44,11 +44,15 @@ class ThemeProvider implements ThemeProviderInterface, ResetAfterRequestInterfac
 
     /**
      * @var DeploymentConfig
+     *
+     * @SuppressWarnings(PHPCS)
      */
     private readonly DeploymentConfig $deploymentConfig;
 
     /**
      * @var Json
+     *
+     * @SuppressWarnings(PHPCS)
      */
     private readonly Json $serializer;
 

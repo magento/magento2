@@ -14,11 +14,15 @@ class JwtUserContext implements UserContextInterface
 {
     /**
      * @var int|null
+     *
+     * @SuppressWarnings(PHPCS)
      */
     private readonly ?int $userId;
 
     /**
      * @var int|null
+     *
+     * @SuppressWarnings(PHPCS)
      */
     private readonly ?int $userType;
 

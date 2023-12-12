@@ -18,6 +18,8 @@ class CustomizableOptionsDataProvider implements BuyRequestDataProviderInterface
 {
     /**
      * @var ArrayManagerFactory
+     *
+     * @SuppressWarnings(PHPCS)
      */
     private readonly ArrayManagerFactory $arrayManagerFactory;
 
@@ -26,7 +28,8 @@ class CustomizableOptionsDataProvider implements BuyRequestDataProviderInterface
      * @param ArrayManagerFactory|null $arrayManagerFactory
      */
     public function __construct(
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        ArrayManagerFactory $arrayManagerFactory = null
     ) {
         $this->arrayManagerFactory = $arrayManagerFactory
             ?? ObjectManager::getInstance()->get(ArrayManagerFactory::class);

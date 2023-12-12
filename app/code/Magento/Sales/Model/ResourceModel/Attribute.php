@@ -50,6 +50,8 @@ class Attribute implements ResetAfterRequestInterface
     }
 
     /**
+     * Retrieve connection
+     *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected function getConnection()

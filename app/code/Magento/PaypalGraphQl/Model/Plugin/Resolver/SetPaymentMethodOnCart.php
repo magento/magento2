@@ -29,7 +29,10 @@ class SetPaymentMethodOnCart
 
     private const PATH_PAYMENT_METHOD_DATA = 'input/payment_method';
 
-    private $allowedPaymentMethodCodes = [];
+    /**
+     * @var array $allowedPaymentMethodCodes
+     */
+    private array $allowedPaymentMethodCodes = [];
 
     /**
      * @var CheckoutFactory

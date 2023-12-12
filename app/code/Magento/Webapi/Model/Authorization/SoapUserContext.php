@@ -22,11 +22,15 @@ class SoapUserContext implements UserContextInterface, ResetAfterRequestInterfac
 {
     /**
      * @var Request
+     *
+     * @SuppressWarnings(PHPCS)
      */
     private readonly Request $request;
 
     /**
      * @var Token
+     *
+     * @SuppressWarnings(PHPCS)
      */
     private readonly TokenFactory $tokenFactory;
 
@@ -47,11 +51,15 @@ class SoapUserContext implements UserContextInterface, ResetAfterRequestInterfac
 
     /**
      * @var IntegrationServiceInterface
+     *
+     * @SuppressWarnings(PHPCS)
      */
     private readonly IntegrationServiceInterface $integrationService;
 
     /**
      * @var BearerTokenValidator
+     *
+     * @SuppressWarnings(PHPCS)
      */
     private readonly BearerTokenValidator $bearerTokenValidator;
 

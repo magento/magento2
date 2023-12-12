@@ -61,11 +61,15 @@ class TokenUserContext implements UserContextInterface, ResetAfterRequestInterfa
 
     /**
      * @var UserTokenReaderInterface
+     *
+     * @SuppressWarnings(PHPCS)
      */
     private readonly UserTokenReaderInterface $userTokenReader;
 
     /**
      * @var UserTokenValidatorInterface
+     *
+     * @SuppressWarnings(PHPCS)
      */
     private readonly UserTokenValidatorInterface $userTokenValidator;
 

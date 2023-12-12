@@ -19,9 +19,8 @@ class PayflowProAdditionalDataProvider implements AdditionalDataProviderInterfac
     /**
      * @param ArrayManager $arrayManager
      */
-    public function __construct(
-        ArrayManager $arrayManager
-    ) {
+    public function __construct(ArrayManager $arrayManager)
+    {
     }
 
     /**

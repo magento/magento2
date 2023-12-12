@@ -19,6 +19,8 @@ class BundleDataProvider implements BuyRequestDataProviderInterface
 {
     /**
      * @var ArrayManagerFactory
+     *
+     * @SuppressWarnings(PHPCS)
      */
     private readonly ArrayManagerFactory $arrayManagerFactory;
 
@@ -33,7 +35,6 @@ class BundleDataProvider implements BuyRequestDataProviderInterface
         $this->arrayManagerFactory = $arrayManagerFactory
             ?? ObjectManager::getInstance()->get(ArrayManagerFactory::class);
     }
-
 
     /**
      * @inheritdoc

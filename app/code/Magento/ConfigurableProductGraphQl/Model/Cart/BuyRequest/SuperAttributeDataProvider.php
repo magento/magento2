@@ -30,6 +30,8 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
 {
     /**
      * @var ArrayManagerFactory
+     *
+     * @SuppressWarnings(PHPCS)
      */
     private readonly ArrayManagerFactory $arrayManagerFactory;
 
