@@ -159,4 +159,22 @@
         <data key="tax_postcode">*</data>
         <data key="rate">8.2500</data>
     </entity>
+    <entity name="Product_Rate_CA" type="taxRate">
+        <data key="code">Product Rate CA</data>
+        <data key="tax_region">CA</data>
+        <data key="tax_region_id">12</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_country">United States</data>
+        <data key="tax_postcode">*</data>
+        <data key="rate">10.0000</data>
+    </entity>
+    <entity name="Shipping_Rate_CA" type="taxRate">
+        <data key="code">Shipping Rate CA</data>
+        <data key="tax_region">CA</data>
+        <data key="tax_region_id">12</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_country">United States</data>
+        <data key="tax_postcode">*</data>
+        <data key="rate">5.0000</data>
+    </entity>
 </entities>
