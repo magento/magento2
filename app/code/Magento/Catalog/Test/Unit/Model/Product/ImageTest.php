@@ -523,7 +523,8 @@ class ImageTest extends TestCase
      * @return void
      * @throws FileSystemException
      */
-    public function testClearCacheWithUnableToDeleteDirectory(): void {
+    public function testClearCacheWithUnableToDeleteDirectory(): void
+    {
         $this->mediaDirectory->expects($this->once())
             ->method('delete')
             ->willThrowException(new FileSystemException(__('Cannot delete non-empty dir.')));

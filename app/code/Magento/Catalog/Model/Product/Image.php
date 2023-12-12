@@ -849,8 +849,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
         // exceptions, allowing the process to continue smoothly.
         try {
             $this->_mediaDirectory->delete($directory);
-        } // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
-        catch (FileSystemException $e) {
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+        } catch (FileSystemException $e) {
         }
 
         $this->_coreFileStorageDatabase->deleteFolder($this->_mediaDirectory->getAbsolutePath($directory));
