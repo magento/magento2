@@ -61,6 +61,8 @@ class IdentifierForSave implements IdentifierInterface
         if (!empty($query)) {
             ksort($query);
             $query = http_build_query($query);
+        } else {
+            $query = '';
         }
         return [$baseUrl, $query];
     }
