@@ -46,7 +46,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Default quality value (for JPEG images only).
      *
      * @var int
-     * @deprecated 103.0.1 use config setting with path self::XML_PATH_JPEG_QUALITY
+     * @deprecated 103.0.1
+     * @see Use config setting with path self::XML_PATH_JPEG_QUALITY
      */
     protected $_quality = null;
 
@@ -102,7 +103,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var int
-     * @deprecated unused
+     * @deprecated
+     * @see Not used anymore
      */
     protected $_angle;
 
@@ -308,7 +310,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $quality
      * @return $this
-     * @deprecated 103.0.1 use config setting with path self::XML_PATH_JPEG_QUALITY
+     * @deprecated 103.0.1
+     * @see Use config setting with path self::XML_PATH_JPEG_QUALITY
      */
     public function setQuality($quality)
     {
@@ -458,6 +461,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Get new file
      *
      * @deprecated 102.0.0
+     * @see Image::getBaseFile
      * @return bool|string
      */
     public function getNewFile()
@@ -837,10 +841,15 @@ class Image extends \Magento\Framework\Model\AbstractModel
     public function clearCache()
     {
         $directory = $this->_catalogProductMediaConfig->getBaseMediaPath() . '/cache';
+
+        // If the directory cannot be deleted, it is likely because it is not empty anymore due to lazy loading from
+        // the storefront triggering new cache file creation.
+        // This is expected behavior and is not a cause for concern. Deletable files were deleted as expected.
+        // To avoid errors on the storefront, we wrap the deletion in a try/catch block and silently handle any
+        // exceptions, allowing the process to continue smoothly.
         try {
             $this->_mediaDirectory->delete($directory);
-        }
-        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+        } // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         catch (FileSystemException $e) {
         }
 
