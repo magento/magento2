@@ -70,7 +70,7 @@ class Identifier implements IdentifierInterface
      */
     private function reconstructUrl($url)
     {
-        $baseUrl = strtok($url, '?');
+        $baseUrl = strtok((string)$url, '?');
         $query = $this->request->getQuery()->toArray();
         if (!empty($query)) {
             ksort($query);
