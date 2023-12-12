@@ -60,4 +60,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="is_guest_checkout_enabled" xsi:type="string">checkout/options/guest_checkout</item>
+                <item name="is_one_page_checkout_enabled" xsi:type="string">checkout/options/onepage_checkout_enabled</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
