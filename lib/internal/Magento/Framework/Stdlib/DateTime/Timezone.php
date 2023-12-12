@@ -325,8 +325,7 @@ class Timezone implements TimezoneInterface
         if ($pattern) {
             $formatter->setPattern($pattern);
         }
-
-        return $formatter->format($date);
+        return str_replace(" "," ",$formatter->format($date));
     }
 
     /**
