@@ -37,7 +37,7 @@ class ChildSku implements ResolverInterface
         /** @var Product $product */
         $product = $value['model'];
 
-        /** to handle no child sku selected at add to whishlist time */
+        /** to handle no child sku selected at add to wishlist time */
         $optionsArray = json_decode($product->getCustomOption('info_buyRequest')->getValue(), true);
         $superAttribute = $optionsArray['super_attribute'];
         $totalSelected = array_filter($superAttribute);
