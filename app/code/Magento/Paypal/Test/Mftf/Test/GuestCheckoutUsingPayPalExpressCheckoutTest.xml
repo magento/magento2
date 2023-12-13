@@ -30,19 +30,6 @@
             <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
                 <argument name="credentials" value="SamplePaypalExpressConfig2"/>
             </actionGroup>
-
-
-            <!-- Deleting Tax zones and rate for Product Tax -->
-            <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToStoresTaxZonesAndRatesPage">
-                <argument name="menuUiId" value="{{AdminMenuStores.dataUiId}}"/>
-                <argument name="submenuUiId" value="{{AdminMenuStoresTaxZonesAndRates.dataUiId}}"/>
-            </actionGroup>
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteProductTaxRule1">
-                <argument name="name" value="{{SimpleTaxTexas.state}}-{{SimpleTaxTexas.rate}}"/>
-                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
-            </actionGroup>
-
-
             <!-- Create Tax Rule & Tax Rate -->
             <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleForPage"/>
             <actionGroup ref="AdminAddTaxRuleActionGroup" stepKey="addTaxRulePageForProductTax">
