@@ -109,8 +109,6 @@
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openFirstOrderPage">
             <argument name="orderId" value="{$grabOrderNumber}"/>
         </actionGroup>
-        <waitForElementVisible selector="{{AdminOrderPaymentInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="waitForTransactionIDFieldToBeAppeared"/>
-        <grabTextFrom selector="{{AdminOrderPaymentInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabATransactionID"/>
         <!-- Check status -->
         <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeAdminOrderStatus">
             <argument name="status" value="Processing"/>
