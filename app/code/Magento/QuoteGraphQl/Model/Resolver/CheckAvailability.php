@@ -41,7 +41,6 @@ class CheckAvailability implements ResolverInterface
      */
     private $stockStatusRepository;
 
-
     /**
      * CheckAvailability constructor
      *
@@ -68,6 +67,8 @@ class CheckAvailability implements ResolverInterface
     }
 
     /**
+     * Check item status available or unavailable
+     *
      * @param Item $cartItem
      * @return bool
      */
@@ -76,31 +77,31 @@ class CheckAvailability implements ResolverInterface
         $requestedQty = 0;
         $previousQty = 0;
 
+        if (!$cartItem->getQuote()->getItems()) {
+            return false;
+        }
+
+        foreach ($cartItem->getQuote()->getItems() as $item) {
+            if ($item->getItemId() == $cartItem->getItemId()) {
+                $requestedQty = $item->getQtyToAdd() ?? $item->getQty();
+                $previousQty = $item->getPreviousQty() ?? 0;
+            }
+        }
+
         if ($cartItem->getProductType() == self::PRODUCT_TYPE_BUNDLE) {
             $qtyOptions = $cartItem->getQtyOptions();
-            $requestedQty = $cartItem->getQtyToAdd() ?? $cartItem->getQty();
-            $previousQty = $cartItem->getPreviousQty() ?? 0;
-            $totalReqQty = $previousQty + $requestedQty;
-
-            foreach($qtyOptions as $qtyOption) {
+            $totalRequestedQty = $previousQty + $requestedQty;
+            foreach ($qtyOptions as $qtyOption) {
                 $productId = (int) $qtyOption->getProductId();
                 $requiredItemQty = (float) $qtyOption->getValue();
-                if ($totalReqQty) {
-                    $requiredItemQty = $requiredItemQty * $totalReqQty;
+                if ($totalRequestedQty) {
+                    $requiredItemQty = $requiredItemQty * $totalRequestedQty;
                 }
-
                 if ($this->getProductStockStatus($productId, $requiredItemQty)) {
                     return false;
                 }
             }
         } else {
-            foreach ($cartItem->getQuote()->getItems() as $item) {
-
-                if ($item->getItemId() == $cartItem->getItemId()) {
-                    $requestedQty = $item->getQtyToAdd() ?? $item->getQty();
-                    $previousQty = $item->getPreviousQty() ?? 0;
-                }
-            }
             $requiredItemQty =  $requestedQty + $previousQty;
             $productId = (int) $cartItem->getProduct()->getId();
             if ($this->getProductStockStatus($productId, $requiredItemQty)) {
@@ -111,6 +112,8 @@ class CheckAvailability implements ResolverInterface
     }
 
     /**
+     * Get product qty
+     *
      * @param int $productId
      * @param float $requiredQuantity
      * @return bool
