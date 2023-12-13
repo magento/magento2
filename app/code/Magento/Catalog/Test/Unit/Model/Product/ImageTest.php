@@ -517,8 +517,7 @@ class ImageTest extends TestCase
     /**
      * This test verifies that if the cache directory cannot be deleted because it is no longer empty (due to newly
      * cached files being created after the old ones were deleted), the cache clean method should handle the exception
-     * and complete the clean. This is expected behavior and is not a cause for concern.
-     * The test asserts that the cache cleaning process completes successfully even if the directory cannot be deleted.
+     * and complete the clean successfully even if the directory cannot be deleted.
      *
      * @return void
      * @throws FileSystemException

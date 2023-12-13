@@ -845,8 +845,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
         // If the directory cannot be deleted, it is likely because it is not empty anymore due to lazy loading from
         // the storefront triggering new cache file creation.
         // This is expected behavior and is not a cause for concern. Deletable files were deleted as expected.
-        // To avoid errors on the storefront, we wrap the deletion in a try/catch block and silently handle any
-        // exceptions, allowing the process to continue smoothly.
         try {
             $this->_mediaDirectory->delete($directory);
             // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
