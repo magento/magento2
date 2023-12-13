@@ -60,6 +60,10 @@ class StockStatusTest extends GraphQlAbstract
      */
     private $productRepository;
 
+    private const SKU = 'simple_10';
+    private const PARENT_SKU_BUNDLE = 'parent_bundle';
+    private const PARENT_SKU_CONFIGURABLE = 'parent_configurable';
+
     /**
      * @inheritDoc
      */
@@ -89,16 +93,15 @@ class StockStatusTest extends GraphQlAbstract
     }
 
     #[
-        DataFixture(ProductFixture::class, ['sku' => 'spl-prod', 'price' => 100.00], as: 'product'),
+        DataFixture(ProductFixture::class, ['sku' => self::SKU, 'price' => 100.00], as: 'product'),
         DataFixture(GuestCartFixture::class, as: 'cart'),
         DataFixture(AddProductToCart::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 100]),
         DataFixture(QuoteMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask')
     ]
     public function testStockStatusUnavailableAddSimpleProduct(): void
     {
-        $sku = 'spl-prod';
         $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
-        $query = $this->mutationAddSimpleProduct($maskedQuoteId, $sku, 100);
+        $query = $this->mutationAddSimpleProduct($maskedQuoteId, self::SKU, 1);
         $response = $this->graphQlMutation($query);
         $responseDataObject = new DataObject($response);
 
@@ -145,7 +148,7 @@ class StockStatusTest extends GraphQlAbstract
             'required' => 1,'product_links' => ['$link$']], 'option'),
         DataFixture(
             BundleProductFixture::class,
-            ['sku' => 'bundle-prod1', 'price' => 90, '_options' => ['$option$']],
+            ['sku' => self::PARENT_SKU_BUNDLE, 'price' => 90, '_options' => ['$option$']],
             as:'bundleProduct'
         ),
         DataFixture(GuestCartFixture::class, as: 'cart'),
@@ -162,8 +165,7 @@ class StockStatusTest extends GraphQlAbstract
     ]
     public function testStockStatusUnavailableAddBundleProduct(): void
     {
-        $sku = 'bundle-prod1';
-        $product = $this->productRepository->get($sku);
+        $product = $this->productRepository->get(self::PARENT_SKU_BUNDLE);
 
         /** @var $typeInstance \Magento\Bundle\Model\Product\Type */
         $typeInstance = $product->getTypeInstance();
@@ -178,7 +180,7 @@ class StockStatusTest extends GraphQlAbstract
         $bundleOptionIdV2 = $this->generateBundleOptionIdV2((int) $optionId, (int) $selectionId, 1);
         $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
 
-        $query = $this->mutationAddBundleProduct($maskedQuoteId, $sku, $bundleOptionIdV2, 100);
+        $query = $this->mutationAddBundleProduct($maskedQuoteId, self::PARENT_SKU_BUNDLE, $bundleOptionIdV2);
         $response = $this->graphQlMutation($query);
         $responseDataObject = new DataObject($response);
 
@@ -216,6 +218,36 @@ class StockStatusTest extends GraphQlAbstract
         self::assertEquals('unavailable', $responseDataObject->getData('cart/items/0/status'));
     }
 
+    #[
+        DataFixture(ProductFixture::class, ['sku' => self::SKU], as: 'product'),
+        DataFixture(AttributeFixture::class, as: 'attribute'),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            ['sku' => self::PARENT_SKU_CONFIGURABLE, '_options' => ['$attribute$'], '_links' => ['$product$']],
+            'configurable_product'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(QuoteMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+        DataFixture(
+            AddConfigurableProductToCartFixture::class,
+            [
+                'cart_id' => '$cart.id$',
+                'product_id' => '$configurable_product.id$',
+                'child_product_id' => '$product.id$',
+                'qty' => 100
+            ],
+        )
+    ]
+    public function testStockStatusUnavailableAddConfigurableProduct(): void
+    {
+        $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
+        $query = $this->mutationAddConfigurableProduct($maskedQuoteId, self::SKU, self::PARENT_SKU_CONFIGURABLE);
+        $response = $this->graphQlMutation($query);
+        $responseDataObject = new DataObject($response);
+
+        self::assertEquals('unavailable', $responseDataObject->getData('addProductsToCart/cart/items/0/status'));
+    }
+
     /**
      * @param string $cartId
      * @return string
@@ -234,7 +266,7 @@ class StockStatusTest extends GraphQlAbstract
 QUERY;
     }
 
-    private function mutationAddSimpleProduct(string $cartId, string $sku, int $qty): string
+    private function mutationAddSimpleProduct(string $cartId, string $sku, int $qty = 1): string
     {
         return <<<QUERY
 mutation {
@@ -256,7 +288,7 @@ mutation {
 QUERY;
     }
 
-    private function mutationAddBundleProduct(string $cartId, string $sku, string $bundleOptionIdV2, int $qty): string
+    private function mutationAddBundleProduct(string $cartId, string $sku, string $bundleOptionIdV2, int $qty = 1): string
     {
         return <<<QUERY
 mutation {
@@ -269,6 +301,32 @@ mutation {
       selected_options: [
         "{$bundleOptionIdV2}"
       ]
+    }]
+  ) {
+    cart {
+      items {
+        status
+        product {
+          sku
+        }
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    private function mutationAddConfigurableProduct(string $cartId, string $sku, string $parentSku, int $qty = 1): string
+    {
+        return <<<QUERY
+mutation {
+  addProductsToCart(
+    cartId: "{$cartId}",
+    cartItems: [
+    {
+      sku: "{$sku}"
+      quantity: $qty
+      parent_sku: "{$parentSku}"
     }]
   ) {
     cart {
