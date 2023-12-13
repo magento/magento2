@@ -53,7 +53,7 @@ class UserExpirationTest extends TestCase
         );
         $userExpirationFactory = Bootstrap::getObjectManager()->get(UserExpirationFactory::class);
         $userExpiration = $userExpirationFactory->create();
-        $userExpiration->setExpiresAt($expireDate);
+        $userExpiration->setExpiresAt($initialExpirationDate->format('Y-m-d H:i:s'));
         $userExpiration->setUserId($this->getUserId());
         $this->userExpirationResource->save($userExpiration);
         $loadedUserExpiration = $userExpirationFactory->create();
