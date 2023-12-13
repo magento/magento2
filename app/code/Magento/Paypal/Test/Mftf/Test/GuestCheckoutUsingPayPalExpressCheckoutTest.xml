@@ -113,7 +113,7 @@
         <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeAdminOrderStatus">
             <argument name="status" value="Processing"/>
         </actionGroup>
-        <waitForText selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$10.80" stepKey="checkGrandTotal"/>
+        <waitForText selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$10.83" stepKey="checkGrandTotal"/>
         <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
         <waitForText selector="{{AdminOrderCommentsTabSection.orderComment}}" userInput="Authorized amount of $10.83. Transaction ID: &quot;{$grabATransactionID}&quot;" stepKey="seeOrderHistoryNotes"/>
     </test>
