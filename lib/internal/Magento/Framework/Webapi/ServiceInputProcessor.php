@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Webapi;
 
+use Laminas\Code\Reflection\ClassReflection;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -22,9 +23,8 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
-use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Webapi\CustomAttribute\PreprocessorInterface;
-use Laminas\Code\Reflection\ClassReflection;
+use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Webapi\Validator\IOLimit\DefaultPageSizeSetter;
 use Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface;
 
@@ -539,6 +539,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
 
         if (!$isArrayType) {
             return $this->_createFromArray($type, $data);
+        } elseif (!is_array($data)) {
+            throw new InvalidArgumentException(__('Not all parameters valid.'));
         }
 
         $result = is_array($data) ? [] : null;
