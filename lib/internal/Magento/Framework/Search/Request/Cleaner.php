@@ -8,8 +8,8 @@ namespace Magento\Framework\Search\Request;
 
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
-use Magento\Framework\Search\Request\Aggregation\StatusInterface as AggregationStatus;
 use Magento\Framework\Phrase;
+use Magento\Framework\Search\Request\Aggregation\StatusInterface as AggregationStatus;
 
 /**
  * @api

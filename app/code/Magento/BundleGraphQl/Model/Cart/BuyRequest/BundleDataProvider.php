@@ -25,6 +25,7 @@ class BundleDataProvider implements BuyRequestDataProviderInterface
     /**
      * @param ArrayManager $arrayManager @deprecated @see $arrayManagerFactory
      * @param ArrayManagerFactory|null $arrayManagerFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ArrayManager $arrayManager,
@@ -33,7 +34,6 @@ class BundleDataProvider implements BuyRequestDataProviderInterface
         $this->arrayManagerFactory = $arrayManagerFactory
             ?? ObjectManager::getInstance()->get(ArrayManagerFactory::class);
     }
-
 
     /**
      * @inheritdoc

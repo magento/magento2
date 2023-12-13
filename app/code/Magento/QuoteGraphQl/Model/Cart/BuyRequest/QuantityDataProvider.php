@@ -25,6 +25,7 @@ class QuantityDataProvider implements BuyRequestDataProviderInterface
     /**
      * @param ArrayManager $arrayManager @deprecated @see $arrayManagerFactory
      * @param ArrayManagerFactory|null $arrayManagerFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ArrayManager $arrayManager,

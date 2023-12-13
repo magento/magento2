@@ -7,12 +7,12 @@
 namespace Magento\Framework\Module\ModuleList;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Module\Declaration\Converter\Dom;
 use Magento\Framework\Xml\Parser;
 use Magento\Framework\Xml\ParserFactory;
-use Magento\Framework\Component\ComponentRegistrarInterface;
-use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Loader of module list information from the filesystem
@@ -29,8 +29,6 @@ class Loader
     private $converter;
 
     /**
-     * Parser
-     *
      * @var \Magento\Framework\Xml\Parser
      * @deprecated
      * @see $parserFactory
@@ -38,8 +36,6 @@ class Loader
     private $parser;
 
     /**
-     * Module registry
-     *
      * @var ComponentRegistrarInterface
      */
     private $moduleRegistry;

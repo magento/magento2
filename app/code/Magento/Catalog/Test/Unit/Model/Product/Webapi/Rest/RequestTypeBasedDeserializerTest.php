@@ -19,6 +19,9 @@ use Magento\Framework\Xml\Parser as ParserXml;
 use Magento\Framework\Xml\ParserFactory as ParserXmlFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var RequestTypeBasedDeserializer */

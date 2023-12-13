@@ -18,6 +18,8 @@ class PayflowProAdditionalDataProvider implements AdditionalDataProviderInterfac
 {
     /**
      * @param ArrayManager $arrayManager
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ArrayManager $arrayManager

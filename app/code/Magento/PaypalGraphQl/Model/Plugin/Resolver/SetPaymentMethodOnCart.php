@@ -9,14 +9,14 @@ namespace Magento\PaypalGraphQl\Model\Plugin\Resolver;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\Stdlib\ArrayManagerFactory;
 use Magento\Paypal\Model\Express\Checkout\Factory as CheckoutFactory;
-use Magento\Framework\Stdlib\ArrayManager;
 use Magento\PaypalGraphQl\Model\Provider\Checkout as CheckoutProvider;
 use Magento\PaypalGraphQl\Model\Provider\Config as ConfigProvider;
 
@@ -58,6 +58,7 @@ class SetPaymentMethodOnCart
      * @param ConfigProvider $configProvider
      * @param array $allowedPaymentMethodCodes
      * @param ArrayManagerFactory|null $arrayManagerFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         CheckoutFactory $checkoutFactory,

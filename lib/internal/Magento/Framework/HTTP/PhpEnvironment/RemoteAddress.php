@@ -41,6 +41,8 @@ class RemoteAddress implements ResetAfterRequestInterface
     private readonly ?array $trustedProxies;
 
     /**
+     * Constructor
+     *
      * @param RequestInterface $httpRequest
      * @param array $alternativeHeaders
      * @param string[]|null $trustedProxies
@@ -55,6 +57,9 @@ class RemoteAddress implements ResetAfterRequestInterface
         $this->trustedProxies = $trustedProxies;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function _resetState(): void
     {
         $this->remoteAddress = null;

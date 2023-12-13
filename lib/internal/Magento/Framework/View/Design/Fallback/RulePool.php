@@ -18,22 +18,19 @@ use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
  */
 class RulePool implements ResetAfterRequestInterface
 {
-    /**#@+
+    /**
      * Supported types of fallback rules
      */
-    const TYPE_FILE = 'file';
-    const TYPE_LOCALE_FILE = 'locale';
-    const TYPE_TEMPLATE_FILE = 'template';
-    const TYPE_STATIC_FILE = 'static';
-    const TYPE_EMAIL_TEMPLATE = 'email';
-    /**#@-*/
+    public const TYPE_FILE = 'file';
+    public const TYPE_LOCALE_FILE = 'locale';
+    public const TYPE_TEMPLATE_FILE = 'template';
+    public const TYPE_STATIC_FILE = 'static';
+    public const TYPE_EMAIL_TEMPLATE = 'email';
 
-    /**#@-*/
+    /** @var mixed */
     protected $filesystem;
 
     /**
-     * Rules
-     *
      * @var array
      */
     private $rules = [];

@@ -25,6 +25,8 @@ use Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestDataProviderInterface;
 
 /**
  * DataProvider for building super attribute options in buy requests
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
 {
@@ -60,6 +62,7 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
      * @param MetadataPool $metadataPool
      * @param StockStateInterface $stockState
      * @param ArrayManagerFactory|null $arrayManagerFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ArrayManager $arrayManager,

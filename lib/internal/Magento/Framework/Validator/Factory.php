@@ -6,13 +6,12 @@
 
 namespace Magento\Framework\Validator;
 
+use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Phrase;
 use Magento\Framework\Translate\Adapter;
 use Magento\Framework\Validator;
-use Magento\Framework\Cache\FrontendInterface;
 
 /**
  * Factory for \Magento\Framework\Validator and \Magento\Framework\Validator\Builder.
@@ -66,6 +65,9 @@ class Factory implements ResetAfterRequestInterface
         $this->moduleReader = $moduleReader;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function _resetState(): void
     {
         $this->_configFiles = null;

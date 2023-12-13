@@ -47,12 +47,6 @@ class Source implements ResetAfterRequestInterface
     protected $fallback;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\ListInterface
-     * @deprecated 100.0.2
-     */
-    private $themeList;
-
-    /**
      * @var ChainFactoryInterface
      */
     private $chainFactory;
@@ -76,6 +70,7 @@ class Source implements ResetAfterRequestInterface
      * @param \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile $fallback
      * @param \Magento\Framework\View\Design\Theme\ListInterface $themeList
      * @param ChainFactoryInterface $chainFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -91,7 +86,6 @@ class Source implements ResetAfterRequestInterface
         $this->tmpDir = $filesystem->getDirectoryWrite(DirectoryList::TMP_MATERIALIZATION_DIR);
         $this->preProcessorPool = $preProcessorPool;
         $this->fallback = $fallback;
-        $this->themeList = $themeList;
         $this->chainFactory = $chainFactory;
     }
 
@@ -288,6 +282,7 @@ class Source implements ResetAfterRequestInterface
      * @return bool|string
      * @deprecated 100.1.0 If custom vendor directory is outside Magento root,
      * then this method will return unexpected result.
+     * @see don't use
      */
     public function findRelativeSourceFilePath(LocalInterface $asset)
     {
