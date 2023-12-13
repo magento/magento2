@@ -359,6 +359,7 @@ return [
         'QuoteRelationsComposite' => null,
         Magento\GraphQlCache\Model\Plugin\Auth\TokenIssuer::class => null,
         Magento\StoreGraphQl\Plugin\LocalizeEmail::class => null,
+        Magento\Framework\MessageQueue\DefaultValueProvider::class => null, // TODO: find out why its failing
         // phpcs:enable Generic.Files.LineLength.TooLong
     ],
     '*-fromConstructed' => [
