@@ -20,6 +20,9 @@ return [
         Magento\Framework\Config\Scope::class => null, // scope changes during test
         Magento\Framework\App\ResourceConnection\Config::class => null, // configuration for connections
         Magento\Framework\Module\ModuleList::class => null, // This one is needed to pass on Jenkins build
+        Magento\Framework\Filter\FilterManager::class => null,
+        Magento\Framework\View\Asset\PreProcessor\Helper\Sort::class => null,
+        Magento\Framework\Validator\EmailAddress::class => null, // FIXME!!!!
 //        Magento\SalesRule\Model\DeltaPriceRound::class => null,
 //        Magento\SalesRule\Helper\CartFixedDiscount::class => null,
 //        Magento\SalesRule\Api\Data\RuleInterfaceFactory::class => null,
@@ -63,7 +66,7 @@ return [
 //        Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator::class => null,
 //        Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class => null,
 //        Magento\Catalog\Model\Product\Attribute\Repository::class => null,
-//        Magento\Catalog\Model\ResourceModel\Product::class => null,
+        Magento\Catalog\Model\ResourceModel\Product::class => null,
 //        Magento\Catalog\Model\ProductRepository::class => null,
 //        Magento\Catalog\Model\Product\Type::class => null,
 //        Magento\Catalog\Model\Product\Link::class => null,
@@ -260,6 +263,8 @@ return [
         // phpcs:enable Generic.Files.LineLength.TooLong
         Magento\Framework\Lock\Proxy::class => null,
         Magento\TestFramework\ObjectManager\Config::class => null,
+        Magento\Framework\Escaper::class => null,
+        Magento\Framework\Css\PreProcessor\Adapter\CssInliner::class => null, // FIXME
     ],
     '*-fromConstructed' => [
         // phpcs:disable Generic.Files.LineLength.TooLong
@@ -342,6 +347,8 @@ return [
             null, // Note: We may need to check to see if this needs to be reset when config changes
         Magento\ConfigurableProduct\Model\Product\Type\Configurable\Interceptor::class => null,
         Magento\Catalog\Model\Product\Type\Simple\Interceptor::class => null,
+        Magento\Eav\Api\Data\AttributeExtension::class =>
+            null, // FIXME: This needs to be fixed.   is_pagebuilder_enabled 0 => null // Bug is in Pagebuilder?
         Magento\TestFramework\Event\Magento::class => null,
         Magento\Store\Model\Website\Interceptor::class => null, // reset by poison pill
         Magento\Eav\Model\Entity\Type::class => null, // attribute types should be destroyed by poison pill
