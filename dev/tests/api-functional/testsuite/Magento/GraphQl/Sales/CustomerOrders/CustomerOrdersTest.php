@@ -38,10 +38,10 @@ class CustomerOrdersTest extends GraphQlAbstract
             <<<QUERY
             query {
                 customer {
-                    orders(filter: {}) { 
-                        items { 
-                            number  
-                            status 
+                    orders(filter: {}) {
+                        items {
+                            number
+                            status
                             created_at
                         }
                     }
@@ -75,7 +75,7 @@ QUERY;
                 'created_at' => "2022-09-09 00:00:00"
             ]
         ];
-  
+
         $actualData = $response['customer']['orders']['items'];
         foreach ($expectedData as $key => $data) {
             $this->assertEquals(
@@ -83,7 +83,7 @@ QUERY;
                 $actualData[$key]['number'],
                 "order_number is different than the expected for order - " . $data['number']
             );
-        
+
             $this->assertEquals(
                 $data['created_at'],
                 $actualData[$key]['created_at'],
@@ -123,4 +123,67 @@ QUERY;
         $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
         return ['Authorization' => 'Bearer ' . $customerToken];
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
+     */
+    public function testCustomerOrdersFiltersQuery()
+    {
+        $from = '2022-09-04';
+        $query =
+            <<<QUERY
+            query {
+                customer {
+                    orders(filter: { created_at: from: {{$from}} status: in:["Processing"]}) {
+                        items {
+                            number
+                            status
+                            created_at
+                        }
+                    }
+                }
+            }
+QUERY;
+
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+
+        $expectedData = [
+            [
+                'number' => '100000002',
+                'status' => 'Processing',
+                'created_at' => "2022-09-04 00:00:00"
+            ],
+            [
+                'number' => '100000003',
+                'status' => 'Processing',
+                'created_at' => "2022-09-10 00:00:00"
+            ]
+        ];
+
+        $actualData = $response['customer']['orders']['items'];
+        $this->assertCount(2, $actualData);
+        foreach ($expectedData as $key => $data) {
+            $this->assertEquals(
+                $data['number'],
+                $actualData[$key]['number'],
+                $data['number']." order is as expected"
+            );
+
+            $this->assertEquals(
+                $data['status'],
+                $actualData[$key]['status'],
+                "Status of the order " . $data['number'] ." is ". $data['status']
+            );
+
+            $this->assertEquals(
+                $data['created_at'],
+                $actualData[$key]['created_at'],
+                $data['number']. "order is created at" . $from
+            );
+        }
+    }
+
 }
