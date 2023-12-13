@@ -21,8 +21,8 @@ class ProductLinks
      * @param Stock $stockHelper
      */
     public function __construct(
-        public readonly Configuration $configuration,
-        public readonly Stock $stockHelper
+        private readonly Configuration $configuration,
+        private readonly Stock $stockHelper
     ) {}
 
     /**
