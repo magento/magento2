@@ -13,15 +13,6 @@ use Magento\CatalogInventory\Model\Configuration;
 
 class ProductLinks
 {
-    /**
-     * @var Configuration
-     */
-    private $configuration;
-
-    /**
-     * @var Stock
-     */
-    private $stockHelper;
 
     /**
      * ProductLinks constructor.
@@ -29,11 +20,10 @@ class ProductLinks
      * @param Configuration $configuration
      * @param Stock $stockHelper
      */
-    public function __construct(Configuration $configuration, Stock $stockHelper)
-    {
-        $this->configuration = $configuration;
-        $this->stockHelper = $stockHelper;
-    }
+    public function __construct(
+        public readonly Configuration $configuration,
+        public readonly Stock $stockHelper
+    ) {}
 
     /**
      * Fixes simple products are shown as associated in grouped when set out of stock
