@@ -16,19 +16,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\QuoteGraphQl\Model\Resolver;
+namespace Magento\QuoteGraphQl\Model\CartItem;
 
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
 use Magento\Quote\Model\Quote\Item;
 
 /**
- * @inheritdoc
+ * Product Stock class to check availability of product
  */
-class CheckAvailability implements ResolverInterface
+class ProductStock
 {
     /**
      * Product type code
@@ -38,10 +34,10 @@ class CheckAvailability implements ResolverInterface
     /**
      * @var StockStatusRepositoryInterface
      */
-    private StockStatusRepositoryInterface $stockStatusRepository;
+    private $stockStatusRepository;
 
     /**
-     * CheckAvailability constructor
+     * ProductStock constructor
      *
      * @param StockStatusRepositoryInterface $stockStatusRepository
      */
@@ -52,33 +48,15 @@ class CheckAvailability implements ResolverInterface
     }
 
     /**
-     * @inheritdoc
-     */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
-    {
-        if (!isset($value['model'])) {
-            throw new LocalizedException(__('"model" value should be specified'));
-        }
-        /** @var Item $cartItem */
-        $cartItem = $value['model'];
-
-        return $this->checkProductQtyStatus($cartItem) ? "available" : "unavailable";
-    }
-
-    /**
      * Check item status available or unavailable
      *
      * @param Item $cartItem
      * @return bool
      */
-    private function checkProductQtyStatus(Item $cartItem): bool
+    public function getProductAvailability($cartItem):bool
     {
         $requestedQty = 0;
         $previousQty = 0;
-
-        if (!$cartItem->getQuote()->getItems()) {
-            return false;
-        }
 
         foreach ($cartItem->getQuote()->getItems() as $item) {
             if ($item->getItemId() == $cartItem->getItemId()) {
@@ -96,14 +74,16 @@ class CheckAvailability implements ResolverInterface
                 if ($totalRequestedQty) {
                     $requiredItemQty = $requiredItemQty * $totalRequestedQty;
                 }
-                if (!$this->isRequiredStockAvailable($productId, $requiredItemQty)) {
+                if ($this->isStockAvailable($productId, $requiredItemQty)) {
                     return false;
                 }
             }
         } else {
             $requiredItemQty =  $requestedQty + $previousQty;
             $productId = (int) $cartItem->getProduct()->getId();
-            return $this->isRequiredStockAvailable($productId, $requiredItemQty);
+            if ($this->isStockAvailable($productId, $requiredItemQty)) {
+                return false;
+            }
         }
         return true;
     }
@@ -115,9 +95,9 @@ class CheckAvailability implements ResolverInterface
      * @param float $requiredQuantity
      * @return bool
      */
-    private function isRequiredStockAvailable(int $productId, float $requiredQuantity): bool
+    private function isStockAvailable(int $productId, float $requiredQuantity): bool
     {
         $stock = $this->stockStatusRepository->get($productId);
-        return ($stock->getQty() >= $requiredQuantity);
+        return ($stock->getQty() < $requiredQuantity) ? true : false;
     }
 }

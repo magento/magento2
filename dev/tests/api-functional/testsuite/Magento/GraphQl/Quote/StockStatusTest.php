@@ -86,7 +86,7 @@ class StockStatusTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
         $responseDataObject = new DataObject($response);
 
-        self::assertEquals('unavailable', $responseDataObject->getData('cart/items/0/status'));
+        self::assertEquals('unavailable', $responseDataObject->getData('cart/items/0/stock_availability'));
     }
 
     #[
@@ -102,12 +102,21 @@ class StockStatusTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
         $responseDataObject = new DataObject($response);
 
-        self::assertEquals('unavailable', $responseDataObject->getData('addProductsToCart/cart/items/0/status'));
+        self::assertEquals(
+            'unavailable',
+            $responseDataObject->getData('addProductsToCart/cart/items/0/stock_availability')
+        );
     }
 
     #[
         DataFixture(ProductFixture::class, ['price' => 100.00], as: 'product'),
-        DataFixture(BundleSelectionFixture::class, ['sku' => '$product.sku$', 'price' => 100, 'price_type' => 0], as:'link'),
+        DataFixture(
+            BundleSelectionFixture::class,
+            [
+                'sku' => '$product.sku$', 'price' => 100, 'price_type' => 0
+            ],
+            as:'link'
+        ),
         DataFixture(BundleOptionFixture::class, ['title' => 'Checkbox Options', 'type' => 'checkbox',
             'required' => 1,'product_links' => ['$link$']], 'option'),
         DataFixture(
@@ -135,12 +144,21 @@ class StockStatusTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
         $responseDataObject = new DataObject($response);
 
-        self::assertEquals('unavailable', $responseDataObject->getData('cart/items/0/status'));
+        self::assertEquals(
+            'unavailable',
+            $responseDataObject->getData('cart/items/0/stock_availability')
+        );
     }
 
     #[
         DataFixture(ProductFixture::class, ['price' => 100.00], as: 'product'),
-        DataFixture(BundleSelectionFixture::class, ['sku' => '$product.sku$', 'price' => 100, 'price_type' => 0], as:'link'),
+        DataFixture(
+            BundleSelectionFixture::class,
+            [
+                'sku' => '$product.sku$', 'price' => 100, 'price_type' => 0
+            ],
+            as:'link'
+        ),
         DataFixture(BundleOptionFixture::class, ['title' => 'Checkbox Options', 'type' => 'checkbox',
             'required' => 1,'product_links' => ['$link$']], 'option'),
         DataFixture(
@@ -181,7 +199,10 @@ class StockStatusTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
         $responseDataObject = new DataObject($response);
 
-        self::assertEquals('unavailable', $responseDataObject->getData('addProductsToCart/cart/items/0/status'));
+        self::assertEquals(
+            'unavailable',
+            $responseDataObject->getData('addProductsToCart/cart/items/0/stock_availability')
+        );
     }
 
     #[
@@ -212,7 +233,10 @@ class StockStatusTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
         $responseDataObject = new DataObject($response);
 
-        self::assertEquals('unavailable', $responseDataObject->getData('cart/items/0/status'));
+        self::assertEquals(
+            'unavailable',
+            $responseDataObject->getData('cart/items/0/stock_availability')
+        );
     }
 
     #[
@@ -242,7 +266,10 @@ class StockStatusTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
         $responseDataObject = new DataObject($response);
 
-        self::assertEquals('unavailable', $responseDataObject->getData('addProductsToCart/cart/items/0/status'));
+        self::assertEquals(
+            'unavailable',
+            $responseDataObject->getData('addProductsToCart/cart/items/0/stock_availability')
+        );
     }
 
     /**
@@ -255,7 +282,7 @@ class StockStatusTest extends GraphQlAbstract
 {
   cart(cart_id:"{$cartId}"){
     items{
-      status
+      stock_availability
     }
   }
 }
@@ -277,7 +304,7 @@ mutation {
   ) {
     cart {
       items {
-        status
+        stock_availability
       }
     }
   }
@@ -285,8 +312,12 @@ mutation {
 QUERY;
     }
 
-    private function mutationAddBundleProduct(string $cartId, string $sku, string $bundleOptionIdV2, int $qty = 1): string
-    {
+    private function mutationAddBundleProduct(
+        string $cartId,
+        string $sku,
+        string $bundleOptionIdV2,
+        int $qty = 1
+    ): string {
         return <<<QUERY
 mutation {
   addProductsToCart(
@@ -302,7 +333,7 @@ mutation {
   ) {
     cart {
       items {
-        status
+        stock_availability
         product {
           sku
         }
@@ -313,8 +344,12 @@ mutation {
 QUERY;
     }
 
-    private function mutationAddConfigurableProduct(string $cartId, string $sku, string $parentSku, int $qty = 1): string
-    {
+    private function mutationAddConfigurableProduct(
+        string $cartId,
+        string $sku,
+        string $parentSku,
+        int $qty = 1
+    ): string {
         return <<<QUERY
 mutation {
   addProductsToCart(
@@ -328,7 +363,7 @@ mutation {
   ) {
     cart {
       items {
-        status
+        stock_availability
         product {
           sku
         }
@@ -344,5 +379,3 @@ QUERY;
         return base64_encode("bundle/$optionId/$selectionId/$quantity");
     }
 }
-
-
