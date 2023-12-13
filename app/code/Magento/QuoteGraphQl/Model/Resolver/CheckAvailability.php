@@ -22,7 +22,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
 use Magento\Quote\Model\Quote\Item;
 
@@ -39,7 +38,7 @@ class CheckAvailability implements ResolverInterface
     /**
      * @var StockStatusRepositoryInterface
      */
-    private $stockStatusRepository;
+    private StockStatusRepositoryInterface $stockStatusRepository;
 
     /**
      * CheckAvailability constructor
@@ -72,7 +71,7 @@ class CheckAvailability implements ResolverInterface
      * @param Item $cartItem
      * @return bool
      */
-    private function checkProductQtyStatus($cartItem):bool
+    private function checkProductQtyStatus(Item $cartItem): bool
     {
         $requestedQty = 0;
         $previousQty = 0;
@@ -97,30 +96,28 @@ class CheckAvailability implements ResolverInterface
                 if ($totalRequestedQty) {
                     $requiredItemQty = $requiredItemQty * $totalRequestedQty;
                 }
-                if ($this->getProductStockStatus($productId, $requiredItemQty)) {
+                if (!$this->isRequiredStockAvailable($productId, $requiredItemQty)) {
                     return false;
                 }
             }
         } else {
             $requiredItemQty =  $requestedQty + $previousQty;
             $productId = (int) $cartItem->getProduct()->getId();
-            if ($this->getProductStockStatus($productId, $requiredItemQty)) {
-                return false;
-            }
+            return $this->isRequiredStockAvailable($productId, $requiredItemQty);
         }
         return true;
     }
 
     /**
-     * Get product qty
+     * Check if is required product available in stock
      *
      * @param int $productId
      * @param float $requiredQuantity
      * @return bool
      */
-    private function getProductStockStatus(int $productId, float $requiredQuantity): bool
+    private function isRequiredStockAvailable(int $productId, float $requiredQuantity): bool
     {
         $stock = $this->stockStatusRepository->get($productId);
-        return ($stock->getQty() < $requiredQuantity) ? true : false;
+        return ($stock->getQty() >= $requiredQuantity);
     }
 }
