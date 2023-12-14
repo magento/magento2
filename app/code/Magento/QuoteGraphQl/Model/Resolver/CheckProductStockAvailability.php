@@ -31,19 +31,13 @@ use Magento\Quote\Model\Quote\Item;
 class CheckProductStockAvailability implements ResolverInterface
 {
     /**
-     * @var ProductStock
-     */
-    private ProductStock $productStock;
-
-    /**
      * CheckProductStockAvailability constructor
      *
      * @param ProductStock $productStock
      */
     public function __construct(
-        ProductStock $productStock
+        private ProductStock $productStock
     ) {
-        $this->productStock = $productStock;
     }
 
     /**
@@ -57,6 +51,6 @@ class CheckProductStockAvailability implements ResolverInterface
         /** @var Item $cartItem */
         $cartItem = $value['model'];
 
-        return $this->productStock->isProductAvailable($cartItem) ? "available" : "unavailable";
+        return $this->productStock->isProductAvailable($cartItem) ? true : false;
     }
 }

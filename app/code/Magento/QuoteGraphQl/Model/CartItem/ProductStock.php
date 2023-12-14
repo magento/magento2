@@ -32,19 +32,13 @@ class ProductStock
     private const PRODUCT_TYPE_BUNDLE = "bundle";
 
     /**
-     * @var StockStatusRepositoryInterface
-     */
-    private $stockStatusRepository;
-
-    /**
      * ProductStock constructor
      *
      * @param StockStatusRepositoryInterface $stockStatusRepository
      */
     public function __construct(
-        StockStatusRepositoryInterface $stockStatusRepository
+        private StockStatusRepositoryInterface $stockStatusRepository
     ) {
-        $this->stockStatusRepository = $stockStatusRepository;
     }
 
     /**

@@ -86,7 +86,7 @@ class StockAvailabilityTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
         $responseDataObject = new DataObject($response);
 
-        self::assertEquals('unavailable', $responseDataObject->getData('cart/items/0/stock_availability'));
+        self::assertEquals(false, $responseDataObject->getData('cart/items/0/is_available'));
     }
 
     #[
@@ -103,8 +103,8 @@ class StockAvailabilityTest extends GraphQlAbstract
         $responseDataObject = new DataObject($response);
 
         self::assertEquals(
-            'unavailable',
-            $responseDataObject->getData('addProductsToCart/cart/items/0/stock_availability')
+            false,
+            $responseDataObject->getData('addProductsToCart/cart/items/0/is_available')
         );
     }
 
@@ -145,8 +145,8 @@ class StockAvailabilityTest extends GraphQlAbstract
         $responseDataObject = new DataObject($response);
 
         self::assertEquals(
-            'unavailable',
-            $responseDataObject->getData('cart/items/0/stock_availability')
+            false,
+            $responseDataObject->getData('cart/items/0/is_available')
         );
     }
 
@@ -200,8 +200,8 @@ class StockAvailabilityTest extends GraphQlAbstract
         $responseDataObject = new DataObject($response);
 
         self::assertEquals(
-            'unavailable',
-            $responseDataObject->getData('addProductsToCart/cart/items/0/stock_availability')
+            false,
+            $responseDataObject->getData('addProductsToCart/cart/items/0/is_available')
         );
     }
 
@@ -234,8 +234,8 @@ class StockAvailabilityTest extends GraphQlAbstract
         $responseDataObject = new DataObject($response);
 
         self::assertEquals(
-            'unavailable',
-            $responseDataObject->getData('cart/items/0/stock_availability')
+            false,
+            $responseDataObject->getData('cart/items/0/is_available')
         );
     }
 
@@ -267,8 +267,8 @@ class StockAvailabilityTest extends GraphQlAbstract
         $responseDataObject = new DataObject($response);
 
         self::assertEquals(
-            'unavailable',
-            $responseDataObject->getData('addProductsToCart/cart/items/0/stock_availability')
+            false,
+            $responseDataObject->getData('addProductsToCart/cart/items/0/is_available')
         );
     }
 
@@ -282,7 +282,7 @@ class StockAvailabilityTest extends GraphQlAbstract
 {
   cart(cart_id:"{$cartId}"){
     items{
-      stock_availability
+      is_available
     }
   }
 }
@@ -304,7 +304,7 @@ mutation {
   ) {
     cart {
       items {
-        stock_availability
+        is_available
       }
     }
   }
@@ -333,7 +333,7 @@ mutation {
   ) {
     cart {
       items {
-        stock_availability
+        is_available
         product {
           sku
         }
@@ -363,7 +363,7 @@ mutation {
   ) {
     cart {
       items {
-        stock_availability
+        is_available
         product {
           sku
         }
