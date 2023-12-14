@@ -195,7 +195,7 @@ class EmailNotification implements EmailNotificationInterface
      */
     private function emailAndPasswordChanged(CustomerInterface $customer, $email): void
     {
-        $storeId = $customer->getStoreId();
+        $storeId = $this->storeManager->getStore()->getId();
         if ($storeId === null) {
             $storeId = $this->getWebsiteStoreId($customer);
         }
@@ -223,7 +223,7 @@ class EmailNotification implements EmailNotificationInterface
      */
     private function emailChanged(CustomerInterface $customer, $email): void
     {
-        $storeId = $customer->getStoreId();
+        $storeId = $this->storeManager->getStore()->getId();
         if ($storeId === null) {
             $storeId = $this->getWebsiteStoreId($customer);
         }
@@ -250,7 +250,7 @@ class EmailNotification implements EmailNotificationInterface
      */
     private function passwordReset(CustomerInterface $customer): void
     {
-        $storeId = $customer->getStoreId();
+        $storeId = $this->storeManager->getStore()->getId();
         if ($storeId === null) {
             $storeId = $this->getWebsiteStoreId($customer);
         }
@@ -356,7 +356,7 @@ class EmailNotification implements EmailNotificationInterface
      */
     public function passwordReminder(CustomerInterface $customer): void
     {
-        $storeId = $customer->getStoreId();
+        $storeId = $this->storeManager->getStore()->getId();
         if ($storeId === null) {
             $storeId = $this->getWebsiteStoreId($customer);
         }
@@ -383,7 +383,7 @@ class EmailNotification implements EmailNotificationInterface
      */
     public function passwordResetConfirmation(CustomerInterface $customer): void
     {
-        $storeId = $customer->getStoreId();
+        $storeId = $this->storeManager->getStore()->getId();
         if ($storeId === null) {
             $storeId = $this->getWebsiteStoreId($customer);
         }
