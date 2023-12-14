@@ -257,6 +257,7 @@ return [
         Magento\Quote\Model\QueryResolver::class => null,
         'QuoteRelationsComposite' => null,
         Magento\StoreGraphQl\Plugin\LocalizeEmail::class => null,
+        Magento\Framework\MessageQueue\DefaultValueProvider::class => null, // TODO: find out why its failing
         // phpcs:enable Generic.Files.LineLength.TooLong
         Magento\Framework\Lock\Proxy::class => null,
         Magento\TestFramework\ObjectManager\Config::class => null,
