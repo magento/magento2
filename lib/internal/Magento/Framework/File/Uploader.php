@@ -342,6 +342,7 @@ class Uploader
      * @return void
      *
      * @deprecated 100.0.8
+     * @see Nothing
      */
     protected function chmod($file)
     {
@@ -385,6 +386,7 @@ class Uploader
      *
      * @return LoggerInterface
      * @deprecated
+     * @see Nothing
      */
     private function getLogger(): LoggerInterface
     {
@@ -838,6 +840,7 @@ class Uploader
      * @param string $fileName
      * @return string
      * @deprecated 101.0.4
+     * @see Nothing
      */
     public static function getDispretionPath($fileName)
     {
@@ -873,6 +876,7 @@ class Uploader
      *
      * @return DriverInterface
      * @deprecated
+     * @see Nothing
      */
     private function getFileDriver(): DriverInterface
     {
