@@ -53,7 +53,7 @@ class ProductStock
      * @param Item $cartItem
      * @return bool
      */
-    public function getProductAvailability($cartItem): bool
+    public function isProductAvailable($cartItem): bool
     {
         $requestedQty = 0;
         $previousQty = 0;
