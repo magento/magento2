@@ -86,24 +86,47 @@ class StockAvailabilityTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
         $responseDataObject = new DataObject($response);
 
-        self::assertEquals(false, $responseDataObject->getData('cart/items/0/is_available'));
+        self::assertFalse(
+            $responseDataObject->getData('cart/items/0/is_available')
+        );
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['price' => 100.00], as: 'product'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 100]),
+        DataFixture(QuoteMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask')
+    ]
+    public function testStockStatusAvailableSimpleProduct(): void
+    {
+        $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlMutation($query);
+        $responseDataObject = new DataObject($response);
+
+        self::assertTrue(
+            $responseDataObject->getData('cart/items/0/is_available')
+        );
     }
 
     #[
         DataFixture(ProductFixture::class, ['sku' => self::SKU, 'price' => 100.00], as: 'product'),
         DataFixture(GuestCartFixture::class, as: 'cart'),
-        DataFixture(AddProductToCart::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 100]),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 99]),
         DataFixture(QuoteMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask')
     ]
-    public function testStockStatusUnavailableAddSimpleProduct(): void
+    public function testStockStatusAddSimpleProduct(): void
     {
         $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
         $query = $this->mutationAddSimpleProduct($maskedQuoteId, self::SKU, 1);
         $response = $this->graphQlMutation($query);
         $responseDataObject = new DataObject($response);
-
-        self::assertEquals(
-            false,
+        self::assertTrue(
+            $responseDataObject->getData('addProductsToCart/cart/items/0/is_available')
+        );
+        $response = $this->graphQlMutation($query);
+        $responseDataObject = new DataObject($response);
+        self::assertFalse(
             $responseDataObject->getData('addProductsToCart/cart/items/0/is_available')
         );
     }
@@ -144,8 +167,7 @@ class StockAvailabilityTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
         $responseDataObject = new DataObject($response);
 
-        self::assertEquals(
-            false,
+        self::assertFalse(
             $responseDataObject->getData('cart/items/0/is_available')
         );
     }
@@ -173,12 +195,12 @@ class StockAvailabilityTest extends GraphQlAbstract
                 'cart_id' => '$cart.id$',
                 'product_id' => '$bundleProduct.id$',
                 'selections' => [['$product.id$']],
-                'qty' => 100
+                'qty' => 99
             ],
         ),
         DataFixture(QuoteMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask')
     ]
-    public function testStockStatusUnavailableAddBundleProduct(): void
+    public function testStockStatusAddBundleProduct(): void
     {
         $product = $this->productRepository->get(self::PARENT_SKU_BUNDLE);
 
@@ -198,9 +220,14 @@ class StockAvailabilityTest extends GraphQlAbstract
         $query = $this->mutationAddBundleProduct($maskedQuoteId, self::PARENT_SKU_BUNDLE, $bundleOptionIdV2);
         $response = $this->graphQlMutation($query);
         $responseDataObject = new DataObject($response);
+        self::assertTrue(
+            $responseDataObject->getData('addProductsToCart/cart/items/0/is_available')
+        );
 
-        self::assertEquals(
-            false,
+        $response = $this->graphQlMutation($query);
+        $responseDataObject = new DataObject($response);
+
+        self::assertFalse(
             $responseDataObject->getData('addProductsToCart/cart/items/0/is_available')
         );
     }
@@ -233,8 +260,7 @@ class StockAvailabilityTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
         $responseDataObject = new DataObject($response);
 
-        self::assertEquals(
-            false,
+        self::assertFalse(
             $responseDataObject->getData('cart/items/0/is_available')
         );
     }
@@ -259,15 +285,18 @@ class StockAvailabilityTest extends GraphQlAbstract
             ],
         )
     ]
-    public function testStockStatusUnavailableAddConfigurableProduct(): void
+    public function testStockStatusAddConfigurableProduct(): void
     {
         $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
         $query = $this->mutationAddConfigurableProduct($maskedQuoteId, self::SKU, self::PARENT_SKU_CONFIGURABLE);
         $response = $this->graphQlMutation($query);
         $responseDataObject = new DataObject($response);
-
-        self::assertEquals(
-            false,
+        self::assertTrue(
+            $responseDataObject->getData('addProductsToCart/cart/items/1/is_available')
+        );
+        $response = $this->graphQlMutation($query);
+        $responseDataObject = new DataObject($response);
+        self::assertFalse(
             $responseDataObject->getData('addProductsToCart/cart/items/0/is_available')
         );
     }
@@ -368,6 +397,10 @@ mutation {
           sku
         }
       }
+    }
+    user_errors {
+      code
+      message
     }
   }
 }
