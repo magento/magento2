@@ -32,9 +32,9 @@
             </actionGroup>
             <!-- Create Tax Rule & Tax Rate -->
             <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleForPage"/>
-            <actionGroup ref="AdminAddTaxRuleActionGroup" stepKey="addTaxRulePageForProductTax">
-                <argument name="ruleName" value="Product"/>
-            </actionGroup>
+            <!--Add new tax rates. Go to tax rule page -->
+            <actionGroup ref="AddNewTaxRuleActionGroup" stepKey="addFirstTaxRuleActionGroup"/>
+            <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="{{TaxRule.name}}"/>
             <!-- Adding product rate tax for NY -->
             <actionGroup ref="AddNewTaxRateNoZipUIActionGroup" stepKey="addProductTaxRateForCA">
                 <argument name="taxCode" value="SimpleTaxTexas"/>
@@ -58,8 +58,8 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Go to the tax rule page and delete the row created-->
             <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPageA"/>
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteProductTaxRule">
-                <argument name="name" value="Product"/>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
+                <argument name="name" value="{{TaxRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
             <!-- Deleting Tax zones and rate for Product Tax -->
@@ -68,7 +68,7 @@
                 <argument name="submenuUiId" value="{{AdminMenuStoresTaxZonesAndRates.dataUiId}}"/>
             </actionGroup>
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteProductTaxRule1">
-                <argument name="name" value="{{SimpleTaxTexas.state}}-{{SimpleTaxTexas.rate}}"/>
+                <argument name="name" value="{{SimpleTaxTexas.identifier}}-{{SimpleTaxTexas.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
