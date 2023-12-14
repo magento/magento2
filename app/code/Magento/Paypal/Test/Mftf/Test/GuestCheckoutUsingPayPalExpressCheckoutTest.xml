@@ -33,7 +33,7 @@
             <!-- Create Tax Rule & Tax Rate -->
             <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleForPage"/>
             <actionGroup ref="AdminAddTaxRuleActionGroup" stepKey="addTaxRulePageForProductTax">
-                <argument name="ruleName" value="Product Taxa"/>
+                <argument name="ruleName" value="Product"/>
             </actionGroup>
             <!-- Adding product rate tax for NY -->
             <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addProductTaxRateForCA">
@@ -59,7 +59,7 @@
             <!-- Go to the tax rule page and delete the row created-->
             <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPageA"/>
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteProductTaxRule">
-                <argument name="name" value="Product Taxa"/>
+                <argument name="name" value="Product"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
             <!-- Deleting Tax zones and rate for Product Tax -->
