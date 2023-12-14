@@ -30,8 +30,6 @@
             <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
                 <argument name="credentials" value="SamplePaypalExpressConfig2"/>
             </actionGroup>
-            <!-- Create Tax Rule & Tax Rate -->
-            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleForPage"/>
             <!--Add new tax rates. Go to tax rule page -->
             <actionGroup ref="AddNewTaxRuleActionGroup" stepKey="addFirstTaxRuleActionGroup"/>
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="{{TaxRule.name}}"/>
