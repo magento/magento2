@@ -96,7 +96,7 @@ class UrlRewriteHandlerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->mergeDataProviderFactoryMock = $this->getMockBuilder(MergeDataProviderFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->mergeDataProviderMock = $this->getMockBuilder(MergeDataProvider::class)
@@ -131,7 +131,7 @@ class UrlRewriteHandlerTest extends TestCase
     {
         /* @var \Magento\Catalog\Model\Category|MockObject $category */
         $category = $this->getMockBuilder(Category::class)
-            ->setMethods(['getEntityId', 'getStoreId', 'getData', 'getChangedProductIds'])
+            ->onlyMethods(['getEntityId', 'getStoreId', 'getData', 'getChangedProductIds'])
             ->disableOriginalConstructor()
             ->getMock();
         $category->expects($this->any())
@@ -142,18 +142,14 @@ class UrlRewriteHandlerTest extends TestCase
             ->willReturn(1);
         $category->expects($this->any())
             ->method('getData')
-            ->withConsecutive(
-                [$this->equalTo('save_rewrites_history')],
-                [$this->equalTo('initial_setup_flag')]
-            )
-            ->willReturnOnConsecutiveCalls(
-                true,
-                null
-            );
+            ->willReturnCallback(fn($operation) => match ([$operation]) {
+                [$this->equalTo('save_rewrites_history')] => true,
+                [$this->equalTo('initial_setup_flag')] => null,
+            });
 
         /* @var \Magento\Catalog\Model\Category|MockObject $childCategory1 */
         $childCategory1 = $this->getMockBuilder(Category::class)
-            ->setMethods(['getEntityId'])
+            ->onlyMethods(['getEntityId'])
             ->disableOriginalConstructor()
             ->getMock();
         $childCategory1->expects($this->any())
@@ -162,7 +158,7 @@ class UrlRewriteHandlerTest extends TestCase
 
         /* @var \Magento\Catalog\Model\Category|MockObject $childCategory1 */
         $childCategory2 = $this->getMockBuilder(Category::class)
-            ->setMethods(['getEntityId'])
+            ->onlyMethods(['getEntityId'])
             ->disableOriginalConstructor()
             ->getMock();
         $childCategory1->expects($this->any())
