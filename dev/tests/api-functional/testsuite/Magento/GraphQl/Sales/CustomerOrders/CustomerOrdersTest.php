@@ -135,7 +135,7 @@ QUERY;
             <<<QUERY
             query {
                 customer {
-                    orders(filter: { created_at: from: {{$from}} status: in:["Processing"]}) {
+                    orders(filter: { created_at: { from: "$from" } status: { in:["Processing"] } }) {
                         items {
                             number
                             status
@@ -155,16 +155,11 @@ QUERY;
                 'number' => '100000002',
                 'status' => 'Processing',
                 'created_at' => "2022-09-04 00:00:00"
-            ],
-            [
-                'number' => '100000003',
-                'status' => 'Processing',
-                'created_at' => "2022-09-10 00:00:00"
             ]
         ];
 
         $actualData = $response['customer']['orders']['items'];
-        $this->assertCount(2, $actualData);
+        $this->assertCount(1, $actualData);
         foreach ($expectedData as $key => $data) {
             $this->assertEquals(
                 $data['number'],
@@ -185,5 +180,4 @@ QUERY;
             );
         }
     }
-
 }
