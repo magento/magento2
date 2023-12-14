@@ -379,5 +379,3 @@ QUERY;
         return base64_encode("bundle/$optionId/$selectionId/$quantity");
     }
 }
-
-
