@@ -36,7 +36,7 @@
                 <argument name="ruleName" value="Product"/>
             </actionGroup>
             <!-- Adding product rate tax for NY -->
-            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addProductTaxRateForCA">
+            <actionGroup ref="AddNewTaxRateNoZipUIActionGroup" stepKey="addProductTaxRateForCA">
                 <argument name="taxCode" value="SimpleTaxTexas"/>
             </actionGroup>
             <!-- Save Tax Rule -->
