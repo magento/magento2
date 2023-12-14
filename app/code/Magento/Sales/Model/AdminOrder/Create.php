@@ -2281,12 +2281,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     private function removeCartTransferredItems()
     {
         $removeCartTransferredItems = $this->getSession()->getTransferredItems() ?? [];
-        if (count($removeCartTransferredItems) > 0) {
-            foreach (array_keys($removeCartTransferredItems) as $key) {
-                if ($key === 'cart') {
-                    unset($removeCartTransferredItems[$key]);
-                }
-            }
+        if (isset($removeCartTransferredItems['cart'])) {
+            unset($removeCartTransferredItems['cart']);
         }
         $this->getSession()->setTransferredItems($removeCartTransferredItems);
     }
