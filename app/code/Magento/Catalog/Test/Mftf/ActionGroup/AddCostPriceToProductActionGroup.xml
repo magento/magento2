@@ -23,5 +23,6 @@
         <fillField userInput="{{price}}" selector="{{AdminProductFormCostPricingSection.costPrice}}" stepKey="fillCostPrice"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDone"/>
         <waitForPageLoad stepKey="waitForAdvancedPricingModalGone"/>
+        <dontSeeElement selector="{{AdminProductFormAdvancedPricingSection.advancedPricingCloseButton}}" stepKey="clickAdvancedPricingCloseButton"/>
     </actionGroup>
 </actionGroups>

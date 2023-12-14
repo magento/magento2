@@ -33,5 +33,6 @@
         <click selector="{{AdminConfigureTaxSection.save}}" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForConfigSaved"/>
         <click selector="{{AdminConfigureTaxSection.taxSalesDisplayHeadOpen}}" stepKey="taxSalesDisplayHeadClosed"/>
+        <waitForText selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccess"/>
     </actionGroup>
 </actionGroups>
