@@ -80,7 +80,7 @@
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <!-- Goto Checkout Page -->
-        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
         <!--Fill Shipping Address-->
         <actionGroup ref="GuestCheckoutFillNewShippingAddressActionGroup" stepKey="fillShippingAddress">
             <argument name="customer" value="$$createCustomer$$" />
