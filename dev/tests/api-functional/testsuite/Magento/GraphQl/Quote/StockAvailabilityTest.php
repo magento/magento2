@@ -40,7 +40,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 /**
  * Test discount totals calculation model
  */
-class StockStatusTest extends GraphQlAbstract
+class StockAvailabilityTest extends GraphQlAbstract
 {
     /**
      * @var ObjectManagerInterface
@@ -379,3 +379,5 @@ QUERY;
         return base64_encode("bundle/$optionId/$selectionId/$quantity");
     }
 }
+
+
