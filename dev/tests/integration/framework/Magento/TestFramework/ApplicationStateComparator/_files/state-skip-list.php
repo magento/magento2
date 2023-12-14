@@ -23,6 +23,7 @@ return [
         Magento\Framework\Filter\FilterManager::class => null,
         Magento\Framework\View\Asset\PreProcessor\Helper\Sort::class => null,
         Magento\Framework\Validator\EmailAddress::class => null, // FIXME!!!!
+        Magento\Framework\Url\QueryParamsResolver::class => null, // FIXME!!!!
 //        Magento\SalesRule\Model\DeltaPriceRound::class => null,
 //        Magento\SalesRule\Helper\CartFixedDiscount::class => null,
 //        Magento\SalesRule\Api\Data\RuleInterfaceFactory::class => null,
@@ -36,7 +37,7 @@ return [
         Magento\SalesSequence\Model\MetaFactory::class => null,
         Magento\SalesSequence\Model\ProfileFactory::class => null,
         Magento\SalesSequence\Model\ResourceModel\Profile::class => null,
-//        Magento\SalesSequence\Model\ResourceModel\Meta::class => null,
+        Magento\SalesSequence\Model\ResourceModel\Meta::class => null,
         Magento\SalesSequence\Model\SequenceFactory::class => null,
         Magento\SalesSequence\Model\Manager::class => null,
 //        Magento\Quote\Model\ResourceModel\Collection\Interceptor::class => null,
