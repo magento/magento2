@@ -72,7 +72,6 @@
         <!-- Go to Order review -->
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentPage"/>
         <waitForPageLoad stepKey="waitForLoadingMask"/>
-        <waitForPageLoad stepKey="waitForPaymentPageLoad"/>
         <!-- Checkout select Credit Card (Payflow Pro) and place order-->
         <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Pro)')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Pro)')}}" visible="true" stepKey="selectPaymentMethod"/>
         <waitForPageLoad stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
