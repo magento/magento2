@@ -232,6 +232,17 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
     }
 
     /**
+     * Make DELETE request
+     *
+     * @param string $uri full uri path
+     * @return void
+     */
+    public function delete($uri)
+    {
+        $this->makeRequest("DELETE", $this->parseUrl($uri));
+    }
+
+    /**
      * Set host, port from full url and return relative url
      *
      * @param string $uri ex. http://google.com/index.php?a=b
@@ -275,6 +286,30 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
     public function post($uri, $params)
     {
         $this->makeRequest("POST", $this->parseUrl($uri), $params);
+    }
+
+    /**
+     * Make PATCH request
+     *
+     * @param string $uri
+     * @param array|string $params use string in case of JSON or XML POST request
+     * @return void
+     */
+    public function patch($uri, $params)
+    {
+        $this->makeRequest("PATCH", $this->parseUrl($uri), $params);
+    }
+
+    /**
+     * Make PUT request
+     *
+     * @param string $uri
+     * @param array|string $params use string in case of JSON or XML POST request
+     * @return void
+     */
+    public function put($uri, $params)
+    {
+        $this->makeRequest("PUT", $this->parseUrl($uri), $params);
     }
 
     /**

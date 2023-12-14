@@ -97,6 +97,14 @@ interface ClientInterface
     public function get($uri);
 
     /**
+     * Make DELETE request
+     *
+     * @param string $uri full uri
+     * @return array
+     */
+    public function delete($uri);
+
+    /**
      * Make POST request
      *
      * @param string $uri full uri
@@ -104,6 +112,24 @@ interface ClientInterface
      * @return void
      */
     public function post($uri, $params);
+
+    /**
+     * Make PATCH request
+     *
+     * @param string $uri full uri
+     * @param array|string $params PATCH fields array or string in case of JSON or XML data
+     * @return void
+     */
+    public function patch($uri, $params);
+
+    /**
+     * Make PUT request
+     *
+     * @param string $uri full uri
+     * @param array|string $params PUT fields array or string in case of JSON or XML data
+     * @return void
+     */
+    public function put($uri, $params);
 
     /**
      * Get response headers
