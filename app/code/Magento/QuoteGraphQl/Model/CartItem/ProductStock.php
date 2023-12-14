@@ -53,7 +53,7 @@ class ProductStock
      * @param Item $cartItem
      * @return bool
      */
-    public function getProductAvailability($cartItem):bool
+    public function getProductAvailability($cartItem): bool
     {
         $requestedQty = 0;
         $previousQty = 0;
@@ -74,14 +74,14 @@ class ProductStock
                 if ($totalRequestedQty) {
                     $requiredItemQty = $requiredItemQty * $totalRequestedQty;
                 }
-                if ($this->isStockAvailable($productId, $requiredItemQty)) {
+                if (!$this->isStockAvailable($productId, $requiredItemQty)) {
                     return false;
                 }
             }
         } else {
             $requiredItemQty =  $requestedQty + $previousQty;
             $productId = (int) $cartItem->getProduct()->getId();
-            if ($this->isStockAvailable($productId, $requiredItemQty)) {
+            if (!$this->isStockAvailable($productId, $requiredItemQty)) {
                 return false;
             }
         }
@@ -98,6 +98,6 @@ class ProductStock
     private function isStockAvailable(int $productId, float $requiredQuantity): bool
     {
         $stock = $this->stockStatusRepository->get($productId);
-        return ($stock->getQty() < $requiredQuantity) ? true : false;
+        return $stock->getQty() >= $requiredQuantity;
     }
 }
