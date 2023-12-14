@@ -1,7 +1,5 @@
 <?php
 /**
- * Routes configuration model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,6 +8,9 @@ namespace Magento\Framework\App\Route;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * Routes configuration model
+ */
 class Config implements ConfigInterface, ResetAfterRequestInterface
 {
     /**

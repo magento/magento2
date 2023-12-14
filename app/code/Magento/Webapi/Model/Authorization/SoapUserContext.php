@@ -23,14 +23,14 @@ class SoapUserContext implements UserContextInterface, ResetAfterRequestInterfac
     /**
      * @var Request
      *
-     * @SuppressWarnings(PHPCS)
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly Request $request;
 
     /**
-     * @var Token
+     * @var TokenFactory
      *
-     * @SuppressWarnings(PHPCS)
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly TokenFactory $tokenFactory;
 
@@ -52,14 +52,14 @@ class SoapUserContext implements UserContextInterface, ResetAfterRequestInterfac
     /**
      * @var IntegrationServiceInterface
      *
-     * @SuppressWarnings(PHPCS)
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly IntegrationServiceInterface $integrationService;
 
     /**
      * @var BearerTokenValidator
      *
-     * @SuppressWarnings(PHPCS)
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly BearerTokenValidator $bearerTokenValidator;
 

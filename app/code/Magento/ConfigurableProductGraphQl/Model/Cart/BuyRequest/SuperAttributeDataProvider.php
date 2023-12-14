@@ -31,7 +31,7 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
     /**
      * @var ArrayManagerFactory
      *
-     * @SuppressWarnings(PHPCS)
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly ArrayManagerFactory $arrayManagerFactory;
 

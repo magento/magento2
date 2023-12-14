@@ -27,16 +27,22 @@ class Converter implements \Magento\Framework\Config\ConverterInterface, ResetAf
      * Boolean value converter.
      *
      * @var BooleanUtils
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly BooleanUtils $booleanUtils;
 
     /**
      * @var InterpreterInterface
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly InterpreterInterface $argumentInterpreter;
 
     /**
      * @var DefaultValueProvider
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly DefaultValueProvider $defaultValue;
 

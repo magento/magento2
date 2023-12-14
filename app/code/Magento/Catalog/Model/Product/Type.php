@@ -24,17 +24,17 @@ use Magento\Framework\Pricing\PriceInfo\Factory as PriceInfoFactory;
  */
 class Type implements OptionSourceInterface, ResetAfterRequestInterface
 {
-    const TYPE_SIMPLE = 'simple';
+    public const TYPE_SIMPLE = 'simple';
 
-    const TYPE_BUNDLE = 'bundle';
+    public const TYPE_BUNDLE = 'bundle';
 
-    const TYPE_VIRTUAL = 'virtual';
+    public const TYPE_VIRTUAL = 'virtual';
 
-    const DEFAULT_TYPE = 'simple';
+    public const DEFAULT_TYPE = 'simple';
 
-    const DEFAULT_TYPE_MODEL = Simple::class;
+    public const DEFAULT_TYPE_MODEL = Simple::class;
 
-    const DEFAULT_PRICE_MODEL = Price::class;
+    public const DEFAULT_PRICE_MODEL = Price::class;
 
     /**
      * @var ConfigInterface
@@ -56,8 +56,6 @@ class Type implements OptionSourceInterface, ResetAfterRequestInterface
     protected $_compositeTypes;
 
     /**
-     * Price models
-     *
      * @var array|null|Price
      */
     protected $_priceModels;

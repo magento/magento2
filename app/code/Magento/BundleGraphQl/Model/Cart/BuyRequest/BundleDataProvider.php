@@ -19,14 +19,15 @@ class BundleDataProvider implements BuyRequestDataProviderInterface
 {
     /**
      * @var ArrayManagerFactory
-     *
-     * @SuppressWarnings(PHPCS)
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly ArrayManagerFactory $arrayManagerFactory;
 
     /**
      * @param ArrayManager $arrayManager @deprecated @see $arrayManagerFactory
      * @param ArrayManagerFactory|null $arrayManagerFactory
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ArrayManager $arrayManager,

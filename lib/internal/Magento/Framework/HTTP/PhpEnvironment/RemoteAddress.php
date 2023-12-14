@@ -20,6 +20,8 @@ class RemoteAddress implements ResetAfterRequestInterface
      * Request object.
      *
      * @var RequestInterface
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     protected readonly RequestInterface $request;
 
@@ -32,15 +34,21 @@ class RemoteAddress implements ResetAfterRequestInterface
 
     /**
      * @var array
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     protected readonly array $alternativeHeaders;
 
     /**
      * @var string[]|null
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly ?array $trustedProxies;
 
     /**
+     * Constructor
+     *
      * @param RequestInterface $httpRequest
      * @param array $alternativeHeaders
      * @param string[]|null $trustedProxies
@@ -55,6 +63,9 @@ class RemoteAddress implements ResetAfterRequestInterface
         $this->trustedProxies = $trustedProxies;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function _resetState(): void
     {
         $this->remoteAddress = null;

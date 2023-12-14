@@ -26,6 +26,8 @@ class DeltaPriceRound implements ResetAfterRequestInterface
     private $roundingDeltas;
 
     /**
+     * Constructor
+     *
      * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(PriceCurrencyInterface $priceCurrency)
@@ -33,6 +35,9 @@ class DeltaPriceRound implements ResetAfterRequestInterface
         $this->priceCurrency = $priceCurrency;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function _resetState(): void
     {
         $this->roundingDeltas = null;

@@ -48,7 +48,7 @@ class Source implements ResetAfterRequestInterface
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ListInterface
-     * @deprecated 100.0.2
+     * @deprecated 100.0.2 @see not recmomended anymore
      */
     private $themeList;
 
@@ -286,7 +286,7 @@ class Source implements ResetAfterRequestInterface
      * @param \Magento\Framework\View\Asset\LocalInterface $asset
      *
      * @return bool|string
-     * @deprecated 100.1.0 If custom vendor directory is outside Magento root,
+     * @deprecated 100.1.0 @see If custom vendor directory is outside Magento root,
      * then this method will return unexpected result.
      */
     public function findRelativeSourceFilePath(LocalInterface $asset)

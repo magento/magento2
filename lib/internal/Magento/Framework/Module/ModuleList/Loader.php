@@ -29,8 +29,6 @@ class Loader
     private $converter;
 
     /**
-     * Parser
-     *
      * @var \Magento\Framework\Xml\Parser
      * @deprecated
      * @see $parserFactory
@@ -38,8 +36,6 @@ class Loader
     private $parser;
 
     /**
-     * Module registry
-     *
      * @var ComponentRegistrarInterface
      */
     private $moduleRegistry;
@@ -51,7 +47,11 @@ class Loader
      */
     private $filesystemDriver;
 
-    /** @var ParserFactory */
+    /**
+     * @var ParserFactory
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
     private readonly ParserFactory $parserFactory;
 
     /**

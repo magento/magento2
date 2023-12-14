@@ -13,6 +13,7 @@ use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Tests the dispatch method in the GraphQl Controller class using a simple product query
