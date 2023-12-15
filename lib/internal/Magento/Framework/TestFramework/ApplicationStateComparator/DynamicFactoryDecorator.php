@@ -48,7 +48,7 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
         $this->collector = new Collector($this->objectManager, $skipListAndFilterList);
         $this->objectManager->addSharedInstance($skipListAndFilterList, SkipListAndFilterList::class);
         $this->objectManager->addSharedInstance($this->collector, Collector::class);
-        $this->resetter = new Resetter();
+        $this->resetter = $objectManager->create(Resetter::class);
     }
 
     /**
