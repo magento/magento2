@@ -40,6 +40,9 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface, ResetAf
         $this->objectManager = $objectManager;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function _resetState(): void
     {
         $this->logger = null;

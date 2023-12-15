@@ -522,7 +522,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      */
     public function getCountryModel()
     {
-        if ($country = $this->countryModelsCache->get($this->getCountryId())) {
+        if (!($country = $this->countryModelsCache->get($this->getCountryId()))) {
             $country = $this->_createCountryInstance();
             $country->load($this->getCountryId());
             $this->countryModelsCache->add($this->getCountryId(), $country);
@@ -541,7 +541,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         if ($regionId === null) {
             $regionId = $this->getRegionId();
         }
-        if ($region = $this->regionModelsCache->get($regionId)) {
+        if (!($region = $this->regionModelsCache->get($regionId))) {
             $region = $this->_createRegionInstance();
             $region->load($regionId);
             $this->regionModelsCache->add($regionId, $region);
