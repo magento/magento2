@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\TestFramework\ApplicationStateComparator;
 
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\ObjectManager\Resetter\Resetter as OriginalResetter;
 use Magento\Framework\ObjectManager\Resetter\WeakMapSorter;
 use Magento\Framework\ObjectManagerInterface;
@@ -36,11 +37,11 @@ class Resetter extends OriginalResetter
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(ComponentRegistrarInterface $componentRegistrar, array $classList = [])
     {
         $this->collectedWeakMap = new WeakMap;
         $this->skipListAndFilterList =  new SkipListAndFilterList;
-        parent::__construct();
+        parent::__construct($componentRegistrar, $classList);
     }
 
     /**
