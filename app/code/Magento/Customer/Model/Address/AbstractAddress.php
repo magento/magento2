@@ -11,6 +11,8 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Customer\Model\Address\AbstractAddress\CountryModelsCache;
+use Magento\Customer\Model\Address\AbstractAddress\RegionModelsCache;
 use Magento\Customer\Model\Data\Address as AddressData;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\AbstractExtensibleModel;
@@ -61,18 +63,28 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     protected $_eventObject = 'customer_address';
 
     /**
-     * cache of Directory country models
+     * Directory country models
      *
      * @var \Magento\Directory\Model\Country[]
+     * @deprecated
+     * @see $countryModelsCache
      */
-    protected $_countryModels = [];
+    protected static $_countryModels = [];
+
+    /** @var CountryModelsCache */
+    private readonly CountryModelsCache $countryModelsCache;
 
     /**
-     * cache of Directory region models
+     * Directory region models
      *
      * @var \Magento\Directory\Model\Region[]
+     * @deprecated
+     * @see $regionModelsCache
      */
-    protected $_regionModels = [];
+    protected static $_regionModels = [];
+
+    /** @var RegionModelsCache */
+    private readonly RegionModelsCache $regionModelsCache;
 
     /**
      * @var \Magento\Directory\Helper\Data
@@ -144,7 +156,9 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param CompositeValidator $compositeValidator
+     * @param CompositeValidator|null $compositeValidator
+     * @param CountryModelsCache|null $countryModelsCache
+     * @param RegionModelsCache|null $regionModelsCache
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -165,7 +179,9 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        CompositeValidator $compositeValidator = null
+        ?CompositeValidator $compositeValidator = null,
+        ?CountryModelsCache $countryModelsCache = null,
+        ?RegionModelsCache $regionModelsCache = null,
     ) {
         $this->_directoryData = $directoryData;
         $data = $this->_implodeArrayField($data);
@@ -179,6 +195,10 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         $this->dataObjectHelper = $dataObjectHelper;
         $this->compositeValidator = $compositeValidator ?: ObjectManager::getInstance()
             ->get(CompositeValidator::class);
+        $this->countryModelsCache = $countryModelsCache ?: ObjectManager::getInstance()
+            ->get(CountryModelsCache::class);
+        $this->regionModelsCache = $regionModelsCache ?: ObjectManager::getInstance()
+            ->get(RegionModelsCache::class);
         parent::__construct(
             $context,
             $registry,
@@ -502,12 +522,12 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      */
     public function getCountryModel()
     {
-        if (!isset($this->_countryModels[$this->getCountryId()])) {
+        if ($country = $this->countryModelsCache->get($this->getCountryId())) {
             $country = $this->_createCountryInstance();
             $country->load($this->getCountryId());
-            $this->_countryModels[$this->getCountryId()] = $country;
+            $this->countryModelsCache->add($this->getCountryId(), $country);
         }
-        return $this->_countryModels[$this->getCountryId()];
+        return $country;
     }
 
     /**
@@ -521,14 +541,12 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         if ($regionId === null) {
             $regionId = $this->getRegionId();
         }
-
-        if (!isset($this->_regionModels[$regionId])) {
+        if ($region = $this->regionModelsCache->get($regionId)) {
             $region = $this->_createRegionInstance();
             $region->load($regionId);
-            $this->_regionModels[$regionId] = $region;
+            $this->regionModelsCache->add($regionId, $region);
         }
-
-        return $this->_regionModels[$regionId];
+        return $region;
     }
 
     /**
@@ -746,7 +764,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      */
     public function _resetState(): void
     {
-        $this->_countryModels  = [];
-        $this->_regionModels = [];
+        self::$_countryModels  = [];
+        self::$_regionModels = [];
     }
 }
