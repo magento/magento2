@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Cache;
 
+use Magento\Framework\Cache\Backend\Redis;
+use Zend_Cache;
+use Zend_Cache_Exception;
+
 class Core extends \Zend_Cache_Core
 {
     /**
@@ -53,17 +57,7 @@ class Core extends \Zend_Cache_Core
     }
 
     /**
-     * Save some data in a cache
-     *
-     * @param  mixed $data                  Data to put in cache (can be another type than string if
-     *                                      automatic_serialization is on)
-     * @param  null|string $cacheId         Cache id (if not set, the last cache id will be used)
-     * @param  string[] $tags               Cache tags
-     * @param  bool|int $specificLifetime   If != false, set a specific lifetime for this cache record
-     *                                      (null => infinite lifetime)
-     * @param  int $priority                integer between 0 (very low priority) and 10 (maximum priority) used by
-     *                                      some particular backends
-     * @return bool                         True if no problem
+     * @inheritDoc
      */
     public function save($data, $cacheId = null, $tags = [], $specificLifetime = false, $priority = 8)
     {
@@ -127,6 +121,34 @@ class Core extends \Zend_Cache_Core
     }
 
     /**
+     * Validate a cache id or a tag (security, reliable filenames, reserved prefixes...)
+     *
+     * Throw an exception if a problem is found
+     *
+     * @param  string $string Cache id or tag
+     * @throws Zend_Cache_Exception
+     * @return void
+     */
+    protected function _validateIdOrTag($string)
+    {
+        if ($this->_backend instanceof Redis) {
+            if (!is_string($string)) {
+                Zend_Cache::throwException('Invalid id or tag : must be a string');
+            }
+            if (substr($string, 0, 9) == 'internal-') {
+                Zend_Cache::throwException('"internal-*" ids or tags are reserved');
+            }
+            if (!preg_match('~^[a-zA-Z0-9_{}]+$~D', $string)) {
+                Zend_Cache::throwException("Invalid id or tag '$string' : must use only [a-zA-Z0-9_{}]");
+            }
+
+            return;
+        }
+
+        parent::_validateIdOrTag($string);
+    }
+
+    /**
      * Set the backend
      *
      * @param  \Zend_Cache_Backend $backendObject
@@ -176,5 +198,16 @@ class Core extends \Zend_Cache_Core
         }
 
         return $backendObject;
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }

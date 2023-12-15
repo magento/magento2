@@ -19,47 +19,52 @@ interface PaymentTokenInterface
     /*
      * Entity ID.
      */
-    const ENTITY_ID = 'entity_id';
+    public const ENTITY_ID = 'entity_id';
     /*
      * Customer ID.
      */
-    const CUSTOMER_ID = 'customer_id';
+    public const CUSTOMER_ID = 'customer_id';
     /*
      * Unique hash for frontend.
      */
-    const PUBLIC_HASH = 'public_hash';
+    public const PUBLIC_HASH = 'public_hash';
     /*
      * Payment method code.
      */
-    const PAYMENT_METHOD_CODE = 'payment_method_code';
+    public const PAYMENT_METHOD_CODE = 'payment_method_code';
     /*
      * Token type.
      */
-    const TYPE = 'type';
+    public const TYPE = 'type';
     /*
      * Token creation timestamp.
      */
-    const CREATED_AT = 'created_at';
+    public const CREATED_AT = 'created_at';
     /*
      * Token expiration timestamp.
      */
-    const EXPIRES_AT = 'expires_at';
+    public const EXPIRES_AT = 'expires_at';
     /*
      * Gateway token ID.
      */
-    const GATEWAY_TOKEN = 'gateway_token';
+    public const GATEWAY_TOKEN = 'gateway_token';
     /*
      * Additional details.
      */
-    const DETAILS = 'details';
+    public const DETAILS = 'details';
     /*
      * Is vault payment record active.
      */
-    const IS_ACTIVE = 'is_active';
+    public const IS_ACTIVE = 'is_active';
     /*
      * Is vault payment token visible.
      */
-    const IS_VISIBLE = 'is_visible';
+    public const IS_VISIBLE = 'is_visible';
+
+    /*
+     * Vault website id
+     */
+    public const WEBSITE_ID = 'website_id';
 
     /**
      * Gets the entity ID.
@@ -249,4 +254,20 @@ interface PaymentTokenInterface
      * @since 100.1.0
      */
     public function setIsVisible($isVisible);
+
+    /**
+     * Gets vault payment website id.
+     *
+     * @return int website id.
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
+    public function getWebsiteId();
+
+    /**
+     * Sets vault payment website id.
+     *
+     * @param int $websiteId
+     * @return $this
+     */
+    public function setWebsiteId(int $websiteId);
 }

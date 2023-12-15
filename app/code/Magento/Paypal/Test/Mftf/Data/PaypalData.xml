@@ -214,7 +214,7 @@
     </entity>
     <entity name="VisaDefaultCardInfo">
         <data key="cardNumberEnding">1111</data>
-        <data key="cardExpire">01/2030</data>
+        <data key="cardExpire">1/2030</data>
     </entity>
     <entity name="SamplePaypalExpressConfig2" type="paypal_express_config">
         <data key="paypal_express_email">rlus_1349181941_biz@ebay.com</data>
