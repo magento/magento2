@@ -79,6 +79,7 @@
         </actionGroup>
         <!-- Goto Checkout Page -->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <waitForPageLoad stepKey="waitForShippingPage"/>
         <!--Fill Shipping Address-->
         <actionGroup ref="GuestCheckoutFillNewShippingAddressActionGroup" stepKey="fillShippingAddress">
             <argument name="customer" value="$$createCustomer$$" />
