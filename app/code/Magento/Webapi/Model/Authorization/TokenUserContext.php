@@ -61,11 +61,15 @@ class TokenUserContext implements UserContextInterface, ResetAfterRequestInterfa
 
     /**
      * @var UserTokenReaderInterface
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly UserTokenReaderInterface $userTokenReader;
 
     /**
      * @var UserTokenValidatorInterface
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly UserTokenValidatorInterface $userTokenValidator;
 

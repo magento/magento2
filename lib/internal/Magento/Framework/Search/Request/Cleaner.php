@@ -268,6 +268,9 @@ class Cleaner implements ResetAfterRequestInterface
         $this->requestData = [];
     }
 
+    /**
+     * @inheritDoc
+     */
     public function _resetState(): void
     {
         $this->clear();

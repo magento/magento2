@@ -44,11 +44,15 @@ class ThemeProvider implements ThemeProviderInterface, ResetAfterRequestInterfac
 
     /**
      * @var DeploymentConfig
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly DeploymentConfig $deploymentConfig;
 
     /**
      * @var Json
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly Json $serializer;
 

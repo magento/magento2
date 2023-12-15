@@ -29,7 +29,10 @@ class SetPaymentMethodOnCart
 
     private const PATH_PAYMENT_METHOD_DATA = 'input/payment_method';
 
-    private $allowedPaymentMethodCodes = [];
+    /**
+     * @var array $allowedPaymentMethodCodes
+     */
+    private array $allowedPaymentMethodCodes = [];
 
     /**
      * @var CheckoutFactory
@@ -38,6 +41,7 @@ class SetPaymentMethodOnCart
 
     /**
      * @var ArrayManagerFactory
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly ArrayManagerFactory $arrayManagerFactory;
 

@@ -25,7 +25,7 @@ class WeakMapSorter
     /**
      * Constructor
      *
-     * @param array<string, int> $sortOrder
+     * @param array $sortOrder
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function __construct(private array $sortOrder)

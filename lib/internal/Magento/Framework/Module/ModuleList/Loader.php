@@ -47,7 +47,11 @@ class Loader
      */
     private $filesystemDriver;
 
-    /** @var ParserFactory */
+    /**
+     * @var ParserFactory
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
     private readonly ParserFactory $parserFactory;
 
     /**

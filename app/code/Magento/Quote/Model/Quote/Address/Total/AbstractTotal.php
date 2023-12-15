@@ -10,6 +10,7 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 /**
  * Sales Quote Address Total  abstract model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -139,7 +140,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface, Res
     /**
      * Set address which can be used inside totals calculation
      *
-     * @param   \Magento\Quote\Model\Quote\Address $address
+     * @param \Magento\Quote\Model\Quote\Address $address
      * @return $this
      */
     protected function _setAddress(\Magento\Quote\Model\Quote\Address $address)
@@ -216,7 +217,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface, Res
     /**
      * Add total model amount value to address
      *
-     * @param   float $amount
+     * @param float $amount
      * @return $this
      */
     protected function _addAmount($amount)

@@ -27,13 +27,15 @@ class RulePool implements ResetAfterRequestInterface
     public const TYPE_STATIC_FILE = 'static';
     public const TYPE_EMAIL_TEMPLATE = 'email';
 
-    /** @var mixed */
-    protected $filesystem;
+    /**
+     * @var \Magento\Framework\Filesystem
+     */
+    protected \Magento\Framework\Filesystem $filesystem;
 
     /**
      * @var array
      */
-    private $rules = [];
+    private array $rules = [];
 
     /**
      * Factory for simple rule

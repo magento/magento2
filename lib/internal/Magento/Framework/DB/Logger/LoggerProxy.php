@@ -52,31 +52,43 @@ class LoggerProxy implements LoggerInterface, ResetAfterRequestInterface
 
     /**
      * @var FileFactory
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly FileFactory $fileFactory;
 
     /**
      * @var QuietFactory
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly QuietFactory $quietFactory;
 
     /**
      * @var string|null
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly ?string $loggerAlias;
 
     /**
      * @var bool
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly bool $logAllQueries;
 
     /**
      * @var float
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly float $logQueryTime;
 
     /**
      * @var bool
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly bool $logCallStack;
 

@@ -28,6 +28,8 @@ class Factory implements ResetAfterRequestInterface
 
     /**
      * @var ObjectManagerInterface
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     protected readonly ObjectManagerInterface $_objectManager;
 
@@ -45,6 +47,8 @@ class Factory implements ResetAfterRequestInterface
 
     /**
      * @var Reader
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly Reader $moduleReader;
 

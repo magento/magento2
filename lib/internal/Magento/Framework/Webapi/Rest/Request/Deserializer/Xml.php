@@ -25,7 +25,11 @@ class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfac
      */
     protected $_appState;
 
-    /** @var ParserFactory */
+    /**
+     * @var ParserFactory
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
     private readonly ParserFactory $parserFactory;
 
     /**

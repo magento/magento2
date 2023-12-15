@@ -14,11 +14,15 @@ class JwtUserContext implements UserContextInterface
 {
     /**
      * @var int|null
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly ?int $userId;
 
     /**
      * @var int|null
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly ?int $userType;
 
