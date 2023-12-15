@@ -442,3 +442,8 @@ enum CartUserInputErrorType {
     UNDEFINED
 }
 
+type StoreConfig {
+    is_guest_checkout_enabled: Boolean @doc(description: "Extended Config Data - checkout/options/guest_checkout")
+    is_one_page_checkout_enabled: Boolean @doc(description: "Extended Config Data - checkout/options/onepage_checkout_enabled")
+    max_items_in_order_summary: Int @doc(description: "Extended Config Data - checkout/options/max_items_display_count")
+}
