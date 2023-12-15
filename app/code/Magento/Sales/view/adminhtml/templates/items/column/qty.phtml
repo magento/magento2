@@ -11,6 +11,13 @@
             <td><?= (float) $item->getQtyOrdered() ?></td>
         </tr>
 
+        <?php if ((float)$item->getQtyBackordered()) : ?>
+            <tr>
+                <th><?= $block->escapeHtml(__('Backordered')); ?></th>
+                <td><?= (float) $item->getQtyBackordered() ?></td>
+            </tr>
+        <?php endif; ?>
+        
         <?php if ((float)$item->getQtyInvoiced()) : ?>
             <tr>
                 <th><?= $block->escapeHtml(__('Invoiced')); ?></th>
