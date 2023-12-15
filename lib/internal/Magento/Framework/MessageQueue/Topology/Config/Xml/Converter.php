@@ -65,7 +65,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface, ResetAf
     /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * phpcs:ignore Magento2.Performance.ForeachArrayMerge
+     * phpcs:disable Magento2.Performance.ForeachArrayMerge
      */
     public function convert($source)
     {

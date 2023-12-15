@@ -35,6 +35,7 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
  * @method bool getShouldIgnoreValidation()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  *
  * @api
  * @since 100.0.2
@@ -71,7 +72,10 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      */
     protected static $_countryModels = [];
 
-    /** @var CountryModelsCache */
+    /**
+     * @var CountryModelsCache
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
     private readonly CountryModelsCache $countryModelsCache;
 
     /**
@@ -83,7 +87,10 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      */
     protected static $_regionModels = [];
 
-    /** @var RegionModelsCache */
+    /**
+     * @var RegionModelsCache
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
     private readonly RegionModelsCache $regionModelsCache;
 
     /**
@@ -156,7 +163,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param CompositeValidator|null $compositeValidator
+     * @param CompositeValidator $compositeValidator
      * @param CountryModelsCache|null $countryModelsCache
      * @param RegionModelsCache|null $regionModelsCache
      *
@@ -179,7 +186,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        ?CompositeValidator $compositeValidator = null,
+        CompositeValidator $compositeValidator = null,
         ?CountryModelsCache $countryModelsCache = null,
         ?RegionModelsCache $regionModelsCache = null,
     ) {

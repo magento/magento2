@@ -13,7 +13,6 @@ use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use WeakMap;
-use WeakReference;
 
 /**
  * Class that keeps track of the instances that need to be reset, and resets them
@@ -32,7 +31,6 @@ class Resetter implements ResetterInterface
     /** @var WeakMapSorter|null Note: We use temporal coupling here because of chicken/egg during bootstrapping */
     private ?WeakMapSorter $weakMapSorter = null;
 
-
     /**
      * @var array
      */
@@ -41,6 +39,8 @@ class Resetter implements ResetterInterface
     /**
      * Constructor
      *
+     * @param ComponentRegistrarInterface $componentRegistrar
+     * @param array $classList
      * @return void
      * @phpcs:disable Magento2.Functions.DiscouragedFunction
      */
@@ -70,7 +70,6 @@ class Resetter implements ResetterInterface
             yield $modulePath . '/etc/' . self::RESET_PATH;
         }
     }
-
 
     /**
      * Add instance to be reset later

@@ -19,6 +19,9 @@ class ResetterFactory
      */
     private static string $resetterClassName = Resetter::class;
 
+    /**
+     * @param ObjectManagerInterface $objectManager
+     */
     public function __construct(private ObjectManagerInterface $objectManager)
     {
     }

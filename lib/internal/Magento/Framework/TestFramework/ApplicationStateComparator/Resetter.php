@@ -9,7 +9,6 @@ namespace Magento\Framework\TestFramework\ApplicationStateComparator;
 
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\ObjectManager\Resetter\Resetter as OriginalResetter;
-use Magento\Framework\ObjectManager\Resetter\WeakMapSorter;
 use Magento\Framework\ObjectManagerInterface;
 use WeakMap;
 
@@ -35,6 +34,8 @@ class Resetter extends OriginalResetter
     /**
      * Constructor
      *
+     * @param ComponentRegistrarInterface $componentRegistrar
+     * @param array $classList
      * @return void
      */
     public function __construct(ComponentRegistrarInterface $componentRegistrar, array $classList = [])

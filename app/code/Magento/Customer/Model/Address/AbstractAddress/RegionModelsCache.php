@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Model\Address\AbstractAddress;
 
@@ -29,7 +30,7 @@ class RegionModelsCache implements ResetAfterRequestInterface
      * Adds model to cache using key
      *
      * @param string $key
-     * @param Region $value
+     * @param Region $model
      * @return void
      */
     public function add(string $key, Region $model) : void

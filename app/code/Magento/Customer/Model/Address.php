@@ -388,6 +388,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      *
      * @return \Magento\Customer\Model\Address\CustomAttributeListInterface
      * @deprecated 100.0.6
+     * @see not recommended way
      */
     private function getAttributeList()
     {

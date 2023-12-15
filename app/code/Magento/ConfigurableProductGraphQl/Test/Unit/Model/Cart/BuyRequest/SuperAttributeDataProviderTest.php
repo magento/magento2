@@ -24,6 +24,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test for SuperAttributeDataProvider
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SuperAttributeDataProviderTest extends TestCase
 {
