@@ -27,7 +27,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface, ResetAf
      * Boolean value converter.
      *
      * @var BooleanUtils
-     *
      * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly BooleanUtils $booleanUtils;
@@ -66,6 +65,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface, ResetAf
     /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * phpcs:ignore Magento2.Performance.ForeachArrayMerge
      */
     public function convert($source)
     {
@@ -93,14 +93,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface, ResetAf
                 }
             }
 
-            // @codingStandardsIgnoreStart
             if (isset($result[$name . '--' . $connection]['bindings']) && count($bindings) > 0) {
                 $bindings = array_merge($result[$name . '--' . $connection]['bindings'], $bindings);
             }
             if (isset($result[$name . '--' . $connection]['arguments']) && count($exchangeArguments) > 0) {
                 $exchangeArguments = array_merge($result[$name . '--' . $connection]['arguments'], $exchangeArguments);
             }
-            // @codingStandardsIgnoreEnd
 
             $autoDelete = $this->getAttributeValue($exchange, 'autoDelete', false);
             $result[$name . '--' . $connection] = [

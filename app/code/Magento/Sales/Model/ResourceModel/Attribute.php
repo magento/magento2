@@ -88,11 +88,11 @@ class Attribute implements ResetAfterRequestInterface
      * Perform actions after object save
      *
      * @param AbstractModel $object
-     * @param string $attribute
+     * @param mixed $attribute
      * @return $this
      * @throws \Exception
      */
-    public function saveAttribute(AbstractModel $object, $attribute)
+    public function saveAttribute(AbstractModel $object, mixed $attribute)
     {
         if ($attribute instanceof AbstractAttribute) {
             $attributes = $attribute->getAttributeCode();

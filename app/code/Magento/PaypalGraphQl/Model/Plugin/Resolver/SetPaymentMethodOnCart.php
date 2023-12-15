@@ -41,7 +41,6 @@ class SetPaymentMethodOnCart
 
     /**
      * @var ArrayManagerFactory
-     *
      * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly ArrayManagerFactory $arrayManagerFactory;
@@ -63,6 +62,7 @@ class SetPaymentMethodOnCart
      * @param ConfigProvider $configProvider
      * @param array $allowedPaymentMethodCodes
      * @param ArrayManagerFactory|null $arrayManagerFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         CheckoutFactory $checkoutFactory,

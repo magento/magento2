@@ -82,7 +82,8 @@ abstract class AbstractResource
     /**
      * Commit resource transaction
      *
-     * @deprecated @see \Magento\Framework\Model\ExecuteCommitCallbacks::afterCommit
+     * @deprecated
+     * @see \Magento\Framework\Model\ExecuteCommitCallbacks::afterCommit
      * @return $this
      */
     public function commit()
@@ -248,7 +249,8 @@ abstract class AbstractResource
      * Get serializer
      *
      * @return Json
-     * @deprecated 101.0.0 @see not recommended anymore
+     * @deprecated 101.0.0
+     * @see not recommended anymore
      * @since 101.0.0
      */
     protected function getSerializer()
@@ -263,7 +265,8 @@ abstract class AbstractResource
      * Get logger
      *
      * @return \Psr\Log\LoggerInterface
-     * @deprecated 101.0.1 @see not recommended anymore
+     * @deprecated 101.0.1
+     * @see not recommended anymore
      */
     private function getLogger()
     {

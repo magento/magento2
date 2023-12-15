@@ -18,7 +18,7 @@ class CustomizableOptionsDataProvider implements BuyRequestDataProviderInterface
 {
     /**
      * @var ArrayManagerFactory
-     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly ArrayManagerFactory $arrayManagerFactory;

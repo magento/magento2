@@ -19,7 +19,7 @@ class PayflowProCcVaultAdditionalDataProvider implements AdditionalDataProviderI
 
     /**
      * @param ArrayManager $arrayManager
-     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     public function __construct(ArrayManager $arrayManager)
