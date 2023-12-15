@@ -30,6 +30,7 @@
             <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClickOnButtonToRemoveFiltersIfPresent"/>
             <createData entity="RollbackPaypalPayflowPro" stepKey="rollbackPaypalPayflowProConfig"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
             <deleteData createDataKey="createSimpleProduct3" stepKey="deleteSimpleProduct3"/>
