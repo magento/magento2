@@ -10,14 +10,15 @@ namespace Magento\Variable\Test\Unit\Model;
 use Magento\Framework\Escaper;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Listener\ReplaceObjectManager\TestProvidesServiceInterface;
+use Magento\Framework\Validation\ValidationException;
+use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
 use Magento\Variable\Model\ResourceModel\Variable;
 use Magento\Variable\Model\ResourceModel\Variable\Collection;
-use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\Validation\ValidationException;
 
-class VariableTest extends TestCase
+class VariableTest extends TestCase implements TestProvidesServiceInterface
 {
     /**
      * @var  \Magento\Variable\Model\Variable
@@ -77,6 +78,17 @@ class VariableTest extends TestCase
             ]
         );
         $this->validationFailedPhrase = __('Validation has failed.');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getServiceForObjectManager(string $type) : ?object
+    {
+        if (Collection::class == $type) {
+            return $this->resourceCollectionMock;
+        }
+        return null;
     }
 
     public function testGetValueHtml()

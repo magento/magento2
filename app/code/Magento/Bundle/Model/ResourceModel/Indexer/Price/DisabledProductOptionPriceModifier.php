@@ -15,11 +15,12 @@ use Magento\Catalog\Model\Config;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceModifierInterface;
 use Magento\Bundle\Model\ResourceModel\Selection as BundleSelection;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Remove bundle product from price index when all products in required option are disabled
  */
-class DisabledProductOptionPriceModifier implements PriceModifierInterface
+class DisabledProductOptionPriceModifier implements PriceModifierInterface, ResetAfterRequestInterface
 {
     /**
      * @var ResourceConnection
@@ -144,5 +145,13 @@ class DisabledProductOptionPriceModifier implements PriceModifierInterface
         while ($id = $statement->fetchColumn()) {
             yield $id;
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->websiteIdsOfProduct = [];
     }
 }
