@@ -8,5 +8,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminNewWebsiteActionsSection">
         <element name="saveWebsite" type="button" selector="#save" timeout="120"/>
+        <element name="setAsDefault" type="checkbox" selector=".//*[@name='website[is_default]']" timeout="120"/>
     </section>
 </sections>

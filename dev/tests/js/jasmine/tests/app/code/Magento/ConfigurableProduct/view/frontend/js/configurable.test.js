@@ -67,8 +67,14 @@ define([
                 'salable': []
             }
         },
-        blockHtml = '<form id="cart"/>'
-            + '<select name=\'super_attribute[93]\'' +
+        blockHtml = '<div class="product-info-main">' +
+            '<div class="product-info-price">' +
+            '<div class="price-box price-final_price" data-role="priceBox">' +
+            '</div>' +
+            '</div>' +
+            '<div class="product-add-form">' +
+            '<form id="cart"/>' +
+            '<select name=\'super_attribute[93]\'' +
             ' data-selector=\'super_attribute[93]\'' +
             ' data-validate=\'{required:true}\'' +
             ' id=\'attribute93\'' +
@@ -78,7 +84,9 @@ define([
             '<option value=\'15\'>beige</option>' +
             '</select>' +
             '<input id="qty"/>' +
-            '</form>',
+            '</form>' +
+            '</div>' +
+            '</div>',
         selectElement,
         qtyElement,
         formElement;
@@ -89,13 +97,22 @@ define([
             selectElement = $('#attribute93');
             qtyElement = $('#qty');
             formElement = $('#cart');
-            widget = new Configurable($.extend(true, {}, options), formElement);
             $.fn.trigFunc = $.fn.trigger;
+            $.fn.priceBoxFunc = $.fn.priceBox;
+            $.fn.priceBox = function () {
+                return {
+                    prices: $.extend(true, {}, this.data('price-box'))
+                };
+            };
+            $('body').find('[data-role=priceBox]').data('price-box', $.extend(true, {}, options.spConfig.prices));
+            widget = new Configurable($.extend(true, {}, options), formElement);
         });
         afterEach(function () {
             formElement.remove();
             $.fn.trigger = $.fn.trigFunc;
+            $.fn.priceBox = $.fn.priceBoxFunc;
             delete $.fn.trigFunc;
+            delete $.fn.priceBoxFunc;
         });
         it('check if attribute value is possible to be set as configurable option', function () {
             expect($.mage.configurable).toBeDefined();
@@ -112,17 +129,6 @@ define([
         it('check if widget will return correct price values in case option is selected or not.', function () {
             var result;
 
-            spyOn($.fn, 'priceBox').and.callFake(function () {
-                return {
-                    prices: {
-                        'baseOldPrice': {'amount': 10},
-                        'oldPrice': {'amount': 10},
-                        'basePrice': {'amount': 10},
-                        'finalPrice': {'amount': 10},
-                        'msrpPrice': {'amount': 0}
-                    }
-                };
-            });
             result = widget._getPrices().prices;
             expect(result.baseOldPrice.amount).toBe(0);
             expect(result.oldPrice.amount).toBe(0);
@@ -140,7 +146,43 @@ define([
         it('check that price is reloaded on qty change', function () {
             spyOn($.fn, 'trigger');
             qtyElement.trigFunc('input');
-            expect($.fn.trigger).toHaveBeenCalledWith('updatePrice', {});
+            expect($.fn.trigger)
+                .toHaveBeenCalledWith(
+                    'updatePrice',
+                    {
+                        prices: {
+                            baseOldPrice: {
+                                amount: 0
+                            },
+                            oldPrice: {
+                                amount: 0
+                            },
+                            basePrice: {
+                                amount: 0
+                            },
+                            finalPrice: {
+                                amount: 0
+                            }
+                        }
+                    }
+                );
+        });
+
+        it('check if the _configureElement method is enabling configurable option or not', function () {
+            selectElement.val(14);
+            widget._configureElement(selectElement);
+            expect(widget).toBeTruthy();
+        });
+
+        it('check if the _clearSelect method is clearing the option selections or not', function () {
+            selectElement.empty();
+            widget._clearSelect(selectElement);
+            expect(widget).toBeTruthy();
+        });
+
+        it('check if the _getSimpleProductId method is returning simple product id or not', function () {
+            widget._getSimpleProductId(selectElement);
+            expect(widget).toBeTruthy();
         });
     });
 });

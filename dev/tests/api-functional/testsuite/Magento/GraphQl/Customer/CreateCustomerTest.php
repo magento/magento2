@@ -36,14 +36,14 @@ class CreateCustomerTest extends GraphQlAbstract
     }
 
     /**
+     * @dataProvider validEmailAddressDataProvider
      * @throws \Exception
      */
-    public function testCreateCustomerAccountWithPassword()
+    public function testCreateCustomerAccountWithPassword(string $email)
     {
         $newFirstname = 'Richard';
         $newLastname = 'Rowe';
         $currentPassword = 'test123#';
-        $newEmail = 'new_customer@example.com';
 
         $query = <<<QUERY
 mutation {
@@ -51,7 +51,7 @@ mutation {
         input: {
             firstname: "{$newFirstname}"
             lastname: "{$newLastname}"
-            email: "{$newEmail}"
+            email: "{$email}"
             password: "{$currentPassword}"
             is_subscribed: true
         }
@@ -71,8 +71,20 @@ QUERY;
         $this->assertNull($response['createCustomer']['customer']['id']);
         $this->assertEquals($newFirstname, $response['createCustomer']['customer']['firstname']);
         $this->assertEquals($newLastname, $response['createCustomer']['customer']['lastname']);
-        $this->assertEquals($newEmail, $response['createCustomer']['customer']['email']);
+        $this->assertEquals($email, $response['createCustomer']['customer']['email']);
         $this->assertTrue($response['createCustomer']['customer']['is_subscribed']);
+    }
+
+    /**
+     * @return array
+     */
+    public function validEmailAddressDataProvider(): array
+    {
+        return [
+            ['new_customer@example.com'],
+            ['jØrgen@somedomain.com'],
+            ['“email”@example.com']
+        ];
     }
 
     /**
@@ -217,15 +229,13 @@ QUERY;
     {
         return [
             ['plainaddress'],
-            ['jØrgen@somedomain.com'],
             ['#@%^%#$@#$@#.com'],
             ['@example.com'],
             ['Joe Smith <email@example.com>'],
             ['email.example.com'],
             ['email@example@example.com'],
             ['email@example.com (Joe Smith)'],
-            ['email@example'],
-            ['“email”@example.com'],
+            ['email@example']
         ];
     }
 
