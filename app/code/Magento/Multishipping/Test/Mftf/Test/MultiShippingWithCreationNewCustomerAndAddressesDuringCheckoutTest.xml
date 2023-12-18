@@ -14,17 +14,11 @@
             <description value="Verify Multi shipping with creation new customer and addresses during checkout"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4685" />
-            <skip>
-                <issueId value="ACQE-4834" />
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminArea"/>
-            <!-- remove the Filter From the page-->
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
-            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearFilterFromProductIndex"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
-            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
                 <field key="name">simple product</field>
             </createData>
@@ -37,6 +31,7 @@
             <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openConfigurableProductEditPage">
                 <argument name="productId" value="$createConfigProduct.id$"/>
             </actionGroup>
+            <waitForElementVisible selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="waitForCreateConfigurationsElementToBeVisible"/>
             <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>
             <waitForPageLoad stepKey="waitForSelectAttributesPage"/>
             <actionGroup ref="CreateOptionsForAttributeActionGroup" stepKey="createOptions">
@@ -44,38 +39,39 @@
                 <argument name="firstOptionName" value="Red"/>
                 <argument name="secondOptionName" value="Green"/>
             </actionGroup>
+            <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextButtonToBeClickable"/>
             <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton"/>
+            <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" stepKey="waitForApplySinglePriceRadioButtonToBeClickable"/>
             <click selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" stepKey="clickOnApplySinglePriceToAllSkus"/>
+            <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.singlePrice}}" stepKey="waitForPriceFieldToBeVisible"/>
             <fillField selector="{{AdminCreateProductConfigurationsPanel.singlePrice}}" userInput="10" stepKey="enterAttributePrice"/>
+            <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="waitForApplySingleQuantityRadioButtonToBeClickable"/>
             <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+            <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.quantity}}" stepKey="waitForQuantityFieldToBeVisible"/>
             <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="100" stepKey="enterAttributeQuantity"/>
+            <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextButtonToBeClickableInPanelPage"/>
             <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextStep"/>
             <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextPageOpened"/>
             <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="generateProducts"/>
-            <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveButtonVisible"/>
             <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
             <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="clickOnConfirmInPopup"/>
             <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
         </before>
         <after>
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearGridFilters"/>
             <actionGroup ref="AdminDeleteAllProductsFromGridActionGroup" stepKey="deleteAllProducts"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <!-- Delete customer -->
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
-            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
-                <argument name="email" value="{{CustomerEntityOne.email}}"/>
-            </actionGroup>
-            <actionGroup ref="AdminDeleteCreatedColorAttributeActionGroup" stepKey="deleteRedColorAttribute">
+            <!-- Delete the Created Color attribute-->
+            <actionGroup ref="AdminDeleteCreatedColorSpecificAttributeActionGroup" stepKey="deleteRedColorAttribute">
                 <argument name="Color" value="Red"/>
             </actionGroup>
-            <actionGroup ref="AdminDeleteCreatedColorAttributeActionGroup" stepKey="deleteBlueColorAttribute">
+            <actionGroup ref="AdminDeleteCreatedColorSpecificAttributeActionGroup" stepKey="deleteGreenColorAttribute">
                 <argument name="Color" value="Green"/>
             </actionGroup>
-            <!-- reindex and flush cache -->
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
+            <!-- Delete customer -->
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
                 <argument name="tags" value="full_page"/>
@@ -102,8 +98,8 @@
             <argument name="productOption" value="Green"/>
             <argument name="qty" value="1"/>
         </actionGroup>
-        <!-- Check Out with Multiple Addresses -->
-        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="navigateToCartPage"/>
+        <!-- Click 'Check Out with Multiple Addresses' -->
         <waitForElementVisible selector="{{MultishippingSection.shippingMultipleCheckout}}" stepKey="waitMultipleAddressShippingButton"/>
         <click selector="{{MultishippingSection.shippingMultipleCheckout}}" stepKey="clickToMultipleAddressShippingButton"/>
         <!--Create an account-->
@@ -117,6 +113,7 @@
             <argument name="customer" value="CustomerEntityOne"/>
         </actionGroup>
         <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <waitForElementVisible selector="{{MultishippingSection.enterNewAddress}}" stepKey="waitForAddressButtonToBeClickable"/>
         <click selector="{{MultishippingSection.enterNewAddress}}" stepKey="clickOnAddress"/>
         <waitForPageLoad stepKey="waitForAddressFieldsPageOpen"/>
         <actionGroup ref="FillNewCustomerAddressFieldsActionGroup" stepKey="editAddressFields">
@@ -156,7 +153,7 @@
         <grabTextFrom selector="{{StorefrontMultipleShippingMethodSection.orderId('1')}}" stepKey="grabFirstOrderId"/>
         <grabTextFrom selector="{{StorefrontMultipleShippingMethodSection.orderId('2')}}" stepKey="grabSecondOrderId"/>
         <!-- Go to My Account > My Orders  and  verify orderId-->
-        <amOnPage url="{{StorefrontCustomerOrdersHistoryPage.url}}" stepKey="goToMyOrdersPage"/>
+        <actionGroup ref="StorefrontNavigateToCustomerOrdersHistoryPageActionGroup" stepKey="goToMyOrdersPage"/>
         <waitForPageLoad stepKey="waitForMyOrdersPageLoad"/>
         <seeElement selector="{{StorefrontCustomerOrdersGridSection.orderView({$grabFirstOrderId})}}" stepKey="seeFirstOrder"/>
         <seeElement selector="{{StorefrontCustomerOrdersGridSection.orderView({$grabSecondOrderId})}}" stepKey="seeSecondOrder"/>
