@@ -153,5 +153,6 @@ class Product implements ResetAfterRequestInterface
     {
         $this->productList = [];
         $this->productSkus = [];
+        $this->attributeCodes = [];
     }
 }

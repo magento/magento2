@@ -11,7 +11,6 @@ use Magento\EavGraphQl\Model\Output\Value\GetAttributeValueInterface;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\GraphQl\Query\Uid;
-use Magento\EavGraphQl\Model\Uid as EavUid;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Model\Quote\Item;

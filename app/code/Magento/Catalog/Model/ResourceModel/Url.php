@@ -10,16 +10,17 @@ namespace Magento\Catalog\Model\ResourceModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements ResetAfterRequestInterface
 {
     /**
      * Stores configuration array
@@ -726,5 +727,16 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_categoryAttributes = [];
+        $this->_productAttributes = [];
+        $this->_rootChildrenIds = [];
+        $this->_stores = null;
     }
 }
