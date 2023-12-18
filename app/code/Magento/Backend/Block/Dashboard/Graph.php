@@ -68,6 +68,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      * Google chart api data encoding
      *
      * @deprecated 101.0.2 since the Google Image Charts API not accessible from March 14, 2019
+     * @see Nothing
      * @var string
      */
     protected $_encoding = 'e';

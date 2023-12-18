@@ -13,6 +13,7 @@ use Magento\Framework\DB\Select;
  *
  * @api
  * @deprecated 100.2.0 in favour of UI component implementation
+ * @see Nothing
  * @method \Magento\Quote\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
  * @method boolean getHideFormElement()
  * @TODO MAGETWO-31510: Remove deprecated class
