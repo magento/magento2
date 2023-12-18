@@ -52,6 +52,8 @@ class UpdateMultiselectAttributesBackendTypesTest extends TestCase
         $select1 = $this->createMock(Select::class);
         $select2 = $this->createMock(Select::class);
         $select3 = $this->createMock(Select::class);
+        $statement = $this->createMock(\Zend_Db_Statement_Interface::class);
+
         $this->eavSetupFactory->method('create')
             ->willReturn($eavSetup);
         $this->dataSetup->method('getConnection')
@@ -65,7 +67,7 @@ class UpdateMultiselectAttributesBackendTypesTest extends TestCase
                 [$entityTypeId, 3, 'backend_type', 'text'],
                 [$entityTypeId, 7, 'backend_type', 'text']
             );
-        $connection->expects($this->exactly(3))
+        $connection->expects($this->exactly(2))
             ->method('select')
             ->willReturnOnConsecutiveCalls($select1, $select2, $select3);
         $connection->method('describeTable')
@@ -78,6 +80,10 @@ class UpdateMultiselectAttributesBackendTypesTest extends TestCase
                     'row_id' => [],
                 ]
             );
+        $connection->method('query')
+            ->willReturn($statement);
+        $connection->method('fetchAll')
+            ->willReturn([]);
         $connection->method('fetchCol')
             ->with($select1)
             ->willReturn($attributeIds);

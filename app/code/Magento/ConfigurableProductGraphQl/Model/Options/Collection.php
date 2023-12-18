@@ -106,6 +106,16 @@ class Collection implements ResetAfterRequestInterface
     }
 
     /**
+     * Retrieve all attributes
+     *
+     * @return array
+     */
+    public function getAttributes(): array
+    {
+        return $this->fetch();
+    }
+
+    /**
      * Fetch attribute data
      *
      * @return array
