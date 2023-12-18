@@ -216,7 +216,7 @@ class ConsumersRunnerTest extends TestCase
                 'arguments' => ['consumerName', '--single-thread', '--max-messages=10000'],
                 'allowedConsumers' => ['someConsumer'],
                 'shellBackgroundExpects' => 0,
-                'isRunExpects' => 0,
+                'isRunExpects' => 1,
             ],
             [
                 'maxMessages' => 10000,
@@ -226,7 +226,7 @@ class ConsumersRunnerTest extends TestCase
                 'arguments' => ['consumerName', '--single-thread', '--max-messages=10000'],
                 'allowedConsumers' => ['someConsumer'],
                 'shellBackgroundExpects' => 0,
-                'isRunExpects' => 0,
+                'isRunExpects' => 1,
             ],
             [
                 'maxMessages' => 10000,

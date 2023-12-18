@@ -122,10 +122,7 @@ class ConsumersRunner
         $php = $this->phpExecutableFinder->find() ?: 'php';
 
         foreach ($this->consumerConfig->getConsumers() as $consumer) {
-            if (!$this->canBeRun($consumer, $allowedConsumers)) {
-                continue;
-            }
-
+            $cliCommandPool = [];
             if (array_key_exists($consumer->getName(), $multipleProcesses)) {
                 $numberOfProcesses = $multipleProcesses[$consumer->getName()];
 
@@ -146,7 +143,7 @@ class ConsumersRunner
                     $command = $php . ' ' . BP . '/bin/magento queue:consumers:start %s %s'
                         . ($maxMessages ? ' %s' : '');
 
-                    $this->shellBackground->execute($command, $arguments);
+                    $cliCommandPool[] = [$command, $arguments];
                 }
             } else if (!$this->lockManager->isLocked(md5($consumer->getName()))) { //phpcs:ignore
                 $arguments = [
@@ -161,6 +158,19 @@ class ConsumersRunner
                 $command = $php . ' ' . BP . '/bin/magento queue:consumers:start %s %s'
                     . ($maxMessages ? ' %s' : '');
 
+                $cliCommandPool[] = [$command, $arguments];
+            }
+
+            if (!$cliCommandPool) {
+                continue;
+            }
+
+            if (!$this->canBeRun($consumer, $allowedConsumers)) {
+                continue;
+            }
+
+            foreach ($cliCommandPool as $commandInstructions) {
+                list($command, $arguments) = $commandInstructions;
                 $this->shellBackground->execute($command, $arguments);
             }
         }
