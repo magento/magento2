@@ -11,11 +11,8 @@ use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface;
 use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Model\ProductRender\FormattedPriceInfoBuilder;
-use Magento\Catalog\Pricing\Price\FinalPrice;
-use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\GroupedProduct\Model\Product\Type\Grouped;
 
 /**
  * Collect information about base prices of products
@@ -25,6 +22,18 @@ use Magento\GroupedProduct\Model\Product\Type\Grouped;
  */
 class Price implements ProductRenderCollectorInterface
 {
+    /** FInal Price key */
+    public const KEY_FINAL_PRICE = "final_price";
+
+    /** Minimal Price key */
+    public const KEY_MINIMAL_PRICE = "minimal_price";
+
+    /** Regular Price key */
+    public const KEY_REGULAR_PRICE = "regular_price";
+
+    /** Max Price key */
+    public const KEY_MAX_PRICE = "max_price";
+
     /**
      * @var PriceCurrencyInterface
      */
@@ -75,49 +84,40 @@ class Price implements ProductRenderCollectorInterface
             $priceInfo = $this->priceInfoFactory->create();
         }
 
-        if ($product->getTypeId() === Grouped::TYPE_CODE) {
-            $product = $product
+        $priceInfo->setFinalPrice(
+            $product
                 ->getPriceInfo()
-                ->getPrice(FinalPrice::PRICE_CODE)
-                ->getMinProduct();
-        }
+                ->getPrice('final_price')
+                ->getAmount()
+                ->getValue()
+        );
+        $priceInfo->setMinimalPrice(
+            $product
+                ->getPriceInfo()
+                ->getPrice('final_price')
+                ->getMinimalPrice()
+                ->getValue()
+        );
+        $priceInfo->setRegularPrice(
+            $product
+                ->getPriceInfo()
+                ->getPrice('regular_price')
+                ->getAmount()
+                ->getValue()
+        );
+        $priceInfo->setMaxPrice(
+            $product
+                ->getPriceInfo()
+                ->getPrice('final_price')
+                ->getMaximalPrice()
+                ->getValue()
+        );
 
-        if ($product !== null) {
-            $priceInfo->setFinalPrice(
-                $product
-                    ->getPriceInfo()
-                    ->getPrice(FinalPrice::PRICE_CODE)
-                    ->getAmount()
-                    ->getValue()
-            );
-            $priceInfo->setMinimalPrice(
-                $product
-                    ->getPriceInfo()
-                    ->getPrice(FinalPrice::PRICE_CODE)
-                    ->getMinimalPrice()
-                    ->getValue()
-            );
-            $priceInfo->setRegularPrice(
-                $product
-                    ->getPriceInfo()
-                    ->getPrice(RegularPrice::PRICE_CODE)
-                    ->getAmount()
-                    ->getValue()
-            );
-            $priceInfo->setMaxPrice(
-                $product
-                    ->getPriceInfo()
-                    ->getPrice(FinalPrice::PRICE_CODE)
-                    ->getMaximalPrice()
-                    ->getValue()
-            );
-
-            $this->formattedPriceInfoBuilder->build(
-                $priceInfo,
-                $productRender->getStoreId(),
-                $productRender->getCurrencyCode()
-            );
-        }
+        $this->formattedPriceInfoBuilder->build(
+            $priceInfo,
+            $productRender->getStoreId(),
+            $productRender->getCurrencyCode()
+        );
 
         $productRender->setPriceInfo($priceInfo);
     }

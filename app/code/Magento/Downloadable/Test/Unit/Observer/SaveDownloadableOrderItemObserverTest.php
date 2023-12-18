@@ -180,8 +180,7 @@ class SaveDownloadableOrderItemObserverTest extends TestCase
             ->method('getRealProductType')
             ->willReturn(DownloadableProductType::TYPE_DOWNLOADABLE);
 
-        $this->orderMock->expects($this->once())
-            ->method('getStoreId')
+        $this->orderMock->method('getStoreId')
             ->willReturn(10500);
 
         $product = $this->getMockBuilder(Product::class)

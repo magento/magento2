@@ -12,9 +12,10 @@ namespace Magento\Framework\HTTP;
 
 use Laminas\Http\Client;
 use Magento\Framework\HTTP\Adapter\Curl;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Traversable;
 
-class LaminasClient extends Client
+class LaminasClient extends Client implements ResetAfterRequestInterface
 {
     /**
      * Internal flag to allow decoding of request body
@@ -35,6 +36,14 @@ class LaminasClient extends Client
         ]);
 
         parent::__construct($uri, $options);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->reset();
     }
 
     /**

@@ -43,6 +43,7 @@
             <actionGroup ref="AdminDeleteReviewsByUserNicknameActionGroup" stepKey="deleteCustomerReview"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearNickNameReviewFilters"/>
             <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="CustomerEntityOne.email"/>
             </actionGroup>

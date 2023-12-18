@@ -28,7 +28,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory as OrderCollectionFactory;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as OrderInvoiceCollection;
-use Magento\Sales\Model\ResourceModel\Order\Item;
+use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as OrderItemCollection;
 use Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory as OrderItemCollectionFactory;
 use Magento\Sales\Model\ResourceModel\Order\Payment;
@@ -153,16 +153,6 @@ class OrderTest extends TestCase
             ['create']
         );
         $this->item = $this->getMockBuilder(Item::class)
-            ->addMethods(
-                [
-                    'isDeleted',
-                    'getQtyToInvoice',
-                    'getParentItemId',
-                    'getQuoteItemId',
-                    'getLockedDoInvoice',
-                    'getProductId'
-                ]
-            )
             ->disableOriginalConstructor()
             ->getMock();
         $this->salesOrderCollectionMock = $this->getMockBuilder(
@@ -889,6 +879,20 @@ class OrderTest extends TestCase
             ->willReturn(42);
 
         $this->assertEquals($cancelActionFlag, $this->order->canCancel());
+    }
+
+    public function testRegisterDiscountCanceled()
+    {
+        $this->item->expects($this->any())
+            ->method('getQtyToInvoice')
+            ->willReturn(42);
+        $this->prepareOrderItem();
+        $this->order->setDiscountAmount(-30);
+        $this->order->setDiscountInvoiced(-10);
+        $this->order->setBaseDiscountAmount(-30);
+        $this->order->setBaseDiscountInvoiced(-10);
+        $this->order->registerCancellation();
+        $this->assertEquals(20, abs((float) $this->order->getDiscountCanceled()));
     }
 
     /**

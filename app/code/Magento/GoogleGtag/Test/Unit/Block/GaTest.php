@@ -166,7 +166,8 @@ class GaTest extends TestCase
                     'affiliation' => 'test',
                     'value' => 10.00,
                     'tax' => 2.00,
-                    'shipping' => 1.00
+                    'shipping' => 1.00,
+                    'currency' => 'USD'
                 ]
             ],
             'products' => [
@@ -223,7 +224,7 @@ class GaTest extends TestCase
         $orderMock->expects($this->once())->method('getGrandTotal')->willReturn(10);
         $orderMock->expects($this->once())->method('getTaxAmount')->willReturn(2);
         $orderMock->expects($this->once())->method('getShippingAmount')->willReturn($orderItemCount);
-        $orderMock->expects($this->once())->method('getOrderCurrencyCode')->willReturn('USD');
+        $orderMock->expects($this->exactly(2))->method('getOrderCurrencyCode')->willReturn('USD');
         return $orderMock;
     }
 
