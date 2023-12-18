@@ -41,6 +41,7 @@ $payment->setMethod('checkmo');
 /** @var OrderItem $orderItem */
 $orderItem = $objectManager->create(OrderItem::class);
 $orderItem->setProductId($product->getId())->setQtyOrdered(2);
+$orderItem->setProductType(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE);
 
 /** @var Order $order */
 $order = $objectManager->create(Order::class);
