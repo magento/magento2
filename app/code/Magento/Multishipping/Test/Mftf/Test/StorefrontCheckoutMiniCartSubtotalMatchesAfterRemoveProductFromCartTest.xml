@@ -29,11 +29,11 @@
             <createData entity="Customer_US_UK_DE" stepKey="createCustomerWithMultipleAddresses"/>
         </before>
         <after>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
             <deleteData createDataKey="createdSimpleProduct" stepKey="deleteCreatedSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomerWithMultipleAddresses" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Login to the Storefront as created customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">

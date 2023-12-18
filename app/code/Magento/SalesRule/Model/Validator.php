@@ -8,6 +8,7 @@ namespace Magento\SalesRule\Model;
 
 use Laminas\Validator\ValidatorInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
@@ -28,7 +29,7 @@ use Magento\SalesRule\Model\ResourceModel\Rule\Collection as RulesCollection;
  * @method Validator setCustomerGroupId($id)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Validator extends \Magento\Framework\Model\AbstractModel
+class Validator extends \Magento\Framework\Model\AbstractModel implements ResetAfterRequestInterface
 {
     /**
      * Rule source collection
@@ -149,6 +150,18 @@ class Validator extends \Magento\Framework\Model\AbstractModel
         $this->cartFixedDiscountHelper = $cartFixedDiscount ?:
             ObjectManager::getInstance()->get(CartFixedDiscount::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->counter = 0;
+        $this->_skipActionsValidation = false;
+        $this->_rulesItemTotals = [];
+        $this->_isFirstTimeResetRun = true;
+        $this->_rules = null;
     }
 
     /**
@@ -408,7 +421,13 @@ class Validator extends \Magento\Framework\Model\AbstractModel
                     $baseDiscountAmount = $quoteAmount;
                     break;
             }
-
+            if ($address->getShippingDiscountAmount() + $discountAmount <= $shippingAmount) {
+                $data = [
+                    'amount' => $discountAmount,
+                    'base_amount' => $baseDiscountAmount
+                ];
+                $this->rulesApplier->addShippingDiscountDescription($address, $rule, $data);
+            }
             $discountAmount = min($address->getShippingDiscountAmount() + $discountAmount, $shippingAmount);
             $baseDiscountAmount = min(
                 $address->getBaseShippingDiscountAmount() + $baseDiscountAmount,
@@ -427,7 +446,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
 
         $address->setAppliedRuleIds($this->validatorUtility->mergeIds($address->getAppliedRuleIds(), $appliedRuleIds));
         $quote->setAppliedRuleIds($this->validatorUtility->mergeIds($quote->getAppliedRuleIds(), $appliedRuleIds));
-
         return $this;
     }
 
@@ -459,11 +477,9 @@ class Validator extends \Magento\Framework\Model\AbstractModel
             $ruleTotalBaseItemsDiscountAmount = 0;
             $validItemsCount = 0;
 
+            /** @var Quote\Item $item */
             foreach ($items as $item) {
-                if (!$this->isValidItemForRule($item, $rule)
-                    || ($item->getChildren() && $item->isChildrenCalculated())
-                    || $item->getNoDiscount()
-                ) {
+                if (!$this->isValidItemForRule($item, $rule)) {
                     continue;
                 }
                 $qty = $this->validatorUtility->getItemQty($item, $rule);
@@ -495,6 +511,13 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      */
     private function isValidItemForRule(AbstractItem $item, Rule $rule)
     {
+        if ($item->getParentItem() && $item->getParentItem()->getProductType() === 'configurable'
+            || (($item->getHasChildren() || $item->getChildren()) && $item->isChildrenCalculated())
+            || $item->getNoDiscount()
+        ) {
+            return false;
+        }
+
         if (!$rule->getActions()->validate($item)) {
             return false;
         }

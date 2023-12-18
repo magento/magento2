@@ -13,6 +13,7 @@
     <preference for="Magento\Framework\Indexer\Table\StrategyInterface" type="Magento\Framework\Indexer\Table\Strategy" />
     <preference for="Magento\Framework\Indexer\StateInterface" type="Magento\Indexer\Model\Indexer\State" />
     <preference for="Magento\Framework\Indexer\IndexMutexInterface" type="Magento\Indexer\Model\IndexMutex" />
+    <preference for="Magento\Framework\Indexer\DeferredCacheCleanerInterface" type="Magento\Indexer\Model\Indexer\DeferredCacheCleaner" />
     <type name="Magento\Framework\Indexer\Table\StrategyInterface" shared="false" />
     <type name="Magento\Indexer\Model\Indexer">
         <arguments>

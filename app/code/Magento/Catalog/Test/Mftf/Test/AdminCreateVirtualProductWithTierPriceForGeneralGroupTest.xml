@@ -26,6 +26,7 @@
         </before>
         <after>
             <deleteData createDataKey="categoryEntity" stepKey="deleteSimpleSubCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteVirtualProduct">
                 <argument name="product" value="virtualProductGeneralGroup"/>

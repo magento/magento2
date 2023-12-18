@@ -10,204 +10,176 @@
 <?php $_divId = 'tree' . $block->getId() ?>
 <div id="<?= $block->escapeHtmlAttr($_divId) ?>" class="tree"></div>
 <?php
-$isUseMassaction = $block->getUseMassaction() ? 1 : 0;
+$isUseMassAction = $block->getUseMassaction() ? 1 : 0;
 $isAnchorOnly = $block->getIsAnchorOnly() ? 1 : 0;
-$intCategoryId = (int)$block->getCategoryId();
-$intRootId = (int) $block->getRoot()->getId();
 $scriptString = <<<script
 
-require(['jquery', 'prototype', 'extjs/ext-tree-checkbox'], function(jQuery){
+require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
 
-var tree{$block->escapeJs($block->getId())};
+    let tree = $('#tree{$block->escapeJs($block->getId())}');
+    let useMassAction = {$isUseMassAction};
+    let isAnchorOnly = {$isAnchorOnly};
+    let checkedNodes = [];
 
-var useMassaction = {$isUseMassaction};
-
-var isAnchorOnly = {$isAnchorOnly};
-
-Ext.tree.TreePanel.Enhanced = function(el, config)
-{
-    Ext.tree.TreePanel.Enhanced.superclass.constructor.call(this, el, config);
-};
-
-Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
-
-    loadTree : function(config, firstLoad)
-    {
-        var parameters = config['parameters'];
-        var data = config['data'];
-
-        if ((typeof parameters['root_visible']) != 'undefined') {
-            this.rootVisible = parameters['root_visible']*1;
-        }
-
-        var root = new Ext.tree.TreeNode(parameters);
-
-        this.nodeHash = {};
-        this.setRootNode(root);
-
-        if (firstLoad) {
-
-script;
-if ($block->getNodeClickListener()):
-    $scriptString .= 'this.addListener(\'click\', ' . /* @noEscape */ $block->getNodeClickListener() .
-    '.createDelegate(this));' . PHP_EOL;
-endif;
-$scriptString .= <<<script
-        }
-
-        this.loader.buildCategoryTree(root, data);
-        this.el.dom.innerHTML = '';
-        // render the tree
-        this.render();
+    function addLastNodeProperty(nodes) {
+        return nodes.map(node => {
+            return node.children
+                ? { ...node, children: addLastNodeProperty(node.children) }
+                : { ...node, lastNode: true };
+        });
     }
-});
 
-jQuery(function()
-{
+    function actionBasedOnIsAnchorOnly() {
+        tree.jstree().get_json('#', { flat: true }).each((node, value) => {
+            const attrId = node.a_attr.id;
+            const rootNode = tree.jstree().get_node("#");
+            const rootId = rootNode.children[0];
 
-script;
-    $scriptString .= 'var emptyNodeAdded = ' . ($block->getWithEmptyNode() ? 'false' : 'true') . ';' . PHP_EOL;
-
-$scriptString .= <<<script
-
-    var categoryLoader = new Ext.tree.TreeLoader({
-       dataUrl: '{$block->escapeJs($block->escapeUrl($block->getLoadTreeUrl()))}'
-    });
-
-    categoryLoader.processResponse = function (response, parent, callback) {
-        var config = JSON.parse(response.responseText);
-
-        this.buildCategoryTree(parent, config);
-
-        if (typeof callback == "function") {
-            callback(this, parent);
-        }
-    };
-
-    categoryLoader.buildCategoryTree = function(parent, config)
-    {
-        if (!config) return null;
-
-
-        if (parent && config && config.length){
-            for (var i = 0; i < config.length; i++) {
-                var node;
-                if (useMassaction && config[i].is_anchor == isAnchorOnly) {
-                    config[i].uiProvider = Ext.tree.CheckboxNodeUI;
-                }
-                var _node = Object.clone(config[i]);
-
-                // Add empty node to reset category filter
-                if(!emptyNodeAdded) {
-                    var empty = Object.clone(_node);
-                    empty.text = '{$block->escapeJs(__('None'))}';
-                    empty.children = [];
-                    empty.id = 'none';
-                    empty.path = '1/none';
-                    empty.cls = 'leaf';
-                    parent.appendChild(new Ext.tree.TreeNode(empty));
-                    emptyNodeAdded = true;
-                }
-
-                if (_node.children && !_node.children.length) {
-                    delete(_node.children);
-                    node = new Ext.tree.AsyncTreeNode(_node);
-                } else {
-                    node = new Ext.tree.TreeNode(config[i]);
-                }
-                parent.appendChild(node);
-                node.loader = node.getOwnerTree().loader;
-                node.loader = node.getOwnerTree().loader;
-                if (_node.children) {
-                    this.buildCategoryTree(node, _node.children);
-                }
+            if (isAnchorOnly === 1 && node.id === rootId) {
+                tree.jstree(true).disable_node(node);
+            } else if (isAnchorOnly === 0 && node.id !== rootId) {
+                tree.jstree(true).disable_node(node);
             }
-        }
-    };
+        });
+    }
 
-    categoryLoader.createNode = function(config) {
-        var node;
-        if (useMassaction && config.is_anchor == isAnchorOnly) {
-            config.uiProvider = Ext.tree.CheckboxNodeUI;
+    function handleLoadedTree(e, data) {
+        const container = $(e.target).closest('div.chooser_container');
+        checkedNodes = container.find('input[type="text"].entities').val().split(',').map(item => item.trim());
+
+        data.instance.get_json('#', { flat: true }).forEach(nodeId => {
+            const node = data.instance.get_node(nodeId);
+
+            if (checkedNodes.includes(node.id)) {
+                tree.jstree(true).select_node(node.id);
+            }
+
+            actionBasedOnIsAnchorOnly();
+        });
+    }
+
+    function handleChange(e, data) {
+        if (data.action === 'ready') {
+            return;
         }
-        var _node = Object.clone(config);
-        if (config.children && !config.children.length) {
-            delete(config.children);
-            node = new Ext.tree.AsyncTreeNode(config);
+
+        if (useMassAction) {
+            const clickedNodeID = data.node.id;
+            const currentCheckedNodes = data.instance.get_checked();
+
+            if (data.action === 'select_node' && !checkedNodes.includes(clickedNodeID)) {
+                checkedNodes = currentCheckedNodes;
+            } else if (data.action === 'deselect_node') {
+                checkedNodes = currentCheckedNodes.filter(nodeID => nodeID !== clickedNodeID);
+            }
+
+            checkedNodes.sort((a, b) => a - b);
+
+            const container = $(e.target).closest('div.chooser_container');
+            container.find('input[type="text"].entities').val(checkedNodes.join(', '));
         } else {
-            node = new Ext.tree.TreeNode(config);
+            node = data.node;
+            node.attributes = node.original;
+            const nodeClickListener = {$block->getNodeClickListener()};
+            nodeClickListener(node);
         }
-        return node;
-    };
-
-    categoryLoader.buildHash = function(node)
-    {
-        var hash = {};
-
-        hash = this.toArray(node.attributes);
-
-        if (node.childNodes.length>0 || (node.loaded==false && node.loading==false)) {
-            hash['children'] = new Array;
-
-            for (var i = 0, len = node.childNodes.length; i < len; i++) {
-                if (!hash['children']) {
-                    hash['children'] = new Array;
-                }
-                hash['children'].push(this.buildHash(node.childNodes[i]));
-            }
-        }
-
-        return hash;
-    };
-
-    categoryLoader.toArray = function(attributes) {
-        var data = {};
-        for (var key in attributes) {
-            var value = attributes[key];
-            data[key] = value;
-        }
-
-        return data;
-    };
-
-    categoryLoader.on("beforeload", function(treeLoader, node) {
-        treeLoader.baseParams.id = node.attributes.id;
-        treeLoader.baseParams.store = node.attributes.store;
-        treeLoader.baseParams.form_key = FORM_KEY;
-        $('{$block->escapeJs($_divId)}').fire('category:beforeLoad', {treeLoader:treeLoader});
-    });
-
-    tree{$block->escapeJs($block->getId())} = new Ext.tree.TreePanel.Enhanced('{$block->escapeJs($_divId)}', {
-        animate:          false,
-        loader:           categoryLoader,
-        enableDD:         false,
-        containerScroll:  true,
-        rootVisible:      false,
-        useAjax:          true,
-        currentNodeId:    {$intCategoryId},
-        addNodeTo:        false
-    });
-
-    if (useMassaction) {
-        tree{$block->escapeJs($block->getId())}.on('check', function(node) {
-            $('{$block->escapeJs($_divId)}').fire('node:changed', {node:node});
-        }, tree{$block->escapeJs($block->getId())});
     }
 
-    // set the root node
-    var parameters = {
-        text:        'Psw',
-        draggable:   false,
-        id:          {$intRootId},
-        expanded:    true,
-        category_id: {$intCategoryId}
+    function getCheckedNodeIds(tree, node) {
+        if (node.children_d && node.children_d.length > 0) {
+            const selectChildrenNodes = node.children_d.filter(item => checkedNodes.includes(item));
+
+            if (selectChildrenNodes.length > 0) {
+                tree.jstree(true).select_node(selectChildrenNodes);
+            }
+        }
+    }
+
+    function addLastNodeFlag(treeData) {
+        if (treeData.children) {
+            treeData.children.forEach(child => addLastNodeFlag(child));
+        } else {
+            treeData.lastNode = true;
+        }
+    }
+
+    function handleSuccessResponse(response, childNode, data) {
+        if (response.length > 0) {
+            response.forEach(newNode => {
+                addLastNodeFlag(newNode);
+
+                // Create the new node and execute node callback
+                data.instance.create_node(childNode, newNode, 'last', node => {
+                    if (useMassAction) {
+                        if (checkedNodes.includes(node.id)) {
+                            tree.jstree(true).select_node(node.id);
+                        }
+                        getCheckedNodeIds(tree, node);
+                        actionBasedOnIsAnchorOnly();
+                    }
+                });
+            });
+        }
+    }
+
+    function handleOpenNode(e, data) {
+        let parentNode = data.node;
+
+        if (parentNode.children.length > 0) {
+            let childNode = data.instance.get_node(parentNode.children, false);
+
+            // Check if the child node has no children (is not yet loaded)
+            if (childNode.children && childNode.children.length === 0
+                && childNode.original && !childNode.original.lastNode) {
+                $.ajax({
+                    url: '{$block->escapeJs($block->escapeUrl($block->getLoadTreeUrl()))}',
+                    data: {
+                        id: childNode.original.id,
+                        store: childNode.original.store,
+                        form_key: FORM_KEY
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        handleSuccessResponse(response, childNode, data);
+                    },
+                    error: function (jqXHR, status, error) {
+                        console.log(status + ': ' + error + 'Response text:' + jqXHR.responseText);
+                    }
+                });
+            }
+        }
+    }
+
+    var jstreeConfig = {
+        core: {
+            data: addLastNodeProperty({$block->getTreeJson()}),
+            check_callback: true
+        },
+        plugins: []
     };
 
-    tree{$block->escapeJs($block->getId())}.loadTree({parameters:parameters, data:{$block->getTreeJson()}},true);
+    if (useMassAction) {
+        jstreeConfig.plugins.push('checkbox');
+        jstreeConfig.checkbox = {
+            three_state: false
+        };
+    }
 
+    tree.jstree(jstreeConfig);
+
+    if (useMassAction) {
+        tree.on('loaded.jstree', (e, data) => handleLoadedTree(e, data));
+    }
+
+    tree.on('changed.jstree', (e, data) => handleChange(e, data));
+    tree.on('open_node.jstree', (e, data) => handleOpenNode(e, data));
 });
 
-});
 script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+    'overflow-x: auto;',
+    '#tree' . $block->escapeJs($block->getId())
+);
 ?>
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>

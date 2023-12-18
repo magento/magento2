@@ -30,7 +30,7 @@ class Config implements ConfigInterface, ResetAfterRequestInterface
     private $attributeHelper;
 
     /**
-     * @var string[]
+     * @var string[]|null
      */
     private $mediaAttributeCodes;
 
@@ -206,6 +206,6 @@ class Config implements ConfigInterface, ResetAfterRequestInterface
      */
     public function _resetState(): void
     {
-        $this->mediaAttributeCodes = [];
+        $this->mediaAttributeCodes = null;
     }
 }
