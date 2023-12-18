@@ -7,7 +7,8 @@
         "magento/framework": "*",
         "magento/module-cms": "*",
         "magento/module-widget": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-graph-ql-resolver-cache": "*"
     },
     "suggest": {
         "magento/module-graph-ql": "*",

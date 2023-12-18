@@ -7,6 +7,8 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\EavGraphQl\Model\Output\GetAttributeDataInterface" type="Magento\EavGraphQl\Model\Output\GetAttributeDataComposite"/>
+    <preference for="Magento\EavGraphQl\Model\Output\Value\GetAttributeValueInterface" type="Magento\EavGraphQl\Model\Output\Value\GetAttributeValueComposite"/>
+    <preference for="Magento\EavGraphQl\Model\Output\Value\Options\GetAttributeSelectedOptionInterface" type="Magento\EavGraphQl\Model\Output\Value\Options\GetAttributeSelectedOptionComposite"/>
     <type name="Magento\EavGraphQl\Model\Output\GetAttributeDataComposite">
         <arguments>
             <argument name="providers" xsi:type="array">
@@ -34,6 +36,36 @@
                     <item name="textarea" xsi:type="string">textarea</item>
                     <item name="weight" xsi:type="string">weight</item>
                 </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\EavGraphQl\Model\Output\Value\GetAttributeValueComposite">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\EavGraphQl\Model\Output\Value\GetCustomAttributes</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\EavGraphQl\Model\Output\Value\GetCustomAttributes">
+        <arguments>
+            <argument name="frontendInputs" xsi:type="array">
+                <item name="multiselect" xsi:type="string">multiselect</item>
+                <item name="select" xsi:type="string">select</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\EavGraphQl\Model\Output\Value\Options\GetAttributeSelectedOptionComposite">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\EavGraphQl\Model\Output\Value\Options\GetCustomSelectedOptionAttributes</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\EavGraphQl\Model\TypeResolver\AttributeValue">
+        <arguments>
+            <argument name="frontendInputs" xsi:type="array">
+                <item name="multiselect" xsi:type="string">multiselect</item>
+                <item name="select" xsi:type="string">select</item>
             </argument>
         </arguments>
     </type>

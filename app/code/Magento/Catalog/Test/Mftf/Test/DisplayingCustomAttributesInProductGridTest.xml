@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-4341"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Login as admin -->

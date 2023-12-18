@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <group value="menu"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>

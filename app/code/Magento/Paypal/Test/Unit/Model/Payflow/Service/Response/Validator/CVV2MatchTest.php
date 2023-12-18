@@ -137,6 +137,15 @@ class CVV2MatchTest extends TestCase
                 'response' => new DataObject(),
                 'configValue' => '1',
             ],
+            [
+                'expectedResult' => true,
+                'response' => new DataObject(
+                    [
+                        'cvv2match' => 'N',
+                    ]
+                ),
+                'configValue' => '0',
+            ],
         ];
     }
 }

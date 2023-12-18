@@ -67,6 +67,7 @@
         <fillField selector="{{CheckoutShippingGuestInfoSection.regionInput}}" userInput="" stepKey="changeStateProvinceField"/>
         <fillField selector="{{CheckoutShippingGuestInfoSection.postcode}}" userInput="KW1 7NQ" stepKey="changeZipPostalCodeField"/>
         <!-- 8. Change shipping rate, select Free Shipping -->
+        <waitForElementClickable selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShipping}}" stepKey="waitForFreeShippingShippingMethod"/>
         <checkOption selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Free Shipping')}}" stepKey="checkFreeShippingAsShippingMethod"/>
         <!-- 9. Fill other fields -->
         <actionGroup ref="StorefrontFillGuestShippingInfoActionGroup" stepKey="fillOtherFieldsInCheckoutShippingSection"/>

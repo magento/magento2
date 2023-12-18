@@ -12,6 +12,7 @@ namespace Magento\CatalogWidget\Model\Rule\Condition;
 use Magento\Catalog\Model\ProductCategoryList;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\DB\Select;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\Store;
 
 /**
@@ -19,7 +20,7 @@ use Magento\Store\Model\Store;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
+class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct implements ResetAfterRequestInterface
 {
     /**
      * @var string
@@ -320,5 +321,13 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                 $this->_productResource->getConnection()->quoteInto('?', $value, \Zend_Db::INT_TYPE)
             )
             : $value;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->joinedAttributes = [];
     }
 }
