@@ -25,6 +25,7 @@
         <element name="CMSPage" type="text" selector="//td[contains(text(),'Home page')]"/>
         <element name="BlockPage" type="text" selector="//td[contains(text(),'{{var1}}')]" parameterized="true"/>
         <element name="PreCreateCategory" type="text" selector=" //span[contains(text(),'{{var1}}')]" parameterized="true"/>
+        <element name="CreateCategory" type="text" selector=" //a[contains(text(),'{{var1}}')]" parameterized="true"/>
         <element name="PreCreateProduct" type="text" selector="//td[contains(text(),'{{var1}}')]" parameterized="true"/>
         <element name="NoOfProductToDisplay" type="input" selector="input[data-ui-id='wysiwyg-widget-options-fieldset-element-text-parameters-products-count']"/>
         <element name="AddParam" type="button" selector=".rule-param-add"/>
@@ -48,5 +49,8 @@
         <element name="ChooserName" type="input" selector="input[name='chooser_name']"/>
         <element name="SelectPageButton" type="button" selector="//button[@title='Select Page...']"/>
         <element name="SelectPageFilterInput" type="input" selector="input.admin__control-text[name='{{filterName}}']" parameterized="true"/>
+        <element name="URLKeySelectPage" type="input" selector="//aside[@role='dialog']//input[@name='chooser_identifier']"/>
+        <element name="SearchButtonSelectPage" type="button" selector="//aside[@role='dialog']//button[@title='Search']"/>
+        <element name="SearchResultSelectPage" type="text" selector="//aside[@role='dialog']//td[contains(@class,'col-url col-chooser_identifier') and contains(text(),'{{var}}')]" parameterized="true"/>
     </section>
 </sections>

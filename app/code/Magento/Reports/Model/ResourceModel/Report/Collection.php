@@ -10,8 +10,6 @@
 namespace Magento\Reports\Model\ResourceModel\Report;
 
 /**
- * Class Collection
- *
  * @api
  * @since 100.0.2
  */
@@ -39,8 +37,6 @@ class Collection extends \Magento\Framework\Data\Collection
     protected $_period;
 
     /**
-     * Intervals
-     *
      * @var int
      */
     protected $_intervals;
@@ -53,7 +49,7 @@ class Collection extends \Magento\Framework\Data\Collection
     protected $_reports;
 
     /**
-     * Page size
+     * Page size|null
      *
      * @var int
      */
@@ -96,6 +92,15 @@ class Collection extends \Magento\Framework\Data\Collection
         $this->_localeDate = $localeDate;
         $this->_collectionFactory = $collectionFactory;
         parent::__construct($entityFactory);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_pageSize = null;
     }
 
     /**

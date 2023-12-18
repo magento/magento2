@@ -17,32 +17,33 @@ class XmlScannerTest extends TestCase
     /**
      * @var XmlScanner
      */
-    protected $_model;
+    private XmlScanner $model;
 
     /**
      * @var MockObject
      */
-    protected $_logMock;
+    private Log $logMock;
 
     /**
      * @var array
      */
-    protected $_testFiles = [];
+    private array $testFiles = [];
 
     /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->_model = new XmlScanner(
-            $this->_logMock = $this->createMock(Log::class)
-        );
+        $this->logMock = $this->createMock(Log::class);
+        $this->model = new XmlScanner($this->logMock);
         $testDir = __DIR__ . '/../../' . '/_files';
-        $this->_testFiles = [
+        $this->testFiles = [
             $testDir . '/app/code/Magento/SomeModule/etc/adminhtml/system.xml',
             $testDir . '/app/code/Magento/SomeModule/etc/di.xml',
             $testDir . '/app/code/Magento/SomeModule/view/frontend/default.xml',
         ];
+        require_once  __DIR__ . '/../../_files/app/code/Magento/SomeModule/Element.php';
+        require_once  __DIR__ . '/../../_files/app/code/Magento/SomeModule/NestedElement.php';
     }
 
     /**
@@ -51,7 +52,7 @@ class XmlScannerTest extends TestCase
     public function testCollectEntities(): void
     {
         $className = 'Magento\Store\Model\Config\Invalidator\Proxy';
-        $this->_logMock
+        $this->logMock
             ->method('add')
             ->withConsecutive(
                 [
@@ -61,16 +62,26 @@ class XmlScannerTest extends TestCase
                 ],
                 [
                     4,
-                    '\Magento\SomeModule\Model\Element\Proxy',
-                    'Invalid proxy class for ' . substr('\Magento\SomeModule\Model\Element\Proxy', 0, -5)
+                    'Magento\SomeModule\Model\Element\Proxy',
+                    'Invalid proxy class for ' . substr('Magento\SomeModule\Model\Element\Proxy', 0, -5)
                 ],
                 [
                     4,
-                    '\Magento\SomeModule\Model\Nested\Element\Proxy',
-                    'Invalid proxy class for ' . substr('\Magento\SomeModule\Model\Nested\Element\Proxy', 0, -5)
-                ]
+                    'Magento\SomeModule\Model\Element2\Proxy',
+                    'Invalid proxy class for ' . substr('Magento\SomeModule\Model\Element2\Proxy', 0, -5)
+                ],
+                [
+                    4,
+                    'Magento\SomeModule\Model\Nested\Element\Proxy',
+                    'Invalid proxy class for ' . substr('Magento\SomeModule\Model\Nested\Element\Proxy', 0, -5)
+                ],
+                [
+                    4,
+                    'Magento\SomeModule\Model\Nested\Element2\Proxy',
+                    'Invalid proxy class for ' . substr('Magento\SomeModule\Model\Nested\Element2\Proxy', 0, -5)
+                ],
             );
-        $actual = $this->_model->collectEntities($this->_testFiles);
+        $actual = $this->model->collectEntities($this->testFiles);
         $expected = [];
         $this->assertEquals($expected, $actual);
     }

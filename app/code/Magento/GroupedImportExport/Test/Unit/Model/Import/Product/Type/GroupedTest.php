@@ -85,6 +85,11 @@ class GroupedTest extends AbstractImportTestCase
     protected $entityModel;
 
     /**
+     * @var Product\SkuStorage|MockObject
+     */
+    private Product\SkuStorage $skuStorage;
+
+    /**
      * @inheritdoc
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -115,8 +120,16 @@ class GroupedTest extends AbstractImportTestCase
         $this->attrCollectionFactory->expects($this->any())->method('addFieldToFilter')->willReturn([]);
         $this->entityModel = $this->createPartialMock(
             Product::class,
-            ['getErrorAggregator', 'getNewSku', 'getOldSku', 'getNextBunch', 'isRowAllowedToImport', 'getRowScope']
+            [
+                'getErrorAggregator',
+                'getNewSku',
+                'getOldSku',
+                'getNextBunch',
+                'isRowAllowedToImport',
+                'getRowScope'
+            ]
         );
+        $this->skuStorage = $this->createMock(Product\SkuStorage::class);
         $this->entityModel->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
         $this->params = [
             0 => $this->entityModel,
@@ -167,7 +180,8 @@ class GroupedTest extends AbstractImportTestCase
                 'resource' => $this->resource,
                 'params' => $this->params,
                 'links' => $this->links,
-                'config' => $this->configMock
+                'config' => $this->configMock,
+                'skuStorage' => $this->skuStorage
             ]
         );
         $metadataPoolMock = $this->createMock(MetadataPool::class);
@@ -200,7 +214,20 @@ class GroupedTest extends AbstractImportTestCase
     public function testSaveData($skus, $bunch): void
     {
         $this->entityModel->expects($this->once())->method('getNewSku')->willReturn($skus['newSku']);
-        $this->entityModel->expects($this->once())->method('getOldSku')->willReturn($skus['oldSku']);
+        $this->entityModel->expects($this->never())->method('getOldSku');
+
+        $this->skuStorage->expects($this->any())
+            ->method('has')
+            ->willReturnCallback(function ($sku) use ($skus) {
+                return isset($skus['oldSku'][$sku]);
+            });
+
+        $this->skuStorage->expects($this->any())
+            ->method('get')
+            ->willReturnCallback(function ($sku) use ($skus) {
+                return $skus['oldSku'][$sku] ?? null;
+            });
+
         $attributes = ['position' => ['id' => 0], 'qty' => ['id' => 0]];
         $this->links->expects($this->once())->method('getAttributes')->willReturn($attributes);
 
@@ -287,11 +314,23 @@ class GroupedTest extends AbstractImportTestCase
                 'productsku' => ['entity_id' => 2, 'attr_set_code' => 'Default', 'type_id' => 'grouped']
             ]
         );
-        $this->entityModel->expects($this->once())->method('getOldSku')->willReturn(
-            [
-                'sku_assoc2' => ['entity_id' => 3, 'type_id' => 'simple']
-            ]
-        );
+        $oldSkusData = [
+            'sku_assoc2' => ['entity_id' => 3, 'type_id' => 'simple']
+        ];
+        $this->entityModel->expects($this->never())->method('getOldSku');
+
+        $this->skuStorage->expects($this->any())
+            ->method('has')
+            ->willReturnCallback(function ($sku) use ($oldSkusData) {
+                return isset($oldSkusData[$sku]);
+            });
+
+        $this->skuStorage->expects($this->any())
+            ->method('get')
+            ->willReturnCallback(function ($sku) use ($oldSkusData) {
+                return $oldSkusData[$sku] ?? null;
+            });
+
         $attributes = ['position' => ['id' => 0], 'qty' => ['id' => 0]];
         $this->links->expects($this->once())->method('getAttributes')->willReturn($attributes);
 
@@ -327,7 +366,7 @@ class GroupedTest extends AbstractImportTestCase
                 'productsku' => ['entity_id' => 2, 'attr_set_code' => 'Default', 'type_id' => 'grouped']
             ]
         );
-        $this->entityModel->expects($this->once())->method('getOldSku')->willReturn([]);
+        $this->entityModel->expects($this->never())->method('getOldSku');
         $attributes = ['position' => ['id' => 0], 'qty' => ['id' => 0]];
         $this->links->expects($this->once())->method('getAttributes')->willReturn($attributes);
 

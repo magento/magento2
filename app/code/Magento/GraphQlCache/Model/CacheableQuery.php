@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\GraphQlCache\Model;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * CacheableQuery should be used as a singleton for collecting HTTP cache-related info and tags of all entities.
  */
-class CacheableQuery
+class CacheableQuery implements ResetAfterRequestInterface
 {
     /**
      * @var string[]
@@ -74,5 +76,14 @@ class CacheableQuery
         $isQueryCacheable = $this->isCacheable();
 
         return !empty($cacheTags) && $isQueryCacheable;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->cacheTags = [];
+        $this->cacheable = true;
     }
 }

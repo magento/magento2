@@ -10,13 +10,12 @@ namespace Magento\Framework\Webapi;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http as Request;
 use Magento\Framework\HTTP\PhpEnvironment\Response;
-use Magento\Framework\ObjectManager\RegisterShutdownInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Request dependent Error Processor
  */
-class RequestAwareErrorProcessor extends ErrorProcessor implements RegisterShutdownInterface
+class RequestAwareErrorProcessor extends ErrorProcessor
 {
     /**
      * @var Request
@@ -75,22 +74,12 @@ class RequestAwareErrorProcessor extends ErrorProcessor implements RegisterShutd
             $mimeType = 'application/json';
         }
         if (!headers_sent()) {
-            $this->response->getHeaders()->addHeaderLine(
-                'HTTP/1.1 ' . ($httpCode ? $httpCode : self::DEFAULT_ERROR_HTTP_CODE)
-            );
+            $this->response->setStatusCode($httpCode ? $httpCode : self::DEFAULT_ERROR_HTTP_CODE);
             $this->response->getHeaders()->addHeaderLine(
                 'Content-Type: ' . $mimeType . '; charset=' . self::DEFAULT_RESPONSE_CHARSET
             );
         }
         // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
         echo $output;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function registerShutdown()
-    {
-        $this->apiShutdownFunction();
     }
 }

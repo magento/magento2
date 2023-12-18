@@ -80,7 +80,6 @@ class CartFixed extends AbstractDiscount
 
         $ruleTotals = $this->validator->getRuleItemTotalsInfo($rule->getId());
         $baseRuleTotals = $ruleTotals['base_items_price'] ?? 0.0;
-        $baseRuleTotalsDiscount = $ruleTotals['base_items_discount_amount'] ?? 0.0;
         $ruleItemsCount = $ruleTotals['items_count'] ?? 0;
 
         $address = $item->getAddress();
@@ -134,7 +133,7 @@ class CartFixed extends AbstractDiscount
                         $qty,
                         $baseItemPrice,
                         $baseItemDiscountAmount,
-                        $baseRuleTotals - $baseRuleTotalsDiscount,
+                        $baseRuleTotals - $address->getBaseDiscountAmount(),
                         $discountType
                     );
             }
