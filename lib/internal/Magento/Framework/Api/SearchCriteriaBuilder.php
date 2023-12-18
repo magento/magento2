@@ -71,6 +71,8 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
     }
 
     /**
+     * Add search filter
+     *
      * @param string $field
      * @param mixed $value
      * @param string $conditionType

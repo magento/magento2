@@ -11,50 +11,62 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Source;
 
+use Magento\Directory\Model\CountryFactory;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Countryofmanufacture extends AbstractSource implements OptionSourceInterface
 {
     /**
-     * @var \Magento\Framework\App\Cache\Type\Config
+     * @var Config
      */
     protected $_configCacheType;
 
     /**
-     * Store manager
-     *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Country factory
-     *
-     * @var \Magento\Directory\Model\CountryFactory
+     * @var CountryFactory
      */
     protected $_countryFactory;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var SerializerInterface
      */
     private $serializer;
 
     /**
+     * @var ResolverInterface
+     */
+    private $localeResolver;
+
+    /**
      * Construct
      *
-     * @param \Magento\Directory\Model\CountryFactory $countryFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
+     * @param CountryFactory $countryFactory
+     * @param StoreManagerInterface $storeManager
+     * @param Config $configCacheType
+     * @param ResolverInterface $localeResolver
+     * @param SerializerInterface $serializer
      */
     public function __construct(
-        \Magento\Directory\Model\CountryFactory $countryFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Cache\Type\Config $configCacheType
+        CountryFactory $countryFactory,
+        StoreManagerInterface $storeManager,
+        Config $configCacheType,
+        ResolverInterface $localeResolver,
+        SerializerInterface $serializer
     ) {
         $this->_countryFactory = $countryFactory;
         $this->_storeManager = $storeManager;
         $this->_configCacheType = $configCacheType;
+        $this->localeResolver = $localeResolver;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -64,32 +76,20 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
      */
     public function getAllOptions()
     {
-        $cacheKey = 'COUNTRYOFMANUFACTURE_SELECT_STORE_' . $this->_storeManager->getStore()->getCode();
+        $storeCode = $this->_storeManager->getStore()->getCode();
+        $locale = $this->localeResolver->getLocale();
+
+        $cacheKey = 'COUNTRYOFMANUFACTURE_SELECT_STORE_' . $storeCode . '_LOCALE_' . $locale;
         if ($cache = $this->_configCacheType->load($cacheKey)) {
-            $options = $this->getSerializer()->unserialize($cache);
+            $options = $this->serializer->unserialize($cache);
         } else {
             /** @var \Magento\Directory\Model\Country $country */
             $country = $this->_countryFactory->create();
             /** @var \Magento\Directory\Model\ResourceModel\Country\Collection $collection */
             $collection = $country->getResourceCollection();
             $options = $collection->load()->toOptionArray();
-            $this->_configCacheType->save($this->getSerializer()->serialize($options), $cacheKey);
+            $this->_configCacheType->save($this->serializer->serialize($options), $cacheKey);
         }
         return $options;
-    }
-
-    /**
-     * Get serializer
-     *
-     * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated 102.0.0
-     */
-    private function getSerializer()
-    {
-        if ($this->serializer === null) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Serialize\SerializerInterface::class);
-        }
-        return $this->serializer;
     }
 }

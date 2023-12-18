@@ -10,6 +10,7 @@ namespace Magento\WeeeGraphQl\Model\Resolver;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Weee\Helper\Data;
 use Magento\Tax\Helper\Data as TaxHelper;
 use Magento\Store\Api\Data\StoreInterface;
@@ -19,7 +20,7 @@ use Magento\Framework\Pricing\Render;
 /**
  * Resolver for the FPT store config settings
  */
-class StoreConfig implements ResolverInterface
+class StoreConfig implements ResolverInterface, ResetAfterRequestInterface
 {
     /**
      * @var string
@@ -59,6 +60,14 @@ class StoreConfig implements ResolverInterface
     {
         $this->weeeHelper = $weeeHelper;
         $this->taxHelper = $taxHelper;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->computedFptSettings = [];
     }
 
     /**

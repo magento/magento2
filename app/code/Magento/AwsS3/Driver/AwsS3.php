@@ -893,16 +893,24 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function fileOpen($path, $mode)
     {
+        $_mode = str_replace(['b', '+'], '', strtolower($mode));
+        if (!in_array($_mode, ['r', 'w', 'a'], true)) {
+            throw new FileSystemException(new Phrase('Invalid file open mode "%1".', [$mode]));
+        }
         $path = $this->normalizeRelativePath($path, true);
 
         if (!isset($this->streams[$path])) {
             $this->streams[$path] = tmpfile();
             try {
                 if ($this->adapter->fileExists($path)) {
-                    //phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    fwrite($this->streams[$path], $this->adapter->read($path));
-                    //phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    rewind($this->streams[$path]);
+                    if ($_mode !== 'w') {
+                        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        fwrite($this->streams[$path], $this->adapter->read($path));
+                        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        if ($_mode !== 'a') {
+                            rewind($this->streams[$path]);
+                        }
+                    }
                 }
             } catch (FlysystemFilesystemException $e) {
                 $this->logger->error($e->getMessage());

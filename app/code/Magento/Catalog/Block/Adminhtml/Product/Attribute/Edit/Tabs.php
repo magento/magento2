@@ -4,20 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Adminhtml product attribute edit page tabs
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit;
 
 /**
+ * Adminhtml product attribute edit page tabs
+ *
  * @api
  * @since 100.0.2
  */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**
+     * Initialise the block
+     *
      * @return void
      */
     protected function _construct()
@@ -29,6 +28,8 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     }
 
     /**
+     * Add tabs
+     *
      * @return $this
      */
     protected function _beforeToHtml()
