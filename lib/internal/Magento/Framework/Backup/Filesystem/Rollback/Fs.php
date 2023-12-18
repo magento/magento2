@@ -96,6 +96,7 @@ class Fs extends AbstractRollback
      *
      * @return Helper
      * @deprecated 101.0.0
+     * @see Nothing
      */
     private function getFsHelper()
     {
