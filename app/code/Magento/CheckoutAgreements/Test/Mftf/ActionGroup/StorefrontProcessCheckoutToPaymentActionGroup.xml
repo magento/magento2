@@ -16,6 +16,7 @@
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
 
         <!--Process steps-->
+        <waitForElementVisible selector="{{CheckoutShippingSection.emailAddress}}" stepKey="waitForEmailFieldVisible" />
         <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{CustomerEntityOne.email}}" stepKey="enterEmail"/>
         <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="enterFirstName"/>
         <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="enterLastName"/>
@@ -30,6 +31,6 @@
         <waitForElementNotVisible selector=".loading-mask" time="300" stepKey="waitForProcessShippingMethod"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
-        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+        <seeCurrentUrlMatches regex="~/checkout/?#payment~" stepKey="assertCheckoutPaymentUrl"/>
     </actionGroup>
 </actionGroups>

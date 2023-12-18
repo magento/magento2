@@ -15,6 +15,7 @@
             <description value="Verify that disabling the clear shopping cart store configuration will remove the clear shopping cart configuration button from the storefront's shopping cart page. Verify that enabling the configuration will add the button to the page and that the button functions as expected"/>
             <group value="shoppingCart"/>
             <severity value="MAJOR"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create simple products and category -->

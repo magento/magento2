@@ -7,12 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit\Response\Http;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWriteInterface;
-use Magento\Framework\Filesystem\File\WriteInterface as FileWriteInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -38,6 +39,16 @@ class FileFactoryTest extends TestCase
      * @var DirectoryWriteInterface|MockObject
      */
     protected $dirMock;
+
+    /**
+     * @var \Magento\Framework\App\Response\FileFactory|MockObject
+     */
+    private $fileResponseFactory;
+
+    /**
+     * @var FileFactory
+     */
+    private $model;
 
     /**
      * @inheritDoc
@@ -75,6 +86,8 @@ class FileFactoryTest extends TestCase
             Http::class,
             ['setHeader', 'sendHeaders', 'setHttpResponseCode', 'clearBody', 'setBody', '__wakeup']
         );
+        $this->fileResponseFactory = $this->createMock(\Magento\Framework\App\Response\FileFactory::class);
+        $this->model = new FileFactory($this->responseMock, $this->fileSystemMock, $this->fileResponseFactory);
     }
 
     /**
@@ -83,7 +96,7 @@ class FileFactoryTest extends TestCase
     public function testCreateIfContentDoesntHaveRequiredKeys(): void
     {
         $this->expectException('InvalidArgumentException');
-        $this->getModel()->create('fileName', []);
+        $this->model->create('fileName', []);
     }
 
     /**
@@ -106,7 +119,7 @@ class FileFactoryTest extends TestCase
         )->method(
             'setHttpResponseCode'
         )->willReturnSelf();
-        $this->getModel()->create('fileName', $content);
+        $this->model->create('fileName', $content);
     }
 
     /**
@@ -116,38 +129,29 @@ class FileFactoryTest extends TestCase
     {
         $file = 'some_file';
         $content = ['type' => 'filename', 'value' => $file];
+        $fileSize = 100;
 
+        $responseMock = $this->getMockForAbstractClass(ResponseInterface::class);
+        $this->fileResponseFactory->expects($this->once())
+            ->method('create')
+            ->with([
+                'options' => [
+                    'filePath' => $file,
+                    'fileName' => 'fileName',
+                    'contentType' => 'application/octet-stream',
+                    'contentLength' => $fileSize,
+                    'directoryCode' => DirectoryList::ROOT,
+                    'remove' => false
+                ]
+            ])
+            ->willReturn($responseMock);
         $this->dirMock->expects($this->once())
             ->method('isFile')
             ->willReturn(true);
         $this->dirMock->expects($this->once())
             ->method('stat')
-            ->willReturn(['size' => 100]);
-        $this->responseMock->expects($this->exactly(6))
-            ->method('setHeader')->willReturnSelf();
-        $this->responseMock->expects($this->once())
-            ->method('setHttpResponseCode')
-            ->with(200)->willReturnSelf();
-        $this->responseMock->expects($this->once())
-            ->method('sendHeaders')->willReturnSelf();
-
-        $streamMock = $this->getMockBuilder(FileWriteInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->dirMock->expects($this->once())
-            ->method('openFile')
-            ->willReturn($streamMock);
-        $this->dirMock->expects($this->never())
-            ->method('delete')
-            ->willReturn($streamMock);
-        $streamMock
-            ->method('eof')
-            ->willReturnOnConsecutiveCalls(false, true);
-        $streamMock->expects($this->once())
-            ->method('read');
-        $streamMock->expects($this->once())
-            ->method('close');
-        $this->getModelMock()->create('fileName', $content);
+            ->willReturn(['size' => $fileSize]);
+        $this->model->create('fileName', $content);
     }
 
     /**
@@ -157,38 +161,35 @@ class FileFactoryTest extends TestCase
     {
         $file = 'some_file';
         $content = ['type' => 'filename', 'value' => $file, 'rm' => 1];
+        $fileSize = 100;
 
         $this->dirMock->expects($this->once())
             ->method('isFile')
             ->willReturn(true);
         $this->dirMock->expects($this->once())
             ->method('stat')
-            ->willReturn(['size' => 100]);
-        $this->responseMock->expects($this->exactly(6))
-            ->method('setHeader')->willReturnSelf();
-        $this->responseMock->expects($this->once())
-            ->method('setHttpResponseCode')
-            ->with(200)->willReturnSelf();
-        $this->responseMock->expects($this->once())
-            ->method('sendHeaders')->willReturnSelf();
-
-        $streamMock = $this->getMockBuilder(FileWriteInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->willReturn(['size' => $fileSize]);
+        $responseMock = $this->getMockForAbstractClass(ResponseInterface::class);
+        $this->fileResponseFactory->expects($this->once())
+            ->method('create')
+            ->with([
+                'options' => [
+                    'filePath' => $file,
+                    'fileName' => 'fileName',
+                    'contentType' => 'application/octet-stream',
+                    'contentLength' => $fileSize,
+                    'directoryCode' => DirectoryList::ROOT,
+                    'remove' => true
+                ]
+            ])
+            ->willReturn($responseMock);
         $this->dirMock->expects($this->once())
-            ->method('openFile')
-            ->willReturn($streamMock);
+            ->method('isFile')
+            ->willReturn(true);
         $this->dirMock->expects($this->once())
-            ->method('delete')
-            ->willReturn($streamMock);
-        $streamMock
-            ->method('eof')
-            ->willReturnOnConsecutiveCalls(false, true);
-        $streamMock->expects($this->once())
-            ->method('read');
-        $streamMock->expects($this->once())
-            ->method('close');
-        $this->getModelMock()->create('fileName', $content);
+            ->method('stat')
+            ->willReturn(['size' => $fileSize]);
+        $this->model->create('fileName', $content);
     }
 
     /**
@@ -202,62 +203,9 @@ class FileFactoryTest extends TestCase
         $this->dirMock->expects($this->never())
             ->method('stat')
             ->willReturn(['size' => 100]);
-        $this->responseMock->expects($this->exactly(6))
-            ->method('setHeader')->willReturnSelf();
-        $this->responseMock->expects($this->once())
-            ->method('setHttpResponseCode')
-            ->with(200)->willReturnSelf();
-        $this->responseMock->expects($this->once())
-            ->method('sendHeaders')->willReturnSelf();
         $this->dirMock->expects($this->once())
             ->method('writeFile')
             ->with('fileName', 'content', 'w+');
-        $streamMock = $this->getMockBuilder(FileWriteInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->dirMock->expects($this->once())
-            ->method('openFile')
-            ->willReturn($streamMock);
-        $streamMock->expects($this->once())
-            ->method('eof')
-            ->willReturn(true);
-        $streamMock->expects($this->once())
-            ->method('close');
-        $this->getModelMock()->create('fileName', 'content');
-    }
-
-    /**
-     * Get model.
-     *
-     * @return FileFactory|object
-     */
-    private function getModel()
-    {
-        return $this->objectManager->getObject(
-            FileFactory::class,
-            [
-                'response' => $this->responseMock,
-                'filesystem' => $this->fileSystemMock
-            ]
-        );
-    }
-
-    /**
-     * Get model mock.
-     *
-     * @return FileFactory|MockObject
-     */
-    private function getModelMock(): MockObject
-    {
-        $modelMock = $this->getMockBuilder(FileFactory::class)
-            ->onlyMethods([])
-            ->setConstructorArgs(
-                [
-                    'response' => $this->responseMock,
-                    'filesystem' => $this->fileSystemMock
-                ]
-            )
-            ->getMock();
-        return $modelMock;
+        $this->model->create('fileName', 'content');
     }
 }

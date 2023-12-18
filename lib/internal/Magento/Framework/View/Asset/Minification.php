@@ -7,13 +7,14 @@ namespace Magento\Framework\View\Asset;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Helper class for static files minification related processes.
  * @api
  * @since 100.0.2
  */
-class Minification
+class Minification implements ResetAfterRequestInterface
 {
     /**
      * XML path for asset minification configuration
@@ -227,5 +228,13 @@ class Minification
             $area = $pathParts[0];
         }
         return $area;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->configCache = [];
     }
 }

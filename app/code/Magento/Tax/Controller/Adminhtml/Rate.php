@@ -10,8 +10,6 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Adminhtml tax rate controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class Rate extends \Magento\Backend\App\Action
 {

@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-89"/>
             <group value="ConfigurableProduct"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

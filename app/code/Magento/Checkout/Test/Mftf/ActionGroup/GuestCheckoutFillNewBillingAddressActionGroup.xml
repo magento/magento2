@@ -18,6 +18,7 @@
             <argument name="customerAddressVar"/>
         </arguments>
 
+        <waitForElementVisible selector="{{CheckoutShippingSection.emailAddress}}" stepKey="waitForEmailField" />
         <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{customerVar.email}}" stepKey="enterEmail"/>
         <waitForPageLoad stepKey="waitForLoading3"/>
         <fillField selector="{{CheckoutPaymentSection.guestFirstName}}" userInput="{{customerVar.firstname}}" stepKey="enterFirstName"/>

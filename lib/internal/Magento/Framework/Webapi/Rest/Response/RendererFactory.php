@@ -34,7 +34,7 @@ class RendererFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Framework\Webapi\Rest\Request $request,
+        \Magento\Framework\App\RequestInterface $request,
         array $renders = []
     ) {
         $this->_objectManager = $objectManager;
@@ -68,16 +68,13 @@ class RendererFactory
      */
     protected function _getRendererClass()
     {
-        $acceptTypes = $this->_request->getAcceptTypes();
-        if (!is_array($acceptTypes)) {
-            $acceptTypes = [$acceptTypes];
-        }
+        $acceptTypes = $this->getAcceptTypes();
         foreach ($acceptTypes as $acceptType) {
             foreach ($this->_renders as $rendererConfig) {
                 $rendererType = $rendererConfig['type'];
-                if ($acceptType == $rendererType || $acceptType == current(
-                    explode('/', $rendererType ?? '')
-                ) . '/*' || $acceptType == '*/*'
+                if ($acceptType == $rendererType
+                    || $acceptType == current(explode('/', $rendererType ?? '')) . '/*'
+                    || $acceptType == '*/*'
                 ) {
                     return $rendererConfig['model'];
                 }
@@ -93,5 +90,43 @@ class RendererFactory
             0,
             \Magento\Framework\Webapi\Exception::HTTP_NOT_ACCEPTABLE
         );
+    }
+
+    /**
+     * Retrieve accept types understandable by requester in a form of array sorted by quality in descending order.
+     *
+     * @return string[]
+     */
+    private function getAcceptTypes()
+    {
+        $qualityToTypes = [];
+        $orderedTypes = [];
+
+        foreach (preg_split('/,\s*/', $this->_request->getHeader('Accept') ?? '') as $definition) {
+            $typeWithQ = explode(';', $definition);
+            $mimeType = trim(array_shift($typeWithQ));
+
+            // check MIME type validity
+            if (!preg_match('~^([0-9a-z*+\-]+)(?:/([0-9a-z*+\-\.]+))?$~i', $mimeType)) {
+                continue;
+            }
+            $quality = '1.0';
+            // default value for quality
+
+            if ($typeWithQ) {
+                $qAndValue = explode('=', $typeWithQ[0]);
+
+                if (2 == count($qAndValue)) {
+                    $quality = $qAndValue[1];
+                }
+            }
+            $qualityToTypes[$quality][$mimeType] = true;
+        }
+        krsort($qualityToTypes);
+
+        foreach ($qualityToTypes as $typeList) {
+            $orderedTypes += $typeList;
+        }
+        return empty($orderedTypes) ? ['*/*'] : array_keys($orderedTypes);
     }
 }

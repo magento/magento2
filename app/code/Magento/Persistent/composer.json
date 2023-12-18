@@ -14,6 +14,9 @@
         "magento/module-quote": "*",
         "magento/module-store": "*"
     },
+    "suggest": {
+        "magento/module-login-as-customer-api": "*"
+    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
