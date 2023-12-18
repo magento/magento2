@@ -53,13 +53,13 @@ class ProductStock
         $previousQty = 0;
 
         foreach ($cartItem->getQuote()->getItems() as $item) {
-            if ($item->getItemId() == $cartItem->getItemId()) {
+            if ($item->getItemId() === $cartItem->getItemId()) {
                 $requestedQty = $item->getQtyToAdd() ?? $item->getQty();
                 $previousQty = $item->getPreviousQty() ?? 0;
             }
         }
 
-        if ($cartItem->getProductType() == self::PRODUCT_TYPE_BUNDLE) {
+        if ($cartItem->getProductType() === self::PRODUCT_TYPE_BUNDLE) {
             $qtyOptions = $cartItem->getQtyOptions();
             $totalRequestedQty = $previousQty + $requestedQty;
             foreach ($qtyOptions as $qtyOption) {
@@ -75,9 +75,7 @@ class ProductStock
         } else {
             $requiredItemQty =  $requestedQty + $previousQty;
             $productId = (int) $cartItem->getProduct()->getId();
-            if (!$this->isStockAvailable($productId, $requiredItemQty)) {
-                return false;
-            }
+            return $this->isStockAvailable($productId, $requiredItemQty);
         }
         return true;
     }

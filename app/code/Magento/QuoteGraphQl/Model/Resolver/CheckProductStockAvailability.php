@@ -51,6 +51,6 @@ class CheckProductStockAvailability implements ResolverInterface
         /** @var Item $cartItem */
         $cartItem = $value['model'];
 
-        return $this->productStock->isProductAvailable($cartItem) ? true : false;
+        return $this->productStock->isProductAvailable($cartItem);
     }
 }
