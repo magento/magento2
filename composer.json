@@ -23,10 +23,6 @@
         },
         {
             "type": "vcs",
-            "url": "git@github.com:magento-commerce/magento-coding-standard.git"
-        },
-        {
-            "type": "vcs",
             "url": "git@github.com:glo71317/laminas-db.git"
         }
     ],
@@ -110,7 +106,7 @@
         "dg/bypass-finals": "^1.4",
         "friendsofphp/php-cs-fixer": "^3.22",
         "lusitanian/oauth": "^0.8",
-        "magento/magento-coding-standard": "dev-develop",
+        "magento/magento-coding-standard": "*",
         "magento/magento2-functional-testing-framework": "^4.6",
         "pdepend/pdepend": "^2.10",
         "phpmd/phpmd": "^2.12",
