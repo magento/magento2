@@ -25,5 +25,7 @@
         <selectOption selector="{{CheckoutShippingSection.region}}" userInput="{{address.state}}" stepKey="selectRegion"/>
         <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{address.postcode}}" stepKey="fillZipCode"/>
         <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{address.telephone}}" stepKey="fillPhone"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.emailAddress}}" stepKey="waitForEmailFieldVisible" />
+        <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{customer.email}}" stepKey="fillEmailField"/>
     </actionGroup>
 </actionGroups>
