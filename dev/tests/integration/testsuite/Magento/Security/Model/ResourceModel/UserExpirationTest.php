@@ -39,6 +39,7 @@ class UserExpirationTest extends TestCase
      * @dataProvider userExpirationSaveDataProvider
      * @magentoAppArea adminhtml
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testUserExpirationSave(string $locale): void
     {

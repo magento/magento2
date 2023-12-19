@@ -143,7 +143,7 @@ class CurrencyTest extends TestCase
             'en_US:PLN' => ['en_US', 'PLN', "PLN\u{00A0}%s"],
             'en_US:PKR' => ['en_US', 'PKR', "PKR\u{00A0}%s"],
             'af_ZA:VND' => ['af_ZA', 'VND', "\u{20AB}%s"],
-            'ar_DZ:EGP' => ['ar_DZ', 'EGP', "%s\u{00A0}\u{062C}.\u{0645}.\u{200F}"],
+            'ar_DZ:EGP' => ['ar_DZ', 'EGP', "\u{062C}.\u{0645}.\u{200F}\u{00A0}%s"],
             'ar_SA:USD' => ['ar_SA', 'USD', "%s\u{00A0}US$"],
             'ar_SA:LBP' => ['ar_SA', 'LBP', "%s\u{00A0}\u{0644}.\u{0644}.\u{200F}"],
             'fa_IR:USD' => ['fa_IR', 'USD', "\u{200E}$%s"],
