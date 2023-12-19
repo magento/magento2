@@ -24,7 +24,7 @@
                 <field key="price">10.00</field>
             </createData>
             <!-- US Customer is created -->
-<!--            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Configure Paypal Express Checkout -->
             <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
@@ -53,7 +53,7 @@
             <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-<!--            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>-->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Go to the tax rule page and delete the row created-->
             <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPageA"/>
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
