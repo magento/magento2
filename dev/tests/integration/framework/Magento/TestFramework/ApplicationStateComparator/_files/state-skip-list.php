@@ -383,7 +383,6 @@ return [
         Magento\Quote\Model\ResourceModel\Quote\Item\Collection\Interceptor::class => null,
         Magento\Quote\Model\Quote\Address\Total::class => null, // FIXME
         Laminas\Validator\ValidatorChain::class => null,
-        Magento\CustomerCustomAttributes\Model\ResourceModel\Sales\Quote\Address::class => null,
         Magento\ResourceConnections\App\DeploymentConfig::class => null,
         Magento\Staging\Model\StagingList::class => null,
         Magento\Staging\Model\ResourceModel\Update::class => null,
