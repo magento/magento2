@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="GuestCheckoutFillNewShippingAddressActionGroup">
+    <actionGroup name="GuestCheckoutShippingAddressFillingActionGroup">
         <annotations>
             <description>Fills in the provided Customer/Address details in the 'Shipping Address' section on the Storefront Checkout page.</description>
         </annotations>
@@ -17,8 +17,7 @@
             <argument name="address" type="entity"/>
         </arguments>
 
-        <waitForElementVisible selector="{{CheckoutShippingSection.emailAddress}}" stepKey="waitForEmailFieldVisible" />
-        <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{customer.email}}" stepKey="fillEmailField"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.firstName}}" stepKey="waitForFirstNameVisible" />
         <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{customer.firstName}}" stepKey="fillFirstName"/>
         <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{customer.lastName}}" stepKey="fillLastName"/>
         <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{address.street[0]}}" stepKey="fillStreet"/>
