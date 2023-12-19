@@ -39,7 +39,6 @@ class UserExpirationTest extends TestCase
      * @dataProvider userExpirationSaveDataProvider
      * @magentoAppArea adminhtml
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testUserExpirationSave(string $locale): void
     {
@@ -54,7 +53,7 @@ class UserExpirationTest extends TestCase
         );
         $userExpirationFactory = Bootstrap::getObjectManager()->get(UserExpirationFactory::class);
         $userExpiration = $userExpirationFactory->create();
-        $userExpiration->setExpiresAt($initialExpirationDate->format('Y-m-d H:i:s'));
+        $userExpiration->setExpiresAt($expireDate);
         $userExpiration->setUserId($this->getUserId());
         $this->userExpirationResource->save($userExpiration);
         $loadedUserExpiration = $userExpirationFactory->create();
