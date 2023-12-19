@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\ObjectManager\Resetter;
 
-use Magento\Framework\ObjectManagerInterface;
-
 /**
  * Factory that creates Resetter based on environment variable.
  */
@@ -20,20 +18,14 @@ class ResetterFactory
     private static string $resetterClassName = Resetter::class;
 
     /**
-     * @param ObjectManagerInterface $objectManager
-     */
-    public function __construct(private ObjectManagerInterface $objectManager)
-    {
-    }
-
-    /**
-     * Create resseter instance
+     * Create resseter factory
      *
      * @return ResetterInterface
+     * @phpcs:disable Magento2.Functions.StaticFunction
      */
-    public function create() : ResetterInterface
+    public static function create() : ResetterInterface
     {
-        return $this->objectManager->create(static::$resetterClassName);
+        return new static::$resetterClassName;
     }
 
     /**

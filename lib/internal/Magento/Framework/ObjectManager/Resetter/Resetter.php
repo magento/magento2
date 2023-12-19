@@ -8,8 +8,6 @@ declare(strict_types=1);
 namespace Magento\Framework\ObjectManager\Resetter;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use WeakMap;
@@ -19,8 +17,7 @@ use WeakMap;
  */
 class Resetter implements ResetterInterface
 {
-    public const RESET_PATH = 'reset.json';
-    private const RESET_STATE_METHOD = '_resetState';
+    public const RESET_PATH = '/app/etc/reset.php';
 
     /** @var WeakMap instances to be reset after request */
     private WeakMap $resetAfterWeakMap;
@@ -33,42 +30,38 @@ class Resetter implements ResetterInterface
 
     /**
      * @var array
+     *
+     */
+    private array $classList = [
+        //phpcs:disable Magento2.PHP.LiteralNamespaces
+        'Magento\Framework\GraphQl\Query\Fields' => true,
+        'Magento\Store\Model\Store' => [
+            "_baseUrlCache" => [],
+            "_configCache" => null,
+            "_configCacheBaseNodes" => [],
+            "_dirCache" => [],
+            "_urlCache" => []
+        ]
+    ];
+
+    /**
+     * @var array
      */
     private array $reflectionCache = [];
 
     /**
      * Constructor
      *
-     * @param ComponentRegistrarInterface $componentRegistrar
-     * @param array $classList
      * @return void
      * @phpcs:disable Magento2.Functions.DiscouragedFunction
      */
-    public function __construct(
-        private ComponentRegistrarInterface $componentRegistrar,
-        private array $classList = [],
-    ) {
-        foreach ($this->getPaths() as $resetPath) {
-            if (!\file_exists($resetPath)) {
-                continue;
-            }
-            $resetData = \json_decode(\file_get_contents($resetPath), true);
-            $this->classList = array_replace($this->classList, $resetData);
+    public function __construct()
+    {
+        if (\file_exists(BP . self::RESET_PATH)) {
+            // phpcs:ignore Magento2.Security.IncludeFile.FoundIncludeFile
+            $this->classList = array_replace($this->classList, (require BP . self::RESET_PATH));
         }
         $this->resetAfterWeakMap = new WeakMap;
-    }
-
-    /**
-     * Get paths for reset json
-     *
-     * @return \Generator<string>
-     */
-    private function getPaths(): \Generator
-    {
-        yield BP . '/app/etc/' . self::RESET_PATH;
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $modulePath) {
-            yield $modulePath . '/etc/' . self::RESET_PATH;
-        }
     }
 
     /**
@@ -79,10 +72,7 @@ class Resetter implements ResetterInterface
      */
     public function addInstance(object $instance) : void
     {
-        if ($instance instanceof ResetAfterRequestInterface
-            || \method_exists($instance, self::RESET_STATE_METHOD)
-            || isset($this->classList[\get_class($instance)])
-        ) {
+        if ($instance instanceof ResetAfterRequestInterface || isset($this->classList[\get_class($instance)])) {
             $this->resetAfterWeakMap[$instance] = true;
         }
     }
@@ -134,10 +124,6 @@ class Resetter implements ResetterInterface
      */
     private function resetStateWithReflection(object $instance)
     {
-        if (\method_exists($instance, self::RESET_STATE_METHOD)) {
-            $instance->{self::RESET_STATE_METHOD}();
-            return;
-        }
         $className = \get_class($instance);
         $reflectionClass = $this->reflectionCache[$className]
             ?? $this->reflectionCache[$className] = new \ReflectionClass($className);
