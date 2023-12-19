@@ -19,11 +19,11 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:magento-gl/composer.git"
+            "url": "git@github.com:magento-commerce/composer.git"
         },
         {
             "type": "vcs",
-            "url": "git@github.com:magento-gl/magento-coding-standard.git"
+            "url": "git@github.com:magento-commerce/magento-coding-standard.git"
         },
         {
             "type": "vcs",
@@ -81,7 +81,7 @@
         "laminas/laminas-validator": "^2.23",
         "league/flysystem": "^2.4",
         "league/flysystem-aws-s3-v3": "^2.4",
-        "magento/composer": "dev-Hammer_PlatForm_Health_247Beta3",
+        "magento/composer": "dev-develop",
         "magento/composer-dependency-version-audit-plugin": "^0.1",
         "magento/magento-composer-installer": ">=0.4.0",
         "magento/zend-cache": "^1.16",
@@ -110,7 +110,7 @@
         "dg/bypass-finals": "^1.4",
         "friendsofphp/php-cs-fixer": "^3.22",
         "lusitanian/oauth": "^0.8",
-        "magento/magento-coding-standard": "dev-Hammer_PlatForm_Health_247Beta3",
+        "magento/magento-coding-standard": "dev-develop",
         "magento/magento2-functional-testing-framework": "^4.6",
         "pdepend/pdepend": "^2.10",
         "phpmd/phpmd": "^2.12",
