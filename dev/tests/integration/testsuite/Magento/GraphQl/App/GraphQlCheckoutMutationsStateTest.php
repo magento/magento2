@@ -31,17 +31,11 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     private ?GraphQlStateDiff $graphQlStateDiff = null;
 
     /**
-     * @var DataFixtureStorage
-     */
-    private DataFixtureStorage $fixtures;
-
-    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
         $this->graphQlStateDiff = new GraphQlStateDiff();
-        $this->fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
         parent::setUp();
     }
 
@@ -81,8 +75,9 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     ]
     public function testAddSimpleProductToCart(): void
     {
-        $cartId1 = $this->fixtures->get('cart1')->getId();
-        $cartId2 = $this->fixtures->get('cart2')->getId();
+        $fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
+        $cartId1 = $fixtures->get('cart1')->getId();
+        $cartId2 = $fixtures->get('cart2')->getId();
         $query = $this->getAddProductToCartQuery();
         $this->graphQlStateDiff->testState(
             $query,
@@ -128,8 +123,9 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     ]
     public function testAddVirtualProductToCart()
     {
-        $cartId1 = $this->fixtures->get('cart1')->getId();
-        $cartId2 = $this->fixtures->get('cart2')->getId();
+        $fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
+        $cartId1 = $fixtures->get('cart1')->getId();
+        $cartId2 = $fixtures->get('cart2')->getId();
         $query = $this->getAddVirtualProductToCartQuery();
         $this->graphQlStateDiff->testState(
             $query,
@@ -152,8 +148,9 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     ]
     public function testAddBundleProductToCart()
     {
-        $cartId1 = $this->fixtures->get('cart1')->getId();
-        $cartId2 = $this->fixtures->get('cart2')->getId();
+        $fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
+        $cartId1 = $fixtures->get('cart1')->getId();
+        $cartId2 = $fixtures->get('cart2')->getId();
         $query = $this->getAddBundleProductToCartQuery('bundle-product');
         $this->graphQlStateDiff->testState(
             $query,
@@ -176,8 +173,9 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     ]
     public function testAddConfigurableProductToCart(): void
     {
-        $cartId1 = $this->fixtures->get('cart1')->getId();
-        $cartId2 = $this->fixtures->get('cart2')->getId();
+        $fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
+        $cartId1 = $fixtures->get('cart1')->getId();
+        $cartId2 = $fixtures->get('cart2')->getId();
         $query = $this->getAddConfigurableProductToCartQuery();
         $this->graphQlStateDiff->testState(
             $query,
@@ -200,8 +198,9 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     ]
     public function testAddDownloadableProductToCart(): void
     {
-        $cartId1 = $this->fixtures->get('cart1')->getId();
-        $cartId2 = $this->fixtures->get('cart2')->getId();
+        $fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
+        $cartId1 = $fixtures->get('cart1')->getId();
+        $cartId2 = $fixtures->get('cart2')->getId();
         $sku = 'downloadable-product-with-purchased-separately-links';
         $links = $this->getProductsLinks($sku);
         $linkId = key($links);
