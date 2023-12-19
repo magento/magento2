@@ -32,9 +32,9 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     {
         if (!class_exists(GraphQlStateDiff::class)) {
             $this->markTestSkipped('GraphQlStateDiff class is not available on this version of Magento.');
-        } else {
-            $this->graphQlStateDiff = new GraphQlStateDiff();
         }
+
+        $this->graphQlStateDiff = new GraphQlStateDiff();
         parent::setUp();
     }
 
