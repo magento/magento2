@@ -26,7 +26,7 @@
         <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{address.postcode}}" stepKey="fillZipCode"/>
         <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{address.telephone}}" stepKey="fillPhone"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
-        <scrollTo selector="{{CmsNewPagePageContentSection.emailAddress}}" stepKey="scrollToEmailAddress"/>
+        <scrollTo selector="{{CheckoutShippingSection.emailAddress}}" stepKey="scrollToEmailAddress"/>
         <waitForElementVisible selector="{{CheckoutShippingSection.emailAddress}}" stepKey="waitForEmailFieldVisible" />
         <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{customer.email}}" stepKey="fillEmailField"/>
     </actionGroup>
