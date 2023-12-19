@@ -21,7 +21,6 @@ use Magento\Wishlist\Model\Item;
 /**
  * Wishlist Data Helper
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  *
