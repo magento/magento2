@@ -866,4 +866,81 @@ class MysqlTest extends TestCase
 
         return $method->invokeArgs($adapter, $parameters);
     }
+
+    /**
+     * @dataProvider retryExceptionDataProvider
+     * @param \Exception $exception
+     * @return void
+     */
+    public function testBeginTransactionWithReconnect(\Exception $exception): void
+    {
+        $adapter = $this->getMysqlPdoAdapterMock(['_connect', '_beginTransaction', '_rollBack']);
+        $adapter->expects(self::exactly(4))
+            ->method('_connect');
+        $adapter->expects(self::once())
+            ->method('_rollBack');
+
+        $matcher = self::exactly(2);
+        $adapter->expects($matcher)
+            ->method('_beginTransaction')
+            ->willReturnCallback(
+                function () use ($matcher, $exception) {
+                    if ($matcher->getInvocationCount() === 1) {
+                        throw $exception;
+                    }
+                }
+            );
+        $adapter->beginTransaction();
+        $adapter->rollBack();
+    }
+
+    /**
+     * @return array[]
+     */
+    public function retryExceptionDataProvider(): array
+    {
+        $serverHasGoneAwayException = new \PDOException();
+        $serverHasGoneAwayException->errorInfo = [1 => 2006];
+        $lostConnectionException = new \PDOException();
+        $lostConnectionException->errorInfo = [1 => 2013];
+
+        return [
+            [$serverHasGoneAwayException],
+            [$lostConnectionException],
+            [new \Zend_Db_Statement_Exception('', 0, $serverHasGoneAwayException)],
+            [new \Zend_Db_Statement_Exception('', 0, $lostConnectionException)],
+        ];
+    }
+
+    /**
+     * @dataProvider exceptionDataProvider
+     * @param \Exception $exception
+     * @return void
+     */
+    public function testBeginTransactionWithoutReconnect(\Exception $exception): void
+    {
+        $this->expectException(\Exception::class);
+        $adapter = $this->getMysqlPdoAdapterMock(['_connect', '_beginTransaction', '_rollBack']);
+        $adapter->expects(self::once())
+            ->method('_connect');
+        $adapter->expects(self::once())
+            ->method('_beginTransaction')
+            ->willThrowException($exception);
+        $adapter->beginTransaction();
+    }
+
+    /**
+     * @return array[]
+     */
+    public function exceptionDataProvider(): array
+    {
+        $pdoException = new \PDOException();
+        $pdoException->errorInfo = [1 => 1213];
+
+        return [
+            [$pdoException],
+            [new \Zend_Db_Statement_Exception('', 0, $pdoException)],
+            [new \Exception()],
+        ];
+    }
 }
