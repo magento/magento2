@@ -66,6 +66,16 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
             $this->totals = $this->totalsCollector->collectQuoteTotals($cartItem->getQuote());
         }
         $currencyCode = $cartItem->getQuote()->getQuoteCurrencyCode();
+
+        if ($cartItem->getProductType() == 'bundle') {
+            $discountValues = $this->getDiscountValues($cartItem, $currencyCode);
+            $discountAmount = 0;
+            foreach ((array) $discountValues as $discountValue) {
+                $discountAmount += $discountValue['amount']['value'];
+            }
+        } else {
+            $discountAmount = $cartItem->getDiscountAmount();
+        }
         return [
             'model' => $cartItem,
             'price' => [
@@ -86,7 +96,7 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
             ],
             'total_item_discount' => [
                 'currency' => $currencyCode,
-                'value' => $cartItem->getDiscountAmount(),
+                'value' => $discountAmount,
             ],
             'discounts' => $this->getDiscountValues($cartItem, $currencyCode)
         ];
