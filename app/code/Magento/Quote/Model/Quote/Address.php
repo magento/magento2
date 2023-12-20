@@ -12,6 +12,7 @@ use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Customer\Model\Address\AbstractAddress\CountryModelsCache;
 use Magento\Customer\Model\Address\AbstractAddress\RegionModelsCache;
+use Magento\Customer\Model\Address\CompositeValidator;
 use Magento\Customer\Model\Address\Mapper;
 use Magento\Directory\Helper\Data;
 use Magento\Directory\Model\CountryFactory;
@@ -337,6 +338,7 @@ class Address extends AbstractAddress implements
      * @param array $data
      * @param Json $serializer
      * @param StoreManagerInterface $storeManager
+     * @param CompositeValidator|null $compositeValidator
      * @param CountryModelsCache|null $countryModelsCache
      * @param RegionModelsCache|null $regionModelsCache
      *
@@ -377,6 +379,7 @@ class Address extends AbstractAddress implements
         array $data = [],
         Json $serializer = null,
         StoreManagerInterface $storeManager = null,
+        ?CompositeValidator $compositeValidator = null,
         ?CountryModelsCache $countryModelsCache = null,
         ?RegionModelsCache $regionModelsCache = null,
     ) {
@@ -416,6 +419,7 @@ class Address extends AbstractAddress implements
             $resource,
             $resourceCollection,
             $data,
+            $compositeValidator,
             $countryModelsCache,
             $regionModelsCache,
         );
