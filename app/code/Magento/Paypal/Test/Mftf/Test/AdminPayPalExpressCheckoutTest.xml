@@ -7,14 +7,14 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCancelPaypalExpressCheckoutTest">
+    <test name="AdminPayPalExpressCheckoutTest">
         <annotations>
             <features value="PayPal"/>
-            <stories value="Paypal express checkout configuration with credentials"/>
+            <stories value="Paypal express checkout configuration"/>
             <title value="Paypal Express Checkout configuration with valid credentials"/>
-            <description value="Cancel an order with paypal express checkout as payment method"/>
+            <description value="Place an order using paypal express checkout as payment method"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="AC-6116"/>
+            <testCaseId value="AC-6149"/>
         </annotations>
         <before>
             <!-- Simple product is created and assigned to category -->
