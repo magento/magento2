@@ -55,7 +55,7 @@
             <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="generateProducts"/>
             <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
             <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="clickOnConfirmInPopup"/>
-            <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
+            <waitForElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
         </before>
         <after>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
@@ -140,9 +140,9 @@
         </actionGroup>
         <actionGroup ref="StorefrontSaveAddressActionGroup" stepKey="saveAddresses"/>
         <waitForPageLoad stepKey="waitForPageToLoadProperly"/>
-        <seeElement selector="{{ShippingMethodSection.productDetails('simple product','1')}}" stepKey="assertSimpleProductDetails"/>
-        <seeElement selector="{{ShippingMethodSection.productDetails('config product','1')}}" stepKey="assertConfigProductRedDetails"/>
-        <seeElement selector="{{ShippingMethodSection.productDetails('config product','10')}}" stepKey="assertConfigProductGreenDetails"/>
+        <waitForElement selector="{{ShippingMethodSection.productDetails('simple product','1')}}" stepKey="assertSimpleProductDetails"/>
+        <waitForElement selector="{{ShippingMethodSection.productDetails('config product','1')}}" stepKey="assertConfigProductRedDetails"/>
+        <waitForElement selector="{{ShippingMethodSection.productDetails('config product','10')}}" stepKey="assertConfigProductGreenDetails"/>
         <!-- Click 'Continue to Billing Information' -->
         <actionGroup ref="StorefrontLeaveDefaultShippingMethodsAndGoToBillingInfoActionGroup" stepKey="useDefaultShippingMethod"/>
         <!-- Click 'Go to Review Your Order' -->
@@ -155,8 +155,8 @@
         <!-- Go to My Account > My Orders  and  verify orderId-->
         <actionGroup ref="StorefrontNavigateToCustomerOrdersHistoryPageActionGroup" stepKey="goToMyOrdersPage"/>
         <waitForPageLoad stepKey="waitForMyOrdersPageLoad"/>
-        <seeElement selector="{{StorefrontCustomerOrdersGridSection.orderView({$grabFirstOrderId})}}" stepKey="seeFirstOrder"/>
-        <seeElement selector="{{StorefrontCustomerOrdersGridSection.orderView({$grabSecondOrderId})}}" stepKey="seeSecondOrder"/>
+        <waitForElement selector="{{StorefrontCustomerOrdersGridSection.orderView({$grabFirstOrderId})}}" stepKey="seeFirstOrder"/>
+        <waitForElement selector="{{StorefrontCustomerOrdersGridSection.orderView({$grabSecondOrderId})}}" stepKey="seeSecondOrder"/>
         <!-- Logout customer -->
         <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
     </test>
