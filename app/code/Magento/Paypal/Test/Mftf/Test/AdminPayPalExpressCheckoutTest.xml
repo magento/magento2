@@ -7,18 +7,17 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminPayPalExpressCheckoutTest">
+    <test name="AdminCancelPaypalExpressCheckoutTest">
         <annotations>
             <features value="PayPal"/>
-            <stories value="Paypal express checkout configuration"/>
+            <stories value="Paypal express checkout configuration with credentials"/>
             <title value="Paypal Express Checkout configuration with valid credentials"/>
-            <description value="Place an order using paypal express checkout as payment method"/>
+            <description value="Cancel an order with paypal express checkout as payment method"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="AC-6149"/>
+            <testCaseId value="AC-6116"/>
         </annotations>
         <before>
             <!-- Simple product is created and assigned to category -->
-            <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
                 <field key="price">10.00</field>
@@ -32,14 +31,12 @@
             </actionGroup>
         </before>
         <after>
-            <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
             <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <!-- Login to StoreFront -->
+        <!-- Go to Storefront -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
         <!-- Add product to cart -->
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
@@ -64,6 +61,7 @@
         <!-- Login to Paypal in-context and verify order total on paypal page-->
         <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
         <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+        <!-- I see order successful Page -->
         <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumberToBeGrabbed"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
         <waitForText selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeSuccessMessage"/>
@@ -71,9 +69,9 @@
             <argument name="orderId" value="{$grabOrderNumber}"/>
         </actionGroup>
         <waitForElementVisible selector="{{AdminOrderPaymentInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="waitForTransactionIDFieldToBeAppeared"/>
-        <grabTextFrom selector="{{AdminOrderPaymentInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabATransactionID"/>
+        <grabTextFrom selector="{{AdminOrderPaymentInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabTransactionID"/>
         <waitForText selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$15.00" stepKey="checkGrandTotal"/>
         <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
-        <waitForText selector="{{AdminOrderCommentsTabSection.orderComment}}" userInput="Authorized amount of $15.00. Transaction ID: &quot;{$grabATransactionID}&quot;" stepKey="seeOrderHistoryNotes"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderComment}}" userInput="Authorized amount of $15.00. Transaction ID: &quot;{$grabTransactionID}&quot;" stepKey="seeOrderHistoryNotes"/>
     </test>
 </tests>
