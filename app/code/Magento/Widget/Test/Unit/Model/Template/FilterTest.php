@@ -251,7 +251,7 @@ class FilterTest extends TestCase
     {
         /** @var BlockInterface|MockObject $blockMock */
         $blockMock = $this->getMockBuilder(BlockInterface::class)
-            ->setMethods(['toHtml'])
+            ->onlyMethods(['toHtml'])
             ->getMockForAbstractClass();
         $blockMock->expects($this->any())
             ->method('toHtml')

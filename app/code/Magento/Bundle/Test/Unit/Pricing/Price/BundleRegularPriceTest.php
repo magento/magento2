@@ -56,7 +56,7 @@ class BundleRegularPriceTest extends TestCase
     {
         $this->saleableInterfaceMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPriceInfo', 'getPriceType', 'getPrice'])
+            ->onlyMethods(['getPriceInfo', 'getPriceType', 'getPrice'])
             ->getMock();
         $this->bundleCalculatorMock = $this->createMock(
             BundleCalculatorInterface::class

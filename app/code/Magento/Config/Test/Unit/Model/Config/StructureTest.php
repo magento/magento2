@@ -354,7 +354,7 @@ class StructureTest extends TestCase
     {
         $tabMock = $this->getMockBuilder(Structure\Element\Tab::class)
             ->disableOriginalConstructor()
-            ->setMethods(['current', 'getChildren', 'rewind'])
+            ->onlyMethods(['current', 'getChildren', 'rewind'])
             ->getMock();
 
         $tabMock->expects($this->any())
@@ -364,7 +364,7 @@ class StructureTest extends TestCase
             ->method('rewind');
         $section = $this->getMockBuilder(Section::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isVisible', 'getData'])
+            ->onlyMethods(['isVisible', 'getData'])
             ->getMock();
         $section->expects($this->any())
             ->method('isVisible')

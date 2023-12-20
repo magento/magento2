@@ -79,7 +79,7 @@ class NewWidgetTest extends TestCase
         $this->cacheState = $this->createPartialMock(State::class, ['isEnabled']);
         $this->localDate = $this->createMock(Timezone::class);
         $this->catalogConfig = $this->getMockBuilder(\Magento\Catalog\Model\Config::class)
-            ->setMethods(['getProductAttributes'])
+            ->onlyMethods(['getProductAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->layout = $this->createMock(Layout::class);
@@ -88,7 +88,7 @@ class NewWidgetTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->context = $this->getMockBuilder(ProductBlockContext::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getEventManager', 'getScopeConfig', 'getLayout',
                     'getRequest', 'getCacheState', 'getCatalogConfig',
@@ -218,7 +218,7 @@ class NewWidgetTest extends TestCase
         $this->context->expects($this->once())->method('getLocaleDate')->willReturn($this->localDate);
 
         $this->productCollection = $this->getMockBuilder(Collection::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setVisibility', 'addMinimalPrice', 'addFinalPrice',
                     'addTaxPercents', 'addAttributeToSelect', 'addUrlRewrite',

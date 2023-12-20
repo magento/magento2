@@ -80,7 +80,7 @@ class ConfigTest extends TestCase
         ]);
         $this->statusFactoryMock = $this->getMockBuilder(StatusFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'create'])
+            ->onlyMethods(['load', 'create'])
             ->getMock();
         $this->orderStatusCollectionFactoryMock = $this->createPartialMock(
             CollectionFactory::class,

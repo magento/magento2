@@ -85,21 +85,21 @@ class QueueTest extends TestCase
     {
         $this->templateFilterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->dateMock = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->templateFactoryMock = $this->getMockBuilder(TemplateFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create', 'load'])
+            ->onlyMethods(['create', 'load'])
             ->getMock();
         $this->problemFactoryMock = $this->getMockBuilder(ProblemFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->transportBuilderMock = $this->getMockBuilder(TransportBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['setTemplateData', 'setTemplateOptions', 'setTemplateVars', 'setFrom', 'addTo', 'getTransport']
             )
             ->getMock();
@@ -114,7 +114,7 @@ class QueueTest extends TestCase
             CollectionFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->subscribersCollectionFactoryMock->expects($this->any())->method('create')->willReturn(
             $this->subscribersCollectionMock
@@ -165,11 +165,11 @@ class QueueTest extends TestCase
         $this->queue->setQueueStartAt(1);
         $collection = $this->getMockBuilder(DataCollection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getItems'])
+            ->onlyMethods(['getItems'])
             ->getMock();
         $item = $this->getMockBuilder(Subscriber::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getStoreId', 'getSubscriberEmail', 'getSubscriberFullName', 'received', 'getUnsubscriptionLink']
             )
             ->getMock();

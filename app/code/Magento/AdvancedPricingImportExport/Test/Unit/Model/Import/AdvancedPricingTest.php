@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import;
 
+use Magento\AdvancedPricingImportExport\Model\CurrencyResolver;
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator;
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\TierPrice;
@@ -136,6 +137,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
      * @var ProcessingErrorAggregatorInterface
      */
     protected $errorAggregator;
+    private MockObject|CurrencyResolver $currencyResolver;
 
     /**
      * @inheritDoc
@@ -630,7 +632,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function saveAndReplaceAdvancedPricesAppendBehaviourDataProvider(): array
+    public static function saveAndReplaceAdvancedPricesAppendBehaviourDataProvider(): array
     {
         // @codingStandardsIgnoreStart
         return [
@@ -759,7 +761,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function validateRowResultDataProvider(): array
+    public static function validateRowResultDataProvider(): array
     {
         return [
             [
@@ -791,7 +793,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function validateRowAddRowErrorCallDataProvider(): array
+    public static function validateRowAddRowErrorCallDataProvider(): array
     {
         return [
             [
@@ -836,7 +838,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
     /**
      * @return array
      */
-    public function saveProductPricesDataProvider(): array
+    public static function saveProductPricesDataProvider(): array
     {
         return [
             [[], ['oSku1' => 'product1', 'oSku2' => 'product2'], [], 0],
@@ -912,7 +914,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
     /**
      * @return array
      */
-    public function deleteProductTierPricesDataProvider(): array
+    public static function deleteProductTierPricesDataProvider(): array
     {
         return [
             [
@@ -999,7 +1001,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
     /**
      * @return array
      */
-    public function processCountExistingPricesDataProvider(): array
+    public static function processCountExistingPricesDataProvider(): array
     {
         return [
             [
@@ -1095,10 +1097,11 @@ class AdvancedPricingTest extends AbstractImportTestCase
             ->method('getMetaData')
             ->with(ProductInterface::class)
             ->willReturn($metadataMock);
+        $this->currencyResolver = $this->createMock(CurrencyResolver::class);
         $advancedPricingMock = $this->getMockBuilder(
             \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class
         )
-            ->setMethods($methods)
+            ->onlyMethods($methods)
             ->setConstructorArgs(
                 [
                     $this->jsonHelper,
@@ -1115,7 +1118,8 @@ class AdvancedPricingTest extends AbstractImportTestCase
                     $this->importProduct,
                     $this->validator,
                     $this->websiteValidator,
-                    $this->tierPriceValidator
+                    $this->tierPriceValidator,
+                    $this->currencyResolver
                 ]
             )
             ->getMock();

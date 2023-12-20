@@ -289,7 +289,7 @@ class DefaultTest extends TestCase
             ['storage' => new Storage()]
         );
         $session = $this->getMockBuilder(Session::class)
-            ->setMethods(['isLoggedIn', 'getUserCreateWord'])
+            ->onlyMethods(['isLoggedIn', 'getUserCreateWord'])
             ->setConstructorArgs($sessionArgs)
             ->getMock();
         $session->expects($this->any())->method('isLoggedIn')->willReturn(false);
@@ -315,7 +315,7 @@ class DefaultTest extends TestCase
         $helper = $this->getMockBuilder(
             Data::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getConfig', 'getFonts', '_getWebsiteCode', 'getImgUrl']
             )->getMock();
 

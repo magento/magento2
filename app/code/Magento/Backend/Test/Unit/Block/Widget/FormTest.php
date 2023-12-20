@@ -34,7 +34,7 @@ class FormTest extends TestCase
 
         $this->dataForm = $this->getMockBuilder(\Magento\Framework\Data\Form::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'setParent',
                 'setBaseUrl',
                 'addCustomAttribute',

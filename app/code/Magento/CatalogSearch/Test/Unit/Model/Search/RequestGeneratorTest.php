@@ -35,15 +35,15 @@ class RequestGeneratorTest extends TestCase
     {
         $this->productAttributeCollectionFactory =
             $this->getMockBuilder(CollectionFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
         $generatorResolver = $this->getMockBuilder(GeneratorResolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getGeneratorForType'])
+            ->onlyMethods(['getGeneratorForType'])
             ->getMock();
         $generator = $this->getMockBuilder(GeneratorInterface::class)
-            ->setMethods(['getFilterData', 'getAggregationData'])
+            ->onlyMethods(['getFilterData', 'getAggregationData'])
             ->getMockForAbstractClass();
         $generator->expects($this->any())
             ->method('getFilterData')
@@ -203,7 +203,7 @@ class RequestGeneratorTest extends TestCase
         /** @var \Magento\Catalog\Model\Entity\Attribute|MockObject $attribute */
         $attribute = $this->getMockBuilder(AttributeResourceModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getAttributeCode',
                     'getBackendType',

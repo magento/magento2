@@ -45,17 +45,17 @@ class CombineTest extends TestCase
     {
         $this->conditionFactoryMock = $this->getMockBuilder(ConditionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->conditionObjectMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->combine = (new ObjectManagerHelper($this))->getObject(

@@ -28,7 +28,7 @@ class PriorityTest extends TestCase
     {
         $this->priorityMock = $this->getMockBuilder(Priority::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
     }
 

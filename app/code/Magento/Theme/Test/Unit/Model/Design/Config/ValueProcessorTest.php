@@ -31,7 +31,7 @@ class ValueProcessorTest extends TestCase
             ->getMock();
         $this->backendModel = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue', 'afterLoad'])
+            ->onlyMethods(['getValue', 'afterLoad'])
             ->getMock();
 
         $this->valueProcessor = new ValueProcessor($this->backendModelFactory);

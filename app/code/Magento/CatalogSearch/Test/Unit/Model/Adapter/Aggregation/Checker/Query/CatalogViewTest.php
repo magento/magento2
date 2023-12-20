@@ -83,22 +83,22 @@ class CatalogViewTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->queryFilterMock = $this->getMockBuilder(Filter::class)
-            ->setMethods(['getReference'])
+            ->onlyMethods(['getReference'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->termFilterMock = $this->getMockBuilder(Term::class)
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->categoryMock = $this->getMockBuilder(CategoryInterface::class)
-            ->setMethods(['getIsAnchor'])
+            ->onlyMethods(['getIsAnchor'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->queryMock = $this->getMockBuilder(QueryInterface::class)
-            ->setMethods(['getMust', 'getShould'])
+            ->onlyMethods(['getMust', 'getShould'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->name = 'Request';

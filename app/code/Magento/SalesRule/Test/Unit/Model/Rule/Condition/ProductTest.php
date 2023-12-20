@@ -96,7 +96,7 @@ class ProductTest extends TestCase
             ->getMockForAbstractClass();
         $this->attributeLoaderInterfaceMock = $this->getMockBuilder(AbstractEntity::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributesByCode'])
+            ->onlyMethods(['getAttributesByCode'])
             ->getMock();
         $this->attributeLoaderInterfaceMock
             ->expects($this->any())
@@ -104,7 +104,7 @@ class ProductTest extends TestCase
             ->willReturn([]);
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
-            ->setMethods(['distinct', 'from', 'where'])
+            ->onlyMethods(['distinct', 'from', 'where'])
             ->getMock();
         $this->selectMock
             ->expects($this->any())
@@ -117,7 +117,7 @@ class ProductTest extends TestCase
             ->willReturnSelf();
         $this->adapterInterfaceMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['fetchCol', 'select'])
+            ->onlyMethods(['fetchCol', 'select'])
             ->getMockForAbstractClass();
         $this->adapterInterfaceMock
             ->expects($this->any())
@@ -125,7 +125,7 @@ class ProductTest extends TestCase
             ->willReturn($this->selectMock);
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['loadAllAttributes', 'getConnection', 'getTable'])
+            ->onlyMethods(['loadAllAttributes', 'getConnection', 'getTable'])
             ->getMock();
         $this->productMock
             ->expects($this->any())
@@ -236,7 +236,7 @@ class ProductTest extends TestCase
         /* @var \Magento\Catalog\Model\Product|MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttribute', 'getId', 'setQuoteItemQty', 'setQuoteItemPrice'])
+            ->onlyMethods(['getAttribute', 'getId', 'setQuoteItemQty', 'setQuoteItemPrice'])
             ->getMock();
         $product
             ->method('setQuoteItemQty')
@@ -269,7 +269,7 @@ class ProductTest extends TestCase
     {
         $attr = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttribute'])
+            ->onlyMethods(['getAttribute'])
             ->getMockForAbstractClass();
 
         $attr->expects($this->any())
@@ -279,7 +279,7 @@ class ProductTest extends TestCase
         /* @var \Magento\Catalog\Model\Product|MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setQuoteItemPrice', 'getResource', 'hasData', 'getData'])
+            ->onlyMethods(['setQuoteItemPrice', 'getResource', 'hasData', 'getData'])
             ->getMock();
 
         $product->expects($this->any())
@@ -302,7 +302,7 @@ class ProductTest extends TestCase
         /* @var AbstractItem|MockObject $item */
         $item = $this->getMockBuilder(AbstractItem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPrice', 'getProduct'])
+            ->onlyMethods(['getPrice', 'getProduct'])
             ->getMockForAbstractClass();
 
         $item->expects($this->any())

@@ -39,12 +39,12 @@ class RefreshPathTest extends TestCase
     {
         $this->resultJsonFactoryMock = $this->getMockBuilder(JsonFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create', 'setData'])
+            ->onlyMethods(['create', 'setData'])
             ->getMock();
 
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getRequest'])
+            ->onlyMethods(['getRequest'])
             ->getMock();
     }
 
@@ -76,7 +76,7 @@ class RefreshPathTest extends TestCase
         $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
 
         $refreshPath = $this->getMockBuilder(RefreshPath::class)
-            ->setMethods(['getRequest', 'create'])
+            ->onlyMethods(['getRequest', 'create'])
             ->setConstructorArgs([
                 $this->contextMock,
                 $this->resultJsonFactoryMock,
@@ -87,7 +87,7 @@ class RefreshPathTest extends TestCase
 
         $categoryMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPath', 'getParentId', 'getResource'])
+            ->onlyMethods(['getPath', 'getParentId', 'getResource'])
             ->getMock();
 
         $categoryMock->expects($this->any())->method('getPath')->willReturn($value['path']);
@@ -97,7 +97,7 @@ class RefreshPathTest extends TestCase
 
         $objectManagerMock = $this->getMockBuilder(ObjectManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->setObjectProperty($refreshPath, '_objectManager', $objectManagerMock);
@@ -125,7 +125,7 @@ class RefreshPathTest extends TestCase
         $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
 
         $refreshPath = $this->getMockBuilder(RefreshPath::class)
-            ->setMethods(['getRequest', 'create'])
+            ->onlyMethods(['getRequest', 'create'])
             ->setConstructorArgs([
                 $this->contextMock,
                 $this->resultJsonFactoryMock,
@@ -136,7 +136,7 @@ class RefreshPathTest extends TestCase
 
         $objectManagerMock = $this->getMockBuilder(ObjectManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->setObjectProperty($refreshPath, '_objectManager', $objectManagerMock);

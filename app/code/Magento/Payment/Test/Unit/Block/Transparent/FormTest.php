@@ -57,11 +57,11 @@ class FormTest extends TestCase
         $objectManagerHelper = new ObjectManager($this);
 
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods(['getParam'])
+            ->onlyMethods(['getParam'])
             ->getMockForAbstractClass();
 
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->setMethods(['getUrl'])
+            ->onlyMethods(['getUrl'])
             ->getMockForAbstractClass();
 
         $context = $objectManagerHelper->getObject(
@@ -76,12 +76,12 @@ class FormTest extends TestCase
             ->getMock();
 
         $this->checkoutSessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods([])
+            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 
         $paymentConfigMock = $this->getMockBuilder(Config::class)
-            ->setMethods([])
+            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 

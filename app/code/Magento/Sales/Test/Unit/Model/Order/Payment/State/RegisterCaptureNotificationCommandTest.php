@@ -149,7 +149,7 @@ class RegisterCaptureNotificationCommandTest extends TestCase
         /** @var Order|MockObject $order */
         $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBaseCurrency', 'getOrderStatusByState'])
+            ->onlyMethods(['getBaseCurrency', 'getOrderStatusByState'])
             ->getMock();
         $order->method('getBaseCurrency')
             ->willReturn($this->getCurrency());
@@ -166,7 +166,7 @@ class RegisterCaptureNotificationCommandTest extends TestCase
     private function getPayment($isTransactionPending, $isFraudDetected)
     {
         $payment = $this->getMockBuilder(OrderPaymentInterface::class)
-            ->setMethods(['getIsTransactionPending', 'getIsFraudDetected'])
+            ->onlyMethods(['getIsTransactionPending', 'getIsFraudDetected'])
             ->getMockForAbstractClass();
         $payment->method('getIsTransactionPending')
             ->willReturn($isTransactionPending);

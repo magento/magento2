@@ -98,11 +98,11 @@ class StockManagementTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockItemInterfaceMock = $this->getMockBuilder(StockItemInterface::class)
-            ->setMethods(['hasAdminArea','getWebsiteId'])
+            ->onlyMethods(['hasAdminArea','getWebsiteId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->stockManagement = $this->getMockBuilder(StockManagement::class)
-            ->setMethods(['getResource', 'canSubtractQty'])
+            ->onlyMethods(['getResource', 'canSubtractQty'])
             ->setConstructorArgs(
                 [
                     'stockResource' => $this->stockResourceMock,

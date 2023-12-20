@@ -65,7 +65,7 @@ class TierPriceTest extends TestCase
         $this->priceInfo = $this->createMock(Base::class);
 
         $this->product = $this->getMockBuilder(Product::class)
-            ->setMethods(['getPriceInfo', 'hasCustomerGroupId', 'getCustomerGroupId', 'getResource', '__wakeup'])
+            ->onlyMethods(['getPriceInfo', 'hasCustomerGroupId', 'getCustomerGroupId', 'getResource', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -102,7 +102,7 @@ class PhpUnit
         if ($suite instanceof \PHPUnit\Framework\DataProviderTestSuite) {
             return;
         }
-        $this->_eventManager->fireEvent('startTestSuite');
+        $this->_eventManager->fireEvent('testSuiteStarted');
     }
 
     /**

@@ -49,7 +49,7 @@ class ProductOptionProcessorTest extends TestCase
     protected function setUp(): void
     {
         $this->dataObject = $this->getMockBuilder(DataObject::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getBundleOption',
                 'getBundleOptionQty',
                 'create',
@@ -59,7 +59,7 @@ class ProductOptionProcessorTest extends TestCase
             ->getMock();
 
         $this->dataObjectFactory = $this->getMockBuilder(\Magento\Framework\DataObject\Factory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectFactory->expects($this->any())
@@ -74,7 +74,7 @@ class ProductOptionProcessorTest extends TestCase
         $this->bundleOptionInterfaceFactory = $this->getMockBuilder(
             BundleOptionInterfaceFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->bundleOptionInterfaceFactory->expects($this->any())
@@ -101,7 +101,7 @@ class ProductOptionProcessorTest extends TestCase
 
         $productOptionExtensionMock = $this->getMockBuilder(
             ProductOptionExtensionInterface::class
-        )->setMethods(['getBundleOptions'])->getMockForAbstractClass();
+        )->onlyMethods(['getBundleOptions'])->getMockForAbstractClass();
 
         $productOptionMock->expects($this->any())
             ->method('getExtensionAttributes')

@@ -47,7 +47,7 @@ class RendererTest extends TestCase
 
         $this->weeeHelper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'isEnabled',
                 'typeOfDisplay',
                 'getWeeeTaxInclTax',
@@ -59,12 +59,12 @@ class RendererTest extends TestCase
 
         $this->priceCurrency = $this->getMockBuilder(PriceCurrency::class)
             ->disableOriginalConstructor()
-            ->setMethods(['format'])
+            ->onlyMethods(['format'])
             ->getMock();
 
         $this->item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getWeeeTaxAppliedAmount',
                 'getPriceInclTax',
                 'getRowTotalInclTax',
@@ -787,7 +787,7 @@ class RendererTest extends TestCase
 
         $itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getRowTotal',
                     'getTaxAmount',
@@ -834,7 +834,7 @@ class RendererTest extends TestCase
 
         $itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getBaseRowTotal',
                     'getBaseTaxAmount',

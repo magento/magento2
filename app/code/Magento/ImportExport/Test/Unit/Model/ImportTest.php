@@ -167,7 +167,7 @@ class ImportTest extends AbstractImportTestCase
             ->getMockForAbstractClass();
         $this->_importConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEntityTypeCode', 'getBehavior', 'getEntities', 'getRelatedIndexers'])
+            ->onlyMethods(['getEntityTypeCode', 'getBehavior', 'getEntities', 'getRelatedIndexers'])
             ->getMockForAbstractClass();
         $this->_entityFactory = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
@@ -181,7 +181,7 @@ class ImportTest extends AbstractImportTestCase
         );
         $this->_entityAdapter = $this->getMockBuilder(AbstractEntity::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'importData',
                     '_saveValidatedBunches',
@@ -217,7 +217,7 @@ class ImportTest extends AbstractImportTestCase
             ->getMock();
         $this->historyModel = $this->getMockBuilder(History::class)
             ->disableOriginalConstructor()
-            ->setMethods(['updateReport', 'invalidateReport', 'addReport'])
+            ->onlyMethods(['updateReport', 'invalidateReport', 'addReport'])
             ->getMock();
         $this->historyModel->expects($this->any())->method('updateReport')->willReturnSelf();
         $this->dateTime = $this->getMockBuilder(DateTime::class)
@@ -263,7 +263,7 @@ class ImportTest extends AbstractImportTestCase
                     $this->localeEmulator
                 ]
             )
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getDataSourceModel',
                     'setData',
@@ -406,7 +406,7 @@ class ImportTest extends AbstractImportTestCase
     {
         /** @var AbstractAttribute $attribute */
         $attribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['getFrontendInput', 'usesSource'])
+            ->onlyMethods(['getFrontendInput', 'usesSource'])
             ->disableOriginalConstructor()
             ->getMock();
         $attribute->expects($this->any())->method('getFrontendInput')->willReturn('boolean');
@@ -754,7 +754,7 @@ class ImportTest extends AbstractImportTestCase
     {
         $importMock = $this->getMockBuilder(Import::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getEntity', '_getEntityAdapter', 'getEntityTypeCode', 'isNeedToLogInHistory']
             )
             ->getMock();
@@ -792,7 +792,7 @@ class ImportTest extends AbstractImportTestCase
         $this->expectException(LocalizedException::class);
         $importMock = $this->getMockBuilder(Import::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getEntity', '_getEntityAdapter', 'getEntityTypeCode', 'isNeedToLogInHistory']
             )
             ->getMock();

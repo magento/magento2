@@ -46,7 +46,7 @@ class StoreViewTest extends TestCase
 
         $this->objectMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'dataHasChangedFor', 'getIsActive'])
+            ->onlyMethods(['getId', 'dataHasChangedFor', 'getIsActive'])
             ->getMock();
 
         $this->storeViewPlugin = new StoreView($this->eavProcessorMock);

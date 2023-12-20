@@ -65,7 +65,7 @@ class RouterTest extends TestCase
 
         $this->pageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
@@ -102,7 +102,7 @@ class RouterTest extends TestCase
 
         /** @var RequestInterface|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getPathInfo',
                 'setModuleName',
                 'setControllerName',

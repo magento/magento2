@@ -49,12 +49,12 @@ class ProviderTest extends TestCase
         $objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->consumerFactoryMock = $this->getMockBuilder(ConsumerFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->tokenFactoryMock = $this->getMockBuilder(TokenFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -63,7 +63,7 @@ class ProviderTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->consumerMock = $this->getMockBuilder(ConsumerInterface::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'load',
                     'loadByKey',
@@ -80,7 +80,7 @@ class ProviderTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->requestTokenMock = $this->getMockBuilder(Token::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'loadByConsumerIdAndUserType',
                     'load',
@@ -98,7 +98,7 @@ class ProviderTest extends TestCase
             ->getMock();
 
         $this->accessTokenMock = $this->getMockBuilder(Token::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getToken',
                     'getSecret',
@@ -177,7 +177,7 @@ class ProviderTest extends TestCase
         $secret = 'secret';
 
         $tokenMock = $this->getMockBuilder(Token::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'loadByConsumerIdAndUserType',
                     'getId',
@@ -220,7 +220,7 @@ class ProviderTest extends TestCase
         $tokenId = 1;
 
         $tokenMock = $this->getMockBuilder(Token::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'loadByConsumerIdAndUserType',
                     'getId',

@@ -41,7 +41,7 @@ class AdditionalCommentTest extends TestCase
     protected function setUp(): void
     {
         $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
-            ->setMethods(['getComment', 'getLabel'])
+            ->onlyMethods(['getComment', 'getLabel'])
             ->disableOriginalConstructor()
             ->getMock();
 

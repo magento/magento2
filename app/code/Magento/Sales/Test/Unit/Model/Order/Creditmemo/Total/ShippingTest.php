@@ -42,7 +42,7 @@ class ShippingTest extends TestCase
 
         $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getOrder',
                     'hasBaseShippingAmount',

@@ -63,7 +63,7 @@ class AdminConfigTest extends TestCase
             ->willReturn('init.host');
         $this->objectManager =  new ObjectManager($this);
         $this->validatorFactory = $this->getMockBuilder(ValidatorFactory::class)
-            ->setMethods(['setInstanceName', 'create'])
+            ->onlyMethods(['setInstanceName', 'create'])
             ->disableOriginalConstructor()
             ->getMock();
         $backendUrl = $this->createMock(Url::class);

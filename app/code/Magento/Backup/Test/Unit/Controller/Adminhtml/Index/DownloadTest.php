@@ -111,11 +111,11 @@ class DownloadTest extends TestCase
             ->getMock();
         $this->backupModelFactoryMock = $this->getMockBuilder(BackupFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->backupModelMock = $this->getMockBuilder(Backup::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTime', 'exists', 'getSize', 'output', 'getPath', 'getFileName'])
+            ->onlyMethods(['getTime', 'exists', 'getSize', 'output', 'getPath', 'getFileName'])
             ->getMock();
         $this->dataHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
@@ -125,12 +125,12 @@ class DownloadTest extends TestCase
             ->getMock();
         $this->resultRawFactoryMock = $this->getMockBuilder(RawFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
             RedirectFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultRawMock = $this->getMockBuilder(Raw::class)
             ->disableOriginalConstructor()

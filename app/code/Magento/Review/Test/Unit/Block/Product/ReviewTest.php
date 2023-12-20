@@ -103,7 +103,7 @@ class ReviewTest extends TestCase
     {
         $this->collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addStoreFilter', 'addStatusFilter', 'addEntityFilter', 'getSize', '__wakeup'])
+            ->onlyMethods(['addStoreFilter', 'addStatusFilter', 'addEntityFilter', 'getSize', '__wakeup'])
             ->getMock();
 
         $this->collection->expects(static::any())
@@ -121,7 +121,7 @@ class ReviewTest extends TestCase
 
         $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create', '__wakeup'])
+            ->onlyMethods(['create', '__wakeup'])
             ->getMock();
 
         $this->collectionFactory->expects(static::once())
@@ -137,7 +137,7 @@ class ReviewTest extends TestCase
         $this->initProductMock();
         $this->registry = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['registry'])
+            ->onlyMethods(['registry'])
             ->getMock();
 
         $this->registry->expects($this->any())
@@ -153,7 +153,7 @@ class ReviewTest extends TestCase
     {
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMock();
     }
 
@@ -164,12 +164,12 @@ class ReviewTest extends TestCase
     {
         $this->store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', '__wakeup'])
+            ->onlyMethods(['getId', '__wakeup'])
             ->getMock();
 
         $this->storeManager = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore', '__wakeup'])
+            ->onlyMethods(['getStore', '__wakeup'])
             ->getMock();
 
         $this->storeManager->expects(static::any())

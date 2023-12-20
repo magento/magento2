@@ -53,14 +53,14 @@ class ProductOptionProcessorTest extends TestCase
     protected function setUp(): void
     {
         $this->dataObject = $this->getMockBuilder(DataObject::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getOptions', 'addData',
             ])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->dataObjectFactory = $this->getMockBuilder(\Magento\Framework\DataObject\Factory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectFactory->expects($this->any())
@@ -70,7 +70,7 @@ class ProductOptionProcessorTest extends TestCase
         $this->customOption = $this->getMockBuilder(
             CustomOptionInterface::class
         )
-            ->setMethods([
+            ->onlyMethods([
                 'getDownloadableLinks',
             ])
             ->getMockForAbstractClass();
@@ -78,7 +78,7 @@ class ProductOptionProcessorTest extends TestCase
         $this->customOptionFactory = $this->getMockBuilder(
             CustomOptionFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->customOptionFactory->expects($this->any())
@@ -92,7 +92,7 @@ class ProductOptionProcessorTest extends TestCase
 
         $urlBuilder = $this->getMockBuilder(UrlBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUrl'])
+            ->onlyMethods(['getUrl'])
             ->getMock();
         $urlBuilder->expects($this->any())->method('getUrl')->willReturn('http://built.url/string/');
 
@@ -117,7 +117,7 @@ class ProductOptionProcessorTest extends TestCase
         $productOptionExtensionMock = $this->getMockBuilder(
             ProductOptionExtensionInterface::class
         )
-            ->setMethods([
+            ->onlyMethods([
                 'getCustomOptions',
             ])
             ->getMockForAbstractClass();

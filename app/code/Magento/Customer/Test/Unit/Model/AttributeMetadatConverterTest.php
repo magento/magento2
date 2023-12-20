@@ -56,15 +56,15 @@ class AttributeMetadatConverterTest extends TestCase
     protected function setUp(): void
     {
         $this->optionFactory = $this->getMockBuilder(OptionInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->validationRuleFactory = $this->getMockBuilder(ValidationRuleInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->attributeMetadataFactory = $this->getMockBuilder(AttributeMetadataInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectHelper =  $this->getMockBuilder(DataObjectHelper::class)
@@ -183,7 +183,7 @@ class AttributeMetadatConverterTest extends TestCase
 
         $mockMethods = ['setAttributeCode', 'setFrontendInput'];
         $attributeMetaData = $this->getMockBuilder(AttributeMetadata::class)
-            ->setMethods($mockMethods)
+            ->onlyMethods($mockMethods)
             ->disableOriginalConstructor()
             ->getMock();
         foreach ($mockMethods as $method) {

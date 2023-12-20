@@ -86,7 +86,7 @@ class PluginTest extends TestCase
     {
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'authenticate',
                     'getBeforeWishlistUrl',

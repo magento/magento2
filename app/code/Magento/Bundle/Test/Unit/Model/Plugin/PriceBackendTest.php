@@ -45,7 +45,7 @@ class PriceBackendTest extends TestCase
             ->getMock();
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTypeId', 'getPriceType', '__wakeUp'])
+            ->onlyMethods(['getTypeId', 'getPriceType', '__wakeUp'])
             ->getMock();
     }
 

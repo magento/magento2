@@ -581,7 +581,7 @@ class ProductTest extends AbstractImportTestCase
         $this->_connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
-            ->setMethods(['from', 'where'])
+            ->onlyMethods(['from', 'where'])
             ->getMock();
         $this->select->expects($this->any())->method('from')->willReturnSelf();
         //$this->select->expects($this->any())->method('where')->willReturnSelf();
@@ -741,7 +741,7 @@ class ProductTest extends AbstractImportTestCase
         $attrCode = 'code';
         $rowNum = 0;
         $string = $this->getMockBuilder(StringUtils::class)
-            ->setMethods(null)->getMock();
+            ->onlyMethods(null)->getMock();
         $this->setPropertyValue($this->importProduct, 'string', $string);
 
         $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(true);
@@ -759,7 +759,7 @@ class ProductTest extends AbstractImportTestCase
         $attrCode = 'code';
         $rowNum = 0;
         $string = $this->getMockBuilder(StringUtils::class)
-            ->setMethods(null)->getMock();
+            ->onlyMethods(null)->getMock();
         $this->setPropertyValue($this->importProduct, 'string', $string);
 
         $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(false);
@@ -2195,7 +2195,7 @@ class ProductTest extends AbstractImportTestCase
         $methods[] = 'getErrorAggregator';
         $importProduct = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods($methods)
+            ->onlyMethods($methods)
             ->getMock();
         $errorMethods = array_keys($errorAggregatorMethods);
         $errorAggregator = $this->getErrorAggregatorObject($errorMethods);

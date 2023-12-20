@@ -68,7 +68,7 @@ class ConfigWriterTest extends TestCase
             ->getMockForAbstractClass();
         $this->valueMock = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
-            ->setMethods(['validateBeforeSave', 'beforeSave', 'getValue', 'afterSave'])
+            ->onlyMethods(['validateBeforeSave', 'beforeSave', 'getValue', 'afterSave'])
             ->getMock();
 
         $this->model = new ConfigWriter(

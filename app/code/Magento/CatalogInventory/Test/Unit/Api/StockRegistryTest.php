@@ -93,7 +93,7 @@ class StockRegistryTest extends TestCase
             false
         );
         $this->stockItem = $this->getMockBuilder(StockItemInterface::class)
-            ->setMethods(['setProductId', 'getData', 'addData', 'getItemId', 'getWebsiteId'])
+            ->onlyMethods(['setProductId', 'getData', 'addData', 'getItemId', 'getWebsiteId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->stockStatus = $this->getMockForAbstractClass(

@@ -138,7 +138,7 @@ class CheckoutTest extends TestCase
     public function testUpdateShippingMethod()
     {
         $shippingAddressMock = $this->getMockBuilder(Address::class)
-            ->setMethods(['setCollectShippingRates', 'getShippingMethod', 'setShippingMethod'])
+            ->onlyMethods(['setCollectShippingRates', 'getShippingMethod', 'setShippingMethod'])
             ->disableOriginalConstructor()
             ->getMock();
         $billingAddressMock = $this->getMockBuilder(Address::class)
@@ -167,7 +167,7 @@ class CheckoutTest extends TestCase
             ->willReturn($shippingMock);
 
         $cartExtensionMock = $this->getMockBuilder(CartExtensionInterface::class)
-            ->setMethods(['getShippingAssignments'])
+            ->onlyMethods(['getShippingAssignments'])
             ->getMockForAbstractClass();
         $cartExtensionMock->expects(static::exactly(2))
             ->method('getShippingAssignments')

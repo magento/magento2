@@ -204,7 +204,7 @@ class QuoteTest extends TestCase
         $this->quoteFactoryMock = $this->createPartialMock(QuoteFactory::class, ['create']);
 
         $this->quote = $this->getMockBuilder(Quote::class)
-            ->setMethods(['getStoreId', 'getQuoteId', 'setQuoteId', 'hasCustomerId', 'getCustomerId'])
+            ->onlyMethods(['getStoreId', 'getQuoteId', 'setQuoteId', 'hasCustomerId', 'getCustomerId'])
             ->setConstructorArgs(
                 [
                     'request' => $this->requestMock,

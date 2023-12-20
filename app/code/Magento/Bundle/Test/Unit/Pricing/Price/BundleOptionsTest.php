@@ -126,7 +126,7 @@ class BundleOptionsTest extends TestCase
                     $this->selectionPriceListProviderMock
                 ]
             )
-            ->setMethods(['getOptionsAmount'])
+            ->onlyMethods(['getOptionsAmount'])
             ->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->bundleOptions = $this->objectManagerHelper->getObject(
@@ -310,7 +310,7 @@ class BundleOptionsTest extends TestCase
     private function createSelectionMock(array $selectionData)
     {
         $selection = $this->getMockBuilder(Product::class)
-            ->setMethods(['isSalable', 'getAmount', 'getQuantity', 'getProduct', '__wakeup'])
+            ->onlyMethods(['isSalable', 'getAmount', 'getQuantity', 'getProduct', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -324,7 +324,7 @@ class BundleOptionsTest extends TestCase
         $selection->expects($this->any())->method('getQuantity')->willReturn(1);
 
         $innerProduct = $this->getMockBuilder(Product::class)
-            ->setMethods(['getSelectionCanChangeQty', '__wakeup'])
+            ->onlyMethods(['getSelectionCanChangeQty', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
         $innerProduct->expects($this->any())->method('getSelectionCanChangeQty')->willReturn(true);

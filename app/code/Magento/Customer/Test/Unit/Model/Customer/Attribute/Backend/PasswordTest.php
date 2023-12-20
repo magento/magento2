@@ -35,7 +35,7 @@ class PasswordTest extends TestCase
         /** @var DataObject|MockObject $object */
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPassword', 'getPasswordConfirm'])
+            ->onlyMethods(['getPassword', 'getPasswordConfirm'])
             ->getMock();
 
         $object->expects($this->once())->method('getPassword')->willReturn($password);
@@ -66,7 +66,7 @@ class PasswordTest extends TestCase
         /** @var DataObject|MockObject $object */
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPassword'])
+            ->onlyMethods(['getPassword'])
             ->getMock();
 
         $object->expects($this->once())->method('getPassword')->willReturn($password);
@@ -82,7 +82,7 @@ class PasswordTest extends TestCase
         /** @var DataObject|MockObject $object */
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPassword', 'setPasswordHash', 'hashPassword'])
+            ->onlyMethods(['getPassword', 'setPasswordHash', 'hashPassword'])
             ->getMock();
 
         $object->expects($this->once())->method('getPassword')->willReturn($password);
@@ -119,7 +119,7 @@ class PasswordTest extends TestCase
         /** @var Customer|MockObject $customer */
         $customer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
 
         $customer->expects($this->exactly(2))->method('getData')->willReturn($randomValue);

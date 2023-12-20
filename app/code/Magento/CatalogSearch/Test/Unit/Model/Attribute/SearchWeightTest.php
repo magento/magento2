@@ -50,15 +50,15 @@ class SearchWeightTest extends TestCase
     protected function setUp(): void
     {
         $this->config = $this->getMockBuilder(Config::class)
-            ->setMethods(['reset'])
+            ->onlyMethods(['reset'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->attribute = $this->getMockBuilder(AbstractModel::class)
-            ->setMethods(['isObjectNew', 'dataHasChangedFor'])
+            ->onlyMethods(['isObjectNew', 'dataHasChangedFor'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->attributeResourceModel = $this->getMockBuilder(Attribute::class)
-            ->setMethods([])
+            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
         $this->closure = function (AbstractModel $model) {

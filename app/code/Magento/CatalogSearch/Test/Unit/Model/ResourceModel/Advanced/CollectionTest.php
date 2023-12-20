@@ -96,18 +96,18 @@ class CollectionTest extends TestCase
         );
         $productLimitationFactoryMock = $this->getMockBuilder(ProductLimitationFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $productLimitationFactoryMock->method('create')
             ->willReturn($productLimitationMock);
 
         $searchCriteriaResolver = $this->getMockBuilder(SearchCriteriaResolverInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['resolve'])
+            ->onlyMethods(['resolve'])
             ->getMockForAbstractClass();
         $searchCriteriaResolverFactory = $this->getMockBuilder(SearchCriteriaResolverFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $searchCriteriaResolverFactory->expects($this->any())
             ->method('create')
@@ -115,16 +115,16 @@ class CollectionTest extends TestCase
 
         $this->searchResultApplierFactory = $this->getMockBuilder(SearchResultApplierFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $totalRecordsResolver = $this->getMockBuilder(TotalRecordsResolverInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['resolve'])
+            ->onlyMethods(['resolve'])
             ->getMockForAbstractClass();
         $totalRecordsResolverFactory = $this->getMockBuilder(TotalRecordsResolverFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $totalRecordsResolverFactory->expects($this->any())
             ->method('create')
@@ -211,7 +211,7 @@ class CollectionTest extends TestCase
     protected function getCriteriaBuilder()
     {
         $criteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->setMethods(['addFilter', 'create', 'setRequestName'])
+            ->onlyMethods(['addFilter', 'create', 'setRequestName'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -226,7 +226,7 @@ class CollectionTest extends TestCase
     protected function getStoreManager()
     {
         $store = $this->getMockBuilder(Store::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $store->expects($this->once())
@@ -234,7 +234,7 @@ class CollectionTest extends TestCase
             ->willReturn(1);
 
         $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $storeManager->expects($this->once())
@@ -253,7 +253,7 @@ class CollectionTest extends TestCase
     {
         $connection = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
-            ->setMethods(['select'])
+            ->onlyMethods(['select'])
             ->getMockForAbstractClass();
         $select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
@@ -261,7 +261,7 @@ class CollectionTest extends TestCase
         $connection->expects($this->any())->method('select')->willReturn($select);
 
         $entity = $this->getMockBuilder(AbstractEntity::class)
-            ->setMethods(['getConnection', 'getTable', 'getDefaultAttributes', 'getEntityTable'])
+            ->onlyMethods(['getConnection', 'getTable', 'getDefaultAttributes', 'getEntityTable'])
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())
@@ -278,7 +278,7 @@ class CollectionTest extends TestCase
             ->willReturn('table');
 
         $universalFactory = $this->getMockBuilder(UniversalFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $universalFactory->expects($this->once())

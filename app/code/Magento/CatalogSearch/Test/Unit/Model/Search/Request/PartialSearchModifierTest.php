@@ -58,7 +58,7 @@ class PartialSearchModifierTest extends TestCase
         $searchWeight = 10;
         foreach ($attributes as $attribute) {
             $item = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
-                ->setMethods(['getAttributeCode', 'getSearchWeight'])
+                ->onlyMethods(['getAttributeCode', 'getSearchWeight'])
                 ->disableOriginalConstructor()
                 ->getMock();
             $item->method('getAttributeCode')

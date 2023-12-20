@@ -63,7 +63,7 @@ class BeforeOrderPaymentSaveObserverTest extends TestCase
 
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPayment'])
+            ->onlyMethods(['getPayment'])
             ->getMock();
 
         $this->eventMock->expects(self::once())

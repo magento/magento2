@@ -265,7 +265,7 @@ class ConfigurableTest extends TestCase
         ?int $customerGroupId = null
     ): void {
         $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getCurrentCurrency'])
+            ->onlyMethods(['getCurrentCurrency'])
             ->getMockForAbstractClass();
         $storeMock->expects($this->any())
             ->method('getCode')
@@ -300,7 +300,7 @@ class ConfigurableTest extends TestCase
         $amountMock = $this->getAmountMock($amount);
 
         $priceMock = $this->getMockBuilder(PriceInterface::class)
-            ->setMethods(['getAmount'])
+            ->onlyMethods(['getAmount'])
             ->getMockForAbstractClass();
         $priceMock->expects($this->any())->method('getAmount')->willReturn($amountMock);
         $tierPriceMock = $this->getTierPriceMock($amountMock, $priceQty, $percentage);
@@ -463,7 +463,7 @@ class ConfigurableTest extends TestCase
             ->willReturn('%s');
 
         $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getCurrentCurrency'])
+            ->onlyMethods(['getCurrentCurrency'])
             ->getMockForAbstractClass();
         $storeMock->expects($this->any())
             ->method('getCurrentCurrency')
@@ -515,7 +515,7 @@ class ConfigurableTest extends TestCase
     protected function getAmountMock($amount): MockObject
     {
         $amountMock = $this->getMockBuilder(AmountInterface::class)
-            ->setMethods(['getValue', 'getBaseAmount'])
+            ->onlyMethods(['getValue', 'getBaseAmount'])
             ->getMockForAbstractClass();
         $amountMock->expects($this->any())
             ->method('getValue')
@@ -543,7 +543,7 @@ class ConfigurableTest extends TestCase
         ];
 
         $tierPriceMock = $this->getMockBuilder(TierPriceInterface::class)
-            ->setMethods(['getTierPriceList', 'getSavePercent'])
+            ->onlyMethods(['getTierPriceList', 'getSavePercent'])
             ->getMockForAbstractClass();
         $tierPriceMock->expects($this->any())
             ->method('getTierPriceList')

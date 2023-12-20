@@ -102,7 +102,7 @@ class SwitcherTest extends TestCase
         foreach ($storesSortOrder as $storeId => $sortOrder) {
             $storeMock = $this->getMockBuilder(Store::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['getId', 'getGroupId', 'getSortOrder', 'isActive', 'getUrl'])
+                ->onlyMethods(['getId', 'getGroupId', 'getSortOrder', 'isActive', 'getUrl'])
                 ->getMock();
             $storeMock->method('getId')->willReturn($storeId);
             $storeMock->method('getGroupId')->willReturn($groupId);

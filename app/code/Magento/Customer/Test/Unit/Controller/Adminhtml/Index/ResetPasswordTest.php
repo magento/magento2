@@ -123,7 +123,7 @@ class ResetPasswordTest extends TestCase
         $this->_response = $this->getMockBuilder(
             \Magento\Framework\App\Response\Http::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['setRedirect', 'getHeader', '__wakeup']
             )->getMock();
 
@@ -140,7 +140,7 @@ class ResetPasswordTest extends TestCase
         $this->_objectManager = $this->getMockBuilder(
             ObjectManager::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['get', 'create']
             )->getMock();
         $frontControllerMock = $this->getMockBuilder(
@@ -155,7 +155,7 @@ class ResetPasswordTest extends TestCase
         $this->_session = $this->getMockBuilder(
             Session::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['setIsUrlNotice', '__wakeup']
             )->getMock();
         $this->_session->expects($this->any())->method('setIsUrlNotice');
@@ -163,14 +163,14 @@ class ResetPasswordTest extends TestCase
         $this->_helper = $this->getMockBuilder(
             Data::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getUrl']
             )->getMock();
 
         $this->messageManager = $this->getMockBuilder(
             Manager::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['addSuccessMessage', 'addMessage', 'addExceptionMessage', 'addErrorMessage']
             )->getMock();
 
@@ -178,7 +178,7 @@ class ResetPasswordTest extends TestCase
             RedirectFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
@@ -207,7 +207,7 @@ class ResetPasswordTest extends TestCase
         $contextMock = $this->getMockBuilder(
             Context::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 $contextArgs
             )->getMock();
         $contextMock->expects($this->any())->method('getRequest')->willReturn($this->_request);

@@ -55,7 +55,7 @@ class StatusResolverTest extends TestCase
     private function getOrder($newOrderStatus, $stateStatuses)
     {
         $order = $this->getMockBuilder(OrderInterface::class)
-            ->setMethods(['getConfig'])
+            ->onlyMethods(['getConfig'])
             ->getMockForAbstractClass();
         $order->method('getPayment')
             ->willReturn($this->getPayment($newOrderStatus));
@@ -72,7 +72,7 @@ class StatusResolverTest extends TestCase
     private function getPayment($newOrderStatus)
     {
         $payment = $this->getMockBuilder(OrderPaymentInterface::class)
-            ->setMethods(['getMethodInstance'])
+            ->onlyMethods(['getMethodInstance'])
             ->getMockForAbstractClass();
         $payment->method('getMethodInstance')
             ->willReturn($this->getMethodInstance($newOrderStatus));

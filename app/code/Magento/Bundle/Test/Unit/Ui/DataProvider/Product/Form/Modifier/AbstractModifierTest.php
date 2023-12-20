@@ -48,7 +48,7 @@ abstract class AbstractModifierTest extends TestCase
         $this->locatorMock = $this->getMockBuilder(LocatorInterface::class)
             ->getMockForAbstractClass();
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['getPriceType'])
+            ->onlyMethods(['getPriceType'])
             ->getMockForAbstractClass();
 
         $this->locatorMock->expects($this->any())

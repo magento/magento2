@@ -106,7 +106,7 @@ class ValidatorTest extends TestCase
         $attribute = $this->getMockBuilder(
             AttributeMetadata::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['__wakeup', 'getAttributeCode', 'getDataModel']
             )->getMock();
         $attribute->expects($this->any())->method('getAttributeCode')->willReturn('ATTR_CODE');

@@ -47,7 +47,7 @@ class QtyincrementsTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->registryMock = $this->createMock(Registry::class);
         $this->stockItem = $this->getMockBuilder(StockItemInterface::class)
-            ->setMethods(['getQtyIncrements', 'getStockItem'])
+            ->onlyMethods(['getQtyIncrements', 'getStockItem'])
             ->getMockForAbstractClass();
         $this->stockItem->expects($this->any())->method('getStockItem')->willReturn(1);
         $this->stockRegistry = $this->getMockForAbstractClass(

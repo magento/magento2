@@ -38,7 +38,7 @@ class GetUtilityPageIdentifiersTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->model = $objectManager->getObject(

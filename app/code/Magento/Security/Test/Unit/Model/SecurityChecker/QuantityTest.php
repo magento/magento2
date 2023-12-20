@@ -62,7 +62,7 @@ class QuantityTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->securityConfigMock =  $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getScopeByEventType'])
+            ->onlyMethods(['getScopeByEventType'])
             ->getMockForAbstractClass();
         $this->securityConfigMock->expects($this->any())
             ->method('getScopeByEventType')

@@ -84,7 +84,7 @@ class ConditionsTest extends TestCase
             ->getMock();
         $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->blockMock = $this->getMockBuilder(BlockInterface::class)
-            ->setMethods(['getWidgetValues'])
+            ->onlyMethods(['getWidgetValues'])
             ->getMockForAbstractClass();
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()

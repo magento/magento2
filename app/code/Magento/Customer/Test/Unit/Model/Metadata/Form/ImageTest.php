@@ -122,10 +122,10 @@ class ImageTest extends AbstractFormTestCase
             ->getMock();
         $this->imageContentFactory = $this->getMockBuilder(ImageContentInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->fileProcessorFactoryMock = $this->getMockBuilder(FileProcessorFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->fileProcessorFactoryMock->expects($this->any())

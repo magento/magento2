@@ -28,7 +28,7 @@ class CustomerLogoutTest extends TestCase
     {
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setWishlistItemCount', 'isLoggedIn', 'getCustomerId'])
+            ->onlyMethods(['setWishlistItemCount', 'isLoggedIn', 'getCustomerId'])
             ->getMock();
 
         $this->observer = new Observer(

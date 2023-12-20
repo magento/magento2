@@ -161,7 +161,7 @@ class CompositeTest extends TestCase
     protected function initModifiers()
     {
         $this->modifierMock = $this->getMockBuilder(\stdClass::class)
-            ->setMethods(['modifyData', 'modifyMeta'])
+            ->onlyMethods(['modifyData', 'modifyMeta'])
             ->getMock();
         $this->modifierFactoryMock->expects($this->once())
             ->method('create')

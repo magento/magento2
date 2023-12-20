@@ -74,7 +74,7 @@ class CountryTest extends TestCase
         $addressMock = $this
             ->getMockBuilder(AbstractAddress::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getCountryId',
                     'getRegion',
@@ -96,14 +96,14 @@ class CountryTest extends TestCase
 
         $countryModelMock = $this->getMockBuilder(\Magento\Directory\Model\Country::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getRegionCollection'])
+            ->onlyMethods(['getRegionCollection'])
             ->getMock();
 
         $addressMock->method('getCountryModel')->willReturn($countryModelMock);
 
         $regionCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAllIds'])
+            ->onlyMethods(['getAllIds'])
             ->getMock();
         $countryModelMock
             ->expects($this->any())

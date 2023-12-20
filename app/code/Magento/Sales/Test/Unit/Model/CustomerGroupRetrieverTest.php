@@ -42,7 +42,7 @@ class CustomerGroupRetrieverTest extends TestCase
     {
         $this->quoteSession = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getQuoteId', 'getQuote'])
+            ->onlyMethods(['getQuoteId', 'getQuote'])
             ->getMock();
         $this->groupManagement = $this->getMockBuilder(GroupManagementInterface::class)
             ->disableOriginalConstructor()

@@ -70,13 +70,13 @@ class ProductCustomOptionsDataProviderTest extends TestCase
     {
         $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();
         $this->collectionMock = $this->getMockBuilder(AbstractCollection::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'load',
                 'getSelect',
                 'getTable',
@@ -104,7 +104,7 @@ class ProductCustomOptionsDataProviderTest extends TestCase
             ->willReturn('entity_id');
         $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMetadata'])
+            ->onlyMethods(['getMetadata'])
             ->getMock();
         $this->metadataPool->expects($this->any())
             ->method('getMetadata')

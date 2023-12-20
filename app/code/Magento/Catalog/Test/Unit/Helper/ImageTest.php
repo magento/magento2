@@ -127,7 +127,7 @@ class ImageTest extends TestCase
     {
         $this->imageFactory = $this->getMockBuilder(ProductImageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->image = $this->getMockBuilder(\Magento\Catalog\Model\Product\Image::class)

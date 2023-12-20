@@ -61,7 +61,7 @@ class PriceTest extends TestCase
 
         $shippingRateMock = $this->getMockBuilder(Rate::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPrice'])
+            ->onlyMethods(['getPrice'])
             ->getMock();
         $shippingRateMock->expects($this->once())
             ->method('getPrice')

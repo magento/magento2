@@ -135,14 +135,14 @@ class IndexTest extends TestCase
     {
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getStore',
             ])
             ->getMockForAbstractClass();
 
         $this->storeInterface = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getWebsiteId',
             ])
             ->getMockForAbstractClass();
@@ -155,7 +155,7 @@ class IndexTest extends TestCase
 
         $this->eavConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getEntityAttributeCodes',
                 'getAttribute',
             ])
@@ -167,7 +167,7 @@ class IndexTest extends TestCase
 
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getTransactionManager',
                 'getResources',
                 'getObjectRelationProcessor',
@@ -175,19 +175,19 @@ class IndexTest extends TestCase
             ->getMock();
 
         $this->eventManager = $this->getMockBuilder(ManagerInterface::class)
-            ->setMethods(['dispatch'])
+            ->onlyMethods(['dispatch'])
             ->getMockForAbstractClass();
 
         $this->product = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getData',
             ])
             ->getMockForAbstractClass();
 
         $this->category = $this->getMockBuilder(CategoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getName',
             ])
             ->getMockForAbstractClass();
@@ -198,7 +198,7 @@ class IndexTest extends TestCase
 
         $this->select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'distinct',
                 'from',
                 'join',
@@ -209,7 +209,7 @@ class IndexTest extends TestCase
 
         $this->resources = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getConnection',
                 'getTableName',
                 'getTablePrefix',
@@ -218,7 +218,7 @@ class IndexTest extends TestCase
 
         $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getMetadata',
                 'getIdentifierField'
             ])
@@ -248,7 +248,7 @@ class IndexTest extends TestCase
             ->getMockForAbstractClass();
 
         $resource = $this->getMockBuilder(ResourceConnection::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getConnection',
                 'getTableName'
             ])
@@ -489,7 +489,7 @@ class IndexTest extends TestCase
 
         $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getFrontendInput',
                 'getOptions',
                 'getData',

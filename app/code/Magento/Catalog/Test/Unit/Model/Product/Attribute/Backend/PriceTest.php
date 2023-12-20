@@ -45,7 +45,7 @@ class PriceTest extends TestCase
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMockForAbstractClass();
         $this->currencyFactory = $this->getMockBuilder(CurrencyFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $objectHelper->getObject(
@@ -57,7 +57,7 @@ class PriceTest extends TestCase
             ]
         );
         $this->attribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['getAttributeCode', 'isScopeWebsite', 'getIsGlobal'])
+            ->onlyMethods(['getAttributeCode', 'isScopeWebsite', 'getIsGlobal'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->model->setAttribute($this->attribute);

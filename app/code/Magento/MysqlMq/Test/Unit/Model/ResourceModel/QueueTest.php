@@ -63,7 +63,7 @@ class QueueTest extends TestCase
         $tableName = 'queue_message';
         $messageId = 2;
         $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['insert', 'lastInsertId'])
+            ->onlyMethods(['insert', 'lastInsertId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->resources->expects($this->exactly(2))->method('getConnection')->with('default')->willReturn($connection);
@@ -87,7 +87,7 @@ class QueueTest extends TestCase
         $tableName = 'queue_message';
         $messageIds = [3, 4];
         $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['insertMultiple', 'lastInsertId'])
+            ->onlyMethods(['insertMultiple', 'lastInsertId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->resources->expects($this->atLeastOnce())

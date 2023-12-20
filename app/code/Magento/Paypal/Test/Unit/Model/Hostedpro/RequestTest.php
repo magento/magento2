@@ -72,11 +72,11 @@ class RequestTest extends TestCase
     {
         $payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
+            ->onlyMethods(['__wakeup'])
             ->getMock();
         $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPayment', '__wakeup', 'getBillingAddress', 'getShippingAddress'])
+            ->onlyMethods(['getPayment', '__wakeup', 'getBillingAddress', 'getShippingAddress'])
             ->getMock();
         $order->expects(static::any())
             ->method('getPayment')
@@ -159,7 +159,7 @@ class RequestTest extends TestCase
         ];
         $paymentMethodMock = $this->getMockBuilder(Hostedpro::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
         $paymentMethodMock->expects($this->once())
             ->method('getConfigData')->with('payment_action')->willReturn('Authorization');

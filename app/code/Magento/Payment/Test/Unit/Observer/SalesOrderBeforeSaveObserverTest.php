@@ -43,7 +43,7 @@ class SalesOrderBeforeSaveObserverTest extends TestCase
         $this->observerMock = $this->getMockBuilder(
             Observer::class
         )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->onlyMethods([])->getMock();
     }
 
     public function testSalesOrderBeforeSaveMethodNotFree()
@@ -68,13 +68,13 @@ class SalesOrderBeforeSaveObserverTest extends TestCase
         $neverInvokedMethods = ['isCanceled', 'getState', 'hasForcedCanCreditMemo'];
         $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 array_merge(['__wakeup', 'getPayment', 'canUnhold'], $neverInvokedMethods)
             )->getMock();
         $paymentMock = $this->getMockBuilder(
             Payment::class
         )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->onlyMethods([])->getMock();
         $order->method('getPayment')->willReturn($paymentMock);
         $methodInstance = $this->getMockBuilder(
             MethodInterface::class
@@ -96,13 +96,13 @@ class SalesOrderBeforeSaveObserverTest extends TestCase
         $neverInvokedMethods = ['getState', 'hasForcedCanCreditMemo'];
         $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 array_merge(['__wakeup', 'getPayment', 'canUnhold', 'isCanceled'], $neverInvokedMethods)
             )->getMock();
         $paymentMock = $this->getMockBuilder(
             Payment::class
         )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->onlyMethods([])->getMock();
         $order->method('getPayment')->willReturn($paymentMock);
         $methodInstance = $this->getMockBuilder(
             MethodInterface::class
@@ -127,13 +127,13 @@ class SalesOrderBeforeSaveObserverTest extends TestCase
         $neverInvokedMethods = ['hasForcedCanCreditMemo'];
         $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 array_merge(['__wakeup', 'getPayment', 'isCanceled', 'canUnhold', 'getState'], $neverInvokedMethods)
             )->getMock();
         $paymentMock = $this->getMockBuilder(
             Payment::class
         )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->onlyMethods([])->getMock();
         $order->method('getPayment')->willReturn($paymentMock);
         $methodInstance = $this->getMockBuilder(
             MethodInterface::class
@@ -187,7 +187,7 @@ class SalesOrderBeforeSaveObserverTest extends TestCase
 
         $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 array_merge(['__wakeup', 'getPayment'])
             )->getMock();
 
@@ -210,7 +210,7 @@ class SalesOrderBeforeSaveObserverTest extends TestCase
         $this->eventMock = $this->getMockBuilder(
             Event::class
         )->disableOriginalConstructor()
-            ->setMethods($methodsList)->getMock();
+            ->onlyMethods($methodsList)->getMock();
         $this->observerMock->expects($this->any())->method('getEvent')->willReturn($this->eventMock);
     }
 
@@ -225,13 +225,13 @@ class SalesOrderBeforeSaveObserverTest extends TestCase
     {
         $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 array_merge(['__wakeup', 'getPayment'], $orderMethods)
             )->getMock();
         $paymentMock = $this->getMockBuilder(
             Payment::class
         )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->onlyMethods([])->getMock();
         $order->method('getPayment')->willReturn($paymentMock);
         $methodInstance = $this->getMockBuilder(
             MethodInterface::class

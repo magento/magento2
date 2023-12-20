@@ -66,28 +66,28 @@ class DatetimeTest extends TestCase
     {
         $this->mathRandomMock = $this->getMockBuilder(Random::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUniqueHash'])
+            ->onlyMethods(['getUniqueHash'])
             ->getMock();
 
         $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->dateTimeFormatterMock = $this
             ->getMockBuilder(DateTimeFormatterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->columnMock = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTimezone', 'getHtmlId', 'getId', 'getFilterTime'])
+            ->onlyMethods(['getTimezone', 'getHtmlId', 'getId', 'getFilterTime'])
             ->getMock();
 
         $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->escaperMock = $this->getMockBuilder(Escaper::class)
@@ -111,7 +111,7 @@ class DatetimeTest extends TestCase
 
         $this->repositoryMock = $this->getMockBuilder(Repository::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUrlWithParams'])
+            ->onlyMethods(['getUrlWithParams'])
             ->getMock();
 
         $this->contextMock->expects($this->once())

@@ -350,7 +350,7 @@ class StockStateProviderTest extends TestCase
         foreach ($options as $variation) {
             $stockItem = $this->getMockBuilder(StockItemInterface::class)
                 ->disableOriginalConstructor()
-                ->setMethods($this->stockItemMethods)
+                ->onlyMethods($this->stockItemMethods)
                 ->getMockForAbstractClass();
             $stockItem->expects($this->any())->method('getSuppressCheckQtyIncrements')->willReturn(
                 $variation['values']['_suppress_check_qty_increments_']
@@ -537,7 +537,7 @@ class StockStateProviderTest extends TestCase
         $qty = 1;
         $qtyIncrements = 5;
         $stockItem = $this->getMockBuilder(StockItemInterface::class)
-            ->setMethods($this->stockItemMethods)
+            ->onlyMethods($this->stockItemMethods)
             ->getMockForAbstractClass();
         $stockItem->expects($this->any())->method('getSuppressCheckQtyIncrements')->willReturn(false);
         $stockItem->expects($this->any())->method('getQtyIncrements')->willReturn($qtyIncrements);

@@ -59,7 +59,7 @@ class CollectionTimeLabelTest extends TestCase
     protected function setUp(): void
     {
         $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
-            ->setMethods(['getComment', 'getElementHtml'])
+            ->onlyMethods(['getComment', 'getElementHtml'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -71,7 +71,7 @@ class CollectionTimeLabelTest extends TestCase
         $reflection_property->setValue($this->abstractElementMock, $escaper);
 
         $this->contextMock = $this->getMockBuilder(Context::class)
-            ->setMethods(['getLocaleDate'])
+            ->onlyMethods(['getLocaleDate'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->formMock = $this->createMock(Form::class);
@@ -80,7 +80,7 @@ class CollectionTimeLabelTest extends TestCase
             ->willReturn($this->timeZoneMock);
         $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLocale'])
+            ->onlyMethods(['getLocale'])
             ->getMockForAbstractClass();
 
         $this->collectionTimeLabel = $objectManager->getObject(

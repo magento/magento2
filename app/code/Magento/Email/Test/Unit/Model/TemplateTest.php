@@ -164,7 +164,7 @@ class TemplateTest extends TestCase
             ->getMock();
 
         $this->filterFactory = $this->getMockBuilder(FilterFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -181,7 +181,7 @@ class TemplateTest extends TestCase
     protected function getModelMock(array $mockedMethods = [])
     {
         return $this->getMockBuilder(Template::class)
-            ->setMethods(array_merge($mockedMethods, ['__wakeup', '__sleep', '_init']))
+            ->onlyMethods(array_merge($mockedMethods, ['__wakeup', '__sleep', '_init']))
             ->setConstructorArgs(
                 [
                     $this->context,
@@ -227,7 +227,7 @@ class TemplateTest extends TestCase
     public function testGetTemplateFilterWithEmptyValue()
     {
         $filterTemplate = $this->getMockBuilder(\Magento\Framework\Filter\Template::class)
-            ->setMethods(['setUseAbsoluteLinks', 'setStoreId', 'setUrlModel'])
+            ->onlyMethods(['setUseAbsoluteLinks', 'setStoreId', 'setUrlModel'])
             ->disableOriginalConstructor()
             ->getMock();
         $filterTemplate->expects($this->once())
@@ -237,7 +237,7 @@ class TemplateTest extends TestCase
         $this->filterFactory->method('create')
             ->willReturn($filterTemplate);
         $designConfig = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -291,7 +291,7 @@ class TemplateTest extends TestCase
             ->willReturn($templateType);
 
         $modulesDir = $this->getMockBuilder(ReadInterface::class)
-            ->setMethods(['readFile', 'getRelativePath'])
+            ->onlyMethods(['readFile', 'getRelativePath'])
             ->getMockForAbstractClass();
 
         $relativePath = 'relativePath';
@@ -400,7 +400,7 @@ class TemplateTest extends TestCase
         );
 
         $designConfig = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -523,7 +523,7 @@ class TemplateTest extends TestCase
 
         class_exists(Template::class, true);
         $filterTemplate = $this->getMockBuilder(\Magento\Framework\Filter\Template::class)
-            ->setMethods(['setVariables', 'setStoreId', 'filter'])
+            ->onlyMethods(['setVariables', 'setStoreId', 'filter'])
             ->disableOriginalConstructor()
             ->getMock();
         $model->expects($this->once())
@@ -534,7 +534,7 @@ class TemplateTest extends TestCase
             ->method('applyDesignConfig');
 
         $designConfig = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMock();
         $storeId = 'storeId';
@@ -747,7 +747,7 @@ class TemplateTest extends TestCase
     public function testGetType($templateType, $expectedResult)
     {
         $emailConfig = $this->getMockBuilder(Config::class)
-            ->setMethods(['getTemplateType'])
+            ->onlyMethods(['getTemplateType'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -755,7 +755,7 @@ class TemplateTest extends TestCase
 
         /** @var Template $model */
         $model = $this->getMockBuilder(Template::class)
-            ->setMethods(['_init'])
+            ->onlyMethods(['_init'])
             ->setConstructorArgs(
                 [
                     $this->createMock(Context::class),

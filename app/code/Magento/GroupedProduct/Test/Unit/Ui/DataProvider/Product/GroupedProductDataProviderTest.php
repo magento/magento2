@@ -56,7 +56,7 @@ class GroupedProductDataProviderTest extends TestCase
             ->getMockForAbstractClass();
         $this->collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'toArray',
                     'isLoaded',
@@ -69,13 +69,13 @@ class GroupedProductDataProviderTest extends TestCase
             )->getMock();
         $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->collectionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->collectionMock);
         $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->setMethods(['getComposableTypes'])
+            ->onlyMethods(['getComposableTypes'])
             ->getMockForAbstractClass();
     }
 

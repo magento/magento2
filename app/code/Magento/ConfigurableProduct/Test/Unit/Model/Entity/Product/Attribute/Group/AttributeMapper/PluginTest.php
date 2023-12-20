@@ -49,26 +49,26 @@ class PluginTest extends TestCase
         $helper = new ObjectManager($this);
 
         $this->registry = $this->getMockBuilder(Registry::class)
-            ->setMethods(['registry'])
+            ->onlyMethods(['registry'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->attributeFactory = $this->getMockBuilder(
             AttributeFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->attribute = $this->getMockBuilder(
             \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute::class
         )
-            ->setMethods(['getUsedAttributes', 'getAttributeId'])
+            ->onlyMethods(['getUsedAttributes', 'getAttributeId'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->magentoObject = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
 

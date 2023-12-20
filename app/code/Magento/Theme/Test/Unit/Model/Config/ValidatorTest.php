@@ -32,7 +32,7 @@ class ValidatorTest extends TestCase
     {
         $this->templateFactoryMock = $this->getMockBuilder(\Magento\Framework\Mail\TemplateInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $objectManagerHelper = new ObjectManager($this);
@@ -58,7 +58,7 @@ class ValidatorTest extends TestCase
             ->getMock();
         $designConfigExtensionMock =
             $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigExtensionInterface::class)
-                ->setMethods(['getDesignConfigData'])
+                ->onlyMethods(['getDesignConfigData'])
                 ->getMockForAbstractClass();
         $designElementMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
@@ -75,7 +75,7 @@ class ValidatorTest extends TestCase
         $designElementMock->expects($this->once())->method('getValue')->willReturn($fieldConfig['field']);
 
         $templateMock = $this->getMockBuilder(\Magento\Email\Model\TemplateInterface::class)
-            ->setMethods(['getTemplateText', 'emulateDesign', 'loadDefault', 'revertDesign', 'setForcedArea'])
+            ->onlyMethods(['getTemplateText', 'emulateDesign', 'loadDefault', 'revertDesign', 'setForcedArea'])
             ->getMock();
 
         $this->templateFactoryMock->expects($this->once())->method('create')->willReturn($templateMock);
@@ -103,7 +103,7 @@ class ValidatorTest extends TestCase
             ->getMock();
         $designConfigExtensionMock =
             $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigExtensionInterface::class)
-                ->setMethods(['getDesignConfigData'])
+                ->onlyMethods(['getDesignConfigData'])
                 ->getMockForAbstractClass();
         $designElementMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
@@ -120,7 +120,7 @@ class ValidatorTest extends TestCase
         $designElementMock->expects($this->once())->method('getValue')->willReturn($fieldConfig['field']);
 
         $templateMock = $this->getMockBuilder(\Magento\Email\Model\TemplateInterface::class)
-            ->setMethods(['getTemplateText', 'emulateDesign', 'loadDefault', 'revertDesign', 'setForcedArea'])
+            ->onlyMethods(['getTemplateText', 'emulateDesign', 'loadDefault', 'revertDesign', 'setForcedArea'])
             ->getMock();
 
         $this->templateFactoryMock->expects($this->once())->method('create')->willReturn($templateMock);

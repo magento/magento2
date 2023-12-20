@@ -73,7 +73,7 @@ class FilterFactoryTest extends TestCase
     {
         $contextMock = $this->getMockForAbstractClass(ContextInterface::class);
         $attributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
-            ->setMethods(['usesSource', 'getSource'])
+            ->onlyMethods(['usesSource', 'getSource'])
             ->getMockForAbstractClass();
         $attributeMock->method('getAttributeCode')->willReturn(self::STUB_ATTRIBUTE['attribute_code']);
         $attributeMock->method('getDefaultFrontendLabel')

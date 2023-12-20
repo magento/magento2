@@ -42,15 +42,15 @@ class PayflowExpressTest extends TestCase
         $proFactory = $this->getMockBuilder(
             ProFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
         $api = $this->createMock(Nvp::class);
         $paypalPro = $this->getMockBuilder(
             Pro::class
         )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->onlyMethods([])->getMock();
         $this->transactionRepository = $this->getMockBuilder(TransactionRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getByTransactionType'])
+            ->onlyMethods(['getByTransactionType'])
             ->getMockForAbstractClass();
         $paypalPro->expects($this->any())->method('getApi')->willReturn($api);
 
@@ -113,7 +113,7 @@ class PayflowExpressTest extends TestCase
         $paymentInfo = $this->getMockBuilder(
             Payment::class
         )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->onlyMethods([])->getMock();
         $this->_model->setData('info_instance', $paymentInfo);
         return $paymentInfo;
     }
@@ -128,7 +128,7 @@ class PayflowExpressTest extends TestCase
         return $this->getMockBuilder(
             Transaction::class
         )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->onlyMethods([])->getMock();
     }
 
     public function testCanFetchTransactionInfo()

@@ -63,7 +63,7 @@ class WishlistTest extends TestCase
             ->getMock();
         $imageHelperFactory = $this->getMockBuilder(ImageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $imageHelperFactory->expects($this->any())
             ->method('create')
@@ -238,7 +238,7 @@ class WishlistTest extends TestCase
         /** @var AbstractType|MockObject $productTypeMock */
         $productTypeMock = $this->getMockBuilder(AbstractType::class)
             ->disableOriginalConstructor()
-            ->setMethods(['hasRequiredOptions'])
+            ->onlyMethods(['hasRequiredOptions'])
             ->getMockForAbstractClass();
 
         $productMock->expects($this->once())
@@ -437,7 +437,7 @@ class WishlistTest extends TestCase
         /** @var AbstractType|MockObject $productTypeMock */
         $productTypeMock = $this->getMockBuilder(AbstractType::class)
             ->disableOriginalConstructor()
-            ->setMethods(['hasRequiredOptions'])
+            ->onlyMethods(['hasRequiredOptions'])
             ->getMockForAbstractClass();
 
         $productMock->expects($this->exactly(2))

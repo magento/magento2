@@ -88,7 +88,7 @@ class ConvertToCsvTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->stream = $this->getMockBuilder(\Magento\Framework\Filesystem\File\WriteInterface::class)
-            ->setMethods([
+            ->onlyMethods([
                 'lock',
                 'unlock',
                 'close',
@@ -165,7 +165,7 @@ class ConvertToCsvTest extends TestCase
     protected function mockStream($expected)
     {
         $this->stream = $this->getMockBuilder(\Magento\Framework\Filesystem\File\WriteInterface::class)
-            ->setMethods([
+            ->onlyMethods([
                 'lock',
                 'unlock',
                 'close',
@@ -195,29 +195,29 @@ class ConvertToCsvTest extends TestCase
     private function mockComponent(string $componentName, array $page1Items, array $page2Items): void
     {
         $context = $this->getMockBuilder(ContextInterface::class)
-            ->setMethods(['getDataProvider'])
+            ->onlyMethods(['getDataProvider'])
             ->getMockForAbstractClass();
 
         $dataProvider = $this->getMockBuilder(
             DataProviderInterface::class
         )
-            ->setMethods(['getSearchResult'])
+            ->onlyMethods(['getSearchResult'])
             ->getMockForAbstractClass();
 
         $searchResult0 = $this->getMockBuilder(SearchResultInterface::class)
-            ->setMethods(['getItems'])
+            ->onlyMethods(['getItems'])
             ->getMockForAbstractClass();
 
         $searchResult1 = $this->getMockBuilder(SearchResultInterface::class)
-            ->setMethods(['getItems'])
+            ->onlyMethods(['getItems'])
             ->getMockForAbstractClass();
 
         $searchResult2 = $this->getMockBuilder(SearchResultInterface::class)
-            ->setMethods(['getItems'])
+            ->onlyMethods(['getItems'])
             ->getMockForAbstractClass();
 
         $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->setMethods(['setPageSize', 'setCurrentPage'])
+            ->onlyMethods(['setPageSize', 'setCurrentPage'])
             ->getMockForAbstractClass();
         $this->component->expects($this->any())
             ->method('getName')

@@ -95,28 +95,28 @@ class SaveDownloadableOrderItemObserverTest extends TestCase
     {
         $this->scopeConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isSetFlag', 'getValue'])
+            ->onlyMethods(['isSetFlag', 'getValue'])
             ->getMock();
 
         $this->purchasedFactory = $this->getMockBuilder(PurchasedFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->productFactory = $this->getMockBuilder(ProductFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->itemFactory = $this->getMockBuilder(ItemFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->itemsFactory = $this->getMockBuilder(
             CollectionFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -126,7 +126,7 @@ class SaveDownloadableOrderItemObserverTest extends TestCase
 
         $this->resultMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setIsAllowed'])
+            ->onlyMethods(['setIsAllowed'])
             ->getMock();
 
         $this->storeMock = $this->getMockBuilder(DataObject::class)
@@ -135,17 +135,17 @@ class SaveDownloadableOrderItemObserverTest extends TestCase
 
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore', 'getResult', 'getQuote', 'getOrder'])
+            ->onlyMethods(['getStore', 'getResult', 'getQuote', 'getOrder'])
             ->getMock();
 
         $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getStoreId', 'getState', 'isCanceled', 'getAllItems'])
+            ->onlyMethods(['getId', 'getStoreId', 'getState', 'isCanceled', 'getAllItems'])
             ->getMock();
 
         $this->observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEvent'])
+            ->onlyMethods(['getEvent'])
             ->getMock();
 
         $this->saveDownloadableOrderItemObserver = (new ObjectManagerHelper($this))->getObject(
@@ -224,7 +224,7 @@ class SaveDownloadableOrderItemObserverTest extends TestCase
 
         $purchasedLink = $this->getMockBuilder(Purchased::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'setLinkSectionTitle', 'save'])
+            ->onlyMethods(['load', 'setLinkSectionTitle', 'save'])
             ->getMock();
         $purchasedLink->expects($this->once())
             ->method('load')
@@ -319,7 +319,7 @@ class SaveDownloadableOrderItemObserverTest extends TestCase
 
         $purchasedLink = $this->getMockBuilder(Purchased::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'setLinkSectionTitle', 'save', 'getId'])
+            ->onlyMethods(['load', 'setLinkSectionTitle', 'save', 'getId'])
             ->getMock();
         $purchasedLink->expects($this->once())
             ->method('load')
@@ -356,7 +356,7 @@ class SaveDownloadableOrderItemObserverTest extends TestCase
     {
         $linkItem = $this->getMockBuilder(\Magento\Downloadable\Model\Link\Purchased\Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStatus', 'getOrderItemId', 'setStatus', 'save', 'setNumberOfDownloadsBought'])
+            ->onlyMethods(['getStatus', 'getOrderItemId', 'setStatus', 'save', 'setNumberOfDownloadsBought'])
             ->getMock();
         $linkItem->expects($this->any())
             ->method('getStatus')

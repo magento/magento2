@@ -80,23 +80,23 @@ class ProcessAdminFinalPriceObserverTest extends TestCase
             ->getMock();
         $this->eventMock = $this
             ->getMockBuilder(Event::class)
-            ->setMethods(['getProduct'])
+            ->onlyMethods(['getProduct'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->rulePricesStorageMock = $this->getMockBuilder(RulePricesStorage::class)
-            ->setMethods(['getWebsiteId', 'getRulePrice', 'getCustomerGroupId', 'setRulePrice'])
+            ->onlyMethods(['getWebsiteId', 'getRulePrice', 'getCustomerGroupId', 'setRulePrice'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->resourceRuleFactoryMock = $this->getMockBuilder(RuleFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
-            ->setMethods(['scopeDate'])
+            ->onlyMethods(['scopeDate'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $objectManagerHelper = new ObjectManager($this);
@@ -128,7 +128,7 @@ class ProcessAdminFinalPriceObserverTest extends TestCase
             ->willReturn($this->eventMock);
 
         $productMock = $this->getMockBuilder(Product::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getStoreId',
                     'getWebsiteId',
@@ -141,7 +141,7 @@ class ProcessAdminFinalPriceObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $dateMock = $this->getMockBuilder(Date::class)
-            ->setMethods(['format'])
+            ->onlyMethods(['format'])
             ->disableOriginalConstructor()
             ->getMock();
 

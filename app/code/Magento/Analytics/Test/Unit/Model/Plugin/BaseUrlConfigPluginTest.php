@@ -47,7 +47,7 @@ class BaseUrlConfigPluginTest extends TestCase
         $this->subscriptionUpdateHandlerMock = $this->createMock(SubscriptionUpdateHandler::class);
         $this->configValueMock = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isValueChanged', 'getPath', 'getScope', 'getOldValue'])
+            ->onlyMethods(['isValueChanged', 'getPath', 'getScope', 'getOldValue'])
             ->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->plugin = $this->objectManagerHelper->getObject(

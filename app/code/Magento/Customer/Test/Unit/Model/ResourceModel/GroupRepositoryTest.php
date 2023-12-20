@@ -152,7 +152,7 @@ class GroupRepositoryTest extends TestCase
         $this->groupRegistry = $this->createMock(GroupRegistry::class);
         $this->groupFactory = $this->createPartialMock(GroupFactory::class, ['create']);
         $this->groupModel = $this->getMockBuilder(Group::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getTaxClassId',
                     'getTaxClassName',

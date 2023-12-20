@@ -73,7 +73,7 @@ class StockTest extends TestCase
         $this->statusFactoryMock =
             $this->getMockBuilder(StatusFactory::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->getMock();
         $this->stockConfiguration = $this->getMockBuilder(
             StockConfigurationInterface::class
@@ -110,7 +110,7 @@ class StockTest extends TestCase
 
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setIsSalable', 'getId'])
+            ->onlyMethods(['setIsSalable', 'getId'])
             ->getMock();
         $productMock->expects($this->once())
             ->method('setIsSalable')
@@ -126,7 +126,7 @@ class StockTest extends TestCase
 
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setIsSalable', 'getId'])
+            ->onlyMethods(['setIsSalable', 'getId'])
             ->getMock();
         $productMock->expects($this->once())
             ->method('setIsSalable')
@@ -202,7 +202,7 @@ class StockTest extends TestCase
             ->getMock();
         $stockStatusMock = $this->getMockBuilder(Status::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addStockDataToCollection'])
+            ->onlyMethods(['addStockDataToCollection'])
             ->getMock();
         $stockStatusMock->expects($this->once())
             ->method('addStockDataToCollection')

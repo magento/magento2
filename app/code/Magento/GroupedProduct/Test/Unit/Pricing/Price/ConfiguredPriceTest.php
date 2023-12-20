@@ -68,7 +68,7 @@ class ConfiguredPriceTest extends TestCase
             ->getMock();
 
         $this->saleableItem = $this->getMockBuilder(SaleableInterface::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getTypeId',
                 'getId',
                 'getQty',

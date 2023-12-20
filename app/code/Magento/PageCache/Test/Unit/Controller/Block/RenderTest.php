@@ -120,7 +120,7 @@ class RenderTest extends TestCase
 
         $regexFactoryMock = $this->getMockBuilder(RegexFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $regexObject = new Regex(self::VALIDATION_RULE_PATTERN);

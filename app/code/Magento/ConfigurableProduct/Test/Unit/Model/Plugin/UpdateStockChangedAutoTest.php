@@ -57,7 +57,7 @@ class UpdateStockChangedAutoTest extends TestCase
             ->getMock();
         $stockItem = $this->getMockBuilder(StockItem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIsInStock', 'setStockStatusChangedAuto'])
+            ->onlyMethods(['getIsInStock', 'setStockStatusChangedAuto'])
             ->getMock();
         $stockItem->expects(self::once())
             ->method('getIsInStock')
@@ -80,7 +80,7 @@ class UpdateStockChangedAutoTest extends TestCase
             ->getMock();
         $stockItem = $this->getMockBuilder(StockItem::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getIsInStock',
                 'getProductId',
                 'hasStockStatusChangedAutomaticallyFlag',

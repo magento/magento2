@@ -53,11 +53,11 @@ class FormattedPriceInfoBuilderTest extends TestCase
 
         $formattedPriceInfoInterfaceMock = $this->getMockBuilder(FormattedPriceInfoInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setData'])
+            ->onlyMethods(['setData'])
             ->getMockForAbstractClass();
         $priceInfoMock = $this->getMockBuilder(PriceInfoInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMockForAbstractClass();
         $priceInfoMock->expects($this->any())
             ->method('getData')

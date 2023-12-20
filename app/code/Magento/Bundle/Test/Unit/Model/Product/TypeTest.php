@@ -181,7 +181,7 @@ class TypeTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->serializer = $this->getMockBuilder(Json::class)
-            ->setMethods(null)
+            ->onlyMethods(null)
             ->disableOriginalConstructor()
             ->getMock();
         $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
@@ -2059,7 +2059,7 @@ class TypeTest extends TestCase
             ->getMock();
         $resourceClassName = AbstractCollection::class;
         $dbResourceMock = $this->getMockBuilder($resourceClassName)
-            ->setMethods(['setProductIdFilter', 'setPositionOrder', 'joinValues', 'setIdFilter'])
+            ->onlyMethods(['setProductIdFilter', 'setPositionOrder', 'joinValues', 'setIdFilter'])
             ->disableOriginalConstructor()
             ->getMock();
         $storeMock = $this->getMockBuilder(Store::class)
@@ -2326,7 +2326,7 @@ class TypeTest extends TestCase
         $this->expectProductEntityMetadata();
         $resourceClassName = AbstractCollection::class;
         $dbResourceMock = $this->getMockBuilder($resourceClassName)
-            ->setMethods(['getItems'])
+            ->onlyMethods(['getItems'])
             ->disableOriginalConstructor()
             ->getMock();
         $item = $this->getMockBuilder(DataObject::class)

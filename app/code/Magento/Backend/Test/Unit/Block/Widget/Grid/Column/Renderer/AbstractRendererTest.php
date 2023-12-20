@@ -38,12 +38,12 @@ class AbstractRendererTest extends TestCase
         $this->dataObjectMock = $this->createPartialMock(DataObject::class, ['getData']);
         $this->columnMock = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEditable', 'getIndex', 'getEditOnly', 'getId'])
+            ->onlyMethods(['getEditable', 'getIndex', 'getEditOnly', 'getId'])
             ->getMock();
         $this->renderer =
             $this->getMockBuilder(AbstractRenderer::class)
                 ->disableOriginalConstructor()
-                ->setMethods(null)
+                ->onlyMethods(null)
                 ->getMock();
     }
 

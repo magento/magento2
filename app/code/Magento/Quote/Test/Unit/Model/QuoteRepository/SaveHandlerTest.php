@@ -95,7 +95,7 @@ class SaveHandlerTest extends TestCase
             ->getMockForAbstractClass();
         $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getItems', 'setLastAddedItem', 'getBillingAddress', 'getExtensionAttributes', 'isVirtual',
                     'collectTotals'
@@ -103,11 +103,11 @@ class SaveHandlerTest extends TestCase
             )
             ->getMock();
         $this->billingAddressMock = $this->getMockBuilder(QuoteAddress::class)
-            ->setMethods(['getCustomerAddress', 'getCustomerAddressId', 'setCustomerAddressId'])
+            ->onlyMethods(['getCustomerAddress', 'getCustomerAddressId', 'setCustomerAddressId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->extensionAttributesMock = $this->getMockBuilder(CartExtensionInterface::class)
-            ->setMethods(['getShippingAssignments'])
+            ->onlyMethods(['getShippingAssignments'])
             ->getMockForAbstractClass();
 
         $this->quoteMock->expects(static::any())

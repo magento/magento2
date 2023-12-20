@@ -53,7 +53,7 @@ class DownloadableTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->saleableItem = $this->getMockBuilder(SaleableInterface::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getPriceInfo',
                 'getLinksPurchasedSeparately',
                 'getCustomOption',

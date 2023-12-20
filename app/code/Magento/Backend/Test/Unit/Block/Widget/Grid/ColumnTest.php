@@ -408,7 +408,7 @@ class ColumnTest extends TestCase
         /** @var  $rendererMock */
         $rendererMock = $this->getMockBuilder(AbstractRenderer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['renderExport', 'render'])
+            ->onlyMethods(['renderExport', 'render'])
             ->getMock();
 
         $rendererMock->expects($this->any())->method('renderExport')->willReturnCallback(
@@ -425,7 +425,7 @@ class ColumnTest extends TestCase
 
         $frameCallbackHostObject = $this->getMockBuilder(Widget::class)
             ->disableOriginalConstructor()
-            ->setMethods(['decorate'])
+            ->onlyMethods(['decorate'])
             ->getMock();
 
         $frameCallbackHostObject->expects($this->any())
@@ -452,7 +452,7 @@ class ColumnTest extends TestCase
         /** @var  $rendererMock */
         $rendererMock = $this->getMockBuilder(AbstractRenderer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['renderExport', 'render'])
+            ->onlyMethods(['renderExport', 'render'])
             ->getMock();
 
         $rendererMock->expects($this->any())->method('renderExport')->willReturnCallback(
@@ -474,7 +474,7 @@ class ColumnTest extends TestCase
         /** @var  $rendererMock */
         $rendererMock = $this->getMockBuilder(AbstractRenderer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['render'])
+            ->onlyMethods(['render'])
             ->getMock();
 
         $rendererMock->expects($this->any())->method('render')->willReturnCallback(

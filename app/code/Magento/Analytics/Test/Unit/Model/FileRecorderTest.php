@@ -79,7 +79,7 @@ class FileRecorderTest extends TestCase
         $this->fileInfoManagerMock = $this->createMock(FileInfoManager::class);
 
         $this->fileInfoFactoryMock = $this->getMockBuilder(FileInfoFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

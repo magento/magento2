@@ -90,14 +90,14 @@ class ChooserTest extends TestCase
             ->getMockForAbstractClass();
         $this->escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'escapeHtml',
                 ]
             )
             ->getMock();
         $this->blockFactoryMock = $this->getMockBuilder(BlockFactory::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'create',
                 ]
@@ -106,7 +106,7 @@ class ChooserTest extends TestCase
             ->getMock();
         $this->elementMock = $this->getMockBuilder(AbstractElement::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getId',
                     'getValue',
@@ -116,7 +116,7 @@ class ChooserTest extends TestCase
             ->getMock();
         $this->modelBlockMock = $this->getMockBuilder(Block::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getTitle',
                     'load',
@@ -126,7 +126,7 @@ class ChooserTest extends TestCase
             ->getMock();
         $this->chooserMock = $this->getMockBuilder(BlockInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setElement',
                     'setConfig',

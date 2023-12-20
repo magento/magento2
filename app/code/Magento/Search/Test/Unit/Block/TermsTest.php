@@ -87,7 +87,7 @@ class TermsTest extends TestCase
         $terms = $this->createMock(Collection::class);
         $dataObjectMock = $this->getMockBuilder(Query::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPopularity', 'getQueryText'])
+            ->onlyMethods(['getPopularity', 'getQueryText'])
             ->getMock();
         $storeMock = $this->createMock(Store::class);
 
@@ -132,12 +132,12 @@ class TermsTest extends TestCase
     {
         $urlMock = $this->getMockBuilder(Url::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setQueryParam', 'getUrl'])
+            ->onlyMethods(['setQueryParam', 'getUrl'])
             ->getMock();
 
         $dataObjectMock = $this->getMockBuilder(Query::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPopularity', 'getQueryText'])
+            ->onlyMethods(['getPopularity', 'getQueryText'])
             ->getMock();
         $this->urlFactoryMock->expects($this->once())
             ->method('create')

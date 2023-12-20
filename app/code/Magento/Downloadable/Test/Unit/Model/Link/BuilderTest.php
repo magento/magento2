@@ -75,7 +75,7 @@ class BuilderTest extends TestCase
 
         $this->mockComponentFactory = $this->getMockBuilder(LinkFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->linkMock = $this->getMockBuilder(LinkInterface::class)

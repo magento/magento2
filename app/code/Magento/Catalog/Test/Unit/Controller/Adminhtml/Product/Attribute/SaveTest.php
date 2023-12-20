@@ -395,7 +395,7 @@ class SaveTest extends AttributeTest
     private function addReturnResultConditions(string $path = '', array $params = [], array $response = [])
     {
         $layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->setMethods(['initMessages', 'getMessagesBlock'])
+            ->onlyMethods(['initMessages', 'getMessagesBlock'])
             ->getMockForAbstractClass();
         $this->layoutFactoryMock
             ->expects($this->once())

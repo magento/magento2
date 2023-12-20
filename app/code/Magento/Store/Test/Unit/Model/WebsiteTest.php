@@ -51,7 +51,7 @@ class WebsiteTest extends TestCase
 
         $this->websiteFactory = $this->getMockBuilder(WebsiteFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create', 'getCollection', '__wakeup'])
+            ->onlyMethods(['create', 'getCollection', '__wakeup'])
             ->getMock();
 
         $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);

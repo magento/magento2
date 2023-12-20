@@ -33,7 +33,7 @@ class RouteTest extends TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
-            ->setMethods(['getPathInfo'])
+            ->onlyMethods(['getPathInfo'])
             ->getMockForAbstractClass();
     }
 

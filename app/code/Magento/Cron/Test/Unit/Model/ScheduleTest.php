@@ -57,7 +57,7 @@ class ScheduleTest extends TestCase
 
         $this->resourceJobMock = $this->getMockBuilder(SchoduleResourceModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'trySetJobStatusAtomic',
                     '__wakeup',
@@ -74,11 +74,11 @@ class ScheduleTest extends TestCase
             ->willReturn('id');
 
         $this->timezoneConverterMock = $this->getMockBuilder(TimezoneInterface::class)
-            ->setMethods(['date'])
+            ->onlyMethods(['date'])
             ->getMockForAbstractClass();
 
         $this->dateTimeFactoryMock = $this->getMockBuilder(DateTimeFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->retrierMock = $this->getMockForAbstractClass(DeadlockRetrierInterface::class);

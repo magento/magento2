@@ -66,12 +66,12 @@ class PayflowlinkTest extends TestCase
             ->getMock();
 
         $configFactoryMock = $this->getMockBuilder(ConfigInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $requestFactory = $this->getMockBuilder(RequestFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -33,12 +33,12 @@ class FactoryTest extends TestCase
     {
         $this->productResourceMock = $this->getMockBuilder(ProductResource::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEntityTable'])
+            ->onlyMethods(['getEntityTable'])
             ->getMock();
 
         $this->eavConfigMock = $this->getMockBuilder(EavConfig::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttribute'])
+            ->onlyMethods(['getAttribute'])
             ->getMock();
 
         $this->eavAttrConditionBuilderMock = $this->getMockBuilder(CustomConditionInterface::class)
@@ -70,7 +70,7 @@ class FactoryTest extends TestCase
 
         $filterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getField'])
+            ->onlyMethods(['getField'])
             ->getMock();
 
         $filterMock
@@ -79,7 +79,7 @@ class FactoryTest extends TestCase
 
         $attributeMock = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBackendTable'])
+            ->onlyMethods(['getBackendTable'])
             ->getMock();
 
         $this->eavConfigMock
@@ -109,7 +109,7 @@ class FactoryTest extends TestCase
 
         $filterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getField'])
+            ->onlyMethods(['getField'])
             ->getMock();
 
         $filterMock
@@ -118,7 +118,7 @@ class FactoryTest extends TestCase
 
         $attributeMock = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBackendTable'])
+            ->onlyMethods(['getBackendTable'])
             ->getMock();
 
         $this->eavConfigMock

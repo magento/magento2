@@ -89,7 +89,7 @@ class MassactionTest extends TestCase
         $this->_gridMock = $this->getMockBuilder(Grid::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
-            ->setMethods(['getId', 'getCollection'])
+            ->onlyMethods(['getId', 'getCollection'])
             ->getMock();
         $this->_gridMock->expects($this->any())
             ->method('getId')
@@ -98,7 +98,7 @@ class MassactionTest extends TestCase
         $this->_layoutMock = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
-            ->setMethods(['getParentName', 'getBlock', 'helper'])
+            ->onlyMethods(['getParentName', 'getBlock', 'helper'])
             ->getMock();
         $this->_layoutMock->expects($this->any())
             ->method('getParentName')
@@ -124,7 +124,7 @@ class MassactionTest extends TestCase
 
         $this->_authorizationMock = $this->getMockBuilder(Authorization::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isAllowed'])
+            ->onlyMethods(['isAllowed'])
             ->getMock();
 
         $this->gridCollectionMock = $this->createMock(Collection::class);

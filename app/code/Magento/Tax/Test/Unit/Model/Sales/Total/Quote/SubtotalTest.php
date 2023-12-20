@@ -105,14 +105,14 @@ class SubtotalTest extends TestCase
         $this->shippingMock = $this->getMockForAbstractClass(ShippingInterface::class);
         $this->taxConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['priceIncludesTax', 'getShippingTaxClass', 'shippingPriceIncludesTax', 'discountTax'])
+            ->onlyMethods(['priceIncludesTax', 'getShippingTaxClass', 'shippingPriceIncludesTax', 'discountTax'])
             ->getMock();
         $this->taxCalculationMock = $this->getMockBuilder(TaxCalculationInterface::class)
             ->getMockForAbstractClass();
         $this->quoteDetailsDataObjectFactoryMock =
             $this->getMockBuilder(QuoteDetailsInterfaceFactory::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['create', 'setBillingAddress', 'setShippingAddress'])->getMock();
+                ->onlyMethods(['create', 'setBillingAddress', 'setShippingAddress'])->getMock();
         $this->keyDataObjectFactoryMock = $this->createPartialMock(
             TaxClassKeyInterfaceFactory::class,
             ['create']
@@ -159,7 +159,7 @@ class SubtotalTest extends TestCase
 
         $this->addressMock = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getAssociatedTaxables', 'getQuote', 'getBillingAddress',
                 'getRegionId', 'getAllItems', '__wakeup',
                 'getParentItem',
@@ -172,7 +172,7 @@ class SubtotalTest extends TestCase
         $this->storeMock = $this->getMockBuilder(
             Store::class
         )->disableOriginalConstructor()
-            ->setMethods(['getStoreId'])->getMock();
+            ->onlyMethods(['getStoreId'])->getMock();
         $this->quoteMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
         $this->storeMock->expects($this->any())->method('getStoreId')->willReturn(111);
     }

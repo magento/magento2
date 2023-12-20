@@ -109,7 +109,7 @@ class RenderLayeredTest extends TestCase
         $this->htmlBlockPagerMock = $this->createMock(Pager::class);
 
         $this->block = $this->getMockBuilder(RenderLayered::class)
-            ->setMethods(['filter', 'eavAttribute'])
+            ->onlyMethods(['filter', 'eavAttribute'])
             ->setConstructorArgs(
                 [
                     $this->contextMock,

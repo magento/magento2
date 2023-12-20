@@ -25,7 +25,7 @@ class SchemaLocatorTest extends TestCase
         $moduleReader = $this->getMockBuilder(
             Reader::class
         )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->onlyMethods([])->getMock();
         $moduleReader->expects($this->once())->method('getModuleDir')->with('etc', 'Magento_Payment')->willReturn(
             self::MODULE_DIR_PATH
         );

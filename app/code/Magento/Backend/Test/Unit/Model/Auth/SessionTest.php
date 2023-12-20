@@ -127,7 +127,7 @@ class SessionTest extends TestCase
             ->getMock();
         $this->aclBuilder->expects($this->any())->method('getAcl')->willReturn($aclMock);
         $userMock = $this->getMockBuilder(User::class)
-            ->setMethods(['getReloadAclFlag', 'setReloadAclFlag', 'unsetData', 'save'])
+            ->onlyMethods(['getReloadAclFlag', 'setReloadAclFlag', 'unsetData', 'save'])
             ->disableOriginalConstructor()
             ->getMock();
         $userMock->expects($this->any())->method('getReloadAclFlag')->willReturn(true);

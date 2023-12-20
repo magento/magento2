@@ -356,7 +356,7 @@ class OptionRepositoryTest extends TestCase
         $this->expectException(InputException::class);
         $this->expectExceptionMessage($msg);
         $optionValueMock = $this->getMockBuilder(OptionValueInterface::class)
-            ->setMethods(['getValueIndex', 'getPricingValue', 'getIsPercent'])
+            ->onlyMethods(['getValueIndex', 'getPricingValue', 'getIsPercent'])
             ->getMockForAbstractClass();
         $optionValuesMock = [];
         if (!empty($optionValues)) {

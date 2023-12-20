@@ -65,11 +65,11 @@ class CategoryTest extends TestCase
 
         $this->indexerMock = $this->getMockBuilder(IndexerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getState', '__wakeup'])
+            ->onlyMethods(['getId', 'getState', '__wakeup'])
             ->getMockForAbstractClass();
         $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMock();
 
         $this->proceed = function () {

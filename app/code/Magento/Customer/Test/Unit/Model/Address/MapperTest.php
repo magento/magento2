@@ -82,7 +82,7 @@ class MapperTest extends TestCase
         $regionMock->expects($this->any())->method('getRegionId')->willReturn(1);
         $regionMock->expects($this->any())->method('getRegionCode')->willReturn('TX');
         $addressMock = $this->getMockBuilder(AddressInterface::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getId',
                     'getDefaultBilling',

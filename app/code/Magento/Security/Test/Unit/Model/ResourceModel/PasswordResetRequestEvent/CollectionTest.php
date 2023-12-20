@@ -60,7 +60,7 @@ class CollectionTest extends TestCase
 
         $this->resourceMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConnection', 'getMainTable', 'getTable', 'deleteRecordsOlderThen'])
+            ->onlyMethods(['getConnection', 'getMainTable', 'getTable', 'deleteRecordsOlderThen'])
             ->getMockForAbstractClass();
 
         $this->resourceMock->expects($this->any())
@@ -73,7 +73,7 @@ class CollectionTest extends TestCase
         $this->collectionMock = $this->getMockBuilder(
             Collection::class
         )
-            ->setMethods(['addFieldToFilter', 'addOrder', 'getSelect', 'getResource', 'getConnection'])
+            ->onlyMethods(['addFieldToFilter', 'addOrder', 'getSelect', 'getResource', 'getConnection'])
             ->setConstructorArgs(
                 [
                     $entityFactory,

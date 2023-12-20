@@ -65,12 +65,12 @@ class StockTest extends TestCase
         /** @var  MockObject */
         $this->eventDispatcher = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['dispatch'])
+            ->onlyMethods(['dispatch'])
             ->getMockForAbstractClass();
 
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEventDispatcher'])
+            ->onlyMethods(['getEventDispatcher'])
             ->getMock();
         $this->context->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventDispatcher);
 
@@ -88,7 +88,7 @@ class StockTest extends TestCase
 
         $this->resource = $this->getMockBuilder(AbstractResource::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIdFieldName'])
+            ->onlyMethods(['getIdFieldName'])
             ->getMockForAbstractClass();
 
         $this->resourceCollection = $this->getMockBuilder(AbstractDb::class)

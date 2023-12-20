@@ -129,7 +129,7 @@ class DeployStaticContentTest extends TestCase
         }
 
         $strategy = $this->getMockBuilder(CompactDeploy::class)
-            ->setMethods(['deploy'])
+            ->onlyMethods(['deploy'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         if ($options['refresh-content-version-only']) {
@@ -147,19 +147,19 @@ class DeployStaticContentTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $deployRjsConfig = $this->getMockBuilder(DeployRequireJsConfig::class)
-            ->setMethods(['deploy'])
+            ->onlyMethods(['deploy'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $deployI18n = $this->getMockBuilder(DeployTranslationsDictionary::class)
-            ->setMethods(['deploy'])
+            ->onlyMethods(['deploy'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $deployBundle = $this->getMockBuilder(Bundle::class)
-            ->setMethods(['deploy'])
+            ->onlyMethods(['deploy'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $minifyTemplates = $this->getMockBuilder(MinifyTemplates::class)
-            ->setMethods(['minifyTemplates'])
+            ->onlyMethods(['minifyTemplates'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

@@ -211,7 +211,7 @@ class AfterImportDataObserverTest extends TestCase
                 StoreManagerInterface::class
             )
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getWebsite',
                 ]
@@ -231,7 +231,7 @@ class AfterImportDataObserverTest extends TestCase
         $this->productUrlRewriteGenerator =
             $this->getMockBuilder(ProductUrlRewriteGenerator::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['generate'])
+                ->onlyMethods(['generate'])
                 ->getMock();
         $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
             ->disableOriginalConstructor()
@@ -249,7 +249,7 @@ class AfterImportDataObserverTest extends TestCase
         );
         $this->urlFinder = $this
             ->getMockBuilder(UrlFinderInterface::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'findAllByData',
                 ]
@@ -275,7 +275,7 @@ class AfterImportDataObserverTest extends TestCase
         $this->mergeDataProvider = new MergeDataProvider();
         $mergeDataProviderFactory->expects($this->once())->method('create')->willReturn($this->mergeDataProvider);
         $this->categoryCollectionFactory = $this->getMockBuilder(CategoryCollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->attributeValue = $this->getMockBuilder(AttributeValue::class)

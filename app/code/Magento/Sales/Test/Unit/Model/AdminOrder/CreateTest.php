@@ -109,12 +109,12 @@ class CreateTest extends TestCase
 
         $this->quoteRepository = $this->getMockBuilder(CartRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getForCustomer'])
+            ->onlyMethods(['getForCustomer'])
             ->getMockForAbstractClass();
 
         $this->sessionQuote = $this->getMockBuilder(SessionQuote::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getQuote',
                     'getStoreId',
@@ -132,13 +132,13 @@ class CreateTest extends TestCase
             ->getMock();
 
         $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
         $this->sessionQuote->method('getStore')
             ->willReturn($storeMock);
 
         $this->customerMapper = $this->getMockBuilder(Mapper::class)
-            ->setMethods(['toFlatArray'])
+            ->onlyMethods(['toFlatArray'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -149,7 +149,7 @@ class CreateTest extends TestCase
 
         $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getEntityId',
                     'getId',
@@ -213,7 +213,7 @@ class CreateTest extends TestCase
             ->willReturn(['group_id' => 1]);
 
         $requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods(['getPostValue'])
+            ->onlyMethods(['getPostValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $requestMock->expects($this->atLeastOnce())->method('getPostValue')->willReturn(null);
@@ -402,7 +402,7 @@ class CreateTest extends TestCase
 
         $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setCustomerGroupId',
                     'getBillingAddress',
@@ -440,7 +440,7 @@ class CreateTest extends TestCase
 
         $itemCollectionMock = $this->getMockBuilder(ItemCollection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIterator'])
+            ->onlyMethods(['getIterator'])
             ->getMock();
         $itemCollectionMock->method('getIterator')
             ->willReturn($iterator);
@@ -494,7 +494,7 @@ class CreateTest extends TestCase
             ->willReturnSelf();
         $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getBillingAddress',
                     'getShippingAddress',

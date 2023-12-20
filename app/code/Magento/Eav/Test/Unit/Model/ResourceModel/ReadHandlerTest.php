@@ -124,7 +124,7 @@ class ReadHandlerTest extends TestCase
             ->willReturn('linkField');
 
         $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['getAttributeCode', 'isScopeWebsite', 'isStatic', 'getBackend', 'getAttributeId'])
+            ->onlyMethods(['getAttributeCode', 'isScopeWebsite', 'isStatic', 'getBackend', 'getAttributeId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $attributeMock->method('isStatic')
@@ -194,7 +194,7 @@ class ReadHandlerTest extends TestCase
             ->willReturn('linkField');
 
         $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getAttributeCode',
                 'isScopeWebsite',
                 'getIsGlobal',

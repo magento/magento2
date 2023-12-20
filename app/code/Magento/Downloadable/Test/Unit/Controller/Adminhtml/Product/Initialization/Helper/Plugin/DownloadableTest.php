@@ -70,15 +70,15 @@ class DownloadableTest extends TestCase
         );
         $this->extensionAttributesMock = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setDownloadableProductSamples', 'setDownloadableProductLinks'])
+            ->onlyMethods(['setDownloadableProductSamples', 'setDownloadableProductLinks'])
             ->getMockForAbstractClass();
         $sampleFactoryMock = $this->getMockBuilder(SampleInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $linkFactoryMock = $this->getMockBuilder(LinkInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $linkBuilderMock = $this->getMockBuilder(Builder::class)
             ->disableOriginalConstructor()

@@ -86,7 +86,7 @@ class DefaultFrontendTest extends TestCase
         $this->attribute = $this->createAttribute();
         $this->source = $this->getMockBuilder(AbstractSource::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAllOptions'])
+            ->onlyMethods(['getAllOptions'])
             ->getMockForAbstractClass();
 
         $this->model = new DefaultFrontend(
@@ -201,7 +201,7 @@ class DefaultFrontendTest extends TestCase
     {
         return $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getIsRequired',
                 'getFrontendClass',
                 'getValidateRules',

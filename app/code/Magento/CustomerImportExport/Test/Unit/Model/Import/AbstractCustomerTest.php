@@ -84,7 +84,7 @@ class AbstractCustomerTest extends AbstractImportTestCase
 
         $modelMock = $this->getMockBuilder(AbstractCustomer::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getErrorAggregator',
                     '_getCustomerCollection',

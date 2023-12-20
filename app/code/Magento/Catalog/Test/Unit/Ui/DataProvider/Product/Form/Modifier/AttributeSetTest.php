@@ -45,7 +45,7 @@ class AttributeSetTest extends AbstractModifierTest
     {
         parent::setUp();
         $this->attributeSetCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->attributeSetCollectionMock = $this->getMockBuilder(Collection::class)

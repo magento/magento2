@@ -42,7 +42,7 @@ class RegisterLinkTest extends TestCase
 
         $httpContext = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $httpContext->expects($this->any())
             ->method('getValue')
@@ -51,7 +51,7 @@ class RegisterLinkTest extends TestCase
 
         $registrationMock = $this->getMockBuilder(Registration::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isAllowed'])
+            ->onlyMethods(['isAllowed'])
             ->getMock();
         $registrationMock->expects($this->any())
             ->method('isAllowed')
@@ -89,7 +89,7 @@ class RegisterLinkTest extends TestCase
         $helper = $this->getMockBuilder(
             Url::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getRegisterUrl']
             )->getMock();
 

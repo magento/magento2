@@ -59,7 +59,7 @@ class GeneralTest extends TestCase
         $addressMock = $this
             ->getMockBuilder(AbstractAddress::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getFirstname',
                     'getLastname',

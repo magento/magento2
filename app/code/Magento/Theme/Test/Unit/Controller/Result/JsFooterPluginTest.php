@@ -41,7 +41,7 @@ class JsFooterPluginTest extends TestCase
     protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->setMethods(['isSetFlag'])
+            ->onlyMethods(['isSetFlag'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

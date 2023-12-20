@@ -77,7 +77,7 @@ class LockConfigProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->valueMock = $this->getMockBuilder(Value::class)
-            ->setMethods(['validateBeforeSave', 'beforeSave', 'setValue', 'getValue', 'afterSave'])
+            ->onlyMethods(['validateBeforeSave', 'beforeSave', 'setValue', 'getValue', 'afterSave'])
             ->disableOriginalConstructor()
             ->getMock();
 

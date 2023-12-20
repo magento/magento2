@@ -54,7 +54,7 @@ class AddressSnapshotTest extends TestCase
 
         $dataObjectMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getId',
                 'getData',
                 'getDataByKey',
@@ -111,7 +111,7 @@ class AddressSnapshotTest extends TestCase
     {
         $dataObjectMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getId',
                 'getData',
             ])

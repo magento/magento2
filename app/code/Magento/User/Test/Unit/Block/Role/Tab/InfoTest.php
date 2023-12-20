@@ -34,11 +34,11 @@ class InfoTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->formFactoryMock = $this->getMockBuilder(FormFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
         $roleMock = $this->getMockBuilder(Role::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
 
         $roleMock->expects($this->any())->method('getData')->willReturn(['test_data' => 1]);
@@ -79,11 +79,11 @@ class InfoTest extends TestCase
     {
         $formMock = $this->getMockBuilder(Form::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
         $fieldsetMock = $this->getMockBuilder(Fieldset::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
         $this->formFactoryMock->expects($this->any())->method('create')->willReturn($formMock);
         $formMock->expects($this->any())->method('addFieldSet')->willReturn($fieldsetMock);

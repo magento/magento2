@@ -204,7 +204,7 @@ class BlockByIdentifierTest extends TestCase
     {
         $filterMock = $this->getMockBuilder(Template::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setStoreId', 'filter'])
+            ->onlyMethods(['setStoreId', 'filter'])
             ->getMock();
         $filterMock->method('setStoreId')->willReturnSelf();
         $filterMock->method('filter')->willReturnArgument(0);

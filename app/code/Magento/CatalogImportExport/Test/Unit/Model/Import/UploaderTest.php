@@ -100,17 +100,17 @@ class UploaderTest extends TestCase
 
         $this->readFactory = $this->getMockBuilder(ReadFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->directoryMock = $this->getMockBuilder(Write::class)
-            ->setMethods(['writeFile', 'getRelativePath', 'isWritable', 'getAbsolutePath'])
+            ->onlyMethods(['writeFile', 'getRelativePath', 'isWritable', 'getAbsolutePath'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDirectoryWrite'])
+            ->onlyMethods(['getDirectoryWrite'])
             ->getMock();
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
@@ -118,12 +118,12 @@ class UploaderTest extends TestCase
 
         $this->random = $this->getMockBuilder(Random::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getRandomString'])
+            ->onlyMethods(['getRandomString'])
             ->getMock();
 
         $this->targetDirectory = $this->getMockBuilder(TargetDirectory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDirectoryWrite', 'getDirectoryRead'])
+            ->onlyMethods(['getDirectoryWrite', 'getDirectoryRead'])
             ->getMock();
         $this->targetDirectory->method('getDirectoryWrite')->willReturn($this->directoryMock);
         $this->targetDirectory->method('getDirectoryRead')->willReturn($this->directoryMock);
@@ -142,7 +142,7 @@ class UploaderTest extends TestCase
                     $this->targetDirectory
                 ]
             )
-            ->setMethods(['_setUploadFile', 'save', 'getTmpDir', 'checkAllowedExtension'])
+            ->onlyMethods(['_setUploadFile', 'save', 'getTmpDir', 'checkAllowedExtension'])
             ->getMock();
     }
 
@@ -176,7 +176,7 @@ class UploaderTest extends TestCase
         // Create adjusted reader which does not validate path.
         $readMock = $this->getMockBuilder(Read::class)
             ->disableOriginalConstructor()
-            ->setMethods(['readAll'])
+            ->onlyMethods(['readAll'])
             ->getMock();
 
         // Expected invocations to create reader and read contents from url
@@ -298,7 +298,7 @@ class UploaderTest extends TestCase
                     $driverPool,
                 ]
             )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $readFactory->method('create')

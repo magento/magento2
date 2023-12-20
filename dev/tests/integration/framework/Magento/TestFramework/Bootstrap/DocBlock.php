@@ -35,7 +35,6 @@ class DocBlock
     public function registerAnnotations(Application $application)
     {
         $eventManager = new \Magento\TestFramework\EventManager($this->_getSubscribers($application));
-        \Magento\TestFramework\Event\PhpUnit::setDefaultEventManager($eventManager);
         \Magento\TestFramework\Event\Magento::setDefaultEventManager($eventManager);
     }
 

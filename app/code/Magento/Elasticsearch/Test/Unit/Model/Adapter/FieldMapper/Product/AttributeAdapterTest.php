@@ -37,7 +37,7 @@ class AttributeAdapterTest extends TestCase
     {
         $this->attribute = $this->getMockBuilder(CustomAttributesDataInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getIsFilterable',
                 'getIsFilterableInSearch',
                 'getIsSearchable',

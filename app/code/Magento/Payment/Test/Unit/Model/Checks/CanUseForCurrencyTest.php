@@ -36,20 +36,20 @@ class CanUseForCurrencyTest extends TestCase
         $paymentMethod = $this->getMockBuilder(
             MethodInterface::class
         )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->onlyMethods([])->getMock();
         $paymentMethod->expects($this->once())->method('canUseForCurrency')->with(
             self::EXPECTED_CURRENCY_CODE
         )->willReturn($expectation);
 
         $quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 []
             )->getMock();
         $store = $this->getMockBuilder(
             Store::class
         )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->onlyMethods([])->getMock();
         $store->expects($this->once())->method('getBaseCurrencyCode')->willReturn(
             self::EXPECTED_CURRENCY_CODE
         );

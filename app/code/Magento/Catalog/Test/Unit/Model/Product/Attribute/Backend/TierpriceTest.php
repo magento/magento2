@@ -65,7 +65,7 @@ class TierpriceTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->attribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['getName', 'isScopeGlobal'])
+            ->onlyMethods(['getName', 'isScopeGlobal'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->localeFormat = $this->getMockBuilder(FormatInterface::class)

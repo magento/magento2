@@ -178,7 +178,7 @@ class FormPostTest extends TestCase
 
         $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'setAddressFormData',
                 'getCustomerId',
             ])
@@ -250,7 +250,7 @@ class FormPostTest extends TestCase
             ->getMock();
 
         $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods([
+            ->onlyMethods([
                 'isPost',
                 'getPostValue',
                 'getParam',
@@ -311,7 +311,7 @@ class FormPostTest extends TestCase
 
         $this->addressDataFactory = $this->getMockBuilder(AddressInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'create',
             ])
             ->getMock();
@@ -327,7 +327,7 @@ class FormPostTest extends TestCase
     {
         $this->region = $this->getMockBuilder(Region::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'load',
                 'getCode',
                 'getDefaultName',
@@ -346,7 +346,7 @@ class FormPostTest extends TestCase
 
         $this->regionDataFactory = $this->getMockBuilder(RegionInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'create',
             ])
             ->getMock();

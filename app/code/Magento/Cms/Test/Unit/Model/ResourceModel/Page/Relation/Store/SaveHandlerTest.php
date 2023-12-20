@@ -103,7 +103,7 @@ class SaveHandlerTest extends TestCase
 
         $page = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getStores',
                 'getStoreId',
                 'getId',

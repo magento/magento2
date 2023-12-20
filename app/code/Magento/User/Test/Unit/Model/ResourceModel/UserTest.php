@@ -66,42 +66,42 @@ class UserTest extends TestCase
     {
         $this->userMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->roleFactoryMock = $this->getMockBuilder(RoleFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->roleMock = $this->getMockBuilder(Role::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->dbAdapterMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->aclDataCacheMock = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $helper = new ObjectManager($this);
@@ -168,7 +168,7 @@ class UserTest extends TestCase
     {
         $methodUserMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUserId'])
+            ->onlyMethods(['getUserId'])
             ->getMock();
         $returnData = [1, 2, 3];
         $uid = 1234;
@@ -339,7 +339,7 @@ class UserTest extends TestCase
     {
         $methodUserMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUserId', 'getRoleId'])
+            ->onlyMethods(['getUserId', 'getRoleId'])
             ->getMock();
         $uid = 1234;
         $roleId = 44;
@@ -358,7 +358,7 @@ class UserTest extends TestCase
     {
         $methodUserMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUserId', 'getRoleId'])
+            ->onlyMethods(['getUserId', 'getRoleId'])
             ->getMock();
         $uid = 1234;
         $roleId = 44;
@@ -422,7 +422,7 @@ class UserTest extends TestCase
         $roleId = 123;
         $methodUserMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
-            ->setMethods(['hasRoleId', 'getRoleId', 'getExtra', 'setExtra'])
+            ->onlyMethods(['hasRoleId', 'getRoleId', 'getExtra', 'setExtra'])
             ->getMock();
         $methodUserMock->expects($this->once())->method('hasRoleId')->willReturn(true);
         $methodUserMock->expects($this->once())->method('getRoleId')->willReturn($roleId);
@@ -462,7 +462,7 @@ class UserTest extends TestCase
     {
         $methodUserMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getExtra', 'setExtra'])
+            ->onlyMethods(['getExtra', 'setExtra'])
             ->getMock();
         $extraData = ['user', 'extra', 'data'];
 
@@ -494,7 +494,7 @@ class UserTest extends TestCase
     {
         $methodUserMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getExtra', 'setExtra'])
+            ->onlyMethods(['getExtra', 'setExtra'])
             ->getMock();
         $extraData = null;
 

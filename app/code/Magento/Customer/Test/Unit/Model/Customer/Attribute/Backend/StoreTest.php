@@ -37,7 +37,7 @@ class StoreTest extends TestCase
     {
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMock();
 
         $object->expects($this->once())->method('getId')->willReturn(1);
@@ -54,12 +54,12 @@ class StoreTest extends TestCase
         $storeName = 'store';
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'hasStoreId', 'setStoreId', 'hasData', 'setData', 'getStoreId'])
+            ->onlyMethods(['getId', 'hasStoreId', 'setStoreId', 'hasData', 'setData', 'getStoreId'])
             ->getMock();
 
         $store = $this->getMockBuilder(
             DataObject::class
-        )->setMethods(['getId', 'getName'])->getMock();
+        )->onlyMethods(['getId', 'getName'])->getMock();
         $store->expects($this->once())->method('getId')->willReturn($storeId);
         $store->expects($this->once())->method('getName')->willReturn($storeName);
 

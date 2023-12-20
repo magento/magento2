@@ -43,12 +43,12 @@ class DeleteRelationTest extends TestCase
         /** @var AbstractModel|MockObject $addressModel  */
         $addressModel = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIsCustomerSaveTransaction', 'getId', 'getResource'])
+            ->onlyMethods(['getIsCustomerSaveTransaction', 'getId', 'getResource'])
             ->getMock();
         /** @var Customer|MockObject $customerModel */
         $customerModel = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDefaultBilling', 'getDefaultShipping', 'getId'])
+            ->onlyMethods(['getDefaultBilling', 'getDefaultShipping', 'getId'])
             ->getMock();
 
         $addressResource = $this->getMockForAbstractClass(

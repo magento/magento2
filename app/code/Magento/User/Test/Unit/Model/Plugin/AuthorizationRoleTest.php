@@ -35,12 +35,12 @@ class AuthorizationRoleTest extends TestCase
     {
         $this->userResourceModelMock = $this->getMockBuilder(User::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->roleMock = $this->getMockBuilder(Role::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $objectManager = new ObjectManager($this);

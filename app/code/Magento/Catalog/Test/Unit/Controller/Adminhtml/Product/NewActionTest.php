@@ -73,7 +73,7 @@ class NewActionTest extends ProductTest
         );
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addData', 'getTypeId', 'getStoreId', '__sleep'])->getMock();
+            ->onlyMethods(['addData', 'getTypeId', 'getStoreId', '__sleep'])->getMock();
         $this->product->expects($this->any())->method('getTypeId')->willReturn('simple');
         $this->product->expects($this->any())->method('getStoreId')->willReturn('1');
         $this->productBuilder->expects($this->any())->method('build')->willReturn($this->product);
@@ -84,7 +84,7 @@ class NewActionTest extends ProductTest
 
         $resultPageFactory = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->resultForward = $this->getMockBuilder(Forward::class)
@@ -97,7 +97,7 @@ class NewActionTest extends ProductTest
 
         $this->regexValidatorFactoryMock = $this->getMockBuilder(RegexFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->regexValidatorMock = $this->createMock(Regex::class);
         $this->regexValidatorFactoryMock->method('create')

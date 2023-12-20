@@ -42,7 +42,7 @@ class GridSyncRemoveObserverTest extends TestCase
             ->getMockForAbstractClass();
         $this->eventObserverMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getObject',
                     'getDataObject'
@@ -51,7 +51,7 @@ class GridSyncRemoveObserverTest extends TestCase
             ->getMock();
         $this->salesModelMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getId'
                 ]

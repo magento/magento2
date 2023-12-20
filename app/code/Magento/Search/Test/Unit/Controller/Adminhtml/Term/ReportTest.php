@@ -70,7 +70,7 @@ class ReportTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->pageConfigMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['getTitle'])
+            ->onlyMethods(['getTitle'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->titleMock = $this->getMockBuilder(Title::class)

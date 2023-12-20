@@ -111,7 +111,7 @@ class RedirectTest extends TestCase
         $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getLastCustomerId',
                     'isLoggedIn',
@@ -136,7 +136,7 @@ class RedirectTest extends TestCase
         $this->url = $this->getMockForAbstractClass(UrlInterface::class);
         $this->urlDecoder = $this->getMockForAbstractClass(DecoderInterface::class);
         $this->customerUrl = $this->getMockBuilder(\Magento\Customer\Model\Url::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'DashboardUrl',
                     'getAccountUrl',

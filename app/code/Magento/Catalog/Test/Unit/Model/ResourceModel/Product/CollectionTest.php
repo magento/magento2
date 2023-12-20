@@ -137,7 +137,7 @@ class CollectionTest extends TestCase
             ->getMock();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore', 'getId', 'getWebsiteId'])
+            ->onlyMethods(['getStore', 'getId', 'getWebsiteId'])
             ->getMockForAbstractClass();
         $moduleManager = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
@@ -167,7 +167,7 @@ class CollectionTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->selectMock = $this->getMockBuilder(Select::class)
@@ -204,7 +204,7 @@ class CollectionTest extends TestCase
         $productLimitationFactoryMock = $this->getMockBuilder(
             ProductLimitationFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
 
         $productLimitationFactoryMock->method('create')
             ->willReturn($this->productLimitationMock);
@@ -283,7 +283,7 @@ class CollectionTest extends TestCase
         $mediaGalleriesMock = [[$linkField => $rowId]];
         $itemMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOrigData'])
+            ->onlyMethods(['getOrigData'])
             ->getMock();
         $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
@@ -325,11 +325,11 @@ class CollectionTest extends TestCase
         $customerGroupId = 2;
         $itemMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
         $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isScopeGlobal', 'getBackend'])
+            ->onlyMethods(['isScopeGlobal', 'getBackend'])
             ->getMock();
         $backend = $this->getMockBuilder(Tierprice::class)
             ->disableOriginalConstructor()
@@ -380,11 +380,11 @@ class CollectionTest extends TestCase
     {
         $itemMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
         $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isScopeGlobal', 'getBackend'])
+            ->onlyMethods(['isScopeGlobal', 'getBackend'])
             ->getMock();
         $backend = $this->getMockBuilder(Tierprice::class)
             ->disableOriginalConstructor()

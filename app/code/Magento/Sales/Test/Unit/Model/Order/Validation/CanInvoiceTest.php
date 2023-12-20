@@ -46,12 +46,12 @@ class CanInvoiceTest extends TestCase
 
         $this->orderMock = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStatus', 'getItems'])
+            ->onlyMethods(['getStatus', 'getItems'])
             ->getMockForAbstractClass();
 
         $this->orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getQtyToInvoice', 'getLockedDoInvoice'])
+            ->onlyMethods(['getQtyToInvoice', 'getLockedDoInvoice'])
             ->getMockForAbstractClass();
 
         $this->model = new CanInvoice();

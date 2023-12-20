@@ -199,7 +199,7 @@ class SaveTest extends TestCase
         $this->userContext->expects($this->exactly(2))->method('getUserId')->willReturn(1);
         $bookmark = $this->getMockBuilder(BookmarkInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCurrent', 'getIdentifier'])
+            ->onlyMethods(['getCurrent', 'getIdentifier'])
             ->getMockForAbstractClass();
         $this->bookmarkFactory->expects($this->once())->method('create')->willReturn($bookmark);
 
@@ -287,7 +287,7 @@ class SaveTest extends TestCase
         }
         $bookmark = $this->getMockBuilder(BookmarkInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCurrent', 'getIdentifier'])
+            ->onlyMethods(['getCurrent', 'getIdentifier'])
             ->getMockForAbstractClass();
         $bookmark->expects($this->any())->method('getCurrent')->willReturn($current);
         $bookmark->expects($this->any())->method('getIdentifier')->willReturn($identifier);

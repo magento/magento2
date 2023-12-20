@@ -108,7 +108,7 @@ class LoginPostTest extends TestCase
 
         $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'isLoggedIn',
                     'setCustomerDataAsLoggedIn',
@@ -508,7 +508,7 @@ class LoginPostTest extends TestCase
 
         $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'isPost',
                     'getPost',

@@ -21,13 +21,13 @@ class LinkTest extends TestCase
         $helper = $this->getMockBuilder(
             Url::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getAccountUrl']
             )->getMock();
         $layout = $this->getMockBuilder(
             Layout::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['helper']
             )->getMock();
 

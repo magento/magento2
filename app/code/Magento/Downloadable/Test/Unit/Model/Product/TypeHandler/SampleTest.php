@@ -56,15 +56,15 @@ class SampleTest extends TestCase
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->sampleFactory = $this->getMockBuilder(SampleFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->sampleResource = $this->getMockBuilder(\Magento\Downloadable\Model\ResourceModel\Sample::class)
             ->disableOriginalConstructor()
-            ->setMethods(['deleteItems'])
+            ->onlyMethods(['deleteItems'])
             ->getMock();
         $sampleResourceFactory = $this->getMockBuilder(\Magento\Downloadable\Model\ResourceModel\SampleFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $sampleResourceFactory->expects($this->any())
             ->method('create')
@@ -194,7 +194,7 @@ class SampleTest extends TestCase
     {
         $sample = $this->getMockBuilder(\Magento\Downloadable\Model\Sample::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setData',
                     'setSampleType',
@@ -238,7 +238,7 @@ class SampleTest extends TestCase
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getStoreId', 'getStore', 'getWebsiteIds', 'getData'])
+            ->onlyMethods(['getId', 'getStoreId', 'getStore', 'getWebsiteIds', 'getData'])
             ->getMock();
         $product->expects($this->any())
             ->method('getId')
@@ -251,7 +251,7 @@ class SampleTest extends TestCase
             ->willReturn($websiteIds);
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWebsiteId'])
+            ->onlyMethods(['getWebsiteId'])
             ->getMock();
         $store->expects($this->any())
             ->method('getWebsiteId')

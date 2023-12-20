@@ -52,7 +52,7 @@ class DatabaseTest extends TestCase
         $this->dbStorageFactoryMock = $this->getMockBuilder(
             DatabaseFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->objectManager = new ObjectManager($this);
         $className = Database::class;
@@ -130,7 +130,7 @@ class DatabaseTest extends TestCase
             ->willReturn($dbModelMock);
         $resourceModelMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
+            ->onlyMethods(['__wakeup'])
             ->getMockForAbstractClass();
         $dbModelMock->expects($this->once())
             ->method('getResource')
@@ -382,7 +382,7 @@ class DatabaseTest extends TestCase
             ->willReturn($dbModelMock);
         $resourceModelMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['deleteFolder', '__wakeup'])
+            ->onlyMethods(['deleteFolder', '__wakeup'])
             ->getMockForAbstractClass();
         $dbModelMock->expects($this->exactly($callNum))
             ->method('getResource')

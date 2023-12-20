@@ -46,12 +46,12 @@ class CanShipTest extends TestCase
 
         $this->orderMock = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStatus', 'getItems'])
+            ->onlyMethods(['getStatus', 'getItems'])
             ->getMockForAbstractClass();
 
         $this->orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getQtyToShip', 'getLockedDoShip'])
+            ->onlyMethods(['getQtyToShip', 'getLockedDoShip'])
             ->getMockForAbstractClass();
 
         $this->model = new CanShip();

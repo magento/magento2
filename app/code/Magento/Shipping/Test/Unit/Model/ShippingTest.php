@@ -90,7 +90,7 @@ class ShippingTest extends TestCase
         $request = new RateRequest();
         $item = $this->getMockBuilder(QuoteItem::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getQty',
                     'getIsQtyDecimal',
@@ -174,7 +174,7 @@ class ShippingTest extends TestCase
             ->getMock();
 
         $this->carrier = $this->getMockBuilder(AbstractCarrierInterface::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setActiveFlag',
                     'checkAvailableShipCountries',

@@ -138,7 +138,7 @@ class ImagesTest extends TestCase
             ->method('getDirectoryReadByPath')
             ->willReturn($this->directoryReadMock);
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'clearWebsiteCache', 'getDefaultStoreView', 'getGroup', 'getGroups',
                     'getStore', 'getStores', 'getWebsite', 'getWebsites', 'hasSingleStore',

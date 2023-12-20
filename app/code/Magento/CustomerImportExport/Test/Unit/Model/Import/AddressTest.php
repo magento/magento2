@@ -158,7 +158,7 @@ class AddressTest extends TestCase
         $this->_stringLib = new StringUtils();
         $this->_storeManager = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWebsites'])
+            ->onlyMethods(['getWebsites'])
             ->getMock();
         $this->_storeManager
             ->method('getWebsites')
@@ -241,7 +241,7 @@ class AddressTest extends TestCase
     {
         $entityFactory = $this->createMock(EntityFactory::class);
         $attributeCollection = $this->getMockBuilder(Collection::class)
-            ->setMethods(['getEntityTypeCode'])
+            ->onlyMethods(['getEntityTypeCode'])
             ->setConstructorArgs([$entityFactory])
             ->getMock();
         foreach ($this->_attributes as $attributeData) {

@@ -66,7 +66,7 @@ class ManagerTest extends TestCase
         $this->_authSession->expects($this->any())->method('getUser')->willReturn($userMock);
 
         $this->_translator = $this->getMockBuilder(TranslateInterface::class)
-            ->setMethods(['init', 'setLocale'])
+            ->onlyMethods(['init', 'setLocale'])
             ->getMockForAbstractClass();
 
         $this->_translator->expects($this->any())->method('setLocale')->willReturn($this->_translator);

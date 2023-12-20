@@ -41,7 +41,7 @@ class ProductViewTest extends TestCase
 
         $this->stockItem = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMinSaleQty', 'getMaxSaleQty', 'getQtyIncrements'])
+            ->onlyMethods(['getMinSaleQty', 'getMaxSaleQty', 'getQtyIncrements'])
             ->getMock();
 
         $this->stockRegistry = $this->getMockBuilder(StockRegistryInterface::class)
@@ -69,11 +69,11 @@ class ProductViewTest extends TestCase
             ->getMock();
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['_wakeup', 'getId', 'getStore'])
+            ->onlyMethods(['_wakeup', 'getId', 'getStore'])
             ->getMock();
         $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWebsiteId', '_wakeup'])
+            ->onlyMethods(['getWebsiteId', '_wakeup'])
             ->getMock();
 
         $productViewBlock->expects($this->any())->method('getProduct')->willReturn($productMock);

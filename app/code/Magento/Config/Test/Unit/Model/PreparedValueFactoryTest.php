@@ -92,11 +92,11 @@ class PreparedValueFactoryTest extends TestCase
     {
         $this->structureFactoryMock = $this->getMockBuilder(StructureFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->valueFactoryMock = $this->getMockBuilder(BackendFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->structureMock = $this->getMockBuilder(Structure::class)
             ->disableOriginalConstructor()
@@ -106,7 +106,7 @@ class PreparedValueFactoryTest extends TestCase
             ->getMock();
         $this->valueMock = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'setPath', 'setScope', 'setScopeId', 'setValue', 'setField',
                 'setGroupId', 'setFieldConfig', 'setScopeCode'
             ])

@@ -97,7 +97,7 @@ class BuilderTest extends TestCase
     public function testBuild($filterMock, $filterType)
     {
         $filter = $this->getMockBuilder($filterMock)
-            ->setMethods(['getMust', 'getType', 'getShould', 'getMustNot'])
+            ->onlyMethods(['getMust', 'getType', 'getShould', 'getMustNot'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $filter->expects($this->any())
@@ -132,7 +132,7 @@ class BuilderTest extends TestCase
     public function testBuildNegation($filterMock, $filterType)
     {
         $filter = $this->getMockBuilder($filterMock)
-            ->setMethods(['getMust', 'getType', 'getShould', 'getMustNot'])
+            ->onlyMethods(['getMust', 'getType', 'getShould', 'getMustNot'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $filter->expects($this->any())

@@ -42,7 +42,7 @@ class RequireCookieTest extends TestCase
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMockForAbstractClass();
 
         $this->contextMock = $this->getMockBuilder(Context::class)
@@ -52,7 +52,7 @@ class RequireCookieTest extends TestCase
             ->willReturn($this->scopeConfigMock);
 
         $this->block = $this->getMockBuilder(RequireCookie::class)
-            ->setMethods(['escapeHtml', 'escapeUrl', 'getUrl', 'getTriggers'])
+            ->onlyMethods(['escapeHtml', 'escapeUrl', 'getUrl', 'getTriggers'])
             ->setConstructorArgs(
                 [
                     'context' => $this->contextMock

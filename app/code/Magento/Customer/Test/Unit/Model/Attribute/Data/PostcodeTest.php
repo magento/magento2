@@ -56,7 +56,7 @@ class PostcodeTest extends TestCase
             ->getMock();
         $this->attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStoreLabel'])
+            ->onlyMethods(['getStoreLabel'])
             ->getMock();
     }
 

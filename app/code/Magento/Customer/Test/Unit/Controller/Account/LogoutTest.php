@@ -55,7 +55,7 @@ class LogoutTest extends TestCase
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'logout', 'setBeforeAuthUrl', 'setLastCustomerId'])
+            ->onlyMethods(['getId', 'logout', 'setBeforeAuthUrl', 'setLastCustomerId'])
             ->getMock();
 
         $this->cookieMetadataFactory = $this->getMockBuilder(CookieMetadataFactory::class)

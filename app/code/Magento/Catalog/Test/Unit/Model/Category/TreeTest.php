@@ -198,7 +198,7 @@ class TreeTest extends TestCase
             ->will($this->onConsecutiveCalls($treeNodeMock1, $treeNodeMock2));
         $node = $this->getMockBuilder(Node::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'hasChildren',
                     'getChildren',
@@ -241,7 +241,7 @@ class TreeTest extends TestCase
 
         $node = $this->getMockBuilder(Node::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'hasChildren',
                     'getChildren',

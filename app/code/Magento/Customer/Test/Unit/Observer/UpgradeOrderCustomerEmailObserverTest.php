@@ -72,7 +72,7 @@ class UpgradeOrderCustomerEmailObserverTest extends TestCase
 
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerDataObject', 'getOrigCustomerDataObject'])
+            ->onlyMethods(['getCustomerDataObject', 'getOrigCustomerDataObject'])
             ->getMock();
 
         $this->observerMock = $this->getMockBuilder(Observer::class)

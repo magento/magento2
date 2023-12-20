@@ -47,7 +47,7 @@ class AllmethodsTest extends TestCase
         $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->shippingConfig = $this->createMock(Config::class);
         $this->carriersMock = $this->getMockBuilder(AbstractCarrierInterface::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'isActive',
                     'getAllowedMethods'

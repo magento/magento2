@@ -53,14 +53,14 @@ class ProductOptionProcessorTest extends TestCase
     protected function setUp(): void
     {
         $this->dataObject = $this->getMockBuilder(DataObject::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getLinks', 'addData'
             ])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->dataObjectFactory = $this->getMockBuilder(\Magento\Framework\DataObject\Factory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectFactory->expects($this->any())
@@ -74,7 +74,7 @@ class ProductOptionProcessorTest extends TestCase
         $this->downloadableOption = $this->getMockBuilder(
             DownloadableOptionInterface::class
         )
-            ->setMethods([
+            ->onlyMethods([
                 'getDownloadableLinks',
             ])
             ->getMockForAbstractClass();
@@ -82,7 +82,7 @@ class ProductOptionProcessorTest extends TestCase
         $this->downloadableOptionFactory = $this->getMockBuilder(
             DownloadableOptionFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->downloadableOptionFactory->expects($this->any())
@@ -111,7 +111,7 @@ class ProductOptionProcessorTest extends TestCase
         $productOptionExtensionMock = $this->getMockBuilder(
             ProductOptionExtensionInterface::class
         )
-            ->setMethods([
+            ->onlyMethods([
                 'getDownloadableOption',
             ])
             ->getMockForAbstractClass();

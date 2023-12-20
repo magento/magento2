@@ -66,7 +66,7 @@ class FrequencyTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->securityConfigMock =  $this->getMockBuilder(ConfigInterface::class)
-            ->setMethods(['getScopeByEventType'])
+            ->onlyMethods(['getScopeByEventType'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->securityConfigMock->expects($this->any())

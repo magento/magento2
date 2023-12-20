@@ -165,7 +165,7 @@ class StorageTest extends TestCase
         $this->objectManagerHelper = new ObjectManager($this);
         $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->driverMock = $this->getMockBuilder(DriverInterface::class)
-            ->setMethods(['getRealPathSafety'])
+            ->onlyMethods(['getRealPathSafety'])
             ->getMockForAbstractClass();
 
         $this->directoryMock = $this->createPartialMock(
@@ -238,7 +238,7 @@ class StorageTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getCurrentPath',
                     'getName',
@@ -476,7 +476,7 @@ class StorageTest extends TestCase
         ];
         $uploader = $this->getMockBuilder(Uploader::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setAllowedExtensions',
                     'setAllowRenameFiles',
@@ -526,7 +526,7 @@ class StorageTest extends TestCase
 
         $image = $this->getMockBuilder(Image::class)
             ->disableOriginalConstructor()
-            ->setMethods(['open', 'keepAspectRatio', 'resize', 'save'])
+            ->onlyMethods(['open', 'keepAspectRatio', 'resize', 'save'])
             ->getMock();
         $image->expects($this->atLeastOnce())->method('open')->with($realPath);
         $image->expects($this->atLeastOnce())->method('keepAspectRatio')->with(true);

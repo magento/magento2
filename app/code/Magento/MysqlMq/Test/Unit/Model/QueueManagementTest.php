@@ -67,7 +67,7 @@ class QueueManagementTest extends TestCase
             ->getMock();
         $this->messageStatusCollectionFactory = $this
             ->getMockBuilder(MessageStatusCollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -228,7 +228,7 @@ class QueueManagementTest extends TestCase
     private function getMessageStatusMock()
     {
         $messageStatus = $this->getMockBuilder(MessageStatus::class)
-            ->setMethods(['getStatus', 'setStatus', 'save', 'getId', 'getUpdatedAt'])
+            ->onlyMethods(['getStatus', 'setStatus', 'save', 'getId', 'getUpdatedAt'])
             ->disableOriginalConstructor()
             ->getMock();
         $messageStatus->expects($this->once())->method('getUpdatedAt')->willReturn('2010-01-01 00:00:00');

@@ -34,7 +34,7 @@ class CombineTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->ruleConditionMock = $this->getMockBuilder(SalesRuleProduct::class)
-            ->setMethods(['loadAttributeOptions', 'getAttributeOption'])
+            ->onlyMethods(['loadAttributeOptions', 'getAttributeOption'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = new Combine(

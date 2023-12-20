@@ -73,7 +73,7 @@ class PreviewTest extends TestCase
         $designConfigData = [];
 
         $this->template = $this->getMockBuilder(Template::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setDesignConfig',
                     'getDesignConfig',
@@ -129,7 +129,7 @@ class PreviewTest extends TestCase
                     $scopeConfig
                 ]
             )
-            ->setMethods(['emulateAreaCode'])
+            ->onlyMethods(['emulateAreaCode'])
             ->disableOriginalConstructor()
             ->getMock();
         $appState->expects($this->any())

@@ -71,7 +71,7 @@ class DataTest extends TestCase
         $objectManagerHelper = new ObjectManager($this);
         $this->escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['escapeHtmlAttr'])
+            ->onlyMethods(['escapeHtmlAttr'])
             ->getMock();
         $this->prepareContext();
 
@@ -154,7 +154,7 @@ class DataTest extends TestCase
             \Magento\Directory\Model\ResourceModel\Country\CollectionFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'create'
                 ]
@@ -306,7 +306,7 @@ class DataTest extends TestCase
 
         $elementHtmlSelect = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setName',
                     'setId',

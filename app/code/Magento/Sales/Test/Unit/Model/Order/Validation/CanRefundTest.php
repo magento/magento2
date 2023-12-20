@@ -43,7 +43,7 @@ class CanRefundTest extends TestCase
 
         $this->orderMock = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStatus', 'getItems'])
+            ->onlyMethods(['getStatus', 'getItems'])
             ->getMockForAbstractClass();
 
         $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)

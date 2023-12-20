@@ -83,11 +83,11 @@ abstract class AbstractContainerTest extends TestCase
     protected function setUp(): void
     {
         $this->eventManagerMock = $this->getMockBuilder(Manager::class)
-            ->setMethods(['dispatch'])
+            ->onlyMethods(['dispatch'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->scopeConfigMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -97,7 +97,7 @@ abstract class AbstractContainerTest extends TestCase
         );
         $this->themeCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getItemById'])
+            ->onlyMethods(['getItemById'])
             ->getMock();
         $this->themeMock = $this->getMockBuilder(
             Theme::class
@@ -110,7 +110,7 @@ abstract class AbstractContainerTest extends TestCase
         );
 
         $this->layoutMergeMock = $this->getMockBuilder(Merge::class)
-            ->setMethods(['addPageHandles', 'load', 'getContainers', 'addHandle'])
+            ->onlyMethods(['addPageHandles', 'load', 'getContainers', 'addHandle'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -121,7 +121,7 @@ abstract class AbstractContainerTest extends TestCase
         $this->escaperMock->method('escapeHtmlAttr')->willReturnArgument(0);
 
         $this->contextMock = $this->getMockBuilder(Context::class)
-            ->setMethods(['getEventManager', 'getScopeConfig', 'getEscaper'])
+            ->onlyMethods(['getEventManager', 'getScopeConfig', 'getEscaper'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->once())->method('getEventManager')->willReturn($this->eventManagerMock);

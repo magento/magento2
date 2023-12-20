@@ -44,14 +44,14 @@ class CanUseForCountryTest extends TestCase
     {
         $quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 []
             )->getMock();
 
         $paymentMethod = $this->getMockBuilder(
             MethodInterface::class
         )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->onlyMethods([])->getMock();
         $paymentMethod->expects($this->once())->method('canUseForCountry')->with(
             self::EXPECTED_COUNTRY_ID
         )->willReturn($expectation);

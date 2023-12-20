@@ -48,7 +48,7 @@ class ProductIdLocatorTest extends TestCase
     {
         $metadataPool = $this->createMock(MetadataPool::class);
         $collectionFactory = $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->idsLimit = 4;
@@ -73,7 +73,7 @@ class ProductIdLocatorTest extends TestCase
         $skus = ['sku_1', 'sku_2'];
 
         $product = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['getSku', 'getData', 'getTypeId'])
+            ->onlyMethods(['getSku', 'getData', 'getTypeId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $product->method('getSku')
@@ -117,7 +117,7 @@ class ProductIdLocatorTest extends TestCase
         $products = [];
         foreach ($skus as $sku) {
             $product = $this->getMockBuilder(ProductInterface::class)
-                ->setMethods(['getSku', 'getData', 'getTypeId'])
+                ->onlyMethods(['getSku', 'getData', 'getTypeId'])
                 ->disableOriginalConstructor()
                 ->getMockForAbstractClass();
             $product->method('getSku')

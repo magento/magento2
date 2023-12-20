@@ -108,7 +108,7 @@ class IndexerHandlerTest extends TestCase
 
         $this->adapterFactory = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->adapterFactory->expects($this->any())
@@ -130,7 +130,7 @@ class IndexerHandlerTest extends TestCase
             ->getMock();
 
         $this->client = $this->getMockBuilder(ClientInterface::class)
-            ->setMethods(['ping', 'testConnection','prepareDocsPerStore','addDocs', 'cleanIndex'])
+            ->onlyMethods(['ping', 'testConnection','prepareDocsPerStore','addDocs', 'cleanIndex'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

@@ -41,14 +41,14 @@ class ToPercentTest extends TestCase
         $this->validator = $this->getMockBuilder(
             Validator::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getItemPrice', 'getItemBasePrice', 'getItemOriginalPrice', 'getItemBaseOriginalPrice']
             )->getMock();
 
         $this->discountDataFactory = $this->getMockBuilder(
             DataFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['create']
             )->getMock();
 
@@ -79,7 +79,7 @@ class ToPercentTest extends TestCase
         $discountData = $this->getMockBuilder(
             Data::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['setAmount', 'setBaseAmount', 'setOriginalAmount', 'setBaseOriginalAmount']
             )->getMock();
 
@@ -88,14 +88,14 @@ class ToPercentTest extends TestCase
         $rule = $this->getMockBuilder(
             Rule::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getDiscountAmount', 'getDiscountQty']
             )->getMock();
 
         $item = $this->getMockBuilder(
             AbstractItem::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getDiscountAmount',
                     'getBaseDiscountAmount',

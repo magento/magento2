@@ -36,7 +36,7 @@ class CombineTest extends TestCase
 
         $this->conditionFactory = $this->getMockBuilder(
             ProductFactory::class
-        )->setMethods(['create'])
+        )->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $arguments['conditionFactory'] = $this->conditionFactory;
@@ -66,7 +66,7 @@ class CombineTest extends TestCase
             'excluded_attribute' => 'Excluded attribute',
         ];
         $productCondition = $this->getMockBuilder(Product::class)
-            ->setMethods(['loadAttributeOptions', 'getAttributeOption'])
+            ->onlyMethods(['loadAttributeOptions', 'getAttributeOption'])
             ->disableOriginalConstructor()
             ->getMock();
         $productCondition->expects($this->any())->method('loadAttributeOptions')->willReturnSelf();
@@ -85,7 +85,7 @@ class CombineTest extends TestCase
             ->getMock();
         $condition = $this->getMockBuilder(Combine::class)
             ->disableOriginalConstructor()
-            ->setMethods(['collectValidatedAttributes'])
+            ->onlyMethods(['collectValidatedAttributes'])
             ->getMock();
         $condition->expects($this->any())->method('collectValidatedAttributes')->with($collection)->willReturnSelf();
 

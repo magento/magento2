@@ -425,7 +425,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $childCategory = $this->getMockBuilder(Category::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getUrlPath',
                     'setUrlPath',

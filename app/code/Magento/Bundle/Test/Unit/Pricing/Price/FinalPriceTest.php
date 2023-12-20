@@ -97,7 +97,7 @@ class FinalPriceTest extends TestCase
     {
         $this->saleableInterfaceMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPriceType', 'getPriceInfo'])
+            ->onlyMethods(['getPriceType', 'getPriceInfo'])
             ->getMock();
         $this->bundleCalculatorMock = $this->createMock(
             BundleCalculatorInterface::class
@@ -229,7 +229,7 @@ class FinalPriceTest extends TestCase
         $this->prepareMock();
         $customOptions = [
             $this->getMockBuilder(ProductCustomOptionInterface::class)
-                ->setMethods(['setProduct'])
+                ->onlyMethods(['setProduct'])
                 ->getMockForAbstractClass()
         ];
 

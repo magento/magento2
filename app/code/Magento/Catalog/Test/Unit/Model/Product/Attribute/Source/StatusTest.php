@@ -76,7 +76,7 @@ class StatusTest extends TestCase
 
         $this->entity = $this->getMockBuilder(AbstractEntity::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLinkField'])
+            ->onlyMethods(['getLinkField'])
             ->getMockForAbstractClass();
     }
 

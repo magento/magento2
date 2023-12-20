@@ -111,7 +111,7 @@ class AuthenticationPopupTest extends TestCase
 
         /** @var StoreInterface||\PHPUnit\Framework\MockObject\MockObject $storeMock */
         $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getBaseUrl'])
+            ->onlyMethods(['getBaseUrl'])
             ->getMockForAbstractClass();
 
         $this->storeManagerMock->expects($this->any())
@@ -226,7 +226,7 @@ class AuthenticationPopupTest extends TestCase
 
         /** @var StoreInterface||\PHPUnit\Framework\MockObject\MockObject $storeMock */
         $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getBaseUrl'])
+            ->onlyMethods(['getBaseUrl'])
             ->getMockForAbstractClass();
 
         $this->storeManagerMock->expects($this->any())

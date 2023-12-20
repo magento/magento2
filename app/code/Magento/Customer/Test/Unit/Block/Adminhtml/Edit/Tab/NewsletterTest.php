@@ -111,7 +111,7 @@ class NewsletterTest extends TestCase
         $this->contextMock = $this->createMock(Context::class);
         $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['formatDateTime'])
+            ->onlyMethods(['formatDateTime'])
             ->getMockForAbstractClass();
         $this->contextMock->expects($this->any())->method('getLocaleDate')->willReturn($this->localeDateMock);
         $this->registryMock = $this->createMock(Registry::class);
@@ -124,7 +124,7 @@ class NewsletterTest extends TestCase
         $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->backendSessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods(['getCustomerFormData'])
+            ->onlyMethods(['getCustomerFormData'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->once())
@@ -191,7 +191,7 @@ class NewsletterTest extends TestCase
 
         $subscriberMock = $this->getMockBuilder(Subscriber::class)
             ->disableOriginalConstructor()
-            ->setMethods(['loadByCustomer', 'getChangeStatusAt', 'isSubscribed', 'getData'])
+            ->onlyMethods(['loadByCustomer', 'getChangeStatusAt', 'isSubscribed', 'getData'])
             ->getMock();
         $statusDate = new \DateTime($statusDate);
         $this->localeDateMock->method('formatDateTime')->with($statusDate)->willReturn($dateExpected);

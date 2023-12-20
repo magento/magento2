@@ -35,7 +35,7 @@ class FormTest extends TestCase
 
         /** @var Form|MockObject $customerHelper */
         $formMock = $this->getMockBuilder(Form::class)
-            ->setMethods(['setUseContainer', 'setParent', 'setBaseUrl'])
+            ->onlyMethods(['setUseContainer', 'setParent', 'setBaseUrl'])
             ->disableOriginalConstructor()
             ->getMock();
 

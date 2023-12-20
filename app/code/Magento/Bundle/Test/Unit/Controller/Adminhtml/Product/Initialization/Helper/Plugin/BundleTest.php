@@ -152,7 +152,7 @@ class BundleTest extends TestCase
             ->willReturn(['option_1' => ['delete' => 1]]);
         $extensionAttribute = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setBundleProductOptions'])
+            ->onlyMethods(['setBundleProductOptions'])
             ->getMockForAbstractClass();
         $extensionAttribute->expects($this->once())->method('setBundleProductOptions')->with([]);
         $this->productMock->expects($this->once())->method('getExtensionAttributes')->willReturn($extensionAttribute);
@@ -193,7 +193,7 @@ class BundleTest extends TestCase
         $this->requestMock->expects($this->any())->method('getPost')->willReturnMap($valueMap);
         $extensionAttribute = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setBundleProductOptions'])
+            ->onlyMethods(['setBundleProductOptions'])
             ->getMockForAbstractClass();
         $extensionAttribute->expects($this->once())->method('setBundleProductOptions')->with([]);
         $this->productMock->expects($this->any())->method('getCompositeReadonly')->willReturn(false);

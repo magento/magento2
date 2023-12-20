@@ -71,7 +71,7 @@ class InvalidSkuProcessorTest extends TestCase
         $this->productIdLocator->expects($this->atLeastOnce())->method('retrieveProductIdsBySkus')
             ->willReturn($idsBySku);
         $product = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['getPriceType'])
+            ->onlyMethods(['getPriceType'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $productPriceType = 0;

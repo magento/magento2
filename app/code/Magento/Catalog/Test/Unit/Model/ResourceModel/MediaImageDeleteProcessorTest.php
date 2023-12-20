@@ -70,27 +70,27 @@ class MediaImageDeleteProcessorTest extends TestCase
 
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getMediaGalleryImages'])
+            ->onlyMethods(['getId', 'getMediaGalleryImages'])
             ->getMock();
 
         $this->imageConfig = $this->getMockBuilder(MediaConfig::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBaseMediaUrl', 'getMediaUrl', 'getBaseMediaPath', 'getMediaPath'])
+            ->onlyMethods(['getBaseMediaUrl', 'getMediaUrl', 'getBaseMediaPath', 'getMediaPath'])
             ->getMock();
 
         $this->mediaDirectory = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getRelativePath', 'isFile', 'delete'])
+            ->onlyMethods(['getRelativePath', 'isFile', 'delete'])
             ->getMock();
 
         $this->imageProcessor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['removeImage'])
+            ->onlyMethods(['removeImage'])
             ->getMock();
 
         $this->productGallery = $this->getMockBuilder(Gallery::class)
             ->disableOriginalConstructor()
-            ->setMethods(['deleteGallery', 'countImageUses'])
+            ->onlyMethods(['deleteGallery', 'countImageUses'])
             ->getMock();
 
         $this->mediaImageDeleteProcessor = $this->objectManager->getObject(

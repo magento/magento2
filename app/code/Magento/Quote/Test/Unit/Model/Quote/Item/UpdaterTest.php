@@ -95,7 +95,7 @@ class UpdaterTest extends TestCase
             ]
         );
         $this->serializer = $this->getMockBuilder(Json::class)
-            ->setMethods(['serialize'])
+            ->onlyMethods(['serialize'])
             ->getMockForAbstractClass();
 
         $this->object = (new ObjectManager($this))
@@ -316,7 +316,7 @@ class UpdaterTest extends TestCase
         $buyRequestMock->expects($this->never())->method('setCustomPrice');
         $buyRequestMock->expects($this->once())->method('getData')->willReturn([]);
         $serializer = $this->getMockBuilder(Json::class)
-            ->setMethods(['serialize'])
+            ->onlyMethods(['serialize'])
             ->getMockForAbstractClass();
         $serializer->expects($this->any())
             ->method('serialize')

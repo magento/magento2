@@ -92,7 +92,7 @@ class ViewTest extends TestCase
             ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isAjax', 'isPost', 'getParam'])
+            ->onlyMethods(['isAjax', 'isPost', 'getParam'])
             ->getMockForAbstractClass();
         $contextMock->expects($this->any())
             ->method('getRequest')
@@ -116,7 +116,7 @@ class ViewTest extends TestCase
             ->method('getResultRedirectFactory')
             ->willReturn($resultRedirectFactoryMock);
         $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
-            ->setMethods(['getUrl'])
+            ->onlyMethods(['getUrl'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $contextMock->expects($this->any())

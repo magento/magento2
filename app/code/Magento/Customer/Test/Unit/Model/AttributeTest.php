@@ -210,7 +210,7 @@ class AttributeTest extends TestCase
         );
 
         $this->resourceMock = $this->getMockBuilder(AbstractResource::class)
-            ->setMethods(['_construct', 'getConnection', 'getIdFieldName', 'saveInSetIncluding'])
+            ->onlyMethods(['_construct', 'getConnection', 'getIdFieldName', 'saveInSetIncluding'])
             ->getMockForAbstractClass();
         $this->cacheManager = $this->getMockBuilder(CacheInterface::class)
             ->getMock();

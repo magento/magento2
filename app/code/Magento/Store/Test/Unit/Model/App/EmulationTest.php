@@ -98,29 +98,29 @@ class EmulationTest extends TestCase
         // Mocks
         $this->designMock = $this->getMockBuilder(Design::class)
             ->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->onlyMethods([])->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])->getMockForAbstractClass();
+            ->onlyMethods([])->getMockForAbstractClass();
         $this->translateMock = $this->getMockBuilder(TranslateInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])->getMockForAbstractClass();
+            ->onlyMethods([])->getMockForAbstractClass();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])->getMockForAbstractClass();
+            ->onlyMethods([])->getMockForAbstractClass();
         $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])->getMockForAbstractClass();
+            ->onlyMethods([])->getMockForAbstractClass();
         $this->inlineConfigMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])->getMockForAbstractClass();
+            ->onlyMethods([])->getMockForAbstractClass();
         $this->inlineTranslationMock = $this->getMockBuilder(StateInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])->getMockForAbstractClass();
+            ->onlyMethods([])->getMockForAbstractClass();
         $this->viewDesignMock = $this->getMockForAbstractClass(DesignInterface::class);
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup', 'getStoreId'])
+            ->onlyMethods(['__wakeup', 'getStoreId'])
             ->getMock();
         $this->rendererMock = $this->createMock(RendererInterface::class);
 

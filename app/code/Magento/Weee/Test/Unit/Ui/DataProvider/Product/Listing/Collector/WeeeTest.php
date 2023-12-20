@@ -62,16 +62,16 @@ class WeeeTest extends TestCase
 
         $this->weeeAdjustmentAttributeFactory = $this->getMockBuilder(WeeeAdjustmentAttributeInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->extensionAttributes = $this->getMockBuilder(PriceInfoExtensionInterface::class)
-            ->setMethods(['setWeeeAttributes', 'setWeeeAdjustment'])
+            ->onlyMethods(['setWeeeAttributes', 'setWeeeAdjustment'])
             ->getMockForAbstractClass();
 
         $this->priceInfoExtensionFactory = $this->getMockBuilder(PriceInfoExtensionInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->formattedPriceInfoBuilder = $this->getMockBuilder(FormattedPriceInfoBuilder::class)
@@ -96,17 +96,17 @@ class WeeeTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $productRender = $this->getMockBuilder(ProductRenderInterface::class)
-            ->setMethods(['getPriceInfo', 'getStoreId'])
+            ->onlyMethods(['getPriceInfo', 'getStoreId'])
             ->getMockForAbstractClass();
         $weeAttribute  = $this->getMockBuilder(WeeeAdjustmentAttributeInterface::class)
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMockForAbstractClass();
         $this->weeeAdjustmentAttributeFactory->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($weeAttribute);
         $priceInfo = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getExtensionAttributes', 'getPrice', 'setExtensionAttributes'])
+            ->onlyMethods(['getExtensionAttributes', 'getPrice', 'setExtensionAttributes'])
             ->getMock();
         $price = $this->getMockBuilder(FinalPrice::class)
             ->disableOriginalConstructor()

@@ -105,7 +105,7 @@ class OptionTest extends TestCase
         $this->quoteItemMock->expects($this->any())->method('getStore')->willReturn($store);
 
         $this->stockItemMock = $this->getMockBuilder(StockItemInterface::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setIsChildItem',
                     'setSuppressCheckQtyIncrements',

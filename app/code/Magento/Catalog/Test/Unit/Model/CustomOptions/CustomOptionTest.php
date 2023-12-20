@@ -72,7 +72,7 @@ class CustomOptionTest extends TestCase
             ->getMock();
 
         $this->extensionMock = $this->getMockBuilder(CustomOptionExtensionInterface::class)
-            ->setMethods(['getFileInfo'])
+            ->onlyMethods(['getFileInfo'])
             ->getMockForAbstractClass();
 
         $this->extensionAttributesFactoryMock->expects(self::any())

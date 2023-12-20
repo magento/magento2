@@ -64,27 +64,27 @@ class ForceAdminPasswordChangeObserverTest extends TestCase
     {
         $this->authMock = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isAllowed'])
+            ->onlyMethods(['isAllowed'])
             ->getMockForAbstractClass();
 
         $this->configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->urlInterfaceMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->authSessionMock = $this->getMockBuilder(\Magento\Backend\Model\Auth\Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setPciAdminUserIsPasswordExpired',
                     'unsPciAdminUserIsPasswordExpired',
@@ -96,17 +96,17 @@ class ForceAdminPasswordChangeObserverTest extends TestCase
 
         $this->actionFlagMock = $this->getMockBuilder(ActionFlag::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->managerInterfaceMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $helper = new ObjectManager($this);
@@ -137,13 +137,13 @@ class ForceAdminPasswordChangeObserverTest extends TestCase
         /** @var Observer|MockObject $eventObserverMock */
         $eventObserverMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         /** @var Event|MockObject */
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getControllerAction', 'getRequest'])
+            ->onlyMethods(['getControllerAction', 'getRequest'])
             ->getMock();
 
         $this->configInterfaceMock
@@ -155,12 +155,12 @@ class ForceAdminPasswordChangeObserverTest extends TestCase
         /** @var Action $controllerMock */
         $controllerMock = $this->getMockBuilder(AbstractAction::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getRedirect', 'getRequest'])
+            ->onlyMethods(['getRedirect', 'getRequest'])
             ->getMockForAbstractClass();
         /** @var RequestInterface $requestMock */
         $requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getFullActionName', 'setDispatched'])
+            ->onlyMethods(['getFullActionName', 'setDispatched'])
             ->getMockForAbstractClass();
         $eventMock->expects($this->once())->method('getControllerAction')->willReturn($controllerMock);
         $eventMock->expects($this->once())->method('getRequest')->willReturn($requestMock);

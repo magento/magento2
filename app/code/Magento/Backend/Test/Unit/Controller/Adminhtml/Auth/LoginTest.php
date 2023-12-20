@@ -99,7 +99,7 @@ class LoginTest extends TestCase
 
         $this->helperMock = $this->createMock(Data::class);
         $this->requestMock = $this->getMockBuilder(Request::class)
-            ->setMethods(['getUri', 'getRequestUri'])
+            ->onlyMethods(['getUri', 'getRequestUri'])
             ->getMockForAbstractClass();
         $this->redirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()

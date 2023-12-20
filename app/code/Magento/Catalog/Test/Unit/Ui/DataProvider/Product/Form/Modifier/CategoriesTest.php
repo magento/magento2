@@ -63,7 +63,7 @@ class CategoriesTest extends AbstractModifierTest
     {
         parent::setUp();
         $this->categoryCollectionFactoryMock = $this->getMockBuilder(CategoryCollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dbHelperMock = $this->getMockBuilder(DbHelper::class)
@@ -81,7 +81,7 @@ class CategoriesTest extends AbstractModifierTest
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods(['getUser'])
+            ->onlyMethods(['getUser'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->categoryCollectionFactoryMock->expects($this->any())
@@ -101,7 +101,7 @@ class CategoriesTest extends AbstractModifierTest
             ->willReturn(new \ArrayIterator([]));
 
         $roleAdmin = $this->getMockBuilder(Role::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $roleAdmin->expects($this->any())
@@ -109,7 +109,7 @@ class CategoriesTest extends AbstractModifierTest
             ->willReturn(0);
 
         $userAdmin = $this->getMockBuilder(User::class)
-            ->setMethods(['getRole'])
+            ->onlyMethods(['getRole'])
             ->disableOriginalConstructor()
             ->getMock();
         $userAdmin->expects($this->any())
@@ -251,7 +251,7 @@ class CategoriesTest extends AbstractModifierTest
             ->will($this->returnValue($roleAclUser));
 
         $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods(['getUser'])
+            ->onlyMethods(['getUser'])
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -57,7 +57,7 @@ class AgreementTest extends TestCase
         ]);
         $this->collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSelect'])
+            ->onlyMethods(['getSelect'])
             ->getMockForAbstractClass();
         $this->connectionMock = $this->createMock(Mysql::class);
         $this->selectMock = $this->createMock(Select::class);

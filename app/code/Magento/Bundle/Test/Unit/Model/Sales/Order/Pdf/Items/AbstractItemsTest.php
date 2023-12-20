@@ -48,7 +48,7 @@ class AbstractItemsTest extends TestCase
             ->getMock();
         $this->filterManagerMock = $this->getMockBuilder(FilterManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['stripTags', 'sprintf'])
+            ->onlyMethods(['stripTags', 'sprintf'])
             ->getMock();
 
         $objectManager = new ObjectManager($this);

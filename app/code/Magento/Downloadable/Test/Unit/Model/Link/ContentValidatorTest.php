@@ -260,7 +260,7 @@ class ContentValidatorTest extends TestCase
     protected function getLinkMock(array $linkData)
     {
         $linkMock = $this->getMockBuilder(LinkInterface::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getTitle',
                     'getPrice',

@@ -108,11 +108,11 @@ class CarrierTest extends TestCase
         $this->scope = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->error = $this->getMockBuilder(Error::class)
-            ->setMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
+            ->onlyMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
             ->getMock();
         $this->errorFactory = $this->getMockBuilder(ErrorFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->errorFactory->method('create')
             ->willReturn($this->error);
@@ -501,7 +501,7 @@ class CarrierTest extends TestCase
     {
         $xmlElFactory = $this->getMockBuilder(ElementFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $xmlElFactory->method('create')
             ->willReturnCallback(
@@ -527,11 +527,11 @@ class CarrierTest extends TestCase
     {
         $rateFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $rateResult = $this->getMockBuilder(Result::class)
             ->disableOriginalConstructor()
-            ->setMethods(null)
+            ->onlyMethods(null)
             ->getMock();
         $rateFactory->method('create')
             ->willReturn($rateResult);
@@ -548,7 +548,7 @@ class CarrierTest extends TestCase
     {
         $rateMethodFactory = $this->getMockBuilder(MethodFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $rateMethodFactory->method('create')
@@ -556,7 +556,7 @@ class CarrierTest extends TestCase
                 function () {
                     $rateMethod = $this->getMockBuilder(Method::class)
                         ->disableOriginalConstructor()
-                        ->setMethods(['setPrice'])
+                        ->onlyMethods(['setPrice'])
                         ->getMock();
                     $rateMethod->method('setPrice')
                         ->willReturnSelf();
@@ -593,7 +593,7 @@ class CarrierTest extends TestCase
     {
         $modulesDirectory = $this->getMockBuilder(Read::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getRelativePath', 'readFile'])
+            ->onlyMethods(['getRelativePath', 'readFile'])
             ->getMock();
         $modulesDirectory->method('readFile')
             ->willReturn(file_get_contents(__DIR__ . '/_files/countries.xml'));
@@ -613,11 +613,11 @@ class CarrierTest extends TestCase
     {
         $storeManager = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWebsite'])
+            ->onlyMethods(['getWebsite'])
             ->getMock();
         $website = $this->getMockBuilder(Website::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBaseCurrencyCode', '__wakeup'])
+            ->onlyMethods(['getBaseCurrencyCode', '__wakeup'])
             ->getMock();
         $website->method('getBaseCurrencyCode')
             ->willReturn('USD');
@@ -659,7 +659,7 @@ class CarrierTest extends TestCase
             ->getMock();
         $this->httpClient = $this->getMockBuilder(LaminasClient::class)
             ->disableOriginalConstructor()
-            ->setMethods(['send'])
+            ->onlyMethods(['send'])
             ->getMock();
         $this->httpClient->method('send')
             ->willReturn($this->httpResponse);

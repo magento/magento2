@@ -163,7 +163,7 @@ abstract class AbstractSenderTest extends TestCase
 
         $this->appEmulator = $this->getMockBuilder(Emulation::class)
             ->disableOriginalConstructor()
-            ->setMethods(['startEnvironmentEmulation', 'stopEnvironmentEmulation'])
+            ->onlyMethods(['startEnvironmentEmulation', 'stopEnvironmentEmulation'])
             ->getMock();
     }
 

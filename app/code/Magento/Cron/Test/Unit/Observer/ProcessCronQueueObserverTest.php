@@ -721,7 +721,7 @@ class ProcessCronQueueObserverTest extends TestCase
         /** @var Schedule|MockObject $schedule */
         $schedule = $this->getMockBuilder(
             Schedule::class
-        )->setMethods(
+        )->onlyMethods(
             $scheduleMethods
         )->disableOriginalConstructor()
             ->getMock();
@@ -782,7 +782,7 @@ class ProcessCronQueueObserverTest extends TestCase
             ->method('create')->willReturn($scheduleMock);
 
         $testCronJob = $this->getMockBuilder('CronJob')
-            ->setMethods(['execute'])->getMock();
+            ->onlyMethods(['execute'])->getMock();
         $testCronJob->expects($this->atLeastOnce())->method('execute')->with($schedule);
 
         $this->objectManagerMock->expects($this->once())

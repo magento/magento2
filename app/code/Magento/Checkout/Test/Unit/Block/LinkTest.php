@@ -51,14 +51,14 @@ class LinkTest extends TestCase
         $helper = $this->getMockBuilder(
             Data::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['canOnepageCheckout', 'isModuleOutputEnabled']
             )->getMock();
 
         $moduleManager = $this->getMockBuilder(
             Manager::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['isOutputEnabled']
             )->getMock();
 

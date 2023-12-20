@@ -71,11 +71,11 @@ class ProcessUrlRewriteSavingObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->pageMock = $this->getMockBuilder(Page::class)
-            ->setMethods(['getId', 'dataHasChangedFor'])
+            ->onlyMethods(['getId', 'dataHasChangedFor'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->eventMock = $this->getMockBuilder(Event::class)
-            ->setMethods(['getObject'])
+            ->onlyMethods(['getObject'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->eventObserverMock = $this->getMockBuilder(EventObserver::class)

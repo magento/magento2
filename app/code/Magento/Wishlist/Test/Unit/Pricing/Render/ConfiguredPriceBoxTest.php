@@ -59,7 +59,7 @@ class ConfiguredPriceBoxTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->price = $this->getMockBuilder(PriceInterface::class)
-            ->setMethods(['setItem'])
+            ->onlyMethods(['setItem'])
             ->getMockForAbstractClass();
 
         $this->rendererPool = $this->getMockBuilder(RendererPool::class)

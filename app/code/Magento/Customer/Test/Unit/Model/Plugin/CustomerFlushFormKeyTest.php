@@ -49,7 +49,7 @@ class CustomerFlushFormKeyTest extends TestCase
         /** @var Session | MockObject */
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBeforeRequestParams', 'setBeforeRequestParams'])
+            ->onlyMethods(['getBeforeRequestParams', 'setBeforeRequestParams'])
             ->getMock();
     }
 

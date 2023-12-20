@@ -185,7 +185,7 @@ class LinksTest extends TestCase
         $currencyMock->expects($this->once())
             ->method('getCurrencySymbol');
         $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getBaseCurrency'])
+            ->onlyMethods(['getBaseCurrency'])
             ->getMockForAbstractClass();
         $storeMock->expects($this->once())
             ->method('getBaseCurrency')

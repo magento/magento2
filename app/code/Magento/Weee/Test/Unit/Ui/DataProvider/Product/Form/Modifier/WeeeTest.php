@@ -44,7 +44,7 @@ class WeeeTest extends AbstractModifierTest
             ->disableOriginalConstructor()
             ->getMock();
         $this->eavAttributeFactoryMock = $this->getMockBuilder(EavAttributeFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->eavAttributeMock = $this->getMockBuilder(EavAttribute::class)

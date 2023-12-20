@@ -68,7 +68,7 @@ class SpecialPriceStorageTest extends TestCase
     {
         $this->specialPriceResource = $this->getMockBuilder(SpecialPriceInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get', 'update', 'delete', 'getEntityLinkField'])->getMockForAbstractClass();
+            ->onlyMethods(['get', 'update', 'delete', 'getEntityLinkField'])->getMockForAbstractClass();
         $this->productIdLocator = $this->getMockBuilder(ProductIdLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -85,7 +85,7 @@ class SpecialPriceStorageTest extends TestCase
         $this->specialPriceFactory = $this->getMockBuilder(
             SpecialPriceInterfaceFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(

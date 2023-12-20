@@ -66,7 +66,7 @@ class MediaGalleryTest extends TestCase
     {
         $existingEntryMock = $this->getMockBuilder(Entry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getName', 'getData', 'getExtensionAttributes'])
+            ->onlyMethods(['getName', 'getData', 'getExtensionAttributes'])
             ->getMock();
         $existingEntryMock->expects($this->any())->method('getData')->willReturn($expected);
         $existingEntryMock->expects($this->any())->method(

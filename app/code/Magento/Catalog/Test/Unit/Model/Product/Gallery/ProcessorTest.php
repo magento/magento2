@@ -150,7 +150,7 @@ class ProcessorTest extends TestCase
             ['getAttributeCode', 'getIsRequired', 'isValueEmpty', 'getIsUnique', 'getEntity']
         );
         $attributeEntity = $this->getMockBuilder(AbstractResource::class)
-            ->setMethods(['checkAttributeUniqueValue'])
+            ->onlyMethods(['checkAttributeUniqueValue'])
             ->getMockForAbstractClass();
 
         $attribute->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);

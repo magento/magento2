@@ -78,7 +78,7 @@ class MetadataLoaderTest extends TestCase
         $this->designConfigExtension = $this->getMockBuilder(
             \Magento\Theme\Api\Data\DesignConfigExtensionInterface::class
         )
-            ->setMethods(['getDesignConfigData'])
+            ->onlyMethods(['getDesignConfigData'])
             ->getMockForAbstractClass();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMockForAbstractClass();

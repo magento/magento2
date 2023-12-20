@@ -243,7 +243,7 @@ class AdvancedPricingTest extends TestCase
         $this->advancedPricing = $this->getMockBuilder(
             AdvancedPricing::class
         )
-            ->setMethods($mockMethods)
+            ->onlyMethods($mockMethods)
             ->disableOriginalConstructor()
             ->getMock();
         foreach ($constructorMethods as $method) {

@@ -110,7 +110,7 @@ class PrintActionTest extends TestCase
         $this->creditmemoLoaderMock = $this->getMockBuilder(
             CreditmemoLoader::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setOrderId',
                     'setCreditmemoId',
@@ -143,7 +143,7 @@ class PrintActionTest extends TestCase
         $this->resultForwardFactoryMock = $this->getMockBuilder(
             ForwardFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultForwardMock = $this->getMockBuilder(Forward::class)
             ->disableOriginalConstructor()

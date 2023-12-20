@@ -58,7 +58,7 @@ class UrlTest extends TestCase
         $this->filter = $this->getMockBuilder(
             FilterManager::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['translitUrl']
             )->getMock();
 
@@ -70,7 +70,7 @@ class UrlTest extends TestCase
         $this->url = $this->getMockBuilder(
             \Magento\Framework\Url::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['setScope', 'getUrl']
             )->getMock();
 
@@ -149,7 +149,7 @@ class UrlTest extends TestCase
         $product = $this->getMockBuilder(
             Product::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getStoreId',
                     'getEntityId',

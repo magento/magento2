@@ -232,7 +232,7 @@ class RendererTest extends TestCase
     {
         $model = $this->getMockBuilder(Renderer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['escapeHtml', 'isShipmentSeparately', 'getSelectionAttributes', 'isChildCalculated'])
+            ->onlyMethods(['escapeHtml', 'isShipmentSeparately', 'getSelectionAttributes', 'isChildCalculated'])
             ->getMock();
         $model->expects($this->any())->method('escapeHtml')->willReturn('Test');
         $model->expects($this->any())->method('isShipmentSeparately')->willReturn(false);

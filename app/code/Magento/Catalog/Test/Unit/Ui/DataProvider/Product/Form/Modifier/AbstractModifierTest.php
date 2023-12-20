@@ -57,7 +57,7 @@ abstract class AbstractModifierTest extends TestCase
         $this->locatorMock = $this->getMockBuilder(LocatorInterface::class)
             ->getMockForAbstractClass();
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getId',
                 'getTypeId',
                 'getStoreId',
@@ -70,7 +70,7 @@ abstract class AbstractModifierTest extends TestCase
                 'isLockedAttribute'
             ])->getMockForAbstractClass();
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['load', 'getId', 'getConfig'])
+            ->onlyMethods(['load', 'getId', 'getConfig'])
             ->getMockForAbstractClass();
         $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)
             ->disableOriginalConstructor()

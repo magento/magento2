@@ -74,7 +74,7 @@ class OrderRegistrarTest extends TestCase
     {
         return $this->getMockBuilder(ShipmentItemInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['register', 'getOrderItem'])
+            ->onlyMethods(['register', 'getOrderItem'])
             ->getMockForAbstractClass();
     }
 }

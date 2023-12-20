@@ -91,7 +91,7 @@ class TableTest extends TestCase
             ->getMock();
 
         $this->attributeOptionCollectionMock = $this->getMockBuilder(AttributeOptionCollection::class)
-            ->setMethods(['toOptionArray'])
+            ->onlyMethods(['toOptionArray'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -105,7 +105,7 @@ class TableTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->abstractAttributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getFrontend', 'getAttributeCode', '__wakeup', 'getStoreId',
                     'getId', 'getIsRequired', 'getEntity', 'getBackend'
@@ -289,25 +289,25 @@ class TableTest extends TestCase
         $attributeCode = 'attribute_code';
         $dir = Select::SQL_ASC;
         $collection = $this->getMockBuilder(AbstractCollection::class)
-            ->setMethods([ 'getSelect', 'getStoreId'])
+            ->onlyMethods([ 'getSelect', 'getStoreId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->abstractAttributeMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
         $entity = $this->getMockBuilder(AbstractEntity::class)
-            ->setMethods(['getLinkField'])
+            ->onlyMethods(['getLinkField'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->abstractAttributeMock->expects($this->once())->method('getEntity')->willReturn($entity);
         $entity->expects($this->once())->method('getLinkField')->willReturn('entity_id');
         $select = $this->getMockBuilder(Select::class)
-            ->setMethods(['joinLeft', 'getConnection', 'order'])
+            ->onlyMethods(['joinLeft', 'getConnection', 'order'])
             ->disableOriginalConstructor()
             ->getMock();
         $collection->expects($this->any())->method('getSelect')->willReturn($select);
         $select->expects($this->any())->method('joinLeft')->willReturnSelf();
         $backend = $this->getMockBuilder(AbstractBackend::class)
-            ->setMethods(['getTable'])
+            ->onlyMethods(['getTable'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->abstractAttributeMock->expects($this->any())->method('getBackend')->willReturn($backend);

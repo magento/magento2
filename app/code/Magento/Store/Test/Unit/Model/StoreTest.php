@@ -99,7 +99,7 @@ class StoreTest extends TestCase
         $this->configMock = $this->getMockBuilder(ReinitableConfigInterface::class)
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(SessionManagerInterface::class)
-            ->setMethods(['getCurrencyCode'])
+            ->onlyMethods(['getCurrencyCode'])
             ->getMockForAbstractClass();
         $this->store = $this->objectManagerHelper->getObject(
             Store::class,
@@ -171,7 +171,7 @@ class StoreTest extends TestCase
         $website = $this->getMockForAbstractClass(WebsiteInterface::class);
 
         $websiteRepository = $this->getMockBuilder(WebsiteRepositoryInterface::class)
-            ->setMethods(['getById'])
+            ->onlyMethods(['getById'])
             ->getMockForAbstractClass();
         $websiteRepository->expects($this->once())
             ->method('getById')
@@ -194,7 +194,7 @@ class StoreTest extends TestCase
     public function testGetWebsiteIfWebsiteIsNotExist()
     {
         $websiteRepository = $this->getMockBuilder(WebsiteRepositoryInterface::class)
-            ->setMethods(['getById'])
+            ->onlyMethods(['getById'])
             ->getMockForAbstractClass();
         $websiteRepository->expects($this->never())
             ->method('getById');
@@ -218,7 +218,7 @@ class StoreTest extends TestCase
         $group = $this->getMockForAbstractClass(GroupInterface::class);
 
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMockForAbstractClass();
         $groupRepository->expects($this->once())
             ->method('get')
@@ -241,7 +241,7 @@ class StoreTest extends TestCase
     public function testGetGroupIfGroupIsNotExist()
     {
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)
-            ->setMethods(['getById'])
+            ->onlyMethods(['getById'])
             ->getMockForAbstractClass();
         $groupRepository->expects($this->never())
             ->method('getById');

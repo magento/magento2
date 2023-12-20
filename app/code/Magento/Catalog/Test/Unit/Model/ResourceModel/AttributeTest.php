@@ -81,7 +81,7 @@ class AttributeTest extends TestCase
     {
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
-            ->setMethods(['from', 'where', 'join', 'deleteFromSelect'])
+            ->onlyMethods(['from', 'where', 'join', 'deleteFromSelect'])
             ->getMock();
 
         $this->connectionMock = $this->getMockBuilder(Adapter::class)
@@ -90,7 +90,7 @@ class AttributeTest extends TestCase
 
         $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['delete', 'getConnection'])
+            ->onlyMethods(['delete', 'getConnection'])
             ->getMock();
 
         $this->contextMock = $this->getMockBuilder(Context::class)
@@ -103,14 +103,14 @@ class AttributeTest extends TestCase
             ->getMock();
         $this->eavConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttribute'])
+            ->onlyMethods(['getAttribute'])
             ->getMock();
         $this->lockValidatorMock = $this->getMockBuilder(LockValidatorInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['validate'])
+            ->onlyMethods(['validate'])
             ->getMockForAbstractClass();
         $this->removeProductAttributeDataMock = $this->getMockBuilder(RemoveProductAttributeData::class)
-            ->setMethods(['removeData'])
+            ->onlyMethods(['removeData'])
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -134,7 +134,7 @@ class AttributeTest extends TestCase
         $backendTableName = 'weee_tax';
 
         $attributeModel = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['getEntityAttribute', 'getConnection', 'getTable'])
+            ->onlyMethods(['getEntityAttribute', 'getConnection', 'getTable'])
             ->setConstructorArgs([
                 $this->contextMock,
                 $this->storeManagerMock,
@@ -162,7 +162,7 @@ class AttributeTest extends TestCase
 
         $abstractModelMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEntityAttributeId','getEntityTypeId'])
+            ->onlyMethods(['getEntityAttributeId','getEntityTypeId'])
             ->getMockForAbstractClass();
         $abstractModelMock->expects($this->any())->method('getEntityAttributeId')->willReturn($entityAttributeId);
         $abstractModelMock->expects($this->any())->method('getEntityTypeId')->willReturn($entityTypeId);
@@ -174,12 +174,12 @@ class AttributeTest extends TestCase
 
         $backendModelMock = $this->getMockBuilder(AbstractBackend::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBackend', 'getTable'])
+            ->onlyMethods(['getBackend', 'getTable'])
             ->getMock();
 
         $abstractAttributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEntity'])
+            ->onlyMethods(['getEntity'])
             ->getMockForAbstractClass();
 
         $eavAttributeMock->expects($this->any())->method('getBackend')->willReturn($backendModelMock);

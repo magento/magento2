@@ -85,14 +85,14 @@ class CostStorageTest extends TestCase
             PricePersistenceFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->pricePersistence = $this->getMockBuilder(PricePersistence::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->costInterfaceFactory = $this->getMockBuilder(CostInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->costInterface = $this->getMockBuilder(CostInterface::class)
             ->disableOriginalConstructor()
