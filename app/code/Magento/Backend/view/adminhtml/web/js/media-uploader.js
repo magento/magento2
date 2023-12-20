@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+/* eslint-disable no-undef */
+
 /**
  * @api
  */
@@ -15,11 +17,11 @@ define([
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/form/element/file-uploader',
     'mage/translate',
-    'jquery/file-uploader'
+    'jquery/uppy-core'
 ], function ($, mageTemplate, alert, FileUploader) {
     'use strict';
 
-    var fileUploader = new FileUploader({
+    let fileUploader = new FileUploader({
         dataScope: '',
         isMultipleFiles: true
     });
@@ -33,113 +35,142 @@ define([
          * @private
          */
         _create: function () {
-            var self = this,
+            let self = this,
+                arrayFromObj = Array.from,
                 progressTmpl = mageTemplate('[data-template="uploader"]'),
-                isResizeEnabled = this.options.isResizeEnabled,
-                resizeConfiguration = {
-                    action: 'resizeImage',
-                    maxWidth: this.options.maxWidth,
-                    maxHeight: this.options.maxHeight
+                uploaderElement = '#fileUploader',
+                targetElement = this.element.find('.fileinput-button.form-buttons')[0],
+                uploadUrl = $(uploaderElement).attr('data-url'),
+                fileId = null,
+                allowedExt = ['jpeg', 'jpg', 'png', 'gif'],
+                allowedResize = false,
+                options = {
+                    proudlyDisplayPoweredByUppy: false,
+                    target: targetElement,
+                    hideUploadButton: true,
+                    hideRetryButton: true,
+                    hideCancelButton: true,
+                    inline: true,
+                    debug:true,
+                    showRemoveButtonAfterComplete: true,
+                    showProgressDetails: false,
+                    showSelectedFiles: false,
+                    hideProgressAfterFinish: true
                 };
 
-            if (!isResizeEnabled) {
-                resizeConfiguration = {
-                    action: 'resizeImage'
-                };
-            }
+            $(document).on('click', uploaderElement ,function () {
+                $(uploaderElement).closest('.fileinput-button.form-buttons')
+                    .find('.uppy-Dashboard-browse').trigger('click');
+            });
 
-            this.element.find('input[type=file]').fileupload({
-                dataType: 'json',
-                formData: {
-                    'form_key': window.FORM_KEY
-                },
-                dropZone: this.element.find('input[type=file]').closest('[role="dialog"]'),
-                sequentialUploads: true,
-                acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-                maxFileSize: this.options.maxFileSize,
+            const uppy = new Uppy.Uppy({
+                autoProceed: true,
 
-                /**
-                 * @param {Object} e
-                 * @param {Object} data
-                 */
-                add: function (e, data) {
-                    var fileSize,
+                onBeforeFileAdded: (currentFile) => {
+                    let fileSize,
                         tmpl;
 
-                    $.each(data.files, function (index, file) {
-                        fileSize = typeof file.size == 'undefined' ?
-                            $.mage.__('We could not detect a size.') :
-                            byteConvert(file.size);
+                    fileSize = typeof currentFile.size == 'undefined' ?
+                        $.mage.__('We could not detect a size.') :
+                        byteConvert(currentFile.size);
 
-                        data.fileId = Math.random().toString(33).substr(2, 18);
+                    fileId = Math.random().toString(33).substr(2, 18);
 
-                        tmpl = progressTmpl({
-                            data: {
-                                name: file.name,
-                                size: fileSize,
-                                id: data.fileId
-                            }
-                        });
-
-                        $(tmpl).appendTo(self.element);
+                    tmpl = progressTmpl({
+                        data: {
+                            name: currentFile.name,
+                            size: fileSize,
+                            id: fileId
+                        }
                     });
 
-                    $(this).fileupload('process', data).done(function () {
-                        data.submit();
-                    });
+                    // code to allow duplicate files from same folder
+                    const modifiedFile = {
+                        ...currentFile,
+                        id:  currentFile.id + '-' + fileId,
+                        tempFileId:  fileId
+                    };
+
+                    // check if resize allowed for file extension
+                    allowedResize = $.inArray(currentFile.extension, allowedExt) !== -1;
+
+                    $(tmpl).appendTo(self.element);
+                    return modifiedFile;
                 },
 
-                /**
-                 * @param {Object} e
-                 * @param {Object} data
-                 */
-                done: function (e, data) {
-                    if (data.result && !data.result.error) {
-                        self.element.trigger('addItem', data.result);
-                    } else {
-                        fileUploader.aggregateError(data.files[0].name, data.result.error);
+                meta: {
+                    'form_key': window.FORM_KEY,
+                    isAjax : true
+                }
+            });
+
+            // initialize Uppy upload
+            uppy.use(Uppy.Dashboard, options);
+
+            // Resize Image as per configuration
+            if (this.options.isResizeEnabled) {
+                uppy.use(Uppy.Compressor, {
+                    maxWidth: this.options.maxWidth,
+                    maxHeight: this.options.maxHeight,
+                    quality: 0.92,
+                    beforeDraw() {
+                        if (!allowedResize) {
+                            this.abort();
+                        }
                     }
+                });
+            }
 
-                    self.element.find('#' + data.fileId).remove();
+            // drop area for file upload
+            uppy.use(Uppy.DropTarget, {
+                target: targetElement,
+                onDragOver: () => {
+                    // override Array.from method of legacy-build.min.js file
+                    Array.from = null;
                 },
-
-                /**
-                 * @param {Object} e
-                 * @param {Object} data
-                 */
-                progress: function (e, data) {
-                    var progress = parseInt(data.loaded / data.total * 100, 10),
-                        progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
-
-                    self.element.find(progressSelector).css('width', progress + '%');
-                },
-
-                /**
-                 * @param {Object} e
-                 * @param {Object} data
-                 */
-                fail: function (e, data) {
-                    var progressSelector = '#' + data.fileId;
-
-                    self.element.find(progressSelector).removeClass('upload-progress').addClass('upload-failure')
-                        .delay(2000)
-                        .hide('highlight')
-                        .remove();
-                },
-
-                stop: fileUploader.uploaderConfig.stop
+                onDragLeave: () => {
+                    Array.from = arrayFromObj;
+                }
             });
 
-            this.element.find('input[type=file]').fileupload('option', {
-                processQueue: [{
-                    action: 'loadImage',
-                    fileTypes: /^image\/(gif|jpeg|png)$/
-                },
-                resizeConfiguration,
-                {
-                    action: 'saveImage'
-                }]
+            // upload files on server
+            uppy.use(Uppy.XHRUpload, {
+                endpoint: uploadUrl,
+                fieldName: 'image'
             });
+
+            uppy.on('upload-success', (file, response) => {
+                if (response.body && !response.body.error) {
+                    self.element.trigger('addItem', response.body);
+                } else {
+                    fileUploader.aggregateError(file.name, response.body.error);
+                }
+
+                self.element.find('#' + file.tempFileId).remove();
+            });
+
+            uppy.on('upload-progress', (file, progress) => {
+                let progressWidth = parseInt(progress.bytesUploaded / progress.bytesTotal * 100, 10),
+                    progressSelector = '#' + file.tempFileId + ' .progressbar-container .progressbar';
+
+                self.element.find(progressSelector).css('width', progressWidth + '%');
+            });
+
+            uppy.on('upload-error', (error, file) => {
+                let progressSelector = '#' + file.tempFileId;
+
+                self.element.find(progressSelector).removeClass('upload-progress').addClass('upload-failure')
+                    .delay(2000)
+                    .hide('highlight')
+                    .remove();
+            });
+
+            uppy.on('complete', () => {
+                fileUploader.uploaderConfig.stop();
+                $(window).trigger('reload.MediaGallery');
+                Array.from = arrayFromObj;
+            });
+
         }
     });
 

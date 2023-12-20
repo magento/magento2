@@ -12,6 +12,7 @@
 <?php
 /** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
 $jsonHelper = $block->getData('jsonHelper');
+$uploadUrl = $block->getUrl('catalog/product_gallery/upload');
 ?>
 <div data-bind="scope: '<?= /* @noEscape */  $block->getComponentName() ?>'" data-role="bulk-step">
     <h2 class="steps-wizard-title"><?= $block->escapeHtml(__('Step 3: Bulk Images, Price and Quantity')) ?></h2>
@@ -82,13 +83,7 @@ $jsonHelper = $block->getData('jsonHelper');
                         <div data-role="uploader" class="uploader">
                             <div class="image-browse">
                                 <span><?= $block->escapeHtml(__('Browse Files...')) ?></span>
-                                <input type="file"
-                                       id=""
-                                       name="image"
-                                       class="admin__control-file"
-                                       multiple="multiple"
-                                       data-url="<?= /* @noEscape */ $block->getUrl('catalog/product_gallery/upload')
-                                        ?>" />
+                                <span class="browse-file" data-url="<?= /* @noEscape */ $uploadUrl ?>"></span>
                             </div>
                         </div>
                         <div class="product-image-wrapper">
@@ -333,9 +328,7 @@ $jsonHelper = $block->getData('jsonHelper');
                                 <div data-role="uploader" class="uploader">
                                     <div class="image-browse">
                                         <span><?= $block->escapeHtml(__('Browse Files...')); ?></span>
-                                        <input type="file" name="image" multiple="multiple"
-                                               data-url="<?=
-                                               /* @noEscape */ $block->getUrl('catalog/product_gallery/upload') ?>" />
+                                        <span class="browse-file" data-url="<?= /* @noEscape */ $uploadUrl ?>"></span>
                                     </div>
                                 </div>
                                 <div class="product-image-wrapper">
@@ -497,7 +490,9 @@ $jsonHelper = $block->getData('jsonHelper');
                                                                        data-role="type-selector"
                                                                        type="checkbox"
                                                                 // @codingStandardsIgnoreLine
-                                                                value="<?= $block->escapeHtmlAttr($attribute->getAttributeCode()) ?>"
+                                                                value="<?=
+                                                                $block->escapeHtmlAttr($attribute->getAttributeCode())
+                                                                ?>"
                                                                 />
                                                                 <?= $block->escapeHtml($attribute->getFrontendLabel())?>
                                                             </label>

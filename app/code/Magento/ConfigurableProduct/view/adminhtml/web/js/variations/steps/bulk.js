@@ -3,6 +3,8 @@
  * See COPYING.txt for license details.
  */
 
+/* eslint-disable no-undef */
+
 /* global FORM_KEY, byteConvert */
 define([
     'uiComponent',
@@ -13,7 +15,7 @@ define([
     'mage/template',
     'Magento_Ui/js/modal/alert',
     'Magento_Catalog/js/product-gallery',
-    'jquery/file-uploader',
+    'jquery/uppy-core',
     'mage/translate',
     'Magento_ConfigurableProduct/js/variations/variations'
 ], function (Component, $, ko, _, Collapsible, mageTemplate, alert) {
@@ -368,8 +370,9 @@ define([
         bindGalleries: function () {
             $('[data-role=bulk-step] [data-role=gallery]').each(function (index, element) {
                 var gallery = $(element),
-                    uploadInput = $(gallery.find('[name=image]')),
-                    dropZone = $(gallery).find('.image-placeholder');
+                    uploadInput = $(gallery.find('.uploader'))[0],
+                    uploadUrl = $(gallery.find('.browse-file')).attr('data-url'),
+                    dropZone = $(gallery).find('.image-placeholder')[0];
 
                 if (!gallery.data('gallery-initialized')) {
                     gallery.mage('productGallery', {
@@ -378,99 +381,122 @@ define([
                         dialogContainerTmpl: '[data-role=img-dialog-container-tmpl]'
                     });
 
-                    uploadInput.fileupload({
-                        dataType: 'json',
-                        dropZone: dropZone,
-                        process: [{
-                            action: 'load',
-                            fileTypes: /^image\/(gif|jpeg|png)$/
-                        }, {
-                            action: 'resize',
-                            maxWidth: 1920,
-                            maxHeight: 1200
-                        }, {
-                            action: 'save'
-                        }],
-                        formData: {
-                            'form_key': FORM_KEY
-                        },
-                        sequentialUploads: true,
-                        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+                    // uppy implementation
+                    let targetElement = uploadInput,
+                        fileId = null,
+                        arrayFromObj = Array.from,
+                        options = {
+                            proudlyDisplayPoweredByUppy: false,
+                            target: targetElement,
+                            hideUploadButton: true,
+                            hideRetryButton: true,
+                            hideCancelButton: true,
+                            inline: true,
+                            debug:true,
+                            showRemoveButtonAfterComplete: true,
+                            showProgressDetails: false,
+                            showSelectedFiles: false,
+                            allowMultipleUploads: false,
+                            hideProgressAfterFinish: true
+                        };
 
-                        /**
-                         * @param {jQuery.Event} e
-                         * @param {Object} data
-                         */
-                        add: function (e, data) {
-                            var progressTmpl = mageTemplate('[data-template=uploader]'),
+                    gallery.find('.product-image-wrapper').on('click', function () {
+                        gallery.find('.uppy-Dashboard-browse').trigger('click');
+                    });
+
+                    const uppy = new Uppy.Uppy({
+                        autoProceed: true,
+
+                        onBeforeFileAdded: (currentFile) => {
+                            let progressTmpl = mageTemplate('[data-template=uploader]'),
                                 fileSize,
                                 tmpl;
 
-                            $.each(data.files, function (i, file) {
-                                fileSize = typeof file.size == 'undefined' ?
-                                    $.mage.__('We could not detect a size.') :
-                                    byteConvert(file.size);
+                            fileSize = typeof currentFile.size == 'undefined' ?
+                                $.mage.__('We could not detect a size.') :
+                                byteConvert(currentFile.size);
 
-                                data.fileId = Math.random().toString(33).substr(2, 18);
+                            fileId = Math.random().toString(33).substr(2, 18);
 
-                                tmpl = progressTmpl({
-                                    data: {
-                                        name: file.name,
-                                        size: fileSize,
-                                        id: data.fileId
-                                    }
-                                });
-
-                                $(tmpl).appendTo(gallery.find('[data-role=uploader]'));
+                            tmpl = progressTmpl({
+                                data: {
+                                    name: currentFile.name,
+                                    size: fileSize,
+                                    id: fileId
+                                }
                             });
 
-                            $(this).fileupload('process', data).done(function () {
-                                data.submit();
-                            });
+                            // code to allow duplicate files from same folder
+                            const modifiedFile = {
+                                ...currentFile,
+                                id:  currentFile.id + '-' + fileId,
+                                tempFileId:  fileId
+                            };
+
+                            $(tmpl).appendTo(gallery.find('[data-role=uploader]'));
+                            return modifiedFile;
                         },
 
-                        /**
-                         * @param {jQuery.Event} e
-                         * @param {Object} data
-                         */
-                        done: function (e, data) {
-                            if (data.result && !data.result.error) {
-                                gallery.trigger('addItem', data.result);
-                            } else {
-                                $('#' + data.fileId)
-                                    .delay(2000)
-                                    .hide('highlight');
-                                alert({
-                                    content: $.mage.__('We don\'t recognize or support this file extension type.')
-                                });
-                            }
-                            $('#' + data.fileId).remove();
-                        },
-
-                        /**
-                         * @param {jQuery.Event} e
-                         * @param {Object} data
-                         */
-                        progress: function (e, data) {
-                            var progress = parseInt(data.loaded / data.total * 100, 10),
-                                progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
-
-                            $(progressSelector).css('width', progress + '%');
-                        },
-
-                        /**
-                         * @param {jQuery.Event} e
-                         * @param {Object} data
-                         */
-                        fail: function (e, data) {
-                            var progressSelector = '#' + data.fileId;
-
-                            $(progressSelector).removeClass('upload-progress').addClass('upload-failure')
-                                .delay(2000)
-                                .hide('highlight')
-                                .remove();
+                        meta: {
+                            'form_key': FORM_KEY
                         }
                     });
+
+                    // initialize Uppy upload
+                    uppy.use(Uppy.Dashboard, options);
+
+                    // drop area for file upload
+                    uppy.use(Uppy.DropTarget, {
+                        target: dropZone,
+                        onDragOver: () => {
+                            // override Array.from method of legacy-build.min.js file
+                            Array.from = null;
+                        },
+                        onDragLeave: () => {
+                            Array.from = arrayFromObj;
+                        }
+                    });
+
+                    // upload files on server
+                    uppy.use(Uppy.XHRUpload, {
+                        endpoint: uploadUrl,
+                        fieldName: 'image'
+                    });
+
+                    uppy.on('upload-success', (file, response) => {
+                        if (response.body && !response.body.error) {
+                            gallery.trigger('addItem', response.body);
+                        } else {
+                            $('#' + file.tempFileId)
+                                .delay(2000)
+                                .hide('highlight');
+                            alert({
+                                content: $.mage.__('We don\'t recognize or support this file extension type.')
+                            });
+                        }
+                        $('#' + file.tempFileId).remove();
+                    });
+
+                    uppy.on('upload-progress', (file, progress) => {
+                        let progressWidth = parseInt(progress.bytesUploaded / progress.bytesTotal * 100, 10),
+                            progressSelector = '#' + file.tempFileId + ' .progressbar-container .progressbar';
+
+                        $(progressSelector).css('width', progressWidth + '%');
+                    });
+
+                    uppy.on('upload-error', (error, file) => {
+                        let progressSelector = '#' + file.tempFileId;
+
+                        $(progressSelector).removeClass('upload-progress').addClass('upload-failure')
+                            .delay(2000)
+                            .hide('highlight')
+                            .remove();
+                    });
+
+                    uppy.on('complete', () => {
+                        Array.from = arrayFromObj;
+                    });
+
                     gallery.data('gallery-initialized', 1);
                 }
             });

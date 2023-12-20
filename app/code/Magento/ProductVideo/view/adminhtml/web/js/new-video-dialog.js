@@ -615,21 +615,18 @@ define([
          * @private
          */
         _uploadFile: function (data, callback) {
-            var fu = this.element.find(this._videoPreviewInputSelector),
-                tmpInput = document.createElement('input'),
-                fileUploader = null;
+            let form = this.element.find(this._videoFormSelector).get(0),
+                formData = new FormData(form);
 
-            $(tmpInput).attr({
-                'name': fu.attr('name'),
-                'value': fu.val(),
-                'type': 'file',
-                'data-ui-ud': fu.attr('data-ui-ud')
-            }).css('display', 'none');
-            fu.parent().append(tmpInput);
-            fileUploader = $(tmpInput).fileupload();
-            fileUploader.fileupload('send', data).done(function (result, textStatus, jqXHR) {
-                tmpInput.remove();
-                callback.call(null, result, textStatus, jqXHR);
+            $.ajax({
+                type: 'post',
+                url: data.url,
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (result, textStatus, jqXHR) {
+                    callback.call(null, result, textStatus, jqXHR);
+                }
             });
         },
 
