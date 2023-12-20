@@ -163,7 +163,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param CompositeValidator|null $compositeValidator
+     * @param CompositeValidator $compositeValidator
      * @param CountryModelsCache|null $countryModelsCache
      * @param RegionModelsCache|null $regionModelsCache
      *
@@ -186,7 +186,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        ?CompositeValidator $compositeValidator = null,
+        CompositeValidator $compositeValidator = null,
         ?CountryModelsCache $countryModelsCache = null,
         ?RegionModelsCache $regionModelsCache = null,
     ) {
