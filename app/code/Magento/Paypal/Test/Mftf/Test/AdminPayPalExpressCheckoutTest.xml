@@ -36,7 +36,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <!-- Go to Storefront -->
+        <!-- Go to StoreFront -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
         <!-- Add product to cart -->
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
@@ -72,6 +72,6 @@
         <grabTextFrom selector="{{AdminOrderPaymentInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabTransactionID"/>
         <waitForText selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$15.00" stepKey="checkGrandTotal"/>
         <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
-        <waitForText selector="{{AdminOrderCommentsTabSection.orderComment}}" userInput="Authorized amount of $15.00. Transaction ID: &quot;{$grabTransactionID}&quot;" stepKey="seeOrderHistoryNotes"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderComment}}" userInput="Authorized amount of $15.00. Transaction ID: &quot;{$grabATransactionID}&quot;" stepKey="seeOrderHistoryNotes"/>
     </test>
 </tests>
