@@ -168,6 +168,7 @@
         <data key="tax_postcode">*</data>
         <data key="rate">10.0000</data>
     </entity>
+<<<<<<< HEAD
     <entity name="Product_Rate_NY" type="taxRate">
         <data key="code">Product Rate NY</data>
         <data key="tax_region">NY</data>
@@ -186,6 +187,8 @@
         <data key="tax_postcode">*</data>
         <data key="rate">3.0000</data>
     </entity>
+=======
+>>>>>>> B2B-3041
     <entity name="Shipping_Rate_CA" type="taxRate">
         <data key="code">Shipping Rate CA</data>
         <data key="tax_region">CA</data>
