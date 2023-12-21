@@ -25,6 +25,7 @@ use Magento\CatalogImportExport\Model\Import\Uploader;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
+use Magento\ConfigurableImportExport\Model\Import\Product\Type\Configurable;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Set;
@@ -1471,18 +1472,32 @@ class ProductTest extends AbstractImportTestCase
      */
     public function testParseAttributesWithoutWrappedValuesWillReturnsLowercasedAttributeCodes(): void
     {
-        $attributesData = 'PARAM1=value1,param2=value2';
+        $entityTypeModel = $this->createPartialMock(
+            Configurable::class,
+            ['retrieveAttributeFromCache']
+        );
+        $entityTypeModel->expects($this->exactly(2))->method('retrieveAttributeFromCache')->willReturn([
+            'type' => 'multiselect'
+        ]);
+        $importProduct = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['retrieveProductTypeByName'])
+            ->getMock();
+        $importProduct->expects($this->exactly(2))->method('retrieveProductTypeByName')->willReturn($entityTypeModel);
+
+        $attributesData = 'PARAM1=value1,param2=value2|value3';
         $preparedAttributes = $this->invokeMethod(
-            $this->importProduct,
+            $importProduct,
             'parseAttributesWithoutWrappedValues',
-            [$attributesData]
+            [$attributesData, 'configurable']
         );
 
         $this->assertArrayHasKey('param1', $preparedAttributes);
         $this->assertEquals('value1', $preparedAttributes['param1']);
 
         $this->assertArrayHasKey('param2', $preparedAttributes);
-        $this->assertEquals('value2', $preparedAttributes['param2']);
+        $this->assertEquals('value2', $preparedAttributes['param2'][0]);
+        $this->assertEquals('value3', $preparedAttributes['param2'][1]);
 
         $this->assertArrayNotHasKey('PARAM1', $preparedAttributes);
     }
@@ -1684,7 +1699,7 @@ class ProductTest extends AbstractImportTestCase
                 ],
                 'catalog_category_product',
                 [
-                   [2, 5],
+                    [2, 5],
                     [
                         [
                             'product_id' => 2,
@@ -2190,5 +2205,58 @@ class ProductTest extends AbstractImportTestCase
         $importProduct->method('getErrorAggregator')->willReturn($errorAggregator);
 
         return $importProduct;
+    }
+
+    /**
+     * @dataProvider valuesDataProvider
+     */
+    public function testParseMultiselectValues($value, $fieldSeparator, $valueSeparator)
+    {
+        $this->importProduct->setParameters(
+            [
+                Import::FIELD_FIELD_SEPARATOR => $fieldSeparator,
+                Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR => $valueSeparator
+            ]
+        );
+        $this->assertEquals(explode($valueSeparator, $value), $this->importProduct->parseMultiselectValues($value));
+    }
+
+    /**
+     * @return array
+     */
+    public function valuesDataProvider(): array
+    {
+        return [
+            'pipeWithCustomFieldSeparator' => [
+                'value' => 'L|C|D|T|H',
+                'fieldSeparator' => ';',
+                'valueSeparator' => '|'
+            ],
+            'commaWithCustomFieldSeparator' => [
+                'value' => 'L,C,D,T,H',
+                'fieldSeparator' => ';',
+                'valueSeparator' => ','
+            ],
+            'pipeWithDefaultFieldSeparator' => [
+                'value' => 'L|C|D|T|H',
+                'fieldSeparator' => ',',
+                'valueSeparator' => '|'
+            ],
+            'commaWithDefaultFieldSeparator' => [
+                'value' => 'L,C,D,T,H',
+                'fieldSeparator' => ',',
+                'valueSeparator' => ','
+            ],
+            'anonymousValueSeparatorWithDefaultFieldSeparator' => [
+                'value' => 'L+C+D+T+H',
+                'fieldSeparator' => ',',
+                'valueSeparator' => '+'
+            ],
+            'anonymousValueSeparatorWithDefaultFieldSeparatorAndSingleValue' => [
+                'value' => 'L',
+                'fieldSeparator' => ',',
+                'valueSeparator' => '*'
+            ]
+        ];
     }
 }
