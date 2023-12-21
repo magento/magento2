@@ -20,7 +20,6 @@ namespace Magento\SalesRule\Observer;
 
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\SalesRule\Model\Coupon\Quote\UpdateCouponUsages;
 
 /**
@@ -52,7 +51,7 @@ class CouponUsagesIncrementObserver implements ObserverInterface
         if (!$quote->getCouponCode() && $quote->dataHasChangedFor('coupon_code')) {
             throw new NoSuchEntityException(__("The coupon code isn't valid. Verify the code and try again."));
         }
-        ($observer->getOrder()) ? $this->updateCouponUsages->execute($quote, true)
+        ($observer->getOrder() || $observer->getOrders()) ? $this->updateCouponUsages->execute($quote, true)
             : $this->updateCouponUsages->execute($quote, false);
     }
 }

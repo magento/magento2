@@ -470,7 +470,6 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
         $this->checkoutSession->setLastRealOrderId($order->getIncrementId());
         $this->checkoutSession->setLastOrderStatus($order->getStatus());
 
-        $this->eventManager->dispatch('checkout_submit_all_after', ['order' => $order, 'quote' => $quote]);
         return $order->getId();
     }
 
@@ -498,7 +497,11 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
             return null;
         }
 
-        return $this->submitQuote($quote, $orderData);
+       $order = $this->submitQuote($quote, $orderData);
+        if (null != $order) {
+            $this->eventManager->dispatch('checkout_submit_all_after', ['order' => $order, 'quote' => $quote]);
+        }
+        return $order;
     }
 
     /**
