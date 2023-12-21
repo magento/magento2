@@ -67,14 +67,21 @@ class ClientResolverTest extends TestCase
         $clientOptionsMock = $this->getMockForAbstractClass(ClientOptionsInterface::class);
 
         $this->objectManager->expects($this->exactly(2))->method('create')
-            ->withConsecutive(
-                [$this->equalTo('engineFactoryClass')],
-                [$this->equalTo('engineOptionClass')]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $factoryMock,
-                $clientOptionsMock
-            );
+//            ->withConsecutive(
+//                [$this->equalTo('engineFactoryClass')],
+//                [$this->equalTo('engineOptionClass')]
+//            )
+//            ->willReturnOnConsecutiveCalls(
+//                $factoryMock,
+//                $clientOptionsMock
+//            );
+            ->willReturnCallback(function ($arg1) use ($factoryMock, $clientOptionsMock) {
+                if ($arg1 == 'engineFactoryClass') {
+                    return $factoryMock;
+                } elseif ($arg1 == 'engineOptionClass') {
+                    return $clientOptionsMock;
+                }
+            });
 
         $clientOptionsMock->expects($this->once())->method('prepareClientOptions')
             ->with([])
