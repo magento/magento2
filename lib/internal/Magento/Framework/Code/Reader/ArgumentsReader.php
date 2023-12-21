@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Code\Reader;
 
-use Laminas\Code\Reflection\DocBlock\Tag\ParamTag;
-use Laminas\Code\Reflection\DocBlockReflection;
 use Magento\Framework\GetParameterClassTrait;
 use Laminas\Code\Reflection\ParameterReflection;
 
@@ -319,11 +317,10 @@ class ArgumentsReader extends ParameterReflection
 
         $docBlock = $this->parameterReflection->getDeclaringFunction()->getDocBlock();
 
-        if (! $docBlock instanceof DocBlockReflection) {
+        if (! $docBlock instanceof \Laminas\Code\Reflection\DocBlockReflection) {
             return null;
         }
 
-        /** @var ParamTag[] $params */
         $params       = $docBlock->getTags('param');
         $paramTag     = $params[$this->parameterReflection->getPosition()] ?? null;
         $variableName = '$' . $this->parameterReflection->getName();
