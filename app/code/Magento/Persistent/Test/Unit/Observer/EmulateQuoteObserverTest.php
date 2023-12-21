@@ -28,6 +28,9 @@ use PHPUnit\Framework\TestCase;
  */
 class EmulateQuoteObserverTest extends TestCase
 {
+    public const EVENT_NAME = 'controller_action_predispatch';
+    public const OBSERVER_INSTANCE = 'Magento\Persistent\Observer\EmulateQuoteObserver';
+
     /**
      * @var EmulateQuoteObserver
      */
@@ -271,5 +274,26 @@ class EmulateQuoteObserverTest extends TestCase
         $this->checkoutSessionMock->expects($this->once())->method('hasQuote')->willReturn(true);
         $this->checkoutSessionMock->expects($this->once())->method('setCustomerData')->with($this->customerMock);
         $this->model->execute($this->observerMock);
+    }
+
+    /**
+     * Test observer is disabled as it may cause performance degradation for quotes with lots of sales rules
+     *
+     * @return void
+     */
+    public function testDisabled()
+    {
+        $eventsXml = simplexml_load_file(__DIR__ . '/../../../etc/frontend/events.xml');
+        $status = 'false';
+        foreach ($eventsXml->event as $event) {
+            if ($event->attributes()['name'] == self::EVENT_NAME) {
+                foreach ($event->observer as $observer) {
+                    if ((string)$observer->attributes()['instance'] == self::OBSERVER_INSTANCE) {
+                        $status = $observer->attributes()['disabled'];
+                    }
+                }
+            }
+        }
+        $this->assertTrue($status == 'true');
     }
 }
