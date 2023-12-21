@@ -9,6 +9,11 @@ namespace Magento\GraphQl\App;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\GraphQl\App\State\GraphQlStateDiff;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Tests the dispatch method in the GraphQl Controller class using a simple product query
@@ -65,19 +70,23 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @return void
      */
-    public function testAddSimpleProductToCart()
+    #[
+        DataFixture(GuestCartFixture::class, as: 'cart1'),
+        DataFixture(GuestCartFixture::class, as: 'cart2'),
+    ]
+    public function testAddSimpleProductToCart(): void
     {
-        $this->markTestSkipped('Fixing in ACPT-1552');
-        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
+        $fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
+        $cartId1 = $fixtures->get('cart1')->getId();
+        $cartId2 = $fixtures->get('cart2')->getId();
         $query = $this->getAddProductToCartQuery();
         $this->graphQlStateDiff->testState(
             $query,
-            ['cartId' => $cartId, 'qty' => 1, 'sku' => 'simple_product'],
-            [],
+            ['cartId' => $cartId1, 'qty' => 1, 'sku' => 'simple_product'],
+            ['cartId' => $cartId2, 'qty' => 1, 'sku' => 'simple_product'],
             [],
             'addSimpleProductsToCart',
             '"data":{"addSimpleProductsToCart":',
@@ -109,19 +118,23 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/virtual_product.php
      * @return void
      */
+    #[
+        DataFixture(GuestCartFixture::class, as: 'cart1'),
+        DataFixture(GuestCartFixture::class, as: 'cart2'),
+    ]
     public function testAddVirtualProductToCart()
     {
-        $this->markTestSkipped('Fixing in ACPT-1552');
-        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
+        $fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
+        $cartId1 = $fixtures->get('cart1')->getId();
+        $cartId2 = $fixtures->get('cart2')->getId();
         $query = $this->getAddVirtualProductToCartQuery();
         $this->graphQlStateDiff->testState(
             $query,
-            ['cartId' => $cartId, 'quantity' => 1, 'sku' => 'virtual_product'],
-            [],
+            ['cartId' => $cartId1, 'quantity' => 1, 'sku' => 'virtual_product'],
+            ['cartId' => $cartId2, 'quantity' => 1, 'sku' => 'virtual_product'],
             [],
             'addVirtualProductsToCart',
             '"data":{"addVirtualProductsToCart":',
@@ -130,19 +143,23 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoDataFixture Magento/Bundle/_files/product.php
      * @return void
      */
+    #[
+        DataFixture(GuestCartFixture::class, as: 'cart1'),
+        DataFixture(GuestCartFixture::class, as: 'cart2'),
+    ]
     public function testAddBundleProductToCart()
     {
-        $this->markTestSkipped('Fixing in ACPT-1552');
-        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
-        $query = $this->getAddBundleProductToCartQuery($cartId, 'bundle-product');
+        $fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
+        $cartId1 = $fixtures->get('cart1')->getId();
+        $cartId2 = $fixtures->get('cart2')->getId();
+        $query = $this->getAddBundleProductToCartQuery('bundle-product');
         $this->graphQlStateDiff->testState(
             $query,
-            [],
-            [],
+            ['cartId' => $cartId1],
+            ['cartId' => $cartId2],
             [],
             'addBundleProductsToCart',
             '"data":{"addBundleProductsToCart":',
@@ -151,19 +168,23 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @return void
      */
+    #[
+        DataFixture(GuestCartFixture::class, as: 'cart1'),
+        DataFixture(GuestCartFixture::class, as: 'cart2'),
+    ]
     public function testAddConfigurableProductToCart(): void
     {
-        $this->markTestSkipped('Fixing in ACPT-1552');
-        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
+        $fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
+        $cartId1 = $fixtures->get('cart1')->getId();
+        $cartId2 = $fixtures->get('cart2')->getId();
         $query = $this->getAddConfigurableProductToCartQuery();
         $this->graphQlStateDiff->testState(
             $query,
-            ['cartId' => $cartId, 'quantity' => 2, 'parentSku' => 'configurable', 'childSku' => 'simple_20'],
-            [],
+            ['cartId' => $cartId1, 'quantity' => 2, 'parentSku' => 'configurable', 'childSku' => 'simple_20'],
+            ['cartId' => $cartId2, 'quantity' => 2, 'parentSku' => 'configurable', 'childSku' => 'simple_20'],
             [],
             'addConfigurableProductsToCart',
             '"data":{"addConfigurableProductsToCart":',
@@ -172,22 +193,26 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoDataFixture Magento/Downloadable/_files/product_downloadable_with_purchased_separately_links.php
      * @return void
      */
+    #[
+        DataFixture(GuestCartFixture::class, as: 'cart1'),
+        DataFixture(GuestCartFixture::class, as: 'cart2'),
+    ]
     public function testAddDownloadableProductToCart(): void
     {
-        $this->markTestSkipped('Fixing in ACPT-1552');
-        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
+        $fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
+        $cartId1 = $fixtures->get('cart1')->getId();
+        $cartId2 = $fixtures->get('cart2')->getId();
         $sku = 'downloadable-product-with-purchased-separately-links';
         $links = $this->getProductsLinks($sku);
         $linkId = key($links);
         $query = $this->getAddDownloadableProductToCartQuery();
         $this->graphQlStateDiff->testState(
             $query,
-            ['cartId' => $cartId, 'qty' => 1, 'sku' => $sku, 'linkId' => $linkId],
-            [],
+            ['cartId' => $cartId1, 'qty' => 1, 'sku' => $sku, 'linkId' => $linkId],
+            ['cartId' => $cartId2, 'qty' => 1, 'sku' => $sku, 'linkId' => $linkId],
             [],
             'addDownloadableProductsToCart',
             '"data":{"addDownloadableProductsToCart":',
@@ -203,7 +228,6 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetShippingAddressOnCart(): void
     {
-        $this->markTestSkipped('Fix this later');
         $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $query = $this->getShippingAddressQuery();
         $this->graphQlStateDiff->testState(
@@ -513,7 +537,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
             QUERY;
     }
 
-    private function getAddBundleProductToCartQuery(string $cartId, string $sku)
+    private function getAddBundleProductToCartQuery(string $sku)
     {
         $productRepository = $this->graphQlStateDiff->getTestObjectManager()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($sku);
@@ -528,9 +552,9 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
         $selectionId = $selection->getSelectionId();
 
         return <<<QUERY
-            mutation {
+            mutation(\$cartId: String!) {
               addBundleProductsToCart(input:{
-                cart_id:"{$cartId}"
+                cart_id:\$cartId
                 cart_items:[
                   {
                     data:{
