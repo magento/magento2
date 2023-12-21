@@ -67,6 +67,7 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
         }
         $currencyCode = $cartItem->getQuote()->getQuoteCurrencyCode();
 
+        /** calculate bundle product discount */
         if ($cartItem->getProductType() == 'bundle') {
             $discountValues = $this->getDiscountValues($cartItem, $currencyCode);
             $discountAmount = 0;
