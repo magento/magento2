@@ -22,10 +22,10 @@
         </arguments>
     </type>
 
-    <type name="Magento\Elasticsearch\ElasticAdapter\Model\Adapter\BatchDataMapper\CategoryFieldsProviderProxy">
+    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper\CategoryFieldsProviderProxy">
         <arguments>
             <argument name="categoryFieldsProviders" xsi:type="array">
-                <item name="elasticsearch7" xsi:type="object">Magento\Elasticsearch\ElasticAdapter\Model\Adapter\BatchDataMapper\CategoryFieldsProvider</item>
+                <item name="elasticsearch7" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper\CategoryFieldsProvider</item>
             </argument>
         </arguments>
     </type>

@@ -122,14 +122,14 @@
     <type name="Magento\Elasticsearch\Model\Adapter\FieldMapper\FieldMapperResolver">
         <arguments>
             <argument name="fieldMappers" xsi:type="array">
-                <item name="product" xsi:type="string">Magento\Elasticsearch\ElasticAdapter\Model\Adapter\FieldMapper\ProductFieldMapperProxy</item>
+                <item name="product" xsi:type="string">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapperProxy</item>
             </argument>
         </arguments>
     </type>
     <virtualType name="additionalFieldsProviderForElasticsearch" type="Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProvider">
         <arguments>
             <argument name="fieldsProviders" xsi:type="array">
-                <item name="categories" xsi:type="object">Magento\Elasticsearch\ElasticAdapter\Model\Adapter\BatchDataMapper\CategoryFieldsProviderProxy</item>
+                <item name="categories" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper\CategoryFieldsProviderProxy</item>
                 <item name="prices" xsi:type="object">Magento\Elasticsearch\Model\Adapter\BatchDataMapper\PriceFieldsProvider</item>
             </argument>
         </arguments>
@@ -166,7 +166,7 @@
     </type>
     <type name="Magento\Elasticsearch\SearchAdapter\ConnectionManager">
         <arguments>
-            <argument name="clientFactory" xsi:type="object">Magento\Elasticsearch\ElasticAdapter\Model\Client\ClientFactoryProxy</argument>
+            <argument name="clientFactory" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Client\ClientFactoryProxy</argument>
             <argument name="clientConfig" xsi:type="object">Magento\Elasticsearch\Model\Config</argument>
         </arguments>
     </type>
@@ -283,7 +283,7 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="elasticsearchFieldProvider" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\CompositeFieldProvider">
+    <virtualType name="elasticsearch5FieldProvider" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\CompositeFieldProvider">
         <arguments>
             <argument name="providers" xsi:type="array">
                 <item name="static" xsi:type="object">elasticsearchStaticFieldProvider</item>
