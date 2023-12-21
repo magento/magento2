@@ -118,6 +118,7 @@
             <deleteData createDataKey="createProduct20" stepKey="deleteProduct20"/>
             <deleteData createDataKey="createProduct21" stepKey="deleteProduct21"/>
 
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="logout"/>
         </after>

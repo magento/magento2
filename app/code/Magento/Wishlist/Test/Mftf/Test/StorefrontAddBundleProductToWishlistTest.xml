@@ -44,10 +44,13 @@
                 <requiredEntity createDataKey="simpleProduct2"/>
             </createData>
 
-            <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete data -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>

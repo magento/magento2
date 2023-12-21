@@ -35,6 +35,7 @@
             <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="Simple_US_Customer.email"/>
             </actionGroup>

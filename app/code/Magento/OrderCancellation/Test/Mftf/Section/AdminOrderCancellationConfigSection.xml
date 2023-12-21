@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminOrderCancellationConfigSection">
+        <element name="valueForSalesCancellation" type="select" selector="#sales_cancellation_enabled"/>
+        <element name="systemValueForSalesCancellation" type="checkbox" selector="#sales_cancellation_enabled_inherit"/>
+        <element name="salesCancellationHead" type="select" selector="#sales_cancellation-head"/>
+        <element name="systemValueForSalesCancellationReasons" type="checkbox" selector="#sales_cancellation_reasons_inherit"/>
+        <element name="deleteReasonRow" type="button" selector="#sales_cancellation_reasons #item{{row}} td.col-actions button.action-delete" parameterized="true"/>
+        <element name="deleteFirstReason" type="button" selector="#sales_cancellation_reasons tbody tr:first-child td.col-actions button.action-delete" />
+        <element name="editReasonRow" type="input" selector="#sales_cancellation_reasons #item{{row}} input" parameterized="true"/>
+        <element name="addReason" type="button" selector="#sales_cancellation_reasons td.col-actions-add button.action-add" />
+        <element name="editFirstReason" type="input" selector="#sales_cancellation_reasons tbody tr:first-child input" />
+        <element name="editLastReason" type="input" selector="#sales_cancellation_reasons tbody tr:last-child input" />
+    </section>
+</sections>

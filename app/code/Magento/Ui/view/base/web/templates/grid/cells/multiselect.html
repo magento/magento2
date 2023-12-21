@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
+<!-- ko if: $row() -->
 <label class="data-grid-checkbox-cell-inner">
     <input class="admin__control-checkbox" type="checkbox" data-action="select-row"
         data-bind="
@@ -12,6 +13,7 @@
             checkedValue: $row()[$col.indexField],
             attr: {
                 id: index + 'check' + $row()[$col.indexField]
-            }"/>
+            }">
     <label attr="for: index + 'check' + $row()[$col.indexField]"></label>
 </label>
+<!-- /ko -->

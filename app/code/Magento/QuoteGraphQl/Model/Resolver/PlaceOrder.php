@@ -7,9 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -17,7 +18,6 @@ use Magento\GraphQl\Helper\Error\AggregateExceptionMessageFormatter;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForCheckout;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\QuoteGraphQl\Model\Cart\PlaceOrder as PlaceOrderModel;
-use Magento\QuoteGraphQl\Model\Cart\PlaceOrderMutexInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
@@ -46,29 +46,21 @@ class PlaceOrder implements ResolverInterface
     private $errorMessageFormatter;
 
     /**
-     * @var PlaceOrderMutexInterface
-     */
-    private $placeOrderMutex;
-
-    /**
      * @param GetCartForCheckout $getCartForCheckout
      * @param PlaceOrderModel $placeOrder
      * @param OrderRepositoryInterface $orderRepository
      * @param AggregateExceptionMessageFormatter $errorMessageFormatter
-     * @param PlaceOrderMutexInterface|null $placeOrderMutex
      */
     public function __construct(
         GetCartForCheckout $getCartForCheckout,
         PlaceOrderModel $placeOrder,
         OrderRepositoryInterface $orderRepository,
-        AggregateExceptionMessageFormatter $errorMessageFormatter,
-        ?PlaceOrderMutexInterface $placeOrderMutex = null
+        AggregateExceptionMessageFormatter $errorMessageFormatter
     ) {
         $this->getCartForCheckout = $getCartForCheckout;
         $this->placeOrder = $placeOrder;
         $this->orderRepository = $orderRepository;
         $this->errorMessageFormatter = $errorMessageFormatter;
-        $this->placeOrderMutex = $placeOrderMutex ?: ObjectManager::getInstance()->get(PlaceOrderMutexInterface::class);
     }
 
     /**
@@ -80,25 +72,6 @@ class PlaceOrder implements ResolverInterface
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
 
-        return $this->placeOrderMutex->execute(
-            $args['input']['cart_id'],
-            \Closure::fromCallable([$this, 'run']),
-            [$field, $context, $info, $args]
-        );
-    }
-
-    /**
-     * Run the resolver.
-     *
-     * @param Field $field
-     * @param ContextInterface $context
-     * @param ResolveInfo $info
-     * @param array|null $args
-     * @return array[]
-     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
-     */
-    private function run(Field $field, ContextInterface $context, ResolveInfo $info, ?array $args): array
-    {
         $maskedCartId = $args['input']['cart_id'];
         $userId = (int)$context->getUserId();
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
@@ -107,6 +80,10 @@ class PlaceOrder implements ResolverInterface
             $cart = $this->getCartForCheckout->execute($maskedCartId, $userId, $storeId);
             $orderId = $this->placeOrder->execute($cart, $maskedCartId, $userId);
             $order = $this->orderRepository->get($orderId);
+        } catch (AuthorizationException $exception) {
+            throw new GraphQlAuthorizationException(
+                __($exception->getMessage())
+            );
         } catch (LocalizedException $e) {
             throw $this->errorMessageFormatter->getFormatted(
                 $e,

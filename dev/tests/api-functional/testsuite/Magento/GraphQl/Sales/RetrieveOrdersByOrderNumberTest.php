@@ -28,6 +28,8 @@ use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 use Magento\Quote\Test\Fixture\CustomerCart;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\Tax\Model\Config as TaxConfig;
+use Magento\TestFramework\Fixture\Config;
 
 /**
  * Class RetrieveOrdersTest
@@ -107,6 +109,9 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
         $this->assertEquals($expectedOrderTotal, $actualOrderTotalFromResponse, 'Totals do not match');
     }
 
+    #[
+        Config(TaxConfig::XML_PATH_DISPLAY_SALES_PRICE, TaxConfig::DISPLAY_TYPE_INCLUDING_TAX),
+    ]
     /**
      *  Verify the customer order with tax, discount with shipping tax class set for calculation setting
      *
@@ -168,6 +173,8 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
             ]
         ];
         $this->assertResponseFields($customerOrderResponse[0]["payment_methods"], $paymentMethodAssertionMap);
+        $this->assertEquals(10.75, $customerOrderResponse[0]['items'][0]['product_sale_price']['value']);
+        $this->assertEquals(7.5, $customerOrderResponse[0]['total']['taxes'][0]['rate']);
         // Asserting discounts on order item level
         $this->assertEquals(4, $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['value']);
         $this->assertEquals('USD', $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']);
@@ -1393,7 +1400,13 @@ QUERY;
            billing_address {
            ... address
            }
-           items{product_name product_sku quantity_ordered discounts {amount{value currency} label}}
+           items{
+             product_name
+             product_sku
+             quantity_ordered
+             product_sale_price {value}
+             discounts {amount{value currency} label}
+           }
            total {
              base_grand_total{value currency}
              grand_total{value currency}

@@ -421,7 +421,13 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
                     $baseDiscountAmount = $quoteAmount;
                     break;
             }
-
+            if ($address->getShippingDiscountAmount() + $discountAmount <= $shippingAmount) {
+                $data = [
+                    'amount' => $discountAmount,
+                    'base_amount' => $baseDiscountAmount
+                ];
+                $this->rulesApplier->addShippingDiscountDescription($address, $rule, $data);
+            }
             $discountAmount = min($address->getShippingDiscountAmount() + $discountAmount, $shippingAmount);
             $baseDiscountAmount = min(
                 $address->getBaseShippingDiscountAmount() + $baseDiscountAmount,
@@ -440,7 +446,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
 
         $address->setAppliedRuleIds($this->validatorUtility->mergeIds($address->getAppliedRuleIds(), $appliedRuleIds));
         $quote->setAppliedRuleIds($this->validatorUtility->mergeIds($quote->getAppliedRuleIds(), $appliedRuleIds));
-
         return $this;
     }
 
@@ -472,11 +477,9 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
             $ruleTotalBaseItemsDiscountAmount = 0;
             $validItemsCount = 0;
 
+            /** @var Quote\Item $item */
             foreach ($items as $item) {
-                if (!$this->isValidItemForRule($item, $rule)
-                    || ($item->getChildren() && $item->isChildrenCalculated())
-                    || $item->getNoDiscount()
-                ) {
+                if (!$this->isValidItemForRule($item, $rule)) {
                     continue;
                 }
                 $qty = $this->validatorUtility->getItemQty($item, $rule);
@@ -508,6 +511,13 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
      */
     private function isValidItemForRule(AbstractItem $item, Rule $rule)
     {
+        if ($item->getParentItem() && $item->getParentItem()->getProductType() === 'configurable'
+            || (($item->getHasChildren() || $item->getChildren()) && $item->isChildrenCalculated())
+            || $item->getNoDiscount()
+        ) {
+            return false;
+        }
+
         if (!$rule->getActions()->validate($item)) {
             return false;
         }

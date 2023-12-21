@@ -553,7 +553,16 @@ abstract class AbstractEntity extends AbstractResource implements
      */
     public function loadAllAttributes($object = null)
     {
-        return $this->attributeLoader->loadAllAttributes($this, $object);
+        $result = $this->attributeLoader->loadAllAttributes($this, $object);
+        if ($object instanceof DataObject && $object->getAttributeSetId()) {
+            $suffix = $this->getAttributesCacheSuffix($object);
+            $this->_attrSetEntity->addSetInfo(
+                $this->getEntityType(),
+                $this->getAttributesByScope($suffix),
+                $object->getAttributeSetId()
+            );
+        }
+        return $result;
     }
 
     /**
