@@ -24,6 +24,8 @@ use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Customer\Model\Address\AbstractAddress\RegionModelsCache;
+use Magento\Customer\Model\Address\AbstractAddress\CountryModelsCache;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -109,6 +111,8 @@ class AbstractAddressTest extends TestCase
                 'resource' => $this->resourceMock,
                 'resourceCollection' => $this->resourceCollectionMock,
                 'compositeValidator' => $this->compositeValidatorMock,
+                'countryModelsCache' => new CountryModelsCache,
+                'regionModelsCache' => new RegionModelsCache,
             ]
         );
     }

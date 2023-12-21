@@ -482,7 +482,6 @@ abstract class AbstractModel extends DataObject
                 new \Magento\Framework\Phrase('The resource isn\'t set.')
             );
         }
-
         return $this->_resource ?: \Magento\Framework\App\ObjectManager::getInstance()->get($this->_resourceName);
     }
 
