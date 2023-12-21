@@ -22,8 +22,11 @@
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="clearIndex">
+           <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
                 <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
             </actionGroup>
             <!-- Create category A without products -->
             <createData entity="_defaultCategory" stepKey="createCategoryA"/>
