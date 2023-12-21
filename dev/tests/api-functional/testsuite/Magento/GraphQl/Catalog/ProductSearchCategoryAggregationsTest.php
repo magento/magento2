@@ -267,7 +267,7 @@ QUERY;
      * @return array
      * @throws \Exception
      */
-    private function  aggregationWithDisplayCategorySetting(): array
+    private function aggregationWithDisplayCategorySetting(): array
     {
         $query = $this->getGraphQlQueryProductSearch();
         $result = $this->graphQlQuery($query);
