@@ -846,8 +846,8 @@ class ProductOtherTest extends ProductTestBase
             CsvFileFixture::class,
             [
                 'rows' => [
-                    ['sku', 'store_view_code', 'additional_attributes'],
-                    ['$product.sku$', 'default', 'datetime_attr=10/9/23, 1:15 PM,date_attr=12/11/23'],
+                    ['sku', 'store_view_code', 'product_type', 'additional_attributes'],
+                    ['$product.sku$', 'default', 'simple', 'datetime_attr=10/9/23, 1:15 PM,date_attr=12/11/23'],
                 ]
             ],
             'file'
