@@ -9,9 +9,7 @@
     <type name="Magento\Framework\App\Cache\Tag\Strategy\Factory">
         <arguments>
             <argument>
-                <item name="Magento\Newsletter\Model\Subscriber" xsi:type="object">
-                    Magento\NewsletterGraphQl\Model\Resolver\Cache\Subscriber\TagsStrategy
-                </item>
+                <item name="Magento\Newsletter\Model\Subscriber" xsi:type="object">Magento\NewsletterGraphQl\Model\Resolver\Cache\Subscriber\TagsStrategy</item>
             </argument>
         </arguments>
     </type>
