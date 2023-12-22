@@ -96,7 +96,7 @@ class ObjectManager
             ->disableOriginalClone()
             ->disableArgumentCloning()
             ->disallowMockingUnknownTypes()
-            ->setMethods(['getIdFieldName', '__sleep', '__wakeup'])
+            ->onlyMethods(['getIdFieldName', '__sleep', '__wakeup'])
             ->getMock();
         $resourceMock->expects(
             $this->_testObject->any()
@@ -194,7 +194,7 @@ class ObjectManager
                 ->disableOriginalClone()
                 ->disableArgumentCloning()
                 ->disallowMockingUnknownTypes()
-                ->setMethods(['populateWithArray', 'populate', 'create'])
+                ->addMethods(['populateWithArray', 'populate', 'create'])
                 ->getMock();
 
             $objectFactory->expects($this->_testObject->any())
