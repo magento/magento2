@@ -16,6 +16,7 @@ use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethodFixture;
 use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Framework\Registry;
+use Magento\Indexer\Test\Fixture\Indexer;
 use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 use Magento\Quote\Test\Fixture\CustomerCart;
 use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
@@ -23,6 +24,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\Sales\Test\Fixture\Invoice as InvoiceFixture;
 use Magento\Sales\Test\Fixture\InvoiceComment as InvoiceCommentFixture ;
+use Magento\Store\Test\Fixture\Store;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -425,9 +427,11 @@ QUERY;
     }
 
     #[
+        DataFixture(Store::class),
         DataFixture(Customer::class, ['email' => 'customer@search.example.com'], as: 'customer'),
         DataFixture(ProductFixture::class, as: 'product'),
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'cart'),
+        DataFixture(Indexer::class, as: 'indexer'),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
         DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
         DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),

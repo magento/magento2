@@ -8,10 +8,12 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote;
 
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Indexer\Test\Fixture\Indexer;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
+use Magento\Store\Test\Fixture\Store;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\Store\Test\Fixture\Website as WebsiteFixture;
 use Magento\TestFramework\Fixture\DataFixture;
@@ -297,10 +299,12 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
     }
 
     #[
+        DataFixture(Store::class),
         DataFixture(ProductFixture::class, as: 'p1'),
         DataFixture(ProductFixture::class, as: 'p2'),
         DataFixture(ProductFixture::class, as: 'p3'),
         DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(Indexer::class, as: 'indexer'),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p1.id$', 'qty' => 1]),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p2.id$', 'qty' => 1]),
     ]
