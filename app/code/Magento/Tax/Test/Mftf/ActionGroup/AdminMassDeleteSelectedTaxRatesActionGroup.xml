@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminMassDeleteSelectedTaxRatesActionGroup">
+        <annotations>
+            <description>Delete selected tax rates in the Tax Rate Grid</description>
+        </annotations>
+        <arguments>
+            <argument name="deleteCount" type="string" />
+        </arguments>
+
+        <selectOption userInput="Delete items" selector="{{AdminTaxRateGridSection.massActionSelect}}" stepKey="selectDeleteOption"/>
+        <waitForElement selector="{{AdminTaxRateGridSection.massActionSubmitButton}}" stepKey="waitForSubmit"/>
+        <click selector="{{AdminTaxRateGridSection.massActionSubmitButton}}" stepKey="clickSubmit"/>
+        <waitForElement selector="{{ModalConfirmationSection.OkButton}}" stepKey="waitForPopup"/>
+        <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="confirmDelete" />
+        <waitForPageLoad stepKey="waitWhilePageReload" />
+        <grabTextFrom selector="{{AdminMessagesSection.successMessage}}" stepKey="successMessage"/>
+        <assertEquals stepKey="checkSuccessMessage">
+            <expectedResult type="string">A total of {{deleteCount}} record(s) have been deleted.</expectedResult>
+            <actualResult type="variable">successMessage</actualResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>
