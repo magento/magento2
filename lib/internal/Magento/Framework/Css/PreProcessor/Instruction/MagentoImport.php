@@ -138,21 +138,26 @@ class MagentoImport implements PreProcessorInterface, ResetAfterRequestInterface
             /** @var $importFile \Magento\Framework\View\File */
             foreach ($importFiles as $importFile) {
                 $moduleName = $importFile->getModule();
+                $referenceString = $isReference ? '(reference) ' : '';
 
                 if (!$deployOnlyEnabled) {
-                    $referenceString = $isReference ? '(reference) ' : '';
                     $importsContent .= $moduleName
                         ? "@import $referenceString'{$moduleName}::{$resolvedPath}';\n"
                         : "@import $referenceString'{$matchedFileId}';\n";
                 }
 
                 if ($deployOnlyEnabled) {
-                    if ($moduleName && !$this->moduleManager->isEnabled($moduleName)) {
+                    if (($moduleName && !$this->moduleManager->isEnabled($moduleName)) ||
+                        "" === ($matchedFileId) ||
+                        null === ($matchedFileId)) {
                         continue;
                     }
 
+                    if (!$moduleName && !empty($matchedFileId)) {
+                        $importsContent .= "@import $referenceString'{$matchedFileId}';\n";
+                    }
+
                     if ($moduleName && $this->moduleManager->isEnabled($moduleName)) {
-                        $referenceString = $isReference ? '(reference) ' : '';
                         $importsContent .= $moduleName
                             ? "@import $referenceString'{$moduleName}::{$resolvedPath}';\n"
                             : "@import $referenceString'{$matchedFileId}';\n";
