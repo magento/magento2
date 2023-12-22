@@ -110,6 +110,15 @@ class Discount extends AbstractTotal
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->setCode(self::COLLECTOR_TYPE_CODE);
+    }
+
+    /**
      * Collect address discount amount
      *
      * @param Quote $quote
