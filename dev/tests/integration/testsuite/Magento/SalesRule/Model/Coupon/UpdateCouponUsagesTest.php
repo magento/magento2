@@ -83,6 +83,11 @@ class UpdateCouponUsagesTest extends TestCase
      */
     private $coupon;
 
+    /**
+     * @var Usage
+     */
+    private $usage;
+
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
