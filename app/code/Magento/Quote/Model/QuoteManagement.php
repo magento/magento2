@@ -497,7 +497,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
             return null;
         }
 
-       $order = $this->submitQuote($quote, $orderData);
+        $order = $this->submitQuote($quote, $orderData);
         if (null != $order) {
             $this->eventManager->dispatch('checkout_submit_all_after', ['order' => $order, 'quote' => $quote]);
         }
