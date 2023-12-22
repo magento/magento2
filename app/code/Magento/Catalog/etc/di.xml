@@ -1351,4 +1351,11 @@
             <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\State\ReloadProcessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="Magento_Catalog::AttributeRepository" xsi:type="object">Magento\Catalog\Model\Category\AttributeRepository</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
