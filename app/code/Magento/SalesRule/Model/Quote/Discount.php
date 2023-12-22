@@ -149,6 +149,9 @@ class Discount extends AbstractTotal
         }
         $items = [];
         foreach ($quote->getAllAddresses() as $quoteAddress) {
+            if ($quote->getIsMultiShipping() && $quoteAddress->getId() !== $address->getId()) {
+                continue;
+            }
             foreach ($quoteAddress->getAllItems() as $item) {
                 $items[] = $item;
             }
@@ -193,9 +196,6 @@ class Discount extends AbstractTotal
         foreach ($rules as $rule) {
             /** @var Item $item */
             foreach ($itemsToApplyRules as $key => $item) {
-                if ($quote->getIsMultiShipping() && $item->getAddress()->getId() !== $address->getId()) {
-                    continue;
-                }
                 if ($item->getNoDiscount() || !$this->calculator->canApplyDiscount($item) || $item->getParentItem()) {
                     continue;
                 }
