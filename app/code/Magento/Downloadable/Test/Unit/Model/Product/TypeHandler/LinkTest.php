@@ -229,22 +229,18 @@ class LinkTest extends TestCase
     {
         $link = $this->getMockBuilder(\Magento\Downloadable\Model\Link::class)
             ->disableOriginalConstructor()
+            ->addMethods(['setProductId','setStoreId','setWebsiteId','setProductWebsiteIds','getIsUnlimited'])
             ->onlyMethods(
                 [
                     'setData',
                     'setLinkType',
-                    'setProductId',
-                    'setStoreId',
-                    'setWebsiteId',
-                    'setProductWebsiteIds',
                     'setPrice',
                     'setNumberOfDownloads',
                     'setSampleUrl',
                     'setSampleType',
                     'setLinkFile',
                     'setSampleFile',
-                    'save',
-                    'getIsUnlimited'
+                    'save'
                 ]
             )
             ->getMock();
@@ -287,14 +283,18 @@ class LinkTest extends TestCase
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
+            ->addMethods(
+                [
+                    'getLinksPurchasedSeparately',
+                    'setIsCustomOptionChanged'
+                ]
+            )
             ->onlyMethods(
                 [
                     'getId',
                     'getStoreId',
                     'getStore',
                     'getWebsiteIds',
-                    'getLinksPurchasedSeparately',
-                    'setIsCustomOptionChanged',
                     'getData'
                 ]
             )

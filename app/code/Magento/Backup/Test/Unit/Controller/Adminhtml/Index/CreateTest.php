@@ -116,7 +116,8 @@ class CreateTest extends TestCase
             ->getMock();
         $this->backupModelMock = $this->getMockBuilder(Backup::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setBackupExtension', 'setTime', 'setBackupsDir', 'setName', 'create'])
+            ->addMethods(['setBackupExtension', 'setBackupsDir', 'create'])
+            ->onlyMethods(['setTime', 'setName'])
             ->getMock();
         $this->dataBackendHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()

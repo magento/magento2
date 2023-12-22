@@ -88,7 +88,8 @@ class AjaxTest extends TestCase
         $product->expects($this->once())->method('getId')->willReturn(1);
 
         $optionsBlock = $this->getMockBuilder(Option::class)
-            ->onlyMethods(['setIgnoreCaching', 'setProduct', 'getOptionValues'])
+            ->addMethods(['setIgnoreCaching'])
+            ->onlyMethods(['setProduct', 'getOptionValues'])
             ->disableOriginalConstructor()
             ->getMock();
         $optionsBlock->expects($this->once())->method('setIgnoreCaching')->with(true)->willReturnSelf();

@@ -38,7 +38,7 @@ class CleanMediaTest extends TestCase
         $helper = new ObjectManager($this);
 
         $session = $this->getMockBuilder(Session::class)
-            ->onlyMethods(['setIsUrlNotice'])
+            ->addMethods(['setIsUrlNotice'])
             ->setConstructorArgs($helper->getConstructArguments(Session::class))
             ->getMock();
 
@@ -46,7 +46,7 @@ class CleanMediaTest extends TestCase
             ExceptionMessageLookupFactory::class
         )
             ->disableOriginalConstructor()
-            ->onlyMethods(
+            ->addMethods(
                 ['getMessageGenerator']
             )
             ->getMock();

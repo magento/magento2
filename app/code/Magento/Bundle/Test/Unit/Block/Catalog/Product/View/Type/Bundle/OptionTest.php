@@ -42,7 +42,8 @@ class OptionTest extends TestCase
     {
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getPriceInfo', 'hasPreconfiguredValues', 'getPreconfiguredValues', '__wakeup'])
+            ->addMethods(['hasPreconfiguredValues'])
+            ->onlyMethods(['getPriceInfo', 'getPreconfiguredValues', '__wakeup'])
             ->getMock();
 
         $registry = $this->getMockBuilder(Registry::class)

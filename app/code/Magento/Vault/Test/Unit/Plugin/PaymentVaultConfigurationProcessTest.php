@@ -146,7 +146,7 @@ class PaymentVaultConfigurationProcessTest extends TestCase
         $vaultPaymentMethod = $this
             ->getMockBuilder(PaymentMethodListInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getCode', 'getProviderCode'])
+            ->addMethods(['getCode', 'getProviderCode'])
             ->getMockForAbstractClass();
 
         $vaultPaymentMethod->expects($this->any())->method('getCode')->willReturn('payflowpro_cc_vault');

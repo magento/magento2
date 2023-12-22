@@ -55,13 +55,14 @@ class IndexTest extends TestCase
     protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->onlyMethods(['getPost', 'getContent'])
+            ->addMethods(['getPost', 'getContent'])
             ->getMockForAbstractClass();
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->onlyMethods(['createBlock'])
             ->getMockForAbstractClass();
         $this->blockMock = $this->getMockBuilder(BlockInterface::class)
-            ->onlyMethods(['setFormId', 'setIsAjax', 'toHtml'])
+            ->addMethods(['setFormId', 'setIsAjax'])
+            ->onlyMethods(['toHtml'])
             ->getMockForAbstractClass();
         $this->jsonResultFactoryMock = $this->createMock(ResultJsonFactory::class);
         $this->jsonResultMock = $this->createMock(ResultJson::class);
@@ -142,7 +143,8 @@ class IndexTest extends TestCase
     private function getCaptchaModelMock(string $imageSource): CaptchaInterface
     {
         $modelMock = $this->getMockBuilder(CaptchaInterface::class)
-            ->onlyMethods(['generate', 'getBlockName', 'getImgSrc'])
+            ->onlyMethods(['generate', 'getBlockName'])
+            ->addMethods(['getImgSrc'])
             ->getMockForAbstractClass();
 
         $modelMock->method('getImgSrc')

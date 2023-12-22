@@ -98,7 +98,7 @@ class MoveTest extends TestCase
     {
         $this->request = $this
             ->getMockBuilder(RequestInterface::class)
-            ->onlyMethods(['getPost'])
+            ->addMethods(['getPost'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->context->expects($this->once())->method('getRequest')->willReturn($this->request);

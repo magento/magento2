@@ -15,6 +15,7 @@ use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\State;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Session\Config\ConfigInterface;
 use Magento\Framework\Session\SaveHandlerInterface;
 use Magento\Framework\Session\SidResolverInterface;
@@ -24,6 +25,7 @@ use Magento\Framework\Session\ValidatorInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Session\SessionStartChecker;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\QuoteFactory;
@@ -124,6 +126,16 @@ class QuoteTest extends TestCase
     protected $quoteFactoryMock;
 
     /**
+     * @var ObjectManagerInterface
+     */
+    protected $objectManagerMock;
+
+    /**
+     * @var SessionStartChecker
+     */
+    protected $sessionStartCheckerMock;
+
+    /**
      * Set up
      *
      * @return void
@@ -203,8 +215,17 @@ class QuoteTest extends TestCase
 
         $this->quoteFactoryMock = $this->createPartialMock(QuoteFactory::class, ['create']);
 
+        $this->sessionStartCheckerMock = $this->createMock(SessionStartChecker::class);
+
+        /** @var ObjectManagerInterface|MockObject $objectManagerMock */
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->once())
+            ->method('get')
+            ->willReturn($this->sessionStartCheckerMock);
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
+
         $this->quote = $this->getMockBuilder(Quote::class)
-            ->onlyMethods(['getStoreId', 'getQuoteId', 'setQuoteId', 'hasCustomerId', 'getCustomerId'])
+            ->addMethods(['getStoreId', 'getQuoteId', 'setQuoteId', 'hasCustomerId', 'getCustomerId'])
             ->setConstructorArgs(
                 [
                     'request' => $this->requestMock,
@@ -390,7 +411,7 @@ class QuoteTest extends TestCase
     /**
      * @return array
      */
-    public function getQuoteDataProvider()
+    public static function getQuoteDataProvider()
     {
         return [
             'customer ids different' => [66, null, 'once'],

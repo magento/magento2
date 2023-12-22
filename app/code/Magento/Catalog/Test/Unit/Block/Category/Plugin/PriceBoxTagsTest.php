@@ -80,12 +80,16 @@ class PriceBoxTagsTest extends TestCase
             ->getMockForAbstractClass();
         $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
+            ->addMethods(
+                [
+                    'getDefaultTaxBillingAddress',
+                    'getDefaultTaxShippingAddress',
+                    'getCustomerTaxClassId'
+                ]
+            )
             ->onlyMethods(
                 [
                     'getCustomerGroupId',
-                    'getDefaultTaxBillingAddress',
-                    'getDefaultTaxShippingAddress',
-                    'getCustomerTaxClassId',
                     'getCustomerId'
                 ]
             )
@@ -157,12 +161,12 @@ class PriceBoxTagsTest extends TestCase
             $customerId
         )->willReturn($rateRequest);
         $salableInterface = $this->getMockBuilder(SaleableInterface::class)
-            ->onlyMethods(['getTaxClassId'])
+            ->addMethods(['getTaxClassId'])
             ->getMockForAbstractClass();
         $priceBox->expects($this->once())->method('getSaleableItem')->willReturn($salableInterface);
         $salableInterface->expects($this->once())->method('getTaxClassId')->willReturn($customerTaxClassId);
         $resource = $this->getMockBuilder(AbstractResource::class)
-            ->onlyMethods(['getRateIds'])
+            ->addMethods(['getRateIds'])
             ->getMockForAbstractClass();
         $this->taxCalculation->expects($this->once())->method('getResource')->willReturn($resource);
         $resource->expects($this->once())->method('getRateIds')->with($rateRequest)->willReturn($rateIds);

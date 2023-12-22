@@ -78,10 +78,25 @@ class StockStateProviderTest extends TestCase
     /**
      * @var array
      */
-    protected $stockItemMethods = [
+    protected $stockAddItemMethods = [
         'getId',
-        'getProductId',
         'getWebsiteId',
+        'hasStockQty',
+        'setStockQty',
+        'getData',
+        'getSuppressCheckQtyIncrements',
+        'getIsChildItem',
+        'getIsSaleable',
+        'getOrderedItems',
+        'setOrderedItems',
+        'getProductName'
+    ];
+
+    /**
+     * @var array
+     */
+    protected $stockItemMethods = [
+        'getProductId',
         'getStockId',
         'getQty',
         'getIsInStock',
@@ -106,15 +121,6 @@ class StockStateProviderTest extends TestCase
         'getLowStockDate',
         'getIsDecimalDivided',
         'getStockStatusChangedAuto',
-        'hasStockQty',
-        'setStockQty',
-        'getData',
-        'getSuppressCheckQtyIncrements',
-        'getIsChildItem',
-        'getIsSaleable',
-        'getOrderedItems',
-        'setOrderedItems',
-        'getProductName',
     ];
 
     /**
@@ -350,6 +356,7 @@ class StockStateProviderTest extends TestCase
         foreach ($options as $variation) {
             $stockItem = $this->getMockBuilder(StockItemInterface::class)
                 ->disableOriginalConstructor()
+                ->addMethods($this->stockAddItemMethods)
                 ->onlyMethods($this->stockItemMethods)
                 ->getMockForAbstractClass();
             $stockItem->expects($this->any())->method('getSuppressCheckQtyIncrements')->willReturn(
@@ -537,6 +544,7 @@ class StockStateProviderTest extends TestCase
         $qty = 1;
         $qtyIncrements = 5;
         $stockItem = $this->getMockBuilder(StockItemInterface::class)
+            ->addMethods($this->stockAddItemMethods)
             ->onlyMethods($this->stockItemMethods)
             ->getMockForAbstractClass();
         $stockItem->expects($this->any())->method('getSuppressCheckQtyIncrements')->willReturn(false);
@@ -553,7 +561,7 @@ class StockStateProviderTest extends TestCase
     /**
      * @return array
      */
-    public function checkQtyIncrementsMsgDataProvider()
+    public static function checkQtyIncrementsMsgDataProvider()
     {
         return [
             [true, 'You can buy Simple Product only in quantities of 5 at a time.'],

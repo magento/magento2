@@ -82,7 +82,8 @@ class DatetimeTest extends TestCase
 
         $this->columnMock = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getTimezone', 'getHtmlId', 'getId', 'getFilterTime'])
+            ->addMethods(['getTimezone','getFilterTime'])
+            ->onlyMethods(['getHtmlId', 'getId'])
             ->getMock();
 
         $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)

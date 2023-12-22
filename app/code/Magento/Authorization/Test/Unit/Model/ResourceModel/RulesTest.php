@@ -117,7 +117,7 @@ class RulesTest extends TestCase
 
         $this->aclBuilderMock = $this->getMockBuilder(Builder::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getConfigCache'])
+            ->addMethods(['getConfigCache'])
             ->getMock();
 
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
@@ -140,7 +140,7 @@ class RulesTest extends TestCase
 
         $this->rulesModelMock = $this->getMockBuilder(RulesModel::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getRoleId'])
+            ->addMethods(['getRoleId'])
             ->getMock();
 
         $this->rulesModelMock->method('getRoleId')

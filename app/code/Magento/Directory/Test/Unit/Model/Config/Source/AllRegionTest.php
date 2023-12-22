@@ -36,8 +36,10 @@ class AllRegionTest extends TestCase
         $objectManagerHelper = new ObjectManager($this);
 
         $countryCollectionFactory = $this->getMockBuilder(
-            CollectionFactory::class
-        )->onlyMethods(['create', '__wakeup', '__sleep'])->disableOriginalConstructor()
+            CollectionFactory::class)
+            ->addMethods(['__wakeup', '__sleep'])
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
             ->getMock();
 
         $this->countryCollection = $this->getMockBuilder(
@@ -55,7 +57,9 @@ class AllRegionTest extends TestCase
         $regionCollectionFactory = $this->getMockBuilder(
             \Magento\Directory\Model\ResourceModel\Region\CollectionFactory::class
         )->disableOriginalConstructor()
-            ->onlyMethods(['create', '__wakeup', '__sleep'])->getMock();
+            ->addMethods(['__wakeup', '__sleep'])
+            ->onlyMethods(['create'])
+            ->getMock();
         $this->regionCollection = $this->getMockBuilder(\Magento\Directory\Model\ResourceModel\Region\Collection::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['load', 'getIterator', '__wakeup', '__sleep'])
@@ -214,7 +218,8 @@ class AllRegionTest extends TestCase
     {
         $region = $this->getMockBuilder(Region::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getCountryId', 'getId', 'getDefaultName', '__wakeup', '__sleep'])
+            ->addMethods(['getCountryId','getDefaultName'])
+            ->onlyMethods(['getId', '__wakeup', '__sleep'])
             ->getMock();
         $region->expects($this->once())
             ->method('getCountryId')

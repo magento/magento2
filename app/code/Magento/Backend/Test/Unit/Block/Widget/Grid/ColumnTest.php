@@ -103,7 +103,7 @@ class ColumnTest extends TestCase
     /**
      * @return array
      */
-    public function getSortableDataProvider()
+    public static function getSortableDataProvider()
     {
         return ['zero' => ['0'], 'false' => [false], 'null' => [null]];
     }
@@ -394,7 +394,7 @@ class ColumnTest extends TestCase
     /**
      * @return array
      */
-    public function columnGroupedDataProvider()
+    public static function columnGroupedDataProvider()
     {
         return [[[], false], [['grouped' => 0], false], [['grouped' => 1], true]];
     }
@@ -425,7 +425,7 @@ class ColumnTest extends TestCase
 
         $frameCallbackHostObject = $this->getMockBuilder(Widget::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['decorate'])
+            ->addMethods(['decorate'])
             ->getMock();
 
         $frameCallbackHostObject->expects($this->any())

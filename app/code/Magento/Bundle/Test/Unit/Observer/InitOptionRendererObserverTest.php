@@ -51,7 +51,7 @@ class InitOptionRendererObserverTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getBlock'])
+            ->addMethods(['getBlock'])
             ->getMock();
 
         $this->blockMock = $this->getMockBuilder(Options::class)

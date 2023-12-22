@@ -130,12 +130,12 @@ class AppendUpsellProductsObserverTest extends TestCase
 
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getProduct', 'getCollection', 'getLimit'])
+            ->addMethods(['getProduct', 'getCollection', 'getLimit'])
             ->getMock();
 
         $this->collectionMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setItems', 'getItems'])
+            ->addMethods(['setItems', 'getItems'])
             ->getMock();
 
         $this->productMock = $this->getMockBuilder(Product::class)
