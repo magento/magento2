@@ -118,10 +118,11 @@ class TablerateTest extends TestCase
 
     /**
      * @param bool $freeshipping
+     * @param bool $isShipSeparately
      * @dataProvider collectRatesWithGlobalFreeShippingDataProvider
      * @return void
      */
-    public function testCollectRatesWithGlobalFreeShipping($freeshipping)
+    public function testCollectRatesWithGlobalFreeShipping($freeshipping, $isShipSeparately)
     {
         $rate = [
             'price' => 15,
@@ -177,11 +178,17 @@ class TablerateTest extends TestCase
         $this->resultFactoryMock->expects($this->once())->method('create')->willReturn($result);
 
         $product->expects($this->any())->method('isVirtual')->willReturn(false);
-
         $item->expects($this->any())->method('getProduct')->willReturn($product);
-        $item->expects($this->any())->method('getFreeShipping')->willReturn(1);
         $item->expects($this->any())->method('getQty')->willReturn(1);
-
+        if ($isShipSeparately) {
+            $freeShippingReturnValue = true;
+            $item->expects($this->any())->method('getHasChildren')->willReturn(1);
+            $item->expects($this->any())->method('isShipSeparately')->willReturn(1);
+            $item->expects($this->any())->method('getChildren')->willReturn([$item]);
+        } else {
+            $freeShippingReturnValue = "1";
+        }
+        $item->expects($this->any())->method('getFreeShipping')->willReturn($freeShippingReturnValue);
         $request->expects($this->any())->method('getAllItems')->willReturn([$item]);
         $request->expects($this->any())->method('getPackageQty')->willReturn(1);
 
@@ -225,8 +232,9 @@ class TablerateTest extends TestCase
     public function collectRatesWithGlobalFreeShippingDataProvider()
     {
         return [
-            ['freeshipping' => true],
-            ['freeshipping' => false]
+            ['freeshipping' => true, 'isShipSeparately' => false],
+            ['freeshipping' => false, 'isShipSeparately' => false],
+            ['freeshipping' => true, 'isShipSeparately' => true]
         ];
     }
 }

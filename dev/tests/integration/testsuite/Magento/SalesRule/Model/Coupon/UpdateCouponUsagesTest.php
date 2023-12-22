@@ -111,9 +111,8 @@ class UpdateCouponUsagesTest extends TestCase
     {
         $cart = $this->fixtures->get('cart1');
         $this->couponManagement->set($cart->getId(), 'one_per_customer');
-        $this->cartManagement->placeOrder($cart->getId());
-        $cart = $this->cartRepository->get($cart->getId());
-        $this->orderManagement->cancel($cart->getReservedOrderId());
+        $orderId = $this->cartManagement->placeOrder($cart->getId());
+        $this->orderManagement->cancel($orderId);
         $consumer = $this->consumerFactory->get('sales.rule.update.coupon.usage');
         $consumer->process(1);
 
