@@ -19,7 +19,6 @@
         <before>
             <!-- Simple product is created and assigned to category -->
             <createData entity="SimpleProduct" stepKey="createProduct">
-                <requiredEntity createDataKey="createCategory"/>
                 <field key="price">10.00</field>
             </createData>
             <!-- US Customer is created -->
