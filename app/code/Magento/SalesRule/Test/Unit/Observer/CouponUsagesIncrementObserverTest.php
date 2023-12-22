@@ -94,6 +94,5 @@ class CouponUsagesIncrementObserverTest extends TestCase
             ->expects($this->once())
             ->method('execute');
         $this->couponUsagesIncrementObserver->execute($this->observerMock);
-       // $this->updateCouponUsagesMock->execute($this->observerMock);
     }
 }

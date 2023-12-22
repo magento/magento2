@@ -21,6 +21,7 @@ namespace Magento\SalesRule\Observer;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\SalesRule\Model\Coupon\Quote\UpdateCouponUsages;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Decrement number of coupon usages after error of placing order
@@ -41,11 +42,14 @@ class CouponUsagesIncrementObserver implements ObserverInterface
     }
 
     /**
-     * @inheritdoc
+     * Increments number of coupon usages after placing order
+     *
+     * @param EventObserver $observer
+     * @return void
+     * @throws NoSuchEntityException
      */
     public function execute(EventObserver $observer)
     {
-        /** @var CartInterface $quote */
         $quote = $observer->getQuote();
         /* if coupon code has been canceled then need to notify the customer */
         if (!$quote->getCouponCode() && $quote->dataHasChangedFor('coupon_code')) {
