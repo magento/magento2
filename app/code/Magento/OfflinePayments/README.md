@@ -36,4 +36,4 @@ For more information about a layout in Magento 2, see the [Layout documentation]
 
 ## Additional information
 
-[Learn how to configure Offline Payment Methods](https://docs.magento.com/user-guide/payment/offline-payment-methods.html).
+[Learn how to configure Offline Payment Methods](https://experienceleague.adobe.com/docs/commerce-admin/stores-sales/payments/payments.html#offline-payment-methods).

@@ -16,7 +16,7 @@ class Reasons extends AbstractFieldArray
      */
     protected function _prepareToRender()
     {
-        $this->addColumn('reason', ['label' => __('Reason'), 'class' => 'required-entry']);
+        $this->addColumn('description', ['label' => __('Reason'), 'class' => 'required-entry']);
         $this->_addAfter = false;
         $this->_addButtonLabel = __('Add Reason');
     }
