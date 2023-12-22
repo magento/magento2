@@ -11,6 +11,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Css\PreProcessor\ErrorHandlerInterface;
 use Magento\Framework\Module\Manager as ModuleManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\PreProcessorInterface;
@@ -26,7 +27,7 @@ use Magento\Framework\View\Asset\PreProcessor\Chain;
  * @magento_import instruction preprocessor
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Must be deleted after moving themeProvider to construct
  */
-class MagentoImport implements PreProcessorInterface
+class MagentoImport implements PreProcessorInterface, ResetAfterRequestInterface
 {
     /**
      * PCRE pattern that matches @magento_import instruction
@@ -59,11 +60,12 @@ class MagentoImport implements PreProcessorInterface
     /**
      * @var ThemeListInterface
      * @deprecated 100.0.2
+     * @see not used
      */
     protected $themeList;
 
     /**
-     * @var ThemeProviderInterface
+     * @var ThemeProviderInterface|null
      */
     private $themeProvider;
 
@@ -105,10 +107,7 @@ class MagentoImport implements PreProcessorInterface
     }
 
     /**
-     * Transform content and/or content type for the specified preprocessing chain object
-     *
-     * @param Chain $chain
-     * @return void
+     * @inheritDoc
      */
     public function process(Chain $chain)
     {
@@ -196,17 +195,23 @@ class MagentoImport implements PreProcessorInterface
     }
 
     /**
-     * Retrieve theme provider instance
+     * Gets themeProvider, lazy loading it when needed
      *
      * @return ThemeProviderInterface
-     * @deprecated 100.1.1
      */
     private function getThemeProvider(): ThemeProviderInterface
     {
         if (null === $this->themeProvider) {
             $this->themeProvider = ObjectManager::getInstance()->get(ThemeProviderInterface::class);
         }
-
         return $this->themeProvider;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->themeProvider = null;
     }
 }

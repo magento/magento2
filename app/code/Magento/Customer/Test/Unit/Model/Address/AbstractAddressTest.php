@@ -24,6 +24,8 @@ use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Customer\Model\Address\AbstractAddress\RegionModelsCache;
+use Magento\Customer\Model\Address\AbstractAddress\CountryModelsCache;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -109,6 +111,8 @@ class AbstractAddressTest extends TestCase
                 'resource' => $this->resourceMock,
                 'resourceCollection' => $this->resourceCollectionMock,
                 'compositeValidator' => $this->compositeValidatorMock,
+                'countryModelsCache' => new CountryModelsCache,
+                'regionModelsCache' => new RegionModelsCache,
             ]
         );
     }
@@ -160,6 +164,29 @@ class AbstractAddressTest extends TestCase
         $this->model->setData('region', '');
         $this->model->setData('country_id', $countryId);
         $this->assertEquals('UK', $this->model->getRegionCode());
+    }
+
+    /**
+     * Test regionid for empty value
+     *
+     * @inheritdoc
+     * @return void
+     */
+    public function testGetRegionId()
+    {
+        $this->model->setData('region_id', 0);
+        $this->model->setData('region', '');
+        $this->model->setData('country_id', 'GB');
+        $region = $this->getMockBuilder(Region::class)
+            ->addMethods(['getCountryId', 'getCode'])
+            ->onlyMethods(['__wakeup', 'load', 'loadByCode','getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $region->method('loadByCode')
+            ->willReturnSelf();
+        $this->regionFactoryMock->method('create')
+            ->willReturn($region);
+        $this->assertEquals(0, $this->model->getRegionId());
     }
 
     public function testGetRegionCodeWithRegion()
@@ -217,17 +244,18 @@ class AbstractAddressTest extends TestCase
     {
         $region = $this->getMockBuilder(Region::class)
             ->addMethods(['getCountryId', 'getCode'])
-            ->onlyMethods(['__wakeup', 'load'])
+            ->onlyMethods(['__wakeup', 'load', 'loadByCode'])
             ->disableOriginalConstructor()
             ->getMock();
+        $region->method('loadByCode')
+            ->willReturnSelf();
         $region->expects($this->once())
             ->method('getCode')
             ->willReturn($regionCode);
         $region->expects($this->once())
             ->method('getCountryId')
             ->willReturn($countryId);
-        $this->regionFactoryMock->expects($this->once())
-            ->method('create')
+        $this->regionFactoryMock->method('create')
             ->willReturn($region);
     }
 
@@ -406,6 +434,7 @@ class AbstractAddressTest extends TestCase
             ["first line\nsecond line", ['first line', 'second line']],
             ['single line', ['single line']],
             ['single line', 'single line'],
+            ['single line', ['single line', null]],
         ];
     }
 

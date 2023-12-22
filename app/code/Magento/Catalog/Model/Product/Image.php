@@ -396,7 +396,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     public function setSize($size)
     {
         // determine width and height from string
-        list($width, $height) = explode('x', strtolower($size), 2);
+        list($width, $height) = explode('x', strtolower((string)$size), 2);
         foreach (['width', 'height'] as $wh) {
             ${$wh}
                 = (int)${$wh};

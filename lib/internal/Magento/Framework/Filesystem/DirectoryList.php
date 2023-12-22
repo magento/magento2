@@ -1,10 +1,5 @@
 <?php
 /**
- * Application file system directories dictionary.
- *
- * Provides information about what directories are available in the application.
- * Serves as a customization point to specify different directories or add your own.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -13,6 +8,11 @@ declare(strict_types=1);
 namespace Magento\Framework\Filesystem;
 
 /**
+ * Application file system directories dictionary.
+ *
+ * Provides information about what directories are available in the application.
+ * Serves as a customization point to specify different directories or add your own.
+ *
  * A list of directories
  *
  * Each list item consists of:
@@ -30,14 +30,14 @@ class DirectoryList
     /**#@+
      * Keys of directory configuration
      */
-    const PATH = 'path';
-    const URL_PATH = 'uri';
+    public const PATH = 'path';
+    public const URL_PATH = 'uri';
     /**#@- */
 
     /**
      * System base temporary directory
      */
-    const SYS_TMP = 'sys_tmp';
+    public const SYS_TMP = 'sys_tmp';
 
     /**
      * Root path
@@ -134,7 +134,7 @@ class DirectoryList
      */
     private function normalizePath($path)
     {
-        return str_replace('\\', '/', $path);
+        return $path !== null ? str_replace('\\', '/', $path) : '';
     }
 
     /**
@@ -176,7 +176,7 @@ class DirectoryList
      */
     protected function isAbsolute($path)
     {
-        $path = strtr($path, '\\', '/');
+        $path = $path !== null ? strtr($path, '\\', '/') : '';
 
         if (strpos($path, '/') === 0) {
             //is UnixRoot
@@ -244,5 +244,16 @@ class DirectoryList
                 new \Magento\Framework\Phrase('Unknown directory type: \'%1\'', [$code])
             );
         }
+    }
+
+    /**
+     * Disable show ObjectManager internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }

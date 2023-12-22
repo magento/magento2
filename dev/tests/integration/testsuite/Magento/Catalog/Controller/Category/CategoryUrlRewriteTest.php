@@ -26,7 +26,6 @@ use Magento\TestFramework\TestCase\AbstractController;
  * Checks category availability on storefront by url rewrite
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
  * @magentoDbIsolation enabled
  */
 class CategoryUrlRewriteTest extends AbstractController
@@ -73,6 +72,7 @@ class CategoryUrlRewriteTest extends AbstractController
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/category_tree.php
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @dataProvider categoryRewriteProvider
      * @param int $categoryId
      * @param string $urlPath
@@ -118,6 +118,7 @@ class CategoryUrlRewriteTest extends AbstractController
      *
      * @magentoDataFixture Magento/Catalog/_files/category.php
      * @magentoDataFixture Magento/Store/_files/store.php
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @return void
      */
     public function testCategoryUrlOnStoreView(): void

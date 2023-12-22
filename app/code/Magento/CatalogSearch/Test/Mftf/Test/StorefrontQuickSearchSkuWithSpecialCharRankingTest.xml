@@ -17,7 +17,7 @@
             <severity value="AVERAGE"/>
             <useCaseId value="ACP2E-8"/>
             <testCaseId value="AC-1259"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
         </annotations>
         <before>
             <!--Create product1-->

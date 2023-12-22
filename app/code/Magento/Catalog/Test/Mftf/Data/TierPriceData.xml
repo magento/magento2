@@ -45,7 +45,7 @@
     <entity name="tierPriceHighCostSimpleProduct" type="data">
         <data key="website">All Websites [USD]</data>
         <data key="customer_group">ALL GROUPS</data>
-        <data key="price">500,000.00</data>
+        <data key="price">500000.00</data>
         <data key="qty">1</data>
     </entity>
     <entity name="tierProductPrice" type="catalogTierPrice">

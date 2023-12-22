@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-21818"/>
             <group value="review"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set general/single_store_mode/enabled 0" stepKey="enabledSingleStoreMode"/>

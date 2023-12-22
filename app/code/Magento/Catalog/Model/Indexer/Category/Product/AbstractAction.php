@@ -13,6 +13,8 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 
 // phpcs:disable Magento2.Classes.AbstractApi
@@ -23,8 +25,9 @@ use Magento\Store\Model\Store;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
+ * phpcs:disable Magento2.Annotation.MethodAnnotationStructure.InvalidDeprecatedTagUsage
  */
-abstract class AbstractAction
+abstract class AbstractAction implements ResetAfterRequestInterface
 {
     /**
      * Chunk size
@@ -43,7 +46,8 @@ abstract class AbstractAction
 
     /**
      * Suffix for table to show it is temporary
-     * @deprecated see getIndexTable
+     * @deprecated
+     * @see getIndexTable
      */
     public const TEMPORARY_TABLE_SUFFIX = '_tmp';
 
@@ -126,9 +130,9 @@ abstract class AbstractAction
     private $queryGenerator;
 
     /**
-     * @var int
+     * @var StoreInterface
      */
-    private $currentStoreId = 0;
+    private $currentStore;
 
     /**
      * @param ResourceConnection $resource
@@ -156,6 +160,20 @@ abstract class AbstractAction
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->nonAnchorSelects = [];
+        $this->anchorSelects = [];
+        $this->productsSelects = [];
+        $this->categoryPath = [];
+        $this->useTempTable = true;
+        $this->tempTreeIndexTableName = null;
+        $this->currentStore = null;
+    }
+
+    /**
      * Run full reindex
      *
      * @return $this
@@ -171,12 +189,34 @@ abstract class AbstractAction
     {
         foreach ($this->storeManager->getStores() as $store) {
             if ($this->getPathFromCategoryId($store->getRootCategoryId())) {
-                $this->currentStoreId = $store->getId();
+                $this->setCurrentStore($store);
                 $this->reindexRootCategory($store);
                 $this->reindexAnchorCategories($store);
                 $this->reindexNonAnchorCategories($store);
             }
         }
+    }
+
+    /**
+     * Set current store
+     *
+     * @param StoreInterface $store
+     * @return $this
+     */
+    private function setCurrentStore(StoreInterface $store): self
+    {
+        $this->currentStore = $store;
+        return $this;
+    }
+
+    /**
+     * Get current store
+     *
+     * @return StoreInterface
+     */
+    private function getCurrentStore(): StoreInterface
+    {
+        return $this->currentStore;
     }
 
     /**
@@ -484,6 +524,7 @@ abstract class AbstractAction
      */
     protected function createAnchorSelect(Store $store)
     {
+        $this->setCurrentStore($store);
         $isAnchorAttributeId = $this->config->getAttribute(
             \Magento\Catalog\Model\Category::ENTITY,
             'is_anchor'
@@ -690,7 +731,7 @@ abstract class AbstractAction
                     ['ccacs' => $this->getTable('catalog_category_entity_int')],
                     'ccacs.' . $categoryLinkField . ' = c.' . $categoryLinkField
                     . ' AND ccacs.attribute_id = ccacd.attribute_id AND ccacs.store_id = ' .
-                    $this->currentStoreId,
+                    $this->getCurrentStore()->getId(),
                     []
                 )->where(
                     $this->connection->getIfNullSql('ccacs.value', 'ccacd.value') . ' = ?',
@@ -702,8 +743,14 @@ abstract class AbstractAction
         foreach ($selects as $select) {
             $values = [];
 
-            foreach ($this->connection->fetchAll($select) as $category) {
-                foreach (explode('/', $category['path']) as $parentId) {
+            $categories = $this->connection->fetchAll($select);
+            foreach ($categories as $category) {
+                $categoriesTree = explode('/', $category['path']);
+                foreach ($categoriesTree as $parentId) {
+                    if (!in_array($this->getCurrentStore()->getRootCategoryId(), $categoriesTree, true)) {
+                        break;
+                    }
+
                     if ($parentId !== $category['entity_id']) {
                         $values[] = [$parentId, $category['entity_id']];
                     }
@@ -717,7 +764,7 @@ abstract class AbstractAction
     }
 
     /**
-     * Retrieve select for reindex products of non anchor categories
+     * Retrieve select for reindex products of anchor categories
      *
      * @param Store $store
      * @return Select

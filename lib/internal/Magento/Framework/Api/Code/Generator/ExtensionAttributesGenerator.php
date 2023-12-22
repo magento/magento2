@@ -15,9 +15,9 @@ use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
  */
 class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\EntityAbstract
 {
-    const ENTITY_TYPE = 'extension';
+    public const ENTITY_TYPE = 'extension';
 
-    const EXTENSION_SUFFIX = 'Extension';
+    public const EXTENSION_SUFFIX = 'Extension';
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\Config
@@ -80,7 +80,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _getDefaultConstructorDefinition()
     {
@@ -88,7 +88,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _getClassProperties()
     {
@@ -96,7 +96,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _getClassMethods()
     {
@@ -139,7 +139,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _validateData()
     {
@@ -148,7 +148,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _generateCode()
     {
@@ -177,11 +177,11 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
         if (!isset($this->allCustomAttributes)) {
             $this->allCustomAttributes = $this->config->get();
         }
-        $dataInterface = ltrim($this->getSourceClassName(), '\\');
+        $dataInterface = $this->getSourceClassName() !== null ? ltrim($this->getSourceClassName(), '\\') : '';
         if (isset($this->allCustomAttributes[$dataInterface])) {
             foreach ($this->allCustomAttributes[$dataInterface] as $attributeName => $attributeMetadata) {
                 $attributeType = $attributeMetadata[Converter::DATA_TYPE];
-                if (strpos($attributeType, '\\') !== false) {
+                if ($attributeType !== null && strpos($attributeType, '\\') !== false) {
                     /** Add preceding slash to class names, while leaving primitive types as is */
                     $attributeType = $this->_getFullyQualifiedClassName($attributeType);
                     $this->allCustomAttributes[$dataInterface][$attributeName][Converter::DATA_TYPE] =
@@ -202,7 +202,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
     protected function validateResultClassName()
     {
         $result = true;
-        $sourceClassName = $this->getSourceClassName();
+        $sourceClassName = $this->getSourceClassName() ?? '';
         $resultClassName = $this->_getResultClassName();
         $interfaceSuffix = 'Interface';
         $expectedResultClassName = substr($sourceClassName, 0, -strlen($interfaceSuffix)) . self::EXTENSION_SUFFIX;

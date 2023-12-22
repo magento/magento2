@@ -16,6 +16,7 @@ use Psr\Log\LoggerInterface;
  *
  * @api
  * @since 100.1.0
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInterface, QueryAwareInterface
 {
@@ -50,32 +51,32 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
 
     /**
      * @var \Magento\Elasticsearch\Model\Config
-     * @deprecated 100.2.0 as this class shouldn't be responsible for query building
-     * and should only modify existing query
+     * @deprecated 100.2.0
+     * @see this class shouldn't be responsible for query building and should only modify existing query
      * @since 100.1.0
      */
     protected $clientConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @deprecated 100.2.0 as this class shouldn't be responsible for query building
-     * and should only modify existing query
+     * @deprecated 100.2.0
+     * @see this class shouldn't be responsible for query building and should only modify existing query
      * @since 100.1.0
      */
     protected $storeManager;
 
     /**
      * @var \Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver
-     * @deprecated 100.2.0 as this class shouldn't be responsible for query building
-     * and should only modify existing query
+     * @deprecated 100.2.0
+     * @see this class shouldn't be responsible for query building and should only modify existing query
      * @since 100.1.0
      */
     protected $searchIndexNameResolver;
 
     /**
      * @var string
-     * @deprecated 100.2.0 as this class shouldn't be responsible for query building
-     * and should only modify existing query
+     * @deprecated 100.2.0
+     * @see this class shouldn't be responsible for query building and should only modify existing query
      * @since 100.1.0
      */
     protected $indexerId;

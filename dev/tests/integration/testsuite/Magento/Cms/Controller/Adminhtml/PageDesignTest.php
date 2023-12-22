@@ -10,17 +10,20 @@ namespace Magento\Cms\Controller\Adminhtml;
 
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\GetPageByIdentifierInterface;
+use Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor;
 use Magento\Cms\Model\Page;
+use Magento\Cms\Model\Page\CustomLayout\CustomLayoutManager;
+use Magento\Cms\Model\Page\CustomLayoutManagerInterface;
 use Magento\Framework\Acl\Builder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
-use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Bootstrap;
+use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory;
 use Magento\UrlRewrite\Model\UrlRewrite;
-use Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor;
 
 /**
  * Test the saving CMS pages design via admin area interface.
@@ -75,19 +78,18 @@ class PageDesignTest extends AbstractBackendController
      */
     protected function setUp(): void
     {
-        Bootstrap::getObjectManager()->configure([
+        BootstrapHelper::getObjectManager()->configure([
             'preferences' => [
-                CustomLayoutManagerInterface::class =>
-                    CustomLayoutManager::class
+                CustomLayoutManagerInterface::class => CustomLayoutManager::class
             ]
         ]);
         parent::setUp();
 
-        $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
-        $this->pageRetriever = Bootstrap::getObjectManager()->get(GetPageByIdentifierInterface::class);
-        $this->scopeConfig = Bootstrap::getObjectManager()->get(ScopeConfigInterface::class);
+        $this->aclBuilder = BootstrapHelper::getObjectManager()->get(Builder::class);
+        $this->pageRetriever = BootstrapHelper::getObjectManager()->get(GetPageByIdentifierInterface::class);
+        $this->scopeConfig = BootstrapHelper::getObjectManager()->get(ScopeConfigInterface::class);
         $this->pagesToDelete = [];
-        $this->postDataProcessor = Bootstrap::getObjectManager()->get(PostDataProcessor::class);
+        $this->postDataProcessor = BootstrapHelper::getObjectManager()->get(PostDataProcessor::class);
     }
 
     /**
@@ -114,8 +116,7 @@ class PageDesignTest extends AbstractBackendController
     private function removeUrlRewrites(): void
     {
         if (!empty($this->pagesToDelete)) {
-            /** @var UrlRewriteCollectionFactory $urlRewriteCollectionFactory */
-            $urlRewriteCollectionFactory = Bootstrap::getObjectManager()->get(
+            $urlRewriteCollectionFactory = BootstrapHelper::getObjectManager()->get(
                 UrlRewriteCollectionFactory::class
             );
             /** @var UrlRewriteCollection $urlRewriteCollection */
@@ -153,7 +154,10 @@ class PageDesignTest extends AbstractBackendController
         ];
 
         //Creating a new page with design properties without the required permissions.
-        $this->aclBuilder->getAcl()->deny(null, 'Magento_Cms::save_design');
+        $this->aclBuilder->getAcl()->deny(
+            Bootstrap::ADMIN_ROLE_ID,
+            'Magento_Cms::save_design'
+        );
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($requestData);
         $this->dispatch($this->uri);
@@ -163,11 +167,14 @@ class PageDesignTest extends AbstractBackendController
         );
 
         //Trying again with the permissions.
-        $this->aclBuilder->getAcl()->allow(null, ['Magento_Cms::save', 'Magento_Cms::save_design']);
+        $this->aclBuilder->getAcl()->allow(
+            Bootstrap::ADMIN_ROLE_ID,
+            ['Magento_Cms::save', 'Magento_Cms::save_design']
+        );
         $this->getRequest()->setDispatched(false);
         $this->dispatch($this->uri);
         /** @var Page $page */
-        $page = Bootstrap::getObjectManager()->create(PageInterface::class);
+        $page = BootstrapHelper::getObjectManager()->create(PageInterface::class);
         $page->load($id, PageInterface::IDENTIFIER);
         $this->assertNotEmpty($page->getId());
         $this->assertEquals(1, $page->getCustomTheme());
@@ -175,7 +182,10 @@ class PageDesignTest extends AbstractBackendController
         $this->getRequest()->setPostValue($requestData);
 
         //Updating the page without the permissions but not touching design settings.
-        $this->aclBuilder->getAcl()->deny(null, 'Magento_Cms::save_design');
+        $this->aclBuilder->getAcl()->deny(
+            Bootstrap::ADMIN_ROLE_ID,
+            'Magento_Cms::save_design'
+        );
         $this->getRequest()->setDispatched(false);
         $this->dispatch($this->uri);
         $this->assertSessionMessages(self::equalTo($sessionMessages), MessageInterface::TYPE_ERROR);
@@ -210,14 +220,17 @@ class PageDesignTest extends AbstractBackendController
             PageInterface::PAGE_LAYOUT => $defaultLayout
         ];
         //Creating a new page with design properties without the required permissions but with default values.
-        $this->aclBuilder->getAcl()->deny(null, 'Magento_Cms::save_design');
+        $this->aclBuilder->getAcl()->deny(
+            Bootstrap::ADMIN_ROLE_ID,
+            'Magento_Cms::save_design'
+        );
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($requestData);
         $this->dispatch($this->uri);
 
         //Validating saved page
         /** @var Page $page */
-        $page = Bootstrap::getObjectManager()->create(PageInterface::class);
+        $page = BootstrapHelper::getObjectManager()->create(PageInterface::class);
         $page->load($id, PageInterface::IDENTIFIER);
         $this->assertNotEmpty($page->getId());
         $this->assertNotNull($page->getPageLayout());

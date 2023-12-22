@@ -9,6 +9,7 @@ use Magento\Checkout\Model\Cart as CustomerCart;
 use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Filter\LocalizedToNormalized;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 
@@ -111,7 +112,7 @@ class Plugin
     {
         $quote = $cart->getQuote();
 
-        $filter = new \Zend_Filter_LocalizedToNormalized(
+        $filter = new LocalizedToNormalized(
             ['locale' => $this->locale->getLocale()]
         );
         $newQty = $this->quantityProcessor->prepareQuantity($quantity);

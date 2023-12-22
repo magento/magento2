@@ -179,7 +179,7 @@ class Config implements ConfigInterface
      */
     private function generateKey($typeName, $methodName, $delimiter = '\\', $lcfirst = true)
     {
-        $parts = explode($delimiter, trim($typeName, $delimiter));
+        $parts = explode($delimiter, trim($typeName ?: '', $delimiter));
         foreach ($parts as &$part) {
             $part = ltrim($part, ':');
             if ($lcfirst === true) {

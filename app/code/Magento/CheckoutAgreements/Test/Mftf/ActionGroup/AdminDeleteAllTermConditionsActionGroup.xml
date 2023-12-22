@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteAllTermConditionsActionGroup">
+        <annotations>
+            <description>Deletes all rows one by one on the 'Terms and Conditions' page.</description>
+        </annotations>
+        <waitForElementVisible selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="waitForResetFilter"/>
+        <click selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="clickResetFilter"/>
+        <waitForPageLoad stepKey="waitForGridReset"/>
+        <helper class="Magento\CheckoutAgreements\Test\Mftf\Helper\CheckoutAgreementsHelpers" method="deleteAllTermConditionRows" stepKey="deleteAllTermConditionRows">
+            <argument name="rowsToDelete">{{AdminTermGridSection.allTermRows}}</argument>
+            <argument name="deleteButton">{{AdminMainActionsSection.delete}}</argument>
+            <argument name="modalAcceptButton">{{AdminConfirmationModalSection.ok}}</argument>
+            <argument name="successMessage">You deleted the condition.</argument>
+            <argument name="successMessageContainer">{{AdminMessagesSection.success}}</argument>
+        </helper>
+        <waitForPageLoad stepKey="waitForGridLoad"/>
+        <waitForText userInput="We couldn't find any records." selector="{{AdminTermGridSection.emptyGrid}}" stepKey="waitForEmptyGrid"/>
+    </actionGroup>
+</actionGroups>

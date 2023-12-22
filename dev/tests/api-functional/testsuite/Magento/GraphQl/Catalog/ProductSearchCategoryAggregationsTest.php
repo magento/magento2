@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Framework\GraphQl\Query\Uid;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -14,6 +17,20 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
 {
+    /** @var ObjectManager */
+    private $objectManager;
+
+    /** @var Uid */
+    private $uid;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->uid = $this->objectManager->get(Uid::class);
+    }
     /**
      * Test category_id aggregation on filter by "eq" category ID condition.
      *
@@ -84,6 +101,7 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
     {
         $query = $this->getGraphQlQuery($filterValue, $includeDirectChildrenOnly);
         $result = $this->graphQlQuery($query);
+
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertArrayHasKey('aggregations', $result['products']);
         $categoryAggregation = array_filter(
@@ -99,7 +117,7 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
         foreach ($categoryAggregation['options'] as $option) {
             $this->assertNotEmpty($option['value']);
             $this->assertNotEmpty($option['label']);
-            $categoryAggregationIdsLabel[(int)$option['value']] = $option['label'];
+            $categoryAggregationIdsLabel[$this->uid->decode($option['value'])] = $option['label'];
         }
         return $categoryAggregationIdsLabel;
     }

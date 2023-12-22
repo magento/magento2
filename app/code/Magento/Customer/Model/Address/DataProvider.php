@@ -218,6 +218,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param Type $entityType
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getAttributesMeta(Type $entityType): array
     {
@@ -226,7 +227,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $attributes = $entityType->getAttributeCollection();
         $customerId = $this->context->getRequestParam('parent_id');
         $entityId = $this->context->getRequestParam('entity_id');
-
         if (!$customerId && $entityId) {
             $customerId = $this->addressRegistry->retrieve($entityId)->getParentId();
         }
@@ -235,7 +235,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $customer = $this->customerRepository->getById($customerId);
             $attributes->setWebsite($customer->getWebsiteId());
         }
-
         /* @var AbstractAttribute $attribute */
         foreach ($attributes as $attribute) {
             if (\in_array($attribute->getFrontendInput(), $this->bannedInputTypes, true)) {
@@ -244,12 +243,18 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             if (\in_array($attribute->getAttributeCode(), self::$attributesToEliminate, true)) {
                 continue;
             }
-
             $meta[$attribute->getAttributeCode()] = $this->attributeMetadataResolver->getAttributesMeta(
                 $attribute,
                 $entityType,
                 $this->allowToShowHiddenAttributes
             );
+            if ($attribute->getAttributeCode() === 'street' && $entityId) {
+                $customerAddressStreet = $this->addressRegistry->retrieve($entityId)->getStreet();
+                $meta[$attribute->getAttributeCode()]["arguments"]["data"]["config"]["size"] = max(
+                    $meta[$attribute->getAttributeCode()]["arguments"]["data"]["config"]["size"],
+                    count($customerAddressStreet)
+                );
+            }
         }
         $this->attributeMetadataResolver->processWebsiteMeta($meta);
 

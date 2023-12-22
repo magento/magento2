@@ -152,6 +152,8 @@ abstract class AbstractMapper implements MapperInterface
         }
         $fullExpression = $expression;
         foreach ($fields as $fieldKey => $fieldItem) {
+            $fieldItem = $fieldItem !== null ? $fieldItem : '';
+            $fullExpression = $fullExpression !== null ? $fullExpression : '';
             $fullExpression = str_replace('{{' . $fieldKey . '}}', $fieldItem, $fullExpression);
         }
         $this->getSelect()->columns([$alias => $fullExpression]);

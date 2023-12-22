@@ -175,6 +175,12 @@ class BasePriceStorage implements BasePriceStorageInterface
             $formattedPrices = $this->applyWebsitePrices($formattedPrices);
         }
 
+        if ($priceAttribute !== null && $priceAttribute->isScopeGlobal()) {
+            foreach ($formattedPrices as &$price) {
+                $price['store_id'] = Store::DEFAULT_STORE_ID;
+            }
+        }
+
         $this->getPricePersistence()->update($formattedPrices);
 
         return $this->validationResult->getFailedItems();

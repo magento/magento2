@@ -233,8 +233,8 @@ class Generator extends AbstractSchemaGenerator
     {
         $methodData = $httpMethodData[Converter::KEY_METHOD];
         $uri = ucwords(str_replace(['/{', '}/', '{', '}'], '/', $uri), "/");
-     
-        $operationId = ucfirst($methodName).str_replace(['/', '-'], '', $uri);
+
+        $operationId = ucfirst($methodName) . str_replace(['/', '-'], '', $uri);
         $pathInfo = [
             'tags' => [$tagName],
             'description' => $methodData['documentation'],
@@ -327,7 +327,7 @@ class Generator extends AbstractSchemaGenerator
             if (!isset($parameterInfo['type'])) {
                 return [];
             }
-            $description = isset($parameterInfo['documentation']) ? $parameterInfo['documentation'] : null;
+            $description = $parameterInfo['documentation'] ?? null;
 
             /** Get location of parameter */
             if (strpos($httpMethodData['uri'], (string) ('{' . $parameterName . '}')) !== false) {
@@ -432,11 +432,11 @@ class Generator extends AbstractSchemaGenerator
             if (!empty($description)) {
                 $result['description'] = $description;
             }
-            $trimedTypeName = rtrim($typeName, '[]');
+            $trimedTypeName = $typeName !== null ? rtrim($typeName, '[]') : '';
             if ($simpleType = $this->getSimpleType($trimedTypeName)) {
                 $result['items'] = ['type' => $simpleType];
             } else {
-                if (strpos($typeName, '[]') !== false) {
+                if ($typeName && strpos($typeName, '[]') !== false) {
                     $result['items'] = ['$ref' => $this->getDefinitionReference($trimedTypeName)];
                 } else {
                     $result = ['$ref' => $this->getDefinitionReference($trimedTypeName)];
@@ -708,14 +708,14 @@ class Generator extends AbstractSchemaGenerator
             // Primitive type or array of primitive types
             return [
                 $this->handlePrimitive($name, $prefix) => [
-                    'type' => substr($type, -2) === '[]' ? $type : $this->getSimpleType($type),
+                    'type' => ($type && substr($type, -2) === '[]') ? $type : $this->getSimpleType($type),
                     'description' => $description
                 ]
             ];
         }
         if ($this->typeProcessor->isArrayType($type)) {
             // Array of complex type
-            $arrayType = substr($type, 0, -2);
+            $arrayType = $type !== null ? substr($type, 0, -2) : '';
             return $this->handleComplex($name, $arrayType, $prefix, true);
         } else {
             // Complex type
@@ -739,9 +739,7 @@ class Generator extends AbstractSchemaGenerator
         $queryNames = [];
         foreach ($parameters as $subParameterName => $subParameterInfo) {
             $subParameterType = $subParameterInfo['type'];
-            $subParameterDescription = isset($subParameterInfo['documentation'])
-                ? $subParameterInfo['documentation']
-                : null;
+            $subParameterDescription = $subParameterInfo['documentation'] ?? null;
             $subPrefix = $prefix
                 ? $prefix . '[' . $name . ']'
                 : $name;
@@ -784,8 +782,8 @@ class Generator extends AbstractSchemaGenerator
         $parts = explode('/', $uri);
         $count = count($parts);
         for ($i=0; $i < $count; $i++) {
-            if (strpos($parts[$i], ':') === 0) {
-                $parts[$i] = '{' . substr($parts[$i], 1) . '}';
+            if (strpos($parts[$i] ?? '', ':') === 0) {
+                $parts[$i] = '{' . substr($parts[$i] ?? '', 1) . '}';
             }
         }
         return implode('/', $parts);

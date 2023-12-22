@@ -9,6 +9,7 @@ namespace Magento\TestFramework\ErrorLog;
 
 use Magento\Framework\Logger\Monolog;
 use Monolog\Handler\HandlerInterface;
+use Monolog\DateTimeImmutable;
 
 class Logger extends Monolog
 {
@@ -43,6 +44,8 @@ class Logger extends Monolog
     }
 
     /**
+     * Clear messages
+     *
      * @return void
      */
     public function clearMessages(): void
@@ -51,6 +54,8 @@ class Logger extends Monolog
     }
 
     /**
+     * Get messages
+     *
      * @return array
      */
     public function getMessages(): array
@@ -64,12 +69,14 @@ class Logger extends Monolog
      * @param int $level The logging level
      * @param string $message The log message
      * @param array $context The log context
+     * @param DateTimeImmutable $datetime Optional log date to log into the past or future
      * @return bool Whether the record has been processed
      */
     public function addRecord(
         int $level,
         string $message,
-        array $context = []
+        array $context = [],
+        DateTimeImmutable $datetime = null
     ): bool {
         if ($level <= $this->minimumErrorLevel) {
             $this->messages[] = [
@@ -77,6 +84,6 @@ class Logger extends Monolog
                 'message' => $message,
             ];
         }
-        return parent::addRecord($level, $message, $context);
+        return parent::addRecord($level, $message, $context, $datetime);
     }
 }

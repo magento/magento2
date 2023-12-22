@@ -16,6 +16,7 @@
             <description value="Verify no javascript error occurs when customer clicks 'Add Your Review' link"/>
             <severity value="MAJOR"/>
             <group value="review"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

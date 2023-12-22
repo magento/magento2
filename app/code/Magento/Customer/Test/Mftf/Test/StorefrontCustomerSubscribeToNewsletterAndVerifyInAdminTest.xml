@@ -16,6 +16,7 @@
         <group value="module-customer"/>
         <severity value="MAJOR"/>
         <testCaseId value="MC-27411"/>
+        <group value="cloud"/>
     </annotations>
     <before>
         <createData entity="Simple_US_Customer" stepKey="createCustomer"/>

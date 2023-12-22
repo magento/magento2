@@ -6,6 +6,9 @@
 
 namespace Magento\Weee\Plugin\Checkout\CustomerData;
 
+/**
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class Cart extends \Magento\Tax\Plugin\Checkout\CustomerData\Cart
 {
     /**
