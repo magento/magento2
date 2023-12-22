@@ -423,7 +423,7 @@ class Adapter implements MethodInterface, SaleOperationInterface
     public function fetchTransactionInfo(InfoInterface $payment, $transactionId)
     {
         return $this->executeCommand(
-            'fetch_transaction_information',
+            'fetch_transaction_info',
             ['payment' => $payment, 'transactionId' => $transactionId]
         );
     }
