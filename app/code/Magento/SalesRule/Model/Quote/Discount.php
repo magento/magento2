@@ -149,9 +149,6 @@ class Discount extends AbstractTotal
         }
         $items = [];
         foreach ($quote->getAllAddresses() as $quoteAddress) {
-            if ($quote->getIsMultiShipping() && $quoteAddress->getId() !== $address->getId()) {
-                continue;
-            }
             foreach ($quoteAddress->getAllItems() as $item) {
                 $items[] = $item;
             }
