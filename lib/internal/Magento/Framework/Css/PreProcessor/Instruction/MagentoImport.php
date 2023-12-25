@@ -140,27 +140,20 @@ class MagentoImport implements PreProcessorInterface, ResetAfterRequestInterface
                 $moduleName = $importFile->getModule();
                 $referenceString = $isReference ? '(reference) ' : '';
 
-                if (!$deployOnlyEnabled) {
-                    $importsContent .= $moduleName
-                        ? "@import $referenceString'{$moduleName}::{$resolvedPath}';\n"
-                        : "@import $referenceString'{$matchedFileId}';\n";
+                if (!$moduleName) {
+                    $importsContent .= "@import $referenceString'{$matchedFileId}';\n";
                 }
 
-                if ($deployOnlyEnabled) {
-                    if (($moduleName && !$this->moduleManager->isEnabled($moduleName)) ||
-                        "" === ($matchedFileId) ||
-                        null === ($matchedFileId)) {
-                        continue;
-                    }
+                if ($moduleName) {
+                    if (!$deployOnlyEnabled) {
+                        $importsContent .= "@import $referenceString'{$moduleName}::{$resolvedPath}';\n";
+                    } else {
+                        if (!$this->moduleManager->isEnabled($moduleName)) {
+                            continue;
+                        }
 
-                    if (!$moduleName && !empty($matchedFileId)) {
-                        $importsContent .= "@import $referenceString'{$matchedFileId}';\n";
-                    }
+                        $importsContent .= "@import $referenceString'{$moduleName}::{$resolvedPath}';\n";
 
-                    if ($moduleName && $this->moduleManager->isEnabled($moduleName)) {
-                        $importsContent .= $moduleName
-                            ? "@import $referenceString'{$moduleName}::{$resolvedPath}';\n"
-                            : "@import $referenceString'{$matchedFileId}';\n";
                     }
                 }
             }
