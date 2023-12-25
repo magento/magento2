@@ -314,9 +314,9 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         } elseif (is_array($value) && $this->isAddressMultilineAttribute($key)) {
             $value = $this->_implodeArrayValues($value);
         } elseif (self::CUSTOM_ATTRIBUTES === $key && is_array($value)) {
-            foreach ($value as &$attribute) {
-                $attribute = is_array($attribute) ? $attribute : $attribute->__toArray();
-                $attribute = $this->processCustomAttribute($attribute);
+            $value = $this->filterCustomAttributes([self::CUSTOM_ATTRIBUTES => $value])[self::CUSTOM_ATTRIBUTES];
+            foreach ($value as $attribute) {
+                $this->processCustomAttribute($attribute);
             }
         }
 
@@ -748,22 +748,16 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
-     * Unify attribute format.
+     * Normalize custom attribute value
      *
-     * @param array $attribute
-     * @return array
+     * @param \Magento\Framework\Api\AttributeInterface $attribute
+     * @return void
      */
-    private function processCustomAttribute(array $attribute): array
+    private function processCustomAttribute(\Magento\Framework\Api\AttributeInterface $attribute): void
     {
-        if (isset($attribute['attribute_code']) &&
-            isset($attribute['value']) &&
-            is_array($attribute['value']) &&
-            $this->isAddressMultilineAttribute($attribute['attribute_code'])
-        ) {
-            $attribute['value'] = $this->_implodeArrayValues($attribute['value']);
+        if (is_array($attribute->getValue()) && $this->isAddressMultilineAttribute($attribute->getAttributeCode())) {
+            $attribute->setValue($this->_implodeArrayValues($attribute->getValue()));
         }
-
-        return $attribute;
     }
 
     /**
