@@ -7,6 +7,7 @@ namespace Magento\Test\Integrity\Library;
 
 use Laminas\Code\Reflection\ClassReflection;
 use Laminas\Code\Reflection\Exception\InvalidArgumentException;
+use Magento\Framework\App\Utility\AggregateInvoker;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Module\Di\Code\Reader\FileClassScanner;
@@ -60,7 +61,7 @@ class DependencyTest extends TestCase
 
     public function testCheckDependencies(): void
     {
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
         $invoker(
             /**
              * @param string $file
