@@ -219,7 +219,9 @@ sub vcl_backend_response {
 }
 
 sub vcl_deliver {
-    if (resp.http.x-varnish ~ " ") {
+    if (obj.uncacheable) {
+        set resp.http.X-Magento-Cache-Debug = "UNCACHEABLE";
+    } else if (obj.hits) {
         set resp.http.X-Magento-Cache-Debug = "HIT";
         set resp.http.Grace = req.http.grace;
     } else {
