@@ -181,6 +181,7 @@ class Discount extends AbstractTotal
                     $child->setDiscountPercent(0);
                 }
             }
+            $item->getAddress()->setBaseDiscountAmount(0);
         }
         $this->calculator->init($store->getWebsiteId(), $quote->getCustomerGroupId(), $quote->getCouponCode());
         $this->calculator->initTotals($items, $address);
