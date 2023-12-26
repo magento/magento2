@@ -51,7 +51,10 @@ class Redis extends \Cm_Cache_Backend_Redis
                 $redis->hGet(self::PREFIX_KEY . $key, self::FIELD_DATA);
             }
 
-            $this->preloadedData = array_filter(array_combine($this->preloadKeys, $redis->exec()));
+            $redisResponse = $redis->exec();
+            $this->preloadedData = is_array($redisResponse) ?
+                array_filter(array_combine($this->preloadKeys, $redisResponse)) :
+                [];
         }
 
         if (isset($this->preloadedData[$id])) {
