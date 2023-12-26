@@ -7,7 +7,6 @@
         "magento/module-eav": "*",
         "magento/framework": "*",
         "magento/module-webapi": "*",
-        "magento/module-new-relic-reporting": "*",
         "magento/module-authorization": "*",
         "webonyx/graphql-php": "^15.0"
     },
