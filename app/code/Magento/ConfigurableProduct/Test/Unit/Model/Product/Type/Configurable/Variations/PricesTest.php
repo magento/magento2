@@ -65,8 +65,6 @@ class PricesTest extends TestCase
             ->method('getNumber')
             ->willReturnCallback(fn($param) => match ([$param]) {
                 [1000] => 1000,
-                [500] => 500,
-                [1000] => 1000,
                 [500] => 500
             });
 

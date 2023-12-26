@@ -137,7 +137,9 @@ class SearchCriteriaBuilderTest extends TestCase
         $this->filterBuilder->expects($this->exactly(2))
             ->method('setField')
             ->willReturnCallback(function ($filterOrderList) {
-                return $this->filterBuilder;
+                if ([$filterOrderList[0]] || [$filterOrderList[1]]) {
+                    return $this->filterBuilder;
+                }
             });
 
         $this->filterBuilder->expects($this->exactly(2))

@@ -130,8 +130,10 @@ class AnchorUrlRewriteGeneratorTest extends TestCase
         $this->categoryRepositoryInterface
             ->expects($this->any())
             ->method('get')
-            ->willReturnCallback(function ($categoryId, $storeId) use ($category) {
-                return $category;
+            ->willReturnCallback(function ($categoryId, $storeId) use ($category, $categoryIds) {
+                if ($categoryIds[0] || $categoryIds[1] || $categoryIds[2] && $storeId) {
+                    return $category;
+                }
             });
 
         $this->categoryRegistry->expects($this->any())->method('getList')
