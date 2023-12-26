@@ -170,9 +170,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, Re
         $appliedTaxes = $orderTaxDetails->getAppliedTaxes();
 
         $extensionAttributes->setAppliedTaxes($appliedTaxes);
-        if (!empty($appliedTaxes)) {
-            $extensionAttributes->setConvertingFromQuote(true);
-        }
+        $extensionAttributes->setConvertingFromQuote(false);
 
         $items = $orderTaxDetails->getItems();
         $extensionAttributes->setItemAppliedTaxes($items);
@@ -276,7 +274,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, Re
     {
         /** @var  \Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes */
         $extensionAttributes = $entity->getExtensionAttributes();
-        if ($entity->getIsNotVirtual() && $extensionAttributes && $extensionAttributes->getShippingAssignments()) {
+        if ($entity->getIsNotVirtual() && $extensionAttributes) {
             $shippingAssignments = $extensionAttributes->getShippingAssignments();
             if (!empty($shippingAssignments)) {
                 $shipping = array_shift($shippingAssignments)->getShipping();
