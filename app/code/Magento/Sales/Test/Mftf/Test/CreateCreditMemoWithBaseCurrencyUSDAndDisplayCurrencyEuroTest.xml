@@ -23,7 +23,7 @@
             <createData entity="SimpleProduct_100" stepKey="createProduct"/>
             <!-- Currency Options settings -->
             <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForEUR.value}}" stepKey="setAllowedCurrencyEURAndUSD"/>
-            <magentoCLI command="config:set {{SetDefaultCurrencyEURConfig.path}} {{SetDefaultCurrencyEURConfig.value}}" stepKey="setCurrencyDefaultEUR"/>
+            <magentoCLI command="config:set currency/options/default EUR" stepKey="setCurrencyDefaultEUR"/>
             <!-- Login as Admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Navigate to currency rates page -->
