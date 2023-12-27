@@ -50,12 +50,18 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
     private $serializer;
 
     /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface
+     */
+    private $priceCurrency;
+
+    /**
      * NewWidget constructor.
      *
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Framework\App\Http\Context $httpContext
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      */
@@ -64,6 +70,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Framework\App\Http\Context $httpContext,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         array $data = [],
         \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
@@ -76,6 +83,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         );
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -140,7 +148,8 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
                 $this->getDisplayType(),
                 $this->getProductsPerPage(),
                 (int) $this->getRequest()->getParam($this->getData('page_var_name'), 1),
-                $this->serializer->serialize($this->getRequest()->getParams())
+                $this->serializer->serialize($this->getRequest()->getParams()),
+                $this->priceCurrency->getCurrency()->getCode()
             ]
         );
     }
