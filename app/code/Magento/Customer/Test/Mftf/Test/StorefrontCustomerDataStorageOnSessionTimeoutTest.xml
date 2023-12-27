@@ -73,6 +73,7 @@
         <waitForPageLoad stepKey="waitForPageLoad4"/>
         <dontSee userInput="Welcome, {{John_Smith_Customer.fullname}}" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="verifyMessage4"/>
 
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
         <deleteData createDataKey="customer" stepKey="deleteCustomer" />
     </test>
 </tests>

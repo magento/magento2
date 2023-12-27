@@ -29,6 +29,8 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Framework\Filesystem;
     use Magento\Framework\Filesystem\Directory\WriteInterface;
     use Magento\Framework\Filesystem\DriverPool;
+    use Magento\Framework\Indexer\IndexerInterface;
+    use Magento\Framework\Indexer\IndexerRegistry;
     use Magento\Framework\Model\ResourceModel\Db\Context;
     use Magento\Framework\Module\ModuleList\Loader;
     use Magento\Framework\Module\ModuleListInterface;
@@ -42,6 +44,7 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Framework\Setup\SampleData\State;
     use Magento\Framework\Setup\SchemaListener;
     use Magento\Framework\Validation\ValidationException;
+    use Magento\Indexer\Model\Indexer\Collection;
     use Magento\RemoteStorage\Driver\DriverException;
     use Magento\RemoteStorage\Setup\ConfigOptionsList as RemoteStorageValidator;
     use Magento\Setup\Console\Command\InstallCommand;
@@ -225,6 +228,19 @@ namespace Magento\Setup\Test\Unit\Model {
         private $patchApplierFactoryMock;
 
         /**
+         * @var Collection|MockObject
+         */
+        private $indexerMock;
+        /**
+         * @var IndexerRegistry|MockObject
+         */
+        private $indexerRegistryMock;
+        /**
+         * @var IndexerInterface|MockObject
+         */
+        private $indexerInterfaceMock;
+
+        /**
          * @inheritdoc
          */
         protected function setUp(): void
@@ -263,6 +279,10 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->patchApplierFactoryMock->expects($this->any())->method('create')->willReturn(
                 $this->patchApplierMock
             );
+            $this->indexerMock = $this->createMock(Collection::class);
+            $this->indexerRegistryMock = $this->createMock(IndexerRegistry::class);
+            $this->indexerInterfaceMock = $this->getMockForAbstractClass(IndexerInterface::class);
+
             $this->object = $this->createObject();
         }
 
@@ -375,9 +395,9 @@ namespace Magento\Setup\Test\Unit\Model {
             $dataSetup->expects($this->any())->method('getConnection')->willReturn($connection);
             $cacheManager = $this->createMock(Manager::class);
             $cacheManager->expects($this->any())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
-            $cacheManager->expects($this->exactly(3))->method('setEnabled')->willReturn(['foo', 'bar']);
-            $cacheManager->expects($this->exactly(3))->method('clean');
-            $cacheManager->expects($this->exactly(3))->method('getStatus')->willReturn(['foo' => 1, 'bar' => 1]);
+            $cacheManager->expects($this->once())->method('setEnabled')->willReturn(['foo', 'bar']);
+            $cacheManager->expects($this->exactly(2))->method('clean');
+            $cacheManager->expects($this->once())->method('getStatus')->willReturn(['foo' => 1, 'bar' => 1]);
             $appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
                 ->disableOriginalConstructor()
                 ->disableArgumentCloning()
@@ -430,7 +450,9 @@ namespace Magento\Setup\Test\Unit\Model {
                         [DeclarationInstaller::class, $this->declarationInstallerMock],
                         [Registry::class, $registry],
                         [SearchConfig::class, $searchConfigMock],
-                        [RemoteStorageValidator::class, $remoteStorageValidatorMock]
+                        [RemoteStorageValidator::class, $remoteStorageValidatorMock],
+                        [Collection::class, $this->indexerMock],
+                        [IndexerRegistry::class, $this->indexerRegistryMock]
                     ]
                 );
             $this->adminFactory->expects($this->any())->method('create')->willReturn(
@@ -446,6 +468,15 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->filePermissions->expects($this->once())
                 ->method('getMissingWritableDirectoriesForDbUpgrade')
                 ->willReturn([]);
+            $this->indexerMock->expects($this->once())->method('getAllIds')->willReturn(
+                [
+                    'catalog_category_product',
+                    'catalog_product_category',
+                ]
+            );
+            $this->indexerRegistryMock->expects($this->exactly(2))->method('get')->willReturn(
+                $this->indexerInterfaceMock
+            );
             call_user_func_array(
                 [
                     $this->logger->expects($this->exactly(count($logMessages)))->method('log'),
@@ -498,48 +529,47 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['foo: 1'],
                         ['bar: 1'],
                         ['Installing data...'],
-                        ['Current status:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
-                        ['Current status:'],
                         ['Caches clearing:'],
                         ['Disabling Maintenance Mode:'],
                         ['Post installation file permissions check...'],
                         ['Write installation date...'],
+                        ['Enabling Update by Schedule Indexer Mode...'],
+                        ['2 indexer(s) are in "Update by Schedule" mode.'],
                         ['Sample Data is installed with errors. See log file for details']
                     ],
                     'logMetaMessages' => [
                         ['Starting Magento installation:'],
-                        ['[Progress: 1 / 22]'],
-                        ['[Progress: 2 / 22]'],
-                        ['[Progress: 3 / 22]'],
-                        ['[Progress: 4 / 22]'],
+                        ['[Progress: 1 / 23]'],
+                        ['[Progress: 2 / 23]'],
+                        ['[Progress: 3 / 23]'],
+                        ['[Progress: 4 / 23]'],
                         ['Schema creation/updates:'],
-                        ['[Progress: 5 / 22]'],
-                        ['[Progress: 6 / 22]'],
+                        ['[Progress: 5 / 23]'],
+                        ['[Progress: 6 / 23]'],
                         ['Schema post-updates:'],
-                        ['[Progress: 7 / 22]'],
-                        ['[Progress: 8 / 22]'],
-                        ['[Progress: 9 / 22]'],
-                        ['[Progress: 10 / 22]'],
-                        ['[Progress: 11 / 22]'],
-                        ['[Progress: 12 / 22]'],
-                        ['[Progress: 13 / 22]'],
+                        ['[Progress: 7 / 23]'],
+                        ['[Progress: 8 / 23]'],
+                        ['[Progress: 9 / 23]'],
+                        ['[Progress: 10 / 23]'],
+                        ['[Progress: 11 / 23]'],
+                        ['[Progress: 12 / 23]'],
+                        ['[Progress: 13 / 23]'],
                         ['Data install/update:'],
-                        ['Disabling caches:'],
-                        ['[Progress: 14 / 22]'],
-                        ['[Progress: 15 / 22]'],
+                        ['[Progress: 14 / 23]'],
+                        ['[Progress: 15 / 23]'],
                         ['Data post-updates:'],
-                        ['[Progress: 16 / 22]'],
-                        ['[Progress: 17 / 22]'],
-                        ['Enabling caches:'],
-                        ['[Progress: 18 / 22]'],
-                        ['[Progress: 19 / 22]'],
-                        ['[Progress: 20 / 22]'],
-                        ['[Progress: 21 / 22]'],
-                        ['[Progress: 22 / 22]'],
+                        ['[Progress: 16 / 23]'],
+                        ['[Progress: 17 / 23]'],
+                        ['[Progress: 18 / 23]'],
+                        ['[Progress: 19 / 23]'],
+                        ['[Progress: 20 / 23]'],
+                        ['[Progress: 21 / 23]'],
+                        ['[Progress: 22 / 23]'],
+                        ['[Progress: 23 / 23]'],
                     ],
                 ],
                 [
@@ -573,50 +603,49 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['foo: 1'],
                         ['bar: 1'],
                         ['Installing data...'],
-                        ['Current status:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
-                        ['Current status:'],
                         ['Installing admin user...'],
                         ['Caches clearing:'],
                         ['Disabling Maintenance Mode:'],
                         ['Post installation file permissions check...'],
                         ['Write installation date...'],
+                        ['Enabling Update by Schedule Indexer Mode...'],
+                        ['2 indexer(s) are in "Update by Schedule" mode.'],
                         ['Sample Data is installed with errors. See log file for details']
                     ],
                     'logMetaMessages' => [
                         ['Starting Magento installation:'],
-                        ['[Progress: 1 / 23]'],
-                        ['[Progress: 2 / 23]'],
-                        ['[Progress: 3 / 23]'],
-                        ['[Progress: 4 / 23]'],
+                        ['[Progress: 1 / 24]'],
+                        ['[Progress: 2 / 24]'],
+                        ['[Progress: 3 / 24]'],
+                        ['[Progress: 4 / 24]'],
                         ['Schema creation/updates:'],
-                        ['[Progress: 5 / 23]'],
-                        ['[Progress: 6 / 23]'],
+                        ['[Progress: 5 / 24]'],
+                        ['[Progress: 6 / 24]'],
                         ['Schema post-updates:'],
-                        ['[Progress: 7 / 23]'],
-                        ['[Progress: 8 / 23]'],
-                        ['[Progress: 9 / 23]'],
-                        ['[Progress: 10 / 23]'],
-                        ['[Progress: 11 / 23]'],
-                        ['[Progress: 12 / 23]'],
-                        ['[Progress: 13 / 23]'],
+                        ['[Progress: 7 / 24]'],
+                        ['[Progress: 8 / 24]'],
+                        ['[Progress: 9 / 24]'],
+                        ['[Progress: 10 / 24]'],
+                        ['[Progress: 11 / 24]'],
+                        ['[Progress: 12 / 24]'],
+                        ['[Progress: 13 / 24]'],
                         ['Data install/update:'],
-                        ['Disabling caches:'],
-                        ['[Progress: 14 / 23]'],
-                        ['[Progress: 15 / 23]'],
+                        ['[Progress: 14 / 24]'],
+                        ['[Progress: 15 / 24]'],
                         ['Data post-updates:'],
-                        ['[Progress: 16 / 23]'],
-                        ['[Progress: 17 / 23]'],
-                        ['Enabling caches:'],
-                        ['[Progress: 18 / 23]'],
-                        ['[Progress: 19 / 23]'],
-                        ['[Progress: 20 / 23]'],
-                        ['[Progress: 21 / 23]'],
-                        ['[Progress: 22 / 23]'],
-                        ['[Progress: 23 / 23]'],
+                        ['[Progress: 16 / 24]'],
+                        ['[Progress: 17 / 24]'],
+                        ['[Progress: 18 / 24]'],
+                        ['[Progress: 19 / 24]'],
+                        ['[Progress: 20 / 24]'],
+                        ['[Progress: 21 / 24]'],
+                        ['[Progress: 22 / 24]'],
+                        ['[Progress: 23 / 24]'],
+                        ['[Progress: 24 / 24]'],
                     ],
                 ],
             ];
@@ -700,9 +729,9 @@ namespace Magento\Setup\Test\Unit\Model {
             $dataSetup->expects($this->any())->method('getConnection')->willReturn($connection);
             $cacheManager = $this->createMock(Manager::class);
             $cacheManager->expects($this->any())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
-            $cacheManager->expects($this->exactly(3))->method('setEnabled')->willReturn(['foo', 'bar']);
-            $cacheManager->expects($this->exactly(3))->method('clean');
-            $cacheManager->expects($this->exactly(3))->method('getStatus')->willReturn(['foo' => 1, 'bar' => 1]);
+            $cacheManager->expects($this->once())->method('setEnabled')->willReturn(['foo', 'bar']);
+            $cacheManager->expects($this->exactly(2))->method('clean');
+            $cacheManager->expects($this->once())->method('getStatus')->willReturn(['foo' => 1, 'bar' => 1]);
             $appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
                 ->disableOriginalConstructor()
                 ->disableArgumentCloning()
@@ -755,9 +784,20 @@ namespace Magento\Setup\Test\Unit\Model {
                         [DeclarationInstaller::class, $this->declarationInstallerMock],
                         [Registry::class, $registry],
                         [SearchConfig::class, $searchConfigMock],
-                        [RemoteStorageValidator::class, $remoteStorageValidatorMock]
+                        [RemoteStorageValidator::class, $remoteStorageValidatorMock],
+                        [Collection::class, $this->indexerMock],
+                        [IndexerRegistry::class, $this->indexerRegistryMock]
                     ]
                 );
+            $this->indexerMock->expects($this->once())->method('getAllIds')->willReturn(
+                [
+                    'catalog_category_product',
+                    'catalog_product_category',
+                ]
+            );
+            $this->indexerRegistryMock->expects($this->exactly(2))->method('get')->willReturn(
+                $this->indexerInterfaceMock
+            );
             $this->adminFactory->expects($this->any())->method('create')->willReturn(
                 $this->createMock(AdminAccount::class)
             );
@@ -830,50 +870,49 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['foo: 1'],
                         ['bar: 1'],
                         ['Installing data...'],
-                        ['Current status:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
-                        ['Current status:'],
                         ['Creating sales order increment prefix...'], // << added
                         ['Caches clearing:'],
                         ['Disabling Maintenance Mode:'],
                         ['Post installation file permissions check...'],
                         ['Write installation date...'],
+                        ['Enabling Update by Schedule Indexer Mode...'],
+                        ['2 indexer(s) are in "Update by Schedule" mode.'],
                         ['Sample Data is installed with errors. See log file for details']
                     ],
                     'logMetaMessages' => [
                         ['Starting Magento installation:'],
-                        ['[Progress: 1 / 23]'],
-                        ['[Progress: 2 / 23]'],
-                        ['[Progress: 3 / 23]'],
-                        ['[Progress: 4 / 23]'],
+                        ['[Progress: 1 / 24]'],
+                        ['[Progress: 2 / 24]'],
+                        ['[Progress: 3 / 24]'],
+                        ['[Progress: 4 / 24]'],
                         ['Schema creation/updates:'],
-                        ['[Progress: 5 / 23]'],
-                        ['[Progress: 6 / 23]'],
+                        ['[Progress: 5 / 24]'],
+                        ['[Progress: 6 / 24]'],
                         ['Schema post-updates:'],
-                        ['[Progress: 7 / 23]'],
-                        ['[Progress: 8 / 23]'],
-                        ['[Progress: 9 / 23]'],
-                        ['[Progress: 10 / 23]'],
-                        ['[Progress: 11 / 23]'],
-                        ['[Progress: 12 / 23]'],
-                        ['[Progress: 13 / 23]'],
+                        ['[Progress: 7 / 24]'],
+                        ['[Progress: 8 / 24]'],
+                        ['[Progress: 9 / 24]'],
+                        ['[Progress: 10 / 24]'],
+                        ['[Progress: 11 / 24]'],
+                        ['[Progress: 12 / 24]'],
+                        ['[Progress: 13 / 24]'],
                         ['Data install/update:'],
-                        ['Disabling caches:'],
-                        ['[Progress: 14 / 23]'],
-                        ['[Progress: 15 / 23]'],
+                        ['[Progress: 14 / 24]'],
+                        ['[Progress: 15 / 24]'],
                         ['Data post-updates:'],
-                        ['[Progress: 16 / 23]'],
-                        ['[Progress: 17 / 23]'],
-                        ['Enabling caches:'],
-                        ['[Progress: 18 / 23]'],
-                        ['[Progress: 19 / 23]'],
-                        ['[Progress: 20 / 23]'],
-                        ['[Progress: 21 / 23]'],
-                        ['[Progress: 22 / 23]'],
-                        ['[Progress: 23 / 23]'],
+                        ['[Progress: 16 / 24]'],
+                        ['[Progress: 17 / 24]'],
+                        ['[Progress: 18 / 24]'],
+                        ['[Progress: 19 / 24]'],
+                        ['[Progress: 20 / 24]'],
+                        ['[Progress: 21 / 24]'],
+                        ['[Progress: 22 / 24]'],
+                        ['[Progress: 23 / 24]'],
+                        ['[Progress: 24 / 24]'],
                     ],
                 ],
             ];
@@ -910,18 +949,18 @@ namespace Magento\Setup\Test\Unit\Model {
 
             $logMetaMessages = [
                 ['Starting Magento installation:'],
-                ['[Progress: 1 / 22]'],
-                ['[Progress: 2 / 22]'],
-                ['[Progress: 3 / 22]'],
-                ['[Progress: 4 / 22]'],
+                ['[Progress: 1 / 23]'],
+                ['[Progress: 2 / 23]'],
+                ['[Progress: 3 / 23]'],
+                ['[Progress: 4 / 23]'],
                 ['Schema creation/updates:'],
-                ['[Progress: 5 / 22]'],
-                ['[Progress: 6 / 22]'],
+                ['[Progress: 5 / 23]'],
+                ['[Progress: 6 / 23]'],
                 ['Schema post-updates:'],
-                ['[Progress: 7 / 22]'],
-                ['[Progress: 8 / 22]'],
-                ['[Progress: 9 / 22]'],
-                ['[Progress: 10 / 22]'],
+                ['[Progress: 7 / 23]'],
+                ['[Progress: 8 / 23]'],
+                ['[Progress: 9 / 23]'],
+                ['[Progress: 10 / 23]'],
             ];
 
             $this->config->expects(static::atLeastOnce())
@@ -1140,9 +1179,9 @@ namespace Magento\Setup\Test\Unit\Model {
             $dataSetup->expects(static::any())->method('getConnection')->willReturn($connection);
             $cacheManager = $this->createMock(Manager::class);
             $cacheManager->expects(static::any())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
-            $cacheManager->expects(static::exactly(3))->method('setEnabled')->willReturn(['foo', 'bar']);
-            $cacheManager->expects(static::exactly(3))->method('clean');
-            $cacheManager->expects(static::exactly(3))->method('getStatus')->willReturn(['foo' => 1, 'bar' => 1]);
+            $cacheManager->expects(static::once())->method('setEnabled')->willReturn(['foo', 'bar']);
+            $cacheManager->expects(static::exactly(2))->method('clean');
+            $cacheManager->expects(static::once())->method('getStatus')->willReturn(['foo' => 1, 'bar' => 1]);
             $appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
                 ->disableOriginalConstructor()
                 ->disableArgumentCloning()
@@ -1213,14 +1252,17 @@ namespace Magento\Setup\Test\Unit\Model {
             $objectManagerReturnMapSequence = [
                 0 => [Registry::class, $registry],
                 1 => [DeclarationInstaller::class, $this->declarationInstallerMock],
-                3 => [SearchConfig::class, $searchConfigMock],
-                4 => [
+                2 => [SearchConfig::class, $searchConfigMock],
+                3 => [
                     RemoteStorageValidator::class,
                     new ReflectionException('Class ' . RemoteStorageValidator::class . ' does not exist')
                 ],
-                5 => [\Magento\Framework\App\State::class, $appState],
-                7 => [Registry::class, $registry],
-                11 => [Manager::class, $cacheManager]
+                4 => [\Magento\Framework\App\State::class, $appState],
+                5 => [Registry::class, $registry],
+                6 => [Manager::class, $cacheManager],
+                7 => [Collection::class, $this->indexerMock],
+                8 => [IndexerRegistry::class, $this->indexerRegistryMock],
+                9 => [IndexerRegistry::class, $this->indexerRegistryMock]
             ];
             $withArgs = $willReturnArgs = [];
 
@@ -1240,6 +1282,15 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->withConsecutive(...$withArgs)
                 ->willReturnOnConsecutiveCalls(...$willReturnArgs);
 
+            $this->indexerMock->expects($this->once())->method('getAllIds')->willReturn(
+                [
+                    'catalog_category_product',
+                    'catalog_product_category',
+                ]
+            );
+            $this->indexerRegistryMock->expects($this->exactly(2))->method('get')->willReturn(
+                $this->indexerInterfaceMock
+            );
             $this->adminFactory->expects(static::any())->method('create')->willReturn(
                 $this->createMock(AdminAccount::class)
             );
@@ -1302,10 +1353,10 @@ namespace Magento\Setup\Test\Unit\Model {
 
             $logMetaMessages = [
                 ['Starting Magento installation:'],
-                ['[Progress: 1 / 22]'],
-                ['[Progress: 2 / 22]'],
-                ['[Progress: 3 / 22]'],
-                ['[Progress: 4 / 22]'],
+                ['[Progress: 1 / 23]'],
+                ['[Progress: 2 / 23]'],
+                ['[Progress: 3 / 23]'],
+                ['[Progress: 4 / 23]'],
                 ['Schema creation/updates:'],
             ];
 
@@ -1434,28 +1485,13 @@ namespace Magento\Setup\Test\Unit\Model {
         /**
          * Test for InstallDataFixtures
          *
-         * @dataProvider testInstallDataFixturesDataProvider
-         *
-         * @param bool $keepCache
-         * @param array $expectedToEnableCacheTypes
          * @return void
          */
-        public function testInstallDataFixtures(bool $keepCache, array $expectedToEnableCacheTypes): void
+        public function testInstallDataFixtures(): void
         {
             $this->moduleList->method('getOne')->willReturn(['setup_version' => '2.0.0']);
 
             $cacheManagerMock = $this->createMock(Manager::class);
-            //simulate disabled layout cache type
-            $cacheManagerMock->expects($this->atLeastOnce())
-                ->method('getStatus')
-                ->willReturn(['layout' => 0]);
-            $cacheManagerMock->expects($this->atLeastOnce())
-                ->method('getAvailableTypes')
-                ->willReturn(['block_html', 'full_page', 'layout' , 'config', 'collections']);
-            $cacheManagerMock->expects($this->exactly(2))
-                ->method('setEnabled')
-                ->withConsecutive([$expectedToEnableCacheTypes, false], [$expectedToEnableCacheTypes, true])
-                ->willReturn([]);
 
             $this->objectManager->expects($this->atLeastOnce())
                 ->method('create')
@@ -1509,25 +1545,7 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->method('create')
                 ->willReturn($dataSetup);
 
-            $this->object->installDataFixtures($this->request, $keepCache);
-        }
-
-        /**
-         * DataProvider for testInstallDataFixtures
-         *
-         * @return array
-         */
-        public function testInstallDataFixturesDataProvider(): array
-        {
-            return [
-                'keep cache' => [
-                    true, ['block_html', 'full_page']
-                ],
-                'do not keep a cache' => [
-                    false,
-                    ['block_html', 'full_page', 'layout']
-                ],
-            ];
+            $this->object->installDataFixtures($this->request);
         }
 
         public function testCheckInstallationFilePermissions()

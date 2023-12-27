@@ -36,7 +36,9 @@
                 <argument name="StoreGroup" value="SecondStoreGroupUnique"/>
                 <argument name="customStore" value="SecondStoreUnique"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindexAllIndexes"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAllIndexes">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <!-- Change time zone for second website-->
             <actionGroup ref="AdminChangeTimeZoneForDifferentWebsiteActionGroup" stepKey="openConfigPage">
                 <argument name="websiteName" value="{{secondCustomWebsite.name}}"/>
@@ -96,7 +98,9 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{secondCustomWebsite.name}}"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <!--reset prouct grid filter-->
             <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridFilter"/>
             <!-- Admin logout -->
@@ -126,6 +130,10 @@
         <!--set second website as default-->
         <actionGroup ref="AdminSetDefaultWebsiteActionGroup" stepKey="setSecondWebsiteAsDefault">
             <argument name="websiteName" value="{{secondCustomWebsite.name}}"/>
+        </actionGroup>
+        <!-- Clean config and full page cache-->
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+            <argument name="tags" value="config full_page"/>
         </actionGroup>
         <!-- create second Customer-->
         <createData entity="Simple_US_Customer_CA" stepKey="createSecondCustomer"/>

@@ -8,8 +8,6 @@ namespace Magento\Review\Block\Adminhtml;
 
 /**
  * Adminhtml add Review main block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Add extends \Magento\Backend\Block\Widget\Form\Container
 {
