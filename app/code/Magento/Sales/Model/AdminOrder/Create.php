@@ -11,6 +11,7 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Model\Metadata\Form as CustomerForm;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\CustomAttributeListInterface;
 use Magento\Quote\Model\Quote\Item;
@@ -2300,8 +2301,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 $cartItem->setHasError(false);
                 if (isset($this->request->get('item')[$itemId]['qty'])) {
                     $qty = $this->request->get('item')[$itemId]['qty'];
+                    $cartItem->setQty($qty);
                 }
-                $cartItem->setQty($qty);
 
                 if ($cartItem->getHasError()) {
                     throw new LocalizedException(__($cartItem->getMessage()));
