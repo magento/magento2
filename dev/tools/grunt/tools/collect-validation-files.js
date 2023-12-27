@@ -47,6 +47,8 @@ module.exports = {
     },
 
     getFiles: function (file) {
+        var files;
+
         if (file) {
             return file.split(',');
         }
@@ -55,6 +57,11 @@ module.exports = {
             fst.write(pc.static.tmp, this.getFilesForValidate());
         }
 
-        return fst.getData(pc.static.tmp);
+        files = fst.getData(pc.static.tmp);
+        if (files.length === 1 && files[0] === '') {
+            files = [];
+        }
+
+        return files;
     }
 };

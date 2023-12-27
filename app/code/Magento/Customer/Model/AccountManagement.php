@@ -16,6 +16,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\ValidationResultsInterfaceFactory;
 use Magento\Customer\Api\SessionCleanerInterface;
 use Magento\Customer\Helper\View as CustomerViewHelper;
+use Magento\Customer\Model\AccountManagement\Authenticate;
 use Magento\Customer\Model\Config\Share as ConfigShare;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\Customer\CredentialsValidator;
@@ -401,6 +402,11 @@ class AccountManagement implements AccountManagementInterface
     private CustomerLogger $customerLogger;
 
     /**
+     * @var Authenticate
+     */
+    private Authenticate $authenticate;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -439,6 +445,7 @@ class AccountManagement implements AccountManagementInterface
      * @param AuthenticationInterface|null $authentication
      * @param Backend|null $eavValidator
      * @param CustomerLogger|null $customerLogger
+     * @param Authenticate|null $authenticate
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -483,7 +490,8 @@ class AccountManagement implements AccountManagementInterface
         AuthorizationInterface $authorization = null,
         AuthenticationInterface $authentication = null,
         Backend $eavValidator = null,
-        ?CustomerLogger $customerLogger = null
+        CustomerLogger $customerLogger = null,
+        Authenticate $authenticate = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -527,6 +535,7 @@ class AccountManagement implements AccountManagementInterface
         $this->authentication = $authentication ?? $objectManager->get(AuthenticationInterface::class);
         $this->eavValidator = $eavValidator ?? $objectManager->get(Backend::class);
         $this->customerLogger = $customerLogger ?? $objectManager->get(CustomerLogger::class);
+        $this->authenticate = $authenticate ?? $objectManager->get(Authenticate::class);
     }
 
     /**
@@ -620,51 +629,7 @@ class AccountManagement implements AccountManagementInterface
      */
     public function authenticate($username, $password)
     {
-        try {
-            $customer = $this->customerRepository->get($username);
-        } catch (NoSuchEntityException $e) {
-            throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
-        }
-
-        $customerId = $customer->getId();
-        if ($this->authentication->isLocked($customerId)) {
-            throw new UserLockedException(__('The account is locked.'));
-        }
-        try {
-            $this->authentication->authenticate($customerId, $password);
-        } catch (InvalidEmailOrPasswordException $e) {
-            throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
-        }
-
-        if ($customer->getConfirmation()
-            && ($this->isConfirmationRequired($customer) || $this->isEmailChangedConfirmationRequired($customer))) {
-            throw new EmailNotConfirmedException(__("This account isn't confirmed. Verify and try again."));
-        }
-
-        $customerModel = $this->customerFactory->create()->updateData($customer);
-        $this->eventManager->dispatch(
-            'customer_customer_authenticated',
-            ['model' => $customerModel, 'password' => $password]
-        );
-
-        $this->eventManager->dispatch('customer_data_object_login', ['customer' => $customer]);
-
-        return $customer;
-    }
-
-    /**
-     * Checks if account confirmation is required if the email address has been changed
-     *
-     * @param CustomerInterface $customer
-     * @return bool
-     */
-    private function isEmailChangedConfirmationRequired(CustomerInterface $customer): bool
-    {
-        return $this->accountConfirmation->isEmailChangedConfirmationRequired(
-            (int)$customer->getWebsiteId(),
-            (int)$customer->getId(),
-            $customer->getEmail()
-        );
+        return $this->authenticate->execute((string) $username, (string) $password);
     }
 
     /**
