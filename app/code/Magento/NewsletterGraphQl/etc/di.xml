@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Framework\App\Cache\Tag\Strategy\Factory">
         <arguments>
-            <argument>
+            <argument name="customStrategies" xsi:type="array">
                 <item name="Magento\Newsletter\Model\Subscriber" xsi:type="object">Magento\NewsletterGraphQl\Model\Resolver\Cache\Subscriber\TagsStrategy</item>
             </argument>
         </arguments>
