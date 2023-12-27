@@ -29,14 +29,9 @@ class LiveCodeTest extends TestCase
     private static $changeCheckDir = '';
 
     /**
-     * @var array
+     * @var mixed
      */
-    private static $uiDataComponentInterface = [
-        'Magento\Framework\App\ActionInterface',
-        'Magento\Framework\View\Element\BlockInterface',
-        'Magento\Framework\View\Element\UiComponentInterface',
-        'Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface',
-    ];
+    private static mixed $frontendUIComponent;
 
     /**
      * Setup basics for all tests
@@ -82,7 +77,8 @@ class LiveCodeTest extends TestCase
             $modulesRequireGraphQLChange,
             "The view layer changes have been detected in the " .
             str_replace("GraphQl", "", $graphQlModules) . " module. " .
-            "The " . $graphQlModules ." module is expected to be updated to reflect these changes."
+            "The " . $graphQlModules ." module is expected to be updated to reflect these changes. " .
+            "The test failure can be ignored if the changes can not be covered with GraphQL API."
         );
     }
 
@@ -115,7 +111,7 @@ class LiveCodeTest extends TestCase
                 continue;
             }
 
-            if (!in_array($moduleName, $requireGraphQLChanges) && self::isViewLayerClass($whitelistFile)) {
+            if (!in_array($moduleName, $requireGraphQLChanges) && self::isViewLayerClass($whitelistFile, $moduleName)) {
                 $requireGraphQLChanges[] = $moduleName . "GraphQl";
             }
         }
@@ -137,20 +133,20 @@ class LiveCodeTest extends TestCase
     }
 
     /**
-     * Return true if the class implements any of the defined interfaces
+     * Return true if the class is a data provider for the frontend
      *
      * @param string $filePath
+     * @param string $moduleName
      * @return bool
      */
-    private static function isViewLayerClass(string $filePath): bool
+    private static function isViewLayerClass(string $filePath, string $moduleName): bool
     {
         $className = self::getClassNameWithNamespace($filePath);
-        if (!$className) {
-            return false;
+        $adminChange = str_contains(strtolower($className), 'adminhtml');
+        if ($className && !$adminChange && self::isFrontendUIComponent($moduleName, $className)) {
+            return true;
         }
-
-        $implementingInterfaces = array_values(class_implements($className));
-        return !empty(array_intersect($implementingInterfaces, self::$uiDataComponentInterface));
+        return false;
     }
 
     /**
@@ -166,5 +162,51 @@ class LiveCodeTest extends TestCase
             return ($m[1] && $className) ? $m[1] . "\\" . $className : '';
         }
         return '';
+    }
+
+    /**
+     * Check if the class is a frontend data provider
+     *
+     * @param string $moduleName
+     * @param string $className
+     * @return bool
+     */
+    private static function isFrontendUIComponent(string $moduleName, string $className): bool
+    {
+        if (!isset(self::$frontendUIComponent[$moduleName])) {
+            $files = glob(BP . '/app/code/Magento/'.$moduleName.'/view/frontend/*/*.xml');
+
+            if (is_array($files)) {
+                $uIComponentClasses = [];
+
+                foreach ($files as $filename) {
+                    $uIComponentClasses[] = simplexml_load_file($filename)->xpath('//@class');
+                }
+                self::$frontendUIComponent[$moduleName] = self::filterUiComponents(
+                    array_unique(array_merge([], ...$uIComponentClasses)),
+                    $moduleName
+                );
+            }
+        }
+        return in_array($className, self::$frontendUIComponent[$moduleName]);
+    }
+
+    /**
+     * Filter the array of classes to return only the classes in this module
+     *
+     * @param array $uIComponentClasses
+     * @param string $moduleName
+     * @return array
+     */
+    private static function filterUiComponents(array $uIComponentClasses, string $moduleName): array
+    {
+        $frontendUIComponent = [];
+        foreach ($uIComponentClasses as $dataProvider) {
+            $dataProviderClass = ltrim((string)$dataProvider->class, '\\');
+            if (str_starts_with($dataProviderClass, 'Magento\\' . $moduleName)) {
+                $frontendUIComponent[] = $dataProviderClass;
+            }
+        }
+        return $frontendUIComponent;
     }
 }
