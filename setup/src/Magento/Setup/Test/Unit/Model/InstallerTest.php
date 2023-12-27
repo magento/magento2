@@ -374,9 +374,9 @@ namespace Magento\Setup\Test\Unit\Model {
             $dataSetup->expects($this->any())->method('getConnection')->willReturn($connection);
             $cacheManager = $this->createMock(Manager::class);
             $cacheManager->expects($this->any())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
-            $cacheManager->expects($this->exactly(3))->method('setEnabled')->willReturn(['foo', 'bar']);
-            $cacheManager->expects($this->exactly(3))->method('clean');
-            $cacheManager->expects($this->exactly(3))->method('getStatus')->willReturn(['foo' => 1, 'bar' => 1]);
+            $cacheManager->expects($this->once())->method('setEnabled')->willReturn(['foo', 'bar']);
+            $cacheManager->expects($this->exactly(2))->method('clean');
+            $cacheManager->expects($this->once())->method('getStatus')->willReturn(['foo' => 1, 'bar' => 1]);
             $appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
                 ->disableOriginalConstructor()
                 ->disableArgumentCloning()
@@ -493,15 +493,11 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['bar: 1'],
                         ['Installing data...'],
                         ['Data install/update:'],
-                        ['Disabling caches:'],
-                        ['Current status:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Data post-updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
-                        ['Enabling caches:'],
-                        ['Current status:'],
                         ['Caches clearing:'],
                         ['Cache cleared successfully'],
                         ['Disabling Maintenance Mode:'],
@@ -545,15 +541,11 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['bar: 1'],
                         ['Installing data...'],
                         ['Data install/update:'],
-                        ['Disabling caches:'],
-                        ['Current status:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Data post-updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
-                        ['Enabling caches:'],
-                        ['Current status:'],
                         ['Installing admin user...'],
                         ['Caches clearing:'],
                         ['Cache cleared successfully'],
@@ -643,9 +635,9 @@ namespace Magento\Setup\Test\Unit\Model {
             $dataSetup->expects($this->any())->method('getConnection')->willReturn($connection);
             $cacheManager = $this->createMock(Manager::class);
             $cacheManager->expects($this->any())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
-            $cacheManager->expects($this->exactly(3))->method('setEnabled')->willReturn(['foo', 'bar']);
-            $cacheManager->expects($this->exactly(3))->method('clean');
-            $cacheManager->expects($this->exactly(3))->method('getStatus')->willReturn(['foo' => 1, 'bar' => 1]);
+            $cacheManager->expects($this->once())->method('setEnabled')->willReturn(['foo', 'bar']);
+            $cacheManager->expects($this->exactly(2))->method('clean');
+            $cacheManager->expects($this->once())->method('getStatus')->willReturn(['foo' => 1, 'bar' => 1]);
             $appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
                 ->disableOriginalConstructor()
                 ->disableArgumentCloning()
@@ -769,15 +761,11 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['bar: 1'],
                         ['Installing data...'],
                         ['Data install/update:'],
-                        ['Disabling caches:'],
-                        ['Current status:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Data post-updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
-                        ['Enabling caches:'],
-                        ['Current status:'],
                         ['Creating sales order increment prefix...'], // << added
                         ['Caches clearing:'],
                         ['Cache cleared successfully'],
@@ -1030,9 +1018,9 @@ namespace Magento\Setup\Test\Unit\Model {
             $dataSetup->expects(static::any())->method('getConnection')->willReturn($connection);
             $cacheManager = $this->createMock(Manager::class);
             $cacheManager->expects(static::any())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
-            $cacheManager->expects(static::exactly(3))->method('setEnabled')->willReturn(['foo', 'bar']);
-            $cacheManager->expects(static::exactly(3))->method('clean');
-            $cacheManager->expects(static::exactly(3))->method('getStatus')->willReturn(['foo' => 1, 'bar' => 1]);
+            $cacheManager->expects(static::once())->method('setEnabled')->willReturn(['foo', 'bar']);
+            $cacheManager->expects(static::exactly(2))->method('clean');
+            $cacheManager->expects(static::once())->method('getStatus')->willReturn(['foo' => 1, 'bar' => 1]);
             $appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
                 ->disableOriginalConstructor()
                 ->disableArgumentCloning()
@@ -1302,28 +1290,13 @@ namespace Magento\Setup\Test\Unit\Model {
         /**
          * Test for InstallDataFixtures
          *
-         * @dataProvider testInstallDataFixturesDataProvider
-         *
-         * @param bool $keepCache
-         * @param array $expectedToEnableCacheTypes
          * @return void
          */
-        public function testInstallDataFixtures(bool $keepCache, array $expectedToEnableCacheTypes): void
+        public function testInstallDataFixtures(): void
         {
             $this->moduleList->method('getOne')->willReturn(['setup_version' => '2.0.0']);
 
             $cacheManagerMock = $this->createMock(Manager::class);
-            //simulate disabled layout cache type
-            $cacheManagerMock->expects($this->atLeastOnce())
-                ->method('getStatus')
-                ->willReturn(['layout' => 0]);
-            $cacheManagerMock->expects($this->atLeastOnce())
-                ->method('getAvailableTypes')
-                ->willReturn(['block_html', 'full_page', 'layout' , 'config', 'collections']);
-            $cacheManagerMock->expects($this->exactly(2))
-                ->method('setEnabled')
-                ->withConsecutive([$expectedToEnableCacheTypes, false], [$expectedToEnableCacheTypes, true])
-                ->willReturn([]);
 
             $this->objectManager->expects($this->atLeastOnce())
                 ->method('create')
@@ -1377,25 +1350,7 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->method('create')
                 ->willReturn($dataSetup);
 
-            $this->object->installDataFixtures($this->request, $keepCache);
-        }
-
-        /**
-         * DataProvider for testInstallDataFixtures
-         *
-         * @return array
-         */
-        public function testInstallDataFixturesDataProvider(): array
-        {
-            return [
-                'keep cache' => [
-                    true, ['block_html', 'full_page']
-                ],
-                'do not keep a cache' => [
-                    false,
-                    ['block_html', 'full_page', 'layout']
-                ],
-            ];
+            $this->object->installDataFixtures($this->request);
         }
 
         public function testCheckInstallationFilePermissions()
