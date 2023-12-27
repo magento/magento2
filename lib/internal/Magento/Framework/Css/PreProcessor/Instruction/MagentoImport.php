@@ -72,12 +72,12 @@ class MagentoImport implements PreProcessorInterface, ResetAfterRequestInterface
     /**
      * @var DeploymentConfig
      */
-    private $deploymentConfig;
+    private DeploymentConfig $deploymentConfig;
 
     /**
      * @var ModuleManager
      */
-    private $moduleManager;
+    private ModuleManager $moduleManager;
 
     /**
      * @param DesignInterface $design
@@ -140,21 +140,12 @@ class MagentoImport implements PreProcessorInterface, ResetAfterRequestInterface
                 $moduleName = $importFile->getModule();
                 $referenceString = $isReference ? '(reference) ' : '';
 
-                if (!$moduleName) {
-                    $importsContent .= "@import $referenceString'{$matchedFileId}';\n";
-                }
-
                 if ($moduleName) {
-                    if (!$deployOnlyEnabled) {
+                    if (!$deployOnlyEnabled || $this->moduleManager->isEnabled($moduleName)) {
                         $importsContent .= "@import $referenceString'{$moduleName}::{$resolvedPath}';\n";
-                    } else {
-                        if (!$this->moduleManager->isEnabled($moduleName)) {
-                            continue;
-                        }
-
-                        $importsContent .= "@import $referenceString'{$moduleName}::{$resolvedPath}';\n";
-
                     }
+                } else {
+                    $importsContent .= "@import $referenceString'{$matchedFileId}';\n";
                 }
             }
         } catch (\LogicException $e) {
@@ -169,7 +160,7 @@ class MagentoImport implements PreProcessorInterface, ResetAfterRequestInterface
      *
      * @return bool
      */
-    protected function hasEnabledFlagDeployEnabledModules(): bool
+    private function hasEnabledFlagDeployEnabledModules(): bool
     {
         return (bool) $this->deploymentConfig->get(self::CONFIG_PATH_SCD_ONLY_ENABLED_MODULES);
     }
