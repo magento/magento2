@@ -14,6 +14,7 @@
  * from Adobe.
  * ************************************************************************
  */
+declare(strict_types=1);
 
 namespace Magento\Analytics\ReportXml;
 
