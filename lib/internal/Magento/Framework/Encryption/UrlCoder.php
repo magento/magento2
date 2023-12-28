@@ -44,6 +44,6 @@ class UrlCoder
      */
     public function decode($url)
     {
-        return $this->_url->sessionUrlVar(base64_decode(strtr($url, '-_,', '+/=')));
+        return $this->_url->sessionUrlVar(base64_decode(strtr($url, '-_~', '+/=')));
     }
 }
