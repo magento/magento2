@@ -132,7 +132,7 @@
             <column name="attribute_id"/>
             <column name="store_id"/>
         </constraint>
-        <index referenceId="CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID" indexType="btree">
+        <index referenceId="CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID_ENTITY_ID" indexType="btree">
             <column name="attribute_id"/>
             <column name="entity_id"/>
         </index>
