@@ -26,7 +26,7 @@ class UrlCoder
     }
 
     /**
-     * base64_encode() for URLs encoding
+     * The base64_encode() for URLs encoding
      *
      * @param    string $url
      * @return   string
@@ -37,7 +37,7 @@ class UrlCoder
     }
 
     /**
-     *  base64_decode() for URLs decoding
+     *  The base64_decode() for URLs decoding
      *
      * @param    string $url
      * @return   string
