@@ -711,7 +711,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $this->model->moveQuoteItem($item, 'cart', 3);
         self::assertEquals(4, $item->getQty(), 'Number of Qty isn\'t correct for Quote item.');
         self::assertEquals(3, $item->getQtyToAdd(), 'Number of added qty isn\'t correct for Quote item.');
-        self::assertEquals($session->getTransferredItems(), []);
+        self::assertEquals($session->getTransferredItems(), ['cart' => []]);
     }
 
     /**
