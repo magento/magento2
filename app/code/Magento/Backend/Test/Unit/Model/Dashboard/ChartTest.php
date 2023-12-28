@@ -89,12 +89,6 @@ class ChartTest extends TestCase
     {
         $this->orderHelperMock
             ->method('setParam')
-//            ->withConsecutive(
-//                ['store', null],
-//                ['website', null],
-//                ['group', null],
-//                ['period', $period]
-//            );
             ->willReturnCallback(function ($arg1, $arg2) use ($period) {
                 if ($arg1 == 'period' && $arg2 == $period) {
                     return $this;
