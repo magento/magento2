@@ -374,9 +374,16 @@ class StorageTest extends TestCase
         };
         $this->urlDecoder
             ->method('decode')
-            ->withConsecutive([$notRoot], [$filename])
-            ->willReturnOnConsecutiveCalls($this->returnCallback($decode), $this->returnCallback($decode));
-
+//            ->withConsecutive([$notRoot], [$filename])
+//            ->willReturnOnConsecutiveCalls($this->returnCallback($decode), $this->returnCallback($decode));
+            ->willReturnCallback(function ($arg) use ($decode, $notRoot, $filename) {
+                if ($arg == $notRoot) {
+                    return $this->returnCallback($decode);
+                }
+                if ($arg == $filename) {
+                    return $this->returnCallback($decode);
+                }
+            });
         $this->assertEquals(
             '../image/not/a/root/filename.ext',
             $this->helper->getRelativeUrl()
@@ -386,7 +393,7 @@ class StorageTest extends TestCase
     /**
      * @return array
      */
-    public function getStorageTypeForNameDataProvider(): array
+    public static function getStorageTypeForNameDataProvider(): array
     {
         return [
             'font' => [\Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT, Storage::FONTS],
@@ -492,7 +499,7 @@ class StorageTest extends TestCase
     /**
      * @return array
      */
-    public function getCurrentPathDataProvider(): array
+    public static function getCurrentPathDataProvider(): array
     {
         $rootPath = '/' . \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE;
 
@@ -512,14 +519,10 @@ class StorageTest extends TestCase
     {
         $this->request
             ->method('getParam')
-            ->withConsecutive(
-                [Storage::PARAM_THEME_ID],
-                [Storage::PARAM_CONTENT_TYPE]
-            )
-            ->willReturnOnConsecutiveCalls(
-                6,
-                \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Storage::PARAM_THEME_ID] => 6,
+                [Storage::PARAM_CONTENT_TYPE] => \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE
+            });
     }
 
     /**
