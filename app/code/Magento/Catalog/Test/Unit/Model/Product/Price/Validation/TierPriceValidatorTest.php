@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Test\Unit\Model\Product\Price\Validation;
 
 use Magento\Catalog\Api\Data\TierPriceInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor;
 use Magento\Catalog\Model\Product\Price\Validation\Result;
 use Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator;
@@ -80,6 +81,11 @@ class TierPriceValidatorTest extends TestCase
     private $tierPrice;
 
     /**
+     * @var ProductRepositoryInterface|MockObject
+     */
+    private $productRepository;
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp(): void
@@ -109,6 +115,9 @@ class TierPriceValidatorTest extends TestCase
         $this->tierPrice = $this->getMockBuilder(TierPriceInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $objectManagerHelper = new ObjectManager($this);
         $this->tierPriceValidator = $objectManagerHelper->getObject(
@@ -120,7 +129,8 @@ class TierPriceValidatorTest extends TestCase
                 'customerGroupRepository' => $this->customerGroupRepository,
                 'websiteRepository' => $this->websiteRepository,
                 'validationResult' => $this->validationResult,
-                'invalidSkuProcessor' => $this->invalidSkuProcessor
+                'invalidSkuProcessor' => $this->invalidSkuProcessor,
+                'productRepository' => $this->productRepository
             ]
         );
     }
@@ -187,6 +197,27 @@ class TierPriceValidatorTest extends TestCase
         ];
         $this->productIdLocator->expects($this->atLeastOnce())->method('retrieveProductIdsBySkus')
             ->willReturn($idsBySku);
+
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $type = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\AbstractType::class)
+            ->onlyMethods(['canUseQtyDecimals'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->productRepository->expects($this->once())
+            ->method('get')
+            ->with($sku)
+            ->willReturn($product);
+
+        $product->expects($this->once())
+            ->method('getTypeInstance')
+            ->willReturn($type);
+
+        $type->expects($this->once())
+            ->method('canUseQtyDecimals')
+            ->willReturn(true);
     }
 
     /**

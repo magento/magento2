@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Setup\Console\Command;
 
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
@@ -31,7 +33,7 @@ class UpgradeCommand extends AbstractSetupCommand
     /**
      * Option to skip deletion of generated/code directory.
      */
-    const INPUT_KEY_KEEP_GENERATED = 'keep-generated';
+    public const INPUT_KEY_KEEP_GENERATED = 'keep-generated';
 
     /**
      * Installer service factory.
@@ -55,7 +57,7 @@ class UpgradeCommand extends AbstractSetupCommand
      */
     private $searchConfigFactory;
 
-    /*
+    /**
      * @var CacheInterface
      */
     private $cache;
@@ -142,8 +144,8 @@ class UpgradeCommand extends AbstractSetupCommand
             $searchConfig = $this->searchConfigFactory->create();
             $this->cache->clean();
             $searchConfig->validateSearchEngine();
-            $installer->removeUnusedTriggers();
             $installer->installSchema($request);
+            $installer->removeUnusedTriggers();
             $installer->installDataFixtures($request, true);
 
             if ($this->deploymentConfig->isAvailable()) {
@@ -163,6 +165,7 @@ class UpgradeCommand extends AbstractSetupCommand
                     '<info>Please re-run Magento compile command. Use the command "setup:di:compile"</info>'
                 );
             }
+
             $output->writeln(
                 "<info>Media files stored outside of 'Media Gallery Allowed' folders"
                 . " will not be available to the media gallery.</info>"

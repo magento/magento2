@@ -12,6 +12,8 @@ use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -77,6 +79,12 @@ class AddCommentTest extends TestCase
      */
     private $objectManagerMock;
 
+    /** @var JsonFactory|MockObject */
+    private $jsonFactory;
+
+    /** @var Json|MockObject */
+    private $resultJson;
+
     /**
      * Test setup
      */
@@ -94,6 +102,13 @@ class AddCommentTest extends TestCase
 
         $this->contextMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
 
+        $this->resultJson = $this->getMockBuilder(Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->jsonFactory = $this->getMockBuilder(JsonFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $objectManagerHelper = new ObjectManager($this);
         $this->addCommentController = $objectManagerHelper->getObject(
             AddComment::class,
@@ -101,7 +116,8 @@ class AddCommentTest extends TestCase
                 'context' => $this->contextMock,
                 'orderRepository' => $this->orderRepositoryMock,
                 '_authorization' => $this->authorizationMock,
-                '_objectManager' => $this->objectManagerMock
+                '_objectManager' => $this->objectManagerMock,
+                'resultJsonFactory' => $this->jsonFactory
             ]
         );
     }
@@ -204,5 +220,45 @@ class AddCommentTest extends TestCase
                 'expectedNotify' => false
             ],
         ];
+    }
+
+    /**
+     * Assert error message for empty comment value
+     *
+     * @return void
+     */
+    public function testExecuteForEmptyCommentMessage(): void
+    {
+        $orderId = 30;
+        $orderStatus = 'processing';
+        $historyData = [
+            'comment' => '',
+            'is_customer_notified' => false,
+            'status' => 'processing'
+        ];
+
+        $this->requestMock->expects($this->once())->method('getParam')->with('order_id')->willReturn($orderId);
+        $this->orderMock->expects($this->atLeastOnce())->method('getDataByKey')
+            ->with('status')->willReturn($orderStatus);
+        $this->orderRepositoryMock->expects($this->once())
+            ->method('get')
+            ->willReturn($this->orderMock);
+        $this->requestMock->expects($this->once())->method('getPost')->with('history')->willReturn($historyData);
+
+        $this->resultJson->expects($this->once())
+            ->method('setData')
+            ->with(
+                [
+                    'error' => true,
+                    'message' => 'Please provide a comment text or ' .
+                        'update the order status to be able to submit a comment for this order.'
+                ]
+            )
+            ->willReturnSelf();
+        $this->jsonFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultJson);
+
+        $this->assertSame($this->resultJson, $this->addCommentController->execute());
     }
 }

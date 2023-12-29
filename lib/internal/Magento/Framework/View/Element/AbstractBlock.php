@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Framework\View\Element;
 
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Cache\LockGuardedCacheLoader;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\DataObject\IdentityInterface;
 
 /**
@@ -51,6 +54,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * @var \Magento\Framework\Session\SidResolverInterface
      * @deprecated 102.0.5 Not used anymore.
+     * @see Session Id's In URL
      */
     protected $_sidResolver;
 
@@ -167,6 +171,11 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     protected $_cache;
 
     /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * @var LockGuardedCacheLoader
      */
     private $lockQuery;
@@ -199,6 +208,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $this->_localeDate = $context->getLocaleDate();
         $this->inlineTranslation = $context->getInlineTranslation();
         $this->lockQuery = $context->getLockGuardedCacheLoader();
+
         if (isset($data['jsLayout'])) {
             $this->jsLayout = $data['jsLayout'];
             unset($data['jsLayout']);
@@ -880,6 +890,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param array|null $allowedTags
      * @return string
      * @deprecated 103.0.0 Use $escaper directly in templates and in blocks.
+     * @see Escaper Usage
      */
     public function escapeHtml($data, $allowedTags = null)
     {
@@ -893,6 +904,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @return string
      * @since 101.0.0
      * @deprecated 103.0.0 Use $escaper directly in templates and in blocks.
+     * @see Escaper Usage
      */
     public function escapeJs($string)
     {
@@ -907,6 +919,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @return string
      * @since 101.0.0
      * @deprecated 103.0.0 Use $escaper directly in templates and in blocks.
+     * @see Escaper Usage
      */
     public function escapeHtmlAttr($string, $escapeSingleQuote = true)
     {
@@ -920,6 +933,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @return string
      * @since 101.0.0
      * @deprecated 103.0.0 Use $escaper directly in templates and in blocks.
+     * @see Escaper Usage
      */
     public function escapeCss($string)
     {
@@ -947,6 +961,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string $string
      * @return string
      * @deprecated 103.0.0 Use $escaper directly in templates and in blocks.
+     * @see Escaper Usage
      */
     public function escapeUrl($string)
     {
@@ -959,6 +974,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string $data
      * @return string
      * @deprecated 101.0.0
+     * @see Escaper Usage
      */
     public function escapeXssInUrl($data)
     {
@@ -974,6 +990,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param bool $addSlashes
      * @return string
      * @deprecated 101.0.0
+     * @see Escaper Usage
      */
     public function escapeQuote($data, $addSlashes = false)
     {
@@ -988,6 +1005,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @return string|array
      * @deprecated 101.0.0
+     * @see Escaper Usage
      */
     public function escapeJsQuote($data, $quote = '\'')
     {
@@ -1035,8 +1053,12 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
 
         $key = array_values($key);  // ignore array keys
 
+        $key[] = (string)$this->getDeploymentConfig()->get(
+            ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY
+        );
+
         $key = implode('|', $key);
-        $key = sha1($key); // use hashing to hide potentially private data
+        $key = hash('sha256', $key); // use hashing to hide potentially private data
         return static::CACHE_KEY_PREFIX . $key;
     }
 
@@ -1175,10 +1197,25 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @return bool
      * @deprecated
+     * @see https://developer.adobe.com/commerce/php/development/cache/page/private-content
      * @since 103.0.1
      */
     public function isScopePrivate()
     {
         return $this->_isScopePrivate;
+    }
+
+    /**
+     * Get DeploymentConfig
+     *
+     * @return DeploymentConfig
+     */
+    private function getDeploymentConfig() : DeploymentConfig
+    {
+        if ($this->deploymentConfig === null) {
+            $this->deploymentConfig = ObjectManager::getInstance()
+                ->get(DeploymentConfig::class);
+        }
+        return $this->deploymentConfig;
     }
 }

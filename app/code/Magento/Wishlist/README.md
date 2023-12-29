@@ -85,12 +85,13 @@ This module introduces the following layouts and layout handles in the directori
     - `wishlist_index_index`
     - `wishlist_index_share`
     - `wishlist_shared_index.xml`
-    
+
 For more information about a layout, see the [Layout documentation](https://developer.adobe.com/commerce/frontend-core/guide/layouts/).
 
 ### UI components
 
-You can extend a customer form and widgets using the configuration files located in the directories 
+You can extend a customer form and widgets using the configuration files located in the directories
+
 - `view/base/ui_component`:
     - `customer_form`
 - `view/frontend/ui_component`:

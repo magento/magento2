@@ -18,6 +18,7 @@
             <testCaseId value="MC-14076"/>
             <group value="importExport"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create Simple Product2 -->
