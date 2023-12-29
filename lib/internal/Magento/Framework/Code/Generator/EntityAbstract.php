@@ -321,6 +321,7 @@ abstract class EntityAbstract
     /**
      * Extract parameter type
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @param \ReflectionParameter $parameter
      * @return null|string
      */
