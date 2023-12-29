@@ -292,6 +292,8 @@ class ArgumentsReader extends ParameterReflection
      *             It may crash on parameters with union types, and will return relative types, instead of
      *             FQN references
      *
+     * @see reflectionnamedtype.isbuiltin.php
+     *
      * @return mixed|string|void|null
      */
     public function detectType()
