@@ -9,7 +9,6 @@
     <module name="Magento_NewsletterGraphQl">
         <sequence>
             <module name="Magento_Newsletter"/>
-            <module name="Magento_GraphQlResolverCache"/>
         </sequence>
     </module>
 </config>
