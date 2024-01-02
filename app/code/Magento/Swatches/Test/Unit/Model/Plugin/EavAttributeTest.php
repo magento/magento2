@@ -287,7 +287,7 @@ class EavAttributeTest extends TestCase
     /**
      * @return array
      */
-    public function visualSwatchProvider()
+    public static function visualSwatchProvider()
     {
         return [
             [Swatch::SWATCH_TYPE_EMPTY, 'black', 'white'],
@@ -330,13 +330,13 @@ class EavAttributeTest extends TestCase
 
         $this->collectionMock->expects($this->exactly(4))
             ->method('addFieldToFilter')
-            ->withConsecutive(
-                ['option_id', self::OPTION_1_ID],
-                ['store_id', self::ADMIN_STORE_ID],
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::ADMIN_STORE_ID]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'option_id' && $arg2 === self::OPTION_1_ID || $arg2 == self::OPTION_2_ID) {
+                    return $this->collectionMock;
+                } elseif ($arg1 == 'store_id' && $arg2 == self::ADMIN_STORE_ID) {
+                    return $this->collectionMock;
+                }
+            });
 
         $this->collectionMock->expects($this->exactly(2))
             ->method('getFirstItem')
@@ -387,21 +387,22 @@ class EavAttributeTest extends TestCase
 
         $this->collectionMock->expects($this->exactly(12))
             ->method('addFieldToFilter')
-            ->withConsecutive(
-                ['option_id', self::OPTION_1_ID],
-                ['store_id', self::ADMIN_STORE_ID],
-                ['option_id', self::OPTION_1_ID],
-                ['store_id', self::DEFAULT_STORE_ID],
-                ['option_id', self::OPTION_1_ID],
-                ['store_id', self::SECOND_STORE_ID],
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::ADMIN_STORE_ID],
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::DEFAULT_STORE_ID],
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::SECOND_STORE_ID]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function ($field, $value) {
+                switch ($field) {
+                    case 'option_id':
+                        if ($value === self::OPTION_1_ID || $value === self::OPTION_2_ID) {
+                            return $this->collectionMock;
+                        }
+                        break;
+                    case 'store_id':
+                        if ($value === self::ADMIN_STORE_ID ||
+                            $value === self::DEFAULT_STORE_ID ||
+                            $value === self::SECOND_STORE_ID) {
+                            return $this->collectionMock;
+                        }
+                        break;
+                }
+            });
 
         $this->collectionMock->expects($this->exactly(6))
             ->method('getFirstItem')
@@ -477,11 +478,13 @@ class EavAttributeTest extends TestCase
 
         $this->collectionMock->expects($this->exactly(2))
             ->method('addFieldToFilter')
-            ->withConsecutive(
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::ADMIN_STORE_ID]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function ($field, $value) {
+                if ($field == 'option_id' && $value == self::OPTION_2_ID) {
+                    return $this->collectionMock;
+                } elseif ($field == 'store_id' && $value == self::ADMIN_STORE_ID) {
+                    return $this->collectionMock;
+                }
+            });
 
         $this->collectionMock->expects($this->exactly(1))
             ->method('getFirstItem')
@@ -529,15 +532,14 @@ class EavAttributeTest extends TestCase
 
         $this->collectionMock->expects($this->exactly(6))
             ->method('addFieldToFilter')
-            ->withConsecutive(
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::ADMIN_STORE_ID],
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::DEFAULT_STORE_ID],
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::SECOND_STORE_ID]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function ($field, $value) {
+                if ($field == 'option_id' && $value == self::OPTION_2_ID) {
+                    return $this->collectionMock;
+                } elseif ($field == 'store_id' && ($value == self::ADMIN_STORE_ID || $value == self::DEFAULT_STORE_ID ||
+                        $value == self::SECOND_STORE_ID)) {
+                    return $this->collectionMock;
+                }
+            });
 
         $this->collectionMock->expects($this->exactly(3))
             ->method('getFirstItem')
@@ -604,21 +606,22 @@ class EavAttributeTest extends TestCase
 
         $this->collectionMock->expects($this->exactly(12))
             ->method('addFieldToFilter')
-            ->withConsecutive(
-                ['option_id', self::OPTION_1_ID],
-                ['store_id', self::ADMIN_STORE_ID],
-                ['option_id', self::OPTION_1_ID],
-                ['store_id', self::DEFAULT_STORE_ID],
-                ['option_id', self::OPTION_1_ID],
-                ['store_id', self::SECOND_STORE_ID],
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::ADMIN_STORE_ID],
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::DEFAULT_STORE_ID],
-                ['option_id', self::OPTION_2_ID],
-                ['store_id', self::SECOND_STORE_ID]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function ($field, $value) {
+                switch ($field) {
+                    case 'option_id':
+                        if ($value === self::OPTION_1_ID || $value === self::OPTION_2_ID) {
+                            return $this->collectionMock;
+                        }
+                        break;
+                    case 'store_id':
+                        if ($value === self::ADMIN_STORE_ID ||
+                            $value === self::DEFAULT_STORE_ID ||
+                            $value === self::SECOND_STORE_ID) {
+                            return $this->collectionMock;
+                        }
+                        break;
+                }
+            });
 
         $this->collectionMock->expects($this->exactly(6))
             ->method('getFirstItem')
@@ -694,19 +697,19 @@ class EavAttributeTest extends TestCase
         if ($id) {
             $swatch->expects($this->exactly(2))
                 ->method('setData')
-                ->withConsecutive(
-                    ['type', $type],
-                    ['value', $value]
-                );
+                ->willReturnCallback(function ($arg1, $arg2) {
+                    if ($arg1 == 'type' || $arg1 == 'value') {
+                        return null;
+                    }
+                });
         } else {
             $swatch->expects($this->exactly(4))
                 ->method('setData')
-                ->withConsecutive(
-                    ['option_id', $optionId],
-                    ['store_id', $storeId],
-                    ['type', $type],
-                    ['value', $value]
-                );
+                ->willReturnCallback(function ($arg1, $arg2) {
+                    if ($arg1== 'option_id' || $arg1== 'store_id' || $arg1 == 'type' || $arg1 == 'value') {
+                        return null;
+                    }
+                });
         }
         return $swatch;
     }

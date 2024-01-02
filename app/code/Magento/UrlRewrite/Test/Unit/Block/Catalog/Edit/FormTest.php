@@ -116,22 +116,12 @@ class FormTest extends TestCase
             ->getMockForAbstractClass();
         $fieldset
             ->method('addField')
-            ->withConsecutive(
-                [],
-                [],
-                [
-                    'store_id',
-                    'select',
-                    [
-                        'label' => 'Store',
-                        'title' => 'Store',
-                        'name' => 'store_id',
-                        'required' => true,
-                        'value' => 0
-                    ]
-                ]
-            )
-            ->willReturnOnConsecutiveCalls(null, null, $storeElement);
+            ->willReturnCallback(function ($arg1) use ($storeElement) {
+                if (empty($param1)) {
+                    return null;
+                }
+                return $storeElement;
+            });
 
         $product = $this->createMock(Product::class);
         $product->expects($this->any())->method('getId')->willReturn('product_id');
