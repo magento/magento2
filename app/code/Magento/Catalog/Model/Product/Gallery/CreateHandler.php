@@ -114,7 +114,7 @@ class CreateHandler implements ExtensionInterface
     /**
      * @var AttributeValue
      */
-    private AttributeValue $attributeValue;
+    private $attributeValue;
 
     /**
      * @var \Magento\Eav\Model\Config
