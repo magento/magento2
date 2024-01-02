@@ -45,7 +45,8 @@ class StateTest extends TestCase
                     'getIsVirtual',
                     'getIsNotVirtual',
                     'getStatus',
-                    'getAllItems'
+                    'getAllItems',
+                    'addStatusHistoryComment'
                 ]
             )
             ->disableOriginalConstructor()
