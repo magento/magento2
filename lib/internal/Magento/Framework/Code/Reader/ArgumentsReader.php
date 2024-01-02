@@ -316,7 +316,7 @@ class ArgumentsReader extends ParameterReflection
             return $declaringClass->getName();
         }
 
-        if (($class = $this->parameterReflection->getClass()) instanceof ReflectionClass) {
+        if (($class = $this->parameterReflection->getClass()) instanceof \ReflectionClass) {
             return $class->getName();
         }
 
