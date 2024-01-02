@@ -326,11 +326,38 @@ class CreateHandler implements ExtensionInterface
 
                 $data[$this->metadata->getLinkField()] = (int)$product->getData($this->metadata->getLinkField());
 
-                if ($isNew || $this->hasGalleryStoreValueChanged($data, $existingGalleryStoreValues)) {
-                    $this->saveGalleryStoreValue($product, $data, $isNew);
+                if (!$isNew) {
+                    $data += (array) $this->getExistingGalleryStoreValue(
+                        $existingGalleryStoreValues,
+                        $data['value_id'],
+                        $data['store_id']
+                    );
                 }
+
+                $this->saveGalleryStoreValue($data, $isNew);
             }
         }
+    }
+
+    /**
+     * Returns existing gallery store value by value id and store id
+     *
+     * @param array $existingGalleryStoreValues
+     * @param int $valueId
+     * @param int $storeId
+     * @return array|null
+     */
+    private function getExistingGalleryStoreValue(array $existingGalleryStoreValues, int $valueId, int $storeId): ?array
+    {
+        foreach ($existingGalleryStoreValues as $existingGalleryStoreValue) {
+            if (((int) $existingGalleryStoreValue['value_id']) === $valueId
+                && ((int) $existingGalleryStoreValue['store_id']) === $storeId
+            ) {
+                return $existingGalleryStoreValue;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -345,50 +372,18 @@ class CreateHandler implements ExtensionInterface
         $existingMediaGalleryValues = [];
         if (!$product->isObjectNew()) {
             $productId = (int)$product->getData($this->metadata->getLinkField());
-            foreach ($this->mediaGalleryValue->getAllByEntityId($productId) as $data) {
-                $existingMediaGalleryValues[] = [
-                    'value_id' => (int) $data['value_id'],
-                    'store_id' => (int) $data['store_id'],
-                    'label' => $data['label'] ?: null,
-                    'position' => $data['position'] !== null ? (int)$data['position'] : null,
-                    'disabled' => (int) $data['disabled'],
-                ];
-            }
+            $existingMediaGalleryValues = $this->mediaGalleryValue->getAllByEntityId($productId);
         }
         return $existingMediaGalleryValues;
     }
 
     /**
-     * Check if gallery store value has changed
-     *
-     * @param array $data
-     * @param array $existingGalleryStoreValues
-     * @return bool
-     */
-    private function hasGalleryStoreValueChanged(array $data, array $existingGalleryStoreValues): bool
-    {
-        foreach ($existingGalleryStoreValues as $existingGalleryStoreValue) {
-            if ($existingGalleryStoreValue['value_id'] === $data['value_id']
-                && $existingGalleryStoreValue['store_id'] === $data['store_id']
-                && $existingGalleryStoreValue['label'] === $data['label']
-                && $existingGalleryStoreValue['position'] === $data['position']
-                && $existingGalleryStoreValue['disabled'] === $data['disabled']
-            ) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * Save media gallery store value
      *
-     * @param Product $product
      * @param array $data
      * @param bool $isNewImage
      */
-    private function saveGalleryStoreValue(Product $product, array $data, bool $isNewImage): void
+    private function saveGalleryStoreValue(array $data, bool $isNewImage): void
     {
         $items = [];
         $items[] = $data;
@@ -401,14 +396,7 @@ class CreateHandler implements ExtensionInterface
         }
 
         foreach ($items as $item) {
-            if (!$product->isObjectNew()) {
-                $this->resourceModel->deleteGalleryValueInStore(
-                    $item['value_id'],
-                    $item[$this->metadata->getLinkField()],
-                    $item['store_id']
-                );
-            }
-            $this->resourceModel->insertGalleryValueInStore($item);
+            $this->mediaGalleryValue->saveGalleryStoreValue($item);
         }
     }
 
