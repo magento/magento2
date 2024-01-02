@@ -1,65 +1,36 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Tax\Model\Plugin;
+namespace Magento\Tax\Model\ResourceModel\Sales\Order;
 
 use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxExtension;
 
-class OrderSave
+class ConvertQuoteTaxToOrderTax
 {
-    /**
-     * @var \Magento\Tax\Model\Sales\Order\TaxFactory
-     */
-    protected $orderTaxFactory;
-
-    /**
-     * @var \Magento\Sales\Model\Order\Tax\ItemFactory
-     */
-    protected $taxItemFactory;
-
     /**
      * @param \Magento\Tax\Model\Sales\Order\TaxFactory $orderTaxFactory
      * @param \Magento\Sales\Model\Order\Tax\ItemFactory $taxItemFactory
      */
     public function __construct(
-        \Magento\Tax\Model\Sales\Order\TaxFactory $orderTaxFactory,
-        \Magento\Sales\Model\Order\Tax\ItemFactory $taxItemFactory
+        private readonly \Magento\Tax\Model\Sales\Order\TaxFactory $orderTaxFactory,
+        private readonly \Magento\Sales\Model\Order\Tax\ItemFactory $taxItemFactory
     ) {
-        $this->orderTaxFactory = $orderTaxFactory;
-        $this->taxItemFactory = $taxItemFactory;
-    }
-
-    /**
-     * Save order tax
-     *
-     * @param \Magento\Sales\Api\OrderRepositoryInterface $subject
-     * @param \Magento\Sales\Api\Data\OrderInterface $order
-     * @return \Magento\Sales\Api\Data\OrderInterface
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function afterSave(
-        \Magento\Sales\Api\OrderRepositoryInterface $subject,
-        \Magento\Sales\Api\Data\OrderInterface $order
-    ) {
-        $this->saveOrderTax($order);
-        return $order;
     }
 
     /**
      * Save order tax
      *
      * @param \Magento\Sales\Api\Data\OrderInterface $order
-     * @return $this
+     * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * phpcs:disable Generic.Metrics.NestingLevel.TooHigh
      */
-    protected function saveOrderTax(\Magento\Sales\Api\Data\OrderInterface $order)
+    public function execute(\Magento\Sales\Api\Data\OrderInterface $order): void
     {
         $extensionAttribute = $order->getExtensionAttributes();
         if (!$extensionAttribute ||
@@ -207,6 +178,5 @@ class OrderSave
         }
 
         $order->setAppliedTaxIsSaved(true);
-        return $this;
     }
 }
