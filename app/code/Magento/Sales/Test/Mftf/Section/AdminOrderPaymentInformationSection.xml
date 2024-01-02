@@ -12,5 +12,6 @@
         <element name="paymentMethod" type="text" selector=".order-payment-method .order-payment-method-title"/>
         <element name="paymentCurrency" type="text" selector=".order-payment-method .order-payment-currency"/>
         <element name="paymentAdditional" type="text" selector=".order-payment-method .order-payment-additional"/>
+        <element name="paymentInformationField" type="text" selector="//*[contains(text(),'{{paymentInformationField}}')]/following-sibling::td" parameterized="true"/>
     </section>
 </sections>
