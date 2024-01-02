@@ -172,7 +172,7 @@
     </type>
     <virtualType name="Magento\Elasticsearch\Elasticsearch5\Model\Client\ElasticsearchFactory" type="Magento\AdvancedSearch\Model\Client\ClientFactory">
         <arguments>
-            <argument name="clientClass" xsi:type="string">Magento\Elasticsearch\Elasticsearch5\Model\Client\Elasticsearch</argument>
+            <argument name="clientClass" xsi:type="string">Magento\Elasticsearch\ElasticAdapter\Model\Client\Elasticsearch</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Adapter">
