@@ -110,7 +110,7 @@
         "magento/magento2-functional-testing-framework": "dev-AC-9499",
         "pdepend/pdepend": "^2.10",
         "phpmd/phpmd": "^2.12",
-        "phpstan/phpstan": "^1.9",
+        "phpstan/phpstan": "^1.9, <1.10.29",
         "phpunit/phpunit": "^9.5",
         "sebastian/phpcpd": "^6.0",
         "symfony/finder": "^6.4"
