@@ -12,7 +12,7 @@
             <features value="PayPal"/>
             <stories value="Paypal express checkout configuration"/>
             <title value="Paypal Express Checkout configuration with valid credentials"/>
-            <description value="As a customer I want to be able to buy goods using Checkout with PayPal button from Product page and use Free Shipping"/>
+            <description value="As a customer I want to be able to buy goods using PayPal express with Free Shipping"/>
             <severity value="CRITICAL"/>
             <testCaseId value="AC-6150"/>
             <group value="3rd_party_integration"/>
