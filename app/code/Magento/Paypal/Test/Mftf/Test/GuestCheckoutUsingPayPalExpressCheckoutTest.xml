@@ -79,7 +79,8 @@
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <!-- Goto Checkout Page -->
-        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckout"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <waitForPageLoad stepKey="waitForShippingPage"/>
         <!--Fill Shipping Address-->
         <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillShippingAddress"/>
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="Texas" stepKey="fillState"/>
