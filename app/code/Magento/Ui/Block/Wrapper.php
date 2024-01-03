@@ -14,6 +14,8 @@ use Magento\Ui\Model\UiComponentGenerator;
  */
 class Wrapper extends \Magento\Framework\View\Element\Template
 {
+    protected const RENDER_TYPE = '';
+
     /**
      * @var UiComponentGenerator
      */
@@ -87,10 +89,10 @@ class Wrapper extends \Magento\Framework\View\Element\Template
     public function renderApp($data = [])
     {
         /** @var \Magento\Ui\Component\AbstractComponent $uiComponent */
-        $uiComponent = $this->uiComponentGenerator
+        $uiComponent = $this->uiComponentGenerator //vezi generateXML aici de la layout
             ->generateUiComponent($this->getData('uiComponent'), $this->getLayout());
         $this->injectDataInDataSource($uiComponent, $this->getData());
         $this->addDataToChildComponents($uiComponent, $data);
-        return (string) $uiComponent->render();
+        return (string) $uiComponent->render(static::RENDER_TYPE);
     }
 }

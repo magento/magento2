@@ -5,6 +5,9 @@
  */
 namespace Magento\Ui\Component;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Listing\Columns;
 
 /**
@@ -19,6 +22,27 @@ class Listing extends AbstractComponent
      * @var array
      */
     protected $columns = [];
+
+    /**
+     * @var ContentTypeFactory
+     */
+    protected ContentTypeFactory $contentTypeFactory;
+
+    /**
+     * @param ContextInterface $context
+     * @param ContentTypeFactory|null $contentTypeFactory
+     * @param array $components
+     * @param array $data
+     */
+    public function __construct(
+        ContextInterface $context,
+        ?ContentTypeFactory $contentTypeFactory = null,
+        array $components = [],
+        array $data = []
+    ) {
+        $this->contentTypeFactory = $contentTypeFactory ?: ObjectManager::getInstance()->get(ContentTypeFactory::class);
+        parent::__construct($context, $components, $data);
+    }
 
     /**
      * Get component name
@@ -36,5 +60,17 @@ class Listing extends AbstractComponent
     public function getDataSourceData()
     {
         return ['data' => $this->getContext()->getDataProvider()->getData()];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function render(string $contentType = '')
+    {
+        if ($contentType) {
+            return $this->contentTypeFactory->get($contentType)->render($this, $this->getTemplate());
+        }
+
+        return parent::render();
     }
 }
