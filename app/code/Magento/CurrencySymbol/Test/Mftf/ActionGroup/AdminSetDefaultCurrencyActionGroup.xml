@@ -13,7 +13,7 @@
         <arguments>
             <argument name="currency" type="string"/>
         </arguments>
-        <uncheckOption selector="{{CurrencySetupSection.defaultdisplayCurrency}}" before="clickSaveConfigBtn" stepKey="uncheckUseDefaultOption"/>
+        <uncheckOption selector="{{CurrencySetupSection.defaultDisplayCurrency}}" before="clickSaveConfigBtn" stepKey="uncheckUseDefaultOption"/>
         <selectOption selector="{{CurrencySetupSection.defaultCurrency}}" userInput="{{currency}}" after="uncheckUseDefaultOption" stepKey="setDefaultCurrencyField"/>
     </actionGroup>
 </actionGroups>
