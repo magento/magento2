@@ -108,6 +108,7 @@ class GalleryOptionsTest extends TestCase
             ['Magento_Catalog', 'gallery/thumbmargin', '5'],
             ['Magento_Catalog', 'gallery/transition/effect', 'slide'],
             ['Magento_Catalog', 'gallery/transition/duration', '500'],
+            ['Magento_Catalog', 'product_image_white_borders', '1'],
         ];
 
         $imageAttributesMap = [
@@ -144,6 +145,7 @@ class GalleryOptionsTest extends TestCase
         $this->assertSame(200, $decodedJson['width']);
         $this->assertSame(300, $decodedJson['thumbheight']);
         $this->assertSame(400, $decodedJson['thumbwidth']);
+        $this->assertSame(1, $decodedJson['whiteBorders']);
     }
 
     public function testGetFSOptionsJson()
@@ -159,7 +161,8 @@ class GalleryOptionsTest extends TestCase
             ['Magento_Catalog', 'gallery/fullscreen/navtype', 'thumbs'],
             ['Magento_Catalog', 'gallery/fullscreen/thumbmargin', '10'],
             ['Magento_Catalog', 'gallery/fullscreen/transition/effect', 'dissolve'],
-            ['Magento_Catalog', 'gallery/fullscreen/transition/duration', '300']
+            ['Magento_Catalog', 'gallery/fullscreen/transition/duration', '300'],
+            ['Magento_Catalog', 'product_image_white_borders', '1'],
         ];
 
         $this->configView->expects($this->any())
@@ -183,6 +186,7 @@ class GalleryOptionsTest extends TestCase
         $this->assertSame('thumbs', $decodedJson['navtype']);
         $this->assertSame('dissolve', $decodedJson['transition']);
         $this->assertSame(300, $decodedJson['transitionduration']);
+        $this->assertSame(1, $decodedJson['whiteBorders']);
     }
 
     public function testGetOptionsJsonOptionals()

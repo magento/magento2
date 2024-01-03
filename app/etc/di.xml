@@ -211,6 +211,7 @@
     <preference for="Magento\Framework\HTTP\ClientInterface" type="Magento\Framework\HTTP\Client\Curl" />
     <preference for="Magento\Framework\Interception\ConfigLoaderInterface" type="Magento\Framework\Interception\PluginListGenerator" />
     <preference for="Magento\Framework\Interception\ConfigWriterInterface" type="Magento\Framework\Interception\PluginListGenerator" />
+    <preference for="Magento\Framework\Mview\View\SubscriptionStatementPostprocessorInterface" type="Magento\Framework\Mview\View\CompositeSubscriptionStatementPostprocessor" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
@@ -371,6 +372,11 @@
                 </item>
             </argument>
             <argument name="resource" xsi:type="object">Magento\Framework\App\ResourceConnection\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Cache\InvalidateLogger">
+        <arguments>
+            <argument name="request" xsi:type="object">Magento\Framework\App\Request\Http\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Backend\App\Area\FrontNameResolver">
@@ -1783,6 +1789,9 @@
                 <item name="http_method_validator" xsi:type="object">
                     Magento\Framework\App\Request\HttpMethodValidator
                 </item>
+                <item name="backpressure" xsi:type="object">
+                    Magento\Framework\App\Request\BackpressureValidator
+                </item>
             </argument>
         </arguments>
     </virtualType>
@@ -1808,11 +1817,6 @@
             <argument name="scopeResolvers" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Framework\App\ScopeResolver</item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Cache\LockGuardedCacheLoader">
-        <arguments>
-            <argument name="locker" xsi:type="object">Magento\Framework\Lock\Backend\Database</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Cache\CompositeStaleCacheNotifier">
@@ -1853,7 +1857,7 @@
             <argument name="supportedVersionPatterns" xsi:type="array">
                 <item name="MySQL-8" xsi:type="string">^8\.0\.</item>
                 <item name="MySQL-5.7" xsi:type="string">^5\.7\.</item>
-                <item name="MariaDB-(10.2-10.4)" xsi:type="string">^10\.[2-4]\.</item>
+                <item name="MariaDB-(10.2-10.6)" xsi:type="string">^10\.[2-6]\.</item>
             </argument>
         </arguments>
     </type>
@@ -1975,5 +1979,29 @@
             <argument name="defaultPageSize" xsi:type="number">999999</argument>
         </arguments>
     </type>
+    <preference for="Magento\Framework\App\BackpressureEnforcerInterface"
+                type="Magento\Framework\App\Backpressure\SlidingWindow\SlidingWindowEnforcer"/>
+    <preference for="Magento\Framework\App\Backpressure\SlidingWindow\RequestLoggerFactoryInterface"
+                type="Magento\Framework\App\Backpressure\SlidingWindow\RequestLoggerFactory"/>
+    <preference for="Magento\Framework\App\Backpressure\SlidingWindow\LimitConfigManagerInterface"
+                type="Magento\Framework\App\Backpressure\SlidingWindow\CompositeLimitConfigManager"/>
+    <preference for="Magento\Framework\App\Request\Backpressure\RequestTypeExtractorInterface"
+                type="Magento\Framework\App\Request\Backpressure\CompositeRequestTypeExtractor"/>
+    <preference for="Magento\Framework\Webapi\Backpressure\BackpressureRequestTypeExtractorInterface"
+                type="Magento\Framework\Webapi\Backpressure\CompositeRequestTypeExtractor" />
+    <type name="Magento\Framework\App\Request\Backpressure\CompositeRequestTypeExtractor">
+        <arguments>
+            <argument name="extractors" xsi:type="array" />
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Backpressure\SlidingWindow\RequestLoggerFactory">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="redis" xsi:type="string">\Magento\Framework\App\Backpressure\SlidingWindow\RedisRequestLogger</item>
+            </argument>
+        </arguments>
+    </type>
     <preference for="Magento\Framework\Filter\Input\PurifierInterface" type="Magento\Framework\Filter\Input\Purifier"/>
+    <preference for="Magento\Framework\App\PageCache\IdentifierInterface" type="Magento\Framework\App\PageCache\Identifier"/>
+    <preference for="Magento\Framework\App\State\ReloadProcessorInterface" type="Magento\Framework\App\State\ReloadProcessorComposite" />
 </config>

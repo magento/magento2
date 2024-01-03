@@ -114,22 +114,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\BundleGraphQl\Model\Resolver\Options\Label">
-        <arguments>
-            <argument name="product" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\ChildProduct</argument>
-        </arguments>
-    </type>
-    <type name="Magento\BundleGraphQl\Model\Resolver\PriceRange">
-        <arguments>
-            <argument name="productDataProvider" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\ChildProduct</argument>
-        </arguments>
-    </type>
-    <virtualType name="Magento\BundleGraphQl\Model\Resolver\Options\Product"
-                 type="Magento\CatalogGraphQl\Model\Resolver\Product">
-        <arguments>
-            <argument name="productDataProvider" xsi:type="object">
-                Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\ChildProduct
-            </argument>
-        </arguments>
-    </virtualType>
 </config>

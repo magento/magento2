@@ -201,7 +201,7 @@ class ServiceMetadata
     {
         $servicesConfig = $this->getServicesConfig();
         if (!isset($servicesConfig[$serviceName]) || !is_array($servicesConfig[$serviceName])) {
-            throw new RuntimeException(__('Requested service is not available: "%1"', $serviceName)->render());
+            throw new RuntimeException((string)__('Requested service is not available: "%1"', $serviceName)->render());
         }
         return $servicesConfig[$serviceName];
     }

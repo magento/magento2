@@ -22,11 +22,15 @@
         </annotations>
         <before>
             <magentoCLI stepKey="disableGuestSubscription" command="config:set newsletter/subscription/allow_guest_subscribe 0"/>
-            <magentoCLI command="cache:clean config" stepKey="cleanCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
         </before>
         <after>
             <magentoCLI stepKey="allowGuestSubscription" command="config:set newsletter/subscription/allow_guest_subscribe 1"/>
-            <magentoCLI command="cache:clean config" stepKey="cacheClean"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cacheClean">
+                <argument name="tags" value="config"/>
+            </actionGroup>
         </after>
 
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefrontPage"/>

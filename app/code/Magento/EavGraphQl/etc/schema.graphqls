@@ -2,7 +2,24 @@
 # See COPYING.txt for license details.
 
 type Query {
-    customAttributeMetadata(attributes: [AttributeInput!]! @doc(description: "An input object that specifies the attribute code and entity type to search.")): CustomAttributeMetadata @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\CustomAttributeMetadata") @doc(description: "Return the attribute type, given an attribute code and entity type.") @cache(cacheable: false)
+    customAttributeMetadata(attributes: [AttributeInput!]! @doc(description: "An input object that specifies the attribute code and entity type to search.")):
+    CustomAttributeMetadata
+    @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\CustomAttributeMetadata")
+    @doc(description: "Return the attribute type, given an attribute code and entity type.")
+    @cache(cacheIdentity: "Magento\\EavGraphQl\\Model\\Resolver\\Cache\\CustomAttributeMetadataIdentity")
+    @deprecated(reason: "Use `customAttributeMetadataV2` query instead.")
+    customAttributeMetadataV2(attributes: [AttributeInput!]): AttributesMetadataOutput! @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesMetadata") @doc(description: "Retrieve EAV attributes metadata.") @cache(cacheIdentity: "Magento\\EavGraphQl\\Model\\Resolver\\Cache\\CustomAttributeMetadataV2Identity")
+    attributesForm(formCode: String! @doc(description: "Form code.")): AttributesFormOutput!
+    @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesForm")
+    @doc(description: "Retrieve EAV attributes associated to a frontend form. Use countries query provided by DirectoryGraphQl module to retrieve region_id and country_id attribute options.")
+    @cache(cacheIdentity: "Magento\\Eav\\Model\\Cache\\AttributesFormIdentity")
+    attributesList(
+        entityType: AttributeEntityTypeEnum! @doc(description: "Entity type.")
+        filters: AttributeFilterInput @doc(description: "Identifies which filter inputs to search for and return.")
+    ): AttributesMetadataOutput
+    @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesList")
+    @doc(description: "Returns a list of attributes metadata for a given entity type.")
+    @cache(cacheIdentity: "Magento\\EavGraphQl\\Model\\Resolver\\Cache\\AttributesListIdentity")
 }
 
 type CustomAttributeMetadata @doc(description: "Defines an array of custom attributes.") {
@@ -40,4 +57,116 @@ type AttributeOption @doc(description: "Defines an attribute option.") {
 input AttributeInput @doc(description: "Defines the attribute characteristics to search for the `attribute_code` and `entity_type` to search.") {
     attribute_code: String @doc(description: "The unique identifier for an attribute code. This value should be in lowercase letters without spaces.")
     entity_type: String @doc(description: "The type of entity that defines the attribute.")
+}
+
+type AttributesMetadataOutput @doc(description: "Metadata of EAV attributes.") {
+    items: [CustomAttributeMetadataInterface!]! @doc(description: "Requested attributes metadata.")
+    errors: [AttributeMetadataError!]! @doc(description: "Errors of retrieving certain attributes metadata.")
+}
+
+type AttributeMetadataError @doc(description: "Attribute metadata retrieval error.") {
+    type: AttributeMetadataErrorType! @doc(description: "Attribute metadata retrieval error type.")
+    message: String! @doc(description: "Attribute metadata retrieval error message.")
+}
+
+enum AttributeMetadataErrorType @doc(description: "Attribute metadata retrieval error types.") {
+    ENTITY_NOT_FOUND @doc(description: "The requested entity was not found.")
+    ATTRIBUTE_NOT_FOUND @doc(description: "The requested attribute was not found.")
+    FILTER_NOT_FOUND @doc(description: "The filter cannot be applied as it does not belong to the entity")
+    UNDEFINED @doc(description: "Not categorized error, see the error message.")
+}
+
+interface CustomAttributeMetadataInterface @typeResolver(class: "Magento\\EavGraphQl\\Model\\TypeResolver\\AttributeMetadata") @doc(description: "An interface containing fields that define the EAV attribute."){
+    code: ID! @doc(description: "The unique identifier for an attribute code. This value should be in lowercase letters without spaces.")
+    label: String @doc(description: "The label assigned to the attribute.")
+    entity_type: AttributeEntityTypeEnum! @doc(description: "The type of entity that defines the attribute.")
+    frontend_input: AttributeFrontendInputEnum @doc(description: "The frontend input type of the attribute.")
+    frontend_class: String @doc(description: "The frontend class of the attribute.")
+    is_required: Boolean! @doc(description: "Whether the attribute value is required.")
+    default_value: String @doc(description: "Default attribute value.")
+    is_unique: Boolean! @doc(description: "Whether the attribute value must be unique.")
+    options: [CustomAttributeOptionInterface!]! @doc(description: "Attribute options.")
+}
+
+interface CustomAttributeOptionInterface @typeResolver(class: "Magento\\EavGraphQl\\Model\\TypeResolver\\AttributeOption") {
+    label: String! @doc(description: "The label assigned to the attribute option.")
+    value: String! @doc(description: "The attribute option value.")
+    is_default: Boolean! @doc(description: "Is the option value default.")
+}
+
+type AttributeOptionMetadata implements CustomAttributeOptionInterface @doc(description: "Base EAV implementation of CustomAttributeOptionInterface.") {
+}
+
+type AttributeMetadata implements CustomAttributeMetadataInterface @doc(description: "Base EAV implementation of CustomAttributeMetadataInterface.") {
+}
+
+enum AttributeEntityTypeEnum @doc(description: "List of all entity types. Populated by the modules introducing EAV entities.") {
+}
+
+enum AttributeFrontendInputEnum @doc(description: "EAV attribute frontend input types.") {
+    BOOLEAN
+    DATE
+    DATETIME
+    FILE
+    GALLERY
+    HIDDEN
+    IMAGE
+    MEDIA_IMAGE
+    MULTILINE
+    MULTISELECT
+    PRICE
+    SELECT
+    TEXT
+    TEXTAREA
+    WEIGHT
+    UNDEFINED
+}
+
+type AttributesFormOutput @doc(description: "Metadata of EAV attributes associated to form") {
+    items: [CustomAttributeMetadataInterface!]! @doc(description: "Requested attributes metadata.")
+    errors: [AttributeMetadataError!]! @doc(description: "Errors of retrieving certain attributes metadata.")
+}
+
+interface AttributeValueInterface @typeResolver(class: "Magento\\EavGraphQl\\Model\\TypeResolver\\AttributeValue") {
+    code: ID! @doc(description: "The attribute code.")
+}
+
+type AttributeValue implements AttributeValueInterface {
+    value: String! @doc(description: "The attribute value.")
+}
+
+type AttributeSelectedOptions implements AttributeValueInterface {
+    selected_options: [AttributeSelectedOptionInterface!]!
+}
+
+interface AttributeSelectedOptionInterface @typeResolver(class: "Magento\\EavGraphQl\\Model\\TypeResolver\\AttributeSelectedOption") {
+    label: String! @doc(description: "The attribute selected option label.")
+    value: String! @doc(description: "The attribute selected option value.")
+}
+
+type AttributeSelectedOption implements AttributeSelectedOptionInterface {
+}
+
+input AttributeValueInput @doc(description: "Specifies the value for attribute.") {
+    attribute_code: String! @doc(description: "The code of the attribute.")
+    value: String @doc(description: "The value assigned to the attribute.")
+    selected_options: [AttributeInputSelectedOption!] @doc(description: "An array containing selected options for a select or multiselect attribute.")
+}
+
+input AttributeInputSelectedOption @doc(description: "Specifies selected option for a select or multiselect attribute value.") {
+    value: String! @doc(description: "The attribute option value.")
+}
+
+input AttributeFilterInput @doc(description: "An input object that specifies the filters used for attributes.") {
+    is_comparable: Boolean @doc(description: "Whether a product or category attribute can be compared against another or not.")
+    is_filterable: Boolean @doc(description: "Whether a product or category attribute can be filtered or not.")
+    is_filterable_in_search: Boolean @doc(description: "Whether a product or category attribute can be filtered in search or not.")
+    is_html_allowed_on_front: Boolean @doc(description: "Whether a product or category attribute can use HTML on front or not.")
+    is_searchable: Boolean @doc(description: "Whether a product or category attribute can be searched or not.")
+    is_used_for_price_rules: Boolean @doc(description: "Whether a product or category attribute can be used for price rules or not.")
+    is_used_for_promo_rules: Boolean @doc(description: "Whether a product or category attribute is used for promo rules or not.")
+    is_visible_in_advanced_search: Boolean @doc(description: "Whether a product or category attribute is visible in advanced search or not.")
+    is_visible_on_front: Boolean @doc(description: "Whether a product or category attribute is visible on front or not.")
+    is_wysiwyg_enabled: Boolean @doc(description: "Whether a product or category attribute has WYSIWYG enabled or not.")
+    used_in_product_listing: Boolean @doc(description: "Whether a product or category attribute is used in product listing or not.")
 }

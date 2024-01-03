@@ -56,6 +56,12 @@ class Sku extends AbstractBackend
             );
         }
 
+        if (strcasecmp($attrCode, 'sku') >= 0 && strlen($value) === 0) {
+            throw new LocalizedException(
+                __('The "%1" attribute value is empty.', $attrCode)
+            );
+        }
+
         if ($this->string->strlen($object->getSku()) > self::SKU_MAX_LENGTH) {
             throw new LocalizedException(
                 __('SKU length should be %1 characters maximum.', self::SKU_MAX_LENGTH)

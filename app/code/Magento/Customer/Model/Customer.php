@@ -17,6 +17,7 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Indexer\StateInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\ObjectManager;
@@ -45,7 +46,7 @@ use Magento\Framework\Indexer\IndexerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Customer extends \Magento\Framework\Model\AbstractModel
+class Customer extends \Magento\Framework\Model\AbstractModel implements ResetAfterRequestInterface
 {
     /**
      * Configuration paths for email templates and identities
@@ -1026,6 +1027,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Validate customer attribute values.
      *
      * @deprecated 100.1.0
+     * @see \Magento\Customer\Model\AccountManagement::validate()
      * @return bool
      */
     public function validate()
@@ -1286,6 +1288,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check if current reset password link token is expired
      *
      * @return boolean
+     * @deprecated
+     * @see \Magento\Customer\Model\AccountManagement::isResetPasswordLinkTokenExpired
      */
     public function isResetPasswordLinkTokenExpired()
     {
@@ -1304,12 +1308,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             return true;
         }
 
-        $dayDifference = floor(($currentTimestamp - $tokenTimestamp) / (24 * 60 * 60));
-        if ($dayDifference >= $expirationPeriod) {
-            return true;
-        }
+        $hourDifference = floor(($currentTimestamp - $tokenTimestamp) / (60 * 60));
 
-        return false;
+        return $hourDifference >= $expirationPeriod;
     }
 
     /**
@@ -1402,5 +1403,13 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     public function getPassword()
     {
         return (string) $this->getData('password');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_errors = [];
     }
 }

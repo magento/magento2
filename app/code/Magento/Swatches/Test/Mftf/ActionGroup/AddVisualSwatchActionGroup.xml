@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddVisualSwatchActionGroup">
+        <annotations>
+            <description>Add visual image swatch property attribute.</description>
+        </annotations>
+
+        <!-- Begin creating a new product attribute of type "Image Swatch" -->
+        <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
+        <waitForPageLoad stepKey="waitForAttributePageLoad"/>
+        <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillDefaultLabel"/>
+        <!-- Select visual swatch -->
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="swatch_visual" stepKey="selectInputType"/>
+        <!-- This hack is because the same <input type="file"> is re-purposed used for all uploads. -->
+        <executeJS function="HTMLInputElement.prototype.click = function() { if(this.type !== 'file') HTMLElement.prototype.click.call(this); };" stepKey="disableClick"/>
+        <!-- Set swatch image #1 -->
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch1"/>
+        <executeJS function="jQuery('#swatch_window_option_option_0').click()" stepKey="clickSwatch1"/>
+        <click selector="{{AdminManageSwatchSection.nthUploadFile('1')}}" stepKey="clickUploadFile1"/>
+        <attachFile selector="input[name='datafile']" userInput="adobe-thumb.jpg" stepKey="attachFile1"/>
+        <waitForElementNotVisible selector="{{AdminManageSwatchSection.swatchWindowUnavailable('0')}}" stepKey="waitForImageUploaded1"/>
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('0')}}" userInput="visualSwatchOption1" stepKey="fillAdmin1"/>
+        <fillField selector="{{AdminManageSwatchSection.visualSwatchDefaultStoreViewBox('0')}}" userInput="visualSwatchOption1" stepKey="fillSwatchDefaultStoreViewBox1"/>
+        <click selector="{{AdminManageSwatchSection.visualSwatchDefaultStoreViewBox('0')}}" stepKey="clickOutsideToDisableDropDown"/>
+        <!-- Set swatch image #2 -->
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch2"/>
+        <executeJS function="jQuery('#swatch_window_option_option_1').click()" stepKey="clickSwatch2"/>
+        <click selector="{{AdminManageSwatchSection.nthUploadFile('2')}}" stepKey="clickUploadFile2"/>
+        <attachFile selector="input[name='datafile']" userInput="adobe-small.jpg" stepKey="attachFile2"/>
+        <waitForElementNotVisible selector="{{AdminManageSwatchSection.swatchWindowUnavailable('1')}}" stepKey="waitForImageUploaded2"/>
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('1')}}" userInput="visualSwatchOption2" stepKey="fillAdmin2"/>
+        <fillField selector="{{AdminManageSwatchSection.visualSwatchDefaultStoreViewBox('1')}}" userInput="visualSwatchOption2" stepKey="fillSwatchDefaultStoreViewBox2"/>
+        <click selector="{{AdminManageSwatchSection.swatchWindow('1')}}" stepKey="clicksWatchWindow2"/>
+        <!-- Set scope -->
+        <click selector="{{AttributePropertiesSection.AdvancedProperties}}" stepKey="expandAdvancedProperties"/>
+        <selectOption selector="{{AttributePropertiesSection.Scope}}" userInput="1" stepKey="selectGlobalScope"/>
+        <scrollToTopOfPage stepKey="scrollToTabs"/>
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStorefrontPropertiesTab"/>
+        <waitForElementVisible selector="{{AdvancedAttributePropertiesSection.UseInProductListing}}" stepKey="waitForTabSwitch"/>
+        <selectOption selector="{{AdvancedAttributePropertiesSection.UseInProductListing}}" userInput="Yes" stepKey="useInProductListing"/>
+        <!-- Set Use In Layered Navigation -->
+        <scrollToTopOfPage stepKey="scrollToTop2"/>
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="goToStorefrontProperties"/>
+        <selectOption selector="{{AttributePropertiesSection.useInLayeredNavigation}}" userInput="1" stepKey="selectUseInLayeredNavigation"/>
+        <selectOption selector="{{AdminNewAttributePanel.useInSearch}}" userInput="Yes" stepKey="selectYesForUseInSearch"/>
+        <!-- Save the new product attribute -->
+        <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSaveAndEdit"/>
+        <wait stepKey="waitToLoad" time="3"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccess"/>
+    </actionGroup>
+</actionGroups>

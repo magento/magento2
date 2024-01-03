@@ -985,6 +985,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Define customer object
      *
+     * Important: This method also copies customer data to quote and removes quote addresses
+     *
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return $this
      */
@@ -1843,8 +1845,14 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getItemByProduct($product)
     {
-        foreach ($this->getAllItems() as $item) {
-            if ($item->representProduct($product)) {
+        /** @var \Magento\Quote\Model\Quote\Item[] $items */
+        $items = $this->getItemsCollection()->getItemsByColumnValue('product_id', $product->getId());
+        foreach ($items as $item) {
+            if (!$item->isDeleted()
+                && $item->getProduct()
+                && $item->getProduct()->getStatus() !== ProductStatus::STATUS_DISABLED
+                && $item->representProduct($product)
+            ) {
                 return $item;
             }
         }

@@ -49,7 +49,7 @@
         <element name="ruleParameterSelect" type="select" selector="rule[conditions][{{arg}}][operator]" parameterized="true"/>
         <element name="ruleParameterInput" type="input" selector="rule[conditions][{{arg}}][value]" parameterized="true"/>
         <element name="openChooser" type="button" selector="//label[@for='conditions__{{arg}}__value']" parameterized="true"/>
-        <element name="categoryCheckbox" type="checkbox" selector="//span[contains(text(), '{{arg}}')]/parent::a/preceding-sibling::input[@type='checkbox']" parameterized="true"/>
+        <element name="categoryCheckbox" type="checkbox" selector="//a[contains(text(), '{{arg}}')]" parameterized="true"/>
         <element name="newCondition" type="button" selector=".rule-param.rule-param-new-child" timeout="30"/>
         <element name="conditionSelect" type="select" selector="select[name='rule[conditions][1][new_child]']"/>
         <element name="targetEllipsis" type="input" selector="//ul[contains(@id, 'conditions')]//a[.='...']"/>
@@ -84,6 +84,7 @@
         <element name="applyDiscountToShipping" type="checkbox" selector="input[name='apply_to_shipping']"/>
         <element name="applyDiscountToShippingLabel" type="checkbox" selector="input[name='apply_to_shipping']+label"/>
         <element name="discountAmount" type="input" selector="input[name='discount_amount']"/>
+        <element name="negativeDiscountAmountError" type="text" selector="//label[@class='admin__field-error' and text()='Please enter a number 0 or greater, without comma in this field.']"/>
         <element name="maximumQtyDiscount" type="input" selector="input[name='discount_qty']"/>
         <element name="discountStep" type="input" selector="input[name='discount_step']"/>
         <element name="applyToShippingAmount" type="checkbox" selector="//div[@class='admin__actions-switch']/input[@name='apply_to_shipping']/../label"/>

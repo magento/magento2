@@ -17,6 +17,7 @@
             <testCaseId value="MC-6192"/>
             <useCaseId value="MAGETWO-91753"/>
             <group value="ConfigurableProduct"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create default category with subcategory -->
@@ -112,7 +113,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <!-- Create three configurable products with options -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
@@ -199,6 +202,9 @@
         <click selector="{{AdminGridMainControls.save}}" stepKey="clickToSaveProduct"/>
         <waitForPageLoad stepKey="waitForNewSimpleProductPage"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageThird"/>
-        <magentoCron stepKey="runCronIndex" groups="index"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoadAfterReindex"/>
     </test>
 </tests>

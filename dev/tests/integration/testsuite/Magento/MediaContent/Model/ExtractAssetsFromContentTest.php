@@ -77,6 +77,12 @@ class ExtractAssetsFromContentTest extends TestCase
                     2020
                 ]
             ],
+            'Relevant paths in content without quotes' => [
+                'content {{media url=testDirectory/path.jpg}} content',
+                [
+                    2020
+                ]
+            ],
             'Relevant wysiwyg paths in content' => [
                 'content <img src="https://domain.com/media/testDirectory/path.jpg"}} content',
                 [

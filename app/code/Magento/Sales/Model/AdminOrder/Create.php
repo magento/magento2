@@ -15,9 +15,11 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\CustomAttributeListInterface;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Sales\Api\Data\OrderAddressInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
+use Magento\Quote\Model\Quote;
 
 /**
  * Order create model
@@ -258,6 +260,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     private $customAttributeList;
 
     /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepositoryInterface;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -290,6 +297,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param ExtensibleDataObjectConverter|null $dataObjectConverter
      * @param StoreManagerInterface $storeManager
      * @param CustomAttributeListInterface|null $customAttributeList
+     * @param OrderRepositoryInterface|null $orderRepositoryInterface
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -324,7 +332,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         ExtensibleDataObjectConverter $dataObjectConverter = null,
         StoreManagerInterface $storeManager = null,
-        CustomAttributeListInterface $customAttributeList = null
+        CustomAttributeListInterface $customAttributeList = null,
+        OrderRepositoryInterface $orderRepositoryInterface = null
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -361,6 +370,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
         $this->customAttributeList = $customAttributeList ?: ObjectManager::getInstance()
             ->get(CustomAttributeListInterface::class);
+        $this->orderRepositoryInterface = $orderRepositoryInterface ?: ObjectManager::getInstance()
+            ->get(OrderRepositoryInterface::class);
     }
 
     /**
@@ -1490,8 +1501,12 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $tmpAddress->unsAddressId()->unsAddressType();
             $data = $tmpAddress->getData();
             $data['save_in_address_book'] = 0;
+            $shippingAddressTmp = $this->getShippingAddress()->getData();
             // Do not duplicate address (billing address will do saving too)
             $this->getShippingAddress()->addData($data);
+            if (array_key_exists('weight', $shippingAddressTmp) && !empty($shippingAddressTmp['weight'])) {
+                $this->getShippingAddress()->setWeight($shippingAddressTmp['weight']);
+            }
         }
         $this->getShippingAddress()->setSameAsBilling($flag);
         $this->setRecollect(true);
@@ -1979,18 +1994,45 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     /**
      * Create new order
      *
-     * @return \Magento\Sales\Model\Order
+     * @return Order
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function createOrder()
     {
         $this->_prepareCustomer();
         $this->_validate();
         $quote = $this->getQuote();
+
         $this->_prepareQuoteItems();
 
+        $orderData = $this->beforeSubmit($quote);
+        $order = $this->quoteManagement->submit($quote, $orderData);
+        $this->afterSubmit($order);
+
+        if ($this->getSendConfirmation() && !$order->getEmailSent()) {
+            $this->emailSender->send($order);
+        }
+
+        $this->_eventManager->dispatch('checkout_submit_all_after', ['order' => $order, 'quote' => $quote]);
+
+        $this->removeTransferredItems();
+
+        return $order;
+    }
+
+    /**
+     * Prepare and retrieve order data before submitting a quote for order creation.
+     *
+     * @param Quote $quote
+     * @return array
+     */
+    private function beforeSubmit(Quote $quote)
+    {
         $orderData = [];
-        if ($this->getSession()->getOrder()->getId()) {
+        if ($this->getSession()->getReordered() || $this->getSession()->getOrder()->getId()) {
             $oldOrder = $this->getSession()->getOrder();
+            $oldOrder = $oldOrder->getId() ?
+                $oldOrder : $this->orderRepositoryInterface->get($this->getSession()->getReordered());
             $originalId = $oldOrder->getOriginalIncrementId();
             if (!$originalId) {
                 $originalId = $oldOrder->getIncrementId();
@@ -2004,25 +2046,31 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             ];
             $quote->setReservedOrderId($orderData['increment_id']);
         }
-        $order = $this->quoteManagement->submit($quote, $orderData);
 
-        if ($this->getSession()->getOrder()->getId()) {
+        return $orderData;
+    }
+
+    /**
+     * Process old order after submission.
+     *
+     * @param Order $order
+     * @return void
+     * @throws \Exception
+     */
+    private function afterSubmit(Order $order)
+    {
+        if ($this->getSession()->getReordered() || $this->getSession()->getOrder()->getId()) {
             $oldOrder = $this->getSession()->getOrder();
+            $oldOrder = $oldOrder->getId() ?
+                $oldOrder : $this->orderRepositoryInterface->get($this->getSession()->getReordered());
             $oldOrder->setRelationChildId($order->getId());
             $oldOrder->setRelationChildRealId($order->getIncrementId());
             $oldOrder->save();
-            $this->orderManagement->cancel($oldOrder->getEntityId());
+            if ($this->getSession()->getOrder()->getId()) {
+                $this->orderManagement->cancel($oldOrder->getEntityId());
+            }
             $order->save();
         }
-        if ($this->getSendConfirmation() && !$order->getEmailSent()) {
-            $this->emailSender->send($order);
-        }
-
-        $this->_eventManager->dispatch('checkout_submit_all_after', ['order' => $order, 'quote' => $quote]);
-
-        $this->removeTransferredItems();
-
-        return $order;
     }
 
     /**

@@ -27,7 +27,7 @@ class Image extends AbstractValidator
         'jpg'  => 'image/jpeg',
         'gif'  => 'image/gif',
         'bmp'  => 'image/bmp',
-        'ico'  => 'image/vnd.microsoft.icon',
+        'ico'  => ['image/vnd.microsoft.icon', 'image/x-icon']
     ];
 
     /**
@@ -70,7 +70,7 @@ class Image extends AbstractValidator
         $fileMimeType = $this->fileMime->getMimeType($filePath);
         $isValid = true;
 
-        if (in_array($fileMimeType, $this->imageMimeTypes)) {
+        if (stripos(json_encode($this->imageMimeTypes), json_encode($fileMimeType)) !== false) {
             try {
                 $image = $this->imageFactory->create($filePath);
                 $image->open();

@@ -83,6 +83,6 @@ class FormTest extends TestCase
      */
     public function testPrepareForm()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->markTestSkipped('This test has not been implemented yet.');
     }
 }
