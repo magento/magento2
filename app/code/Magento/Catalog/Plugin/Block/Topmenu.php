@@ -12,7 +12,8 @@ use Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Tree\Node;
 
 /**
- * Plugin for top menu block
+ * Plugin that enhances the top menu block by building and managing the category tree
+ * for menu rendering in a storefront.
  */
 class Topmenu
 {
@@ -78,7 +79,6 @@ class Topmenu
         $storeId = $this->storeManager->getStore()->getId();
         /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
         $collection = $this->getCategoryTree($storeId, $rootId);
-        $currentCategory = $this->getCurrentCategory();
         $mapping = [$rootId => $subject->getMenu()];  // use nodes stack to avoid recursion
         foreach ($collection as $category) {
             $categoryParentId = $category->getParentId();
@@ -95,11 +95,7 @@ class Topmenu
             $parentCategoryNode = $mapping[$categoryParentId];
 
             $categoryNode = new Node(
-                $this->getCategoryAsArray(
-                    $category,
-                    $currentCategory,
-                    $category->getParentId() == $categoryParentId
-                ),
+                $this->getCategoryAsArray($category),
                 'id',
                 $parentCategoryNode->getTree(),
                 $parentCategoryNode
@@ -133,40 +129,19 @@ class Topmenu
     }
 
     /**
-     * Get current Category from catalog layer
-     *
-     * @return \Magento\Catalog\Model\Category
-     */
-    private function getCurrentCategory()
-    {
-        $catalogLayer = $this->layerResolver->get();
-
-        if (!$catalogLayer) {
-            return null;
-        }
-
-        return $catalogLayer->getCurrentCategory();
-    }
-
-    /**
      * Convert category to array
      *
      * @param \Magento\Catalog\Model\Category $category
-     * @param \Magento\Catalog\Model\Category $currentCategory
-     * @param bool $isParentActive
      * @return array
      */
-    private function getCategoryAsArray($category, $currentCategory, $isParentActive)
+    private function getCategoryAsArray($category)
     {
         $categoryId = $category->getId();
         return [
             'name' => $category->getName(),
             'id' => 'category-node-' . $categoryId,
             'url' => $this->catalogCategory->getCategoryUrl($category),
-            'has_active' => in_array((string)$categoryId, explode('/', (string)$currentCategory->getPath()), true),
-            'is_active' => $categoryId == $currentCategory->getId(),
-            'is_category' => true,
-            'is_parent_active' => $isParentActive
+            'is_category' => true
         ];
     }
 

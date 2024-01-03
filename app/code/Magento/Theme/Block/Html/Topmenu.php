@@ -7,7 +7,6 @@ namespace Magento\Theme\Block\Html;
 
 use Magento\Backend\Model\Menu;
 use Magento\Framework\Data\Tree\Node;
-use Magento\Framework\Data\Tree\Node\Collection;
 use Magento\Framework\Data\Tree\NodeFactory;
 use Magento\Framework\Data\TreeFactory;
 use Magento\Framework\DataObject;
@@ -218,7 +217,6 @@ class Topmenu extends Template implements IdentityInterface
 
         $children = $menuTree->getChildren();
         $childLevel = $this->getChildLevel($menuTree->getLevel());
-        $this->removeChildrenWithoutActiveParent($children, $childLevel);
 
         $counter = 1;
         $childrenCount = $children->count();
@@ -312,12 +310,6 @@ class Topmenu extends Template implements IdentityInterface
             $classes[] = 'first';
         }
 
-        if ($item->getIsActive()) {
-            $classes[] = 'active';
-        } elseif ($item->getHasActive()) {
-            $classes[] = 'has-active';
-        }
-
         if ($item->getIsLast()) {
             $classes[] = 'last';
         }
@@ -377,23 +369,6 @@ class Topmenu extends Template implements IdentityInterface
             );
         }
         return $this->_menu;
-    }
-
-    /**
-     * Remove children from collection when the parent is not active
-     *
-     * @param Collection $children
-     * @param int $childLevel
-     * @return void
-     */
-    private function removeChildrenWithoutActiveParent(Collection $children, int $childLevel): void
-    {
-        /** @var Node $child */
-        foreach ($children as $child) {
-            if ($childLevel === 0 && $child->getData('is_parent_active') === false) {
-                $children->delete($child);
-            }
-        }
     }
 
     /**
