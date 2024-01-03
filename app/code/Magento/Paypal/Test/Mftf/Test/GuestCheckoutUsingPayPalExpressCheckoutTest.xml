@@ -15,6 +15,7 @@
             <description value="As a customer I want to be able to buy goods using Checkout with PayPal button from Product page and use Free Shipping"/>
             <severity value="CRITICAL"/>
             <testCaseId value="AC-6150"/>
+            <group value="3rd_party_integration"/>
         </annotations>
         <before>
             <!-- Simple product is created and assigned to category -->
@@ -78,8 +79,7 @@
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <!-- Goto Checkout Page -->
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
-        <waitForPageLoad stepKey="waitForShippingPage"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckout"/>
         <!--Fill Shipping Address-->
         <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillShippingAddress"/>
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="Texas" stepKey="fillState"/>
