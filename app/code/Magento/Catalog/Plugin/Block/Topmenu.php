@@ -95,7 +95,10 @@ class Topmenu
             $parentCategoryNode = $mapping[$categoryParentId];
 
             $categoryNode = new Node(
-                $this->getCategoryAsArray($category),
+                $this->getCategoryAsArray(
+                    $category,
+                    $category->getParentId() == $categoryParentId
+                ),
                 'id',
                 $parentCategoryNode->getTree(),
                 $parentCategoryNode
@@ -131,17 +134,19 @@ class Topmenu
     /**
      * Convert category to array
      *
-     * @param \Magento\Catalog\Model\Category $category
+     * @param Category $category
+     * @param bool $isParentActive
      * @return array
      */
-    private function getCategoryAsArray($category)
+    private function getCategoryAsArray($category, $isParentActive): array
     {
         $categoryId = $category->getId();
         return [
             'name' => $category->getName(),
             'id' => 'category-node-' . $categoryId,
             'url' => $this->catalogCategory->getCategoryUrl($category),
-            'is_category' => true
+            'is_category' => true,
+            'is_parent_active' => $isParentActive
         ];
     }
 
