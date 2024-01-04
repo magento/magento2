@@ -18,8 +18,6 @@ use Magento\Framework\Data\Tree\Node;
 class Topmenu
 {
     /**
-     * Catalog category
-     *
      * @var \Magento\Catalog\Helper\Category
      */
     protected $catalogCategory;
@@ -35,28 +33,20 @@ class Topmenu
     private $storeManager;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Resolver
-     */
-    private $layerResolver;
-
-    /**
      * Initialize dependencies.
      *
      * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory $categoryCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      */
     public function __construct(
         \Magento\Catalog\Helper\Category $catalogCategory,
         \Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory $categoryCollectionFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Layer\Resolver $layerResolver
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->catalogCategory = $catalogCategory;
         $this->collectionFactory = $categoryCollectionFactory;
         $this->storeManager = $storeManager;
-        $this->layerResolver = $layerResolver;
     }
 
     /**
