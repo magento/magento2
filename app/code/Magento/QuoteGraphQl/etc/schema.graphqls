@@ -222,6 +222,7 @@ type PlaceOrderOutput @doc(description: "Contains the results of the request to 
 type Cart @doc(description: "Contains the contents and other details about a guest or customer cart.") {
     id: ID! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\MaskedCartId") @doc(description: "The unique ID for a `Cart` object.")
     items: [CartItemInterface] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItems") @doc(description: "An array of products that have been added to the cart.")
+    paginated_items(pageSize: Int = 20, currentPage: Int = 1): CartItems @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemsPaginated")
     applied_coupon: AppliedCoupon @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupon") @deprecated(reason: "Use `applied_coupons` instead.")
     applied_coupons: [AppliedCoupon] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupons") @doc(description:"An array of `AppliedCoupon` objects. Each object contains the `code` text attribute, which specifies the coupon code.")
     email: String @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartEmail") @doc(description: "The email address of the guest or customer.")
@@ -232,6 +233,12 @@ type Cart @doc(description: "Contains the contents and other details about a gue
     prices: CartPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartPrices") @doc(description: "Pricing details for the quote.")
     total_quantity: Float! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartTotalQuantity") @doc(description: "The total number of items in the cart.")
     is_virtual: Boolean! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartIsVirtual") @doc(description: "Indicates whether the cart contains only virtual products.")
+}
+
+type CartItems {
+    items: [CartItemInterface]! @doc(description: "An array of products that have been added to the cart.")
+    page_info: SearchResultPageInfo @doc(description: "Metadata for pagination rendering.")
+    total_count: Int! @doc(description: "The number of returned cart items.")
 }
 
 interface CartAddressInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddressTypeResolver") {
