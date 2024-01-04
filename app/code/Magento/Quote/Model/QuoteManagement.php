@@ -497,7 +497,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
             $quote->setIsActive(false);
             return null;
         }
-        
+
         return $this->submitQuote($quote, $orderData);
     }
 
