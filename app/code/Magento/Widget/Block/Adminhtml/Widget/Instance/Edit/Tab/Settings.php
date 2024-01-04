@@ -6,8 +6,6 @@
 
 /**
  * Widget Instance Settings tab block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 
@@ -19,8 +17,6 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
@@ -49,6 +45,8 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
+     * Initialise the block
+     *
      * @return void
      */
     protected function _construct()

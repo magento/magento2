@@ -24,4 +24,4 @@ For more information about a layout in Magento 2, see the [Layout documentation]
 
 ## Additional information
 
-[Learn how to configure Google AdWords](https://docs.magento.com/user-guide/marketing/google-adwords.html).
+[Learn how to configure Google AdWords](https://experienceleague.adobe.com/docs/commerce-admin/marketing/google-tools/google-adwords.html).

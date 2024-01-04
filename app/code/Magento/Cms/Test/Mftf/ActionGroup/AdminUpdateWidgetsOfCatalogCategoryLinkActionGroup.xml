@@ -22,6 +22,7 @@
         <click selector="{{CmsNewWidgetOptionsSection.SelectCategory}}" stepKey="clickSelectCategoryButton1"/>
         <waitForPageLoad stepKey="waitToLoadRootCategory"/>
         <click selector="{{CmsNewWidgetOptionsSection.ExpandRootCategory}}" stepKey="clickToExpandRootCat"/>
+        <waitForPageLoad stepKey="waitToExpandRootCategory"/>
         <click selector="{{CmsNewWidgetOptionsSection.SecondCategory}}" stepKey="clickSecondCategoryToSelect"/>
         <waitForPageLoad stepKey="waitToSelectSecondCategory"/>
         <click selector="{{CmsNewWidgetOptionsSection.SaveWidget}}" stepKey="clickSaveWidgetButton"/>
