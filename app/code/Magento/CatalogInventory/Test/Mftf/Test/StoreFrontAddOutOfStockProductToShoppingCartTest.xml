@@ -62,8 +62,8 @@
         <!-- Mouse Hover Product On Category Page-->
         <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct"/>
         <!-- Select Add to cart-->
-        <waitForElementClickable selector="{{StorefrontCategoryMainSection.addToCartProductBySku($$simpleProductOne.sku$$)}}" stepKey="waitForAddToCartButton"/>
-        <click selector="{{StorefrontCategoryMainSection.addToCartProductBySku($$simpleProductOne.sku$$)}}" stepKey="toCategory"/>
+        <waitForElementClickable selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="waitForAddToCartButton"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="toCategory"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.errorMsg}}" stepKey="wait"/>
         <!-- Assert the Error Message-->
         <see selector="{{StorefrontProductPageSection.errorMsg}}" userInput="Product that you are trying to add is not available." stepKey="seeErrorMessage"/>
