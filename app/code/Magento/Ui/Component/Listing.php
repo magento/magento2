@@ -30,9 +30,9 @@ class Listing extends AbstractComponent
 
     /**
      * @param ContextInterface $context
-     * @param ContentTypeFactory|null $contentTypeFactory
      * @param array $components
      * @param array $data
+     * @param ContentTypeFactory|null $contentTypeFactory
      */
     public function __construct(
         ContextInterface $context,
@@ -63,6 +63,8 @@ class Listing extends AbstractComponent
     }
 
     /**
+     * Render content depending on specified type
+     *
      * @param string $contentType
      * @return string
      */
