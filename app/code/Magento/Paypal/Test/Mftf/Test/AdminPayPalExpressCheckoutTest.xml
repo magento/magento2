@@ -15,6 +15,7 @@
             <description value="Place an order using paypal express checkout as payment method"/>
             <severity value="CRITICAL"/>
             <testCaseId value="AC-6149"/>
+            <group value="3rd_party_integration"/>
         </annotations>
         <before>
             <!-- Simple product is created and assigned to category -->
