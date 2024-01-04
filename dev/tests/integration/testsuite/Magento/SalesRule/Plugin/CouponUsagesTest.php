@@ -20,7 +20,6 @@ use Magento\TestFramework\MessageQueue\PreconditionFailedException;
 use Magento\TestFramework\MessageQueue\PublisherConsumerController;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use tests\verification\Tests\SkippedGenerationTest;
 
 /**
  * Test increasing coupon usages after order placing and decreasing after order cancellation.
@@ -116,7 +115,6 @@ class CouponUsagesTest extends TestCase
       */
     public function testSubmitQuoteAndCancelOrder()
     {
-        $this->markTestSkipped('Skipped due to the disabled coupon_uses_increment_plugin in ACP2E-2519.');
         $customerId = 1;
         $couponCode = 'one_usage';
         $reservedOrderId = 'test01';
