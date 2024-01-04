@@ -37,9 +37,7 @@ class Indexer implements DataFixtureInterface
         $this->indexerCollection->load();
         /** @var IndexerModel $indexer */
         foreach ($this->indexerCollection->getItems() as $indexer) {
-            if ($indexer->getState()->getData('status') === 'invalid') {
-                $indexer->reindexAll();
-            }
+            $indexer->reindexAll();
         }
         return null;
     }
