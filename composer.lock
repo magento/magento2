@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "49833abd590fe8ed76310ae13f399129",
+    "content-hash": "e7b0a26a9d38f203ff751135f9db4754",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1960,21 +1960,21 @@
         },
         {
             "name": "laminas/laminas-db",
-            "version": "dev-php8.3_support",
+            "version": "2.18.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/glo71317/laminas-db.git",
-                "reference": "9413f5f0a08e2cff249bf479577ef43d933a6aad"
+                "url": "https://github.com/laminas/laminas-db.git",
+                "reference": "4df7a3f7ffe268e8683306fcec125c269408b295"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/glo71317/laminas-db/zipball/9413f5f0a08e2cff249bf479577ef43d933a6aad",
-                "reference": "9413f5f0a08e2cff249bf479577ef43d933a6aad",
+                "url": "https://api.github.com/repos/laminas/laminas-db/zipball/4df7a3f7ffe268e8683306fcec125c269408b295",
+                "reference": "4df7a3f7ffe268e8683306fcec125c269408b295",
                 "shasum": ""
             },
             "require": {
                 "laminas/laminas-stdlib": "^3.7.1",
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0"
+                "php": "~8.0.0 || ~8.1.0|| ~8.2.0"
             },
             "conflict": {
                 "zendframework/zend-db": "*"
@@ -2003,36 +2003,7 @@
                     "Laminas\\Db\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "LaminasTest\\Db\\": "test/unit/",
-                    "LaminasIntegrationTest\\Db\\": "test/integration/"
-                }
-            },
-            "scripts": {
-                "check": [
-                    "@cs-check",
-                    "@test"
-                ],
-                "cs-check": [
-                    "phpcs"
-                ],
-                "cs-fix": [
-                    "phpcbf"
-                ],
-                "test": [
-                    "phpunit --colors=always --testsuite \"unit test\""
-                ],
-                "test-coverage": [
-                    "phpunit --colors=always --coverage-clover clover.xml"
-                ],
-                "test-integration": [
-                    "phpunit --colors=always --testsuite \"integration test\""
-                ],
-                "upload-coverage": [
-                    "coveralls -v"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -2043,14 +2014,20 @@
                 "laminas"
             ],
             "support": {
-                "docs": "https://docs.laminas.dev/laminas-db/",
-                "issues": "https://github.com/laminas/laminas-db/issues",
-                "source": "https://github.com/laminas/laminas-db",
-                "rss": "https://github.com/laminas/laminas-db/releases.atom",
                 "chat": "https://laminas.dev/chat",
-                "forum": "https://discourse.laminas.dev"
+                "docs": "https://docs.laminas.dev/laminas-db/",
+                "forum": "https://discourse.laminas.dev",
+                "issues": "https://github.com/laminas/laminas-db/issues",
+                "rss": "https://github.com/laminas/laminas-db/releases.atom",
+                "source": "https://github.com/laminas/laminas-db"
             },
-            "time": "2023-11-14T07:39:20+00:00"
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2023-05-05T16:22:28+00:00"
         },
         {
             "name": "laminas/laminas-di",
@@ -4314,12 +4291,12 @@
             "version": "dev-develop",
             "source": {
                 "type": "git",
-                "url": "git@github.com:magento-commerce/composer.git",
+                "url": "https://github.com/magento/composer.git",
                 "reference": "2c5c08a668e378eeed1e8c6e50315c14af4ca3ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento-commerce/composer/zipball/2c5c08a668e378eeed1e8c6e50315c14af4ca3ce",
+                "url": "https://api.github.com/repos/magento/composer/zipball/2c5c08a668e378eeed1e8c6e50315c14af4ca3ce",
                 "reference": "2c5c08a668e378eeed1e8c6e50315c14af4ca3ce",
                 "shasum": ""
             },
@@ -4338,14 +4315,15 @@
                     "Magento\\Composer\\": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "OSL-3.0",
                 "AFL-3.0"
             ],
             "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
             "support": {
-                "source": "https://github.com/magento-commerce/composer/tree/develop",
-                "issues": "https://github.com/magento-commerce/composer/issues"
+                "issues": "https://github.com/magento/composer/issues",
+                "source": "https://github.com/magento/composer/tree/develop"
             },
             "time": "2023-12-19T16:58:46+00:00"
         },
@@ -13164,7 +13142,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "laminas/laminas-db": 20,
         "magento/composer": 20
     },
     "prefer-stable": true,

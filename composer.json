@@ -16,16 +16,6 @@
         "preferred-install": "dist",
         "sort-packages": true
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:magento-commerce/composer.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:glo71317/laminas-db.git"
-        }
-    ],
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "ext-bcmath": "*",
@@ -57,7 +47,7 @@
         "laminas/laminas-code": "^4.13",
         "laminas/laminas-di": "^3.13",
         "laminas/laminas-file": "^2.13",
-        "laminas/laminas-db": "dev-php8.3_support",
+        "laminas/laminas-db": "^2.15",
         "laminas/laminas-oauth": "^2.6",
         "laminas/laminas-escaper": "^2.13",
         "laminas/laminas-eventmanager": "^3.11",
