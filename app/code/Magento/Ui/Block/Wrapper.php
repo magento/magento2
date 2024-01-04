@@ -89,7 +89,7 @@ class Wrapper extends \Magento\Framework\View\Element\Template
     public function renderApp($data = [])
     {
         /** @var \Magento\Ui\Component\AbstractComponent $uiComponent */
-        $uiComponent = $this->uiComponentGenerator //vezi generateXML aici de la layout
+        $uiComponent = $this->uiComponentGenerator
             ->generateUiComponent($this->getData('uiComponent'), $this->getLayout());
         $this->injectDataInDataSource($uiComponent, $this->getData());
         $this->addDataToChildComponents($uiComponent, $data);

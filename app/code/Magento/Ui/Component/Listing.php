@@ -16,7 +16,7 @@ use Magento\Ui\Component\Listing\Columns;
  */
 class Listing extends AbstractComponent
 {
-    const NAME = 'listing';
+    public const NAME = 'listing';
 
     /**
      * @var array
@@ -26,7 +26,7 @@ class Listing extends AbstractComponent
     /**
      * @var ContentTypeFactory
      */
-    protected ContentTypeFactory $contentTypeFactory;
+    private ContentTypeFactory $contentTypeFactory;
 
     /**
      * @param ContextInterface $context
@@ -36,9 +36,9 @@ class Listing extends AbstractComponent
      */
     public function __construct(
         ContextInterface $context,
-        ?ContentTypeFactory $contentTypeFactory = null,
         array $components = [],
-        array $data = []
+        array $data = [],
+        ?ContentTypeFactory $contentTypeFactory = null
     ) {
         $this->contentTypeFactory = $contentTypeFactory ?: ObjectManager::getInstance()->get(ContentTypeFactory::class);
         parent::__construct($context, $components, $data);
@@ -55,7 +55,7 @@ class Listing extends AbstractComponent
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDataSourceData()
     {
@@ -63,7 +63,8 @@ class Listing extends AbstractComponent
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $contentType
+     * @return string
      */
     public function render(string $contentType = '')
     {
