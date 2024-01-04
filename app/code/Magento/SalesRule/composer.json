@@ -30,7 +30,8 @@
         "magento/module-asynchronous-operations": "*"
     },
     "suggest": {
-        "magento/module-sales-rule-sample-data": "*"
+        "magento/module-sales-rule-sample-data": "*",
+        "magento/module-multishipping": "*"
     },
     "type": "magento2-module",
     "license": [

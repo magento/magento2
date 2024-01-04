@@ -39,7 +39,4 @@
     <event name="sales_quote_collect_totals_before">
         <observer name="salesrule_sales_quote_collect_totals_before" instance="\Magento\SalesRule\Observer\QuoteResetAppliedRulesObserver" />
     </event>
-    <event name="checkout_submit_all_after">
-        <observer name="coupon_usages_increment_after_all_save" instance="\Magento\SalesRule\Observer\CouponUsagesIncrementObserver" />
-    </event>
 </config>

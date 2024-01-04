@@ -193,7 +193,10 @@
         <plugin name="coupon_uses_decrement_plugin" type="Magento\SalesRule\Plugin\CouponUsagesDecrement" />
     </type>
     <type name="\Magento\Quote\Model\QuoteManagement">
-        <plugin name="coupon_uses_increment_plugin" type="Magento\SalesRule\Plugin\CouponUsagesIncrement" sortOrder="20" disabled="true"/>
+        <plugin name="coupon_uses_increment_plugin" type="Magento\SalesRule\Plugin\CouponUsagesIncrement" sortOrder="20"/>
+    </type>
+    <type name="\Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderDefault">
+        <plugin name="coupon_uses_increment_multishipping_plugin" type="Magento\SalesRule\Plugin\CouponUsagesIncrementMultishipping" sortOrder="30"/>
     </type>
     <preference
             for="Magento\SalesRule\Model\Spi\CodeLimitManagerInterface"
