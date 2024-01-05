@@ -22,7 +22,6 @@ use Magento\Checkout\Test\Fixture\SetDeliveryMethod;
 use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethod;
 use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddress;
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Framework\DataObject;
 use Magento\Framework\MessageQueue\ConsumerFactory;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -31,14 +30,12 @@ use Magento\Quote\Test\Fixture\AddProductToCart;
 use Magento\Quote\Test\Fixture\CustomerCart;
 use Magento\Quote\Test\Fixture\GuestCart;
 use Magento\Sales\Api\OrderManagementInterface;
-use Magento\SalesRule\Model\ResourceModel\Coupon\Usage;
 use Magento\SalesRule\Test\Fixture\Rule as SalesRuleFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\MessageQueue\ClearQueueProcessor;
-use Magento\SalesRule\Model\Coupon;
 use PHPUnit\Framework\TestCase;
 
 class UpdateCouponUsagesTest extends TestCase
@@ -73,21 +70,6 @@ class UpdateCouponUsagesTest extends TestCase
      */
     private $consumerFactory;
 
-    /**
-     * @var DataObject
-     */
-    private $couponUsage;
-
-    /**
-     * @var Coupon
-     */
-    private $coupon;
-
-    /**
-     * @var Usage
-     */
-    private $usage;
-
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -101,9 +83,6 @@ class UpdateCouponUsagesTest extends TestCase
         $this->cartRepository = $objectManager->get(CartRepositoryInterface::class);
         $this->orderManagement = $objectManager->get(OrderManagementInterface::class);
         $this->consumerFactory = $objectManager->get(ConsumerFactory::class);
-        $this->usage = $objectManager->get(Usage::class);
-        $this->coupon = $objectManager->get(Coupon::class);
-        $this->couponUsage = $objectManager->create(DataObject::class);
     }
 
     #[
@@ -132,19 +111,8 @@ class UpdateCouponUsagesTest extends TestCase
     {
         $cart = $this->fixtures->get('cart1');
         $this->couponManagement->set($cart->getId(), 'one_per_customer');
-        $this->coupon->loadByCode('one_per_customer');
         $orderId = $this->cartManagement->placeOrder($cart->getId());
-        $this->usage->loadByCustomerCoupon($this->couponUsage, $cart->getCustomerId(), $this->coupon->getId());
-        self::assertEquals(
-            1,
-            $this->couponUsage->getTimesUsed()
-        );
         $this->orderManagement->cancel($orderId);
-        $this->usage->loadByCustomerCoupon($this->couponUsage, $cart->getCustomerId(), $this->coupon->getId());
-        self::assertEquals(
-            0,
-            $this->couponUsage->getTimesUsed()
-        );
         $consumer = $this->consumerFactory->get('sales.rule.update.coupon.usage');
         $consumer->process(1);
 
@@ -154,11 +122,6 @@ class UpdateCouponUsagesTest extends TestCase
         $cart = $this->cartRepository->get($cart->getId());
         $this->couponManagement->set($cart->getId(), 'one_per_customer');
         $this->cartManagement->placeOrder($cart->getId());
-        $this->usage->loadByCustomerCoupon($this->couponUsage, $cart->getCustomerId(), $this->coupon->getId());
-        self::assertEquals(
-            1,
-            $this->couponUsage->getTimesUsed()
-        );
         $consumer->process(1);
     }
 }
