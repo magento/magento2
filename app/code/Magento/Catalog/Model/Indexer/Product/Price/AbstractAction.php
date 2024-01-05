@@ -437,12 +437,18 @@ abstract class AbstractAction
      */
     private function deleteOutdatedData(array $entityIds, string $temporaryTable, string $mainTable): void
     {
+        $connection = $this->getConnection();
+        $describe = $connection->describeTable($connection->getTableName($temporaryTable));
+        if (false === $describe['entity_id']['NULLABLE']) {
+            return;
+        }
+
         $joinCondition = [
             'tmp_table.entity_id = main_table.entity_id',
             'tmp_table.customer_group_id = main_table.customer_group_id',
             'tmp_table.website_id = main_table.website_id',
         ];
-        $select = $this->getConnection()->select()
+        $select = $connection->select()
             ->from(['main_table' => $mainTable], null)
             ->joinLeft(['tmp_table' => $temporaryTable], implode(' AND ', $joinCondition), null)
             ->where('tmp_table.entity_id IS NULL')

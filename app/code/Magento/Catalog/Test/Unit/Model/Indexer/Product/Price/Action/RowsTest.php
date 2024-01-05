@@ -143,7 +143,7 @@ class RowsTest extends TestCase
         $select->method('join')->willReturnSelf();
         $adapter = $this->createMock(AdapterInterface::class);
         $adapter->method('select')->willReturn($select);
-        $adapter->method('describeTable')->willReturn([]);
+        $adapter->method('describeTable')->willReturn(['entity_id' => ['NULLABLE' => true]]);
         $this->defaultIndexerResource->method('getConnection')->willReturn($adapter);
         $adapter->method('fetchAll')->with($select)->willReturn([]);
 
