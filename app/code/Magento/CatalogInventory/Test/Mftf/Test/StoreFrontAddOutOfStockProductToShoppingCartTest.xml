@@ -39,8 +39,8 @@
         </before>
         <!-- Delete the Data after execution-->
         <after>
-            <deleteData createDataKey="createCategory" stepKey="deleteProduct"/>
-            <deleteData createDataKey="simpleProductOne" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleProductOne" stepKey="deleteProduct"/>
             <magentoCLI command="config:set {{EnableInventoryCheckOnCartLoad.path}} {{EnableInventoryCheckOnCartLoad.value}}" stepKey="enableCartLoad"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
