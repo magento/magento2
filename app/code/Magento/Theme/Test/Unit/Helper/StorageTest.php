@@ -374,8 +374,6 @@ class StorageTest extends TestCase
         };
         $this->urlDecoder
             ->method('decode')
-//            ->withConsecutive([$notRoot], [$filename])
-//            ->willReturnOnConsecutiveCalls($this->returnCallback($decode), $this->returnCallback($decode));
             ->willReturnCallback(function ($arg) use ($decode, $notRoot, $filename) {
                 if ($arg == $notRoot) {
                     return $this->returnCallback($decode);

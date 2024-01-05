@@ -103,19 +103,44 @@ class BuilderTest extends TestCase
 
         if ($isTransactionExists) {
             $this->repositoryMock->method('getByTransactionId')
-                ->withConsecutive(
-                    [$transactionId, $paymentId, $orderId],
-                    [$parentTransactionId, $paymentId, $orderId]
-                )->willReturnOnConsecutiveCalls(
-                    $transaction,
-                    $parentTransaction
-                );
+            ->willReturnCallback(function (
+                $arg1,
+                $arg2,
+                $arg3
+            ) use (
+                $transactionId,
+                $paymentId,
+                $orderId,
+                $parentTransactionId,
+                $parentTransaction,
+                $transaction
+            ) {
+                if ($arg1 == $transactionId && $arg2 == $paymentId && $arg3 ==  $orderId) {
+                    return $transaction;
+                } elseif ($arg1 == $parentTransactionId && $arg2 == $paymentId && $arg3 ==  $orderId) {
+                    return $parentTransaction;
+                }
+            });
         } else {
             $this->repositoryMock->method('getByTransactionId')
-                ->withConsecutive(
-                    [$transactionId, $paymentId, $orderId],
-                    [$parentTransactionId, $paymentId, $orderId]
-                )->willReturnOnConsecutiveCalls(false, $parentTransaction);
+                ->willReturnCallback(function (
+                    $arg1,
+                    $arg2,
+                    $arg3
+                ) use (
+                    $transactionId,
+                    $paymentId,
+                    $orderId,
+                    $parentTransactionId,
+                    $parentTransaction
+                ) {
+                    if ($arg1 == $transactionId && $arg2 == $paymentId && $arg3 ==  $orderId) {
+                        return false;
+                    } elseif ($arg1 == $parentTransactionId && $arg2 == $paymentId && $arg3 ==  $orderId) {
+                        return $parentTransaction;
+                    }
+                });
+
             $this->repositoryMock->method('create')
                 ->willReturn($transaction);
             $transaction->expects($this->once())->method('setTxnId')
@@ -291,7 +316,7 @@ class BuilderTest extends TestCase
     /**
      * @return array
      */
-    public function createDataProvider(): array
+    public static function createDataProvider(): array
     {
         return [
             'transactionNotExists' => [

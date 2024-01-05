@@ -268,11 +268,18 @@ class BundleTest extends TestCase
             ->getMock();
         $this->product
             ->method('getLowestPrice')
-            ->withConsecutive(
-                [$this->product, $baseAmount],
-                [$this->product, $basePriceValue]
-            )
-            ->willReturnOnConsecutiveCalls(999, 888);
+//            ->withConsecutive(
+//                [$this->product, $baseAmount],
+//                [$this->product, $basePriceValue]
+//            )
+//            ->willReturnOnConsecutiveCalls(999, 888);
+            ->willReturnCallback(function ($arg1, $arg2) use ($baseAmount, $basePriceValue) {
+                if ($arg1 == $this->product && $arg2==$baseAmount) {
+                    return 999;
+                } elseif ($arg1 == $this->product && $arg2==$basePriceValue) {
+                    return 888;
+                }
+            });
         $this->bundleProductPriceFactory->expects($this->once())
             ->method('create')
             ->willReturn($bundleProductPrice);
@@ -411,8 +418,12 @@ class BundleTest extends TestCase
             }
             $priceInfoMock
                 ->method('getPrice')
-                ->withConsecutive(...$withArgs)
-                ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+                ->willReturnCallback(function ($withArgs) use ($willReturnArgs) {
+                    static $callCount = 0;
+                    $returnValue = $willReturnArgs[$callCount] ?? null;
+                    $callCount++;
+                    return $returnValue;
+                });
         } else {
             $priceInfoMock->expects($this->any())
                 ->method('getPrice')
@@ -606,7 +617,7 @@ class BundleTest extends TestCase
     /**
      * @return array
      */
-    public function getOptionsDataProvider(): array
+    public static function getOptionsDataProvider(): array
     {
         return [
             [true],

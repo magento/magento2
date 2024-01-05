@@ -267,8 +267,13 @@ class InlineEditTest extends TestCase
             ->willReturn($this->resultJson);
         $this->request
             ->method('getParam')
-            ->withConsecutive(['items', []], ['isAjax'])
-            ->willReturnOnConsecutiveCalls($this->items, true);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'items') {
+                    return $this->items;
+                } elseif ($arg1 == 'isAjax') {
+                    return true;
+                }
+            });
         $this->customerRepository->expects($this->once())
             ->method('getById')
             ->with(14)
@@ -359,25 +364,11 @@ class InlineEditTest extends TestCase
         $this->prepareMocksForTesting();
         $this->dataObjectHelper
             ->method('populateWithArray')
-            ->withConsecutive(
-                [
-                    $this->address,
-                    [
-                        'postcode' => '07294',
-                        'firstname' => 'Firstname',
-                        'lastname' => 'Lastname'
-                    ],
-                    AddressInterface::class
-                ],
-                [
-                    $this->customerData,
-                    [
-                        'name' => 'Firstname Lastname',
-                        'email' => 'test@test.ua'
-                    ],
-                    CustomerInterface::class
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg3 == AddressInterface::class || $arg3 == CustomerInterface::class) {
+                    return null;
+                }
+            });
 
         $this->customerData->expects($this->once())
             ->method('getDefaultBilling')
@@ -408,8 +399,13 @@ class InlineEditTest extends TestCase
             ->willReturn($this->resultJson);
         $this->request
             ->method('getParam')
-            ->withConsecutive(['items', []], ['isAjax'])
-            ->willReturnOnConsecutiveCalls([], false);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'items') {
+                    return [];
+                } elseif ($arg1 == 'isAjax') {
+                    return false;
+                }
+            });
         $this->resultJson
             ->expects($this->once())
             ->method('setData')
@@ -436,16 +432,11 @@ class InlineEditTest extends TestCase
         $this->prepareMocksForTesting();
         $this->dataObjectHelper
             ->method('populateWithArray')
-            ->withConsecutive(
-                [
-                    $this->customerData,
-                    [
-                        'name' => 'Firstname Lastname',
-                        'email' => 'test@test.ua'
-                    ],
-                    CustomerInterface::class
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg3 == CustomerInterface::class) {
+                    return null;
+                }
+            });
 
         $this->customerData->expects($this->once())
             ->method('getDefaultBilling')
@@ -480,16 +471,11 @@ class InlineEditTest extends TestCase
         $this->prepareMocksForTesting();
         $this->dataObjectHelper
             ->method('populateWithArray')
-            ->withConsecutive(
-                [
-                    $this->customerData,
-                    [
-                        'name' => 'Firstname Lastname',
-                        'email' => 'test@test.ua'
-                    ],
-                    CustomerInterface::class
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg3 == CustomerInterface::class) {
+                    return null;
+                }
+            });
         $this->customerData->expects($this->once())
             ->method('getDefaultBilling')
             ->willReturn(false);

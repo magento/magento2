@@ -87,8 +87,13 @@ class StoresConfigTest extends TestCase
 
         $this->_config
             ->method('getValue')
-            ->withConsecutive([$path, 'store', 'code_0'], [$path, 'store', 'code_1'])
-            ->willReturnOnConsecutiveCalls(0, 1);
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($path) {
+                if ($arg1 == $path && $arg2 == 'store' && $arg3 == 'code_0') {
+                    return 0;
+                } elseif ($arg1 == $path && $arg2 == 'store' && $arg3 == 'code_1') {
+                    return 1;
+                }
+            });
 
         $this->assertEquals([0 => 0, 1 => 1], $this->_model->getStoresConfigByPath($path));
     }
