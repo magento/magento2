@@ -27,11 +27,11 @@
         "magento/module-captcha": "*",
         "magento/module-checkout": "*",
         "magento/module-authorization": "*",
-        "magento/module-asynchronous-operations": "*"
+        "magento/module-asynchronous-operations": "*",
+        "magento/module-multishipping": "*"
     },
     "suggest": {
-        "magento/module-sales-rule-sample-data": "*",
-        "magento/module-multishipping": "*"
+        "magento/module-sales-rule-sample-data": "*"
     },
     "type": "magento2-module",
     "license": [
