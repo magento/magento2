@@ -1645,6 +1645,11 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
+        <index referenceId="CATALOG_PRODUCT_INDEX_ENTITY_CUSTOMER_WEBSITE" indexType="btree">
+            <column name="entity_id"/>
+            <column name="customer_group_id"/>
+            <column name="website_id"/>
+        </index>
     </table>
     <table name="catalog_category_product_index_tmp" resource="default" engine="innodb"
            comment="Catalog Category Product Indexer temporary table">

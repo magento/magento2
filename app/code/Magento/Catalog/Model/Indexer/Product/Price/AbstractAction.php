@@ -408,11 +408,11 @@ abstract class AbstractAction
                 foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
                     $this->tableMaintainer->createMainTmpTable($dimensions);
                     $temporaryTable = $this->tableMaintainer->getMainTmpTable($dimensions);
-                    $this->_emptyTable($temporaryTable);
                     $indexer->executeByDimensions($dimensions, \SplFixedArray::fromArray($entityIds, false));
                     $mainTable = $this->tableMaintainer->getMainTableByDimensions($dimensions);
                     $this->_insertFromTable($temporaryTable, $mainTable);
                     $this->deleteOutdatedData($entityIds, $temporaryTable, $mainTable);
+                    $this->_connection->dropTable($temporaryTable);
                 }
             } else {
                 // handle 3d-party indexers for backward compatibility
@@ -437,18 +437,12 @@ abstract class AbstractAction
      */
     private function deleteOutdatedData(array $entityIds, string $temporaryTable, string $mainTable): void
     {
-        $connection = $this->getConnection();
-        $describe = $connection->describeTable($connection->getTableName($temporaryTable));
-        if (false === $describe['entity_id']['NULLABLE']) {
-            return;
-        }
-
         $joinCondition = [
             'tmp_table.entity_id = main_table.entity_id',
             'tmp_table.customer_group_id = main_table.customer_group_id',
             'tmp_table.website_id = main_table.website_id',
         ];
-        $select = $connection->select()
+        $select = $this->getConnection()->select()
             ->from(['main_table' => $mainTable], null)
             ->joinLeft(['tmp_table' => $temporaryTable], implode(' AND ', $joinCondition), null)
             ->where('tmp_table.entity_id IS NULL')
