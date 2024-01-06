@@ -301,40 +301,41 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Sales\Model\Config $salesConfig,
-        \Magento\Backend\Model\Session\Quote $quoteSession,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\DataObject\Copy $objectCopyService,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        Product\Quote\Initializer $quoteInitializer,
-        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
-        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
-        \Magento\Customer\Api\Data\AddressInterfaceFactory $addressFactory,
-        \Magento\Customer\Model\Metadata\FormFactory $metadataFormFactory,
-        \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Sales\Model\AdminOrder\EmailSender $emailSender,
+        \Magento\Framework\ObjectManagerInterface            $objectManager,
+        \Magento\Framework\Event\ManagerInterface            $eventManager,
+        \Magento\Framework\Registry                          $coreRegistry,
+        \Magento\Sales\Model\Config                          $salesConfig,
+        \Magento\Backend\Model\Session\Quote                 $quoteSession,
+        \Psr\Log\LoggerInterface                             $logger,
+        \Magento\Framework\DataObject\Copy                   $objectCopyService,
+        \Magento\Framework\Message\ManagerInterface          $messageManager,
+        Product\Quote\Initializer                            $quoteInitializer,
+        \Magento\Customer\Api\CustomerRepositoryInterface    $customerRepository,
+        \Magento\Customer\Api\AddressRepositoryInterface     $addressRepository,
+        \Magento\Customer\Api\Data\AddressInterfaceFactory   $addressFactory,
+        \Magento\Customer\Model\Metadata\FormFactory         $metadataFormFactory,
+        \Magento\Customer\Api\GroupRepositoryInterface       $groupRepository,
+        \Magento\Framework\App\Config\ScopeConfigInterface   $scopeConfig,
+        \Magento\Sales\Model\AdminOrder\EmailSender          $emailSender,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        \Magento\Quote\Model\Quote\Item\Updater $quoteItemUpdater,
-        \Magento\Framework\DataObject\Factory $objectFactory,
-        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
-        \Magento\Customer\Api\AccountManagementInterface $accountManagement,
-        \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory,
-        \Magento\Customer\Model\Customer\Mapper $customerMapper,
-        \Magento\Quote\Api\CartManagementInterface $quoteManagement,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Sales\Api\OrderManagementInterface $orderManagement,
-        \Magento\Quote\Model\QuoteFactory $quoteFactory,
-        array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        ExtensibleDataObjectConverter $dataObjectConverter = null,
-        StoreManagerInterface $storeManager = null,
-        CustomAttributeListInterface $customAttributeList = null,
-        OrderRepositoryInterface $orderRepositoryInterface = null
-    ) {
+        \Magento\Quote\Model\Quote\Item\Updater              $quoteItemUpdater,
+        \Magento\Framework\DataObject\Factory                $objectFactory,
+        \Magento\Quote\Api\CartRepositoryInterface           $quoteRepository,
+        \Magento\Customer\Api\AccountManagementInterface     $accountManagement,
+        \Magento\Customer\Api\Data\CustomerInterfaceFactory  $customerFactory,
+        \Magento\Customer\Model\Customer\Mapper              $customerMapper,
+        \Magento\Quote\Api\CartManagementInterface           $quoteManagement,
+        \Magento\Framework\Api\DataObjectHelper              $dataObjectHelper,
+        \Magento\Sales\Api\OrderManagementInterface          $orderManagement,
+        \Magento\Quote\Model\QuoteFactory                    $quoteFactory,
+        array                                                $data = [],
+        \Magento\Framework\Serialize\Serializer\Json         $serializer = null,
+        ExtensibleDataObjectConverter                        $dataObjectConverter = null,
+        StoreManagerInterface                                $storeManager = null,
+        CustomAttributeListInterface                         $customAttributeList = null,
+        OrderRepositoryInterface                             $orderRepositoryInterface = null
+    )
+    {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
         $this->_coreRegistry = $coreRegistry;
@@ -888,7 +889,12 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                         }
 
                         $cartItems = $cart->getAllVisibleItems();
-                        $canBeRestored = (bool)$this->restoreTransferredItem('cart', $cartItems, $product);
+                        $cartItemsToRestore = [];
+                        foreach ($cartItems as $value) {
+                            $cartItemsToRestore[$value->getData('item_id')] = $value->getData('item_id');
+                        }
+                        $canBeRestored = $this->restoreTransferredItem('cart', $cartItemsToRestore);
+
                         if (!$canBeRestored) {
                             $cartItem = $cart->addProduct($product, $info);
                             if (is_string($cartItem)) {
@@ -939,7 +945,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                             $this->getSession()->getStoreId()
                         );
                         $wishlistItems = $wishlist->getItemCollection()->getItems();
-                        $canBeRestored = (bool)$this->restoreTransferredItem('wishlist', $wishlistItems, null);
+                        $canBeRestored = $this->restoreTransferredItem('wishlist', $wishlistItems);
                         if (!$canBeRestored) {
                             $wishlist->addNewItem($item->getProduct(), $info);
                         }
@@ -990,7 +996,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                     $this->moveQuoteItem($item, 'order', $qty);
                     $transferredItems = $this->_session->getTransferredItems() ?? [];
                     $transferredItems['cart'][$itemId] = $itemId;
-                    $this->_session->setTransferredItems($transferredItems) ;
+                    $this->_session->setTransferredItems($transferredItems);
                 }
             }
         }
@@ -1006,7 +1012,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                     $this->addProduct($item->getProduct(), $item->getBuyRequest()->toArray());
                     $transferredItems = $this->_session->getTransferredItems() ?? [];
                     $transferredItems['wishlist'][$itemId] = $itemId;
-                    $this->_session->setTransferredItems($transferredItems) ;
+                    $this->_session->setTransferredItems($transferredItems);
                 }
             }
         }
@@ -2108,34 +2114,17 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param string $area
      * @param \Magento\Quote\Model\Quote\Item[]|\Magento\Wishlist\Model\Item[] $items
-     * @param \Magento\Catalog\Model\Product|null $product Product
      * @return bool
      */
-    private function restoreTransferredItem($area, $items, $product = null): bool
+    private function restoreTransferredItem(string $area, array $items): bool
     {
         $transferredItems = $this->_session->getTransferredItems() ?? [];
         if (!isset($transferredItems[$area])) {
             return false;
         }
-        $itemToRestoreId = null;
-        switch ($area) {
-            case 'wishlist':
-                $itemToRestore = array_intersect_key($items, $transferredItems['wishlist']);
-                if ($itemToRestore) {
-                    $itemToRestoreId = array_key_first($itemToRestore);
-                }
-                break;
-            case 'cart':
-                $cart = $this->getCustomerCart();
-                $cartItem = $cart->getItemByProduct($product);
-                $canBeRestored = $cartItem ? in_array($cartItem->getId(), $transferredItems['cart']) : false;
-                if ($canBeRestored) {
-                    $itemToRestoreId = $cartItem->getItemId();
-                }
-                break;
-            default:
-                break;
-        }
+        $itemToRestore = array_intersect_key($items, $transferredItems[$area]);
+        $itemToRestoreId = array_key_first($itemToRestore);
+
         if ($itemToRestoreId) {
             unset($transferredItems[$area][$itemToRestoreId]);
             $this->_session->setTransferredItems($transferredItems);
