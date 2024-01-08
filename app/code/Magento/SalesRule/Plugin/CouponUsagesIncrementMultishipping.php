@@ -8,13 +8,9 @@ declare(strict_types=1);
 namespace Magento\SalesRule\Plugin;
 
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteRepository;
-use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Model\Service\OrderService;
 use Magento\SalesRule\Model\Coupon\Quote\UpdateCouponUsages;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderDefault;
-use Magento\Sales\Api\OrderManagementInterface;
 
 /**
  * Increments number of coupon usages before placing order
