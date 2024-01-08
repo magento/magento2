@@ -18,8 +18,12 @@ $widgetOptions = [
         [
             'responsive' => true,
             'expanded' => true,
-            'position' => ['my' => 'left top', 'at' => 'left bottom']
-        ])
+            'position' => [
+                'my' => 'left top',
+                'at' => 'left bottom'
+            ]
+        ]
+    )
 ];
 $widgetOptionsJson = $jsonSerializer->serialize($widgetOptions);
 ?>
