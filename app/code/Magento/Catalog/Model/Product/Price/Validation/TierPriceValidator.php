@@ -173,6 +173,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
             }
             $this->checkUnique($price, $existingPrices, $key, $validationResult, true);
             $this->checkGroup($price, $key, $validationResult);
+            $this->checkWebsiteId($price, $key, $validationResult);
         }
 
         return $validationResult;
@@ -530,5 +531,26 @@ class TierPriceValidator implements ResetAfterRequestInterface
     public function _resetState(): void
     {
         $this->customerGroupsByCode = [];
+    }
+
+    /**
+     * Validate the incorrect website id.
+     *
+     * @param TierPriceInterface $price
+     * @param int $key
+     * @param Result $validationResult
+     * @return void
+     */
+    public function checkWebsiteId(TierPriceInterface $price, $key, Result $validationResult)
+    {
+        if ((int) $this->allWebsitesValue !== $price->getWebsiteId()) {
+            $validationResult->addFailedItem(
+                $key,
+                __('Incorrect website ID: %1', $price->getWebsiteId()),
+                [
+                    'websiteId' => $price->getWebsiteId()
+                ]
+            );
+        }
     }
 }
