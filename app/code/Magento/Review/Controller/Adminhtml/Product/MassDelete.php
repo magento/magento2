@@ -71,7 +71,10 @@ class MassDelete extends ProductController implements HttpPostActionInterface
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addExceptionMessage($e, __('Something went wrong while deleting these records.'));
+                $this->messageManager->addExceptionMessage(
+                    $e,
+                    __('Something went wrong while deleting these records.')
+                );
             }
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
@@ -123,6 +126,7 @@ class MassDelete extends ProductController implements HttpPostActionInterface
                     ->getIdFieldName(),
                 $this->getRequest()->getParam('reviews')
             );
+            $collection->addStoreData();
 
             $this->collection = $collection;
         }

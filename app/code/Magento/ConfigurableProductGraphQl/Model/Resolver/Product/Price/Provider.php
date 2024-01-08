@@ -9,20 +9,33 @@ namespace Magento\ConfigurableProductGraphQl\Model\Resolver\Product\Price;
 
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
-use Magento\Framework\Pricing\Amount\AmountInterface;
-use Magento\Framework\Pricing\SaleableInterface;
+use Magento\CatalogGraphQl\Model\Resolver\Product\Price\Provider as CatalogPriceProvider;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface;
-use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface;
+use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterfaceFactory;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\Amount\BaseFactory;
+use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * Provides product prices for configurable products
  */
-class Provider implements ProviderInterface
+class Provider implements ProviderInterface, ResetAfterRequestInterface
 {
     /**
      * @var ConfigurableOptionsProviderInterface
      */
     private $optionsProvider;
+
+    /**
+     * @var ConfigurableOptionsProviderInterfaceFactory
+     */
+    private $optionsProviderFactory;
+
+    /**
+     * @var BaseFactory
+     */
+    private $amountFactory;
 
     /**
      * @var array
@@ -41,12 +54,24 @@ class Provider implements ProviderInterface
     ];
 
     /**
-     * @param ConfigurableOptionsProviderInterface $optionsProvider
+     * @var CatalogPriceProvider
+     */
+    private $catalogPriceProvider;
+
+    /**
+     * @param ConfigurableOptionsProviderInterfaceFactory $optionsProviderFactory
+     * @param BaseFactory $amountFactory
+     * @param CatalogPriceProvider $catalogPriceProvider
      */
     public function __construct(
-        ConfigurableOptionsProviderInterface $optionsProvider
+        ConfigurableOptionsProviderInterfaceFactory $optionsProviderFactory,
+        BaseFactory $amountFactory,
+        CatalogPriceProvider $catalogPriceProvider
     ) {
-        $this->optionsProvider = $optionsProvider;
+        $this->optionsProvider = $optionsProviderFactory->create();
+        $this->optionsProviderFactory = $optionsProviderFactory;
+        $this->amountFactory = $amountFactory;
+        $this->catalogPriceProvider = $catalogPriceProvider;
     }
 
     /**
@@ -101,7 +126,13 @@ class Provider implements ProviderInterface
         if (!isset($this->minimalPrice[$code][$product->getId()])) {
             $minimumAmount = null;
             foreach ($this->optionsProvider->getProducts($product) as $variant) {
-                $variantAmount = $variant->getPriceInfo()->getPrice($code)->getAmount();
+                $variantAmount = null;
+                if ($code === FinalPrice::PRICE_CODE) {
+                    $variantAmount = $this->catalogPriceProvider->getMinimalFinalPrice($variant);
+                } elseif ($code === RegularPrice::PRICE_CODE) {
+                    $variantAmount = $this->catalogPriceProvider->getMinimalRegularPrice($variant);
+                }
+
                 if (!$minimumAmount || ($variantAmount->getValue() < $minimumAmount->getValue())) {
                     $minimumAmount = $variantAmount;
                     $this->minimalPrice[$code][$product->getId()] = $variantAmount;
@@ -109,7 +140,7 @@ class Provider implements ProviderInterface
             }
         }
 
-        return $this->minimalPrice[$code][$product->getId()];
+        return $this->minimalPrice[$code][$product->getId()] ?? $this->amountFactory->create(['amount' => null]);
     }
 
     /**
@@ -124,7 +155,13 @@ class Provider implements ProviderInterface
         if (!isset($this->maximalPrice[$code][$product->getId()])) {
             $maximumAmount = null;
             foreach ($this->optionsProvider->getProducts($product) as $variant) {
-                $variantAmount = $variant->getPriceInfo()->getPrice($code)->getAmount();
+                $variantAmount = null;
+                if ($code === FinalPrice::PRICE_CODE) {
+                    $variantAmount = $this->catalogPriceProvider->getMaximalFinalPrice($variant);
+                } elseif ($code === RegularPrice::PRICE_CODE) {
+                    $variantAmount = $this->catalogPriceProvider->getMaximalRegularPrice($variant);
+                }
+
                 if (!$maximumAmount || ($variantAmount->getValue() > $maximumAmount->getValue())) {
                     $maximumAmount = $variantAmount;
                     $this->maximalPrice[$code][$product->getId()] = $variantAmount;
@@ -132,6 +169,18 @@ class Provider implements ProviderInterface
             }
         }
 
-        return $this->maximalPrice[$code][$product->getId()];
+        return $this->maximalPrice[$code][$product->getId()] ?? $this->amountFactory->create(['amount' => null]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState():void
+    {
+        $this->minimalPrice[RegularPrice::PRICE_CODE] = [];
+        $this->minimalPrice[FinalPrice::PRICE_CODE] = [];
+        $this->maximalPrice[RegularPrice::PRICE_CODE] = [];
+        $this->maximalPrice[FinalPrice::PRICE_CODE] = [];
+        $this->optionsProvider = $this->optionsProviderFactory->create();
     }
 }

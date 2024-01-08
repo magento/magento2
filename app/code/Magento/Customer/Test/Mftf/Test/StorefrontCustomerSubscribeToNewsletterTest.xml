@@ -15,6 +15,7 @@
             <title value="StoreFront Customer Newsletter Subscription"/>
             <description value="Customer can be subscribed to Newsletter Subscription on StoreFront"/>
             <severity value="MAJOR"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>

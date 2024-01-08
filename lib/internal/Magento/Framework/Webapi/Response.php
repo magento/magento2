@@ -1,39 +1,44 @@
 <?php
 /**
- * Web API response.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi;
 
+use Magento\Framework\App\Response\HttpInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
+/**
+ * Web Api response
+ */
 class Response extends \Magento\Framework\HTTP\PhpEnvironment\Response implements
-    \Magento\Framework\App\Response\HttpInterface
+    HttpInterface,
+    ResetAfterRequestInterface
 {
     /**
      * Character set which must be used in response.
      */
-    const RESPONSE_CHARSET = 'utf-8';
+    public const RESPONSE_CHARSET = 'utf-8';
 
     /**#@+
      * Default message types.
      */
-    const MESSAGE_TYPE_SUCCESS = 'success';
+    public const MESSAGE_TYPE_SUCCESS = 'success';
 
-    const MESSAGE_TYPE_ERROR = 'error';
+    public const MESSAGE_TYPE_ERROR = 'error';
 
-    const MESSAGE_TYPE_WARNING = 'warning';
+    public const MESSAGE_TYPE_WARNING = 'warning';
 
     /**#@- */
 
     /**#@+
      * Success HTTP response codes.
      */
-    const HTTP_OK = 200;
+    public const HTTP_OK = 200;
 
-    /**#@-*/
-
-    /**#@-*/
+    /**
+     * @var array
+     */
     protected $_messages = [];
 
     /**
@@ -93,5 +98,14 @@ class Response extends \Magento\Framework\HTTP\PhpEnvironment\Response implement
     {
         $this->_messages = [];
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->clearMessages();
+        parent::_resetState();
     }
 }

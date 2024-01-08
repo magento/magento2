@@ -8,6 +8,7 @@ namespace Magento\Config\Controller\Adminhtml\System\Config;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Config\Controller\Adminhtml\System\AbstractConfig;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * System Configuration Save Controller
@@ -54,6 +55,18 @@ class Save extends AbstractConfig implements HttpPostActionInterface
         $this->_configFactory = $configFactory;
         $this->_cache = $cache;
         $this->string = $string;
+    }
+
+    /**
+     * Save configuration state
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
+     *
+     * @param array $configState
+     * @return bool
+     */
+    public function _saveState($configState = []): bool
+    {
+        return parent::_saveState($configState);
     }
 
     /**
@@ -209,17 +222,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
     {
         try {
             // custom save logic
-            $this->_saveSection();
-            $section = $this->getRequest()->getParam('section');
-            $website = $this->getRequest()->getParam('website');
-            $store = $this->getRequest()->getParam('store');
-            $configData = [
-                'section' => $section,
-                'website' => $website,
-                'store' => $store,
-                'groups' => $this->_getGroupsForSave(),
-            ];
-            $configData = $this->filterNodes($configData);
+            $configData = $this->getConfigData();
 
             /** @var \Magento\Config\Model\Config $configModel */
             $configModel = $this->_configFactory->create(['data' => $configData]);
@@ -268,7 +271,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
         $filtered = [];
         foreach ($groups as $groupName => $childPaths) {
             //When group accepts arbitrary fields and clones them we allow it
-            $group = $this->_configStructure->getElement($prefix .'/' .$groupName);
+            $group = $this->_configStructure->getElement($prefix . '/' . $groupName);
             if (array_key_exists('clone_fields', $group->getData()) && $group->getData()['clone_fields']) {
                 $filtered[$groupName] = $childPaths;
                 continue;
@@ -279,7 +282,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
             if (array_key_exists('fields', $childPaths)) {
                 foreach ($childPaths['fields'] as $field => $fieldData) {
                     //Constructing config path for the $field
-                    $path = $prefix .'/' .$groupName .'/' .$field;
+                    $path = $prefix . '/' . $groupName . '/' . $field;
                     $element = $this->_configStructure->getElement($path);
                     if ($element
                         && ($elementData = $element->getData())
@@ -296,7 +299,7 @@ class Save extends AbstractConfig implements HttpPostActionInterface
             //Recursively filtering this group's groups.
             if (array_key_exists('groups', $childPaths) && $childPaths['groups']) {
                 $filteredGroups = $this->filterPaths(
-                    $prefix .'/' .$groupName,
+                    $prefix . '/' . $groupName,
                     $childPaths['groups'],
                     $systemXmlConfig
                 );
@@ -317,21 +320,50 @@ class Save extends AbstractConfig implements HttpPostActionInterface
      * @param array $configData
      * @return array
      */
-    private function filterNodes(array $configData): array
+    public function filterNodes(array $configData): array
     {
         if (!empty($configData['groups'])) {
-            $systemXmlPathsFromKeys = array_keys($this->_configStructure->getFieldPaths());
-            $systemXmlPathsFromValues = array_reduce(
-                array_values($this->_configStructure->getFieldPaths()),
-                'array_merge',
-                []
-            );
             //Full list of paths defined in system.xml
-            $systemXmlConfig = array_merge($systemXmlPathsFromKeys, $systemXmlPathsFromValues);
-
+            $fieldPaths = $this->_configStructure->getFieldPaths();
+            $systemXmlConfig = array_merge(array_keys($fieldPaths), ...array_values($fieldPaths));
             $configData['groups'] = $this->filterPaths($configData['section'], $configData['groups'], $systemXmlConfig);
         }
+        return $configData;
+    }
 
+    /**
+     * Get Config data from Request
+     *
+     * @return array
+     * @throws LocalizedException
+     */
+    public function getConfigData()
+    {
+        $this->_saveSection();
+        $section = $this->getRequest()->getParam('section');
+        $website = $this->getRequest()->getParam('website');
+        $store = $this->getRequest()->getParam('store');
+        $configData = [
+            'section' => $section,
+            'website' => $website,
+            'store' => $store,
+            'groups' => $this->_getGroupsForSave(),
+        ];
+        $configData = $this->filterNodes($configData);
+
+        $groups = $this->getRequest()->getParam('groups');
+
+        if (isset($groups['country']['fields'])) {
+            if (isset($groups['country']['fields']['eu_countries'])) {
+                $countries = $groups['country']['fields']['eu_countries'];
+                if (empty($countries['value']) &&
+                    !isset($countries['inherit'])) {
+                    throw new LocalizedException(
+                        __('Something went wrong while saving this configuration.')
+                    );
+                }
+            }
+        }
         return $configData;
     }
 }

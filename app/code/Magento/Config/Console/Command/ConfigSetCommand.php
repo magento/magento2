@@ -9,10 +9,13 @@ namespace Magento\Config\Console\Command;
 use Magento\Config\App\Config\Type\System;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Console\Cli;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -31,16 +34,18 @@ class ConfigSetCommand extends Command
     /**#@+
      * Constants for arguments and options.
      */
-    const ARG_PATH = 'path';
-    const ARG_VALUE = 'value';
-    const OPTION_SCOPE = 'scope';
-    const OPTION_SCOPE_CODE = 'scope-code';
-    const OPTION_LOCK = 'lock';
-    const OPTION_LOCK_ENV = 'lock-env';
-    const OPTION_LOCK_CONFIG = 'lock-config';
+    public const ARG_PATH = 'path';
+    public const ARG_VALUE = 'value';
+    public const OPTION_SCOPE = 'scope';
+    public const OPTION_SCOPE_CODE = 'scope-code';
+    public const OPTION_LOCK = 'lock';
+    public const OPTION_LOCK_ENV = 'lock-env';
+    public const OPTION_LOCK_CONFIG = 'lock-config';
     /**#@-*/
 
-    /**#@-*/
+    /**#@-
+     * @var EmulatedAdminhtmlAreaProcessor
+     */
     private $emulatedAreaProcessor;
 
     /**
@@ -65,21 +70,29 @@ class ConfigSetCommand extends Command
     private $deploymentConfig;
 
     /**
+     * @var LocaleEmulatorInterface
+     */
+    private $localeEmulator;
+
+    /**
      * @param EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor Emulator adminhtml area for CLI command
      * @param ChangeDetector $changeDetector The config change detector
      * @param ProcessorFacadeFactory $processorFacadeFactory The factory for processor facade
      * @param DeploymentConfig $deploymentConfig Application deployment configuration
+     * @param LocaleEmulatorInterface|null $localeEmulator
      */
     public function __construct(
         EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor,
         ChangeDetector $changeDetector,
         ProcessorFacadeFactory $processorFacadeFactory,
-        DeploymentConfig $deploymentConfig
+        DeploymentConfig $deploymentConfig,
+        LocaleEmulatorInterface $localeEmulator = null
     ) {
         $this->emulatedAreaProcessor = $emulatedAreaProcessor;
         $this->changeDetector = $changeDetector;
         $this->processorFacadeFactory = $processorFacadeFactory;
         $this->deploymentConfig = $deploymentConfig;
+        $this->localeEmulator = $localeEmulator;
 
         parent::__construct();
     }
@@ -141,8 +154,10 @@ class ConfigSetCommand extends Command
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @since 101.0.0
      * @return int|null
+     * @throws FileSystemException
+     * @throws RuntimeException
+     * @since 101.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -165,32 +180,32 @@ class ConfigSetCommand extends Command
 
         try {
             $message = $this->emulatedAreaProcessor->process(function () use ($input) {
+                return $this->localeEmulator->emulate(function () use ($input) {
+                    $lock = $input->getOption(static::OPTION_LOCK_ENV)
+                        || $input->getOption(static::OPTION_LOCK_CONFIG)
+                        || $input->getOption(static::OPTION_LOCK);
 
-                $lock = $input->getOption(static::OPTION_LOCK_ENV)
-                    || $input->getOption(static::OPTION_LOCK_CONFIG)
-                    || $input->getOption(static::OPTION_LOCK);
+                    $lockTargetPath = ConfigFilePool::APP_ENV;
+                    if ($input->getOption(static::OPTION_LOCK_CONFIG)) {
+                        $lockTargetPath = ConfigFilePool::APP_CONFIG;
+                    }
 
-                $lockTargetPath = ConfigFilePool::APP_ENV;
-                if ($input->getOption(static::OPTION_LOCK_CONFIG)) {
-                    $lockTargetPath = ConfigFilePool::APP_CONFIG;
-                }
-
-                return $this->processorFacadeFactory->create()->processWithLockTarget(
-                    $input->getArgument(static::ARG_PATH),
-                    $input->getArgument(static::ARG_VALUE),
-                    $input->getOption(static::OPTION_SCOPE),
-                    $input->getOption(static::OPTION_SCOPE_CODE),
-                    $lock,
-                    $lockTargetPath
-                );
+                    return $this->processorFacadeFactory->create()->processWithLockTarget(
+                        $input->getArgument(static::ARG_PATH),
+                        $input->getArgument(static::ARG_VALUE),
+                        $input->getOption(static::OPTION_SCOPE),
+                        $input->getOption(static::OPTION_SCOPE_CODE),
+                        $lock,
+                        $lockTargetPath
+                    );
+                });
             });
 
             $output->writeln('<info>' . $message . '</info>');
 
             return Cli::RETURN_SUCCESS;
         } catch (\Exception $exception) {
-            $output->writeln('<error>' . $exception->getMessage() . '</error>');
-
+            $output->writeln(sprintf('<error>%s</error>', $exception->getMessage()));
             return Cli::RETURN_FAILURE;
         }
     }

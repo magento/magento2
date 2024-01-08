@@ -29,7 +29,7 @@ class PayLaterLink extends Field
     /**
      * @var array.
      */
-    private const ARRAY_PAYLATER_SUPPORTED_COUNTRIES = ['US','GB','DE','FR','AU'];
+    private const ARRAY_PAYLATER_SUPPORTED_COUNTRIES = ['US','GB','DE','FR','AU','IT','ES'];
 
     /**
      * @var ScopeConfigInterface

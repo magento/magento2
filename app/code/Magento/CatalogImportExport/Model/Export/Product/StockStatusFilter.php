@@ -48,9 +48,11 @@ class StockStatusFilter implements ProductFilterInterface
         switch ($value) {
             case self::IN_STOCK:
                 $this->stockHelper->addInStockFilterToCollection($collection);
+                $collection->setFlag(self::NAME . '_filter_applied');
                 break;
             case self::OUT_OF_STOCK:
                 $this->stockHelper->addOutOfStockFilterToCollection($collection);
+                $collection->setFlag(self::NAME . '_filter_applied');
                 break;
         }
         return $collection;

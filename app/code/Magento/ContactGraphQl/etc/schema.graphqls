@@ -1,0 +1,23 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Mutation {
+    contactUs(
+        input: ContactUsInput! @doc(description: "An input object that defines shopper information.")
+    ): ContactUsOutput @doc(description: "Send a 'Contact Us' email to the merchant.") @resolver(class: "Magento\\ContactGraphQl\\Model\\Resolver\\ContactUs")
+}
+
+input ContactUsInput {
+    email: String! @doc(description: "The email address of the shopper.")
+    name: String! @doc(description: "The full name of the shopper.")
+    telephone: String @doc(description: "The shopper's telephone number.")
+    comment: String! @doc(description: "The shopper's comment to the merchant.")
+}
+
+type ContactUsOutput @doc(description: "Contains the status of the request."){
+    status: Boolean! @doc(description: "Indicates whether the request was successful.")
+}
+
+type StoreConfig {
+    contact_enabled: Boolean! @doc(description: "Indicates whether the Contact Us form in enabled.")
+}

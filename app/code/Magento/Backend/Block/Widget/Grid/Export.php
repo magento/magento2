@@ -343,6 +343,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Retrieve Grid data as CSV
      *
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getCsv()
     {
@@ -364,7 +365,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
                     $data[] = '"' . str_replace(
                         ['"', '\\'],
                         ['""', '\\\\'],
-                        $column->getRowFieldExport($item)
+                        $column->getRowFieldExport($item) ?: ''
                     ) . '"';
                 }
             }
@@ -378,7 +379,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
                     $data[] = '"' . str_replace(
                         ['"', '\\'],
                         ['""', '\\\\'],
-                        $column->getRowFieldExport($this->_getTotals())
+                        $column->getRowFieldExport($this->_getTotals()) ?: ''
                     ) . '"';
                 }
             }

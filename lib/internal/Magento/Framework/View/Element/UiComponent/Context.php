@@ -253,6 +253,15 @@ class Context implements ContextInterface
         //Dynamic UI component data should not contain templates.
         $config = $this->sanitizer->sanitize(array_merge($dataSource, $dataProviderConfig));
 
+        $params = [
+            'namespace' => $this->getNamespace()
+        ];
+
+        $providerRequestFieldName = $this->getDataProvider()->getRequestFieldName();
+        $providerRequestFieldValue = $this->request->getParam($providerRequestFieldName);
+        if ($providerRequestFieldValue) {
+            $params[$providerRequestFieldName] = $providerRequestFieldValue;
+        }
         return [
             $this->getDataProvider()->getName() => [
                 'type' => 'dataSource',
@@ -261,9 +270,7 @@ class Context implements ContextInterface
                 'config' => array_replace_recursive(
                     $config,
                     [
-                        'params' => [
-                            'namespace' => $this->getNamespace()
-                        ],
+                        'params' => $params,
                     ]
                 )
             ]

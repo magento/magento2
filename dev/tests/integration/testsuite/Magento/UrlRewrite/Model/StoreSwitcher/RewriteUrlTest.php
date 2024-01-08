@@ -7,12 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\UrlRewrite\Model\StoreSwitcher;
 
+use Exception;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Value;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface as ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
@@ -20,12 +22,13 @@ use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\StoreSwitcher;
+use Magento\Store\Model\StoreSwitcher\CannotSwitchStoreException;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * Test store switching
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RewriteUrlTest extends TestCase
 {
@@ -110,11 +113,44 @@ class RewriteUrlTest extends TestCase
     }
 
     /**
+     * Testing store switching with existing cms pages with non-existing url keys
+     *
+     * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
+     * @magentoDbIsolation disabled
+     * @return void
+     * @throws StoreSwitcher\CannotSwitchStoreException|NoSuchEntityException
+     */
+    public function testSwitchToExistingPageToNonExistingUrlKeys(): void
+    {
+        $fromStore = $this->getStoreByCode('default');
+        $toStore = $this->getStoreByCode('fixture_second_store');
+
+        //test with CMS page with url rewrite for from and target store
+        $redirectUrl1 = "http://localhost/index.php/page-c/";
+        $expectedUrl1 = "http://localhost/index.php/page-c-on-2nd-store";
+
+        $this->assertEquals($expectedUrl1, $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl1));
+
+        //test with CMS page without url rewrite for second/target store
+        $redirectUrl2 = "http://localhost/index.php/fixture_second_store/page-e/";
+        $expectedUrl2 = "http://localhost/index.php/fixture_second_store/page-e/";
+
+        $this->assertEquals($expectedUrl2, $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl2));
+
+        //test with custom url rewrite without CMS page
+        $redirectUrl3 = "http://localhost/index.php/fixture_second_store/contact/";
+        $expectedUrl3 = "http://localhost/index.php/fixture_second_store/contact/";
+
+        $this->assertEquals($expectedUrl3, $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl3));
+    }
+
+    /**
      * Testing store switching using cms pages with the same url_key but with different page_id
      *
      * @magentoDataFixture Magento/Cms/_files/two_cms_page_with_same_url_for_different_stores.php
      * @magentoDbIsolation disabled
      * @return void
+     * @throws CannotSwitchStoreException|NoSuchEntityException
      */
     public function testSwitchCmsPageToAnotherStore(): void
     {
@@ -133,6 +169,9 @@ class RewriteUrlTest extends TestCase
      * @magentoDbIsolation disabled
      * @magentoAppArea frontend
      * @return void
+     * @throws CannotSwitchStoreException
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     public function testSwitchCmsPageToAnotherStoreAsCustomer(): void
     {
@@ -167,6 +206,7 @@ class RewriteUrlTest extends TestCase
      * @param StoreInterface $targetStore
      * @param string $baseUrl
      * @return void
+     * @throws Exception
      */
     private function setBaseUrl(StoreInterface $targetStore, string $baseUrl): void
     {
@@ -189,6 +229,7 @@ class RewriteUrlTest extends TestCase
      *
      * @param string $storeCode
      * @return StoreInterface
+     * @throws NoSuchEntityException
      */
     private function getStoreByCode(string $storeCode): StoreInterface
     {

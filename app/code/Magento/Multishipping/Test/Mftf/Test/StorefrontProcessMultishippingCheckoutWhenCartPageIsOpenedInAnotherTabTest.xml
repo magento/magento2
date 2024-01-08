@@ -18,6 +18,7 @@
             <testCaseId value="MC-17871"/>
             <useCaseId value="MC-17469"/>
             <group value="multishipping"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Login as Admin -->
@@ -38,6 +39,7 @@
             <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomerWithMultipleAddresses" stepKey="deleteCustomer"/>
         </after>
         <!-- Login to the Storefront as created customer -->

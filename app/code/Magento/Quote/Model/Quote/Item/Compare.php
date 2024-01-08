@@ -5,10 +5,10 @@
  */
 namespace Magento\Quote\Model\Quote\Item;
 
-use Magento\Quote\Model\Quote\Item;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\JsonValidator;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Quote\Model\Quote\Item;
 
 /**
  * Compare quote items
@@ -68,6 +68,10 @@ class Compare
      */
     public function compare(Item $target, Item $compared)
     {
+        if ($target->getSku() !== null && $target->getSku() === $compared->getSku()) {
+            return true;
+        }
+
         if ($target->getProductId() != $compared->getProductId()) {
             return false;
         }

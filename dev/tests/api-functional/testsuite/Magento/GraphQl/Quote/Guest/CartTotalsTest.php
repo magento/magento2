@@ -7,8 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
+use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
+use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -231,14 +238,13 @@ class CartTotalsTest extends GraphQlAbstract
         self::assertCount(0, $appliedTaxesResponse);
     }
 
-    /**
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product as:product
-     * @magentoApiDataFixture Magento\Quote\Test\Fixture\GuestCart as:cart
-     * @magentoApiDataFixture Magento\Quote\Test\Fixture\AddProductToCart as:item1
-     * @magentoApiDataFixture Magento\Quote\Test\Fixture\SetBillingAddress with:{"cart_id":"$cart.id$"}
-     * @magentoApiDataFixture Magento\Quote\Test\Fixture\SetShippingAddress with:{"cart_id":"$cart.id$"}
-     * @magentoDataFixtureDataProvider {"item1":{"cart_id":"$cart.id$","product_id":"$product.id$","qty":2}}
-     */
+    #[
+        DataFixture(ProductFixture::class, as: 'p'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p.id$', 'qty' => 2]),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+    ]
     public function testGetTotalsWithNoTaxApplied()
     {
         $cart = $this->fixtures->get('cart');
@@ -308,6 +314,25 @@ class CartTotalsTest extends GraphQlAbstract
             "The current user cannot perform operations on cart \"$maskedQuoteId\""
         );
         $this->graphQlQuery($query);
+    }
+
+    public function testGetCartTotalsWithNonExistingCartId(): void
+    {
+        $maskedQuoteId = 'NonExistingQuoteId';
+        $query = $this->getQuery($maskedQuoteId);
+        try {
+            $this->graphQlQuery($query);
+            $this->fail('Expected exception was not raised');
+        } catch (\Exception $exception) {
+            $response = $exception->getResponseData();
+            $this->assertArrayHasKey('errors', $response);
+            $actualError = reset($response['errors']);
+            $this->assertEquals("Could not find a cart with ID \"$maskedQuoteId\"", $actualError['message']);
+            $this->assertEquals(
+                GraphQlNoSuchEntityException::EXCEPTION_CATEGORY,
+                $actualError['extensions']['category']
+            );
+        }
     }
 
     /**

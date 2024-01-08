@@ -33,7 +33,7 @@ class Categories extends AbstractModifier
     /**#@+
      * Category tree cache id
      */
-    const CATEGORY_TREE_ID = 'CATALOG_PRODUCT_CATEGORY_TREE';
+    public const CATEGORY_TREE_ID = 'CATALOG_PRODUCT_CATEGORY_TREE';
     /**#@-*/
 
     /**
@@ -312,13 +312,11 @@ class Categories extends AbstractModifier
                                     'actionName' => 'toggleModal',
                                 ],
                                 [
-                                    'targetName' =>
-                                        'product_form.product_form.create_category_modal.create_category',
+                                    'targetName' => 'product_form.product_form.create_category_modal.create_category',
                                     'actionName' => 'render'
                                 ],
                                 [
-                                    'targetName' =>
-                                        'product_form.product_form.create_category_modal.create_category',
+                                    'targetName' => 'product_form.product_form.create_category_modal.create_category',
                                     'actionName' => 'resetForm'
                                 ]
                             ],
@@ -421,7 +419,7 @@ class Categories extends AbstractModifier
 
         /** @var \Magento\Catalog\Model\Category $category */
         foreach ($matchingNamesCollection as $category) {
-            foreach (explode('/', $category->getPath()) as $parentId) {
+            foreach (explode('/', $category->getPath() ?? '') as $parentId) {
                 $shownCategoriesIds[$parentId] = 1;
             }
         }

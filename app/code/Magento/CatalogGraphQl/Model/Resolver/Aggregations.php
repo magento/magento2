@@ -22,11 +22,6 @@ use Magento\Store\Api\Data\StoreInterface;
 class Aggregations implements ResolverInterface
 {
     /**
-     * @var Layer\DataProvider\Filters
-     */
-    private $filtersDataProvider;
-
-    /**
      * @var LayerBuilder
      */
     private $layerBuilder;
@@ -42,18 +37,15 @@ class Aggregations implements ResolverInterface
     private $includeDirectChildrenOnly;
 
     /**
-     * @param \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters $filtersDataProvider
      * @param LayerBuilder $layerBuilder
      * @param PriceCurrency $priceCurrency
      * @param Category\IncludeDirectChildrenOnly $includeDirectChildrenOnly
      */
     public function __construct(
-        \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters $filtersDataProvider,
         LayerBuilder $layerBuilder,
         PriceCurrency $priceCurrency = null,
         Category\IncludeDirectChildrenOnly $includeDirectChildrenOnly = null
     ) {
-        $this->filtersDataProvider = $filtersDataProvider;
         $this->layerBuilder = $layerBuilder;
         $this->priceCurrency = $priceCurrency ?: ObjectManager::getInstance()->get(PriceCurrency::class);
         $this->includeDirectChildrenOnly = $includeDirectChildrenOnly
@@ -75,30 +67,45 @@ class Aggregations implements ResolverInterface
         }
 
         $aggregations = $value['search_result']->getSearchAggregation();
-
-        if ($aggregations) {
-            $categoryFilter = $value['categories'] ?? [];
-            $includeDirectChildrenOnly = $args['filter']['category']['includeDirectChildrenOnly'] ?? false;
-            if ($includeDirectChildrenOnly && !empty($categoryFilter)) {
-                $this->includeDirectChildrenOnly->setFilter(['category' => $categoryFilter]);
-            }
-            /** @var StoreInterface $store */
-            $store = $context->getExtensionAttributes()->getStore();
-            $storeId = (int)$store->getId();
-            $results = $this->layerBuilder->build($aggregations, $storeId);
-            if (isset($results['price_bucket'])) {
-                foreach ($results['price_bucket']['options'] as &$value) {
-                    list($from, $to) = explode('-', $value['label']);
-                    $newLabel = $this->priceCurrency->convertAndRound($from)
-                        . '-'
-                        . $this->priceCurrency->convertAndRound($to);
-                    $value['label'] = $newLabel;
-                    $value['value'] = str_replace('-', '_', $newLabel);
-                }
-            }
-            return $results;
-        } else {
+        if (!$aggregations || (int)$value['total_count'] == 0) {
             return [];
         }
+
+        $categoryFilter = $value['categories'] ?? [];
+        $includeDirectChildrenOnly = $args['filter']['category']['includeDirectChildrenOnly'] ?? false;
+        if ($includeDirectChildrenOnly && !empty($categoryFilter)) {
+            $this->includeDirectChildrenOnly->setFilter(['category' => $categoryFilter]);
+        }
+        
+        $results = $this->layerBuilder->build(
+            $aggregations,
+            (int)$context->getExtensionAttributes()->getStore()->getId()
+        );
+        if (!isset($results['price_bucket']['options'])) {
+            return $results;
+        }
+
+        $priceBucketOptions = [];
+        foreach ($results['price_bucket']['options'] as $optionValue) {
+            $priceBucketOptions[] = $this->getConvertedAndRoundedOptionValue($optionValue);
+        }
+        $results['price_bucket']['options'] = $priceBucketOptions;
+
+        return $results;
+    }
+
+    /**
+     * Converts and rounds option value
+     *
+     * @param String[] $optionValue
+     * @return String[]
+     */
+    private function getConvertedAndRoundedOptionValue(array $optionValue): array
+    {
+        list($from, $to) = explode('-', $optionValue['label']);
+        $newLabel = $this->priceCurrency->convertAndRound($from) . '-' . $this->priceCurrency->convertAndRound($to);
+        $optionValue['label'] = $newLabel;
+        $optionValue['value'] = str_replace('-', '_', $newLabel);
+        return $optionValue;
     }
 }

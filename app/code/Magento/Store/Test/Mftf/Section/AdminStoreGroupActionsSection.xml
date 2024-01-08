@@ -9,5 +9,6 @@
     <section name="AdminStoreGroupActionsSection">
         <element name="saveButton" type="button" selector="#save" timeout="120" />
         <element name="okButton" type="button" selector="//footer[@class='modal-footer']//button[@class='action-primary action-accept']/span" timeout="30"/>
+        <element name="btnSaveStore" type="button" selector="//button[@title='Save Store' and @id='save']"/>
     </section>
 </sections>
