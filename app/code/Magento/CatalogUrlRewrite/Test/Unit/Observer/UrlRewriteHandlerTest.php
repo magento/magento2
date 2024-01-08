@@ -167,14 +167,6 @@ class UrlRewriteHandlerTest extends TestCase
                 [$this->equalTo('save_rewrites_history')] => true,
                 [$this->equalTo('initial_setup_flag')] => null
             });
-//            ->withConsecutive(
-//                [$this->equalTo('save_rewrites_history')],
-//                [$this->equalTo('initial_setup_flag')]
-//            )
-//            ->willReturnOnConsecutiveCalls(
-//                true,
-//                null
-//            );
 
         /* @var \Magento\Catalog\Model\Category|MockObject $childCategory1 */
         $childCategory1 = $this->getMockBuilder(Category::class)
