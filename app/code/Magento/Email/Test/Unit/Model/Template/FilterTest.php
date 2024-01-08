@@ -280,7 +280,7 @@ class FilterTest extends TestCase
                     $this->storeInformation
                 ]
             )
-            ->onlyMethods($mockedMethods ?? null)
+            ->onlyMethods($mockedMethods ?? [])
             ->getMock();
     }
 

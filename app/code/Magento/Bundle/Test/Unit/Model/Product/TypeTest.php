@@ -2096,10 +2096,11 @@ class TypeTest extends TestCase
             ->willReturnSelf();
         $productMock
             ->method('getData')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                ['_cache_instance_used_selections'] => null,
-                ['_cache_instance_used_selections_ids'] => $usedOptionsIds
-            });
+            ->withConsecutive(
+                ['_cache_instance_used_options'],
+                ['_cache_instance_used_options_ids']
+            )
+            ->willReturnOnConsecutiveCalls(null, $usedOptionsIds);
         $productMock
             ->method('setData')
             ->withConsecutive(
