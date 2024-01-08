@@ -25,5 +25,6 @@
         <element name="shippingMethod" type="text" selector="#shippingMethodCharge > span.selectedShippingMethod"/>
         <element name="paypalCart" type="text" selector="#transactionCart"/>
         <element name="productNamePosition" type="text" selector=".itemName"/>
+        <element name="orderTotalOnPaypalCheckout" type="text" selector="//div[@id='cart']//span[contains(text(),'$')]"/>
     </section>
 </sections>

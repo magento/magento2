@@ -10,8 +10,12 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminShippingMethodsUpsSection">
         <element name="carriersUpsTab" type="button" selector="#carriers_ups-head"/>
+        <element name="carriersUpsType" type="select" selector="#carriers_ups_type"/>
+        <element name="selectedUpsType" type="text" selector="#carriers_ups_type option[selected]"/>
         <element name="carriersUPSActive" type="input" selector="#carriers_ups_active_inherit"/>
+        <element name="carriersUPSTypeSystem" type="input" selector="#carriers_ups_type_inherit"/>
         <element name="carriersUPSAccountLive" type="input" selector="#carriers_ups_is_account_live_inherit"/>
+        <element name="carriersUPSGatewayXMLUrl" type="input" selector="#carriers_ups_gateway_xml_url_inherit"/>
         <element name="carriersUPSGatewayUrl" type="input" selector="#carriers_ups_gateway_url_inherit"/>
         <element name="carriersUPSModeXML" type="input" selector="#carriers_ups_mode_xml_inherit"/>
         <element name="carriersUPSOriginShipment" type="input" selector="#carriers_ups_origin_shipment_inherit"/>
