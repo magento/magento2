@@ -31,6 +31,7 @@
         <waitForPageLoad stepKey="waitForPageCacheManagementLoad"/>
 
         <!-- Check 'Flush Static Files Cache' not visible in production mode. -->
-        <dontSee selector="{{AdminCacheManagementSection.additionalCacheButton('Flush Static Files Cache')}}" stepKey="dontSeeFlushStaticFilesButton" />
+        <scrollTo selector="{{AdminCacheManagementSection.additionalCacheButton('Flush Catalog Images Cache')}}" stepKey="scrollToAdditionalCacheButtons"/>
+        <dontSeeElement selector="{{AdminCacheManagementSection.additionalCacheButton('Flush Static Files Cache')}}" stepKey="dontSeeFlushStaticFilesButton"/>
     </test>
 </tests>

@@ -18,6 +18,7 @@
             <testCaseId value="MC-17787"/>
             <group value="backend"/>
             <group value="login"/>
+            <group value="cloud"/>
         </annotations>
 
         <!-- Logging in Magento admin and checking for Privacy policy footer in dashboard -->

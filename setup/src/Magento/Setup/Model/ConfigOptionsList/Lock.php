@@ -316,9 +316,10 @@ class Lock implements ConfigOptionsListInterface
         string $lockProvider
     ) {
         foreach ($this->mappingInputKeyToConfigPath[$lockProvider] as $input => $path) {
-            // do not set default value null for lock db prefix
-            if ($input !== self::INPUT_KEY_LOCK_DB_PREFIX) {
-                $configData->set($path, $deploymentConfig->get($path, $this->getDefaultValue($input)));
+            // do not set default value null for lock db prefix, but save current value if it exists
+            $defaultValue = $deploymentConfig->get($path, $this->getDefaultValue($input));
+            if (($input !== self::INPUT_KEY_LOCK_DB_PREFIX) || ($defaultValue !== null)) {
+                $configData->set($path, $defaultValue);
             }
         }
 

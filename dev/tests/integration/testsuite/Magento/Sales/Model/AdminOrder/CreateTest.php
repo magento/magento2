@@ -21,6 +21,7 @@ use Magento\Sales\Model\AdminOrder\EmailSender;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -97,6 +98,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $order->loadByIncrementId('100000001');
 
         /** @var $orderCreate \Magento\Sales\Model\AdminOrder\Create */
+        $order->setReordered(true);
         $orderCreate = $this->model->initFromOrder($order);
 
         $quoteItems = $orderCreate->getQuote()->getItemsCollection();
@@ -142,6 +144,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ['additional_option_key' => 'additional_option_value'],
             $newOrderItem->getProductOptionByCode('additional_options')
         );
+        Response::closeOutputBuffers(1, false);
     }
 
     /**

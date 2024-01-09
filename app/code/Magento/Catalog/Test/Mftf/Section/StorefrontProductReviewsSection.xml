@@ -21,5 +21,6 @@
         <!-- The tab transform to an accordion when window resize -->
         <element name="reviewsSectionToggleState" type="button" selector="//*[@id='tab-label-reviews-title']/ancestor::div[@aria-selected='{{boolean}}'][@aria-expanded='{{boolean}}']" parameterized="true"/>
         <element name="infoForNotLoggedIn" type="block" selector=".block-content .message.info.notlogged"/>
+        <element name="startRating" type="text" selector="(.//*[@class='control review-control-vote'])[{{row}}]//label[{{value}}]" parameterized="true"/>
     </section>
 </sections>

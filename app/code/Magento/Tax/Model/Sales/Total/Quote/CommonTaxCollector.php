@@ -194,6 +194,15 @@ class CommonTaxCollector extends AbstractTotal
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->counter = 0;
+    }
+
+    /**
      * Map quote address to customer address
      *
      * @param QuoteAddress $address
@@ -627,6 +636,7 @@ class CommonTaxCollector extends AbstractTotal
         $address = $shippingAssignment->getShipping()->getAddress();
         $address->setBaseTaxAmount($baseTax);
         $address->setBaseSubtotalTotalInclTax($baseSubtotalInclTax);
+        $address->setSubtotalInclTax($subtotalInclTax);
         $address->setSubtotal($total->getSubtotal());
         $address->setBaseSubtotal($total->getBaseSubtotal());
 

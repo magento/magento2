@@ -160,7 +160,7 @@ class ColumnsTest extends TestCase
     public function testPrepareWithUpdateColumn(): void
     {
         $attributeCode = 'billing_attribute_code';
-        $backendType = 'backend-type';
+        $frontendInput = 'text';
         $attributeData = [
             'attribute_code' => 'billing_attribute_code',
             'frontend_input' => 'text',
@@ -211,7 +211,7 @@ class ColumnsTest extends TestCase
                     'config',
                     [
                         'name' => $attributeCode,
-                        'dataType' => $backendType,
+                        'dataType' => $frontendInput,
                         'filter' => [
                             'filterType' => 'text',
                             'conditionType' => 'like',

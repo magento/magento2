@@ -160,6 +160,16 @@ define([
             jQueryAjax = undefined;
         });
 
+        it('test that setStoreId calls loadArea with a callback', function () {
+            init();
+            spyOn(order, 'loadArea').and.callFake(function () {
+                expect(arguments.length).toEqual(4);
+                expect(arguments[3] instanceof Function).toBeTrue();
+            });
+            order.setStoreId('id');
+            expect(order.loadArea).toHaveBeenCalled();
+        });
+
         describe('Testing the process customer group change', function () {
             it('and confirm method is called', function () {
                 init();

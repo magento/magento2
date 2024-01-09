@@ -13,6 +13,7 @@ use Magento\Eav\Model\Attribute\Data\AbstractData;
 use Magento\Eav\Model\AttributeDataFactory;
 use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Eav\Model\Validator\Attribute\Data;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\ObjectManagerInterface;
@@ -36,6 +37,11 @@ class DataTest extends TestCase
     private $model;
 
     /**
+     * @var \Magento\Eav\Model\Config|MockObject
+     */
+    private $eavConfigMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -49,7 +55,12 @@ class DataTest extends TestCase
                 ]
             )
             ->getMock();
-
+        $this->createMock(ObjectManagerInterface::class);
+        ObjectManager::setInstance($this->createMock(ObjectManagerInterface::class));
+        $this->eavConfigMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
+            ->onlyMethods(['getEntityType'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = new Data($this->attrDataFactory);
     }
 
@@ -205,13 +216,17 @@ class DataTest extends TestCase
                 'is_visible' => true,
             ]
         );
+        $entityTypeCode = 'entity_type_code';
         $collection = $this->getMockBuilder(DataObject::class)
             ->addMethods(['getItems'])->getMock();
         $collection->expects($this->once())->method('getItems')->willReturn([$attribute]);
         $entityType = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getAttributeCollection'])
+            ->addMethods(['getAttributeCollection','getEntityTypeCode'])
             ->getMock();
+        $entityType->expects($this->atMost(2))->method('getEntityTypeCode')->willReturn($entityTypeCode);
         $entityType->expects($this->once())->method('getAttributeCollection')->willReturn($collection);
+        $this->eavConfigMock->expects($this->once())->method('getEntityType')
+            ->with($entityTypeCode)->willReturn($entityType);
         $entity = $this->_getEntityMock();
         $entity->expects($this->once())->method('getResource')->willReturn($resource);
         $entity->expects($this->once())->method('getEntityType')->willReturn($entityType);
@@ -235,7 +250,7 @@ class DataTest extends TestCase
         )->willReturn(
             $dataModel
         );
-        $validator = new Data($attrDataFactory);
+        $validator = new Data($attrDataFactory, $this->eavConfigMock);
 
         $validator->setData(['attribute' => 'new_test_data']);
         $this->assertTrue($validator->isValid($entity));

@@ -16,6 +16,7 @@
             <stories value="Guest Checkout"/>
             <testCaseId value="AC-4604"/>
             <severity value="MAJOR"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--PRECONDITIONS-->
@@ -50,6 +51,7 @@
             <deleteData createDataKey="simpleProductOne" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProductTwo" stepKey="deleteSimpleProduct2"/>
             <deleteData createDataKey="testCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!--Goto Admin Configuration page and Allow Guest Checkout is Yes-->
             <createData entity="EnableAllowGuestCheckout" stepKey="storeConfigurationAllowGuestCheckoutYes"/>

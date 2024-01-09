@@ -79,6 +79,102 @@ class ShippingMethodManagementTest extends TestCase
     }
 
     /**
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/OfflineShipping/_files/tablerates_price.php
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    #[
+        ConfigFixture('carriers/tablerate/active', '1', 'store', 'default'),
+        ConfigFixture('carriers/flatrate/active', '0', 'store', 'default'),
+        ConfigFixture('carriers/tablerate/condition_name', 'package_value_with_discount', 'store'),
+        ConfigFixture('carriers/tablerate/include_virtual_price', '0', 'store', 'default'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple', 'special_price' => 5.99], 'p1'),
+        DataFixture(VirtualProductFixture::class, ['sku' => 'virtual', 'weight' => 0], 'p2'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p1.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p2.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+    ]
+    public function testTableRateWithoutIncludingVirtualProduct()
+    {
+        $cartId = (int)$this->fixtures->get('cart')->getId();
+
+        if (!$cartId) {
+            $this->fail('quote fixture failed');
+        }
+
+        /** @var QuoteRepository $quoteRepository */
+        $quoteRepository = $this->objectManager->get(QuoteRepository::class);
+        $quote = $quoteRepository->get($cartId);
+
+        /** @var QuoteIdToMaskedQuoteIdInterface $maskedQuoteId */
+        $maskedQuoteId = $this->objectManager->get(QuoteIdToMaskedQuoteIdInterface::class)->execute($cartId);
+
+        /** @var GuestShippingMethodManagementInterface $shippingEstimation */
+        $shippingEstimation = $this->objectManager->get(GuestShippingMethodManagementInterface::class);
+        $result = $shippingEstimation->estimateByExtendedAddress(
+            $maskedQuoteId,
+            $quote->getShippingAddress()
+        );
+
+        $this->assertCount(1, $result);
+        $rate = reset($result);
+        $expectedResult = [
+            'method_code' => 'bestway',
+            'amount' => 15,
+        ];
+        $this->assertEquals($expectedResult['method_code'], $rate->getMethodCode());
+        $this->assertEquals($expectedResult['amount'], $rate->getAmount());
+    }
+
+    /**
+     * Test table rate amount for the cart that contains some items with free shipping applied.
+     * @magentoDbIsolation enabled
+     * @magentoConfigFixture current_store carriers/tablerate/active 1
+     * @magentoConfigFixture current_store carriers/flatrate/active 0
+     * @magentoConfigFixture current_store carriers/freeshipping/active 0
+     * @magentoConfigFixture current_store carriers/tablerate/condition_name package_value_with_discount
+     * @magentoDataFixture Magento/Catalog/_files/categories.php
+     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_free_shipping_by_category.php
+     * @magentoDataFixture Magento/Sales/_files/quote_with_multiple_products.php
+     * @magentoDataFixture Magento/OfflineShipping/_files/tablerates_price.php
+     * @return void
+     */
+    public function testTableRateWithCartRuleForFreeShipping()
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $quote = $this->getQuote('tableRate');
+        $cartId = $quote->getId();
+        if (!$cartId) {
+            $this->fail('quote fixture failed');
+        }
+        /** @var QuoteIdMask $quoteIdMask */
+        $quoteIdMask = Bootstrap::getObjectManager()
+            ->create(QuoteIdMaskFactory::class)
+            ->create();
+        $quoteIdMask->load($cartId, 'quote_id');
+        //Use masked cart Id
+        $cartId = $quoteIdMask->getMaskedId();
+        $addressFactory = $this->objectManager->get(AddressInterfaceFactory::class);
+        /** @var \Magento\Quote\Api\Data\AddressInterface $address */
+        $address = $addressFactory->create();
+        $address->setCountryId('US');
+        /** @var  GuestShippingMethodManagementInterface $shippingEstimation */
+        $shippingEstimation = $objectManager->get(GuestShippingMethodManagementInterface::class);
+        $result = $shippingEstimation->estimateByExtendedAddress($cartId, $address);
+        $this->assertCount(1, $result);
+        $rate = reset($result);
+        $expectedResult = [
+            'method_code' => 'bestway',
+            'amount' => 10
+        ];
+        $this->assertEquals($expectedResult['method_code'], $rate->getMethodCode());
+        $this->assertEquals($expectedResult['amount'], $rate->getAmount());
+    }
+    
+    /**
      * @magentoDataFixture Magento/SalesRule/_files/cart_rule_100_percent_off.php
      * @magentoDataFixture Magento/Sales/_files/quote_with_customer.php
      * @return void
@@ -143,101 +239,6 @@ class ShippingMethodManagementTest extends TestCase
             $this->assertEquals($expectedResult['amount'], $rate->getAmount());
             $this->assertEquals($expectedResult['method_code'], $rate->getMethodCode());
         }
-    }
-
-    /**
-     * @magentoDataFixture Magento/OfflineShipping/_files/tablerates_price.php
-     * @return void
-     * @throws NoSuchEntityException
-     */
-    #[
-        ConfigFixture('carriers/tablerate/active', '1', 'store', 'default'),
-        ConfigFixture('carriers/flatrate/active', '0', 'store', 'default'),
-        ConfigFixture('carriers/tablerate/condition_name', 'package_value_with_discount', 'store'),
-        ConfigFixture('carriers/tablerate/include_virtual_price', '0', 'store', 'default'),
-        DataFixture(ProductFixture::class, ['sku' => 'simple', 'special_price' => 5.99], 'p1'),
-        DataFixture(VirtualProductFixture::class, ['sku' => 'virtual', 'weight' => 0], 'p2'),
-        DataFixture(GuestCartFixture::class, as: 'cart'),
-        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p1.id$']),
-        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p2.id$']),
-        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
-        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
-    ]
-    public function testTableRateWithoutIncludingVirtualProduct()
-    {
-        $cartId = (int)$this->fixtures->get('cart')->getId();
-
-        if (!$cartId) {
-            $this->fail('quote fixture failed');
-        }
-
-        /** @var QuoteRepository $quoteRepository */
-        $quoteRepository = $this->objectManager->get(QuoteRepository::class);
-        $quote = $quoteRepository->get($cartId);
-
-        /** @var QuoteIdToMaskedQuoteIdInterface $maskedQuoteId */
-        $maskedQuoteId = $this->objectManager->get(QuoteIdToMaskedQuoteIdInterface::class)->execute($cartId);
-
-        /** @var GuestShippingMethodManagementInterface $shippingEstimation */
-        $shippingEstimation = $this->objectManager->get(GuestShippingMethodManagementInterface::class);
-        $result = $shippingEstimation->estimateByExtendedAddress(
-            $maskedQuoteId,
-            $quote->getShippingAddress()
-        );
-
-        $this->assertCount(1, $result);
-        $rate = reset($result);
-        $expectedResult = [
-            'method_code' => 'bestway',
-            'amount' => 15,
-        ];
-        $this->assertEquals($expectedResult['method_code'], $rate->getMethodCode());
-        $this->assertEquals($expectedResult['amount'], $rate->getAmount());
-    }
-
-    /**
-     * Test table rate amount for the cart that contains some items with free shipping applied.
-     *
-     * @magentoConfigFixture current_store carriers/tablerate/active 1
-     * @magentoConfigFixture current_store carriers/flatrate/active 0
-     * @magentoConfigFixture current_store carriers/freeshipping/active 0
-     * @magentoConfigFixture current_store carriers/tablerate/condition_name package_value_with_discount
-     * @magentoDataFixture Magento/Catalog/_files/categories.php
-     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_free_shipping_by_category.php
-     * @magentoDataFixture Magento/Sales/_files/quote_with_multiple_products.php
-     * @magentoDataFixture Magento/OfflineShipping/_files/tablerates_price.php
-     * @return void
-     */
-    public function testTableRateWithCartRuleForFreeShipping()
-    {
-        $objectManager = Bootstrap::getObjectManager();
-        $quote = $this->getQuote('tableRate');
-        $cartId = $quote->getId();
-        if (!$cartId) {
-            $this->fail('quote fixture failed');
-        }
-        /** @var QuoteIdMask $quoteIdMask */
-        $quoteIdMask = Bootstrap::getObjectManager()
-            ->create(QuoteIdMaskFactory::class)
-            ->create();
-        $quoteIdMask->load($cartId, 'quote_id');
-        //Use masked cart Id
-        $cartId = $quoteIdMask->getMaskedId();
-        $addressFactory = $this->objectManager->get(AddressInterfaceFactory::class);
-        /** @var \Magento\Quote\Api\Data\AddressInterface $address */
-        $address = $addressFactory->create();
-        $address->setCountryId('US');
-        /** @var  GuestShippingMethodManagementInterface $shippingEstimation */
-        $shippingEstimation = $objectManager->get(GuestShippingMethodManagementInterface::class);
-        $result = $shippingEstimation->estimateByExtendedAddress($cartId, $address);
-        $this->assertCount(1, $result);
-        $rate = reset($result);
-        $expectedResult = [
-            'method_code' => 'bestway',
-            'amount' => 10
-        ];
-        $this->assertEquals($expectedResult['method_code'], $rate->getMethodCode());
-        $this->assertEquals($expectedResult['amount'], $rate->getAmount());
     }
 
     /**

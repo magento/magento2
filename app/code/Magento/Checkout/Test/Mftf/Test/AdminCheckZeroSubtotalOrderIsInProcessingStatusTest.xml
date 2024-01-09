@@ -18,6 +18,7 @@
             <testCaseId value="MAGETWO-94178"/>
             <useCaseId value="MAGETWO-71375"/>
             <group value="checkout"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
@@ -62,7 +63,17 @@
 
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="clickToProceedToCheckout"/>
 
-        <actionGroup ref="ShipmentFormFreeShippingActionGroup" stepKey="shipmentFormFreeShippingActionGroup"/>
+        <actionGroup ref="FillGuestCheckoutShippingAddressWithCountryAndStateActionGroup" stepKey="fillShippingFormData">
+            <argument name="customer" value="CustomerEntityOne"/>
+            <argument name="customerAddress" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="shipmentFormFreeShippingActionGroup">
+            <argument name="shippingMethodName" value="Free Shipping"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextButtonOnShippingPage" />
+        <waitForPageLoad stepKey="waitForPaymentLoading"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <seeCurrentUrlMatches regex="~/checkout/?#payment~" stepKey="assertCheckoutPaymentUrl"/>
 
         <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyDiscountCoupon">
             <argument name="discountCode" value="$createCartPriceRuleCoupon.code$"/>

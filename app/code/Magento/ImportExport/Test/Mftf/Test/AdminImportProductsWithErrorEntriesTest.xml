@@ -17,6 +17,7 @@
             <useCaseId value="MAGETWO-65066"/>
             <group value="importExport"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Login to Admin Page-->
@@ -39,7 +40,7 @@
             <argument name="importNoticeMessage" value="Created: 10, Updated: 0, Deleted: 0"/>
             <argument name="validationNoticeMessage" value="Checked rows: 10, checked entities: 10, invalid rows: 0, total errors: 0"/>
         </actionGroup>
-        <see selector="{{AdminImportValidationMessagesSection.importErrorList}}" userInput="row(s): 1, 2, 3, 4, 5, 6, 7, 8, 9, 10" stepKey="seeTenImportError"/>
+        <waitForText selector="{{AdminImportValidationMessagesSection.importErrorList}}" userInput="row(s): 10" stepKey="seeTenImportError"/>
 
         <!--Import products with "Stop on Error" and "Allowed Errors Count" equals 5-->
         <actionGroup ref="AdminImportProductsWithCheckValidationResultActionGroup" stepKey="importProductsWithAllowedErrorsCountFive">
@@ -51,7 +52,7 @@
             <argument name="importMessage" value="Maximum error count has been reached or system error is occurred!"/>
             <argument name="validationNoticeMessage" value="Checked rows: 10, checked entities: 10, invalid rows: 0, total errors: 0"/>
         </actionGroup>
-        <see selector="{{AdminImportValidationMessagesSection.importErrorList}}" userInput="row(s): 1, 2, 3, 4, 5, 6" stepKey="seeAboutFiveImportError"/>
+        <waitForText selector="{{AdminImportValidationMessagesSection.importErrorList}}" userInput="row(s): 6" stepKey="seeAboutFiveImportError"/>
 
         <!--Import products with "Stop on Error" and "Allowed Errors Count" equals 11-->
         <actionGroup ref="AdminImportProductsWithCheckValidationResultActionGroup" stepKey="importProductsWithAllowedErrorsCountEleven">
@@ -61,6 +62,6 @@
             <argument name="importNoticeMessage" value="Created: 0, Updated: 10, Deleted: 0"/>
             <argument name="validationNoticeMessage" value="Checked rows: 10, checked entities: 10, invalid rows: 0, total errors: 0"/>
         </actionGroup>
-        <see selector="{{AdminImportValidationMessagesSection.importErrorList}}" userInput="row(s): 1, 2, 3, 4, 5, 6, 7, 8, 9, 10" stepKey="seeAboutTenImportError"/>
+        <waitForText selector="{{AdminImportValidationMessagesSection.importErrorList}}" userInput="row(s): 10" stepKey="seeAboutTenImportError"/>
     </test>
 </tests>

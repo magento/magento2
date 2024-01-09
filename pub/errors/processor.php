@@ -111,6 +111,21 @@ class Processor
     public $reportUrl;
 
     /**
+     * @var string
+     */
+    public $_reportDir;
+
+    /**
+     * @var string
+     */
+    public $_indexDir;
+
+    /**
+     * @var string
+     */
+    public $_errorDir;
+
+    /**
      * Server script name
      *
      * @var string

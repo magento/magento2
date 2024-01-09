@@ -16,6 +16,7 @@
             <description value="Admin can not create rule with invalid data"/>
             <severity value="MAJOR"/>
             <group value="SalesRule"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
