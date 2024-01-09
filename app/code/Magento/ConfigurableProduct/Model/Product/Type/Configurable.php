@@ -12,8 +12,11 @@ use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Config;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 use Magento\ConfigurableProduct\Model\Product\Type\Collection\SalableProcessor;
+use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -150,6 +153,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
     protected $typeConfigurableFactory;
 
     /**
+     * @var \Magento\Eav\Api\AttributeRepositoryInterface
+     */
+    protected $attributeRepository;
+
+    /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
      */
     protected $extensionAttributesJoinProcessor;
@@ -240,6 +248,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
         \Magento\Framework\Registry $coreRegistry,
         \Psr\Log\LoggerInterface $logger,
         ProductRepositoryInterface $productRepository,
+        AttributeRepositoryInterface $attributeRepository,
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFactory $typeConfigurableFactory,
         \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $eavAttributeFactory,
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable\AttributeFactory $configurableAttributeFactory,
@@ -257,6 +266,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
         SearchCriteriaBuilder $searchCriteriaBuilder = null,
         UploaderFactory $uploaderFactory = null
     ) {
+        $this->attributeRepository = $attributeRepository;
         $this->typeConfigurableFactory = $typeConfigurableFactory;
         $this->_eavAttributeFactory = $eavAttributeFactory;
         $this->configurableAttributeFactory = $configurableAttributeFactory;
@@ -410,7 +420,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
         $usedProductAttributes = [];
 
         foreach ($ids as $attributeId) {
-            $usedProductAttributes[] = $this->getAttributeById($attributeId, $product);
+            $usedProductAttributes[$attributeId] = $this->getAttributeById($attributeId, $product);
         }
         $product->setData($this->usedProductAttributes, $usedProductAttributes);
         $product->setData($this->usedProductAttributeIds, $ids);
@@ -853,9 +863,16 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
                 return $attributes;
             }
             $data = $this->serializer->unserialize($data);
-            $this->getUsedProductAttributeIds($product);
 
-            $usedAttributes = $product->getData($this->_usedAttributes);
+            $criteria = $this->searchCriteriaBuilder->addFilter(AttributeInterface::ATTRIBUTE_ID, array_keys($data), 'in')->create();
+
+            $necessaryAttributes = $this->attributeRepository->getList(Product::ENTITY, $criteria)->getItems();
+            $usedAttributes = [];
+            foreach ($necessaryAttributes as $usedAttribute) {
+                $usedAttributes[$usedAttribute->getId()] = $usedAttribute;
+            }
+
+            $this->setUsedProductAttributes($product, array_keys($usedAttributes));
 
             foreach ($data as $attributeId => $attributeValue) {
                 if (isset($usedAttributes[$attributeId])) {
