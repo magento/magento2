@@ -9,13 +9,12 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontAddProductToCartAndGoToCheckoutWithInvalidCreditCardTest">
         <annotations>
-            <features value="Braintree"/>
-            <stories value="Checkout with invalid credit card details through Braintree credit card payment method"/>
-            <title value="Checkout with invalid credit card details through Braintree credit card payment method"/>
-            <description value="Checkout with invalid credit card details through Braintree credit card payment method"/>
+            <features value="payflow"/>
+            <stories value="Checkout with invalid credit card details through Paypal payflow credit card payment method"/>
+            <title value="Checkout with invalid credit card details through Paypal payflow credit card payment method"/>
+            <description value="Checkout with invalid credit card details through Paypal payflow credit card payment method"/>
             <severity value="MINOR"/>
             <testCaseId value="AC-8920"/>
-            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -35,14 +34,14 @@
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
                 <argument name="tags" value=""/>
             </actionGroup>
-            <!-- Enable Braintree -->
-            <actionGroup ref="AdminBraintreeEnableActionGroup" stepKey="ConfigBraintree">
-                <argument name="credentials" value="SampleBraintreeConfig"/>
+            <!-- Paypal Payflow -->
+            <actionGroup ref="AdminPayPalPayflowProWithValutActionGroup" stepKey="ConfigPayflow">
+                <argument name="credentials" value="_CREDS"/>
             </actionGroup>
         </before>
         <after>
             <magentoCLI command="config:set paypal/general/merchant_country US" stepKey="setMerchantCountry"/>
-            <magentoCLI command="config:set payment/braintree/active 0" stepKey="disablePayPalExpress"/>
+            <createData entity="RollbackPaypalPayflowPro" stepKey="rollbackPaypalPayflowProConfig"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
@@ -59,16 +58,15 @@
         <!-- Select Shipping method and fill the credit card details -->
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRate"/>
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToReview"/>
-        <actionGroup ref="CheckoutSelectCreditCardPaymentActionGroup" stepKey="selectCreditCard"/>
+        <click selector="{{StorefrontCheckoutPaymentMethodSection.checkPayFlowCreditCard}}" stepKey="selectCreditCardPaymentMethod"/>
         <checkOption selector="{{StorefrontCheckoutPaymentMethodSection.billingAddressSameAsShipping}}" stepKey="checkBillingAddressSameAsShippingCheckbox"/>
-        <actionGroup ref="FillBraintreeCreditCardActionGroup" stepKey="fillCreditCardDetails">
-            <argument name="creditCardDetails" value="InvalidCreditCard"/>
+        <actionGroup ref="FillPayFlowCreditCardActionGroup" stepKey="fillCreditCardDetails">
+            <argument name="creditCardDetails" value="VisaDefaultCard"/>
         </actionGroup>
         <!-- Place Order and assert the error message -->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-        <actionGroup ref="StorefrontAssertCheckoutErrorMessageActionGroup" stepKey="assertErrorMessage">
-            <argument name="message" value="Your payment could not be taken. Please try again or use a different payment method. Credit card number is not an accepted test number."/>
-        </actionGroup>
+        <waitForElementVisible selector="//*[@class='modals-wrapper']//aside[@class='modal-popup confirm _show']//div[@class='modal-inner-wrap']" stepKey="seeErrorMessage"/>
+        <click selector="//*[@class='modals-wrapper']//aside[@class='modal-popup confirm _show']//div[@class='modal-inner-wrap']//footer/button" stepKey="clickOk"/>
         <wait time="6" stepKey="waitForPageLoad" />
         <seeCurrentUrlMatches regex="~\/checkout/#payment~" stepKey="seeCurrentUrl"/>
     </test>
