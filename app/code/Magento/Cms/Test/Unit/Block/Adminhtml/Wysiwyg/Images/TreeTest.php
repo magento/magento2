@@ -75,7 +75,7 @@ class TreeTest extends TestCase
                 $this->createMock(DirectoryHelper::class)
             ]
         ];
-        $this->objectManager->prepareObjectManager($objects);
+        $objectManager->prepareObjectManager($objects);
 
         $contextMock = $this->createMock(Context::class);
         $this->cmsWysiwygImagesMock = $this->createMock(Images::class);

@@ -25,6 +25,9 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Stdlib\DateTime\Filter\Date;
+use Magento\Framework\Registry;
+use Magento\Cms\Model\Wysiwyg\Config;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -114,7 +117,31 @@ class EditTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
+        $objectManager = new ObjectManager($this);
+
+        $objects = [
+            [
+                Date::class,
+                $this->createMock(Date::class)
+            ],
+            [
+                StoreManagerInterface::class,
+                $this->createMock(StoreManagerInterface::class)
+            ],
+            [
+                Registry::class,
+                $this->createMock(Registry::class)
+            ],
+            [
+                Config::class,
+                $this->createMock(Config::class)
+            ],
+            [
+                Session::class,
+                $this->createMock(Session::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
 
         $this->categoryMock = $this->createPartialMock(
             Category::class,
@@ -214,7 +241,7 @@ class EditTest extends TestCase
             ->method('getResultRedirectFactory')
             ->willReturn($this->resultRedirectFactoryMock);
 
-        $this->edit = $this->objectManager->getObject(
+        $this->edit = $objectManager->getObject(
             Edit::class,
             [
                 'context' => $this->contextMock,
