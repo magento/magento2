@@ -74,6 +74,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
      * @param EmailValidator|null $emailValidator
      * @param CustomerRepositoryInterface|null $customerRepository
      * @param NewsletterConfig|null $newsletterConfig
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
