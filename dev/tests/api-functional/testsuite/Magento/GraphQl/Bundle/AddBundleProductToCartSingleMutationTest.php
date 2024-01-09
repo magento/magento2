@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Bundle;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\DataObject;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
@@ -240,8 +241,7 @@ QUERY;
         string $optionQty1,
         string $expectedOptionQty0,
         string $expectedOptionQty1
-    ): void
-    {
+    ): void {
         $this->quoteResource->load(
             $this->quote,
             'test_order_1',
@@ -261,6 +261,58 @@ QUERY;
         $bundleOptions = $response['addProductsToCart']['cart']['items'][0]['bundle_options'];
         $this->assertEquals($expectedOptionQty0, $bundleOptions[0]['values'][0]['quantity']);
         $this->assertEquals($expectedOptionQty1, $bundleOptions[1]['values'][0]['quantity']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_with_dynamic_price.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @return void
+     */
+    public function testAddBundleProductToCartWithDiscount(): void
+    {
+        $this->quoteResource->load(
+            $this->quote,
+            'test_order_1',
+            'reserved_order_id'
+        );
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $response = $this->graphQlQuery($this->getProductQuery('bundle_product_with_dynamic_price'));
+        $bundleItem = $response['products']['items'][0];
+        $sku = $bundleItem['sku'];
+        $bundleOptions = $bundleItem['items'];
+
+        $uId0 = $bundleOptions[0]['options'][0]['uid'];
+        $uId1 = $bundleOptions[1]['options'][0]['uid'];
+        $response = $this->graphQlMutation(
+            $this->getMutationsQuery($maskedQuoteId, $uId0, $uId1, $sku, '1', '1')
+        );
+        $responseDataObject = new DataObject($response);
+        $cartItems = $responseDataObject->getData('addProductsToCart/cart/items');
+        self::assertIsArray($cartItems);
+        self::assertCount(1, $cartItems);
+        self::assertEquals($sku, $cartItems[0]['product']['sku']);
+
+        $couponCode = '2?ds5!2d';
+        $query = $this->getCouponMutationsQuery($maskedQuoteId, $couponCode);
+        $response = $this->graphQlMutation($query);
+        $responseDataObject = new DataObject($response);
+        $appliedCouponCode = $responseDataObject->getData('applyCouponToCart/cart/applied_coupon/code');
+        self::assertEquals($couponCode, $appliedCouponCode);
+
+        $query = $this->getCartQueryWithDiscounts($maskedQuoteId);
+        $response = $this->graphQlMutation($query);
+        $responseDataObject = new DataObject($response);
+        $discounts = $responseDataObject->getData('cart/prices/discounts');
+        self::assertIsArray($discounts);
+        self::assertCount(1, $discounts);
+        self::assertEquals(5, $discounts[0]['amount']['value']);
+        $cartItems = $responseDataObject->getData('cart/items');
+        self::assertIsArray($cartItems);
+        self::assertCount(1, $cartItems);
+        self::assertEquals($sku, $cartItems[0]['product']['sku']);
+        self::assertIsArray($cartItems[0]['prices']['discounts']);
+        self::assertEquals(5, $cartItems[0]['prices']['discounts'][0]['amount']['value']);
     }
 
     /**
@@ -393,6 +445,69 @@ mutation {
     }
     user_errors {
         message
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @param string $couponCode
+     * @return string
+     */
+    private function getCouponMutationsQuery(string $maskedQuoteId, string $couponCode): string
+    {
+        return <<<QUERY
+mutation {
+  applyCouponToCart(input: {cart_id: "$maskedQuoteId", coupon_code: "$couponCode"}) {
+    cart {
+    id
+      applied_coupon {
+        code
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getCartQueryWithDiscounts(string $maskedQuoteId): string
+    {
+        return <<<QUERY
+{
+  cart(cart_id: "$maskedQuoteId") {
+    email
+    items {
+      uid
+      prices {
+        discounts {
+          amount {
+            value
+          }
+        }
+      }
+      product {
+        sku
+      }
+    }
+    applied_coupons {
+      code
+    }
+    prices {
+      discounts {
+        amount {
+          value
+        }
+        label
+      }
+      grand_total {
+        value
+      }
     }
   }
 }

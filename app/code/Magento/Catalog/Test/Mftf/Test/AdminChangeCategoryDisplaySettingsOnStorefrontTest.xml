@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminChangeCategoryDisplaySettingsOnStorefrontTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="ChangeCategoryDisplaySettingsOnStorefront"/>
+            <title value="Verify correctness of Sorting,Navigation, Listing products"/>
+            <description value="Verify correctness of Sorting, Navigation, Listing products at the Storefront Category"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4150"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- create category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!-- create 11 simple products -->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct1">
+                <field key="price">10</field>
+                <field key="quantity">1000</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct2">
+                <field key="price">11</field>
+                <field key="quantity">1000</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct3">
+                <field key="price">12</field>
+                <field key="quantity">1000</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct4">
+                <field key="price">13</field>
+                <field key="quantity">1000</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct5">
+                <field key="price">14</field>
+                <field key="quantity">1000</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct6">
+                <field key="price">15</field>
+                <field key="quantity">1000</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct7">
+                <field key="price">16</field>
+                <field key="quantity">1000</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct8">
+                <field key="price">17</field>
+                <field key="quantity">1000</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct9">
+                <field key="price">18</field>
+                <field key="quantity">1000</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct10">
+                <field key="price">19</field>
+                <field key="quantity">1000</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct11">
+                <field key="price">20</field>
+                <field key="quantity">1000</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct12">
+                <field key="price">21</field>
+                <field key="quantity">1000</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData><createData entity="SimpleProduct" stepKey="createSimpleProduct13">
+            <field key="price">22</field>
+            <field key="quantity">1000</field>
+            <requiredEntity createDataKey="createCategory"/>
+        </createData><createData entity="SimpleProduct" stepKey="createSimpleProduct14">
+            <field key="price">23</field>
+            <field key="quantity">1000</field>
+            <requiredEntity createDataKey="createCategory"/>
+        </createData><createData entity="SimpleProduct" stepKey="createSimpleProduct15">
+            <field key="price">24</field>
+            <field key="quantity">1000</field>
+            <requiredEntity createDataKey="createCategory"/>
+        </createData>
+        </before>
+        <after>
+            <!-- delete created entities -->
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createSimpleProduct3" stepKey="deleteSimpleProduct3"/>
+            <deleteData createDataKey="createSimpleProduct4" stepKey="deleteSimpleProduct4"/>
+            <deleteData createDataKey="createSimpleProduct5" stepKey="deleteSimpleProduct5"/>
+            <deleteData createDataKey="createSimpleProduct6" stepKey="deleteSimpleProduct6"/>
+            <deleteData createDataKey="createSimpleProduct7" stepKey="deleteSimpleProduct7"/>
+            <deleteData createDataKey="createSimpleProduct8" stepKey="deleteSimpleProduct8"/>
+            <deleteData createDataKey="createSimpleProduct9" stepKey="deleteSimpleProduct9"/>
+            <deleteData createDataKey="createSimpleProduct10" stepKey="deleteSimpleProduct10"/>
+            <deleteData createDataKey="createSimpleProduct11" stepKey="deleteSimpleProduct11"/>
+            <deleteData createDataKey="createSimpleProduct12" stepKey="deleteSimpleProduct12"/>
+            <deleteData createDataKey="createSimpleProduct13" stepKey="deleteSimpleProduct13"/>
+            <deleteData createDataKey="createSimpleProduct14" stepKey="deleteSimpleProduct14"/>
+            <deleteData createDataKey="createSimpleProduct15" stepKey="deleteSimpleProduct15"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+        <!-- Login to Admin page -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="assertLoggedIn"/>
+        <!-- Open created category on Storefront -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryPage">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <!-- Switch category view to List mode -->
+        <actionGroup ref="StorefrontSwitchCategoryViewToListModeActionGroup" stepKey="switchCategoryViewToListMode"/>
+        <!-- Sort products By Price -->
+        <actionGroup ref="StorefrontCategoryPageSortProductActionGroup" stepKey="sortProductByPrice"/>
+        <!-- Set Ascending Direction -->
+        <actionGroup ref="StorefrontCategoryPageSortAscendingActionGroup" stepKey="setAscendingDirection"/>
+        <!-- Sort products By ProductName -->
+        <selectOption selector="{{StorefrontCategoryTopToolbarSection.sortByDropdown}}" userInput="Product Name" stepKey="selectSortByProductName"/>
+        <!-- Set Descending Direction -->
+        <actionGroup ref="StorefrontCategoryPageSortDescendingActionGroup" stepKey="setDescendingDirection"/>
+        <selectOption selector="{{StorefrontCategoryTopToolbarSection.showDropdown}}" userInput="15" stepKey="selectShowProducts"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+    </test>
+</tests>
+
+

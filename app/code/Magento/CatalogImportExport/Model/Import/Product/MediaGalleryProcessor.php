@@ -389,7 +389,7 @@ class MediaGalleryProcessor
             $storeId = $image['store_id'];
             unset($image['store_id']);
             $sku = mb_strtolower($image['sku']);
-            $value = ltrim($image['value'], '/\\');
+            $value = isset($image['value']) ? ltrim($image['value'], '/\\') : '';
             $result[$storeId][$sku][$value] = $image;
         }
 

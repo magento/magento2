@@ -13,5 +13,8 @@
         <element name="StoreInformation" type="button" selector="#general_store_information-head"/>
         <element name="City" type="input" selector="#general_store_information_city"/>
         <element name="Save" type="button" selector="#save" timeout="30"/>
+        <element name="Country" type="select" selector="#general_store_information_country_id"/>
+        <element name="fillVATNumber" type="input" selector="#general_store_information_merchant_vat_number"/>
+        <element name="validateVATNumber" type="button" selector="#general_store_information_validate_vat_number" timeout="30"/>
     </section>
 </sections>

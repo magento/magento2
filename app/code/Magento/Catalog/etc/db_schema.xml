@@ -1623,7 +1623,7 @@
     <table name="catalog_product_index_price_tmp" resource="default" engine="innodb"
            comment="Catalog Product Price Indexer Temp Table">
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
-                comment="Entity ID"/>
+                comment="Product ID"/>
         <column xsi:type="int" name="customer_group_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Customer Group ID"/>
         <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
@@ -1640,20 +1640,11 @@
                 comment="Max Price"/>
         <column xsi:type="decimal" name="tier_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Tier Price"/>
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true"
+                comment="ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
-            <column name="entity_id"/>
-            <column name="customer_group_id"/>
-            <column name="website_id"/>
+            <column name="id"/>
         </constraint>
-        <index referenceId="CATALOG_PRODUCT_INDEX_PRICE_TMP_CUSTOMER_GROUP_ID" indexType="btree">
-            <column name="customer_group_id"/>
-        </index>
-        <index referenceId="CATALOG_PRODUCT_INDEX_PRICE_TMP_WEBSITE_ID" indexType="btree">
-            <column name="website_id"/>
-        </index>
-        <index referenceId="CATALOG_PRODUCT_INDEX_PRICE_TMP_MIN_PRICE" indexType="btree">
-            <column name="min_price"/>
-        </index>
     </table>
     <table name="catalog_category_product_index_tmp" resource="default" engine="innodb"
            comment="Catalog Category Product Indexer temporary table">

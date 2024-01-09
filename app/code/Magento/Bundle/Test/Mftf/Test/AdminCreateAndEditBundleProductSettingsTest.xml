@@ -17,10 +17,14 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-224"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create a Website -->
             <createData entity="customWebsite" stepKey="createWebsite"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!-- Create a simple product for a bundle option -->
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
@@ -35,6 +39,9 @@
             <!-- Delete a Website -->
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="Second Website"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
             </actionGroup>
 
             <!-- Log out -->
@@ -140,6 +147,7 @@
         <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>
 

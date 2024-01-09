@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEditOrderActionGroup">
+        <arguments>
+            <argument name="orderId" type="string"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{AdminOrderDetailsMainActionsSection.edit}}" stepKey="waitForEditButton"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.edit}}" stepKey="clickEditButton"/>
+        <see selector="{{AdminEditConfirmationModalSection.message}}" userInput="Are you sure? This order will be canceled and a new one will be created instead." stepKey="seeConfirmationMessage"/>
+        <click selector="{{AdminEditConfirmationModalSection.ok}}" stepKey="confirmOrderEdit"/>
+        <see selector="{{AdminOrderFormActionSection.pageHeader}}" userInput="Edit Order #{{orderId}}" stepKey="seeOrderStatus"/>
+    </actionGroup>
+</actionGroups>

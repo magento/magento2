@@ -13,7 +13,7 @@
         <comment><![CDATA[Accept payments with a PCI-compliant checkout that keeps customers on your site. (<u>Includes Express Checkout</u>)]]></comment>
         <attribute type="activity_path">payment/payflow_advanced/active</attribute>
         <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
-            <comment>https://docs.magento.com/user-guide/payment/paypal-payments-advanced.html</comment>
+            <comment>https://experienceleague.adobe.com/docs/commerce-admin/stores-sales/payments/paypal/paypal-payments-advanced.html</comment>
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
         </group>
         <group id="required_settings" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
@@ -54,6 +54,16 @@
                     <config_path>payment/payflow_advanced/sandbox_flag</config_path>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <attribute type="shared">1</attribute>
+                </field>
+                <field id="buyer_country" translate="label" type="select" sortOrder="65" showInDefault="1" showInWebsite="1">
+                    <label>Buyer Country</label>
+                    <config_path>payment/payflow_advanced/buyer_country</config_path>
+                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                    <attribute type="shared">1</attribute>
+                    <tooltip>The buyer country determines which funding sources are eligible for a given buyer during testing.</tooltip>
+                    <depends>
+                        <field id="sandbox_flag">1</field>
+                    </depends>
                 </field>
                 <field id="use_proxy" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1">
                     <label>Use Proxy</label>
@@ -217,7 +227,7 @@
                 </group>
             </group>
             <group id="advanced_advertise_paylater" translate="label" showInDefault="1" showInWebsite="1" sortOrder="70">
-                <label>Advertise PayPal PayLater</label>
+                <label>Advertise PayPal Pay Later</label>
                 <depends>
                     <field id="enable_paypal_paylater_experience">1</field>
                 </depends>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertCountryAndRegionValueActionGroup">
+        <annotations>
+            <description>Verify country and region values.</description>
+        </annotations>
+        <arguments>
+            <argument name="value" type="string"/>
+            <argument name="expectedValue" type="string"/>
+        </arguments>
+
+        <executeJS function="return document.getElementById(&quot;{{value}}&quot;).value;" stepKey="value"/>
+        <assertEquals stepKey="assertRegionValue">
+            <actualResult type="variable">$value</actualResult>
+            <expectedResult type="string">{{expectedValue}}</expectedResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

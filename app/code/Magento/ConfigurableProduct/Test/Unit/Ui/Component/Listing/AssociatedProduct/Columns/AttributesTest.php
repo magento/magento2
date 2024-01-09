@@ -109,10 +109,13 @@ class AttributesTest extends TestCase
         $name = 'some_name';
         $initialData = [
             'data' => [
+                'totalRecords' => 4,
                 'items' => [
-                    ['attribute1_1_code' => 'attribute1_1_option2'],
-                    ['attribute2_1_code' => 'attribute2_1_option3'],
-                    ['attribute3_1_code' => 'attribute3_1_option3', 'attribute3_2_code' => 'attribute3_2_option1']
+                    ['attribute1_1_code' => 'attribute1_1_option2', 'required_options' => '0'],
+                    ['attribute2_1_code' => 'attribute2_1_option3', 'required_options' => '0'],
+                    ['attribute3_1_code' => 'attribute3_1_option3', 'attribute3_2_code' => 'attribute3_2_option1',
+                        'required_options' => '0'],
+                    ['attribute4_1_code' => 'attribute4_1_option1', 'required_options' => '1']
                 ]
             ]
         ];
@@ -158,18 +161,22 @@ class AttributesTest extends TestCase
         ];
         $resultData = [
             'data' => [
+                'totalRecords' => 3,
                 'items' => [
                     [
                         'attribute1_1_code' => 'attribute1_1_option2',
+                        'required_options' => '0',
                         $name => 'attribute1_1_label: attribute1_1_option2_label'
                     ],
                     [
                         'attribute2_1_code' => 'attribute2_1_option3',
+                        'required_options' => '0',
                         $name => ''
                     ],
                     [
                         'attribute3_1_code' => 'attribute3_1_option3',
                         'attribute3_2_code' => 'attribute3_2_option1',
+                        'required_options' => '0',
                         $name => 'attribute3_1_label: attribute3_1_option3_label,'
                             . ' attribute3_2_label: attribute3_2_option1_label'
                     ]
@@ -187,7 +194,9 @@ class AttributesTest extends TestCase
             ->method('getItems')
             ->willReturn($attributes);
 
-        $this->assertSame($resultData, $this->attributesColumn->prepareDataSource($initialData));
+        $actualResultItems = $this->attributesColumn->prepareDataSource($initialData);
+        $this->assertSame($resultData['data']['items'], $actualResultItems['data']['items']);
+        $this->assertSame($resultData['data']['totalRecords'], count($actualResultItems['data']['items']));
     }
 
     /**

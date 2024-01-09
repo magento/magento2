@@ -10,6 +10,7 @@ namespace Magento\Swagger\Test\Unit\Block;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Swagger\Api\Data\SchemaTypeInterface;
 use Magento\Swagger\Block\Index;
@@ -34,6 +35,11 @@ class IndexTest extends TestCase
     private $index;
 
     /**
+     * @var UrlInterface
+     */
+    private $urlBuilder;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -41,6 +47,8 @@ class IndexTest extends TestCase
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMock();
         $this->schemaTypeMock = $this->getMockBuilder(SchemaTypeInterface::class)
+            ->getMock();
+        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
             ->getMock();
 
         $this->index = (new ObjectManager($this))->getObject(
@@ -50,6 +58,7 @@ class IndexTest extends TestCase
                     Context::class,
                     [
                         'request' => $this->requestMock,
+                        'urlBuilder' => $this->urlBuilder
                     ]
                 ),
                 'data' => [
@@ -78,6 +87,10 @@ class IndexTest extends TestCase
         $this->schemaTypeMock->expects($this->once())
             ->method('getSchemaUrlPath')
             ->willReturn('/test');
+
+        $this->urlBuilder->expects($this->any())
+            ->method('getBaseUrl')
+            ->willReturn('');
 
         $this->assertEquals('/test', $this->index->getSchemaUrl());
     }

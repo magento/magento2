@@ -7,11 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CurrencySymbolProvider;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CurrencySymbolProvider;
 use Magento\Directory\Model\Currency as CurrencyModel;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Currency\Data\Currency as CurrencyData;
 use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
@@ -19,7 +20,6 @@ use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Zend_Currency;
 
 /**
  * Test class for Website Currency Symbol provider
@@ -62,7 +62,7 @@ class CurrencySymbolProviderTest extends TestCase
     private $currencyMock;
 
     /**
-     * @var Zend_Currency|MockObject
+     * @var CurrencyData|MockObject
      */
     private $websiteCurrencyMock;
 
@@ -103,7 +103,7 @@ class CurrencySymbolProviderTest extends TestCase
             ['getBaseCurrency']
         );
         $this->currencyMock = $this->createMock(CurrencyModel::class);
-        $this->websiteCurrencyMock = $this->createMock(Zend_Currency::class);
+        $this->websiteCurrencyMock = $this->createMock(CurrencyData::class);
         $this->productMock = $this->createMock(Product::class);
         $this->locatorMock = $this->getMockForAbstractClass(
             LocatorInterface::class,

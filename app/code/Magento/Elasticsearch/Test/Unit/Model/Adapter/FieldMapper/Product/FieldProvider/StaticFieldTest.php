@@ -280,6 +280,35 @@ class StaticFieldTest extends TestCase
             ],
             [
                 'attr_code',
+                'select',
+                false,
+                false,
+                'select',
+                true,
+                false,
+                'attr_code_value',
+                '',
+                'sort_attr_code',
+                [
+                    'attr_code_value' => [
+                        'type' => 'select',
+                        'index' => false,
+                        'fields' => [
+                            'sort_attr_code' => [
+                                'type' => 'string',
+                                'index' => 'not_analyzed',
+                                'normalizer' => 'folding',
+                            ],
+                        ],
+                    ],
+                    'store_id' => [
+                        'type' => 'string',
+                        'index' => 'no',
+                    ],
+                ],
+            ],
+            [
+                'attr_code',
                 'text',
                 'no',
                 false,
@@ -347,6 +376,7 @@ class StaticFieldTest extends TestCase
                             'sort_attr_code' => [
                                 'type' => 'string',
                                 'index' => 'not_analyzed',
+                                'normalizer' => 'folding',
                             ],
                         ],
                     ],

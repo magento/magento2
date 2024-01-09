@@ -16,7 +16,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
  *
  * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  * @magentoAppArea adminhtml
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
@@ -27,7 +27,6 @@ class ProductMultipleStoresTest extends ProductTestBase
     /**
      * @magentoDataFixture Magento/Store/_files/website.php
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDbIsolation disabled
      */
     public function testProductWithMultipleStoresInDifferentBunches()
     {
@@ -124,6 +123,7 @@ class ProductMultipleStoresTest extends ProductTestBase
      * Test import product into multistore system when media is disabled.
      *
      * @magentoDataFixture Magento/CatalogImportExport/Model/Import/_files/custom_category_store_media_disabled.php
+     * @magentoDbIsolation enabled
      * @return void
      */
     public function testProductsWithMultipleStoresWhenMediaIsDisabled(): void
@@ -165,7 +165,6 @@ class ProductMultipleStoresTest extends ProductTestBase
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/_files/attribute_with_option.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
-     * @magentoDbIsolation disabled
      */
     public function testProductsWithMultipleStores()
     {

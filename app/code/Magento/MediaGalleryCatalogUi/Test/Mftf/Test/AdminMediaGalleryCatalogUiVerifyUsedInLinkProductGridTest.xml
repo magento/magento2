@@ -19,7 +19,7 @@
             <group value="media_gallery_ui"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <createData entity="SimpleSubCategory" stepKey="category"/>
             <createData entity="SimpleProduct" stepKey="product">
                 <requiredEntity createDataKey="category"/>
@@ -27,7 +27,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPage"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetProductGridToDefaultView"/>
@@ -40,8 +40,8 @@
             <argument name="product" value="$$product$$"/>
         </actionGroup>
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab"/>
-        <waitForElementVisible selector="{{CatalogWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4" />
-        <click selector="{{CatalogWYSIWYGSection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE" />
+        <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
         <waitForPageLoad stepKey="waitForPageLoad" />
         <actionGroup ref="ClickBrowseBtnOnUploadPopupActionGroup" stepKey="clickBrowserBtn"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
@@ -55,12 +55,13 @@
             <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
-        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup" stepKey="clickOkButton"/>
+        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMceActionGroup" stepKey="clickOkButton"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPage"/>
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetProductGridToDefaultView"/>
 
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="openViewImageDetails"/>
         <actionGroup ref="AdminEnhancedMediaGalleryClickEntityUsedInActionGroup" stepKey="clickUsedInProducts">
             <argument name="entityName" value="Products"/>
@@ -71,6 +72,7 @@
 
         <deleteData createDataKey="product" stepKey="deleteProduct"/>
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters2"/>
 
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="openViewImageDetailsToVerifyEmptyUsedIn"/>
         <actionGroup ref="AssertAdminEnhancedMediaGalleryUsedInSectionNotDisplayedActionGroup" stepKey="assertThereIsNoUsedInSection"/>

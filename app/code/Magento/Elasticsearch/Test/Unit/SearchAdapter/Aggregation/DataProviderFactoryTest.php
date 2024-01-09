@@ -91,7 +91,7 @@ class DataProviderFactoryTest extends TestCase
             ->getMock();
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->with($this->isType('string'), ['queryContainer' => $queryContainer])
+            ->with($this->isType('string'), ['queryContainer' => $queryContainer, 'aggregationFieldName' => null])
             ->willReturn($recreatedDataProvider);
         $result = $this->factory->create($dataProvider, $queryContainer);
         $this->assertNotSame($dataProvider, $result);

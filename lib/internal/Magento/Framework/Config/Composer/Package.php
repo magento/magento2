@@ -65,7 +65,7 @@ class Package
      */
     public function get($propertyPath, $filter = null)
     {
-        $result = $this->traverseGet($this->json, explode('->', $propertyPath));
+        $result = $this->traverseGet($this->json, explode('->', $propertyPath ?: ''));
         if ($result && $filter) {
             foreach ($result as $key => $value) {
                 if (!preg_match($filter, $key)) {

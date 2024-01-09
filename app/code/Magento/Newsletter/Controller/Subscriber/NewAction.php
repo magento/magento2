@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Newsletter\Controller\Subscriber;
 
 use Magento\Customer\Api\AccountManagementInterface as CustomerAccountManagement;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\App\Action\Context;
@@ -56,6 +57,11 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
     private $subscriptionManager;
 
     /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
+    /**
      * Initialize dependencies.
      *
      * @param Context $context
@@ -66,6 +72,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
      * @param CustomerAccountManagement $customerAccountManagement
      * @param SubscriptionManagerInterface $subscriptionManager
      * @param EmailValidator|null $emailValidator
+     * @param CustomerRepositoryInterface|null $customerRepository
      * @param NewsletterConfig|null $newsletterConfig
      */
     public function __construct(
@@ -77,12 +84,16 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
         CustomerAccountManagement $customerAccountManagement,
         SubscriptionManagerInterface $subscriptionManager,
         EmailValidator $emailValidator = null,
+        CustomerRepositoryInterface $customerRepository = null,
         NewsletterConfig $newsletterConfig = null
     ) {
         $this->customerAccountManagement = $customerAccountManagement;
         $this->subscriptionManager = $subscriptionManager;
         $this->emailValidator = $emailValidator ?: ObjectManager::getInstance()->get(EmailValidator::class);
-        $this->newsletterConfig = $newsletterConfig?: ObjectManager::getInstance()->get(NewsletterConfig::class);
+        $this->customerRepository = $customerRepository ?: ObjectManager::getInstance()
+            ->get(CustomerRepositoryInterface::class);
+        $this->newsletterConfig = $newsletterConfig?: ObjectManager::getInstance()
+            ->get(NewsletterConfig::class);
         parent::__construct(
             $context,
             $subscriberFactory,
@@ -181,7 +192,8 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
                 }
 
                 $storeId = (int)$this->_storeManager->getStore()->getId();
-                $currentCustomerId = $this->getSessionCustomerId($email);
+                $currentCustomerId = $this->getCustomerId($email, $websiteId);
+
                 $subscriber = $currentCustomerId
                     ? $this->subscriptionManager->subscribeCustomer($currentCustomerId, $storeId)
                     : $this->subscriptionManager->subscribe($email, $storeId);
@@ -198,30 +210,28 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
         }
         /** @var Redirect $redirect */
         $redirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        // phpcs:ignore Magento2.Legacy.ObsoleteResponse
         $redirectUrl = $this->_redirect->getRedirectUrl();
 
         return $redirect->setUrl($redirectUrl);
     }
 
     /**
-     * Get customer id from session if he is owner of the email
+     * Check if customer with provided email exists and return its id
      *
      * @param string $email
+     * @param int $websiteId
      *
      * @return int|null
      */
-    private function getSessionCustomerId(string $email): ?int
+    private function getCustomerId(string $email, int $websiteId): ?int
     {
-        if (!$this->_customerSession->isLoggedIn()) {
+        try {
+            $customer = $this->customerRepository->get($email, $websiteId);
+            return (int)$customer->getId();
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             return null;
         }
-
-        $customer = $this->_customerSession->getCustomerDataObject();
-        if ($customer->getEmail() !== $email) {
-            return null;
-        }
-
-        return (int)$this->_customerSession->getId();
     }
 
     /**

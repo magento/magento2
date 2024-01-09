@@ -11,8 +11,8 @@
             <div class="file-uploader-summary">
                 <div class="file-uploader-filename">
                     <!-- ko if: $file.url --><a attr="href: $file.url" target="_blank" text="$file.name"></a><!-- /ko -->
-                    <!-- ko if: !$file.url --><text args="$file.name"/><!-- /ko -->
-                    (<text args="$parent.formatSize($file.size)"/>)
+                    <!-- ko if: !$file.url --><text args="$file.name"></text><!-- /ko -->
+                    (<text args="$parent.formatSize($file.size)"></text>)
                 </div>
             </div>
         </each>

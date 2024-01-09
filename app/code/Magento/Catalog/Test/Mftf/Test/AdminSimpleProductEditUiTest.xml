@@ -17,6 +17,7 @@
             <testCaseId value="MAGETWO-92835"/>
             <group value="Catalog"/>
             <severity value="AVERAGE"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

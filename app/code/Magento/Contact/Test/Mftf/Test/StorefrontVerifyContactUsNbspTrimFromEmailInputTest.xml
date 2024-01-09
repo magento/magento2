@@ -18,6 +18,7 @@
             <testCaseId value="MC-42234"/>
             <useCaseId value="MC-41850"/>
             <group value="contact"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <actionGroup ref="StorefrontOpenContactUsPageActionGroup" stepKey="goToContactUsPage"/>

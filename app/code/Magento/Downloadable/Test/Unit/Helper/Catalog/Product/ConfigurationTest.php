@@ -117,7 +117,7 @@ class ConfigurationTest extends TestCase
         $item->expects($this->once())->method('getOptionByCode')->willReturn($option);
         $product->expects($this->once())->method('getTypeInstance')->willReturn($productType);
         $productType->expects($this->once())->method('getLinks')->with($product)->willReturn([1 => $productLink]);
-        $option->expects($this->once())->method('getValue')->willReturn(1);
+        $option->method('getValue')->willReturn(1);
         $product->expects($this->once())->method('getLinksTitle')->willReturn('links_title');
         $productLink->expects($this->once())->method('getTitle')->willReturn('title');
 

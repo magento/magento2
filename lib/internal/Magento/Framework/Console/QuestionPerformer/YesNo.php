@@ -62,7 +62,7 @@ class YesNo
         $question = $this->getConfirmationQuestion($messages);
         $answer = $this->questionHelper->ask($input, $output, $question);
 
-        return in_array(strtolower($answer), ['yes', 'y']);
+        return in_array(strtolower($answer ?? ''), ['yes', 'y']);
     }
 
     /**
@@ -80,7 +80,7 @@ class YesNo
         ]);
 
         $question->setValidator(function ($answer) {
-            if (!in_array(strtolower($answer), ['yes', 'y', 'no', 'n'])) {
+            if (!in_array(strtolower($answer ?? ''), ['yes', 'y', 'no', 'n'])) {
                 throw new LocalizedException(
                     new Phrase('A [y]es or [n]o selection needs to be made. Select and try again.')
                 );

@@ -28,7 +28,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory as OrderCollectionFactory;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as OrderInvoiceCollection;
-use Magento\Sales\Model\ResourceModel\Order\Item;
+use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as OrderItemCollection;
 use Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory as OrderItemCollectionFactory;
 use Magento\Sales\Model\ResourceModel\Order\Payment;
@@ -153,16 +153,6 @@ class OrderTest extends TestCase
             ['create']
         );
         $this->item = $this->getMockBuilder(Item::class)
-            ->addMethods(
-                [
-                    'isDeleted',
-                    'getQtyToInvoice',
-                    'getParentItemId',
-                    'getQuoteItemId',
-                    'getLockedDoInvoice',
-                    'getProductId'
-                ]
-            )
             ->disableOriginalConstructor()
             ->getMock();
         $this->salesOrderCollectionMock = $this->getMockBuilder(
@@ -401,6 +391,7 @@ class OrderTest extends TestCase
     public function testGetCustomerName(array $expectedData)
     {
         $this->order->setCustomerFirstname($expectedData['first_name']);
+        $this->order->setCustomerMiddlename($expectedData['middle_name']);
         $this->order->setCustomerSuffix($expectedData['customer_suffix']);
         $this->order->setCustomerPrefix($expectedData['customer_prefix']);
         $this->scopeConfigMock->expects($this->exactly($expectedData['invocation']))
@@ -420,6 +411,7 @@ class OrderTest extends TestCase
                     [
                         'first_name' => null,
                         'invocation' => 0,
+                        'middle_name' => null,
                         'expected_name' => 'Guest',
                         'customer_suffix' => 'smith',
                         'customer_prefix' => 'mr.'
@@ -428,8 +420,19 @@ class OrderTest extends TestCase
                 [
                     [
                         'first_name' => 'Smith',
-                        'invocation' => 1,
+                        'invocation' => 0,
+                        'middle_name' => null,
                         'expected_name' => 'mr. Smith  Carl',
+                        'customer_suffix' => 'Carl',
+                        'customer_prefix' => 'mr.'
+                    ]
+                ],
+                [
+                    [
+                        'first_name' => 'John',
+                        'invocation' => 1,
+                        'middle_name' => 'Middle',
+                        'expected_name' => 'mr. John Middle  Carl',
                         'customer_suffix' => 'Carl',
                         'customer_prefix' => 'mr.'
                     ]
@@ -565,6 +568,19 @@ class OrderTest extends TestCase
     {
         $this->order->setData('forced_can_creditmemo', true);
         $this->assertTrue($this->order->canCreditmemo());
+    }
+
+    /**
+     * Test canCreditMemo when the forced_can_creditmemo flag set to false.
+     *
+     * @return void
+     */
+    public function testCanNotCreditMemoWithForcedWhenFlagSetToFalse()
+    {
+        $this->prepareOrderItem();
+        $this->order->setData('forced_can_creditmemo', false);
+        $this->order->setState(Order::STATE_PROCESSING);
+        $this->assertFalse($this->order->canCreditmemo());
     }
 
     public function testCanEditIfHasInvoices()
@@ -876,6 +892,20 @@ class OrderTest extends TestCase
             ->willReturn(42);
 
         $this->assertEquals($cancelActionFlag, $this->order->canCancel());
+    }
+
+    public function testRegisterDiscountCanceled()
+    {
+        $this->item->expects($this->any())
+            ->method('getQtyToInvoice')
+            ->willReturn(42);
+        $this->prepareOrderItem();
+        $this->order->setDiscountAmount(-30);
+        $this->order->setDiscountInvoiced(-10);
+        $this->order->setBaseDiscountAmount(-30);
+        $this->order->setBaseDiscountInvoiced(-10);
+        $this->order->registerCancellation();
+        $this->assertEquals(20, abs((float) $this->order->getDiscountCanceled()));
     }
 
     /**

@@ -5,14 +5,17 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price\Action;
 
-use Magento\Directory\Model\CurrencyFactory;
 use Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice;
+use Magento\Directory\Model\CurrencyFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -35,6 +38,11 @@ class Rows extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     private $batchSize;
 
     /**
+     * @var CacheContext
+     */
+    private CacheContext $cacheContext;
+
+    /**
      * @param ScopeConfigInterface $config
      * @param StoreManagerInterface $storeManager
      * @param CurrencyFactory $currencyFactory
@@ -47,6 +55,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      * @param DimensionCollectionFactory|null $dimensionCollectionFactory
      * @param TableMaintainer|null $tableMaintainer
      * @param int|null $batchSize
+     * @param CacheContext|null $cacheContext
      * @SuppressWarnings(PHPMD.NPathComplexity) Added to backward compatibility with abstract class
      * @SuppressWarnings(PHPMD.CyclomaticComplexity) Added to backward compatibility with abstract class
      * @SuppressWarnings(PHPMD.ExcessiveParameterList) Added to backward compatibility with abstract class
@@ -63,7 +72,8 @@ class Rows extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         TierPrice $tierPriceIndexResource = null,
         DimensionCollectionFactory $dimensionCollectionFactory = null,
         TableMaintainer $tableMaintainer = null,
-        ?int $batchSize = null
+        ?int $batchSize = null,
+        CacheContext $cacheContext = null
     ) {
         parent::__construct(
             $config,
@@ -79,6 +89,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             $tableMaintainer
         );
         $this->batchSize = $batchSize ?? self::BATCH_SIZE;
+        $this->cacheContext = $cacheContext ?? ObjectManager::getInstance()->get(CacheContext::class);
     }
 
     /**
@@ -101,7 +112,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             $currentBatch[] = $id;
             if (++$i === $this->batchSize) {
                 try {
-                    $this->_reindexRows($currentBatch);
+                    $this->cacheContext->registerEntities(Product::CACHE_TAG, $this->_reindexRows($currentBatch));
                 } catch (\Exception $e) {
                     throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
                 }
@@ -112,7 +123,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
 
         if (!empty($currentBatch)) {
             try {
-                $this->_reindexRows($currentBatch);
+                $this->cacheContext->registerEntities(Product::CACHE_TAG, $this->_reindexRows($currentBatch));
             } catch (\Exception $e) {
                 throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
             }

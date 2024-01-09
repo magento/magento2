@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-89184"/>
             <group value="Cms"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>

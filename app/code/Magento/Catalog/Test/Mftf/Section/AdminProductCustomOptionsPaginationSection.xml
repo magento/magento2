@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductCustomOptionsPaginationSection">
+        <element name="perPageDropdown" type="select" selector=".admin__control-table-pagination .selectmenu"/>
+        <element name="perPageOption" type="button" selector="//div[@class='admin__control-table-pagination']//div[@class='selectmenu-items _active']//li//button[text()='{{label}}']" parameterized="true"/>
+        <element name="perPageInput" type="input" selector="//div[@class='admin__control-table-pagination']//div[@class='selectmenu-items _active']//li[@class='_edit']//div[@class='selectmenu-item-edit']//input"/>
+        <element name="perPageApplyInput" type="button" selector="//div[@class='admin__control-table-pagination']//div[@class='selectmenu-items _active']//li[@class='_edit']//div[@class='selectmenu-item-edit']//button"/>
+    </section>
+</sections>

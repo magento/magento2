@@ -205,7 +205,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->model->setRouteName('catalog');
         $this->assertEquals('catalog', $this->model->getRouteName());
 
-        $this->markTestIncomplete('setRouteName() logic is unclear.');
+        $this->markTestSkipped('setRouteName() logic is unclear.');
     }
 
     public function testSetGetControllerName()
@@ -213,7 +213,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->model->setControllerName('product');
         $this->assertEquals('product', $this->model->getControllerName());
 
-        $this->markTestIncomplete('setControllerName() logic is unclear.');
+        $this->markTestSkipped('setControllerName() logic is unclear.');
     }
 
     public function testSetGetActionName()
@@ -221,7 +221,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->model->setActionName('view');
         $this->assertEquals('view', $this->model->getActionName());
 
-        $this->markTestIncomplete('setActionName() logic is unclear.');
+        $this->markTestSkipped('setActionName() logic is unclear.');
     }
 
     /**

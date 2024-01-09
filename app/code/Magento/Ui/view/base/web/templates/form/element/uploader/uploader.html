@@ -17,10 +17,10 @@
                 <label class="file-uploader-button action-default" attr="for: uid" translate="'Upload'"></label>
 
                 <span class="file-uploader-spinner"></span>
-                <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
+                <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"></render>
             </div>
 
-            <render args="tooltipTpl" if="$data.tooltip"/>
+            <render args="tooltipTpl" if="$data.tooltip"></render>
 
             <div class="admin__field-note" if="$data.notice" attr="id: noticeId">
                 <!-- ko with: {noticeUnsanitizedHtml: notice} -->
@@ -41,6 +41,6 @@
                 </label>
             </div>
         </div>
-        <render args="$data.service.template" if="$data.hasService()"/>
+        <render args="$data.service.template" if="$data.hasService()"></render>
     </div>
 </div>

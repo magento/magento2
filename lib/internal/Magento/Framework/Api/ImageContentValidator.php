@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -87,7 +86,7 @@ class ImageContentValidator implements ImageContentValidatorInterface
     protected function isNameValid($name)
     {
         // Cannot contain \ / ? * : " ; < > ( ) | { }
-        if (!preg_match('/^[^\\/?*:";<>()|{}\\\\]+$/', $name)) {
+        if ($name === null || !preg_match('/^[^\\/?*:";<>()|{}\\\\]+$/', $name)) {
             return false;
         }
         return true;

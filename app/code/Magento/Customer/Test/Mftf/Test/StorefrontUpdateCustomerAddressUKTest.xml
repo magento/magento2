@@ -17,6 +17,7 @@
             <severity value="BLOCKER"/>
             <group value="customer"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -35,6 +36,7 @@
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteNewUser">
                 <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

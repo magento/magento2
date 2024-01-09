@@ -17,7 +17,8 @@ return [
                     ],
                     'secure' => false,
                     'realMethod' => 'getById',
-                    'parameters' => []
+                    'parameters' => [],
+                    'input-array-size-limit' => null,
                 ],
                 'save' => [
                     'resources' => [
@@ -25,7 +26,8 @@ return [
                     ],
                     'secure' => false,
                     'realMethod' => 'save',
-                    'parameters' => []
+                    'parameters' => [],
+                    'input-array-size-limit' => 50,
                 ],
                 'saveSelf' => [
                     'resources' => [
@@ -39,6 +41,7 @@ return [
                             'value' => null,
                         ],
                     ],
+                    'input-array-size-limit' => null,
                 ],
                 'deleteById' => [
                     'resources' => [
@@ -47,7 +50,8 @@ return [
                     ],
                     'secure' => false,
                     'realMethod' => 'deleteById',
-                    'parameters' => []
+                    'parameters' => [],
+                    'input-array-size-limit' => null,
                 ],
             ],
         ],
@@ -70,6 +74,7 @@ return [
                         'value' => '%customer_id%',
                     ],
                 ],
+                'input-array-size-limit' => null,
             ],
         ],
         '/V1/customers/me' => [
@@ -88,6 +93,7 @@ return [
                         'value' => null,
                     ],
                 ],
+                'input-array-size-limit' => null,
             ],
             'PUT' => [
                 'secure' => true,
@@ -104,6 +110,7 @@ return [
                         'value' => null,
                     ],
                 ],
+                'input-array-size-limit' => null,
             ],
         ],
         '/V1/customers' => [
@@ -116,8 +123,8 @@ return [
                 'resources' => [
                     'Magento_Customer::manage' => true,
                 ],
-                'parameters' => [
-                ],
+                'parameters' => [],
+                'input-array-size-limit' => 50,
             ],
         ],
         '/V1/customers/:id' => [
@@ -130,8 +137,8 @@ return [
                 'resources' => [
                     'Magento_Customer::read' => true,
                 ],
-                'parameters' => [
-                ],
+                'parameters' => [],
+                'input-array-size-limit' => null,
             ],
             'DELETE' => [
                 'secure' => false,
@@ -143,8 +150,8 @@ return [
                     'Magento_Customer::manage' => true,
                     'Magento_Customer::delete' => true,
                 ],
-                'parameters' => [
-                ],
+                'parameters' => [],
+                'input-array-size-limit' => null,
             ],
         ],
     ],

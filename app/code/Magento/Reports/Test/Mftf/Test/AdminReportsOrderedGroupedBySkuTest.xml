@@ -25,6 +25,7 @@
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
@@ -39,15 +40,20 @@
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteVirtualProducts">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
-            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttributeSet">
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
                 <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
             </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <comment userInput="BIC workaround" stepKey="deleteAttributeSet"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Add first configurable product to order-->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToFirstOrderWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToFirstOrderWithExistingCustomer">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <actionGroup ref="AddConfigurableProductToOrderActionGroup" stepKey="addFirstConfigurableProductToOrder">
@@ -58,7 +64,7 @@
         <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitFirstOrder" />
 
         <!--Add second configurable product to order-->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToSecondOrderWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToSecondOrderWithExistingCustomer">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <actionGroup ref="AddConfigurableProductToOrderActionGroup" stepKey="addSecondConfigurableProductToOrder">

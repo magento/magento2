@@ -19,4 +19,9 @@
         <plugin name="synchronize_media_content"
                 type="Magento\MediaContentSynchronization\Plugin\SynchronizeMediaContent"/>
     </type>
+    <type name="Magento\MediaContentSynchronization\Console\Command\Synchronize">
+        <arguments>
+            <argument name="synchronizeContent" xsi:type="object">Magento\MediaContentSynchronizationApi\Api\SynchronizeInterface\Proxy</argument>
+        </arguments>
+    </type>
 </config>
