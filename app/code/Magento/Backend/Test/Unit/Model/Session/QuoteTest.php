@@ -131,11 +131,6 @@ class QuoteTest extends TestCase
     protected $objectManagerMock;
 
     /**
-     * @var SessionStartChecker
-     */
-    protected $sessionStartCheckerMock;
-
-    /**
      * Set up
      *
      * @return void
@@ -215,14 +210,13 @@ class QuoteTest extends TestCase
 
         $this->quoteFactoryMock = $this->createPartialMock(QuoteFactory::class, ['create']);
 
-        $this->sessionStartCheckerMock = $this->createMock(SessionStartChecker::class);
-
-        /** @var ObjectManagerInterface|MockObject $objectManagerMock */
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->once())
-            ->method('get')
-            ->willReturn($this->sessionStartCheckerMock);
-        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
+        $objects = [
+            [
+                SessionStartChecker::class,
+                $this->createMock(SessionStartChecker::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
 
         $this->quote = $this->getMockBuilder(Quote::class)
             ->addMethods(['getStoreId', 'getQuoteId', 'setQuoteId', 'hasCustomerId', 'getCustomerId'])
