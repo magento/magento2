@@ -57,7 +57,8 @@ class PriceTest extends TestCase
             ]
         );
         $this->attribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->onlyMethods(['getAttributeCode', 'isScopeWebsite', 'getIsGlobal'])
+            ->addMethods(['isScopeWebsite', 'getIsGlobal'])
+            ->onlyMethods(['getAttributeCode'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->model->setAttribute($this->attribute);
@@ -79,7 +80,7 @@ class PriceTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderValidate()
+    public static function dataProviderValidate()
     {
         return [
             'US simple' => ['1234.56'],
@@ -110,7 +111,7 @@ class PriceTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderValidateForFailure()
+    public static function dataProviderValidateForFailure()
     {
         return [
             'negative US simple' => ['-1234.56'],

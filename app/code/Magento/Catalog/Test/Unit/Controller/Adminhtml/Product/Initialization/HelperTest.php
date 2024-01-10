@@ -29,6 +29,7 @@ use Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Locale\Format;
 use Magento\Framework\Locale\FormatInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -130,12 +131,13 @@ class HelperTest extends TestCase
             ->getMock();
         $this->productRepositoryMock = $this->createMock(ProductRepository::class);
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->onlyMethods(['getPost'])
+            ->addMethods(['getPost'])
             ->getMockForAbstractClass();
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->stockFilterMock = $this->createMock(StockDataFilter::class);
 
         $this->productMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['getOptionsReadOnly'])
             ->onlyMethods(
                 [
                     'getId',
@@ -143,14 +145,13 @@ class HelperTest extends TestCase
                     'lockAttribute',
                     'getAttributes',
                     'unlockAttribute',
-                    'getOptionsReadOnly',
                     'getSku',
                 ]
             )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $productExtensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->onlyMethods(['getCategoryLinks', 'setCategoryLinks'])
+            ->addMethods(['getCategoryLinks', 'setCategoryLinks'])
             ->getMockForAbstractClass();
         $this->productMock->setExtensionAttributes($productExtensionAttributes);
 
@@ -176,6 +177,14 @@ class HelperTest extends TestCase
             ->willReturnCallback(function () {
                 return $this->createMock(CategoryLinkInterface::class);
             });
+
+        $objects = [
+            [
+                ProductCustomOptionInterfaceFactory::class,
+                $this->customOptionFactoryMock
+            ]
+        ];
+        $this->prepareObjectManager($objects);
 
         $this->helper = $this->objectManager->getObject(
             Helper::class,
@@ -280,7 +289,7 @@ class HelperTest extends TestCase
 
         $customOptionMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(null)
+            ->onlyMethods([])
             ->getMock();
         $firstExpectedCustomOption = clone $customOptionMock;
         $firstExpectedCustomOption->setData($optionsData['option2']);
@@ -316,7 +325,7 @@ class HelperTest extends TestCase
             ->willReturnCallback(
                 function () {
                     return $this->getMockBuilder(ProductLink::class)
-                        ->onlyMethods(null)
+                        ->onlyMethods([])
                         ->disableOriginalConstructor()
                         ->getMock();
                 }
@@ -383,7 +392,7 @@ class HelperTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function initializeDataProvider()
+    public static function initializeDataProvider()
     {
         return [
             [
@@ -559,7 +568,7 @@ class HelperTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function mergeProductOptionsDataProvider()
+    public static function mergeProductOptionsDataProvider()
     {
         return [
             'options are not array, empty array is returned' => [
@@ -762,5 +771,23 @@ class HelperTest extends TestCase
         $this->productRepositoryMock->expects($this->any())
             ->method('getById')
             ->willReturnMap($repositoryReturnMap);
+    }
+
+    /**
+     * @param $map
+     */
+    private function prepareObjectManager($map)
+    {
+        $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->addMethods(['getInstance'])
+            ->onlyMethods(['get'])
+            ->getMockForAbstractClass();
+
+        $objectManagerMock->method('getInstance')->willReturnSelf();
+        $objectManagerMock->method('get')->willReturnMap($map);
+
+        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($objectManagerMock);
     }
 }

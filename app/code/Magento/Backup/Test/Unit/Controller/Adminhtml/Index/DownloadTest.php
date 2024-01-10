@@ -22,6 +22,7 @@ use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\ImportExport\Model\ResourceModel\Helper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -101,6 +102,11 @@ class DownloadTest extends TestCase
      */
     protected $resultRedirectMock;
 
+    /**
+     * @var Helper
+     */
+    protected $resourceHelper;
+
     protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
@@ -115,7 +121,8 @@ class DownloadTest extends TestCase
             ->getMock();
         $this->backupModelMock = $this->getMockBuilder(Backup::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getTime', 'exists', 'getSize', 'output', 'getPath', 'getFileName'])
+            ->addMethods(['getTime', 'getPath'])
+            ->onlyMethods(['exists', 'getSize', 'output', 'getFileName'])
             ->getMock();
         $this->dataHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
@@ -139,6 +146,10 @@ class DownloadTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->resourceHelper = $this->getMockBuilder(Helper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->objectManager = new ObjectManager($this);
         $this->context = $this->objectManager->getObject(
             Context::class,
@@ -149,9 +160,19 @@ class DownloadTest extends TestCase
                 'resultRedirectFactory' => $this->resultRedirectFactoryMock
             ]
         );
+
+        $objects = [
+            [
+                Data::class,
+                $this->dataHelperMock
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
+
         $this->downloadController = $this->objectManager->getObject(
             Download::class,
             [
+                'helper' => $this->resourceHelper,
                 'context' => $this->context,
                 'backupModelFactory' => $this->backupModelFactoryMock,
                 'fileFactory' => $this->fileFactoryMock,
@@ -260,7 +281,7 @@ class DownloadTest extends TestCase
     /**
      * @return array
      */
-    public function executeBackupNotFoundDataProvider()
+    public static function executeBackupNotFoundDataProvider()
     {
         return [
             [1, false, 1],

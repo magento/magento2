@@ -128,9 +128,11 @@ class DataProviderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->clientConfig = $this->getMockBuilder(Config::class)
+            ->addMethods([
+                'getIndexName'
+            ])
             ->onlyMethods([
-                'getIndexName',
-                'getEntityType',
+                'getEntityType'
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -170,7 +172,8 @@ class DataProviderTest extends TestCase
             ->method('getEntityType')
             ->willReturn('product');
         $this->clientMock = $this->getMockBuilder(ClientInterface::class)
-            ->onlyMethods(['query', 'testConnection'])
+            ->addMethods(['query'])
+            ->onlyMethods(['testConnection'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->connectionManager->expects($this->any())

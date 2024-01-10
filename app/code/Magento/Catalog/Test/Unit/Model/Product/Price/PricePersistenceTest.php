@@ -77,7 +77,8 @@ class PricePersistenceTest extends TestCase
             ->getMockForAbstractClass();
         $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getLinkField', 'getMetadata'])
+            ->addMethods(['getLinkField'])
+            ->onlyMethods(['getMetadata'])
             ->getMock();
         $this->connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()

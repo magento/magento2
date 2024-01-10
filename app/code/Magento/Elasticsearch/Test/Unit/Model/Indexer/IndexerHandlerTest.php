@@ -130,7 +130,8 @@ class IndexerHandlerTest extends TestCase
             ->getMock();
 
         $this->client = $this->getMockBuilder(ClientInterface::class)
-            ->onlyMethods(['ping', 'testConnection','prepareDocsPerStore','addDocs', 'cleanIndex'])
+            ->addMethods(['ping', 'prepareDocsPerStore','addDocs', 'cleanIndex'])
+            ->onlyMethods(['testConnection'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

@@ -88,7 +88,6 @@ class UpdateHandlerTest extends TestCase
             ->getMock();
         $this->tierPriceResource = $this->getMockBuilder(Tierprice::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
 
         $this->updateHandler = $this->objectManager->getObject(
@@ -128,7 +127,7 @@ class UpdateHandlerTest extends TestCase
         /** @var MockObject $product */
         $product = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getData','setData', 'getStoreId', 'getOrigData'])
+            ->addMethods(['getData','setData', 'getStoreId', 'getOrigData'])
             ->getMockForAbstractClass();
         $product->expects($this->atLeastOnce())->method('getData')->willReturnMap(
             [
@@ -158,7 +157,7 @@ class UpdateHandlerTest extends TestCase
         /** @var MockObject $attribute */
         $attribute = $this->getMockBuilder(ProductAttributeInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getName', 'isScopeGlobal'])
+            ->addMethods(['getName', 'isScopeGlobal'])
             ->getMockForAbstractClass();
         $attribute->expects($this->atLeastOnce())->method('getName')->willReturn('tier_price');
         $attribute->expects($this->atLeastOnce())->method('isScopeGlobal')->willReturn(true);
@@ -195,7 +194,7 @@ class UpdateHandlerTest extends TestCase
         /** @var MockObject $attribute */
         $attribute = $this->getMockBuilder(ProductAttributeInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getName', 'isScopeGlobal'])
+            ->addMethods(['getName', 'isScopeGlobal'])
             ->getMockForAbstractClass();
         $attribute->expects($this->atLeastOnce())->method('getName')->willReturn('tier_price');
         $this->attributeRepository->expects($this->atLeastOnce())->method('get')->with('tier_price')
@@ -203,7 +202,7 @@ class UpdateHandlerTest extends TestCase
         /** @var MockObject $product */
         $product = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getData','setData', 'getStoreId', 'getOrigData'])
+            ->addMethods(['getData','setData', 'getStoreId', 'getOrigData'])
             ->getMockForAbstractClass();
         $product->expects($this->atLeastOnce())->method('getData')->with('tier_price')->willReturn(1);
 
@@ -215,7 +214,7 @@ class UpdateHandlerTest extends TestCase
      *
      * @return array
      */
-    public function configDataProvider()
+    public static function configDataProvider()
     {
         return [
             [

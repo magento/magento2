@@ -128,7 +128,8 @@ class LayerTest extends TestCase
             ->getMock();
 
         $this->store = $this->getMockBuilder(Store::class)
-            ->onlyMethods(['getRootCategoryId', 'getFilters'])
+            ->addMethods(['getFilters'])
+            ->onlyMethods(['getRootCategoryId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
