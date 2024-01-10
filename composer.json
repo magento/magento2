@@ -16,12 +16,6 @@
         "preferred-install": "dist",
         "sort-packages": true
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:magento-gl/magento2-functional-testing-framework.git"
-        }
-    ],
     "require": {
         "php": "~8.1.0||~8.2.0",
         "ext-bcmath": "*",
@@ -103,7 +97,7 @@
         "friendsofphp/php-cs-fixer": "^3.22",
         "lusitanian/oauth": "^0.8",
         "magento/magento-coding-standard": "*",
-        "magento/magento2-functional-testing-framework": "dev-AC-9499",
+        "magento/magento2-functional-testing-framework": "^4.7",
         "pdepend/pdepend": "^2.10",
         "phpmd/phpmd": "^2.12",
         "phpstan/phpstan": "^1.9, <1.10.29",
