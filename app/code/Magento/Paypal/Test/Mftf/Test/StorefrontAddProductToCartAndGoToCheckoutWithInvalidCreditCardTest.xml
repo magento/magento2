@@ -25,7 +25,7 @@
             </createData>
             <!-- New Product -->
             <createData entity="SimpleProduct2" stepKey="simpleProduct">
-                <field key="price">100</field>
+                <field key="price">9000000</field>
             </createData>
             <!-- Reindex and cache flush -->
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
