@@ -16,6 +16,8 @@
             <severity value="MAJOR"/>
             <testCaseId value="B2B-1506"/>
         </annotations>
-        <actionGroup ref="AdminExpandCurrencyOptionsActionGroup" stepKey="openCurrencyOptions"/>
+        <before>
+            <actionGroup ref="AdminExpandCurrencyOptionsActionGroup" stepKey="openCurrencyOptions"/>
+        </before>
     </test>
 </tests>
