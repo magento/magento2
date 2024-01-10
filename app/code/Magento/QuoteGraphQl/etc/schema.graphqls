@@ -5,6 +5,7 @@ type Query {
     """phpcs:ignore Magento2.GraphQL.ValidArgumentName"""
     cart(cart_id: String! @doc(description: "The unique ID of the cart to query.")): Cart @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart") @doc(description:"Return information about the specified shopping cart.") @cache(cacheable: false)
     customerCart: Cart! @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CustomerCart") @doc(description:"Return information about the customer's shopping cart.") @cache(cacheable: false)
+    estimateShippingMethods(input: EstimateShippingMethodsInput! @doc(description: "An input object that specifies details for estimation of available shipping methods")): [AvailableShippingMethod] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\EstimateShippingMethods") @doc(description: "Estimate shipping method(s) for cart based on address")
 }
 
 type Mutation {
@@ -145,6 +146,12 @@ input SetShippingMethodsOnCartInput @doc(description: "Applies one or shipping m
 input ShippingMethodInput @doc(description: "Defines the shipping carrier and method.") {
     carrier_code: String! @doc(description: "A string that identifies a commercial carrier or an offline delivery method.")
     method_code: String! @doc(description: "A string that indicates which service a commercial carrier will use to ship items. For offline delivery methods, this value is similar to the label displayed on the checkout page.")
+}
+
+input EstimateShippingMethodsInput @doc(description: "Defines the input required for `estimateShippingMethods` query") {
+    cart_id: String! @doc(description: "The unique ID of the cart to query.")
+    country_id: String! @doc(description: "The country code to estimate available shipping method(s)")
+    address: CustomerAddressInput @doc(description: "Customer's address to estimate available shipping method(s)")
 }
 
 input SetPaymentMethodAndPlaceOrderInput @doc(description: "Applies a payment method to the quote.") {
