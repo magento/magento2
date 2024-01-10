@@ -9,6 +9,13 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="UpdateCurrencyRateForQuotesInStatusesOrderedAndClosedTest">
+        <annotations>
+            <stories value="Currency Rates"/>
+            <title value="Update currency rate for quotes in statuses Ordered and Closed"/>
+            <description value="Update currency rate for created quotes in statuses Ordered and Closed"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="B2B-1506"/>
+        </annotations>
         <actionGroup ref="AdminExpandCurrencyOptionsActionGroup" stepKey="openCurrencyOptions"/>
     </test>
 </tests>
