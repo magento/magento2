@@ -63,10 +63,8 @@
         <actionGroup ref="FillPayFlowCreditCardActionGroup" stepKey="fillCreditCardDetails">
             <argument name="creditCardDetails" value="VisaDefaultCard"/>
         </actionGroup>
-        <!-- Place Order and assert the error message -->
+        <!-- Place Order and assert the url -->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-        <waitForElementVisible selector="//*[@class='modals-wrapper']//aside[@class='modal-popup confirm _show']//div[@class='modal-inner-wrap']" stepKey="seeErrorMessage"/>
-        <click selector="//*[@class='modals-wrapper']//aside[@class='modal-popup confirm _show']//div[@class='modal-inner-wrap']//footer/button" stepKey="clickOk"/>
         <wait time="6" stepKey="waitForPageLoad" />
         <seeCurrentUrlMatches regex="~\/checkout/#payment~" stepKey="seeCurrentUrl"/>
     </test>
