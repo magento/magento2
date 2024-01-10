@@ -4,33 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\Theme\Block\Html\Topmenu */
-/** @var $viewModel \Magento\Catalog\ViewModel\TopMenu */
-$viewModel = $block->getData('viewModel');
-$columnsLimit = $block->getColumnsLimit() ?: 0;
-$menuHtml = $block->getHtml('level-top', 'submenu', $columnsLimit);
-$jsonSerializer = $viewModel->getJsonSerializer();
+/**
+ * Top menu for store
+ *
+ * @var $block \Magento\Theme\Block\Html\Topmenu
+ */
 
-$widget = $jsonSerializer->unserialize($viewModel->getJsonConfigurationHtmlEscaped());
-$widgetOptions = [
-    'menu' => array_merge(
-        $widget['menu'] ?? [],
-        [
-            'responsive' => true,
-            'expanded' => true,
-            'position' => [
-                'my' => 'left top',
-                'at' => 'left bottom'
-            ]
-        ]
-    )
-];
-$widgetOptionsJson = $jsonSerializer->serialize($widgetOptions);
+$columnsLimit = $block->getColumnsLimit() ?: 0;
+$_menuHtml = $block->getHtml('level-top', 'submenu', $columnsLimit)
 ?>
 
 <nav class="navigation" data-action="navigation">
-    <ul data-mage-init='<?= /* @noEscape */ $widgetOptionsJson ?>'>
-        <?= /* @noEscape */ $menuHtml ?>
+    <ul data-mage-init='{"menu":{"responsive":true, "expanded":true, "position":{"my":"left top","at":"left bottom"}}}'>
+        <?= /* @noEscape */ $_menuHtml?>
         <?= $block->getChildHtml() ?>
     </ul>
 </nav>
