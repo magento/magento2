@@ -14,7 +14,7 @@
         </arguments>
         <amOnPage stepKey="amOnAdminUsersPage" url="{{AdminUsersPage.url}}"/>
         <waitForPageLoad stepKey="waitForAdminUserPageLoad"/>
-        <waitForElementClickable selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="resetFilters"/>
+        <waitForElementClickable selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="WaitForresetFiltersElementToBeClickable"/>
         <click selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="resetFilters" />
         <waitForPageLoad stepKey="waitForFiltersToReset" />
         <waitForElementVisible selector="{{AdminLegacyDataGridTableSection.columnTemplateStrict(user.username, 'user_id')}}" stepKey="waitForUserIdVisible" />
