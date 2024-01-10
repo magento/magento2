@@ -80,7 +80,7 @@ class ChangelogBatchWalker implements ChangelogBatchWalkerInterface
         $idsTable = $this->idsTableBuilder->build($changelog);
 
         try {
-            $connection->createTemporaryTable($idsTable);
+            $connection->createTable($idsTable);
 
             $columns = $this->getIdsColumns($idsTable);
 
@@ -122,7 +122,7 @@ class ChangelogBatchWalker implements ChangelogBatchWalkerInterface
                 yield $ids;
             }
         } finally {
-            $connection->dropTemporaryTable($idsTable->getName());
+            $connection->dropTable($idsTable->getName());
         }
     }
 
