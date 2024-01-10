@@ -7,6 +7,7 @@ namespace Magento\Framework\TestFramework\Unit\Helper;
 
 use Magento\Framework\GetParameterClassTrait;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\App\ObjectManager as AppObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -97,7 +98,7 @@ class ObjectManager
             ->disableOriginalClone()
             ->disableArgumentCloning()
             ->disallowMockingUnknownTypes()
-            ->setMethods(['getIdFieldName', '__sleep', '__wakeup'])
+            ->onlyMethods(['getIdFieldName', '__sleep', '__wakeup'])
             ->getMock();
         $resourceMock->expects(
             $this->_testObject->any()
@@ -195,7 +196,8 @@ class ObjectManager
                 ->disableOriginalClone()
                 ->disableArgumentCloning()
                 ->disallowMockingUnknownTypes()
-                ->setMethods(['populateWithArray', 'populate', 'create'])
+                ->addMethods(['populateWithArray', 'populate'])
+                ->onlyMethods(['create'])
                 ->getMock();
 
             $objectFactory->expects($this->_testObject->any())
@@ -374,7 +376,7 @@ class ObjectManager
         $objectManagerMock->method('getInstance')->willReturnSelf();
         $objectManagerMock->method('get')->willReturnMap($map);
 
-        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
+        $reflectionProperty = new \ReflectionProperty(AppObjectManager::class, '_instance');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($objectManagerMock);
     }
