@@ -117,7 +117,7 @@ class EditTest extends TestCase
      */
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
         $objects = [
             [
@@ -141,7 +141,7 @@ class EditTest extends TestCase
                 $this->createMock(Session::class)
             ]
         ];
-        $objectManager->prepareObjectManager($objects);
+        $this->objectManager->prepareObjectManager($objects);
 
         $this->categoryMock = $this->createPartialMock(
             Category::class,
@@ -241,7 +241,7 @@ class EditTest extends TestCase
             ->method('getResultRedirectFactory')
             ->willReturn($this->resultRedirectFactoryMock);
 
-        $this->edit = $objectManager->getObject(
+        $this->edit = $this->objectManager->getObject(
             Edit::class,
             [
                 'context' => $this->contextMock,
