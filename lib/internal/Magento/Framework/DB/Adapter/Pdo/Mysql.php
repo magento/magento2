@@ -328,8 +328,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         }
         if ($this->_transactionLevel === 0) {
             $this->logger->startTimer();
-            parent::beginTransaction();
-            $this->logger->logStats(LoggerInterface::TYPE_TRANSACTION, 'BEGIN');
+            try {
+                $this->performQuery(function () {
+                    parent::beginTransaction();
+                });
+            } finally {
+                $this->logger->logStats(LoggerInterface::TYPE_TRANSACTION, 'BEGIN');
+            }
         }
         ++$this->_transactionLevel;
         return $this;
@@ -598,9 +603,30 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
      * @return \Zend_Db_Statement_Pdo|void
      * @throws Zend_Db_Adapter_Exception To re-throw \PDOException.
      * @throws Zend_Db_Statement_Exception
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _query($sql, $bind = [])
+    {
+        $result = null;
+        try {
+            $this->_checkDdlTransaction($sql);
+            $this->_prepareQuery($sql, $bind);
+            $this->logger->startTimer();
+            $result = $this->performQuery(fn () => parent::query($sql, $bind));
+        } finally {
+            $this->logger->logStats(LoggerInterface::TYPE_QUERY, $sql, $bind, $result);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Execute query and reconnect if needed.
+     *
+     * @param callable $queryExecutor
+     * @return \Zend_Db_Statement_Pdo|void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function performQuery(callable $queryExecutor)
     {
         $connectionErrors = [
             2006, // SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
@@ -609,22 +635,15 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         $triesCount = 0;
         do {
             $retry = false;
-            $this->logger->startTimer();
             try {
-                $this->_checkDdlTransaction($sql);
-                $this->_prepareQuery($sql, $bind);
-                $result = parent::query($sql, $bind);
-                $this->logger->logStats(LoggerInterface::TYPE_QUERY, $sql, $bind, $result);
-                return $result;
+                return $queryExecutor();
             } catch (\Exception $e) {
                 // Finalize broken query
                 $profiler = $this->getProfiler();
                 if ($profiler instanceof Profiler) {
-                    /** @var Profiler $profiler */
                     $profiler->queryEndLast();
                 }
 
-                /** @var $pdoException \PDOException */
                 $pdoException = null;
                 if ($e instanceof \PDOException) {
                     $pdoException = $e;
@@ -641,12 +660,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
                     $retry = true;
                     $triesCount++;
                     $this->closeConnection();
-
                     $this->_connect();
                 }
 
                 if (!$retry) {
-                    $this->logger->logStats(LoggerInterface::TYPE_QUERY, $sql, $bind);
                     $this->logger->critical($e);
                     // rethrow custom exception if needed
                     if ($pdoException && isset($this->exceptionMap[$pdoException->errorInfo[1]])) {
@@ -1769,18 +1786,39 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         $cacheKey = $this->_getTableName($tableName, $schemaName);
         $ddl = $this->loadDdlCache($cacheKey, self::DDL_DESCRIBE);
         if ($ddl === false) {
-            $ddl = parent::describeTable($tableName, $schemaName);
-            /**
-             * Remove bug in some MySQL versions, when int-column without default value is described as:
-             * having default empty string value
-             */
-            $affected = ['tinyint', 'smallint', 'mediumint', 'int', 'bigint'];
-            foreach ($ddl as $key => $columnData) {
-                if (($columnData['DEFAULT'] === '') && (array_search($columnData['DATA_TYPE'], $affected) !== false)) {
-                    $ddl[$key]['DEFAULT'] = null;
-                }
-            }
+            $ddl = $this->prepareColumnData(parent::describeTable($tableName, $schemaName));
             $this->saveDdlCache($cacheKey, self::DDL_DESCRIBE, $ddl);
+        }
+
+        return $ddl;
+    }
+
+    /**
+     * Prepares column data for describeTable() method
+     *
+     * @param array $ddl
+     * @return array
+     */
+    private function prepareColumnData(array $ddl): array
+    {
+        /**
+         * Remove bug in some MySQL versions, when int-column without default value is described as:
+         * having default empty string value
+         */
+        $affected = ['tinyint', 'smallint', 'mediumint', 'int', 'bigint'];
+        foreach ($ddl as $key => $columnData) {
+            if (($columnData['DEFAULT'] === '') && (array_search($columnData['DATA_TYPE'], $affected) !== false)) {
+                $ddl[$key]['DEFAULT'] = null;
+            }
+        }
+
+        /**
+         * Starting from MariaDB 10.5.1 columns with old temporal formats are marked with a \/* mariadb-5.3 *\/
+         * comment in the output of SHOW CREATE TABLE, SHOW COLUMNS, DESCRIBE statements,
+         * as well as in the COLUMN_TYPE column of the INFORMATION_SCHEMA.COLUMNS Table.
+         */
+        foreach ($ddl as $key => $columnData) {
+            $ddl[$key]['DATA_TYPE'] = str_replace(' /* mariadb-5.3 */', '', $columnData['DATA_TYPE']);
         }
 
         return $ddl;

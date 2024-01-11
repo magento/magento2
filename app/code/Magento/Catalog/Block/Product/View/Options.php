@@ -12,7 +12,6 @@ use Magento\Catalog\Model\Product\Option\Value;
 /**
  * Product options block
  *
- * @author Magento Core Team <core@magentocommerce.com>
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
@@ -39,7 +38,7 @@ class Options extends \Magento\Framework\View\Element\Template
     protected $_registry = null;
 
     /**
-     * Catalog product
+     * Product
      *
      * @var Product
      */
@@ -175,7 +174,17 @@ class Options extends \Magento\Framework\View\Element\Template
         $data = [
             'prices' => [
                 'oldPrice' => [
-                    'amount' => $this->pricingHelper->currency($option->getRegularPrice(), false, false),
+                    'amount' => $this->_catalogData->getTaxPrice(
+                        $option->getProduct(),
+                        $option->getRegularPrice(),
+                        true,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        false
+                    ),
                     'adjustments' => [],
                 ],
                 'basePrice' => [
