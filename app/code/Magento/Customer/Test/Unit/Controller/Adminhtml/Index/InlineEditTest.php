@@ -268,7 +268,7 @@ class InlineEditTest extends TestCase
         $this->request
             ->method('getParam')
             ->willReturnCallback(function ($arg1, $arg2) {
-                if ($arg1 == 'items') {
+                if ($arg1 == 'items' && empty($arg2)) {
                     return $this->items;
                 } elseif ($arg1 == 'isAjax') {
                     return true;
@@ -365,8 +365,26 @@ class InlineEditTest extends TestCase
         $this->dataObjectHelper
             ->method('populateWithArray')
             ->willReturnCallback(function ($arg1, $arg2, $arg3) {
-                if ($arg3 == AddressInterface::class || $arg3 == CustomerInterface::class) {
-                    return null;
+                static $callCount = 0;
+                $callCount++;
+                switch ($callCount) {
+                    case 1:
+                        if ($arg1 == $this->address && $arg2 == [
+                                'postcode' => '07294',
+                                'firstname' => 'Firstname',
+                                'lastname' => 'Lastname'
+                            ] && $arg3 == AddressInterface::class) {
+                            return null;
+                        }
+                        break;
+                    case 2:
+                        if ($arg1 == $this->customerData && $arg2 == [
+                                'name' => 'Firstname Lastname',
+                                'email' => 'test@test.ua'
+                            ] && $arg3 == CustomerInterface::class) {
+                            return null;
+                        }
+                        break;
                 }
             });
 
@@ -400,7 +418,7 @@ class InlineEditTest extends TestCase
         $this->request
             ->method('getParam')
             ->willReturnCallback(function ($arg1, $arg2) {
-                if ($arg1 == 'items') {
+                if ($arg1 == 'items' && empty($arg2)) {
                     return [];
                 } elseif ($arg1 == 'isAjax') {
                     return false;
@@ -433,7 +451,10 @@ class InlineEditTest extends TestCase
         $this->dataObjectHelper
             ->method('populateWithArray')
             ->willReturnCallback(function ($arg1, $arg2, $arg3) {
-                if ($arg3 == CustomerInterface::class) {
+                if ($arg1 === $this->customerData && $arg2 === [
+                        'name' => 'Firstname Lastname',
+                        'email' => 'test@test.ua'
+                    ] && $arg3 === CustomerInterface::class) {
                     return null;
                 }
             });
@@ -472,7 +493,10 @@ class InlineEditTest extends TestCase
         $this->dataObjectHelper
             ->method('populateWithArray')
             ->willReturnCallback(function ($arg1, $arg2, $arg3) {
-                if ($arg3 == CustomerInterface::class) {
+                if ($arg1 == $this->customerData && $arg2 === [
+                        'name' => 'Firstname Lastname',
+                        'email' => 'test@test.ua'
+                    ] && $arg3 === CustomerInterface::class) {
                     return null;
                 }
             });

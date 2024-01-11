@@ -394,9 +394,11 @@ class AttributeTest extends TestCase
         $this->itemDataBuilder
             ->method('addItemData')
             ->willReturnCallback(function ($label, $value, $count) use ($selectedOptions, $facetedData) {
-                if ($label == $selectedOptions[0]['label'] && $value == $selectedOptions[0]['value']) {
+                if ($label == $selectedOptions[0]['label'] && $value == $selectedOptions[0]['value'] &&
+                    $count == $facetedData[$selectedOptions[0]['value']]['count']) {
                     return $this->itemDataBuilder;
-                } elseif ($label == $selectedOptions[1]['label'] && $value == $selectedOptions[1]['value']) {
+                } elseif ($label == $selectedOptions[1]['label'] && $value == $selectedOptions[1]['value'] &&
+                    $count == $facetedData[$selectedOptions[1]['value']]['count']) {
                     return $this->itemDataBuilder;
                 }
             });

@@ -147,8 +147,14 @@ class BulkManagementTest extends TestCase
         $operation->expects($this->exactly(2))->method('getTopicName')
             ->willReturnOnConsecutiveCalls($topicNames[0], $topicNames[1]);
         $this->publisher->expects($this->exactly(2))->method('publish')
-            ->willReturnCallback(function ($arg1, $arg2) use ($topicNames, $operation) {
-                if (in_array($arg1, $topicNames)) {
+            ->willReturnCallback(function (...$args) use ($topicNames, $operation) {
+                static $index = 0;
+                $expectedArgs = [
+                    [$topicNames[0], [$operation]],
+                    [$topicNames[1], [$operation]]
+                ];
+                $index++;
+                if($args === $expectedArgs[$index - 1]){
                     return null;
                 }
             });

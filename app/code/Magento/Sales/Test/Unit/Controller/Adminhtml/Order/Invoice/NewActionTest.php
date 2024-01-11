@@ -254,9 +254,9 @@ class NewActionTest extends TestCase
         $this->requestMock
             ->method('getParam')
             ->willReturnCallback(function ($arg1, $arg2) use ($orderId, $invoiceData) {
-                if ($arg1 == 'order_id') {
+                if ($arg1 == 'order_id' && empty($arg2)) {
                     return $orderId;
-                } elseif ($arg1 == 'invoice') {
+                } elseif ($arg1 == 'invoice' && empty($arg2)) {
                     return $invoiceData;
                 }
             });
@@ -327,9 +327,9 @@ class NewActionTest extends TestCase
         $this->requestMock
             ->method('getParam')
             ->willReturnCallback(function ($arg1, $arg2) use ($orderId, $invoiceData) {
-                if ($arg1 == 'order_id') {
+                if ($arg1 == 'order_id' && empty($arg2)) {
                     return $orderId;
-                } elseif ($arg1 == 'invoice') {
+                } elseif ($arg1 == 'invoice' && empty($arg2)) {
                     return $invoiceData;
                 }
             });

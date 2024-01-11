@@ -106,9 +106,9 @@ class UpdateItemQtyTest extends TestCase
         $this->requestMock
             ->method('getParam')
             ->willReturnCallback(function ($arg1, $arg2) {
-                if ($arg1 == 'item_id') {
+                if ($arg1 == 'item_id' && $arg2 === null) {
                     return '1';
-                } elseif ($arg1 == 'item_qty') {
+                } elseif ($arg1 == 'item_qty' && $arg2 === null) {
                     return '2';
                 }
             });
@@ -168,9 +168,9 @@ class UpdateItemQtyTest extends TestCase
         $this->requestMock
             ->method('getParam')
             ->willReturnCallback(function ($arg1, $arg2) {
-                if ($arg1 == 'item_id') {
+                if ($arg1 == 'item_id' && $arg2 === null) {
                     return '1';
-                } elseif ($arg1 == 'item_qty') {
+                } elseif ($arg1 == 'item_qty' && $arg2 === null) {
                     return '2';
                 }
             });
@@ -216,9 +216,9 @@ class UpdateItemQtyTest extends TestCase
         $this->requestMock
             ->method('getParam')
             ->willReturnCallback(function ($arg1, $arg2) {
-                if ($arg1 == 'item_id') {
+                if ($arg1 == 'item_id' && $arg2 === null) {
                     return '1';
-                } elseif ($arg1 == 'item_qty') {
+                } elseif ($arg1 == 'item_qty' && $arg2 === null) {
                     return '2';
                 }
             });
@@ -276,9 +276,9 @@ class UpdateItemQtyTest extends TestCase
         $this->requestMock
             ->method('getParam')
             ->willReturnCallback(function ($arg1, $arg2) {
-                if ($arg1 == 'item_id') {
+                if ($arg1 == 'item_id' && $arg2 === null) {
                     return '1';
-                } elseif ($arg1 == 'item_qty') {
+                } elseif ($arg1 == 'item_qty' && $arg2 === null) {
                     return '{{7+2}}';
                 }
             });

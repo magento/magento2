@@ -103,7 +103,8 @@ class EraserTest extends TestCase
         $this->connection
             ->method('delete')
             ->willReturnCallback(function ($arg1, $arg2) {
-                if ($arg1 == 'store_1_flat' && $arg1 == 'store_2_flat') {
+                if ($arg1 == 'store_1_flat' || $arg1 == 'store_2_flat' &&
+                    isset($arg2['entity_id IN(?)']) && $arg2['entity_id IN(?)'] === [1]) {
                     return null;
                 }
             });

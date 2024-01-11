@@ -284,15 +284,22 @@ class EmailNotificationTest extends TestCase
 
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
-            ->willReturnCallback(function ($configPath, $scopeType, $storeId) use ($xmlPathTemplate) {
-                if ($configPath == $xmlPathTemplate) {
-                    return self::STUB_EMAIL_IDENTIFIER;
-                }
-                if ($configPath === EmailNotification::XML_PATH_FORGOT_EMAIL_IDENTITY) {
-                    return self::STUB_SENDER;
-                }
+            ->willReturnCallback(function (...$args) use ($xmlPathTemplate, $customerStoreId) {
+                static $index = 0;
+                $expectedArgs = [
+                    [$xmlPathTemplate, ScopeInterface::SCOPE_STORE, $customerStoreId],
+                    [EmailNotification::XML_PATH_FORGOT_EMAIL_IDENTITY, ScopeInterface::SCOPE_STORE, $customerStoreId],
+                    [$xmlPathTemplate, ScopeInterface::SCOPE_STORE, $customerStoreId],
+                    [EmailNotification::XML_PATH_FORGOT_EMAIL_IDENTITY, ScopeInterface::SCOPE_STORE, $customerStoreId]
+                ];
+                $returnValue = [self::STUB_EMAIL_IDENTIFIER,
+                    self::STUB_SENDER,
+                    self::STUB_EMAIL_IDENTIFIER,
+                    self::STUB_SENDER];
+                $index++;
+                return $args === $expectedArgs[$index - 1] ? $returnValue[$index - 1] : null;
             });
-        
+
         $this->transportBuilderMock->expects(clone $expects)
             ->method('setTemplateIdentifier')
             ->with(self::STUB_EMAIL_IDENTIFIER)
@@ -475,13 +482,15 @@ class EmailNotificationTest extends TestCase
 
         $this->scopeConfigMock
             ->method('getValue')
-            ->willReturnCallback(function ($configPath, $scopeType, $storeId) {
-                if ($configPath === EmailNotification::XML_PATH_REMIND_EMAIL_TEMPLATE) {
-                    return self::STUB_EMAIL_IDENTIFIER;
-                }
-                if ($configPath === EmailNotification::XML_PATH_FORGOT_EMAIL_IDENTITY) {
-                    return self::STUB_SENDER;
-                }
+            ->willReturnCallback(function (...$args) use ($customerStoreId) {
+                static $index = 0;
+                $expectedArgs = [
+                    [EmailNotification::XML_PATH_REMIND_EMAIL_TEMPLATE, ScopeInterface::SCOPE_STORE, $customerStoreId],
+                    [EmailNotification::XML_PATH_FORGOT_EMAIL_IDENTITY, ScopeInterface::SCOPE_STORE, $customerStoreId]
+                ];
+                $returnValue = [self::STUB_EMAIL_IDENTIFIER, self::STUB_SENDER];
+                $index++;
+                return $args === $expectedArgs[$index - 1] ? $returnValue[$index - 1] : null;
             });
         $this->mockDefaultTransportBuilder(
             self::STUB_EMAIL_IDENTIFIER,
@@ -575,13 +584,15 @@ class EmailNotificationTest extends TestCase
             ->willReturnSelf();
         $this->scopeConfigMock
             ->method('getValue')
-            ->willReturnCallback(function ($configPath, $scopeType, $storeId) {
-                if ($configPath === EmailNotification::XML_PATH_REMIND_EMAIL_TEMPLATE) {
-                    return self::STUB_EMAIL_IDENTIFIER;
-                }
-                if ($configPath === EmailNotification::XML_PATH_FORGOT_EMAIL_IDENTITY) {
-                    return self::STUB_SENDER;
-                }
+            ->willReturnCallback(function (...$args) use ($defaultStoreId) {
+                static $index = 0;
+                $expectedArgs = [
+                    [EmailNotification::XML_PATH_REMIND_EMAIL_TEMPLATE, ScopeInterface::SCOPE_STORE, $defaultStoreId],
+                    [EmailNotification::XML_PATH_FORGOT_EMAIL_IDENTITY, ScopeInterface::SCOPE_STORE, $defaultStoreId]
+                ];
+                $returnValue = [self::STUB_EMAIL_IDENTIFIER, self::STUB_SENDER];
+                $index++;
+                return $args === $expectedArgs[$index - 1] ? $returnValue[$index - 1] : null;
             });
 
         $this->mockDefaultTransportBuilder(
@@ -675,13 +686,15 @@ class EmailNotificationTest extends TestCase
 
         $this->scopeConfigMock
             ->method('getValue')
-            ->willReturnCallback(function ($configPath, $scopeType, $storeId) {
-                if ($configPath == EmailNotification::XML_PATH_FORGOT_EMAIL_TEMPLATE) {
-                    return self::STUB_EMAIL_IDENTIFIER;
-                }
-                if ($configPath == EmailNotification::XML_PATH_FORGOT_EMAIL_IDENTITY) {
-                    return self::STUB_SENDER;
-                }
+            ->willReturnCallback(function (...$args) use ($customerStoreId) {
+                static $index = 0;
+                $expectedArgs = [
+                    [EmailNotification::XML_PATH_FORGOT_EMAIL_TEMPLATE, ScopeInterface::SCOPE_STORE, $customerStoreId],
+                    [EmailNotification::XML_PATH_FORGOT_EMAIL_IDENTITY, ScopeInterface::SCOPE_STORE, $customerStoreId]
+                ];
+                $returnValue = [self::STUB_EMAIL_IDENTIFIER, self::STUB_SENDER];
+                $index++;
+                return $args === $expectedArgs[$index - 1] ? $returnValue[$index - 1] : null;
             });
 
         $this->mockDefaultTransportBuilder(
@@ -774,13 +787,15 @@ class EmailNotificationTest extends TestCase
 
         $this->scopeConfigMock
             ->method('getValue')
-            ->willReturnCallback(function ($configPath, $scopeType, $storeId) {
-                if ($configPath === EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE) {
-                    return self::STUB_EMAIL_IDENTIFIER;
-                }
-                if ($configPath === EmailNotification::XML_PATH_REGISTER_EMAIL_IDENTITY) {
-                    return self::STUB_SENDER;
-                }
+            ->willReturnCallback(function (...$args) use ($customerStoreId) {
+                static $index = 0;
+                $expectedArgs = [
+                    [EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE, ScopeInterface::SCOPE_STORE, $customerStoreId],
+                    [EmailNotification::XML_PATH_REGISTER_EMAIL_IDENTITY, ScopeInterface::SCOPE_STORE, $customerStoreId]
+                ];
+                $returnValue = [self::STUB_EMAIL_IDENTIFIER, self::STUB_SENDER];
+                $index++;
+                return $args === $expectedArgs[$index - 1] ? $returnValue[$index - 1] : null;
             });
 
         $this->mockDefaultTransportBuilder(

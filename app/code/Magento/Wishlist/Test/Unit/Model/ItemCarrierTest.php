@@ -525,11 +525,11 @@ class ItemCarrierTest extends TestCase
 
         $this->managerMock
             ->method('addErrorMessage')
-            ->willReturnCallback(function ($param1, $param2) use ($productOneName, $productTwoName) {
-                if ($param1 == __('%1 for "%2".', 'Localized Exception', $productTwoName)) {
+            ->willReturnCallback(function ($arg1, $arg2) use ($productOneName, $productTwoName) {
+                if ($arg1 == __('%1 for "%2".', 'Localized Exception', $productTwoName) && $arg2 === null) {
                     return $this->managerMock;
-                } elseif ($param1 == __('We couldn\'t add the following product(s) to the shopping cart: %1.', '"' .
-                        $productOneName . '"')) {
+                } elseif ($arg1 == __('We couldn\'t add the following product(s) to the shopping cart: %1.', '"' .
+                        $productOneName . '"') && $arg2 === null) {
                     return $this->managerMock;
                 }
             });
@@ -713,8 +713,8 @@ class ItemCarrierTest extends TestCase
         $this->managerMock
             ->method('addErrorMessage')
             ->willReturnCallback(function ($arg1, $arg2) {
-                if ($arg1 == __('We can\'t add this item to your shopping cart right now.') ||
-                    $arg1 == __('We can\'t update the Wish List right now.')) {
+                if ($arg1 == __('We can\'t add this item to your shopping cart right now.' && $arg2 === null) ||
+                    $arg1 == __('We can\'t update the Wish List right now.') && $arg2 === null) {
                     return $this->managerMock;
                 }
             });

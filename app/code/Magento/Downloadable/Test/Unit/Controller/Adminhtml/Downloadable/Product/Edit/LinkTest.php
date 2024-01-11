@@ -134,9 +134,9 @@ class LinkTest extends TestCase
         $this->request
             ->method('getParam')
             ->willReturnCallback(function ($arg1, $arg2) use ($fileType) {
-                if ($arg1 == 'id') {
+                if ($arg1 == 'id' && $arg2 == 0) {
                     return 1;
-                } elseif ($arg1 == 'type') {
+                } elseif ($arg1 == 'type' && $arg2 == 0) {
                     return $fileType;
                 }
             });

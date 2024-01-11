@@ -92,15 +92,31 @@ class SuperAttributeDataProviderTest extends TestCase
         ];
 
         $this->arrayManager->method('get')
-            ->willReturnCallback(function ($arg1, $arg2) use ($quoteMock) {
-                if ($arg1 == 'parent_sku') {
-                    return 'configurable';
-                } elseif ($arg1 == 'data/sku') {
-                    return 'simple1';
-                } elseif ($arg1 == 'data/quantity') {
-                    return 2.0;
-                } elseif ($arg1 == 'model') {
-                    return $quoteMock;
+            ->willReturnCallback(function ($arg1, $arg2) use ($cartItemData, $quoteMock) {
+                static $callCount = 0;
+                $callCount++;
+
+                switch ($callCount) {
+                    case 1:
+                        if ($arg1 == 'parent_sku' && $arg2 == $cartItemData) {
+                            return 'configurable';
+                        }
+                        break;
+                    case 2:
+                        if ($arg1 == 'data/sku' && $arg2 == $cartItemData) {
+                            return 'simple1';
+                        }
+                        break;
+                    case 3:
+                        if ($arg1 == 'data/quantity' && $arg2 == $cartItemData) {
+                            return 2.0;
+                        }
+                        break;
+                    case 4:
+                        if ($arg1 == 'model' && $arg2 == $cartItemData) {
+                            return $quoteMock;
+                        }
+                        break;
                 }
             });
 

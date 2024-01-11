@@ -36,7 +36,7 @@ class SaveTest extends ThemeTest
         $this->_request
             ->method('getParam')
             ->willReturnCallback(function ($arg1, $arg2) use ($themeData, $customCssContent, $jsRemovedFiles, $jsOrder) {
-                if ($arg1 == 'back') {
+                if ($arg1 == 'back' && $arg2 === false) {
                     return true;
                 } elseif ($arg1 == 'theme') {
                     return $themeData;

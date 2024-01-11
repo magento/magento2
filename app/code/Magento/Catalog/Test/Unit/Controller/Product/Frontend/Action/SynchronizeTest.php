@@ -96,9 +96,9 @@ class SynchronizeTest extends TestCase
         $this->requestMock
             ->method('getParam')
             ->willReturnCallback(function ($arg1, $arg2) use ($data) {
-                if ($arg1 == 'ids') {
+                if ($arg1 == 'ids' && empty($arg2)) {
                     return $data['ids'];
-                } elseif ($arg1 == 'type_id') {
+                } elseif ($arg1 == 'type_id' && $arg2 === null) {
                     return $data['type_id'];
                 }
             });
@@ -134,9 +134,9 @@ class SynchronizeTest extends TestCase
         $this->requestMock
             ->method('getParam')
             ->willReturnCallback(function ($arg1, $arg2) use ($data) {
-                if ($arg1 == 'ids') {
+                if ($arg1 == 'ids' && empty($arg2)) {
                     return $data['ids'];
-                } elseif ($arg1 == 'type_id') {
+                } elseif ($arg1 == 'type_id' && $arg2 === null) {
                     return $data['type_id'];
                 }
             });

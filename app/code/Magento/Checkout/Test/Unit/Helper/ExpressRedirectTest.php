@@ -112,8 +112,13 @@ class ExpressRedirectTest extends TestCase
         }
         $this->actionFlag
             ->method('set')
-            ->willReturnCallback(function (...$args) {
-                return null;
+            ->willReturnCallback(function (...$args) use ($withArgs) {
+                static $callCount = 0;
+                $callCount++;
+                $expectedArgs = $withArgs[$callCount - 1];
+                if ($args === $expectedArgs) {
+                    return null;
+                }
             });
 
         $expectedLoginUrl = 'loginURL';

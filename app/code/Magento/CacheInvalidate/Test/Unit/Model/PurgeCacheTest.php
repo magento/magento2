@@ -144,11 +144,34 @@ class PurgeCacheTest extends TestCase
 
         $this->socketAdapterMock->expects($this->exactly(2))
             ->method('write')
-            ->willReturnCallback(function ($method, $uri, $version, $headers) {
-                if ($method === 'PURGE' && $version === '1.1' && $headers['Host'] === $uri->getHost()) {
-                    if (isset($headers['X-Magento-Tags-Pattern'])) {
-                        return null;
-                    }
+            ->willReturnCallback(function ($arg1, $arg2, $arg3, $arg4) use ($uri, $tagsSplitA, $tagsSplitB) {
+                static $callCount = 0;
+                $callCount++;
+                switch ($callCount) {
+                    case 1:
+                        if ($arg1 === 'PURGE' &&
+                            $arg2 === $uri &&
+                            $arg3 === '1.1' &&
+                            is_array($arg4) &&
+                            isset($arg4['X-Magento-Tags-Pattern']) &&
+                            $arg4['X-Magento-Tags-Pattern'] === implode('|', $tagsSplitA) &&
+                            isset($arg4['Host']) &&
+                            $arg4['Host'] === $uri->getHost()) {
+                             return null;
+                        }
+                        break;
+                    case 2:
+                        if ($arg1 === 'PURGE' &&
+                            $arg2 === $uri &&
+                            $arg3 === '1.1' &&
+                            is_array($arg4) &&
+                            isset($arg4['X-Magento-Tags-Pattern']) &&
+                            $arg4['X-Magento-Tags-Pattern'] === implode('|', $tagsSplitB) &&
+                            isset($arg4['Host']) &&
+                            $arg4['Host'] === $uri->getHost()) {
+                            return null;
+                        }
+                        break;
                 }
             });
 

@@ -268,11 +268,6 @@ class BundleTest extends TestCase
             ->getMock();
         $this->product
             ->method('getLowestPrice')
-//            ->withConsecutive(
-//                [$this->product, $baseAmount],
-//                [$this->product, $basePriceValue]
-//            )
-//            ->willReturnOnConsecutiveCalls(999, 888);
             ->willReturnCallback(function ($arg1, $arg2) use ($baseAmount, $basePriceValue) {
                 if ($arg1 == $this->product && $arg2==$baseAmount) {
                     return 999;
@@ -284,7 +279,6 @@ class BundleTest extends TestCase
             ->method('create')
             ->willReturn($bundleProductPrice);
         $options = [$this->createOption($optionId, 'Title `1', $selections)];
-
         $finalPriceMock = $this->getPriceMock(
             [
                 'getPriceWithoutOption' => new DataObject(
@@ -317,7 +311,6 @@ class BundleTest extends TestCase
             RegularPrice::PRICE_CODE => $regularPriceMock
         ];
         $priceInfo = $this->getPriceInfoMock($prices);
-
         $this->product->expects($this->once())
             ->method('hasPreconfiguredValues')
             ->willReturn(true);

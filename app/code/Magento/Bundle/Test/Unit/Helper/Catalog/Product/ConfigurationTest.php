@@ -286,7 +286,7 @@ class ConfigurationTest extends TestCase
                 ->method('getTaxPrice')
                 ->willReturnCallback(
                     function ($product, $amount, $includingTax) {
-                        if ($includingTax || !$includingTax) {
+                        if ($product && $amount == 15.00 && ($includingTax || !$includingTax)) {
                             return 15.00;
                         }
                     }

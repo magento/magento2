@@ -110,7 +110,7 @@ class InlineEditTest extends TestCase
             ->willReturnCallback(function ($arg1, $arg2) use ($postData) {
                 if ($arg1 == 'isAjax') {
                     return true;
-                } elseif ($arg1 == 'items') {
+                } elseif ($arg1 == 'items' && empty($arg2)) {
                     return  $postData;
                 }
             });
@@ -170,7 +170,7 @@ class InlineEditTest extends TestCase
             ->willReturnCallback(function ($arg1, $arg2) {
                 if ($arg1 == 'isAjax') {
                     return true;
-                } elseif ($arg1 == 'items') {
+                } elseif ($arg1 == 'items' && empty($arg2)) {
                     return [];
                 }
             });

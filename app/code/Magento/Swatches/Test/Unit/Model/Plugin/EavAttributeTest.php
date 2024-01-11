@@ -387,17 +387,17 @@ class EavAttributeTest extends TestCase
 
         $this->collectionMock->expects($this->exactly(12))
             ->method('addFieldToFilter')
-            ->willReturnCallback(function ($field, $value) {
-                switch ($field) {
+            ->willReturnCallback(function ($arg1, $arg2) {
+                switch ($arg1) {
                     case 'option_id':
-                        if ($value === self::OPTION_1_ID || $value === self::OPTION_2_ID) {
+                        if ($arg2 == self::OPTION_1_ID || $arg2 == self::OPTION_2_ID) {
                             return $this->collectionMock;
                         }
                         break;
                     case 'store_id':
-                        if ($value === self::ADMIN_STORE_ID ||
-                            $value === self::DEFAULT_STORE_ID ||
-                            $value === self::SECOND_STORE_ID) {
+                        if ($arg2 == self::ADMIN_STORE_ID ||
+                            $arg2 == self::DEFAULT_STORE_ID ||
+                            $arg2 == self::SECOND_STORE_ID) {
                             return $this->collectionMock;
                         }
                         break;
@@ -478,10 +478,10 @@ class EavAttributeTest extends TestCase
 
         $this->collectionMock->expects($this->exactly(2))
             ->method('addFieldToFilter')
-            ->willReturnCallback(function ($field, $value) {
-                if ($field == 'option_id' && $value == self::OPTION_2_ID) {
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'option_id' && $arg2 == self::OPTION_2_ID) {
                     return $this->collectionMock;
-                } elseif ($field == 'store_id' && $value == self::ADMIN_STORE_ID) {
+                } elseif ($arg1 == 'store_id' && $arg2 == self::ADMIN_STORE_ID) {
                     return $this->collectionMock;
                 }
             });
@@ -532,11 +532,11 @@ class EavAttributeTest extends TestCase
 
         $this->collectionMock->expects($this->exactly(6))
             ->method('addFieldToFilter')
-            ->willReturnCallback(function ($field, $value) {
-                if ($field == 'option_id' && $value == self::OPTION_2_ID) {
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'option_id' && $arg2 == self::OPTION_2_ID) {
                     return $this->collectionMock;
-                } elseif ($field == 'store_id' && ($value == self::ADMIN_STORE_ID || $value == self::DEFAULT_STORE_ID ||
-                        $value == self::SECOND_STORE_ID)) {
+                } elseif ($arg1 == 'store_id' && ($arg2 == self::ADMIN_STORE_ID || $arg2 == self::DEFAULT_STORE_ID ||
+                        $arg2 == self::SECOND_STORE_ID)) {
                     return $this->collectionMock;
                 }
             });
@@ -606,17 +606,17 @@ class EavAttributeTest extends TestCase
 
         $this->collectionMock->expects($this->exactly(12))
             ->method('addFieldToFilter')
-            ->willReturnCallback(function ($field, $value) {
-                switch ($field) {
+            ->willReturnCallback(function ($arg1, $arg2) {
+                switch ($arg1) {
                     case 'option_id':
-                        if ($value === self::OPTION_1_ID || $value === self::OPTION_2_ID) {
+                        if ($arg2 == self::OPTION_1_ID || $arg2 == self::OPTION_2_ID) {
                             return $this->collectionMock;
                         }
                         break;
                     case 'store_id':
-                        if ($value === self::ADMIN_STORE_ID ||
-                            $value === self::DEFAULT_STORE_ID ||
-                            $value === self::SECOND_STORE_ID) {
+                        if ($arg2 == self::ADMIN_STORE_ID ||
+                            $arg2 == self::DEFAULT_STORE_ID ||
+                            $arg2 == self::SECOND_STORE_ID) {
                             return $this->collectionMock;
                         }
                         break;
@@ -697,17 +697,25 @@ class EavAttributeTest extends TestCase
         if ($id) {
             $swatch->expects($this->exactly(2))
                 ->method('setData')
-                ->willReturnCallback(function ($arg1, $arg2) {
-                    if ($arg1 == 'type' || $arg1 == 'value') {
+                ->willReturnCallback(function ($arg1, $arg2) use ($type, $value) {
+                    if ($arg1 == 'type' && $arg2 == $type || $arg1 == 'value' && $arg2 == $value) {
                         return null;
                     }
                 });
         } else {
             $swatch->expects($this->exactly(4))
                 ->method('setData')
-                ->willReturnCallback(function ($arg1, $arg2) {
-                    if ($arg1== 'option_id' || $arg1== 'store_id' || $arg1 == 'type' || $arg1 == 'value') {
+                ->willReturnCallback(function ($arg1, $arg2) use ($optionId, $storeId, $type, $value) {
+                    if ($arg1 === 'option_id' && $arg2 === $optionId) {
                         return null;
+                    } elseif ($arg1 === 'store_id' && $arg2 === $storeId) {
+                        return null;
+                    } elseif ($arg1 === 'type' && $arg2 === $type) {
+                        return null;
+                    } elseif ($arg1 === 'value' && $arg2 === $value) {
+                        return null;
+                    } else {
+                         return null;
                     }
                 });
         }
