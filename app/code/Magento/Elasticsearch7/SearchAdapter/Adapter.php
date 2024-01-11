@@ -11,6 +11,8 @@ use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder as AggregationBuilde
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\SearchAdapter\QueryContainerFactory;
 use Magento\Elasticsearch\SearchAdapter\ResponseFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Search\AdapterInterface;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\Search\Response\QueryResponse;
@@ -74,12 +76,18 @@ class Adapter implements AdapterInterface
     private $logger;
 
     /**
+     * @var ResponseInterface
+     */
+    private $response;
+
+    /**
      * @param ConnectionManager $connectionManager
      * @param Mapper $mapper
      * @param ResponseFactory $responseFactory
      * @param AggregationBuilder $aggregationBuilder
      * @param QueryContainerFactory $queryContainerFactory
      * @param LoggerInterface $logger
+     * @param ResponseInterface $response
      */
     public function __construct(
         ConnectionManager $connectionManager,
@@ -87,7 +95,8 @@ class Adapter implements AdapterInterface
         ResponseFactory $responseFactory,
         AggregationBuilder $aggregationBuilder,
         QueryContainerFactory $queryContainerFactory,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ResponseInterface $response = null
     ) {
         $this->connectionManager = $connectionManager;
         $this->mapper = $mapper;
@@ -95,6 +104,8 @@ class Adapter implements AdapterInterface
         $this->aggregationBuilder = $aggregationBuilder;
         $this->queryContainerFactory = $queryContainerFactory;
         $this->logger = $logger;
+        $this->response = $response ??
+            ObjectManager::getInstance()->get(ResponseInterface::class);
     }
 
     /**
@@ -114,6 +125,7 @@ class Adapter implements AdapterInterface
             $rawResponse = $client->query($query);
         } catch (\Exception $e) {
             $this->logger->critical($e);
+            $this->response->setNoCacheHeaders();
             // return empty search result in case an exception is thrown from Elasticsearch
             $rawResponse = self::$emptyRawResponse;
         }
