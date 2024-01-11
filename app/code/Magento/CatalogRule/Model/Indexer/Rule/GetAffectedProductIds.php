@@ -18,19 +18,19 @@ declare(strict_types=1);
 
 namespace Magento\CatalogRule\Model\Indexer\Rule;
 
+use Magento\CatalogRule\Model\ResourceModel\Rule as RuleResourceModel;
 use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory;
 use Magento\CatalogRule\Model\Rule;
-use Magento\Framework\App\ResourceConnection;
 
 class GetAffectedProductIds
 {
     /**
      * @param CollectionFactory $ruleCollectionFactory
-     * @param ResourceConnection $resource
+     * @param RuleResourceModel $ruleResourceModel
      */
     public function __construct(
         private readonly CollectionFactory $ruleCollectionFactory,
-        private readonly ResourceConnection $resource
+        private readonly RuleResourceModel $ruleResourceModel
     ) {
     }
 
@@ -42,20 +42,7 @@ class GetAffectedProductIds
      */
     public function execute(array $ids): array
     {
-        $connection = $this->resource->getConnection();
-        $select = $connection->select()
-            ->from(
-                ['t' => $this->resource->getTableName('catalogrule_product')],
-                ['t.product_id']
-            )
-            ->where(
-                't.rule_id IN (?)',
-                array_map('intval', $ids)
-            )
-            ->distinct(
-                true
-            );
-        $productIds = array_map('intval', $connection->fetchCol($select));
+        $productIds = $this->ruleResourceModel->getProductIdsByRuleIds($ids);
         $rules = $this->ruleCollectionFactory->create()
             ->addFieldToFilter('rule_id', ['in' => array_map('intval', $ids)]);
         foreach ($rules as $rule) {

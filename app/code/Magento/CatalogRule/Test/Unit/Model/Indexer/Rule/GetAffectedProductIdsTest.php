@@ -20,12 +20,10 @@ namespace Magento\CatalogRule\Test\Unit\Model\Indexer\Rule;
 
 use ArrayIterator;
 use Magento\CatalogRule\Model\Indexer\Rule\GetAffectedProductIds;
+use Magento\CatalogRule\Model\ResourceModel\Rule as RuleResourceModel;
 use Magento\CatalogRule\Model\ResourceModel\Rule\Collection;
 use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory;
 use Magento\CatalogRule\Model\Rule;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\DB\Select;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -40,9 +38,9 @@ class GetAffectedProductIdsTest extends TestCase
     private $ruleCollectionFactory;
 
     /**
-     * @var ResourceConnection|MockObject
+     * @var RuleResourceModel|MockObject
      */
-    private $resource;
+    private $ruleResourceModel;
 
     /**
      * @var GetAffectedProductIds
@@ -55,11 +53,11 @@ class GetAffectedProductIdsTest extends TestCase
     protected function setUp(): void
     {
         $this->ruleCollectionFactory = $this->createMock(CollectionFactory::class);
-        $this->resource = $this->createMock(ResourceConnection::class);
+        $this->ruleResourceModel = $this->createMock(RuleResourceModel::class);
 
         $this->getAffectedProductIds = new GetAffectedProductIds(
             $this->ruleCollectionFactory,
-            $this->resource
+            $this->ruleResourceModel
         );
     }
 
@@ -71,20 +69,9 @@ class GetAffectedProductIdsTest extends TestCase
         $ruleIds = [1, 2, 5];
         $oldMatch = [3, 7, 9];
         $newMatch = [6];
-        $connection = $this->createMock(AdapterInterface::class);
-        $select = $this->createMock(Select::class);
-        $connection->expects($this->once())->method('fetchCol')->willReturn($oldMatch);
-        $connection->expects($this->once())->method('select')->willReturn($select);
-        $select->expects($this->once())->method('from')->willReturnSelf();
-        $select->expects($this->once())
-            ->method('where')
-            ->with('t.rule_id IN (?)', $ruleIds)
-            ->willReturnSelf();
-        $select->expects($this->once())
-            ->method('distinct')
-            ->with(true)
-            ->willReturnSelf();
-        $this->resource->expects($this->once())->method('getConnection')->willReturn($connection);
+        $this->ruleResourceModel->expects($this->once())
+            ->method('getProductIdsByRuleIds')
+            ->willReturn($oldMatch);
 
         $collection = $this->createMock(Collection::class);
         $rule = $this->createMock(Rule::class);
