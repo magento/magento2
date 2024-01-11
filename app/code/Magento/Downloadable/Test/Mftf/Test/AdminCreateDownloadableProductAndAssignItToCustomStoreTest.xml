@@ -39,7 +39,7 @@
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Delete store view -->
-            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteCreatedStoreView"/>
+            <actionGroup ref="AdminDeleteMultipleStoreViewsActionGroup" stepKey="deleteCreatedStoreView"/>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
             </actionGroup>
