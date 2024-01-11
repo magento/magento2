@@ -364,7 +364,9 @@ class ObjectManager
     }
 
     /**
-     * @param $map
+     * Helper method to get mock of ObjectManagerInterface
+     *
+     * @param array $map
      */
     public function prepareObjectManager($map)
     {

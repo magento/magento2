@@ -30,7 +30,7 @@ use PHPUnit\Framework\TestCase;
 class UpdateHandlerTest extends TestCase
 {
     /**
-     * Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     private $objectManager;
 

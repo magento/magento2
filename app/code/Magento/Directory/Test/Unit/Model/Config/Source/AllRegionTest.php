@@ -35,8 +35,7 @@ class AllRegionTest extends TestCase
     {
         $objectManagerHelper = new ObjectManager($this);
 
-        $countryCollectionFactory = $this->getMockBuilder(
-            CollectionFactory::class)
+        $countryCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->addMethods(['__wakeup', '__sleep'])
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()

@@ -29,8 +29,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CheckUserForgotPasswordBackendObserverTest extends TestCase
 {
-    const STUB_EMAIL = 'stub@test.mail';
-    const STUB_REQUEST_PARAMS = ['STUB_PARAM'];
+    private const STUB_EMAIL = 'stub@test.mail';
+    private const STUB_REQUEST_PARAMS = ['STUB_PARAM'];
 
     /**
      * @var MockObject|DataHelper
