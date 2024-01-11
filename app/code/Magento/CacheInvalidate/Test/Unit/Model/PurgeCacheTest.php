@@ -117,6 +117,7 @@ class PurgeCacheTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testSendMultiPurgeRequest(): void
     {

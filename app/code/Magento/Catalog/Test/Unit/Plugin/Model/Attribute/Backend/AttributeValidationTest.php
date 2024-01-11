@@ -135,7 +135,7 @@ class AttributeValidationTest extends TestCase
                 ->willReturn($attributeCode);
             $this->entityMock
                 ->method('getData')
-                ->willReturnCallback(function ($arg1, $arg2) use ($attributeCode) {
+                ->willReturnCallback(function ($arg1) use ($attributeCode) {
                     if (empty($arg1)) {
                         return [$attributeCode => null];
                     } elseif ($arg1 == $attributeCode) {

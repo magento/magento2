@@ -68,9 +68,9 @@ class ClientResolverTest extends TestCase
 
         $this->objectManager->expects($this->exactly(2))->method('create')
             ->willReturnCallback(function ($className) use ($factoryMock, $clientOptionsMock) {
-                if ($className === 'engineFactoryClass') {
+                if ($className == 'engineFactoryClass') {
                     return $factoryMock;
-                } elseif ($className === 'engineOptionClass') {
+                } elseif ($className == 'engineOptionClass') {
                     return $clientOptionsMock;
                 }
             });

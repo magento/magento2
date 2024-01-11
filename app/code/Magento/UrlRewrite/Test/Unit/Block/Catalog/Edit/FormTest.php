@@ -124,7 +124,7 @@ class FormTest extends TestCase
                     case 2:
                         return null;
                     case 3:
-                        if ($arg1 === 'store_id' && $arg2 === 'select' && $arg3 === [
+                        if ($arg1 == 'store_id' && $arg2 == 'select' && $arg3 == [
                                 'label' => 'Store',
                                 'title' => 'Store',
                                 'name' => 'store_id',

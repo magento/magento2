@@ -128,13 +128,13 @@ class RecentTest extends TestCase
             ->method('addAttributeToFilter')
             ->willReturnCallback(function ($arg1, $arg2)
  use ($attribute, $customerId, $storeId, $statuses, $orderCollection) {
-                if ($arg1 === $attribute[0] && $arg2 === $customerId) {
+                if ($arg1 == $attribute[0] && $arg2 == $customerId) {
                     return $orderCollection;
                 }
-                if ($arg1 === $attribute[1] && $arg2 === $storeId) {
+                if ($arg1 == $attribute[1] && $arg2 == $storeId) {
                     return $orderCollection;
                 }
-                if ($arg1 === $attribute[2] && $arg2 === ['in' => $statuses]) {
+                if ($arg1 == $attribute[2] && $arg2 == ['in' => $statuses]) {
                     return $orderCollection;
                 }
             });

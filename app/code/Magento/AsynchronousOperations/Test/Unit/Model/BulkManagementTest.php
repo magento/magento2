@@ -154,7 +154,7 @@ class BulkManagementTest extends TestCase
                     [$topicNames[1], [$operation]]
                 ];
                 $index++;
-                if($args === $expectedArgs[$index - 1]){
+                if ($args === $expectedArgs[$index - 1]) {
                     return null;
                 }
             });

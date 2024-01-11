@@ -116,6 +116,7 @@ class ShippingMethodConverterTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testModelToDataObject(): void
     {
@@ -143,7 +144,7 @@ class ShippingMethodConverterTest extends TestCase
                     return $shippingPriceInclTax;
                 }
             });
-        
+
         $this->rateModelMock->expects($this->once())
             ->method('getCarrierTitle')->willReturn('CARRIER_TITLE');
         $this->rateModelMock->expects($this->once())

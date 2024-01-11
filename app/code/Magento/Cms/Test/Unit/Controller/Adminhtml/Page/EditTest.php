@@ -218,7 +218,9 @@ class EditTest extends TestCase
         $titleMock
             ->method('prepend')
             ->willReturnCallback(function ($arg) {
-                return null;
+                if ($arg == __('Pages') || $arg == $this->getTitle()) {
+                    return null;
+                }
             });
         $pageConfigMock = $this->createMock(Config::class);
         $pageConfigMock->expects($this->exactly(2))->method('getTitle')->willReturn($titleMock);

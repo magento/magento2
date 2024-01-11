@@ -27,11 +27,11 @@ use PHPUnit\Framework\TestCase;
  */
 class AddPaypalShortcutsObserverTest extends TestCase
 {
-    const PAYMENT_CODE = 'code';
+    public const PAYMENT_CODE = 'code';
 
-    const PAYMENT_AVAILABLE = 'isAvailable';
+    public const PAYMENT_AVAILABLE = 'isAvailable';
 
-    const PAYMENT_IS_BML = 'isBml';
+    public const PAYMENT_IS_BML = 'isBml';
 
     /**
      * @param array $blocks

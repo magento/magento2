@@ -150,7 +150,7 @@ class BundlePanelTest extends TestCase
             ->method('merge')
             ->willReturnCallback(function ($arg1) use ($metaArgument) {
                 if (is_null($arg1) || $arg1 == $metaArgument) {
-                    return [0 => '1'];
+                    return null;
                 }
             });
         $this->bundlePanelModel->modifyMeta($sourceMeta);

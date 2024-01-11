@@ -790,8 +790,10 @@ class EmailNotificationTest extends TestCase
             ->willReturnCallback(function (...$args) use ($customerStoreId) {
                 static $index = 0;
                 $expectedArgs = [
-                    [EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE, ScopeInterface::SCOPE_STORE, $customerStoreId],
-                    [EmailNotification::XML_PATH_REGISTER_EMAIL_IDENTITY, ScopeInterface::SCOPE_STORE, $customerStoreId]
+                    [EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE,
+                        ScopeInterface::SCOPE_STORE, $customerStoreId],
+                    [EmailNotification::XML_PATH_REGISTER_EMAIL_IDENTITY,
+                        ScopeInterface::SCOPE_STORE, $customerStoreId]
                 ];
                 $returnValue = [self::STUB_EMAIL_IDENTIFIER, self::STUB_SENDER];
                 $index++;

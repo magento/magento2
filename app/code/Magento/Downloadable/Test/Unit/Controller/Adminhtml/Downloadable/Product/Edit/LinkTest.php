@@ -145,8 +145,40 @@ class LinkTest extends TestCase
         $this->response
             ->expects($this->any())
             ->method('setHeader')
-            ->willReturnCallback(function ($arg1, $arg2) {
-                    return $this->response;
+            ->willReturnCallback(function ($arg1, $arg2 = null, $arg3 = null) use ($fileSize, $fileName) {
+                static $callCount = 0;
+                $callCount++;
+                switch ($callCount) {
+                    case 1:
+                        if ($arg1 == 'Pragma' && $arg2 == 'public' && $arg3 == true) {
+                            return $this->response;
+                        }
+                        break;
+                    case 2:
+                        if ($arg1 == 'Cache-Control' && $arg2 == 'must-revalidate, post-check=0, pre-check=0' &&
+                            $arg3 == true) {
+                            return $this->response;
+                        }
+                        break;
+                    case 3:
+                        if ($arg1 == 'Content-type' && $arg2 == 'text/html' && $arg3 === null) {
+                            return $this->response;
+                        }
+                        break;
+                    case 4:
+                        if ($arg1 === 'Content-Length' && $arg2 === $fileSize && $arg3 === null) {
+                            return $this->response;
+                        }
+                        break;
+                    case 5:
+                        if ($arg1 == 'Content-Disposition' && $arg2 == 'attachment; filename=' . $fileName &&
+                            $arg3 === null) {
+                            return $this->response;
+                        }
+                        break;
+                }
+
+                return $this->response;
             });
         $this->response->expects($this->once())->method('sendHeaders')->willReturnSelf();
         $this->objectManager
@@ -193,9 +225,9 @@ class LinkTest extends TestCase
         $this->request
             ->method('getParam')
             ->willReturnCallback(function ($arg1, $arg2) use ($fileType) {
-                if ($arg1 == 'id') {
+                if ($arg1 == 'id' && $arg2 == 0) {
                     return 1;
-                } elseif ($arg1 == 'type') {
+                } elseif ($arg1 == 'type' && $arg2 == 0) {
                     return $fileType;
                 }
             });

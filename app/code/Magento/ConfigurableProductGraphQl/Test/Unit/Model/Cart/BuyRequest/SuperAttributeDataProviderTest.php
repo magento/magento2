@@ -78,6 +78,7 @@ class SuperAttributeDataProviderTest extends TestCase
 
     /**
      * Check that website id is correctly retrieved
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testExecute(): void
     {

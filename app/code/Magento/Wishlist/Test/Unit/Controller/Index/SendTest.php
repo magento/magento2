@@ -280,13 +280,13 @@ class SendTest extends TestCase
         $this->request
             ->method('getPost')
             ->willReturnCallback(function ($arg) {
-                if ($arg === 'emails') {
+                if ($arg == 'emails') {
                     return 'some.email2@gmail.com';
-                } elseif ($arg === 'message') {
+                } elseif ($arg == 'message') {
                     return null;
                 }
             });
-        
+
         $wishlist = $this->createMock(Wishlist::class);
         $this->wishlistProvider->expects($this->once())
             ->method('getWishlist')

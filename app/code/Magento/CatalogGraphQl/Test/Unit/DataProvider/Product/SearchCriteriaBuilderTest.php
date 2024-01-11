@@ -149,9 +149,10 @@ class SearchCriteriaBuilderTest extends TestCase
 
         $this->filterBuilder->expects($this->exactly(2))
             ->method('setConditionType')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                [''] => $this->filterBuilder,
-                ['in'] => $this->filterBuilder
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'in' || empty($arg1)) {
+                    return $this->filterBuilder;
+                }
             });
 
         $this->filterBuilder

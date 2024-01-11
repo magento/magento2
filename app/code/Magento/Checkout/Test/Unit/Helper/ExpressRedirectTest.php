@@ -158,9 +158,7 @@ class ExpressRedirectTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['setRedirect'])->getMock();
         $responseMock->expects($this->once())->method('setRedirect')->with($expectedLoginUrl);
-
         $expressRedirectMock->expects($this->once())->method('getResponse')->willReturn($responseMock);
-
         $expressRedirectMock->expects(
             $this->any()
         )->method(

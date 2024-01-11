@@ -63,6 +63,7 @@ class FieldTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testIteratorInitializesCorrespondingFlyweights(): void
     {

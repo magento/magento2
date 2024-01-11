@@ -34,7 +34,7 @@ use Psr\Log\LoggerInterface;
  */
 class DirectiveTest extends TestCase
 {
-    const IMAGE_PATH = 'pub/media/wysiwyg/image.jpg';
+    public const IMAGE_PATH = 'pub/media/wysiwyg/image.jpg';
 
     /**
      * @var Directive

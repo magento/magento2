@@ -679,6 +679,7 @@ class EavAttributeTest extends TestCase
      * @param int|null $optionId
      * @param int|null $storeId
      * @return MockObject
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function createSwatchMock(
         string $type,

@@ -259,8 +259,7 @@ class SaveHandlerTest extends TestCase
                 $index++;
                 return $args === $expectedArgs[$index - 1] ? $returnValue : null;
             });
-
-
+        
         $this->tierPriceResource
             ->expects($this->atLeastOnce())
             ->method('loadPriceData')

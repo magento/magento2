@@ -187,9 +187,9 @@ class ShipmentTest extends TestCase
             ->method('getValue')
             ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($filename) {
                 if ($arg1 == 'sales/identity/logo' && $arg2 == ScopeInterface::SCOPE_STORE && is_null($arg3)) {
-                    return $this->returnValue($filename);
+                    return $filename;
                 } elseif ($arg1 == 'sales/identity/address' && $arg2 == ScopeInterface::SCOPE_STORE && is_null($arg3)) {
-                    return $this->returnValue(null);
+                    return null;
                 }
             });
 

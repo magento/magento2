@@ -176,9 +176,9 @@ class RssTest extends TestCase
         $this->requestMock
             ->method('getParam')
             ->willReturnCallback(function ($arg1, $arg2) use ($data) {
-                if ($arg1 == 'wishlist_id' && $arg2 === null) {
+                if ($arg1 == 'wishlist_id' && empty($arg2)) {
                     return '';
-                } elseif ($arg1 == 'data' && $arg2 === null) {
+                } elseif ($arg1 == 'data' && empty($arg2)) {
                     return $data;
                 }
             });

@@ -344,7 +344,7 @@ class SaveTest extends TestCase
 
         $this->messageManagerMock
             ->method('addSuccessMessage')
-            ->willReturnCallback(function ($arg1) use ($duplicateBlockMock) {
+            ->willReturnCallback(function ($arg1) {
                 if ($arg1 == (__('You saved the block.')) || $arg1 == __('You duplicated the block.')) {
                     return null;
                 }
