@@ -89,7 +89,7 @@ class SaveTest extends TestCase
      */
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
         $objects = [
             [
@@ -109,7 +109,7 @@ class SaveTest extends TestCase
                 $this->createMock(Session::class)
             ]
         ];
-        $objectManager->prepareObjectManager($objects);
+        $this->objectManager->prepareObjectManager($objects);
 
         $this->resultRedirectFactoryMock = $this->createPartialMock(
             RedirectFactory::class,
@@ -151,7 +151,7 @@ class SaveTest extends TestCase
             ['addSuccessMessage', 'getMessages']
         );
 
-        $this->save = $objectManager->getObject(
+        $this->save = $this->objectManager->getObject(
             Save::class,
             [
                 'request' => $this->requestMock,

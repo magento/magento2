@@ -45,7 +45,7 @@ class LinkTest extends TestCase
 
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
         $objects = [
             [
                 SecureHtmlRenderer::class,
@@ -56,12 +56,12 @@ class LinkTest extends TestCase
                 $this->createMock(Random::class)
             ]
         ];
-        $objectManager->prepareObjectManager($objects);
+        $this->objectManager->prepareObjectManager($objects);
 
         $this->mockCmsPage = $this->createMock(Page::class);
         $this->mockResourcePage = $this->createMock(\Magento\Cms\Model\ResourceModel\Page::class);
 
-        $this->linkElement = $objectManager->getObject(
+        $this->linkElement = $this->objectManager->getObject(
             Link::class,
             [
                 'cmsPage' => $this->mockCmsPage,
