@@ -138,9 +138,10 @@ class ImagesTest extends TestCase
             ->method('getDirectoryReadByPath')
             ->willReturn($this->directoryReadMock);
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
+            ->addMethods(['clearWebsiteCache'])
             ->onlyMethods(
                 [
-                    'clearWebsiteCache', 'getDefaultStoreView', 'getGroup', 'getGroups',
+                    'getDefaultStoreView', 'getGroup', 'getGroups',
                     'getStore', 'getStores', 'getWebsite', 'getWebsites', 'hasSingleStore',
                     'isSingleStoreMode', 'reinitStores', 'setCurrentStore', 'setIsSingleStoreModeAllowed',
                 ]
@@ -290,7 +291,7 @@ class ImagesTest extends TestCase
     /**
      * @return array
      */
-    public function providerConvertIdToPath()
+    public static function providerConvertIdToPath()
     {
         return [
             ['', ''],
@@ -318,7 +319,7 @@ class ImagesTest extends TestCase
     /**
      * @return array
      */
-    public function providerShortFilename()
+    public static function providerShortFilename()
     {
         return [
             ['test', 3, 'tes...'],
@@ -340,7 +341,7 @@ class ImagesTest extends TestCase
     /**
      * @return array
      */
-    public function providerShortFilenameDefaultMaxLength()
+    public static function providerShortFilenameDefaultMaxLength()
     {
         return [
             ['Mini text', 'Mini text'],
@@ -380,7 +381,7 @@ class ImagesTest extends TestCase
     /**
      * @return array
      */
-    public function providerIsUsingStaticUrlsAllowed()
+    public static function providerIsUsingStaticUrlsAllowed()
     {
         return [
             [true],
@@ -467,7 +468,7 @@ class ImagesTest extends TestCase
     /**
      * @return array
      */
-    public function providerGetCurrentPath()
+    public static function providerGetCurrentPath()
     {
         return [
             ['L3Rlc3RfcGF0aA--', 'L3Rlc3RfcGF0aA--', 'PATH/test_path', true],
@@ -523,7 +524,7 @@ class ImagesTest extends TestCase
     /**
      * @return array
      */
-    public function providerGetImageHtmlDeclarationRenderingAsTag()
+    public static function providerGetImageHtmlDeclarationRenderingAsTag()
     {
         return [
             [
@@ -572,7 +573,7 @@ class ImagesTest extends TestCase
     /**
      * @return array
      */
-    public function providerGetImageHtmlDeclaration()
+    public static function providerGetImageHtmlDeclaration()
     {
         return [
             ['http://localhost', 'test.png', true, 'http://localhost/test.png'],

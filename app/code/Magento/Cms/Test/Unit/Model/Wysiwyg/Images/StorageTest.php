@@ -238,9 +238,9 @@ class StorageTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
+            ->addMethods(['getCurrentPath'])
             ->onlyMethods(
                 [
-                    'getCurrentPath',
                     'getName',
                     'getSessionId',
                     'getCookieLifetime',
@@ -383,7 +383,7 @@ class StorageTest extends TestCase
     /**
      * @return array
      */
-    public function dirsCollectionDataProvider()
+    public static function dirsCollectionDataProvider()
     {
         return [
             [
@@ -526,7 +526,8 @@ class StorageTest extends TestCase
 
         $image = $this->getMockBuilder(Image::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['open', 'keepAspectRatio', 'resize', 'save'])
+            ->addMethods(['open', 'keepAspectRatio'])
+            ->onlyMethods(['resize', 'save'])
             ->getMock();
         $image->expects($this->atLeastOnce())->method('open')->with($realPath);
         $image->expects($this->atLeastOnce())->method('keepAspectRatio')->with(true);

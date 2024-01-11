@@ -225,13 +225,15 @@ class AdvancedPricingTest extends TestCase
             'initWebsites',
             'initCategories'
         ];
+        $mockAddMethods = [
+            '_headerColumns'
+        ];
         $mockMethods = array_merge($constructorMethods, [
             '_customHeadersMapping',
             '_prepareEntityCollection',
             '_getEntityCollection',
             'getWriter',
             'getExportData',
-            '_headerColumns',
             '_customFieldsMapping',
             'getItemsPerPage',
             'paginateCollection',
@@ -243,6 +245,7 @@ class AdvancedPricingTest extends TestCase
         $this->advancedPricing = $this->getMockBuilder(
             AdvancedPricing::class
         )
+            ->addMethods($mockAddMethods)
             ->onlyMethods($mockMethods)
             ->disableOriginalConstructor()
             ->getMock();

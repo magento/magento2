@@ -83,7 +83,7 @@ class SetLinkStatusObserverTest extends TestCase
 
         $this->resultMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setIsAllowed'])
+            ->addMethods(['setIsAllowed'])
             ->getMock();
 
         $this->storeMock = $this->getMockBuilder(DataObject::class)
@@ -92,7 +92,7 @@ class SetLinkStatusObserverTest extends TestCase
 
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getStore', 'getResult', 'getQuote', 'getOrder'])
+            ->addMethods(['getStore', 'getResult', 'getQuote', 'getOrder'])
             ->getMock();
 
         $this->orderMock = $this->getMockBuilder(Order::class)
@@ -117,7 +117,7 @@ class SetLinkStatusObserverTest extends TestCase
     /**
      * @return array
      */
-    public function setLinkStatusPendingDataProvider()
+    public static function setLinkStatusPendingDataProvider()
     {
         return [
             [
@@ -543,7 +543,8 @@ class SetLinkStatusObserverTest extends TestCase
     {
         $linkItem = $this->getMockBuilder(\Magento\Downloadable\Model\Link\Purchased\Item::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getStatus', 'getOrderItemId', 'setStatus', 'save', 'setNumberOfDownloadsBought'])
+            ->addMethods(['getStatus', 'getOrderItemId', 'setStatus','setNumberOfDownloadsBought'])
+            ->onlyMethods(['save'])
             ->getMock();
         $linkItem->expects($this->any())
             ->method('getStatus')

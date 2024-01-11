@@ -68,7 +68,8 @@ class PriceTest extends TestCase
 
         $checkoutSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getQuote', '__wakeup'])
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['getQuote'])
             ->getMock();
 
         $checkoutSession->expects($this->any())
@@ -100,7 +101,8 @@ class PriceTest extends TestCase
     {
         $shippingRateMock = $this->getMockBuilder(Rate::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getPrice', '__wakeup'])
+            ->addMethods(['getPrice'])
+            ->onlyMethods(['__wakeup'])
             ->getMock();
         $shippingRateMock->expects($this->once())
             ->method('getPrice')

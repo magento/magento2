@@ -72,9 +72,9 @@ class ConfigurableTest extends TestCase
 
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
+            ->addMethods(['setNewVariationsAttributeSetId', 'setCanSaveConfigurableAttributes'])
             ->onlyMethods([
-                'getTypeId', 'setAttributeSetId', 'getExtensionAttributes', 'setNewVariationsAttributeSetId',
-                'setCanSaveConfigurableAttributes', 'setExtensionAttributes'
+                'getTypeId', 'setAttributeSetId', 'getExtensionAttributes', 'setExtensionAttributes'
             ])
             ->getMock();
 
@@ -168,7 +168,7 @@ class ConfigurableTest extends TestCase
 
         $extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setConfigurableProductOptions', 'setConfigurableProductLinks'])
+            ->addMethods(['setConfigurableProductOptions', 'setConfigurableProductLinks'])
             ->getMockForAbstractClass();
         $this->product->expects(static::once())
             ->method('getExtensionAttributes')
@@ -234,7 +234,7 @@ class ConfigurableTest extends TestCase
 
         $extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setConfigurableProductOptions', 'setConfigurableProductLinks'])
+            ->addMethods(['setConfigurableProductOptions', 'setConfigurableProductLinks'])
             ->getMockForAbstractClass();
         $this->product->expects(static::once())
             ->method('getExtensionAttributes')

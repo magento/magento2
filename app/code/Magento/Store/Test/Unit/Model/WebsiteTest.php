@@ -51,7 +51,8 @@ class WebsiteTest extends TestCase
 
         $this->websiteFactory = $this->getMockBuilder(WebsiteFactory::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['create', 'getCollection', '__wakeup'])
+            ->addMethods(['getCollection', '__wakeup'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
@@ -128,10 +129,9 @@ class WebsiteTest extends TestCase
     {
         $this->typeList->expects($this->exactly(2))
             ->method('cleanType')
-            ->withConsecutive(
-                ['full_page'],
-                [Config::TYPE_IDENTIFIER]
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['full_page'], [Config::TYPE_IDENTIFIER] => $this->typeList
+            });
 
         $this->model->afterDelete();
     }

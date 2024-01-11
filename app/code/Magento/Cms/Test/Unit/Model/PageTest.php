@@ -63,13 +63,14 @@ class PageTest extends TestCase
             ->getMock();
         $this->resourcePageMock = $this->getMockBuilder(PageResource::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getIdFieldName', 'checkIdentifier', 'getResources'])
+            ->addMethods(['getResources'])
+            ->onlyMethods(['getIdFieldName', 'checkIdentifier'])
             ->getMock();
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->resourcesMock = $this->getMockBuilder(AbstractResource::class)
-            ->onlyMethods(['getIdFieldName', 'load', 'checkIdentifier'])
+            ->addMethods(['getIdFieldName', 'load', 'checkIdentifier'])
             ->getMockForAbstractClass();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();

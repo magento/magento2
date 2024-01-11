@@ -106,7 +106,7 @@ class PreparedValueFactoryTest extends TestCase
             ->getMock();
         $this->valueMock = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([
+            ->addMethods([
                 'setPath', 'setScope', 'setScopeId', 'setValue', 'setField',
                 'setGroupId', 'setFieldConfig', 'setScopeCode'
             ])
@@ -251,7 +251,7 @@ class PreparedValueFactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createDataProvider()
+    public static function createDataProvider()
     {
         return [
             'standard flow' => [

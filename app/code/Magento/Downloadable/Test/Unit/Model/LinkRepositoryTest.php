@@ -168,6 +168,11 @@ class LinkRepositoryTest extends TestCase
     protected function getLinkMock(array $linkData)
     {
         $linkMock = $this->getMockBuilder(LinkInterface::class)
+            ->addMethods(
+                [
+                    'hasSampleType'
+                ]
+            )
             ->onlyMethods(
                 [
                     'getLinkType',
@@ -178,8 +183,7 @@ class LinkRepositoryTest extends TestCase
                     'getNumberOfDownloads',
                     'getIsShareable',
                     'getLinkUrl',
-                    'getLinkFile',
-                    'hasSampleType',
+                    'getLinkFile'
                 ]
             )
             ->getMockForAbstractClass();
