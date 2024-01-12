@@ -218,6 +218,10 @@ class TierPriceValidatorTest extends TestCase
         $type->expects($this->once())
             ->method('canUseQtyDecimals')
             ->willReturn(true);
+
+        $product->expects($this->atLeastOnce())
+            ->method('getTierPrices')
+            ->willReturn([$this->tierPrice]);
     }
 
     /**

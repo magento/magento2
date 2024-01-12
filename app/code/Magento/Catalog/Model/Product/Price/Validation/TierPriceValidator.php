@@ -541,7 +541,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
      * @param Result $validationResult
      * @return void
      */
-    public function checkWebsiteId(TierPriceInterface $price, $key, Result $validationResult)
+    private function checkWebsiteId(TierPriceInterface $price, $key, Result $validationResult)
     {
         if (isset($this->productsCacheBySku[$price->getSku()]) &&
             is_array($this->productsCacheBySku[$price->getSku()]->getTierPrices()) &&
