@@ -15,6 +15,8 @@ use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Http;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Math\Random;
@@ -528,7 +530,6 @@ class ForgotPasswordPostTest extends AbstractController
     /**
      * Test to enable password change frequency limit for customer
      *
-     * @magentoDbIsolation disabled
      * @magentoConfigFixture current_store customer/password/min_time_between_password_reset_requests 0
      * @magentoConfigFixture current_store customer/captcha/enable 0
      * @magentoDataFixture Magento/Customer/_files/customer.php
@@ -556,7 +557,7 @@ class ForgotPasswordPostTest extends AbstractController
         // Updating the limit to greater than 0
         $this->resourceConfig->saveConfig(
             'customer/password/min_time_between_password_reset_requests',
-            2,
+            1,
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
             0
         );
@@ -577,8 +578,8 @@ class ForgotPasswordPostTest extends AbstractController
             MessageInterface::TYPE_ERROR
         );
 
-        // Wait for 2 minutes before resetting password
-        sleep(120);
+        // Wait for 1 minute before resetting password
+        sleep(60);
 
         // Clicking on the forgot password link
         $this->getRequest()->setPostValue('email', $email);
