@@ -26,10 +26,5 @@
         <element name="carriersDHLSpecificErrMsg" type="input" selector="#carriers_dhl_specificerrmsg_inherit"/>
         <element name="carriersDHLAllowSpecific" type="input" selector="#carriers_dhl_sallowspecific_inherit"/>
         <element name="carriersDHLSpecificCountry" type="input" selector="#carriers_dhl_specificcountry"/>
-        <element name="carriersDHLSelectBox" type="input" selector="#carriers_dhl_active"/>
-        <element name="carriersDHLTabOpen" type="button" selector="#carriers_dhl-head.open"/>
-        <element name="carriersDHLShowMethod" type="input" selector="#carriers_dhl_showmethod"/>
-        <element name="carriersDHLDebug" type="input" selector="#carriers_dhl_debug"/>
-        <element name="carriersDHLSandbox" type="input" selector="#carriers_dhl_sandbox_mode"/>
     </section>
 </sections>
