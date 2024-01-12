@@ -13,7 +13,6 @@
             <argument name="enabled" type="string" defaultValue="No"/>
             <argument name="config" defaultValue="dhlConfigData"/>
             <argument name="allowSpecificCountry" type="string" defaultValue="Specific Countries"/>
-            <argument name="specificCountry" type="string" defaultValue="United Kingdom"/>
             <argument name="showMethod" type="string" defaultValue="No"/>
             <argument name="debug" type="string" defaultValue="No"/>
             <argument name="sandbox" type="string" defaultValue="No"/>
