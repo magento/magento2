@@ -212,6 +212,11 @@ class Vat
                 $gatewayResponse->setRequestMessage(__('Please enter a valid VAT number.'));
             }
         } catch (\Exception $exception) {
+            $this->logger->error(
+                sprintf('VAT Number validation failed with message: %s', $exception->getMessage()),
+                ['exception' => $exception]
+            );
+
             $gatewayResponse->setIsValid(false);
             $gatewayResponse->setRequestDate('');
             $gatewayResponse->setRequestIdentifier('');

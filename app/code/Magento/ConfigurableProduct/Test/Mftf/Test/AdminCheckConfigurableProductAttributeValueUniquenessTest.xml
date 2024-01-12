@@ -18,6 +18,7 @@
             <testCaseId value="MC-17450"/>
             <useCaseId value="MAGETWO-99443"/>
             <group value="ConfigurableProduct"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -36,7 +37,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <!--Create configurable product-->
         <comment userInput="Create configurable product" stepKey="createConfProd"/>

@@ -5,20 +5,9 @@
  */
 ?>
 <div data-bind="scope: 'messages'">
-    <!-- ko if: cookieMessages && cookieMessages.length > 0 -->
-    <div aria-atomic="true" role="alert" data-bind="foreach: { data: cookieMessages, as: 'message' }" class="messages">
-        <div data-bind="attr: {
-            class: 'message-' + message.type + ' ' + message.type + ' message',
-            'data-ui-id': 'message-' + message.type
-        }">
-            <div data-bind="html: $parent.prepareMessageForHtml(message.text)"></div>
-        </div>
-    </div>
-    <!-- /ko -->
-
-    <!-- ko if: messages().messages && messages().messages.length > 0 -->
+    <!-- ko if: cookieMessagesObservable() && cookieMessagesObservable().length > 0 -->
     <div aria-atomic="true" role="alert" class="messages" data-bind="foreach: {
-        data: messages().messages, as: 'message'
+        data: cookieMessagesObservable(), as: 'message'
     }">
         <div data-bind="attr: {
             class: 'message-' + message.type + ' ' + message.type + ' message',
@@ -28,7 +17,19 @@
         </div>
     </div>
     <!-- /ko -->
+
+    <div aria-atomic="true" role="alert" class="messages" data-bind="foreach: {
+        data: messages().messages, as: 'message'
+    }, afterRender: purgeMessages">
+        <div data-bind="attr: {
+            class: 'message-' + message.type + ' ' + message.type + ' message',
+            'data-ui-id': 'message-' + message.type
+        }">
+            <div data-bind="html: $parent.prepareMessageForHtml(message.text)"></div>
+        </div>
+    </div>
 </div>
+
 <script type="text/x-magento-init">
     {
         "*": {
