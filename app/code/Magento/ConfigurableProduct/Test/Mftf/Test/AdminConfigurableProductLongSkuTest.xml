@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-5685"/>
             <group value="ConfigurableProduct"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -56,7 +57,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
          <!--Create a configurable product with long name and sku-->

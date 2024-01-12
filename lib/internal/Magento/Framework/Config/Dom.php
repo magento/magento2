@@ -15,6 +15,7 @@ use Magento\Framework\Phrase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  * @api
  * @since 100.0.2
  */
@@ -119,15 +120,16 @@ class Dom
      * Retrieve array of xml errors
      *
      * @param string $errorFormat
+     * @param \DOMDocument|null $dom
      * @return string[]
      */
-    private static function getXmlErrors($errorFormat)
+    private static function getXmlErrors($errorFormat, $dom = null)
     {
         $errors = [];
         $validationErrors = libxml_get_errors();
         if (count($validationErrors)) {
             foreach ($validationErrors as $error) {
-                $errors[] = self::_renderErrorMessage($error, $errorFormat);
+                $errors[] = self::_renderErrorMessage($error, $errorFormat, $dom);
             }
         } else {
             $errors[] = 'Unknown validation error';
@@ -380,7 +382,7 @@ class Dom
         try {
             $result = $dom->schemaValidate($schema);
             if (!$result) {
-                $errors = self::getXmlErrors($errorFormat);
+                $errors = self::getXmlErrors($errorFormat, $dom);
             }
         } catch (\Exception $exception) {
             $errors = self::getXmlErrors($errorFormat);
@@ -398,11 +400,15 @@ class Dom
      *
      * @param \LibXMLError $errorInfo
      * @param string $format
+     * @param \DOMDocument|null $dom
      * @return string
      * @throws \InvalidArgumentException
      */
-    private static function _renderErrorMessage(\LibXMLError $errorInfo, $format)
-    {
+    private static function _renderErrorMessage(
+        \LibXMLError $errorInfo,
+        string $format,
+        \DOMDocument $dom = null
+    ): string {
         $result = $format;
         foreach ($errorInfo as $field => $value) {
             $placeholder = '%' . $field . '%';
@@ -422,6 +428,14 @@ class Dom
                         "Error format '{$format}' contains unsupported placeholders: " . implode(', ', $unsupported)
                     );
                 }
+            }
+        }
+        if ($dom) {
+            $xml = explode(PHP_EOL, $dom->saveXml());
+            $lines = array_slice($xml, max(0, $errorInfo->line - 5), 10, true);
+            $result .= 'The xml was: ' . PHP_EOL;
+            foreach ($lines as $lineNumber => $line) {
+                $result .= $lineNumber . ':' . $line . PHP_EOL;
             }
         }
         return $result;

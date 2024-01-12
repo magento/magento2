@@ -17,12 +17,15 @@
             <testCaseId value="MAGETWO-96960"/>
             <useCaseId value="MAGETWO-96850"/>
             <group value="checkout"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Create a product-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
 
-            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexer">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!--Delete created data-->
@@ -36,6 +39,7 @@
             <argument name="productName" value="$createProduct.name$$"/>
         </actionGroup>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.emailAddress}}" stepKey="waitForEmailFieldVisible" />
         <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{CustomerEntityOne.email}}" stepKey="enterEmail"/>
         <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="enterFirstName"/>
         <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="enterLastName"/>
@@ -57,10 +61,11 @@
         <grabValueFrom selector="{{CheckoutShippingSection.telephone}}" stepKey="grabTelephone"/>
 
         <!--Select shipping method and finalize checkout-->
+        <waitForElementClickable selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="waitForFirstShippingMethodClickable" />
         <click selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
-        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+        <seeCurrentUrlMatches regex="~/checkout/?#payment~" stepKey="assertCheckoutPaymentUrl"/>
 
         <!--Go to cart page, update qty and proceed to checkout-->
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage"/>

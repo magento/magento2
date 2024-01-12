@@ -16,6 +16,7 @@
             <description value="A product must don't presents on 'Low Stock' report if the product is disabled."/>
             <severity value="MAJOR"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

@@ -21,6 +21,7 @@
             <group value="tax"/>
             <group value="weee"/>
             <group value="cloud_smoke"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -59,7 +60,9 @@
                 <argument name="valueForFPT" value="20"/>
             </actionGroup>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
-            <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBrokenIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
 
         <after>
@@ -70,11 +73,14 @@
             <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
             <createData entity="WeeeConfigDisable" stepKey="disableFPT"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
-            <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBrokenIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!--  Test Steps  -->

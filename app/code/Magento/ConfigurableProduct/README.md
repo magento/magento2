@@ -35,7 +35,7 @@ Value | Description
 
 If the `gallery_switch_strategy` variable is not defined, the default value `replace` will be used.
 
-For example, adding these lines of code to the theme view.xml file will set the gallery behavior to `replace` mode. 
+For example, adding these lines of code to the theme view.xml file will set the gallery behavior to `replace` mode.
 
 ```xml
 <vars module="Magento_ConfigurableProduct">

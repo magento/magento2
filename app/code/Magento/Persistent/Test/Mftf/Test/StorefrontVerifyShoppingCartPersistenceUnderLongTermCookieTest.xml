@@ -152,6 +152,7 @@
         <actionGroup ref="AssertStorefrontCustomerLogoutSuccessPageActionGroup" stepKey="seeLogoutSuccessPageUrlAfterLogOutJohnSmithCustomerSecondTime"/>
         <waitForPageLoad stepKey="waitForHomePageLoadAfter5Seconds"/>
         <waitForText selector="{{StorefrontCMSPageSection.mainContent}}" userInput="CMS homepage content goes here." stepKey="waitForLoadMainContentMessageOnHomePage"/>
+        <waitForElementClickable selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="waitForNotYouLinkClickable" />
         <click selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="clickOnNotYouLink" />
         <waitForPageLoad stepKey="waitForCustomerLoginPageLoad"/>
         <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="assertMiniCartEmptyAfterJohnDoeSignOut" />

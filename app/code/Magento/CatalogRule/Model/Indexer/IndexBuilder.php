@@ -9,6 +9,8 @@ namespace Magento\CatalogRule\Model\Indexer;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
+use Magento\Catalog\Model\Indexer\Product\Price\Processor as PriceIndexProcessor;
+use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\CatalogRule\Model\Indexer\IndexBuilder\ProductLoader;
 use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
@@ -19,6 +21,7 @@ use Magento\Eav\Model\Config;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
@@ -169,6 +172,11 @@ class IndexBuilder
     private $productLoader;
 
     /**
+     * @var IndexerRegistry
+     */
+    private $indexerRegistry;
+
+    /**
      * @var ProductCollectionFactory
      */
     private $productCollectionFactory;
@@ -195,6 +203,7 @@ class IndexBuilder
      * @param TableSwapper|null $tableSwapper
      * @param TimezoneInterface|null $localeDate
      * @param ProductCollectionFactory|null $productCollectionFactory
+     * @param IndexerRegistry|null $indexerRegistry
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -219,7 +228,8 @@ class IndexBuilder
         ProductLoader $productLoader = null,
         TableSwapper $tableSwapper = null,
         TimezoneInterface $localeDate = null,
-        ProductCollectionFactory $productCollectionFactory = null
+        ProductCollectionFactory $productCollectionFactory = null,
+        IndexerRegistry $indexerRegistry = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -261,6 +271,8 @@ class IndexBuilder
             ObjectManager::getInstance()->get(TableSwapper::class);
         $this->localeDate = $localeDate ??
             ObjectManager::getInstance()->get(TimezoneInterface::class);
+        $this->indexerRegistry = $indexerRegistry ??
+            ObjectManager::getInstance()->get(IndexerRegistry::class);
         $this->productCollectionFactory = $productCollectionFactory ??
             ObjectManager::getInstance()->get(ProductCollectionFactory::class);
     }
@@ -331,6 +343,15 @@ class IndexBuilder
         foreach ($ids as $productId) {
             $this->cleanProductPriceIndex([$productId]);
             $this->reindexRuleProductPrice->execute($this->batchCount, $productId);
+        }
+
+        //the case was not handled via indexer dependency decorator or via mview configuration
+        $ruleIndexer = $this->indexerRegistry->get(RuleProductProcessor::INDEXER_ID);
+        if ($ruleIndexer->isScheduled()) {
+            $priceIndexer = $this->indexerRegistry->get(PriceIndexProcessor::INDEXER_ID);
+            if (!$priceIndexer->isScheduled()) {
+                $priceIndexer->reindexList($ids);
+            }
         }
 
         $this->reindexRuleGroupWebsite->execute();
