@@ -74,10 +74,8 @@ class ChangelogBatchWalker implements ChangelogBatchWalkerInterface
         int                $lastVersionId,
         int                $batchSize
     ): iterable {
-        echo '0';
         $connection = $this->resourceConnection->getConnection();
         $changelogTableName = $this->resourceConnection->getTableName($changelog->getName());
-
 
         if (!$connection->isTableExists($changelogTableName)) {
             throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
