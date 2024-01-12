@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontGuestCheckoutForAvailableShippingRateChangeToInputDataTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout via Guest Checkout"/>
+            <title value="Guest Checkout - guest should be able to see the change in the shipping rate on fly."/>
+            <description value="Should be able to change the shipping rate while changing the input data based on the specific country and zipcode."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-6139"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <!-- Enabling Flat Rate -->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <!-- Creating subcategory -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <!-- Creating Simple Product -->
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Go to Store > Configuration > Sales > Shipping Methods -->
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+            <!-- Free Shipping Configuration -->
+            <actionGroup ref="AdminFreeShippingActionGroup" stepKey="freeShippingConfig">
+                <argument name="enabled" value="Yes"/>
+                <argument name="allowSpecificCountry" value="Specific Countries"/>
+                <argument name="specificCountry" value="Afghanistan"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
+            <!-- DHL Shipping Configuration -->
+            <actionGroup ref="AdminDHLConfigurationActionGroup" stepKey="dhlConfig">
+                <argument name="enabled" value="Yes"/>
+                <argument name="config" value="dhlConfigData"/>
+                <argument name="allowSpecificCountry" value="Specific Countries"/>
+                <argument name="specificCountry" value="United Kingdom"/>
+                <argument name="showMethod" value="Yes"/>
+                <argument name="debug" value="Yes"/>
+                <argument name="sandbox" value="Yes"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigurationForDHL"/>
+            <!--Set Shipping settings origin data-->
+            <actionGroup ref="AdminSetShippingOriginConfigActionGroup" stepKey="setShippingOriginConfigurationData">
+                <argument name="country" value="United States"/>
+                <argument name="state" value="California"/>
+                <argument name="postcode" value="90034"/>
+            </actionGroup>
+        </before>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCachePostChangingConfigurationSettings">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexPostChangingConfigurationSettings">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <!-- Go to storefront page to add product -->
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+            <waitForPageLoad stepKey="waitForProductPage"/>
+            <!-- Add Simple product in the cart -->
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
+                <argument name="product" value="$createSimpleProduct$"/>
+            </actionGroup>
+            <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+            <!-- Guest checkout -->
+            <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="goToShippingAndFillDetails">
+                <argument name="customerAddress" value="US_CA_Address"/>
+            </actionGroup>
+            <selectOption selector="{{CheckoutShippingSection.region}}" userInput="California" stepKey="fillStateField"/>
+            <waitForPageLoad stepKey="waitForChangeAfterStateLoad"/>
+            <actionGroup ref="VerifyShippingMethodIsVisibilityOrNotActionGroup" stepKey="verifyShippingMethod"/>
+            <waitForElementVisible selector="{{CheckoutShippingMethodsSection.shippingMethodDhlLabel}}" stepKey="waitForDHLLabelVisible"/>
+            <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodDhlWorldWideExpress}}" stepKey="waitForDHLPriceNotVisibleAfterStateChange"/>
+            <!-- Change country value -->
+            <selectOption selector="{{CheckoutShippingSection.country}}" userInput="Afghanistan" stepKey="fillCountryField"/>
+            <waitForPageLoad stepKey="waitForChangeAfterCountryLoad"/>
+            <actionGroup ref="VerifyShippingMethodIsVisibilityOrNotActionGroup" stepKey="verifyShippingMethodAfterCountryChange"/>
+            <waitForElementVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShipping}}" stepKey="waitForFreeShippingVisibleAfterCountryChange"/>
+            <waitForElementVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShippingLabel}}" stepKey="waitForFreeShippingLabelVisibleAfterCountryChange"/>
+            <waitForElementVisible selector="{{CheckoutShippingMethodsSection.shippingMethodDhlLabel}}" stepKey="waitForDHLLabelVisibleAfterCountryChange"/>
+            <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodDhlWorldWideExpress}}" stepKey="waitForDHLPriceNotVisibleAfterCountryChange"/>
+            <!-- Fill New Data for checkout page -->
+            <selectOption selector="{{CheckoutShippingSection.country}}" userInput="United Kingdom" stepKey="fillCountry"/>
+            <fillField selector="{{CheckoutShippingSection.city}}" userInput="London" stepKey="fillCity"/>
+            <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="N14 5JP" stepKey="fillPostcode"/>
+            <actionGroup ref="VerifyShippingMethodIsVisibilityOrNotActionGroup" stepKey="verifyShippingMethodAfterNewData"/>
+            <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShipping}}" stepKey="waitForFreeShippingVisibleAfterNewFormData"/>
+            <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShippingLabel}}" stepKey="waitForFreeShippingLabelVisibleAfterNewFormData"/>
+            <actionGroup ref="VerifyDHLShippingMethodIsVisibilityActionGroup" stepKey="dhlShippingVisibility"/>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <!-- Disable flat rate method -->
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+            <!-- Reset shipping origin -->
+            <actionGroup ref="AdminResetShippingOriginConfigurationActionGroup" stepKey="ResetCaliforniaShippingOrigin"/>
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="shippingMethodConfigPage"/>
+            <!-- Reset free shipping origin -->
+            <actionGroup ref="AdminDisableFreeShippingActionGroup" stepKey="resetFreeShippingConfig"/>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="resetSaveConfiguration"/>
+            <!-- Reset dhl configuration origin -->
+            <actionGroup ref="AdminDHLConfigurationActionGroup" stepKey="resetDhlConfig"/>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="resetSaveConfigurationForDHL"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+    </test>
+</tests>
