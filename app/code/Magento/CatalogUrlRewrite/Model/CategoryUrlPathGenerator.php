@@ -80,10 +80,6 @@ class CategoryUrlPathGenerator
         }
 
         $path = $category->getUrlKey();
-        if (empty($path)) {
-            return $category->getUrlPath();
-        }
-
         if ($this->isNeedToGenerateUrlPathForParent($category)) {
             $parentCategory = $parentCategory === null ?
                 $this->categoryRepository->get($category->getParentId(), $category->getStoreId()) : $parentCategory;
@@ -103,10 +99,13 @@ class CategoryUrlPathGenerator
     {
         $path = $category->getUrlPath();
         if ($path !== null && !$category->dataHasChangedFor('url_key') && !$category->dataHasChangedFor('parent_id')) {
-            $parentPath = $this->getParentUrlPath($category);
+            $parentPath = $this->generateParentUrlPathFromUrlKeys($category);
             if (strlen($parentPath) && str_contains($path, $parentPath) !== false) {
                 return true;
             }
+        }
+        if (empty($category->getUrlKey())) {
+            return true;
         }
         return false;
     }
@@ -182,12 +181,12 @@ class CategoryUrlPathGenerator
     }
 
     /**
-     * Get a parent url path based on custom scoped url keys
+     * Generate a parent url path based on custom scoped url keys
      *
      * @param CategoryInterface $category
      * @return string
      */
-    private function getParentUrlPath(CategoryInterface $category): string
+    private function generateParentUrlPathFromUrlKeys(CategoryInterface $category): string
     {
         $storeId = $category->getStoreId();
         $currentStore = $this->storeManager->getStore();

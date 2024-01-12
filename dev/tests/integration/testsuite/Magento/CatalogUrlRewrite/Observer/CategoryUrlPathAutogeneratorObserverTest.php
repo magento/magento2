@@ -77,8 +77,8 @@ class CategoryUrlPathAutogeneratorObserverTest extends AbstractController
     }
 
     #[
-        DbIsolation(false),
-        AppIsolation(false),
+        DbIsolation(true),
+        AppIsolation(true),
         DataFixtureBeforeTransaction(Website::class, as: 'website2'),
         DataFixtureBeforeTransaction(Group::class, ['website_id' => '$website2.id$'], as:'group2'),
         DataFixtureBeforeTransaction(
