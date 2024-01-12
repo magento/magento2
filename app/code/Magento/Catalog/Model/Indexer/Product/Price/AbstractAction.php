@@ -412,7 +412,10 @@ abstract class AbstractAction
                     $mainTable = $this->tableMaintainer->getMainTableByDimensions($dimensions);
                     $this->_insertFromTable($temporaryTable, $mainTable);
                     $this->deleteOutdatedData($entityIds, $temporaryTable, $mainTable);
-                    $this->_connection->dropTable($temporaryTable);
+                    // phpcs:ignore Magento2.SQL.RawQuery.FoundRawSql
+                    $this->getConnection()->query(
+                        'TRUNCATE TABLE ' . $this->getConnection()->quoteIdentifier($temporaryTable)
+                    );
                 }
             } else {
                 // handle 3d-party indexers for backward compatibility
