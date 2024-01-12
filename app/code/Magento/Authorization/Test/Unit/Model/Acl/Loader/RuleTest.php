@@ -94,6 +94,7 @@ class RuleTest extends TestCase
      * Test populating acl rule from cache.
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testPopulateAclFromCache(): void
     {

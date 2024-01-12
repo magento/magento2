@@ -1267,6 +1267,7 @@ class QuoteManagementTest extends TestCase
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testSubmitForCustomer(): void
     {
@@ -1397,6 +1398,7 @@ class QuoteManagementTest extends TestCase
      * @return void
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testSubmitWithLockException(): void
     {

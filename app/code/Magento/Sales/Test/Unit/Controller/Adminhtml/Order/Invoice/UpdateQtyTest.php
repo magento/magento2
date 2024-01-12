@@ -213,7 +213,7 @@ class UpdateQtyTest extends TestCase
             ->willReturnCallback(function ($arg1, $arg2) use ($orderId, $invoiceData) {
                 if ($arg1 == 'order_id') {
                     return $orderId;
-                } elseif ($arg1 == 'invoice' && is_null($arg2)) {
+                } elseif ($arg1 == 'invoice' && empty($arg2)) {
                     return $invoiceData;
                 }
             });

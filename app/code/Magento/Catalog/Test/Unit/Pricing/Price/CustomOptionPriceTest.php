@@ -402,10 +402,10 @@ class CustomOptionPriceTest extends TestCase
         $this->product->setCustomOptions($customOptions);
         $this->product
             ->method('getOptionById')
-            ->willReturnCallback(function ($arg) use ($optionId1, $optionMock) {
+            ->willReturnCallback(function ($arg) use ($optionId1, $optionId2, $optionMock) {
                 if ($arg == $optionId1) {
                     return $optionMock;
-                } elseif ($arg == $optionId1) {
+                } elseif ($arg == $optionId2) {
                     return null;
                 }
             });
