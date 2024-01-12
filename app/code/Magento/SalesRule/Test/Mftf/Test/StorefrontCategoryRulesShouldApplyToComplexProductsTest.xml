@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-70192"/>
             <group value="catalogRule"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create two Categories: CAT1 and CAT2 -->

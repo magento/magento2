@@ -10,9 +10,10 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontSelectFirstShippingMethodActionGroup">
         <annotations>
-            <description>Select first shipping method.</description>
+            <description>Waits for Shipping Section load. Select first shipping method.</description>
         </annotations>
 
+        <waitForElementClickable selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="waitForShippingMethod" />
         <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
         <waitForLoadingMaskToDisappear stepKey="waitForMaskDisappear"/>
     </actionGroup>

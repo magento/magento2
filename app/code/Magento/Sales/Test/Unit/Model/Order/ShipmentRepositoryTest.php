@@ -264,6 +264,33 @@ class ShipmentRepositoryTest extends TestCase
         $this->assertEquals($shipment, $this->subject->save($shipment));
     }
 
+    public function testSaveWithValidatorException()
+    {
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $shipment = $this->createPartialMock(Shipment::class, ['getEntityId']);
+        $shipment->expects($this->never())
+            ->method('getEntityId');
+
+        $mapper = $this->getMockForAbstractClass(
+            AbstractDb::class,
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['save']
+        );
+        $mapper->expects($this->once())
+            ->method('save')
+            ->willThrowException(new \Magento\Framework\Validator\Exception());
+
+        $this->metadata->expects($this->any())
+            ->method('getMapper')
+            ->willReturn($mapper);
+
+        $this->assertEquals($shipment, $this->subject->save($shipment));
+    }
+
     public function testCreate()
     {
         $shipment = $this->createMock(Shipment::class);

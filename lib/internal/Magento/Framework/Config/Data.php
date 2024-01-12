@@ -39,8 +39,6 @@ class Data implements \Magento\Framework\Config\DataInterface
     protected $_cacheId;
 
     /**
-     * Cache tags
-     *
      * @var array
      */
     protected $cacheTags = [];
@@ -79,17 +77,22 @@ class Data implements \Magento\Framework\Config\DataInterface
      * @param CacheInterface $cache
      * @param string $cacheId
      * @param SerializerInterface|null $serializer
+     * @param array|null $cacheTags
      */
     public function __construct(
         ReaderInterface $reader,
         CacheInterface $cache,
         $cacheId,
-        SerializerInterface $serializer = null
+        SerializerInterface $serializer = null,
+        ?array $cacheTags = null,
     ) {
         $this->reader = $reader;
         $this->cache = $cache;
         $this->cacheId = $cacheId;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        if ($cacheTags) {
+            $this->cacheTags = $cacheTags;
+        }
         $this->initData();
     }
 
@@ -154,5 +157,21 @@ class Data implements \Magento\Framework\Config\DataInterface
     public function reset()
     {
         $this->cache->remove($this->cacheId);
+        $this->_data = [];
+        $configData = $this->reader->read();
+        if ($configData) {
+            $this->merge($configData);
+        }
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }

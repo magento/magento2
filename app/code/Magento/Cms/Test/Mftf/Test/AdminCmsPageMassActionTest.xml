@@ -19,6 +19,7 @@
             <group value="backend"/>
             <group value="CMSContent"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

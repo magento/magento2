@@ -1,6 +1,6 @@
 # Magento_CatalogUrlRewrite module
 
-This module generate url rewrite fields for catalog and product. 
+This module generate url rewrite fields for catalog and product.
 
 ## Extensibility
 

@@ -837,7 +837,7 @@ class QuoteManagementTest extends TestCase
                     ['order' => $order, 'quote' => $quote]
                 ]
             );
-        $this->lockManagerMock->method('isLocked')->willReturn(false);
+        $this->lockManagerMock->method('lock')->willReturn(true);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quote);
         $this->assertEquals($order, $this->model->submit($quote, $orderData));
     }
@@ -1378,6 +1378,7 @@ class QuoteManagementTest extends TestCase
                     ['order' => $order, 'quote' => $quote]
                 ]
             );
+        $this->lockManagerMock->method('lock')->willReturn(true);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quote);
         $this->assertEquals($order, $this->model->submit($quote, $orderData));
     }
@@ -1501,7 +1502,7 @@ class QuoteManagementTest extends TestCase
                     ['order' => $order, 'quote' => $quote]
                 ]
             );
-        $this->lockManagerMock->method('isLocked')->willReturn(true);
+        $this->lockManagerMock->method('lock')->willReturn(false);
 
         $this->expectExceptionMessage(
             'A server error stopped your order from being placed. Please try to place your order again.'

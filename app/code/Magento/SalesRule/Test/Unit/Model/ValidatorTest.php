@@ -110,7 +110,7 @@ class ValidatorTest extends TestCase
         $this->helper = new ObjectManager($this);
         $this->rulesApplier = $this->createPartialMock(
             RulesApplier::class,
-            ['setAppliedRuleIds', 'applyRules', 'addDiscountDescription']
+            ['setAppliedRuleIds', 'applyRules', 'addDiscountDescription', 'addShippingDiscountDescription']
         );
 
         $this->addressMock = $this->getMockBuilder(Address::class)
@@ -375,8 +375,7 @@ class ValidatorTest extends TestCase
     public function testInitTotalsCanApplyDiscount(): void
     {
         $rule = $this->getMockBuilder(Rule::class)
-            ->addMethods(['getSimpleAction'])
-            ->onlyMethods(['getActions', 'getId'])
+            ->onlyMethods(['getActions', 'getId', 'getSimpleAction'])
             ->disableOriginalConstructor()
             ->getMock();
         $item1 = $this->getMockForAbstractClass(
@@ -561,14 +560,14 @@ class ValidatorTest extends TestCase
 
         $ruleMock = $this->getMockBuilder(Rule::class)
             ->disableOriginalConstructor()
-            ->addMethods(['getApplyToShipping', 'getSimpleAction', 'getDiscountAmount'])
+            ->addMethods(['getApplyToShipping', 'getDiscountAmount'])
+            ->onlyMethods(['getSimpleAction'])
             ->getMock();
         $ruleMock->method('getApplyToShipping')
             ->willReturn(true);
         $ruleMock->method('getDiscountAmount')
             ->willReturn($ruleDiscount);
-        $ruleMock->method('getSimpleAction')
-            ->willReturn($action);
+        $ruleMock->expects($this->any())->method('getSimpleAction')->willReturn($action);
 
         $iterator = new \ArrayIterator([$ruleMock]);
         $this->ruleCollection->method('getIterator')
@@ -632,7 +631,8 @@ class ValidatorTest extends TestCase
     ): void {
         $ruleMock = $this->getMockBuilder(Rule::class)
             ->disableOriginalConstructor()
-            ->addMethods(['getApplyToShipping', 'getSimpleAction', 'getDiscountAmount'])
+            ->addMethods(['getApplyToShipping', 'getDiscountAmount'])
+            ->onlyMethods(['getSimpleAction'])
             ->getMock();
         $ruleMock->method('getApplyToShipping')
             ->willReturn(true);

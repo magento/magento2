@@ -17,6 +17,7 @@ Extension developers can interact with the Magento_MediaGalleryCmsUi module. For
 The configuration files located in the directory `view/adminhtml/ui_component`.
 
 This module extends ui components:
+
 - `media_gallery_listing`
 - `standalone_media_gallery_listing`
 

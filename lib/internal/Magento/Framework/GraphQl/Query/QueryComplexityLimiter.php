@@ -7,15 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query;
 
-use GraphQL\Language\AST\Node;
+use GraphQL\Language\AST\DocumentNode;
 use GraphQL\Language\AST\NodeKind;
-use GraphQL\Language\Parser;
-use GraphQL\Language\Source;
 use GraphQL\Language\Visitor;
 use GraphQL\Validator\DocumentValidator;
 use GraphQL\Validator\Rules\DisableIntrospection;
 use GraphQL\Validator\Rules\QueryDepth;
 use GraphQL\Validator\Rules\QueryComplexity;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
@@ -26,6 +25,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
  * should be filtered and rejected.
  *
  * https://github.com/webonyx/graphql-php/blob/master/docs/security.md#query-complexity-analysis
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QueryComplexityLimiter
 {
@@ -45,20 +45,49 @@ class QueryComplexityLimiter
     private $introspectionConfig;
 
     /**
+     * @var QueryParser
+     */
+    private $queryParser;
+
+    /**
+     * @var array
+     */
+    private $rules = [];
+
+    /**
+     * Constructor
+     *
      * @param int $queryDepth
      * @param int $queryComplexity
      * @param IntrospectionConfiguration $introspectionConfig
+     * @param QueryParser|null $queryParser
      */
     public function __construct(
         int $queryDepth,
         int $queryComplexity,
-        IntrospectionConfiguration $introspectionConfig
+        IntrospectionConfiguration $introspectionConfig,
+        QueryParser $queryParser = null
     ) {
         $this->queryDepth = $queryDepth;
         $this->queryComplexity = $queryComplexity;
         $this->introspectionConfig = $introspectionConfig;
+        $this->queryParser = $queryParser ?: ObjectManager::getInstance()->get(QueryParser::class);
     }
 
+    /**
+     * Get rules
+     *
+     * @return array
+     */
+    private function getRules()
+    {
+        if (empty($this->rules)) {
+            $this->rules[] = new QueryComplexity($this->queryComplexity);
+            $this->rules[] = new DisableIntrospection((int) $this->introspectionConfig->isIntrospectionDisabled());
+            $this->rules[] = new QueryDepth($this->queryDepth);
+        }
+        return $this->rules;
+    }
     /**
      * Sets limits for query complexity
      *
@@ -67,11 +96,9 @@ class QueryComplexityLimiter
      */
     public function execute(): void
     {
-        DocumentValidator::addRule(new QueryComplexity($this->queryComplexity));
-        DocumentValidator::addRule(
-            new DisableIntrospection((int) $this->introspectionConfig->isIntrospectionDisabled())
-        );
-        DocumentValidator::addRule(new QueryDepth($this->queryDepth));
+        foreach ($this->getRules() as $rule) {
+            DocumentValidator::addRule($rule);
+        }
     }
 
     /**
@@ -80,25 +107,28 @@ class QueryComplexityLimiter
      * This is necessary for performance optimization, as extremely large queries require a substantial
      * amount of time to fully validate and can affect server performance.
      *
-     * @param string $query
+     * @param DocumentNode|string $query
      * @throws GraphQlInputException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function validateFieldCount(string $query): void
+    public function validateFieldCount(DocumentNode|string $query): void
     {
         if (!empty($query)) {
             $totalFieldCount = 0;
-            $queryAst = Parser::parse(new Source($query ?: '', 'GraphQL'));
+            if (is_string($query)) {
+                $query = $this->queryParser->parse($query);
+            }
+
             Visitor::visit(
-                $queryAst,
+                $query,
                 [
                     'leave' => [
-                        NodeKind::FIELD => function (Node $node) use (&$totalFieldCount) {
+                        NodeKind::FIELD => function () use (&$totalFieldCount) {
                             $totalFieldCount++;
                         }
                     ]
                 ]
             );
-
             if ($totalFieldCount > $this->queryComplexity) {
                 throw new GraphQlInputException(__(
                     'Max query complexity should be %1 but got %2.',
