@@ -408,14 +408,11 @@ abstract class AbstractAction
                 foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
                     $this->tableMaintainer->createMainTmpTable($dimensions);
                     $temporaryTable = $this->tableMaintainer->getMainTmpTable($dimensions);
+                    $this->_emptyTable($temporaryTable);
                     $indexer->executeByDimensions($dimensions, \SplFixedArray::fromArray($entityIds, false));
                     $mainTable = $this->tableMaintainer->getMainTableByDimensions($dimensions);
                     $this->_insertFromTable($temporaryTable, $mainTable);
                     $this->deleteOutdatedData($entityIds, $temporaryTable, $mainTable);
-                    // phpcs:ignore Magento2.SQL.RawQuery.FoundRawSql
-                    $this->getConnection()->query(
-                        'TRUNCATE TABLE ' . $this->getConnection()->quoteIdentifier($temporaryTable)
-                    );
                 }
             } else {
                 // handle 3d-party indexers for backward compatibility
