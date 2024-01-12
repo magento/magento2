@@ -14,5 +14,6 @@ For information about a module installation in Magento 2, see [Enable or disable
 ## Additional data
 
 More information can get at articles:
+
 - [Advanced Reporting](https://developer.adobe.com/commerce/php/development/advanced-reporting/)
 - [Data collection for advanced reporting](https://developer.adobe.com/commerce/php/development/advanced-reporting/data-collection/)

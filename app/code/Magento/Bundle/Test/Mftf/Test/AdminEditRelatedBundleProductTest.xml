@@ -17,13 +17,16 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-3342"/>
             <group value="Bundle"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Admin login-->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct0"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete the bundled product -->
@@ -78,7 +81,9 @@
             <argument name="expectedText" value="$$simpleProduct1.name$$"/>
         </actionGroup>
 
-        <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexer">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!--See related product in storefront-->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToStorefront">

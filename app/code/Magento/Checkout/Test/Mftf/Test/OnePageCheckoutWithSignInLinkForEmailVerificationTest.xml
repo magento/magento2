@@ -18,6 +18,7 @@
             <testCaseId value="MC-42729"/>
             <group value="checkout"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create Simple Product -->

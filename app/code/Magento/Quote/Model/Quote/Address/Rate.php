@@ -43,6 +43,13 @@ class Rate extends AbstractModel
     protected $_address;
 
     /**
+     * @var carrier_sort_order
+     */
+    public $carrier_sort_order;
+
+    /**
+     * Check the Quote rate
+     *
      * @return void
      */
     protected function _construct()
@@ -51,6 +58,8 @@ class Rate extends AbstractModel
     }
 
     /**
+     * Set Address id with address before save
+     *
      * @return $this
      */
     public function beforeSave()
@@ -63,6 +72,8 @@ class Rate extends AbstractModel
     }
 
     /**
+     * Set address
+     *
      * @param \Magento\Quote\Model\Quote\Address $address
      * @return $this
      */
@@ -73,6 +84,8 @@ class Rate extends AbstractModel
     }
 
     /**
+     * Get Method for address
+     *
      * @return \Magento\Quote\Model\Quote\Address
      */
     public function getAddress()
@@ -81,6 +94,8 @@ class Rate extends AbstractModel
     }
 
     /**
+     * Import shipping rate
+     *
      * @param \Magento\Quote\Model\Quote\Address\RateResult\AbstractResult $rate
      * @return $this
      */

@@ -9,6 +9,7 @@
     <preference for="Magento\Bundle\Api\ProductOptionTypeListInterface" type="Magento\Bundle\Model\OptionTypeList" />
     <preference for="Magento\Bundle\Api\Data\OptionTypeInterface" type="Magento\Bundle\Model\Source\Option\Type" />
     <preference for="Magento\Bundle\Api\ProductLinkManagementInterface" type="Magento\Bundle\Model\LinkManagement" />
+    <preference for="Magento\Bundle\Api\ProductLinkManagementAddChildrenInterface" type="Magento\Bundle\Model\LinkManagement" />
     <preference for="Magento\Bundle\Api\Data\LinkInterface" type="Magento\Bundle\Model\Link" />
     <preference for="Magento\Bundle\Api\ProductOptionRepositoryInterface" type="Magento\Bundle\Model\OptionRepository" />
     <preference for="Magento\Bundle\Api\ProductOptionManagementInterface" type="Magento\Bundle\Model\OptionManagement" />

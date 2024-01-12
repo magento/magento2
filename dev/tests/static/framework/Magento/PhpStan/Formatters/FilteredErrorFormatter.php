@@ -66,14 +66,17 @@ class FilteredErrorFormatter implements ErrorFormatter
             return self::NO_ERRORS;
         }
 
+        //@phpstan:ignore-line
         $clearedAnalysisResult = new AnalysisResult(
             $this->clearIgnoredErrors($analysisResult->getFileSpecificErrors()),
             $analysisResult->getNotFileSpecificErrors(),
             $analysisResult->getInternalErrors(),
             $analysisResult->getWarnings(),
+            $analysisResult->getCollectedData(),
             $analysisResult->isDefaultLevelUsed(),
             $analysisResult->getProjectConfigFile(),
-            $analysisResult->isResultCacheSaved()
+            $analysisResult->isResultCacheSaved(),
+            $analysisResult->getPeakMemoryUsageBytes()
         );
 
         return $this->tableErrorFormatter->formatErrors($clearedAnalysisResult, $output);

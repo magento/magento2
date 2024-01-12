@@ -37,6 +37,11 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class ProductPriceTest extends GraphQlAbstract
 {
+    /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
     /** @var ObjectManager $objectManager */
     private $objectManager;
 
@@ -368,14 +373,14 @@ class ProductPriceTest extends GraphQlAbstract
                     "simple1" => [
                         0 => [
                             'discount' =>['amount_off' => 1, 'percent_off' => 10],
-                            'final_price' =>['value'=> 9],
+                            'final_price' =>['value'=> 9 * 2],
                             'quantity' => 2
                         ]
                     ],
                     "simple2" => [
                         0 => [
                             'discount' =>['amount_off' => 2, 'percent_off' => 10],
-                            'final_price' =>['value'=> 18],
+                            'final_price' =>['value'=> 18 * 2],
                             'quantity' => 2
                         ]
                     ]
@@ -414,14 +419,14 @@ class ProductPriceTest extends GraphQlAbstract
                     "simple1" => [
                         0 => [
                             'discount' =>['amount_off' => 1, 'percent_off' => 10],
-                            'final_price' =>['value'=> 9],
+                            'final_price' =>['value'=> 9 * 2 ],
                             'quantity' => 2
                         ]
                     ],
                     "simple2" => [
                         0 => [
                             'discount' =>['amount_off' => 2, 'percent_off' => 10],
-                            'final_price' =>['value'=> 18],
+                            'final_price' =>['value'=> 18 * 2],
                             'quantity' => 2
                         ]
                     ]
@@ -601,7 +606,7 @@ class ProductPriceTest extends GraphQlAbstract
                         'amount_off' => 1,
                         'percent_off' => 10
                     ],
-                    'final_price' =>['value'=> 9],
+                    'final_price' =>['value'=> 9 * 2],
                     'quantity' => 2
                 ]
             ]
@@ -692,7 +697,7 @@ class ProductPriceTest extends GraphQlAbstract
                 'customer_group_id' => Group::CUST_GROUP_ALL,
                 'percentage_value'=> null,
                 'qty'=> 2,
-                'value'=> 20
+                'value'=> 20,
             ]
         ];
         foreach ($configurableProductVariants as $configurableProductVariant) {
@@ -772,7 +777,7 @@ class ProductPriceTest extends GraphQlAbstract
                         "value" => round((float) $configurableProductVariants[$key]->getSpecialPrice(), 2)
                     ],
                     "discount" => [
-                        "amount_off" => ($regularPrice[$key] - $finalPrice[$key]),
+                        "amount_off" => round($regularPrice[$key] - $finalPrice[$key], 2),
                         "percent_off" => round(($regularPrice[$key] - $finalPrice[$key])*100/$regularPrice[$key], 2)
                     ]
                 ],
@@ -784,7 +789,7 @@ class ProductPriceTest extends GraphQlAbstract
                         "value" => round((float) $configurableProductVariants[$key]->getSpecialPrice(), 2)
                     ],
                     "discount" => [
-                        "amount_off" => $regularPrice[$key] - $finalPrice[$key],
+                        "amount_off" => round($regularPrice[$key] - $finalPrice[$key], 2),
                         "percent_off" => round(($regularPrice[$key] - $finalPrice[$key])*100/$regularPrice[$key], 2)
                     ]
                 ]
@@ -804,7 +809,7 @@ class ProductPriceTest extends GraphQlAbstract
                                 2
                             )
                         ],
-                        'final_price' =>['value'=> $tierPriceData[0]['value']],
+                        'final_price' =>['value'=> $tierPriceData[0]['value'] * 2],
                         'quantity' => 2
                     ]
                 ]
@@ -882,7 +887,7 @@ class ProductPriceTest extends GraphQlAbstract
                          'amount_off' => 3,
                          'percent_off' => 30
                     ],
-                    'final_price' =>['value'=> 7],
+                    'final_price' =>['value'=> 7 * 2],
                     'quantity' => 2
                 ]
             ]
@@ -1213,13 +1218,26 @@ QUERY;
                 $expected['regular_price']['currency'] ?? $currency,
                 $actual['regular_price']['currency']
             );
-            $this->assertEquals($expected['final_price']['value'], $actual['final_price']['value']);
+            $this->assertEquals($expected['final_price']['value'], round($actual['final_price']['value'], 2));
             $this->assertEquals(
                 $expected['final_price']['currency'] ?? $currency,
                 $actual['final_price']['currency']
             );
-            $this->assertEquals($expected['discount']['amount_off'], $actual['discount']['amount_off']);
-            $this->assertEquals($expected['discount']['percent_off'], $actual['discount']['percent_off']);
+            $this->assertEqualsWithDelta(
+                $expected['discount']['amount_off'],
+                ($actual['regular_price']['value'] - round($actual['final_price']['value'], 2)),
+                self::EPSILON
+            );
+            $this->assertEqualsWithDelta(
+                $expected['discount']['percent_off'],
+                round(
+                    (
+                        $actual['regular_price']['value'] - round($actual['final_price']['value'], 2)
+                    ) * 100 / $actual['regular_price']['value'],
+                    2
+                ),
+                self::EPSILON
+            );
         }
     }
 

@@ -15,6 +15,7 @@
             <severity value="AVERAGE"/>
             <testCaseId value="MC-38271"/>
             <group value="shipping"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Add simple product -->
