@@ -5,21 +5,20 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Tax\Test\Unit\Model\Plugin;
+namespace Magento\Tax\Test\Unit\Model\ResourceModel\Sales\Order;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderExtensionInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Tax\Item;
 use Magento\Sales\Model\Order\Tax\ItemFactory;
-use Magento\Tax\Model\Plugin\OrderSave;
+use Magento\Tax\Model\ResourceModel\Sales\Order\ConvertQuoteTaxToOrderTax;
 use Magento\Tax\Model\Sales\Order\Tax;
 use Magento\Tax\Model\Sales\Order\TaxFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class OrderSaveTest extends TestCase
+class ConvertQuoteTaxToOrderTaxTest extends TestCase
 {
     private const ORDERID = 123;
     private const ITEMID = 151;
@@ -28,27 +27,22 @@ class OrderSaveTest extends TestCase
     /**
      * @var TaxFactory|MockObject
      */
-    protected $orderTaxFactoryMock;
+    private $orderTaxFactoryMock;
 
     /**
      * @var ItemFactory|MockObject
      */
-    protected $taxItemFactoryMock;
-
-    /**
-     * @var OrderRepositoryInterface|MockObject
-     */
-    protected $subjectMock;
+    private $taxItemFactoryMock;
 
     /**
      * @var ObjectManager
      */
-    protected $objectManagerHelper;
+    private $objectManagerHelper;
 
     /**
-     * @var OrderSave
+     * @var ConvertQuoteTaxToOrderTax
      */
-    protected $model;
+    private $model;
 
     /**
      * @inheritDoc
@@ -64,11 +58,10 @@ class OrderSaveTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->subjectMock = $this->getMockForAbstractClass(OrderRepositoryInterface::class);
 
         $this->objectManagerHelper = new ObjectManager($this);
         $this->model = $this->objectManagerHelper->getObject(
-            OrderSave::class,
+            ConvertQuoteTaxToOrderTax::class,
             [
                 'orderTaxFactory' => $this->orderTaxFactoryMock,
                 'taxItemFactory' => $this->taxItemFactoryMock
@@ -179,7 +172,7 @@ class OrderSaveTest extends TestCase
     }
 
     /**
-     * Test for order afterSave.
+     * Test for execute method
      *
      * @param array $appliedTaxes
      * @param array $itemAppliedTaxes
@@ -188,9 +181,9 @@ class OrderSaveTest extends TestCase
      * @param int|null $itemId
      *
      * @return void
-     * @dataProvider afterSaveDataProvider
+     * @dataProvider executeDataProvider
      */
-    public function testAfterSave(
+    public function testExecute(
         array $appliedTaxes,
         array $itemAppliedTaxes,
         array $expectedTaxes,
@@ -230,16 +223,16 @@ class OrderSaveTest extends TestCase
         $this->verifyOrderTaxes($expectedTaxes);
         $this->verifyItemTaxes($expectedItemTaxes);
 
-        $this->assertEquals($orderMock, $this->model->afterSave($this->subjectMock, $orderMock));
+        $this->model->execute($orderMock);
     }
 
     /**
-     * After save data provider.
+     * Data provider for testExecute().
      *
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function afterSaveDataProvider(): array
+    public function executeDataProvider(): array
     {
         return [
             //one item with shipping
