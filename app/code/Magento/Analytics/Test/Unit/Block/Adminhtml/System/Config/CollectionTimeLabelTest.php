@@ -15,6 +15,7 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -59,7 +60,8 @@ class CollectionTimeLabelTest extends TestCase
     protected function setUp(): void
     {
         $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
-            ->onlyMethods(['getComment', 'getElementHtml'])
+            ->addMethods(['getComment'])
+            ->onlyMethods(['getElementHtml'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -83,6 +85,13 @@ class CollectionTimeLabelTest extends TestCase
             ->onlyMethods(['getLocale'])
             ->getMockForAbstractClass();
 
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->collectionTimeLabel = $objectManager->getObject(
             CollectionTimeLabel::class,
             [
