@@ -26,7 +26,6 @@ use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
-use Magento\Framework\Registry;
 use Magento\Cms\Model\Wysiwyg\Config;
 
 /**
@@ -127,10 +126,6 @@ class EditTest extends TestCase
             [
                 StoreManagerInterface::class,
                 $this->createMock(StoreManagerInterface::class)
-            ],
-            [
-                Registry::class,
-                $this->createMock(Registry::class)
             ],
             [
                 Config::class,
