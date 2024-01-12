@@ -126,6 +126,7 @@ class LinkTest extends TestCase
      *
      * @return void
      * @dataProvider executeDataProvider
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testExecuteFile(string $fileType): void
     {
