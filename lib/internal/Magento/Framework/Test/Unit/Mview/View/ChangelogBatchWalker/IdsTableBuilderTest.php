@@ -23,27 +23,28 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Mview\View\ChangelogBatchWalker\IdsTableBuilder;
 use Magento\Framework\Mview\View\ChangelogInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class IdsTableBuilderTest extends TestCase
 {
     /**
-     * @var ResourceConnection
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnection;
 
     /**
-     * @var ChangelogInterface
+     * @var ChangelogInterface|MockObject
      */
     private $changeLog;
 
     /**
-     * @var AdapterInterface
+     * @var AdapterInterface|MockObject
      */
     private $connection;
 
     /**
-     * @var Table
+     * @var Table|MockObject
      */
     private $table;
 
