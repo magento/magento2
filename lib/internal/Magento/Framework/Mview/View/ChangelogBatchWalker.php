@@ -24,30 +24,34 @@ use Magento\Framework\Phrase;
 class ChangelogBatchWalker implements ChangelogBatchWalkerInterface
 {
     /**
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var ResourceConnection
      */
     private ResourceConnection $resourceConnection;
+
     /**
-     * @var \Magento\Framework\DB\Query\Generator
+     * @var Generator
      */
     private Generator $generator;
+
     /**
-     * @var \Magento\Framework\Mview\View\ChangelogBatchWalker\IdsTableBuilderInterface
+     * @var IdsTableBuilderInterface
      */
     private IdsTableBuilderInterface $idsTableBuilder;
+
     /**
-     * @var \Magento\Framework\Mview\View\ChangelogBatchWalker\IdsSelectBuilderInterface
+     * @var IdsSelectBuilderInterface
      */
     private IdsSelectBuilderInterface $idsSelectBuilder;
+
     /**
-     * @var \Magento\Framework\Mview\View\ChangelogBatchWalker\IdsFetcherInterface
+     * @var IdsFetcherInterface
      */
     private IdsFetcherInterface $idsFetcher;
 
     /**
      * @param ResourceConnection $resourceConnection
-     * @param \Magento\Framework\DB\Query\Generator $generator
-     * @param \Magento\Framework\Mview\View\ChangelogBatchWalker\IdsContext $idsContext
+     * @param Generator $generator
+     * @param IdsContext $idsContext
      */
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -70,8 +74,10 @@ class ChangelogBatchWalker implements ChangelogBatchWalkerInterface
         int                $lastVersionId,
         int                $batchSize
     ): iterable {
+        echo '0';
         $connection = $this->resourceConnection->getConnection();
         $changelogTableName = $this->resourceConnection->getTableName($changelog->getName());
+
 
         if (!$connection->isTableExists($changelogTableName)) {
             throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
