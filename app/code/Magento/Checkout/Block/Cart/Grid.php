@@ -101,6 +101,20 @@ class Grid extends \Magento\Checkout\Block\Cart
     }
 
     /**
+     * Filter items that can't be displayed directly
+     * @param $itemsCollection \Magento\Quote\Model\ResourceModel\Quote\Item\Collection
+     * @return void
+     */
+    protected function filterCollection(\Magento\Quote\Model\ResourceModel\Quote\Item\Collection $itemsCollection)
+    {
+        foreach ($itemsCollection->getItems() as $key => $item) {
+            if ($item->getParentItemId()) {
+                $itemsCollection->removeItemByKey($key);
+            }
+        }
+    }
+
+    /**
      * {@inheritdoc}
      * @since 100.1.7
      */
@@ -116,6 +130,7 @@ class Grid extends \Magento\Checkout\Block\Cart
             /** @var  \Magento\Theme\Block\Html\Pager $pager */
             $pager = $this->getLayout()->createBlock(\Magento\Theme\Block\Html\Pager::class);
             $pager->setAvailableLimit([$availableLimit => $availableLimit])->setCollection($itemsCollection);
+            $this->filterCollection($itemsCollection);
             $this->setChild('pager', $pager);
             $itemsCollection->load();
             $this->prepareItemUrls();
@@ -134,11 +149,8 @@ class Grid extends \Magento\Checkout\Block\Cart
         if (!$this->itemsCollection) {
             /** @var \Magento\Quote\Model\ResourceModel\Quote\Item\Collection $itemCollection */
             $itemCollection = $this->itemCollectionFactory->create();
-
             $itemCollection->setQuote($this->getQuote());
-            $itemCollection->addFieldToFilter('parent_item_id', ['null' => true]);
             $this->joinAttributeProcessor->process($itemCollection);
-
             $this->itemsCollection = $itemCollection;
         }
         return $this->itemsCollection;
