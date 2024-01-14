@@ -107,12 +107,12 @@ class CouponUsagesTest extends TestCase
         parent::tearDown();
     }
 
-     /**
-      * Test increasing coupon usages after after order placing and decreasing after order cancellation.
-      *
-      * @magentoDataFixture Magento/SalesRule/_files/coupons_limited_order.php
-      * @magentoDbIsolation disabled
-      */
+    /**
+     * Test increasing coupon usages after after order placing and decreasing after order cancellation.
+     *
+     * @magentoDataFixture Magento/SalesRule/_files/coupons_limited_order.php
+     * @magentoDbIsolation disabled
+     */
     public function testSubmitQuoteAndCancelOrder()
     {
         $customerId = 1;
