@@ -20,7 +20,6 @@ use Magento\Cms\Model\Wysiwyg\Config;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -55,10 +54,6 @@ class DeleteTest extends TestCase
             [
                 StoreManagerInterface::class,
                 $this->createMock(StoreManagerInterface::class)
-            ],
-            [
-                Registry::class,
-                $this->createMock(Registry::class)
             ],
             [
                 Config::class,
