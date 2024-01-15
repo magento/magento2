@@ -16,7 +16,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\SalesRule\Test\Unit\Model\Plugin;
+namespace Magento\SalesRule\Test\Unit\Plugin;
 
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteRepository;
