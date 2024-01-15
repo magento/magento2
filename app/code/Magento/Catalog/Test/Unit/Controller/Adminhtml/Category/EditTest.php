@@ -17,6 +17,7 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\Page\Title;
@@ -122,6 +123,10 @@ class EditTest extends TestCase
             [
                 Date::class,
                 $this->createMock(Date::class)
+            ],
+            [
+                Registry::class,
+                $this->createMock(Registry::class)
             ],
             [
                 StoreManagerInterface::class,
