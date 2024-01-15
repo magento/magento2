@@ -18,7 +18,6 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Test\Unit\Model\Plugin;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteRepository;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -60,7 +59,6 @@ class CouponUsageIncreamentForMultishippingTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->subjectMock = $this->getMockBuilder(PlaceOrderDefault::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -75,12 +73,9 @@ class CouponUsageIncreamentForMultishippingTest extends TestCase
             ->onlyMethods(['getQuoteId'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->plugin = $this->objectManagerHelper->getObject(
-            CouponUsagesIncrementMultishipping::class,
-            [
-                'updateCouponUsages' => $this->updateCouponUsagesMock,
-                'quoteRepository' => $this->quoteRepositoryMock
-            ]
+        $this->plugin = new CouponUsagesIncrementMultishipping(
+            $this->updateCouponUsagesMock,
+            $this->quoteRepositoryMock
         );
     }
     /**
