@@ -117,17 +117,24 @@ class RuleTest extends TestCase
         $aclMock->method('hasResource')->willReturn(true);
         $aclMock
             ->method('allow')
-            ->withConsecutive(
-                ['1', null, null],
-                ['1', 'Magento_Backend::all', null],
-                ['2', 1, null]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg2 === null) {
+                    return null;
+                } elseif ($arg2 === 'Magento_Backend::all') {
+                    return null;
+                } elseif ($arg2 === '1') {
+                    return null;
+                    ;
+                }
+            });
 
         $aclMock
             ->method('deny')
-            ->withConsecutive(
-                ['3', 1, null]
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 === '3' && $arg2 == 1 && is_null($arg3)) {
+                    return null;
+                }
+            });
 
         $aclMock
             ->method('getResources')

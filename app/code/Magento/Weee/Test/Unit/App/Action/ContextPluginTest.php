@@ -201,11 +201,13 @@ class ContextPluginTest extends TestCase
 
         $this->scopeConfigMock
             ->method('getValue')
-            ->withConsecutive(
-                [TaxConfig::CONFIG_XML_PATH_DEFAULT_COUNTRY, ScopeInterface::SCOPE_STORE, null],
-                [TaxConfig::CONFIG_XML_PATH_DEFAULT_REGION, ScopeInterface::SCOPE_STORE, null]
-            )
-            ->willReturnOnConsecutiveCalls('US', 0);
+            ->willReturnCallback(function ($config, $scope, $scopeCode) {
+                if ($config === TaxConfig::CONFIG_XML_PATH_DEFAULT_COUNTRY) {
+                    return 'US';
+                } elseif ($config === TaxConfig::CONFIG_XML_PATH_DEFAULT_REGION) {
+                    return 0;
+                }
+            });
 
         $this->weeeTaxMock->expects($this->once())
             ->method('isWeeeInLocation')
@@ -294,11 +296,13 @@ class ContextPluginTest extends TestCase
 
         $this->scopeConfigMock
             ->method('getValue')
-            ->withConsecutive(
-                [TaxConfig::CONFIG_XML_PATH_DEFAULT_COUNTRY, ScopeInterface::SCOPE_STORE, null],
-                [TaxConfig::CONFIG_XML_PATH_DEFAULT_REGION, ScopeInterface::SCOPE_STORE, null]
-            )
-            ->willReturnOnConsecutiveCalls('US', 0);
+            ->willReturnCallback(function ($config, $scope, $scopeCode) {
+                if ($config === TaxConfig::CONFIG_XML_PATH_DEFAULT_COUNTRY) {
+                    return 'US';
+                } elseif ($config === TaxConfig::CONFIG_XML_PATH_DEFAULT_REGION) {
+                    return 0;
+                }
+            });
 
         $this->customerSessionMock->expects($this->once())
             ->method('getDefaultTaxBillingAddress')
@@ -359,11 +363,13 @@ class ContextPluginTest extends TestCase
 
         $this->scopeConfigMock
             ->method('getValue')
-            ->withConsecutive(
-                [TaxConfig::CONFIG_XML_PATH_DEFAULT_COUNTRY, ScopeInterface::SCOPE_STORE, null],
-                [TaxConfig::CONFIG_XML_PATH_DEFAULT_REGION, ScopeInterface::SCOPE_STORE, null]
-            )
-            ->willReturnOnConsecutiveCalls('US', 0);
+            ->willReturnCallback(function ($config, $scope, $scopeCode) {
+                if ($config === TaxConfig::CONFIG_XML_PATH_DEFAULT_COUNTRY) {
+                    return 'US';
+                } elseif ($config === TaxConfig::CONFIG_XML_PATH_DEFAULT_REGION) {
+                    return 0;
+                }
+            });
 
         $this->customerSessionMock->expects($this->once())
             ->method('getDefaultTaxShippingAddress')

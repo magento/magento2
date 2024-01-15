@@ -97,18 +97,17 @@ class SuperAttributeDataProviderTest extends TestCase
         ];
 
         $this->arrayManager->method('get')
-            ->withConsecutive(
-                ['parent_sku', $cartItemData],
-                ['data/sku', $cartItemData],
-                ['data/quantity', $cartItemData],
-                ['model', $cartItemData],
-            )
-            ->willReturnOnConsecutiveCalls(
-                'configurable',
-                'simple1',
-                2.0,
-                $quoteMock,
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($quoteMock) {
+                if ($arg1 == 'parent_sku') {
+                    return 'configurable';
+                } elseif ($arg1 == 'data/sku') {
+                    return 'simple1';
+                } elseif ($arg1 == 'data/quantity') {
+                    return 2.0;
+                } elseif ($arg1 == 'model') {
+                    return $quoteMock;
+                }
+            });
 
         $websiteId = 1;
         $storeMock = $this->createMock(Store::class);

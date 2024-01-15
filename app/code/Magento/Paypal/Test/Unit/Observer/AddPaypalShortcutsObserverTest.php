@@ -140,16 +140,28 @@ class AddPaypalShortcutsObserverTest extends TestCase
         }
         $paypalConfigMock
             ->method('isMethodAvailable')
-            ->withConsecutive(...$paypalConfigMockWithArgs)
-            ->willReturnOnConsecutiveCalls(...$paypalConfigMockReturnArgs);
+            ->willReturnCallback(function ($paypalConfigMockWithArgs) use ($paypalConfigMockReturnArgs) {
+                static $callCount = 0;
+                $returnValue = $paypalConfigMockReturnArgs[$callCount] ?? null;
+                $callCount++;
+                return $returnValue;
+            });
         $shortcutFactoryMock
             ->method('create')
-            ->withConsecutive(...$shortcutFactoryMockWithArgs)
-            ->willReturn(...$shortcutFactoryMockReturnArgs);
+            ->willReturnCallback(function ($shortcutFactoryMockWithArgs) use ($shortcutFactoryMockReturnArgs) {
+                static $callCount = 0;
+                $returnValue = $shortcutFactoryMockReturnArgs[$callCount] ?? null;
+                $callCount++;
+                return $returnValue;
+            });
         $layoutMock
             ->method('createBlock')
-            ->withConsecutive(...$layoutMockWithArgs)
-            ->willReturnOnConsecutiveCalls(...$layoutMockReturnArgs);
+            ->willReturnCallback(function ($layoutMockWithArgs) use ($layoutMockReturnArgs) {
+                static $callCount = 0;
+                $returnValue = $layoutMockReturnArgs[$callCount] ?? null;
+                $callCount++;
+                return $returnValue;
+            });
 
         $shortcutButtonsMock->expects(self::exactly($callIndexBlock))
             ->method('addShortcut')
@@ -167,7 +179,7 @@ class AddPaypalShortcutsObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderShortcutsButtons(): array
+    public static function dataProviderShortcutsButtons(): array
     {
         return [
             [

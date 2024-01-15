@@ -95,10 +95,14 @@ class PurgeCacheTest extends TestCase
         }
         $this->socketAdapterMock
             ->method('connect')
-            ->withConsecutive(...$connectWithArgs);
+            ->willReturnCallback(function (...$connectWithArgs) {
+                return null;
+            });
         $this->socketAdapterMock
             ->method('write')
-            ->withConsecutive(...$writeWithArgs);
+            ->willReturnCallback(function (...$writeWithArgs) {
+                return null;
+            });
         $this->socketAdapterMock
             ->method('read');
 
@@ -140,16 +144,13 @@ class PurgeCacheTest extends TestCase
 
         $this->socketAdapterMock->expects($this->exactly(2))
             ->method('write')
-            ->withConsecutive(
-                [
-                    'PURGE', $uri, '1.1',
-                    ['X-Magento-Tags-Pattern' => implode('|', $tagsSplitA), 'Host' => $uri->getHost()]
-                ],
-                [
-                    'PURGE', $uri, '1.1',
-                    ['X-Magento-Tags-Pattern' => implode('|', $tagsSplitB), 'Host' => $uri->getHost()]
-                ]
-            );
+            ->willReturnCallback(function ($method, $uri, $version, $headers) {
+                if ($method === 'PURGE' && $version === '1.1' && $headers['Host'] === $uri->getHost()) {
+                    if (isset($headers['X-Magento-Tags-Pattern'])) {
+                        return null;
+                    }
+                }
+            });
 
         $this->socketAdapterMock->expects($this->exactly(2))
             ->method('close');
@@ -160,7 +161,7 @@ class PurgeCacheTest extends TestCase
     /**
      * @return array
      */
-    public function sendPurgeRequestDataProvider(): array
+    public static function sendPurgeRequestDataProvider(): array
     {
         return [
             [

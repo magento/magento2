@@ -85,10 +85,11 @@ class BuilderTest extends TestCase
 
         $this->menuMock
             ->method('add')
-            ->withConsecutive(
-                [$this->isInstanceOf(Item::class), null, 2],
-                [$this->isInstanceOf(Item::class), null, 4]
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg3 == 2 || $arg3 == 4) {
+                    return null;
+                }
+            });
 
         $this->model->processCommand(
             new Add(

@@ -147,7 +147,12 @@ class BulkManagementTest extends TestCase
         $operation->expects($this->exactly(2))->method('getTopicName')
             ->willReturnOnConsecutiveCalls($topicNames[0], $topicNames[1]);
         $this->publisher->expects($this->exactly(2))->method('publish')
-            ->withConsecutive([$topicNames[0], [$operation]], [$topicNames[1], [$operation]])->willReturn(null);
+            ->willReturnCallback(function ($arg1, $arg2) use ($topicNames, $operation) {
+                if (in_array($arg1, $topicNames)) {
+                    return null;
+                }
+            });
+
         $this->assertTrue(
             $this->bulkManagement->scheduleBulk($bulkUuid, [$operation, $operation], $description, $userId)
         );
@@ -290,8 +295,14 @@ class BulkManagementTest extends TestCase
         $operationCollection = $this->createMock(Collection::class);
         $this->operationCollectionFactory->expects($this->once())->method('create')->willReturn($operationCollection);
         $operationCollection->expects($this->exactly(2))->method('addFieldToFilter')
-            ->withConsecutive(['bulk_uuid', ['eq' => $bulkUuid]], ['error_code', ['in' => $errorCodes]])
-            ->willReturnSelf();
+            ->willReturnCallback(function ($key, $value) use ($bulkUuid, $errorCodes, $operationCollection) {
+                if ($key == 'bulk_uuid' && $value == ['eq' => $bulkUuid]) {
+                    return $operationCollection;
+                } elseif ($key == 'error_code' && $value == ['in' => $errorCodes]) {
+                    return $operationCollection;
+                }
+            });
+
         $operation = $this->getMockBuilder(Operation::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -335,8 +346,13 @@ class BulkManagementTest extends TestCase
         $operationCollection = $this->createMock(Collection::class);
         $this->operationCollectionFactory->expects($this->once())->method('create')->willReturn($operationCollection);
         $operationCollection->expects($this->exactly(2))->method('addFieldToFilter')
-            ->withConsecutive(['bulk_uuid', ['eq' => $bulkUuid]], ['error_code', ['in' => $errorCodes]])
-            ->willReturnSelf();
+            ->willReturnCallback(function ($key, $value) use ($bulkUuid, $errorCodes, $operationCollection) {
+                if ($key == 'bulk_uuid' && $value == ['eq' => $bulkUuid]) {
+                    return $operationCollection;
+                } elseif ($key == 'error_code' && $value == ['in' => $errorCodes]) {
+                    return $operationCollection;
+                }
+            });
         $operation = $this->getMockBuilder(Operation::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

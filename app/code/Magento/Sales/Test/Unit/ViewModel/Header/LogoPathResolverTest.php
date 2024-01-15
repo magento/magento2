@@ -43,14 +43,15 @@ class LogoPathResolverTest extends TestCase
     public function testGetPathWhenInSingleStoreModeAndSalesLogoPathNotNull(): void
     {
         $this->scopeConfig->method('getValue')
-            ->withConsecutive(
-                ['general/single_store_mode/enabled', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null],
-                ['sales/identity/logo_html', ScopeInterface::SCOPE_WEBSITE, 1]
-            )
-            ->willReturn(
-                "1",
-                'sales_identity_logo_html_value'
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 == 'general/single_store_mode/enabled' && $arg2 == ScopeConfigInterface::SCOPE_TYPE_DEFAULT &&
+                    $arg3 == null) {
+                    return "1";
+                } elseif ($arg1 == 'sales/identity/logo_html' && $arg2 == ScopeInterface::SCOPE_WEBSITE &&
+                    $arg3 == 1) {
+                    return 'sales_identity_logo_html_value';
+                }
+            });
         $valueForAssert = $this->model->getPath();
         $this->assertEquals('sales/store/logo_html/sales_identity_logo_html_value', $valueForAssert);
         $this->assertNotNull($valueForAssert);
@@ -65,12 +66,18 @@ class LogoPathResolverTest extends TestCase
     public function testGetPathWhenInSingleStoreModeAndSalesLogoPathIsNullAndHeaderLogoPathIsNotNull(): void
     {
         $this->scopeConfig->method('getValue')
-            ->withConsecutive(
-                ['general/single_store_mode/enabled', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null],
-                ['sales/identity/logo_html', ScopeInterface::SCOPE_WEBSITE, 1],
-                ['design/header/logo_src', ScopeInterface::SCOPE_WEBSITE, 1]
-            )
-            ->willReturn('1', null, 'SingleStore.png');
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 == 'general/single_store_mode/enabled' && $arg2 == ScopeConfigInterface::SCOPE_TYPE_DEFAULT &&
+                    $arg3 == null) {
+                    return '1';
+                } elseif ($arg1 == 'sales/identity/logo_html' && $arg2 == ScopeInterface::SCOPE_WEBSITE &&
+                    $arg3 == 1) {
+                    return null;
+                } elseif ($arg1 == 'design/header/logo_src' && $arg2 == ScopeInterface::SCOPE_WEBSITE &&
+                    $arg3 == 1) {
+                    return 'SingleStore.png';
+                }
+            });
         $valueForAssert = $this->model->getPath();
         $this->assertEquals('logo/SingleStore.png', $valueForAssert);
         $this->assertNotNull($valueForAssert);
@@ -85,12 +92,18 @@ class LogoPathResolverTest extends TestCase
     public function testGetPathWhenInSingleStoreModeAndSalesLogoPathIsNullAndHeaderLogoPathIsNull(): void
     {
         $this->scopeConfig->method('getValue')
-            ->withConsecutive(
-                ['general/single_store_mode/enabled', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null],
-                ['sales/identity/logo_html', ScopeInterface::SCOPE_WEBSITE, 1],
-                ['design/header/logo_src', ScopeInterface::SCOPE_WEBSITE, 1]
-            )
-            ->willReturn('1', null, null);
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 == 'general/single_store_mode/enabled' && $arg2 == ScopeConfigInterface::SCOPE_TYPE_DEFAULT &&
+                    $arg3 == null) {
+                    return '1';
+                } elseif ($arg1 == 'sales/identity/logo_html' && $arg2 == ScopeInterface::SCOPE_WEBSITE &&
+                    $arg3 == 1) {
+                    return null;
+                } elseif ($arg1 == 'design/header/logo_src' && $arg2 == ScopeInterface::SCOPE_WEBSITE &&
+                    $arg3 == 1) {
+                    return null;
+                }
+            });
         $valueForAssert = $this->model->getPath();
         $this->assertNull($valueForAssert);
     }
@@ -103,11 +116,15 @@ class LogoPathResolverTest extends TestCase
     public function testGetPathWhenInMultiStoreModeAndPathNotNull(): void
     {
         $this->scopeConfig->method('getValue')
-            ->withConsecutive(
-                ['general/single_store_mode/enabled', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null],
-                ['sales/identity/logo_html', ScopeInterface::SCOPE_STORE, 1]
-            )
-            ->willReturn('0', 'sales_identity_logo_html_value');
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 == 'general/single_store_mode/enabled' && $arg2 == ScopeConfigInterface::SCOPE_TYPE_DEFAULT &&
+                    $arg3 == null) {
+                    return '0';
+                } elseif ($arg1 == 'sales/identity/logo_html' && $arg2 == ScopeInterface::SCOPE_STORE &&
+                    $arg3 == 1) {
+                    return 'sales_identity_logo_html_value';
+                }
+            });
         $valueForAssert = $this->model->getPath();
         $this->assertEquals('sales/store/logo_html/sales_identity_logo_html_value', $valueForAssert);
         $this->assertNotNull($valueForAssert);
@@ -122,12 +139,18 @@ class LogoPathResolverTest extends TestCase
     public function testGetPathWhenInMultiStoreModeAndSalesLogoPathIsNullAndHeaderLogoPathIsNull(): void
     {
         $this->scopeConfig->method('getValue')
-            ->withConsecutive(
-                ['general/single_store_mode/enabled', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null],
-                ['sales/identity/logo_html', ScopeInterface::SCOPE_STORE, 1],
-                ['design/header/logo_src', ScopeInterface::SCOPE_STORE, 1]
-            )
-            ->willReturn('0', null, null);
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 == 'general/single_store_mode/enabled' && $arg2 == ScopeConfigInterface::SCOPE_TYPE_DEFAULT &&
+                    $arg3 == null) {
+                    return '0';
+                } elseif ($arg1 == 'sales/identity/logo_html' && $arg2 == ScopeInterface::SCOPE_STORE &&
+                    $arg3 == 1) {
+                    return null;
+                } elseif ($arg1 == 'design/header/logo_src' && $arg2 == ScopeInterface::SCOPE_STORE &&
+                    $arg3 == 1) {
+                    return null;
+                }
+            });
         $valueForAssert = $this->model->getPath();
         $this->assertNull($valueForAssert);
     }
@@ -141,12 +164,18 @@ class LogoPathResolverTest extends TestCase
     public function testGetPathWhenInMultiStoreModeAndSalesLogoPathIsNullAndHeaderLogoPathIsNotNull(): void
     {
         $this->scopeConfig->method('getValue')
-            ->withConsecutive(
-                ['general/single_store_mode/enabled', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null],
-                ['sales/identity/logo_html', ScopeInterface::SCOPE_WEBSITE, 1],
-                ['design/header/logo_src', ScopeInterface::SCOPE_WEBSITE, 1]
-            )
-            ->willReturn('1', null, 'MultiStore.png');
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 == 'general/single_store_mode/enabled' && $arg2 == ScopeConfigInterface::SCOPE_TYPE_DEFAULT &&
+                    $arg3 == null) {
+                    return '1';
+                } elseif ($arg1 == 'sales/identity/logo_html' && $arg2 == ScopeInterface::SCOPE_WEBSITE &&
+                    $arg3 == 1) {
+                    return null;
+                } elseif ($arg1 == 'design/header/logo_src' && $arg2 == ScopeInterface::SCOPE_WEBSITE &&
+                    $arg3 == 1) {
+                    return 'MultiStore.png';
+                }
+            });
         $valueForAssert = $this->model->getPath();
         $this->assertEquals('logo/MultiStore.png', $valueForAssert);
         $this->assertNotNull($valueForAssert);

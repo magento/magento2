@@ -107,8 +107,10 @@ class ProductDataMapperTest extends TestCase
 
         $this->builderMock->expects($this->any())
             ->method('addFields')
-            ->withConsecutive([$additionalFields])
-            ->willReturnSelf();
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$additionalFields] => $this->builderMock,
+            });
+
         $this->builderMock->expects($this->any())
             ->method('build')
             ->willReturn([]);

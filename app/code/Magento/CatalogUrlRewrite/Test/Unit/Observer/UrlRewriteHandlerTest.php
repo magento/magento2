@@ -108,7 +108,7 @@ class UrlRewriteHandlerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->mergeDataProviderFactoryMock = $this->getMockBuilder(MergeDataProviderFactory::class)
-            ->onlyMethods(['create'])
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->mergeDataProviderMock = $this->getMockBuilder(MergeDataProvider::class)
@@ -163,14 +163,10 @@ class UrlRewriteHandlerTest extends TestCase
             ->willReturn(1);
         $category->expects($this->any())
             ->method('getData')
-            ->withConsecutive(
-                [$this->equalTo('save_rewrites_history')],
-                [$this->equalTo('initial_setup_flag')]
-            )
-            ->willReturnOnConsecutiveCalls(
-                true,
-                null
-            );
+            ->willReturnCallback(fn($operation) => match ([$operation]) {
+                [$this->equalTo('save_rewrites_history')] => true,
+                [$this->equalTo('initial_setup_flag')] => null,
+            });
 
         /* @var \Magento\Catalog\Model\Category|MockObject $childCategory1 */
         $childCategory1 = $this->getMockBuilder(Category::class)

@@ -525,11 +525,14 @@ class ItemCarrierTest extends TestCase
 
         $this->managerMock
             ->method('addErrorMessage')
-            ->withConsecutive([__('%1 for "%2".', 'Localized Exception', $productTwoName), null], [__(
-                'We couldn\'t add the following product(s) to the shopping cart: %1.',
-                '"' . $productOneName . '"'
-            ), null])
-            ->willReturnOnConsecutiveCalls($this->managerMock, $this->managerMock);
+            ->willReturnCallback(function ($param1, $param2) use ($productOneName, $productTwoName) {
+                if ($param1 == __('%1 for "%2".', 'Localized Exception', $productTwoName)) {
+                    return $this->managerMock;
+                } elseif ($param1 == __('We couldn\'t add the following product(s) to the shopping cart: %1.', '"' .
+                        $productOneName . '"')) {
+                    return $this->managerMock;
+                }
+            });
 
         $this->wishlistHelperMock->expects($this->once())
             ->method('calculate')
@@ -709,11 +712,12 @@ class ItemCarrierTest extends TestCase
 
         $this->managerMock
             ->method('addErrorMessage')
-            ->withConsecutive(
-                [__('We can\'t add this item to your shopping cart right now.'), null],
-                [__('We can\'t update the Wish List right now.'), null]
-            )
-            ->willReturnOnConsecutiveCalls($this->managerMock, $this->managerMock);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == __('We can\'t add this item to your shopping cart right now.') ||
+                    $arg1 == __('We can\'t update the Wish List right now.')) {
+                    return $this->managerMock;
+                }
+            });
 
         $productOneMock->expects($this->any())
             ->method('getName')

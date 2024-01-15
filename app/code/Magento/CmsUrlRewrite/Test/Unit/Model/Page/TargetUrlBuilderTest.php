@@ -119,26 +119,13 @@ class TargetUrlBuilderTest extends TestCase
             ->willReturn('test/index');
         $this->frontendUrlBuilderMock->expects($this->any())
             ->method('getUrl')
-            ->withConsecutive(
-                [
-                    'test/index',
-                    [
-                        '_current' => false,
-                        '_nosid' => true,
-                        '_query' => [
-                            StoreManagerInterface::PARAM_NAME => $storeId
-                        ]
-                    ]
-                ],
-                [
-                    'stores/store/switch',
-                    $urlParams
-                ]
-            )
-            ->willReturnOnConsecutiveCalls(
-                'http://domain.com/test',
-                'http://domain.com/test/index'
-            );
+            ->willReturnCallback(function ($routePath, $urlParams) {
+                if ($routePath === 'test/index') {
+                    return 'http://domain.com/test';
+                } elseif ($routePath === 'stores/store/switch') {
+                    return 'http://domain.com/test/index';
+                }
+            });
 
         $result = $this->viewModel->process('test/index', $storeId);
 
@@ -150,7 +137,7 @@ class TargetUrlBuilderTest extends TestCase
      *
      * @return array
      */
-    public function scopedUrlsDataProvider(): array
+    public static function scopedUrlsDataProvider(): array
     {
         $enStoreCode = 'en';
         $defaultUrlParams = [

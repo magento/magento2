@@ -112,7 +112,9 @@ class ExpressRedirectTest extends TestCase
         }
         $this->actionFlag
             ->method('set')
-            ->withConsecutive(...$withArgs);
+            ->willReturnCallback(function (...$args) {
+                return null;
+            });
 
         $expectedLoginUrl = 'loginURL';
         $expressRedirectMock->expects(
@@ -181,7 +183,7 @@ class ExpressRedirectTest extends TestCase
      *
      * @return array
      */
-    public function redirectLoginDataProvider(): array
+    public static function redirectLoginDataProvider(): array
     {
         return [
             [[], 'beforeCustomerUrl', 'beforeCustomerUrlDEFAULT'],

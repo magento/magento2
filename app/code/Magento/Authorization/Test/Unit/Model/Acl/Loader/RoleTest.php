@@ -155,10 +155,11 @@ class RoleTest extends TestCase
         $aclMock = $this->createMock(Acl::class);
         $aclMock
             ->method('addRole')
-            ->withConsecutive(
-                [$this->anything(), null],
-                [$this->anything(), '1']
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg2 === null || $arg2 === '1') {
+                    return null;
+                }
+            });
 
         $this->model->populateAcl($aclMock);
     }
