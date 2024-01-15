@@ -35,5 +35,6 @@
         <element name="shippingMethodDhlMedicalExpressLabel" type="text" selector="#label_method_Q_dhl"/>
         <element name="shippingMethodDhlMedicalExpress" type="radio" selector="#checkout-shipping-method-load input[value='dhl_Q']"/>
         <element name="shippingMethodFreeShippingLabel" type="text" selector="#label_carrier_freeshipping_freeshipping"/>
+        <element name="shippingDHLErrorMessage" type="text" selector="#checkout-shipping-method-load .table-checkout-shipping-method tr.row-error .error div"/>
     </section>
 </sections>

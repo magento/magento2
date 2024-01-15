@@ -84,6 +84,7 @@
             <waitForElementVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShippingLabel}}" stepKey="waitForFreeShippingLabelVisibleAfterCountryChange"/>
             <waitForElementVisible selector="{{CheckoutShippingMethodsSection.shippingMethodDhlLabel}}" stepKey="waitForDHLLabelVisibleAfterCountryChange"/>
             <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodDhlWorldWideExpress}}" stepKey="waitForDHLPriceNotVisibleAfterCountryChange"/>
+            <waitForText selector="{{CheckoutShippingMethodsSection.shippingDHLErrorMessage}}" userInput="This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us." stepKey="seeDhlErrorMessage"/>
             <!-- Fill New Data for checkout page -->
             <selectOption selector="{{CheckoutShippingSection.country}}" userInput="United Kingdom" stepKey="fillCountry"/>
             <fillField selector="{{CheckoutShippingSection.city}}" userInput="London" stepKey="fillCity"/>
