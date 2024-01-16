@@ -209,6 +209,7 @@ class ViewedTest extends TestCase
      * @param InvokedCount $deleteCount
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @dataProvider intervalsDataProvider
      */
     public function testAggregate($from, $to, InvokedCount $truncateCount, InvokedCount $deleteCount): void
@@ -219,16 +220,16 @@ class ViewedTest extends TestCase
         $this->helperMock
             ->method('updateReportRatingPos')
         ->willReturnCallback(function ($connection, $type, $column, $mainTable, $aggregationTable) {
-            if ($type == 'day' && $column == 'views_num' &&
+            if ($connection == $this->connectionMock && $type == 'day' && $column == 'views_num' &&
                 $mainTable == 'report_viewed_product_aggregated_daily' &&
                 $aggregationTable == 'report_viewed_product_aggregated_daily') {
                 return $this->helperMock;
-            } elseif ($type == 'month' &&
+            } elseif ($connection == $this->connectionMock && $type == 'month' &&
                 $column == 'views_num' &&
                 $mainTable == 'report_viewed_product_aggregated_daily' &&
                 $aggregationTable == 'report_viewed_product_aggregated_monthly') {
                 return $this->helperMock;
-            } elseif ($type == 'year' &&
+            } elseif ($connection == $this->connectionMock && $type == 'year' &&
                 $column == 'views_num' &&
                 $mainTable == 'report_viewed_product_aggregated_daily' &&
                 $aggregationTable == 'report_viewed_product_aggregated_yearly') {

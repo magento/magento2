@@ -62,6 +62,7 @@ class LogoPathResolverTest extends TestCase
      * and logo path is not defined in config
      * and header logo path is defined in config
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testGetPathWhenInSingleStoreModeAndSalesLogoPathIsNullAndHeaderLogoPathIsNotNull(): void
     {
@@ -88,6 +89,7 @@ class LogoPathResolverTest extends TestCase
      * and logo path is not defined in config
      * and header logo path is not defined in config
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testGetPathWhenInSingleStoreModeAndSalesLogoPathIsNullAndHeaderLogoPathIsNull(): void
     {
@@ -135,6 +137,7 @@ class LogoPathResolverTest extends TestCase
      * and logo path is not defined in config
      * and header logo path is not defined in config
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testGetPathWhenInMultiStoreModeAndSalesLogoPathIsNullAndHeaderLogoPathIsNull(): void
     {
@@ -160,6 +163,7 @@ class LogoPathResolverTest extends TestCase
      * and logo path is not defined in config
      * and header logo path is defined in config
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testGetPathWhenInMultiStoreModeAndSalesLogoPathIsNullAndHeaderLogoPathIsNotNull(): void
     {

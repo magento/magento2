@@ -125,11 +125,10 @@ class PredispatchReviewObserverTest extends TestCase
         $this->configMock
             ->method('getValue')
             ->willReturnCallback(function ($arg1, $arg2) use ($expectedRedirectUrl) {
-                if ($arg1 === PredispatchReviewObserver::XML_PATH_REVIEW_ACTIVE &&
-                    $arg2 === ScopeInterface::SCOPE_STORE) {
+                if ($arg1 == PredispatchReviewObserver::XML_PATH_REVIEW_ACTIVE &&
+                    $arg2 == ScopeInterface::SCOPE_STORE) {
                     return false;
-                }
-                if ($arg1 === 'web/default/no_route' && $arg2 === ScopeInterface::SCOPE_STORE) {
+                } elseif ($arg1 == 'web/default/no_route' && $arg2 == ScopeInterface::SCOPE_STORE) {
                     return $expectedRedirectUrl;
                 }
             });

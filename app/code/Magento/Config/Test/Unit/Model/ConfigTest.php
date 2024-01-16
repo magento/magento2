@@ -215,7 +215,7 @@ class ConfigTest extends TestCase
             ->method('dispatch')
             ->willReturnCallback(function ($arg1, $arg2) {
                 if ($arg1== 'admin_system_config_changed_section_' &&
-                    ($this->arrayHasKey('website') || $this->arrayHasKey('store'))) {
+                    (array_key_exists('website', $arg2) || array_key_exists('store', $arg2))) {
                     return null;
                 }
             });
@@ -282,7 +282,7 @@ class ConfigTest extends TestCase
             ->method('dispatch')
             ->willReturnCallback(function ($arg1, $arg2) {
                 if ($arg1== 'admin_system_config_changed_section_' &&
-                    ($this->arrayHasKey('website') || $this->arrayHasKey('store'))) {
+                    (array_key_exists('website', $arg2) || array_key_exists('store', $arg2))) {
                     return null;
                 }
             });

@@ -739,6 +739,7 @@ class QuoteManagementTest extends TestCase
      * @return void
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testSubmit(): void
     {
@@ -1215,6 +1216,7 @@ class QuoteManagementTest extends TestCase
     /**
      * @return void
      * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testGetCartForCustomer(): void
     {
@@ -1265,6 +1267,7 @@ class QuoteManagementTest extends TestCase
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testSubmitForCustomer(): void
     {
@@ -1376,6 +1379,7 @@ class QuoteManagementTest extends TestCase
      * @param array $methods
      *
      * @return MockObject
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function createPartialMockForAbstractClass(string $className, array $methods = []): MockObject
     {
@@ -1394,6 +1398,7 @@ class QuoteManagementTest extends TestCase
      * @return void
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testSubmitWithLockException(): void
     {

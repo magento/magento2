@@ -335,9 +335,9 @@ class CategoryTest extends TestCase
         $this->itemDataBuilder
             ->method('addItemData')
             ->willReturnCallback(function ($arg1, $arg2, $arg3) {
-                if ($arg1 === 'Category 1' && $arg2 === 120 && $arg3 === 10) {
+                if ($arg1 == 'Category 1' && $arg2 == 120 && $arg3 == 10) {
                     return $this->itemDataBuilder;
-                } elseif ($arg1 === 'Category 2' && $arg2 === 5641 && $arg3 === 45) {
+                } elseif ($arg1 == 'Category 2' && $arg2 == 5641 && $arg3 == 45) {
                     return $this->itemDataBuilder;
                 }
             });

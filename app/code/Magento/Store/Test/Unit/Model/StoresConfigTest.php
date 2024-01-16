@@ -1,7 +1,5 @@
 <?php declare(strict_types=1);
 /**
- * Test class for \Magento\Store\Model\Store\StoresConfig
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */

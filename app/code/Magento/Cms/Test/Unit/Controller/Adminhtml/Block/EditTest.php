@@ -219,7 +219,7 @@ class EditTest extends TestCase
         $titleMock
             ->method('prepend')
             ->willReturnCallback(function ($arg) {
-                if ($arg == $this->getTitle() || [__('Blocks')]) {
+                if ($arg == $this->getTitle() || $arg == [__('Blocks')]) {
                     return null;
                 }
             });
@@ -237,7 +237,7 @@ class EditTest extends TestCase
             ->willReturnCallback(function ($arg1, $arg2) use ($label, $title, $resultPageMock) {
                 if ($arg1 == (__($label)) || $arg1 == (__($title))) {
                     return $resultPageMock;
-                } elseif ($arg1 == []) {
+                } elseif ($arg1 === null && $arg2 === null) {
                     return null;
                 }
             });

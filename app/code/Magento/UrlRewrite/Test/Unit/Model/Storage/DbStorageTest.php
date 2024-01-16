@@ -84,6 +84,7 @@ class DbStorageTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testFindAllByData(): void
     {

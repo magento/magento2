@@ -279,9 +279,9 @@ class RollbackTest extends TestCase
         $this->objectManagerMock
             ->method('create')
             ->willReturnCallback(function ($arg1, $arg2) {
-                if ($arg1 == Db::class) {
+                if ($arg1 == Db::class && empty($arg2)) {
                     return $this->backupResourceModelMock;
-                } elseif ($arg1 == Backup::class) {
+                } elseif ($arg1 == Backup::class && empty($arg2)) {
                     return $this->backupModelMock;
                 }
             });

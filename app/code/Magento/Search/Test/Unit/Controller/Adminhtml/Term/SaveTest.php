@@ -275,6 +275,7 @@ class SaveTest extends TestCase
      * @param bool $withStoreId
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function mockGetRequestData(
         string $queryText,

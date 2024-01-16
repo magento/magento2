@@ -69,6 +69,7 @@ class BuilderTest extends TestCase
      * @param bool $isTransactionExists
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @dataProvider createDataProvider
      */
     public function testCreate(
@@ -88,7 +89,6 @@ class BuilderTest extends TestCase
         if ($document) {
             $document = $this->expectDocument($transactionId);
         }
-
         $parentTransaction = $this->expectTransaction($orderId, $paymentId);
         $transaction = $this->expectTransaction($orderId, $paymentId);
         $transaction->expects($this->atLeastOnce())->method('getTxnId')->willReturn($transactionId);
@@ -161,7 +161,6 @@ class BuilderTest extends TestCase
         if ($additionalInfo) {
             $transaction->expects($this->exactly(count($additionalInfo)))->method('setAdditionalInformation');
         }
-
         $builder = $this->builder->setPayment($this->paymentMock)
             ->setOrder($this->orderMock)
             ->setAdditionalInformation($additionalInfo)

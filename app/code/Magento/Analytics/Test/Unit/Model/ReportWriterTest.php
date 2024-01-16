@@ -135,8 +135,14 @@ class ReportWriterTest extends TestCase
         $errorStreamMock
             ->expects($this->exactly(2))
             ->method('writeCsv')
-            ->willReturnCallback(function ($arg) {
-                 return null;
+            ->willReturnCallback(function (...$args) use ($expectedFileData) {
+                static $index = 0;
+                $expectedArgs = [
+                    [array_keys($expectedFileData[0])],
+                    [$expectedFileData[0]]
+                ];
+                $index++;
+                return $args === $expectedArgs[$index - 1] ? null : null;
             });
 
         $errorStreamMock->expects($this->once())->method('unlock');

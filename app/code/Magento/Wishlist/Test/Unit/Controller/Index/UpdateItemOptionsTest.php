@@ -280,9 +280,9 @@ class UpdateItemOptionsTest extends TestCase
         $this->requestMock
             ->method('getParam')
             ->willReturnCallback(function ($arg1, $arg2) {
-                if ($arg1 == 'product') {
+                if ($arg1 == 'product' && is_null($arg2)) {
                     return 2;
-                } elseif ($arg1 == 'id') {
+                } elseif ($arg1 == 'id' && is_null($arg2)) {
                     return 3;
                 }
             });
@@ -377,9 +377,9 @@ class UpdateItemOptionsTest extends TestCase
         $this->requestMock
             ->method('getParam')
             ->willReturnCallback(function ($arg1, $arg2) {
-                if ($arg1 == 'product') {
+                if ($arg1 == 'product' && is_null($arg2)) {
                     return 2;
-                } elseif ($arg1 == 'id') {
+                } elseif ($arg1 == 'id' && is_null($arg2)) {
                     return 3;
                 }
             });
@@ -503,9 +503,9 @@ class UpdateItemOptionsTest extends TestCase
         $this->requestMock
             ->method('getParam')
             ->willReturnCallback(function ($arg1, $arg2) {
-                if ($arg1 == 'product') {
+                if ($arg1 == 'product' && is_null($arg2)) {
                     return 2;
-                } elseif ($arg1 == 'id') {
+                } elseif ($arg1 == 'id' && is_null($arg2)) {
                     return 3;
                 }
             });

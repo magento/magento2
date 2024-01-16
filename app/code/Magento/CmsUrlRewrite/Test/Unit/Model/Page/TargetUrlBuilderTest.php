@@ -119,11 +119,23 @@ class TargetUrlBuilderTest extends TestCase
             ->willReturn('test/index');
         $this->frontendUrlBuilderMock->expects($this->any())
             ->method('getUrl')
-            ->willReturnCallback(function ($routePath, $urlParams) {
-                if ($routePath === 'test/index') {
-                    return 'http://domain.com/test';
-                } elseif ($routePath === 'stores/store/switch') {
-                    return 'http://domain.com/test/index';
+            ->willReturnCallback(function (...$args) use ($storeId, $urlParams) {
+                static $callCount = 0;
+                $callCount++;
+                switch ($callCount) {
+                    case 1:
+                        if ($args === ['test/index',
+                            ['_current' => false, '_nosid' => true, '_query' =>
+                                [StoreManagerInterface::PARAM_NAME => $storeId]]]) {
+                            return 'http://domain.com/test';
+                        }
+                        break;
+                    case 2:
+                        if ($args === ['stores/store/switch', $urlParams]) {
+                            return 'http://domain.com/test/index';
+                        }
+                        break;
+
                 }
             });
 

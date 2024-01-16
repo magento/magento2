@@ -784,6 +784,7 @@ class DataTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testGetSwatchesByOptionsIdIf2(): void
     {

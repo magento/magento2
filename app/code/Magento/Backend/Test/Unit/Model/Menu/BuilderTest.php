@@ -85,8 +85,14 @@ class BuilderTest extends TestCase
 
         $this->menuMock
             ->method('add')
-            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
-                if ($arg3 == 2 || $arg3 == 4) {
+            ->willReturnCallback(function (...$args) {
+                static $index = 0;
+                $expectedArgs = [
+                    [$this->isInstanceOf(Item::class), null, 2],
+                    [$this->isInstanceOf(Item::class), null, 4]
+                ];
+                $index++;
+                if ($args === $expectedArgs[$index - 1]) {
                     return null;
                 }
             });

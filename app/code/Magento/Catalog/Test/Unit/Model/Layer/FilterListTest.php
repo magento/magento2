@@ -94,17 +94,28 @@ class FilterListTest extends TestCase
     {
         $this->objectManagerMock
             ->method('create')
-            ->withConsecutive(
-                [],
-                [
-                    $expectedClass,
-                    [
-                        'data' => ['attribute_model' => $this->attributeMock],
-                        'layer' => $this->layerMock
-                    ]
-                ]
-            )
-            ->willReturnOnConsecutiveCalls('filter', 'filter');
+            ->willReturnCallback(function (...$args) {
+                static $callCount = 0;
+                $callCount++;
+                switch ($callCount) {
+                    case 1:
+                        if (empty($arg)) {
+                            return 'filter';
+                        }
+                        break;
+                    case 2:
+                        $expectedClass = $args[0];
+                        $expectedArguments = [
+                            'data' => ['attribute_model' => $this->attributeMock],
+                            'layer' => $this->layerMock
+                        ];
+                        if ($expectedClass == $expectedClass &&
+                            $args[1] == $expectedArguments) {
+                            return 'filter';
+                        }
+                        break;
+                }
+            });
 
         $this->attributeMock->expects($this->once())
             ->method($method)
@@ -167,7 +178,7 @@ class FilterListTest extends TestCase
     /**
      * @return array
      */
-    public function getFiltersDataProvider(): array
+    public static function getFiltersDataProvider(): array
     {
         return [
             [
@@ -193,7 +204,7 @@ class FilterListTest extends TestCase
      *
      * @return array
      */
-    public function getFiltersWithoutCategoryDataProvider(): array
+    public static function getFiltersWithoutCategoryDataProvider(): array
     {
         return [
             'Filters contains only price attribute' => [

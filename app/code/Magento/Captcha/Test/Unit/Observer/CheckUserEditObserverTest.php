@@ -36,7 +36,7 @@ class CheckUserEditObserverTest extends TestCase
     /** @var ActionFlag|MockObject */
     protected $actionFlagMock;
 
-    /* @var \Magento\Framework\Message\ManagerInterface|MockObject */
+    /** @var \Magento\Framework\Message\ManagerInterface|MockObject */
     protected $messageManagerMock;
 
     /** @var RedirectInterface|MockObject */
@@ -167,10 +167,9 @@ class CheckUserEditObserverTest extends TestCase
             ->method('addErrorMessage')
             ->willReturnCallback(function ($arg1) use ($message) {
                 if ($arg1 == $message || $arg1 == (__('Incorrect CAPTCHA'))) {
-                    return '';
+                    return null;
                 }
             });
-
 
         $this->actionFlagMock->expects($this->once())
             ->method('set')

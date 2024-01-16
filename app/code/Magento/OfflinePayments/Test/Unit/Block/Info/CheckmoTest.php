@@ -96,7 +96,7 @@ class CheckmoTest extends TestCase
             ->willReturnCallback(function ($arg1) use ($details) {
                 if ($arg1 == 'mailing_address') {
                     return $details;
-                } elseif ($arg1 == []) {
+                } elseif (empty($arg1)) {
                     return null;
                 }
             });

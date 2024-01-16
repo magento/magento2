@@ -116,11 +116,24 @@ class FormTest extends TestCase
             ->getMockForAbstractClass();
         $fieldset
             ->method('addField')
-            ->willReturnCallback(function ($arg1) use ($storeElement) {
-                if (empty($param1)) {
-                    return null;
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($storeElement) {
+                static $callCount = 0;
+                $callCount++;
+                switch ($callCount) {
+                    case 1:
+                    case 2:
+                        return null;
+                    case 3:
+                        if ($arg1 == 'store_id' && $arg2 == 'select' && $arg3 == [
+                                'label' => 'Store',
+                                'title' => 'Store',
+                                'name' => 'store_id',
+                                'required' => true,
+                                'value' => 0
+                            ]) {
+                            return $storeElement;
+                        }
                 }
-                return $storeElement;
             });
 
         $product = $this->createMock(Product::class);

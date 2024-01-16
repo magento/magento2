@@ -241,6 +241,7 @@ class WebapiTest extends TestCase
         }
 
         $this->registry->expects($this->any())
+            ->method('registry')
             ->willReturnCallback(fn($param) => match ([$param]) {
                 [IntegrationController::REGISTRY_KEY_CURRENT_RESOURCE] => false,
                 [IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION] => $integrationData
