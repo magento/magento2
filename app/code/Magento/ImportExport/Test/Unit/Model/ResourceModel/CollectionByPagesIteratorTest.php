@@ -117,11 +117,12 @@ class CollectionByPagesIteratorTest extends TestCase
             ->method('callback')
             ->willReturnCallback(function () use ($withArgs) {
                 static $callCount = 0;
-
                 if ($callCount < count($withArgs)) {
                     $args = $withArgs[$callCount];
-                    $callCount++;
-                    return null;
+                    if ($args) {
+                        $callCount++;
+                        return null;
+                    }
                 }
             });
 
