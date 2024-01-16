@@ -37,14 +37,10 @@ interface ParentValueFactorProviderInterface
     /**
      * Returns the runtime value that should be used as factor.
      *
-     * Throws an Exception if factor value cannot be resolved.
-     *
      * @param ContextInterface $context
      * @param array $parentValue
-     *
-     * @throws \Exception
-     *
      * @return string
+     * @throws \InvalidArgumentException
      */
     public function getFactorValue(ContextInterface $context, array $parentValue): string;
 }

@@ -34,7 +34,7 @@ For information about significant changes in patch releases, see [2.4.x Release 
 
 More information about email templates are at articles:
 
-- [Marketing/Email](https://docs.magento.com/user-guide/marketing/email-templates.html)
-- [Email templates list](https://docs.magento.com/user-guide/marketing/email-template-list.html)
+- [Marketing/Email](https://experienceleague.adobe.com/docs/commerce-admin/systems/communications/email-templates.html)
+- [Email templates list](https://experienceleague.adobe.com/docs/commerce-admin/systems/communications/email-templates.html#email-template-list)
 - [Customize email templates](https://developer.adobe.com/commerce/frontend-core/guide/templates/email/)
 - [Migrating custom email templates](https://developer.adobe.com/commerce/frontend-core/guide/templates/email-migration/#nested-arrays)

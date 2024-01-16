@@ -223,15 +223,21 @@ class RulesApplier
     {
         if ($item->getChildren() && $item->isChildrenCalculated()) {
             $cloneItem = clone $item;
+
+            $applyToChildren = false;
+            foreach ($item->getChildren() as $childItem) {
+                if ($rule->getActions()->validate($childItem)) {
+                    $discountData = $this->getDiscountData($childItem, $rule, $address);
+                    $this->setDiscountData($discountData, $childItem);
+                    $applyToChildren = true;
+                }
+            }
             /**
              * validate without children
              */
-            $applyAll = $rule->getActions()->validate($cloneItem);
-            foreach ($item->getChildren() as $childItem) {
-                if ($applyAll || $rule->getActions()->validate($childItem)) {
-                    $discountData = $this->getDiscountData($childItem, $rule, $address);
-                    $this->setDiscountData($discountData, $childItem);
-                }
+            if (!$applyToChildren && $rule->getActions()->validate($cloneItem)) {
+                $discountData = $this->getDiscountData($item, $rule, $address);
+                $this->setDiscountData($discountData, $item);
             }
         } else {
             $discountData = $this->getDiscountData($item, $rule, $address);
@@ -450,7 +456,7 @@ class RulesApplier
         $address = $item->getAddress();
         $quote = $item->getQuote();
 
-        $item->setAppliedRuleIds(join(',', $appliedRuleIds));
+        $item->setAppliedRuleIds($this->validatorUtility->mergeIds($item->getAppliedRuleIds(), $appliedRuleIds));
         $address->setAppliedRuleIds($this->validatorUtility->mergeIds($address->getAppliedRuleIds(), $appliedRuleIds));
         $quote->setAppliedRuleIds($this->validatorUtility->mergeIds($quote->getAppliedRuleIds(), $appliedRuleIds));
 
