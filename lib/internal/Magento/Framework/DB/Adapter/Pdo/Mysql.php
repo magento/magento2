@@ -4228,7 +4228,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
                 }
             }
         }
-    
+    }
     /**
      * Disable show internals with var_dump
      *
