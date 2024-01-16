@@ -117,7 +117,7 @@ class FormTest extends TestCase
 
         $this->_fieldsetMock
             ->method('addField')
-            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($experimentCode, $experimentCodeId) {
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
                 static $callCount = 0;
                 if ($callCount === 0) {
                     $callCount++;
@@ -129,7 +129,7 @@ class FormTest extends TestCase
                     return null;
                 }
             });
-          
+
         $this->_formMock->expects($this->once())->method('setFieldNameSuffix')->with('google_experiment');
     }
 }

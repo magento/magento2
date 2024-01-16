@@ -100,6 +100,7 @@ class PriceTest extends TestCase
     /**
      * @throws \ReflectionException
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testCalculateDynamicBundleSelectionPrice(): void
     {
