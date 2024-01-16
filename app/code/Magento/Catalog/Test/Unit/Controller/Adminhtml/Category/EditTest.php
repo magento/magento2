@@ -135,10 +135,6 @@ class EditTest extends TestCase
             [
                 Config::class,
                 $this->createMock(Config::class)
-            ],
-            [
-                Session::class,
-                $this->createMock(Session::class)
             ]
         ];
         $this->objectManager->prepareObjectManager($objects);
