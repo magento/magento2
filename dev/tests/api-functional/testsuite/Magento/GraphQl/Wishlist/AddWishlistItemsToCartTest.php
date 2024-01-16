@@ -145,7 +145,7 @@ class AddWishlistItemsToCartTest extends GraphQlAbstract
 
         $query = $this->getQuery($wishlistId, $itemId);
 
-        $this->graphQlMutation($query, [], '', ['Authorization' => 'Bearer test_token']);
+        $this->graphQlMutation($query);
     }
 
     /**

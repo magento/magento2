@@ -49,6 +49,9 @@ QUERY;
 }
 QUERY;
 
+    /**
+     * @var CustomerTokenServiceInterface
+     */
     private $tokenService;
 
     protected function setUp(): void
