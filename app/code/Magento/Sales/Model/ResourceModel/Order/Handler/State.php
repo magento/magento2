@@ -39,7 +39,8 @@ class State
                 $order->setState(Order::STATE_CLOSED)
                     ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_CLOSED));
             } elseif ($currentState === Order::STATE_PROCESSING
-                && (!$order->canShip() || $this->isPartiallyRefundedOrderShipped($order))
+                && (!$order->canShip() ||
+                    ($this->isPartiallyRefundedOrderShipped($order) && !$this->hasPendingShipmentItems($order)))
             ) {
                 $order->setState(Order::STATE_COMPLETE)
                     ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_COMPLETE));
@@ -58,6 +59,7 @@ class State
      */
     public function isPartiallyRefundedOrderShipped(Order $order): bool
     {
+        //we should also check the number of items that require shipping
         $isPartiallyRefundedOrderShipped = false;
         if ($this->getShippedItems($order) > 0
             && $order->getTotalQtyOrdered() <= $this->getRefundedItems($order) + $this->getShippedItems($order)) {
@@ -65,6 +67,23 @@ class State
         }
 
         return $isPartiallyRefundedOrderShipped;
+    }
+
+    /**
+     * Check if order has items that haven't been shipped yet
+     *
+     * @param Order $order
+     * @return bool
+     */
+    private function hasPendingShipmentItems(Order $order): bool
+    {
+        foreach ($order->getAllItems() as $item) {
+            if ($item->canShip()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
