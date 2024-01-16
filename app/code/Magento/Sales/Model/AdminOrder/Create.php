@@ -334,8 +334,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         StoreManagerInterface                                $storeManager = null,
         CustomAttributeListInterface                         $customAttributeList = null,
         OrderRepositoryInterface                             $orderRepositoryInterface = null
-    )
-    {
+    ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
         $this->_coreRegistry = $coreRegistry;
@@ -827,6 +826,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * phpcs:disable Generic.Metrics.NestingLevel
      */
