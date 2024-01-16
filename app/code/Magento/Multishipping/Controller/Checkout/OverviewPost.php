@@ -10,6 +10,9 @@ namespace Magento\Multishipping\Controller\Checkout;
 use Magento\Checkout\Api\AgreementsValidatorInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Checkout\Api\PaymentProcessingRateLimiterInterface;
+use Magento\Checkout\Api\Exception\PaymentProcessingRateLimitExceededException;
+use Magento\Framework\App\ObjectManager;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
@@ -21,12 +24,15 @@ use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 use Psr\Log\LoggerInterface;
 
 /**
+ * Placing orders.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OverviewPost extends Checkout implements HttpPostActionInterface
 {
     /**
      * @var Validator
+     * @deprecated Form key validation is handled on the framework level.
      */
     protected $formKeyValidator;
 
@@ -46,6 +52,11 @@ class OverviewPost extends Checkout implements HttpPostActionInterface
     private $session;
 
     /**
+     * @var PaymentProcessingRateLimiterInterface
+     */
+    private $paymentRateLimiter;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param CustomerRepositoryInterface $customerRepository
@@ -54,6 +65,7 @@ class OverviewPost extends Checkout implements HttpPostActionInterface
      * @param LoggerInterface $logger
      * @param AgreementsValidatorInterface $agreementValidator
      * @param SessionManagerInterface $session
+     * @param PaymentProcessingRateLimiterInterface|null $paymentRateLimiter
      */
     public function __construct(
         Context $context,
@@ -63,12 +75,15 @@ class OverviewPost extends Checkout implements HttpPostActionInterface
         Validator $formKeyValidator,
         LoggerInterface $logger,
         AgreementsValidatorInterface $agreementValidator,
-        SessionManagerInterface $session
+        SessionManagerInterface $session,
+        ?PaymentProcessingRateLimiterInterface $paymentRateLimiter = null
     ) {
         $this->formKeyValidator = $formKeyValidator;
         $this->logger = $logger;
         $this->agreementsValidator = $agreementValidator;
         $this->session = $session;
+        $this->paymentRateLimiter = $paymentRateLimiter
+            ?? ObjectManager::getInstance()->get(PaymentProcessingRateLimiterInterface::class);
 
         parent::__construct(
             $context,
@@ -86,15 +101,12 @@ class OverviewPost extends Checkout implements HttpPostActionInterface
      */
     public function execute()
     {
-        if (!$this->formKeyValidator->validate($this->getRequest())) {
-            $this->_forward('backToAddresses');
-            return;
-        }
-        if (!$this->_validateMinimumAmount()) {
-            return;
-        }
-
         try {
+            $this->paymentRateLimiter->limit();
+            if (!$this->_validateMinimumAmount()) {
+                return;
+            }
+
             if (!$this->agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))) {
                 $this->messageManager->addErrorMessage(
                     __('Please agree to all Terms and Conditions before placing the order.')
@@ -123,6 +135,9 @@ class OverviewPost extends Checkout implements HttpPostActionInterface
                 $this->_getCheckout()->getCheckoutSession()->setDisplaySuccess(true);
                 $this->_redirect('*/*/success');
             }
+        } catch (PaymentProcessingRateLimitExceededException $ex) {
+            $this->messageManager->addErrorMessage($ex->getMessage());
+            $this->_redirect('*/*/overview');
         } catch (PaymentException $e) {
             $message = $e->getMessage();
             if (!empty($message)) {

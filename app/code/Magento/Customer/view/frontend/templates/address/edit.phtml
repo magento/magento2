@@ -8,7 +8,9 @@
 /** @var \Magento\Customer\ViewModel\Address $viewModel */
 /** @var \Magento\Framework\Escaper $escaper */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Customer\ViewModel\Address\RegionProvider $regionProvider */
 $viewModel = $block->getViewModel();
+$regionProvider = $block->getRegionProvider();
 ?>
 <?php $_company = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Company::class) ?>
 <?php $_telephone = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Telephone::class) ?>
@@ -25,7 +27,8 @@ $viewModel = $block->getViewModel();
 <?php $_postcodeValidationClass_value = $viewModel->addressGetAttributeValidationClass('postcode'); ?>
 <?php $_postcodeValidationClass = $_postcodeValidationClass_value; ?>
 <?php $_streetValidationClass = $viewModel->addressGetAttributeValidationClass('street'); ?>
-<?php $_streetValidationClassNotRequired = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
+<?php $_streetValidationClassNotRequired = $_streetValidationClass !== null ?
+    trim(str_replace('required-entry', '', $_streetValidationClass)) : ''; ?>
 <?php $_regionValidationClass = $viewModel->addressGetAttributeValidationClass('region'); ?>
 <form class="form-address-edit"
       action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>"
@@ -58,8 +61,15 @@ $viewModel = $block->getViewModel();
         <div class="field street required">
             <label for="street_1" class="label"><span><?= /* @noEscape */ $_street ?></span></label>
             <div class="control">
+                <div class="field primary">
+                    <label for="street_1" class="label">
+                        <span>
+                            <?= $escaper->escapeHtml(__('Street Address: Line %1', 1)) ?>
+                        </span>
+                    </label>
+                </div>
                 <input type="text"
-                       name="street[]"
+                       name="street[0]"
                        value="<?= $escaper->escapeHtmlAttr($block->getStreetLine(1)) ?>"
                        title="<?= /* @noEscape */ $_street ?>"
                        id="street_1"
@@ -68,10 +78,10 @@ $viewModel = $block->getViewModel();
                     <?php for ($_i = 1, $_n = $viewModel->addressGetStreetLines(); $_i < $_n; $_i++): ?>
                         <div class="field additional">
                             <label class="label" for="street_<?= /* @noEscape */ $_i + 1 ?>">
-                                <span><?= $escaper->escapeHtml(__('Street Address %1', $_i + 1)) ?></span>
+                                <span><?= $escaper->escapeHtml(__('Street Address: Line %1', $_i + 1)) ?></span>
                             </label>
                             <div class="control">
-                                <input type="text" name="street[]"
+                                <input type="text" name="street[<?= /* @noEscape */ $_i ?>]"
                                        value="<?= $escaper->escapeHtmlAttr($block->getStreetLine($_i + 1)) ?>"
                                        title="<?= $escaper->escapeHtmlAttr(__('Street Address %1', $_i + 1)) ?>"
                                        id="street_<?= /* @noEscape */ $_i + 1 ?>"
@@ -195,6 +205,7 @@ $viewModel = $block->getViewModel();
             <button type="submit"
                     class="action save primary"
                     data-action="save-address"
+                    disabled="disabled"
                     title="<?= $escaper->escapeHtmlAttr(__('Save Address')) ?>">
                 <span><?= $escaper->escapeHtml(__('Save Address')) ?></span>
             </button>
@@ -214,13 +225,13 @@ $viewModel = $block->getViewModel();
             }
         },
         "#country": {
-            "regionUpdater": {
+            "directoryRegionUpdater": {
                 "optionalRegionAllowed": <?= /* @noEscape */ $_displayAll ? 'true' : 'false' ?>,
                 "regionListId": "#region_id",
                 "regionInputId": "#region",
                 "postcodeId": "#zip",
                 "form": "#form-validate",
-                "regionJson": <?= /* @noEscape */ $viewModel->dataGetRegionJson() ?>,
+                "regionJson": <?= /* @noEscape */ $regionProvider->getRegionJson(); ?>,
                 "defaultRegion": "<?= (int) $block->getRegionId() ?>",
                 "countriesWithOptionalZip": <?= /* @noEscape */ $viewModel->dataGetCountriesWithOptionalZip(true) ?>
             }

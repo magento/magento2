@@ -3,14 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Model;
 
-use Magento\Framework\Exception\InputException;
-use Magento\Quote\Model\Quote\Address\BillingAddressPersister;
-use Psr\Log\LoggerInterface as Logger;
-use Magento\Quote\Api\BillingAddressManagementInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\InputException;
+use Magento\Quote\Api\BillingAddressManagementInterface;
+use Magento\Quote\Api\Data\AddressInterface;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Quote billing address write service object.
@@ -25,14 +26,14 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     protected $addressValidator;
 
     /**
-     * Logger.
+     * Logger object.
      *
      * @var Logger
      */
     protected $logger;
 
     /**
-     * Quote repository.
+     * Quote repository object.
      *
      * @var \Magento\Quote\Api\CartRepositoryInterface
      */
@@ -72,10 +73,14 @@ class BillingAddressManagement implements BillingAddressManagementInterface
      * @inheritdoc
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address, $useForShipping = false)
+    public function assign($cartId, AddressInterface $address, $useForShipping = false)
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
+
+        // validate the address
+        $this->addressValidator->validateWithExistingAddress($quote, $address);
+
         $address->setCustomerId($quote->getCustomerId());
         $quote->removeAddress($quote->getBillingAddress()->getId());
         $quote->setBillingAddress($address);
@@ -104,6 +109,7 @@ class BillingAddressManagement implements BillingAddressManagementInterface
      *
      * @return \Magento\Quote\Model\ShippingAddressAssignment
      * @deprecated 101.0.0
+     * @see \Magento\Quote\Model\ShippingAddressAssignment
      */
     private function getShippingAddressAssignment()
     {

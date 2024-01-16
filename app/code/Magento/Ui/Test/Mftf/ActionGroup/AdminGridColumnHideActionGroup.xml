@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminGridColumnHideActionGroup">
+        <annotations>
+            <description>
+                Hides a column on Admin Grid page.
+            </description>
+        </annotations>
+        <arguments>
+            <argument name="columnLabel" type="string"/>
+        </arguments>
+        <click selector="{{AdminDataGridHeaderSection.columnsToggle}}" stepKey="openColumnsTab"/>
+        <uncheckOption selector="{{AdminDataGridHeaderSection.columnCheckbox(columnLabel)}}" stepKey="hideColumn"/>
+        <click selector="{{AdminDataGridHeaderSection.columnsToggle}}" stepKey="closeColumnsTab"/>
+        <dontSeeElement selector="{{AdminDataGridTableSection.columnHeader(columnLabel)}}" stepKey="dontSeeColumnInGrid"/>
+    </actionGroup>
+</actionGroups>

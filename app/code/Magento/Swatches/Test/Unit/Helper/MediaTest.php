@@ -7,13 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\Swatches\Test\Unit\Helper;
 
+use Magento\Catalog\Model\Config\CatalogMediaConfig;
 use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Framework\Config\View;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Image;
 use Magento\Framework\Image\Factory;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Store\Model\Store;
@@ -59,8 +63,23 @@ class MediaTest extends TestCase
     /** @var Media|ObjectManager */
     protected $mediaHelperObject;
 
+    /** @var CatalogMediaConfig|MockObject */
+    private $catalogMediaConfigMock;
+
+    private function setupObjectManagerForCheckImageExist($return)
+    {
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $mockFileSystem = $this->createMock(Filesystem::class);
+        $mockRead = $this->createMock(ReadInterface::class);
+        $objectManagerMock->method($this->logicalOr('get', 'create'))->willReturn($mockFileSystem);
+        $mockFileSystem->method('getDirectoryRead')->willReturn($mockRead);
+        $mockRead->method('isExist')->willReturn($return);
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
+    }
+
     protected function setUp(): void
     {
+        $this->setupObjectManagerForCheckImageExist(false);
         $objectManager = new ObjectManager($this);
 
         $this->mediaConfigMock = $this->createMock(Config::class);
@@ -78,6 +97,9 @@ class MediaTest extends TestCase
 
         $this->storeMock = $this->createPartialMock(Store::class, ['getBaseUrl']);
 
+        $this->catalogMediaConfigMock = $this->createPartialMock(CatalogMediaConfig::class, ['getMediaUrlFormat']);
+        $this->catalogMediaConfigMock->method('getMediaUrlFormat')->willReturn(CatalogMediaConfig::HASH);
+
         $this->mediaDirectoryMock = $this->createMock(Write::class);
         $this->fileSystemMock = $this->createPartialMock(Filesystem::class, ['getDirectoryWrite']);
         $this->fileSystemMock
@@ -94,6 +116,7 @@ class MediaTest extends TestCase
                 'storeManager' => $this->storeManagerMock,
                 'imageFactory' => $this->imageFactoryMock,
                 'configInterface' => $this->viewConfigMock,
+                'catalogMediaConfig' => $this->catalogMediaConfigMock,
             ]
         );
     }
@@ -112,7 +135,7 @@ class MediaTest extends TestCase
             ->expects($this->once())
             ->method('getBaseUrl')
             ->with('media')
-            ->willReturn('http://url/pub/media/');
+            ->willReturn('http://url/media/');
 
         $this->generateImageConfig();
 
@@ -120,7 +143,7 @@ class MediaTest extends TestCase
 
         $result = $this->mediaHelperObject->getSwatchAttributeImage($swatchType, '/f/i/file.png');
 
-        $this->assertEquals($result, $expectedResult);
+        $this->assertEquals($expectedResult, $result);
     }
 
     /**
@@ -131,11 +154,11 @@ class MediaTest extends TestCase
         return [
             [
                 'swatch_image',
-                'http://url/pub/media/attribute/swatch/swatch_image/30x20/f/i/file.png',
+                'http://url/media/attribute/swatch/swatch_image/30x20/f/i/file.png',
             ],
             [
                 'swatch_thumb',
-                'http://url/pub/media/attribute/swatch/swatch_thumb/110x90/f/i/file.png',
+                'http://url/media/attribute/swatch/swatch_thumb/110x90/f/i/file.png',
             ],
         ];
     }
@@ -152,7 +175,20 @@ class MediaTest extends TestCase
     public function testMoveImageFromTmpNoDb()
     {
         $this->fileStorageDbMock->method('checkDbUsage')->willReturn(false);
-        $this->fileStorageDbMock->method('renameFile')->willReturnSelf();
+        $this->mediaDirectoryMock
+            ->expects($this->atLeastOnce())
+            ->method('getAbsolutePath')
+            ->willReturn('attribute/swatch/f/i/file.tmp');
+        $this->mediaDirectoryMock
+            ->expects($this->atLeastOnce())
+            ->method('renameFile')
+            ->willReturnSelf();
+        $driver = $this->getMockBuilder(DriverInterface::class)
+            ->getMockForAbstractClass();
+        $driver->method('getAbsolutePath')->willReturn('file');
+        $this->mediaDirectoryMock
+            ->method('getDriver')
+            ->willReturn($driver);
         $result = $this->mediaHelperObject->moveImageFromTmp('file.tmp');
         $this->assertNotNull($result);
     }
@@ -177,7 +213,7 @@ class MediaTest extends TestCase
 
         $this->imageFactoryMock->expects($this->any())->method('create')->willReturn($image);
         $this->generateImageConfig();
-        $image->expects($this->any())->method('resize')->willReturnSelf();
+        $image->method('resize')->willReturnSelf();
         $image->expects($this->atLeastOnce())->method('backgroundColor')->with([255, 255, 255])->willReturnSelf();
         $this->mediaHelperObject->generateSwatchVariations('/e/a/earth.png');
     }
@@ -195,11 +231,11 @@ class MediaTest extends TestCase
             ->expects($this->once())
             ->method('getBaseUrl')
             ->with('media')
-            ->willReturn('http://url/pub/media/');
+            ->willReturn('http://url/media/');
 
         $result = $this->mediaHelperObject->getSwatchMediaUrl();
 
-        $this->assertEquals($result, 'http://url/pub/media/attribute/swatch');
+        $this->assertEquals($result, 'http://url/media/attribute/swatch');
     }
 
     /**
@@ -282,7 +318,7 @@ class MediaTest extends TestCase
             ],
         ];
 
-        $configMock->expects($this->any())->method('getMediaEntities')->willReturn($imageConfig);
+        $configMock->method('getMediaEntities')->willReturn($imageConfig);
     }
 
     public function testGetAttributeSwatchPath()

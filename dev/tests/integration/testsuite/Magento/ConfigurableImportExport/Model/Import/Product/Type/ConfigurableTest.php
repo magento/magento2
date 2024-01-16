@@ -5,19 +5,41 @@
  */
 namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
+use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Filesystem;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
+use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
+use Magento\ImportExport\Test\Fixture\CsvFile as CsvFileFixture;
+use Magento\Store\Model\Store;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @magentoAppArea adminhtml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigurableTest extends \PHPUnit\Framework\TestCase
+class ConfigurableTest extends TestCase
 {
     /**
      * Configurable product test Type
      */
-    const TEST_PRODUCT_TYPE = 'configurable';
+    public const TEST_PRODUCT_TYPE = 'configurable';
 
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product
@@ -25,22 +47,55 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\EntityManager\EntityMetadata
+     * @var EntityMetadata
      */
     protected $productMetadata;
 
     protected function setUp(): void
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
         $this->model = $this->objectManager->create(\Magento\CatalogImportExport\Model\Import\Product::class);
-        /** @var \Magento\Framework\EntityManager\MetadataPool $metadataPool */
-        $metadataPool = $this->objectManager->get(\Magento\Framework\EntityManager\MetadataPool::class);
-        $this->productMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        /** @var MetadataPool $metadataPool */
+        $metadataPool = $this->objectManager->get(MetadataPool::class);
+        $this->productMetadata = $metadataPool->getMetadata(ProductInterface::class);
+    }
+
+    /**
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
+     */
+    public function testShouldUpdateConfigurableStockStatusIfChildProductsStockStatusChanged(): void
+    {
+        $sku = 'configurable';
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        /** @var ProductInterface $product */
+        $product = $productRepository->get($sku, true, null, true);
+        $stockItem = $this->getStockItem((int) $product->getId());
+        $this->assertNotNull($stockItem);
+        $this->assertTrue($stockItem->getIsInStock());
+
+        // Set all child product out of stock
+        $pathToFile = __DIR__ . '/../../_files/import_configurable_child_products_stock_item_status_out_of_stock.csv';
+        $errors = $this->doImport($pathToFile);
+        $this->assertEquals(0, $errors->getErrorsCount());
+
+        $stockItem = $this->getStockItem((int) $product->getId());
+        $this->assertNotNull($stockItem);
+        $this->assertFalse($stockItem->getIsInStock());
+
+        // Set some child product in stock
+        $pathToFile = __DIR__ . '/../../_files/import_configurable_child_products_stock_item_status_in_stock.csv';
+        $errors = $this->doImport($pathToFile);
+        $this->assertEquals(0, $errors->getErrorsCount());
+
+        $stockItem = $this->getStockItem((int) $product->getId());
+        $this->assertNotNull($stockItem);
+        $this->assertTrue($stockItem->getIsInStock());
     }
 
     public function configurableImportDataProvider()
@@ -60,9 +115,9 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $pathToFile Path to import file
-     * @param $productName Name/sku of configurable product
-     * @param $optionSkuList Name of variations for configurable product
+     * @param string $pathToFile Path to import file
+     * @param string $productName Name/sku of configurable product
+     * @param array $optionSkuList Name of variations for configurable product
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
      * @magentoAppArea adminhtml
      * @magentoAppIsolation enabled
@@ -70,26 +125,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      */
     public function testConfigurableImport($pathToFile, $productName, $optionSkuList)
     {
-        $filesystem = $this->objectManager->create(
-            \Magento\Framework\Filesystem::class
-        );
-
-        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
-            [
-                'file' => $pathToFile,
-                'directory' => $directory
-            ]
-        );
-        $errors = $this->model->setSource(
-            $source
-        )->setParameters(
-            [
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
-                'entity' => 'catalog_product'
-            ]
-        )->validateData();
+        $errors = $this->doImport($pathToFile, Import::BEHAVIOR_APPEND);
 
         $this->assertTrue($errors->getErrorsCount() == 0);
         $this->model->importData();
@@ -98,7 +134,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $resource = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productId = $resource->getIdBySku($productName);
         $this->assertIsNumeric($productId);
-        /** @var \Magento\Catalog\Model\Product $product */
+        /** @var Product $product */
         $product = $this->objectManager->get(ProductRepositoryInterface::class)->getById($productId);
 
         $this->assertFalse($product->isObjectNew());
@@ -166,36 +202,18 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             'default' => 'Configurable 1',
             'fixture_second_store' => 'Configurable 1 Second Store'
         ];
-        $filesystem = $this->objectManager->create(
-            \Magento\Framework\Filesystem::class
-        );
-
-        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
-            [
-                'file' =>  __DIR__ . '/../../_files/import_configurable_for_multiple_store_views.csv',
-                'directory' => $directory
-            ]
-        );
-        $errors = $this->model->setSource(
-            $source
-        )->setParameters(
-            [
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
-                'entity' => 'catalog_product'
-            ]
-        )->validateData();
+        $pathToFile = __DIR__ . '/../../_files/import_configurable_for_multiple_store_views.csv';
+        $errors = $this->doImport($pathToFile, Import::BEHAVIOR_APPEND);
 
         $this->assertTrue($errors->getErrorsCount() == 0);
         $this->model->importData();
 
         foreach ($products as $storeCode => $productName) {
-            $store = $this->objectManager->create(\Magento\Store\Model\Store::class);
+            $store = $this->objectManager->create(Store::class);
             $store->load($storeCode, 'code');
-            /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-            $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-            /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
+            /** @var ProductRepositoryInterface $productRepository */
+            $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+            /** @var ProductInterface $product */
             $product = $productRepository->get($productSku, 0, $store->getId());
             $this->assertFalse($product->isObjectNew());
             $this->assertEquals($productName, $product->getName());
@@ -215,29 +233,107 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         {
             $expectedErrorMessage = 'Product with assigned super attributes should not have specified "store_view_code"'
                 . ' value';
-            $filesystem = $this->objectManager->create(
-                \Magento\Framework\Filesystem::class
-            );
-
-            $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
-            $source = $this->objectManager->create(
-                \Magento\ImportExport\Model\Import\Source\Csv::class,
-                [
-                    'file' =>  __DIR__ . '/../../_files/import_configurable_for_multiple_store_views_error.csv',
-                    'directory' => $directory
-                ]
-            );
-            $errors = $this->model->setSource(
-                $source
-            )->setParameters(
-                [
-                    'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
-                    'entity' => 'catalog_product'
-                ]
-            )->validateData();
+            $pathToFile = __DIR__ . '/../../_files/import_configurable_for_multiple_store_views_error.csv';
+            $errors = $this->doImport($pathToFile, Import::BEHAVIOR_APPEND);
 
             $this->assertTrue($errors->getErrorsCount() == 1);
             $this->assertEquals($expectedErrorMessage, $errors->getAllErrors()[0]->getErrorMessage());
         }
+    }
+
+    /**
+     * @param int $productId
+     * @return StockItemInterface|null
+     */
+    private function getStockItem(int $productId): ?StockItemInterface
+    {
+        $criteriaFactory = $this->objectManager->create(StockItemCriteriaInterfaceFactory::class);
+        $stockItemRepository = $this->objectManager->create(StockItemRepositoryInterface::class);
+        $stockConfiguration = $this->objectManager->create(StockConfigurationInterface::class);
+        $criteria = $criteriaFactory->create();
+        $criteria->setScopeFilter($stockConfiguration->getDefaultScopeId());
+        $criteria->setProductsFilter($productId);
+        $stockItemCollection = $stockItemRepository->getList($criteria);
+        $stockItems = $stockItemCollection->getItems();
+        return reset($stockItems);
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'cp1-10,2cm'], as: 'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'cp1-15,5cm'], as: 'p2'),
+        DataFixture(
+            AttributeFixture::class,
+            [
+                'attribute_code' => 'size',
+                'options' => [['label' => '10,2cm'], ['label' => '15,5cm']],
+            ],
+            as: 'attr'
+        ),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            ['_options' => ['$attr$'], '_links' => ['$p1$', '$p2$']],
+            'cp1'
+        ),
+        DataFixture(
+            CsvFileFixture::class,
+            [
+                'rows' => [
+                    ['sku', 'configurable_variations'],
+                    ['$cp1.sku$', 'sku=cp1-10,2cm,size=10,2cm|sku=cp1-15,5cm,size=15,5cm'],
+                ]
+            ],
+            'file'
+        )
+    ]
+    public function testSpecialCharactersInConfigurableVariations(): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $attrId = $fixtures->get('attr')->getId();
+        $sku = $fixtures->get('cp1')->getSku();
+        $p1Id = $fixtures->get('p1')->getId();
+        $p2Id = $fixtures->get('p2')->getId();
+        $pathToFile = $fixtures->get('file')->getAbsolutePath();
+        $errors = $this->doImport($pathToFile, Import::BEHAVIOR_APPEND);
+        $this->assertEquals(
+            0,
+            $errors->getErrorsCount(),
+            implode(PHP_EOL, array_map(fn ($error) => $error->getErrorMessage(), $errors->getAllErrors()))
+        );
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        /** @var ProductInterface $product */
+        $product = $productRepository->get($sku, forceReload: true);
+        $options = $product->getExtensionAttributes()->getConfigurableProductOptions();
+        $this->assertCount(1, $options);
+        $this->assertEquals($attrId, reset($options)->getAttributeId());
+        $childIds = $product->getExtensionAttributes()->getConfigurableProductLinks();
+        $this->assertCount(2, $childIds);
+        $this->assertContains($p1Id, $childIds);
+        $this->assertContains($p2Id, $childIds);
+    }
+
+    /**
+     * @param string $file
+     * @param string $behavior
+     * @param bool $validateOnly
+     * @return ProcessingErrorAggregatorInterface
+     */
+    private function doImport(
+        string $file,
+        string $behavior = Import::BEHAVIOR_ADD_UPDATE,
+        bool $validateOnly = false
+    ): ProcessingErrorAggregatorInterface {
+        /** @var Filesystem $filesystem */
+        $filesystem =$this->objectManager->create(Filesystem::class);
+        $directoryWrite = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = ImportAdapter::findAdapterFor($file, $directoryWrite);
+        $errors = $this->model
+            ->setParameters(['behavior' => $behavior, 'entity' => 'catalog_product'])
+            ->setSource($source)
+            ->validateData();
+        if (!$validateOnly && !$errors->getAllErrors()) {
+            $this->model->importData();
+        }
+        return $errors;
     }
 }

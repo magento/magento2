@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Bundle\Test\Unit\Model\Sales\Order\Pdf\Items;
 
 use Magento\Bundle\Model\Sales\Order\Pdf\Items\Shipment;
+use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Order\Creditmemo;
@@ -33,6 +34,11 @@ class AbstractItemsTest extends TestCase
      */
     private $orderItemMock;
 
+    /**
+     * @var FilterManager|MockObject
+     */
+    private $filterManagerMock;
+
     protected function setUp(): void
     {
         $this->orderItemMock = $this->getMockBuilder(Item::class)
@@ -40,13 +46,18 @@ class AbstractItemsTest extends TestCase
             ->onlyMethods(['getProductOptions', 'getParentItem', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->filterManagerMock = $this->getMockBuilder(FilterManager::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['stripTags', 'sprintf'])
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->serializerMock = $this->createMock(Json::class);
         $this->model = $objectManager->getObject(
             Shipment::class,
             [
-                'serializer' => $this->serializerMock
+                'serializer' => $this->serializerMock,
+                'filterManager' => $this->filterManagerMock,
             ]
         );
     }
@@ -356,6 +367,34 @@ class AbstractItemsTest extends TestCase
             [true, ['product_calculations' => 0], true],
             [false, [], true],
             [false, ['product_calculations' => 0], false],
+        ];
+    }
+
+    /**
+     * @dataProvider getValueHtmlWithoutShipmentSeparatelyDataProvider
+     */
+    public function testGetValueHtmlWithoutShipmentSeparately($qty)
+    {
+        $this->filterManagerMock->expects($this->any())->method('stripTags')->willReturn('Test');
+        $this->filterManagerMock->expects($this->any())->method('sprintf')->willReturn($qty);
+        $this->orderItemMock->expects($this->any())->method('getProductOptions')
+            ->willReturn([
+                'shipment_type' => 1,
+                'bundle_selection_attributes' => [],
+            ]);
+        $this->serializerMock->expects($this->any())->method('unserialize')
+            ->willReturn(['qty' => $qty]);
+        $this->assertSame($qty . ' x Test', $this->model->getValueHtml($this->orderItemMock));
+    }
+
+    /**
+     * @return array
+     */
+    public function getValueHtmlWithoutShipmentSeparatelyDataProvider()
+    {
+        return [
+            [1],
+            [1.5],
         ];
     }
 }

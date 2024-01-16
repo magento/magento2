@@ -14,6 +14,13 @@
                 <show_swatch_tooltip>1</show_swatch_tooltip>
             </frontend>
         </catalog>
+        <system>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <swatches_folder>attribute</swatches_folder>
+                </allowed_resources>
+            </media_storage_configuration>
+        </system>
         <general>
             <validator_data>
                 <input_types>

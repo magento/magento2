@@ -5,46 +5,52 @@
  */
 namespace Magento\MessageQueue\Model\ResourceModel;
 
-use \Magento\Framework\MessageQueue\Lock\ReaderInterface;
-use \Magento\Framework\MessageQueue\Lock\WriterInterface;
+use DateInterval;
+use DateTime;
+use Magento\Framework\MessageQueue\Lock\ReaderInterface;
+use Magento\Framework\MessageQueue\Lock\WriterInterface;
+use Magento\Framework\MessageQueue\LockInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\MessageQueue\Model\LockFactory;
 
 /**
  * Class Lock to handle database lock table db transactions.
  */
-class Lock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements ReaderInterface, WriterInterface
+class Lock extends AbstractDb implements ReaderInterface, WriterInterface
 {
     /**#@+
      * Constants
      */
-    const QUEUE_LOCK_TABLE = 'queue_lock';
+    public const QUEUE_LOCK_TABLE = 'queue_lock';
     /**#@-*/
 
     /**#@-*/
     private $dateTime;
 
     /**
-     * @var \Magento\MessageQueue\Model\LockFactory
+     * @var LockFactory
      */
     private $lockFactory;
 
     /**
-     * @var integer
+     * @var int
      */
     private $interval;
 
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
-     * @param \Magento\MessageQueue\Model\LockFactory $lockFactory
-     * @param null $connectionName
-     * @param integer $interval
+     * @param LockFactory $lockFactory
+     * @param ?string $connectionName
+     * @param int $interval
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-        \Magento\MessageQueue\Model\LockFactory $lockFactory,
+        LockFactory $lockFactory,
         $connectionName = null,
         $interval = 86400
     ) {
@@ -55,7 +61,7 @@ class Lock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -63,9 +69,9 @@ class Lock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function read(\Magento\Framework\MessageQueue\LockInterface $lock, $code)
+    public function read(LockInterface $lock, $code)
     {
         $object = $this->lockFactory->create();
         $object->load($code, 'message_code');
@@ -75,23 +81,25 @@ class Lock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function saveLock(\Magento\Framework\MessageQueue\LockInterface $lock)
+    public function saveLock(LockInterface $lock)
     {
         $object = $this->lockFactory->create();
         $object->setMessageCode($lock->getMessageCode());
         $object->setCreatedAt($this->dateTime->gmtTimestamp());
         $object->save();
+        $lock->setId($object->getId());
+        $lock->setCreatedAt($object->getCreatedAt());
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function releaseOutdatedLocks()
     {
-        $date = (new \DateTime())->setTimestamp($this->dateTime->gmtTimestamp());
-        $date->add(new \DateInterval('PT' . $this->interval . 'S'));
+        $date = (new DateTime())->setTimestamp($this->dateTime->gmtTimestamp());
+        $date->add(new DateInterval('PT' . $this->interval . 'S'));
         $this->getConnection()->delete($this->getTable(self::QUEUE_LOCK_TABLE), ['created_at <= ?' => $date]);
     }
 }

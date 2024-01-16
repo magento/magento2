@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyCreateCloseCreateCustomProductAttributeTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create product Attribute after closing the new attribute window multiple times"/>
+            <title value="Create Custom Product Attribute Dropdown Field (Not Required) from Product Page after closing the new attribute window multiple times"/>
+            <description
+                value="login as admin and create simple product attribute Dropdown field after closing the new attribute window multiple times"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-30362"/>
+            <group value="catalog"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteCreatedAttribute">
+                <argument name="productAttributeLabel" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdminPanel"/>
+        </after>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="navigateToProductPage">
+            <argument name="productId" value="$createProduct.id$"/>
+        </actionGroup>
+        <!-- Attribute creation -->
+        <click selector="{{AdminProductFormSection.addAttributeBtn}}" stepKey="clickOnAddAttribute"/>
+        <waitForElementVisible selector="{{AdminProductFormSection.createNewAttributeBtn}}" stepKey="waitForCreateBtn"/>
+        <click selector="{{AdminProductFormSection.createNewAttributeBtn}}" stepKey="clickCreateNewAttributeButton"/>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.defaultLabel}}"
+                               stepKey="waitForLabelInput"/>
+        <!-- Close creation window few times -->
+        <click selector="{{AdminCreateNewProductAttributeSection.closeAttribute}}"
+               stepKey="clickCloseNewAttributeWindowButton"/>
+        <waitForElementVisible selector="{{AdminProductFormSection.createNewAttributeBtn}}"
+                               stepKey="waitForCreateBtn2"/>
+        <click selector="{{AdminProductFormSection.createNewAttributeBtn}}" stepKey="clickCreateNewAttributeButton2"/>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.defaultLabel}}"
+                               stepKey="waitForLabelInput2"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.closeAttribute}}"
+               stepKey="clickCloseNewAttributeWindowButton2"/>
+        <waitForElementVisible selector="{{AdminProductFormSection.createNewAttributeBtn}}"
+                               stepKey="waitForCreateBtn3"/>
+        <click selector="{{AdminProductFormSection.createNewAttributeBtn}}" stepKey="clickCreateNewAttributeButton3"/>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.defaultLabel}}"
+                               stepKey="waitForLabelInput3"/>
+        <!-- Fill attribute data and save -->
+        <fillField selector="{{AdminCreateNewProductAttributeSection.defaultLabel}}"
+                   userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillAttributeLabel"/>
+        <selectOption selector="{{AdminCreateNewProductAttributeSection.inputType}}" userInput="Dropdown"
+                      stepKey="setInputType"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.advancedAttributeProperties}}"
+               stepKey="clickOnAdvancedAttributeProperties"/>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.attributeCode}}"
+                               stepKey="waitForAttributeCodeToVisible"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.attributeCode}}"
+                   userInput="{{newProductAttribute.attribute_code}}" stepKey="fillAttributeCode"/>
+        <scrollTo selector="{{AdminCreateNewProductAttributeSection.storefrontProperties}}"
+                  stepKey="scrollToStorefrontProperties"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.storefrontProperties}}"
+               stepKey="clickOnStorefrontProperties"/>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.inSearch}}"
+                               stepKey="waitForStoreFrontProperties"/>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.inSearch}}" stepKey="enableInSearchOption"/>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.advancedSearch}}"
+                     stepKey="enableAdvancedSearch"/>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.visibleOnStorefront}}"
+                     stepKey="enableVisibleOnStorefront"/>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.sortProductListing}}"
+                     stepKey="enableSortProductListing"/>
+        <actionGroup ref="AdminAddOptionForDropdownAttributeActionGroup" stepKey="createDropdownOption">
+            <argument name="storefrontViewAttributeValue" value="{{ProductAttributeOption8.label}}"/>
+            <argument name="adminAttributeLabel" value="{{ProductAttributeOption8.label}}"/>
+        </actionGroup>
+        <checkOption selector="{{AdminCreateNewProductAttributeSection.defaultRadioButton('1')}}"
+                     stepKey="selectRadioButton"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.saveAttribute}}" stepKey="clickOnSaveAttribute"/>
+        <!-- Check if the product page after attribute save-->
+        <seeInCurrentUrl url="{{AdminProductEditPage.url($createProduct.id$)}}" stepKey="seeRedirectToProductPage"/>
+    </test>
+</tests>

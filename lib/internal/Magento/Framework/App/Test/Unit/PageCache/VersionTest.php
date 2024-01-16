@@ -104,6 +104,10 @@ class VersionTest extends TestCase
                 ->method('setHttpOnly')
                 ->with(false)->willReturnSelf();
 
+            $publicCookieMetadataMock->expects($this->once())
+                ->method('setSameSite')
+                ->with('Lax')->willReturnSelf();
+
             $this->cookieMetadataFactoryMock->expects($this->once())
                 ->method('createPublicCookieMetadata')
                 ->with()

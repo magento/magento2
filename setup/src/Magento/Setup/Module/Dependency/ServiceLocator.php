@@ -95,7 +95,7 @@ class ServiceLocator
             self::$circularDependenciesReportBuilder = new CircularReport\Builder(
                 self::getComposerJsonParser(),
                 new CircularReport\Writer(self::getCsvWriter()),
-                new CircularTool([], null)
+                new CircularTool()
             );
         }
         return self::$circularDependenciesReportBuilder;

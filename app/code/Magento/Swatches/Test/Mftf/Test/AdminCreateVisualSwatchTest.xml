@@ -33,6 +33,13 @@
             <click selector="{{AdminManageSwatchSection.nthDelete('3')}}" stepKey="deleteSwatch3"/>
             <waitForPageLoad stepKey="waitToClickSave"/>
             <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit"/>
+            <waitForPageLoad stepKey="waitForSave"/>
+
+            <!-- Change back to dropdown -->
+            <selectOption selector="{{AdminNewAttributePanel.inputType}}" userInput="select" stepKey="selectDropdown"/>
+            <waitForPageLoad stepKey="waitToClickSave2"/>
+            <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit2"/>
+            <waitForPageLoad stepKey="waitForSave2"/>
             <!-- Logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
@@ -101,12 +108,16 @@
 
         <!-- Create a configurable product to verify the storefront with -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductToggle"/>
-        <click selector="{{AdminProductGridActionSection.addConfigurableProduct}}" stepKey="clickOnAddConfigurableProduct"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="clickOnAddProductToggle"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickOnAddConfigurableProduct">
+            <argument name="productType" value="configurable"/>
+        </actionGroup>
         <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
         <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
         <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
-        <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillQuantity">
+            <argument name="productQty" value="{{_defaultProduct.quantity}}"/>
+        </actionGroup>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
         <fillField userInput="{{_defaultProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>

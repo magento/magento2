@@ -194,8 +194,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
                         Storage::PARAM_CONTENT_TYPE => \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE
                     ]
                 ) . "', null, null,'" . $this->escapeJs(
-                    __('Upload Images'),
-                    true
+                    __('Upload Images')
                 ) . "');",
             ]
         );
@@ -222,8 +221,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
                         Storage::PARAM_CONTENT_TYPE => \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT
                     ]
                 ) . "', null, null,'" . $this->escapeJs(
-                    __('Upload Fonts'),
-                    true
+                    __('Upload Fonts')
                 ) . "');",
             ]
         );

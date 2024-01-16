@@ -20,23 +20,31 @@
                       '_changed': changed,
                       '_loading': loading,
                       '_error': error">
-            <span translate="label"/>
+            <span translate="label"></span>
             <span class="admin__page-nav-item-messages" if="collapsible">
                 <span class="admin__page-nav-item-message _changed">
-                    <span class="admin__page-nav-item-message-icon"></span>
-                    <span class="admin__page-nav-item-message-tooltip"
+                    <span class="admin__page-nav-item-message-icon"
+                          role="tooltip"
+                          tabindex="0"
+                          aria-labelledby="changed-message-tooltip">
+                    </span>
+                    <span class="admin__page-nav-item-message-tooltip" id="changed-message-tooltip"
                           data-bind="i18n: 'Changes have been made to this section that have not been saved.'">
                     </span>
                 </span>
                 <span class="admin__page-nav-item-message _error">
-                    <span class="admin__page-nav-item-message-icon"></span>
-                    <span class="admin__page-nav-item-message-tooltip"
+                    <span class="admin__page-nav-item-message-icon"
+                          role="tooltip"
+                          tabindex="0"
+                          aria-labelledby="error-message-tooltip">
+                    </span>
+                    <span class="admin__page-nav-item-message-tooltip" id="error-message-tooltip"
                           data-bind="i18n: 'This tab contains invalid data. Please resolve this before saving.'">
                     </span>
                 </span>
                 <span class="admin__page-nav-item-message-loader">
                     <span class="spinner">
-                       <span repeat="8"/>
+                       <span repeat="8"></span>
                     </span>
                </span>
             </span>
@@ -48,6 +56,6 @@
         <fieldset
                 if="opened() || _wasOpened || initializeFieldsetDataByDefault"
                 class="admin__fieldset"
-                each="data: elems, as: 'element'" render=""/>
+                each="data: elems, as: 'element'" render=""></fieldset>
     </div>
 </div>

@@ -22,7 +22,8 @@ class Name extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     {
         /** @var \Magento\Integration\Model\Integration $row */
         $text = parent::render($row);
-        if (!$this->isUrlSecure($row->getEndpoint()) || !$this->isUrlSecure($row->getIdentityLinkUrl())) {
+        if (($row->getEndpoint() && !$this->isUrlSecure($row->getEndpoint())) ||
+            ($row->getIdentityLinkUrl() && !$this->isUrlSecure($row->getIdentityLinkUrl()))) {
             $text .= '<span class="security-notice"><span>' . __("Integration not secure") . '</span></span>';
         }
         return $text;
@@ -36,6 +37,6 @@ class Name extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      */
     protected function isUrlSecure($url)
     {
-        return (strpos($url, 'http:') !== 0);
+        return (is_string($url) && strpos($url, 'http:') !== 0);
     }
 }

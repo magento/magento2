@@ -1,16 +1,12 @@
 <?php
 /**
- * Runtime class definitions. \Reflection is used to parse constructor signatures. Should be used only in dev mode.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Definition;
 
 /**
- * Class Runtime
- *
- * @package Magento\Framework\ObjectManager\Definition
+ * Runtime class definitions. \Reflection is used to parse constructor signatures. Should be used only in dev mode.
  */
 class Runtime implements \Magento\Framework\ObjectManager\DefinitionInterface
 {
@@ -62,6 +58,17 @@ class Runtime implements \Magento\Framework\ObjectManager\DefinitionInterface
      * @return array
      */
     public function getClasses()
+    {
+        return [];
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
     {
         return [];
     }

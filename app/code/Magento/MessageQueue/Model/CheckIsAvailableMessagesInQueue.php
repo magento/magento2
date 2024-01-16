@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\MessageQueue\Model;
 
+use Magento\Framework\MessageQueue\CountableQueueInterface;
 use Magento\Framework\MessageQueue\QueueRepository;
 
 /**
@@ -40,6 +41,9 @@ class CheckIsAvailableMessagesInQueue
     public function execute($connectionName, $queueName)
     {
         $queue = $this->queueRepository->get($connectionName, $queueName);
+        if ($queue instanceof CountableQueueInterface) {
+            return $queue->count() > 0;
+        }
         $message = $queue->dequeue();
         if ($message) {
             $queue->reject($message);

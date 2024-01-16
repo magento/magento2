@@ -6,13 +6,19 @@
  */
 namespace Magento\Swatches\Controller\Ajax;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\PageCache\Model\Config;
+use Magento\Swatches\Helper\Data;
 
 /**
- * Class Media
+ * Provide product media data.
  */
-class Media extends \Magento\Framework\App\Action\Action implements \Magento\Framework\App\Action\HttpGetActionInterface
+class Media extends Action implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Catalog\Model\Product Factory
@@ -37,9 +43,9 @@ class Media extends \Magento\Framework\App\Action\Action implements \Magento\Fra
      */
     public function __construct(
         Context $context,
-        \Magento\Catalog\Model\ProductFactory $productModelFactory,
-        \Magento\Swatches\Helper\Data $swatchHelper,
-        \Magento\PageCache\Model\Config $config
+        ProductFactory $productModelFactory,
+        Data $swatchHelper,
+        Config $config
     ) {
         $this->productModelFactory = $productModelFactory;
         $this->swatchHelper = $swatchHelper;
@@ -65,16 +71,18 @@ class Media extends \Magento\Framework\App\Action\Action implements \Magento\Fra
         $response = $this->getResponse();
 
         if ($productId = (int)$this->getRequest()->getParam('product_id')) {
+            /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
             $product = $this->productModelFactory->create()->load($productId);
-            $productMedia = $this->swatchHelper->getProductMediaGallery(
-                $product
-            );
+            $productMedia = [];
+            if ($product->getId() && $product->getStatus() == Status::STATUS_ENABLED) {
+                $productMedia = $this->swatchHelper->getProductMediaGallery($product);
+            }
             $resultJson->setHeader('X-Magento-Tags', implode(',', $product->getIdentities()));
 
             $response->setPublicHeaders($this->config->getTtl());
         }
-
         $resultJson->setData($productMedia);
+
         return $resultJson;
     }
 }

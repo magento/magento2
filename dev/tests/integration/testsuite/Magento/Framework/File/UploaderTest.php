@@ -8,95 +8,90 @@ declare(strict_types=1);
 namespace Magento\Framework\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use PHPUnit\Framework\TestCase;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Filesystem;
 
 /**
  * Test for \Magento\Framework\File\Uploader
  */
-class UploaderTest extends \PHPUnit\Framework\TestCase
+class UploaderTest extends TestCase
 {
     /**
-     * @var \Magento\MediaStorage\Model\File\UploaderFactory
+     * @var UploaderFactory
      */
     private $uploaderFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem
+     * @var Filesystem\File\WriteInterface
      */
-    private $filesystem;
+    private $mediaDirectory;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->uploaderFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get(\Magento\MediaStorage\Model\File\UploaderFactory::class);
-
-        $this->filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get(\Magento\Framework\Filesystem::class);
+        $objectManager = Bootstrap::getObjectManager();
+        $this->uploaderFactory = $objectManager->get(UploaderFactory::class);
+        $filesystem = $objectManager->get(Filesystem::class);
+        $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
     }
 
     /**
-     * @return void
+     * @inheritDoc
      */
-    public function testUploadFileFromAllowedFolder(): void
+    public function tearDown(): void
     {
-        $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
+        $this->mediaDirectory->delete('customer_address');
+    }
 
-        $fileName = 'text.txt';
-        $tmpDir = 'tmp';
-        $filePath = $tmpDirectory->getAbsolutePath($fileName);
+    /**
+     * @dataProvider uploadDataProvider
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function testUpload(string $expectedFile, ?string $newImageName = null): void
+    {
+        $this->mediaDirectory->delete('customer_address');
+        $this->mediaDirectory->create($this->mediaDirectory->getRelativePath('customer_address/tmp/'));
+        $tmpFilePath = $this->mediaDirectory->getAbsolutePath('customer_address/tmp/magento.jpg');
+        $this->mediaDirectory->getDriver()->filePutContents(
+            $tmpFilePath,
+            file_get_contents(__DIR__ . '/_files/magento.jpg')
+        );
 
-        $tmpDirectory->writeFile($fileName, 'just a text');
-
-        $type = [
-            'tmp_name' => $filePath,
-            'name' => $fileName,
+        $fileData = [
+            'name' => 'magento.jpg',
+            'type' => 'image/jpeg',
+            'tmp_name' => $tmpFilePath,
+            'error' => 0,
+            'size' => 139416,
         ];
 
-        $uploader = $this->uploaderFactory->create(['fileId' => $type]);
-        $uploader->save($mediaDirectory->getAbsolutePath($tmpDir));
+        $uploader = $this->uploaderFactory->create(['fileId' => $fileData]);
+        $uploader->setAllowRenameFiles(true);
+        $uploader->setFilesDispersion(false);
 
-        $this->assertTrue($mediaDirectory->isFile($tmpDir . DIRECTORY_SEPARATOR . $fileName));
+        $uploader->save($this->mediaDirectory->getAbsolutePath('customer_address'), $newImageName);
+
+        self::assertEquals($newImageName ?? 'magento.jpg', $uploader->getUploadedFileName());
+        self::assertTrue($this->mediaDirectory->isExist($expectedFile));
     }
 
     /**
-     *
-     * @return void
+     * @return array
      */
-    public function testUploadFileFromNotAllowedFolder(): void
+    public function uploadDataProvider(): array
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid parameter given. A valid $fileId[tmp_name] is expected.');
-
-        $fileName = 'text.txt';
-        $tmpDir = 'tmp';
-        $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::LOG);
-        $filePath = $tmpDirectory->getAbsolutePath() . $tmpDir . DIRECTORY_SEPARATOR . $fileName;
-
-        $tmpDirectory->writeFile($tmpDir . DIRECTORY_SEPARATOR . $fileName, 'just a text');
-
-        $type = [
-            'tmp_name' => $filePath,
-            'name' => $fileName,
+        return [
+            [
+                'customer_address/magento.jpg',
+                null,
+            ],
+            [
+                'customer_address/new_magento.jpg',
+                'new_magento.jpg',
+            ]
         ];
-
-        $this->uploaderFactory->create(['fileId' => $type]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        $tmpDir = 'tmp';
-        $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $mediaDirectory->delete($tmpDir);
-
-        $logDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::LOG);
-        $logDirectory->delete($tmpDir);
     }
 }

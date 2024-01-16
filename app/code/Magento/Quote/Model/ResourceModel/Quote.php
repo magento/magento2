@@ -35,6 +35,7 @@ class Quote extends AbstractDb
         Manager $sequenceManager,
         $connectionName = null
     ) {
+        $this->_uniqueFields = [];
         parent::__construct($context, $entitySnapshot, $entityRelationComposite, $connectionName);
         $this->sequenceManager = $sequenceManager;
     }
@@ -61,8 +62,11 @@ class Quote extends AbstractDb
     {
         $select = parent::_getLoadSelect($field, $value, $object);
         $storeIds = $object->getSharedStoreIds();
+
         if ($storeIds) {
-            if ($storeIds != ['*']) {
+            // The comparison the arrays [0] != ['*'] returns `true` in PHP >= 8 and `false` otherwise
+            // This check emulates an old behavior (as it was in PHP 7)
+            if ($storeIds !== ['*'] && $storeIds !== [0]) {
                 $select->where('store_id IN (?)', $storeIds);
             }
         } else {
@@ -315,5 +319,27 @@ class Quote extends AbstractDb
         }
 
         return $this;
+    }
+
+    /**
+     * Quickly check if quote exists
+     *
+     * Uses direct DB query due to performance reasons
+     *
+     * @param int $quoteId
+     * @return bool
+     */
+    public function isExists(int $quoteId): bool
+    {
+        $connection = $this->getConnection();
+        $mainTable = $this->getMainTable();
+        $idFieldName = $this->getIdFieldName();
+
+        $field = $connection->quoteIdentifier(sprintf('%s.%s', $mainTable, $idFieldName));
+        $select = $connection->select()
+            ->from($mainTable, [$idFieldName])
+            ->where($field . '=?', $quoteId);
+
+        return (bool)$connection->fetchOne($select);
     }
 }

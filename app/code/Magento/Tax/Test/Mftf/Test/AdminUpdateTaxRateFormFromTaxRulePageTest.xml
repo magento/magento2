@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateTaxRateFormFromTaxRulePageTest">
+        <annotations>
+            <stories value="Country and region updating properly in Tax Rate pop-up."/>
+            <title value="Country and region updating properly in Tax Rate."/>
+            <description value="Tax Rate country and region update when changed through Tax Rule."/>
+            <testCaseId value="AC-7782"/>
+            <useCaseId value="ACP2E-1527"/>
+            <severity value="CRITICAL"/>
+            <group value="tax"/>
+        </annotations>
+        <before>
+            <createData entity="defaultTaxRate" stepKey="initialTaxRate"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
+                <argument name="taxRuleCode" value="{{SimpleTaxRule.code}}" />
+            </actionGroup>
+            <deleteData stepKey="deleteTaxRate" createDataKey="initialTaxRate" />
+        </after>
+
+        <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleIndex1"/>
+        <actionGroup ref="AdminClickAddTaxRuleButtonActionGroup" stepKey="clickAddNewTaxRuleButton"/>
+        <!-- Update a tax rate country and region value -->
+        <actionGroup ref="AdminUpdateTaxRulePageActionGroup" stepKey="updateTaxRateValue">
+            <argument name="code" value="{{SimpleTaxRule.code}}"/>
+            <argument name="country" value="{{taxRateCustomRateCanada.tax_country_id}}"/>
+            <argument name="state" value="66"/>
+        </actionGroup>
+        <!-- open tax rule page and tax rate modal-->
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickClearFilters2"/>
+        <actionGroup ref="AdminReopenTaxRulePageActionGroup" stepKey="reopenTaxRateModal">
+            <argument name="code" value="{{SimpleTaxRule.code}}"/>
+        </actionGroup>
+        <!-- Verify we see success message -->
+        <actionGroup ref="AssertCountryAndRegionValueActionGroup" stepKey="verifyCountryValue">
+            <argument name="value" value="tax_country_id"/>
+            <argument name="expectedValue" value="{{taxRateCustomRateCanada.tax_country_id}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertCountryAndRegionValueActionGroup" stepKey="verifyRegionValue">
+            <argument name="value" value="tax_region_id"/>
+            <argument name="expectedValue" value="66"/>
+        </actionGroup>
+   </test>
+</tests>

@@ -16,4 +16,20 @@
             <item>Default Store View</item>
         </array>
     </entity>
+    <entity name="firstSimpleProductReview">
+        <data key="nickname" unique="suffix">user1</data>
+        <data key="title">Review title 1</data>
+        <data key="detail">Simple product review 1</data>
+        <array key="select_stores">
+            <item>Default Store View</item>
+        </array>
+    </entity>
+    <entity name="secondSimpleProductReview">
+        <data key="nickname" unique="suffix">user2</data>
+        <data key="title">Review title 2</data>
+        <data key="detail">Simple product review 2</data>
+        <array key="select_stores">
+            <item>Default Store View</item>
+        </array>
+    </entity>
 </entities>

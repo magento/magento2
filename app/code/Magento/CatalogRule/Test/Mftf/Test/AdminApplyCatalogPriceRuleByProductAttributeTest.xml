@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-25351"/>
             <group value="catalogRule"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="productDropDownAttribute" stepKey="createDropdownAttribute"/>
@@ -123,7 +124,9 @@
                           userInput="$createProductAttributeOptionGreen.option[store_labels][0][label]$" stepKey="setAttributeValueForSecondChildProduct"/>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondChildProduct"/>
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete created data -->
@@ -139,7 +142,9 @@
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetCatalogRulesGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <!-- Create Catalog Price Rule -->
         <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="startCreatingFirstPriceRule"/>
@@ -154,10 +159,7 @@
             <argument name="discountAmount" value="{{SimpleCatalogPriceRule.discount_amount}}"/>
         </actionGroup>
         <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
-        <!-- Run cron -->
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value="catalogrule_rule"/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
         <!-- Open first simple product page on storefront -->
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openFirstSimpleProductPage">
             <argument name="productUrlKey" value="$createFirstProduct.custom_attributes[url_key]$"/>

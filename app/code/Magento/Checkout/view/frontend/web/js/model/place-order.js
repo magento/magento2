@@ -10,21 +10,35 @@ define(
         'mage/storage',
         'Magento_Checkout/js/model/error-processor',
         'Magento_Checkout/js/model/full-screen-loader',
-        'Magento_Customer/js/customer-data'
+        'Magento_Customer/js/customer-data',
+        'Magento_Checkout/js/model/payment/place-order-hooks',
+        'underscore'
     ],
-    function (storage, errorProcessor, fullScreenLoader, customerData) {
+    function (storage, errorProcessor, fullScreenLoader, customerData, hooks, _) {
         'use strict';
 
         return function (serviceUrl, payload, messageContainer) {
+            var headers = {}, redirectURL = '';
+
             fullScreenLoader.startLoader();
+            _.each(hooks.requestModifiers, function (modifier) {
+                modifier(headers, payload);
+            });
 
             return storage.post(
-                serviceUrl, JSON.stringify(payload)
+                serviceUrl, JSON.stringify(payload), true, 'application/json', headers
             ).fail(
                 function (response) {
                     errorProcessor.process(response, messageContainer);
+                    redirectURL = response.getResponseHeader('errorRedirectAction');
+
+                    if (redirectURL) {
+                        setTimeout(function () {
+                            errorProcessor.redirectTo(redirectURL);
+                        }, 3000);
+                    }
                 }
-            ).success(
+            ).done(
                 function (response) {
                     var clearData = {
                         'selectedShippingAddress': null,
@@ -44,6 +58,9 @@ define(
             ).always(
                 function () {
                     fullScreenLoader.stopLoader();
+                    _.each(hooks.afterRequestListeners, function (listener) {
+                        listener();
+                    });
                 }
             );
         };

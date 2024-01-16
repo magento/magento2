@@ -79,12 +79,18 @@ class SessionTest extends TestCase
             ['getCookie', 'setPublicCookie']
         );
         $this->storage = $this->getMockBuilder(Storage::class)
-            ->addMethods(['getUser', 'getAcl', 'setAcl'])
+            ->addMethods(['getUser'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->sessionConfig = $this->createPartialMock(
             \Magento\Framework\Session\Config::class,
-            ['getCookiePath', 'getCookieDomain', 'getCookieSecure', 'getCookieHttpOnly']
+            [
+                'getCookiePath',
+                'getCookieDomain',
+                'getCookieSecure',
+                'getCookieHttpOnly',
+                'getCookieSameSite'
+            ]
         );
         $this->aclBuilder = $this->getMockBuilder(Builder::class)
             ->disableOriginalConstructor()
@@ -127,8 +133,6 @@ class SessionTest extends TestCase
         $userMock->expects($this->any())->method('getReloadAclFlag')->willReturn(true);
         $userMock->expects($this->once())->method('setReloadAclFlag')->with('0')->willReturnSelf();
         $userMock->expects($this->once())->method('save');
-        $this->storage->expects($this->once())->method('setAcl')->with($aclMock);
-        $this->storage->expects($this->any())->method('getAcl')->willReturn($aclMock);
         if ($isUserPassedViaParams) {
             $this->session->refreshAcl($userMock);
         } else {
@@ -193,6 +197,9 @@ class SessionTest extends TestCase
         $cookieMetadata->expects($this->once())
             ->method('setHttpOnly')
             ->with($httpOnly)->willReturnSelf();
+        $cookieMetadata->expects($this->once())
+            ->method('setSameSite')
+            ->willReturnSelf();
 
         $this->cookieMetadataFactory->expects($this->once())
             ->method('createPublicCookieMetadata')
@@ -218,6 +225,9 @@ class SessionTest extends TestCase
         $this->sessionConfig->expects($this->once())
             ->method('getCookieHttpOnly')
             ->willReturn($httpOnly);
+        $this->sessionConfig->expects($this->once())
+            ->method('getCookieSameSite')
+            ->willReturn('Lax');
 
         $this->session->prolong();
 
@@ -238,7 +248,7 @@ class SessionTest extends TestCase
             $aclMock = $this->getMockBuilder(Acl::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-            $this->storage->expects($this->any())->method('getAcl')->willReturn($aclMock);
+            $this->session->setAcl($aclMock);
         }
         if ($isUserDefined) {
             $userMock = $this->getMockBuilder(User::class)
@@ -247,7 +257,9 @@ class SessionTest extends TestCase
             $this->storage->expects($this->once())->method('getUser')->willReturn($userMock);
         }
         if ($isAclDefined && $isUserDefined) {
+            // phpstan:ignore
             $userMock->expects($this->any())->method('getAclRole')->willReturn($userAclRole);
+            // phpstan:ignore
             $aclMock->expects($this->once())->method('isAllowed')->with($userAclRole)->willReturn($isAllowed);
         }
 

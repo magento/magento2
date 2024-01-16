@@ -9,6 +9,7 @@ namespace Magento\Multishipping\Plugin;
 
 use Magento\Checkout\Model\Cart;
 use Magento\Framework\App\Action\Action;
+use Magento\Multishipping\Model\DisableMultishipping;
 
 /**
  * Turns Off Multishipping mode for Quote.
@@ -21,12 +22,20 @@ class DisableMultishippingMode
     private $cart;
 
     /**
+     * @var DisableMultishipping
+     */
+    private $disableMultishipping;
+
+    /**
      * @param Cart $cart
+     * @param DisableMultishipping $disableMultishipping
      */
     public function __construct(
-        Cart $cart
+        Cart $cart,
+        DisableMultishipping $disableMultishipping
     ) {
         $this->cart = $cart;
+        $this->disableMultishipping = $disableMultishipping;
     }
 
     /**
@@ -36,16 +45,16 @@ class DisableMultishippingMode
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeExecute(Action $subject)
+    public function beforeExecute(Action $subject): void
     {
         $quote = $this->cart->getQuote();
-        if ($quote->getIsMultiShipping()) {
-            $quote->setIsMultiShipping(0);
-            $extensionAttributes = $quote->getExtensionAttributes();
-            if ($extensionAttributes && $extensionAttributes->getShippingAssignments()) {
-                $extensionAttributes->setShippingAssignments([]);
-            }
+        $modChanged = $this->disableMultishipping->execute($quote);
+        if ($modChanged) {
+            $totalsCollectedBefore = $quote->getTotalsCollectedFlag();
             $this->cart->saveQuote();
+            if (!$totalsCollectedBefore) {
+                $quote->setTotalsCollectedFlag(false);
+            }
         }
     }
 }

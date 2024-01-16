@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Csp\Helper;
 
 use Magento\Csp\Api\InlineUtilInterface;
+use Magento\Csp\Model\Collector\ConfigCollector;
 use Magento\Csp\Model\Collector\DynamicCollector;
 use Magento\Csp\Model\Policy\FetchPolicy;
 use Magento\Framework\App\ObjectManager;
@@ -39,6 +40,11 @@ class InlineUtil implements InlineUtilInterface, SecurityProcessorInterface
      */
     private $htmlRenderer;
 
+    /**
+     * @var ConfigCollector
+     */
+    private $configCollector;
+
     private static $tagMeta = [
         'script' => ['id' => 'script-src', 'remote' => ['src'], 'hash' => true],
         'style' => ['id' => 'style-src', 'remote' => [], 'hash' => true],
@@ -60,15 +66,18 @@ class InlineUtil implements InlineUtilInterface, SecurityProcessorInterface
      * @param DynamicCollector $dynamicCollector
      * @param bool $useUnsafeHashes Use 'unsafe-hashes' policy (not supported by CSP v2).
      * @param HtmlRenderer|null $htmlRenderer
+     * @param ConfigCollector|null $configCollector
      */
     public function __construct(
         DynamicCollector $dynamicCollector,
         bool $useUnsafeHashes = false,
-        ?HtmlRenderer $htmlRenderer = null
+        ?HtmlRenderer $htmlRenderer = null,
+        ?ConfigCollector $configCollector = null
     ) {
         $this->dynamicCollector = $dynamicCollector;
         $this->useUnsafeHashes = $useUnsafeHashes;
         $this->htmlRenderer = $htmlRenderer ?? ObjectManager::getInstance()->get(HtmlRenderer::class);
+        $this->configCollector = $configCollector ?? ObjectManager::getInstance()->get(ConfigCollector::class);
     }
 
     /**
@@ -110,14 +119,14 @@ class InlineUtil implements InlineUtilInterface, SecurityProcessorInterface
      */
     private function extractRemoteFonts(string $styleContent): array
     {
-        $urlsFound = [[]];
+        $urlsFound = [];
         preg_match_all('/\@font\-face\s*?\{([^\}]*)[^\}]*?\}/im', $styleContent, $fontFaces);
         foreach ($fontFaces[1] as $fontFaceContent) {
             preg_match_all('/url\([\'\"]?(http(s)?\:[^\)]+)[\'\"]?\)/i', $fontFaceContent, $urls);
             $urlsFound[] = $urls[1];
         }
 
-        return array_map([$this, 'extractHost'], array_merge(...$urlsFound));
+        return array_map([$this, 'extractHost'], array_merge([], ...$urlsFound));
     }
 
     /**
@@ -187,7 +196,10 @@ class InlineUtil implements InlineUtilInterface, SecurityProcessorInterface
                     new FetchPolicy($policyId, false, $remotes)
                 );
             }
-            if ($tagData->getContent() && !empty(self::$tagMeta[$tagData->getTag()]['hash'])) {
+            if ($tagData->getContent()
+                && !empty(self::$tagMeta[$tagData->getTag()]['hash'])
+                && $this->isInlineDisabled(self::$tagMeta[$tagData->getTag()]['id'])
+            ) {
                 $this->dynamicCollector->add(
                     new FetchPolicy(
                         $policyId,
@@ -232,5 +244,22 @@ class InlineUtil implements InlineUtilInterface, SecurityProcessorInterface
         $this->dynamicCollector->add($policy);
 
         return $eventHandlerData;
+    }
+
+    /**
+     * Check if inline sources are prohibited.
+     *
+     * @param string $policyId
+     * @return bool
+     */
+    private function isInlineDisabled(string $policyId): bool
+    {
+        foreach ($this->configCollector->collect() as $policy) {
+            if ($policy->getId() === $policyId && $policy instanceof FetchPolicy) {
+                return !$policy->isInlineAllowed();
+            }
+        }
+
+        return false;
     }
 }

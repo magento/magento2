@@ -46,7 +46,7 @@
                     timeout: false
                 });
 
-                $(this.form).submit();
+                $(this.form).trigger('submit');
             } else {
                 uiAlert({
                     content: $.mage.__('Please select a file to import!')
@@ -74,7 +74,7 @@ script;
             <div class="fieldset admin__field">
                 <span class="admin__field-label"><span><?= $block->escapeHtml(__('Export Tax Rates')) ?></span></span>
                 <div class="admin__field-control">
-                    <?= $block->getButtonHtml(__('Export Tax Rates'), "this.form.submit()") ?>
+                    <?= $block->getButtonHtml(__('Export Tax Rates'), "export_form.submit()") ?>
                 </div>
             </div>
         <?php if ($block->getUseContainer()):?>

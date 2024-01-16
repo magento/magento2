@@ -68,7 +68,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        if (!preg_match('/^[a-z]+[a-z0-9_]*$/i', $object->getCode())) {
+        if (!$object->getCode() || !preg_match('/^[a-z]+[a-z0-9_]*$/i', $object->getCode())) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'Website code may only contain letters (a-z), numbers (0-9) or underscore (_),'

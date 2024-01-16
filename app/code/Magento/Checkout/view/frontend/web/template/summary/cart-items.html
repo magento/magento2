@@ -7,11 +7,11 @@
 <div class="block items-in-cart" data-bind="mageInit: {'collapsible':{'openedState': 'active', 'active': isItemsBlockExpanded()}}">
     <div class="title" data-role="title">
         <strong role="heading" aria-level="1">
-            <translate args="maxCartItemsToDisplay" if="maxCartItemsToDisplay < getCartLineItemsCount()"/>
-            <translate args="'of'" if="maxCartItemsToDisplay < getCartLineItemsCount()"/>
-            <span data-bind="text: getCartSummaryItemsCount()"></span>
-            <translate args="'Item in Cart'" if="getCartLineItemsCount() === 1"/>
-            <translate args="'Items in Cart'" if="getCartLineItemsCount() > 1"/>
+            <translate args="maxCartItemsToDisplay" if="maxCartItemsToDisplay < getCartLineItemsCount()"></translate>
+            <translate args="'of'" if="maxCartItemsToDisplay < getCartLineItemsCount()"></translate>
+            <span data-bind="text: getCartSummaryItemsCount().toLocaleString(window.LOCALE)"></span>
+            <translate args="'Item in Cart'" if="getCartSummaryItemsCount() === 1"></translate>
+            <translate args="'Items in Cart'" if="getCartSummaryItemsCount() > 1"></translate>
         </strong>
     </div>
     <div class="content minicart-items" data-role="content">
@@ -20,7 +20,7 @@
                 <each args="items()">
                     <li class="product-item">
                         <div class="product">
-                            <each args="$parent.elems()" render=""/>
+                            <each args="$parent.elems()" render=""></each>
                         </div>
                     </li>
                 </each>

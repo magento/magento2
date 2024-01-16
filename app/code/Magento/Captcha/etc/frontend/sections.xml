@@ -10,4 +10,10 @@
     <action name="customer/ajax/login">
         <section name="captcha"/>
     </action>
+    <action name="rest/*/V1/carts/*/payment-information">
+        <section name="captcha"/>
+    </action>
+    <action name="rest/*/V1/guest-carts/*/payment-information">
+        <section name="captcha"/>
+    </action>
 </config>

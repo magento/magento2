@@ -66,7 +66,8 @@ class RegionTest extends TestCase
             }
         );
         $countryMock = $this->getMockBuilder(AbstractElement::class)
-            ->addMethods(['getValue', 'serialize'])
+            ->onlyMethods(['serialize'])
+            ->addMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $countryMock->method('serialize')->willReturnCallback(

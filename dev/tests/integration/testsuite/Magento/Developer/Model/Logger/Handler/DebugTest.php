@@ -16,9 +16,11 @@ use Magento\Framework\Shell;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @magentoAppIsolation enabled
  */
 class DebugTest extends \PHPUnit\Framework\TestCase
 {
@@ -76,7 +78,7 @@ class DebugTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->shell = $this->objectManager->get(Shell::class);
-        $this->logger = $this->objectManager->get(Monolog::class);
+        $this->logger = $this->objectManager->get(LoggerInterface::class);
         $this->deploymentConfig = $this->objectManager->get(DeploymentConfig::class);
 
         /** @var Filesystem $filesystem */
@@ -125,7 +127,7 @@ class DebugTest extends \PHPUnit\Framework\TestCase
 
         $this->removeDebugLog();
         $this->logger->debug($message);
-        $this->assertFileNotExists($this->getDebuggerLogPath());
+        $this->assertFileDoesNotExist($this->getDebuggerLogPath());
         $this->assertNull($this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_DEBUG_LOGGING));
 
         $this->checkCommonFlow($message);
@@ -235,6 +237,6 @@ class DebugTest extends \PHPUnit\Framework\TestCase
         $this->enableDebugging(false);
         $this->removeDebugLog();
         $this->logger->debug($message);
-        $this->assertFileNotExists($this->getDebuggerLogPath());
+        $this->assertFileDoesNotExist($this->getDebuggerLogPath());
     }
 }

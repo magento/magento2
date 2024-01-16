@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckoutWithMultishippingIfMaximumQtyLimitWasReachedTest">
+        <annotations>
+            <features value="Multishipping"/>
+            <stories value="Order Placement With Maximum QTY Limit for Multishipping"/>
+            <title value="Maximum QTY Limit for Shipping with Multishipping Was Reached"/>
+            <description value="Customer should not be able ship if Maximum QTY limit was reached"/>
+            <severity value="MAJOR"/>
+            <group value="multishipping"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{MaximumQtyAllowed2ForShippingToMultipleAddressesConfigData.path}} {{MaximumQtyAllowed2ForShippingToMultipleAddressesConfigData.value}}" stepKey="setMaximumQty2"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{MaximumQtyAllowed100ForShippingToMultipleAddressesConfigData.path}} {{MaximumQtyAllowed100ForShippingToMultipleAddressesConfigData.value}}" stepKey="setDefaultMaximumQty"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="openProductFromCategory">
+            <argument name="category" value="$createCategory$"/>
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addProductToTheCart">
+            <argument name="productQty" value="2"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="navigateToCartPage"/>
+        <!-- Click 'Check Out with Multiple Addresses' -->
+        <actionGroup ref="StorefrontGoCheckoutWithMultipleAddressesActionGroup" stepKey="goCheckoutWithMultipleAddresses"/>
+        <actionGroup ref="StorefrontChangeMultishippingItemQtyActionGroup" stepKey="setProductQuantity">
+            <argument name="quantity" value="{{MaximumQtyAllowed2ForShippingToMultipleAddressesConfigData.value}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontNavigateToShippingInformationPageActionGroup" stepKey="navigateToShippingInformation"/>
+        <see selector=".modals-wrapper .modal-content div" userInput="Maximum qty allowed for Shipping to multiple addresses is {{MaximumQtyAllowed2ForShippingToMultipleAddressesConfigData.value}}" stepKey="seeErrorMessage"/>
+    </test>
+</tests>

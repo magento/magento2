@@ -1,19 +1,22 @@
 <?php
 /**
- * XML deserializer of REST request content.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi\Rest\Request\Deserializer;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Framework\Phrase;
+use Magento\Framework\Xml\Parser;
+use Magento\Framework\Xml\ParserFactory;
 
 class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterface
 {
     /**
-     * @var \Magento\Framework\Xml\Parser
+     * @var Parser
+     * @deprecated
+     * @see $parserFactory
      */
     protected $_xmlParser;
 
@@ -23,13 +26,26 @@ class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfac
     protected $_appState;
 
     /**
-     * @param \Magento\Framework\Xml\Parser $xmlParser
-     * @param State $appState
+     * @var ParserFactory
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    public function __construct(\Magento\Framework\Xml\Parser $xmlParser, State $appState)
-    {
+    private readonly ParserFactory $parserFactory;
+
+    /**
+     * @param Parser $xmlParser
+     * @param State $appState
+     * @param ParserFactory|null $parserFactory
+     *
+     */
+    public function __construct(
+        \Magento\Framework\Xml\Parser $xmlParser,
+        State $appState,
+        ?ParserFactory $parserFactory = null,
+    ) {
         $this->_xmlParser = $xmlParser;
         $this->_appState = $appState;
+        $this->parserFactory = $parserFactory ?? ObjectManager::getInstance()->get(ParserFactory::class);
     }
 
     /**
@@ -57,13 +73,18 @@ class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfac
             );
         }
         /** Disable external entity loading to prevent possible vulnerability */
-        $previousLoaderState = libxml_disable_entity_loader(true);
+        if (version_compare(PHP_VERSION, '8.0') < 0) {
+            // this function no longer has an effect in PHP 8.0, but it's required in earlier versions
+            $previousLoaderState = libxml_disable_entity_loader(true);
+        }
         set_error_handler([$this, 'handleErrors']);
-
-        $this->_xmlParser->loadXML($xmlRequestBody);
+        $xmlParser = $this->parserFactory->create();
+        $xmlParser->loadXML($xmlRequestBody);
 
         restore_error_handler();
-        libxml_disable_entity_loader($previousLoaderState);
+        if (isset($previousLoaderState)) {
+            libxml_disable_entity_loader($previousLoaderState);
+        }
 
         /** Process errors during XML parsing. */
         if ($this->_errorMessage !== null) {
@@ -74,7 +95,7 @@ class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfac
             }
             throw new \Magento\Framework\Webapi\Exception($exceptionMessage);
         }
-        $data = $this->_xmlParser->xmlToArray();
+        $data = $xmlParser->xmlToArray();
         /** Data will always have exactly one element so it is safe to call reset here. */
         return reset($data);
     }

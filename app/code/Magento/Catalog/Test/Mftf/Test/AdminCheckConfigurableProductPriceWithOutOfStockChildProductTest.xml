@@ -20,6 +20,9 @@
 
         <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToProductQuantity" after="waitForProductPageToLoad"/>
         <remove keyForRemoval="disableProduct"/>
-        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="Out of Stock" stepKey="selectOutOfStock" after="scrollToProductQuantity"/>
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="selectOutOfStock" after="scrollToProductQuantity">
+           <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup> 
+     
     </test>
 </tests>

@@ -13,7 +13,7 @@
         <column xsi:type="smallint" name="attribute_set_id" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Attribute Set ID"/>
         <column xsi:type="varchar" name="type_id" nullable="false" length="32" default="simple" comment="Type ID"/>
-        <column xsi:type="varchar" name="sku" nullable="true" length="64" comment="SKU"/>
+        <column xsi:type="varchar" name="sku" nullable="false" length="64" comment="SKU"/>
         <column xsi:type="smallint" name="has_options" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Has Options"/>
         <column xsi:type="smallint" name="required_options" unsigned="true" nullable="false"
@@ -547,6 +547,8 @@
                 default="0" comment="Product ID"/>
         <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
+        <column xsi:type="int" name="list_id" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="List ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="catalog_compare_item_id"/>
         </constraint>
@@ -558,6 +560,8 @@
                     referenceColumn="entity_id" onDelete="CASCADE"/>
         <constraint xsi:type="foreign" referenceId="CATALOG_COMPARE_ITEM_STORE_ID_STORE_STORE_ID" table="catalog_compare_item"
                     column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="SET NULL"/>
+        <constraint xsi:type="foreign" referenceId="CATALOG_COMPARE_ITEM_LIST_ID_CATALOG_COMPARE_LIST_LIST_ID" table="catalog_compare_item"
+                    column="list_id" referenceTable="catalog_compare_list" referenceColumn="list_id" onDelete="CASCADE"/>
         <index referenceId="CATALOG_COMPARE_ITEM_PRODUCT_ID" indexType="btree">
             <column name="product_id"/>
         </index>
@@ -571,6 +575,25 @@
         </index>
         <index referenceId="CATALOG_COMPARE_ITEM_STORE_ID" indexType="btree">
             <column name="store_id"/>
+        </index>
+    </table>
+    <table name="catalog_compare_list" resource="default" engine="innodb" comment="Catalog Compare List with hash Table">
+        <column xsi:type="int" name="list_id" padding="10" unsigned="true" nullable="false"
+                identity="true" comment="Compare List ID"/>
+        <column xsi:type="varchar" name="list_id_mask" nullable="true" length="32" comment="Masked ID"/>
+        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Customer ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="list_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="CATALOG_COMPARE_LIST_CUSTOMER_ID">
+            <column name="customer_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="CATALOG_COMPARE_LIST_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID"
+                    table="catalog_compare_list" column="customer_id" referenceTable="customer_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+        <index referenceId="CATALOG_COMPARE_LIST_LIST_ID_MASK" indexType="btree">
+            <column name="list_id_mask"/>
         </index>
     </table>
     <table name="catalog_product_website" resource="default" engine="innodb"
@@ -1600,7 +1623,7 @@
     <table name="catalog_product_index_price_tmp" resource="default" engine="innodb"
            comment="Catalog Product Price Indexer Temp Table">
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
-                comment="Entity ID"/>
+                comment="Product ID"/>
         <column xsi:type="int" name="customer_group_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Customer Group ID"/>
         <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
@@ -1617,20 +1640,11 @@
                 comment="Max Price"/>
         <column xsi:type="decimal" name="tier_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Tier Price"/>
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true"
+                comment="ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
-            <column name="entity_id"/>
-            <column name="customer_group_id"/>
-            <column name="website_id"/>
+            <column name="id"/>
         </constraint>
-        <index referenceId="CATALOG_PRODUCT_INDEX_PRICE_TMP_CUSTOMER_GROUP_ID" indexType="btree">
-            <column name="customer_group_id"/>
-        </index>
-        <index referenceId="CATALOG_PRODUCT_INDEX_PRICE_TMP_WEBSITE_ID" indexType="btree">
-            <column name="website_id"/>
-        </index>
-        <index referenceId="CATALOG_PRODUCT_INDEX_PRICE_TMP_MIN_PRICE" indexType="btree">
-            <column name="min_price"/>
-        </index>
     </table>
     <table name="catalog_category_product_index_tmp" resource="default" engine="innodb"
            comment="Catalog Category Product Indexer temporary table">
@@ -1670,7 +1684,7 @@
         <constraint xsi:type="foreign" referenceId="CAT_PRD_ENTT_MDA_GLR_VAL_TO_ENTT_ENTT_ID_CAT_PRD_ENTT_ENTT_ID"
                     table="catalog_product_entity_media_gallery_value_to_entity" column="entity_id"
                     referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" referenceId="CAT_PRD_ENTT_MDA_GLR_VAL_TO_ENTT_VAL_ID_ENTT_ID">
+        <constraint xsi:type="primary" referenceId="CAT_PRD_ENTT_MDA_GLR_VAL_TO_ENTT_VAL_ID_ENTT_ID">
             <column name="value_id"/>
             <column name="entity_id"/>
         </constraint>

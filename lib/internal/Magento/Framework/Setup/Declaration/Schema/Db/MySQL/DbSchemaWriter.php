@@ -250,7 +250,9 @@ class DbSchemaWriter implements DbSchemaWriterInterface
      */
     public function resetAutoIncrement($tableName, $resource)
     {
-        $sql = 'AUTO_INCREMENT = 1';
+        $autoIncrementValue = $this->getNextAutoIncrementValue($tableName, $resource);
+        $sql = "AUTO_INCREMENT = {$autoIncrementValue}";
+
         return $this->statementFactory->create(
             sprintf('RESET_AUTOINCREMENT_%s', $tableName),
             $tableName,
@@ -299,5 +301,28 @@ class DbSchemaWriter implements DbSchemaWriterInterface
                 }
             }
         }
+    }
+
+    /**
+     * Retrieve next value for AUTO_INCREMENT column.
+     *
+     * @param string $tableName
+     * @param string $resource
+     * @return int
+     */
+    private function getNextAutoIncrementValue(string $tableName, string $resource): int
+    {
+        $adapter = $this->resourceConnection->getConnection($resource);
+        $autoIncrementField = $adapter->getAutoIncrementField($tableName);
+        if ($autoIncrementField) {
+            $sql = sprintf('SELECT MAX(`%s`) + 1 FROM `%s`', $autoIncrementField, $tableName);
+            $adapter->resetDdlCache($tableName);
+            $stmt = $adapter->query($sql);
+
+            return (int)$stmt->fetchColumn();
+        } else {
+            return 1;
+        }
+
     }
 }

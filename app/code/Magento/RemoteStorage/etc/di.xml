@@ -1,0 +1,163 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\RemoteStorage\Driver\Adapter\Cache\CacheInterface" type="Magento\RemoteStorage\Driver\Adapter\Cache\Generic"/>
+    <preference for="Magento\RemoteStorage\Driver\Adapter\CachedAdapterInterface" type="Magento\RemoteStorage\Driver\Adapter\CachedAdapter"/>
+    <preference for="Magento\RemoteStorage\Driver\Adapter\MetadataProviderInterface" type="Magento\RemoteStorage\Driver\Adapter\MetadataProvider"/>
+    <preference for="Magento\RemoteStorage\Driver\Adapter\MetadataProviderFactoryInterface" type="Magento\RemoteStorage\Driver\Adapter\MetadataProviderFactory"/>
+    <preference for="Magento\Framework\Filesystem\DriverPool" type="Magento\RemoteStorage\Driver\DriverPool"/>
+    <preference for="Magento\Framework\File\Uploader" type="Magento\RemoteStorage\Model\File\Uploader"/>
+    <virtualType name="remoteWriteFactory" type="Magento\Framework\Filesystem\Directory\WriteFactory">
+        <arguments>
+            <argument name="driverPool" xsi:type="object">Magento\RemoteStorage\Driver\DriverPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="remoteReadFactory" type="Magento\Framework\Filesystem\Directory\ReadFactory">
+        <arguments>
+            <argument name="driverPool" xsi:type="object">Magento\RemoteStorage\Driver\DriverPool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\RemoteStorage\Filesystem">
+        <arguments>
+            <argument name="writeFactory" xsi:type="object">
+                Magento\RemoteStorage\Model\Filesystem\Directory\WriteFactory
+            </argument>
+            <argument name="readFactory" xsi:type="object">remoteReadFactory</argument>
+        </arguments>
+    </type>
+    <virtualType name="customRemoteFilesystem" type="Magento\RemoteStorage\Filesystem">
+        <arguments>
+            <argument name="directoryCodes" xsi:type="array">
+                <item name="media" xsi:type="const">Magento\Framework\App\Filesystem\DirectoryList::MEDIA</item>
+                <item name="var_import_export" xsi:type="const">Magento\Framework\App\Filesystem\DirectoryList::VAR_IMPORT_EXPORT</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="fullRemoteFilesystem" type="Magento\RemoteStorage\Filesystem" />
+    <virtualType name="stdFilesystem" type="Magento\Framework\Filesystem" />
+    <preference for="Magento\Framework\Filesystem" type="customRemoteFilesystem"/>
+    <type name="Magento\Framework\Filesystem\Directory\TargetDirectory">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+            <argument name="driverCode" xsi:type="const">Magento\RemoteStorage\Driver\DriverPool::REMOTE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Model\Sitemap">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Controller\Adminhtml\Sitemap\Save">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Block\Adminhtml\Grid\Renderer\Link">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Controller\Adminhtml\Sitemap\Delete">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="remoteStorageSync" xsi:type="object">Magento\RemoteStorage\Console\Command\RemoteStorageSynchronizeCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\MaintenanceMode">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaStorage\Model\File\Storage\SynchronizationFactory">
+        <plugin name="remoteMediaStorageSynchronizationFactory" type="Magento\RemoteStorage\Plugin\File\Storage\SynchronizationFactory" />
+    </type>
+    <type name="Magento\MediaGalleryMetadata\Model\IptcEmbed">
+        <plugin name="remoteIptcEmbed" type="Magento\RemoteStorage\Plugin\MediaGalleryMetadata\IptcEmbed" />
+    </type>
+    <type name="Magento\MediaGalleryMetadata\Model\ExifReader">
+        <plugin name="remoteExifReader" type="Magento\RemoteStorage\Plugin\MediaGalleryMetadata\ExifReader" />
+    </type>
+    <type name="Magento\MediaGallerySynchronization\Model\Filesystem\GetFileInfo">
+        <plugin name="remoteGetFileInfo" type="Magento\RemoteStorage\Plugin\Filesystem\GetFileInfo" />
+    </type>
+    <type name="Magento\Framework\Data\Collection\Filesystem">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Cms\Model\Wysiwyg\Images\Storage">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\File\Mime">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\File\Name">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Option\Type\File\ExistingValidate">
+        <plugin name="remoteValidatorInfo" type="Magento\RemoteStorage\Plugin\ExistingValidate" sortOrder="10"/>
+    </type>
+    <type name="Magento\Framework\Image\Adapter\AbstractAdapter">
+        <plugin name="remoteImageFile" type="Magento\RemoteStorage\Plugin\Image" sortOrder="10"/>
+    </type>
+    <type name="Magento\Framework\Archive\Zip">
+        <plugin name="remoteZipArchive" type="Magento\RemoteStorage\Plugin\Zip" sortOrder="10"/>
+    </type>
+    <type name="Magento\Catalog\Model\Category\FileInfo">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ImportExport\Model\Import">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ImportExport\Model\Import\ImageDirectoryBaseProvider">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ImportExport\Helper\Report">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogImportExport\Model\Import\Product">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogImportExport\Model\Import\Uploader">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\DownloadableImportExport\Helper\Uploader">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\RemoteStorage\Model\Synchronizer">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">customRemoteFilesystem</argument>
+        </arguments>
+    </type>
+</config>

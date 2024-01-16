@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontReviewDisallowGuestsToWriteReviewsTest">
+        <annotations>
+            <features value="Review"/>
+            <stories value="Disallow guests to write reviews"/>
+            <title value="Guests are not allowed to write reviews if the option disabled in admin"/>
+            <description value="Guests should be not able write product reviews if the option disabled in configurations"/>
+            <severity value="MINOR"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{DisAllowGuestsToWriteReviewsConfigData.path}} {{DisAllowGuestsToWriteReviewsConfigData.value}}" stepKey="disAllowGuestsWriteReviews"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{AllowGuestsToWriteReviewsConfigData.path}} {{AllowGuestsToWriteReviewsConfigData.value}}" stepKey="returnDefaultValue"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="openProductFromCategory">
+            <argument name="category" value="$createCategory$"/>
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertReviewNotificationForNotLoggedInUsersActionGroup" stepKey="assertMessage">
+            <argument name="message" value="Only registered users can write reviews. Please Sign in or create an account"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertReviewFieldsAreAbsentActionGroup" stepKey="assertReviewElementsNotVisible"/>
+    </test>
+</tests>

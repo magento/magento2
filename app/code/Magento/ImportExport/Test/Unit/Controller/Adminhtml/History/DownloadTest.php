@@ -9,14 +9,17 @@ namespace Magento\ImportExport\Test\Unit\Controller\Adminhtml\History;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\ImportExport\Controller\Adminhtml\History\Download;
 use Magento\ImportExport\Helper\Report;
+use Magento\ImportExport\Model\Import;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -155,8 +158,20 @@ class DownloadTest extends TestCase
         $this->reportHelper->method('importFileExists')
             ->with($processedFilename)
             ->willReturn(true);
-        $this->resultRaw->expects($this->once())->method('setContents');
-        $this->downloadController->execute();
+
+        $responseMock = $this->getMockBuilder(ResponseInterface::class)
+            ->getMock();
+        $this->fileFactory->expects($this->once())
+            ->method('create')
+            ->with(
+                $processedFilename,
+                ['type' => 'filename', 'value' =>Import::IMPORT_HISTORY_DIR . $processedFilename],
+                DirectoryList::VAR_IMPORT_EXPORT,
+                'application/octet-stream',
+                1
+            )
+            ->willReturn($responseMock);
+        $this->assertSame($responseMock, $this->downloadController->execute());
     }
 
     /**

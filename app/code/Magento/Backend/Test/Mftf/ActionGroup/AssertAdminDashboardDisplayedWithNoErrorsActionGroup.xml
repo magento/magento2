@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminDashboardDisplayedWithNoErrorsActionGroup">
+        <annotations>
+            <description>Checks if Dashboard is displayed properly</description>
+        </annotations>
+
+        <waitForElementVisible selector="{{AdminDashboardSection.dashboardDiagramOrderContentTab}}" stepKey="seeOrderContentTab"/>
+        <waitForElementVisible selector="{{AdminDashboardSection.dashboardDiagramContent}}" stepKey="seeDiagramContent"/>
+        <click selector="{{AdminDashboardSection.dashboardDiagramAmounts}}" stepKey="clickDashboardAmount"/>
+        <waitForPageLoad stepKey="waitForDashboardAmountLoading"/>
+        <waitForElementVisible selector="{{AdminDashboardSection.dashboardDiagramAmountsContentTab}}" stepKey="seeDiagramAmountContent"/>
+        <waitForElementVisible selector="{{AdminDashboardSection.dashboardDiagramTotals}}" stepKey="seeAmountTotals"/>
+        <dontSeeJsError stepKey="dontSeeJsError"/>
+    </actionGroup>
+</actionGroups>
