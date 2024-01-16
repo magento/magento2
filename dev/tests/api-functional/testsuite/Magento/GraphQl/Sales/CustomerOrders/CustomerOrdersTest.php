@@ -38,10 +38,10 @@ class CustomerOrdersTest extends GraphQlAbstract
             <<<QUERY
             query {
                 customer {
-                    orders(filter: {}) {
-                        items {
-                            number
-                            status
+                    orders(filter: {}) { 
+                        items { 
+                            number  
+                            status 
                             created_at
                         }
                     }
@@ -75,7 +75,7 @@ QUERY;
                 'created_at' => "2022-09-09 00:00:00"
             ]
         ];
-
+  
         $actualData = $response['customer']['orders']['items'];
         foreach ($expectedData as $key => $data) {
             $this->assertEquals(
@@ -83,7 +83,7 @@ QUERY;
                 $actualData[$key]['number'],
                 "order_number is different than the expected for order - " . $data['number']
             );
-
+        
             $this->assertEquals(
                 $data['created_at'],
                 $actualData[$key]['created_at'],
