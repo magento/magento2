@@ -167,6 +167,30 @@ class CachedAdapter implements CachedAdapterInterface
     /**
      * {@inheritdoc}
      */
+    public function directoryExists(string $path): bool
+    {
+        $cacheHas = $this->cache->exists($path);
+
+        if ($cacheHas !== null) {
+            return $cacheHas;
+        }
+
+        $exists = $this->adapter->directoryExists($path);
+
+        if ($exists) {
+            $cacheEntry = ['type' => 'dir', 'path' => $path];
+            $this->cache->updateMetadata($path, $cacheEntry, true);
+        } else {
+            $this->cache->storeDirNotExists($path);
+        }
+
+        return $exists;
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
     public function read(string $path): string
     {
         return $this->adapter->read($path);

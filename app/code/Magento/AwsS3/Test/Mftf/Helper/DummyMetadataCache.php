@@ -83,4 +83,11 @@ class DummyMetadataCache implements \Magento\RemoteStorage\Driver\Adapter\Cache\
     public function storeFileNotExists(string $path): void
     {
     }
+
+    /**
+     * @inheirtDoc
+     */
+    public function storeDirNotExists(string $path): void
+    {
+    }
 }
