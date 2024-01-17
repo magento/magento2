@@ -118,6 +118,7 @@
         <actionGroup ref="StorefrontOpenProductFromCategoryPageActionGroup" stepKey="openProductFromCategoryPage">
             <argument name="productName" value="$product_1_1_1_2.name$"/>
         </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductDisplayPageLoad"/>
         <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeCorrectName">
             <argument name="productName" value="$product_1_1_1_2.name$"/>
         </actionGroup>
@@ -219,6 +220,7 @@
         <actionGroup ref="StorefrontOpenProductFromCategoryPageActionGroup" stepKey="openProductFromCategoryPage_Try2">
             <argument name="productName" value="$product_1_1_1_2.name$"/>
         </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductDisplayPageLoad_Try2"/>
         <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeCorrectName_Try2">
             <argument name="productName" value="$product_1_1_1_2.name$"/>
         </actionGroup>

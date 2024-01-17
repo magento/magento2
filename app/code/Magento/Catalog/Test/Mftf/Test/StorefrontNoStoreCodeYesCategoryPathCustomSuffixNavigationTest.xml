@@ -10,7 +10,7 @@
     <test name="StorefrontNoStoreCodeYesCategoryPathCustomSuffixNavigationTest">
         <annotations>
             <features value="Catalog"/>
-            <stories value="Navigation Menu Highlighting with custom Suffix, No Store Code, Yes Category Path"/>
+            <stories value="Navigation Menu Highlighting with Custom Suffix, No Store Code, Yes Category Path"/>
             <title value="Validation of Navigation Menu Highlighting with custom Suffix, No Store Code and Yes Category Path in URLs"/>
             <description value="This test verifies that the correct category is highlighted in the navigation menu when navigating through categories and products on the storefront, specifically with custom URL suffixes and the settings 'Add Store Code to Urls: No' and 'Use Categories Path for Product URLs: Yes'. The test focuses on the impact of these configurations on category highlighting."/>
             <testCaseId value="AC-10851"/>
@@ -127,6 +127,7 @@
         <actionGroup ref="StorefrontOpenProductFromCategoryPageActionGroup" stepKey="openProductFromCategoryPage">
             <argument name="productName" value="$product_1_1_1_2.name$"/>
         </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductDisplayPageLoad"/>
         <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeCorrectName">
             <argument name="productName" value="$product_1_1_1_2.name$"/>
         </actionGroup>
@@ -228,6 +229,7 @@
         <actionGroup ref="StorefrontOpenProductFromCategoryPageActionGroup" stepKey="openProductFromCategoryPage_Try2">
             <argument name="productName" value="$product_1_1_1_2.name$"/>
         </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductDisplayPageLoad_Try2"/>
         <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeCorrectName_Try2">
             <argument name="productName" value="$product_1_1_1_2.name$"/>
         </actionGroup>
