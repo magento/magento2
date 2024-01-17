@@ -18,7 +18,7 @@
         </annotations>
         <before>
             <!--Login to backend-->
-            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin" before="navigateToConfigCurrencySetupPage1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin" before="navigateToConfigCurrencySetupPage1"/>
             <!--Setup currencies -->
             <actionGroup ref="AdminNavigateToCurrencySetupPageActionGroup" stepKey="navigateToConfigCurrencySetupPage1"/>
             <actionGroup ref="AdminExpandCurrencyOptionsActionGroup" stepKey="openCurrencyOptions"/>
