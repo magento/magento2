@@ -14,7 +14,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 class Serialize implements SerializerInterface
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function serialize($data)
     {
@@ -27,7 +27,7 @@ class Serialize implements SerializerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function unserialize($string)
     {
@@ -38,8 +38,7 @@ class Serialize implements SerializerInterface
             function () {
                 restore_error_handler();
                 throw new \InvalidArgumentException('Unable to unserialize value, string is corrupted.');
-            },
-            E_NOTICE
+            }
         );
         // We have to use unserialize here
         // phpcs:ignore Magento2.Security.InsecureFunction
