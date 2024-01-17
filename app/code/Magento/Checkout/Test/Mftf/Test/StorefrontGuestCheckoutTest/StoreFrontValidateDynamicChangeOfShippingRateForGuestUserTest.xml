@@ -7,13 +7,13 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontGuestCheckoutForAvailableShippingRateChangeToInputDataTest">
+    <test name="StoreFrontValidateDynamicChangeOfShippingRateForGuestUserTest">
         <annotations>
             <features value="Checkout"/>
-            <stories value="Checkout via Guest Checkout"/>
+            <stories value="Shipping rate in Guest Checkout"/>
             <title value="Guest Checkout - guest should be able to see the change in the shipping rate on fly."/>
             <description value="Should be able to change the shipping rate while changing the input data based on the specific country and zipcode."/>
-            <severity value="AVERAGE"/>
+            <severity value="CRITICAL"/>
             <testCaseId value="AC-6139"/>
         </annotations>
         <before>
@@ -52,13 +52,13 @@
                 <argument name="state" value="California"/>
                 <argument name="postcode" value="90034"/>
             </actionGroup>
-        </before>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCachePostChangingConfigurationSettings">
                 <argument name="tags" value="config"/>
             </actionGroup>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexPostChangingConfigurationSettings">
-                <argument name="indices" value=""/>
+                <argument name="indices" value="cataloginventory_stock catalog_product_price"/>
             </actionGroup>
+        </before>
             <!-- Go to storefront page to add product -->
             <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
             <waitForPageLoad stepKey="waitForProductPage"/>
@@ -66,20 +66,22 @@
             <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
                 <argument name="product" value="$createSimpleProduct$"/>
             </actionGroup>
-            <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+            <actionGroup ref="StorefrontShippingPageRedirectActionGroup" stepKey="goToShippingPage"/>
             <!-- Guest checkout -->
             <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="goToShippingAndFillDetails">
                 <argument name="customerAddress" value="US_CA_Address"/>
             </actionGroup>
             <selectOption selector="{{CheckoutShippingSection.region}}" userInput="California" stepKey="fillStateField"/>
             <waitForPageLoad stepKey="waitForChangeAfterStateLoad"/>
-            <actionGroup ref="VerifyShippingMethodIsVisibilityOrNotActionGroup" stepKey="verifyShippingMethod"/>
+            <actionGroup ref="CheckForFlatRateShippingMethodAvailabilityActionGroup" stepKey="verifyShippingMethod"/>
             <waitForElementVisible selector="{{CheckoutShippingMethodsSection.shippingMethodDhlLabel}}" stepKey="waitForDHLLabelVisible"/>
             <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodDhlWorldWideExpress}}" stepKey="waitForDHLPriceNotVisibleAfterStateChange"/>
+            <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShipping}}" stepKey="waitForFreeShippingNotVisible"/>
+            <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShippingLabel}}" stepKey="waitForFreeShippingLabelNotVisible"/>
             <!-- Change country value -->
             <selectOption selector="{{CheckoutShippingSection.country}}" userInput="Afghanistan" stepKey="fillCountryField"/>
             <waitForPageLoad stepKey="waitForChangeAfterCountryLoad"/>
-            <actionGroup ref="VerifyShippingMethodIsVisibilityOrNotActionGroup" stepKey="verifyShippingMethodAfterCountryChange"/>
+            <actionGroup ref="CheckForFlatRateShippingMethodAvailabilityActionGroup" stepKey="verifyShippingMethodAfterCountryChange"/>
             <waitForElementVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShipping}}" stepKey="waitForFreeShippingVisibleAfterCountryChange"/>
             <waitForElementVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShippingLabel}}" stepKey="waitForFreeShippingLabelVisibleAfterCountryChange"/>
             <waitForElementVisible selector="{{CheckoutShippingMethodsSection.shippingMethodDhlLabel}}" stepKey="waitForDHLLabelVisibleAfterCountryChange"/>
@@ -89,7 +91,7 @@
             <selectOption selector="{{CheckoutShippingSection.country}}" userInput="United Kingdom" stepKey="fillCountry"/>
             <fillField selector="{{CheckoutShippingSection.city}}" userInput="London" stepKey="fillCity"/>
             <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="N14 5JP" stepKey="fillPostcode"/>
-            <actionGroup ref="VerifyShippingMethodIsVisibilityOrNotActionGroup" stepKey="verifyShippingMethodAfterNewData"/>
+            <actionGroup ref="CheckForFlatRateShippingMethodAvailabilityActionGroup" stepKey="verifyShippingMethodAfterNewData"/>
             <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShipping}}" stepKey="waitForFreeShippingVisibleAfterNewFormData"/>
             <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShippingLabel}}" stepKey="waitForFreeShippingLabelVisibleAfterNewFormData"/>
             <actionGroup ref="VerifyDHLShippingMethodIsVisibilityActionGroup" stepKey="dhlShippingVisibility"/>
@@ -105,7 +107,7 @@
             <actionGroup ref="AdminDisableFreeShippingActionGroup" stepKey="resetFreeShippingConfig"/>
             <actionGroup ref="AdminSaveConfigActionGroup" stepKey="resetSaveConfiguration"/>
             <!-- Reset dhl configuration origin -->
-            <actionGroup ref="AdminDHLConfigurationActionGroup" stepKey="resetDhlConfig"/>
+            <actionGroup ref="AdminDisableDHLConfigurationActionGroup" stepKey="resetDhlConfig"/>
             <actionGroup ref="AdminSaveConfigActionGroup" stepKey="resetSaveConfigurationForDHL"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
