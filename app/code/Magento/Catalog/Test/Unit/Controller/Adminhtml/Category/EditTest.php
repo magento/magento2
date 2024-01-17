@@ -119,26 +119,6 @@ class EditTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $objects = [
-            [
-                Date::class,
-                $this->createMock(Date::class)
-            ],
-            [
-                Registry::class,
-                $this->createMock(Registry::class)
-            ],
-            [
-                StoreManagerInterface::class,
-                $this->createMock(StoreManagerInterface::class)
-            ],
-            [
-                Config::class,
-                $this->createMock(Config::class)
-            ]
-        ];
-        $this->objectManager->prepareObjectManager($objects);
-
         $this->categoryMock = $this->createPartialMock(
             Category::class,
             [
