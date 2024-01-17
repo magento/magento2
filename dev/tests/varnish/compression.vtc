@@ -25,12 +25,13 @@ server s1 {
 # interval to avoid further interference
 shell {
     # testdir is automatically set to the directory containing the present vtc
-    sed ${testdir}/../../../app/code/Magento/PageCache/etc/varnish6.vcl > ${tmpdir}/output.vcl \
+    sed \
         -e 's@\.interval = 5s;@.interval = 5m; .initial = 10;@' \
         -e 's@/\* {{ host }} \*/@${s1_addr}@' \
         -e 's@/\* {{ port }} \*/@${s1_port}@' \
         -e 's@/\* {{ ssl_offloaded_header }} \*/@unused@' \
-        -e 's@/\* {{ grace_period }} \*/@0@'
+        -e 's@/\* {{ grace_period }} \*/@0@' \
+        ${testdir}/../../../app/code/Magento/PageCache/etc/varnish6.vcl > ${tmpdir}/output.vcl
 }
 
 # little trick here: we leverage the fact that subroutines with the same name
