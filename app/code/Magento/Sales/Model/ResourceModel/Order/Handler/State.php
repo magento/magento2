@@ -59,7 +59,6 @@ class State
      */
     public function isPartiallyRefundedOrderShipped(Order $order): bool
     {
-        //we should also check the number of items that require shipping
         $isPartiallyRefundedOrderShipped = false;
         if ($this->getShippedItems($order) > 0
             && $order->getTotalQtyOrdered() <= $this->getRefundedItems($order) + $this->getShippedItems($order)) {
