@@ -32,29 +32,13 @@ use Magento\Integration\Api\UserTokenValidatorInterface;
 class AuthorizationRequestValidator implements HttpRequestValidatorInterface
 {
     /**
-     * @var UserTokenReaderInterface
-     *
-     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
-     */
-    private readonly UserTokenReaderInterface $userTokenReader;
-
-    /**
-     * @var UserTokenValidatorInterface
-     *
-     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
-     */
-    private readonly UserTokenValidatorInterface $userTokenValidator;
-
-    /**
      * @param UserTokenReaderInterface $tokenReader
      * @param UserTokenValidatorInterface $tokenValidator
      */
     public function __construct(
-        UserTokenReaderInterface $tokenReader,
-        UserTokenValidatorInterface $tokenValidator
+        private readonly UserTokenReaderInterface $tokenReader,
+        private readonly UserTokenValidatorInterface $tokenValidator
     ) {
-        $this->userTokenReader = $tokenReader;
-        $this->userTokenValidator = $tokenValidator;
     }
 
     /**
@@ -76,8 +60,7 @@ class AuthorizationRequestValidator implements HttpRequestValidatorInterface
             return;
         }
 
-        $tokenType = strtolower(reset($headerPieces));
-        if ($tokenType !== 'bearer') {
+        if (strtolower(reset($headerPieces)) !== 'bearer') {
             return;
         }
 
