@@ -67,8 +67,15 @@ class Snapshot implements ResetAfterRequestInterface
             return true;
         }
         foreach ($this->snapshotData[$entityClass][$entity->getId()] as $field => $value) {
-            if ($entity->getDataByKey($field) !== $value) {
-                return true;
+            $fieldValue = $entity->getDataByKey($field);
+            if(is_numeric($fieldValue) && is_numeric($value)) {
+                if ($fieldValue !== $value) {
+                    return true;
+                }
+            } else {
+                if ($fieldValue != $value) {
+                    return true;
+                }
             }
         }
 
