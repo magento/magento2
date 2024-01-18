@@ -28,7 +28,7 @@ class Street extends AbstractValidator
      * \s: Whitespace characters (spaces, tabs, newlines, etc.).
      * \d: Digits (0-9).
      */
-    private const PATTERN_STREET = "/(?:[\p{L}\p{M},-.'’`&\s\d]){1,255}+/u";
+    private const PATTERN_STREET = "/(?:[\p{L}\p{M}\"[],-.'’`&\s\d]){1,255}+/u";
 
     /**
      * Validate street fields.

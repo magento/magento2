@@ -23,7 +23,7 @@ class Telephone extends AbstractValidator
      * \-: Matches the hyphen.
      * \d: Digits (0-9).
      */
-    private const PATTERN_TELEPHONE = '/(?:[\d\+\-\()]{1,20})/u';
+    private const PATTERN_TELEPHONE = '/(?:[\d\s\+\-\()]{1,20})/u';
     
     /**
      * Validate telephone fields.
@@ -35,7 +35,7 @@ class Telephone extends AbstractValidator
     {
         if (!$this->isValidTelephone($customer->getTelephone())) {
             parent::_addMessages([[
-                'telephone' => "Invalid Phone Number. Please use 0-9, +, -, (, ). space not allowed."
+                'telephone' => "Invalid Phone Number. Please use 0-9, +, -, (, ) and space."
             ]]);
         }
 
@@ -51,7 +51,7 @@ class Telephone extends AbstractValidator
     private function isValidTelephone($telephoneValue)
     {
         if ($telephoneValue != null) {
-            if (preg_match(self::PATTERN_TELEPHONE, $telephoneValue, $matches)) {
+            if (preg_match(self::PATTERN_TELEPHONE, (string) $telephoneValue, $matches)) {
                 return $matches[0] == $telephoneValue;
             }
         }
