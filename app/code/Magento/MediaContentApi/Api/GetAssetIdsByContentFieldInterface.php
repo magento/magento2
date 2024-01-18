@@ -11,6 +11,7 @@ use Magento\Framework\Exception\InvalidArgumentException;
 
 /**
  * Interface used to return Asset id by content field.
+ * @api
  */
 interface GetAssetIdsByContentFieldInterface
 {

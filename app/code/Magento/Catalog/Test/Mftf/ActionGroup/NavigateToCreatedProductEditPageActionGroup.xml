@@ -22,9 +22,9 @@
         <waitForPageLoad stepKey="waitForClearFilters"/>
         <dontSeeElement selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="dontSeeClearFilters"/>
         <click selector="{{AdminProductGridFilterSection.viewDropdown}}" stepKey="openViewBookmarksTab"/>
-        <click selector="{{AdminProductGridFilterSection.viewBookmark('Default View')}}" stepKey="resetToDefaultGridView"/>
+        <click selector="{{AdminProductGridFilterSection.viewBookmark(DefaultGridView.name)}}" stepKey="resetToDefaultGridView"/>
         <waitForPageLoad stepKey="waitForResetToDefaultView"/>
-        <see selector="{{AdminProductGridFilterSection.viewDropdown}}" userInput="Default View" stepKey="seeDefaultViewSelected"/>
+        <see selector="{{AdminProductGridFilterSection.viewDropdown}}" userInput="{{DefaultGridView.name}}" stepKey="seeDefaultViewSelected"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
         <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillProductSkuFilter"/>
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>

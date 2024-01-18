@@ -54,12 +54,44 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     /**
      * Retrieve an external iterator
      *
+     * @Deprecated
+     * @see getIteratorForCustomQuery
      * @return \Iterator
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         $connection = $this->getConnection();
         $select = $connection->select()->from($this->getMainTable(), ['data'])->order('id ASC');
+        $stmt = $connection->query($select);
+
+        $stmt->setFetchMode(\Zend_Db::FETCH_NUM);
+        if ($stmt instanceof \IteratorAggregate) {
+            $iterator = $stmt->getIterator();
+        } else {
+            // Statement doesn't support iterating, so fetch all records and create iterator ourself
+            $rows = $stmt->fetchAll();
+            $iterator = new \ArrayIterator($rows);
+        }
+
+        return $iterator;
+    }
+
+    /**
+     * Retrieve an external iterator for Custom Query
+     *
+     * @param array $ids
+     * @return \Iterator
+     */
+    #[\ReturnTypeWillChange]
+    public function getIteratorForCustomQuery($ids)
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()
+            ->from($this->getMainTable(), ['data'])->order('id ASC');
+        if ($ids) {
+            $select = $select->where('id IN (?)', $ids);
+        }
         $stmt = $connection->query($select);
 
         $stmt->setFetchMode(\Zend_Db::FETCH_NUM);
@@ -85,23 +117,55 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     }
 
     /**
+     * Clean all processed bunches from table.
+     *
+     * @return void
+     */
+    public function cleanProcessedBunches()
+    {
+        $this->getConnection()->delete(
+            $this->getMainTable(),
+            'is_processed = 1 OR TIMESTAMPADD(DAY, 1, updated_at) < CURRENT_TIMESTAMP() '
+        );
+    }
+
+    /**
+     * Set Flag for Imported Rows
+     *
+     * @param array $ids
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function markProcessedBunches(array $ids): void
+    {
+        $where = $ids ? ['id IN (?)' => $ids] : '';
+        $this->getConnection()->update(
+            $this->getMainTable(),
+            ['is_processed' => '1'],
+            $where
+        );
+    }
+
+    /**
      * Return behavior from import data table.
      *
+     * @param array|null $ids
      * @return string
      */
-    public function getBehavior()
+    public function getBehavior($ids = null)
     {
-        return $this->getUniqueColumnData('behavior');
+        return $this->getUniqueColumnDataWithIds('behavior', $ids);
     }
 
     /**
      * Return entity type code from import data table.
      *
+     * @param array $ids
      * @return string
      */
-    public function getEntityTypeCode()
+    public function getEntityTypeCode($ids = null)
     {
-        return $this->getUniqueColumnData('entity');
+        return $this->getUniqueColumnDataWithIds('entity', $ids);
     }
 
     /**
@@ -125,6 +189,31 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     }
 
     /**
+     * Retrieve Unique Column Data for specific Ids
+     *
+     * @param string $code
+     * @param array $ids
+     * @return mixed
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getUniqueColumnDataWithIds($code, $ids = null)
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()->from($this->getMainTable(), [$code]);
+        if ($ids) {
+            $select = $select->where('id IN (?)', $ids);
+        }
+        $values = array_unique($connection->fetchCol($select));
+
+        if (count($values) != 1) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Error in data structure: %1 values are mixed', $code)
+            );
+        }
+        return $values[0];
+    }
+
+    /**
      * Get next bunch of validated rows.
      *
      * @return array|null
@@ -138,7 +227,33 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
         $dataRow = null;
         if ($this->_iterator->valid()) {
             $encodedData = $this->_iterator->current();
-            if (array_key_exists(0, $encodedData) && $encodedData[0]) {
+            if (!empty($encodedData[0])) {
+                $dataRow = $this->jsonHelper->jsonDecode($encodedData[0]);
+                $this->_iterator->next();
+            }
+        }
+        if (!$dataRow) {
+            $this->_iterator = null;
+        }
+        return $dataRow;
+    }
+
+    /**
+     * Get next unique bunch of validated rows.
+     *
+     * @param array|null $ids
+     * @return array|null
+     */
+    public function getNextUniqueBunch($ids = null)
+    {
+        if (null === $this->_iterator) {
+            $this->_iterator = $this->getIteratorForCustomQuery($ids);
+            $this->_iterator->rewind();
+        }
+        $dataRow = null;
+        if ($this->_iterator->valid()) {
+            $encodedData = $this->_iterator->current();
+            if (!empty($encodedData[0])) {
                 $dataRow = $this->jsonHelper->jsonDecode($encodedData[0]);
                 $this->_iterator->next();
             }
@@ -167,9 +282,10 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
             );
         }
 
-        return $this->getConnection()->insert(
+        $this->getConnection()->insert(
             $this->getMainTable(),
-            ['behavior' => $behavior, 'entity' => $entity, 'data' => $encodedData]
+            ['behavior' => $behavior, 'entity' => $entity, 'data' => $encodedData, 'is_processed' => '0']
         );
+        return $this->getConnection()->lastInsertId($this->getMainTable());
     }
 }

@@ -43,7 +43,6 @@
         <arguments>
             <argument name="renderers" xsi:type="array">
                 <item name="translation" xsi:type="object">Magento\Framework\Phrase\Renderer\Translate</item>
-                <item name="messageFormatter" xsi:type="object">Magento\Framework\Phrase\Renderer\MessageFormatter</item>
                 <item name="placeholder" xsi:type="object">Magento\Framework\Phrase\Renderer\Placeholder</item>
                 <item name="inline" xsi:type="object">Magento\Framework\Phrase\Renderer\Inline</item>
             </argument>
@@ -147,6 +146,13 @@
                     <item name="source" xsi:type="object">Magento\Translation\Model\Source\InitialTranslationSource</item>
                     <item name="namespace" xsi:type="const">Magento\Translation\App\Config\Type\Translation::CONFIG_TYPE</item>
                 </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\State\ReloadProcessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="Magento_Translate::config" xsi:type="object">Magento\Translation\App\Config\ReloadConfig</item>
             </argument>
         </arguments>
     </type>

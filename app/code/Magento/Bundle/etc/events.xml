@@ -18,4 +18,7 @@
     <event name="magento_bundle_model_selection_save_after">
         <observer name="legacy_model_save" instance="Magento\Framework\EntityManager\Observer\AfterEntitySave" />
     </event>
+    <event name="magento_bundle_model_selection_save_before">
+        <observer name="legacy_model_save" instance="Magento\Framework\EntityManager\Observer\BeforeEntitySave" />
+    </event>
 </config>

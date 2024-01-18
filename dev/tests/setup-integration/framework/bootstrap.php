@@ -12,6 +12,7 @@ require_once __DIR__ . '/autoload.php';
 //to handle different types of errors on CI
 require __DIR__ . '/../../error_handler.php';
 
+error_reporting(E_ALL);
 $testsBaseDir = dirname(__DIR__);
 $integrationTestsDir = realpath("{$testsBaseDir}/../integration");
 $fixtureBaseDir = $integrationTestsDir . '/testsuite';
@@ -83,7 +84,10 @@ try {
     $application->createInstallDir();
     //We do not want to install anything
     $application->initialize([]);
-    $application->cleanup();
+
+    if ($settings->getAsBoolean('TESTS_CLEANUP')) {
+        $application->cleanup();
+    }
 
     \Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
 

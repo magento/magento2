@@ -49,7 +49,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     /**
      * Key that contains field type in structure array
      */
-    const TYPE_KEY = '_elementType';
+    public const TYPE_KEY = '_elementType';
 
     /**
      * Configuration structure represented as tree
@@ -177,7 +177,8 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      */
     public function getElement($path)
     {
-        return $this->getElementByPathParts(explode('/', $path));
+        $parts = $path !== null ? explode('/', $path) : [];
+        return $this->getElementByPathParts($parts);
     }
 
     /**
@@ -195,7 +196,8 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
             $path = array_shift($allPaths[$path]);
         }
 
-        return $this->getElementByPathParts(explode('/', $path));
+        $parts = $path !== null ? explode('/', $path) : [];
+        return $this->getElementByPathParts($parts);
     }
 
     /**
@@ -382,32 +384,22 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      * Iteration that collects config field paths recursively from config files.
      *
      * @param array $elements The elements to be parsed
+     * @param array $result used for recursive calls
      * @return array An array of config path to config structure path map
      */
-    private function getFieldsRecursively(array $elements = [])
+    private function getFieldsRecursively(array $elements = [], &$result = [])
     {
-        $result = [];
-
         foreach ($elements as $element) {
             if (isset($element['children'])) {
-                $result = array_merge_recursive(
-                    $result,
-                    $this->getFieldsRecursively($element['children'])
-                );
+                $this->getFieldsRecursively($element['children'], $result);
             } else {
                 if ($element['_elementType'] === 'field') {
                     $structurePath = (isset($element['path']) ? $element['path'] . '/' : '') . $element['id'];
                     $configPath = isset($element['config_path']) ? $element['config_path'] : $structurePath;
-
-                    if (!isset($result[$configPath])) {
-                        $result[$configPath] = [];
-                    }
-
                     $result[$configPath][] = $structurePath;
                 }
             }
         }
-
         return $result;
     }
 }

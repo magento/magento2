@@ -24,7 +24,7 @@ use Magento\Framework\Data\Collection;
 class Gallery extends \Magento\Framework\View\Element\Template
 {
     /**
-     * Core registry
+     * Framework class for Core Registry
      *
      * @var \Magento\Framework\Registry
      */
@@ -122,9 +122,9 @@ class Gallery extends \Magento\Framework\View\Element\Template
     public function getImageWidth()
     {
         $file = $this->getCurrentImage()->getPath();
-
+        $fileStat = $this->getMediaDirectory()->stat($file);
         if ($this->_filesystem->getDirectoryRead(DirectoryList::MEDIA)->isFile($file)) {
-            $size = getimagesize($file);
+            $size = $fileStat['size'];
             if (isset($size[0])) {
                 if ($size[0] > 600) {
                     return 600;

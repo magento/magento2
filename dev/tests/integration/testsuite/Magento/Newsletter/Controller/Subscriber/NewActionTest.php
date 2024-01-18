@@ -8,11 +8,15 @@ declare(strict_types=1);
 namespace Magento\Newsletter\Controller\Subscriber;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Newsletter\Model\ResourceModel\Subscriber as SubscriberResource;
 use Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory;
+use Magento\Newsletter\Model\ResourceModel\Subscriber\Grid\Collection as GridCollection;
+use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\TestCase\AbstractController;
 use Laminas\Stdlib\Parameters;
 
@@ -107,15 +111,31 @@ class NewActionTest extends AbstractController
 
     /**
      * @magentoDataFixture Magento/Customer/_files/new_customer.php
+     * @dataProvider emailAndStatusDataProvider
      *
      * @return void
      */
-    public function testNewActionUsedEmail(): void
+    public function testNewActionUsedEmail($email, $subscriptionType): void
     {
-        $this->prepareRequest('new_customer@example.com');
+        $this->prepareRequest($email);
         $this->dispatch('newsletter/subscriber/new');
 
+        /** @var GridCollection $gridCollection */
+        $gridCollection = $this->_objectManager->create(GridCollection::class);
+        $item = $gridCollection->getFirstItem();
+        self::assertEquals($subscriptionType, (int)$item->getType());
         $this->performAsserts('Thank you for your subscription.');
+    }
+
+    /**
+     * @return array
+     */
+    public function emailAndStatusDataProvider()
+    {
+        return [
+            'customer' => ['new_customer@example.com', 2],
+            'not_a_customer' => ['not_a_customer@gmail.com', 1],
+        ];
     }
 
     /**
@@ -205,8 +225,18 @@ class NewActionTest extends AbstractController
         $this->session->loginById(1);
         $this->prepareRequest('customer2@search.example.com');
         $this->dispatch('newsletter/subscriber/new');
+        $scopeConfig = $this->_objectManager->get(ScopeConfigInterface::class);
+        $guestLoginConfig = $scopeConfig->getValue(
+            AccountManagement::GUEST_CHECKOUT_LOGIN_OPTION_SYS_CONFIG,
+            ScopeInterface::SCOPE_WEBSITE,
+            1
+        );
 
-        $this->performAsserts('This email address is already assigned to another user.');
+        if ($guestLoginConfig) {
+            $this->performAsserts('This email address is already assigned to another user.');
+        } else {
+            $this->performAsserts('This email address is already subscribed.');
+        }
     }
 
     /**

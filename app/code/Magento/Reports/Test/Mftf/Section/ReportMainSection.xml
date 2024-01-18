@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="ReportMainSection">
+        <element name="amount" type="text" selector=".totals .col-total-amount" timeout="30"/>
+        <element name="shippingAmount" type="text" selector=".totals .col-total_shipping" timeout="30"/>
+        <element name="taxAmount" type="text" selector=".totals .col-tax-amount" timeout="30"/>
+        <element name="refundAmount" type="text" selector=".totals .col-refunded" timeout="30"/>
+        <element name="invoiceAmount" type="text" selector=".totals .col-total-invoiced" timeout="30"/>
+        <element name="storeViewDropdown" type="button" selector="#store-change-button" timeout="30"/>
+        <element name="websiteByName" type="button" selector="//*[@class='store-switcher-website  ']/a[contains(text(), '{{websiteName}}')]" timeout="30" parameterized="true"/>
+    </section>
+</sections>

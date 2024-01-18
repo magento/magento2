@@ -54,6 +54,9 @@ class StatusBaseSelectProcessorTest extends TestCase
      */
     private $statusBaseSelectProcessor;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->eavConfig = $this->getMockBuilder(Config::class)
@@ -71,11 +74,14 @@ class StatusBaseSelectProcessorTest extends TestCase
         $this->statusBaseSelectProcessor =  (new ObjectManager($this))->getObject(StatusBaseSelectProcessor::class, [
             'eavConfig' => $this->eavConfig,
             'metadataPool' => $this->metadataPool,
-            'storeManager' => $this->storeManager,
+            'storeManager' => $this->storeManager
         ]);
     }
 
-    public function testProcess()
+    /**
+     * @return void
+     */
+    public function testProcess(): void
     {
         $linkField = 'link_field';
         $backendTable = 'backend_table';
@@ -93,7 +99,7 @@ class StatusBaseSelectProcessorTest extends TestCase
 
         /** @var AttributeInterface|MockObject $statusAttribute */
         $statusAttribute = $this->getMockBuilder(AttributeInterface::class)
-            ->setMethods(['getBackendTable', 'getAttributeId'])
+            ->addMethods(['getBackendTable', 'getAttributeId'])
             ->getMockForAbstractClass();
         $statusAttribute->expects($this->atLeastOnce())
             ->method('getBackendTable')
@@ -117,28 +123,27 @@ class StatusBaseSelectProcessorTest extends TestCase
             ->method('getId')
             ->willReturn($currentStoreId);
 
-        $this->select->expects($this->at(0))
+        $this->select
             ->method('joinLeft')
-            ->with(
-                ['status_global_attr' => $backendTable],
-                "status_global_attr.{$linkField} = "
-                . BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS . ".{$linkField}"
-                . " AND status_global_attr.attribute_id = {$attributeId}"
-                . ' AND status_global_attr.store_id = ' . Store::DEFAULT_STORE_ID,
-                []
+            ->withConsecutive(
+                [
+                    ['status_global_attr' => $backendTable],
+                    "status_global_attr.{$linkField} = "
+                    . BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS . ".{$linkField}"
+                    . " AND status_global_attr.attribute_id = {$attributeId}"
+                    . ' AND status_global_attr.store_id = ' . Store::DEFAULT_STORE_ID,
+                    []
+                ],
+                [
+                    ['status_attr' => $backendTable],
+                    "status_attr.{$linkField} = " . BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS . ".{$linkField}"
+                    . " AND status_attr.attribute_id = {$attributeId}"
+                    . " AND status_attr.store_id = {$currentStoreId}",
+                    []
+                ]
             )
-            ->willReturnSelf();
-        $this->select->expects($this->at(1))
-            ->method('joinLeft')
-            ->with(
-                ['status_attr' => $backendTable],
-                "status_attr.{$linkField} = " . BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS . ".{$linkField}"
-                . " AND status_attr.attribute_id = {$attributeId}"
-                . " AND status_attr.store_id = {$currentStoreId}",
-                []
-            )
-            ->willReturnSelf();
-        $this->select->expects($this->at(2))
+            ->willReturnOnConsecutiveCalls($this->select, $this->select);
+        $this->select
             ->method('where')
             ->with('IFNULL(status_attr.value, status_global_attr.value) = ?', Status::STATUS_ENABLED)
             ->willReturnSelf();

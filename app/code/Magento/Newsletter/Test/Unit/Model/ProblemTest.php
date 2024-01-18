@@ -102,7 +102,7 @@ class ProblemTest extends TestCase
                 'subscriberFactory' => $this->subscriberFactoryMock,
                 'resource' => $this->resourceModelMock,
                 'resourceCollection' => $this->abstractDbMock,
-                'data' => [],
+                'data' => []
             ]
         );
     }
@@ -110,7 +110,7 @@ class ProblemTest extends TestCase
     /**
      * @return void
      */
-    public function testAddSubscriberData()
+    public function testAddSubscriberData(): void
     {
         $subscriberId = 1;
         $this->subscriberMock->expects($this->once())
@@ -126,7 +126,7 @@ class ProblemTest extends TestCase
     /**
      * @return void
      */
-    public function testAddQueueData()
+    public function testAddQueueData(): void
     {
         $queueId = 1;
         $queueMock =  $this->getMockBuilder(Queue::class)
@@ -145,7 +145,7 @@ class ProblemTest extends TestCase
     /**
      * @return void
      */
-    public function testAddErrorData()
+    public function testAddErrorData(): void
     {
         $exceptionMessage = 'Some message';
         $exceptionCode = 111;
@@ -161,7 +161,7 @@ class ProblemTest extends TestCase
     /**
      * @return void
      */
-    public function testGetSubscriberWithNoSubscriberId()
+    public function testGetSubscriberWithNoSubscriberId(): void
     {
         self::assertNull($this->problemModel->getSubscriber());
     }
@@ -169,7 +169,7 @@ class ProblemTest extends TestCase
     /**
      * @return void
      */
-    public function testGetSubscriber()
+    public function testGetSubscriber(): void
     {
         $this->setSubscriber();
         self::assertEquals($this->subscriberMock, $this->problemModel->getSubscriber());
@@ -178,7 +178,7 @@ class ProblemTest extends TestCase
     /**
      * @return void
      */
-    public function testUnsubscribeWithNoSubscriber()
+    public function testUnsubscribeWithNoSubscriber(): void
     {
         $this->subscriberMock->expects($this->never())
             ->method('__call')
@@ -192,17 +192,13 @@ class ProblemTest extends TestCase
     /**
      * @return void
      */
-    public function testUnsubscribe()
+    public function testUnsubscribe(): void
     {
         $this->setSubscriber();
-        $this->subscriberMock->expects($this->at(1))
+        $this->subscriberMock
             ->method('__call')
-            ->with('setSubscriberStatus', [Subscriber::STATUS_UNSUBSCRIBED])
-            ->willReturnSelf();
-        $this->subscriberMock->expects($this->at(2))
-            ->method('__call')
-            ->with('setIsStatusChanged')
-            ->willReturnSelf();
+            ->withConsecutive(['setSubscriberStatus', [Subscriber::STATUS_UNSUBSCRIBED]], ['setIsStatusChanged'])
+            ->willReturnOnConsecutiveCalls($this->subscriberMock, $this->subscriberMock);
         $this->subscriberMock->expects($this->once())
             ->method('save');
 
@@ -214,7 +210,7 @@ class ProblemTest extends TestCase
     /**
      * Sets subscriber to the Problem model
      */
-    private function setSubscriber()
+    private function setSubscriber(): void
     {
         $subscriberId = 1;
         $this->problemModel->setSubscriberId($subscriberId);

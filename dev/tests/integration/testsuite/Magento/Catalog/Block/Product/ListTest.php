@@ -3,7 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Block\Product;
+
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test class for \Magento\Catalog\Block\Product\List.
@@ -12,12 +17,17 @@ namespace Magento\Catalog\Block\Product;
  * @magentoAppArea frontend
  * @magentoDbIsolation disabled
  */
-class ListTest extends \PHPUnit\Framework\TestCase
+class ListTest extends TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Product\ListProduct
      */
     protected $_block;
+
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection|MockObject
+     */
+    private $collectionProductMock;
 
     protected function setUp(): void
     {
@@ -28,6 +38,8 @@ class ListTest extends \PHPUnit\Framework\TestCase
         )->createBlock(
             \Magento\Catalog\Block\Product\ListProduct::class
         );
+
+        $this->collectionProductMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
     }
 
     public function testGetLayer()
@@ -42,6 +54,7 @@ class ListTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Product\Collection::class, $collection);
         /* Check that root category was defined for Layer as current */
         $this->assertEquals(2, $this->_block->getLayer()->getCurrentCategory()->getId());
+        $this->collectionProductMock->expects($this->never())->method('load');
     }
 
     /**

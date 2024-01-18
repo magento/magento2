@@ -304,7 +304,7 @@ define([
          * Action to close the context menu in media gallery.
          */
         closeContextMenu: function () {
-            $(this.gridSelector).click();
+            $(this.gridSelector).trigger('click');
         },
 
         /**

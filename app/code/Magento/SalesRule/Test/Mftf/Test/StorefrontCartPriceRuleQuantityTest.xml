@@ -24,7 +24,9 @@
             <createData entity="_defaultProduct" stepKey="createPreReqProduct">
                 <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
@@ -34,7 +36,7 @@
             </actionGroup>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="createPreReqProduct" stepKey="deletePreReqProduct"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Create the rule... -->
@@ -61,10 +63,12 @@
         <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="1.00" stepKey="fillDiscountAmount"/>
         <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
         <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
-        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- Add 1 product to the cart -->
-        <amOnPage url="$$createPreReqProduct.name$$.html" stepKey="goToProductPage"/>
+        <amOnPage url="$$createPreReqProduct.custom_attributes[url_key]$$.html" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="1" stepKey="fillQuantity"/>
         <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
@@ -75,7 +79,7 @@
         <dontSeeElement selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="dontSeeDiscount"/>
 
         <!-- Add the same product to the cart again (2 total) -->
-        <amOnPage url="$$createPreReqProduct.name$$.html" stepKey="goToProductPage2"/>
+        <amOnPage url="$$createPreReqProduct.custom_attributes[url_key]$$.html" stepKey="goToProductPage2"/>
         <waitForPageLoad stepKey="waitForProductPageLoad2"/>
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="1" stepKey="fillQuantity2"/>
         <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage2"/>

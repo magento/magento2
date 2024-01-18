@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="SalesOrderComments" type="order">
+        <data key="commentWithHyperlink">&#x3C;a href=&#x22;https://business.adobe.com/products/magento/magento-commerce.html&#x22;&#x3E;Testing Html Tags&#x3C;/a&#x3E;</data>
+    </entity>
+    <entity name="anchorTagFragment" type="string">
+        <data key="anchorTag">a href</data>
+    </entity>
+</entities>

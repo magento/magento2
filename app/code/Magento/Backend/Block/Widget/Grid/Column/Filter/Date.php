@@ -109,25 +109,16 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
             ' value="' .
             $this->localeResolver->getLocale() .
             '"/>';
-        $scriptString = '
-            require(["jquery", "mage/calendar"], function($){
-                $("#' .
-            $htmlId .
-            '_range").dateRange({
-                    dateFormat: "' .
-            $format .
-            '",
-                        buttonText: "' . $this->escapeHtml(__('Date selector')) .
-            '",
+        $scriptString = 'require(["jquery", "mage/calendar"], function($){
+                $("#' . $htmlId . '_range").dateRange({
+                    dateFormat: "' . $format . '",
+                    buttonText: "' . $this->escapeHtml(__('Date selector')) . '",
+                    buttonImage: "' . $this->getViewFileUrl('Magento_Theme::calendar.png') . '",
                     from: {
-                        id: "' .
-            $htmlId .
-            '_from"
+                        id: "' . $htmlId . '_from"
                     },
                     to: {
-                        id: "' .
-            $htmlId .
-            '_to"
+                        id: "' . $htmlId . '_to"
                     }
                 })
             });';
@@ -233,7 +224,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
             \IntlDateFormatter::NONE,
             $adminTimeZone
         );
-        $simpleRes = new \DateTime(null, $adminTimeZone);
+        $simpleRes = new \DateTime('now', $adminTimeZone);
         $simpleRes->setTimestamp($formatter->parse($date));
         $simpleRes->setTime(0, 0, 0);
         $simpleRes->setTimezone(new \DateTimeZone('UTC'));

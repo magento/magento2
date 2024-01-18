@@ -85,7 +85,8 @@ class ImporterTest extends TestCase
     protected function setUp(): void
     {
         $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
-            ->setMethods(['create', 'getFlagData', 'saveFlag'])
+            ->onlyMethods(['getFlagData', 'saveFlag'])
+            ->addMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->flagMock = $this->getMockBuilder(Flag::class)
@@ -125,7 +126,10 @@ class ImporterTest extends TestCase
         );
     }
 
-    public function testImport()
+    /**
+     * @return void
+     */
+    public function testImport(): void
     {
         $data = [];
         $currentData = ['current' => '2'];
@@ -153,15 +157,9 @@ class ImporterTest extends TestCase
         $this->saveProcessorMock->expects($this->once())
             ->method('process')
             ->with([]);
-        $this->scopeMock->expects($this->at(1))
+        $this->scopeMock
             ->method('setCurrentScope')
-            ->with(Area::AREA_ADMINHTML);
-        $this->scopeMock->expects($this->at(2))
-            ->method('setCurrentScope')
-            ->with('oldScope');
-        $this->scopeMock->expects($this->at(3))
-            ->method('setCurrentScope')
-            ->with('oldScope');
+            ->withConsecutive([Area::AREA_ADMINHTML], ['oldScope'], ['oldScope']);
         $this->flagManagerMock->expects($this->once())
             ->method('saveFlag')
             ->with(Importer::FLAG_CODE, $data);
@@ -169,7 +167,10 @@ class ImporterTest extends TestCase
         $this->assertSame(['System config was processed'], $this->model->import($data));
     }
 
-    public function testImportWithException()
+    /**
+     * @return void
+     */
+    public function testImportWithException(): void
     {
         $this->expectException('Magento\Framework\Exception\State\InvalidTransitionException');
         $this->expectExceptionMessage('Some error');

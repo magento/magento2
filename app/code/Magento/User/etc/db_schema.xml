@@ -49,7 +49,7 @@
                 comment="Password ID"/>
         <column xsi:type="int" name="user_id" unsigned="true" nullable="false" identity="false" default="0"
                 comment="User ID"/>
-        <column xsi:type="varchar" name="password_hash" nullable="true" length="100" comment="Password Hash"/>
+        <column xsi:type="varchar" name="password_hash" nullable="true" length="255" comment="Password Hash"/>
         <column xsi:type="int" name="expires" unsigned="true" nullable="false" identity="false" default="0"
                 comment="Deprecated"/>
         <column xsi:type="int" name="last_updated" unsigned="true" nullable="false" identity="false"

@@ -7,11 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\GraphQlCache\Controller;
 
+use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\Response\HttpInterface as HttpResponse;
+use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Registry;
 use Magento\GraphQl\Controller\GraphQl as GraphQlController;
 use Magento\GraphQlCache\Model\CacheableQuery;
+use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\PageCache\Model\Cache\Type as PageCache;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
@@ -19,6 +25,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Abstract test class for Graphql cache tests
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractGraphqlCacheTest extends TestCase
 {
@@ -27,11 +35,65 @@ abstract class AbstractGraphqlCacheTest extends TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @var string
+     */
+    private $envConfigPath;
+
+    /**
+     * @var Reader
+     */
+    private $envConfigReader;
+
+    /**
+     * @var PhpFormatter
+     */
+    private $formatter;
+
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->enablePageCachePlugin();
         $this->enableCachebleQueryTestProxy();
+    }
+
+    /**
+     * If the cache id salt didn't exist in env.php before a GraphQL request it gets added. To prevent test failures
+     * due to a config getting changed (which is normally illegal), the salt needs to be removed from env.php after
+     * a test if it wasn't there before.
+     *
+     * @see \Magento\TestFramework\Isolation\DeploymentConfig
+     *
+     * @inheritdoc
+     */
+    protected function runTest()
+    {
+        /** @var Reader $reader */
+        if (!$this->envConfigPath) {
+            /** @var ConfigFilePool $configFilePool */
+            $configFilePool = $this->objectManager->get(ConfigFilePool::class);
+            $this->envConfigPath = $configFilePool->getPath(ConfigFilePool::APP_ENV);
+        }
+        $this->envConfigReader = $this->envConfigReader ?: $this->objectManager->get(Reader::class);
+        $initialConfig = $this->envConfigReader->load(ConfigFilePool::APP_ENV);
+
+        try {
+            return parent::runTest();
+        } finally {
+            $this->formatter = $this->formatter ?: new PhpFormatter();
+            $this->filesystem = $this->filesystem ?: $this->objectManager->get(Filesystem::class);
+            $cacheSaltPathChunks = explode('/', CacheIdCalculator::SALT_CONFIG_PATH);
+            $currentConfig = $this->envConfigReader->load(ConfigFilePool::APP_ENV);
+            $resetConfig = $this->resetAddedSection($initialConfig, $currentConfig, $cacheSaltPathChunks);
+            $resetFileContents = $this->formatter->format($resetConfig);
+            $directoryWrite = $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG);
+            $directoryWrite->writeFile($this->envConfigPath, $resetFileContents);
+        }
     }
 
     protected function tearDown(): void
@@ -136,5 +198,28 @@ abstract class AbstractGraphqlCacheTest extends TestCase
         $request->setUri(implode('?', [$request->getPathInfo(), http_build_query($queryParams)]));
 
         return $this->objectManager->create(GraphQlController::class)->dispatch($request);
+    }
+
+    /**
+     * Go over the current deployment config and unset a section that was not present in the pre-test deployment config
+     *
+     * @param array $initial
+     * @param array $current
+     * @param string[] $chunks
+     * @return array
+     */
+    private function resetAddedSection(array $initial, array $current, array $chunks): array
+    {
+        if ($chunks) {
+            $chunk = array_shift($chunks);
+            if (!isset($initial[$chunk])) {
+                if (isset($current[$chunk])) {
+                    unset($current[$chunk]);
+                }
+            } elseif (isset($current[$chunk]) && is_array($initial[$chunk]) && is_array($current[$chunk])) {
+                $current[$chunk] = $this->resetAddedSection($initial[$chunk], $current[$chunk], $chunks);
+            }
+        }
+        return $current;
     }
 }

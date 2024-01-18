@@ -92,9 +92,13 @@
         <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="seeEmptyNotice"/>
         <dontSee userInput="$$createProductA1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeProductA1"/>
 
-        <!-- 4. Run cron to reindex -->
-        <wait time="60" stepKey="waitForChanges"/>
-        <magentoCLI command="cron:run" stepKey="runCron"/>
+        <!-- 4. Reindex -->
+        <comment userInput="BIC workaround" stepKey="waitForChanges"/>
+        <comment userInput="BIC workaround" stepKey="runCron"/>
+        <comment userInput="BIC workaround" stepKey="runCronTwice"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex1">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- 5. Open category A on Storefront again -->
         <actionGroup ref="ReloadPageActionGroup" stepKey="reloadCategoryA"/>
@@ -121,9 +125,13 @@
         <see userInput="$$createCategoryA.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategoryAOnPage"/>
         <see userInput="$$createProductA1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeNameProductA1"/>
 
-        <!-- 8. Run cron reindex (Ensure that at least one minute passed since last cron run) -->
-        <wait time="60" stepKey="waitOneMinute"/>
-        <magentoCLI command="cron:run" stepKey="runCron1"/>
+        <!-- 8. Reindex -->
+        <comment userInput="BIC workaround" stepKey="waitOneMinute"/>
+        <comment userInput="BIC workaround" stepKey="runCron1"/>
+        <comment userInput="BIC workaround" stepKey="runCronTwice1"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex2">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- 9. Open category A on Storefront again -->
         <actionGroup ref="ReloadPageActionGroup" stepKey="refreshCategoryAPage"/>
@@ -176,9 +184,13 @@
         <see userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductC1inCategoryC1"/>
         <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductC2InCategoryC2"/>
 
-        <!-- 14. Run cron to reindex  (Ensure that at least one minute passed since last cron run) -->
-        <wait time="60" stepKey="waitMinute"/>
-        <magentoCLI command="cron:run" stepKey="runCron2"/>
+        <!-- 14. Reindex -->
+        <comment userInput="BIC workaround" stepKey="waitMinute"/>
+        <comment userInput="BIC workaround" stepKey="runCron2"/>
+        <comment userInput="BIC workaround" stepKey="runCronTwice2"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex3">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!--  15. Open category B on Storefront  -->
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="onPageCategoryB">
@@ -235,9 +247,13 @@
         <dontSee userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeCategoryCPageProductC1"/>
         <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryCPageProductC2"/>
 
-        <!-- 17.14. Run cron to reindex  (Ensure that at least one minute passed since last cron run) -->
-        <wait time="60" stepKey="waitForOneMinute"/>
-        <magentoCLI command="cron:run" stepKey="runCron3"/>
+        <!-- 17.14. Reindex -->
+        <comment userInput="BIC workaround" stepKey="waitForOneMinute"/>
+        <comment userInput="BIC workaround" stepKey="runCron3"/>
+        <comment userInput="BIC workaround" stepKey="runCronTwice3"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex4">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!--  17.15. Open category B on Storefront  -->
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openPageCategoryB">
@@ -296,9 +312,13 @@
         <see userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeOnCategoryCProductC1"/>
         <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeOnCategoryCProductC2"/>
 
-        <!-- 18.14. Run cron to reindex  (Ensure that at least one minute passed since last cron run) -->
-        <wait time="60" stepKey="waitExtraMinute"/>
-        <magentoCLI command="cron:run" stepKey="runCron4"/>
+        <!-- 18.14. Reindex -->
+        <comment userInput="BIC workaround" stepKey="waitExtraMinute"/>
+        <comment userInput="BIC workaround" stepKey="runCron4"/>
+        <comment userInput="BIC workaround" stepKey="runCronTwice4"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex5">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!--  18.15. Open category B on Storefront  -->
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="navigateToPageCategoryB">

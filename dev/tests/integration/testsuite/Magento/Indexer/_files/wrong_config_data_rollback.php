@@ -5,6 +5,7 @@
  */
 declare(strict_types=1);
 
+use Magento\Config\Model\Config\Factory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -13,5 +14,12 @@ $resource = Bootstrap::getObjectManager()->get(ResourceConnection::class);
 $connection = $resource->getConnection();
 $tableName = $resource->getTableName('core_config_data');
 
-$connection->query("DELETE FROM $tableName WHERE path = 'catalog/search/elasticsearch7_server_port'"
+$configFactory = Bootstrap::getObjectManager()->get(Factory::class);
+$config = $configFactory->create();
+$config->setScope('stores');
+
+$engine = $config->getConfigDataValue('catalog/search/engine');
+$portField = "catalog/search/{$engine}_server_port";
+
+$connection->query("DELETE FROM $tableName WHERE path = '{$portField}'"
     ." AND scope = 'stores';");

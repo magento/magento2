@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Wishlist\Test\Unit\Model;
 
+use Exception;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Exception as ProductException;
+use Magento\Checkout\Helper\Cart as HelperCart;
 use Magento\Checkout\Model\Cart;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Response\RedirectInterface;
@@ -30,36 +33,59 @@ use Psr\Log\LoggerInterface;
  */
 class ItemCarrierTest extends TestCase
 {
-    /** @var ItemCarrier */
+    /**
+     * @var ItemCarrier
+     */
     protected $model;
 
-    /** @var Session|MockObject */
+    /**
+     * @var Session|MockObject
+     */
     protected $sessionMock;
 
-    /** @var LocaleQuantityProcessor|MockObject */
+    /**
+     * @var LocaleQuantityProcessor|MockObject
+     */
     protected $quantityProcessorMock;
 
-    /** @var Cart|MockObject */
+    /**
+     * @var Cart|MockObject
+     */
     protected $cartMock;
 
-    /** @var LoggerInterface|MockObject */
+    /**
+     * @var LoggerInterface|MockObject
+     */
     protected $loggerMock;
 
-    /** @var Data|MockObject */
+    /**
+     * @var Data|MockObject
+     */
     protected $wishlistHelperMock;
 
-    /** @var \Magento\Checkout\Helper\Cart|MockObject */
+    /**
+     * @var HelperCart|MockObject
+     */
     protected $cartHelperMock;
 
-    /** @var UrlInterface|MockObject */
+    /**
+     * @var UrlInterface|MockObject
+     */
     protected $urlBuilderMock;
 
-    /** @var ManagerInterface|MockObject */
+    /**
+     * @var ManagerInterface|MockObject
+     */
     protected $managerMock;
 
-    /** @var RedirectInterface|MockObject */
+    /**
+     * @var RedirectInterface|MockObject
+     */
     protected $redirectMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->sessionMock = $this->getMockBuilder(Session::class)
@@ -76,7 +102,7 @@ class ItemCarrierTest extends TestCase
         $this->wishlistHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cartHelperMock = $this->getMockBuilder(\Magento\Checkout\Helper\Cart::class)
+        $this->cartHelperMock = $this->getMockBuilder(HelperCart::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
@@ -100,9 +126,11 @@ class ItemCarrierTest extends TestCase
     }
 
     /**
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testMoveAllToCart()
+    public function testMoveAllToCart(): void
     {
         $wishlistId = 7;
         $sessionCustomerId = 23;
@@ -117,23 +145,45 @@ class ItemCarrierTest extends TestCase
 
         /** @var Item|MockObject $itemOneMock */
         $itemOneMock = $this->getMockBuilder(Item::class)
-            ->setMethods(['getProduct', 'unsProduct', 'getId', 'setQty', 'addToCart', 'delete', 'getProductUrl'])
+            ->onlyMethods(
+                [
+                    'getProduct',
+                    'getId',
+                    'setQty',
+                    'addToCart',
+                    'delete',
+                    'getProductUrl'
+                ]
+            )
+            ->addMethods(['unsProduct'])
             ->disableOriginalConstructor()
             ->getMock();
         /** @var Item|MockObject $itemTwoMock */
         $itemTwoMock = $this->getMockBuilder(Item::class)
-            ->setMethods(['getProduct', 'unsProduct', 'getId', 'setQty', 'addToCart', 'delete', 'getProductUrl'])
+            ->onlyMethods(
+                [
+                    'getProduct',
+                    'getId',
+                    'setQty',
+                    'addToCart',
+                    'delete',
+                    'getProductUrl'
+                ]
+            )
+            ->addMethods(['unsProduct'])
             ->disableOriginalConstructor()
             ->getMock();
 
         /** @var Product|MockObject $productOneMock */
         $productOneMock = $this->getMockBuilder(Product::class)
-            ->setMethods(['getDisableAddToCart', 'setDisableAddToCart', 'getName'])
+            ->onlyMethods(['getName'])
+            ->addMethods(['getDisableAddToCart', 'setDisableAddToCart'])
             ->disableOriginalConstructor()
             ->getMock();
         /** @var Product|MockObject $productTwoMock */
         $productTwoMock = $this->getMockBuilder(Product::class)
-            ->setMethods(['getDisableAddToCart', 'setDisableAddToCart', 'getName'])
+            ->onlyMethods(['getName'])
+            ->addMethods(['getDisableAddToCart', 'setDisableAddToCart'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -275,9 +325,11 @@ class ItemCarrierTest extends TestCase
     }
 
     /**
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testMoveAllToCartWithNotSalableAndOptions()
+    public function testMoveAllToCartWithNotSalableAndOptions(): void
     {
         $sessionCustomerId = 23;
         $itemOneId = 14;
@@ -292,23 +344,45 @@ class ItemCarrierTest extends TestCase
 
         /** @var Item|MockObject $itemOneMock */
         $itemOneMock = $this->getMockBuilder(Item::class)
-            ->setMethods(['getProduct', 'unsProduct', 'getId', 'setQty', 'addToCart', 'delete', 'getProductUrl'])
+            ->onlyMethods(
+                [
+                    'getProduct',
+                    'getId',
+                    'setQty',
+                    'addToCart',
+                    'delete',
+                    'getProductUrl'
+                ]
+            )
+            ->addMethods(['unsProduct'])
             ->disableOriginalConstructor()
             ->getMock();
         /** @var Item|MockObject $itemTwoMock */
         $itemTwoMock = $this->getMockBuilder(Item::class)
-            ->setMethods(['getProduct', 'unsProduct', 'getId', 'setQty', 'addToCart', 'delete', 'getProductUrl'])
+            ->onlyMethods(
+                [
+                    'getProduct',
+                    'getId',
+                    'setQty',
+                    'addToCart',
+                    'delete',
+                    'getProductUrl'
+                ]
+            )
+            ->addMethods(['unsProduct'])
             ->disableOriginalConstructor()
             ->getMock();
 
         /** @var Product|MockObject $productOneMock */
         $productOneMock = $this->getMockBuilder(Product::class)
-            ->setMethods(['getDisableAddToCart', 'setDisableAddToCart', 'getName'])
+            ->onlyMethods(['getName'])
+            ->addMethods(['getDisableAddToCart', 'setDisableAddToCart'])
             ->disableOriginalConstructor()
             ->getMock();
         /** @var Product|MockObject $productTwoMock */
         $productTwoMock = $this->getMockBuilder(Product::class)
-            ->setMethods(['getDisableAddToCart', 'setDisableAddToCart', 'getName'])
+            ->onlyMethods(['getName'])
+            ->addMethods(['getDisableAddToCart', 'setDisableAddToCart'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -323,7 +397,8 @@ class ItemCarrierTest extends TestCase
 
         /** @var Wishlist|MockObject $wishlistMock */
         $wishlistMock = $this->getMockBuilder(Wishlist::class)
-            ->setMethods(['isOwner', 'getItemCollection', 'getId', 'getSharingCode', 'save'])
+            ->onlyMethods(['isOwner', 'getItemCollection', 'getId', 'save'])
+            ->addMethods(['getSharingCode'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -379,7 +454,7 @@ class ItemCarrierTest extends TestCase
             ->willReturnMap(
                 [
                     [$qtys[$itemOneId], $qtys[$itemOneId]],
-                    [$qtys[$itemTwoId], $qtys[$itemTwoId]],
+                    [$qtys[$itemTwoId], $qtys[$itemTwoId]]
                 ]
             );
         $itemOneMock->expects($this->once())
@@ -394,7 +469,7 @@ class ItemCarrierTest extends TestCase
         $itemOneMock->expects($this->once())
             ->method('addToCart')
             ->with($this->cartMock, $isOwner)
-            ->willThrowException(new \Magento\Catalog\Model\Product\Exception(__('Product Exception.')));
+            ->willThrowException(new ProductException(__('Product Exception.')));
         $itemTwoMock->expects($this->once())
             ->method('addToCart')
             ->with($this->cartMock, $isOwner)
@@ -409,8 +484,8 @@ class ItemCarrierTest extends TestCase
             ->method('getQuote')
             ->willReturn($quoteMock);
 
-        /** @var \Magento\Quote\Model\Quote\Item|MockObject $collectionMock */
-        $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
+        /** @var Quote\Item|MockObject $collectionMock */
+        $itemMock = $this->getMockBuilder(Quote\Item::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -448,20 +523,13 @@ class ItemCarrierTest extends TestCase
             ->method('getName')
             ->willReturn($productTwoName);
 
-        $this->managerMock->expects($this->at(0))
+        $this->managerMock
             ->method('addErrorMessage')
-            ->with(__('%1 for "%2".', 'Localized Exception', $productTwoName), null)
-            ->willReturnSelf();
-
-        $this->managerMock->expects($this->at(1))
-            ->method('addErrorMessage')
-            ->with(
-                __(
-                    'We couldn\'t add the following product(s) to the shopping cart: %1.',
-                    '"' . $productOneName . '"'
-                ),
-                null
-            )->willReturnSelf();
+            ->withConsecutive([__('%1 for "%2".', 'Localized Exception', $productTwoName), null], [__(
+                'We couldn\'t add the following product(s) to the shopping cart: %1.',
+                '"' . $productOneName . '"'
+            ), null])
+            ->willReturnOnConsecutiveCalls($this->managerMock, $this->managerMock);
 
         $this->wishlistHelperMock->expects($this->once())
             ->method('calculate')
@@ -471,9 +539,11 @@ class ItemCarrierTest extends TestCase
     }
 
     /**
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testMoveAllToCartWithException()
+    public function testMoveAllToCartWithException(): void
     {
         $wishlistId = 7;
         $sessionCustomerId = 23;
@@ -487,23 +557,45 @@ class ItemCarrierTest extends TestCase
 
         /** @var Item|MockObject $itemOneMock */
         $itemOneMock = $this->getMockBuilder(Item::class)
-            ->setMethods(['getProduct', 'unsProduct', 'getId', 'setQty', 'addToCart', 'delete', 'getProductUrl'])
+            ->onlyMethods(
+                [
+                    'getProduct',
+                    'getId',
+                    'setQty',
+                    'addToCart',
+                    'delete',
+                    'getProductUrl'
+                ]
+            )
+            ->addMethods(['unsProduct'])
             ->disableOriginalConstructor()
             ->getMock();
         /** @var Item|MockObject $itemTwoMock */
         $itemTwoMock = $this->getMockBuilder(Item::class)
-            ->setMethods(['getProduct', 'unsProduct', 'getId', 'setQty', 'addToCart', 'delete', 'getProductUrl'])
+            ->onlyMethods(
+                [
+                    'getProduct',
+                    'getId',
+                    'setQty',
+                    'addToCart',
+                    'delete',
+                    'getProductUrl'
+                ]
+            )
+            ->addMethods(['unsProduct'])
             ->disableOriginalConstructor()
             ->getMock();
 
         /** @var Product|MockObject $productOneMock */
         $productOneMock = $this->getMockBuilder(Product::class)
-            ->setMethods(['getDisableAddToCart', 'setDisableAddToCart', 'getName'])
+            ->onlyMethods(['getName'])
+            ->addMethods(['getDisableAddToCart', 'setDisableAddToCart'])
             ->disableOriginalConstructor()
             ->getMock();
         /** @var Product|MockObject $productTwoMock */
         $productTwoMock = $this->getMockBuilder(Product::class)
-            ->setMethods(['getDisableAddToCart', 'setDisableAddToCart', 'getName'])
+            ->onlyMethods(['getName'])
+            ->addMethods(['getDisableAddToCart', 'setDisableAddToCart'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -587,7 +679,7 @@ class ItemCarrierTest extends TestCase
             ->with($this->cartMock, $isOwner)
             ->willReturn(true);
 
-        $exception = new \Exception('Exception.');
+        $exception = new Exception('Exception.');
         $itemTwoMock->expects($this->once())
             ->method('addToCart')
             ->with($this->cartMock, $isOwner)
@@ -596,11 +688,6 @@ class ItemCarrierTest extends TestCase
         $this->loggerMock->expects($this->once())
             ->method('critical')
             ->with($exception, []);
-
-        $this->managerMock->expects($this->at(0))
-            ->method('addErrorMessage')
-            ->with(__('We can\'t add this item to your shopping cart right now.'), null)
-            ->willReturnSelf();
 
         $this->wishlistHelperMock->expects($this->once())
             ->method('getListUrl')
@@ -618,12 +705,15 @@ class ItemCarrierTest extends TestCase
 
         $wishlistMock->expects($this->once())
             ->method('save')
-            ->willThrowException(new \Exception());
+            ->willThrowException(new Exception());
 
-        $this->managerMock->expects($this->at(1))
+        $this->managerMock
             ->method('addErrorMessage')
-            ->with(__('We can\'t update the Wish List right now.'), null)
-            ->willReturnSelf();
+            ->withConsecutive(
+                [__('We can\'t add this item to your shopping cart right now.'), null],
+                [__('We can\'t update the Wish List right now.'), null]
+            )
+            ->willReturnOnConsecutiveCalls($this->managerMock, $this->managerMock);
 
         $productOneMock->expects($this->any())
             ->method('getName')

@@ -6,11 +6,13 @@
 
 namespace Magento\Framework\Module\ModuleList;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Module\Declaration\Converter\Dom;
 use Magento\Framework\Xml\Parser;
-use Magento\Framework\Component\ComponentRegistrarInterface;
-use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Xml\ParserFactory;
 
 /**
  * Loader of module list information from the filesystem
@@ -27,15 +29,13 @@ class Loader
     private $converter;
 
     /**
-     * Parser
-     *
      * @var \Magento\Framework\Xml\Parser
+     * @deprecated
+     * @see $parserFactory
      */
     private $parser;
 
     /**
-     * Module registry
-     *
      * @var ComponentRegistrarInterface
      */
     private $moduleRegistry;
@@ -48,24 +48,33 @@ class Loader
     private $filesystemDriver;
 
     /**
+     * @var ParserFactory
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
+    private readonly ParserFactory $parserFactory;
+
+    /**
      * Constructor
      *
      * @param Dom $converter
-     * @param Parser $parser
+     * @param Parser $parser @deprecated, @see $parserFactory
      * @param ComponentRegistrarInterface $moduleRegistry
      * @param DriverInterface $filesystemDriver
+     * @param ParserFactory|null $parserFactory
      */
     public function __construct(
         Dom $converter,
         Parser $parser,
         ComponentRegistrarInterface $moduleRegistry,
-        DriverInterface $filesystemDriver
+        DriverInterface $filesystemDriver,
+        ?ParserFactory $parserFactory = null,
     ) {
         $this->converter = $converter;
         $this->parser = $parser;
-        $this->parser->initErrorHandler();
         $this->moduleRegistry = $moduleRegistry;
         $this->filesystemDriver = $filesystemDriver;
+        $this->parserFactory = $parserFactory ?? ObjectManager::getInstance()->get(ParserFactory::class);
     }
 
     /**
@@ -82,7 +91,9 @@ class Loader
 
         foreach ($this->getModuleConfigs() as list($file, $contents)) {
             try {
-                $this->parser->loadXML($contents);
+                $parser = $this->parserFactory->create();
+                $parser->initErrorHandler();
+                $parser->loadXML($contents);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     new \Magento\Framework\Phrase(
@@ -93,7 +104,7 @@ class Loader
                 );
             }
 
-            $data = $this->converter->convert($this->parser->getDom());
+            $data = $this->converter->convert($parser->getDom());
             $name = key($data);
             if (!isset($excludeSet[$name])) {
                 $result[$name] = $data[$name];
@@ -133,10 +144,10 @@ class Loader
     {
         ksort($origList);
         $modules = $this->prearrangeModules($origList);
-
+        $sequenceCache = [];
         $expanded = [];
         foreach (array_keys($modules) as $moduleName) {
-            $sequence = $this->expandSequence($origList, $moduleName);
+            $sequence = $this->expandSequence($origList, $moduleName, $sequenceCache);
             asort($sequence);
 
             $expanded[] = [
@@ -189,27 +200,40 @@ class Loader
     /**
      * Accumulate information about all transitive "sequence" references
      *
+     * Added a sequence cache to avoid re-computing the sequences of dependencies over and over again.
+     *
      * @param array $list
      * @param string $name
+     * @param array $sequenceCache
      * @param array $accumulated
+     * @param string $parentName
      * @return array
      * @throws \Exception
      */
-    private function expandSequence($list, $name, $accumulated = [])
-    {
-        $accumulated[$name] = true;
-        $result = $list[$name]['sequence'];
-        $allResults = [];
-        foreach ($result as $relatedName) {
-            if (isset($accumulated[$relatedName])) {
-                throw new \LogicException("Circular sequence reference from '{$name}' to '{$relatedName}'.");
-            }
-            if (!isset($list[$relatedName])) {
-                continue;
-            }
-            $allResults[] = $this->expandSequence($list, $relatedName, $accumulated);
+    private function expandSequence(
+        array $list,
+        string $name,
+        array &$sequenceCache,
+        array $accumulated = [],
+        string $parentName = ''
+    ) {
+        // Making sure we haven't already called the method for this module higher in the stack
+        if (isset($accumulated[$name])) {
+            throw new \LogicException("Circular sequence reference from '{$parentName}' to '{$name}'.");
         }
-        $allResults[] = $result;
-        return array_unique(array_merge([], ...$allResults));
+        $accumulated[$name] = true;
+        // Checking if we already computed the full sequence for this module
+        if (!isset($sequenceCache[$name])) {
+            $sequence = $list[$name]['sequence'] ?? [];
+            $allSequences = [];
+            // Going over all immediate dependencies to gather theirs recursively
+            foreach ($sequence as $relatedName) {
+                $relatedSequence = $this->expandSequence($list, $relatedName, $sequenceCache, $accumulated, $name);
+                $allSequences[] = $relatedSequence;
+            }
+            $allSequences[] = $sequence;
+            $sequenceCache[$name] = array_unique(array_merge(...$allSequences));
+        }
+        return $sequenceCache[$name] ?? [];
     }
 }

@@ -111,6 +111,21 @@ class Processor
     public $reportUrl;
 
     /**
+     * @var string
+     */
+    public $_reportDir;
+
+    /**
+     * @var string
+     */
+    public $_indexDir;
+
+    /**
+     * @var string
+     */
+    public $_errorDir;
+
+    /**
      * Server script name
      *
      * @var string
@@ -595,7 +610,7 @@ class Processor
      */
     private function isReportIdValid(string $reportId): bool
     {
-        return (bool)preg_match('/[a-fA-F0-9]{64}/', $reportId);
+        return (bool)preg_match('/^[a-fA-F0-9]{64}$/', $reportId);
     }
 
     /**

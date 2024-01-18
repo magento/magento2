@@ -13,11 +13,6 @@
         <data key="title">PayPal Settlement</data>
         <data key="dataUiId">magento-paypal-report-salesroot-paypal-settlement-reports</data>
     </entity>
-    <entity name="AdminMenuSales">
-        <data key="pageTitle">Sales</data>
-        <data key="title">Sales</data>
-        <data key="dataUiId">magento-sales-sales</data>
-    </entity>
     <entity name="AdminMenuSalesBillingAgreements">
         <data key="pageTitle">Billing Agreements</data>
         <data key="title">Billing Agreements</data>

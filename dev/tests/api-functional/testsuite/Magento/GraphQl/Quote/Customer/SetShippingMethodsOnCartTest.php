@@ -138,6 +138,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store carriers/freeshipping/active 0
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
@@ -385,7 +386,9 @@ QUERY;
     public function testSetShippingMethodOnAnEmptyCart()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The shipping method can\'t be set for an empty cart. Add an item to cart and try again.');
+        $this->expectExceptionMessage(
+            'The shipping method can\'t be set for an empty cart. Add an item to cart and try again.'
+        );
 
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $carrierCode = 'flatrate';

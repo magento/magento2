@@ -19,21 +19,25 @@
             <useCaseId value="MC-36809"/>
             <group value="cookie"/>
             <group value="configuration"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </after>
         <amOnPage url="/" stepKey="goToHomePage"/>
+        <wait time="5" stepKey="waitForPageLoad"/>
         <executeJS function="return window.cookiesConfig.secure ? 'true' : 'false'" stepKey="isCookieSecure"/>
         <assertEquals stepKey="assertCookieIsUnsecure">
             <actualResult type="variable">isCookieSecure</actualResult>
+            <expectedResult type="string">false</expectedResult>
+        </assertEquals>
+        <wait time="10" stepKey="waitForPageLoad2"/>
+        <executeJS function="return jQuery.mage.cookies.defaults.secure ? 'true' : 'false'" stepKey="isCookieSecure2"/>
+        <assertEquals stepKey="assertCookieIsSecure2">
+            <actualResult type="variable">isCookieSecure2</actualResult>
             <expectedResult type="string">false</expectedResult>
         </assertEquals>
     </test>

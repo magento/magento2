@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportDownloadableProductsWithUrlLinksTest">
+        <annotations>
+            <features value="DownloadableImportExport"/>
+            <stories value="Import Products"/>
+            <title value="Import Downloadable Products with Url Links"/>
+            <description value="Imports a .csv file containing a downloadable product with url links. Verifies that
+            products are imported successfully."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-38947"/>
+            <group value="importExport"/>
+            <group value="Downloadable"/>
+        </annotations>
+
+        <before>
+            <!-- Add Downloadable Domain, Create Category, & Create Customer -->
+            <magentoCLI command="downloadable:domains:add static.magento.com" stepKey="addDownloadableDomain"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <createData entity="ImportCategory_Downloadable_UrlLinks" stepKey="createImportCategory"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!-- Copy Images to Import Directory for Product Images -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
+                <argument name="path">var/import/images/{{ImportProduct_Downloadable_UrlLinks.name}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyBaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.baseImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.baseImage}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copySmallImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.smallImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.smallImage}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyThumbnailImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.thumbnailImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.thumbnailImage}}</argument>
+            </helper>
+
+            <!-- Copy Images to Import Directory for Downloadable Links -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportDownloadableLinkFiles">
+                <argument name="path">pub/media/import/{{ImportProduct_Downloadable_UrlLinks.name}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyBaseImage2">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.baseImage}}</argument>
+                <argument name="destination">pub/media/import/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.baseImage}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copySmallImage2">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.smallImage}}</argument>
+                <argument name="destination">pub/media/import/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.smallImage}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyThumbnailImage3">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.thumbnailImage}}</argument>
+                <argument name="destination">pub/media/import/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.thumbnailImage}}</argument>
+            </helper>
+
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <!-- Revert Configuration & Delete Data -->
+            <magentoCLI command="downloadable:domains:remove static.magento.com" stepKey="removeDownloadableDomain"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <deleteData createDataKey="createImportCategory" stepKey="deleteImportCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
+                <argument name="path">var/import/images/{{ImportProduct_Downloadable_UrlLinks.name}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteDownloadableLinkFilesDirectory">
+                <argument name="path">pub/media/import/{{ImportProduct_Downloadable_UrlLinks.name}}</argument>
+            </helper>
+            <deleteData url="/V1/products/{{ImportProduct_Downloadable_UrlLinks.urlKey}}" stepKey="deleteImportedDownloadableProduct"/>
+            <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="navigateToAndResetProductGridToDefaultView"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Import Downloadable Product & Assert No Errors -->
+        <actionGroup ref="AdminNavigateToImportPageActionGroup" stepKey="navigateToImportPage"/>
+        <actionGroup ref="AdminFillImportFormActionGroup" stepKey="fillImportForm">
+            <argument name="importFile" value="{{ImportProduct_Downloadable_UrlLinks.fileName}}"/>
+            <argument name="imagesFileDirectory" value="{{ImportProduct_Downloadable_UrlLinks.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickCheckDataImportActionGroup" stepKey="clickCheckData"/>
+        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="{{ImportCommonMessages.validFile}}" stepKey="seeCheckDataResultMessage"/>
+        <dontSeeElementInDOM selector="{{AdminImportValidationMessagesSection.importErrorList}}" stepKey="dontSeeErrorMessage"/>
+        <actionGroup ref="AdminClickImportActionGroup" stepKey="clickImport"/>
+        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="{{ImportProduct_Downloadable_UrlLinks.importSummary}}" stepKey="seeNoticeMessage"/>
+        <see selector="{{AdminImportValidationMessagesSection.messageByType('success')}}" userInput="{{ImportCommonMessages.success}}" stepKey="seeImportMessage"/>
+        <dontSeeElementInDOM selector="{{AdminImportValidationMessagesSection.importErrorList}}" stepKey="dontSeeErrorMessage2"/>
+
+        <!-- Reindex -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
+        <!-- Admin: Verify Data on Import History Page -->
+        <actionGroup ref="AdminNavigateToImportHistoryPageActionGroup" stepKey="navigateToImportHistoryPage"/>
+        <actionGroup ref="AdminGridSortColumnDescendingActionGroup" stepKey="sortColumnByIdDescending">
+            <argument name="columnLabel" value="history_id"/>
+        </actionGroup>
+        <see userInput="{{ImportProduct_Downloadable_UrlLinks.fileName}}" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeImportedFile"/>
+        <see userInput="{{ImportProduct_Downloadable_UrlLinks.importSummary}}" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeSummary"/>
+
+        <!-- Admin: Verify Downloadable Product on Edit Product Page -->
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToDownloadableProductEditPage">
+            <argument name="product" value="ImportProduct_Downloadable_UrlLinks"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInfoOnEditPageActionGroup" stepKey="assertDownloadableProductOnEditPage">
+            <argument name="productStatus" value="{{ImportProduct_Downloadable_UrlLinks.status}}"/>
+            <argument name="productName" value="{{ImportProduct_Downloadable_UrlLinks.name}}"/>
+            <argument name="productSku" value="{{ImportProduct_Downloadable_UrlLinks.sku}}"/>
+            <argument name="productPrice" value="{{ImportProduct_Downloadable_UrlLinks.price}}"/>
+            <argument name="productQuantity" value="{{ImportProduct_Downloadable_UrlLinks.quantity}}"/>
+            <argument name="productWeight" value="{{ImportProduct_Downloadable_UrlLinks.weight}}"/>
+            <argument name="productVisibility" value="{{ImportProduct_Downloadable_UrlLinks.visibilityText}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Downloadable_UrlLinks.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProductBaseImageOnEditPage">
+            <argument name="image" value="{{ImportProduct_Downloadable_UrlLinks.baseImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Downloadable_UrlLinks.baseImageName, 'image')}}" stepKey="seeBaseImageRole"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProductSmallImageOnEditPage">
+            <argument name="image" value="{{ImportProduct_Downloadable_UrlLinks.smallImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Downloadable_UrlLinks.smallImageName, 'small_image')}}" stepKey="seeSmallImageRole"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProductThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProduct_Downloadable_UrlLinks.thumbnailImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Downloadable_UrlLinks.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRole"/>
+
+        <!-- Admin: Verify Downloadable Information -->
+        <actionGroup ref="ExpandAdminProductSectionActionGroup" stepKey="expandDownloadableSection">
+            <argument name="sectionSelector" value="{{AdminProductDownloadableSection.sectionHeader}}"/>
+            <argument name="sectionDependentSelector" value="{{AdminProductDownloadableSection.sectionLinkGrid}}"/>
+        </actionGroup>
+        <seeCheckboxIsChecked selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="seeDownloadableProductChecked"/>
+        <seeInField userInput="{{ImportProduct_Downloadable_UrlLinks.linksTitle}}" selector="{{AdminProductDownloadableSection.linksTitleInput}}" stepKey="seeLinksTitle"/>
+        <seeCheckboxIsChecked selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="seeLinksPurchasedSeparateChecked"/>
+        <actionGroup ref="AdminAssertDownloadableLinkInformationActionGroup" stepKey="verifyDownloadableLinkAdmin">
+            <argument name="title" value="{{ImportProduct_Downloadable_UrlLinks.linkTitle}}"/>
+            <argument name="price" value="{{ImportProduct_Downloadable_UrlLinks.linkPrice}}"/>
+            <argument name="fileType" value="{{ImportProduct_Downloadable_UrlLinks.linkFileType}}"/>
+            <argument name="fileNameOrUrl" value="{{ImportProduct_Downloadable_UrlLinks.linkFileUrl}}"/>
+            <argument name="sampleType" value="{{ImportProduct_Downloadable_UrlLinks.linkSampleFileType}}"/>
+            <argument name="sampleFileNameOrUrl" value="{{ImportProduct_Downloadable_UrlLinks.linkSampleFileUrl}}"/>
+            <argument name="shareable" value="{{ImportProduct_Downloadable_UrlLinks.linkShareable}}"/>
+            <argument name="maxDownloads" value="{{ImportProduct_Downloadable_UrlLinks.linkMaxDownloads}}"/>
+        </actionGroup>
+        <seeCheckboxIsChecked selector="{{AdminProductDownloadableSection.addLinkIsUnlimitedDownloads('0')}}" stepKey="seeLinkMaxDownloadsUnlimitedChecked"/>
+        <seeInField userInput="{{ImportProduct_Downloadable_UrlLinks.samplesTitle}}" selector="{{AdminProductDownloadableSection.samplesTitleInput}}" stepKey="seeSamplesTitle"/>
+        <actionGroup ref="AdminAssertDownloadableSampleLinkInformationActionGroup" stepKey="verifyDownloadableSampleLinkAdmin">
+            <argument name="title" value="{{ImportProduct_Downloadable_UrlLinks.sampleTitle}}"/>
+            <argument name="fileType" value="{{ImportProduct_Downloadable_UrlLinks.sampleFileType}}"/>
+            <argument name="fileNameOrUrl" value="{{ImportProduct_Downloadable_UrlLinks.sampleFileUrl}}"/>
+        </actionGroup>
+
+        <!-- Storefront: Verify Downloadable Product In Category -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginStorefront">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="goToCategoryPage">
+            <argument name="categoryUrl" value="{{ImportCategory_Downloadable_UrlLinks.name_lwr}}"/>
+        </actionGroup>
+        <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productName}}" userInput="1" stepKey="seeOnly1Product2"/>
+        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ImportProduct_Downloadable_UrlLinks.name}}" stepKey="seeProduct"/>
+
+        <!-- Storefront: Verify Downloadable Product Info & Image -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStorefrontPage">
+            <argument name="productUrl" value="{{ImportProduct_Downloadable_UrlLinks.urlKey}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName">
+            <argument name="value" value="{{ImportProduct_Downloadable_UrlLinks.name}}"/>
+        </actionGroup>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Downloadable_UrlLinks.sku}}" stepKey="seeSku"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportProduct_Downloadable_UrlLinks.price}}" stepKey="seePrice"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProduct_Downloadable_UrlLinks.baseImageName)}}" stepKey="seeBaseImage"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProduct_Downloadable_UrlLinks.smallImageName)}}" stepKey="seeSmallImage"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProduct_Downloadable_UrlLinks.thumbnailImageName)}}" stepKey="seeThumbnailImage"/>
+
+        <!-- Storefront: Verify Downloadable Product Link Data -->
+        <seeElement selector="{{StorefrontDownloadableProductSection.downloadableSampleLabel(ImportProduct_Downloadable_UrlLinks.sampleTitle)}}" stepKey="seeDownloadableSampleLink"/>
+        <click selector="{{StorefrontDownloadableProductSection.downloadableSampleLabel(ImportProduct_Downloadable_UrlLinks.sampleTitle)}}" stepKey="clickDownloadableSampleLink"/>
+        <switchToNextTab stepKey="switchToDownloadedLinkTab"/>
+        <waitForElement selector="{{StorefrontDownloadableLinkSection.downloadableLinkTitle(ImportProduct_Downloadable_UrlLinks.sampleFileName)}}" stepKey="seeImageTitle"/>
+        <waitForElement selector="{{StorefrontDownloadableLinkSection.downloadableLinkSvg}}" stepKey="seeImage"/>
+        <closeTab stepKey="closeTab"/>
+        <seeElement selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(ImportProduct_Downloadable_UrlLinks.linkTitle)}}" stepKey="seeDownloadableLink"/>
+        <seeElement selector="{{StorefrontDownloadableProductSection.downloadableLinkSampleByTitle('sample')}}" stepKey="seeDownloadableLinkSampleLink"/>
+        <click selector="{{StorefrontDownloadableProductSection.downloadableLinkSampleByTitle('sample')}}" stepKey="clickDownloadableLinkSampleLink"/>
+        <switchToNextTab stepKey="switchToDownloadedLinkTab2"/>
+        <waitForElement selector="{{StorefrontDownloadableLinkSection.downloadableLinkTitle(ImportProduct_Downloadable_UrlLinks.linkSampleFileName)}}" stepKey="seeImageTitle2"/>
+        <waitForElement selector="{{StorefrontDownloadableLinkSection.downloadableLinkSvg}}" stepKey="seeImage2"/>
+        <closeTab stepKey="closeTab2"/>
+        <checkOption selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(ImportProduct_Downloadable_UrlLinks.linkTitle)}}" stepKey="selectDownloadableLink"/>
+        <waitForText selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportProduct_Downloadable_UrlLinks.totalPriceWithLink}}" stepKey="seeUpdatedPrice"/>
+
+        <!-- Purchase Downloadable Product -->
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProductToCart"/>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="navigateToCheckoutPage"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlacePurchaseOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+
+        <!-- Create Invoice -->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="goToOrderInAdmin">
+            <argument name="entityId" value="{$grabOrderId}"/>
+        </actionGroup>
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startInvoice"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
+
+        <!-- Storefront: Go to Purchased Downloadable Product & Verify Link -->
+        <actionGroup ref="StorefrontNavigateToCustomerDownloadableProductsPageActionGroup" stepKey="goToCustomerDownloadableProductsPage"/>
+        <waitForText userInput="{{ImportProduct_Downloadable_UrlLinks.linkTitle}}" selector="{{StorefrontCustomerDownloadableProductsSection.downloadableLinkByOrderNumber({$grabOrderNumber})}}" stepKey="seeDownloadableLink2"/>
+        <click selector="{{StorefrontCustomerDownloadableProductsSection.downloadableLinkByOrderNumber({$grabOrderNumber})}}" stepKey="clickDownloadableLink"/>
+        <switchToNextTab stepKey="switchToDownloadedLinkTab3"/>
+        <waitForElement selector="{{StorefrontDownloadableLinkSection.downloadableLinkTitle(ImportProduct_Downloadable_UrlLinks.linkFileName)}}" stepKey="seeImageTitle3"/>
+        <waitForElement selector="{{StorefrontDownloadableLinkSection.downloadableLinkSvg}}" stepKey="seeImage3"/>
+        <closeTab stepKey="closeTab3"/>
+    </test>
+</tests>

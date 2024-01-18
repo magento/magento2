@@ -43,10 +43,10 @@ class BatchSizeCalculator
     private const DEPLOYMENT_CONFIG_INDEXER_BATCHES = 'indexer/batch_size/';
 
     /**
-     * BatchSizeCalculator constructor.
      * @param array $batchRowsCount
      * @param array $estimators
      * @param array $batchSizeAdjusters
+     * @param DeploymentConfig|null $deploymentConfig
      */
     public function __construct(
         array $batchRowsCount,

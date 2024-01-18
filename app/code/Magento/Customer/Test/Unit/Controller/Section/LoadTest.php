@@ -146,6 +146,12 @@ class LoadTest extends TestCase
                 'sectionNamesAsArray' => null,
                 'forceNewTimestamp' => false
             ],
+            [
+                'sectionNames' => ['sectionName1', 'sectionName2', 'sectionName3'],
+                'forceNewSectionTimestamp' => 'forceNewSectionTimestamp',
+                'sectionNamesAsArray' => ['sectionName1', 'sectionName2', 'sectionName3'],
+                'forceNewTimestamp' => true
+            ],
         ];
     }
 

@@ -8,12 +8,11 @@
  */
 -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/9.1/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
          colors="true"
          columns="max"
          beStrictAboutTestsThatDoNotTestAnything="false"
-         bootstrap="./framework/bootstrap.php"
->
+         bootstrap="./framework/bootstrap.php">
     <testsuites>
         <testsuite name="Less Static Code Analysis">
             <file>testsuite/Magento/Test/Less/LiveCodeTest.php</file>
@@ -23,6 +22,9 @@
         </testsuite>
         <testsuite name="GraphQL Static Code Analysis">
             <file>testsuite/Magento/Test/GraphQl/LiveCodeTest.php</file>
+        </testsuite>
+        <testsuite name="XML Coding Standard Verification">
+            <file>testsuite/Magento/Test/Xml/LiveCodeTest.php</file>
         </testsuite>
         <testsuite name="PHP Coding Standard Verification">
             <file>testsuite/Magento/Test/Php/LiveCodeTest.php</file>
@@ -38,12 +40,13 @@
         <!-- TESTS_COMPOSER_PATH - specify the path to composer binary, if a relative reference cannot be resolved -->
         <!--<const name="TESTS_COMPOSER_PATH" value="/usr/local/bin/composer"/>-->
     </php>
-    <listeners>
-        <listener class="Yandex\Allure\Adapter\AllureAdapter">
+    <extensions>
+        <extension class="Qameta\Allure\PHPUnit\AllureExtension">
+            <!-- Optional arguments block; omit it if you want to use default values -->
             <arguments>
-                <string>var/allure-results</string> <!-- XML files output directory -->
-                <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->
+                <!-- Path to config file (default is config/allure.config.php) -->
+                <string>allure/allure.config.php</string>
             </arguments>
-        </listener>
-    </listeners>
+        </extension>
+    </extensions>
 </phpunit>

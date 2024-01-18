@@ -97,6 +97,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
         $paths->setAccessible(true);
 
         $paths->setValue(
+            null,
             [
                 ComponentRegistrar::MODULE => [],
                 ComponentRegistrar::THEME => [],
@@ -157,7 +158,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
         $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);
         $paths = $reflection->getProperty('paths');
         $paths->setAccessible(true);
-        $paths->setValue($this->backupRegistrar);
+        $paths->setValue(null, $this->backupRegistrar);
         $paths->setAccessible(false);
     }
 }

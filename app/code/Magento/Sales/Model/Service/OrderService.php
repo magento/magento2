@@ -5,13 +5,13 @@
  */
 namespace Magento\Sales\Model\Service;
 
-use Magento\Sales\Api\OrderManagementInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Payment\Gateway\Command\CommandException;
+use Magento\Sales\Api\OrderManagementInterface;
+use Magento\Sales\Model\OrderMutexInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class OrderService
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderService implements OrderManagementInterface
@@ -62,6 +62,11 @@ class OrderService implements OrderManagementInterface
     private $logger;
 
     /**
+     * @var OrderMutexInterface
+     */
+    private $orderMutex;
+
+    /**
      * Constructor
      *
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
@@ -73,6 +78,8 @@ class OrderService implements OrderManagementInterface
      * @param \Magento\Sales\Model\Order\Email\Sender\OrderCommentSender $orderCommentSender
      * @param \Magento\Sales\Api\PaymentFailuresInterface $paymentFailures
      * @param LoggerInterface $logger
+     * @param OrderMutexInterface|null $orderMutex
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
@@ -83,7 +90,8 @@ class OrderService implements OrderManagementInterface
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\Order\Email\Sender\OrderCommentSender $orderCommentSender,
         \Magento\Sales\Api\PaymentFailuresInterface $paymentFailures,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ?OrderMutexInterface $orderMutex = null
     ) {
         $this->orderRepository = $orderRepository;
         $this->historyRepository = $historyRepository;
@@ -94,6 +102,7 @@ class OrderService implements OrderManagementInterface
         $this->orderCommentSender = $orderCommentSender;
         $this->paymentFailures = $paymentFailures;
         $this->logger = $logger;
+        $this->orderMutex = $orderMutex ?: ObjectManager::getInstance()->get(OrderMutexInterface::class);
     }
 
     /**
@@ -103,6 +112,22 @@ class OrderService implements OrderManagementInterface
      * @return bool
      */
     public function cancel($id)
+    {
+        return $this->orderMutex->execute(
+            (int) $id,
+            \Closure::fromCallable([$this, 'cancelOrder']),
+            [$id]
+        );
+    }
+
+    /**
+     * Order cancel
+     *
+     * @param int $id
+     * @return bool
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     */
+    private function cancelOrder($id): bool
     {
         $order = $this->orderRepository->get($id);
         if ($order->canCancel()) {
@@ -135,14 +160,25 @@ class OrderService implements OrderManagementInterface
      * @param int $id
      * @param \Magento\Sales\Api\Data\OrderStatusHistoryInterface $statusHistory
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addComment($id, \Magento\Sales\Api\Data\OrderStatusHistoryInterface $statusHistory)
     {
         $order = $this->orderRepository->get($id);
+
+        /**
+         * change order status is not allowed during add comment to the order
+         */
+        if ($statusHistory->getStatus() && $statusHistory->getStatus() != $order->getStatus()) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Unable to add comment: The status "%1" is not part of the order
+                 status history.', $statusHistory->getStatus())
+            );
+        }
         $order->addStatusHistory($statusHistory);
         $this->orderRepository->save($order);
-        $notify = isset($statusHistory['is_customer_notified']) ? $statusHistory['is_customer_notified'] : false;
-        $comment = trim(strip_tags($statusHistory->getComment()));
+        $notify = $statusHistory['is_customer_notified'] ?? false;
+        $comment = $statusHistory->getComment() !== null ? trim(strip_tags($statusHistory->getComment())) : '';
         $this->orderCommentSender->send($order, $notify, $comment);
         return true;
     }
@@ -269,7 +305,7 @@ class OrderService implements OrderManagementInterface
 
         $this->eventManager->dispatch(
             'sales_order_state_change_before',
-            ['order' => $this, 'transport' => $transport]
+            ['order' => $this, 'transport' => $transport, 'order_object' => $order]
         );
         $status = $transport->getStatus();
         $order->setData('state', $transport->getState());

@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Test\Integration\Model\Jpeg\Segment;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -32,11 +34,6 @@ class XmpTest extends TestCase
     private $xmpReader;
 
     /**
-     * @var DriverInterface
-     */
-    private $driver;
-
-    /**
      * @var ReadFile
      */
     private $fileReader;
@@ -47,6 +44,11 @@ class XmpTest extends TestCase
     private $metadataFactory;
 
     /**
+     * @var WriteInterface
+     */
+    private $directory;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -54,8 +56,18 @@ class XmpTest extends TestCase
         $this->xmpWriter = Bootstrap::getObjectManager()->get(WriteXmp::class);
         $this->xmpReader = Bootstrap::getObjectManager()->get(ReadXmp::class);
         $this->fileReader = Bootstrap::getObjectManager()->get(ReadFile::class);
-        $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
+        $this->directory = Bootstrap::getObjectManager()->get(FileSystem::class)
+            ->getDirectoryWrite(DirectoryList::MEDIA);
         $this->metadataFactory = Bootstrap::getObjectManager()->get(MetadataFactory::class);
+        $this->directory->create('testDir');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        $this->directory->delete('testDir');
     }
 
     /**
@@ -74,7 +86,11 @@ class XmpTest extends TestCase
         string $description,
         array $keywords
     ): void {
-        $path = realpath(__DIR__ . '/../../../../_files/' . $fileName);
+        $path = $this->directory->getAbsolutePath('testDir/' . $fileName);
+        $this->directory->getDriver()->filePutContents(
+            $path,
+            file_get_contents(__DIR__ . '/../../../../_files/' . $fileName)
+        );
         $file = $this->fileReader->execute($path);
         $originalMetadata = $this->xmpReader->execute($file);
 

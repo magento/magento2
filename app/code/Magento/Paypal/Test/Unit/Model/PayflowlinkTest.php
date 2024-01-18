@@ -9,6 +9,7 @@ namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
 use Magento\Paypal\Block\Payment\Info;
@@ -51,6 +52,9 @@ class PayflowlinkTest extends TestCase
     /** @var ScopeConfigInterface|MockObject */
     protected $scopeConfigMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->store = $this->createMock(Store::class);
@@ -109,6 +113,7 @@ class PayflowlinkTest extends TestCase
                 'configFactory' => $configFactoryMock,
                 'requestFactory' => $requestFactory,
                 'gateway' => $this->gatewayMock,
+                'mathRandom' => new Random()
             ]
         );
         $this->model->setInfoInstance($this->infoInstance);

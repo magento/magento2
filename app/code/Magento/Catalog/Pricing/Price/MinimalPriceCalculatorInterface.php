@@ -11,6 +11,8 @@ use Magento\Framework\Pricing\Amount\AmountInterface;
 
 /**
  * Interface define methods which control display of "As low as" price
+ *
+ * @api
  */
 interface MinimalPriceCalculatorInterface
 {

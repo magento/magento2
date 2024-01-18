@@ -68,7 +68,7 @@ class Blob implements DbDefinitionProcessorInterface
     public function fromDefinition(array $data)
     {
         $matches = [];
-        if (preg_match('/^text\s*\((\d+)\)/', $data['definition'], $matches) && isset($matches[1])) {
+        if (preg_match('/^text\s*\((\d+)\)/', $data['definition'] ?? '', $matches) && isset($matches[1])) {
             $data['length'] = $matches[1];
         }
 

@@ -82,7 +82,7 @@ class Exceptions extends ArraySerialized
             }
 
             // Empty string (match all) is not supported, because it means setting a default theme. Remove such entries.
-            if (!strlen($row['search'])) {
+            if (!isset($row['search']) || !strlen($row['search'])) {
                 unset($exceptions[$rowKey]);
                 continue;
             }
@@ -131,7 +131,7 @@ class Exceptions extends ArraySerialized
      */
     protected function _isRegexp($search)
     {
-        if (strlen($search) < 3) {
+        if ($search === null || strlen($search) < 3) {
             return false;
         }
 

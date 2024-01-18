@@ -42,6 +42,9 @@ class PageTest extends TestCase
      */
     protected $_model;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $logger = $this->getMockForAbstractClass(LoggerInterface::class);
@@ -78,27 +81,25 @@ class PageTest extends TestCase
         $this->_model = new Page($this->_factoryMock, $menuConfig);
     }
 
-    public function testToOptionArray()
+    /**
+     * @return void
+     */
+    public function testToOptionArray(): void
     {
-        $this->_factoryMock->expects(
-            $this->at(0)
-        )->method(
-            'create'
-        )->with(
-            ['iterator' => $this->_menuModel->getIterator()]
-        )->willReturn(
-            new Iterator($this->_menuModel->getIterator())
-        );
-
-        $this->_factoryMock->expects(
-            $this->at(1)
-        )->method(
-            'create'
-        )->with(
-            ['iterator' => $this->_menuSubModel->getIterator()]
-        )->willReturn(
-            new Iterator($this->_menuSubModel->getIterator())
-        );
+        $this->_factoryMock
+            ->method('create')
+            ->withConsecutive(
+                [
+                    ['iterator' => $this->_menuModel->getIterator()]
+                ],
+                [
+                    ['iterator' => $this->_menuSubModel->getIterator()]
+                ]
+            )
+            ->willReturnOnConsecutiveCalls(
+                new Iterator($this->_menuModel->getIterator()),
+                new Iterator($this->_menuSubModel->getIterator())
+            );
 
         $nonEscapableNbspChar = html_entity_decode('&#160;', ENT_NOQUOTES, 'UTF-8');
         $paddingString = str_repeat($nonEscapableNbspChar, 4);

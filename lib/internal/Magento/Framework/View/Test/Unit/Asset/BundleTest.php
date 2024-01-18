@@ -109,18 +109,14 @@ class BundleTest extends TestCase
         $assetMock = $this->getMockBuilder(LocalInterface::class)
             ->setMethods(['getContentType', 'getContext'])
             ->getMockForAbstractClass();
-        $assetMock
-            ->expects($this->any())
-            ->method('getContext')
+        $assetMock->method('getContext')
             ->willReturn($contextMock);
-        $assetMock
-            ->expects($this->any())
-            ->method('getContentType')
+        $assetMock->method('getContentType')
             ->willReturn('js');
-        $assetMock
-            ->expects($this->any())
-            ->method('getFilePath')
+        $assetMock->method('getFilePath')
             ->willReturn('onefile.js');
+        $assetMock->method('getContent')
+            ->willReturn('');   // PHP 8.1 compatibility
 
         $writeMock = $this->getMockBuilder(WriteInterface::class)
             ->getMockForAbstractClass();
