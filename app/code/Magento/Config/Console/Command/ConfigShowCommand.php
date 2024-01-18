@@ -126,8 +126,7 @@ class ConfigShowCommand extends Command
             ?: ObjectManager::getInstance()->get(PathValidatorFactory::class);
         $this->emulatedAreaProcessor = $emulatedAreaProcessor
             ?: ObjectManager::getInstance()->get(EmulatedAdminhtmlAreaProcessor::class);
-        $this->localeEmulator = $localeEmulator
-            ?: ObjectManager::getInstance()->get(LocaleEmulatorInterface::class);
+        $this->localeEmulator = $localeEmulator;
     }
 
     /**
