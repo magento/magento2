@@ -102,6 +102,7 @@ class ObserverTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testScheduledUpdateCurrencyRates(): void
     {

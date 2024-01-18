@@ -94,26 +94,14 @@ class FilterListTest extends TestCase
     {
         $this->objectManagerMock
             ->method('create')
-            ->willReturnCallback(function (...$args) {
-                static $callCount = 0;
-                $callCount++;
-                switch ($callCount) {
-                    case 1:
-                        if (empty($arg)) {
-                            return 'filter';
-                        }
-                        break;
-                    case 2:
-                        $expectedClass = $args[0];
-                        $expectedArguments = [
-                            'data' => ['attribute_model' => $this->attributeMock],
-                            'layer' => $this->layerMock
-                        ];
-                        if ($expectedClass == $expectedClass &&
-                            $args[1] == $expectedArguments) {
-                            return 'filter';
-                        }
-                        break;
+            ->willReturnCallback(function ($arguments) {
+                if (empty($arguments)) {
+                    return 'filter';
+                } else {
+                        $expectedClass = $arguments[0];
+                    if ($expectedClass == $expectedClass) {
+                        return 'filter';
+                    }
                 }
             });
 

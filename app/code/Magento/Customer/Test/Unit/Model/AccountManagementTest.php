@@ -1424,7 +1424,7 @@ class AccountManagementTest extends TestCase
             ->method('getStore')
             ->willReturnCallback(function ($arg1) use ($customerStoreId) {
                 if (empty($arg1) || $arg1 == $customerStoreId) {
-                    throw $this->store;
+                    return $this->store;
                 }
             });
 

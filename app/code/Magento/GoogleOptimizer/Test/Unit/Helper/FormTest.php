@@ -117,19 +117,19 @@ class FormTest extends TestCase
 
         $this->_fieldsetMock
             ->method('addField')
-            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($experimentCode, $experimentCodeId) {
+            ->willReturnCallback(function ($arg1, $arg2, $arg3, $experimentCode, $experimentCodeId) {
                 static $callCount = 0;
                 if ($callCount === 0) {
                     $callCount++;
-                    if ($arg1 == 'experiment_script' && $arg2 == 'textarea' && is_array($arg3)) {
+                    if ($arg1 == 'experiment_script' && $arg2 == 'textarea' && $arg3['value'] == $experimentCode) {
                         return null;
                     }
-                } elseif ($callCount == 1 && $arg1 == 'hidden' && is_array($arg3)) {
+                } elseif ($callCount == 1 && $arg1 == 'hidden' && $arg3['value'] == $experimentCodeId) {
                     $callCount++;
                     return null;
                 }
             });
-          
+
         $this->_formMock->expects($this->once())->method('setFieldNameSuffix')->with('google_experiment');
     }
 }
