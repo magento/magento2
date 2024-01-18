@@ -19,7 +19,7 @@ declare(strict_types=1);
 namespace Magento\SalesRule\Test\Unit\Plugin;
 
 use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\QuoteRepository;
+use Magento\Quote\Api\CartRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\SalesRule\Model\Coupon\Quote\UpdateCouponUsages;
@@ -40,9 +40,9 @@ class CouponUsageIncreamentForMultishippingTest extends TestCase
     private $updateCouponUsagesMock;
 
     /**
-     * @var QuoteRepository|MockObject
+     * @var CartRepositoryInterface|MockObject
      */
-    private $quoteRepositoryMock;
+    private $cartRepositoryInterfaceMock;
 
     /**
      * @var Order[]|MockObject
@@ -66,7 +66,7 @@ class CouponUsageIncreamentForMultishippingTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['execute'])
             ->getMock();
-        $this->quoteRepositoryMock = $this->getMockBuilder(QuoteRepository::class)
+        $this->cartRepositoryInterfaceMock = $this->getMockBuilder(CartRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->orderMock = $this->getMockBuilder(Order::class)
@@ -75,7 +75,7 @@ class CouponUsageIncreamentForMultishippingTest extends TestCase
             ->getMock();
         $this->plugin = new CouponUsagesIncrementMultishipping(
             $this->updateCouponUsagesMock,
-            $this->quoteRepositoryMock
+            $this->cartRepositoryInterfaceMock
         );
     }
     /**
@@ -96,7 +96,7 @@ class CouponUsageIncreamentForMultishippingTest extends TestCase
         $this->orderMock->expects($this->once())->method('getQuoteId')
             ->willReturn(1);
 
-        $this->quoteRepositoryMock->expects($this->once())->method('get')->with(1)->willReturn($quoteMock);
+        $this->cartRepositoryInterfaceMock->expects($this->once())->method('get')->with(1)->willReturn($quoteMock);
         $quoteMock->expects($this->once())->method('getCouponCode')->willReturn($couponCode);
         $quoteMock->expects($this->any())->method('dataHasChangedFor')->with($couponCode)->willReturn(true);
         $this->updateCouponUsagesMock
