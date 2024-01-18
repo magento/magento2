@@ -301,41 +301,40 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface            $objectManager,
-        \Magento\Framework\Event\ManagerInterface            $eventManager,
-        \Magento\Framework\Registry                          $coreRegistry,
-        \Magento\Sales\Model\Config                          $salesConfig,
-        \Magento\Backend\Model\Session\Quote                 $quoteSession,
-        \Psr\Log\LoggerInterface                             $logger,
-        \Magento\Framework\DataObject\Copy                   $objectCopyService,
-        \Magento\Framework\Message\ManagerInterface          $messageManager,
-        Product\Quote\Initializer                            $quoteInitializer,
-        \Magento\Customer\Api\CustomerRepositoryInterface    $customerRepository,
-        \Magento\Customer\Api\AddressRepositoryInterface     $addressRepository,
-        \Magento\Customer\Api\Data\AddressInterfaceFactory   $addressFactory,
-        \Magento\Customer\Model\Metadata\FormFactory         $metadataFormFactory,
-        \Magento\Customer\Api\GroupRepositoryInterface       $groupRepository,
-        \Magento\Framework\App\Config\ScopeConfigInterface   $scopeConfig,
-        \Magento\Sales\Model\AdminOrder\EmailSender          $emailSender,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Sales\Model\Config $salesConfig,
+        \Magento\Backend\Model\Session\Quote $quoteSession,
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\DataObject\Copy $objectCopyService,
+        \Magento\Framework\Message\ManagerInterface $messageManager,
+        Product\Quote\Initializer $quoteInitializer,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
+        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
+        \Magento\Customer\Api\Data\AddressInterfaceFactory $addressFactory,
+        \Magento\Customer\Model\Metadata\FormFactory $metadataFormFactory,
+        \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Sales\Model\AdminOrder\EmailSender $emailSender,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        \Magento\Quote\Model\Quote\Item\Updater              $quoteItemUpdater,
-        \Magento\Framework\DataObject\Factory                $objectFactory,
-        \Magento\Quote\Api\CartRepositoryInterface           $quoteRepository,
-        \Magento\Customer\Api\AccountManagementInterface     $accountManagement,
-        \Magento\Customer\Api\Data\CustomerInterfaceFactory  $customerFactory,
-        \Magento\Customer\Model\Customer\Mapper              $customerMapper,
-        \Magento\Quote\Api\CartManagementInterface           $quoteManagement,
-        \Magento\Framework\Api\DataObjectHelper              $dataObjectHelper,
-        \Magento\Sales\Api\OrderManagementInterface          $orderManagement,
-        \Magento\Quote\Model\QuoteFactory                    $quoteFactory,
-        array                                                $data = [],
-        \Magento\Framework\Serialize\Serializer\Json         $serializer = null,
-        ExtensibleDataObjectConverter                        $dataObjectConverter = null,
-        StoreManagerInterface                                $storeManager = null,
-        CustomAttributeListInterface                         $customAttributeList = null,
-        OrderRepositoryInterface                             $orderRepositoryInterface = null
-    )
-    {
+        \Magento\Quote\Model\Quote\Item\Updater $quoteItemUpdater,
+        \Magento\Framework\DataObject\Factory $objectFactory,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
+        \Magento\Customer\Api\AccountManagementInterface $accountManagement,
+        \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory,
+        \Magento\Customer\Model\Customer\Mapper $customerMapper,
+        \Magento\Quote\Api\CartManagementInterface $quoteManagement,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Magento\Sales\Api\OrderManagementInterface $orderManagement,
+        \Magento\Quote\Model\QuoteFactory $quoteFactory,
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ExtensibleDataObjectConverter $dataObjectConverter = null,
+        StoreManagerInterface $storeManager = null,
+        CustomAttributeListInterface $customAttributeList = null,
+        OrderRepositoryInterface $orderRepositoryInterface = null
+    ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
         $this->_coreRegistry = $coreRegistry;
@@ -890,8 +889,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
                         $cartItems = $cart->getAllVisibleItems();
                         $cartItemsToRestore = [];
-                        foreach ($cartItems as $value) {
-                            $cartItemsToRestore[$value->getData('item_id')] = $value->getData('item_id');
+                        foreach ($cartItems as $cartItem) {
+                            $cartItemsToRestore[$cartItem->getItemId()] = $cartItem->getItemId();
                         }
                         $canBeRestored = $this->restoreTransferredItem('cart', $cartItemsToRestore);
 
