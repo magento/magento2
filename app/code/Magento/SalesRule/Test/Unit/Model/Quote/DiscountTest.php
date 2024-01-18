@@ -131,7 +131,7 @@ class DiscountTest extends TestCase
         $this->addressMock = $this->getMockBuilder(Address::class)
             ->addMethods(['getShippingAmount'])
             ->onlyMethods(
-                ['getQuote', 'getAllItems', 'getExtensionAttributes', 'getCustomAttributesCodes', 'setBaseDiscountAmount']
+                ['getQuote','getAllItems','getExtensionAttributes','getCustomAttributesCodes','setBaseDiscountAmount']
             )
             ->disableOriginalConstructor()
             ->getMock();
