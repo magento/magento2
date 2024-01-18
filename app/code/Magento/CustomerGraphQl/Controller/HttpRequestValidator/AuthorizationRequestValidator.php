@@ -66,13 +66,13 @@ class AuthorizationRequestValidator implements HttpRequestValidatorInterface
 
         $bearerToken = end($headerPieces);
         try {
-            $token = $this->userTokenReader->read($bearerToken);
+            $token = $this->tokenReader->read($bearerToken);
         } catch (UserTokenException $exception) {
             throw new GraphQlAuthenticationException(__($exception->getMessage()));
         }
 
         try {
-            $this->userTokenValidator->validate($token);
+            $this->tokenValidator->validate($token);
         } catch (AuthorizationException $exception) {
             throw new GraphQlAuthenticationException(__($exception->getMessage()));
         }
