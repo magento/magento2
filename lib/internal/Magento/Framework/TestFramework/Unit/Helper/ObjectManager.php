@@ -97,7 +97,7 @@ class ObjectManager
             ->disableOriginalClone()
             ->disableArgumentCloning()
             ->disallowMockingUnknownTypes()
-            ->setMethods(['getIdFieldName', '__sleep', '__wakeup'])
+            ->onlyMethods(['getIdFieldName', '__sleep', '__wakeup'])
             ->getMock();
         $resourceMock->expects(
             $this->_testObject->any()
