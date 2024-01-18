@@ -301,6 +301,40 @@ class TierPriceStorageTest extends WebapiAbstract
     }
 
     /**
+     * Test to validate the incorrect website id.
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testCheckWebsiteId()
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/tier-prices',
+                'httpMethod' => Request::HTTP_METHOD_POST
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Update',
+            ],
+        ];
+        $tierPriceWithInvalidWebsiteId = [
+            'price' => 38.97,
+            'price_type' => TierPriceInterface::PRICE_TYPE_FIXED,
+            'website_id' => 1,
+            'sku' => self::SIMPLE_PRODUCT_SKU,
+            'customer_group' => 'ALL GROUPS',
+            'quantity' => 3,
+            'extension_attributes' => []
+        ];
+        $response = $this->_webApiCall($serviceInfo, ['prices' => [$tierPriceWithInvalidWebsiteId]]);
+        $this->assertNotEmpty($response);
+        $message = 'Incorrect website ID: 1';
+        $this->assertEquals($message, $response[0]['message']);
+        $this->assertEquals('1', $response[0]['parameters'][0]);
+    }
+
+    /**
      * Check prise exists and is correct.
      *
      * @param array $price
