@@ -29,7 +29,7 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit\Framework\TestCase
     {
         $property = new \ReflectionProperty(\Magento\Setup\Module\I18n\ServiceLocator::class, '_dictionaryGenerator');
         $property->setAccessible(true);
-        $property->setValue(null);
+        $property->setValue(null, null);
         $property->setAccessible(false);
     }
 
