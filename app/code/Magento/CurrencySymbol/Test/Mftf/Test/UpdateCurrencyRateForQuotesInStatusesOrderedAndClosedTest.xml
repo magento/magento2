@@ -18,9 +18,9 @@
         </annotations>
         <before>
             <!--Login to backend-->
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin" before="navigateToConfigCurrencySetupPage1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Setup currencies -->
-            <actionGroup ref="AdminNavigateToCurrencySetupPageActionGroup" stepKey="navigateToConfigCurrencySetupPage1"/>
+            <actionGroup ref="AdminNavigateToCurrencySetupPageActionGroup" stepKey="navigateToConfigCurrencySetupPage"/>
             <actionGroup ref="AdminExpandCurrencyOptionsActionGroup" stepKey="openCurrencyOptions"/>
             <actionGroup ref="AdminSetBaseCurrencyActionGroup" stepKey="setBaseCurrencyUSD">
                 <argument name="currency" value="US Dollar"/>
