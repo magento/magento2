@@ -18,14 +18,13 @@ class Telephone extends AbstractValidator
     /**
      * Allowed char:
      *
-     * \(\) :Matches open and close parentheses
-     * \s: Matches any whitespace character.
+     * \() :Matches open and close parentheses
      * \+: Matches the plus sign.
      * \-: Matches the hyphen.
      * \d: Digits (0-9).
      */
-    private const PATTERN_TELEPHONE = '/(?:[\(\)\+\-\s\d]){1,255}+/u';
-
+    private const PATTERN_TELEPHONE = '/(?:[\d\+\-\()]{1,20})/u';
+    
     /**
      * Validate telephone fields.
      *
@@ -35,7 +34,9 @@ class Telephone extends AbstractValidator
     public function isValid($customer)
     {
         if (!$this->isValidTelephone($customer->getTelephone())) {
-            parent::_addMessages([['telephone' => 'Telephone is not valid! Allowed chars: Matches open and close parentheses, Matches any whitespace character, Matches the plus sign, Matches the hyphen, Digits (0-9)']]);
+            parent::_addMessages([[
+                'telephone' => "Invalid Phone Number. Please use 0-9, +, -, (, ). space not allowed."
+            ]]);
         }
 
         return count($this->_messages) == 0;

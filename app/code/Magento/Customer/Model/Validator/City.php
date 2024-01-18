@@ -20,15 +20,10 @@ class City extends AbstractValidator
      *
      * \p{L}: Unicode letters.
      * \p{M}: Unicode marks (diacritic marks, accents, etc.).
-     * ,: Comma.
-     * \-: Hyphen.
-     * \.: Period.
-     * `'’: Single quotes, both regular and right single quotation marks.
-     * &: Ampersand.
+     * ': Apostrophe mark.
      * \s: Whitespace characters (spaces, tabs, newlines, etc.).
-     * \d: Digits (0-9).
      */
-    private const PATTERN_CITY = '/(?:[\p{L}\p{M}\,\-\.\'’`&\s\d]){1,255}+/u';
+    private const PATTERN_CITY = '/(?:[\p{L}\p{M}\s\-\']{1,100})/u';
 
     /**
      * Validate city fields.
@@ -40,7 +35,7 @@ class City extends AbstractValidator
     {
         if (!$this->isValidCity($customer->getCity())) {
             parent::_addMessages([[
-                'city' => 'City is not valid! Allowed chars: Unicode letters, Unicode marks, Comma, Hyphen, Period, Single quotes, both regular and right single quotation marks, Ampersand, Whitespace characters, Digits'
+                'city' => "Invalid City. Please use A-Z, a-z, 0-9, -, ', spaces"
             ]]);
         }
 

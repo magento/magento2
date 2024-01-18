@@ -21,14 +21,14 @@ class Street extends AbstractValidator
      * \p{L}: Unicode letters.
      * \p{M}: Unicode marks (diacritic marks, accents, etc.).
      * ,: Comma.
-     * \-: Hyphen.
-     * \.: Period.
+     * -: Hyphen.
+     * .: Period.
      * `'’: Single quotes, both regular and right single quotation marks.
      * &: Ampersand.
      * \s: Whitespace characters (spaces, tabs, newlines, etc.).
      * \d: Digits (0-9).
      */
-    private const PATTERN_STREET = '/(?:[\p{L}\p{M}\,\-\.\'’`&\s\d]){1,255}+/u';
+    private const PATTERN_STREET = "/(?:[\p{L}\p{M},-.'’`&\s\d]){1,255}+/u";
 
     /**
      * Validate street fields.
@@ -40,7 +40,9 @@ class Street extends AbstractValidator
     {
         foreach ($customer->getStreet() as $street) {
             if (!$this->isValidStreet($street)) {
-                parent::_addMessages([['street' => 'Street is not valid! Allowed chars: Unicode letters, Unicode marks, Comma, Hyphen, Period, Single quotes, both regular and right single quotation marks, Ampersand, Whitespace characters, Digits']]);
+                parent::_addMessages([[
+                    'street' => "Invalid Street Address. Please use A-Z, a-z, 0-9, , - . ' ’ ` & spaces"
+                ]]);
             }
         }
 
