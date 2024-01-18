@@ -64,12 +64,11 @@ class RendererTest extends TestCase
 
         $this->item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([
+            ->addMethods([
                 'getWeeeTaxAppliedAmount',
                 'getPriceInclTax',
-                'getRowTotalInclTax',
-                'getCalculationPrice',
                 'getRowTotal',
+                'getRowTotalInclTax',
                 'getWeeeTaxAppliedRowAmount',
                 'getStoreId',
                 'getBaseRowTotalInclTax',
@@ -81,6 +80,7 @@ class RendererTest extends TestCase
                 'getBasePriceInclTax',
                 'getQtyOrdered'
             ])
+            ->onlyMethods(['getCalculationPrice'])
             ->getMock();
 
         $this->item->expects($this->any())
@@ -133,7 +133,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function displayPriceWithWeeeDetailsDataProvider()
+    public static function displayPriceWithWeeeDetailsDataProvider()
     {
         $data = [
             'weee_disabled_true_true' => [
@@ -486,7 +486,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function getDisplayPriceDataProvider()
+    public static function getDisplayPriceDataProvider()
     {
         $data = [
             'weee_disabled_true' => [
@@ -756,7 +756,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function getFinalDisplayPriceDataProvider()
+    public static function getFinalDisplayPriceDataProvider()
     {
         $data = [
             'weee_disabled_true' => [

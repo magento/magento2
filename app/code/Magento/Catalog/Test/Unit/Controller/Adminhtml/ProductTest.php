@@ -90,9 +90,9 @@ abstract class ProductTest extends TestCase
             ->getMock();
 
         $responseInterfaceMock = $this->getMockBuilder(ResponseInterface::class)
-            ->onlyMethods(
-                ['setRedirect', 'sendResponse']
-            )->getMockForAbstractClass();
+            ->addMethods(['setRedirect'])
+            ->onlyMethods(['sendResponse'])
+            ->getMockForAbstractClass();
 
         $managerInterfaceMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $sessionMock = $this->getMockBuilder(Session::class)

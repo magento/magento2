@@ -33,7 +33,7 @@ class RouteTest extends TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
-            ->onlyMethods(['getPathInfo'])
+            ->addMethods(['getPathInfo'])
             ->getMockForAbstractClass();
     }
 
@@ -85,7 +85,7 @@ class RouteTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderRoutes()
+    public static function dataProviderRoutes()
     {
         return [
             // Success

@@ -154,7 +154,7 @@ class EditTest extends TestCase
             ->getMock();
 
         $this->blockTemplate = $this->getMockBuilder(Template::class)
-            ->onlyMethods(['setIsPopup'])
+            ->addMethods(['setIsPopup'])
             ->disableOriginalConstructor()
             ->getMock();
 

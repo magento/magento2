@@ -111,21 +111,25 @@ class RedirectTest extends TestCase
         $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(
+            ->addMethods(
                 [
                     'getLastCustomerId',
-                    'isLoggedIn',
-                    'getId',
                     'setLastCustomerId',
                     'unsBeforeAuthUrl',
                     'getBeforeAuthUrl',
-                    'setBeforeAuthUrl',
-                    'getAfterAuthUrl',
-                    'setAfterAuthUrl',
                     'getBeforeRequestParams',
+                    'getAfterAuthUrl',
                     'getBeforeModuleName',
                     'getBeforeControllerName',
                     'getBeforeAction',
+                ]
+            )
+            ->onlyMethods(
+                [
+                    'isLoggedIn',
+                    'getId',
+                    'setBeforeAuthUrl',
+                    'setAfterAuthUrl'
                 ]
             )
             ->getMock();
@@ -136,9 +140,9 @@ class RedirectTest extends TestCase
         $this->url = $this->getMockForAbstractClass(UrlInterface::class);
         $this->urlDecoder = $this->getMockForAbstractClass(DecoderInterface::class);
         $this->customerUrl = $this->getMockBuilder(\Magento\Customer\Model\Url::class)
+            ->addMethods(['DashboardUrl'])
             ->onlyMethods(
                 [
-                    'DashboardUrl',
                     'getAccountUrl',
                     'getLoginUrl',
                     'getLogoutUrl',
@@ -263,7 +267,7 @@ class RedirectTest extends TestCase
      *
      * @return array
      */
-    public function getRedirectDataProvider()
+    public static function getRedirectDataProvider()
     {
         /**
          * Customer ID

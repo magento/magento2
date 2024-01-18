@@ -101,7 +101,7 @@ class BuilderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->onlyMethods(['load'])
+            ->addMethods(['load'])
             ->getMockForAbstractClass();
 
         $this->productRepositoryMock = $this->getMockBuilder(ProductRepositoryInterface::class)

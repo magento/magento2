@@ -108,7 +108,7 @@ class CarrierTest extends TestCase
         $this->scope = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->error = $this->getMockBuilder(Error::class)
-            ->onlyMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
+            ->addMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
             ->getMock();
         $this->errorFactory = $this->getMockBuilder(ErrorFactory::class)
             ->disableOriginalConstructor()
@@ -224,7 +224,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function prepareShippingLabelContentExceptionDataProvider()
+    public static function prepareShippingLabelContentExceptionDataProvider()
     {
         $filesPath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR;
         $empty = $billingNumberOnly = $outputImageOnly = simplexml_load_file(
@@ -292,7 +292,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function dhlProductsDataProvider(): array
+    public static function dhlProductsDataProvider(): array
     {
         return [
             'doc' => [
@@ -364,7 +364,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function buildMessageReferenceDataProvider()
+    public static function buildMessageReferenceDataProvider()
     {
         return [
             'quote_prefix' => ['QUOT'],
@@ -409,7 +409,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function buildSoftwareNameDataProvider()
+    public static function buildSoftwareNameDataProvider()
     {
         return [
             'valid_length' => ['Magento'],
@@ -440,7 +440,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function buildSoftwareVersionProvider()
+    public static function buildSoftwareVersionProvider()
     {
         return [
             'valid_length' => ['2.3.1'],
@@ -484,7 +484,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function getGatewayURLProvider()
+    public static function getGatewayURLProvider()
     {
         return [
             'standard_url' => [0, 'https://xmlpi-ea.dhl.com/XMLShippingServlet'],
@@ -531,7 +531,7 @@ class CarrierTest extends TestCase
             ->getMock();
         $rateResult = $this->getMockBuilder(Result::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(null)
+            ->onlyMethods([])
             ->getMock();
         $rateFactory->method('create')
             ->willReturn($rateResult);

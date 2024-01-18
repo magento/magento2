@@ -120,7 +120,8 @@ class AddAttributeToTemplateTest extends TestCase
             ->onlyMethods(['create'])
             ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->onlyMethods(['getParam', 'setParam'])
+            ->addMethods(['setParam'])
+            ->onlyMethods(['getParam'])
             ->getMockForAbstractClass();
         $this->contextMock->expects($this->once())
             ->method('getRequest')
