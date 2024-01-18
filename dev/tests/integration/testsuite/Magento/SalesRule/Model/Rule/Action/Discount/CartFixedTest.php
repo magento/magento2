@@ -370,12 +370,13 @@ class CartFixedTest extends TestCase
         $model->createOrders();
         $orderList = $this->getOrderList((int)$quote->getId());
         $this->assertCount(3, $orderList);
+
         /**
          * The order with $10 simple product
          * @var Order $firstOrder
          */
         $firstOrder = array_shift($orderList);
-
+        $this->assertNotEmpty($firstOrder->getAppliedRuleIds());
         $this->assertEquals(
             $firstOrderTotals['subtotal'],
             $firstOrder->getSubtotal()
@@ -392,11 +393,19 @@ class CartFixedTest extends TestCase
             $firstOrderTotals['grand_total'],
             $firstOrder->getGrandTotal()
         );
+        $firstOrderItem = array_values($firstOrder->getItems())[0];
+        $this->assertNotEmpty($firstOrderItem->getAppliedRuleIds());
+        $this->assertEquals(
+            $firstOrderTotals['discount_amount'] * -1,
+            $firstOrderItem->getDiscountAmount()
+        );
+
         /**
          * The order with $20 simple product
          * @var Order $secondOrder
          */
         $secondOrder = array_shift($orderList);
+        $this->assertNotEmpty($secondOrder->getAppliedRuleIds());
         $this->assertEquals(
             $secondOrderTotals['subtotal'],
             $secondOrder->getSubtotal()
@@ -413,11 +422,19 @@ class CartFixedTest extends TestCase
             $secondOrderTotals['grand_total'],
             $secondOrder->getGrandTotal()
         );
+        $secondOrderItem = array_values($secondOrder->getItems())[0];
+        $this->assertNotEmpty($secondOrderItem->getAppliedRuleIds());
+        $this->assertEquals(
+            $secondOrderTotals['discount_amount'] * -1,
+            $secondOrderItem->getDiscountAmount()
+        );
+
         /**
          * The order with $5 virtual product and billing address as shipping
          * @var Order $thirdOrder
          */
         $thirdOrder = array_shift($orderList);
+        $this->assertNotEmpty($thirdOrder->getAppliedRuleIds());
         $this->assertEquals(
             $thirdOrderTotals['subtotal'],
             $thirdOrder->getSubtotal()
@@ -433,6 +450,12 @@ class CartFixedTest extends TestCase
         $this->assertEquals(
             $thirdOrderTotals['grand_total'],
             $thirdOrder->getGrandTotal()
+        );
+        $thirdOrderItem = array_values($thirdOrder->getItems())[0];
+        $this->assertNotEmpty($thirdOrderItem->getAppliedRuleIds());
+        $this->assertEquals(
+            $thirdOrderTotals['discount_amount'] * -1,
+            $thirdOrderItem->getDiscountAmount()
         );
     }
 
