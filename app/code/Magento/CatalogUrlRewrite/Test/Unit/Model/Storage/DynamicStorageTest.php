@@ -16,6 +16,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\Store\Model\ScopeInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
@@ -127,6 +128,15 @@ class DynamicStorageTest extends TestCase
         $this->logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                LoggerInterface::class,
+                $this->createMock(LoggerInterface::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
 
         $this->object = new DynamicStorage(
             $this->urlRewriteFactoryMock,

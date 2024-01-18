@@ -17,7 +17,6 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\Page\Title;
@@ -26,8 +25,6 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\Stdlib\DateTime\Filter\Date;
-use Magento\Cms\Model\Wysiwyg\Config;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -118,26 +115,6 @@ class EditTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-
-        $objects = [
-            [
-                Date::class,
-                $this->createMock(Date::class)
-            ],
-            [
-                Registry::class,
-                $this->createMock(Registry::class)
-            ],
-            [
-                StoreManagerInterface::class,
-                $this->createMock(StoreManagerInterface::class)
-            ],
-            [
-                Config::class,
-                $this->createMock(Config::class)
-            ]
-        ];
-        $this->objectManager->prepareObjectManager($objects);
 
         $this->categoryMock = $this->createPartialMock(
             Category::class,
