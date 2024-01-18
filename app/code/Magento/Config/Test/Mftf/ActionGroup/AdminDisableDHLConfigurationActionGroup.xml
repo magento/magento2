@@ -9,28 +9,16 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminDisableDHLConfigurationActionGroup">
-        <arguments>
-            <argument name="enabled" type="string" defaultValue="No"/>
-            <argument name="config" defaultValue="dhlConfigData"/>
-            <argument name="allowSpecificCountry" type="string" defaultValue="Specific Countries"/>
-            <argument name="showMethod" type="string" defaultValue="No"/>
-            <argument name="debug" type="string" defaultValue="No"/>
-            <argument name="sandbox" type="string" defaultValue="No"/>
-        </arguments>
         <conditionalClick selector="{{AdminShippingMethodDHLSection.carriersDHLTab}}" dependentSelector="{{AdminShippingMethodDHLSection.carriersDHLTabOpen}}" visible="false" stepKey="toggleClick"/>
         <waitForElementVisible selector="{{AdminShippingMethodDHLSection.carriersDHLSelectBox}}" stepKey="waitForCarriersDHLActiveCheckbox"/>
-        <selectOption selector="{{AdminShippingMethodDHLSection.carriersDHLSelectBox}}" userInput="{{enabled}}" stepKey="selectOptionForDHLEnabled"/>
+        <selectOption selector="{{AdminShippingMethodDHLSection.carriersDHLSelectBox}}" userInput="No" stepKey="selectOptionForDHLEnabled"/>
         <checkOption selector="{{AdminShippingMethodDHLSection.carriersDHLActive}}" stepKey="clickOnFreeShippingCheckbox"/>
-        <waitForElementVisible selector="{{AdminShippingMethodDHLSection.carriersDHLAccessId}}" stepKey="waitForDHLAccessID"/>
-        <fillField selector="{{AdminShippingMethodDHLSection.carriersDHLAccessId}}" userInput="{{config.access_id}}" stepKey="fillDHLAccessID"/>
-        <fillField selector="{{AdminShippingMethodDHLSection.carriersDHLPassword}}" userInput="{{config.password}}" stepKey="fillDHLPassword"/>
-        <fillField selector="{{AdminShippingMethodDHLSection.carriersDHLAccountField}}" userInput="{{config.account_number}}" stepKey="fillDHLAccountNumber"/>
         <checkOption selector="{{AdminShippingMethodDHLSection.carriersDHLAccount}}" stepKey="clickOnDHLAccount"/>
         <waitForElementVisible selector="{{AdminShippingMethodDHLSection.carriersDHLSelectAllowSpecific}}" stepKey="waitForDHLAllowSpecific"/>
-        <selectOption selector="{{AdminShippingMethodDHLSection.carriersDHLSelectAllowSpecific}}" userInput="{{allowSpecificCountry}}" stepKey="selectOptionForAllowSpecificCountry"/>
-        <uncheckOption selector="{{AdminShippingMethodDHLSection.carriersDHLAllowSpecific}}" stepKey="clickOnDHLAllowSpecific"/>
-        <selectOption selector="{{AdminShippingMethodDHLSection.carriersDHLShowMethod}}" userInput="{{showMethod}}" stepKey="selectOptionForShowMethod"/>
-        <selectOption selector="{{AdminShippingMethodDHLSection.carriersDHLDebug}}" userInput="{{debug}}" stepKey="selectOptionForDebug"/>
-        <selectOption selector="{{AdminShippingMethodDHLSection.carriersDHLSandbox}}" userInput="{{sandbox}}" stepKey="selectOptionForSandbox"/>
+        <selectOption selector="{{AdminShippingMethodDHLSection.carriersDHLSelectAllowSpecific}}" userInput="All Allowed Countries" stepKey="selectOptionForAllowSpecificCountry"/>
+        <checkOption selector="{{AdminShippingMethodDHLSection.carriersDHLAllowSpecific}}" stepKey="clickOnDHLAllowSpecific"/>
+        <selectOption selector="{{AdminShippingMethodDHLSection.carriersDHLShowMethod}}" userInput="No" stepKey="selectOptionForShowMethod"/>
+        <selectOption selector="{{AdminShippingMethodDHLSection.carriersDHLDebug}}" userInput="No" stepKey="selectOptionForDebug"/>
+        <selectOption selector="{{AdminShippingMethodDHLSection.carriersDHLSandbox}}" userInput="No" stepKey="selectOptionForSandbox"/>
     </actionGroup>
 </actionGroups>

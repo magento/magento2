@@ -8,16 +8,15 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminFreeShippingActionGroup">
+    <actionGroup name="AdminEnableFreeShippingActionGroup">
         <arguments>
-            <argument name="enabled" type="string" defaultValue="No"/>
             <argument name="allowSpecificCountry" type="string" defaultValue="All Allowed Countries"/>
             <argument name="specificCountry" type="string" defaultValue="Afghanistan"/>
         </arguments>
-        <conditionalClick selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingSectionHead}}" dependentSelector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingSectionHeadOpen}}" visible="false" stepKey="click1"/>
+        <conditionalClick selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingSectionHead}}" dependentSelector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingSectionHeadOpen}}" visible="false" stepKey="openFreeShippingSection"/>
         <waitForElementVisible selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingActive}}" stepKey="waitForFreeShippingDefaultCheckbox"/>
         <uncheckOption selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingActive}}" stepKey="clickOnFreeShippingCheckbox"/>
-        <selectOption selector="{{AdminShippingMethodFreeShippingSection.carriersSelectFreeShippingActive}}" userInput="{{enabled}}" stepKey="selectOptionForFreeShipping"/>
+        <selectOption selector="{{AdminShippingMethodFreeShippingSection.carriersSelectFreeShippingActive}}" userInput="Yes" stepKey="selectOptionForFreeShipping"/>
         <waitForElementVisible selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingAllowSpecific}}" stepKey="waitForShipApplicableDefaultCheckbox"/>
         <uncheckOption selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingAllowSpecific}}" stepKey="clickOnShipApplicaleCountries"/>
         <selectOption selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingSelectAllowSpecific}}" userInput="{{allowSpecificCountry}}" stepKey="selectOptionForAllowSpecificCountries"/>

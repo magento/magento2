@@ -8,9 +8,8 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminDHLConfigurationActionGroup">
+    <actionGroup name="AdminEnableDHLConfigurationActionGroup">
         <arguments>
-            <argument name="enabled" type="string" defaultValue="No"/>
             <argument name="config" defaultValue="dhlConfigData"/>
             <argument name="allowSpecificCountry" type="string" defaultValue="Specific Countries"/>
             <argument name="specificCountry" type="string" defaultValue="United Kingdom"/>
@@ -18,10 +17,10 @@
             <argument name="debug" type="string" defaultValue="No"/>
             <argument name="sandbox" type="string" defaultValue="No"/>
         </arguments>
-        <conditionalClick selector="{{AdminShippingMethodDHLSection.carriersDHLTab}}" dependentSelector="{{AdminShippingMethodDHLSection.carriersDHLTabOpen}}" visible="false" stepKey="toggleClick"/>
+        <conditionalClick selector="{{AdminShippingMethodDHLSection.carriersDHLTab}}" dependentSelector="{{AdminShippingMethodDHLSection.carriersDHLTabOpen}}" visible="false" stepKey="openDHLSection"/>
         <waitForElementVisible selector="{{AdminShippingMethodDHLSection.carriersDHLActive}}" stepKey="waitForCarriersDHLActiveCheckbox"/>
         <uncheckOption selector="{{AdminShippingMethodDHLSection.carriersDHLActive}}" stepKey="clickOnFreeShippingCheckbox"/>
-        <selectOption selector="{{AdminShippingMethodDHLSection.carriersDHLSelectBox}}" userInput="{{enabled}}" stepKey="selectOptionForDHLEnabled"/>
+        <selectOption selector="{{AdminShippingMethodDHLSection.carriersDHLSelectBox}}" userInput="Yes" stepKey="selectOptionForDHLEnabled"/>
         <waitForElementVisible selector="{{AdminShippingMethodDHLSection.carriersDHLAccessId}}" stepKey="waitForDHLAccessID"/>
         <fillField selector="{{AdminShippingMethodDHLSection.carriersDHLAccessId}}" userInput="{{config.access_id}}" stepKey="fillDHLAccessID"/>
         <fillField selector="{{AdminShippingMethodDHLSection.carriersDHLPassword}}" userInput="{{config.password}}" stepKey="fillDHLPassword"/>

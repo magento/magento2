@@ -29,15 +29,13 @@
             <!-- Go to Store > Configuration > Sales > Shipping Methods -->
             <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
             <!-- Free Shipping Configuration -->
-            <actionGroup ref="AdminFreeShippingActionGroup" stepKey="freeShippingConfig">
-                <argument name="enabled" value="Yes"/>
+            <actionGroup ref="AdminEnableFreeShippingActionGroup" stepKey="freeShippingConfig">
                 <argument name="allowSpecificCountry" value="Specific Countries"/>
                 <argument name="specificCountry" value="Afghanistan"/>
             </actionGroup>
             <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
             <!-- DHL Shipping Configuration -->
-            <actionGroup ref="AdminDHLConfigurationActionGroup" stepKey="dhlConfig">
-                <argument name="enabled" value="Yes"/>
+            <actionGroup ref="AdminEnableDHLConfigurationActionGroup" stepKey="dhlConfig">
                 <argument name="config" value="dhlConfigData"/>
                 <argument name="allowSpecificCountry" value="Specific Countries"/>
                 <argument name="specificCountry" value="United Kingdom"/>
@@ -66,7 +64,7 @@
             <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
                 <argument name="product" value="$createSimpleProduct$"/>
             </actionGroup>
-            <actionGroup ref="StorefrontShippingPageRedirectActionGroup" stepKey="goToShippingPage"/>
+            <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="goToShippingPage"/>
             <!-- Guest checkout -->
             <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="goToShippingAndFillDetails">
                 <argument name="customerAddress" value="US_CA_Address"/>
