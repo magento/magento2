@@ -45,9 +45,10 @@ class CouponUsagesIncrementMultishipping
      * @param UpdateCouponUsages $updateCouponUsages
      * @param CartRepositoryInterface $cartRepositoryInterface
      */
-    public function __construct(UpdateCouponUsages $updateCouponUsages, 
-                                CartRepositoryInterface $cartRepositoryInterface)
-    {
+    public function __construct(
+        UpdateCouponUsages $updateCouponUsages,
+        CartRepositoryInterface $cartRepositoryInterface
+    ) {
         $this->updateCouponUsages = $updateCouponUsages;
         $this->cartRepositoryInterface = $cartRepositoryInterface;
     }
