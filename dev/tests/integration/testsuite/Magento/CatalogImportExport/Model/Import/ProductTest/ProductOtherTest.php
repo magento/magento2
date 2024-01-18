@@ -794,31 +794,7 @@ class ProductOtherTest extends ProductTestBase
         $fixtures = DataFixtureStorageManager::getStorage();
         $p1 = $fixtures->get('p1');
         $pathToFile = $fixtures->get('file')->getAbsolutePath();
-        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
-        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
-            [
-                'file' => $pathToFile,
-                'directory' => $directory
-            ]
-        );
-
-        $importModel = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import::class
-        );
-        $importModel->setData(
-            [
-                'entity' => 'catalog_product',
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
-                Import::FIELD_NAME_VALIDATION_STRATEGY =>
-                    ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR,
-                Import::FIELD_NAME_ALLOWED_ERROR_COUNT => 0,
-                Import::FIELD_FIELD_SEPARATOR => ',',
-                'locale' => 'de_DE'
-            ]
-        );
-        $importModel->validateSource($source);
+        $importModel = $this->createImport($pathToFile, ['locale' => 'de_DE']);
         $this->assertErrorsCount(0, $importModel->getErrorAggregator());
         $importModel->importSource();
         $simpleProduct = $this->getProductBySku($p1->getSku());
@@ -847,7 +823,7 @@ class ProductOtherTest extends ProductTestBase
             [
                 'rows' => [
                     ['sku', 'store_view_code', 'product_type', 'additional_attributes'],
-                    ['$product.sku$', 'default', 'simple', 'datetime_attr=10/9/23, 1:15 PM,date_attr=12/11/23'],
+                    ['$product.sku$', 'default', 'simple', 'datetime_attr=10/27/23, 1:15 PM,date_attr=12/16/23'],
                 ]
             ],
             'file'
@@ -861,11 +837,133 @@ class ProductOtherTest extends ProductTestBase
         $product = $this->productRepository->get($sku, storeId: Store::DEFAULT_STORE_ID, forceReload: true);
         $this->assertEquals('2015-07-19 08:30:00', $product->getDatetimeAttr());
         $this->assertEquals('2017-02-07 00:00:00', $product->getDateAttr());
-        $importModel = $this->createImportModel($pathToFile);
-        $this->assertErrorsCount(0, $importModel->validateData());
-        $importModel->importData();
+        $importModel = $this->createImport($pathToFile, ['locale' => 'en_US']);
+        $this->assertErrorsCount(0, $importModel->getErrorAggregator());
+        $importModel->importSource();
         $product = $this->productRepository->get($sku, storeId: Store::DEFAULT_STORE_ID, forceReload: true);
-        $this->assertEquals('2023-10-09 18:15:00', $product->getDatetimeAttr());
-        $this->assertEquals('2023-12-11 00:00:00', $product->getDateAttr());
+        $this->assertEquals('2023-10-27 18:15:00', $product->getDatetimeAttr());
+        $this->assertEquals('2023-12-16 00:00:00', $product->getDateAttr());
+    }
+
+    #[
+        Config(DirectoryData::XML_PATH_DEFAULT_TIMEZONE, 'America/Chicago', ScopeConfigInterface::SCOPE_TYPE_DEFAULT),
+        DataFixture(
+            AttributeFixture::class,
+            ['frontend_input' => 'date', 'backend_type' => 'datetime', 'attribute_code' => 'date_attr'],
+            'date_attr'
+        ),
+        DataFixture(
+            AttributeFixture::class,
+            ['frontend_input' => 'datetime', 'backend_type' => 'datetime', 'attribute_code' => 'datetime_attr'],
+            'datetime_attr'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            ['datetime_attr' => '2015-07-19 08:30:00', 'date_attr' => '2017-02-07'],
+            'product'
+        ),
+        DataFixture(
+            CsvFileFixture::class,
+            [
+                'rows' => [
+                    ['sku', 'store_view_code', 'product_type', 'additional_attributes'],
+                    ['$product.sku$', 'default', 'simple', 'datetime_attr=27.10.23, 13:15,date_attr=16.12.23'],
+                ]
+            ],
+            'file'
+        ),
+    ]
+    public function testImportProductWithDateAndDatetimeAttributesInLocaleFormat(): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $sku = $fixtures->get('product')->getSku();
+        $pathToFile = $fixtures->get('file')->getAbsolutePath();
+        $product = $this->productRepository->get($sku, storeId: Store::DEFAULT_STORE_ID, forceReload: true);
+        $this->assertEquals('2015-07-19 08:30:00', $product->getDatetimeAttr());
+        $this->assertEquals('2017-02-07 00:00:00', $product->getDateAttr());
+        $importModel = $this->createImport($pathToFile, ['locale' => 'de_DE']);
+        $this->assertErrorsCount(0, $importModel->getErrorAggregator());
+        $importModel->importSource();
+        $product = $this->productRepository->get($sku, storeId: Store::DEFAULT_STORE_ID, forceReload: true);
+        $this->assertEquals('2023-10-27 18:15:00', $product->getDatetimeAttr());
+        $this->assertEquals('2023-12-16 00:00:00', $product->getDateAttr());
+    }
+
+    #[
+        Config(DirectoryData::XML_PATH_DEFAULT_TIMEZONE, 'America/Chicago', ScopeConfigInterface::SCOPE_TYPE_DEFAULT),
+        DataFixture(
+            AttributeFixture::class,
+            ['frontend_input' => 'date', 'backend_type' => 'datetime', 'attribute_code' => 'date_attr'],
+            'date_attr'
+        ),
+        DataFixture(
+            AttributeFixture::class,
+            ['frontend_input' => 'datetime', 'backend_type' => 'datetime', 'attribute_code' => 'datetime_attr'],
+            'datetime_attr'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            ['datetime_attr' => '2015-07-19 08:30:00', 'date_attr' => '2017-02-07'],
+            'product'
+        ),
+        DataFixture(
+            CsvFileFixture::class,
+            [
+                'rows' => [
+                    ['sku', 'store_view_code', 'product_type', 'additional_attributes'],
+                    ['$product.sku$', 'default', 'simple', 'datetime_attr=2023-10-27 13:15:00,date_attr=2023-12-16'],
+                ]
+            ],
+            'file'
+        ),
+    ]
+    public function testImportProductWithDateAndDatetimeAttributesInInternalFormat(): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $sku = $fixtures->get('product')->getSku();
+        $pathToFile = $fixtures->get('file')->getAbsolutePath();
+        $product = $this->productRepository->get($sku, storeId: Store::DEFAULT_STORE_ID, forceReload: true);
+        $this->assertEquals('2015-07-19 08:30:00', $product->getDatetimeAttr());
+        $this->assertEquals('2017-02-07 00:00:00', $product->getDateAttr());
+        $importModel = $this->createImport($pathToFile, ['locale' => 'de_DE']);
+        $this->assertErrorsCount(0, $importModel->getErrorAggregator());
+        $importModel->importSource();
+        $product = $this->productRepository->get($sku, storeId: Store::DEFAULT_STORE_ID, forceReload: true);
+        $this->assertEquals('2023-10-27 18:15:00', $product->getDatetimeAttr());
+        $this->assertEquals('2023-12-16 00:00:00', $product->getDateAttr());
+    }
+
+    /**
+     * @param string $pathToFile
+     * @param array $parameters
+     * @return Import
+     */
+    private function createImport(string $pathToFile, array $parameters = []): Import
+    {
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => $pathToFile,
+                'directory' => $directory
+            ]
+        );
+
+        $importModel = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import::class
+        );
+        $importModel->setData(
+            $parameters + [
+                'entity' => 'catalog_product',
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                Import::FIELD_NAME_VALIDATION_STRATEGY =>
+                    ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR,
+                Import::FIELD_NAME_ALLOWED_ERROR_COUNT => 0,
+                Import::FIELD_FIELD_SEPARATOR => ',',
+            ]
+        );
+        $importModel->validateSource($source);
+        return $importModel;
     }
 }
