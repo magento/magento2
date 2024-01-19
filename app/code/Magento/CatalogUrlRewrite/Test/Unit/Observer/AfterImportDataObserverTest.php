@@ -177,6 +177,11 @@ class AfterImportDataObserverTest extends TestCase
     protected $objectManager;
 
     /**
+     * @var ImportProduct\SkuStorage|MockObject
+     */
+    private ImportProduct\SkuStorage|MockObject $skuStorageMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.TooManyFields)
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -184,6 +189,7 @@ class AfterImportDataObserverTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->skuStorageMock = $this->createMock(ImportProduct\SkuStorage::class);
         $this->importProduct = $this->createPartialMock(
             \Magento\CatalogImportExport\Model\Import\Product::class,
             [
@@ -294,7 +300,8 @@ class AfterImportDataObserverTest extends TestCase
             $this->categoryCollectionFactory,
             $this->scopeConfig,
             $this->collectionFactory,
-            $this->attributeValue
+            $this->attributeValue,
+            $this->skuStorageMock
         );
     }
 
@@ -335,6 +342,7 @@ class AfterImportDataObserverTest extends TestCase
                 [$this->products[1][ImportProduct::COL_SKU]]
             )
             ->will($this->onConsecutiveCalls($newSku[0], $newSku[1]));
+
         $this->importProduct
             ->expects($this->exactly($productsCount))
             ->method('getProductCategories')

@@ -16,6 +16,7 @@ use Magento\CatalogImportExport\Model\Import\Product\LinkProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\MediaGalleryProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\Product\Skip;
+use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
 use Magento\CatalogImportExport\Model\Import\Product\StatusProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\StockProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType;
@@ -52,7 +53,6 @@ use Magento\Store\Model\Store;
 class Product extends AbstractEntity
 {
     private const COL_NAME_FORMAT = '/[\x00-\x1F\x7F]/';
-    private const DEFAULT_GLOBAL_MULTIPLE_VALUE_SEPARATOR = ',';
     public const CONFIG_KEY_PRODUCT_TYPES = 'global/importexport/import_product_types';
 
     /**
@@ -770,6 +770,11 @@ class Product extends AbstractEntity
     private $stockItemProcessor;
 
     /**
+     * @var SkuStorage|null
+     */
+    private ?SkuStorage $skuStorage;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -819,6 +824,7 @@ class Product extends AbstractEntity
      * @param LinkProcessor|null $linkProcessor
      * @param File|null $fileDriver
      * @param StockItemProcessorInterface|null $stockItemProcessor
+     * @param SkuStorage|null $skuStorage
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -874,7 +880,8 @@ class Product extends AbstractEntity
         StockProcessor $stockProcessor = null,
         LinkProcessor $linkProcessor = null,
         ?File $fileDriver = null,
-        ?StockItemProcessorInterface $stockItemProcessor = null
+        ?StockItemProcessorInterface $stockItemProcessor = null,
+        ?SkuStorage $skuStorage = null
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -930,6 +937,8 @@ class Product extends AbstractEntity
         );
         $this->_optionEntity = $data['option_entity'] ??
             $optionFactory->create(['data' => ['product_entity' => $this]]);
+        $this->skuStorage = $skuStorage ?? ObjectManager::getInstance()
+                ->get(SkuStorage::class);
         $this->_initAttributeSets()
             ->_initTypeModels()
             ->_initSkus()
@@ -939,7 +948,7 @@ class Product extends AbstractEntity
         $this->productRepository = $productRepository ?? ObjectManager::getInstance()
                 ->get(ProductRepositoryInterface::class);
         $this->stockItemProcessor = $stockItemProcessor ?? ObjectManager::getInstance()
-            ->get(StockItemProcessorInterface::class);
+                ->get(StockItemProcessorInterface::class);
     }
 
     /**
@@ -1104,7 +1113,11 @@ class Product extends AbstractEntity
                 }
                 $this->_eventManager->dispatch(
                     'catalog_product_import_bunch_delete_after',
-                    ['adapter' => $this, 'bunch' => $bunch]
+                    [
+                        'adapter' => $this,
+                        'bunch' => $bunch,
+                        'ids_to_delete' => $idsToDelete,
+                    ]
                 );
                 $this->reindexProducts($idsToDelete);
             }
@@ -1142,7 +1155,7 @@ class Product extends AbstractEntity
     protected function _replaceProducts()
     {
         $this->deleteProductsForReplacement();
-        $this->_oldSku = $this->skuProcessor->reloadOldSkus()->getOldSkus();
+        $this->skuStorage->reset();
         $this->_validatedRows = null;
         $this->setParameters(
             array_merge(
@@ -1204,7 +1217,7 @@ class Product extends AbstractEntity
     protected function _initSkus()
     {
         $this->skuProcessor->setTypeModels($this->_productTypeModels);
-        $this->_oldSku = $this->skuProcessor->reloadOldSkus()->getOldSkus();
+        $this->skuStorage->reset();
         return $this;
     }
 
@@ -1337,7 +1350,7 @@ class Product extends AbstractEntity
             $linkIdBySkuForStatusChanged = [];
             $tableData = [];
             foreach ($skuData as $sku => $attributes) {
-                $linkId = $this->_oldSku[strtolower($sku)][$linkField];
+                $linkId = $this->skuStorage->get((string)$sku)[$linkField];
                 foreach ($attributes as $attributeId => $storeValues) {
                     foreach ($storeValues as $storeId => $storeValue) {
                         if ($attributeId === $statusAttributeId) {
@@ -1460,7 +1473,7 @@ class Product extends AbstractEntity
                     $this->skuProcessor->setNewSkuData($sku, $key, $value);
                 }
             }
-            $this->updateOldSku($newProducts);
+            $this->updateSkuStorage($newProducts);
         }
         return $this;
     }
@@ -1481,22 +1494,11 @@ class Product extends AbstractEntity
      * @param array $newProducts
      * @return void
      */
-    private function updateOldSku(array $newProducts)
+    private function updateSkuStorage(array $newProducts): void
     {
-        $oldSkus = [];
         foreach ($newProducts as $info) {
-            $typeId = $info['type_id'];
-            $sku = strtolower($info['sku']);
-            $oldSkus[$sku] = [
-                'type_id' => $typeId,
-                'attr_set_id' => $info['attribute_set_id'],
-                $this->getProductIdentifierField() => $info[$this->getProductIdentifierField()],
-                'supported_type' => isset($this->_productTypeModels[$typeId]),
-                $this->getProductEntityLinkField() => $info[$this->getProductEntityLinkField()],
-            ];
+            $this->skuStorage->set($info);
         }
-
-        $this->_oldSku = array_replace($this->_oldSku, $oldSkus);
     }
 
     /**
@@ -1702,7 +1704,12 @@ class Product extends AbstractEntity
             $this->_saveProductAttributes($attributes);
             $this->_eventManager->dispatch(
                 'catalog_product_import_bunch_save_after',
-                ['adapter' => $this, 'bunch' => $bunch]
+                [
+                    'adapter' => $this,
+                    'bunch' => $bunch,
+                    'media_gallery' => $mediaGallery,
+                    'media_gallery_labels' => $labelsForUpdate,
+                ]
             );
         }
         return $this;
@@ -2587,10 +2594,19 @@ class Product extends AbstractEntity
      * new products with the same SKU in different letter cases.
      *
      * @return array
+     * @deprecated This method is deprecated due to high memory consumption.
+     * @see SkuStorage
      */
     public function getOldSku()
     {
-        return $this->_oldSku;
+        // For backward compatibility get all data from storage
+        $oldSkus = [];
+        foreach ($this->skuStorage->iterate() as $sku => $value) {
+            $oldSkus[$sku] = $value;
+            $oldSkus[$sku]['supported_type'] = isset($this->_productTypeModels[$value['type_id']]);
+        }
+
+        return $oldSkus;
     }
 
     /**
@@ -2820,7 +2836,7 @@ class Product extends AbstractEntity
      *
      * @return array
      */
-    private function _parseAdditionalAttributes($rowData)
+    private function _parseAdditionalAttributes(array $rowData): array
     {
         if (empty($rowData['additional_attributes'])) {
             return $rowData;
@@ -2830,7 +2846,7 @@ class Product extends AbstractEntity
                 $rowData[mb_strtolower($key)] = $value;
             }
         } else {
-            $rowData = array_merge($rowData, $this->getAdditionalAttributes($rowData['additional_attributes']));
+            $rowData = array_merge($rowData, $this->getAdditionalAttributes($rowData));
         }
         return $rowData;
     }
@@ -2844,14 +2860,14 @@ class Product extends AbstractEntity
      *      codeN => valueN
      * ]
      *
-     * @param string $additionalAttributes Attributes data that will be parsed
+     * @param array $rowData
      * @return array
      */
-    private function getAdditionalAttributes($additionalAttributes)
+    private function getAdditionalAttributes(array $rowData): array
     {
         return empty($this->_parameters[Import::FIELDS_ENCLOSURE])
-            ? $this->parseAttributesWithoutWrappedValues($additionalAttributes)
-            : $this->parseAttributesWithWrappedValues($additionalAttributes);
+            ? $this->parseAttributesWithoutWrappedValues($rowData['additional_attributes'], $rowData['product_type'])
+            : $this->parseAttributesWithWrappedValues($rowData['additional_attributes']);
     }
 
     /**
@@ -2865,9 +2881,10 @@ class Product extends AbstractEntity
      *
      * @param string $attributesData Attributes data that will be parsed. It keeps data in format:
      *      code=value,code2=value2...,codeN=valueN
+     * @param string $productType
      * @return array
      */
-    private function parseAttributesWithoutWrappedValues($attributesData)
+    private function parseAttributesWithoutWrappedValues(string $attributesData, string $productType): array
     {
         $attributeNameValuePairs = explode($this->getMultipleValueSeparator(), $attributesData);
         $preparedAttributes = [];
@@ -2883,6 +2900,17 @@ class Product extends AbstractEntity
             }
             list($code, $value) = explode(self::PAIR_NAME_VALUE_SEPARATOR, $attributeData, 2);
             $code = mb_strtolower($code);
+
+            $entityTypeModel = $this->retrieveProductTypeByName($productType);
+            if ($entityTypeModel) {
+                $attrParams = $entityTypeModel->retrieveAttributeFromCache($code);
+                if (!empty($attrParams) && $attrParams['type'] ==  'multiselect') {
+                    $parsedValue = $this->parseMultiselectValues($value, self::PSEUDO_MULTI_LINE_SEPARATOR);
+                    if (count($parsedValue) > 1) {
+                        $value = $parsedValue;
+                    }
+                }
+            }
             $preparedAttributes[$code] = $value;
         }
         return $preparedAttributes;
@@ -2932,10 +2960,13 @@ class Product extends AbstractEntity
      * @return array
      * @since 100.1.2
      */
-    public function parseMultiselectValues($values, $delimiter = self::PSEUDO_MULTI_LINE_SEPARATOR)
+    public function parseMultiselectValues($values, $delimiter = '')
     {
         if (empty($this->_parameters[Import::FIELDS_ENCLOSURE])) {
-            if ($this->getMultipleValueSeparator() !== self::DEFAULT_GLOBAL_MULTIPLE_VALUE_SEPARATOR) {
+            if (is_array($values)) {
+                return $values;
+            }
+            if (!$delimiter) {
                 $delimiter = $this->getMultipleValueSeparator();
             }
 
@@ -3244,8 +3275,7 @@ class Product extends AbstractEntity
     private function isSkuExist($sku)
     {
         if ($sku !== null) {
-            $sku = strtolower($sku);
-            return isset($this->_oldSku[$sku]);
+            return $this->skuStorage->has($sku);
         }
         return false;
     }
@@ -3258,7 +3288,7 @@ class Product extends AbstractEntity
      */
     private function getExistingSku($sku)
     {
-        return $this->_oldSku[strtolower($sku)];
+        return $this->skuStorage->get((string)$sku);
     }
 
     /**

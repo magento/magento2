@@ -7,9 +7,11 @@
 namespace Magento\ConfigurableProduct\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Model\ConfigurableMaxPriceCalculator;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\Price\AbstractPrice;
+use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * Class RegularPrice
@@ -54,11 +56,17 @@ class ConfigurableRegularPrice extends AbstractPrice implements
     private $lowestPriceOptionsProvider;
 
     /**
+     * @var ConfigurableMaxPriceCalculator
+     */
+    private $configurableMaxPriceCalculator;
+
+    /**
      * @param \Magento\Framework\Pricing\SaleableInterface $saleableItem
      * @param float $quantity
      * @param \Magento\Framework\Pricing\Adjustment\CalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param PriceResolverInterface $priceResolver
+     * @param ConfigurableMaxPriceCalculator $configurableMaxPriceCalculator
      * @param LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider
      */
     public function __construct(
@@ -67,12 +75,14 @@ class ConfigurableRegularPrice extends AbstractPrice implements
         \Magento\Framework\Pricing\Adjustment\CalculatorInterface $calculator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         PriceResolverInterface $priceResolver,
+        ConfigurableMaxPriceCalculator $configurableMaxPriceCalculator,
         LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider = null
     ) {
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->priceResolver = $priceResolver;
         $this->lowestPriceOptionsProvider = $lowestPriceOptionsProvider ?:
             ObjectManager::getInstance()->get(LowestPriceOptionsProviderInterface::class);
+        $this->configurableMaxPriceCalculator = $configurableMaxPriceCalculator;
     }
 
     /**
@@ -183,5 +193,29 @@ class ConfigurableRegularPrice extends AbstractPrice implements
     public function _resetState(): void
     {
         $this->values = [];
+    }
+
+    /**
+     * Check whether Configurable Product have more than one children products
+     *
+     * @param SaleableInterface $product
+     * @return bool
+     */
+    public function isChildProductsOfEqualPrices(SaleableInterface $product): bool
+    {
+        $minPrice = $this->getMinRegularAmount()->getValue();
+        $final_price = $product->getFinalPrice();
+        $productId = $product->getId();
+        if ($final_price < $minPrice) {
+            return false;
+        }
+        $attributes = $product->getTypeInstance()->getConfigurableAttributes($product);
+        $items = $attributes->getItems();
+        $options = reset($items);
+        $maxPrice = $this->configurableMaxPriceCalculator->getMaxPriceForConfigurableProduct($productId);
+        if ($maxPrice == 0) {
+            $maxPrice = $this->getMaxRegularAmount()->getValue();
+        }
+        return (count($options->getOptions()) > 1) && $minPrice == $maxPrice;
     }
 }
