@@ -9,6 +9,9 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\TierPriceInterface;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Customer\Model\Group;
 
 /**
  * Test all API calls for tier price storage.
@@ -302,9 +305,23 @@ class TierPriceStorageTest extends WebapiAbstract
 
     /**
      * Test to validate the incorrect website id.
-     *
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
+    #[
+        DataFixture(
+            ProductFixture::class,
+            [
+                'sku' => 'simple',
+                'website_id' => 0,
+                'tier_prices' => [
+                    [
+                        'customer_group_id' => Group::NOT_LOGGED_IN_ID,
+                        'qty' => 3.2,
+                        'value' => 6
+                    ]
+                ]
+            ]
+        )
+    ]
     public function testCheckWebsiteId()
     {
         $serviceInfo = [
