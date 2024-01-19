@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="AC-6150"/>
             <group value="3rd_party_integration"/>
+            <group value="paypalExpress"/>
         </annotations>
         <before>
             <!-- Simple product is created and assigned to category -->
@@ -27,10 +28,10 @@
             <!-- US Customer is created -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <!-- Configure Paypal Express Checkout -->
-            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
-                <argument name="credentials" value="SamplePaypalExpressConfig2"/>
-            </actionGroup>
+<!--            &lt;!&ndash; Configure Paypal Express Checkout &ndash;&gt;-->
+<!--            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">-->
+<!--                <argument name="credentials" value="SamplePaypalExpressConfig2"/>-->
+<!--            </actionGroup>-->
             <!--Add new tax rates. Go to tax rule page -->
             <actionGroup ref="AddNewTaxRuleActionGroup" stepKey="addFirstTaxRuleActionGroup"/>
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="{{TaxRule.name}}"/>
@@ -51,7 +52,7 @@
             <!-- Roll back configuration -->
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
-            <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
+<!--            <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
