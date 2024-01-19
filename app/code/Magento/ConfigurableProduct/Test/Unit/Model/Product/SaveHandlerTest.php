@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ProductRepository;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\ConfigurableProduct\Model\OptionRepository;
 use Magento\ConfigurableProduct\Model\Product\SaveHandler;
@@ -15,6 +16,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableM
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -39,6 +41,11 @@ class SaveHandlerTest extends TestCase
     private $configurable;
 
     /**
+     * @var ProductRepositoryInterface|MockObject
+     */
+    protected $productRepository;
+
+    /**
      * @var SaveHandler
      */
     private $saveHandler;
@@ -55,9 +62,15 @@ class SaveHandlerTest extends TestCase
 
         $this->initConfigurableFactoryMock();
 
+        $this->productRepository = $this->getMockBuilder(ProductRepository::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['get'])
+            ->getMock();
+
         $this->saveHandler = new SaveHandler(
             $this->configurable,
-            $this->optionRepository
+            $this->optionRepository,
+            $this->productRepository
         );
     }
 
@@ -97,7 +110,7 @@ class SaveHandlerTest extends TestCase
         $product->expects(static::once())
             ->method('getTypeId')
             ->willReturn(ConfigurableModel::TYPE_CODE);
-        $product->expects(static::exactly(1))
+        $product->expects(static::exactly(2))
             ->method('getSku')
             ->willReturn($sku);
 
@@ -147,7 +160,7 @@ class SaveHandlerTest extends TestCase
         $product->expects(static::once())
             ->method('getTypeId')
             ->willReturn(ConfigurableModel::TYPE_CODE);
-        $product->expects(static::exactly(4))
+        $product->expects(static::exactly(5))
             ->method('getSku')
             ->willReturn($sku);
 
@@ -159,6 +172,9 @@ class SaveHandlerTest extends TestCase
         $product->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
+
+        $this->productRepository->expects($this->once())
+            ->method('get')->with($sku, false, null, true);
 
         $attributeNew = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()

@@ -167,6 +167,10 @@ class Currency
         }
         $options = array_merge($this->options, $this->checkOptions($options));
         $numberFormatter = new NumberFormatter($options['locale'], NumberFormatter::CURRENCY);
+        if (isset($options['precision'])) {
+            $numberFormatter->setAttribute(NumberFormatter::FRACTION_DIGITS, $options['precision']);
+        }
+
         $value = $numberFormatter->format((float) $value);
 
         if (is_numeric($options['display']) === false) {

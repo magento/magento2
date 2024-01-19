@@ -23,9 +23,9 @@ class CurrencyTest extends TestCase
      * @return void
      * @throws \Magento\Framework\Currency\Exception\CurrencyException
      *
-     * @dataProvider toCurrencyPositionsDataProvider
+     * @dataProvider optionsDataProvider
      */
-    public function testToCurrencyPositions(float|int|null $value, array $options, string $expectedResult): void
+    public function testToCurrencyWithOptions(float|int|null $value, array $options, string $expectedResult): void
     {
         $currency = new Currency();
         $result = $currency->toCurrency($value, $options);
@@ -36,7 +36,7 @@ class CurrencyTest extends TestCase
     /**
      * @return array[]
      */
-    public function toCurrencyPositionsDataProvider(): array
+    public function optionsDataProvider(): array
     {
         return [
             'rightPosition_en_AU' => [
@@ -101,6 +101,24 @@ class CurrencyTest extends TestCase
                     'symbol' => 'CUST',
                 ],
                 'expectedResult' => 'CUST 12.00',
+            ],
+            'precisionIsGreaterThanZero' => [
+                'value' => 12.16,
+                'options' => [
+                    'locale' => 'en_US',
+                    'currency' => 'USD',
+                    'precision'=> 1,
+                ],
+                'expectedResult' => '$12.2',
+            ],
+            'precisionIsZero' => [
+                'value' => 12.16,
+                'options' => [
+                    'locale' => 'en_US',
+                    'currency' => 'USD',
+                    'precision'=> 0,
+                ],
+                'expectedResult' => '$12',
             ],
         ];
     }

@@ -90,11 +90,6 @@ class Config extends \Magento\Eav\Model\Config
     protected $_eavConfig;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory
      */
     protected $_setCollectionFactory;
@@ -166,7 +161,8 @@ class Config extends \Magento\Eav\Model\Config
             $universalFactory,
             $serializer,
             $scopeConfig,
-            $attributesForPreload
+            $attributesForPreload,
+            $storeManager,
         );
     }
 
