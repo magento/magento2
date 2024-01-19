@@ -7,12 +7,12 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontNoStoreCodeYesCategoryPathCustomSuffixNavigationTest">
+    <test name="StorefrontNoStoreCodeYesCategoryPathHtmlSuffixNavigationTest">
         <annotations>
             <features value="Catalog"/>
-            <stories value="Navigation Menu Highlighting with Custom Suffix, No Store Code, Yes Category Path"/>
-            <title value="Validation of Navigation Menu Highlighting with custom Suffix, No Store Code and Yes Category Path in URLs"/>
-            <description value="This test verifies that the correct category is highlighted in the navigation menu when navigating through categories and products on the storefront, specifically with custom URL suffixes and the settings 'Add Store Code to Urls: No' and 'Use Categories Path for Product URLs: Yes'. The test focuses on the impact of these configurations on category highlighting."/>
+            <stories value="Navigation Menu Highlighting with .html Suffix, No Store Code, Yes Category Path"/>
+            <title value="Validation of Navigation Menu Highlighting with .html Suffix, No Store Code and Yes Category Path in URLs"/>
+            <description value="This test verifies that the correct category is highlighted in the navigation menu when navigating through categories and products on the storefront, specifically with .html URL suffixes and the settings 'Add Store Code to Urls: No' and 'Use Categories Path for Product URLs: Yes'. The test focuses on the impact of these configurations on category highlighting."/>
             <testCaseId value="AC-10851"/>
             <severity value="MAJOR"/>
             <group value="catalog"/>
@@ -44,8 +44,8 @@
                 <argument name="indices" value=""/>
             </actionGroup>
             <!-- Set custom url suffixes -->
-            <magentoCLI command="config:set catalog/seo/category_url_suffix .htm" stepKey="setCategoryUrlSuffix"/>
-            <magentoCLI command="config:set catalog/seo/product_url_suffix .phtml" stepKey="setProductUrlSuffix"/>
+            <magentoCLI command="config:set catalog/seo/category_url_suffix .html" stepKey="setCategoryUrlSuffix"/>
+            <magentoCLI command="config:set catalog/seo/product_url_suffix .html" stepKey="setProductUrlSuffix"/>
             <!-- Set "Add Store Code to Urls": No -->
             <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="disableStoreCodeToUrls"/>
             <!-- Set "Use Categories Path for Product URLs": Yes -->
@@ -62,14 +62,11 @@
             <deleteData createDataKey="product_1_1" stepKey="deleteProduct_1_1" />
             <deleteData createDataKey="product_1_2" stepKey="deleteProduct_1_2" />
             <deleteData createDataKey="product_1_1_1_2" stepKey="deleteProduct_1_1_1_2" />
-            <!-- Set url suffixes to its default values -->
-            <magentoCLI command="config:set catalog/seo/category_url_suffix .html" stepKey="setCategoryUrlSuffix"/>
-            <magentoCLI command="config:set catalog/seo/product_url_suffix .html" stepKey="setProductUrlSuffix"/>
             <!-- Set "Use Categories Path for Product URLs": No -->
             <magentoCLI command="config:set {{DisableCategoriesPathForProductUrls.path}} {{DisableCategoriesPathForProductUrls.value}}" stepKey="disableCategoriesPathForProductUrls"/>
             <!-- Flush needed cache -->
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterChangingConfig">
-                <argument name="tags" value=""/>
+                <argument name="tags" value="config full_page"/>
             </actionGroup>
         </after>
         <!-- Open storefront homepage -->
@@ -200,7 +197,7 @@
         </assertEquals>
 
         <!-- Open direct Category 1.2 url -->
-        <amOnPage url="/$$category_1.custom_attributes[url_key]$$/$$category_1_2.custom_attributes[url_key]$$.htm"  stepKey="openCategoryPageDirectly"/>
+        <amOnPage url="/$$category_1.custom_attributes[url_key]$$/$$category_1_2.custom_attributes[url_key]$$.html"  stepKey="openCategoryPageDirectly"/>
         <waitForPageLoad stepKey="waitForCategoryStoreFrontPageToLoad"/>
         <!-- Check if parent Category 1 has 'has-active' class and Category 1.2 child category has 'active' class -->
         <grabAttributeFrom selector="{{AdminCategorySidebarTreeSection.categoryHighlighted($$category_1.name$$)}}" userInput="class" stepKey="grabCategory_1_Class_Try4"/>
@@ -260,7 +257,7 @@
         </assertEquals>
 
         <!-- Open product assigned to both Category 1_1 & Category 1_2 by its direct page url with category in it -->
-        <amOnPage url="/$$category_1.custom_attributes[url_key]$$/$$category_1_2.custom_attributes[url_key]$$/$$product_1_1_1_2.custom_attributes[url_key]$$.phtml" stepKey="openProductPageDirectly" />
+        <amOnPage url="/$$category_1.custom_attributes[url_key]$$/$$category_1_2.custom_attributes[url_key]$$/$$product_1_1_1_2.custom_attributes[url_key]$$.html" stepKey="openProductPageDirectly" />
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <!-- Check if parent Category 1 has 'has-active' class and Category 1.2 child category has 'active' class -->
         <grabAttributeFrom selector="{{AdminCategorySidebarTreeSection.categoryHighlighted($$category_1.name$$)}}" userInput="class" stepKey="grabCategory_1_Class_Try6"/>
