@@ -24,7 +24,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class EnableAdminUsageTest extends \PHPUnit\Framework\TestCase
 {
-    const STUB_PRODUCT_VERSION = 'Product Version';
+    private const STUB_PRODUCT_VERSION = 'Product Version';
 
     /** @var EnableAdminUsage */
     private $controller;
