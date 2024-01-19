@@ -15,7 +15,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     /**
      * Cache tag
      */
-    const CACHE_TAG = 'store_relations';
+    public const CACHE_TAG = 'store_relations';
 
     /**
      * @var \Magento\Store\Api\StoreRepositoryInterface
@@ -107,7 +107,9 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
 
         if (is_array($storeCode)) {
             if (!isset($storeCode['_data']['code'])) {
-                throw new \InvalidArgumentException(__('Invalid store parameter.'));
+                throw new \InvalidArgumentException(
+                    __('Invalid store parameter.')->render()
+                );
             }
             $storeCode = $storeCode['_data']['code'];
         }
