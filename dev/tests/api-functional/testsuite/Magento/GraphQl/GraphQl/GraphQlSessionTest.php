@@ -48,6 +48,10 @@ class GraphQlSessionTest extends GraphQlAbstract
     /**
      * Test for checking if graphQL query sets session cookies
      *
+     * Note: The reason why the first response doesn't have cookies, but the subsequent responses do is
+     * because Magento/Framework/App/PageCache/Kernel.php removes Set-Cookie headers when the response has a
+     * public Cache-Control.  This test asserts that behaviour.
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @magentoConfigFixture graphql/session/disable 0
      */
@@ -71,8 +75,7 @@ QUERY;
         $result = $this->graphQlClient->getWithResponseHeaders($query, [], '', [], true);
         $this->assertEmpty($result['cookies']);
         // perform secondary request after cookies have been flushed
-        $result = $this->graphQlClient->getWithResponseHeaders($query, [], '', []);
-
+        $result = $this->graphQlClient->getWithResponseHeaders($query, [], '', [], true);
         // may have other cookies than session
         $this->assertNotEmpty($result['cookies']);
         $this->assertAnyCookieMatchesRegex('/PHPSESSID=[a-z0-9]+;/', $result['cookies']);
