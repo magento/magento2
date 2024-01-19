@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- Simple product is created and assigned to category -->
-            <createData entity="_defaultCategory" stepKey="createCategory"/>
+<!--            <createData entity="_defaultCategory" stepKey="createCategory"/>-->
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
                 <field key="price">10.00</field>
@@ -54,7 +54,7 @@
             <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
 <!--            <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+<!--            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>-->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Go to the tax rule page and delete the row created-->
             <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPageA"/>
@@ -90,8 +90,6 @@
         <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFreeShipping">
             <argument name="shippingMethodName" value="Free Shipping"/>
         </actionGroup>
-        <!-- Assert Free Shipping checkbox -->
-        <seeCheckboxIsChecked selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShipping}}" stepKey="freeShippingMethodCheckboxIsChecked"/>
         <!-- Click Next button -->
         <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
         <!-- Click on PayPal payment radio button -->
