@@ -84,9 +84,9 @@ define([
                 expect(component.initUploader).toHaveBeenCalledWith(fileInputMock);
                 expect(component.replaceInputTypeFile).toHaveBeenCalledWith(fileInputMock);
 
-                expect(uppyMock.use).toHaveBeenCalledWith(Uppy.Dashboard, jasmine.any(Object));
-                expect(uppyMock.use).toHaveBeenCalledWith(Uppy.DropTarget, jasmine.any(Object));
-                expect(uppyMock.use).toHaveBeenCalledWith(Uppy.XHRUpload, jasmine.any(Object));
+                expect(uppyMock.use).toHaveBeenCalledWith(window.Uppy.Dashboard, jasmine.any(Object));
+                expect(uppyMock.use).toHaveBeenCalledWith(window.Uppy.DropTarget, jasmine.any(Object));
+                expect(uppyMock.use).toHaveBeenCalledWith(window.Uppy.XHRUpload, jasmine.any(Object));
             });
         });
 

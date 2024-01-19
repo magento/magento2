@@ -17,6 +17,7 @@ define([
     'Magento_Ui/js/form/element/abstract',
     'mage/backend/notification',
     'mage/translate',
+    'jquery/jquery.cookie',
     'jquery/uppy-core',
     'mage/adminhtml/tools'
 ], function ($, _, utils, uiAlert, validator, Element, notification, $t) {
@@ -85,7 +86,7 @@ define([
                         hideProgressAfterFinish: true
                     };
 
-                if (fileInputName === undefined){
+                if (fileInputName === undefined) {
                     fileInputName = $(fileInput).attr('name');
                 }
                 // handle input type file
