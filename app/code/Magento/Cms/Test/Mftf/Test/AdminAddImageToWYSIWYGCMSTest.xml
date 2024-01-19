@@ -20,7 +20,7 @@
         <before>
             <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
-            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="enableOldMediaGallery">
+            <actionGroup ref="CliMediaGalleryEnhancedEnableActionGroup" stepKey="enableOldMediaGallery">
                 <argument name="enabled" value="0"/>
             </actionGroup>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
@@ -40,7 +40,7 @@
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYGFirst"/>
             <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableOldMediaGallery">
+            <actionGroup ref="CliMediaGalleryEnhancedEnableActionGroup" stepKey="disableOldMediaGallery">
                 <argument name="enabled" value="1"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

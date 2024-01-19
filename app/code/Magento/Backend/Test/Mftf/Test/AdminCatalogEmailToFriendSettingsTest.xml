@@ -15,7 +15,7 @@
             <title value="Admin should be able to manage settings of Email To A Friend Functionality"/>
             <description value="Admin should be able to enable Email To A Friend functionality in Magento Admin backend and see additional options"/>
             <group value="backend"/>
-            <severity value="MINOR"></severity>
+            <severity value="MINOR"/>
             <testCaseId value="MC-35895"/>
             <group value="pr_exclude"/>
         </annotations>
@@ -23,11 +23,15 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <magentoCLI stepKey="enableSendFriend" command="config:set sendfriend/email/enabled 1"/>
-            <magentoCLI stepKey="cacheClean" command="cache:clean config"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cacheClean">
+                <argument name="tags" value="config"/>
+            </actionGroup>
         </before>
         <after>
             <magentoCLI stepKey="disableSendFriend" command="config:set sendfriend/email/enabled 0"/>
-            <magentoCLI stepKey="cacheClean" command="cache:clean config"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cacheClean">
+                <argument name="tags" value="config"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
