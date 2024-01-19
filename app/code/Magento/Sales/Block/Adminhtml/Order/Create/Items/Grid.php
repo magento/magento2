@@ -30,36 +30,26 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     protected $_moveToCustomerStorage = true;
 
     /**
-     * Tax data
-     *
      * @var \Magento\Tax\Helper\Data
      */
     protected $_taxData;
 
     /**
-     * Wishlist factory
-     *
      * @var \Magento\Wishlist\Model\WishlistFactory
      */
     protected $_wishlistFactory;
 
     /**
-     * Gift message save
-     *
      * @var \Magento\GiftMessage\Model\Save
      */
     protected $_giftMessageSave;
 
     /**
-     * Tax config
-     *
      * @var \Magento\Tax\Model\Config
      */
     protected $_taxConfig;
 
     /**
-     * Message helper
-     *
      * @var \Magento\GiftMessage\Helper\Message
      */
     protected $_messageHelper;
@@ -440,7 +430,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         $optionStr = '';
         $this->_moveToCustomerStorage = true;
         if ($optionIds = $item->getOptionByCode('option_ids')) {
-            foreach (explode(',', $optionIds->getValue()) as $optionId) {
+            foreach (explode(',', $optionIds->getValue() ?? '') as $optionId) {
                 $option = $item->getProduct()->getOptionById($optionId);
                 if ($option) {
                     $optionStr .= $option->getTitle() . ':';
@@ -545,12 +535,12 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     {
         $product = $item->getProduct();
 
-        $options = ['label' => __('Configure')];
+        $options = ['label' => $this->escapeHtmlAttr(__('Configure'))];
         if ($product->canConfigure()) {
             $options['onclick'] = sprintf('order.showQuoteItemConfiguration(%s)', $item->getId());
         } else {
             $options['class'] = ' disabled';
-            $options['title'] = __('This product does not have any configurable options');
+            $options['title'] = $this->escapeHtmlAttr(__('This product does not have any configurable options'));
         }
 
         return $this->getLayout()->createBlock(

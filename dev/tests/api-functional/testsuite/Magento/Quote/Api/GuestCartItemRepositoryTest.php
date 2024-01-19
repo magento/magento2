@@ -326,7 +326,7 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
                     'use_config_backorders' => 0,
                     'backorders' => Stock::BACKORDERS_NO,
                 ],
-                'This product is out of stock.'
+                'There are no source items with the in stock status'
             ],
             [
                 [

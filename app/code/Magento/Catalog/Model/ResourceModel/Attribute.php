@@ -101,7 +101,7 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
             $attributeStoreIds = array_keys($this->_storeManager->getStores());
             if (!empty($attributeStoreIds)) {
                 $delCondition = [
-                    'attribute_id = ?' => $object->getId(),
+                    'attribute_id = ?' => (int)$object->getId(),
                     'store_id IN(?)' => $attributeStoreIds,
                 ];
                 $this->getConnection()->delete($object->getBackendTable(), $delCondition);

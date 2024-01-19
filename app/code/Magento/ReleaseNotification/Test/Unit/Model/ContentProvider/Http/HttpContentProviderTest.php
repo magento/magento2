@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\ReleaseNotification\Test\Unit\Model\ContentProvider\Http;
 
 use Magento\Framework\HTTP\ClientInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ReleaseNotification\Model\ContentProvider\Http\HttpContentProvider;
 use Magento\ReleaseNotification\Model\ContentProvider\Http\UrlBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -42,23 +41,19 @@ class HttpContentProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->getMockForAbstractClass();
-        $this->urlBuilderMock = $this->getMockBuilder(UrlBuilder::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUrl'])
-            ->getMock();
-        $this->httpClientMock = $this->getMockBuilder(ClientInterface::class)
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlBuilder::class);
+        $this->httpClientMock = $this->createMock(ClientInterface::class);
+        $requestTimeout = 10;
+        $this->httpClientMock->expects($this->once())
+            ->method('setTimeout')
+            ->with($requestTimeout);
 
-        $objectManager = new ObjectManager($this);
-        $this->httpContentProvider = $objectManager->getObject(
-            HttpContentProvider::class,
-            [
-                'httpClient' => $this->httpClientMock,
-                'urlBuilder' => $this->urlBuilderMock,
-                'logger' => $this->loggerMock
-            ]
+        $this->httpContentProvider = new HttpContentProvider(
+            $this->httpClientMock,
+            $this->urlBuilderMock,
+            $this->loggerMock,
+            $requestTimeout
         );
     }
 

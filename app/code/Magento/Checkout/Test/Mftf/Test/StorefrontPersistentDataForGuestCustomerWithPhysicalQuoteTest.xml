@@ -22,13 +22,13 @@
             <createData entity="SimpleProduct2" stepKey="createProduct">
                 <field key="price">10</field>
             </createData>
-            <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
+            <magentoCLI command="config:set {{EnableFreeShippingConfigData.path}} {{EnableFreeShippingConfigData.value}}" stepKey="enableFreeShippingMethod"/>
             <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>
             <executeJS function="window.localStorage.clear();" stepKey="clearLocalStorage"/>
         </before>
         <after>
+            <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShippingMethod"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShipping"/>
         </after>
         <!-- 1. Add simple product to cart and go to checkout-->
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
@@ -67,6 +67,7 @@
         <fillField selector="{{CheckoutShippingGuestInfoSection.regionInput}}" userInput="" stepKey="changeStateProvinceField"/>
         <fillField selector="{{CheckoutShippingGuestInfoSection.postcode}}" userInput="KW1 7NQ" stepKey="changeZipPostalCodeField"/>
         <!-- 8. Change shipping rate, select Free Shipping -->
+        <waitForElementClickable selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShipping}}" stepKey="waitForFreeShippingShippingMethod"/>
         <checkOption selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Free Shipping')}}" stepKey="checkFreeShippingAsShippingMethod"/>
         <!-- 9. Fill other fields -->
         <actionGroup ref="StorefrontFillGuestShippingInfoActionGroup" stepKey="fillOtherFieldsInCheckoutShippingSection"/>

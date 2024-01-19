@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssignTwoCategoriesToProductActionGroup" extends="AdminAssignCategoryToProductAndSaveActionGroup">
+        <annotations>
+            <description>Extends AdminAssignCategoryToProductAndSaveActionGroup + assigns the second category and prevents product saving (the Product Edit page should be opened in Admin prior this check).</description>
+        </annotations>
+        <arguments>
+            <argument name="categoryTwoName" type="string"/>
+        </arguments>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="openDropDown2" after="waitForApplyCategory"/>
+        <checkOption selector="{{AdminProductFormSection.selectCategory(categoryTwoName)}}" stepKey="selectCategoryTwo"/>
+        <click selector="{{AdminProductFormSection.done}}" stepKey="clickDone2"/>
+        <waitForPageLoad stepKey="waitForApplyCategoryTwo"/>
+        <remove keyForRemoval="clickSave"/>
+        <remove keyForRemoval="waitForSavingProduct"/>
+        <remove keyForRemoval="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

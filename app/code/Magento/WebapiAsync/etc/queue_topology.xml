@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
-    <exchange name="magento" type="topic" connection="amqp">
-        <binding id="async.operations.all" topic="async.#" destinationType="queue" destination="async.operations.all"/>
+    <exchange name="magento">
+        <binding id="async.operations.all" topic="async.#" destination="async.operations.all"/>
     </exchange>
 </config>

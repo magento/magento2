@@ -57,9 +57,9 @@ require([
             });
 
             var uploadButton = $('#js_uploader_button');
-            uploadButton.removeAttr('disabled');
+            uploadButton.prop('disabled', false);
 
-            uploadButton.click(function () {
+            uploadButton.on('click', function () {
                 $('#messages').html('');
                 $(this).attr('disabled', 'disabled');
 
@@ -121,10 +121,10 @@ require([
         }
     });
 
-    $('#js_files_uploader').click(function () {
+    $('#js_files_uploader').on('click', function () {
         /** Unbind click event on file change */
         $('#js-file-uploader').html('');
-        $('#js_uploader_button').unbind('click');
+        $('#js_uploader_button').off('click');
     });
 
 

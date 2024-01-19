@@ -7,6 +7,8 @@ namespace Magento\Framework\App\Config\Spi;
 
 /**
  * Allows to use custom callbacks and functions before applying fallback
+ *
+ * @api
  */
 interface PreProcessorInterface
 {

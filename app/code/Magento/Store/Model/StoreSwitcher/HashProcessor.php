@@ -96,39 +96,41 @@ class HashProcessor implements StoreSwitcherInterface
      */
     public function switch(StoreInterface $fromStore, StoreInterface $targetStore, string $redirectUrl): string
     {
-        $timestamp = (int) $this->request->getParam('time_stamp');
-        $signature = (string) $this->request->getParam('signature');
-        $data = (string) $this->request->getParam('data');
-        $context = $this->contextFactory->create(
-            [
-                'fromStore' => $fromStore,
-                'targetStore' => $targetStore,
-                'redirectUrl' => $redirectUrl
-            ]
-        );
-        $redirectDataObject = $this->dataFactory->create(
-            [
-                'signature' => $signature,
-                'timestamp' => $timestamp,
-                'data' => $data
-            ]
-        );
+        if ($this->request->getParam('data') !== null) {
+            $timestamp = (int) $this->request->getParam('time_stamp');
+            $signature = (string) $this->request->getParam('signature');
+            $data = (string) $this->request->getParam('data');
+            $context = $this->contextFactory->create(
+                [
+                    'fromStore' => $fromStore,
+                    'targetStore' => $targetStore,
+                    'redirectUrl' => $redirectUrl
+                ]
+            );
+            $redirectDataObject = $this->dataFactory->create(
+                [
+                    'signature' => $signature,
+                    'timestamp' => $timestamp,
+                    'data' => $data
+                ]
+            );
 
-        try {
-            if ($redirectUrl && $this->dataValidator->validate($context, $redirectDataObject)) {
-                $this->postprocessor->process($context, $this->dataSerializer->unserialize($data));
-            } else {
-                throw new LocalizedException(
-                    __('The requested store cannot be found. Please check the request and try again.')
+            try {
+                if ($redirectUrl && $this->dataValidator->validate($context, $redirectDataObject)) {
+                    $this->postprocessor->process($context, $this->dataSerializer->unserialize($data));
+                } else {
+                    throw new LocalizedException(
+                        __('The requested store cannot be found. Please check the request and try again.')
+                    );
+                }
+            } catch (LocalizedException $exception) {
+                $this->messageManager->addErrorMessage($exception->getMessage());
+            } catch (\Throwable $exception) {
+                $this->logger->error($exception);
+                $this->messageManager->addErrorMessage(
+                    __('Something went wrong.')
                 );
             }
-        } catch (LocalizedException $exception) {
-            $this->messageManager->addErrorMessage($exception->getMessage());
-        } catch (\Throwable $exception) {
-            $this->logger->error($exception);
-            $this->messageManager->addErrorMessage(
-                __('Something went wrong.')
-            );
         }
 
         return $redirectUrl;

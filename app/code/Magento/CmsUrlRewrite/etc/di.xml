@@ -9,4 +9,15 @@
     <type name="Magento\Cms\Model\ResourceModel\Page">
         <plugin name="cms_url_rewrite_plugin" type="Magento\CmsUrlRewrite\Plugin\Cms\Model\ResourceModel\Page"/>
     </type>
+    <type name="Magento\Cms\Model\PageRepository\ValidationComposite">
+        <plugin name="cms_validate_url_plugin"
+                type="Magento\CmsUrlRewrite\Plugin\Cms\Model\PageRepository\ValidationCompositePlugin" sortOrder="10"/>
+    </type>
+    <type name="Magento\UrlRewrite\Model\UrlRewrite">
+        <arguments>
+            <argument name="entityToCacheTagMap" xsi:type="array">
+                <item name="cms-page" xsi:type="const">Magento\Cms\Model\Page::CACHE_TAG</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

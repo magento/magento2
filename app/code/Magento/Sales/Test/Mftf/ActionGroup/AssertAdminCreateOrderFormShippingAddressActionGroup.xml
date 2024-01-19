@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * seeInField COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminCreateOrderFormShippingAddressActionGroup">
+        <annotations>
+            <description>Verify shipping address inputs on admin create order page. Start on admin create new order page.</description>
+        </annotations>
+        <arguments>
+            <argument name="prefix" type="string" defaultValue="{{CustomerAddressSimple.prefix}}"/>
+            <argument name="firstname" type="string" defaultValue="{{CustomerAddressSimple.firstname}}"/>
+            <argument name="middleName" type="string" defaultValue="{{CustomerAddressSimple.middlename}}"/>
+            <argument name="lastname" type="string" defaultValue="{{CustomerAddressSimple.lastname}}"/>
+            <argument name="suffix" type="string" defaultValue="{{CustomerAddressSimple.suffix}}"/>
+            <argument name="company" type="string" defaultValue="{{CustomerAddressSimple.company}}"/>
+            <argument name="streetLine1" type="string" defaultValue="{{CustomerAddressSimple.street[0]}}"/>
+            <argument name="streetLine2" type="string" defaultValue="{{CustomerAddressSimple.street[1]}}"/>
+            <argument name="city" type="string" defaultValue="{{CustomerAddressSimple.city}}"/>
+            <argument name="countryId" type="string" defaultValue="{{CustomerAddressSimple.country_id}}"/>
+            <argument name="state" type="string" defaultValue="{{CustomerAddressSimple.state}}"/>
+            <argument name="province" type="string" defaultValue=""/>
+            <argument name="postcode" type="string" defaultValue="{{CustomerAddressSimple.postcode}}"/>
+            <argument name="telephone" type="string" defaultValue="{{CustomerAddressSimple.telephone}}"/>
+            <argument name="fax" type="string" defaultValue="{{CustomerAddressSimple.fax}}"/>
+            <argument name="vatNumber" type="string" defaultValue=""/>
+        </arguments>
+
+        <waitForElementVisible selector="{{AdminOrderFormShippingAddressSection.NamePrefix}}" stepKey="waitForInputVisible"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.NamePrefix}}" userInput="{{prefix}}" stepKey="verifyPrefix"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.FirstName}}" userInput="{{firstname}}" stepKey="verifyFirstName"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.MiddleName}}" userInput="{{middleName}}" stepKey="verifyMiddleName"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.LastName}}" userInput="{{lastname}}" stepKey="verifyLastName"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.NameSuffix}}" userInput="{{suffix}}" stepKey="verifySuffix"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.Company}}" userInput="{{company}}" stepKey="verifyCompany"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.StreetLine1}}" userInput="{{streetLine1}}" stepKey="verifyStreetLine1"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.StreetLine2}}" userInput="{{streetLine2}}" stepKey="verifyStreetLine2"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.City}}" userInput="{{city}}" stepKey="verifyCity"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.Country}}" userInput="{{countryId}}" stepKey="verifyCountry"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.State}}" userInput="{{state}}" stepKey="verifyState"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.Province}}" userInput="{{province}}" stepKey="verifyProvince"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.PostalCode}}" userInput="{{postcode}}" stepKey="verifyPostalCode"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.Phone}}" userInput="{{telephone}}" stepKey="verifyPhone"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.Fax}}" userInput="{{fax}}" stepKey="verifyFax"/>
+        <seeInField selector="{{AdminOrderFormShippingAddressSection.VatNumber}}" userInput="{{vatNumber}}" stepKey="verifyVatNumber"/>
+    </actionGroup>
+</actionGroups>

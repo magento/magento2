@@ -9,8 +9,8 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCustomerSignInFormSection">
-        <element name="captchaField" type="input" selector="#captcha_user_login"/>
-        <element name="captchaImg" type="block" selector=".captcha-img"/>
-        <element name="captchaReload" type="block" selector=".captcha-reload"/>
+        <element name="captchaField" type="input" selector="fieldset #captcha_user_login"/>
+        <element name="captchaImg" type="block" selector="fieldset .captcha-img"/>
+        <element name="captchaReload" type="block" selector="fieldset .captcha-reload"/>
     </section>
 </sections>

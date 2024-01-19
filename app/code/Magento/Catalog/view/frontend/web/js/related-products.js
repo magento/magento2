@@ -51,7 +51,7 @@ define([
                 this.options.selectAllMessage : this.options.unselectAllMessage;
 
             $(e.target).html(innerHTML);
-            $(this.options.relatedCheckbox).attr(
+            $(this.options.relatedCheckbox + ':visible').attr(
                 'checked',
                 this.options.relatedProductsCheckFlag = !this.options.relatedProductsCheckFlag
             );

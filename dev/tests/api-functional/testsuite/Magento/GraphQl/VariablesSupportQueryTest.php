@@ -46,7 +46,7 @@ query GetProductsQuery($pageSize: Int, $filterInput: ProductAttributeFilterInput
           amount {
             value
             currency
-          }          
+          }
         }
       }
     }
@@ -59,7 +59,7 @@ QUERY;
             'priceSort' => 'ASC',
             'filterInput' => [
                 'price' => [
-                    'from' => 150,
+                    'from' => '150',
                 ],
             ],
         ];

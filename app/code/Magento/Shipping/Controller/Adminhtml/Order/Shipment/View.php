@@ -7,15 +7,16 @@
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 
-class View extends \Magento\Backend\App\Action
+class View extends \Magento\Backend\App\Action implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::shipment';
+    public const ADMIN_RESOURCE = 'Magento_Sales::shipment';
 
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
@@ -53,7 +54,7 @@ class View extends \Magento\Backend\App\Action
     /**
      * Shipment information page
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface|\Magento\Framework\App\ResponseInterface
      */
     public function execute()
     {
@@ -68,12 +69,12 @@ class View extends \Magento\Backend\App\Action
                 ->updateBackButtonUrl($this->getRequest()->getParam('come_from'));
             $resultPage->setActiveMenu('Magento_Sales::sales_shipment');
             $resultPage->getConfig()->getTitle()->prepend(__('Shipments'));
-            $resultPage->getConfig()->getTitle()->prepend("#" . $shipment->getIncrementId());
+            $resultPage->getConfig()->getTitle()->prepend(__('View Shipment #%1', $shipment->getIncrementId()));
             return $resultPage;
         } else {
-            $resultForward = $this->resultForwardFactory->create();
-            $resultForward->forward('noroute');
-            return $resultForward;
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setPath('sales/shipment');
+            return $resultRedirect;
         }
     }
 }

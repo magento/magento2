@@ -16,6 +16,7 @@
             <description value="The product attribute that has no value should output 'N/A' on the product comparison page."/>
             <severity value="MINOR"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -46,10 +47,12 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <!--Open product page-->
-        <amOnPage url="{{StorefrontProductPage.url($$createProductDefault.name$$)}}" stepKey="goToProductDefaultPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProductDefault.custom_attributes[url_key]$$)}}" stepKey="goToProductDefaultPage"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
         <!--Click on 'Add to Compare' link-->
         <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="clickOnAddToCompare">
@@ -60,7 +63,7 @@
             <argument name="productVar" value="$$createProductDefault$$"/>
         </actionGroup>
         <!--Open product with custom attribute page-->
-        <amOnPage url="{{StorefrontProductPage.url($$createProductCustom.name$$)}}" stepKey="goToProductCustomPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProductCustom.custom_attributes[url_key]$$)}}" stepKey="goToProductCustomPage"/>
         <waitForPageLoad stepKey="waitForProductCustomPage"/>
         <!--Click on 'Add to Compare' link-->
         <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="clickOnAddToCompareCustom">

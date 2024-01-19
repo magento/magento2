@@ -13,5 +13,7 @@
         <data key="urlSoap">URL key "soap" matches a reserved endpoint name (admin, soap, rest, graphql, standard). Use another URL key.</data>
         <data key="urlRest">URL key "rest" matches a reserved endpoint name (admin, soap, rest, graphql, standard). Use another URL key.</data>
         <data key="urlGraphql">URL key "graphql" matches a reserved endpoint name (admin, soap, rest, graphql, standard). Use another URL key.</data>
+        <data key="urlAdminError">URL key "admin" matches a reserved endpoint name (admin). Use another URL key.</data>
+        <data key="urlAdminPartialError">URL key "admin" matches a reserved endpoint name </data>
     </entity>
 </entities>

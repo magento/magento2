@@ -17,8 +17,16 @@ use Magento\Sales\Model\Order\Invoice;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class to test Collecting credit memo taxes
+ */
 class TaxTest extends TestCase
 {
+    /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
     /**
      * @var Tax
      */
@@ -44,6 +52,9 @@ class TaxTest extends TestCase
      */
     protected $invoice;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
@@ -112,13 +123,13 @@ class TaxTest extends TestCase
 
         //verify invoice data
         foreach ($expectedResults['creditmemo_data'] as $key => $value) {
-            $this->assertEquals($value, $this->creditmemo->getData($key));
+            $this->assertEqualsWithDelta($value, $this->creditmemo->getData($key), self::EPSILON);
         }
         //verify invoice item data
         foreach ($expectedResults['creditmemo_items'] as $itemKey => $itemData) {
             $creditmemoItem = $creditmemoItems[$itemKey];
             foreach ($itemData as $key => $value) {
-                $this->assertEquals($value, $creditmemoItem->getData($key));
+                $this->assertEqualsWithDelta($value, $creditmemoItem->getData($key), self::EPSILON);
             }
         }
     }
@@ -186,8 +197,10 @@ class TaxTest extends TestCase
                     'base_shipping_amount' => 30,
                     'tax_amount' => 0.82,
                     'base_tax_amount' => 0.82,
-                    'invoice' => new MagentoObject(
+                    'invoice' => $this->createInvoiceMock(
                         [
+                            'tax_amount' => 24.33,
+                            'base_tax_amount' => 24.33,
                             'shipping_tax_amount' => 2.45,
                             'base_shipping_tax_amount' => 2.45,
                             'shipping_discount_tax_compensation_amount' => 0,
@@ -275,8 +288,10 @@ class TaxTest extends TestCase
                     'base_shipping_amount' => 30,
                     'tax_amount' => 0.82 * $currencyRatio,
                     'base_tax_amount' => 0.82,
-                    'invoice' => new MagentoObject(
+                    'invoice' => $this->createInvoiceMock(
                         [
+                            'tax_amount' => 24.33 * $currencyRatio,
+                            'base_tax_amount' => 24.33,
                             'shipping_tax_amount' => 2.45 * $currencyRatio,
                             'base_shipping_tax_amount' => 2.45,
                             'shipping_discount_tax_compensation_amount' => 0,
@@ -350,8 +365,10 @@ class TaxTest extends TestCase
                     'base_shipping_amount' => 30,
                     'tax_amount' => 1.65,
                     'base_tax_amount' => 1.65,
-                    'invoice' => new MagentoObject(
+                    'invoice' => $this->createInvoiceMock(
                         [
+                            'tax_amount' => 11.14,
+                            'base_tax_amount' => 11.14,
                             'shipping_tax_amount' => 1.24,
                             'base_shipping_tax_amount' => 1.24,
                             'shipping_discount_tax_compensation_amount' => 0,
@@ -426,8 +443,10 @@ class TaxTest extends TestCase
                     'base_shipping_amount' => 0,
                     'tax_amount' => 0.82,
                     'base_tax_amount' => 0.82,
-                    'invoice' => new MagentoObject(
+                    'invoice' => $this->createInvoiceMock(
                         [
+                            'tax_amount' => 16.09,
+                            'base_tax_amount' => 16.09,
                             'shipping_tax_amount' => 1.24,
                             'base_shipping_tax_amount' => 1.24,
                             'shipping_discount_tax_compensation_amount' => 0,
@@ -507,14 +526,6 @@ class TaxTest extends TestCase
                     'base_shipping_amount' => 0,
                     'tax_amount' => 0.76,
                     'base_tax_amount' => 0.76,
-                    'invoice' => new MagentoObject(
-                        [
-                            'shipping_tax_amount' => 0,
-                            'base_shipping_tax_amount' => 0,
-                            'shipping_discount_tax_compensation_amount' => 0,
-                            'base_shipping_discount_tax_compensation_amount' => 0,
-                        ]
-                    ),
                 ],
             ],
             'expected_results' => [
@@ -581,8 +592,10 @@ class TaxTest extends TestCase
                     'base_grand_total' => 60.82,
                     'tax_amount' => 0.82,
                     'base_tax_amount' => 0.82,
-                    'invoice' => new MagentoObject(
+                    'invoice' => $this->createInvoiceMock(
                         [
+                            'tax_amount' => 16.09,
+                            'base_tax_amount' => 16.09,
                             'shipping_tax_amount' => 1.24,
                             'base_shipping_tax_amount' => 1.24,
                             'shipping_discount_tax_compensation_amount' => 0,
@@ -712,14 +725,6 @@ class TaxTest extends TestCase
                     'base_shipping_amount' => 0,
                     'tax_amount' => 0,
                     'base_tax_amount' => 0,
-                    'invoice' => new MagentoObject(
-                        [
-                            'shipping_tax_amount' => 0,
-                            'base_shipping_tax_amount' => 0,
-                            'shipping_discount_tax_compensation_amount' => 0,
-                            'base_shipping_discount_tax_compensation_amount' => 0,
-                        ]
-                    ),
                 ],
             ],
             'expected_results' => [
@@ -744,6 +749,129 @@ class TaxTest extends TestCase
             ],
         ];
 
+        // scenario 7: 1 items, 1 invoiced, shipping covered by cart rule
+        // shipping is partially returned
+        $result['last_creditmemo_with_discount_for_entire_shipping_all_prices_including_tax'] = [
+            'order_data' => [
+                'data_fields' => [
+                    'shipping_tax_amount' => 0,
+                    'base_shipping_tax_amount' => 0,
+                    'shipping_discount_tax_compensation_amount' => 1.36,
+                    'base_shipping_discount_tax_compensation_amount' => 1.36,
+                    'tax_amount' => 1.22,
+                    'base_tax_amount' => 1.22,
+                    'tax_invoiced' => 1.22,
+                    'base_tax_invoiced' => 1.22,
+                    'shipping_amount' => 13.64,
+                    'shipping_discount_amount' => 15,
+                    'base_shipping_amount' => 13.64,
+                    'discount_tax_compensation_invoiced' => 1.73,
+                    'base_discount_tax_compensation_invoiced' => 1.73
+                ],
+            ],
+            'creditmemo_data' => [
+                'items' => [
+                    'item_1' => [
+                        'order_item' => [
+                            'qty_invoiced' => 1,
+                            'tax_invoiced' => 1.22,
+                            'base_tax_invoiced' => 1.22,
+                            'discount_tax_compensation_amount' => 1.73,
+                            'base_discount_tax_compensation_amount' => 1.73,
+                            'discount_tax_compensation_invoiced' => 1.73,
+                            'base_discount_tax_compensation_invoiced' => 1.73
+                        ],
+                        'is_last' => true,
+                        'qty' => 1,
+                    ],
+                ],
+                'is_last' => true,
+                'data_fields' => [
+                    'shipping_amount' => 0,
+                    'base_shipping_amount' => 0,
+                    'grand_total' => 10.45,
+                    'base_grand_total' => 10.45,
+                    'tax_amount' => 0,
+                    'base_tax_amount' => 0
+                ],
+            ],
+            'expected_results' => [
+                'creditmemo_items' => [
+                    'item_1' => [
+                        'tax_amount' => 1.22,
+                        'base_tax_amount' => 1.22,
+                    ],
+                ],
+                'creditmemo_data' => [
+                    'grand_total' => 13.4,
+                    'base_grand_total' => 13.4,
+                    'tax_amount' => 1.22,
+                    'base_tax_amount' => 1.22,
+                ],
+            ],
+        ];
+
+        // scenario 8: 1 items, 1 invoiced, shipping covered by cart rule
+        // shipping amount is 0 i.e., free shipping
+        $result['creditmemo_with_discount_for_entire_shipping_all_prices_including_tax_free_shipping'] = [
+            'order_data' => [
+                'data_fields' => [
+                    'shipping_tax_amount' => 0,
+                    'base_shipping_tax_amount' => 0,
+                    'shipping_discount_tax_compensation_amount' => 1.36,
+                    'base_shipping_discount_tax_compensation_amount' => 1.36,
+                    'tax_amount' => 1.22,
+                    'base_tax_amount' => 1.22,
+                    'tax_invoiced' => 1.22,
+                    'base_tax_invoiced' => 1.22,
+                    'shipping_amount' => 0,
+                    'shipping_discount_amount' => 15,
+                    'base_shipping_amount' => 13.64,
+                    'discount_tax_compensation_invoiced' => 1.73,
+                    'base_discount_tax_compensation_invoiced' => 1.73
+                ],
+            ],
+            'creditmemo_data' => [
+                'items' => [
+                    'item_1' => [
+                        'order_item' => [
+                            'qty_invoiced' => 1,
+                            'tax_invoiced' => 1.22,
+                            'base_tax_invoiced' => 1.22,
+                            'discount_tax_compensation_amount' => 1.73,
+                            'base_discount_tax_compensation_amount' => 1.73,
+                            'discount_tax_compensation_invoiced' => 1.73,
+                            'base_discount_tax_compensation_invoiced' => 1.73
+                        ],
+                        'is_last' => true,
+                        'qty' => 1,
+                    ],
+                ],
+                'is_last' => true,
+                'data_fields' => [
+                    'shipping_amount' => 0,
+                    'base_shipping_amount' => 0,
+                    'grand_total' => 10.45,
+                    'base_grand_total' => 10.45,
+                    'tax_amount' => 0,
+                    'base_tax_amount' => 0
+                ],
+            ],
+            'expected_results' => [
+                'creditmemo_items' => [
+                    'item_1' => [
+                        'tax_amount' => 1.22,
+                        'base_tax_amount' => 1.22,
+                    ],
+                ],
+                'creditmemo_data' => [
+                    'grand_total' => 14.76,
+                    'base_grand_total' => 13.4,
+                    'tax_amount' => 1.22,
+                    'base_tax_amount' => 1.22,
+                ],
+            ],
+        ];
         return $result;
     }
 
@@ -778,5 +906,41 @@ class TaxTest extends TestCase
             ->willReturn($creditmemoItemData['is_last']);
         $creditmemoItem->setData('qty', $creditmemoItemData['qty']);
         return $creditmemoItem;
+    }
+
+    /**
+     * Create invoice mock object
+     *
+     * @param array $data
+     * @return MockObject|Invoice
+     */
+    private function createInvoiceMock(array $data): MockObject
+    {
+        /** @var MockObject|Invoice $invoice */
+        $invoice = $this->getMockBuilder(Invoice::class)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->addMethods(['getBaseShippingDiscountTaxCompensationAmount'])
+            ->onlyMethods([
+                'getTaxAmount',
+                'getBaseTaxAmount',
+                'getShippingTaxAmount',
+                'getBaseShippingTaxAmount',
+                'getShippingDiscountTaxCompensationAmount'
+            ])
+            ->getMock();
+
+        $invoice->method('getTaxAmount')->willReturn($data['tax_amount'] ?? 0);
+        $invoice->method('getBaseTaxAmount')->willReturn($data['base_tax_amount'] ?? 0);
+        $invoice->method('getShippingTaxAmount')->willReturn($data['shipping_tax_amount'] ?? 0);
+        $invoice->method('getBaseShippingTaxAmount')->willReturn($data['base_shipping_tax_amount'] ?? 0);
+        $invoice->method('getShippingDiscountTaxCompensationAmount')
+            ->willReturn($data['shipping_discount_tax_compensation_amount'] ?? 0);
+        $invoice->method('getBaseShippingDiscountTaxCompensationAmount')
+            ->willReturn($data['base_shipping_discount_tax_compensation_amount'] ?? 0);
+
+        return $invoice;
     }
 }

@@ -33,16 +33,26 @@
                     <caption class="table-caption"><?= $block->escapeHtml(__('Product Rating')) ?></caption>
                     <?php foreach ($block->getRating() as $_rating): ?>
                         <?php if ($_rating->getPercent()): ?>
+                            <?php $rating = ceil($_rating->getPercent()) ?>
                             <tr>
-                                <td class="label"><?= $block->escapeHtml(__($_rating->getRatingCode())) ?></td>
+                                <td class="label" width="10%">
+                                    <?= $block->escapeHtml(__($_rating->getRatingCode())) ?>
+                                </td>
                                 <td class="value">
-                                    <div class="rating-box">
-                                        <div class="rating"/>
+                                    <?php $ratingId = $_rating->getRatingId() ?>
+                                    <div class="rating-summary item"
+                                         id="rating-div-<?= $block->escapeHtml($ratingId) ?>">
+                                        <div class="rating-result" title="<?= /* @noEscape */ $rating ?>%">
+                                            <span>
+                                                <span><?= /* @noEscape */ $rating ?>%</span>
+                                            </span>
+                                        </div>
+                                        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                            "width:" . /* @noEscape */ $rating . "%",
+                                            'div#rating-div-'.$_rating->getRatingId().
+                                            '>div.rating-result>span:first-child'
+                                        ) ?>
                                     </div>
-                                    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-                                        "width:" . /* @noEscape */ ceil($_rating->getPercent()) . "%;",
-                                        'div.rating-box div.rating'
-                                    ) ?>
                                 </td>
                             </tr>
                         <?php endif; ?>

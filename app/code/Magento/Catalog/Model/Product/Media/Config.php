@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Model\Product\Media;
 
 use Magento\Eav\Model\Entity\Attribute;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -16,11 +17,9 @@ use Magento\Store\Model\StoreManagerInterface;
  * @api
  * @since 100.0.2
  */
-class Config implements ConfigInterface
+class Config implements ConfigInterface, ResetAfterRequestInterface
 {
     /**
-     * Store manager
-     *
      * @var StoreManagerInterface
      */
     protected $storeManager;
@@ -31,7 +30,7 @@ class Config implements ConfigInterface
     private $attributeHelper;
 
     /**
-     * @var string[]
+     * @var string[]|null
      */
     private $mediaAttributeCodes;
 
@@ -170,7 +169,7 @@ class Config implements ConfigInterface
      */
     protected function _prepareFile($file)
     {
-        return ltrim(str_replace('\\', '/', $file), '/');
+        return $file === null ? '' : ltrim(str_replace('\\', '/', $file), '/');
     }
 
     /**
@@ -200,5 +199,13 @@ class Config implements ConfigInterface
                 ->get(\Magento\Eav\Model\Entity\Attribute::class);
         }
         return $this->attributeHelper;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->mediaAttributeCodes = null;
     }
 }

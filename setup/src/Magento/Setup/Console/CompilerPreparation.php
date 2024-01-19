@@ -140,7 +140,7 @@ class CompilerPreparation
                     function ($matches) {
                         return preg_quote($matches[1]) . '[^:]*';
                     },
-                    $cmdName
+                    ($cmdName ?? '')
                 );
                 $commands = preg_grep('{^' . $expr . '$}', $compilationCommands);
                 if (empty($commands)) {

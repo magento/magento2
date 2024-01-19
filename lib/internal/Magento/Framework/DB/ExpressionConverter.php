@@ -1,18 +1,20 @@
 <?php
 /**
- * DB expression converter
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\DB;
 
+/**
+ * The Database expression converter
+ */
 class ExpressionConverter
 {
     /**
      * Maximum length for many MySql identifiers, including database, table, trigger, and column names
      */
-    const MYSQL_IDENTIFIER_LEN = 64;
+    public const MYSQL_IDENTIFIER_LEN = 64;
 
     /**
      * Dictionary maps common words in identifiers to abbreviations
@@ -74,7 +76,7 @@ class ExpressionConverter
      */
     public static function shortName($name)
     {
-        return strtr($name, self::$_translateMap);
+        return $name !== null ? strtr($name, self::$_translateMap) : '';
     }
 
     /**
@@ -90,6 +92,8 @@ class ExpressionConverter
     }
 
     /**
+     * Retrieves shorten entity name.
+     *
      * Shorten the name of a MySql identifier, by abbreviating common words and hashing if necessary. Prepends the
      * given prefix to clarify what kind of entity the identifier represents, in case hashing is used.
      *
@@ -99,9 +103,11 @@ class ExpressionConverter
      */
     public static function shortenEntityName($entityName, $prefix)
     {
-        if (strlen($entityName) > self::MYSQL_IDENTIFIER_LEN) {
+        if ($entityName !== null && strlen($entityName) > self::MYSQL_IDENTIFIER_LEN) {
             $shortName = ExpressionConverter::shortName($entityName);
             if (strlen($shortName) > self::MYSQL_IDENTIFIER_LEN) {
+                // md5() here is not for cryptographic use.
+                // phpcs:ignore Magento2.Security.InsecureFunction
                 $hash = md5($entityName);
                 if (strlen($prefix . $hash) > self::MYSQL_IDENTIFIER_LEN) {
                     $entityName = self::trimHash($hash, $prefix, self::MYSQL_IDENTIFIER_LEN);
@@ -123,12 +129,14 @@ class ExpressionConverter
      * @param  int $maxCharacters
      * @return string
      */
-    private static function trimHash($hash, $prefix, $maxCharacters)
-    {
-        $diff        = strlen($hash) + strlen($prefix) -  $maxCharacters;
-        $superfluous = $diff / 2;
-        $odd         = $diff % 2;
-        $hash        = substr($hash, $superfluous, - ($superfluous + $odd));
-        return $hash;
+    private static function trimHash(
+        string $hash,
+        string $prefix,
+        int $maxCharacters
+    ): string {
+        $diff = strlen($hash) + strlen($prefix) - $maxCharacters;
+        $superfluous = intdiv($diff, 2);
+        $odd = $diff % 2;
+        return substr($hash, $superfluous, - ($superfluous + $odd));
     }
 }

@@ -53,6 +53,10 @@
 //  Utilities
 //  ---------------------------------------------
 
+/**
+ * @codingStandardsIgnoreStart
+ */
+
 .admin__menu-link() {
     color: @menu-item__color;
     display: block;
@@ -520,7 +524,6 @@
     }
 
     //  This part hides Submenu Group Titles only for menus with single groups.
-    .submenu .column:only-of-type .submenu-group-title,
     .level-0 > .submenu > ul > .level-1:only-of-type > .submenu-group-title {
         display: none;
     }

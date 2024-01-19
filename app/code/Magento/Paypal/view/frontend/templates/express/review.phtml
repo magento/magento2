@@ -4,10 +4,18 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Paypal\Block\Express\Review;
+
 /**
- * @var \Magento\Paypal\Block\Express\Review $block
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var Review $block
+ * @var Escaper $escaper
+ * @var SecureHtmlRenderer $secureRenderer
  */
+
+/** @var \Magento\Paypal\ViewModel\PaypalFundingSourceDataProvider $paypalFundingSourceDataProvider */
+$paypalFundingSourceDataProvider = $block->getData('PaypalFundingSourceDataProvider');
 ?>
 <div class="paypal-review view">
     <div class="block block-order-details-view">
@@ -15,11 +23,11 @@
             <?php if ($block->getShippingAddress()): ?>
                 <div class="box box-order-shipping-method">
                     <strong class="box-title">
-                        <span><?= $block->escapeHtml(__('Shipping Method')) ?></span>
+                        <span><?= $escaper->escapeHtml(__('Shipping Method')) ?></span>
                     </strong>
                     <div class="box-content">
                         <form method="post" id="shipping-method-form"
-                              action="<?= $block->escapeUrl($block->getShippingMethodSubmitUrl()) ?>"
+                              action="<?= $escaper->escapeUrl($block->getShippingMethodSubmitUrl()) ?>"
                               class="form">
                             <?php if ($block->canEditShippingMethod()): ?>
                                 <?php if ($groups = $block->getShippingRateGroups()): ?>
@@ -28,11 +36,14 @@
                                         <select name="shipping_method" id="shipping-method" class="select">
                                             <?php if (!$currentRate): ?>
                                                 <option value="">
-                                                    <?= $block->escapeHtml(__('Please select a shipping method...')); ?>
+                                                    <?= $escaper->escapeHtml(
+                                                        __('Please select a shipping method...')
+                                                    ); ?>
                                                 </option>
                                             <?php endif; ?>
                                             <?php foreach ($groups as $code => $rates): ?>
-                                                <optgroup label="<?= $block->escapeHtml($block->getCarrierName($code));
+                                                <optgroup label="<?=
+                                                    $escaper->escapeHtml($block->getCarrierName($code));
                                                 ?>">
                                                     <?php foreach ($rates as $rate): ?>
                                                         <option value="<?=
@@ -51,19 +62,10 @@
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
-                                    <div class="actions-toolbar">
-                                        <div class="primary">
-                                            <button id="update-shipping-method-submit" type="submit"
-                                                    class="action update primary">
-                                                <span>
-                                                    <?= $block->escapeHtml(__('Update Shipping Method')) ?>
-                                                </span>
-                                            </button>
-                                        </div>
-                                    </div>
+                                    <div class="actions-toolbar"></div>
                                 <?php else: ?>
                                     <p>
-                                        <?= $block->escapeHtml(__(
+                                        <?= $escaper->escapeHtml(__(
                                             'Sorry, no quotes are available for this order right now.'
                                         )); ?>
                                     </p>
@@ -80,40 +82,41 @@
                 </div>
                 <div class="box box-order-shipping-address">
                     <strong class="box-title">
-                        <span><?= $block->escapeHtml(__('Shipping Address')) ?></span>
+                        <span><?= $escaper->escapeHtml(__('Shipping Address')) ?></span>
                     </strong>
                     <div class="box-content">
                         <address>
-                            <?= $block->escapeHtml(
+                            <?= $escaper->escapeHtml(
                                 $block->renderAddress($block->getShippingAddress()),
                                 ['br']
-                            );?>
+                            ); ?>
                         </address>
                     </div>
                     <?php if ($block->getCanEditShippingAddress()): ?>
                         <div class="box-actions">
-                            <a href="<?= $block->escapeUrl($block->getEditUrl()) ?>" class="action edit">
-                                <span><?= $block->escapeHtml(__('Edit')) ?></span>
+                            <a href="<?= $escaper->escapeUrl($block->getEditUrl()) ?>" class="action edit">
+                                <span><?= $escaper->escapeHtml(__('Edit')) ?></span>
                             </a>
                         </div>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
             <div class="box box-order-billing-address">
-                <strong class="box-title"><span><?= $block->escapeHtml(__('Payment Method')) ?></span></strong>
+                <strong class="box-title"><span><?= $escaper->escapeHtml(__('Payment Method')) ?></span></strong>
                 <div class="box-content">
-                    <?= $block->escapeHtml($block->getPaymentMethodTitle()) ?><br>
-                    <?= $block->escapeHtml($block->getEmail()) ?> <br>
+                    <?= $escaper->escapeHtml($paypalFundingSourceDataProvider->getPaypalFundingSource()
+                        ?? $block->getPaymentMethodTitle()) ?><br>
+                    <?= $escaper->escapeHtml($block->getEmail()) ?> <br>
                     <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png"
                          alt="<?= $block->escapeHtml(__('Buy now with PayPal')) ?>"/>
                 </div>
-            <?php if ($block->getEditUrl()): ?>
-                <div class="box-actions">
-                    <a href="<?= $block->escapeUrl($block->getEditUrl()) ?>" class="action edit">
-                        <span><?= $block->escapeHtml(__('Edit Payment Information')) ?></span>
-                    </a>
-                </div>
-            <?php endif ?>
+                <?php if ($block->getEditUrl()): ?>
+                    <div class="box-actions">
+                        <a href="<?= $escaper->escapeUrl($block->getEditUrl()) ?>" class="action edit">
+                            <span><?= $escaper->escapeHtml(__('Edit Payment Information')) ?></span>
+                        </a>
+                    </div>
+                <?php endif ?>
             </div>
         </div>
     </div>
@@ -124,33 +127,34 @@
 
     <div class="paypal-review-items">
         <div class="paypal-review-title">
-            <strong><?= $block->escapeHtml(__('Items in Your Shopping Cart')) ?></strong>
-            <a href="<?= $block->escapeUrl($block->getUrl('checkout/cart')) ?>" class="action edit">
-                <span><?= $block->escapeHtml(__('Edit Shopping Cart')) ?></span>
+            <strong><?= $escaper->escapeHtml(__('Items in Your Shopping Cart')) ?></strong>
+            <a href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart')) ?>" class="action edit">
+                <span><?= $escaper->escapeHtml(__('Edit Shopping Cart')) ?></span>
             </a>
         </div>
 
         <?= $block->getChildHtml('details') ?>
 
-        <form method="post" id="order-review-form" action="<?= $block->escapeUrl($block->getPlaceOrderUrl()) ?>"
+        <form method="post" id="order-review-form" action="<?= $escaper->escapeUrl($block->getPlaceOrderUrl()) ?>"
               class="form order-review-form">
             <?= $block->getChildHtml('agreements') ?>
             <div class="actions-toolbar" id="review-buttons-container">
                 <div class="primary">
                     <button type="button" id="review-button" class="action checkout primary"
-                            value="<?= $block->escapeHtml(__('Place Order')) ?>">
-                        <span><?= $block->escapeHtml(__('Place Order')) ?></span>
+                            value="<?= $escaper->escapeHtml(__('Place Order')) ?>">
+                        <span><?= $escaper->escapeHtml(__('Place Order')) ?></span>
                     </button>
                 </div>
                 <span class="please-wait load indicator" id="review-please-wait"
-                      data-text="<?= $block->escapeHtml(__('Submitting order information...')) ?>">
-                   <span><?= $block->escapeHtml(__('Submitting order information...')) ?></span>
+                      data-text="<?= $escaper->escapeHtml(__('Submitting order information...')) ?>">
+                   <span><?= $escaper->escapeHtml(__('Submitting order information...')) ?></span>
                 </span>
-                <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display: none;", 'span#review-please-wait')?>
+                <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display: none;", 'span#review-please-wait') ?>
             </div>
         </form>
     </div>
 </div>
+<?php // phpcs:ignore Magento2.Legacy.PhtmlTemplate ?>
 <script type="text/x-magento-init">
     {
         "#order-review-form": {
@@ -158,7 +162,7 @@
             "orderReview": {
                 "shippingSubmitFormSelector": "#shipping-method-form",
                 "shippingSelector": "#shipping-method",
-                "shippingMethodUpdateUrl": "<?= $block->escapeUrl($block->getUpdateShippingMethodsUrl()) ?>",
+                "shippingMethodUpdateUrl": "<?= $escaper->escapeJs($block->getUpdateShippingMethodsUrl()) ?>",
                 "isAjax": <?= /* @noEscape */ $block->getUseAjax() ? 'true' : 'false' ?>,
                 "canEditShippingMethod": <?= /* @noEscape */ $block->canEditShippingMethod() ? 'true' : 'false' ?>
             }

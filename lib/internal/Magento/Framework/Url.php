@@ -7,9 +7,11 @@
 namespace Magento\Framework;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Url\HostChecker;
 
+// phpcs:disable Magento2.Annotation
 /**
  * URL
  *
@@ -64,7 +66,7 @@ use Magento\Framework\Url\HostChecker;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class Url extends \Magento\Framework\DataObject implements \Magento\Framework\UrlInterface
+class Url extends \Magento\Framework\DataObject implements \Magento\Framework\UrlInterface, ResetAfterRequestInterface
 {
     /**
      * Configuration data cache
@@ -138,7 +140,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     protected $_routeConfig;
 
     /**
-     * @var \Magento\Framework\Url\RouteParamsResolverInterface
+     * @var \Magento\Framework\Url\RouteParamsResolverInterface|null
      */
     private $_routeParamsResolver;
 
@@ -175,7 +177,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     protected $routeParamsPreprocessor;
 
     /**
-     * @var \Magento\Framework\Url\ModifierInterface
+     * @var \Magento\Framework\Url\ModifierInterface|null
      */
     private $urlModifier;
 
@@ -496,6 +498,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param string $data
      * @return \Magento\Framework\UrlInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _setRoutePath($data)
     {
@@ -504,11 +507,14 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         }
 
         $this->unsetData('route_path');
-        $routePieces = explode('/', $data);
-
-        $route = array_shift($routePieces);
-        if ('*' === $route) {
-            $route = $this->_getRequest()->getRouteName();
+        $route = '';
+        $routePieces = [];
+        if (!empty($data)) {
+            $routePieces = explode('/', $data);
+            $route = array_shift($routePieces);
+            if ('*' === $route) {
+                $route = $this->_getRequest()->getRouteName();
+            }
         }
         $this->_setRouteName($route);
 
@@ -921,11 +927,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             unset($routeParams['_query']);
         }
 
-        $noSid = null;
-        if (isset($routeParams['_nosid'])) {
-            $noSid = (bool)$routeParams['_nosid'];
-            unset($routeParams['_nosid']);
-        }
+        unset($routeParams['_nosid']);
         $url = $this->getRouteUrl($routePath, $routeParams);
 
         /**
@@ -1008,9 +1010,14 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param string $value
      * @return string
      * @deprecated 101.0.0
+     * @see \Magento\Framework\Escaper::escapeUrl
      */
     public function escape($value)
     {
+        if ($value === null) {
+            return '';
+        }
+
         $value = str_replace('"', '%22', $value);
         $value = str_replace("'", '%27', $value);
         $value = str_replace('>', '%3E', $value);
@@ -1107,7 +1114,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         $this->_prepareSessionUrl($url);
         $query = $this->_getQuery(false);
         if ($query) {
-            $url .= (strpos($url, '?') === false ? '?' : '&') . $query;
+            $url .= (strpos((string)$url, '?') === false ? '?' : '&') . $query;
         }
 
         return $url;
@@ -1155,6 +1162,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @return \Magento\Framework\Url\ModifierInterface
      * @deprecated 101.0.0
+     * @see \Magento\Framework\Url\ModifierInterface
      */
     private function getUrlModifier()
     {
@@ -1172,6 +1180,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @return Escaper
      * @deprecated 101.0.0
+     * @see \Magento\Framework\Escaper
      */
     private function getEscaper()
     {
@@ -1180,5 +1189,17 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
                 ->get(\Magento\Framework\Escaper::class);
         }
         return $this->escaper;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_data = [];
+        $this->cacheUrl = [];
+        self::$_configDataCache = null;
+        $this->urlModifier = null;
+        $this->_routeParamsResolver = null;
     }
 }

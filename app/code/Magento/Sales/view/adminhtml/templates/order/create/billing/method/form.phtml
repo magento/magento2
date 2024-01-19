@@ -4,57 +4,68 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Sales\Block\Adminhtml\Order\Create\Billing\Method\Form as BillingMethodForm;
+
+/**
+ * @var BillingMethodForm $block
+ * @var Escaper $escaper
+ * @var SecureHtmlRenderer $secureRenderer
+ */
 ?>
 <?php if ($block->hasMethods()): ?>
-<div id="order-billing_method_form">
-    <dl class="admin__payment-methods control">
-    <?php
-        $_methods = $block->getMethods();
-        $_methodsCount = count($_methods);
-        $_counter = 0;
-        $currentSelectedMethod = $block->getSelectedMethodCode();
-    ?>
-    <?php foreach ($_methods as $_method):
-        $_code = $_method->getCode();
-        $_counter++;
-        ?>
-        <dt class="admin__field-option">
-        <?php if ($_methodsCount > 1): ?>
-            <input id="p_method_<?= $block->escapeHtmlAttr($_code); ?>"
-                   value="<?= $block->escapeHtmlAttr($_code); ?>"
-                   type="radio" name="payment[method]"
-                   title="<?= $block->escapeHtmlAttr($_method->getTitle()); ?>"
-                    <?php if ($currentSelectedMethod == $_code): ?>
-                    checked="checked"
+    <div id="order-billing_method_form">
+        <dl class="admin__payment-methods control">
+            <?php
+                $_methods = $block->getMethods();
+                $_methodsCount = count($_methods);
+                $_counter = 0;
+                $currentSelectedMethod = $block->getSelectedMethodCode();
+            ?>
+            <?php foreach ($_methods as $_method):
+                $_code = $_method->getCode();
+                $_counter++;
+                ?>
+                <dt class="admin__field-option">
+                    <?php if ($_methodsCount > 1): ?>
+                        <input id="p_method_<?= $escaper->escapeHtmlAttr($_code); ?>"
+                               value="<?= $escaper->escapeHtmlAttr($_code); ?>"
+                               type="radio" name="payment[method]"
+                               title="<?= $escaper->escapeHtmlAttr($_method->getTitle()); ?>"
+                            <?php if ($currentSelectedMethod == $_code): ?>
+                                checked="checked"
+                            <?php endif; ?>
+                               data-validate="{'validate-one-required-by-name':true}"
+                               class="admin__control-radio"/>
+                    <?php else: ?>
+                        <span class="no-display">
+                            <input id="p_method_<?= $escaper->escapeHtmlAttr($_code); ?>"
+                                   value="<?= $escaper->escapeHtmlAttr($_code); ?>"
+                                   type="radio"
+                                   name="payment[method]" class="admin__control-radio"
+                                   checked="checked"/>
+                        </span>
                     <?php endif; ?>
-                   data-validate="{'validate-one-required-by-name':true}"
-                   class="admin__control-radio"/>
-            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                'onclick',
-                "payment.switchMethod('" . $block->escapeJs($_code) . "')",
-                'input#p_method_' . $block->escapeJs($_code)
-            ) ?>
-        <?php else:?>
-            <span class="no-display">
-                <input id="p_method_<?= $block->escapeHtmlAttr($_code); ?>"
-                       value="<?= $block->escapeHtmlAttr($_code); ?>"
-                       type="radio"
-                       name="payment[method]" class="admin__control-radio"
-                       checked="checked"/>
-            </span>
-        <?php endif;?>
 
-            <label class="admin__field-label" for="p_method_<?= $block->escapeHtmlAttr($_code); ?>">
-                <?= $block->escapeHtml($_method->getTitle()) ?>
-            </label>
-        </dt>
-        <dd class="admin__payment-method-wrapper">
-            <?= $block->getChildHtml('payment.method.' . $_code) ?>
-        </dd>
-    <?php endforeach; ?>
-    </dl>
-</div>
+                    <label class="admin__field-label" for="p_method_<?= $escaper->escapeHtmlAttr($_code); ?>">
+                        <?= $escaper->escapeHtml($_method->getTitle()) ?>
+                    </label>
+
+                    <?php if ($_methodsCount > 1): ?>
+                        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                            'onclick',
+                            "payment.switchMethod('" . $escaper->escapeJs($_code) . "')",
+                            'input#p_method_' . $escaper->escapeJs($_code)
+                        ) ?>
+                    <?php endif; ?>
+                </dt>
+                <dd class="admin__payment-method-wrapper">
+                    <?= $block->getChildHtml('payment.method.' . $_code) ?>
+                </dd>
+            <?php endforeach; ?>
+        </dl>
+    </div>
     <?php $scriptString = <<<script
         require([
             'mage/apply/main',
@@ -65,11 +76,11 @@
 script;
     if ($_methodsCount !== 1):
         $scriptString .= <<<script
-            order.setPaymentMethod('{$block->escapeJs($currentSelectedMethod)}');
+            order.setPaymentMethod('{$escaper->escapeJs($currentSelectedMethod)}');
 script;
     else:
         $scriptString .= <<<script
-            payment.switchMethod('{$block->escapeJs($currentSelectedMethod)}');
+            payment.switchMethod('{$escaper->escapeJs($currentSelectedMethod)}');
 script;
     endif;
     $scriptString .= <<<script
@@ -78,7 +89,8 @@ script;
 
 script;
     ?>
-    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+    <?= /* @noEscape */
+    $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php else: ?>
-    <div class="admin__message-empty"><?= $block->escapeHtml(__('No Payment Methods')); ?></div>
+    <div class="admin__message-empty"><?= $escaper->escapeHtml(__('No Payment Methods')); ?></div>
 <?php endif; ?>

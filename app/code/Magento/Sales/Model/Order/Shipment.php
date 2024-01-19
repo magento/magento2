@@ -10,6 +10,7 @@ use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EntityInterface;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\Collection as CommentsCollection;
+use Magento\Sales\Model\ValidatorInterface;
 
 /**
  * Sales order shipment model
@@ -26,26 +27,26 @@ use Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\Collection as Comme
  */
 class Shipment extends AbstractModel implements EntityInterface, ShipmentInterface
 {
-    const STATUS_NEW = 1;
+    public const STATUS_NEW = 1;
 
-    const REPORT_DATE_TYPE_ORDER_CREATED = 'order_created';
+    public const REPORT_DATE_TYPE_ORDER_CREATED = 'order_created';
 
-    const REPORT_DATE_TYPE_SHIPMENT_CREATED = 'shipment_created';
+    public const REPORT_DATE_TYPE_SHIPMENT_CREATED = 'shipment_created';
 
     /**
      * Store address
      */
-    const XML_PATH_STORE_ADDRESS1 = 'shipping/origin/street_line1';
+    public const XML_PATH_STORE_ADDRESS1 = 'shipping/origin/street_line1';
 
-    const XML_PATH_STORE_ADDRESS2 = 'shipping/origin/street_line2';
+    public const XML_PATH_STORE_ADDRESS2 = 'shipping/origin/street_line2';
 
-    const XML_PATH_STORE_CITY = 'shipping/origin/city';
+    public const XML_PATH_STORE_CITY = 'shipping/origin/city';
 
-    const XML_PATH_STORE_REGION_ID = 'shipping/origin/region_id';
+    public const XML_PATH_STORE_REGION_ID = 'shipping/origin/region_id';
 
-    const XML_PATH_STORE_ZIP = 'shipping/origin/postcode';
+    public const XML_PATH_STORE_ZIP = 'shipping/origin/postcode';
 
-    const XML_PATH_STORE_COUNTRY_ID = 'shipping/origin/country_id';
+    public const XML_PATH_STORE_COUNTRY_ID = 'shipping/origin/country_id';
 
     /**
      * Order entity type
@@ -105,6 +106,11 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     private $commentsCollection;
 
     /**
+     * @var ValidatorInterface|null
+     */
+    private $validator;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -117,6 +123,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param ValidatorInterface|null $validator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -131,13 +138,15 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        ?ValidatorInterface $validator = null
     ) {
         $this->_shipmentItemCollectionFactory = $shipmentItemCollectionFactory;
         $this->_trackCollectionFactory = $trackCollectionFactory;
         $this->_commentFactory = $commentFactory;
         $this->_commentCollectionFactory = $commentCollectionFactory;
         $this->orderRepository = $orderRepository;
+        $this->validator = $validator;
         parent::__construct(
             $context,
             $registry,
@@ -157,6 +166,14 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     protected function _construct()
     {
         $this->_init(\Magento\Sales\Model\ResourceModel\Order\Shipment::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function _getValidationRulesBeforeSave(): ?ValidatorInterface
+    {
+        return $this->validator;
     }
 
     /**

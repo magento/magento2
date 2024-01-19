@@ -13,6 +13,7 @@ use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Helper\PostHelper;
+use Magento\Framework\DataObject;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\EncoderInterface;
@@ -184,13 +185,29 @@ class DataTest extends TestCase
 
     public function testGetConfigureUrl()
     {
-        $url = 'http://magento2ce/wishlist/index/configure/id/4/product_id/30/';
+        $url = 'http://magento2ce/wishlist/index/configure/id/4/product_id/30/qty/1000';
+
+        $buyRequest = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getSuperAttribute', 'getQty'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $buyRequest->expects($this->once())
+            ->method('getSuperAttribute')
+            ->willReturn(['100' => '10']);
+        $buyRequest->expects($this->exactly(2))
+            ->method('getQty')
+            ->willReturn('1000');
 
         /** @var WishlistItem|MockObject $wishlistItem */
         $wishlistItem = $this->getMockBuilder(WishlistItem::class)
-            ->addMethods(['getWishlistItemId', 'getProductId'])
+            ->addMethods(['getWishlistItemId', 'getProductId', 'getQty'])
+            ->onlyMethods(['getBuyRequest'])
             ->disableOriginalConstructor()
             ->getMock();
+        $wishlistItem
+            ->expects($this->once())
+            ->method('getBuyRequest')
+            ->willReturn($buyRequest);
         $wishlistItem
             ->expects($this->once())
             ->method('getWishlistItemId')
@@ -199,13 +216,17 @@ class DataTest extends TestCase
             ->expects($this->once())
             ->method('getProductId')
             ->willReturn(30);
+        $wishlistItem
+            ->expects($this->once())
+            ->method('getQty')
+            ->willReturn(1000);
 
         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
-            ->with('wishlist/index/configure', ['id' => 4, 'product_id' => 30])
+            ->with('wishlist/index/configure', ['id' => 4, 'product_id' => 30, 'qty' => 1000])
             ->willReturn($url);
 
-        $this->assertEquals($url, $this->model->getConfigureUrl($wishlistItem));
+        $this->assertEquals($url . '#100=10', $this->model->getConfigureUrl($wishlistItem));
     }
 
     public function testGetWishlist()

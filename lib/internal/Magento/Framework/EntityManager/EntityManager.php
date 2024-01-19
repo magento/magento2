@@ -36,6 +36,16 @@ class EntityManager
     private $callbackHandler;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * @var TypeResolver
+     */
+    private $typeResolver;
+
+    /**
      * @param OperationPool $operationPool
      * @param MetadataPool $metadataPool
      * @param TypeResolver $typeResolver

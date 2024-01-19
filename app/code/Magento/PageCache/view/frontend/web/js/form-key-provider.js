@@ -5,7 +5,7 @@
 define(function () {
     'use strict';
 
-    return function () {
+    return function (settings) {
         var formKey,
             inputElements,
             inputSelector = 'input[name="form_key"]';
@@ -18,13 +18,16 @@ define(function () {
             var expires,
                 secure,
                 date = new Date(),
-                isSecure = !!window.cookiesConfig && window.cookiesConfig.secure;
+                cookiesConfig = window.cookiesConfig || {},
+                isSecure = !!cookiesConfig.secure,
+                samesite = cookiesConfig.samesite || 'lax';
 
             date.setTime(date.getTime() + 86400000);
             expires = '; expires=' + date.toUTCString();
             secure = isSecure ? '; secure' : '';
+            samesite = '; samesite=' + samesite;
 
-            document.cookie = 'form_key=' + (value || '') + expires + secure + '; path=/';
+            document.cookie = 'form_key=' + (value || '') + expires + secure + '; path=/' + samesite;
         }
 
         /**
@@ -53,6 +56,14 @@ define(function () {
         }
 
         /**
+         * Get form key from UI input hidden
+         * @private
+         */
+        function getFormKeyFromUI() {
+            return document.querySelector(inputSelector).value;
+        }
+
+        /**
          * Generate form key string
          * @private
          */
@@ -74,6 +85,11 @@ define(function () {
          */
         function initFormKey() {
             formKey = getFormKeyCookie();
+
+            if (settings && settings.isPaginationCacheEnabled && !formKey) {
+                formKey = getFormKeyFromUI();
+                setFormKeyCookie(formKey);
+            }
 
             if (!formKey) {
                 formKey = generateFormKeyString();

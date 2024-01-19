@@ -10,7 +10,6 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Adapter;
 use Magento\CatalogSearch\Model\Adapter\Options;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -26,12 +25,15 @@ class OptionsTest extends TestCase
      */
     private $options;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -43,7 +45,10 @@ class OptionsTest extends TestCase
         );
     }
 
-    public function testGet()
+    /**
+     * @return void
+     */
+    public function testGet(): void
     {
         $expectedResult = [
             'interval_division_limit' => 15,
@@ -52,18 +57,13 @@ class OptionsTest extends TestCase
             'max_intervals_number' => 33
         ];
 
-        $this->scopeConfig->expects($this->at(0))
+        $this->scopeConfig
             ->method('getValue')
-            ->withConsecutive([Options::XML_PATH_INTERVAL_DIVISION_LIMIT, ScopeInterface::SCOPE_STORE])
-            ->willReturn($expectedResult['interval_division_limit']);
-        $this->scopeConfig->expects($this->at(1))
-            ->method('getValue')
-            ->withConsecutive([Options::XML_PATH_RANGE_STEP, ScopeInterface::SCOPE_STORE])
-            ->willReturn($expectedResult['range_step']);
-        $this->scopeConfig->expects($this->at(2))
-            ->method('getValue')
-            ->withConsecutive([Options::XML_PATH_RANGE_MAX_INTERVALS, ScopeInterface::SCOPE_STORE])
-            ->willReturn($expectedResult['max_intervals_number']);
+            ->willReturnOnConsecutiveCalls(
+                $expectedResult['interval_division_limit'],
+                $expectedResult['range_step'],
+                $expectedResult['max_intervals_number']
+            );
 
         $this->options->get();
     }

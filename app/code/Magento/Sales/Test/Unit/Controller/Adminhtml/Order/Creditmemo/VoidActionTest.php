@@ -127,9 +127,6 @@ class VoidActionTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getInvoice', 'getOrder', 'cancel', 'getId', 'void'])
             ->getMock();
-        $titleMock = $this->getMockBuilder(\Magento\Framework\App\Action\Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -155,7 +152,6 @@ class VoidActionTest extends TestCase
                     'getRequest',
                     'getResponse',
                     'getObjectManager',
-                    'getTitle',
                     'getSession',
                     'getHelper',
                     'getActionFlag',
@@ -206,9 +202,6 @@ class VoidActionTest extends TestCase
         $this->contextMock->expects($this->any())
             ->method('getObjectManager')
             ->willReturn($this->objectManagerMock);
-        $this->contextMock->expects($this->any())
-            ->method('getTitle')
-            ->willReturn($titleMock);
         $this->contextMock->expects($this->any())
             ->method('getMessageManager')
             ->willReturn($this->messageManagerMock);

@@ -7,6 +7,7 @@
 namespace Magento\Config\Console\Command;
 
 use Magento\Config\Model\Config\Backend\Admin\Custom;
+use Magento\Config\Model\Config\PathValidator;
 use Magento\Config\Model\Config\Structure\Converter;
 use Magento\Config\Model\Config\Structure\Data as StructureData;
 use Magento\Directory\Model\Currency;
@@ -442,6 +443,15 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             [Custom::XML_PATH_GENERAL_LOCALE_CODE, 'en_AU', ScopeInterface::SCOPE_STORE, 'default'],
             [Custom::XML_PATH_ADMIN_SECURITY_USEFORMKEY, '0']
         ];
+    }
+
+    /**
+     * Test validate path when field has custom config_path
+     */
+    public function testValidatePathWithCustomConfigPath(): void
+    {
+        $pathValidator = $this->objectManager->get(PathValidator::class);
+        $this->assertTrue($pathValidator->validate('general/group/subgroup/second_field'));
     }
 
     /**

@@ -44,7 +44,7 @@ class Provider implements TokenProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validateConsumer($consumer)
     {
@@ -58,7 +58,7 @@ class Provider implements TokenProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createRequestToken($consumer)
     {
@@ -73,7 +73,7 @@ class Provider implements TokenProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validateRequestToken($requestToken, $consumer, $oauthVerifier)
     {
@@ -99,7 +99,7 @@ class Provider implements TokenProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAccessToken($consumer)
     {
@@ -118,7 +118,7 @@ class Provider implements TokenProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validateAccessTokenRequest($accessToken, $consumer)
     {
@@ -144,7 +144,7 @@ class Provider implements TokenProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validateAccessToken($accessToken)
     {
@@ -168,19 +168,19 @@ class Provider implements TokenProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validateOauthToken($oauthToken)
     {
-        return strlen($oauthToken) == \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN;
+        return $oauthToken && strlen($oauthToken) == \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConsumerByKey($consumerKey)
     {
-        if (strlen($consumerKey) != \Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_KEY) {
+        if ($consumerKey && strlen($consumerKey) != \Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_KEY) {
             throw new \Magento\Framework\Oauth\Exception(
                 __('Consumer key is not the correct length')
             );

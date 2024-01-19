@@ -14,7 +14,7 @@
         <data key="dataUiId">magento-catalog-catalog</data>
     </entity>
     <entity name="AdminMenuCatalogCategories">
-        <data key="pageTitle">Default Category (ID: 2)</data>
+        <data key="pageTitle">Default Category (ID: </data>
         <data key="title">Categories</data>
         <data key="dataUiId">magento-catalog-catalog-categories</data>
     </entity>
