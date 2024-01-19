@@ -3,6 +3,8 @@
  * See COPYING.txt for license details.
  */
 
+/* eslint-disable no-undef */
+
 define([
     'jquery',
     'mage/template',
@@ -142,6 +144,7 @@ define([
                 fileId = null,
                 arrayFromObj = Array.from,
                 fileObj = [],
+                uploaderContainer = this.element.find('input[type="file"]').closest('.image-placeholder'),
                 options = {
                     proudlyDisplayPoweredByUppy: false,
                     target: targetElement,
@@ -188,7 +191,6 @@ define([
                         tempFileId:  fileId
                     };
 
-                    var uploaderContainer = this.element.find('input[type="file"]').closest('.image-placeholder');
                     uploaderContainer.addClass('loading');
                     fileObj.push(currentFile);
                     return modifiedFile;
@@ -245,7 +247,6 @@ define([
             });
 
             uppy.on('complete', () => {
-                var uploaderContainer = this.element.find('input[type="file"]').closest('.image-placeholder');
                 uploaderContainer.removeClass('loading');
                 Array.from = arrayFromObj;
             });

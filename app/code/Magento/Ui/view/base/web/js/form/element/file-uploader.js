@@ -17,6 +17,7 @@ define([
     'Magento_Ui/js/form/element/abstract',
     'mage/backend/notification',
     'mage/translate',
+    'jquery/jquery.cookie',
     'jquery/uppy-core',
     'mage/adminhtml/tools'
 ], function ($, _, utils, uiAlert, validator, Element, notification, $t) {
@@ -67,7 +68,6 @@ define([
             if (fileInput !== undefined) {
                 let targetElement = $(fileInput).closest('.file-uploader-area')[0],
                     dropTargetElement = $(fileInput).closest(this.dropZone)[0],
-                    fileObj = [],
                     formKey = window.FORM_KEY !== undefined ? window.FORM_KEY : $.cookie('form_key'),
                     fileInputName = this.fileInputName,
                     arrayFromObj = Array.from,
@@ -85,7 +85,7 @@ define([
                         hideProgressAfterFinish: true
                     };
 
-                if (fileInputName === undefined){
+                if (fileInputName === undefined) {
                     fileInputName = $(fileInput).attr('name');
                 }
                 // handle input type file
@@ -104,12 +104,8 @@ define([
                         }
 
                         if (!allowed.passed)  {
-                            fileObj.push(currentFile);
                             this.aggregateError(file.name, allowed.message);
-
-                            if (this.aggregatedErrors.length === fileObj.length) {
-                                this.uploaderConfig.stop();
-                            }
+                            this.uploaderConfig.stop();
                             return false;
                         }
 

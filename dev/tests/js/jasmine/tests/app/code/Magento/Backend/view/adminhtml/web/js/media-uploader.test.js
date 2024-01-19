@@ -8,7 +8,7 @@
 define([
     'jquery',
     'Magento_Backend/js/media-uploader'
-], function ($, mediaUploader) {
+], function ($) {
     'use strict';
 
     describe('Magento_Backend/js/media-uploader::_create()', function () {
