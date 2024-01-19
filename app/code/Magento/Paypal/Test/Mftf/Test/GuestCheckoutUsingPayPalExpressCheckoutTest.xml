@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- Simple product is created and assigned to category -->
-<!--            <createData entity="_defaultCategory" stepKey="createCategory"/>-->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
                 <field key="price">10.00</field>
@@ -28,10 +28,6 @@
             <!-- US Customer is created -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-<!--            &lt;!&ndash; Configure Paypal Express Checkout &ndash;&gt;-->
-<!--            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">-->
-<!--                <argument name="credentials" value="SamplePaypalExpressConfig2"/>-->
-<!--            </actionGroup>-->
             <!--Add new tax rates. Go to tax rule page -->
             <actionGroup ref="AddNewTaxRuleActionGroup" stepKey="addFirstTaxRuleActionGroup"/>
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="{{TaxRule.name}}"/>
@@ -52,9 +48,8 @@
             <!-- Roll back configuration -->
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
-<!--            <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-<!--            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Go to the tax rule page and delete the row created-->
             <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPageA"/>
@@ -79,9 +74,7 @@
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
-        <!-- Goto Checkout Page -->
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
-        <waitForPageLoad stepKey="waitForShippingPage"/>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
         <!--Fill Shipping Address-->
         <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillShippingAddress"/>
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="Texas" stepKey="fillState"/>
