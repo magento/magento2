@@ -5,7 +5,9 @@
  */
 namespace Magento\Sales\Model\Order\Email\Container;
 
-class Template
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
+class Template implements ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -88,5 +90,16 @@ class Template
     public function getTemplateId()
     {
         return $this->id;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->vars = null;
+        $this->options = null;
+        $this->id = null;
+        $this->templateId = null;
     }
 }

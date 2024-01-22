@@ -6,8 +6,9 @@
 namespace Magento\Catalog\Model\Category;
 
 use Magento\Catalog\Api\CategoryAttributeRepositoryInterface;
+use Magento\Framework\App\State\ReloadProcessorInterface;
 
-class AttributeRepository implements CategoryAttributeRepositoryInterface
+class AttributeRepository implements CategoryAttributeRepositoryInterface, ReloadProcessorInterface
 {
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
@@ -30,7 +31,7 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
     private $eavConfig;
 
     /**
-     * @var array
+     * @var array|null
      */
     private $metadataCache;
 
@@ -97,5 +98,15 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
                 ->getItems();
         }
         return $this->metadataCache[$dataObjectClassName];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function reloadState(): void
+    {
+        $this->filterBuilder->_resetState();
+        $this->searchCriteriaBuilder->_resetState();
+        $this->metadataCache = null;
     }
 }
