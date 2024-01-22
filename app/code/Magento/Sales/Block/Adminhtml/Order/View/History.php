@@ -14,15 +14,11 @@ namespace Magento\Sales\Block\Adminhtml\Order\View;
 class History extends \Magento\Backend\Block\Template
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Sales data
-     *
      * @var \Magento\Sales\Helper\Data
      */
     protected $_salesData = null;
