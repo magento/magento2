@@ -38,7 +38,7 @@ class GridProcessAddressChangeTest extends TestCase
             ->getMock();
         $this->eventObserverMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getOrderId'])
+            ->addMethods(['getOrderId'])
             ->getMock();
         $this->observer = new GridProcessAddressChange($this->gridPoolMock);
     }

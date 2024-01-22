@@ -55,7 +55,7 @@ class CreateQuantityValidatorTest extends TestCase
 
         $this->entity = $this->getMockBuilder(\stdClass::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getOrderItemId', 'getQty'])
+            ->addMethods(['getOrderItemId', 'getQty'])
             ->getMock();
     }
 
@@ -101,7 +101,7 @@ class CreateQuantityValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             'testValidateCreditMemoProductItems' => [

@@ -116,7 +116,7 @@ class SaveTest extends TestCase
             ['storage' => new Storage()]
         );
         $this->_sessionMock = $this->getMockBuilder(Session::class)
-            ->onlyMethods(['setFormData'])
+            ->addMethods(['setFormData'])
             ->setConstructorArgs($constructArguments)
             ->getMock();
         $this->resultForwardFactoryMock = $this->getMockBuilder(
@@ -296,7 +296,7 @@ class SaveTest extends TestCase
     /**
      * @return array
      */
-    public function testExecuteEmailsDataProvider()
+    public static function testExecuteEmailsDataProvider()
     {
         /**
         * string $sendEmail

@@ -297,7 +297,7 @@ class OrderTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetItemByQuoteItemId()
+    public static function dataProviderGetItemByQuoteItemId()
     {
         return [
             [10, 10, 'replace-me'],
@@ -338,7 +338,7 @@ class OrderTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetAllVisibleItems()
+    public static function dataProviderGetAllVisibleItems()
     {
         return [
             [false, null, ['replace-me']],
@@ -403,7 +403,7 @@ class OrderTest extends TestCase
     /**
      * Customer name data provider
      */
-    public function customerNameProvider()
+    public static function customerNameProvider()
     {
         return
             [
@@ -615,7 +615,7 @@ class OrderTest extends TestCase
             ->willReturn($productId);
 
         $product = $this->getMockBuilder(ProductInterface::class)
-            ->onlyMethods(['isSalable'])
+            ->addMethods(['isSalable'])
             ->getMockForAbstractClass();
         $product->expects(static::once())
             ->method('isSalable')
@@ -684,7 +684,7 @@ class OrderTest extends TestCase
             ->willReturn($productId);
 
         $product = $this->getMockBuilder(ProductInterface::class)
-            ->onlyMethods(['isSalable'])
+            ->addMethods(['isSalable'])
             ->getMockForAbstractClass();
         $product->expects(static::never())
             ->method('isSalable');
@@ -731,7 +731,7 @@ class OrderTest extends TestCase
             ->willReturn($productId);
 
         $product = $this->getMockBuilder(ProductInterface::class)
-            ->onlyMethods(['isSalable'])
+            ->addMethods(['isSalable'])
             ->getMockForAbstractClass();
         $product->expects(static::once())
             ->method('isSalable')
@@ -768,7 +768,7 @@ class OrderTest extends TestCase
     {
         $paymentMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo'])
+            ->addMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo'])
             ->getMock();
         $paymentMock->expects($this->any())
             ->method('canReviewPayment')
@@ -793,7 +793,7 @@ class OrderTest extends TestCase
 
         $paymentMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo'])
+            ->addMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo'])
             ->getMock();
         $paymentMock->expects($this->any())
             ->method('canReviewPayment')
@@ -832,7 +832,7 @@ class OrderTest extends TestCase
     {
         $paymentMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo'])
+            ->addMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo'])
             ->getMock();
         $paymentMock->expects($this->any())
             ->method('canReviewPayment')
@@ -862,7 +862,7 @@ class OrderTest extends TestCase
 
         $paymentMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo'])
+            ->addMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo'])
             ->getMock();
         $paymentMock->expects($this->any())
             ->method('canReviewPayment')
@@ -1046,7 +1046,8 @@ class OrderTest extends TestCase
     {
         $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['isDeleted', 'filterByTypes', 'filterByParent', 'getQtyToInvoice'])
+            ->addMethods(['filterByTypes', 'filterByParent'])
+            ->onlyMethods(['isDeleted', 'getQtyToInvoice'])
             ->getMock();
 
         $itemMock->expects($this->any())
@@ -1087,7 +1088,7 @@ class OrderTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderActionFlag()
+    public static function dataProviderActionFlag()
     {
         return [
             [false],
@@ -1310,7 +1311,7 @@ class OrderTest extends TestCase
     /**
      * @return array
      */
-    public function notInvoicingStatesProvider()
+    public static function notInvoicingStatesProvider()
     {
         return [
             [Order::STATE_COMPLETE],
@@ -1322,7 +1323,7 @@ class OrderTest extends TestCase
     /**
      * @return array
      */
-    public function canNotCreditMemoStatesProvider()
+    public static function canNotCreditMemoStatesProvider()
     {
         return [
             [Order::STATE_HOLDED],

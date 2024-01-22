@@ -118,17 +118,19 @@ class DownloadCustomOptionTest extends TestCase
 
         $this->itemOptionMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['load', 'getId', 'getCode', 'getProductId', 'getValue'])
+            ->addMethods(['getCode', 'getProductId'])
+            ->onlyMethods(['load', 'getId', 'getValue'])
             ->getMock();
 
         $this->productOptionMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['load', 'getId', 'getProductId', 'getType'])
+            ->addMethods(['getProductId'])
+            ->onlyMethods(['load', 'getId', 'getType'])
             ->getMock();
 
         $objectManagerMock = $this->getMockBuilder(Download::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
+            ->addMethods(['create'])
             ->getMock();
         $objectManagerMock->expects($this->any())->method('create')
             ->willReturnMap(
@@ -224,7 +226,7 @@ class DownloadCustomOptionTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             [ //Good

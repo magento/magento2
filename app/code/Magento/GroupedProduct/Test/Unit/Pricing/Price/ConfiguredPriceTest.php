@@ -68,15 +68,17 @@ class ConfiguredPriceTest extends TestCase
             ->getMock();
 
         $this->saleableItem = $this->getMockBuilder(SaleableInterface::class)
+            ->addMethods([
+                'getTypeInstance',
+                'getStore',
+                'getCustomOption',
+                'hasFinalPrice',
+            ])
             ->onlyMethods([
                 'getTypeId',
                 'getId',
                 'getQty',
-                'getPriceInfo',
-                'getTypeInstance',
-                'getStore',
-                'getCustomOption',
-                'hasFinalPrice'
+                'getPriceInfo'
             ])
             ->getMockForAbstractClass();
         $this->saleableItem->expects($this->once())

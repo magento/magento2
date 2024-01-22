@@ -222,7 +222,7 @@ class CarrierTest extends TestCase
             ->getMock();
 
         $this->carrier = $this->getMockBuilder(Carrier::class)
-            ->onlyMethods(['rateRequest'])
+            ->addMethods(['rateRequest'])
             ->setConstructorArgs(
                 [
                     'scopeConfig' => $this->scope,
@@ -368,7 +368,7 @@ class CarrierTest extends TestCase
     {
         $request = $this->getMockBuilder(RateRequest::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getDestCity'])
+            ->addMethods(['getDestCity'])
             ->getMock();
         $request->expects($this->once())
             ->method('getDestCity')
@@ -380,7 +380,7 @@ class CarrierTest extends TestCase
     {
         $request = $this->getMockBuilder(RateRequest::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getDestCity'])
+            ->addMethods(['getDestCity'])
             ->getMock();
         $request->expects($this->exactly(2))
             ->method('getDestCity')
@@ -462,7 +462,7 @@ class CarrierTest extends TestCase
             ->willReturn($baseCurrencyCode);
 
         $request = $this->getMockBuilder(RateRequest::class)
-            ->onlyMethods(['getBaseCurrency'])
+            ->addMethods(['getBaseCurrency'])
             ->disableOriginalConstructor()
             ->getMock();
         $request->method('getBaseCurrency')
@@ -485,7 +485,7 @@ class CarrierTest extends TestCase
      * Get list of rates variations
      * @return array
      */
-    public function collectRatesDataProvider(): array
+    public static function collectRatesDataProvider(): array
     {
         return [
             [10.0, 'USD', 'EUR', 'RATED_ACCOUNT_PACKAGE', 7.5],
@@ -551,7 +551,7 @@ class CarrierTest extends TestCase
     /**
      * Get list of variations
      */
-    public function logDataProvider(): array
+    public static function logDataProvider(): array
     {
         return [
             [
@@ -573,7 +573,7 @@ class CarrierTest extends TestCase
      * @param string $tracking
      * @return array
      */
-    public function getTrackRequest(string $tracking): array
+    public static function getTrackRequest(string $tracking): array
     {
         return [
             'includeDetailedScans' => true,
@@ -1009,7 +1009,7 @@ class CarrierTest extends TestCase
     {
         $this->error = $this->getMockBuilder(RateResultError::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
+            ->addMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
             ->getMock();
         $this->errorFactory = $this->getMockBuilder(RateErrorFactory::class)
             ->disableOriginalConstructor()
@@ -1111,7 +1111,7 @@ class CarrierTest extends TestCase
         $priceCurrency = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
         $rateMethod = $this->getMockBuilder(Method::class)
             ->setConstructorArgs(['priceCurrency' => $priceCurrency])
-            ->onlyMethods(null)
+            ->onlyMethods([])
             ->getMock();
         $rateMethodFactory = $this->getMockBuilder(MethodFactory::class)
             ->disableOriginalConstructor()

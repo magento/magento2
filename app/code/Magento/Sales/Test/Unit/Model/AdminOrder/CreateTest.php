@@ -114,19 +114,21 @@ class CreateTest extends TestCase
 
         $this->sessionQuote = $this->getMockBuilder(SessionQuote::class)
             ->disableOriginalConstructor()
+            ->addMethods([
+                'getStoreId',
+                'getCustomerId',
+                'setData',
+                'setCurrencyId',
+                'setCustomerId',
+                'setStoreId',
+                'setCustomerGroupId',
+                'getUseOldShippingMethod'
+            ])
             ->onlyMethods(
                 [
                     'getQuote',
-                    'getStoreId',
-                    'getCustomerId',
-                    'setData',
-                    'setCurrencyId',
-                    'setCustomerId',
-                    'setStoreId',
-                    'setCustomerGroupId',
                     'getData',
-                    'getStore',
-                    'getUseOldShippingMethod',
+                    'getStore'
                 ]
             )
             ->getMock();
@@ -149,12 +151,11 @@ class CreateTest extends TestCase
 
         $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
+            ->addMethods(['setReordered', 'getReordered'])
             ->onlyMethods(
                 [
                     'getEntityId',
                     'getId',
-                    'setReordered',
-                    'getReordered',
                     'getOrderCurrencyCode',
                     'getCustomerGroupId',
                     'getItemsCollection',
@@ -213,7 +214,7 @@ class CreateTest extends TestCase
             ->willReturn(['group_id' => 1]);
 
         $requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->onlyMethods(['getPostValue'])
+            ->addMethods(['getPostValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $requestMock->expects($this->atLeastOnce())->method('getPostValue')->willReturn(null);
@@ -402,9 +403,9 @@ class CreateTest extends TestCase
 
         $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
+            ->addMethods(['setCustomerGroupId'])
             ->onlyMethods(
                 [
-                    'setCustomerGroupId',
                     'getBillingAddress',
                     'getShippingAddress',
                     'isVirtual',
@@ -494,11 +495,11 @@ class CreateTest extends TestCase
             ->willReturnSelf();
         $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
+            ->addMethods(['setRecollect'])
             ->onlyMethods(
                 [
                     'getBillingAddress',
-                    'getShippingAddress',
-                    'setRecollect'
+                    'getShippingAddress'
                 ]
             )
             ->getMock();
@@ -523,7 +524,7 @@ class CreateTest extends TestCase
      *
      * @return array
      */
-    public function setShippingAsBillingDataProvider(): array
+    public static function setShippingAsBillingDataProvider(): array
     {
         return [
             'testcase when sameAsBillingFlag is false' => [

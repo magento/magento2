@@ -51,7 +51,8 @@ class CanShipTest extends TestCase
 
         $this->orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getQtyToShip', 'getLockedDoShip'])
+            ->addMethods(['getQtyToShip'])
+            ->onlyMethods(['getLockedDoShip'])
             ->getMockForAbstractClass();
 
         $this->model = new CanShip();
@@ -82,7 +83,7 @@ class CanShipTest extends TestCase
      * Data provider for testCanShipWrongState
      * @return array
      */
-    public function canShipWrongStateDataProvider()
+    public static function canShipWrongStateDataProvider()
     {
         return [
             [Order::STATE_PAYMENT_REVIEW],
@@ -141,7 +142,7 @@ class CanShipTest extends TestCase
      *
      * @return array
      */
-    public function canShipDataProvider()
+    public static function canShipDataProvider()
     {
         return [
             [0, null, [__('The order does not allow a shipment to be created.')]],

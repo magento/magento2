@@ -148,7 +148,8 @@ class ViewTest extends TestCase
             ->getMock();
         $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getInvoice', 'getOrder', 'cancel', 'getId'])
+            ->addMethods(['cancel'])
+            ->onlyMethods(['getInvoice', 'getOrder', 'getId'])
             ->getMock();
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
@@ -167,12 +168,12 @@ class ViewTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock = $this->getMockBuilder(Context::class)
+            ->addMethods(['getTitle'])
             ->onlyMethods(
                 [
                     'getRequest',
                     'getResponse',
                     'getObjectManager',
-                    'getTitle',
                     'getSession',
                     'getHelper',
                     'getActionFlag',

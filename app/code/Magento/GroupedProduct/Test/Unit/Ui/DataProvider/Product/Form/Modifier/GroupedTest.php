@@ -131,7 +131,7 @@ class GroupedTest extends AbstractModifierTest
             ->onlyMethods(['getLinkType', 'getLinkedProductSku', 'getPosition', 'getExtensionAttributes'])
             ->getMockForAbstractClass();
         $this->linkExtensionMock = $this->getMockBuilder(ProductLinkExtensionInterface::class)
-            ->onlyMethods(['getQty'])
+            ->addMethods(['getQty'])
             ->getMockForAbstractClass();
         $this->linkExtensionMock->expects($this->any())
             ->method('getQty')
@@ -179,7 +179,8 @@ class GroupedTest extends AbstractModifierTest
     protected function createModel()
     {
         $this->currencyMock = $this->getMockBuilder(CurrencyInterface::class)
-            ->onlyMethods(['getCurrency', 'toCurrency'])
+            ->addMethods(['toCurrency'])
+            ->onlyMethods(['getCurrency'])
             ->getMockForAbstractClass();
         $this->currencyMock->expects($this->any())
             ->method('getCurrency')
@@ -264,7 +265,8 @@ class GroupedTest extends AbstractModifierTest
         ];
         $model = $this->getModel();
         $linkedProductMock = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['getId', 'getName', 'getPrice', 'getSku', 'getImage', 'getPosition', 'getQty'])
+            ->addMethods(['getPosition'])
+            ->onlyMethods(['getId', 'getName', 'getPrice', 'getSku', 'getImage', 'getQty'])
             ->disableOriginalConstructor()
             ->getMock();
         $linkedProductMock->expects($this->once())

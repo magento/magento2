@@ -80,7 +80,7 @@ class RelationTest extends TestCase
             ->getMock();
         $this->itemMock = $this->getMockBuilder(OrderItem::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(
+            ->addMethods(
                 [
                     'setParentId'
                 ]

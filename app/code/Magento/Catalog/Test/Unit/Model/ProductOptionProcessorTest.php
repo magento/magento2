@@ -113,12 +113,7 @@ class ProductOptionProcessorTest extends TestCase
         $productOptionMock = $this->getMockBuilder(ProductOptionInterface::class)
             ->getMockForAbstractClass();
 
-        $productOptionExtensionMock = $this->getMockBuilder(
-            ProductOptionExtensionInterface::class
-        )
-            ->onlyMethods([
-                'getCustomOptions',
-            ])
+        $productOptionExtensionMock = $this->getMockBuilder(ProductOptionExtensionInterface::class)
             ->getMockForAbstractClass();
 
         $productOptionMock->expects($this->any())

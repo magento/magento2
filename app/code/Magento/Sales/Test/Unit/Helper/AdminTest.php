@@ -100,7 +100,8 @@ class AdminTest extends TestCase
 
         $this->magentoObjectMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getOrder', 'getData'])
+            ->addMethods(['getOrder'])
+            ->onlyMethods(['getData'])
             ->getMock();
 
         $this->orderMock = $this->getMockBuilder(Order::class)
@@ -217,7 +218,7 @@ class AdminTest extends TestCase
     /**
      * @return array
      */
-    public function displayPricesDataProvider()
+    public static function displayPricesDataProvider()
     {
         return [
             [
@@ -332,7 +333,7 @@ class AdminTest extends TestCase
     /**
      * @return array
      */
-    public function applySalableProductTypesFilterDataProvider()
+    public static function applySalableProductTypesFilterDataProvider()
     {
         return [
             ['product', 'validProductType', 0],

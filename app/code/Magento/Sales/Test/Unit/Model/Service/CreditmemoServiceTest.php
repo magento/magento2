@@ -198,7 +198,8 @@ class CreditmemoServiceTest extends TestCase
     public function testRefund()
     {
         $creditMemoMock = $this->getMockBuilder(CreditmemoInterface::class)
-            ->onlyMethods(['getId', 'getOrder', 'getInvoice', 'getOrderId'])
+            ->addMethods(['getId', 'getOrder', 'getInvoice'])
+            ->onlyMethods(['getOrderId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $creditMemoMock->expects($this->once())->method('getId')->willReturn(null);
@@ -271,7 +272,8 @@ class CreditmemoServiceTest extends TestCase
     public function testRefundPendingCreditMemo()
     {
         $creditMemoMock = $this->getMockBuilder(CreditmemoInterface::class)
-            ->onlyMethods(['getId', 'getOrder', 'getState', 'getInvoice', 'getOrderId'])
+            ->addMethods(['getId', 'getOrder', 'getInvoice'])
+            ->onlyMethods(['getState', 'getOrderId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $creditMemoMock->expects($this->once())->method('getId')->willReturn(444);
@@ -353,7 +355,8 @@ class CreditmemoServiceTest extends TestCase
         $baseTotalPaid = 10;
         /** @var CreditmemoInterface|MockObject $creditMemo */
         $creditMemo = $this->getMockBuilder(CreditmemoInterface::class)
-            ->onlyMethods(['getId', 'getOrder', 'getOrderId'])
+            ->addMethods(['getId', 'getOrder'])
+            ->onlyMethods(['getOrderId'])
             ->getMockForAbstractClass();
         $creditMemo->method('getId')
             ->willReturn(null);
@@ -391,7 +394,7 @@ class CreditmemoServiceTest extends TestCase
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('We cannot register an existing credit memo.');
         $creditMemoMock = $this->getMockBuilder(CreditmemoInterface::class)
-            ->onlyMethods(['getId'])
+            ->addMethods(['getId'])
             ->getMockForAbstractClass();
         $creditMemoMock->expects($this->once())->method('getId')->willReturn(444);
         $this->creditmemoService->refund($creditMemoMock, true);
@@ -402,7 +405,8 @@ class CreditmemoServiceTest extends TestCase
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('We found an invalid order to refund.');
         $creditMemoMock = $this->getMockBuilder(CreditmemoInterface::class)
-            ->onlyMethods(['getId', 'getOrderId'])
+            ->addMethods(['getId'])
+            ->onlyMethods(['getOrderId'])
             ->getMockForAbstractClass();
         $creditMemoMock->expects($this->once())->method('getId')->willReturn(null);
         $creditMemoMock->expects($this->once())->method('getOrderId')->willReturn(null);
@@ -422,7 +426,8 @@ class CreditmemoServiceTest extends TestCase
 
         /** @var CreditmemoInterface|MockObject $creditMemo */
         $creditMemo = $this->getMockBuilder(CreditmemoInterface::class)
-            ->onlyMethods(['getId', 'getOrder', 'getOrderId'])
+            ->addMethods(['getId', 'getOrder'])
+            ->onlyMethods(['getOrderId'])
             ->getMockForAbstractClass();
         $creditMemo->method('getId')
             ->willReturn(null);
