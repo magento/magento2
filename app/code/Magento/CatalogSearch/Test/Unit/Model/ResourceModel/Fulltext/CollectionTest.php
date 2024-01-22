@@ -206,7 +206,7 @@ class CollectionTest extends TestCase
     {
         $reflectionProperty = new ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
         $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue(null);
+        $reflectionProperty->setValue(null, null);
     }
 
     /**
