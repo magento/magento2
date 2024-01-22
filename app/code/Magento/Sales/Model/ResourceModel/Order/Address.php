@@ -122,4 +122,27 @@ class Address extends SalesResource implements OrderAddressResourceInterface
         }
         return $this;
     }
+
+    /**
+     * Check is current order address entity has changes, by comparing current object state with stored snapshot
+     *
+     * @param \Magento\Framework\DataObject $entity
+     * @return bool
+     */
+    protected function isModified(\Magento\Framework\Model\AbstractModel $entity)
+    {
+        if (!$entity->getId()) {
+            return true;
+        }
+        $snapChatData = $this->entitySnapshot->getSnapshotData($entity);
+        foreach ($snapChatData as $field => $value) {
+            $fieldValue = $entity->getDataByKey($field);
+            if (is_numeric($fieldValue) && is_numeric($value)) {
+                if ($fieldValue !== $value) {
+                    return true;
+                }
+            }
+        }
+        return parent::isModified($entity);
+    }
 }

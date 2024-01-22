@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Model\ResourceModel\Db\VersionControl;
 
+use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
@@ -51,6 +52,17 @@ class Snapshot implements ResetAfterRequestInterface
     }
 
     /**
+     * Get snapshot data
+     *
+     * @param DataObject $entity
+     * @return array
+     */
+    public function getSnapshotData(\Magento\Framework\DataObject $entity)
+    {
+        return $this->snapshotData[get_class($entity)][$entity->getId()];
+    }
+
+    /**
      * Check is current entity has changes, by comparing current object state with stored snapshot
      *
      * @param \Magento\Framework\DataObject $entity
@@ -67,15 +79,8 @@ class Snapshot implements ResetAfterRequestInterface
             return true;
         }
         foreach ($this->snapshotData[$entityClass][$entity->getId()] as $field => $value) {
-            $fieldValue = $entity->getDataByKey($field);
-            if (is_numeric($fieldValue) && is_numeric($value)) {
-                if ($fieldValue !== $value) {
-                    return true;
-                }
-            } else {
-                if ($fieldValue != $value) {
-                    return true;
-                }
+            if ($entity->getDataByKey($field) != $value) {
+                return true;
             }
         }
 
