@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminDisableDHLConfigurationActionGroup">
-        <conditionalClick selector="{{AdminShippingMethodDHLSection.carriersDHLTab}}" dependentSelector="{{AdminShippingMethodDHLSection.carriersDHLTabOpen}}" visible="false" stepKey="toggleClick"/>
+        <conditionalClick selector="{{AdminShippingMethodDHLSection.carriersDHLTab}}" dependentSelector="{{AdminShippingMethodDHLSection.carriersDHLTabOpen}}" visible="false" stepKey="openDHLSection"/>
         <waitForElementVisible selector="{{AdminShippingMethodDHLSection.carriersDHLSelectBox}}" stepKey="waitForCarriersDHLActiveCheckbox"/>
         <selectOption selector="{{AdminShippingMethodDHLSection.carriersDHLSelectBox}}" userInput="No" stepKey="selectOptionForDHLEnabled"/>
         <checkOption selector="{{AdminShippingMethodDHLSection.carriersDHLActive}}" stepKey="clickOnFreeShippingCheckbox"/>
