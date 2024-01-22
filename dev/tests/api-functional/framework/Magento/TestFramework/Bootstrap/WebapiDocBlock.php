@@ -7,6 +7,7 @@
 namespace Magento\TestFramework\Bootstrap;
 
 use Magento\TestFramework\Annotation\ApiConfigFixture;
+use Magento\TestFramework\Annotation\AppArea;
 use Magento\TestFramework\Annotation\ConfigFixture;
 use Magento\TestFramework\Event\Transaction;
 
@@ -28,7 +29,7 @@ class WebapiDocBlock extends \Magento\TestFramework\Bootstrap\DocBlock
     {
         $subscribers = parent::_getSubscribers($application);
         foreach ($subscribers as $key => $subscriber) {
-            if (get_class($subscriber) === ConfigFixture::class || get_class($subscriber) === Transaction::class) {
+            if (in_array(get_class($subscriber), [ConfigFixture::class, Transaction::class, AppArea::class])) {
                 unset($subscribers[$key]);
             }
         }
@@ -41,6 +42,7 @@ class WebapiDocBlock extends \Magento\TestFramework\Bootstrap\DocBlock
             )
         );
         $subscribers[] = new ApiConfigFixture();
+        $subscribers[] = new AppArea($application);
 
         return $subscribers;
     }

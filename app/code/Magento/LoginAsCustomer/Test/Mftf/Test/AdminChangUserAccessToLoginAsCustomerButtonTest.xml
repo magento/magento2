@@ -27,7 +27,9 @@
                         stepKey="enableLoginAsCustomer"/>
             <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
                         stepKey="enableLoginAsCustomerAutoDetection"/>
-            <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheBeforeTestRun">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultAdminUserBefore"/>
 
@@ -45,6 +47,7 @@
             </actionGroup>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <!--Delete new User-->
@@ -62,7 +65,9 @@
 
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
                         stepKey="disableLoginAsCustomer"/>
-            <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterTestRun">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Login as new User -->

@@ -9,6 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CheckoutCartSummarySection">
+        <element name="cartTotalsBlock" type="block" selector="#cart-totals" />
         <element name="taxAmount" type="text" selector="[data-th='Tax']>span"/>
         <element name="taxSummary" type="text" selector=".totals-tax-summary"/>
         <element name="rate" type="text" selector=" tr.totals-tax-details.shown th.mark"/>

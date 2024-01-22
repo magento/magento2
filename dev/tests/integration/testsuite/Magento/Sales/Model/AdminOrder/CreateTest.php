@@ -98,6 +98,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $order->loadByIncrementId('100000001');
 
         /** @var $orderCreate \Magento\Sales\Model\AdminOrder\Create */
+        $order->setReordered(true);
         $orderCreate = $this->model->initFromOrder($order);
 
         $quoteItems = $orderCreate->getQuote()->getItemsCollection();

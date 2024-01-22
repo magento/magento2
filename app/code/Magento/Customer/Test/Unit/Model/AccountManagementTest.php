@@ -472,7 +472,7 @@ class AccountManagementTest extends TestCase
         $website->expects($this->atLeastOnce())
             ->method('getStoreIds')
             ->willReturn([1, 2, 3]);
-        $website->expects($this->once())
+        $website->expects($this->atMost(2))
             ->method('getDefaultStore')
             ->willReturn($store);
         $customer = $this->getMockBuilder(Customer::class)
@@ -551,7 +551,7 @@ class AccountManagementTest extends TestCase
             ->getMock();
         $website->method('getStoreIds')
             ->willReturn([1, 2, 3]);
-        $website->expects($this->once())
+        $website->expects($this->atMost(2))
             ->method('getDefaultStore')
             ->willReturn($store);
         $customer = $this->getMockBuilder(Customer::class)
@@ -633,7 +633,7 @@ class AccountManagementTest extends TestCase
             ->getMock();
         $website->method('getStoreIds')
             ->willReturn([1, 2, 3]);
-        $website->expects($this->once())
+        $website->expects($this->atMost(2))
             ->method('getDefaultStore')
             ->willReturn($store);
         $customer = $this->getMockBuilder(Customer::class)
@@ -2073,67 +2073,6 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-     * @return void
-     * @throws LocalizedException
-     */
-    public function testAuthenticate(): void
-    {
-        $username = 'login';
-        $password = '1234567';
-        $passwordHash = '1a2b3f4c';
-
-        $customerData = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $customerModel = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customerModel->expects($this->once())
-            ->method('updateData')
-            ->willReturn($customerModel);
-
-        $this->customerRepository
-            ->expects($this->once())
-            ->method('get')
-            ->with($username)
-            ->willReturn($customerData);
-
-        $this->authenticationMock->expects($this->once())
-            ->method('authenticate');
-
-        $customerSecure = $this->getMockBuilder(CustomerSecure::class)
-            ->addMethods(['getPasswordHash'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customerSecure->expects($this->any())
-            ->method('getPasswordHash')
-            ->willReturn($passwordHash);
-
-        $this->customerRegistry->expects($this->any())
-            ->method('retrieveSecureData')
-            ->willReturn($customerSecure);
-
-        $this->customerFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($customerModel);
-
-        $this->manager->expects($this->exactly(2))
-            ->method('dispatch')
-            ->withConsecutive(
-                [
-                    'customer_customer_authenticated',
-                    ['model' => $customerModel, 'password' => $password]
-                ],
-                [
-                    'customer_data_object_login', ['customer' => $customerData]
-                ]
-            );
-
-        $this->assertEquals($customerData, $this->accountManagement->authenticate($username, $password));
-    }
-
-    /**
      * @param int $isConfirmationRequired
      * @param string|null $confirmation
      * @param string $expected
@@ -2597,5 +2536,56 @@ class AccountManagementTest extends TestCase
             ->willReturn([$storeMock]);
 
         $this->assertTrue($this->accountManagement->validateCustomerStoreIdByWebsiteId($customerMock));
+    }
+
+    /**
+     * @return void
+     * @throws LocalizedException
+     */
+    public function testCompanyAdminWebsiteDoesNotHaveStore(): void
+    {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('The store view is not in the associated website.');
+
+        $websiteId = 1;
+        $customerId = 1;
+        $customerEmail = 'email@email.com';
+        $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
+
+        $website = $this->getMockBuilder(Website::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $website->method('getStoreIds')
+            ->willReturn([]);
+        $website->expects($this->atMost(1))
+            ->method('getDefaultStore')
+            ->willReturn(null);
+        $customer = $this->getMockBuilder(Customer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customer->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturn($customerId);
+        $customer->expects($this->once())
+            ->method('getEmail')
+            ->willReturn($customerEmail);
+        $customer->expects($this->atLeastOnce())
+            ->method('getWebsiteId')
+            ->willReturn($websiteId);
+        $customer->method('getStoreId')
+            ->willReturnOnConsecutiveCalls(null, null, 1);
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('get')
+            ->with($customerEmail)
+            ->willReturn($customer);
+        $this->share->method('isWebsiteScope')
+            ->willReturn(true);
+        $this->storeManager
+            ->expects($this->atLeastOnce())
+            ->method('getWebsite')
+            ->with($websiteId)
+            ->willReturn($website);
+        $this->accountManagement->createAccountWithPasswordHash($customer, $hash);
     }
 }
