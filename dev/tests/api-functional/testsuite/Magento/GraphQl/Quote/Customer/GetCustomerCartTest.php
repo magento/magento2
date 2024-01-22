@@ -141,7 +141,7 @@ class GetCustomerCartTest extends GraphQlAbstract
     public function testGetCustomerCartAfterTokenRevoked()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('User token has been revoked');
+        $this->expectExceptionMessage('The request is allowed for logged in customer');
 
         $customerCartQuery = $this->getCustomerCartQuery();
         $headers = $this->getHeaderMap();

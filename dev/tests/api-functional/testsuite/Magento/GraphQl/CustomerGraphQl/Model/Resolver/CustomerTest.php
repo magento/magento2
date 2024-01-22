@@ -26,6 +26,7 @@ use Magento\Store\Test\Fixture\Website as WebsiteFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQl\ResolverCacheAbstract;
+use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 
 /**
  * Test for customer resolver cache
@@ -541,7 +542,7 @@ class CustomerTest extends ResolverCacheAbstract
                 $query
             );
             $this->fail('Expected exception not thrown');
-        } catch (\Exception $e) {
+        } catch (ResponseContainsErrorsException $e) {
             // expected exception
         }
 
