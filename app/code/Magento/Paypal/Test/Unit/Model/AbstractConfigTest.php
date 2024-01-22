@@ -11,6 +11,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Payment\Model\MethodInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\ScopeInterface as ModelScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -300,23 +301,33 @@ class AbstractConfigTest extends TestCase
      * Check bill me later active setting uses disable funding options
      *
      * @param string|null $disableFundingOptions
-     * @param int $expectedFlag
+     * @param int $expressBml
      * @param bool $expectedValue
      *
      * @dataProvider isMethodActiveBmlDataProvider
      */
-    public function testIsMethodActiveBml($disableFundingOptions, $expectedFlag, $expectedValue)
-    {
+    public function testIsMethodActiveBml(
+        $disableFundingOptions,
+        $expressBml,
+        $wpsExpress,
+        $wpsExpressBml,
+        $expectedValue
+    ) {
         $this->scopeConfigMock->method('getValue')
             ->with(
                 self::equalTo('paypal/style/disable_funding_options'),
-                self::equalTo('store')
+                self::equalTo(ScopeInterface::SCOPE_STORE)
             )
             ->willReturn($disableFundingOptions);
 
+        $configFlagMap = [
+            ['payment/wps_express/active', ScopeInterface::SCOPE_STORE, null, $wpsExpress],
+            ['payment/wps_express_bml/active', ScopeInterface::SCOPE_STORE, null, $wpsExpressBml],
+            ['payment/paypal_express_bml/active', ScopeInterface::SCOPE_STORE, null, $expressBml]
+        ];
+
         $this->scopeConfigMock->method('isSetFlag')
-            ->with('payment/paypal_express_bml/active')
-            ->willReturn($expectedFlag);
+            ->willReturnMap($configFlagMap);
 
         self::assertEquals($expectedValue, $this->config->isMethodActive('paypal_express_bml'));
     }
@@ -327,14 +338,18 @@ class AbstractConfigTest extends TestCase
     public function isMethodActiveBmlDataProvider()
     {
         return [
-            ['CREDIT,CARD,ELV', 0, false],
-            ['CREDIT,CARD,ELV', 1, true],
-            ['CREDIT', 0, false],
-            ['CREDIT', 1, true],
-            ['CARD', 0, true],
-            ['CARD', 1, true],
-            [null, 0, true],
-            [null, 1, true]
+            ['CREDIT,CARD,ELV', 0, 0, 0, false],
+            ['CREDIT,CARD,ELV', 1, 0, 0,  true],
+            ['CREDIT', 0, 0, 0, false],
+            ['CREDIT', 1, 0, 0, true],
+            ['CARD', 0, 0, 0,  true],
+            ['CARD', 1, 0, 0,  true],
+            [null, 0, 0, 0,  true],
+            [null, 1, 0, 0,  true],
+            ['CREDIT', 0, 1, 0, false],
+            ['', 0, 1, 0, false],
+            ['', 0, 1, 1, true],
+            ['CREDIT', 0, 1, 1, true]
         ];
     }
 

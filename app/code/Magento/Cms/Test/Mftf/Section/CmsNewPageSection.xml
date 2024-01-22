@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CmsNewPageSection">
+        <element name="content" type="button" selector="#menu-magento-backend-content"/>
+        <element name="blocks" type="button" selector="//span[text()='Blocks']"/>
+        <element name="create" type="button" selector="#add"/>
+        <element name="block" type="input" selector="//input[@name='title']"/>
+        <element name="id" type="button" selector="//input[@name='identifier']"/>
+        <element name="storeView" type="button" selector="//select[@name='store_id']//*[contains(text(), '{{arg}}')]" parameterized="true"/>
+        <element name="frame" type="iframe" selector="cms_block_form_content_ifr"/>
+        <element name="description" type="input" selector="//body[@id='tinymce']"/>
+        <element name="save" type="button" selector="#save-button"/>
+    </section>
+</sections>

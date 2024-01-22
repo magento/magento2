@@ -15,6 +15,7 @@
             <description value="Verify checkbox is disabled 'Create Permanent Redirect' set 'No' on category and product edit page."/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-35589"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{DisableCreatePermanentRedirect.path}} {{DisableCreatePermanentRedirect.value}}" stepKey="enableCreatePermanentRedirect"/>

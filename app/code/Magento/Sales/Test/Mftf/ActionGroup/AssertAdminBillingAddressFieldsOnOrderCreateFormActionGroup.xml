@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminBillingAddressFieldsOnOrderCreateFormActionGroup">
+        <annotations>
+            <description>Admin assert fields filled default billing address from customer</description>
+        </annotations>
+        <arguments>
+            <argument name="namePrefix" type="string" defaultValue=""/>
+            <argument name="firstName" type="string" defaultValue="{{US_Address_CA.firstname}}"/>
+            <argument name="middleName" type="string" defaultValue=""/>
+            <argument name="lastName" type="string" defaultValue="{{US_Address_CA.lastname}}"/>
+            <argument name="nameSuffix" type="string" defaultValue=""/>
+            <argument name="company" type="string" defaultValue="{{US_Address_CA.company}}"/>
+            <argument name="streetLine1" type="string" defaultValue="{{US_Address_CA.street[0]}}"/>
+            <argument name="streetLine2" type="string" defaultValue="{{US_Address_CA.street[1]}}"/>
+            <argument name="country" type="string" defaultValue="{{US_Address_CA.country}}"/>
+            <argument name="state" type="string" defaultValue="{{US_Address_CA.state}}"/>
+            <argument name="province" type="string" defaultValue=""/>
+            <argument name="city" type="string" defaultValue="{{US_Address_CA.city}}"/>
+            <argument name="postcode" type="string" defaultValue="{{US_Address_CA.postcode}}"/>
+            <argument name="phone" type="string" defaultValue="{{US_Address_CA.telephone}}"/>
+            <argument name="fax" type="string" defaultValue=""/>
+            <argument name="vatNumber" type="string" defaultValue="{{US_With_Vat_Number.vat_id}}"/>
+        </arguments>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.NamePrefix}}" stepKey="getNamePrefix"/>
+        <assertEquals stepKey="assertNamePrefix">
+            <expectedResult type="string">{{namePrefix}}</expectedResult>
+            <actualResult type="variable">getNamePrefix</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.FirstName}}" stepKey="getFirstName"/>
+        <assertEquals stepKey="assertFirstName">
+            <expectedResult type="string">{{firstName}}</expectedResult>
+            <actualResult type="variable">getFirstName</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.MiddleName}}" stepKey="getMiddleName"/>
+        <assertEquals stepKey="assertMiddleName">
+            <expectedResult type="string">{{middleName}}</expectedResult>
+            <actualResult type="variable">getMiddleName</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.LastName}}" stepKey="getLastName"/>
+        <assertEquals stepKey="assertLastName">
+            <expectedResult type="string">{{lastName}}</expectedResult>
+            <actualResult type="variable">getLastName</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.NameSuffix}}" stepKey="getNameSuffix"/>
+        <assertEquals stepKey="assertNameSuffix">
+            <expectedResult type="string">{{nameSuffix}}</expectedResult>
+            <actualResult type="variable">getNameSuffix</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.Company}}" stepKey="getCompany"/>
+        <assertEquals stepKey="assertCompany">
+            <expectedResult type="string">{{company}}</expectedResult>
+            <actualResult type="variable">getCompany</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.StreetLine1}}" stepKey="getStreetLine1"/>
+        <assertEquals stepKey="assertStreetLine1">
+            <expectedResult type="string">{{streetLine1}}</expectedResult>
+            <actualResult type="variable">getStreetLine1</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.StreetLine2}}" stepKey="getStreetLine2"/>
+        <assertEquals stepKey="assertStreetLine2">
+            <expectedResult type="string">{{streetLine2}}</expectedResult>
+            <actualResult type="variable">getStreetLine2</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{AdminOrderFormBillingAddressSection.countrySelectedOption}}" stepKey="getCountrySelectedOption"/>
+        <assertEquals stepKey="assertCountrySelectedOption">
+            <expectedResult type="string">{{country}}</expectedResult>
+            <actualResult type="variable">getCountrySelectedOption</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{AdminOrderFormBillingAddressSection.stateSelectedOption}}" stepKey="getStateSelectedOption"/>
+        <assertEquals stepKey="assertStateSelectedOption">
+            <expectedResult type="string">{{state}}</expectedResult>
+            <actualResult type="variable">getStateSelectedOption</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.Province}}" stepKey="getProvince"/>
+        <assertEquals stepKey="assertProvince">
+            <expectedResult type="string">{{province}}</expectedResult>
+            <actualResult type="variable">getProvince</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.City}}" stepKey="getCity"/>
+        <assertEquals stepKey="assertCity">
+            <expectedResult type="string">{{city}}</expectedResult>
+            <actualResult type="variable">getCity</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.PostalCode}}" stepKey="getPostCode"/>
+        <assertEquals stepKey="assertPostCode">
+            <expectedResult type="string">{{postcode}}</expectedResult>
+            <actualResult type="variable">getPostCode</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.Phone}}" stepKey="getPhone"/>
+        <assertEquals stepKey="assertPhone">
+            <expectedResult type="string">{{phone}}</expectedResult>
+            <actualResult type="variable">getPhone</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.Fax}}" stepKey="getFax"/>
+        <assertEquals stepKey="assertFax">
+            <expectedResult type="string">{{fax}}</expectedResult>
+            <actualResult type="variable">getFax</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.VatNumber}}" stepKey="getVatNumber"/>
+        <assertEquals stepKey="assertVatNumber">
+            <expectedResult type="string">{{vatNumber}}</expectedResult>
+            <actualResult type="variable">getVatNumber</actualResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

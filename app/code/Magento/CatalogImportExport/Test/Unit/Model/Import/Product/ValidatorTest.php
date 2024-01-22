@@ -12,6 +12,7 @@ use Magento\CatalogImportExport\Model\Import\Product\Type\Simple;
 use Magento\CatalogImportExport\Model\Import\Product\Validator;
 use Magento\CatalogImportExport\Model\Import\Product\Validator\Media;
 use Magento\CatalogImportExport\Model\Import\Product\Validator\Website;
+use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\ImportExport\Model\Import;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -46,7 +47,7 @@ class ValidatorTest extends TestCase
         $entityTypeModel->expects($this->any())->method('retrieveAttributeFromCache')->willReturn([]);
         $this->context = $this->createPartialMock(
             Product::class,
-            ['retrieveProductTypeByName', 'retrieveMessageTemplate', 'getBehavior']
+            ['retrieveProductTypeByName', 'retrieveMessageTemplate', 'getBehavior', 'getMultipleValueSeparator']
         );
         $this->context->expects($this->any())->method('retrieveProductTypeByName')->willReturn($entityTypeModel);
         $this->context->expects($this->any())->method('retrieveMessageTemplate')->willReturn('error message');
@@ -64,7 +65,10 @@ class ValidatorTest extends TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->validator = $this->objectManagerHelper->getObject(
             Validator::class,
-            ['validators' => $this->validators]
+            [
+                'string' => new StringUtils(),
+                'validators' => $this->validators
+            ]
         );
         $this->validator->init($this->context);
     }
@@ -79,6 +83,7 @@ class ValidatorTest extends TestCase
      */
     public function testAttributeValidation($behavior, $attrParams, $rowData, $isValid, $attrCode = 'attribute_code')
     {
+        $this->context->method('getMultipleValueSeparator')->willReturn(Product::PSEUDO_MULTI_LINE_SEPARATOR);
         $this->context->expects($this->any())->method('getBehavior')->willReturn($behavior);
         $result = $this->validator->isAttributeValid(
             $attrCode,

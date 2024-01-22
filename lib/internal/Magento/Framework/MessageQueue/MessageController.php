@@ -60,6 +60,8 @@ class MessageController
             throw new NotFoundException(new Phrase("Property 'message_id' not found in properties."));
         }
         $code = $consumerName . '-' . $properties['message_id'];
+        // md5() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $code = md5($code);
         $this->reader->read($lock, $code);
         if ($lock->getId()) {

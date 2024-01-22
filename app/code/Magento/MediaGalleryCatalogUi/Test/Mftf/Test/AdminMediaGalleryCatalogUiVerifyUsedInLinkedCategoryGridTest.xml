@@ -22,18 +22,21 @@
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllMediaGalleryImages"/>
+            <comment userInput="BIC workaround" stepKey="deleteAllMediaGalleryImages"/>
             <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openMediaGalleryCategoryGridPage"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters"/>
         </before>
 
         <after>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetMediaGalleryGridFilters"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetMediaGalleryGridFilters"/>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+                <argument name="FolderName" value="wysiwyg"/>
+            </actionGroup>
             <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolder"/>
             <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFolder"/>
             <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertFolderWasDeleted"/>
-            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllMediaGalleryImages"/>
+            <comment userInput="BIC workaround" stepKey="deleteAllMediaGalleryImages"/>
             <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openMediaGalleryCategoryGridPage"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
@@ -43,8 +46,11 @@
             <argument name="id" value="$category.id$"/>
         </actionGroup>
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromImageUploader"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear" />
-        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetMediaGalleryGridFilters"/>
+        <comment userInput="BIC workaround" stepKey="waitForLoadingMaskToDisappear"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetMediaGalleryGridFilters"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolder">
+            <argument name="name" value="wysiwyg"/>
+        </actionGroup>
         <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
         <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder"/>
         <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertNewFolderCreated"/>
@@ -61,6 +67,10 @@
         <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategory"/>
 
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromImageUploaderToVerifyLink"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetMediaGalleryGridFilters2"/>
+        <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+            <argument name="FolderName" value="wysiwyg"/>
+        </actionGroup>
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCategoryImageFolder"/>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="openViewImageDetails"/>
         <actionGroup ref="AdminEnhancedMediaGalleryClickEntityUsedInActionGroup" stepKey="clickUsedInCategories">
@@ -94,6 +104,10 @@
 
         <deleteData createDataKey="category" stepKey="deleteCategory"/>
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
+        <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder2">
+            <argument name="FolderName" value="wysiwyg"/>
+        </actionGroup>
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="openCategoryImageFolder"/>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="openViewImageDetailsToVerifyEmptyUsedIn"/>
         <actionGroup ref="AssertAdminEnhancedMediaGalleryUsedInSectionNotDisplayedActionGroup" stepKey="assertThereIsNoUsedInSection"/>

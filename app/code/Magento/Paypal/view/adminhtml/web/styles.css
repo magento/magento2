@@ -35,3 +35,4 @@
 .paypal-recommended-header > .admin__collapsible-block > a::before {content: '' !important; width: 0; height: 0; border-color: transparent; border-top-color: #000; border-style: solid; border-width: .8rem .5rem 0 .5rem; margin-top:1px; transition: all .2s linear;}
 .payments-other-header > .admin__collapsible-block > a.open::before,
 .paypal-recommended-header > .admin__collapsible-block > a.open::before {border-color: transparent; border-bottom-color: #000; border-width: 0 .5rem .8rem .5rem;}
+.paypal-advertise-bml {border-bottom-color: transparent; padding-bottom: 0;}

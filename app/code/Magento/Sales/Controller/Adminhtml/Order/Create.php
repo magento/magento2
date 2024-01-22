@@ -14,7 +14,6 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
 /**
  * Adminhtml sales orders creation process controller
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
@@ -344,7 +343,7 @@ abstract class Create extends \Magento\Backend\App\Action
                     $this->messageManager->addSuccessMessage(__('The coupon code has been accepted.'));
                 }
             }
-        } elseif (isset($data['coupon']['code']) && empty($couponCode)) {
+        } elseif (isset($data['coupon']['code']) && $couponCode=='') {
             $this->messageManager->addSuccessMessage(__('The coupon code has been removed.'));
         }
 
@@ -401,7 +400,7 @@ abstract class Create extends \Magento\Backend\App\Action
      */
     protected function _getAclResource()
     {
-        $action = strtolower($this->getRequest()->getActionName());
+        $action = strtolower($this->getRequest()->getActionName() ?? '');
         if (in_array($action, ['index', 'save', 'cancel']) && $this->_getSession()->getReordered()) {
             $action = 'reorder';
         }

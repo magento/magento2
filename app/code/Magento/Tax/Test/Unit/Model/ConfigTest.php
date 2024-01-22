@@ -23,10 +23,11 @@ class ConfigTest extends TestCase
      *
      * @param string $setterMethod
      * @param string $getterMethod
+     *
      * @param bool $value
      * @dataProvider dataProviderDirectSettersGettersMethods
      */
-    public function testDirectSettersGettersMethods($setterMethod, $getterMethod, $value)
+    public function testDirectSettersGettersMethods($setterMethod, $getterMethod, $value): void
     {
         // Need a mocked object with only dummy methods.  It is just needed for construction.
         // The setter/getter methods do not use this object (for this set of tests).
@@ -41,7 +42,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderDirectSettersGettersMethods()
+    public function dataProviderDirectSettersGettersMethods(): array
     {
         return [
             ['setShippingPriceIncludeTax', 'shippingPriceIncludesTax', true],
@@ -60,17 +61,16 @@ class ConfigTest extends TestCase
      * @param bool $applyTaxAfterDiscount
      * @param bool $discountTaxIncl
      * @param string $expectedValue
+     *
+     * @return void
      * @dataProvider dataProviderGetCalculationSequence
      */
-    public function testGetCalculationSequence($applyTaxAfterDiscount, $discountTaxIncl, $expectedValue)
+    public function testGetCalculationSequence($applyTaxAfterDiscount, $discountTaxIncl, $expectedValue): void
     {
         $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $scopeConfigMock->expects($this->at(0))
+        $scopeConfigMock
             ->method('getValue')
-            ->willReturn($applyTaxAfterDiscount);
-        $scopeConfigMock->expects($this->at(1))
-            ->method('getValue')
-            ->willReturn($discountTaxIncl);
+            ->willReturnOnConsecutiveCalls($applyTaxAfterDiscount, $discountTaxIncl);
 
         /** @var Config */
         $model = new Config($scopeConfigMock);
@@ -80,7 +80,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetCalculationSequence()
+    public function dataProviderGetCalculationSequence(): array
     {
         return [
             [true,  true,  Calculation::CALC_TAX_AFTER_DISCOUNT_ON_INCL],
@@ -97,9 +97,11 @@ class ConfigTest extends TestCase
      * @param string $path
      * @param bool|int $configValue
      * @param bool $expectedValue
+     *
+     * @return void
      * @dataProvider dataProviderScopeConfigMethods
      */
-    public function testScopeConfigMethods($method, $path, $configValue, $expectedValue)
+    public function testScopeConfigMethods($method, $path, $configValue, $expectedValue): void
     {
         $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $scopeConfigMock->expects($this->once())
@@ -116,14 +118,14 @@ class ConfigTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataProviderScopeConfigMethods()
+    public function dataProviderScopeConfigMethods(): array
     {
         return [
             [
                 'priceIncludesTax',
                 Config::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,
                 true,
-                true,
+                true
             ],
             [
                 'applyTaxAfterDiscount',
@@ -378,5 +380,51 @@ class ConfigTest extends TestCase
                 'http:\\kiwis.rule.com'
             ]
         ];
+    }
+
+    /**
+     * Tests check if necessary do product price conversion
+     *
+     * @return void
+     */
+    public function testNeedPriceConversion(): void
+    {
+        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock
+            ->method('getValue')
+            ->willReturnMap(
+                [
+                    [
+                        Config::XML_PATH_DISPLAY_CART_SHIPPING,
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        true
+                    ],
+                    [
+                        Config::XML_PATH_DISPLAY_CART_SHIPPING,
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        false
+                    ],
+                    [
+                        Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        true
+                    ],
+                    [
+                        Config::XML_PATH_DISPLAY_CART_PRICE,
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        false
+                    ]
+                ]
+            );
+        /** @var Config */
+        $model = new Config($scopeConfigMock);
+        $model->setPriceIncludesTax(false);
+        $model->setNeedUseShippingExcludeTax(false);
+        $model->setShippingPriceIncludeTax(false);
+        $this->assertEquals(true, $model->needPriceConversion());
     }
 }

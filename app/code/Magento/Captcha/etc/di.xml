@@ -6,6 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Captcha\Api\CaptchaConfigPostProcessorInterface" type="Magento\Captcha\Model\Filter\CaptchaConfigPostProcessorComposite"/>
     <type name="Magento\Captcha\Model\DefaultModel">
         <arguments>
             <argument name="session" xsi:type="object">Magento\Customer\Model\Session</argument>
@@ -38,5 +39,20 @@
     </type>
     <type name="Magento\Checkout\Block\Cart\Sidebar">
         <plugin name="login_captcha" type="Magento\Captcha\Model\Cart\ConfigPlugin" sortOrder="50" />
+    </type>
+    <type name="Magento\Captcha\Model\Filter\CaptchaConfigPostProcessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="processor" xsi:type="object">Magento\Captcha\Model\Filter\QuoteDataConfigFilter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Captcha\Model\Filter\QuoteDataConfigFilter">
+        <arguments>
+            <argument name="filterList" xsi:type="array">
+                <item name="remote_ip" xsi:type="string">remote_ip</item>
+                <item name="x_forwarded_for" xsi:type="string">x_forwarded_for</item>
+            </argument>
+        </arguments>
     </type>
 </config>

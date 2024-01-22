@@ -14,6 +14,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder;
 use Magento\Framework\MessageQueue\Topology\Config\Data;
 use Magento\Framework\MessageQueue\Topology\Config\QueueConfigItem\DataMapper;
+use Magento\Framework\Phrase;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -288,5 +289,47 @@ class DataMapperTest extends TestCase
             ]
         ];
         $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    /**
+     * @return void
+     */
+    public function testTopicIsSynchronousException(): void
+    {
+        $topicName = 'topic01';
+        $data = [
+            'ex01' => [
+                'name' => 'ex01',
+                'type' => 'topic',
+                'connection' => 'amqp',
+                'durable' => true,
+                'internal' => false,
+                'autoDelete' => false,
+                'arguments' => ['some' => 'argument'],
+                'bindings' => [
+                    'bind01' => [
+                        'id' => 'bind01',
+                        'topic' => $topicName,
+                        'destinationType' => 'queue',
+                        'destination' => 'some.queue',
+                        'disabled' => false,
+                        'arguments' => ['some' => 'arguments'],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->communicationConfigMock->expects($this->exactly(1))
+            ->method('getTopic')
+            ->willThrowException(new LocalizedException(
+                new Phrase('Topic "%topic" is not configured.', ['topic' => $topicName])
+            ));
+
+        $this->configDataMock->expects($this->once())->method('get')->willReturn($data);
+
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage(sprintf('Error while checking if topic "%s" is synchronous', $topicName));
+
+        $this->model->getMappedData();
     }
 }

@@ -27,7 +27,7 @@
         <plugin name="result-messages" type="Magento\Theme\Controller\Result\MessagePlugin"/>
     </type>
     <type name="Magento\Framework\View\Result\Layout">
-        <plugin name="asyncCssLoad" type="Magento\Theme\Controller\Result\AsyncCssPlugin" />
+        <plugin name="asyncCssLoad" type="Magento\Theme\Controller\Result\AsyncCssPlugin" sortOrder="-20" />
         <plugin name="deferJsToFooter" type="Magento\Theme\Controller\Result\JsFooterPlugin" sortOrder="-10" />
     </type>
     <type name="Magento\Theme\Block\Html\Header\CriticalCss">

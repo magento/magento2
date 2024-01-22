@@ -133,7 +133,7 @@ define([
                 }
                 textareaElm.focus();
                 textareaElm.scrollTop = scrollPos;
-                jQuery(textareaElm).change();
+                jQuery(textareaElm).trigger('change');
                 textareaElm = null;
             }
         }

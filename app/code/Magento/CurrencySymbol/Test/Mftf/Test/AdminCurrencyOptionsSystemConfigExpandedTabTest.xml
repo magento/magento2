@@ -28,6 +28,7 @@
             <argument name="submenuUiId" value="{{AdminMenuStoresCurrencyCurrencyRates.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminNavigateToCurrencyRatesOptionActionGroup" stepKey="navigateToOptions" />
+        <waitForElementVisible selector="{{CurrencySetupSection.currencyOptions}}" stepKey="waitForCurrencyOptionsVisible"/>
         <grabAttributeFrom selector="{{CurrencySetupSection.currencyOptions}}" userInput="class" stepKey="grabClass"/>
         <assertStringContainsString stepKey="assertClass">
             <actualResult type="string">{$grabClass}</actualResult>

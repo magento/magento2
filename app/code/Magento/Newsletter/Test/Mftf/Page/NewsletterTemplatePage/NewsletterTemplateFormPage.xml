@@ -10,5 +10,6 @@
     <page name="NewsletterTemplateForm" url="/newsletter/template/new/" area="admin" module="Magento_Cms">
         <section name="StorefrontNewsletterSection"/>
         <section name="StorefrontNewsletterSection"/>
+        <section name="QueueInformationSection"/>
     </page>
 </pages>

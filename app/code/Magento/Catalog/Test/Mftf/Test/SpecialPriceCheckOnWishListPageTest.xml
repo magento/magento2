@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="SpecialPriceCheckOnWishListPageTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Check verify Special Price is the same as on the catalog page"/>
+            <title value="'Special Price on Catalog' is shown correctly"/>
+            <description value="Add Product to Wishlist and verify Special Price is the same as on the catalog page"/>
+            <testCaseId value="MC-26860"/>
+            <severity value="AVERAGE"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Create first simple product-->
+
+            <createData entity="ApiSimplePrice100Qty100" stepKey="createFirstSimpleProduct"/>
+
+            <!-- Create category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="AssignProductToCategory" stepKey="assignTestCategoryToTestProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <requiredEntity createDataKey="createFirstSimpleProduct"/>
+            </createData>
+
+            <!-- Create Customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <!-- Delete Data -->
+        <after>
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteSimpleCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+        <!-- Login into Admin Panel-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+
+        <!-- Open Product Page-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductPagebyID">
+            <argument name="productId" value="$createFirstSimpleProduct.id$"/>
+        </actionGroup>
+
+        <!-- Open Advanced Pricing and add Special Price to Product-->
+        <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPriceForFirstProduct">
+            <argument name="price" value="{{specialProductPrice3.price}}"/>
+        </actionGroup>
+
+        <!-- Save Product Page-->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+
+        <!-- Login to StoreFront-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Navigates to category page -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+
+        <!-- Grab Value of Product Price from Category Page-->
+        <grabTextFrom selector=" {{StorefrontCategoryMainSection.productPrice}}" stepKey="grabProductPrice"/>
+
+        <!-- Open Product Page -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$$createFirstSimpleProduct$$"/>
+        </actionGroup>
+
+        <!-- Grab Value of Special Price from Product Page-->
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.specialPriceValue}}" stepKey="waitForProductSpecialPrice"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.specialPriceValue}}" stepKey="grabSpecialPricefromProductPage"/>
+
+        <!-- Add Product To WishList from Product Page-->
+        <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="wishlist">
+            <argument name="productVar" value="$$createFirstSimpleProduct$$"/>
+        </actionGroup>
+
+        <!-- Grab Value of Special Price from WishList Page-->
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productSpecialPrice}}"  stepKey="grabspecialPriceFromWishListPage"/>
+
+        <!-- Check Special Price on the Catalog Page is same as Special Price on WishList Page-->
+        <assertEquals stepKey="assertProductPriceValuesAreEqual">
+            <actualResult type="const">$grabSpecialPricefromProductPage</actualResult>
+            <expectedResult type="string">$grabspecialPriceFromWishListPage</expectedResult>
+        </assertEquals>
+
+    </test>
+</tests>

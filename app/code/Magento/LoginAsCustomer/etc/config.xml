@@ -12,7 +12,6 @@
             <general>
                 <enabled>1</enabled>
                 <store_view_manual_choice_enabled>0</store_view_manual_choice_enabled>
-                <authentication_data_expiration_time>60</authentication_data_expiration_time>
             </general>
         </login_as_customer>
     </default>

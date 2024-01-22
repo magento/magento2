@@ -76,7 +76,7 @@ define([
      * Internal method used to normalize argumnets passed
      * to 'async' module methods.
      *
-     * @param {(String|Objetc)} selector
+     * @param {(String|Object)} selector
      * @param {(HTMLElement|Object|String)} [ctx]
      * @returns {Object}
      */

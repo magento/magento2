@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminResetColumnDropDownActionGroup">
+        <annotations>
+            <description>Reset the column dropdown ot its original state on the Orders grid page.</description>
+        </annotations>
+        <!-- Resetting column checkbox -->
+        <click selector="{{AdminOrdersGridSection.columnsDropdown}}" stepKey="openColumnsDropdown"/>
+        <click selector="{{AdminOrdersGridSection.resetColumnCheckbox}}" stepKey="resetColumnCheckbox"/>
+        <click selector="{{AdminOrdersGridSection.columnsDropdown}}" stepKey="closeColumnsDropdown" />
+    </actionGroup>
+</actionGroups>
+

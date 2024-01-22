@@ -50,6 +50,8 @@
         <column xsi:type="timestamp" name="first_failure" on_update="false" nullable="true" comment="First Failure"/>
         <column xsi:type="timestamp" name="lock_expires" on_update="false" nullable="true"
                 comment="Lock Expiration Date"/>
+        <column xsi:type="timestamp" name="session_cutoff" on_update="false" nullable="true"
+                comment="Session Cutoff Time"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
@@ -451,6 +453,8 @@
                 identity="false" default="0" comment="Is Filterable in Grid"/>
         <column xsi:type="smallint" name="is_searchable_in_grid" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Is Searchable in Grid"/>
+        <column xsi:type="smallint" name="grid_filter_condition_type" unsigned="true" nullable="false"
+                identity="false" default="0" comment="Grid Filter Condition Type"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="attribute_id"/>
         </constraint>
@@ -508,7 +512,10 @@
                 comment="Visitor ID"/>
         <column xsi:type="int" name="customer_id" unsigned="false" nullable="true" identity="false"
                 comment="Customer ID"/>
-        <column xsi:type="varchar" name="session_id" nullable="true" length="64" comment="Session ID"/>
+        <column xsi:type="varchar" name="session_id" nullable="true" length="1"
+                comment="Deprecated: Session ID value no longer used"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created At"/>
         <column xsi:type="timestamp" name="last_visit_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Last Visit Time"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -535,5 +542,20 @@
         <constraint xsi:type="unique" referenceId="CUSTOMER_LOG_CUSTOMER_ID">
             <column name="customer_id"/>
         </constraint>
+    </table>
+    <table name="customer_group_excluded_website" resource="default" engine="innodb"
+           comment="Excluded Websites From Customer Group">
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="int" name="customer_group_id" unsigned="true" nullable="false" identity="false"
+                comment="Customer Group ID"/>
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
+                comment="Excluded Website ID from Customer Group"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <index referenceId="CUSTOMER_GROUP_EXCLUDED_WEBSITE_CUSTOMER_GROUP_ID_WEBSITE_ID" indexType="btree">
+            <column name="customer_group_id"/>
+            <column name="website_id"/>
+        </index>
     </table>
 </schema>

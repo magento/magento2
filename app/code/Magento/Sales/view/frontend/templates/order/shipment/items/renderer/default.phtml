@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+/** @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter */
 ?>
 <?php $_item = $block->getItem() ?>
 <?php $_order = $block->getItem()->getOrderItem()->getOrder() ?>
@@ -42,5 +43,7 @@
     <td class="col sku" data-th="<?= $block->escapeHtml(__('SKU')) ?>">
         <?= /* @noEscape */ $block->prepareSku($block->getSku()) ?>
     </td>
-    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty Shipped')) ?>"><?= (int) $_item->getQty() ?></td>
+    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty Shipped')) ?>">
+        <?= /* @noEscape */ $localeFormatter->formatNumber((float) $_item->getQty()) ?>
+    </td>
 </tr>

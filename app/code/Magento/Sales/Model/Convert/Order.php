@@ -52,6 +52,11 @@ class Order extends \Magento\Framework\DataObject
     protected $_objectCopyService;
 
     /**
+     * @var \Magento\Sales\Model\Order\Shipment\ItemFactory
+     */
+    private $_shipmentItemFactory;
+
+    /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository
      * @param \Magento\Sales\Model\Order\Invoice\ItemFactory $invoiceItemFactory

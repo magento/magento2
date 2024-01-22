@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="EnableGoogleAnalyticsConfigData">
+        <data key="path">google/analytics/active</data>
+        <data key="scope">google</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="EnableGoogleAnalyticsExperimentsConfigData">
+        <data key="path">google/analytics/experiments</data>
+        <data key="scope">google</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="SetGtmAccountTypeConfigData">
+        <data key="path">google/analytics/type</data>
+        <data key="scope">google</data>
+        <data key="scope_id">1</data>
+        <data key="label">Google Tag Manager</data>
+        <data key="value">tag_manager</data>
+    </entity>
+    <entity name="DisableGoogleAnalyticsConfigData">
+        <data key="path">google/analytics/active</data>
+        <data key="scope">google</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="DisableGoogleAnalyticsExperimentsConfigData">
+        <data key="path">google/analytics/experiments</data>
+        <data key="scope">google</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+</entities>

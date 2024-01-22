@@ -20,7 +20,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 abstract class AbstractResource
 {
     /**
-     * @var Json
+     * @var Json|null
      * @since 101.0.0
      */
     protected $serializer;
@@ -60,7 +60,6 @@ abstract class AbstractResource
      * Start resource transaction
      *
      * @return $this
-     * @api
      */
     public function beginTransaction()
     {
@@ -73,7 +72,6 @@ abstract class AbstractResource
      *
      * @param callable|array $callback
      * @return $this
-     * @api
      */
     public function addCommitCallback($callback)
     {
@@ -84,9 +82,9 @@ abstract class AbstractResource
     /**
      * Commit resource transaction
      *
-     * @deprecated see \Magento\Framework\Model\ExecuteCommitCallbacks::afterCommit
+     * @deprecated
+     * @see \Magento\Framework\Model\ExecuteCommitCallbacks::afterCommit
      * @return $this
-     * @api
      */
     public function commit()
     {
@@ -112,7 +110,6 @@ abstract class AbstractResource
      * Roll back resource transaction
      *
      * @return $this
-     * @api
      */
     public function rollBack()
     {
@@ -203,7 +200,7 @@ abstract class AbstractResource
      */
     protected function _prepareTableValueForSave($value, $type)
     {
-        $type = strtolower($type);
+        $type = $value !== null ? strtolower($type) : '';
         if ($type == 'decimal' || $type == 'numeric' || $type == 'float') {
             $value = \Magento\Framework\App\ObjectManager::getInstance()->get(
                 \Magento\Framework\Locale\FormatInterface::class
@@ -252,7 +249,6 @@ abstract class AbstractResource
      * Get serializer
      *
      * @return Json
-     * @deprecated 101.0.0
      * @since 101.0.0
      */
     protected function getSerializer()
@@ -267,7 +263,6 @@ abstract class AbstractResource
      * Get logger
      *
      * @return \Psr\Log\LoggerInterface
-     * @deprecated 101.0.1
      */
     private function getLogger()
     {

@@ -11,6 +11,9 @@ use Magento\Directory\Helper\Data;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\Escaper;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Validator\NotEmpty;
+use Magento\Framework\Validator\ValidateException;
+use Magento\Framework\Validator\ValidatorChain;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -73,7 +76,7 @@ class Country implements ValidatorInterface
     {
         $countryId = $address->getCountryId();
         $errors = [];
-        if (!\Zend_Validate::is($countryId, 'NotEmpty')) {
+        if (!ValidatorChain::is($countryId, NotEmpty::class)) {
             $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'countryId']);
         } elseif (!in_array($countryId, $this->getWebsiteAllowedCountries($address), true)) {
             //Checking if such country exists.
@@ -91,7 +94,7 @@ class Country implements ValidatorInterface
      *
      * @param AbstractAddress $address
      * @return array
-     * @throws \Zend_Validate_Exception
+     * @throws ValidateException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function validateRegion(AbstractAddress $address)
@@ -104,11 +107,11 @@ class Country implements ValidatorInterface
         $regionId = (string)$address->getRegionId();
         $allowedRegions = $regionCollection->getAllIds();
         $isRegionRequired = $this->directoryData->isRegionRequired($countryId);
-        if ($isRegionRequired && empty($allowedRegions) && !\Zend_Validate::is($region, 'NotEmpty')) {
+        if ($isRegionRequired && empty($allowedRegions) && !ValidatorChain::is($region, NotEmpty::class)) {
             //If region is required for country and country doesn't provide regions list
             //region must be provided.
             $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'region']);
-        } elseif ($allowedRegions && !\Zend_Validate::is($regionId, 'NotEmpty') && $isRegionRequired) {
+        } elseif ($allowedRegions && !ValidatorChain::is($regionId, NotEmpty::class) && $isRegionRequired) {
             //If country actually has regions and requires you to
             //select one then it must be selected.
             $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'regionId']);

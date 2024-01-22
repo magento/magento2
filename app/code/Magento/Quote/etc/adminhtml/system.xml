@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="cataloginventory">
+            <tab>catalog</tab>
+            <group id="options">
+                <field id="enable_inventory_check" translate="label" type="select" sortOrder="60" showInDefault="1" canRestore="1">
+                    <label>Enable Inventory Check On Cart Load</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Disabling inventory check skips pre validation of cart item data.</comment>
+                </field>
+            </group>
+        </section>
+        <section id="sales">
+            <group id="backpressure" translate="label" type="text" sortOrder="1001" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Rate limiting</label>
+                <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable rate limiting for placing orders</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="limit" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Requests limit per authenticated customer</label>
+                    <backend_model>Magento\Quote\Model\Backpressure\Config\LimitValue</backend_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="guest_limit" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Requests limit per guest</label>
+                    <backend_model>Magento\Quote\Model\Backpressure\Config\LimitValue</backend_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="period" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Counter resets in a ...</label>
+                    <source_model>Magento\Quote\Model\Backpressure\Config\PeriodSource</source_model>
+                    <backend_model>Magento\Quote\Model\Backpressure\Config\PeriodValue</backend_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

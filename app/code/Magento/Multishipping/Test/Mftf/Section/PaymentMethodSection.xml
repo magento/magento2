@@ -9,6 +9,9 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="PaymentMethodSection">
-        <element name="goToReviewOrder" type="button" selector="#payment-continue"/>
+        <element name="goToReviewOrder" type="button" selector="#payment-continue" timeout="30"/>
+        <element name="changeBillingAddress" type="button" selector="//div[@class='box box-billing-address']//a[normalize-space() = 'Change']" timeout="30"/>
+        <element name="billingAddressBlock" type="block" selector=".box-billing-address > .box-content > address" timeout="30"/>
+        <element name="shippingblock" type="block" selector=".box-shipping-address > .box-content > address" timeout="30"/>
     </section>
 </sections>

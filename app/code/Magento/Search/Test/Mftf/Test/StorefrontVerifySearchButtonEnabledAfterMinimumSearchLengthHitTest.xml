@@ -16,6 +16,7 @@
             <severity value="AVERAGE"/>
             <testCaseId value="MC-37381"/>
             <group value="searchFrontend"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>

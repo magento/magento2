@@ -34,11 +34,11 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
  */
 class Related extends AbstractModifier
 {
-    const DATA_SCOPE = '';
-    const DATA_SCOPE_RELATED = 'related';
-    const DATA_SCOPE_UPSELL = 'upsell';
-    const DATA_SCOPE_CROSSSELL = 'crosssell';
-    const GROUP_RELATED = 'related';
+    public const DATA_SCOPE = '';
+    public const DATA_SCOPE_RELATED = 'related';
+    public const DATA_SCOPE_UPSELL = 'upsell';
+    public const DATA_SCOPE_CROSSSELL = 'crosssell';
+    public const GROUP_RELATED = 'related';
 
     /**
      * @var string
@@ -205,11 +205,17 @@ class Related extends AbstractModifier
 
         foreach ($this->getDataScopes() as $dataScope) {
             $data[$productId]['links'][$dataScope] = [];
+            $linkItems = [];
             foreach ($this->productLinkRepository->getList($product) as $linkItem) {
                 if ($linkItem->getLinkType() !== $dataScope) {
                     continue;
                 }
-
+                $linkItems[] = $linkItem;
+            }
+            usort($linkItems, function ($a, $b) {
+                return $a->getPosition() <=> $b->getPosition();
+            });
+            foreach ($linkItems as $linkItem) {
                 /** @var \Magento\Catalog\Model\Product $linkedProduct */
                 $linkedProduct = $this->productRepository->get(
                     $linkItem->getLinkedProductSku(),
@@ -570,7 +576,7 @@ class Related extends AbstractModifier
                         'columnsHeaderAfterRender' => true,
                         'renderDefaultRecord' => false,
                         'template' => 'ui/dynamic-rows/templates/grid',
-                        'component' => 'Magento_Ui/js/dynamic-rows/dynamic-rows-grid',
+                        'component' => 'Magento_Catalog/js/components/reset-dynamic-rows-grid-row-position-on-delete',
                         'addButton' => false,
                         'recordTemplate' => 'record',
                         'dataScope' => 'data.links',

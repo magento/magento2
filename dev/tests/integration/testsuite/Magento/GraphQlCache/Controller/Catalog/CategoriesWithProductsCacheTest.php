@@ -31,9 +31,9 @@ class CategoriesWithProductsCacheTest extends AbstractGraphqlCacheTest
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         /** @var ProductInterface $product */
         $product = $productRepository->get('simple333');
-        $categoryId ='333';
-        $query
-            = <<<QUERY
+        $categoryId = 333;
+        $query =
+<<<QUERY
 query GetCategoryWithProducts(\$id: Int!, \$pageSize: Int!, \$currentPage: Int!) {
         category(id: \$id) {
             id
@@ -41,7 +41,7 @@ query GetCategoryWithProducts(\$id: Int!, \$pageSize: Int!, \$currentPage: Int!)
             name
             product_count
             products(
-                      pageSize: \$pageSize, 
+                      pageSize: \$pageSize,
                       currentPage: \$currentPage) {
                 items {
                     id
@@ -59,7 +59,7 @@ query GetCategoryWithProducts(\$id: Int!, \$pageSize: Int!, \$currentPage: Int!)
         }
     }
 QUERY;
-        $variables =[
+        $variables = [
             'id' => $categoryId,
             'pageSize'=> 10,
             'currentPage' => 1
@@ -72,7 +72,7 @@ QUERY;
 
         $response = $this->dispatchGraphQlGETRequest($queryParams);
         $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
-        $expectedCacheTags = ['cat_c','cat_c_' . $categoryId,'cat_p','cat_p_' . $product->getId(),'FPC'];
+        $expectedCacheTags = ['cat_c', 'cat_c_' . $categoryId, 'cat_p', 'cat_p_' . $product->getId(), 'FPC'];
         $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
         $this->assertEquals($expectedCacheTags, $actualCacheTags);
     }
