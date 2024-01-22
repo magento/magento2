@@ -180,7 +180,7 @@ class IndexTest extends TestCase
 
         $this->product = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([
+            ->addMethods([
                 'getData',
             ])
             ->getMockForAbstractClass();
@@ -218,10 +218,8 @@ class IndexTest extends TestCase
 
         $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([
-                'getMetadata',
-                'getIdentifierField'
-            ])
+            ->addMethods(['getIdentifierField'])
+            ->onlyMethods(['getMetadata'])
             ->getMock();
 
         $this->context->expects($this->any())

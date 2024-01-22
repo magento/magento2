@@ -314,7 +314,7 @@ class FileTest extends TestCase
             ->willReturn(json_encode($resultValue));
 
         $option = $this->getMockBuilder(Option::class)
-            ->onlyMethods(['setValue'])
+            ->addMethods(['setValue'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -338,7 +338,8 @@ class FileTest extends TestCase
         $configurationItemOption = $this->getMockBuilder(
             OptionInterface::class
         )->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'getValue'])
+            ->addMethods(['getId'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $configurationItemOption->expects($this->once())
             ->method('getId')

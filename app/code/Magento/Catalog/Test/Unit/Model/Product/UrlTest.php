@@ -58,9 +58,8 @@ class UrlTest extends TestCase
         $this->filter = $this->getMockBuilder(
             FilterManager::class
         )->disableOriginalConstructor()
-            ->onlyMethods(
-                ['translitUrl']
-            )->getMock();
+            ->addMethods(['translitUrl'])
+            ->getMock();
 
         $this->urlFinder = $this->getMockBuilder(
             UrlFinderInterface::class
@@ -149,17 +148,14 @@ class UrlTest extends TestCase
         $product = $this->getMockBuilder(
             Product::class
         )->disableOriginalConstructor()
+            ->addMethods(['getUrlKey', 'setRequestPath', 'hasUrlDataObject', 'getDoNotUseCategoryId'])
             ->onlyMethods(
                 [
                     'getStoreId',
                     'getEntityId',
                     'getId',
-                    'getUrlKey',
-                    'setRequestPath',
-                    'hasUrlDataObject',
                     'getRequestPath',
-                    'getCategoryId',
-                    'getDoNotUseCategoryId',
+                    'getCategoryId'
                 ]
             )->getMock();
         $product->expects($this->any())->method('getStoreId')->willReturn($storeId);
@@ -197,7 +193,7 @@ class UrlTest extends TestCase
     /**
      * @return array
      */
-    public function getUrlDataProvider()
+    public static function getUrlDataProvider()
     {
         return [
             [

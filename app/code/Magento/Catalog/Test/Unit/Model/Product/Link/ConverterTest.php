@@ -33,7 +33,8 @@ class ConverterTest extends TestCase
         $linkType = 'associated';
         $linkMock = $this->getMockBuilder(ProductLinkInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getData', 'getLinkType', 'getLinkedProductSku', 'getExtensionAttributes'])
+            ->addMethods(['getData'])
+            ->onlyMethods(['getLinkType', 'getLinkedProductSku', 'getExtensionAttributes'])
             ->getMockForAbstractClass();
         $basicData = [$linkMock];
         $linkedProductMock = $this->getMockBuilder(Product::class)
@@ -78,7 +79,7 @@ class ConverterTest extends TestCase
             ->method('getId')
             ->willReturn($linkedProductId);
         $attributeMock = $this->getMockBuilder(ExtensionAttributesInterface::class)
-            ->onlyMethods(['__toArray'])
+            ->addMethods(['__toArray'])
             ->getMockForAbstractClass();
         $linkMock->expects($this->once())
             ->method('getExtensionAttributes')

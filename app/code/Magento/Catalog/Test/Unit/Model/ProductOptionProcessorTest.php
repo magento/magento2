@@ -53,9 +53,8 @@ class ProductOptionProcessorTest extends TestCase
     protected function setUp(): void
     {
         $this->dataObject = $this->getMockBuilder(DataObject::class)
-            ->onlyMethods([
-                'getOptions', 'addData',
-            ])
+            ->addMethods(['getOptions'])
+            ->onlyMethods(['addData'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -70,7 +69,7 @@ class ProductOptionProcessorTest extends TestCase
         $this->customOption = $this->getMockBuilder(
             CustomOptionInterface::class
         )
-            ->onlyMethods([
+            ->addMethods([
                 'getDownloadableLinks',
             ])
             ->getMockForAbstractClass();
@@ -206,7 +205,7 @@ class ProductOptionProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderConvertToProductOption()
+    public static function dataProviderConvertToProductOption()
     {
         return [
             [

@@ -105,9 +105,10 @@ class TableTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->abstractAttributeMock = $this->getMockBuilder(AbstractAttribute::class)
+            ->addMethods(['getStoreId'])
             ->onlyMethods(
                 [
-                    'getFrontend', 'getAttributeCode', '__wakeup', 'getStoreId',
+                    'getFrontend', 'getAttributeCode', '__wakeup',
                     'getId', 'getIsRequired', 'getEntity', 'getBackend'
                 ]
             )
@@ -212,7 +213,7 @@ class TableTest extends TestCase
     /**
      * @return array
      */
-    public function specificOptionsProvider()
+    public static function specificOptionsProvider()
     {
         return [
             [['1', '2'], true],
@@ -270,7 +271,7 @@ class TableTest extends TestCase
     /**
      * @return array
      */
-    public function getOptionTextProvider()
+    public static function getOptionTextProvider()
     {
         return [
             [
@@ -289,7 +290,8 @@ class TableTest extends TestCase
         $attributeCode = 'attribute_code';
         $dir = Select::SQL_ASC;
         $collection = $this->getMockBuilder(AbstractCollection::class)
-            ->onlyMethods([ 'getSelect', 'getStoreId'])
+            ->addMethods(['getStoreId'])
+            ->onlyMethods(['getSelect'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -394,7 +396,7 @@ class TableTest extends TestCase
     /**
      * @return array
      */
-    public function getAllOptionsDataProvider()
+    public static function getAllOptionsDataProvider()
     {
         return [
             [

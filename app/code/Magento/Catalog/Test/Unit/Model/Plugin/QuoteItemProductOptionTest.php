@@ -60,11 +60,12 @@ class QuoteItemProductOptionTest extends TestCase
             ->getMock();
         $this->quoteItemMock = $this->getMockBuilder(AbstractQuoteItem::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getOptions', 'getProduct'])
+            ->addMethods(['getOptions'])
+            ->onlyMethods(['getProduct'])
             ->getMockForAbstractClass();
         $this->quoteItemOptionMock = $this->getMockBuilder(QuoteItemOption::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getCode'])
+            ->addMethods(['getCode'])
             ->getMock();
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()

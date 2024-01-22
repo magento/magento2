@@ -73,7 +73,8 @@ class ProductIdLocatorTest extends TestCase
         $skus = ['sku_1', 'sku_2'];
 
         $product = $this->getMockBuilder(ProductInterface::class)
-            ->onlyMethods(['getSku', 'getData', 'getTypeId'])
+            ->addMethods(['getData'])
+            ->onlyMethods(['getSku', 'getTypeId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $product->method('getSku')
@@ -117,7 +118,8 @@ class ProductIdLocatorTest extends TestCase
         $products = [];
         foreach ($skus as $sku) {
             $product = $this->getMockBuilder(ProductInterface::class)
-                ->onlyMethods(['getSku', 'getData', 'getTypeId'])
+                ->addMethods(['getData'])
+                ->onlyMethods(['getSku', 'getTypeId'])
                 ->disableOriginalConstructor()
                 ->getMockForAbstractClass();
             $product->method('getSku')

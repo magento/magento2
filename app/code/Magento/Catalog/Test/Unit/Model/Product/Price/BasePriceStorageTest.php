@@ -211,14 +211,14 @@ class BasePriceStorageTest extends TestCase
     public function testUpdate(bool $isScopeWebsite, bool $isScopeGlobal, array $formattedPrices)
     {
         $website = $this->getMockBuilder(WebsiteInterface::class)
-            ->onlyMethods([
+            ->addMethods([
                 'getStoreIds',
             ])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $website->method('getStoreIds')->willReturn([1 => 1, 2 => 2]);
         $store = $this->getMockBuilder(StoreInterface::class)
-            ->onlyMethods([
+            ->addMethods([
                 'getWebsite',
             ])
             ->disableOriginalConstructor()
@@ -254,7 +254,7 @@ class BasePriceStorageTest extends TestCase
         $this->pricePersistence->expects($this->any())->method('update')->with($formattedPrices);
         $this->validationResult->expects($this->any())->method('getFailedItems')->willReturn([]);
         $attribute = $this->getMockBuilder(ProductAttributeInterface::class)
-            ->onlyMethods([
+            ->addMethods([
                 'isScopeWebsite',
                 'isScopeGlobal'
             ])
@@ -336,7 +336,7 @@ class BasePriceStorageTest extends TestCase
      *
      * @return array
      */
-    public function updateProvider(): array
+    public static function updateProvider(): array
     {
         return
             [

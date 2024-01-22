@@ -91,13 +91,14 @@ class CustomOptionProcessorTest extends TestCase
             ->getMock();
         $this->cartItem = $this->getMockBuilder(CartItemInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getOptionByCode', 'getProductOption', 'setProductOption'])
+            ->addMethods(['getOptionByCode'])
+            ->onlyMethods(['getProductOption', 'setProductOption'])
             ->getMockForAbstractClass();
         $this->extensibleAttribute = $this->getMockBuilder(
             ProductOptionExtensionInterface::class
         )
             ->disableOriginalConstructor()
-            ->onlyMethods(['setCustomOptions', 'getCustomOptions'])
+            ->addMethods(['setCustomOptions', 'getCustomOptions'])
             ->getMockForAbstractClass();
         $this->productOption = $this->getMockBuilder(ProductOption::class)
             ->disableOriginalConstructor()

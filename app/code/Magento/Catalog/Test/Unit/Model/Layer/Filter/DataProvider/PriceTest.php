@@ -117,7 +117,7 @@ class PriceTest extends TestCase
         /** @var Category|MockObject $category */
         $category = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getFilterPriceRange'])
+            ->addMethods(['getFilterPriceRange'])
             ->getMock();
         $priceRange = 10;
         $category->expects($this->once())
@@ -135,7 +135,7 @@ class PriceTest extends TestCase
         /** @var Category|MockObject $category */
         $category = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getFilterPriceRange'])
+            ->addMethods(['getFilterPriceRange'])
             ->getMock();
         $priceRange = 0;
         $category->expects($this->once())
@@ -174,7 +174,7 @@ class PriceTest extends TestCase
     /**
      * @return array
      */
-    public function validateFilterDataProvider()
+    public static function validateFilterDataProvider()
     {
         return [
             ['filter' => '0-10', 'result' => ['0', '10']],

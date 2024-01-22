@@ -40,7 +40,7 @@ class CategoryTest extends TestCase
             ->getMock();
 
         $this->category = $this->getMockBuilder(Category::class)
-            ->onlyMethods(['getName', 'getId'])
+            ->addMethods(['getName', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
 

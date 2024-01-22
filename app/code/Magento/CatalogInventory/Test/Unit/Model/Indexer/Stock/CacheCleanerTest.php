@@ -74,7 +74,7 @@ class CacheCleanerTest extends TestCase
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->getMock();
         $this->stockConfigurationMock = $this->getMockBuilder(StockConfigurationInterface::class)
-            ->onlyMethods(['getStockThresholdQty'])
+            ->addMethods(['getStockThresholdQty'])
             ->getMockForAbstractClass();
         $this->cacheContextMock = $this->getMockBuilder(CacheContext::class)
             ->disableOriginalConstructor()
@@ -82,7 +82,8 @@ class CacheCleanerTest extends TestCase
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMock();
         $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
-            ->onlyMethods(['getMetadata', 'getLinkField'])
+            ->addMethods(['getLinkField'])
+            ->onlyMethods(['getMetadata'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->selectMock = $this->getMockBuilder(Select::class)
@@ -183,7 +184,7 @@ class CacheCleanerTest extends TestCase
     /**
      * @return array
      */
-    public function cleanDataProvider(): array
+    public static function cleanDataProvider(): array
     {
         return [
             [true, false, 1, false],
@@ -245,7 +246,7 @@ class CacheCleanerTest extends TestCase
     /**
      * @return array
      */
-    public function notCleanCacheDataProvider(): array
+    public static function notCleanCacheDataProvider(): array
     {
         return [
             [true, true, 1, false],
