@@ -27,6 +27,7 @@
             <description value="Customer should be able to add a bundle product to the cart from widget"/>
             <severity value="CRITICAL"/>
             <testCaseId value="AC-10867"/>
+            <useCaseId value="ACP2E-2615"/>
             <group value="WYSIWYGDisabled"/>
             <group value="Bundle"/>
         </annotations>
