@@ -19,10 +19,8 @@
             <group value="paypalExpress"/>
         </annotations>
         <before>
-            <!-- Simple product is created and assigned to category -->
-            <createData entity="_defaultCategory" stepKey="createCategory"/>
-            <createData entity="SimpleProduct" stepKey="createProduct">
-                <requiredEntity createDataKey="createCategory"/>
+            <!-- Simple product is created -->
+            <createData entity="simpleProductWithoutCategory" stepKey="createProduct">
                 <field key="price">10.00</field>
             </createData>
             <!-- US Customer is created -->
@@ -49,7 +47,6 @@
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Go to the tax rule page and delete the row created-->
             <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPageA"/>
@@ -68,7 +65,7 @@
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <!-- Login to StoreFront -->
+        <!-- Navigate to StoreFront -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
         <!-- Add product to cart -->
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
