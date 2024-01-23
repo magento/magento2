@@ -15,7 +15,7 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 class Address extends SalesResource implements OrderAddressResourceInterface
 {
     /**
-     * Event prefix
+     * Sales order address event prefix
      *
      * @var string
      */
@@ -33,10 +33,10 @@ class Address extends SalesResource implements OrderAddressResourceInterface
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Sales\Model\ResourceModel\Attribute $attribute
-     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param Snapshot $entitySnapshot
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite
+     * @param \Magento\Sales\Model\ResourceModel\Attribute $attribute
+     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param \Magento\Sales\Model\Order\Address\Validator $validator
      * @param \Magento\Sales\Model\ResourceModel\GridPool $gridPool
      * @param string $connectionName

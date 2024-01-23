@@ -59,7 +59,14 @@ class Snapshot implements ResetAfterRequestInterface
      */
     public function getSnapshotData(\Magento\Framework\DataObject $entity)
     {
-        return $this->snapshotData[get_class($entity)][$entity->getId()];
+        $entityClass = get_class($entity);
+        $entityId = $entity->getId();
+
+        if (isset($this->snapshotData[$entityClass][$entityId])) {
+            return $this->snapshotData[$entityClass][$entityId];
+        }
+
+        return [];
     }
 
     /**
