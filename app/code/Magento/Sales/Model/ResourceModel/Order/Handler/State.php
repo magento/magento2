@@ -18,102 +18,84 @@ class State
      *
      * @param Order $order
      * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function check(Order $order)
     {
+        if ($order->isCanceled() && $order->canUnhold() && $order->canInvoice()) {
+            return $this;
+        }
+
         $currentState = $order->getState();
-        if ($currentState == Order::STATE_NEW && $order->getIsInProcess()) {
+        if ($this->canBeProcessingStatus($order, $currentState)) {
             $order->setState(Order::STATE_PROCESSING)
                 ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_PROCESSING));
             $currentState = Order::STATE_PROCESSING;
         }
 
-        if (!$order->isCanceled() && !$order->canUnhold() && !$order->canInvoice()) {
-            if (in_array($currentState, [Order::STATE_PROCESSING, Order::STATE_COMPLETE])
-                && !$order->canCreditmemo()
-                && !$order->canShip()
-                && $order->getIsNotVirtual()
-            ) {
-                $order->setState(Order::STATE_CLOSED)
-                    ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_CLOSED));
-            } elseif ($currentState === Order::STATE_PROCESSING
-                && (!$order->canShip() ||
-                    ($this->isPartiallyRefundedOrderShipped($order) && !$this->hasPendingShipmentItems($order)))
-            ) {
-                $order->setState(Order::STATE_COMPLETE)
-                    ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_COMPLETE));
-            } elseif ($order->getIsVirtual() && $order->getStatus() === Order::STATE_CLOSED) {
-                $order->setState(Order::STATE_CLOSED);
-            }
+        if ($this->canBeClosedStatus($order, $currentState)) {
+            $order->setState(Order::STATE_CLOSED)
+                ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_CLOSED));
+            return $this;
         }
+
+        if ($this->canBeCompleteStatus($order, $currentState)) {
+            $order->setState(Order::STATE_COMPLETE)
+                ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_COMPLETE));
+            return $this;
+        }
+
         return $this;
     }
 
     /**
-     * Check if all items are remaining items after partially refunded are shipped
+     * Check if order can be automatically switched to complete status
      *
      * @param Order $order
+     * @param string $currentState
      * @return bool
      */
-    public function isPartiallyRefundedOrderShipped(Order $order): bool
+    private function canBeCompleteStatus(Order $order, string $currentState): bool
     {
-        $isPartiallyRefundedOrderShipped = false;
-        if ($this->getShippedItems($order) > 0
-            && $order->getTotalQtyOrdered() <= $this->getRefundedItems($order) + $this->getShippedItems($order)) {
-            $isPartiallyRefundedOrderShipped = true;
-        }
-
-        return $isPartiallyRefundedOrderShipped;
-    }
-
-    /**
-     * Check if order has items that haven't been shipped yet
-     *
-     * @param Order $order
-     * @return bool
-     */
-    private function hasPendingShipmentItems(Order $order): bool
-    {
-        foreach ($order->getAllItems() as $item) {
-            if ($item->canShip()) {
-                return true;
-            }
+        if ($currentState === Order::STATE_PROCESSING && !$order->canShip()) {
+            return true;
         }
 
         return false;
     }
 
     /**
-     * Get all refunded items number
+     * Check if order can be automatically switched to closed status
      *
      * @param Order $order
-     * @return int
+     * @param string $currentState
+     * @return bool
      */
-    private function getRefundedItems(Order $order): int
+    private function canBeClosedStatus(Order $order, string $currentState): bool
     {
-        $numOfRefundedItems = 0;
-        foreach ($order->getAllItems() as $item) {
-            if ($item->getProductType() == 'simple') {
-                $numOfRefundedItems += (int)$item->getQtyRefunded();
-            }
+        if (in_array($currentState, [Order::STATE_PROCESSING, Order::STATE_COMPLETE])
+            && !$order->canCreditmemo()
+            && !$order->canShip()
+            && $order->getIsNotVirtual()
+        ) {
+            return true;
         }
-        return $numOfRefundedItems;
+
+        return false;
     }
 
     /**
-     * Get all shipped items number
+     * Check if order can be automatically switched to processing status
      *
      * @param Order $order
-     * @return int
+     * @param string $currentState
+     * @return bool
      */
-    private function getShippedItems(Order $order): int
+    private function canBeProcessingStatus(Order $order, string $currentState): bool
     {
-        $numOfShippedItems = 0;
-        foreach ($order->getAllItems() as $item) {
-            $numOfShippedItems += (int)$item->getQtyShipped();
+        if ($currentState == Order::STATE_NEW && $order->getIsInProcess()) {
+            return true;
         }
-        return $numOfShippedItems;
+
+        return false;
     }
 }

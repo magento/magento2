@@ -861,7 +861,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Retrieve order shipment availability
      *
      * @return bool
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function canShip()
     {
@@ -877,27 +876,28 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             return false;
         }
 
-        foreach ($this->getAllItems() as $item) {
-            $qtyToShip = !$item->getParentItem() || $item->getParentItem()->getProductType() !== Type::TYPE_BUNDLE ?
-                $item->getQtyToShip() : $item->getSimpleQtyToShip();
-
-            if ($qtyToShip > 0 && !$item->getIsVirtual() &&
-                !$item->getLockedDoShip() && !$this->isRefunded($item)) {
-                return true;
-            }
-        }
-        return false;
+        return $this->checkItemShipping();
     }
 
     /**
-     * Check if item is refunded.
+     * Check if at least one of the order items can be shipped
      *
-     * @param OrderItemInterface $item
      * @return bool
      */
-    private function isRefunded(OrderItemInterface $item)
+    private function checkItemShipping(): bool
     {
-        return $item->getQtyRefunded() == $item->getQtyOrdered();
+        foreach ($this->getAllItems() as $item) {
+            if (!$item->getParentItem()) {
+                $qtyToShip = !$item->getParentItem() || $item->getParentItem()->getProductType() !== Type::TYPE_BUNDLE ?
+                    $item->getQtyToShip() : $item->getSimpleQtyToShip();
+
+                if ($qtyToShip > 0 && !$item->getIsVirtual() && !$item->getLockedDoShip()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
