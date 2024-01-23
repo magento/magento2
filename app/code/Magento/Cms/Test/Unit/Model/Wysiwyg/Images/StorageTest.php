@@ -42,9 +42,9 @@ class StorageTest extends TestCase
     /**
      * Directory paths samples
      */
-    const STORAGE_ROOT_DIR = '/storage/root/dir/';
+    private const STORAGE_ROOT_DIR = '/storage/root/dir/';
 
-    const INVALID_DIRECTORY_OVER_ROOT = '/storage/some/another/dir';
+    private const INVALID_DIRECTORY_OVER_ROOT = '/storage/some/another/dir';
 
     /**
      * @var Storage

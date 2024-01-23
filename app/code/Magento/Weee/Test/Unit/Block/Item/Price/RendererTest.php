@@ -38,8 +38,8 @@ class RendererTest extends TestCase
      */
     protected $item;
 
-    const STORE_ID = 'store_id';
-    const ZONE = 'zone';
+    private const STORE_ID = 'store_id';
+    private const ZONE = 'zone';
 
     protected function setUp(): void
     {
