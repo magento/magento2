@@ -187,7 +187,6 @@ class CachedAdapter implements CachedAdapterInterface
         return $exists;
     }
 
-
     /**
      * @inheritdoc
      */

@@ -101,5 +101,4 @@ interface CacheInterface
      * @return void
      */
     public function storeDirNotExists(string $path): void;
-
 }
