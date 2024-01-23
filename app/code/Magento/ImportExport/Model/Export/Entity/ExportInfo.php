@@ -172,7 +172,7 @@ class ExportInfo implements FieldsEnclosureAwareExportInfoInterface
     /**
      * @inheritDoc
      */
-    public function getFieldsEnclosure()
+    public function getFieldsEnclosure(): ?bool
     {
         return $this->fieldsEnclosure;
     }
@@ -180,7 +180,7 @@ class ExportInfo implements FieldsEnclosureAwareExportInfoInterface
     /**
      * @inheritDoc
      */
-    public function setFieldsEnclosure($fieldsEnclosure)
+    public function setFieldsEnclosure(bool $fieldsEnclosure): void
     {
         $this->fieldsEnclosure = $fieldsEnclosure;
     }

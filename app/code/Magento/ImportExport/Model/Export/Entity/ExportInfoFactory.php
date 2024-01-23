@@ -107,8 +107,8 @@ class ExportInfoFactory
             $writer->getContentType()
         );
         $fileName = $this->generateFileName($entity, $entityAdapter, $writer->getFileExtension());
-        /** @var ExportInfoInterface $exportInfo */
-        $exportInfo = $this->objectManager->create(ExportInfoInterface::class);
+        /** @var FieldsEnclosureAwareExportInfoInterface $exportInfo */
+        $exportInfo = $this->objectManager->create(FieldsEnclosureAwareExportInfoInterface::class);
         $exportInfo->setExportFilter($this->serializer->serialize($exportFilter));
         $exportInfo->setSkipAttr($skipAttr);
         $exportInfo->setFileName($fileName);
@@ -118,7 +118,7 @@ class ExportInfoFactory
         if ($locale) {
             $exportInfo->setLocale($locale);
         }
-        if ($exportInfo instanceof FieldsEnclosureAwareExportInfoInterface && $fieldsEnclosure !== null) {
+        if ($fieldsEnclosure !== null) {
             $exportInfo->setFieldsEnclosure($fieldsEnclosure);
         }
 

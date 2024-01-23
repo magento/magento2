@@ -25,7 +25,7 @@ interface FieldsEnclosureAwareExportInfoInterface extends LocalizedExportInfoInt
      *
      * @return bool|null
      */
-    public function getFieldsEnclosure();
+    public function getFieldsEnclosure(): ?bool;
 
     /**
      * Set whether fields enclosure is enabled
@@ -33,5 +33,5 @@ interface FieldsEnclosureAwareExportInfoInterface extends LocalizedExportInfoInt
      * @param bool $fieldsEnclosure
      * @return void
      */
-    public function setFieldsEnclosure($fieldsEnclosure);
+    public function setFieldsEnclosure(bool $fieldsEnclosure): void;
 }
