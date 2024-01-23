@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Stdlib;
 
@@ -11,5 +12,11 @@ namespace Magento\Framework\Stdlib;
  */
 interface CookieDisablerInterface
 {
+    /**
+     * Set Cookies Disabled.  If true, cookies won't be sent.
+     *
+     * @param bool $disabled
+     * @return void
+     */
     public function setCookiesDisabled(bool $disabled) : void;
 }

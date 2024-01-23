@@ -69,6 +69,7 @@ class Kernel
      */
     private $identifierForSave;
 
+    // phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
     private readonly CookieDisablerInterface $cookieDisabler;
 
     /**

@@ -7,19 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Stdlib\Cookie;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Stdlib\CookieDisablerInterface;
-use Magento\Framework\Stdlib\CookieManagerInterface;
-use Magento\Framework\Phrase;
-use Magento\Framework\HTTP\Header as HttpHeader;
-use Psr\Log\LoggerInterface;
 
 /**
  * Disables sending the cookies that are currently set.
  */
 class PhpCookieDisabler implements CookieDisablerInterface
 {
+    /**
+     * @inheritDoc
+     */
     public function setCookiesDisabled(bool $disabled) : void
     {
         if ($disabled && !headers_sent()) {
