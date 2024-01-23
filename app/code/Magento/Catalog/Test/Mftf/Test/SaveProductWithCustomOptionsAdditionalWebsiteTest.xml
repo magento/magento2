@@ -36,7 +36,9 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
         </before>
@@ -46,7 +48,9 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteTestWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
@@ -67,33 +71,37 @@
         <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses2"/>
         <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOption"/>
         <waitForPageLoad stepKey="waitAfterAddOption"/>
-        <fillField selector="input[name='product[options][0][title]']" userInput="Radio Option" stepKey="fillOptionTitle"/>
-        <click selector=".admin__dynamic-rows[data-index='options'] .action-select" stepKey="openOptionTypeDropDown"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('0')}}" stepKey="waitForOptionTitle"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('0')}}" userInput="Radio Option" stepKey="fillOptionTitle"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeOpenDropDown}}" stepKey="openOptionTypeDropDown"/>
         <click selector=".admin__dynamic-rows[data-index='options'] .action-menu._active li:nth-of-type(3) li:nth-of-type(2)" stepKey="selectRadioButtonType"/>
 
         <!--Add Option Values -->
         <click selector="{{AdminProductCustomizableOptionsSection.clickAddValue('Radio Option')}}" stepKey="clickAddValue1"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Radio Option', '0')}}" stepKey="waitForOptionValueTitle1"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Radio Option', '0')}}" userInput="option 1" stepKey="fillOptionValueTitle1"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice('Radio Option', '0')}}" userInput="5" stepKey="fillOptionValuePrice1"/>
 
         <click selector="{{AdminProductCustomizableOptionsSection.clickAddValue('Radio Option')}}" stepKey="clickAddValue2"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Radio Option', '1')}}" stepKey="waitForOptionValueTitle2"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Radio Option', '1')}}" userInput="option 2" stepKey="fillOptionValueTitle2"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice('Radio Option', '1')}}" userInput="6" stepKey="fillOptionValuePrice2"/>
 
         <click selector="{{AdminProductCustomizableOptionsSection.clickAddValue('Radio Option')}}" stepKey="clickAddValue3"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Radio Option', '2')}}" stepKey="waitForOptionValueTitle3"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Radio Option', '2')}}" userInput="option 3" stepKey="fillOptionValueTitle3"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice('Radio Option', '2')}}" userInput="7" stepKey="fillOptionValuePrice3"/>
 
         <!-- Save the product with custom options -->
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
-        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeProductSavedMessage"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeProductSavedMessage"/>
 
         <!-- Add this product to second website -->
         <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openProductInWebsitesSection1"/>
         <click selector="{{ProductInWebsitesSection.website(customWebsite.name)}}" stepKey="selectSecondWebsite"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForProductPagetoSaveAgain"/>
-        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageAgain"/>
+        <waitForPageLoad stepKey="waitForProductPagetoSaveAgain"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageAgain"/>
 
         <!-- Verify the product's custom options -->
         <waitForElement selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="waitForSection"/>

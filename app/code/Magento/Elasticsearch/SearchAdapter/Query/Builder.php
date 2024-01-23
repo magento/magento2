@@ -13,7 +13,7 @@ use Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Search\RequestInterface;
-use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Query\Builder as Elasticsearch5Builder;
+use Magento\Elasticsearch\ElasticAdapter\SearchAdapter\Query\Builder as ElasticsearchBuilder;
 
 /**
  * Query builder for search adapter.
@@ -21,7 +21,7 @@ use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Query\Builder as Elastics
  * @api
  * @since 100.1.0
  */
-class Builder extends Elasticsearch5Builder
+class Builder extends ElasticsearchBuilder
 {
     private const ELASTIC_INT_MAX = 2147483647;
 
