@@ -18,6 +18,7 @@
             <testCaseId value="MAGETWO-29398"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
@@ -27,14 +28,16 @@
             </createData>
         </before>
         <after>
-            <actionGroup ref="GoToProductCatalogPageActionGroup" stepKey="goToProductCatalogPage"/>
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPage"/>
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteConfigurableProduct">
                 <argument name="product" value="_defaultProduct"/>
             </actionGroup>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetSearch"/>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <deleteData stepKey="deleteAttribute" createDataKey="createConfigProductAttribute"/>
-            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCron">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Create configurable product from downloadable product page-->
@@ -62,7 +65,7 @@
         <actionGroup ref="SaveConfiguredProductActionGroup" stepKey="saveProductForm"/>
         <!-- Check that product was added with implicit type change -->
         <comment stepKey="beforeVerify" userInput="Verify Product Type Assigned Correctly"/>
-        <actionGroup ref="GoToProductCatalogPageActionGroup" stepKey="goToProductCatalogPage"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPage"/>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetSearch"/>
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="searchForProduct">
             <argument name="product" value="_defaultProduct"/>

@@ -24,14 +24,14 @@ use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
 abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 {
     /**
-     * Store manager
+     * Store manager to get the store information
      *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Model factory
+     * Model factory to create a model object
      *
      * @var \Magento\Catalog\Model\Factory
      */
@@ -87,7 +87,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     {
         $applyTo = $attribute->getApplyTo() ?: [];
         return (count($applyTo) == 0 || in_array($object->getTypeId(), $applyTo))
-            && $attribute->isInSet($object->getAttributeSetId());
+            && $attribute->isInSet($object->getAttributeSetId() ?? $this->getEntityType()->getDefaultAttributeSetId());
     }
 
     /**
@@ -147,7 +147,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             ->select()
             ->from(['attr_table' => $table], [])
             ->where("attr_table.{$this->getLinkField()} = ?", $object->getData($this->getLinkField()))
-            ->where('attr_table.store_id IN (?)', $storeIds);
+            ->where('attr_table.store_id IN (?)', $storeIds, \Zend_Db::INT_TYPE);
 
         if ($setId) {
             $select->join(
@@ -325,7 +325,25 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _updateAttribute($object, $attribute, $valueId, $value)
     {
-        return $this->_saveAttributeValue($object, $attribute, $value);
+        $entity = $attribute->getEntity();
+        $row = $this->getAttributeRow($entity, $object, $attribute);
+        $hasSingleStore = $this->_storeManager->hasSingleStore();
+        $storeId = $hasSingleStore
+            ? $this->getDefaultStoreId()
+            : (int) $this->_storeManager->getStore($object->getStoreId())->getId();
+        if ($valueId > 0 && array_key_exists('store_id', $row) && $storeId === $row['store_id']) {
+            $table = $attribute->getBackend()->getTable();
+            $connection = $this->getConnection();
+            $connection->update(
+                $table,
+                ['value' => $this->_prepareValueForSave($value, $attribute)],
+                sprintf('%s=%d', $connection->quoteIdentifier('value_id'), $valueId)
+            );
+
+            return $this;
+        } else {
+            return $this->_saveAttributeValue($object, $attribute, $value);
+        }
     }
 
     /**
@@ -562,7 +580,11 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         if ($typedAttributes) {
             foreach ($typedAttributes as $table => $_attributes) {
                 $defaultJoinCondition = [
-                    $connection->quoteInto('default_value.attribute_id IN (?)', array_keys($_attributes)),
+                    $connection->quoteInto(
+                        'default_value.attribute_id IN (?)',
+                        array_keys($_attributes),
+                        \Zend_Db::INT_TYPE
+                    ),
                     "default_value.{$this->getLinkField()} = e.{$this->getLinkField()}",
                     'default_value.store_id = 0',
                 ];
@@ -589,7 +611,11 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                         'store_value.attribute_id'
                     );
                     $joinCondition = [
-                        $connection->quoteInto('store_value.attribute_id IN (?)', array_keys($_attributes)),
+                        $connection->quoteInto(
+                            'store_value.attribute_id IN (?)',
+                            array_keys($_attributes),
+                            \Zend_Db::INT_TYPE
+                        ),
                         "store_value.{$this->getLinkField()} = e.{$this->getLinkField()}",
                         'store_value.store_id = :store_id',
                     ];

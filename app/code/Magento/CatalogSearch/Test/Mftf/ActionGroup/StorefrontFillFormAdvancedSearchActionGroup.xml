@@ -23,6 +23,7 @@
         <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.ShortDescription}}" userInput="{{short_description}}" stepKey="fillShortDescription"/>
         <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.PriceFrom}}" userInput="{{price_from}}" stepKey="fillPriceFrom"/>
         <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.PriceTo}}" userInput="{{price_to}}" stepKey="fillPriceTo"/>
+        <scrollTo selector="{{StorefrontCatalogSearchAdvancedFormSection.SubmitButton}}" stepKey="scrollToSubmitButton"/>
         <click selector="{{StorefrontCatalogSearchAdvancedFormSection.SubmitButton}}" stepKey="clickSubmit"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>

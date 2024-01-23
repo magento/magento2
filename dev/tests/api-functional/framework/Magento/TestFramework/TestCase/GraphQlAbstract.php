@@ -6,7 +6,6 @@
 namespace Magento\TestFramework\TestCase;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\App\Request\Http;
 
 /**
  * Test case for Web API functional tests for Graphql.
@@ -101,6 +100,29 @@ abstract class GraphQlAbstract extends WebapiAbstract
     }
 
     /**
+     * Perform GraphQL query via POST and returns the response headers
+     *
+     * @param string $query
+     * @param array $variables
+     * @param string $operationName
+     * @param array $headers
+     * @return array
+     */
+    public function graphQlMutationWithResponseHeaders(
+        string $query,
+        array $variables = [],
+        string $operationName = '',
+        array $headers = []
+    ): array {
+        return $this->getGraphQlClient()->postWithResponseHeaders(
+            $query,
+            $variables,
+            $operationName,
+            $this->composeHeaders($headers)
+        );
+    }
+
+    /**
      * Compose headers
      *
      * @param array $headers
@@ -186,59 +208,16 @@ abstract class GraphQlAbstract extends WebapiAbstract
     }
 
     /**
-     * Compare arrays recursively regardless of nesting.
+     * Tear down test and flush page cache
      *
-     * Can compare arrays that have both one level and n-level nesting.
-     * ```
-     *  [
-     * 'products' => [
-     *      'items' => [
-     *      [
-     *          'sku'       => 'bundle-product',
-     *          'type_id'   => 'bundle',
-     *          'items'     => [
-     *          [
-     *              'title'     => 'Bundle Product Items',
-     *              'sku'       => 'bundle-product',
-     *              'options'   => [
-     *              [
-     *                  'price' => 2.75,
-     *                  'label' => 'Simple Product',
-     *                  'product' => [
-     *                      'name'    => 'Simple Product',
-     *                      'sku'     => 'simple',
-     *                  ]
-     *              ]
-     *          ]
-     *      ]
-     *  ];
-     * ```
-     *
-     * @param array $expected
-     * @param array $actual
-     * @return array
+     * @return void
      */
-    public function compareArraysRecursively(array $expected, array $actual): array
+    protected function tearDown(): void
     {
-        $diffResult = [];
-
-        foreach ($expected as $key => $value) {
-            if (array_key_exists($key, $actual)) {
-                if (is_array($value)) {
-                    $recursiveDiff = $this->compareArraysRecursively($value, $actual[$key]);
-                    if (!empty($recursiveDiff)) {
-                        $diffResult[$key] = $recursiveDiff;
-                    }
-                } else {
-                    if (!in_array($value, $actual, true)) {
-                        $diffResult[$key] = $value;
-                    }
-                }
-            } else {
-                $diffResult[$key] = $value;
-            }
-        }
-
-        return $diffResult;
+        parent::tearDown();
+        $appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
+        $out = '';
+        // phpcs:ignore Magento2.Security.InsecureFunction
+        exec("php -f {$appDir}/bin/magento cache:flush full_page", $out);
     }
 }

@@ -3,12 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup;
 
 use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Interface for handling options in deployment configuration tool
+ *
+ * @api
  */
 interface ConfigOptionsListInterface
 {

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCreateCustomerWithInvalidDataTest">
+        <annotations>
+            <stories value="Create a Customer via the Storefront"/>
+            <features value="Customer"/>
+            <title value="Register customer on storefront after customer form validation failed."/>
+            <description value="Customer should be able to re-submit register form after correcting invalid form data on storefront."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-38532"/>
+            <useCaseId value="MC-38509"/>
+            <group value="customer"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <!--Try to submit register form with wrong password.-->
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountFormWithWrongData">
+            <argument name="customer" value="Simple_Customer_With_Password_Length_Is_Below_Eight_Characters"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="tryToSubmitFormWithWrongPassword"/>
+        <actionGroup ref="AssertMessageCustomerCreateAccountPasswordComplexityActionGroup" stepKey="seeTheErrorPasswordLength">
+            <argument name="message" value="Minimum length of this field must be equal or greater than 8 symbols. Leading and trailing spaces will be ignored."/>
+        </actionGroup>
+        <!--Re-submit customer register form with correct data.-->
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountFormWithCorrectData">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage"/>
+    </test>
+</tests>

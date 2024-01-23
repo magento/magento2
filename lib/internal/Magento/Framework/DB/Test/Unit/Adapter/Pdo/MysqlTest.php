@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
  */
 class MysqlTest extends TestCase
 {
-    const CUSTOM_ERROR_HANDLER_MESSAGE = 'Custom error handler message';
+    public const CUSTOM_ERROR_HANDLER_MESSAGE = 'Custom error handler message';
 
     /**
      * @var SelectFactory|MockObject
@@ -426,7 +426,7 @@ class MysqlTest extends TestCase
         );
         $adapter->expects($this->any())->method('getSchemaListener')->willReturn($this->schemaListenerMock);
         $adapter->expects($this->any())->method('_getTableName')->willReturnArgument(0);
-        $adapter->expects($this->any())->method('quote')->willReturnArgument(0);
+        $adapter->expects($this->any())->method('quote')->willReturnOnConsecutiveCalls('', 'Some field');
         $adapter->expects($this->once())->method('rawQuery')->with($expectedQuery);
         $adapter->addColumn('tableName', 'columnName', $options);
     }
@@ -792,5 +792,155 @@ class MysqlTest extends TestCase
         );
         $resourceProperty->setAccessible(true);
         $resourceProperty->setValue($pdoAdapterMock, $this->connection);
+    }
+
+    /**
+     * @param array $actual
+     * @param array $expected
+     * @dataProvider columnDataForTest
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function testPrepareColumnData(array $actual, array $expected)
+    {
+        $adapter = $this->getMysqlPdoAdapterMock([]);
+        $result = $this->invokeModelMethod($adapter, 'prepareColumnData', [$actual]);
+
+        foreach ($result as $key => $value) {
+            $this->assertEquals($expected[$key], $value);
+        }
+    }
+
+    /**
+     * Data provider for testPrepareColumnData
+     *
+     * @return array[]
+     */
+    public function columnDataForTest(): array
+    {
+        return [
+          [
+              'actual' => [
+                      [
+                          'DATA_TYPE' => 'int',
+                          'DEFAULT' => ''
+                      ],
+                      [
+                          'DATA_TYPE' => 'timestamp /* mariadb-5.3 */',
+                          'DEFAULT' => 'CURRENT_TIMESTAMP'
+                      ],
+                      [
+                          'DATA_TYPE' => 'varchar',
+                          'DEFAULT' => ''
+                      ]
+                  ],
+              'expected' => [
+                      [
+                          'DATA_TYPE' => 'int',
+                          'DEFAULT' => null
+                      ],
+                      [
+                          'DATA_TYPE' => 'timestamp',
+                          'DEFAULT' => 'CURRENT_TIMESTAMP'
+                      ],
+                      [
+                          'DATA_TYPE' => 'varchar',
+                          'DEFAULT' => ''
+                      ]
+                  ]
+              ]
+        ];
+    }
+
+    /**
+     * @param string $method
+     * @param array $parameters
+     * @return mixed
+     * @throws \ReflectionException
+     */
+    private function invokeModelMethod(MockObject $adapter, string $method, array $parameters = [])
+    {
+        $reflection = new \ReflectionClass($adapter);
+        $method = $reflection->getMethod($method);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($adapter, $parameters);
+    }
+
+    /**
+     * @dataProvider retryExceptionDataProvider
+     * @param \Exception $exception
+     * @return void
+     */
+    public function testBeginTransactionWithReconnect(\Exception $exception): void
+    {
+        $adapter = $this->getMysqlPdoAdapterMock(['_connect', '_beginTransaction', '_rollBack']);
+        $adapter->expects(self::exactly(4))
+            ->method('_connect');
+        $adapter->expects(self::once())
+            ->method('_rollBack');
+
+        $matcher = self::exactly(2);
+        $adapter->expects($matcher)
+            ->method('_beginTransaction')
+            ->willReturnCallback(
+                function () use ($matcher, $exception) {
+                    if ($matcher->getInvocationCount() === 1) {
+                        throw $exception;
+                    }
+                }
+            );
+        $adapter->beginTransaction();
+        $adapter->rollBack();
+    }
+
+    /**
+     * @return array[]
+     */
+    public function retryExceptionDataProvider(): array
+    {
+        $serverHasGoneAwayException = new \PDOException();
+        $serverHasGoneAwayException->errorInfo = [1 => 2006];
+        $lostConnectionException = new \PDOException();
+        $lostConnectionException->errorInfo = [1 => 2013];
+
+        return [
+            [$serverHasGoneAwayException],
+            [$lostConnectionException],
+            [new \Zend_Db_Statement_Exception('', 0, $serverHasGoneAwayException)],
+            [new \Zend_Db_Statement_Exception('', 0, $lostConnectionException)],
+        ];
+    }
+
+    /**
+     * @dataProvider exceptionDataProvider
+     * @param \Exception $exception
+     * @return void
+     */
+    public function testBeginTransactionWithoutReconnect(\Exception $exception): void
+    {
+        $this->expectException(\Exception::class);
+        $adapter = $this->getMysqlPdoAdapterMock(['_connect', '_beginTransaction', '_rollBack']);
+        $adapter->expects(self::once())
+            ->method('_connect');
+        $adapter->expects(self::once())
+            ->method('_beginTransaction')
+            ->willThrowException($exception);
+        $adapter->beginTransaction();
+    }
+
+    /**
+     * @return array[]
+     */
+    public function exceptionDataProvider(): array
+    {
+        $pdoException = new \PDOException();
+        $pdoException->errorInfo = [1 => 1213];
+
+        return [
+            [$pdoException],
+            [new \Zend_Db_Statement_Exception('', 0, $pdoException)],
+            [new \Exception()],
+        ];
     }
 }

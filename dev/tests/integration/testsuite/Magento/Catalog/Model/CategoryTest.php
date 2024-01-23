@@ -14,11 +14,18 @@ use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\Tree;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Eav\Model\Entity\Attribute\Exception as AttributeException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Math\Random;
 use Magento\Framework\Url;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -56,7 +63,13 @@ class CategoryTest extends TestCase
     private $categoryRepository;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $dataFixtureStorage;
+
+    /**
      * @inheritdoc
+     * @throws LocalizedException
      */
     protected function setUp(): void
     {
@@ -67,6 +80,7 @@ class CategoryTest extends TestCase
         $this->_model = $this->objectManager->create(Category::class);
         $this->categoryResource = $this->objectManager->get(CategoryResource::class);
         $this->categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);
+        $this->dataFixtureStorage = DataFixtureStorageManager::getStorage();
     }
 
     public function testGetUrlInstance(): void
@@ -271,7 +285,7 @@ class CategoryTest extends TestCase
 
     public function testGetAvailableSortBy(): void
     {
-        $this->assertEquals([], $this->_model->getAvailableSortBy());
+        $this->assertEquals(null, $this->_model->getAvailableSortBy());
         $this->_model->setData('available_sort_by', 'test,and,test');
         $this->assertEquals(['test', 'and', 'test'], $this->_model->getAvailableSortBy());
     }
@@ -420,6 +434,29 @@ class CategoryTest extends TestCase
     }
 
     /**
+     * Test for Category Description field to be able to contain >64kb of data
+     *
+     * @throws NoSuchEntityException
+     * @throws \Exception
+     */
+    public function testMaximumDescriptionLength(): void
+    {
+        $random = Bootstrap::getObjectManager()->get(Random::class);
+        $longDescription = $random->getRandomString(70000);
+
+        $requiredData = [
+            'name' => 'Test Category',
+            'attribute_set_id' => '3',
+            'parent_id' => 2,
+            'description' => $longDescription
+        ];
+        $this->_model->setData($requiredData);
+        $this->categoryResource->save($this->_model);
+        $category = $this->categoryRepository->get($this->_model->getId());
+        $this->assertEquals($longDescription, $category->getDescription());
+    }
+
+    /**
      * @return array
      */
     public function categoryFieldsProvider(): array
@@ -483,5 +520,22 @@ class CategoryTest extends TestCase
         $collection->addNameToResult()->load();
 
         return $collection->getItemByColumnValue('name', $categoryName);
+    }
+
+    /**
+     * @return void
+     * @throws LocalizedException|\Exception
+     */
+    #[
+        DataFixture(CategoryFixture::class, as: 'category'),
+    ]
+    public function testGetUrlAfterUpdate()
+    {
+        $category = $this->dataFixtureStorage->get('category');
+        $category->setUrlKey('new-url');
+        $category->setSaveRewritesHistory(true);
+        $this->categoryResource->save($category);
+
+        $this->assertStringEndsWith('new-url.html', $category->getUrl());
     }
 }

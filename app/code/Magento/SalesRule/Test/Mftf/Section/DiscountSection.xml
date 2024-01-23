@@ -14,6 +14,7 @@
         <element name="ApplyCodeBtn" type="button" selector="//span[text()='Apply Discount']"/>
         <element name="CancelCoupon" type="button" selector="//button[@value='Cancel Coupon']"/>
         <element name="DiscountVerificationMsg" type="text" selector=".message-success div"/>
+        <element name="DiscountVerificationMsgWithAriaAtomicProperty" type="text" selector=".message-success[aria-atomic=true] div"/>
         <element name="CancelCouponBtn" type="button" selector="#discount-form .action-cancel"/>
     </section>
 </sections>

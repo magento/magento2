@@ -90,6 +90,25 @@ $dateAttribute->save();
 /* Assign attribute to attribute set */
 $installer->addAttributeToGroup($productEntityTypeId, 'Default', 'General', $dateAttribute->getId());
 
+$decimalAttribute = Bootstrap::getObjectManager()->create(Attribute::class);
+$decimalAttribute->setData(
+    [
+        'attribute_code' => 'decimal_attribute',
+        'entity_type_id' => $productEntityTypeId,
+        'is_global' => 1,
+        'is_filterable' => 1,
+        'is_user_defined' => 1,
+        'backend_type' => 'decimal',
+        'frontend_input' => 'weight',
+        'frontend_label' => 'Test Decimal',
+        'is_searchable' => 1,
+        'is_filterable_in_search' => 1,
+    ]
+);
+$decimalAttribute->save();
+/* Assign attribute to attribute set */
+$installer->addAttributeToGroup($productEntityTypeId, 'Default', 'General', $decimalAttribute->getId());
+
 $productAttributeSetId = $installer->getAttributeSetId($productEntityTypeId, 'Default');
 /* Create simple products per each first attribute option */
 foreach ($selectOptions[1] as $option) {
@@ -127,6 +146,7 @@ foreach ($selectOptions[1] as $option) {
             $selectAttributes[1]->getAttributeCode() => $option->getId(),
             $selectAttributes[2]->getAttributeCode() => $selectOptions[2]->getLastItem()->getId(),
             $dateAttribute->getAttributeCode() => '10/30/2000',
+            $decimalAttribute->getAttributeCode() => 1.11,
         ],
         $product->getStoreId()
     );

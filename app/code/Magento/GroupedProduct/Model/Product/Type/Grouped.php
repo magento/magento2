@@ -8,6 +8,7 @@
 namespace Magento\GroupedProduct\Model\Product\Type;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\File\UploaderFactory;
 
 /**
  * Grouped product type model
@@ -102,6 +103,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Msrp\Helper\Data $msrpData
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param UploaderFactory|null $uploaderFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -119,7 +121,8 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Framework\App\State $appState,
         \Magento\Msrp\Helper\Data $msrpData,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        UploaderFactory $uploaderFactory = null
     ) {
         $this->productLinks = $catalogProductLink;
         $this->_storeManager = $storeManager;
@@ -136,7 +139,8 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             $coreRegistry,
             $logger,
             $productRepository,
-            $serializer
+            $serializer,
+            $uploaderFactory
         );
     }
 
@@ -347,7 +351,12 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
                 if ($isStrictProcessMode && !$subProduct->getQty() && $subProduct->isSalable()) {
                     return __('Please specify the quantity of product(s).')->render();
                 }
-                $productsInfo[$subProduct->getId()] = $subProduct->isSalable() ? (float)$subProduct->getQty() : 0;
+                if (isset($buyRequest['qty']) && !isset($buyRequest['super_group'])) {
+                    $subProductQty = (float)$subProduct->getQty() * (float)$buyRequest['qty'];
+                    $productsInfo[$subProduct->getId()] = $subProduct->isSalable() ? $subProductQty : 0;
+                } else {
+                    $productsInfo[$subProduct->getId()] = $subProduct->isSalable() ? (float)$subProduct->getQty() : 0;
+                }
             }
         }
 

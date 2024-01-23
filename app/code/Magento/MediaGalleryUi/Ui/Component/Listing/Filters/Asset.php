@@ -17,7 +17,7 @@ use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Select;
 
 /**
- * Asset  filter
+ * Asset filter
  */
 class Asset extends Select
 {
@@ -27,22 +27,25 @@ class Asset extends Select
     private $getContentIdentities;
 
     /**
+     * Constructor
+     *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param FilterBuilder $filterBuilder
      * @param FilterModifier $filterModifier
-     * @param OptionSourceInterface $optionsProvider
      * @param GetContentByAssetIdsInterface $getContentIdentities
+     * @param OptionSourceInterface $optionsProvider
      * @param array $components
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         FilterBuilder $filterBuilder,
         FilterModifier $filterModifier,
-        OptionSourceInterface $optionsProvider = null,
         GetContentByAssetIdsInterface $getContentIdentities,
+        OptionSourceInterface $optionsProvider = null,
         array $components = [],
         array $data = []
     ) {
@@ -67,17 +70,20 @@ class Asset extends Select
      */
     public function applyFilter()
     {
-        if (isset($this->filterData[$this->getName()])) {
-            $ids = is_array($this->filterData[$this->getName()])
-                ? $this->filterData[$this->getName()]
-                : [$this->filterData[$this->getName()]];
-            $filter = $this->filterBuilder->setConditionType('in')
-                    ->setField($this->_data['config']['identityColumn'])
-                    ->setValue($this->getEntityIdsByAsset($ids))
-                    ->create();
-
-            $this->getContext()->getDataProvider()->addFilter($filter);
+        if (!isset($this->filterData[$this->getName()])) {
+            return;
         }
+
+        $assetIds = $this->filterData[$this->getName()];
+        if (!is_array($assetIds)) {
+            $assetIds = explode(',', str_replace(['[', ']'], '', $assetIds));
+        }
+
+        $filter = $this->filterBuilder->setConditionType('in')
+            ->setField($this->_data['config']['identityColumn'])
+            ->setValue($this->getEntityIdsByAsset($assetIds))
+            ->create();
+        $this->getContext()->getDataProvider()->addFilter($filter);
     }
 
     /**

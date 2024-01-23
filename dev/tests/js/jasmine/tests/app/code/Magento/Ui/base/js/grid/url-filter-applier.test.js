@@ -12,7 +12,8 @@ define([
     describe('Magento_Ui/js/grid/url-filter-applier', function () {
         var urlFilterApplierObj,
             filterComponentMock = {
-                setData: jasmine.createSpy(),
+                set: jasmine.createSpy(),
+                get: jasmine.createSpy(),
                 apply: jasmine.createSpy()
             };
 
@@ -64,11 +65,14 @@ define([
             it('applies url filter on filter component', function () {
                 urlFilterApplierObj.searchString = '?filters[name]=test&filters[qty]=1';
                 urlFilterApplierObj.apply();
-                expect(urlFilterApplierObj.filterComponent().setData).toHaveBeenCalledWith({
-                    'name': 'test',
-                    'qty': '1'
-                }, false);
-                expect(urlFilterApplierObj.filterComponent().apply).toHaveBeenCalled();
+                expect(urlFilterApplierObj.filterComponent().get).toHaveBeenCalled();
+                expect(urlFilterApplierObj.filterComponent().set).toHaveBeenCalledWith(
+                    'applied',
+                    {
+                        'name': 'test',
+                        'qty': '1'
+                    }
+                );
             });
         });
     });

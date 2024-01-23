@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCategoryUrlRewriteDifferentStoreTest">
+        <annotations>
+            <stories value="Url rewrites"/>
+            <title value="Verify url category for different store view."/>
+            <description value="Verify url category for different store view, after change ukr_key category for one of them store view."/>
+            <features value="CatalogUrlRewrite"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-38053"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableCategoryProductRewrites"/>
+            <magentoCLI command="config:set catalog/seo/product_use_categories 1" stepKey="setEnableUseCategoriesPath"/>
+            <createData entity="SubCategory" stepKey="rootCategory"/>
+            <createData entity="SimpleSubCategoryDifferentUrlStore" stepKey="subCategory">
+                <requiredEntity createDataKey="rootCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="subCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <actionGroup ref="CreateStoreViewActionGroup" stepKey="createCustomStoreViewFr">
+                <argument name="storeView" value="customStoreFR"/>
+            </actionGroup>
+
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="indexerReindexAfterCreate"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheBefore"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set catalog/seo/product_use_categories 0" stepKey="setEnableUseCategoriesPath"/>
+            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
+            <deleteData stepKey="deleteSubCategory" createDataKey="subCategory"/>
+            <deleteData stepKey="deleteRootCategory" createDataKey="rootCategory"/>
+
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
+                <argument name="customStore" value="customStoreFR"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableCategoryProductRewrites"/>
+        </after>
+
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="navigateToCreatedSubCategory">
+            <argument name="Category" value="$$subCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="AdminSwitchCustomStoreViewForSubCategory">
+            <argument name="storeView" value="customStoreFR.name"/>
+        </actionGroup>
+        <actionGroup ref="ChangeSeoUrlKeyForSubCategoryActionGroup" stepKey="changeSeoUrlKeyForSubCategoryCustomStore">
+            <argument name="value" value="{{SimpleSubCategoryDifferentUrlStore.url_key_custom_store}}"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontGoToSubCategoryPageActionGroup" stepKey="goToCategoryC">
+            <argument name="categoryName" value="$$rootCategory.name$$"/>
+            <argument name="subCategoryName" value="$$subCategory.name$$"/>
+        </actionGroup>
+
+        <click selector="{{StorefrontCategoryProductSection.ProductInfoByName($$createProduct.name$$)}}" stepKey="navigateToCreateProduct"/>
+
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStore">
+            <argument name="storeView" value="customStoreFR" />
+        </actionGroup>
+
+        <grabFromCurrentUrl stepKey="grabUrl"/>
+        <assertStringContainsString stepKey="assertUrl">
+            <expectedResult type="string">{{SimpleSubCategoryDifferentUrlStore.url_key_custom_store}}</expectedResult>
+            <actualResult type="string">{$grabUrl}</actualResult>
+        </assertStringContainsString>
+    </test>
+</tests>

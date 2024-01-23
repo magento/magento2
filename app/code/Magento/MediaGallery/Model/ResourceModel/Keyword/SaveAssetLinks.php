@@ -133,7 +133,7 @@ class SaveAssetLinks
             /** @var Mysql $connection */
             $connection = $this->resourceConnection->getConnection();
             $connection->delete(
-                $connection->getTableName(
+                $this->resourceConnection->getTableName(
                     self::TABLE_ASSET_KEYWORD
                 ),
                 [
@@ -196,7 +196,7 @@ class SaveAssetLinks
         try {
             $connection = $this->resourceConnection->getConnection();
             $connection->update(
-                $connection->getTableName(self::TABLE_MEDIA_ASSET),
+                $this->resourceConnection->getTableName(self::TABLE_MEDIA_ASSET),
                 ['updated_at' => null],
                 ['id =?' => $assetId]
             );

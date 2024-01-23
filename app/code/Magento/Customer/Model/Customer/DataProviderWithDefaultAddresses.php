@@ -6,21 +6,28 @@ declare(strict_types=1);
  */
 namespace Magento\Customer\Model\Customer;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
 use Magento\Directory\Model\CountryFactory;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Customer\Model\FileUploaderDataResolver;
 use Magento\Customer\Model\AttributeMetadataResolver;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Ui\Component\Form\Element\Multiline;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
  * Refactored version of Magento\Customer\Model\Customer\DataProvider with eliminated usage of addresses collection.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProviderWithDefaultAddresses extends AbstractDataProvider
 {
@@ -67,6 +74,21 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
     private $attributeMetadataResolver;
 
     /**
+     * @var CustomerFactory
+     */
+    private $customerFactory;
+
+    /**
+     * @var ContextInterface
+     */
+    private $context;
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -79,6 +101,9 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
      * @param bool $allowToShowHiddenAttributes
      * @param array $meta
      * @param array $data
+     * @param CustomerFactory|null $customerFactory
+     * @param ContextInterface|null $context
+     * @param CustomerRepositoryInterface|null $customerRepository
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -94,7 +119,10 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
         AttributeMetadataResolver $attributeMetadataResolver,
         $allowToShowHiddenAttributes = true,
         array $meta = [],
-        array $data = []
+        array $data = [],
+        CustomerFactory $customerFactory = null,
+        ?ContextInterface $context = null,
+        CustomerRepositoryInterface $customerRepository = null
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->collection = $customerCollectionFactory->create();
@@ -104,6 +132,10 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
         $this->countryFactory = $countryFactory;
         $this->fileUploaderDataResolver = $fileUploaderDataResolver;
         $this->attributeMetadataResolver = $attributeMetadataResolver;
+        $this->context = $context ?? ObjectManager::getInstance()->get(ContextInterface::class);
+        $this->customerFactory = $customerFactory ?: ObjectManager::getInstance()->get(CustomerFactory::class);
+        $this->customerRepository = $customerRepository ??
+            ObjectManager::getInstance()->get(CustomerRepositoryInterface::class);
         $this->meta['customer']['children'] = $this->getAttributesMeta(
             $eavConfig->getEntityType('customer')
         );
@@ -130,7 +162,7 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
                 $result['customer'],
                 array_flip(self::$forbiddenCustomerFields)
             );
-            unset($result['address']);
+            $this->prepareCustomAttributeValue($result['customer']);
 
             $result['default_billing_address'] = $this->prepareDefaultAddress(
                 $customer->getDefaultBillingAddress()
@@ -142,9 +174,10 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
 
             $this->loadedData[$customer->getId()] = $result;
         }
-
         $data = $this->session->getCustomerFormData();
         if (!empty($data)) {
+            $customer = $this->customerFactory->create();
+            $this->fileUploaderDataResolver->overrideFileUploaderData($customer, $data['customer']);
             $customerId = $data['customer']['entity_id'] ?? null;
             $this->loadedData[$customerId] = $data;
             $this->session->unsCustomerFormData();
@@ -179,6 +212,24 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
         return $addressData;
     }
 
+    /***
+     * Prepare values for Custom Attributes.
+     *
+     * @param array $data
+     * @return void
+     */
+    private function prepareCustomAttributeValue(array &$data): void
+    {
+        foreach ($this->meta['customer']['children'] as $attributeName => $attributeMeta) {
+            if ($attributeMeta['arguments']['data']['config']['dataType'] === Multiline::NAME
+                && isset($data[$attributeName])
+                && !is_array($data[$attributeName])
+            ) {
+                $data[$attributeName] = explode("\n", $data[$attributeName]);
+            }
+        }
+    }
+
     /**
      * Get attributes meta
      *
@@ -190,6 +241,11 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
     {
         $meta = [];
         $attributes = $entityType->getAttributeCollection();
+        $customerId = $this->context->getRequestParam('id');
+        if ($customerId) {
+            $customer = $this->customerRepository->getById($customerId);
+            $attributes->setWebsite($customer->getWebsiteId());
+        }
         /* @var AbstractAttribute $attribute */
         foreach ($attributes as $attribute) {
             $meta[$attribute->getAttributeCode()] = $this->attributeMetadataResolver->getAttributesMeta(

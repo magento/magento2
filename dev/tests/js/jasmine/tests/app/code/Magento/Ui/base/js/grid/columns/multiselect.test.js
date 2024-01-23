@@ -42,7 +42,7 @@ define([
                 id: 3
             });
 
-            expect(multiSelect.allSelected()).toBeFalsy();
+            expect(multiSelect.allSelected()).toBeFalse();
             expect(multiSelect.excluded().toString()).toEqual('');
             expect(multiSelect.selected().toString()).toEqual('');
         });
@@ -51,7 +51,7 @@ define([
             multiSelect.selected.push(4);
             multiSelect.selected.push(5);
 
-            expect(multiSelect.allSelected()).toBeFalsy();
+            expect(multiSelect.allSelected()).toBeUndefined();
             expect(multiSelect.excluded().toString()).toEqual('');
             expect(multiSelect.selected().toString()).toEqual('4,5');
         });
@@ -70,7 +70,7 @@ define([
             }]);
             multiSelect.selectPage();
 
-            expect(multiSelect.allSelected()).toBeFalsy();
+            expect(multiSelect.allSelected()).toBeUndefined();
             expect(multiSelect.excluded().toString()).toEqual('');
             expect(multiSelect.selected().toString()).toEqual('1,2,3,4');
         });
@@ -93,7 +93,7 @@ define([
                 id: 6
             }]);
             multiSelect.selected.push(6);
-            expect(multiSelect.allSelected()).toBeFalsy();
+            expect(multiSelect.allSelected()).toBeUndefined();
             expect(multiSelect.excluded().toString()).toEqual('5');
             expect(multiSelect.selected().toString()).toEqual('3,4,6');
         });
@@ -112,7 +112,7 @@ define([
             multiSelect.selectPage();
             multiSelect.selected.remove(4); // remove second
 
-            expect(multiSelect.allSelected()).toBeFalsy();
+            expect(multiSelect.allSelected()).toBeUndefined();
             expect(multiSelect.excluded().toString()).toEqual('4');
             expect(multiSelect.selected().toString()).toEqual('3');
         });
@@ -130,9 +130,22 @@ define([
                 id: 4
             }]);
 
-            expect(multiSelect.allSelected()).toBeFalsy();
+            expect(multiSelect.allSelected()).toBeUndefined();
             expect(multiSelect.excluded().toString()).toEqual('');
             expect(multiSelect.selected().toString()).toEqual('3,4,1,2');
+        });
+
+        it('Select all rows all over the Grid and deselects all records', function () {
+            multiSelect.rows([{
+                id: 1
+            }, {
+                id: 2
+            }]);
+
+            multiSelect.selectAll();
+            multiSelect.deselectAll();
+            multiSelect.indetermine(2);
+            expect(multiSelect.togglePage().selected()).toEqual([1, 2]);
         });
 
         it('Select all rows all over the Grid without all rows on current page but with specific rows on another page',
@@ -155,7 +168,7 @@ define([
                     id: 6
                 }]);
 
-                expect(multiSelect.allSelected()).toBeFalsy();
+                expect(multiSelect.allSelected()).toBeUndefined();
                 expect(multiSelect.excluded().toString()).toEqual('3,4');
                 expect(multiSelect.selected().toString()).toEqual('5,6');
             });

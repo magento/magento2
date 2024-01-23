@@ -9,6 +9,7 @@ namespace Magento\MediaGallerySynchronizationApi\Model;
 
 /**
  * Fetch data from database in batches
+ * @api
  */
 interface FetchBatchesInterface
 {

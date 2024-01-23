@@ -9,11 +9,20 @@ namespace Magento\Quote\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Type;
+use Magento\Checkout\Api\PaymentInformationManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Vat;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Api\CartManagementInterface;
+use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver;
+use Magento\Quote\Observer\Frontend\Quote\Address\VatValidator;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -21,12 +30,14 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class for testing QuoteManagement model
  *
  * @see \Magento\Quote\Model\QuoteManagement
  * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QuoteManagementTest extends TestCase
@@ -67,6 +78,21 @@ class QuoteManagementTest extends TestCase
     private $storeManager;
 
     /**
+     * @var PaymentInformationManagementInterface
+     */
+    private $paymentManagement;
+
+    /**
+     * @var PaymentInterface
+     */
+    private $payment;
+
+    /**
+     * @var AddressInterface
+     */
+    private $address;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -81,6 +107,9 @@ class QuoteManagementTest extends TestCase
         $this->productRepository->cleanCache();
         $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $this->paymentManagement = $this->objectManager->get(PaymentInformationManagementInterface::class);
+        $this->payment = $this->objectManager->get(PaymentInterface::class);
+        $this->address = $this->objectManager->get(AddressInterface::class);
     }
 
     /**
@@ -107,8 +136,74 @@ class QuoteManagementTest extends TestCase
     }
 
     /**
+     * Verify guest customer place order with auto-group assigment.
+     *
+     * @magentoDataFixture Magento/Sales/_files/guest_quote_with_addresses.php
+     *
+     * @magentoConfigFixture default_store customer/create_account/auto_group_assign 1
+     * @magentoConfigFixture default_store customer/create_account/tax_calculation_address_type shipping
+     * @magentoConfigFixture default_store customer/create_account/viv_intra_union_group 2
+     * @magentoConfigFixture default_store customer/create_account/viv_on_each_transaction 1
+     *
+     * @return void
+     */
+    public function testSubmitGuestCustomer(): void
+    {
+        $this->mockVatValidation();
+        $quote = $this->getQuoteByReservedOrderId->execute('guest_quote');
+        $this->cartManagement->placeOrder($quote->getId());
+        $quoteAfterOrderPlaced = $this->getQuoteByReservedOrderId->execute('guest_quote');
+        self::assertEquals(0, $quoteAfterOrderPlaced->getCustomerGroupId());
+        self::assertEquals(3, $quoteAfterOrderPlaced->getCustomerTaxClassId());
+    }
+
+    /**
+     * Creates order with purchase_order payment method
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Sales/_files/quote_with_purchase_order.php
+     *
+     * @return void
+     * @throws CouldNotSaveException
+     */
+    public function testSubmitWithPurchaseOrder(): void
+    {
+        $paymentMethodName = 'purchaseorder';
+        $poNumber = '12345678';
+        $quote = $this->getQuoteByReservedOrderId->execute('test_order_1');
+        $quote->getPayment()->setPoNumber($poNumber);
+        $quote->collectTotals()->save();
+        $orderId = $this->cartManagement->placeOrder($quote->getId());
+        $order = $this->orderRepository->get($orderId);
+        $orderItems = $order->getItems();
+        $this->assertCount(1, $orderItems);
+        $payment = $order->getPayment();
+        $this->assertEquals($paymentMethodName, $payment->getMethod());
+        $this->assertEquals($poNumber, $payment->getPoNumber());
+    }
+
+    /**
+     * Creates order with purchase_order payment method without po_number
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Sales/_files/quote_with_purchase_order.php
+     *
+     * @return void
+     * @throws CouldNotSaveException
+     */
+    public function testSubmitWithPurchaseOrderWithException(): void
+    {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('Purchase order number is a required field.');
+
+        $quote = $this->getQuoteByReservedOrderId->execute('test_order_1');
+        $this->cartManagement->placeOrder($quote->getId());
+    }
+
+    /**
      * Tries to create order with product that has child items and one of them was deleted.
      *
+     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 1
      * @magentoAppArea adminhtml
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Sales/_files/quote_with_bundle.php
@@ -124,8 +219,23 @@ class QuoteManagementTest extends TestCase
     }
 
     /**
+     * Tries to create order with product that has child items and one of them
+     * was deleted when item data check is disabled on quote load.
+     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 0
+     * @magentoAppArea adminhtml
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Sales/_files/quote_with_bundle.php
+     */
+    public function testSubmitWithDeletedItemWithDisabledInventoryCheck(): void
+    {
+        $this->productRepository->deleteById('simple-2');
+        $quote = $this->getQuoteByReservedOrderId->execute('test01');
+        $this->cartManagement->placeOrder($quote->getId());
+    }
+
+    /**
      * Tries to create order with item of stock during checkout.
-     *
+     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 1
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDbIsolation enabled
      */
@@ -134,6 +244,25 @@ class QuoteManagementTest extends TestCase
         $this->makeProductOutOfStock('simple');
         $quote = $this->getQuoteByReservedOrderId->execute('test01');
         $this->expectExceptionObject(new LocalizedException(__('Some of the products are out of stock.')));
+        $this->cartManagement->placeOrder($quote->getId());
+    }
+
+    /**
+     * Tries to create order with item of stock during checkout
+     * when item data check is disabled on quote load.
+     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 0
+     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDbIsolation enabled
+     */
+    public function testSubmitWithItemOutOfStockWithDisabledInventoryCheck(): void
+    {
+        $this->makeProductOutOfStock('simple');
+        $quote = $this->getQuoteByReservedOrderId->execute('test01');
+        $this->expectExceptionObject(
+            new LocalizedException(
+                __('The shipping method is missing. Select the shipping method and try again.')
+            )
+        );
         $this->cartManagement->placeOrder($quote->getId());
     }
 
@@ -230,5 +359,82 @@ class QuoteManagementTest extends TestCase
         $stockItem = $extensionAttributes->getStockItem();
         $stockItem->setIsInStock(false);
         $this->productRepository->save($product);
+    }
+
+    /**
+     * Makes customer vat validator 'check vat number' response successful.
+     *
+     * @return void
+     */
+    private function mockVatValidation(): void
+    {
+        $vatMock = $this->getMockBuilder(Vat::class)
+            ->setConstructorArgs(
+                [
+                    'scopeConfig' => $this->objectManager->get(ScopeConfigInterface::class),
+                    'logger' => $this->objectManager->get(LoggerInterface::class),
+                ]
+            )
+            ->onlyMethods(['checkVatNumber'])
+            ->getMock();
+        $gatewayResponse = new DataObject([
+            'is_valid' => true,
+            'request_date' => 'testData',
+            'request_identifier' => 'testRequestIdentifier',
+            'request_success' => true,
+        ]);
+        $vatMock->method('checkVatNumber')->willReturn($gatewayResponse);
+        $this->objectManager->removeSharedInstance(CollectTotalsObserver::class);
+        $this->objectManager->removeSharedInstance(VatValidator::class);
+        $this->objectManager->removeSharedInstance(Vat::class);
+        $this->objectManager->addSharedInstance($vatMock, Vat::class);
+    }
+
+    /**
+     * Creates order with purchase_order payment method
+     *
+     * @magentoDataFixture Magento/Sales/_files/quote_with_customer.php
+     * @magentoDbIsolation disabled
+     * @return void
+     * @throws CouldNotSaveException
+     */
+    public function testCustomerAddressIdAfterPlacingOrder(): void
+    {
+        $quote = $this->getQuoteByReservedOrderId->execute('test01');
+        $quote->getBillingAddress()->setSaveInAddressBook(null);
+        $quote->getBillingAddress()->setCustomerAddressId(null);
+
+        $this->address->setFirstname($quote->getBillingAddress()->getFirstname());
+        $this->address->setLastname($quote->getBillingAddress()->getLastname());
+        $this->address->setCity($quote->getBillingAddress()->getCity());
+        $this->address->setCompany($quote->getBillingAddress()->getCompany());
+        $this->address->setCountryId($quote->getBillingAddress()->getCountryId());
+        $this->address->setRegionId($quote->getBillingAddress()->getRegionId());
+        $this->address->setCustomerId($quote->getBillingAddress()->getCustomerId());
+        $this->address->setPostcode($quote->getBillingAddress()->getPostcode());
+        $this->address->setTelephone($quote->getBillingAddress()->getTelephone());
+        $this->address->setStreet($quote->getBillingAddress()->getStreet());
+        $this->address->setSameAsBilling($quote->getBillingAddress()->getSameAsBilling());
+        $this->address->setCustomerAddressId($quote->getBillingAddress()->getCustomerAddressId());
+        $this->address->setSaveInAddressBook($quote->getBillingAddress()->getSaveInAddressBook());
+
+        $quote->getShippingAddress()
+            ->setShippingMethod('flatrate_flatrate')
+            ->setCollectShippingRates(true);
+        $quote->getShippingAddress()->setSameAsBilling(1);
+        $quote->getShippingAddress()->setSaveInAddressBook(1);
+        $this->payment->setMethod('checkmo');
+        $quote->save();
+        $orderId = $this->paymentManagement->savePaymentInformationAndPlaceOrder(
+            $quote->getId(),
+            $this->payment,
+            $this->address
+        );
+        $order = $this->orderRepository->get($orderId);
+        $billingAddress = $order->getBillingAddress();
+        $shippingAddress = $order->getShippingAddress();
+        $this->assertNotNull($billingAddress->getCustomerAddressId());
+        $this->assertNotNull($shippingAddress->getCustomerAddressId());
+        $this->assertEquals($billingAddress->getCustomerAddressId(), $shippingAddress->getCustomerAddressId());
     }
 }

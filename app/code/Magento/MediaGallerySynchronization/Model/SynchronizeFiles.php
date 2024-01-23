@@ -12,11 +12,11 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Driver\File;
-use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGallerySynchronizationApi\Model\ImportFilesInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
-use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
+use Magento\MediaGallerySynchronization\Model\Filesystem\GetFileInfo;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -50,9 +50,9 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     private $driver;
 
     /**
-     * @var SplFileInfoFactory
+     * @var GetFileInfo
      */
-    private $splFileInfoFactory;
+    private $getFileInfo;
 
     /**
      * @var ImportFilesInterface
@@ -60,33 +60,33 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     private $importFiles;
 
     /**
-     * @var DateTime
+     * @var DateTimeFactory
      */
-    private $date;
+    private $dateFactory;
 
     /**
      * @param File $driver
      * @param Filesystem $filesystem
-     * @param DateTime $date
+     * @param DateTimeFactory $dateFactory
      * @param LoggerInterface $log
-     * @param SplFileInfoFactory $splFileInfoFactory
+     * @param GetFileInfo $getFileInfo
      * @param GetAssetsByPathsInterface $getAssetsByPaths
      * @param ImportFilesInterface $importFiles
      */
     public function __construct(
         File $driver,
         Filesystem $filesystem,
-        DateTime $date,
+        DateTimeFactory $dateFactory,
         LoggerInterface $log,
-        SplFileInfoFactory $splFileInfoFactory,
+        GetFileInfo $getFileInfo,
         GetAssetsByPathsInterface $getAssetsByPaths,
         ImportFilesInterface $importFiles
     ) {
         $this->driver = $driver;
         $this->filesystem = $filesystem;
-        $this->date = $date;
+        $this->dateFactory = $dateFactory;
         $this->log = $log;
-        $this->splFileInfoFactory = $splFileInfoFactory;
+        $this->getFileInfo = $getFileInfo;
         $this->getAssetsByPaths = $getAssetsByPaths;
         $this->importFiles = $importFiles;
     }
@@ -148,9 +148,9 @@ class SynchronizeFiles implements SynchronizeFilesInterface
      */
     private function getFileModificationTime(string $path): string
     {
-        return $this->date->gmtDate(
+        return $this->dateFactory->create()->gmtDate(
             self::DATE_FORMAT,
-            $this->splFileInfoFactory->create($this->getMediaDirectory()->getAbsolutePath($path))->getMTime()
+            $this->getFileInfo->execute($this->getMediaDirectory()->getAbsolutePath($path))->getMTime()
         );
     }
 

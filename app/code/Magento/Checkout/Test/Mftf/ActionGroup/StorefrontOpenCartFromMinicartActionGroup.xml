@@ -13,9 +13,13 @@
             <description>Clicks on the Storefront Mini Shopping Cart icon. Click on 'View and Edit Cart'.</description>
         </annotations>
 
+        <scrollToTopOfPage stepKey="scrollToTopOfThePage" />
         <waitForElement selector="{{StorefrontMinicartSection.showCart}}" stepKey="waitForShowMinicart"/>
         <waitForElement selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForCartLink"/>
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickShowMinicart"/>
         <click selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="clickCart"/>
+        <waitForPageLoad stepKey="waitForCart"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.orderSummaryTotal}}" stepKey="waitForOrderTotal"/>
+        <waitForPageLoad stepKey="waitForOrderTotalCalculation"/>
     </actionGroup>
 </actionGroups>

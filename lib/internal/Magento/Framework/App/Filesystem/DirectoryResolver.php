@@ -16,6 +16,7 @@ class DirectoryResolver
 {
     /**
      * @var DirectoryList
+     * @deprecated $this->filesystem->getDirectoryWrite() can be used for getting directory
      */
     private $directoryList;
 
@@ -51,7 +52,7 @@ class DirectoryResolver
     {
         $directory = $this->filesystem->getDirectoryWrite($directoryConfig);
         $realPath = $directory->getDriver()->getRealPathSafety($path);
-        $root = $this->directoryList->getPath($directoryConfig);
+        $root = rtrim($directory->getAbsolutePath(), DIRECTORY_SEPARATOR);
 
         return strpos($realPath, $root) === 0;
     }

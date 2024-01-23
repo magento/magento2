@@ -10,6 +10,7 @@ namespace Magento\Downloadable\Test\Unit\Helper;
 use Magento\Downloadable\Helper\Download as DownloadHelper;
 use Magento\Downloadable\Helper\File as DownloadableFile;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface as DirReadInterface;
 use Magento\Framework\Filesystem\File\ReadFactory;
@@ -62,6 +63,11 @@ class DownloadTest extends TestCase
 
     const URL = 'http://example.com';
 
+    /**
+     * @var Mime|MockObject
+     */
+    private $mime;
+
     protected function setUp(): void
     {
         require_once __DIR__ . '/../_files/download_mock.php';
@@ -77,6 +83,7 @@ class DownloadTest extends TestCase
             SessionManagerInterface::class
         );
         $this->fileReadFactory = $this->createMock(ReadFactory::class);
+        $this->mime = $this->createMock(Mime::class);
 
         $this->_helper = (new ObjectManager($this))->getObject(
             \Magento\Downloadable\Helper\Download::class,
@@ -85,6 +92,7 @@ class DownloadTest extends TestCase
                 'filesystem'       => $this->_filesystemMock,
                 'session'          => $this->sessionManager,
                 'fileReadFactory'  => $this->fileReadFactory,
+                'mime' => $this->mime
             ]
         );
     }
@@ -132,8 +140,17 @@ class DownloadTest extends TestCase
 
     public function testGetContentType()
     {
+        $this->mime->expects(
+            self::once()
+        )->method(
+            'getMimeType'
+        )->willReturn(
+            self::MIME_TYPE
+        );
         $this->_setupFileMocks();
         $this->_downloadableFileMock->expects($this->never())->method('getFileType');
+        $this->_workingDirectoryMock->expects($this->once())->method('getAbsolutePath')
+            ->willReturn('/path/to/file.txt');
         $this->assertEquals(self::MIME_TYPE, $this->_helper->getContentType());
     }
 
@@ -146,10 +163,10 @@ class DownloadTest extends TestCase
         self::$functionExists = $functionExistsResult;
         self::$mimeContentType = $mimeContentTypeResult;
 
-        $this->_downloadableFileMock->expects(
-            $this->once()
+        $this->mime->expects(
+            self::once()
         )->method(
-            'getFileType'
+            'getMimeType'
         )->willReturn(
             self::MIME_TYPE
         );

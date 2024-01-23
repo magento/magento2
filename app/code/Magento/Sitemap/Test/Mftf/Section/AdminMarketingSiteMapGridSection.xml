@@ -15,5 +15,6 @@
         <element name="searchButton" type="button" selector=".admin__filter-actions [title='Search']"/>
         <element name="firstSearchResult" type="text" selector="#sitemapGrid_table>tbody>tr:nth-child(1)"/>
         <element name="fileNameTextField" type="input" selector="#sitemapGrid_filter_sitemap_filename" timeout="90"/>
+        <element name="firstRowLink" type="button" selector="//td[contains(@class, 'col-link')][1]/a"/>
     </section>
 </sections>

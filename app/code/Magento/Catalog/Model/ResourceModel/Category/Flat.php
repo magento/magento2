@@ -17,22 +17,16 @@ use Magento\Framework\App\ObjectManager;
 class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
 {
     /**
-     * Store id
-     *
      * @var int
      */
     protected $_storeId;
 
     /**
-     * Loaded
-     *
      * @var boolean
      */
     protected $_loaded = false;
 
     /**
-     * Nodes
-     *
      * @var array
      */
     protected $_nodes = [];
@@ -52,30 +46,22 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
     protected $_eventManager;
 
     /**
-     * Catalog config
-     *
      * @var \Magento\Catalog\Model\Config
      */
     protected $_catalogConfig;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Category collection factory
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
      * @deprecated 100.0.2
      */
     protected $_categoryCollectionFactory;
 
     /**
-     * Category factory
-     *
      * @var \Magento\Catalog\Model\CategoryFactory
      */
     protected $_categoryFactory;
@@ -294,7 +280,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
         $inactiveCategories = $this->getInactiveCategoryIds();
 
         if (!empty($inactiveCategories)) {
-            $select->where('main_table.entity_id NOT IN (?)', $inactiveCategories);
+            $select->where('main_table.entity_id NOT IN (?)', $inactiveCategories, \Zend_Db::INT_TYPE);
         }
 
         // Allow extensions to modify select (e.g. add custom category attributes to select)
@@ -370,7 +356,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
                 $nodes = $this->_loadNodes($parentNode, $recursionLevel, $storeId);
                 $childrenItems = [];
                 foreach ($nodes as $node) {
-                    $pathToParent = explode('/', $node->getPath());
+                    $pathToParent = explode('/', $node->getPath() ?? '');
                     array_pop($pathToParent);
                     $pathToParent = implode('/', $pathToParent);
                     $childrenItems[$pathToParent][] = $node;
@@ -681,7 +667,8 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
             1
         )->where(
             'entity_id IN (?)',
-            $filterIds
+            $filterIds,
+            \Zend_Db::INT_TYPE
         );
 
         return $this->getConnection()->fetchCol($select);
@@ -713,8 +700,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
                 $websiteId
             );
         }
-        $bind = ['category_id' => (int)$category->getId()];
 
-        return $this->getConnection()->fetchPairs($select, $bind);
+        return $this->getConnection()->fetchPairs($select);
     }
 }

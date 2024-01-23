@@ -14,14 +14,13 @@ use Magento\Store\Model\Store;
 /**
  * Export Advanced Pricing
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
 {
-    const ENTITY_ADVANCED_PRICING = 'advanced_pricing';
+    public const ENTITY_ADVANCED_PRICING = 'advanced_pricing';
 
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
@@ -158,6 +157,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     protected function initTypeModels()
     {
         $productTypes = $this->_exportConfig->getEntityTypes(CatalogProduct::ENTITY);
+        $disabledAttrs = [];
+        $indexValueAttributes = [];
         foreach ($productTypes as $productTypeName => $productTypeConfig) {
             if (!($model = $this->_typeFactory->create($productTypeConfig['model']))) {
                 throw new \Magento\Framework\Exception\LocalizedException(
@@ -174,13 +175,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             }
             if ($model->isSuitable()) {
                 $this->_productTypeModels[$productTypeName] = $model;
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $this->_disabledAttrs = array_merge($this->_disabledAttrs, $model->getDisabledAttrs());
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $this->_indexValueAttributes = array_merge(
-                    $this->_indexValueAttributes,
-                    $model->getIndexValueAttributes()
-                );
+                $disabledAttrs[] = $model->getDisabledAttrs();
+                $indexValueAttributes[] = $model->getIndexValueAttributes();
             }
         }
         if (!$this->_productTypeModels) {
@@ -188,7 +184,10 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                 __('There are no product types available for export')
             );
         }
-        $this->_disabledAttrs = array_unique($this->_disabledAttrs);
+        $this->_disabledAttrs = array_unique(array_merge([], $this->_disabledAttrs, ...$disabledAttrs));
+        $this->_indexValueAttributes = array_unique(
+            array_merge([], $this->_indexValueAttributes, ...$indexValueAttributes)
+        );
         return $this;
     }
 
@@ -486,7 +485,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             )
             ->where(
                 'ap.' . $productEntityLinkField . ' IN (?)',
-                $productIds
+                $productIds,
+                \Zend_Db::INT_TYPE
             );
 
         if ($priceFromFilter !== null) {
@@ -518,6 +518,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
         if (isset($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP])) {
             $exportFilter = $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP];
         }
+        $selectFields = [];
+        $exportData = false;
         if ($table == ImportAdvancedPricing::TABLE_TIER_PRICE) {
             $selectFields = [
                 ImportAdvancedPricing::COL_SKU => 'cpe.sku',
@@ -565,10 +567,10 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                 if (isset($price[0]) && !empty($price[0]) || isset($price[1]) && !empty($price[1])) {
                     $select->orWhere('ap.percentage_value IS NOT NULL');
                 }
-                if (isset($updatedAtFrom) && !empty($updatedAtFrom)) {
+                if (isset($updatedAtFrom)) {
                     $select->where('cpe.updated_at >= ?', $updatedAtFrom);
                 }
-                if (isset($updatedAtTo) && !empty($updatedAtTo)) {
+                if (isset($updatedAtTo)) {
                     $select->where('cpe.updated_at <= ?', $updatedAtTo);
                 }
                 $exportData = $this->_connection->fetchAll($select);

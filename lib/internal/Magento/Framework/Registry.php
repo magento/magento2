@@ -5,17 +5,20 @@
  */
 namespace Magento\Framework;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * Registry model. Used to manage values in registry
  *
  * Registry usage as a shared service introduces temporal, hard to detect coupling into system.
- * It's usage should be avoid. Use service classes or data providers instead.
+ * Its usage should be avoided. Use service classes or data providers instead.
  *
  * @api
  * @deprecated 102.0.0
+ * @see Nothing
  * @since 100.0.2
  */
-class Registry
+class Registry implements ResetAfterRequestInterface
 {
     /**
      * Registry collection
@@ -29,8 +32,8 @@ class Registry
      *
      * @param string $key
      * @return mixed
-     *
      * @deprecated 102.0.0
+     * @see Nothing
      */
     public function registry($key)
     {
@@ -48,8 +51,8 @@ class Registry
      * @param bool $graceful
      * @return void
      * @throws \RuntimeException
-     *
      * @deprecated 102.0.0
+     * @see Nothing
      */
     public function register($key, $value, $graceful = false)
     {
@@ -67,18 +70,12 @@ class Registry
      *
      * @param string $key
      * @return void
-     *
      * @deprecated 102.0.0
+     * @see Nothing
      */
     public function unregister($key)
     {
         if (isset($this->_registry[$key])) {
-            if (is_object($this->_registry[$key])
-                && method_exists($this->_registry[$key], '__destruct')
-                && is_callable([$this->_registry[$key], '__destruct'])
-            ) {
-                $this->_registry[$key]->__destruct();
-            }
             unset($this->_registry[$key]);
         }
     }
@@ -90,5 +87,13 @@ class Registry
     {
         $keys = array_keys($this->_registry);
         array_walk($keys, [$this, 'unregister']);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_registry = [];
     }
 }

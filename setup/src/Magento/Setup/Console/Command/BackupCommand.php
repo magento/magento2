@@ -155,7 +155,7 @@ class BackupCommand extends AbstractSetupCommand
             $output,
             false
         );
-        
+
         return $returnValue;
     }
 

@@ -10,5 +10,7 @@
     <section name="StorefrontHeaderSection">
         <element name="welcomeMessage" type="text" selector=".greet.welcome"/>
         <element name="logoLink" type="button" selector=".header .logo"/>
+        <element name="logoImage" type="button" selector=".header .logo > img[src*='{{filename}}']" parameterized="true"/>
+        <element name="mobileMenuToggle" type="button" selector=".header .nav-toggle"/>
     </section>
 </sections>

@@ -45,6 +45,11 @@ class Directory implements \Magento\Setup\Module\Di\Code\Reader\ClassesScannerIn
     private $classesScanner;
 
     /**
+     * @var string
+     */
+    private $generationDir;
+
+    /**
      * @param \Magento\Setup\Module\Di\Compiler\Log\Log $log Logging object
      * @param \Magento\Framework\Code\Reader\ClassReader $classReader
      * @param \Magento\Setup\Module\Di\Code\Reader\ClassesScanner $classesScanner

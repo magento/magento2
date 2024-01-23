@@ -213,7 +213,8 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
                 \Magento\Sales\Model\Order::STATE_CANCELED
             )->where(
                 'orders.customer_id IN(?)',
-                $customerIds
+                $customerIds,
+                \Zend_Db::INT_TYPE
             )->group(
                 'orders.customer_id'
             );

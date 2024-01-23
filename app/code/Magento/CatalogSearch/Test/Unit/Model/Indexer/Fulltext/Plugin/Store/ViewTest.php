@@ -11,7 +11,6 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\View as StoreViewIndexerPlugin;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\ResourceModel\Store as StoreResourceModel;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -23,11 +22,6 @@ class ViewTest extends TestCase
      * @var StoreViewIndexerPlugin
      */
     private $plugin;
-
-    /**
-     * @var ObjectManagerHelper
-     */
-    private $objectManagerHelper;
 
     /**
      * @var IndexerRegistry|MockObject
@@ -64,20 +58,16 @@ class ViewTest extends TestCase
             ->setMethods(['isObjectNew'])
             ->getMock();
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->plugin = $this->objectManagerHelper->getObject(
-            StoreViewIndexerPlugin::class,
-            ['indexerRegistry' => $this->indexerRegistryMock]
-        );
+        $this->plugin = new StoreViewIndexerPlugin($this->indexerRegistryMock);
     }
 
     /**
      * @param bool $isObjectNew
      * @param int $invalidateCounter
      *
-     * @dataProvider beforeAfterSaveDataProvider
+     * @dataProvider afterSaveDataProvider
      */
-    public function testBeforeAfterSave($isObjectNew, $invalidateCounter)
+    public function testAfterSave(bool $isObjectNew, int $invalidateCounter): void
     {
         $this->prepareIndexer($invalidateCounter);
         $this->storeMock->expects(static::once())
@@ -86,14 +76,16 @@ class ViewTest extends TestCase
         $this->indexerMock->expects(static::exactly($invalidateCounter))
             ->method('invalidate');
 
-        $this->plugin->beforeSave($this->subjectMock, $this->storeMock);
-        $this->assertSame($this->subjectMock, $this->plugin->afterSave($this->subjectMock, $this->subjectMock));
+        $this->assertSame(
+            $this->subjectMock,
+            $this->plugin->afterSave($this->subjectMock, $this->subjectMock, $this->storeMock)
+        );
     }
 
     /**
      * @return array
      */
-    public function beforeAfterSaveDataProvider()
+    public function afterSaveDataProvider(): array
     {
         return [
             [false, 0],
@@ -101,7 +93,7 @@ class ViewTest extends TestCase
         ];
     }
 
-    public function testAfterDelete()
+    public function testAfterDelete(): void
     {
         $this->prepareIndexer(1);
         $this->indexerMock->expects(static::once())
@@ -116,7 +108,7 @@ class ViewTest extends TestCase
      * @param int $invalidateCounter
      * @return void
      */
-    private function prepareIndexer($invalidateCounter)
+    private function prepareIndexer(int $invalidateCounter): void
     {
         $this->indexerRegistryMock->expects(static::exactly($invalidateCounter))
             ->method('get')

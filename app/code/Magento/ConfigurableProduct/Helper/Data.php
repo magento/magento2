@@ -7,9 +7,12 @@
 namespace Magento\ConfigurableProduct\Helper;
 
 use Magento\Catalog\Model\Product\Image\UrlBuilder;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Image;
 
 /**
@@ -32,13 +35,23 @@ class Data
     private $imageUrlBuilder;
 
     /**
-     * @param ImageHelper $imageHelper
-     * @param UrlBuilder $urlBuilder
+     * @var ScopeConfigInterface
      */
-    public function __construct(ImageHelper $imageHelper, UrlBuilder $urlBuilder = null)
-    {
+    private $scopeConfig;
+
+    /**
+     * @param ImageHelper $imageHelper
+     * @param UrlBuilder|null $urlBuilder
+     * @param ScopeConfigInterface|null $scopeConfig
+     */
+    public function __construct(
+        ImageHelper $imageHelper,
+        UrlBuilder $urlBuilder = null,
+        ?ScopeConfigInterface $scopeConfig = null
+    ) {
         $this->imageHelper = $imageHelper;
         $this->imageUrlBuilder = $urlBuilder ?? ObjectManager::getInstance()->get(UrlBuilder::class);
+        $this->scopeConfig = $scopeConfig ?? ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -73,7 +86,7 @@ class Data
     /**
      * Get Options for Configurable Product Options
      *
-     * @param \Magento\Catalog\Model\Product $currentProduct
+     * @param Product $currentProduct
      * @param array $allowedProducts
      * @return array
      */
@@ -88,23 +101,43 @@ class Data
                 $productAttribute = $attribute->getProductAttribute();
                 $productAttributeId = $productAttribute->getId();
                 $attributeValue = $product->getData($productAttribute->getAttributeCode());
-                if ($product->isSalable()) {
+                if ($this->canDisplayShowOutOfStockStatus()) {
+                    if ($product->isSalable()) {
+                        $options['salable'][$productAttributeId][$attributeValue][] = $productId;
+                    }
                     $options[$productAttributeId][$attributeValue][] = $productId;
+                } else {
+                    if ($product->isSalable()) {
+                        $options[$productAttributeId][$attributeValue][] = $productId;
+                    }
                 }
                 $options['index'][$productId][$productAttributeId] = $attributeValue;
             }
         }
+        $options['canDisplayShowOutOfStockStatus'] = $this->canDisplayShowOutOfStockStatus();
         return $options;
     }
 
     /**
      * Get allowed attributes
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return array
      */
     public function getAllowAttributes($product)
     {
-        return $product->getTypeInstance()->getConfigurableAttributes($product);
+        return ($product->getTypeId() == Configurable::TYPE_CODE)
+            ? $product->getTypeInstance()->getConfigurableAttributes($product)
+            : [];
+    }
+
+    /**
+     * Returns if display out of stock status set or not in catalog inventory
+     *
+     * @return bool
+     */
+    private function canDisplayShowOutOfStockStatus(): bool
+    {
+        return (bool) $this->scopeConfig->getValue('cataloginventory/options/show_out_of_stock');
     }
 }

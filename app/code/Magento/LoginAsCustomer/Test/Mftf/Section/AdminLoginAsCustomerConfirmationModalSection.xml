@@ -9,6 +9,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminLoginAsCustomerConfirmationModalSection">
-        <element name="storeView" type="select" selector="//select[@id='lac-confirmation-popup-store-id']"/>
+        <element name="store" type="select" selector="//select[@id='lac-confirmation-popup-store-id']"/>
     </section>
 </sections>

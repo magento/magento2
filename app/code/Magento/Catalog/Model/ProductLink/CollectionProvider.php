@@ -88,7 +88,7 @@ class CollectionProvider
                 $posA = (int)$itemA['position'];
                 $posB = (int)$itemB['position'];
 
-                return $posA <=> $posB;
+                return (($posA - $posB) > 0) ? 1 : -1;  // for PHP 7 and 8 consistency
             }
         );
 

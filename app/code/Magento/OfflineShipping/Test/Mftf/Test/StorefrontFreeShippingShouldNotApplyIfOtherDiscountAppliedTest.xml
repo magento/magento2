@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontFreeShippingShouldNotApplyIfOtherDiscountAppliedTest">
+        <annotations>
+            <features value="Shipping"/>
+            <stories value="Offline Shipping Methods"/>
+            <title value="Free Shipping Should Not Applicable if Other Discount Reduce the Matching Amount"/>
+            <description value="Free Shipping Should Not Applicable if Other Discount Reduce the Matching Amount"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-7886"/>
+            <group value="shipping"/>
+        </annotations>
+        <before>
+            <!-- Create cart price rule -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create active cart price rule-->
+            <actionGroup ref="AdminCreateCartPriceRuleActionsWithSubtotalExclTaxActionGroup" stepKey="createFreeShippingCartPriceRule">
+                <argument name="ruleName" value="CartPriceRuleFreeShippingAppliedOnly"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateCartPriceRuleWithCouponCodeActionGroup" stepKey="createCartPriceRule">
+                <argument name="ruleName" value="CartPriceRuleConditionWithCouponAppliedForSubtotalExclTax"/>
+                <argument name="couponCode" value="CartPriceRuleConditionWithCouponAppliedForSubtotalExclTax.coupon_code"/>
+            </actionGroup>
+            <!-- Add simple product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+                <field key="price">100.00</field>
+            </createData>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteFreeShippingCartPriceRule">
+                <argument name="ruleName" value="{{CartPriceRuleFreeShippingAppliedOnly.name}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
+                <argument name="ruleName" value="{{CartPriceRuleConditionWithCouponAppliedForSubtotalExclTax.name}}"/>
+            </actionGroup>
+<!--             Remove simple product-->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Add simple product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+
+        <!-- Assert that table rate value is correct for US -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
+        <waitForElement time="30" selector="{{CheckoutCartSummarySection.estimateShippingAndTaxForm}}" stepKey="waitForEstimateShippingAndTaxForm"/>
+        <waitForElement time="30" selector="{{CheckoutCartSummarySection.shippingMethodForm}}" stepKey="waitForShippingMethodForm"/>
+        <conditionalClick selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
+        <see selector="{{CheckoutCartSummarySection.shippingPrice}}" userInput="$0.00" stepKey="seeFlatShippingZero"/>
+
+        <!-- Apply Discount Coupon to the Order -->
+        <actionGroup ref="StorefrontShoppingCartClickApplyDiscountButtonActionGroup" stepKey="clickApplyButton"/>
+        <actionGroup ref="StorefrontShoppingCartFillCouponCodeFieldActionGroup" stepKey="fillDiscountCodeField">
+            <argument name="discountCode" value="{{CartPriceRuleConditionWithCouponAppliedForSubtotalExclTax.coupon_code}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontShoppingCartClickApplyDiscountButtonActionGroup" stepKey="clickApplyDiscountButton"/>
+        <actionGroup ref="AssertMessageCustomerChangeAccountInfoActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value='You used coupon code "{{CartPriceRuleConditionWithCouponAppliedForSubtotalExclTax.coupon_code}}".'/>
+        </actionGroup>
+        <waitForElement time="30" selector="{{CheckoutCartSummarySection.estimateShippingAndTaxForm}}" stepKey="waitForEstimateShippingAndTaxFormAfterCouponApplied"/>
+        <waitForElement time="30" selector="{{CheckoutCartSummarySection.shippingMethodForm}}" stepKey="waitForShippingMethodFormAfterCouponApplied"/>
+        <!-- Sometimes the shipping loading masks are not done loading -->
+        <waitForPageLoad stepKey="waitForShippingLoaded"/>
+        <see selector="{{CheckoutCartSummarySection.shippingPrice}}" userInput="$5.00" stepKey="seeFlatShippingPrice"/>
+    </test>
+</tests>

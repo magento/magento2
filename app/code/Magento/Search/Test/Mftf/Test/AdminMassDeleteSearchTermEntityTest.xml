@@ -18,6 +18,7 @@
             <testCaseId value="MC-14767"/>
             <group value="searchFrontend"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create three search term -->
@@ -34,8 +35,7 @@
         </after>
 
         <!-- Go to the catalog search term page -->
-        <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage"/>
-        <waitForPageLoad stepKey="waitForAdminCatalogSearchTermIndexPageLoad"/>
+        <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="openAdminCatalogSearchTermIndexPage"/>
 
         <!-- Select all created below search terms -->
         <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByFirstSearchQuery">

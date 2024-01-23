@@ -35,6 +35,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Deploy\Console\Command\App\ConfigImportCommand">
+        <arguments>
+            <argument name="adminhtmlAreaProcessor" xsi:type="object">Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor\Proxy</argument>
+            <argument name="areaList" xsi:type="object">Magento\Framework\App\AreaList\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Deploy\Model\Filesystem">
         <arguments>
             <argument name="shell" xsi:type="object">Magento\Framework\App\Shell</argument>

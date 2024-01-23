@@ -14,22 +14,23 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\CartInterfaceFactory;
 use Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory;
-use Magento\Quote\Model\QuoteRepository\SaveHandler;
 use Magento\Quote\Model\QuoteRepository\LoadHandler;
+use Magento\Quote\Model\QuoteRepository\SaveHandler;
 use Magento\Quote\Model\ResourceModel\Quote\Collection as QuoteCollection;
 use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory as QuoteCollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Quote repository.
+ * Repository for quote entity.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class QuoteRepository implements CartRepositoryInterface
+class QuoteRepository implements CartRepositoryInterface, ResetAfterRequestInterface
 {
     /**
      * @var Quote[]
@@ -44,6 +45,7 @@ class QuoteRepository implements CartRepositoryInterface
     /**
      * @var QuoteFactory
      * @deprecated 101.1.2
+     * @see no longer used
      */
     protected $quoteFactory;
 
@@ -53,8 +55,9 @@ class QuoteRepository implements CartRepositoryInterface
     protected $storeManager;
 
     /**
-     * @var QuoteCollection
+     * @var QuoteCollection|null
      * @deprecated 101.0.0
+     * @see $quoteCollectionFactory
      */
     protected $quoteCollection;
 
@@ -98,7 +101,7 @@ class QuoteRepository implements CartRepositoryInterface
      *
      * @param QuoteFactory $quoteFactory
      * @param StoreManagerInterface $storeManager
-     * @param QuoteCollection $quoteCollection
+     * @param QuoteCollection $quoteCollection Deprecated.  Use $quoteCollectionFactory
      * @param CartSearchResultsInterfaceFactory $searchResultsDataFactory
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param CollectionProcessorInterface|null $collectionProcessor
@@ -130,12 +133,22 @@ class QuoteRepository implements CartRepositoryInterface
     /**
      * @inheritdoc
      */
+    public function _resetState(): void
+    {
+        $this->quotesById = [];
+        $this->quotesByCustomerId = [];
+        $this->quoteCollection = null;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function get($cartId, array $sharedStoreIds = [])
     {
         if (!isset($this->quotesById[$cartId])) {
             $quote = $this->loadQuote('loadByIdWithoutStore', 'cartId', $cartId, $sharedStoreIds);
-            $this->getLoadHandler()->load($quote);
             $this->quotesById[$cartId] = $quote;
+            $this->getLoadHandler()->load($quote);
         }
         return $this->quotesById[$cartId];
     }
@@ -146,10 +159,16 @@ class QuoteRepository implements CartRepositoryInterface
     public function getForCustomer($customerId, array $sharedStoreIds = [])
     {
         if (!isset($this->quotesByCustomerId[$customerId])) {
-            $quote = $this->loadQuote('loadByCustomer', 'customerId', $customerId, $sharedStoreIds);
-            $this->getLoadHandler()->load($quote);
-            $this->quotesById[$quote->getId()] = $quote;
-            $this->quotesByCustomerId[$customerId] = $quote;
+            $customerQuote = $this->loadQuote('loadByCustomer', 'customerId', $customerId, $sharedStoreIds);
+            $customerQuoteId = $customerQuote->getId();
+            //prevent loading quote items for same quote
+            if (isset($this->quotesById[$customerQuoteId])) {
+                $customerQuote = $this->quotesById[$customerQuoteId];
+            } else {
+                $this->getLoadHandler()->load($customerQuote);
+            }
+            $this->quotesById[$customerQuoteId] = $customerQuote;
+            $this->quotesByCustomerId[$customerId] = $customerQuote;
         }
         return $this->quotesByCustomerId[$customerId];
     }
@@ -192,7 +211,6 @@ class QuoteRepository implements CartRepositoryInterface
                 }
             }
         }
-
         $this->getSaveHandler()->save($quote);
         unset($this->quotesById[$quote->getId()]);
         unset($this->quotesByCustomerId[$quote->getCustomerId()]);
@@ -262,6 +280,7 @@ class QuoteRepository implements CartRepositoryInterface
      * @param QuoteCollection $collection The quote collection.
      * @return void
      * @deprecated 101.0.0
+     * @see no longer used
      * @throws InputException The specified filter group or quote collection does not exist.
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, QuoteCollection $collection)
@@ -282,7 +301,6 @@ class QuoteRepository implements CartRepositoryInterface
      * Get new SaveHandler dependency for application code.
      *
      * @return SaveHandler
-     * @deprecated 100.1.0
      */
     private function getSaveHandler()
     {
@@ -296,7 +314,6 @@ class QuoteRepository implements CartRepositoryInterface
      * Get load handler instance.
      *
      * @return LoadHandler
-     * @deprecated 100.1.0
      */
     private function getLoadHandler()
     {

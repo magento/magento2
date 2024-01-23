@@ -26,7 +26,7 @@ $product->isObjectNew(true);
 $product->setTypeId(Type::TYPE_SIMPLE)
     ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([1])
-    ->setName('Simple Product Out Of Stock')
+    ->setName('Simple Product Out Of Stock With Category')
     ->setSku('out-of-stock-product')
     ->setPrice(10)
     ->setWeight(1)
@@ -50,5 +50,5 @@ $product->setTypeId(Type::TYPE_SIMPLE)
     ->setCanSaveCustomOptions(true)
     ->setHasOptions(true);
 /** @var ProductRepositoryInterface $productRepositoryFactory */
-$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
 $productRepository->save($product);

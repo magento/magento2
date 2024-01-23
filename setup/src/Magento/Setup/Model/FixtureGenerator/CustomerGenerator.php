@@ -124,24 +124,31 @@ class CustomerGenerator
      */
     private function addDefaultAddresses()
     {
-        $this->getConnection()->query(
-            sprintf(
-                '
-                    update `%s` customer
-                    join (
-                        select 
-                            parent_id, min(entity_id) as min, max(entity_id) as max
-                        from `%s`
-                        group by parent_id
-                    ) customer_address on customer_address.parent_id = customer.entity_id
+        $batchSize = 10000;
+        $customerTableName = $this->resourceConnection->getTableName('customer_entity');
+        $customerAddressTableName = $this->resourceConnection->getTableName('customer_address_entity');
+        $customerMaxId = $this->getConnection()->fetchOne("select max(entity_id) from `$customerTableName`");
+        for ($i = 1; $i < $customerMaxId; $i += $batchSize) {
+            $this->getConnection()->query(
+            "
+                    update `$customerTableName` customer
+                        join (
+                            select
+                                parent_id, min(entity_id) as min, max(entity_id) as max
+                            from `$customerAddressTableName`
+                            group by parent_id
+                        ) customer_address on customer_address.parent_id = customer.entity_id
                     set
                       customer.default_billing = customer_address.min,
                       customer.default_shipping = customer_address.max
-                ',
-                $this->resourceConnection->getTableName('customer_entity'),
-                $this->resourceConnection->getTableName('customer_address_entity')
-            )
-        );
+                    where entity_id between :min and :max
+                ",
+                [
+                    'min' => $i,
+                    'max' => $i + $batchSize
+                ]
+            );
+        }
     }
 
     /**

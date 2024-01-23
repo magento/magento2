@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Ui\Component\Listing\Column\Store;
 
 use Magento\Framework\Escaper;
@@ -10,20 +12,18 @@ use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Store\Model\System\Store as SystemStore;
 
 /**
- * Class Options
+ * Ui stores options
+ *
+ * @api
  */
 class Options implements OptionSourceInterface
 {
     /**
-     * Escaper
-     *
      * @var Escaper
      */
     protected $escaper;
 
     /**
-     * System store
-     *
      * @var SystemStore
      */
     protected $systemStore;
@@ -78,7 +78,7 @@ class Options implements OptionSourceInterface
     protected function sanitizeName($name)
     {
         $matches = [];
-        preg_match('/\$[:]*{(.)*}/', $name, $matches);
+        preg_match('/\$[:]*{(.)*}/', $name ?: '', $matches);
         if (count($matches) > 0) {
             $name = $this->escaper->escapeHtml($this->escaper->escapeJs($name));
         } else {
@@ -93,37 +93,38 @@ class Options implements OptionSourceInterface
      *
      * @return void
      */
-    protected function generateCurrentOptions()
+    protected function generateCurrentOptions(): void
     {
         $websiteCollection = $this->systemStore->getWebsiteCollection();
         $groupCollection = $this->systemStore->getGroupCollection();
         $storeCollection = $this->systemStore->getStoreCollection();
-        /** @var \Magento\Store\Model\Website $website */
+
         foreach ($websiteCollection as $website) {
             $groups = [];
-            /** @var \Magento\Store\Model\Group $group */
             foreach ($groupCollection as $group) {
-                if ($group->getWebsiteId() == $website->getId()) {
+                if ($group->getWebsiteId() === $website->getId()) {
                     $stores = [];
-                    /** @var  \Magento\Store\Model\Store $store */
                     foreach ($storeCollection as $store) {
-                        if ($store->getGroupId() == $group->getId()) {
-                            $name = $this->sanitizeName($store->getName());
-                            $stores[$name]['label'] = str_repeat(' ', 8) . $name;
-                            $stores[$name]['value'] = $store->getId();
+                        if ($store->getGroupId() === $group->getId()) {
+                            $stores[] = [
+                                'label' => str_repeat(' ', 8) . $this->sanitizeName($store->getName()),
+                                'value' => $store->getId(),
+                            ];
                         }
                     }
                     if (!empty($stores)) {
-                        $name = $this->sanitizeName($group->getName());
-                        $groups[$name]['label'] = str_repeat(' ', 4) . $name;
-                        $groups[$name]['value'] = array_values($stores);
+                        $groups[] = [
+                            'label' => str_repeat(' ', 4) . $this->sanitizeName($group->getName()),
+                            'value' => array_values($stores),
+                        ];
                     }
                 }
             }
             if (!empty($groups)) {
-                $name = $this->sanitizeName($website->getName());
-                $this->currentOptions[$name]['label'] = $name;
-                $this->currentOptions[$name]['value'] = array_values($groups);
+                $this->currentOptions[] = [
+                    'label' => $this->sanitizeName($website->getName()),
+                    'value' => array_values($groups),
+                ];
             }
         }
     }

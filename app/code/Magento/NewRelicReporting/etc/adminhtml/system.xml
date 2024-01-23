@@ -68,9 +68,9 @@
                     </depends>
                 </field>
                 <field id="separate_apps" translate="label comment" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Send Adminhtml and Frontend as Separate Apps</label>
+                    <label>Send each Magento Area Code as Separate App</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>In addition to the main app (which includes all PHP execution), separate apps for adminhtml and frontend will be created. Requires New Relic Application Name to be set.</comment>
+                    <comment>In addition to the main app (which includes all PHP execution), separate apps for each Magento area code (adminhtml, frontend, ...) will be created. Requires New Relic Application Name to be set.</comment>
                     <depends>
                         <field id="enable">1</field>
                     </depends>

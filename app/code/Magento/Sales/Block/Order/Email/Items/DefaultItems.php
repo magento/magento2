@@ -17,7 +17,6 @@ use Magento\Sales\Model\Order\Item as OrderItem;
  * Sales Order Email items default renderer
  *
  * @api
- * @author     Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class DefaultItems extends Template
@@ -39,7 +38,7 @@ class DefaultItems extends Template
      */
     public function getItemOptions()
     {
-        $result = [[]];
+        $result = [];
         if ($options = $this->getItem()->getOrderItem()->getProductOptions()) {
             if (isset($options['options'])) {
                 $result[] = $options['options'];
@@ -52,7 +51,7 @@ class DefaultItems extends Template
             }
         }
 
-        return array_merge(...$result);
+        return array_merge([], ...$result);
     }
 
     /**

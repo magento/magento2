@@ -13,7 +13,10 @@
             <description>Activate massaction mode by click on Delete Selected..</description>
         </annotations>
 
+        <wait stepKey="waitBefore" time="5" />
         <waitForElementVisible selector="{{AdminEnhancedMediaGalleryMassActionSection.deleteImages}}" stepKey="waitForMassActionButton"/>
         <click selector="{{AdminEnhancedMediaGalleryMassActionSection.deleteImages}}" stepKey="clickOnMassActionButton"/>
+        <waitForPageLoad stepKey="waitForPageLoaded" />
+        <wait stepKey="waitAfter" time="5" />
     </actionGroup>
 </actionGroups>

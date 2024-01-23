@@ -66,9 +66,6 @@ class PurchaseorderTest extends TestCase
 
     public function testValidate()
     {
-        $this->expectException(LocalizedException::class);
-        $this->expectExceptionMessage('Purchase order number is a required field.');
-
         $data = new DataObject([]);
 
         $addressMock = $this->getMockForAbstractClass(OrderAddressInterface::class);
@@ -84,6 +81,7 @@ class PurchaseorderTest extends TestCase
         $this->object->setData('info_instance', $instance);
         $this->object->assignData($data);
 
-        $this->object->validate();
+        $result = $this->object->validate();
+        $this->assertEquals($result, $this->object);
     }
 }

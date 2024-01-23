@@ -11,8 +11,9 @@
 define([
     'jquery',
     'Magento_Customer/js/customer-data',
+    'mageUtils',
     'jquery/jquery-storageapi'
-], function ($, storage) {
+], function ($, storage, utils) {
     'use strict';
 
     var cacheKey = 'checkout-data',
@@ -88,7 +89,7 @@ define([
         setShippingAddressFromData: function (data) {
             var obj = getData();
 
-            obj.shippingAddressFromData = data;
+            obj.shippingAddressFromData = utils.filterFormData(data);
             saveData(obj);
         },
 
@@ -193,7 +194,7 @@ define([
         setBillingAddressFromData: function (data) {
             var obj = getData();
 
-            obj.billingAddressFromData = data;
+            obj.billingAddressFromData = utils.filterFormData(data);
             saveData(obj);
         },
 

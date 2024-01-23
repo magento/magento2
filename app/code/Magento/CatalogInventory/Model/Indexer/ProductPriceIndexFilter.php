@@ -105,7 +105,7 @@ class ProductPriceIndexFilter implements PriceModifierInterface
         }
 
         if (!empty($entityIds)) {
-            $select->where('stock_item.product_id in (?)', $entityIds);
+            $select->where('stock_item.product_id IN (?)', $entityIds, \Zend_Db::INT_TYPE);
         }
 
         $select->group('stock_item.product_id');
@@ -121,7 +121,7 @@ class ProductPriceIndexFilter implements PriceModifierInterface
         foreach ($batchSelectIterator as $select) {
             $productIds = null;
             foreach ($connection->query($select)->fetchAll() as $row) {
-                $productIds[] = $row['product_id'];
+                $productIds[] = (int) $row['product_id'];
             }
             if ($productIds !== null) {
                 $where = [$priceTable->getEntityField() .' IN (?)' => $productIds];

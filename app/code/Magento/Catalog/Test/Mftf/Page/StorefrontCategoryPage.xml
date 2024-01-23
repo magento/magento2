@@ -11,5 +11,6 @@
     <page name="StorefrontCategoryPage" url="/{{var1}}.html" area="storefront" module="Magento_Catalog" parameterized="true">
         <section name="StorefrontCategoryMainSection"/>
         <section name="WYSIWYGToolbarSection"/>
+        <section name="StorefrontCategoryProductSection"/>
     </page>
 </pages>

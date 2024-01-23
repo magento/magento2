@@ -19,6 +19,7 @@
         <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
         <waitForPageLoad stepKey="waitForPriceList"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.ruleName}}" stepKey="waitRuleNameFieldAppeared"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ruleName.name}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="{{ruleName.websites}}" stepKey="selectWebsites"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" parameterArray="[{{ruleName.customerGroups}}]" stepKey="selectCustomerGroup"/>
@@ -26,6 +27,7 @@
         <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="{{ruleName.apply}}" stepKey="selectActionType"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="{{ruleName.discountAmount}}" stepKey="fillDiscountAmount"/>
         <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
-        <see selector="{{AdminCartPriceRulesFormSection.successMessage}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>

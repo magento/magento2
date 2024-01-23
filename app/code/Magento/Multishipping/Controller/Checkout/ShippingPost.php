@@ -4,13 +4,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Multishipping\Controller\Checkout;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Multishipping\Controller\Checkout;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 
-class ShippingPost extends \Magento\Multishipping\Controller\Checkout
+class ShippingPost extends Checkout implements HttpPostActionInterface
 {
     /**
+     * Shipping action
+     *
      * @return void
      */
     public function execute()
@@ -26,7 +32,7 @@ class ShippingPost extends \Magento\Multishipping\Controller\Checkout
             $this->_getState()->setCompleteStep(State::STEP_SHIPPING);
             $this->_redirect('*/*/billing');
         } catch (\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $this->_redirect('*/*/shipping');
         }
     }

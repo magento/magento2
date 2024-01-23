@@ -9,7 +9,6 @@ namespace Magento\MediaGalleryMetadata\Model;
 
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
-use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 
 /**
  * Get metadata from IPTC block
@@ -42,14 +41,14 @@ class GetIptcMetadata
      */
     public function execute(string $data): MetadataInterface
     {
-        $title = '';
-        $description = '';
+        $title = null;
+        $description = null;
         $keywords = [];
 
         if (is_callable('iptcparse')) {
             $iptcData = iptcparse($data);
 
-            if (!empty($iptcData[self::IPTC_TITLE])) {
+            if (!empty($iptcData[self::IPTC_TITLE][0])) {
                 $title = trim($iptcData[self::IPTC_TITLE][0]);
             }
 
@@ -65,7 +64,7 @@ class GetIptcMetadata
         return $this->metadataFactory->create([
             'title' => $title,
             'description' => $description,
-            'keywords' => $keywords
+            'keywords' => !empty($keywords) ? $keywords : null
         ]);
     }
 }

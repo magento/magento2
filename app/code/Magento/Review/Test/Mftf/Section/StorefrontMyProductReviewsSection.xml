@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontMyProductReviewsSection">
+        <element name="reviewDescription" type="text" selector="//td[@data-th='Review']"/>
+        <element name="reviewRating" type="text" selector="//tbody/tr[position()='{{reviewNumber}}']/td/div/div/span[contains(@style,'width: {{reviewValue}};')]" parameterized="true"/>
+        <element name="reviewSeeDetails" type="text" selector="#my-reviews-table > tbody > tr:nth-child({{row}}) > td.col.actions > a" parameterized="true" />
+    </section>
+</sections>

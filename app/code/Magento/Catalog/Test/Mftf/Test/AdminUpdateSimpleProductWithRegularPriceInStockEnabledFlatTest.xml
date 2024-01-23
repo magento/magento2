@@ -8,15 +8,19 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminUpdateSimpleProductWithRegularPriceInStockEnabledFlatTest">
+    <test name="AdminUpdateSimpleProductWithRegularPriceInStockEnabledFlatTest" deprecated="Use AdminUpdateSimpleProductWithRegularPriceInStockEnabledFlatCatalogTest instead">
         <annotations>
             <stories value="Update Simple Product"/>
-            <title value="Update Simple Product with Regular Price (In Stock) Enabled Flat"/>
+            <title value="DEPRECACTED. Update Simple Product with Regular Price (In Stock) Enabled Flat"/>
             <description value="Test log in to Update Simple Product and Update Simple Product with Regular Price (In Stock) Enabled Flat"/>
             <testCaseId value="MC-10818"/>
             <severity value="CRITICAL"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminUpdateSimpleProductWithRegularPriceInStockEnabledFlatCatalogTest instead</issueId>
+            </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -33,24 +37,27 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{simpleProductEnabledFlat.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI stepKey="unsetFlatCatalogProduct" command="config:set catalog/frontend/flat_catalog_product 0"/>
         </after>
 
         <!-- Search default simple product in the grid page -->
-        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
-        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGrid">
-            <argument name="sku" value="$$initialSimpleProduct.sku$$"/>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="openProductCatalogPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterProductGrid"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="clickFirstRowToOpenDefaultSimpleProduct">
+            <argument name="product" value="$$initialSimpleProduct$$"/>
         </actionGroup>
-        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToOpenDefaultSimpleProduct"/>
-        <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitUntilProductIsOpened"/>
 
         <!-- Update simple product with regular price -->
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{simpleProductEnabledFlat.name}}" stepKey="fillSimpleProductName"/>
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{simpleProductEnabledFlat.sku}}" stepKey="fillSimpleProductSku"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{simpleProductEnabledFlat.price}}" stepKey="fillSimpleProductPrice"/>
         <selectOption selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{simpleProductEnabledFlat.productTaxClass}}" stepKey="selectProductTaxClass"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{simpleProductEnabledFlat.quantity}}" stepKey="fillSimpleProductQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillSimpleProductQuantity">
+            <argument name="productQty" value="{{simpleProductEnabledFlat.quantity}}"/>
+        </actionGroup>
         <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickAdvancedInventoryLink"/>
         <conditionalClick selector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" dependentSelector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" visible="true" stepKey="checkUseConfigSettingsCheckBox"/>
         <selectOption selector="{{AdminProductFormAdvancedInventorySection.manageStock}}" userInput="No" stepKey="selectManageStock"/>
@@ -105,14 +112,16 @@
         <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{simpleProductEnabledFlat.urlKey}}" stepKey="seeUrlKey"/>
 
         <!--Verify customer see updated simple product link on category page -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.name$$)}}" stepKey="openCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.custom_attributes[url_key]$$)}}" stepKey="openCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <see selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{simpleProductEnabledFlat.name}}" stepKey="seeSimpleProductNameOnCategoryPage"/>
 
         <!-- Verify customer see updated simple product (from the above step) on the storefront page -->
         <amOnPage url="{{StorefrontProductPage.url(simpleProductEnabledFlat.urlKey)}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{simpleProductEnabledFlat.name}}" stepKey="seeSimpleProductNameOnStoreFrontPage"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeSimpleProductNameOnStoreFrontPage">
+            <argument name="value" value="{{simpleProductEnabledFlat.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{simpleProductEnabledFlat.price}}" stepKey="seeSimpleProductPriceOnStoreFrontPage"/>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeSimpleProductSkuOnStoreFrontPage">
             <argument name="productSku" value="{{simpleProductEnabledFlat.sku}}"/>

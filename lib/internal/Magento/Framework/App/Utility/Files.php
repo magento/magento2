@@ -24,26 +24,26 @@ use Magento\Framework\View\Design\Theme\ThemePackageList;
  */
 class Files
 {
-    const INCLUDE_APP_CODE = 1;
+    public const INCLUDE_APP_CODE = 1;
 
-    const INCLUDE_TESTS = 2;
+    public const INCLUDE_TESTS = 2;
 
-    const INCLUDE_DEV_TOOLS = 4;
+    public const INCLUDE_DEV_TOOLS = 4;
 
-    const INCLUDE_TEMPLATES = 8;
+    public const INCLUDE_TEMPLATES = 8;
 
-    const INCLUDE_LIBS = 16;
+    public const INCLUDE_LIBS = 16;
 
-    const INCLUDE_PUB_CODE = 32;
+    public const INCLUDE_PUB_CODE = 32;
 
-    const INCLUDE_NON_CLASSES = 64;
+    public const INCLUDE_NON_CLASSES = 64;
 
-    const INCLUDE_SETUP = 128;
+    public const INCLUDE_SETUP = 128;
 
     /**
      * Return as data set
      */
-    const AS_DATA_SET = 1024;
+    public const AS_DATA_SET = 1024;
 
     /**
      * @var ComponentRegistrar
@@ -143,7 +143,7 @@ class Files
     {
         $result = [];
         foreach ($files as $file) {
-            $key = str_replace(BP . '/', '', $file);
+            $key = $file !== null ? str_replace(BP . '/', '', $file) : '';
             $result[$key] = [$file];
         }
         return $result;
@@ -371,11 +371,11 @@ class Files
             }
             $globPaths = [BP . '/app/etc/config.xml', BP . '/app/etc/*/config.xml'];
             $configXmlPaths = array_merge($globPaths, $configXmlPaths);
-            $files = [[]];
+            $files = [];
             foreach ($configXmlPaths as $xmlPath) {
                 $files[] = glob($xmlPath, GLOB_NOSORT);
             }
-            self::$_cache[$cacheKey] = array_merge(...$files);
+            self::$_cache[$cacheKey] = array_merge([], ...$files);
         }
         if ($asDataSet) {
             return self::composeDataSets(self::$_cache[$cacheKey]);
@@ -640,27 +640,24 @@ class Files
                 );
                 if ($params['with_metainfo']) {
                     foreach ($moduleFiles as $moduleFile) {
-                        $modulePath = str_replace(DIRECTORY_SEPARATOR, '/', preg_quote($moduleDir, '#'));
+                        $modulePath = $moduleDir !== null ?
+                            str_replace(DIRECTORY_SEPARATOR, '/', preg_quote($moduleDir, '#')) : '';
                         $regex = '#^' . $modulePath . '/view/(?P<area>[a-z]+)/layout/(?P<path>.+)$#i';
-                        if (preg_match($regex, $moduleFile, $matches)) {
+                        if ($moduleFile && preg_match($regex, $moduleFile, $matches)) {
                             $files[] = [
-                                $matches['area'],
-                                '',
-                                $moduleName,
-                                $matches['path'],
-                                $moduleFile,
+                                [$matches['area'], '', $moduleName, $matches['path'], $moduleFile]
                             ];
                         } else {
                             throw new \UnexpectedValueException("Could not parse modular layout file '$moduleFile'");
                         }
                     }
                 } else {
-                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $files = array_merge($files, $moduleFiles);
+                    $files[] = $moduleFiles;
                 }
             }
         }
-        return $files;
+
+        return array_merge([], ...$files);
     }
 
     /**
@@ -677,7 +674,8 @@ class Files
         $requiredModuleName = $params['namespace'] . '_' . $params['module'];
         $themePath = $params['theme_path'];
         foreach ($this->themePackageList->getThemes() as $theme) {
-            $currentThemePath = str_replace(DIRECTORY_SEPARATOR, '/', $theme->getPath());
+            $currentThemePath = $theme->getPath() !== null ?
+                str_replace(DIRECTORY_SEPARATOR, '/', $theme->getPath()) : '';
             $currentThemeCode = $theme->getVendor() . '/' . $theme->getName();
             if (($area == '*' || $theme->getArea() === $area)
                 && ($themePath == '*' || $themePath == '*/*' || $themePath == $currentThemeCode)
@@ -691,14 +689,14 @@ class Files
 
                 if ($params['with_metainfo']) {
                     // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $files = array_merge($this->parseThemeFiles($themeFiles, $currentThemePath, $theme));
+                    $files[] = [array_merge($this->parseThemeFiles($themeFiles, $currentThemePath, $theme))];
                 } else {
-                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $files = array_merge($files, $themeFiles);
+                    $files[] = $themeFiles;
                 }
             }
         }
-        return $files;
+
+        return array_merge([], ...$files);
     }
 
     /**
@@ -716,7 +714,7 @@ class Files
             . '/(?P<module>[a-z\d]+_[a-z\d]+)/layout/(override/((base/)|(theme/[a-z\d_]+/[a-z\d_]+/)))?'
             . '(?P<path>.+)$#i';
         foreach ($themeFiles as $themeFile) {
-            if (preg_match($regex, $themeFile, $matches)) {
+            if ($themeFile && preg_match($regex, $themeFile, $matches)) {
                 $files[] = [
                     $theme->getArea(),
                     $theme->getVendor() . '/' . $theme->getName(),
@@ -931,7 +929,8 @@ class Files
             $themeArea = $themePackage->getArea();
             if ($area == '*' || $area == $themeArea) {
                 $files = [];
-                $themePath = str_replace(DIRECTORY_SEPARATOR, '/', $themePackage->getPath());
+                $themePath = $themePackage->getPath() !== null ?
+                    str_replace(DIRECTORY_SEPARATOR, '/', $themePackage->getPath()) : '';
                 $paths = [
                     $themePath . "/web",
                     $themePath . "/*_*/web",
@@ -940,9 +939,9 @@ class Files
                 ];
                 $this->_accumulateFilesByPatterns($paths, $filePattern, $files);
                 $regex = '#^' . $themePath .
-                    '/((?P<module>[a-z\d]+_[a-z\d]+)/)?web/(i18n/(?P<locale>[a-z_]+)/)?(?P<path>.+)$#i';
+                    '/((?P<module>[a-z\d]+_[a-z_\d]+)/)?web/(i18n/(?P<locale>[a-z_]+)/)?(?P<path>.+)$#i';
                 foreach ($files as $file) {
-                    if (preg_match($regex, $file, $matches)) {
+                    if ($file && preg_match($regex, $file, $matches)) {
                         $result[] = [
                             $themeArea,
                             $themePackage->getVendor() . '/' . $themePackage->getName(),
@@ -1008,7 +1007,7 @@ class Files
     {
         $path = str_replace(DIRECTORY_SEPARATOR, '/', BP);
         foreach (self::getFiles($patterns, $filePattern) as $file) {
-            $file = str_replace(DIRECTORY_SEPARATOR, '/', $file);
+            $file = $file !== null ? str_replace(DIRECTORY_SEPARATOR, '/', $file) : '';
             if ($subroutine) {
                 $result[] = $this->$subroutine($file, $path);
             } else {
@@ -1028,7 +1027,7 @@ class Files
     protected function _parseModuleStatic($file)
     {
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
-            if (preg_match(
+            if ($file && preg_match(
                 '/^' . preg_quote("{$modulePath}/", '/') . 'view\/([a-z]+)\/web\/(.+)$/i',
                 $file,
                 $matches
@@ -1055,7 +1054,7 @@ class Files
             $moduleWebPath = $moduleDir . "/view/{$area}/web";
 
             foreach (self::getFiles([$moduleWebPath], $filePattern) as $absolutePath) {
-                $localPath = substr($absolutePath, strlen($moduleDir) + 1);
+                $localPath = $absolutePath !== null ? substr($absolutePath, strlen($moduleDir ?? '') + 1) : '';
                 if (preg_match('/^view\/([a-z]+)\/web\/(.+)$/i', $localPath, $matches) === 1) {
                     list(, $parsedArea, $parsedPath) = $matches;
                     $result[] = [$parsedArea, '', '', $moduleName, $parsedPath, $absolutePath];
@@ -1074,7 +1073,8 @@ class Files
     {
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
             $appCode = preg_quote("{$modulePath}/", '/');
-            if (preg_match('/^' . $appCode . 'view\/([a-z]+)\/web\/i18n\/([a-z_]+)\/(.+)$/i', $file, $matches) === 1) {
+            if ($file &&
+                preg_match('/^' . $appCode . 'view\/([a-z]+)\/web\/i18n\/([a-z_]+)\/(.+)$/i', $file, $matches) === 1) {
                 list(, $area, $locale, $filePath) = $matches;
                 return [$area, '', $locale, $moduleName, $filePath, $file];
             }
@@ -1195,10 +1195,10 @@ class Files
                 $files
             );
             if ($withMetaInfo) {
-                $regex = '#^' . str_replace(DIRECTORY_SEPARATOR, '/', $theme->getPath())
-                    . '/(?P<module>[a-z\d]+_[a-z\d]+)/templates/(?P<path>.+)$#i';
+                $themePath = $theme->getPath() !== null ? str_replace(DIRECTORY_SEPARATOR, '/', $theme->getPath()) : '';
+                $regex = '#^' . $themePath . '/(?P<module>[a-z\d]+_[a-z\d]+)/templates/(?P<path>.+)$#i';
                 foreach ($files as $file) {
-                    if (preg_match($regex, $file, $matches)) {
+                    if ($file && preg_match($regex, $file, $matches)) {
                         $result[] = [
                             $theme->getArea(),
                             $theme->getVendor() . '/' . $theme->getName(),
@@ -1234,10 +1234,11 @@ class Files
                 $files
             );
             if ($withMetaInfo) {
-                $modulePath = str_replace(DIRECTORY_SEPARATOR, '/', preg_quote($moduleDir, '#'));
+                $modulePath = $moduleDir !== null ?
+                    str_replace(DIRECTORY_SEPARATOR, '/', preg_quote($moduleDir, '#')) : '';
                 $regex = '#^' . $modulePath . '/view/(?P<area>[a-z]+)/templates/(?P<path>.+)$#i';
                 foreach ($files as $file) {
-                    if (preg_match($regex, $file, $matches)) {
+                    if ($file && preg_match($regex, $file, $matches)) {
                         $result[] = [
                             $matches['area'],
                             '',
@@ -1324,7 +1325,7 @@ class Files
     {
         $result = [];
         foreach ($dirPatterns as $oneDirPattern) {
-            $oneDirPattern = str_replace('\\', '/', $oneDirPattern);
+            $oneDirPattern = $oneDirPattern !== null ? str_replace('\\', '/', $oneDirPattern) : '';
             $entriesInDir = Glob::glob("{$oneDirPattern}/{$fileNamePattern}", Glob::GLOB_NOSORT | Glob::GLOB_BRACE);
             $subDirs = Glob::glob("{$oneDirPattern}/*", Glob::GLOB_ONLYDIR | Glob::GLOB_NOSORT | Glob::GLOB_BRACE);
             $filesInDir = array_diff($entriesInDir, $subDirs);
@@ -1393,6 +1394,8 @@ class Files
      */
     public function classFileExists($class, &$path = '')
     {
+        $class = $class ?: '';
+
         if ($class[0] == '\\') {
             $class = substr($class, 1);
         }
@@ -1463,7 +1466,7 @@ class Files
          * Note that realpath() automatically changes directory separator to the OS-native
          * Since realpath won't work with symlinks we also check file_exists if realpath failed
          */
-        if (realpath($fullPath) == str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $fullPath)
+        if ($fullPath && realpath($fullPath) == str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $fullPath)
             || file_exists($fullPath)
         ) {
             $fileContent = file_get_contents($fullPath);
@@ -1586,10 +1589,13 @@ class Files
         $result = [];
         $incorrectPatterns = [];
         foreach ($patterns as $pattern) {
+            $pattern = $pattern ?? '';
+
             if (0 === strpos($pattern, '#')) {
                 continue;
             }
             $patternParts = explode(' ', $pattern);
+
             if (count($patternParts) == 3) {
                 list($componentType, $componentName, $pathPattern) = $patternParts;
                 $files = $this->getPathByComponentPattern($componentType, $componentName, $pathPattern);
@@ -1665,9 +1671,8 @@ class Files
     {
         $key = __METHOD__ . "/{$moduleName}";
         if (!isset(self::$_cache[$key])) {
-            self::$_cache[$key] = file_exists(
-                $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName)
-            );
+            $componentPath = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
+            self::$_cache[$key] = $componentPath && file_exists($componentPath);
         }
 
         return self::$_cache[$key];

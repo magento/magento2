@@ -132,9 +132,9 @@ class LayoutProcessor implements LayoutProcessorInterface
             $elements[$code]['dataType'] = 'select';
             $elements[$code]['formElement'] = 'select';
 
-            foreach ($options as $key => $value) {
+            foreach ($options as $value) {
                 $elements[$code]['options'][] = [
-                    'value' => $key,
+                    'value' => $value,
                     'label' => $value,
                 ];
             }
@@ -351,9 +351,6 @@ class LayoutProcessor implements LayoutProcessorInterface
                                 ],
                             ],
                             'telephone' => [
-                                'validation' => [
-                                    'validate-phoneStrict' => 0,
-                                ],
                                 'config' => [
                                     'tooltip' => [
                                         'description' => __('For delivery questions.'),

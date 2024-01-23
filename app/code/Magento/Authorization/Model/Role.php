@@ -5,28 +5,31 @@
  */
 namespace Magento\Authorization\Model;
 
+use Magento\Authorization\Model\ResourceModel\Role\Collection;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Model\AbstractModel;
+
 /**
  * Admin Role Model
  *
- * @api
  * @method int getParentId()
- * @method \Magento\Authorization\Model\Role setParentId(int $value)
+ * @method Role setParentId(int $value)
  * @method int getTreeLevel()
- * @method \Magento\Authorization\Model\Role setTreeLevel(int $value)
+ * @method Role setTreeLevel(int $value)
  * @method int getSortOrder()
- * @method \Magento\Authorization\Model\Role setSortOrder(int $value)
+ * @method Role setSortOrder(int $value)
  * @method string getRoleType()
- * @method \Magento\Authorization\Model\Role setRoleType(string $value)
+ * @method Role setRoleType(string $value)
  * @method int getUserId()
- * @method \Magento\Authorization\Model\Role setUserId(int $value)
+ * @method Role setUserId(int $value)
  * @method string getUserType()
- * @method \Magento\Authorization\Model\Role setUserType(string $value)
+ * @method Role setUserType(string $value)
  * @method string getRoleName()
- * @method \Magento\Authorization\Model\Role setRoleName(string $value)
+ * @method Role setRoleName(string $value)
  * @api
  * @since 100.0.2
  */
-class Role extends \Magento\Framework\Model\AbstractModel
+class Role extends AbstractModel
 {
     /**
      * @var string
@@ -34,21 +37,9 @@ class Role extends \Magento\Framework\Model\AbstractModel
     protected $_eventPrefix = 'authorization_roles';
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Authorization\Model\ResourceModel\Role $resource
-     * @param \Magento\Authorization\Model\ResourceModel\Role\Collection $resourceCollection
-     * @param array $data
+     * @var string
      */
-    public function __construct( //phpcs:ignore Generic.CodeAnalysis.UselessOverridingMethod
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Authorization\Model\ResourceModel\Role $resource,
-        \Magento\Authorization\Model\ResourceModel\Role\Collection $resourceCollection,
-        array $data = []
-    ) {
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-    }
+    protected $_cacheTag = 'user_assigned_role';
 
     /**
      * @inheritDoc
@@ -65,31 +56,30 @@ class Role extends \Magento\Framework\Model\AbstractModel
     public function __wakeup()
     {
         parent::__wakeup();
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->_resource = $objectManager->get(\Magento\Authorization\Model\ResourceModel\Role::class);
-        $this->_resourceCollection = $objectManager->get(
-            \Magento\Authorization\Model\ResourceModel\Role\Collection::class
-        );
+        $objectManager = ObjectManager::getInstance();
+        $this->_resource = $objectManager->get(ResourceModel\Role::class);
+        $this->_resourceCollection = $objectManager->get(Collection::class);
     }
 
     /**
-     * Class constructor
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Authorization\Model\ResourceModel\Role::class);
+        $this->_init(ResourceModel\Role::class);
     }
 
     /**
-     * Update object into database
+     * Obsolete method of update
      *
      * @return $this
+     * @deprecated Method was never implemented and used.
      */
     public function update()
     {
-        $this->getResource()->update($this);
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
+        trigger_error('Method was never implemented and used.', E_USER_DEPRECATED);
+
         return $this;
     }
 

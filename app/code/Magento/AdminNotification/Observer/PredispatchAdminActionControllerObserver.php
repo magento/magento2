@@ -9,8 +9,7 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * AdminNotification observer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class PredispatchAdminActionControllerObserver implements ObserverInterface
 {

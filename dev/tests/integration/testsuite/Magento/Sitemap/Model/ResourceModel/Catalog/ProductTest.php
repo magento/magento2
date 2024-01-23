@@ -17,8 +17,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * Base product image path
      */
-    const BASE_IMAGE_PATH = '#http\:\/\/localhost\/pub\/media\/catalog\/product\/cache\/[a-z0-9]{32}:path:#';
-    
+    const BASE_IMAGE_PATH = '#http://localhost/media/catalog/product/cache/[a-z0-9]{32}:path:#';
+
     /**
      * Test getCollection None images
      * 1) Check that image attributes were not loaded
@@ -52,6 +52,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * 3) Check thumbnails when no thumbnail selected
      *
      * @magentoConfigFixture default_store sitemap/product/image_include all
+     * @magentoConfigFixture default/web/url/catalog_media_url_format hash
      */
     public function testGetCollectionAll()
     {
@@ -120,6 +121,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * 3) Check thumbnails when no thumbnail selected
      *
      * @magentoConfigFixture default_store sitemap/product/image_include base
+     * @magentoConfigFixture default/web/url/catalog_media_url_format hash
      */
     public function testGetCollectionBase()
     {

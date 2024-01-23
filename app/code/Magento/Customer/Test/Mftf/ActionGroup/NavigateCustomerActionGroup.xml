@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="NavigateToAllCustomerPage">
+    <actionGroup name="NavigateToAllCustomerPage" deprecated="Use AdminOpenCustomersGridActionGroup instead.">
         <annotations>
             <description>Goes to the Admin Customers grid page.</description>
         </annotations>

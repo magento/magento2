@@ -92,10 +92,10 @@ class ExternalFKSetup
     /**
      * Get foreign keys for tables and columns
      *
-     * @param string $refTable
-     * @param string $refColumn
      * @param string $targetTable
      * @param string $targetColumn
+     * @param string $refTable
+     * @param string $refColumn
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -110,7 +110,7 @@ class ExternalFKSetup
         );
         $foreignKeys = array_filter(
             $foreignKeys,
-            function ($key) use ($targetColumn, $refTable, $refColumn) {
+            function ($key) use ($targetColumn, $refTable) {
                 return $key['COLUMN_NAME'] == $targetColumn
                 && $key['REF_TABLE_NAME'] == $refTable;
             }

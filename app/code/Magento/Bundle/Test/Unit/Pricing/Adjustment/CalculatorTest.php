@@ -166,9 +166,10 @@ class CalculatorTest extends TestCase
 
         $optionSelections = [];
         foreach ($options as $option) {
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $optionSelections = array_merge($optionSelections, $option->getSelections());
+            $optionSelections[] = $option->getSelections();
         }
+        $optionSelections = array_merge([], ...$optionSelections);
+
         $this->selectionPriceListProvider->expects($this->any())->method('getPriceList')->willReturn($optionSelections);
 
         $price = $this->createMock(BundleOptionPrice::class);

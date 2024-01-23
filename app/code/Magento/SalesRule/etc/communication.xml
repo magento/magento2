@@ -9,4 +9,10 @@
     <topic name="sales_rule.codegenerator" request="Magento\SalesRule\Api\Data\CouponGenerationSpecInterface">
         <handler name="codegeneratorProcessor" type="Magento\SalesRule\Model\Coupon\Consumer" method="process" />
     </topic>
+    <topic name="sales.rule.update.coupon.usage" request="Magento\AsynchronousOperations\Api\Data\OperationInterface">
+        <handler name="sales.rule.update.coupon.usage" type="Magento\SalesRule\Model\CouponUsageConsumer" method="process" />
+    </topic>
+    <topic name="sales.rule.quote.trigger.recollect" request="Magento\AsynchronousOperations\Api\Data\OperationInterface">
+        <handler name="sales.rule.quote.trigger.recollect" type="Magento\SalesRule\Model\Queue\Consumer\RuleQuoteRecollectTotals" method="process" />
+    </topic>
 </config>

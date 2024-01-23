@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontAssertProductFinalPriceChangesDynamicallyOnProductPageWithTierPricesConfiguredTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Tier price"/>
+            <title value="Product price is updated according to tier prices when changing product quantity"/>
+            <description value="Check that price of product will be updated according to tier prices on product page when changing product quantity"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-42006"/>
+            <useCaseId value="MC-41767"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!--AdminProductPageOpenByIdActionGroup-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductForEdit">
+            <argument name="productId" value="$createSimpleProduct.id$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddAdvancedPricingToTheProductActionGroup" stepKey="addCustomerGroupPrice">
+            <argument name="index" value="0"/>
+            <argument name="groupPrice" value="simpleGroupPrice"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddAdvancedPricingToTheProductActionGroup" stepKey="addCustomerGroupPrice2">
+            <argument name="index" value="1"/>
+            <argument name="groupPrice" value="tierPriceForAllGroups"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddAdvancedPricingToTheProductActionGroup" stepKey="addCustomerGroupPrice3">
+            <argument name="index" value="2"/>
+            <argument name="groupPrice" value="tierPriceForGeneralGroup"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$createSimpleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="2" stepKey="fillQuantity"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeSimpleProductPriceOnStoreFrontPage">
+            <argument name="productPrice" value="80"/>
+        </actionGroup>
+        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="3" stepKey="fillQuantity2"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeSimpleProductPriceOnStoreFrontPage2">
+            <argument name="productPrice" value="80"/>
+        </actionGroup>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$createCustomer$" />
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSimpleProductPage">
+            <argument name="productUrl" value="$createSimpleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="2" stepKey="fillQuantity3"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeSimpleProductPriceOnStoreFrontPage3">
+            <argument name="productPrice" value="80"/>
+        </actionGroup>
+        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="3" stepKey="fillQuantity4"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeSimpleProductPriceOnStoreFrontPage4">
+            <argument name="productPrice" value="70"/>
+        </actionGroup>
+    </test>
+</tests>

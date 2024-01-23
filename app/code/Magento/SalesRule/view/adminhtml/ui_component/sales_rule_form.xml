@@ -47,14 +47,6 @@
             </settings>
         </dataProvider>
     </dataSource>
-    <fieldset name="general">
-        <settings>
-            <additionalClasses>
-                <class name="fieldset-schedule">true</class>
-            </additionalClasses>
-            <label translate="true">Currently Active</label>
-        </settings>
-    </fieldset>
     <fieldset name="rule_information" sortOrder="10">
         <settings>
             <collapsible>true</collapsible>
@@ -128,7 +120,7 @@
                 </validation>
                 <dataType>number</dataType>
                 <tooltip>
-                    <link>https://docs.magento.com/m2/ce/user_guide/configuration/scope.html</link>
+                    <link>https://experienceleague.adobe.com/docs/commerce-admin/start/setup/websites-stores-views.html#scope-settings</link>
                     <description>What is this?</description>
                 </tooltip>
                 <label translate="true">Websites</label>
@@ -207,7 +199,7 @@
                                 </action>
                                 <action name="2">
                                     <target>sales_rule_form.sales_rule_form.rule_information.uses_per_coupon</target>
-                                    <callback>hide</callback>
+                                    <callback>show</callback>
                                 </action>
                             </actions>
                         </rule>
@@ -480,6 +472,9 @@
                         <item name="0" xsi:type="string" translate="true">Discount amount is applied to subtotal only</item>
                         <item name="1" xsi:type="string" translate="true">Discount amount is applied to subtotal and shipping amount separately</item>
                     </item>
+                    <item name="noticePerSimpleAction" xsi:type="array">
+                        <item name="cart_fixed" xsi:type="string" translate="true">Discount amount is distributed among subtotal and shipping amount. Cases when multiple discounts applied to shipping amount are not supported. The option is going to be removed in future releases.</item>
+                    </item>
                 </item>
             </argument>
             <settings>
@@ -501,7 +496,7 @@
         <field name="stop_rules_processing" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="default" xsi:type="number">0</item>
+                    <item name="default" xsi:type="number">1</item>
                     <item name="source" xsi:type="string">sales_rule</item>
                 </item>
             </argument>
@@ -546,7 +541,11 @@
         </field>
         <container name="store_view_labels" sortOrder="40">
             <htmlContent name="html_content">
-                <block name="store_view_labels" class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels"/>
+                <block name="store_view_labels" class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels">
+                    <arguments>
+                        <argument name="target_form" xsi:type="string">sales_rule_form</argument>
+                    </arguments>
+                </block>
             </htmlContent>
         </container>
     </fieldset>

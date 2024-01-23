@@ -10,6 +10,7 @@ use Magento\Framework\Autoload\AutoloaderRegistry;
 require_once __DIR__ . '/../../../../app/bootstrap.php';
 require_once __DIR__ . '/autoload.php';
 
+error_reporting(E_ALL);
 $testsBaseDir = dirname(__DIR__);
 $integrationTestsDir = realpath("{$testsBaseDir}/../integration");
 $fixtureBaseDir = $integrationTestsDir . '/testsuite';
@@ -50,9 +51,13 @@ try {
     if (!file_exists($installConfigFile)) {
         $installConfigFile = $installConfigFile . '.dist';
     }
+    $postInstallConfigFile = $settings->getAsConfigFile('TESTS_POST_INSTALL_SETUP_COMMAND_CONFIG_FILE');
+    if (!file_exists($postInstallConfigFile)) {
+        $postInstallConfigFile = $postInstallConfigFile . '.dist';
+    }
     $globalConfigFile = $settings->getAsConfigFile('TESTS_GLOBAL_CONFIG_FILE');
-    if (!file_exists($installConfigFile)) {
-        $installConfigFile = $installConfigFile . '.dist';
+    if (!file_exists($globalConfigFile)) {
+        $globalConfigFile = $globalConfigFile . '.dist';
     }
     $dirList     = new \Magento\Framework\App\Filesystem\DirectoryList(BP);
     $application = new \Magento\TestFramework\WebApiApplication(
@@ -62,7 +67,9 @@ try {
         $globalConfigFile,
         BP . '/app/etc/',
         $settings->get('TESTS_MAGENTO_MODE'),
-        AutoloaderRegistry::getAutoloader()
+        AutoloaderRegistry::getAutoloader(),
+        false,
+        $postInstallConfigFile
     );
 
     if (defined('TESTS_MAGENTO_INSTALLATION') && TESTS_MAGENTO_INSTALLATION === 'enabled') {
@@ -101,6 +108,9 @@ try {
     Magento\TestFramework\Workaround\Override\Fixture\Resolver::setInstance(
         new  \Magento\TestFramework\WebapiWorkaround\Override\Fixture\Resolver($overrideConfig)
     );
+    Magento\TestFramework\Fixture\DataFixtureStorageManager::setStorage(
+        new Magento\TestFramework\Fixture\DataFixtureStorage()
+    );
     \Magento\TestFramework\Workaround\Override\Config::setInstance($overrideConfig);
     unset($bootstrap, $application, $settings, $shell, $overrideConfig);
 } catch (\Exception $e) {
@@ -117,7 +127,8 @@ function setCustomErrorHandler()
 {
     set_error_handler(
         function ($errNo, $errStr, $errFile, $errLine) {
-            if (error_reporting()) {
+            $errLevel = error_reporting();
+            if (($errLevel & $errNo) !== 0) {
                 $errorNames = [
                     E_ERROR => 'Error',
                     E_WARNING => 'Warning',

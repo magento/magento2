@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminEnablePaypalExpressCheckoutAndValidateTheGuestCheckoutPaymentWorksWithPaypalExpressTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Payment methods"/>
+            <title value="Enable paypal express checkout and validate the guest checkout payment works with paypal express"/>
+            <description value="Enable paypal express checkout and validate the guest checkout payment works with paypal express"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5662"/>
+            <group value="paypal"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="simpleCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
+                <argument name="credentials" value="SamplePaypalExpressConfig2"/>
+            </actionGroup>
+            <click selector="{{PayPalExpressCheckoutConfigSection.configureBtn('us')}}" stepKey="clickPayPalConfigureBtn"/>
+            <click selector="{{PayPalAdvancedSettingConfigSection.advancedSettingTab('us')}}" stepKey="clickPayPalConfigureBtn1"/>
+
+            <!--Enable Display on shopping cart-->
+            <selectOption selector ="{{PayPalAdvancedSettingConfigSection.displayonshoppingcart('us')}}" userInput="Yes" stepKey="enableSandboxMode"/>
+            <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set paypal/general/merchant_country US" stepKey="setMerchantCountry"/>
+            <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
+            <magentoCLI command="config:set payment/wps_express/active 0" stepKey="disableWPSExpress"/>
+            <magentoCLI command="config:set payment/hosted_pro/active 0" stepKey="disableHostedProExpress"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+
+        <!--Add simple product-->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$simpleProduct$"/>
+        </actionGroup>
+        <!--Go to cart page-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="gotoCart"/>
+
+        <!-- Click on Paypal paypal button-->
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn">
+            <argument name="elementNumber" value="1"/>
+        </actionGroup>
+
+        <!--Check in-context-->
+        <switchToNextTab stepKey="switchToInContentTab"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeCurrentUrlMatches regex="~\//www.sandbox.paypal.com/~" stepKey="seeCurrentUrlMatchesConfigPath1"/>
+    </test>
+</tests>

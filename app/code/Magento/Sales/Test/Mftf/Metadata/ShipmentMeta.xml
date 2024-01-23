@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateShipment" dataType="Shipment" type="create" auth="adminOauth" url="V1/order/{return}/ship" method="POST">
+        <contentType>application/json</contentType>
+         <object key="cartItem" dataType="CartItem">
+            <field key="quote_id">string</field>
+        </object>
+    </operation>
+</operations>

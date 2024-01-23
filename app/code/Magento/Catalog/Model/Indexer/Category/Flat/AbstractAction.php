@@ -6,21 +6,31 @@
 
 namespace Magento\Catalog\Model\Indexer\Category\Flat;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\ResourceModel\Helper;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Abstract action class for category flat indexers.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AbstractAction
 {
     /**
      * Suffix for table to show it is temporary
      */
-    const TEMPORARY_TABLE_SUFFIX = '_tmp';
+    public const TEMPORARY_TABLE_SUFFIX = '_tmp';
 
     /**
-     * Attribute codes
-     *
      * @var array
      */
     protected $attributeCodes;
@@ -31,14 +41,14 @@ class AbstractAction
     protected $resource;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
     /**
      * Catalog resource helper
      *
-     * @var \Magento\Catalog\Model\ResourceModel\Helper
+     * @var Helper
      */
     protected $resourceHelper;
 
@@ -50,12 +60,12 @@ class AbstractAction
     protected $columns = [];
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @var AdapterInterface
      */
     protected $connection;
 
     /**
-     * @var \Magento\Framework\EntityManager\EntityMetadata
+     * @var EntityMetadata
      */
     protected $categoryMetadata;
 
@@ -67,19 +77,32 @@ class AbstractAction
     protected $skipStaticColumns = [];
 
     /**
+     * @var SkipStaticColumnsProvider
+     */
+    private $skipStaticColumnsProvider;
+
+    /**
      * @param ResourceConnection $resource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
+     * @param StoreManagerInterface $storeManager
+     * @param Helper $resourceHelper
+     * @param MetadataPool|null $metadataPool
+     * @param SkipStaticColumnsProvider|null $skipStaticColumnsProvider
      */
     public function __construct(
         ResourceConnection $resource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
+        StoreManagerInterface $storeManager,
+        Helper $resourceHelper,
+        MetadataPool $metadataPool = null,
+        SkipStaticColumnsProvider $skipStaticColumnsProvider = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
         $this->storeManager = $storeManager;
         $this->resourceHelper = $resourceHelper;
+        $metadataPool = $metadataPool ?? ObjectManager::getInstance()->get(MetadataPool::class);
+        $this->categoryMetadata = $metadataPool->getMetadata(CategoryInterface::class);
+        $this->skipStaticColumnsProvider = $skipStaticColumnsProvider
+            ?? ObjectManager::getInstance()->get(SkipStaticColumnsProvider::class);
         $this->columns = array_merge($this->getStaticColumns(), $this->getEavColumns());
     }
 
@@ -110,23 +133,22 @@ class AbstractAction
      * @param integer $storeId
      * @return string
      */
-    public function getMainStoreTable($storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID)
+    public function getMainStoreTable($storeId = Store::DEFAULT_STORE_ID)
     {
         if (is_string($storeId)) {
             $storeId = (int) $storeId;
         }
 
         $suffix = sprintf('store_%d', $storeId);
-        $table = $this->connection->getTableName($this->getTableName('catalog_category_flat_' . $suffix));
-
-        return $table;
+        return $this->connection->getTableName($this->getTableName('catalog_category_flat_' . $suffix));
     }
 
     /**
      * Return structure for flat catalog table
      *
      * @param string $tableName
-     * @return \Magento\Framework\DB\Ddl\Table
+     * @return Table
+     * @throws \Zend_Db_Exception
      */
     protected function getFlatTableStructure($tableName)
     {
@@ -139,10 +161,10 @@ class AbstractAction
         //Adding columns
         foreach ($this->getColumns() as $fieldName => $fieldProp) {
             $default = $fieldProp['default'];
-            if ($fieldProp['type'][0] == \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP
+            if ($fieldProp['type'][0] == Table::TYPE_TIMESTAMP
                 && $default == 'CURRENT_TIMESTAMP'
             ) {
-                $default = \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT;
+                $default = Table::TIMESTAMP_INIT;
             }
             $table->addColumn(
                 $fieldName,
@@ -203,11 +225,11 @@ class AbstractAction
             $isUnsigned = '';
             $options = null;
             $ddlType = $this->resourceHelper->getDdlTypeByColumnType($column['DATA_TYPE']);
-            $column['DEFAULT'] = trim($column['DEFAULT'], "' ");
+            $column['DEFAULT'] = $column['DEFAULT'] ? trim($column['DEFAULT'], "' ") : '';
             switch ($ddlType) {
-                case \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT:
-                case \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER:
-                case \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT:
+                case Table::TYPE_SMALLINT:
+                case Table::TYPE_INTEGER:
+                case Table::TYPE_BIGINT:
                     $isUnsigned = (bool)$column['UNSIGNED'];
                     if ($column['DEFAULT'] === '') {
                         $column['DEFAULT'] = null;
@@ -215,27 +237,27 @@ class AbstractAction
 
                     $options = null;
                     if ($column['SCALE'] > 0) {
-                        $ddlType = \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL;
+                        $ddlType = Table::TYPE_DECIMAL;
                     } else {
                         break;
                     }
                     // fall-through intentional
-                case \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL:
+                case Table::TYPE_DECIMAL:
                     $options = $column['PRECISION'] . ',' . $column['SCALE'];
                     $isUnsigned = null;
                     if ($column['DEFAULT'] === '') {
                         $column['DEFAULT'] = null;
                     }
                     break;
-                case \Magento\Framework\DB\Ddl\Table::TYPE_TEXT:
+                case Table::TYPE_TEXT:
                     $options = $column['LENGTH'];
                     $isUnsigned = null;
                     break;
-                case \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP:
+                case Table::TYPE_TIMESTAMP:
                     $options = null;
                     $isUnsigned = null;
                     break;
-                case \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME:
+                case Table::TYPE_DATETIME:
                     $isUnsigned = null;
                     break;
             }
@@ -248,7 +270,7 @@ class AbstractAction
             ];
         }
         $columns['store_id'] = [
-            'type' => [\Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT, 5],
+            'type' => [Table::TYPE_SMALLINT, 5],
             'unsigned' => true,
             'nullable' => false,
             'default' => '0',
@@ -274,7 +296,7 @@ class AbstractAction
             switch ($attribute['backend_type']) {
                 case 'varchar':
                     $columns[$attribute['attribute_code']] = [
-                        'type' => [\Magento\Framework\DB\Ddl\Table::TYPE_TEXT, 255],
+                        'type' => [Table::TYPE_TEXT, 255],
                         'unsigned' => null,
                         'nullable' => true,
                         'default' => null,
@@ -283,7 +305,7 @@ class AbstractAction
                     break;
                 case 'int':
                     $columns[$attribute['attribute_code']] = [
-                        'type' => [\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER, null],
+                        'type' => [Table::TYPE_INTEGER, null],
                         'unsigned' => null,
                         'nullable' => true,
                         'default' => null,
@@ -292,7 +314,7 @@ class AbstractAction
                     break;
                 case 'text':
                     $columns[$attribute['attribute_code']] = [
-                        'type' => [\Magento\Framework\DB\Ddl\Table::TYPE_TEXT, '64k'],
+                        'type' => [Table::TYPE_TEXT, '64k'],
                         'unsigned' => null,
                         'nullable' => true,
                         'default' => null,
@@ -301,7 +323,7 @@ class AbstractAction
                     break;
                 case 'datetime':
                     $columns[$attribute['attribute_code']] = [
-                        'type' => [\Magento\Framework\DB\Ddl\Table::TYPE_DATETIME, null],
+                        'type' => [Table::TYPE_DATETIME, null],
                         'unsigned' => null,
                         'nullable' => true,
                         'default' => null,
@@ -310,7 +332,7 @@ class AbstractAction
                     break;
                 case 'decimal':
                     $columns[$attribute['attribute_code']] = [
-                        'type' => [\Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL, '12,4'],
+                        'type' => [Table::TYPE_DECIMAL, '12,4'],
                         'unsigned' => null,
                         'nullable' => true,
                         'default' => null,
@@ -346,7 +368,7 @@ class AbstractAction
                 $this->connection->getTableName(
                     $this->getTableName('eav_entity_type')
                 ) . '.entity_type_code = ?',
-                \Magento\Catalog\Model\Category::ENTITY
+                Category::ENTITY
             );
             $this->attributeCodes = [];
             foreach ($this->connection->fetchAll($select) as $attribute) {
@@ -378,7 +400,7 @@ class AbstractAction
 
         $attributes = $this->getAttributes();
         $attributesType = ['varchar', 'int', 'decimal', 'text', 'datetime'];
-        $linkField = $this->getCategoryMetadata()->getLinkField();
+        $linkField = $this->categoryMetadata->getLinkField();
         foreach ($attributesType as $type) {
             foreach ($this->getAttributeTypeValues($type, $entityIds, $storeId) as $row) {
                 if (isset($row[$linkField], $row['attribute_id'])) {
@@ -404,7 +426,7 @@ class AbstractAction
      */
     private function getLinkIds(array $entityIds)
     {
-        $linkField = $this->getCategoryMetadata()->getLinkField();
+        $linkField = $this->categoryMetadata->getLinkField();
         if ($linkField === 'entity_id') {
             return $entityIds;
         }
@@ -414,7 +436,8 @@ class AbstractAction
             [$linkField]
         )->where(
             'e.entity_id IN (?)',
-            $entityIds
+            $entityIds,
+            \Zend_Db::INT_TYPE
         );
 
         return $this->connection->fetchCol($select);
@@ -430,7 +453,7 @@ class AbstractAction
      */
     protected function getAttributeTypeValues($type, $entityIds, $storeId)
     {
-        $linkField = $this->getCategoryMetadata()->getLinkField();
+        $linkField = $this->categoryMetadata->getLinkField();
         $select = $this->connection->select()->from(
             [
                 'def' => $this->connection->getTableName($this->getTableName('catalog_category_entity_' . $type)),
@@ -459,10 +482,12 @@ class AbstractAction
             ]
         )->where(
             "e.entity_id IN (?)",
-            $entityIds
+            $entityIds,
+            \Zend_Db::INT_TYPE
         )->where(
             'def.store_id IN (?)',
-            [\Magento\Store\Model\Store::DEFAULT_STORE_ID, $storeId]
+            [Store::DEFAULT_STORE_ID, $storeId],
+            \Zend_Db::INT_TYPE
         );
 
         return $this->connection->fetchAll($select);
@@ -499,31 +524,14 @@ class AbstractAction
     }
 
     /**
-     * Get category metadata instance.
-     *
-     * @return \Magento\Framework\EntityManager\EntityMetadata
-     */
-    private function getCategoryMetadata()
-    {
-        if (null === $this->categoryMetadata) {
-            $metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
-            $this->categoryMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
-        }
-        return $this->categoryMetadata;
-    }
-
-    /**
-     * Get skip static columns instance.
+     * Gets skipped static columns.
      *
      * @return array
      */
     private function getSkipStaticColumns()
     {
-        if (null === $this->skipStaticColumns) {
-            $provider = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Model\Indexer\Category\Flat\SkipStaticColumnsProvider::class);
-            $this->skipStaticColumns = $provider->get();
+        if ($this->skipStaticColumns === []) {
+            $this->skipStaticColumns = $this->skipStaticColumnsProvider->get();
         }
         return $this->skipStaticColumns;
     }

@@ -29,7 +29,7 @@ class OrderAddressUpdateTest extends WebapiAbstract
         $order = $objectManager->get(\Magento\Sales\Model\Order::class)->loadByIncrementId('100000001');
 
         $address = [
-            OrderAddress::REGION => 'California',
+            OrderAddress::REGION => 'CA',
             OrderAddress::POSTCODE => '11111',
             OrderAddress::LASTNAME => 'lastname',
             OrderAddress::STREET => ['street'],
@@ -76,7 +76,7 @@ class OrderAddressUpdateTest extends WebapiAbstract
         $billingAddress = $actualOrder->getBillingAddress();
 
         $validate = [
-            OrderAddress::REGION => 'California',
+            OrderAddress::REGION => 'CA',
             OrderAddress::POSTCODE => '11111',
             OrderAddress::LASTNAME => 'lastname',
             OrderAddress::STREET => 'street',

@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 
 use Magento\Backend\Helper\Js;
+use Magento\Catalog\Api\Data\CategoryLinkInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory as CustomOptionFactory;
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory as ProductLinkFactory;
 use Magento\Catalog\Api\Data\ProductLinkTypeInterface;
@@ -24,7 +25,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Store\Model\StoreManagerInterface;
-use Zend_Filter_Input;
+use Magento\Framework\Filter\FilterInput;
 
 /**
  * Product helper
@@ -59,6 +60,7 @@ class Helper
     /**
      * @var Date
      * @deprecated 101.0.0
+     * @see we don't recommend this approach anymore
      */
     protected $dateFilter;
 
@@ -116,6 +118,11 @@ class Helper
     private $dateTimeFilter;
 
     /**
+     * @var CategoryLinkInterfaceFactory
+     */
+    private $categoryLinkFactory;
+
+    /**
      * Constructor
      *
      * @param RequestInterface $request
@@ -132,6 +139,7 @@ class Helper
      * @param FormatInterface|null $localeFormat
      * @param ProductAuthorization|null $productAuthorization
      * @param DateTimeFilter|null $dateTimeFilter
+     * @param CategoryLinkInterfaceFactory|null $categoryLinkFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -148,7 +156,8 @@ class Helper
         AttributeFilter $attributeFilter = null,
         FormatInterface $localeFormat = null,
         ?ProductAuthorization $productAuthorization = null,
-        ?DateTimeFilter $dateTimeFilter = null
+        ?DateTimeFilter $dateTimeFilter = null,
+        ?CategoryLinkInterfaceFactory $categoryLinkFactory = null
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
@@ -166,6 +175,7 @@ class Helper
         $this->localeFormat = $localeFormat ?: $objectManager->get(FormatInterface::class);
         $this->productAuthorization = $productAuthorization ?? $objectManager->get(ProductAuthorization::class);
         $this->dateTimeFilter = $dateTimeFilter ?? $objectManager->get(DateTimeFilter::class);
+        $this->categoryLinkFactory = $categoryLinkFactory ?? $objectManager->get(CategoryLinkInterfaceFactory::class);
     }
 
     /**
@@ -217,7 +227,7 @@ class Helper
             }
         }
 
-        $inputFilter = new Zend_Filter_Input($dateFieldFilters, [], $productData);
+        $inputFilter = new FilterInput($dateFieldFilters, [], $productData);
         $productData = $inputFilter->getUnescaped();
 
         if (isset($productData['options'])) {
@@ -238,6 +248,7 @@ class Helper
 
         $product = $this->setProductLinks($product);
         $product = $this->fillProductOptions($product, $productOptions);
+        $this->setCategoryLinks($product);
 
         $product->setCanSaveCustomOptions(
             !empty($productData['affect_product_custom_options']) && !$product->getOptionsReadonly()
@@ -401,6 +412,7 @@ class Helper
      *
      * @return LinkResolver
      * @deprecated 102.0.0
+     * @see we don't recommend this approach anymore
      */
     private function getLinkResolver()
     {
@@ -412,9 +424,9 @@ class Helper
     }
 
     /**
-     * Remove ids of non selected websites from $websiteIds array and return filtered data
+     * Remove ids of non-selected websites from $websiteIds array and return filtered data
      *
-     * $websiteIds parameter expects array with website ids as keys and 1 (selected) or 0 (non selected) as values
+     * $websiteIds parameter expects array with website ids as keys and id (selected) or 0 (non-selected) as values
      * Only one id (default website ID) will be set to $websiteIds array when the single store mode is turned on
      *
      * @param array $websiteIds
@@ -425,7 +437,8 @@ class Helper
         if (!$this->storeManager->isSingleStoreMode()) {
             $websiteIds = array_filter((array) $websiteIds);
         } else {
-            $websiteIds[$this->storeManager->getWebsite(true)->getId()] = 1;
+            $websiteId = $this->storeManager->getWebsite(true)->getId();
+            $websiteIds[$websiteId] = $websiteId;
         }
 
         return $websiteIds;
@@ -483,5 +496,31 @@ class Helper
         }
 
         return $product->setOptions($customOptions);
+    }
+
+    /**
+     * Set category links based on initialized category ids
+     *
+     * @param Product $product
+     */
+    private function setCategoryLinks(Product $product): void
+    {
+        $extensionAttributes = $product->getExtensionAttributes();
+        $categoryLinks = [];
+        foreach ((array) $extensionAttributes->getCategoryLinks() as $categoryLink) {
+            $categoryLinks[$categoryLink->getCategoryId()] = $categoryLink;
+        }
+
+        $newCategoryLinks = [];
+        foreach ($product->getCategoryIds() as $categoryId) {
+            $categoryLink = $categoryLinks[$categoryId] ??
+                $this->categoryLinkFactory->create()
+                    ->setCategoryId($categoryId)
+                    ->setPosition(0);
+            $newCategoryLinks[] = $categoryLink;
+        }
+
+        $extensionAttributes->setCategoryLinks(!empty($newCategoryLinks) ? $newCategoryLinks : null);
+        $product->setExtensionAttributes($extensionAttributes);
     }
 }

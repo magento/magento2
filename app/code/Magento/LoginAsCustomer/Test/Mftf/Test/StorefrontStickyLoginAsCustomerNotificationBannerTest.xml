@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontStickyLoginAsCustomerNotificationBannerTest">
+        <annotations>
+            <features value="Login as Customer"/>
+            <useCaseId value="https://github.com/magento/magento2/issues/29354"/>
+            <stories value="Availability of sticky UI elements if module enable/disable"/>
+            <title value="Sticky Notification Banner is present on Storefront page"/>
+            <description
+                value="Verify that Sticky Notification Banner is present on page if 'Login as customer' functionality used"/>
+            <testCaseId value=""/>
+            <group value="login_as_customer"/>
+            <severity value="CRITICAL"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
+                        stepKey="enableLoginAsCustomer"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanConfigCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
+                        stepKey="disableLoginAsCustomer"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanConfigCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup" stepKey="loginAsCustomerFromCustomerPage">
+            <argument name="customerId" value="$$createCustomer.id$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertStorefrontStickyLoginAsCustomerNotificationBannerActionGroup" stepKey="assertStickyNotificationBanner">
+            <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontSignOutNotificationBannerAndCloseTabActionGroup" stepKey="signOutAndCloseTab"/>
+    </test>
+</tests>

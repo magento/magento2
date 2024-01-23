@@ -38,4 +38,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\MediaGalleryCatalogUi\Ui\Component\Listing\Columns\Thumbnail">
+        <arguments>
+            <argument name="defaultPlaceholder" xsi:type="array">
+                <item name="image" xsi:type="string">Magento_MediaGalleryCatalogUi::images/category/placeholder/image.jpg</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

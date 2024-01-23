@@ -454,7 +454,7 @@ class SubscriptionManagerTest extends TestCase
                     'subscriber_status' => Subscriber::STATUS_SUBSCRIBED,
                     'subscriber_confirm_code' => '',
                 ],
-                'needToSendEmail' => false,
+                'needToSendEmail' => true,
             ],
             'Update subscription data: subscription confirm required ' => [
                 'subscriber_data' => [
@@ -618,7 +618,7 @@ class SubscriptionManagerTest extends TestCase
                     'subscriber_status' => Subscriber::STATUS_NOT_ACTIVE,
                     'subscriber_confirm_code' => '',
                 ],
-                'needToSendEmail' => false,
+                'needToSendEmail' => true,
             ],
             'Update subscription data' => [
                 'subscriber_data' => [
@@ -642,7 +642,7 @@ class SubscriptionManagerTest extends TestCase
                     'subscriber_status' => Subscriber::STATUS_UNSUBSCRIBED,
                     'subscriber_confirm_code' => '',
                 ],
-                'needToSendEmail' => false,
+                'needToSendEmail' => true,
             ],
         ];
     }

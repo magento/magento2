@@ -23,7 +23,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <magentoCLI command="config:set {{CatalogInventoryOptionsOnlyXleftThreshold.path}} 10000" stepKey="setStockThresholdQty"/>
-            <magentoCLI command="cache:flush config" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

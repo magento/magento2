@@ -7,7 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
-    <topic name="media.content.synchronization" is_synchronous="false" request="string[]">
+    <topic name="media.content.synchronization" is_synchronous="false" request="Magento\AsynchronousOperations\Api\Data\OperationInterface">
         <handler name="media.content.synchronization.handler"
                  type="Magento\MediaContentSynchronization\Model\Consume" method="execute"/>
     </topic>

@@ -51,6 +51,7 @@ define([
          */
         handlePriceValue: function (isConfigurable) {
             this.disabled(!!this.isUseDefault() || isConfigurable);
+            this.required(!!this.isUseDefault() || !isConfigurable);
 
             if (isConfigurable) {
                 this.clear();

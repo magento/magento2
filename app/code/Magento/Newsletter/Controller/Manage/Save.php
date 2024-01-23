@@ -77,7 +77,7 @@ class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActi
 
         $customerId = $this->_customerSession->getCustomerId();
         if ($customerId === null) {
-            $this->messageManager->addError(__('Something went wrong while saving your subscription.'));
+            $this->messageManager->addErrorMessage(__('Something went wrong while saving your subscription.'));
         } else {
             try {
                 $customer = $this->customerRepository->getById($customerId);
@@ -105,7 +105,7 @@ class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActi
                     $this->messageManager->addSuccess(__('We have updated your subscription.'));
                 }
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('Something went wrong while saving your subscription.'));
+                $this->messageManager->addErrorMessage(__('Something went wrong while saving your subscription.'));
             }
         }
         return $this->_redirect('customer/account/');

@@ -10,12 +10,12 @@ use Magento\Deploy\Console\DeployStaticOptions;
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackageFile;
 use Magento\Deploy\Package\Processor\ProcessorInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Css\PreProcessor\Instruction\Import;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\View\Url\CssResolver;
 use Magento\Framework\View\Asset\Minification;
+use Magento\Framework\View\Url\CssResolver;
 
 /**
  * Pre-processor for speeding up deployment of CSS files
@@ -121,6 +121,20 @@ class Css implements ProcessorInterface
     }
 
     /**
+     * See if given path is local or remote URL
+     *
+     * @param string $path
+     * @return bool
+     */
+    private function isLocal(string $path): bool
+    {
+        $pattern = '{^(file://(?!//)|/(?!/)|/?[a-z]:[\\\\/]|\.\.[\\\\/]|[a-z0-9_.-]+[\\\\/])}i';
+        $result = preg_match($pattern, $path);
+
+        return is_int($result) ? (bool) $result : true;
+    }
+
+    /**
      * Build map file
      *
      * @param string $packagePath
@@ -135,13 +149,22 @@ class Css implements ProcessorInterface
             $imports = [];
             $this->map[$fullPath] = [];
 
-            $content = $this->staticDir->readFile($this->minification->addMinifiedSign($fullPath));
+            $tmpFilename = $this->minification->addMinifiedSign($fullPath);
+            if ($this->staticDir->isReadable($tmpFilename)) {
+                $content = $this->staticDir->readFile($tmpFilename);
+            } else {
+                $content = '';
+            }
 
-            $callback = function ($matchContent) use ($packagePath, $filePath, & $imports) {
-                $importRelPath = $this->normalize(pathinfo($filePath, PATHINFO_DIRNAME) . '/' . $matchContent['path']);
-                $imports[$importRelPath] = $this->normalize(
-                    $packagePath . '/' . pathinfo($filePath, PATHINFO_DIRNAME) . '/' . $matchContent['path']
-                );
+            $callback = function ($matchContent) use ($packagePath, $filePath, &$imports) {
+                if ($this->isLocal($matchContent['path'])) {
+                    $importRelPath = $this->normalize(
+                        pathinfo($filePath, PATHINFO_DIRNAME) . '/' . $matchContent['path']
+                    );
+                    $imports[$importRelPath] = $this->normalize(
+                        $packagePath . '/' . pathinfo($filePath, PATHINFO_DIRNAME) . '/' . $matchContent['path']
+                    );
+                }
             };
             preg_replace_callback(Import::REPLACE_PATTERN, $callback, $content);
 
@@ -175,15 +198,17 @@ class Css implements ProcessorInterface
      *
      * @param string $fileName
      * @return array
-     * phpcs:disable Magento2.Performance.ForeachArrayMerge
      */
-    private function collectFileMap($fileName)
+    private function collectFileMap(string $fileName): array
     {
-        $result = isset($this->map[$fileName]) ? $this->map[$fileName] : [];
-        foreach ($result as $path) {
-            $result = array_merge($result, $this->collectFileMap($path));
+        $valueFromMap = $this->map[$fileName] ?? [];
+        $result = [$valueFromMap];
+
+        foreach ($valueFromMap as $path) {
+            $result[] = $this->collectFileMap($path);
         }
-        return array_unique($result);
+
+        return array_unique(array_merge([], ...$result));
     }
 
     /**

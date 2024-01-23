@@ -80,29 +80,23 @@ class AfterAddressSaveObserverTest extends TestCase
     protected $appState;
 
     /**
-     * @var Customer|MockObject
-     */
-    protected $customerMock;
-
-    /**
      * @var Session|MockObject
      */
     protected $customerSessionMock;
 
+    /**
+     * @var GroupInterface|MockObject
+     */
+    protected $group;
+
     protected function setUp(): void
     {
-        $this->vat = $this->getMockBuilder(Vat::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->helperAddress = $this->getMockBuilder(\Magento\Customer\Helper\Address::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->registry = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $this->vat = $this->createMock(Vat::class);
+        $this->helperAddress = $this->createMock(HelperAddress::class);
+        $this->registry = $this->createMock(Registry::class);
+        $this->escaper = $this->createMock(Escaper::class);
+        $this->appState = $this->createMock(AppState::class);
+        $this->customerSessionMock = $this->createMock(Session::class);
         $this->group = $this->getMockBuilder(GroupInterface::class)
             ->setMethods(['getId'])
             ->getMockForAbstractClass();
@@ -114,21 +108,8 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
-
         $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();
-
-        $this->escaper = $this->getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->customerSessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->model = new AfterAddressSaveObserver(
             $this->vat,
@@ -148,15 +129,15 @@ class AfterAddressSaveObserverTest extends TestCase
      * @param bool $processedFlag
      * @param bool $forceProcess
      * @param int $addressId
-     * @param int $registeredAddressId
-     * @param string $configAddressType
+     * @param mixed $registeredAddressId
+     * @param mixed $configAddressType
      * @dataProvider dataProviderAfterAddressSaveRestricted
      */
     public function testAfterAddressSaveRestricted(
-        $isVatValidationEnabled,
-        $processedFlag,
-        $forceProcess,
-        $addressId,
+        bool $isVatValidationEnabled,
+        bool $processedFlag,
+        bool $forceProcess,
+        int  $addressId,
         $registeredAddressId,
         $configAddressType
     ) {
@@ -322,17 +303,21 @@ class AfterAddressSaveObserverTest extends TestCase
     }
 
     /**
-     * @param string $vatId
+     * @param mixed $vatId
      * @param int $countryId
      * @param bool $isCountryInEU
+     * @param int $customerGroupId
      * @param int $defaultGroupId
+     * @param bool $disableAutoGroupChange
      * @dataProvider dataProviderAfterAddressSaveDefaultGroup
      */
     public function testAfterAddressSaveDefaultGroup(
         $vatId,
-        $countryId,
-        $isCountryInEU,
-        $defaultGroupId
+        int    $countryId,
+        bool   $isCountryInEU,
+        int $customerGroupId,
+        int $defaultGroupId,
+        bool $disableAutoGroupChange
     ) {
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
@@ -359,15 +344,15 @@ class AfterAddressSaveObserverTest extends TestCase
             ->willReturn($store);
         $customer->expects($this->once())
             ->method('getDisableAutoGroupChange')
-            ->willReturn(false);
-        $customer->expects($this->once())
+            ->willReturn($disableAutoGroupChange);
+        $customer->expects($this->any())
             ->method('getGroupId')
-            ->willReturn(null);
-        $customer->expects($this->once())
+            ->willReturn($customerGroupId);
+        $customer->expects($this->any())
             ->method('setGroupId')
             ->with($defaultGroupId)
             ->willReturnSelf();
-        $customer->expects($this->once())
+        $customer->expects($this->any())
             ->method('save')
             ->willReturnSelf();
 
@@ -427,14 +412,17 @@ class AfterAddressSaveObserverTest extends TestCase
     public function dataProviderAfterAddressSaveDefaultGroup()
     {
         return [
-            ['', 1, false, 1],
-            [1, 1, false, 1],
+            'when vatId is empty, non EU country and disable auto group false' => ['', 1, false, 1, 1, false],
+            'when vatId is empty, non EU country and disable auto group true' => ['', 1, false, 1, 1, true],
+            'when vatId is empty, non EU country, disable auto group true
+            and different groupId' => ['', 1, false, 1, 2, true],
+            'when vatId is not empty, non EU country and disable auto group false' => [1, 1, false, 1, 1, false],
         ];
     }
 
     /**
-     * @param string $vatId
-     * @param $vatClass
+     * @param mixed $vatId
+     * @param mixed $vatClass
      * @param int $countryId
      * @param string $country
      * @param int $newGroupId
@@ -451,15 +439,15 @@ class AfterAddressSaveObserverTest extends TestCase
     public function testAfterAddressSaveNewGroup(
         $vatId,
         $vatClass,
-        $countryId,
-        $country,
-        $newGroupId,
-        $areaCode,
-        $resultVatIsValid,
-        $resultRequestSuccess,
-        $resultValidMessage,
-        $resultInvalidMessage,
-        $resultErrorMessage
+        int    $countryId,
+        string $country,
+        int    $newGroupId,
+        string $areaCode,
+        bool   $resultVatIsValid,
+        bool   $resultRequestSuccess,
+        string $resultValidMessage,
+        string $resultInvalidMessage,
+        string $resultErrorMessage
     ) {
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
@@ -595,7 +583,7 @@ class AfterAddressSaveObserverTest extends TestCase
                 ->with($vatId)
                 ->willReturn($vatId);
             $this->messageManager->expects($this->once())
-                ->method('addError')
+                ->method('addErrorMessage')
                 ->with($resultInvalidMessage)
                 ->willReturnSelf();
         }
@@ -605,7 +593,7 @@ class AfterAddressSaveObserverTest extends TestCase
                 ->with('trans_email/ident_support/email', ScopeInterface::SCOPE_STORE)
                 ->willReturn('admin@example.com');
             $this->messageManager->expects($this->once())
-                ->method('addError')
+                ->method('addErrorMessage')
                 ->with($resultErrorMessage)
                 ->willReturnSelf();
         }

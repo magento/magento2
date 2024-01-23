@@ -8,14 +8,21 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model;
 
-use Magento\Eav\Model\Config as EavConfig;
-use Magento\Catalog\Model\Product;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\TestFramework\ObjectManager;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Copier;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\StateException;
+use Magento\Framework\Math\Random;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 
 /**
  * Tests product model:
@@ -119,12 +126,60 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         )->setMetaDescription(
             'meta description'
         )->setVisibility(
-            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
+            Visibility::VISIBILITY_BOTH
         )->setStatus(
-            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+            Status::STATUS_ENABLED
         );
         $crud = new \Magento\TestFramework\Entity($this->_model, ['sku' => uniqid()]);
         $crud->testCrud();
+    }
+
+    /**
+     * Test for Product Description field to be able to contain >64kb of data
+     *
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoAppArea adminhtml
+     * @throws NoSuchEntityException
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws StateException
+     * @throws LocalizedException
+     */
+    public function testMaximumDescriptionLength()
+    {
+        $sku = uniqid();
+        $random = Bootstrap::getObjectManager()->get(Random::class);
+        $longDescription = $random->getRandomString(70000);
+
+        $this->_model->setTypeId(
+            'simple'
+        )->setAttributeSetId(
+            4
+        )->setName(
+            'Simple Product With Long Description'
+        )->setDescription(
+            $longDescription
+        )->setSku(
+            $sku
+        )->setPrice(
+            10
+        )->setMetaTitle(
+            'meta title'
+        )->setMetaKeyword(
+            'meta keyword'
+        )->setMetaDescription(
+            'meta description'
+        )->setVisibility(
+            Visibility::VISIBILITY_BOTH
+        )->setStatus(
+            Status::STATUS_ENABLED
+        );
+
+        $this->productRepository->save($this->_model);
+        $product = $this->productRepository->get($sku);
+
+        $this->assertEquals($longDescription, $product->getDescription());
     }
 
     /**
@@ -193,36 +248,77 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $mediaDirectory->create($config->getBaseTmpMediaPath());
         $targetFile = $config->getTmpMediaPath(basename($sourceFile));
-        copy($sourceFile, $mediaDirectory->getAbsolutePath($targetFile));
+        $mediaDirectory->getDriver()->filePutContents($mediaDirectory->getAbsolutePath($targetFile), file_get_contents($sourceFile));
 
         return $targetFile;
     }
 
     /**
-     * Test duplicate method
+     * Test Duplicate of product
      *
+     * Product assigned to default and custom scope is used. After duplication the copied product
+     * should retain store view specific data
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_multistore_different_short_description.php
      * @magentoAppIsolation enabled
      * @magentoAppArea adminhtml
+     * @magentoDbIsolation disabled
      */
     public function testDuplicate()
     {
-        $this->_model = $this->productRepository->get('simple');
-
-        // fixture
-        /** @var \Magento\Catalog\Model\Product\Copier $copier */
+        $fixtureProductSku = 'simple-different-short-description';
+        $fixtureCustomStoreCode = 'fixturestore';
+        $defaultStoreId = Store::DEFAULT_STORE_ID;
+        /** @var \Magento\Store\Api\StoreRepositoryInterface $storeRepository */
+        $storeRepository = $this->objectManager->create(\Magento\Store\Api\StoreRepositoryInterface::class);
+        $customStoreId = $storeRepository->get($fixtureCustomStoreCode)->getId();
+        $defaultScopeProduct = $this->productRepository->get($fixtureProductSku, true, $defaultStoreId);
+        $customScopeProduct = $this->productRepository->get($fixtureProductSku, true, $customStoreId);
+        /** @var Copier $copier */
         $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Catalog\Model\Product\Copier::class
+            Copier::class
         );
-        $duplicate = $copier->copy($this->_model);
+        $duplicate = $copier->copy($defaultScopeProduct);
+
+        /* Fetch duplicate after cloning */
+        $defaultScopeDuplicate = $this->productRepository->getById($duplicate->getId(), true, $defaultStoreId);
+        $customScopeDuplicate = $this->productRepository->getById($duplicate->getId(), true, $customStoreId);
+
         try {
-            $this->assertNotEmpty($duplicate->getId());
-            $this->assertNotEquals($duplicate->getId(), $this->_model->getId());
-            $this->assertNotEquals($duplicate->getSku(), $this->_model->getSku());
-            $this->assertEquals(
-                \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED,
-                $duplicate->getStatus()
+            $this->assertNotEquals(
+                $customScopeDuplicate->getId(), $customScopeProduct->getId(),
+                'Duplicate product Id should not equal to source product Id'
             );
-            $this->assertEquals(\Magento\Store\Model\Store::DEFAULT_STORE_ID, $duplicate->getStoreId());
+            $this->assertNotEquals(
+                $customScopeDuplicate->getSku(), $customScopeProduct->getSku(),
+                'Duplicate product SKU should not equal to source product SKU'
+            );
+            $this->assertNotEquals(
+                $customScopeDuplicate->getShortDescription(), $defaultScopeDuplicate->getShortDescription(),
+                'Short description of the duplicated product on custom scope should not equal to ' .
+                'duplicate product description on default scope'
+            );
+            $this->assertEquals(
+                $customScopeProduct->getShortDescription(), $customScopeDuplicate->getShortDescription(),
+                'Short description of the duplicated product on custom scope should equal to ' .
+                'source product description on custom scope'
+            );
+            $this->assertEquals(
+                $customScopeProduct->getStoreId(), $customScopeDuplicate->getStoreId(),
+                'Store Id of the duplicated product on custom scope should equal to ' .
+                'store Id of source product on custom scope'
+            );
+            $this->assertEquals(
+                $defaultScopeProduct->getStoreId(), $defaultScopeDuplicate->getStoreId(),
+                'Store Id of the duplicated product on default scope should equal to ' .
+                'store Id of source product on default scope'
+            );
+
+            $this->assertEquals(
+                Status::STATUS_DISABLED, $defaultScopeDuplicate->getStatus(),
+                'Duplicate should be disabled'
+            );
+
             $this->_undo($duplicate);
         } catch (\Exception $e) {
             $this->_undo($duplicate);
@@ -240,9 +336,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->_model = $this->productRepository->get('simple');
 
         $this->assertEquals('simple', $this->_model->getSku());
-        /** @var \Magento\Catalog\Model\Product\Copier $copier */
+        /** @var Copier $copier */
         $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Catalog\Model\Product\Copier::class
+            Copier::class
         );
         $duplicate = $copier->copy($this->_model);
         $this->assertEquals('simple-5', $duplicate->getSku());
@@ -258,7 +354,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Store\Model\StoreManagerInterface::class
         )->getStore()->setId(
-            \Magento\Store\Model\Store::DEFAULT_STORE_ID
+            Store::DEFAULT_STORE_ID
         );
         $duplicate->delete();
     }
@@ -275,35 +371,35 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function testVisibilityApi()
     {
         $this->assertEquals(
-            [\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED],
+            [Status::STATUS_ENABLED],
             $this->_model->getVisibleInCatalogStatuses()
         );
         $this->assertEquals(
-            [\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED],
+            [Status::STATUS_ENABLED],
             $this->_model->getVisibleStatuses()
         );
 
-        $this->_model->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
+        $this->_model->setStatus(Status::STATUS_DISABLED);
         $this->assertFalse($this->_model->isVisibleInCatalog());
 
-        $this->_model->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+        $this->_model->setStatus(Status::STATUS_ENABLED);
         $this->assertTrue($this->_model->isVisibleInCatalog());
 
         $this->assertEquals(
             [
-                \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
-                \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG,
-                \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH,
+                Visibility::VISIBILITY_IN_SEARCH,
+                Visibility::VISIBILITY_IN_CATALOG,
+                Visibility::VISIBILITY_BOTH,
             ],
             $this->_model->getVisibleInSiteVisibilities()
         );
 
         $this->assertFalse($this->_model->isVisibleInSiteVisibility());
-        $this->_model->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH);
+        $this->_model->setVisibility(Visibility::VISIBILITY_IN_SEARCH);
         $this->assertTrue($this->_model->isVisibleInSiteVisibility());
-        $this->_model->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG);
+        $this->_model->setVisibility(Visibility::VISIBILITY_IN_CATALOG);
         $this->assertTrue($this->_model->isVisibleInSiteVisibility());
-        $this->_model->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH);
+        $this->_model->setVisibility(Visibility::VISIBILITY_BOTH);
         $this->assertTrue($this->_model->isVisibleInSiteVisibility());
     }
 
@@ -509,9 +605,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         )->setMetaDescription(
             'meta description'
         )->setVisibility(
-            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
+            Visibility::VISIBILITY_BOTH
         )->setStatus(
-            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+            Status::STATUS_ENABLED
         )->setCollectExceptionMessages(
             true
         );
@@ -551,9 +647,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             $attribute->getAttributeCode(),
             'unique value'
         )->setVisibility(
-            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
+            Visibility::VISIBILITY_BOTH
         )->setStatus(
-            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+            Status::STATUS_ENABLED
         )->setCollectExceptionMessages(
             true
         );
@@ -600,9 +696,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             $attribute->getAttributeCode(),
             'unique value'
         )->setVisibility(
-            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
+            Visibility::VISIBILITY_BOTH
         )->setStatus(
-            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+            Status::STATUS_ENABLED
         )->setCollectExceptionMessages(
             true
         );
@@ -675,10 +771,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      *
      * @return void
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\StateException
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @throws StateException
      */
     public function testProductStatusWhenCatalogFlatProductIsEnabled()
     {
@@ -760,5 +856,17 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $product = ObjectManager::getInstance()->create(Product::class, ['data' => $data]);
         $this->assertSame($product->getCustomAttribute('tax_class_id')->getValue(), '3');
         $this->assertSame($product->getCustomAttribute('category_ids')->getValue(), '1,2');
+    }
+
+    public function testSetPriceWithoutTypeId()
+    {
+        $this->_model->setAttributeSetId(4);
+        $this->_model->setName('Some name');
+        $this->_model->setSku('some_sku');
+        $this->_model->setPrice(9.95);
+        $this->productRepository->save($this->_model);
+
+        $product = $this->productRepository->get('some_sku', false, null, true);
+        $this->assertEquals(9.95, $product->getPrice());
     }
 }

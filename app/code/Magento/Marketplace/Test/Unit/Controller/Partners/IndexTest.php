@@ -93,7 +93,7 @@ class IndexTest extends TestCase
      */
     public function getLayoutFactoryMock($methods = null)
     {
-        return $this->createPartialMock(LayoutFactory::class, $methods, []);
+        return $this->createPartialMock(LayoutFactory::class, $methods);
     }
 
     /**
@@ -109,7 +109,7 @@ class IndexTest extends TestCase
      */
     public function getResponseMock($methods = null)
     {
-        return $this->createPartialMock(Response::class, $methods, []);
+        return $this->createPartialMock(Response::class, $methods);
     }
 
     /**
@@ -117,7 +117,7 @@ class IndexTest extends TestCase
      */
     public function getRequestMock($methods = null)
     {
-        return $this->createPartialMock(Http::class, $methods, []);
+        return $this->createPartialMock(Http::class, $methods);
     }
 
     /**

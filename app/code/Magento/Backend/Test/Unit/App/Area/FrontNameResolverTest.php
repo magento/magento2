@@ -51,6 +51,9 @@ class FrontNameResolverTest extends TestCase
      */
     protected $_defaultFrontName = 'defaultFrontName';
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         /** @var MockObject|DeploymentConfig $deploymentConfigMock */
@@ -74,30 +77,22 @@ class FrontNameResolverTest extends TestCase
         );
     }
 
-    public function testIfCustomPathUsed()
+    /**
+     * @return void
+     */
+    public function testIfCustomPathUsed(): void
     {
-        $this->configMock->expects(
-            $this->at(0)
-        )->method(
-            'getValue'
-        )->with(
-            'admin/url/use_custom_path'
-        )->willReturn(
-            true
-        );
-        $this->configMock->expects(
-            $this->at(1)
-        )->method(
-            'getValue'
-        )->with(
-            'admin/url/custom_path'
-        )->willReturn(
-            'expectedValue'
-        );
+        $this->configMock
+            ->method('getValue')
+            ->withConsecutive(['admin/url/use_custom_path'], ['admin/url/custom_path'])
+            ->willReturnOnConsecutiveCalls(true, 'expectedValue');
         $this->assertEquals('expectedValue', $this->model->getFrontName());
     }
 
-    public function testIfCustomPathNotUsed()
+    /**
+     * @return void
+     */
+    public function testIfCustomPathNotUsed(): void
     {
         $this->configMock->expects(
             $this->once()
@@ -113,14 +108,21 @@ class FrontNameResolverTest extends TestCase
 
     /**
      * @param string $url
-     * @param string $host
+     * @param string|null $host
      * @param string $useCustomAdminUrl
      * @param string $customAdminUrl
-     * @param string $expectedValue
+     * @param bool $expectedValue
+     *
+     * @return void
      * @dataProvider hostsDataProvider
      */
-    public function testIsHostBackend($url, $host, $useCustomAdminUrl, $customAdminUrl, $expectedValue)
-    {
+    public function testIsHostBackend(
+        string $url,
+        ?string $host,
+        string $useCustomAdminUrl,
+        string $customAdminUrl,
+        bool $expectedValue
+    ): void {
         $this->scopeConfigMock->expects($this->exactly(2))
             ->method('getValue')
             ->willReturnMap(
@@ -137,7 +139,7 @@ class FrontNameResolverTest extends TestCase
                         ScopeInterface::SCOPE_STORE,
                         null,
                         $customAdminUrl
-                    ],
+                    ]
                 ]
             );
 
@@ -179,9 +181,26 @@ class FrontNameResolverTest extends TestCase
     }
 
     /**
+     * Test the case when backend url is not set.
+     *
+     * @return void
+     */
+    public function testIsHostBackendWithEmptyHost(): void
+    {
+        $this->request->expects($this->any())
+            ->method('getServer')
+            ->willReturn('magento2.loc');
+        $this->uri->expects($this->once())
+            ->method('getHost')
+            ->willReturn(null);
+
+        $this->assertEquals($this->model->isHostBackend(), false);
+    }
+
+    /**
      * @return array
      */
-    public function hostsDataProvider()
+    public function hostsDataProvider(): array
     {
         return [
             'withoutPort' => [
@@ -238,6 +257,13 @@ class FrontNameResolverTest extends TestCase
                 'host' => 'SomeOtherHost.loc',
                 'useCustomAdminUrl' => '1',
                 'customAdminUrl' => 'https://myhost.loc/',
+                'expectedValue' => false
+            ],
+            'withEmptyHost' => [
+                'url' => 'http://magento2.loc/',
+                'host' => null,
+                'useCustomAdminUrl' => '0',
+                'customAdminUrl' => '',
                 'expectedValue' => false
             ]
         ];

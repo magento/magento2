@@ -74,8 +74,6 @@ class Config extends \Magento\Framework\DataObject
     protected $_objectFactory;
 
     /**
-     * TransactionFactory
-     *
      * @var \Magento\Framework\DB\TransactionFactory
      */
     protected $_transactionFactory;
@@ -184,6 +182,10 @@ class Config extends \Magento\Framework\DataObject
             return $this;
         }
 
+        /**
+         * Reload config to make sure config data is consistent with the database at this point.
+         */
+        $this->_appConfig->reinit();
         $oldConfig = $this->_getConfig(true);
 
         /** @var \Magento\Framework\DB\Transaction $deleteTransaction */
@@ -207,10 +209,9 @@ class Config extends \Magento\Framework\DataObject
                 $deleteTransaction
             );
 
-            $groupChangedPaths = $this->getChangedPaths($sectionId, $groupId, $groupData, $oldConfig, $extraOldGroups);
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $changedPaths = \array_merge($changedPaths, $groupChangedPaths);
+            $changedPaths[] = $this->getChangedPaths($sectionId, $groupId, $groupData, $oldConfig, $extraOldGroups);
         }
+        $changedPaths = array_merge([], ...$changedPaths);
 
         try {
             $deleteTransaction->delete();
@@ -356,7 +357,7 @@ class Config extends \Magento\Framework\DataObject
                 $field = $this->getField($sectionId, $groupId, $fieldId);
                 $path = $this->getFieldPath($field, $fieldId, $oldConfig, $extraOldGroups);
                 if ($this->isValueChanged($oldConfig, $path, $fieldData)) {
-                    $changedPaths[] = $path;
+                    $changedPaths[] = [$path];
                 }
             }
         }
@@ -371,12 +372,11 @@ class Config extends \Magento\Framework\DataObject
                     $oldConfig,
                     $extraOldGroups
                 );
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $changedPaths = \array_merge($changedPaths, $subGroupChangedPaths);
+                $changedPaths[] = $subGroupChangedPaths;
             }
         }
 
-        return $changedPaths;
+        return \array_merge([], ...$changedPaths);
     }
 
     /**
@@ -534,7 +534,7 @@ class Config extends \Magento\Framework\DataObject
      */
     public function setDataByPath($path, $value)
     {
-        $path = trim($path);
+        $path = $path !== null ? trim($path) : '';
         if ($path === '') {
             throw new \UnexpectedValueException('Path must not be empty');
         }

@@ -11,26 +11,33 @@ define([
     'underscore',
     'Magento_MediaGalleryUi/js/directory/actions/createDirectory',
     'jquery/jstree/jquery.jstree',
-    'Magento_Ui/js/lib/view/utils/async'
+    'Magento_Ui/js/lib/view/utils/async',
+    'Magento_MediaGalleryUi/js/directory/directories'
 ], function ($, Component, layout, _, createDirectory) {
     'use strict';
 
     return Component.extend({
         defaults: {
+            allowedActions: [],
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
+            bookmarkProvider: 'componentType = bookmark, ns = ${ $.ns }',
             directoryTreeSelector: '#media-gallery-directory-tree',
             getDirectoryTreeUrl: 'media_gallery/directories/gettree',
+            createDirectoryUrl: 'media_gallery/directories/create',
+            deleteDirectoryUrl: 'media_gallery/directories/delete',
             jsTreeReloaded: null,
             modules: {
+                bookmarks: '${ $.bookmarkProvider }',
                 directories: '${ $.name }_directories',
                 filterChips: '${ $.filterChipsProvider }'
             },
             listens: {
-                '${ $.provider }:params.filters.path': 'clearFiltersHandle'
+                '${ $.provider }:params.filters.path': 'updateSelectedDirectory'
             },
             viewConfig: [{
                 component: 'Magento_MediaGalleryUi/js/directory/directories',
-                name: '${ $.name }_directories'
+                name: '${ $.name }_directories',
+                allowedActions: '${ $.allowedActions }'
             }]
         },
 
@@ -46,10 +53,12 @@ define([
                 this.directoryTreeSelector,
                 this,
                 function () {
+                    this.initJsTreeEvents();
                     this.renderDirectoryTree().then(function () {
                         this.initEvents();
                     }.bind(this));
-                }.bind(this));
+                }.bind(this)
+            );
 
             return this;
         },
@@ -58,7 +67,6 @@ define([
          * Render directory tree component.
          */
         renderDirectoryTree: function () {
-
             return this.getJsonTree().then(function (data) {
                 this.createFolderIfNotExists(data).then(function (isFolderCreated) {
                     if (isFolderCreated) {
@@ -87,36 +95,36 @@ define([
          * @param {Array} directories
          */
         createFolderIfNotExists: function (directories) {
-            var isMediaBrowser = !_.isUndefined(window.MediabrowserUtility),
-                currentTreePath = isMediaBrowser ? window.MediabrowserUtility.pathId : null,
+            var requestedDirectory = this.getRequestedDirectory(),
                 deferred = $.Deferred(),
-                decodedPath,
                 pathArray;
 
-            if (currentTreePath) {
-                decodedPath = Base64.idDecode(currentTreePath);
-
-                if (!this.isDirectoryExist(directories[0], decodedPath)) {
-                    pathArray = this.convertPathToPathsArray(decodedPath);
-
-                    $.each(pathArray, function (i, val) {
-                        if (this.isDirectoryExist(directories[0], val)) {
-                            pathArray.splice(i, 1);
-                        }
-                    }.bind(this));
-
-                    createDirectory(
-                        this.createDirectoryUrl,
-                        pathArray
-                    ).then(function () {
-                        deferred.resolve(true);
-                    });
-                } else {
-                    deferred.resolve(false);
-                }
-            } else {
+            if (_.isNull(requestedDirectory)) {
                 deferred.resolve(false);
+
+                return deferred.promise();
             }
+
+            if (this.isDirectoryExist(directories, requestedDirectory)) {
+                deferred.resolve(false);
+
+                return deferred.promise();
+            }
+
+            pathArray = this.convertPathToPathsArray(requestedDirectory);
+
+            $.each(pathArray, function (i, val) {
+                if (this.isDirectoryExist(directories, val)) {
+                    pathArray.splice(i, 1);
+                }
+            }.bind(this));
+
+            createDirectory(
+                this.createDirectoryUrl,
+                pathArray
+            ).then(function () {
+                deferred.resolve(true);
+            });
 
             return deferred.promise();
         },
@@ -140,7 +148,7 @@ define([
                 var i;
 
                 for (i = 0; i < data.length; i++) {
-                    if (data[i].attr.id === id) {
+                    if (data[i].id === id) {
                         found = data[i];
                         break;
                     } else if (data[i].children && data[i].children.length) {
@@ -199,17 +207,15 @@ define([
         /**
          * Remove ability to multiple select on nodes
          */
-        overrideMultiselectBehavior: function () {
-            $.jstree.defaults.ui['select_range_modifier'] = false;
-            $.jstree.defaults.ui['select_multiple_modifier'] = false;
+        disableMultiselectBehavior: function () {
+            $.jstree.defaults.core.multiple = false;
         },
 
         /**
          *  Handle jstree events
          */
         initEvents: function () {
-            this.firejsTreeEvents();
-            this.overrideMultiselectBehavior();
+            this.disableMultiselectBehavior();
 
             $(window).on('reload.MediaGallery', function () {
                 this.getJsonTree().then(function (data) {
@@ -217,10 +223,10 @@ define([
                         if (isCreated) {
                             this.renderDirectoryTree().then(function () {
                                 this.setJsTreeReloaded(true);
-                                this.firejsTreeEvents();
+                                this.initJsTreeEvents();
                             }.bind(this));
                         } else {
-                            this.checkChipFiltersState();
+                            this.updateSelectedDirectory();
                         }
                     }.bind(this));
                 }.bind(this));
@@ -230,30 +236,42 @@ define([
         /**
          * Fire event for jstree component
          */
-        firejsTreeEvents: function () {
+        initJsTreeEvents: function () {
             $(this.directoryTreeSelector).on('select_node.jstree', function (element, data) {
-                var path = $(data.rslt.obj).data('path');
-
-                this.setActiveNodeFilter(path);
+                this.setActiveNodeFilter(data.node.id);
                 this.setJsTreeReloaded(false);
             }.bind(this));
 
             $(this.directoryTreeSelector).on('loaded.jstree', function () {
-                this.checkChipFiltersState();
+                this.updateSelectedDirectory();
             }.bind(this));
-
         },
 
         /**
          * Verify directory filter on init event, select folder per directory filter state
          */
-        checkChipFiltersState: function () {
+        updateSelectedDirectory: function () {
             var currentFilterPath = this.filterChips().filters.path,
-                isMediaBrowser = !_.isUndefined(window.MediabrowserUtility),
+                requestedDirectory = this.getRequestedDirectory(),
                 currentTreePath;
 
-            currentTreePath = this.isFiltersApplied(currentFilterPath) || !isMediaBrowser ? currentFilterPath :
-                Base64.idDecode(window.MediabrowserUtility.pathId);
+            if (_.isUndefined(currentFilterPath)) {
+                this.clearFiltersHandle();
+
+                return;
+            }
+
+            if (!_.isUndefined(this.bookmarks())) {
+                if (!_.size(this.bookmarks().getViewData(this.bookmarks().defaultIndex))) {
+                    setTimeout(function () {
+                        this.updateSelectedDirectory();
+                    }.bind(this), 500);
+
+                    return;
+                }
+            }
+            currentTreePath = this.isFilterApplied(currentFilterPath) || _.isNull(requestedDirectory) ?
+                currentFilterPath : requestedDirectory;
 
             if (this.folderExistsInTree(currentTreePath)) {
                 this.locateNode(currentTreePath);
@@ -269,10 +287,20 @@ define([
          */
         folderExistsInTree: function (path) {
             if (!_.isUndefined(path)) {
-                return $('#' + path.replace(/\//g, '\\/')).length === 1;
+                return $(this.directoryTreeSelector).jstree('get_node', path);
             }
 
             return false;
+        },
+
+        /**
+         * Get requested directory from MediabrowserUtility
+         *
+         * @returns {String|null}
+         */
+        getRequestedDirectory: function () {
+            return !_.isUndefined(window.MediabrowserUtility) && window.MediabrowserUtility.pathId !== '' ?
+                Base64.idDecode(window.MediabrowserUtility.pathId) : null;
         },
 
         /**
@@ -280,9 +308,8 @@ define([
          *
          * @param {String} currentFilterPath
          */
-        isFiltersApplied: function (currentFilterPath) {
-            return !_.isUndefined(currentFilterPath) && currentFilterPath !== '' &&
-                currentFilterPath !== 'wysiwyg' && currentFilterPath !== 'catalog/category';
+        isFilterApplied: function (currentFilterPath) {
+            return !_.isUndefined(currentFilterPath) && currentFilterPath !== '';
         },
 
         /**
@@ -291,26 +318,24 @@ define([
          * @param {String} path
          */
         locateNode: function (path) {
-            var selectedId =  $(this.directoryTreeSelector).jstree('get_selected').attr('id');
-
-            if (path === selectedId) {
+            if ($(this.directoryTreeSelector).jstree('is_selected', path)) {
                 return;
             }
-            path = path.replace(/\//g, '\\/');
-            $(this.directoryTreeSelector).jstree('open_node', '#' + path);
-            $(this.directoryTreeSelector).jstree('select_node', '#' + path, true);
+            $(this.directoryTreeSelector).jstree('deselect_node',
+                $(this.directoryTreeSelector).jstree('get_selected')
+            );
+            $(this.directoryTreeSelector).jstree('open_node', path);
+            $(this.directoryTreeSelector).jstree('select_node', path, true);
 
         },
 
         /**
-         * Listener to clear filters event
+         * Clear filters
          */
         clearFiltersHandle: function () {
-            if (_.isUndefined(this.filterChips().filters.path)) {
-                $(this.directoryTreeSelector).jstree('deselect_all');
-                this.activeNode(null);
-                this.directories().setInActive();
-            }
+            $(this.directoryTreeSelector).jstree('deselect_all');
+            this.activeNode(null);
+            this.directories().setInActive();
         },
 
         /**
@@ -319,7 +344,6 @@ define([
          * @param {String} nodePath
          */
         setActiveNodeFilter: function (nodePath) {
-
             if (this.activeNode() === nodePath && !this.jsTreeReloaded) {
                 this.selectStorageRoot();
             } else {
@@ -341,14 +365,13 @@ define([
             this.filterChips().set('applied', filters);
             this.activeNode(null);
             this.waitForCondition(
-              function () {
-                return _.isUndefined(this.directories());
-            }.bind(this),
                 function () {
-                this.directories().setInActive();
-            }.bind(this)
-          );
-
+                    return _.isUndefined(this.directories());
+                }.bind(this),
+                function () {
+                    this.directories().setInActive();
+                }.bind(this)
+            );
         },
 
         /**
@@ -372,10 +395,12 @@ define([
         },
 
         /**
-          * Remove active node from directory tree, and select next
-          */
+         * Remove active node from directory tree, and select next
+         */
         removeNode: function () {
-            $(this.directoryTreeSelector).jstree('remove');
+            $(this.directoryTreeSelector).jstree('delete_node',
+                $(this.directoryTreeSelector).jstree('get_selected')
+            );
         },
 
         /**
@@ -390,7 +415,6 @@ define([
             filters = $.extend(true, filters, applied);
             filters.path = path;
             this.filterChips().set('applied', filters);
-
         },
 
         /**
@@ -400,9 +424,9 @@ define([
             var deferred = $.Deferred();
 
             this.getJsonTree().then(function (data) {
-                this.createTree(data);
+                $(this.directoryTreeSelector).jstree(true).settings.core.data = data;
+                $(this.directoryTreeSelector).jstree(true).refresh(false, true);
                 this.setJsTreeReloaded(true);
-                this.initEvents();
                 deferred.resolve();
             }.bind(this));
 
@@ -450,28 +474,22 @@ define([
          * @param {Array} data
          */
         createTree: function (data) {
+            // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
             $(this.directoryTreeSelector).jstree({
-                plugins: ['json_data', 'themes',  'ui', 'crrm', 'types', 'hotkeys'],
-                vcheckbox: {
-                    'two_state': true,
-                    'real_checkboxes': true
+                plugins: [],
+                checkbox: {
+                    three_state: false,
+                    cascade: ''
                 },
-                'json_data': {
-                    data: data
-                },
-                hotkeys: {
-                    space: this._changeState,
-                    'return': this._changeState
-                },
-                types: {
-                    'types': {
-                        'disabled': {
-                            'check_node': true,
-                            'uncheck_node': true
-                        }
+                core: {
+                    data: data,
+                    check_callback: true,
+                    themes: {
+                        dots: false
                     }
                 }
             });
+            // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         }
     });
 });

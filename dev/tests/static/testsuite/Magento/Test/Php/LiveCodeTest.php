@@ -14,6 +14,8 @@ use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
 use Magento\TestFramework\CodingStandard\Tool\CopyPasteDetector;
 use Magento\TestFramework\CodingStandard\Tool\PhpCompatibility;
 use Magento\TestFramework\CodingStandard\Tool\PhpStan;
+use Magento\TestFramework\Utility\AddedFiles;
+use Magento\TestFramework\Utility\FilesSearch;
 use PHPMD\TextUI\Command;
 
 /**
@@ -113,8 +115,8 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      */
     private static function getChangedFilesList($changedFilesBaseDir)
     {
-        return self::getFilesFromListFile(
-            $changedFilesBaseDir,
+        return FilesSearch::getFilesFromListFile(
+            $changedFilesBaseDir ?: self::getChangedFilesBaseDir(),
             'changed_files*',
             function () {
                 // if no list files, probably, this is the dev environment
@@ -126,65 +128,6 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
                 return $changedFiles;
             }
         );
-    }
-
-    /**
-     * This method loads list of added files.
-     *
-     * @param string $changedFilesBaseDir
-     * @return string[]
-     */
-    private static function getAddedFilesList($changedFilesBaseDir)
-    {
-        return self::getFilesFromListFile(
-            $changedFilesBaseDir,
-            'changed_files*.added.*',
-            function () {
-                // if no list files, probably, this is the dev environment
-                // phpcs:ignore Generic.PHP.NoSilencedErrors,Magento2.Security.InsecureFunction
-                @exec('git diff --cached --name-only --diff-filter=A', $addedFiles);
-                return $addedFiles;
-            }
-        );
-    }
-
-    /**
-     * Read files from generated lists.
-     *
-     * @param string $listsBaseDir
-     * @param string $listFilePattern
-     * @param callable $noListCallback
-     * @return string[]
-     */
-    private static function getFilesFromListFile($listsBaseDir, $listFilePattern, $noListCallback)
-    {
-        $filesDefinedInList = [];
-
-        $globFilesListPattern = ($listsBaseDir ?: self::getChangedFilesBaseDir())
-            . '/_files/' . $listFilePattern;
-        $listFiles = glob($globFilesListPattern);
-        if (!empty($listFiles)) {
-            foreach ($listFiles as $listFile) {
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
-                $filesDefinedInList = array_merge(
-                    $filesDefinedInList,
-                    file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
-                );
-            }
-        } else {
-            $filesDefinedInList = call_user_func($noListCallback);
-        }
-
-        array_walk(
-            $filesDefinedInList,
-            function (&$file) {
-                $file = BP . '/' . $file;
-            }
-        );
-
-        $filesDefinedInList = array_values(array_unique($filesDefinedInList));
-
-        return $filesDefinedInList;
     }
 
     /**
@@ -263,38 +206,6 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             // nothing is whitelisted
             return [];
         }
-    }
-
-    /**
-     * Retrieves the lowest PHP version specified in <kbd>composer.json</var> of project.
-     *
-     * @return string
-     */
-    private function getLowestPhpVersion(): string
-    {
-        $composerJson = json_decode(file_get_contents(BP . '/composer.json'), true);
-        $phpVersion   = '7.0';
-
-        if (isset($composerJson['require']['php'])) {
-            $versions = explode('||', $composerJson['require']['php']);
-
-            //normalize version constraints
-            foreach ($versions as $key => $version) {
-                $version = ltrim($version, '^~');
-                $version = str_replace('*', '999', $version);
-
-                $versions[$key] = $version;
-            }
-
-            //sort versions
-            usort($versions, 'version_compare');
-
-            $lowestVersion = array_shift($versions);
-            $versionParts  = explode('.', $lowestVersion);
-            $phpVersion    = sprintf('%s.%s', $versionParts[0], $versionParts[1] ?? '0');
-        }
-
-        return $phpVersion;
     }
 
     /**
@@ -403,18 +314,15 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
 
         $blackList = [];
         foreach (glob(__DIR__ . '/_files/phpcpd/blacklist/*.txt') as $list) {
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
-            $blackList = array_merge($blackList, file($list, FILE_IGNORE_NEW_LINES));
+            $blackList[] = file($list, FILE_IGNORE_NEW_LINES);
         }
+        $blackList = array_merge([], ...$blackList);
 
         $copyPasteDetector->setBlackList($blackList);
 
         $result = $copyPasteDetector->run([BP]);
 
-        $output = "";
-        if (file_exists($reportFile)) {
-            $output = file_get_contents($reportFile);
-        }
+        $output = file_exists($reportFile) ? file_get_contents($reportFile) : '';
 
         $this->assertTrue(
             $result,
@@ -427,7 +335,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      */
     public function testStrictTypes()
     {
-        $changedFiles = self::getAddedFilesList('');
+        $changedFiles = AddedFiles::getAddedFilesList(self::getChangedFilesBaseDir());
 
         try {
             $blackList = Files::init()->readLists(
@@ -457,34 +365,6 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             "Following files are missing strict type declaration:"
             . PHP_EOL
             . implode(PHP_EOL, $filesMissingStrictTyping)
-        );
-    }
-
-    /**
-     * Test for compatibility to lowest PHP version declared in <kbd>composer.json</kbd>.
-     */
-    public function testPhpCompatibility()
-    {
-        $targetVersion = $this->getLowestPhpVersion();
-        $reportFile    = self::$reportDir . '/phpcompatibility_report.txt';
-        $rulesetDir    = __DIR__ . '/_files/PHPCompatibilityMagento';
-
-        if (!file_exists($reportFile)) {
-            touch($reportFile);
-        }
-
-        $codeSniffer = new PhpCompatibility($rulesetDir, $reportFile, new Wrapper());
-        $codeSniffer->setTestVersion($targetVersion);
-
-        $result = $codeSniffer->run(
-            $this->isFullScan() ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml'])
-        );
-        $report = file_get_contents($reportFile);
-
-        $this->assertEquals(
-            0,
-            $result,
-            'PHP Compatibility detected violation(s):' . PHP_EOL . $report
         );
     }
 

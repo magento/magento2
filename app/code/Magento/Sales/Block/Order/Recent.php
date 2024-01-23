@@ -6,9 +6,9 @@
 namespace Magento\Sales\Block\Order;
 
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Customer\Model\Session;
 use Magento\Sales\Model\Order\Config;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\ObjectManager;
 
@@ -26,7 +26,7 @@ class Recent extends \Magento\Framework\View\Element\Template
     const ORDER_LIMIT = 5;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
+     * @var CollectionFactoryInterface
      */
     protected $_orderCollectionFactory;
 
@@ -47,7 +47,7 @@ class Recent extends \Magento\Framework\View\Element\Template
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
+     * @param CollectionFactoryInterface $orderCollectionFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param array $data
@@ -55,7 +55,7 @@ class Recent extends \Magento\Framework\View\Element\Template
      */
     public function __construct(
         Context $context,
-        CollectionFactory $orderCollectionFactory,
+        CollectionFactoryInterface $orderCollectionFactory,
         Session $customerSession,
         Config $orderConfig,
         array $data = [],
@@ -84,11 +84,12 @@ class Recent extends \Magento\Framework\View\Element\Template
      */
     private function getRecentOrders()
     {
-        $orders = $this->_orderCollectionFactory->create()->addAttributeToSelect(
+        $customerId = $this->_customerSession->getCustomerId();
+        $orders = $this->_orderCollectionFactory->create($customerId)->addAttributeToSelect(
             '*'
         )->addAttributeToFilter(
             'customer_id',
-            $this->_customerSession->getCustomerId()
+            $customerId
         )->addAttributeToFilter(
             'store_id',
             $this->storeManager->getStore()->getId()

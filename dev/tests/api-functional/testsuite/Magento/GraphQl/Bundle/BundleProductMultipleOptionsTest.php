@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Bundle;
 
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\CompareArraysRecursively;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -14,6 +16,20 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class BundleProductMultipleOptionsTest extends GraphQlAbstract
 {
+    /**
+     * @var CompareArraysRecursively
+     */
+    private $compareArraysRecursively;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $this->compareArraysRecursively = $objectManager->create(CompareArraysRecursively::class);
+    }
+
     /**
      * @magentoApiDataFixture Magento/Bundle/_files/product_with_multiple_options.php
      * @param array $bundleProductDataProvider
@@ -85,7 +101,7 @@ QUERY;
         $productItems = $response['products']['items'];
 
         foreach ($bundleProductDataProvider as $key => $data) {
-            $diff = $this->compareArraysRecursively($data, $productItems[$key]);
+            $diff = $this->compareArraysRecursively->execute($data, $productItems[$key]);
             self::assertEquals([], $diff, "Actual response doesn't equal to expected data");
         }
     }

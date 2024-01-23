@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomerAdminUi\Plugin\Button;
 
 use Magento\Backend\Block\Widget\Button\ButtonList;
+use Magento\Backend\Block\Widget\Button\ToolbarInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\AbstractBlock;
@@ -61,13 +62,13 @@ class ToolbarPlugin
     /**
      * Add Login as Customer button.
      *
-     * @param \Magento\Backend\Block\Widget\Button\ToolbarInterface $subject
-     * @param \Magento\Framework\View\Element\AbstractBlock $context
-     * @param \Magento\Backend\Block\Widget\Button\ButtonList $buttonList
+     * @param ToolbarInterface $subject
+     * @param AbstractBlock $context
+     * @param ButtonList $buttonList
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforePushButtons(
-        \Magento\Backend\Block\Widget\Button\ToolbarInterface $subject,
+        ToolbarInterface $subject,
         AbstractBlock $context,
         ButtonList $buttonList
     ): void {
@@ -77,7 +78,7 @@ class ToolbarPlugin
         if ($order
             && !empty($order['customer_id'])
             && $this->config->isEnabled()
-            && $this->authorization->isAllowed('Magento_LoginAsCustomer::login_button')
+            && $this->authorization->isAllowed('Magento_LoginAsCustomer::login')
         ) {
             $customerId = (int)$order['customer_id'];
             $buttonList->add(
@@ -97,18 +98,17 @@ class ToolbarPlugin
      */
     private function getOrder(string $nameInLayout, AbstractBlock $context)
     {
-        $order = null;
-
-        if ('sales_order_edit' == $nameInLayout) {
-            $order = $context->getOrder();
-        } elseif ('sales_invoice_view' == $nameInLayout) {
-            $order = $context->getInvoice()->getOrder();
-        } elseif ('sales_shipment_view' == $nameInLayout) {
-            $order = $context->getShipment()->getOrder();
-        } elseif ('sales_creditmemo_view' == $nameInLayout) {
-            $order = $context->getCreditmemo()->getOrder();
+        switch ($nameInLayout) {
+            case 'sales_order_edit':
+                return $context->getOrder();
+            case 'sales_invoice_view':
+                return $context->getInvoice()->getOrder();
+            case 'sales_shipment_view':
+                return $context->getShipment()->getOrder();
+            case 'sales_creditmemo_view':
+                return $context->getCreditmemo()->getOrder();
         }
 
-        return $order;
+        return null;
     }
 }

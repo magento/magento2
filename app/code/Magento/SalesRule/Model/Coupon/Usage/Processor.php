@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\SalesRule\Model\Coupon\Usage;
 
 use Magento\SalesRule\Model\Coupon;
+use Magento\SalesRule\Model\CouponFactory;
 use Magento\SalesRule\Model\ResourceModel\Coupon\Usage;
 use Magento\SalesRule\Model\Rule\CustomerFactory;
 use Magento\SalesRule\Model\RuleFactory;
@@ -23,14 +24,14 @@ class Processor
     private $ruleFactory;
 
     /**
-     * @var RuleFactory
+     * @var CustomerFactory
      */
     private $ruleCustomerFactory;
 
     /**
-     * @var Coupon
+     * @var CouponFactory
      */
-    private $coupon;
+    private $couponFactory;
 
     /**
      * @var Usage
@@ -40,18 +41,18 @@ class Processor
     /**
      * @param RuleFactory $ruleFactory
      * @param CustomerFactory $ruleCustomerFactory
-     * @param Coupon $coupon
+     * @param CouponFactory $couponFactory
      * @param Usage $couponUsage
      */
     public function __construct(
         RuleFactory $ruleFactory,
         CustomerFactory $ruleCustomerFactory,
-        Coupon $coupon,
+        CouponFactory $couponFactory,
         Usage $couponUsage
     ) {
         $this->ruleFactory = $ruleFactory;
         $this->ruleCustomerFactory = $ruleCustomerFactory;
-        $this->coupon = $coupon;
+        $this->couponFactory = $couponFactory;
         $this->couponUsage = $couponUsage;
     }
 
@@ -66,21 +67,9 @@ class Processor
             return;
         }
 
-        if (!empty($updateInfo->getCouponCode())) {
-            $this->updateCouponUsages($updateInfo);
-        }
-        $isIncrement = $updateInfo->isIncrement();
-        $customerId = $updateInfo->getCustomerId();
-        // use each rule (and apply to customer, if applicable)
-        foreach (array_unique($updateInfo->getAppliedRuleIds()) as $ruleId) {
-            if (!(int)$ruleId) {
-                continue;
-            }
-            $this->updateRuleUsages($isIncrement, (int)$ruleId);
-            if ($customerId) {
-                $this->updateCustomerRuleUsages($isIncrement, (int)$ruleId, $customerId);
-            }
-        }
+        $this->updateCouponUsages($updateInfo);
+        $this->updateRuleUsages($updateInfo);
+        $this->updateCustomerRulesUsages($updateInfo);
     }
 
     /**
@@ -88,36 +77,36 @@ class Processor
      *
      * @param UpdateInfo $updateInfo
      */
-    private function updateCouponUsages(UpdateInfo $updateInfo): void
+    public function updateCouponUsages(UpdateInfo $updateInfo): void
     {
+        $coupon = $this->retrieveCoupon($updateInfo);
+        if (!$coupon) {
+            return;
+        }
+
         $isIncrement = $updateInfo->isIncrement();
-        $this->coupon->load($updateInfo->getCouponCode(), 'code');
-        if ($this->coupon->getId()) {
-            if ($updateInfo->isIncrement() || $this->coupon->getTimesUsed() > 0) {
-                $this->coupon->setTimesUsed($this->coupon->getTimesUsed() + ($isIncrement ? 1 : -1));
-                $this->coupon->save();
-            }
-            if ($updateInfo->getCustomerId()) {
-                $this->couponUsage->updateCustomerCouponTimesUsed(
-                    $updateInfo->getCustomerId(),
-                    $this->coupon->getId(),
-                    $isIncrement
-                );
-            }
+        if (!$updateInfo->isCouponAlreadyApplied()
+            && ($updateInfo->isIncrement() || $coupon->getTimesUsed() > 0)) {
+            $coupon->setTimesUsed($coupon->getTimesUsed() + ($isIncrement ? 1 : -1));
+            $coupon->save();
         }
     }
 
     /**
      * Update the number of rule usages
      *
-     * @param bool $isIncrement
-     * @param int $ruleId
+     * @param UpdateInfo $updateInfo
      */
-    private function updateRuleUsages(bool $isIncrement, int $ruleId): void
+    public function updateRuleUsages(UpdateInfo $updateInfo): void
     {
-        $rule = $this->ruleFactory->create();
-        $rule->load($ruleId);
-        if ($rule->getId()) {
+        $isIncrement = $updateInfo->isIncrement();
+        foreach ($updateInfo->getAppliedRuleIds() as $ruleId) {
+            $rule = $this->ruleFactory->create();
+            $rule->load($ruleId);
+            if (!$rule->getId()) {
+                continue;
+            }
+
             $rule->loadCouponCode();
             if ($isIncrement || $rule->getTimesUsed() > 0) {
                 $rule->setTimesUsed($rule->getTimesUsed() + ($isIncrement ? 1 : -1));
@@ -127,11 +116,35 @@ class Processor
     }
 
     /**
+     * Update the number of rules usages per customer
+     *
+     * @param UpdateInfo $updateInfo
+     */
+    public function updateCustomerRulesUsages(UpdateInfo $updateInfo): void
+    {
+        $customerId = $updateInfo->getCustomerId();
+        if (!$customerId) {
+            return;
+        }
+
+        $isIncrement = $updateInfo->isIncrement();
+        foreach ($updateInfo->getAppliedRuleIds() as $ruleId) {
+            $this->updateCustomerRuleUsages($isIncrement, $ruleId, $customerId);
+        }
+
+        $coupon = $this->retrieveCoupon($updateInfo);
+        if ($coupon) {
+            $this->couponUsage->updateCustomerCouponTimesUsed($customerId, $coupon->getId(), $isIncrement);
+        }
+    }
+
+    /**
      * Update the number of rule usages per customer
      *
      * @param bool $isIncrement
      * @param int $ruleId
      * @param int $customerId
+     * @throws \Exception
      */
     private function updateCustomerRuleUsages(bool $isIncrement, int $ruleId, int $customerId): void
     {
@@ -144,6 +157,27 @@ class Processor
         } elseif ($isIncrement) {
             $ruleCustomer->setCustomerId($customerId)->setRuleId($ruleId)->setTimesUsed(1);
         }
-        $ruleCustomer->save();
+
+        if ($ruleCustomer->hasData()) {
+            $ruleCustomer->save();
+        }
+    }
+
+    /**
+     * Retrieve coupon from update info
+     *
+     * @param UpdateInfo $updateInfo
+     * @return Coupon|null
+     */
+    private function retrieveCoupon(UpdateInfo $updateInfo): ?Coupon
+    {
+        if (!$updateInfo->getCouponCode()) {
+            return null;
+        }
+
+        $coupon = $this->couponFactory->create();
+        $coupon->loadByCode($updateInfo->getCouponCode());
+
+        return $coupon->getId() ? $coupon : null;
     }
 }

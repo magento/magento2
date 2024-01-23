@@ -14,5 +14,6 @@
         <element name="firstProductCheckbox" type="checkbox" selector="//*[@id='source_products_table']/tbody/tr[1]//*[@name='source_products']"/>
         <element name="addSelectionsToMyCartButton" type="button" selector="//*[@id='products_search']/div[1]//*[text()='Add selections to my cart']"/>
         <element name="addedProductName" type="text" selector="//*[@id='order-items_grid']//*[text()='{{var}}']" parameterized="true"/>
+        <element name="addedProductQty" type="input" selector="//*[@id='order-items_grid']//*[text()='{{var}}']//..//..//*[@class='col-qty']//input" parameterized="true"/>
     </section>
 </sections>

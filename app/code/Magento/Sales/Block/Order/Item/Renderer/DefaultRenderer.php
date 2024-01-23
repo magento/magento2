@@ -105,7 +105,7 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
      */
     public function getItemOptions()
     {
-        $result = [[]];
+        $result = [];
         $options = $this->getOrderItem()->getProductOptions();
         if ($options) {
             if (isset($options['options'])) {
@@ -118,7 +118,7 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
                 $result[] = $options['attributes_info'];
             }
         }
-        return array_merge(...$result);
+        return array_merge([], ...$result);
     }
 
     /**

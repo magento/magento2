@@ -18,6 +18,7 @@
             <testCaseId value="MC-14689"/>
             <group value="checkout"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create category and simple product -->
@@ -56,7 +57,7 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
 
         <!-- Add product to the cart -->
-        <click selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="clickCustomizeAndAddToCart"/>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickCustomizeAndAddToCart"/>
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="$$createBundleDynamicProduct.name$$"/>
         </actionGroup>

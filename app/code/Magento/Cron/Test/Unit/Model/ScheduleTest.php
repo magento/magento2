@@ -212,7 +212,6 @@ class ScheduleTest extends TestCase
     {
         return [
             [''],
-            [null],
             [false],
             ['1 2 3 4'],
             ['1 2 3 4 5 6 7']
@@ -427,6 +426,7 @@ class ScheduleTest extends TestCase
             ['1/'],       //Invalid cron expression, expecting numeric modulus: 1/
             ['-'],        //Invalid cron expression
             ['1-2-3'],    //Invalid cron expression, expecting 'from-to' structure: 1-2-3
+            ['0/0'],
         ];
     }
 

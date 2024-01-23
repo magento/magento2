@@ -91,6 +91,13 @@ class ProductDataMapper implements BatchDataMapperInterface
     private $filterableAttributeTypes;
 
     /**
+     * @var string[]
+     */
+    private $sortableCaseSensitiveAttributes = [
+        'name',
+    ];
+
+    /**
      * @param Builder $builder
      * @param FieldMapperInterface $fieldMapper
      * @param DateFieldType $dateFieldType
@@ -99,6 +106,7 @@ class ProductDataMapper implements BatchDataMapperInterface
      * @param array $excludedAttributes
      * @param array $sortableAttributesValuesToImplode
      * @param array $filterableAttributeTypes
+     * @param array $sortableCaseSensitiveAttributes
      */
     public function __construct(
         Builder $builder,
@@ -108,7 +116,8 @@ class ProductDataMapper implements BatchDataMapperInterface
         DataProvider $dataProvider,
         array $excludedAttributes = [],
         array $sortableAttributesValuesToImplode = [],
-        array $filterableAttributeTypes = []
+        array $filterableAttributeTypes = [],
+        array $sortableCaseSensitiveAttributes = []
     ) {
         $this->builder = $builder;
         $this->fieldMapper = $fieldMapper;
@@ -122,6 +131,10 @@ class ProductDataMapper implements BatchDataMapperInterface
         $this->dataProvider = $dataProvider;
         $this->attributeOptionsCache = [];
         $this->filterableAttributeTypes = $filterableAttributeTypes;
+        $this->sortableCaseSensitiveAttributes = array_merge(
+            $this->sortableCaseSensitiveAttributes,
+            $sortableCaseSensitiveAttributes
+        );
     }
 
     /**
@@ -237,6 +250,7 @@ class ProductDataMapper implements BatchDataMapperInterface
      * - "Visible in Advanced Search" (is_visible_in_advanced_search)
      * - "Use in Layered Navigation" (is_filterable)
      * - "Use in Search Results Layered Navigation" (is_filterable_in_search)
+     * - "Use in Sorting in Product Listing" (used_for_sort_by)
      *
      * @param Attribute $attribute
      * @return bool
@@ -248,6 +262,7 @@ class ProductDataMapper implements BatchDataMapperInterface
             || $attribute->getIsVisibleInAdvancedSearch()
             || $attribute->getIsFilterable()
             || $attribute->getIsFilterableInSearch()
+            || $attribute->getUsedForSortBy()
         );
     }
 
@@ -259,6 +274,9 @@ class ProductDataMapper implements BatchDataMapperInterface
      * @param array $attributeValues
      * @param int $storeId
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function prepareAttributeValues(
         int $productId,
@@ -296,6 +314,12 @@ class ProductDataMapper implements BatchDataMapperInterface
             && count($attributeValues) > 1
         ) {
             $attributeValues = [$productId => implode(' ', $attributeValues)];
+        }
+
+        if (in_array($attribute->getAttributeCode(), $this->sortableCaseSensitiveAttributes)) {
+            foreach ($attributeValues as $key => $attributeValue) {
+                $attributeValues[$key] = strtolower($attributeValue);
+            }
         }
 
         return $attributeValues;
@@ -348,8 +372,11 @@ class ProductDataMapper implements BatchDataMapperInterface
             return $attributeLabels;
         }
 
+        // array_flip() + foreach { isset() }  is much faster than foreach { in_array() } when there are many options
+        $attributeValues = array_flip($attributeValues);
+
         foreach ($options as $option) {
-            if (\in_array($option['value'], $attributeValues)) {
+            if (isset($attributeValues[$option['value']])) {
                 $attributeLabels[] = $option['label'];
             }
         }
