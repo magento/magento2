@@ -32,14 +32,14 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class GroupedTest extends AbstractModifierTest
 {
-    const PRODUCT_ID = 1;
-    const LINKED_PRODUCT_ID = 2;
-    const LINKED_PRODUCT_SKU = 'linked';
-    const LINKED_PRODUCT_NAME = 'linked';
-    const LINKED_PRODUCT_QTY = '0';
-    const LINKED_PRODUCT_POSITION = 1;
-    const LINKED_PRODUCT_POSITION_CALCULATED = 1;
-    const LINKED_PRODUCT_PRICE = '1';
+    private const PRODUCT_ID = 1;
+    private const LINKED_PRODUCT_ID = 2;
+    private const LINKED_PRODUCT_SKU = 'linked';
+    private const LINKED_PRODUCT_NAME = 'linked';
+    private const LINKED_PRODUCT_QTY = '0';
+    private const LINKED_PRODUCT_POSITION = 1;
+    private const LINKED_PRODUCT_POSITION_CALCULATED = 1;
+    private const LINKED_PRODUCT_PRICE = '1';
 
     /**
      * @var ProductInterface|MockObject

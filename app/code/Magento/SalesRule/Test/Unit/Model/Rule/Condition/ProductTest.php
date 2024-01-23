@@ -176,7 +176,7 @@ class ProductTest extends TestCase
     /**
      * @return array
      */
-    public function getValueElementChooserUrlDataProvider()
+    public static function getValueElementChooserUrlDataProvider()
     {
         return [
             'category_ids_without_js_object' => [
@@ -236,7 +236,8 @@ class ProductTest extends TestCase
         /* @var \Magento\Catalog\Model\Product|MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getAttribute', 'getId', 'setQuoteItemQty', 'setQuoteItemPrice'])
+            ->onlyMethods(['getId'])
+            ->addMethods(['getAttribute', 'setQuoteItemQty', 'setQuoteItemPrice'])
             ->getMock();
         $product
             ->method('setQuoteItemQty')
@@ -269,7 +270,7 @@ class ProductTest extends TestCase
     {
         $attr = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getAttribute'])
+            ->addMethods(['getAttribute'])
             ->getMockForAbstractClass();
 
         $attr->expects($this->any())
@@ -279,7 +280,8 @@ class ProductTest extends TestCase
         /* @var \Magento\Catalog\Model\Product|MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setQuoteItemPrice', 'getResource', 'hasData', 'getData'])
+            ->addMethods(['setQuoteItemPrice'])
+            ->onlyMethods(['getResource', 'hasData', 'getData'])
             ->getMock();
 
         $product->expects($this->any())
@@ -324,7 +326,7 @@ class ProductTest extends TestCase
      *
      * @return array
      */
-    public function localisationProvider(): array
+    public static function localisationProvider(): array
     {
         return [
             'number' => [true, 500.01],

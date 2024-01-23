@@ -85,7 +85,8 @@ class AbstractCarrierOnlineTest extends TestCase
 
         $item = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getProduct', 'getQty', 'getWeight', '__wakeup', 'getStore'])
+            ->addMethods(['getWeight'])
+            ->onlyMethods(['getProduct', 'getQty', '__wakeup', 'getStore'])
             ->getMock();
         $item->expects($this->any())->method('getProduct')->willReturn($product);
 

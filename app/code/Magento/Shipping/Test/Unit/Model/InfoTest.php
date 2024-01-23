@@ -136,7 +136,8 @@ class InfoTest extends TestCase
 
         $track = $this->getMockBuilder(Track::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setShipment', 'getNumberDetail'])
+            ->addMethods(['getNumberDetail'])
+            ->onlyMethods(['setShipment'])
             ->getMock();
         $track->expects($this->atLeastOnce())->method('setShipment')->with($shipment)->willReturnSelf();
         $track->expects($this->atLeastOnce())->method('getNumberDetail')->willReturn($trackDetails);
@@ -212,7 +213,8 @@ class InfoTest extends TestCase
             ->willReturn($shipment);
         $track = $this->getMockBuilder(Track::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setShipment', 'getNumberDetail'])
+            ->addMethods(['getNumberDetail'])
+            ->onlyMethods(['setShipment'])
             ->getMock();
         $track->expects($this->atLeastOnce())->method('setShipment')->with($shipment)->willReturnSelf();
         $track->expects($this->atLeastOnce())->method('getNumberDetail')->willReturn($trackDetails);
@@ -288,7 +290,8 @@ class InfoTest extends TestCase
             ->willReturn($decodedHash);
         $track = $this->getMockBuilder(Track::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['load', 'getId', 'getProtectCode', 'getNumberDetail'])
+            ->addMethods(['getNumberDetail'])
+            ->onlyMethods(['load', 'getId', 'getProtectCode'])
             ->getMock();
         $track->expects($this->atLeastOnce())->method('load')->with($decodedHash['id'])->willReturnSelf();
         $track->expects($this->atLeastOnce())->method('getId')->willReturn($decodedHash['id']);
@@ -304,7 +307,7 @@ class InfoTest extends TestCase
     /**
      * @return array
      */
-    public function loadByHashWithTrackIdDataProvider()
+    public static function loadByHashWithTrackIdDataProvider()
     {
         return [
             [

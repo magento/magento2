@@ -10,6 +10,7 @@ namespace Magento\Shipping\Test\Unit\Model\Shipping;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Directory\Model\Region;
 use Magento\Directory\Model\RegionFactory;
+use Magento\Quote\Model\Quote\Address\RateRequestFactory;
 use Magento\Framework\App\Config;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -89,7 +90,7 @@ class LabelsTest extends TestCase
 
         $authSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getUser'])
+            ->addMethods(['getUser'])
             ->getMock();
         $authSession->expects(static::any())->method('getUser')->willReturn($this->user);
         $regionFactory = $this->getRegionFactory();
@@ -97,7 +98,16 @@ class LabelsTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['getValue'])
             ->getMock();
+
         $objectManagerHelper = new ObjectManagerHelper($this);
+        $objects = [
+            [
+                RateRequestFactory::class,
+                $this->createMock(RateRequestFactory::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
+
         $this->labels = $objectManagerHelper->getObject(
             Labels::class,
             [
@@ -129,7 +139,7 @@ class LabelsTest extends TestCase
         $this->user->expects($this->once())->method('getEmail')->willReturn('admin@admin.test.com');
         $shippingMethod = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getCarrierCode'])
+            ->addMethods(['getCarrierCode'])
             ->getMock();
         $shippingMethod->expects(static::once())
             ->method('getCarrierCode')
@@ -187,7 +197,7 @@ class LabelsTest extends TestCase
             ->getMock();
         $shippingMethod = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getCarrierCode'])
+            ->addMethods(['getCarrierCode'])
             ->getMock();
         $order->expects($this->atLeastOnce())
             ->method('getShippingMethod')
@@ -228,7 +238,8 @@ class LabelsTest extends TestCase
     {
         $this->region = $this->getMockBuilder(Region::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['load', 'getCode'])
+            ->addMethods(['getCode'])
+            ->onlyMethods(['load'])
             ->getMock();
         $regionFactory = $this->getMockBuilder(RegionFactory::class)
             ->disableOriginalConstructor()
@@ -283,7 +294,7 @@ class LabelsTest extends TestCase
      * Data provider to testRequestToShipment
      * @return array
      */
-    public function requestToShipmentDataProvider()
+    public static function requestToShipmentDataProvider()
     {
         return [
             [
@@ -299,7 +310,7 @@ class LabelsTest extends TestCase
      * Data provider to testRequestToShipmentLocalizedException
      * @return array
      */
-    public function requestToShipmentLocalizedExceptionDataProvider()
+    public static function requestToShipmentLocalizedExceptionDataProvider()
     {
         return [
             [

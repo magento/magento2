@@ -1107,7 +1107,7 @@ class ProductTest extends AbstractImportTestCase
      * @return void
      * @dataProvider validateRowCheckSpecifiedSkuDataProvider
      */
-    public function testValidateRowCheckSpecifiedSku($sku, $expectedError): void
+    public function testValidateRowCheckSpecifiedSku($sku): void
     {
         $importProduct = $this->createModelMockWithErrorAggregator(
             ['addRowError', 'getOptionEntity', 'getRowScope'],
@@ -1813,16 +1813,13 @@ class ProductTest extends AbstractImportTestCase
     {
         return [
             [
-                '$sku' => null,
-                '$expectedError' => Validator::ERROR_SKU_IS_EMPTY
+                '$sku' => null
             ],
             [
-                '$sku' => false,
-                '$expectedError' => Validator::ERROR_ROW_IS_ORPHAN
+                '$sku' => false
             ],
             [
-                '$sku' => 'sku',
-                '$expectedError' => Validator::ERROR_INVALID_STORE
+                '$sku' => 'sku'
             ]
         ];
     }

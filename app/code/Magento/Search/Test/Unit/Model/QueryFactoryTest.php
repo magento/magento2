@@ -71,7 +71,8 @@ class QueryFactoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->query = $this->getMockBuilder(Query::class)
-            ->onlyMethods(['setIsQueryTextExceeded', 'setIsQueryTextShort', 'loadByQueryText', 'getId'])
+            ->addMethods(['setIsQueryTextExceeded', 'setIsQueryTextShort'])
+            ->onlyMethods(['loadByQueryText', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
 

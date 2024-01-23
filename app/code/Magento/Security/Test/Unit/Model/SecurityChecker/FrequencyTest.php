@@ -53,7 +53,7 @@ class FrequencyTest extends TestCase
      */
     protected $objectManager;
 
-    /*
+    /**
      * @var RemoteAddress
      */
     protected $remoteAddressMock;

@@ -48,7 +48,7 @@ class QuantityTest extends TestCase
      */
     protected $objectManager;
 
-    /*
+    /**
      * @var RemoteAddress
      */
     protected $remoteAddressMock;
