@@ -887,12 +887,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private function checkItemShipping(): bool
     {
         foreach ($this->getAllItems() as $item) {
-            if (!$item->getParentItem()) {
-                $qtyToShip = $item->getQtyToShip();
+            $qtyToShip = !$item->getParentItem() || $item->getParentItem()->getProductType() !== Type::TYPE_BUNDLE ?
+                $item->getQtyToShip() : $item->getSimpleQtyToShip();
 
-                if ($qtyToShip > 0 && !$item->getIsVirtual() && !$item->getLockedDoShip()) {
-                    return true;
-                }
+            if ($qtyToShip > 0 && !$item->getIsVirtual() && !$item->getLockedDoShip()) {
+                return true;
             }
         }
 
