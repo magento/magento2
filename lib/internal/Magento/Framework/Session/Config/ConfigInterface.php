@@ -12,6 +12,7 @@ namespace Magento\Framework\Session\Config;
 /**
  * Interface \Magento\Framework\Session\Config\ConfigInterface
  *
+ * @api
  */
 interface ConfigInterface
 {

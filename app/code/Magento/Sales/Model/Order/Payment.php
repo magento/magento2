@@ -2273,6 +2273,21 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     /**
+     * @inheritDoc
+     *
+     * Because cc_last_4 data attribute violates data contract (use underscore (_) between alphanumerical characters),
+     * this ad hoc method is for setting cc_last_4 data value in \Magento\Framework\Api\DataObjectHelper::_setDataValues
+     */
+    public function setCustomAttribute($attributeCode, $attributeValue)
+    {
+        if ($attributeCode === OrderPaymentInterface::CC_LAST_4) {
+            return parent::setData(OrderPaymentInterface::CC_LAST_4, $attributeValue);
+        }
+
+        return parent::setCustomAttribute($attributeCode, $attributeValue);
+    }
+
+    /**
      * @inheritdoc
      */
     public function setCcStatusDescription($description)

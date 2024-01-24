@@ -20,6 +20,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use StorefrontApplyCatalogRuleForSimpleProductWithSelectFixedMethodTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Login as Admin -->
@@ -36,7 +37,9 @@
 
             <!-- Update all products to have custom options -->
             <updateData createDataKey="createProduct1" entity="productWithFixedOptions" stepKey="updateProductWithOptions1"/>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete products and category -->
@@ -68,7 +71,7 @@
         <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Navigate to category on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createCategory.name$)}}" stepKey="goToCategoryPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage"/>
 
         <!-- Check product 1 name on store front category page -->
         <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct1Name">
@@ -89,7 +92,7 @@
         </actionGroup>
 
         <!-- Navigate to product 1 on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createProduct1.name$)}}" stepKey="goToProductPage1"/>
+        <amOnPage url="{{StorefrontProductPage.url($createProduct1.custom_attributes[url_key]$)}}" stepKey="goToProductPage1"/>
 
         <!-- Assert regular and special price after selecting ProductOptionValueDropdown1 -->
         <actionGroup ref="StorefrontSelectCustomOptionRadioAndAssertPricesActionGroup" stepKey="storefrontSelectCustomOptionAndAssertPrices1">

@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Ui\DataProvider\Product;
 
+use Magento\Framework\DB\Select;
+
 /**
  * Collection which is used for rendering product list in the backend.
  *
@@ -27,56 +29,50 @@ class ProductCollection extends \Magento\Catalog\Model\ResourceModel\Product\Col
     }
 
     /**
-     * Return approximately amount if too much entities.
-     *
-     * @return int|mixed
+     * @inheritdoc
      */
     public function getSize()
     {
-        $sql = $this->getSelectCountSql();
-        $possibleCount = $this->analyzeCount($sql);
+        if ($this->_totalRecords === null) {
+            if ($this->_scopeConfig->getValue('admin/grid/limit_total_number_of_products')) {
+                $sql = $this->getSelectCountSql();
+                $estimatedRowsCount = $this->analyzeRows($sql);
+                $recordsLimit = $this->_scopeConfig->getValue('admin/grid/records_limit');
 
-        if ($possibleCount > 20000) {
-            return $possibleCount;
+                if ($estimatedRowsCount > $recordsLimit) {
+                    $columns = $sql->getPart(Select::COLUMNS);
+                    $sql->reset(Select::COLUMNS);
+
+                    foreach ($columns as &$column) {
+                        if ($column[1] instanceof \Zend_Db_Expr && $column[1] == "COUNT(DISTINCT e.entity_id)") {
+                            $column[1] = new \Zend_Db_Expr('e.entity_id');
+                        }
+                    }
+                    $sql->setPart(Select::COLUMNS, $columns);
+                    $sql->limit($recordsLimit);
+                    $query = new \Zend_Db_Expr('SELECT COUNT(*) FROM (' . $sql->assemble() . ') AS c');
+                    $this->_totalRecords = (int)$this->getConnection()->query($query)->fetchColumn();
+                } else {
+                    return parent::getSize();
+                }
+                return $this->_totalRecords;
+            }
+            return parent::getSize();
         }
-
-        return parent::getSize();
+        return $this->_totalRecords;
     }
 
     /**
-     * Analyze amount of entities in DB.
+     * Analyze number of rows to be examined to execute the query.
      *
-     * @param $sql
-     * @return int|mixed
+     * @param Select $sql
+     * @return mixed
      * @throws \Zend_Db_Statement_Exception
      */
-    private function analyzeCount($sql)
+    private function analyzeRows(Select $sql)
     {
         $results = $this->getConnection()->query('EXPLAIN ' . $sql)->fetchAll();
-        $alias = $this->getMainTableAlias();
 
-        foreach ($results as $result) {
-            if ($result['table'] == $alias) {
-                return $result['rows'];
-            }
-        }
-
-        return 0;
-    }
-
-    /**
-     * Identify main table alias or its name if alias is not defined.
-     *
-     * @return string
-     * @throws \LogicException
-     */
-    private function getMainTableAlias()
-    {
-        foreach ($this->getSelect()->getPart(\Magento\Framework\DB\Select::FROM) as $tableAlias => $tableMetadata) {
-            if ($tableMetadata['joinType'] == 'from') {
-                return $tableAlias;
-            }
-        }
-        throw new \LogicException("Main table cannot be identified.");
+        return max(array_column($results, 'rows'));
     }
 }

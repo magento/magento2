@@ -7,6 +7,7 @@
 /**
  * Interface of product configurational item option
  *
+ * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\Product\Configuration\Item\Option;

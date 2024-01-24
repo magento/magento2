@@ -72,7 +72,7 @@ class Account
      */
     private function isActionAllowed(): bool
     {
-        $action = strtolower($this->request->getActionName());
+        $action = strtolower($this->request->getActionName() ?? '');
         $pattern = '/^(' . implode('|', $this->allowedActions) . ')$/i';
 
         return (bool)preg_match($pattern, $action);

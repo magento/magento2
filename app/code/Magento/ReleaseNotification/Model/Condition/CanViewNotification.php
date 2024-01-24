@@ -14,6 +14,11 @@ use Magento\Framework\App\CacheInterface;
 /**
  * Dynamic validator for UI release notification, manage UI component visibility.
  * Return true if the logged in user has not seen the notification.
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ *
+ * @deprecated Starting from Magento OS 2.4.7 Magento_ReleaseNotification module is deprecated
+ * in favor of another in-product messaging mechanism
+ * @see Current in-product messaging mechanism
  */
 class CanViewNotification implements VisibilityConditionInterface
 {
@@ -72,8 +77,6 @@ class CanViewNotification implements VisibilityConditionInterface
     }
 
     /**
-     * Validate if notification popup can be shown and set the notification flag
-     *
      * @inheritdoc
      */
     public function isVisible(array $arguments)
@@ -81,12 +84,11 @@ class CanViewNotification implements VisibilityConditionInterface
         $userId = $this->session->getUser()->getId();
         $cacheKey = self::$cachePrefix . $userId;
         $value = $this->cacheStorage->load($cacheKey);
+
         if ($value === false) {
-            $value = version_compare(
-                $this->viewerLogger->get($userId)->getLastViewVersion(),
-                $this->productMetadata->getVersion(),
-                '<'
-            );
+            $lastViewVersion = $this->viewerLogger->get($userId)->getLastViewVersion();
+            $value = ($lastViewVersion) ?
+                version_compare($lastViewVersion, $this->productMetadata->getVersion(), '<') : true;
             $this->cacheStorage->save(false, $cacheKey);
         }
         return (bool)$value;

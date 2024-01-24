@@ -115,6 +115,7 @@ class SubscriberTest extends TestCase
                 'setTemplateOptions',
                 'setTemplateVars',
                 'setFrom',
+                'setFromByScope',
                 'addTo',
                 'getTransport'
             ]
@@ -133,8 +134,8 @@ class SubscriberTest extends TestCase
         $this->inlineTranslation = $this->getMockForAbstractClass(StateInterface::class);
         $this->resource = $this->getMockBuilder(SubscriberResourceModel::class)
             ->addMethods(
-            ['loadByCustomer']
-        )
+                ['loadByCustomer']
+            )
             ->onlyMethods(
                 ['loadByEmail', 'getIdFieldName', 'save', 'received', 'loadBySubscriberEmail', 'loadByCustomerId']
             )
@@ -379,8 +380,8 @@ class SubscriberTest extends TestCase
             ->with($vars)
             ->willReturnSelf();
         $this->transportBuilder->expects($this->once())
-            ->method('setFrom')
-            ->with($identity)
+            ->method('setFromByScope')
+            ->with($identity, $this->subscriber->getStoreId())
             ->willReturnSelf();
         $this->transportBuilder->expects($this->once())
             ->method('addTo')

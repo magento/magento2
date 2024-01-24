@@ -53,6 +53,9 @@ class ValueProcessorTest extends TestCase
      */
     private $valueProcessor;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->valueFactoryMock = $this->getMockBuilder(ValueFactory::class)
@@ -60,9 +63,8 @@ class ValueProcessorTest extends TestCase
             ->getMock();
         $this->scopeMock = $this->getMockBuilder(ScopeInterface::class)
             ->getMockForAbstractClass();
-        $this->structureFactoryMock = $this->getMockBuilder(StructureFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
+        $this->structureFactoryMock = $this->getMockBuilder(StructureFactory::class)->disableOriginalConstructor()
+            ->onlyMethods(['create'])
             ->getMock();
         $this->jsonSerializerMock = $this->getMockBuilder(JsonSerializer::class)
             ->disableOriginalConstructor()
@@ -91,6 +93,8 @@ class ValueProcessorTest extends TestCase
      * @param string $className
      * @param string $value
      * @param string|array $processedValue
+     *
+     * @return void
      * @dataProvider processDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -109,7 +113,7 @@ class ValueProcessorTest extends TestCase
         $className,
         $value,
         $processedValue
-    ) {
+    ): void {
         $scope = 'someScope';
         $scopeCode = 'someScopeCode';
         $path = 'some/config/path';
@@ -118,12 +122,9 @@ class ValueProcessorTest extends TestCase
         $this->scopeMock->expects($this->once())
             ->method('getCurrentScope')
             ->willReturn($oldConfigScope);
-        $this->scopeMock->expects($this->at(1))
+        $this->scopeMock
             ->method('setCurrentScope')
-            ->with(Area::AREA_ADMINHTML);
-        $this->scopeMock->expects($this->at(2))
-            ->method('setCurrentScope')
-            ->with($oldConfigScope);
+            ->withConsecutive([Area::AREA_ADMINHTML], [$oldConfigScope]);
 
         /** @var Structure|MockObject $structureMock */
         $structureMock = $this->getMockBuilder(Structure::class)
@@ -136,7 +137,8 @@ class ValueProcessorTest extends TestCase
         /** @var Value|Encrypted|MockObject $valueMock */
         $backendModelMock = $this->getMockBuilder($className)
             ->disableOriginalConstructor()
-            ->setMethods(['setPath', 'setScope', 'setScopeId', 'setValue', 'getValue', 'afterLoad'])
+            ->addMethods(['setPath', 'setScope', 'setScopeId', 'setValue', 'getValue'])
+            ->onlyMethods(['afterLoad'])
             ->getMock();
         $backendModelMock->expects($expectsSetPath)
             ->method('setPath')
@@ -191,7 +193,7 @@ class ValueProcessorTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function processDataProvider()
+    public function processDataProvider(): array
     {
         return [
             [

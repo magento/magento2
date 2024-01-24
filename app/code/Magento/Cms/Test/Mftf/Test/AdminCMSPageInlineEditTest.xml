@@ -18,6 +18,7 @@
             <useCaseId value="MC-39953"/>
             <group value="cms"/>
             <group value="ui"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

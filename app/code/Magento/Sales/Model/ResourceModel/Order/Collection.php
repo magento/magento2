@@ -12,7 +12,6 @@ use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
  * Flat sales order collection
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Collection extends AbstractCollection implements OrderSearchResultInterface
@@ -23,15 +22,11 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
     protected $_idFieldName = 'entity_id';
 
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_collection';
 
     /**
-     * Event object
-     *
      * @var string
      */
     protected $_eventObject = 'order_collection';

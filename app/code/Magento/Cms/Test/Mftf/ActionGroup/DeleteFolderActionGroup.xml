@@ -17,8 +17,8 @@
         </arguments>
 
         <click userInput="{{ImageFolder.name}}" stepKey="clickOnCreatedFolder"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
-        <see selector="{{MediaGallerySection.DeleteFolder}}" userInput="Delete Folder" stepKey="seeDeleteFolderBtn"/>
+        <waitForPageLoad stepKey="waitForLoading"/>
+        <waitForText selector="{{MediaGallerySection.DeleteFolder}}" userInput="Delete Folder" stepKey="seeDeleteFolderBtn"/>
         <click selector="{{MediaGallerySection.DeleteFolder}}" stepKey="clickDeleteFolderBtn"/>
         <waitForText userInput="OK" stepKey="waitForConfirm"/>
         <click selector="{{MediaGallerySection.confirmDelete}}" stepKey="confirmDelete"/>

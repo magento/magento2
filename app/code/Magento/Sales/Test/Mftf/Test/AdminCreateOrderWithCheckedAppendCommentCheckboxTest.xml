@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderWithCheckedAppendCommentCheckboxTest">
+        <annotations>
+            <stories value="Create Order With Checked Append Comment checkbox"/>
+            <title value="Check if checked Append Comment checkbox isn't reset after shippinhg method selecting"/>
+            <description value="Check if checked Append Comment checkbox isn't reset after shippinhg method selectiong"/>
+            <severity value="MAJOR"/>
+            <group value="sales"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="defaultSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <magentoCLI command="config:set {{enabledCheckMoneyOrder.label}} {{enabledCheckMoneyOrder.value}}" stepKey="enableCheckMoneyOrder"/>
+            <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderPage">
+            <argument name="customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProduct">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddCommentOnCreateOrderPageActionGroup" stepKey="provideComment">
+            <argument name="comment" value="Test Order Comment"/>
+        </actionGroup>
+        <seeCheckboxIsChecked selector="{{AdminOrderFormTotalSection.appendComments}}" stepKey="checkAppendCommentsCheckboxIsCheckedAfterCommentProvided"/>
+        <scrollTo selector="{{AdminOrderFormPaymentSection.header}}" stepKey="scrollUp"/>
+        <actionGroup ref="AdminSelectFlatRateShippingMethodOnCreateOrderPageActionGroup" stepKey="selectFlatRate"/>
+        <actionGroup ref="SelectCheckMoneyPaymentMethodActionGroup" stepKey="selectPaymentMethod"/>
+        <seeCheckboxIsChecked selector="{{AdminOrderFormTotalSection.appendComments}}" stepKey="checkAppendCommentsCheckboxIsCheckedAfterShippingSelected"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <actionGroup ref="AdminCheckIfCustomerIsNotifiedOfOrderCommentActionGroup" stepKey="assertCustomerIsNotified">
+            <argument name="orderComment" value="Test Order Comment"/>
+            <argument name="expectedStatus" value="Notified"/>
+        </actionGroup>
+    </test>
+</tests>

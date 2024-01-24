@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableProductWithTierPriceWithExcludingTaxTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Tiered pricing tax always shows including tax"/>
+            <title value="Store front to validate the tier price with excluding tax for configurable product"/>
+            <description value="Store front to validate the tier price with excluding tax for configurable product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-2386"/>
+            <useCaseId value="ACP2E-45"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+        <before>
+            <createData entity="productAttributeWithTwoOptionsNotVisible" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOptionOne">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOptionTwo">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOptionOne">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOptionTwo">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <createData entity="ApiSimpleOne" stepKey="createFirstSimpleProduct">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOptionOne"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createSecondSimpleProduct">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOptionTwo"/>
+            </createData>
+
+            <createData entity="tierProductPrice" stepKey="addTierPrice">
+                <requiredEntity createDataKey="createFirstSimpleProduct" />
+            </createData>
+
+            <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
+            <createData entity="SimpleTaxRule" stepKey="createTaxRule"/>
+
+            <magentoCLI command="config:set tax/calculation/based_on origin"  stepKey="setTaxCalculationBasedOn"/>
+            <magentoCLI command="config:set tax/calculation/price_includes_tax 1"  stepKey="setCatalogPrice"/>
+            <magentoCLI command="config:set tax/display/type 1" stepKey="enableShowExcludingTax"/>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogOut"/>
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="ApiConfigurableProduct"/>
+            </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
+
+            <magentoCLI command="config:set tax/calculation/based_on shipping"  stepKey="unSetTaxCalculationBasedOn"/>
+            <magentoCLI command="config:set tax/calculation/price_includes_tax 0"  stepKey="unsetCatalogPrice"/>
+            <magentoCLI command="config:set tax/display/type 0" stepKey="disableShowExcludingTax"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+
+        <!-- Create configurable product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="createConfigurableProduct">
+            <argument name="product" value="ApiConfigurableProduct"/>
+        </actionGroup>
+
+        <!-- Fill configurable product values -->
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillConfigurableProductValues">
+            <argument name="product" value="ApiConfigurableProduct"/>
+        </actionGroup>
+
+        <!-- Create product configurations and add attribute and select all options -->
+        <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="generateConfigurationsByAttributeCode">
+            <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+        </actionGroup>
+
+        <!-- Add associated products to configurations grid -->
+        <actionGroup ref="AddProductToConfigurationsGridActionGroup" stepKey="addFirstSimpleProduct">
+            <argument name="sku" value="$$createFirstSimpleProduct.sku$$"/>
+            <argument name="name" value="$$createConfigProductAttributeOptionOne.option[store_labels][1][label]$$"/>
+        </actionGroup>
+        <actionGroup ref="AddProductToConfigurationsGridActionGroup" stepKey="addSecondSimpleProduct">
+            <argument name="sku" value="$$createSecondSimpleProduct.sku$$"/>
+            <argument name="name" value="$$createConfigProductAttributeOptionTwo.option[store_labels][1][label]$$"/>
+        </actionGroup>
+
+        <!-- Save configurable product -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProduct"/>
+
+        <!--Login customer on storefront-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+            <argument name="Customer" value="$$createCustomer$$" />
+        </actionGroup>
+
+        <!-- Assert product tier price on product page -->
+        <amOnPage url="{{ApiConfigurableProduct.urlKey}}.html" stepKey="amOnProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <selectOption userInput="$$createConfigProductAttributeOptionOne.option[store_labels][1][label]$$"
+                      selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}"
+                      stepKey="selectOption"/>
+
+        <see stepKey="seeTierPriceContainsExcludingTax" selector="{{StorefrontProductInfoMainSection.tierPriceContainsExcludingTax}}" userInput="$83.14"/>
+    </test>
+</tests>

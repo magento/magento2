@@ -8,12 +8,12 @@ namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV;
 
 class ColumnResolver
 {
-    const COLUMN_COUNTRY = 'Country';
-    const COLUMN_REGION = 'Region/State';
-    const COLUMN_ZIP = 'Zip/Postal Code';
-    const COLUMN_WEIGHT = 'Weight (and above)';
-    const COLUMN_WEIGHT_DESTINATION = 'Weight (and above)';
-    const COLUMN_PRICE = 'Shipping Price';
+    public const COLUMN_COUNTRY = 'Country';
+    public const COLUMN_REGION = 'Region/State';
+    public const COLUMN_ZIP = 'Zip/Postal Code';
+    public const COLUMN_WEIGHT = 'Weight (and above)';
+    public const COLUMN_WEIGHT_DESTINATION = 'Weight (and above)';
+    public const COLUMN_PRICE = 'Shipping Price';
 
     /**
      * @var array
@@ -22,7 +22,7 @@ class ColumnResolver
         self::COLUMN_COUNTRY => 0,
         self::COLUMN_REGION => 1,
         self::COLUMN_ZIP => 2,
-        self::COLUMN_WEIGHT => 3,
+        self::COLUMN_WEIGHT => 3, // @phpstan-ignore-line
         self::COLUMN_WEIGHT_DESTINATION => 3,
         self::COLUMN_PRICE => 4,
     ];
@@ -44,6 +44,8 @@ class ColumnResolver
     }
 
     /**
+     * Method to get column value.
+     *
      * @param string $column
      * @param array $values
      * @return string|int|float|null
@@ -65,6 +67,6 @@ class ColumnResolver
             throw new ColumnNotFoundException(__('Column "%1" not found', $column));
         }
 
-        return  trim($values[$columnIndex]);
+        return  trim($values[$columnIndex] ?? '');
     }
 }

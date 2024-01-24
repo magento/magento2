@@ -21,7 +21,8 @@
             <group value="ConfigurableProduct"/>
             <skip>
                 <issueId value="DEPRECATED">Use AdminCheckProductQtyAfterOrderCancellingTest instead</issueId>
-            </skip> 
+            </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -44,10 +45,12 @@
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
             <argument name="product" value="$$createConfigProduct$$"/>
         </actionGroup>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="changeProductQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="changeProductQuantity">
+            <argument name="productQty" value="100"/>
+        </actionGroup>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveChanges"/>
 
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="navigateToProductPage"/>
+        <amOnPage url="$$createConfigProduct.custom_attributes[url_key]$$.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
         <fillField selector="{{StorefrontProductInfoMainSection.qty}}" userInput="4" stepKey="fillQuantity"/>
 

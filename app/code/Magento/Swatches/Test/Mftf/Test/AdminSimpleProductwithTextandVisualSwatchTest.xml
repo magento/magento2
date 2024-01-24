@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSimpleProductwithTextandVisualSwatchTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Create simple product and configure visual and text swatches"/>
+            <title value="Admin can create simple product with text and visual swatches"/>
+            <description value="Admin can create simple product with text and visual swatches"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5727"/>
+        </annotations>
+        <before>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create text and visual swatch attribute-->
+            <actionGroup ref="AddTextSwatchToProductWithTwoOptionsActionGroup" stepKey="createTextSwatch"/>
+            <actionGroup ref="AddVisualSwatchActionGroup" stepKey="createVisualSwatch"/>
+            <!--Assign text swatch attribute to the Default set-->
+            <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
+            <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet"/>
+            <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
+                <argument name="group" value="Product Details"/>
+                <argument name="attribute" value="{{textSwatchAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
+            <!--Assign visual swatch attribute to the Default set-->
+            <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage1"/>
+            <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet1"/>
+            <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup1">
+                <argument name="group" value="Product Details"/>
+                <argument name="attribute" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+            <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet1"/>
+            <!--Create category -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <!--Create product and fill new text swatch attribute field-->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <waitForPageLoad stepKey="waitForProductIndexPage"/>
+            <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+                <argument name="product" value="SimpleProduct"/>
+            </actionGroup>
+            <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillProductForm">
+                <argument name="product" value="SimpleProduct"/>
+            </actionGroup>
+            <!-- Add text swatch product to category -->
+            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}"
+                                        parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
+            <click selector="{{AdminProductFormSection.saveCategory}}" stepKey="saveCategory"/>
+            <scrollToTopOfPage stepKey="scrollToTop0"/>
+            <selectOption
+                selector="{{AdminProductFormSection.attributeRequiredInputField(textSwatchAttribute.attribute_code)}}"
+                userInput="textSwatchOption1" stepKey="fillTheAttributeRequiredInputField"/>
+            <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <!-- Create product and fill new visual swatch attribute field-->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex1"/>
+            <waitForPageLoad stepKey="waitForProductIndexPage1"/>
+            <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct1">
+                <argument name="product" value="SimpleProduct"/>
+            </actionGroup>
+            <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillProductForm1">
+                <argument name="product" value="DownloadableProduct"/>
+            </actionGroup>
+            <!-- Add visual swatch product to category -->
+            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}"
+                                        parameterArray="[$$createCategory.name$$]" stepKey="fillCategory1"/>
+            <click selector="{{AdminProductFormSection.saveCategory}}" stepKey="saveCategory1"/>
+            <scrollToTopOfPage stepKey="scrollToTop1"/>
+            <selectOption
+                selector="{{AdminProductFormSection.attributeRequiredInputField(ProductAttributeFrontendLabel.label)}}"
+                userInput="visualSwatchOption2" stepKey="fillTheAttributeRequiredInputField1"/>
+            <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton1"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex1">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete text and visual swatch attributes -->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup"
+                         stepKey="openProductAttributeFromSearchResultInGrid0">
+                <argument name="productAttributeCode" value="{{textSwatchAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup"
+                         stepKey="deleteProductAttributeByAttributeCode0">
+                <argument name="productAttributeCode" value="{{textSwatchAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup"
+                         stepKey="deleteProductAttributeSuccess0"/>
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup"
+                         stepKey="openProductAttributeFromSearchResultInGrid1">
+                <argument name="productAttributeCode" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup"
+                         stepKey="deleteProductAttributeByAttributeCode1">
+                <argument name="productAttributeCode" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+            <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup"
+                         stepKey="deleteProductAttributeSuccess1"/>
+            <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttributeGrid"/>
+            <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Delete product -->
+            <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="goToProductCatalog"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteProduct"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetFiltersIfExist"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex2">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Assert that attribute values present in layered navigation -->
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="amOnCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <click selector="{{StorefrontCategorySidebarSection.seeLayeredNavigationCategoryTextSwatch}}"
+               stepKey="clickTextSwatch"/>
+        <click selector="{{StorefrontCategorySidebarSection.seeTextSwatchOption}}" stepKey="seeTextSwatch"/>
+        <see userInput="{{SimpleProduct.name}}" stepKey="assertTextSwatchProduct"/>
+        <!--Assert that attribute values present in layered navigation -->
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="amOnCategoryPage1"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad1"/>
+        <click selector="{{StorefrontCategorySidebarSection.seeLayeredNavigationCategoryVisualSwatch}}"
+               stepKey="clickVisualSwatch"/>
+        <click selector="{{StorefrontCategorySidebarSection.seeVisualSwatchOption}}" stepKey="seeVisualSwatch"/>
+        <see userInput="{{DownloadableProduct.name}}" stepKey="assertVisualSwatchProduct"/>
+        <!--Verfiy the text swatch attribute product appears in search option  with option one  -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForOptionOne">
+            <argument name="phrase" value="textSwatchOption1"/>
+        </actionGroup>
+        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{SimpleProduct.name}}"
+             stepKey="seeTextSwatchAttributeProductName"/>
+        <!--Verfiy the text swatch attribute product does not appears in search option with option two   -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage1"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForOptionTwo">
+            <argument name="phrase" value="textSwatchOption2"/>
+        </actionGroup>
+        <dontSee selector="{{StorefrontCatalogSearchMainSection.searchResults}}" userInput="{{SimpleProduct.name}}"
+                 stepKey="doNotSeeProduct"/>
+        <!--Verfiy the visual swatch attribute product appears in search option with option two   -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage2"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForOptionTwo1">
+            <argument name="phrase" value="visualSwatchOption2"/>
+        </actionGroup>
+        <waitForText selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{DownloadableProduct.name}}"
+                     stepKey="seeVisualSwatchAttributeProductName"/>
+        <!--Verfiy the visual swatch attribute product does not appear in search option with option one   -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage3"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForOptionOne1">
+            <argument name="phrase" value="visualSwatchOption1"/>
+        </actionGroup>
+        <dontSee selector="{{StorefrontCatalogSearchMainSection.searchResults}}"
+                 userInput="{{DownloadableProduct.name}}" stepKey="doNotSeeProduct1"/>
+    </test>
+</tests>

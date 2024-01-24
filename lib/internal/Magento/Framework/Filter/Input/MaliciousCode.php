@@ -1,21 +1,36 @@
 <?php
 /**
- * Filter for removing malicious code from HTML
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Filter\Input;
 
-class MaliciousCode implements \Zend_Filter_Interface
+use Laminas\Filter\FilterInterface;
+use Magento\Framework\App\ObjectManager;
+
+class MaliciousCode implements FilterInterface
 {
+    /**
+     * @var PurifierInterface|null $purifier
+     */
+    private PurifierInterface $purifier;
+
+    /**
+     * @param PurifierInterface|null $purifier
+     */
+    public function __construct(?PurifierInterface $purifier = null)
+    {
+        $this->purifier =  $purifier ?? ObjectManager::getInstance()->get(PurifierInterface::class);
+    }
+
     /**
      * Regular expressions for cutting malicious code
      *
      * @var string[]
      */
-    protected $_expressions = [
+    protected array $_expressions = [
         //comments, must be first
         '/(\/\*.*\*\/)/Us',
         //tabs
@@ -27,10 +42,12 @@ class MaliciousCode implements \Zend_Filter_Interface
         //js in the style attribute
         '/style=[^<]*((expression\s*?\([^<]*?\))|(behavior\s*:))[^<]*(?=\/*\>)/Uis',
         //js attributes
-        '/(ondblclick|onclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|'.
+        '/(ondblclick|onclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|' .
         'onload|onunload|onerror)=[^<]*(?=\/*\>)/Uis',
         //tags
         '/<\/?(script|meta|link|frame|iframe|object).*>/Uis',
+        //scripts
+        '/<\?\s*?(php|=).*>/Uis',
         //base64 usage
         '/src=[^<]*base64[^<]*(?=\/*\>)/Uis',
     ];
@@ -39,15 +56,16 @@ class MaliciousCode implements \Zend_Filter_Interface
      * Filter value
      *
      * @param string|array $value
-     * @return string|array Filtered value
+     * @return string|array
      */
     public function filter($value)
     {
         $replaced = 0;
         do {
-            $value = preg_replace($this->_expressions, '', $value, -1, $replaced);
+            $value = preg_replace($this->_expressions, '', $value ?? '', -1, $replaced);
         } while ($replaced !== 0);
-        return  $value;
+
+        return $this->purifier->purify($value);
     }
 
     /**
@@ -56,7 +74,7 @@ class MaliciousCode implements \Zend_Filter_Interface
      * @param string $expression
      * @return $this
      */
-    public function addExpression($expression)
+    public function addExpression(string $expression) :self
     {
         if (!in_array($expression, $this->_expressions)) {
             $this->_expressions[] = $expression;
@@ -70,7 +88,7 @@ class MaliciousCode implements \Zend_Filter_Interface
      * @param array $expressions
      * @return $this
      */
-    public function setExpressions(array $expressions)
+    public function setExpressions(array $expressions) :self
     {
         $this->_expressions = $expressions;
         return $this;

@@ -397,7 +397,7 @@ class CopyTest extends TestCase
         $targetMock
             ->expects($this->any())
             ->method('getExtensionAttributes')
-            ->willReturn(null);
+            ->willReturnSelf();
 
         $this->eventManagerMock->expects($this->once())->method('dispatch');
         $result = $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $sourceMock, $targetMock);

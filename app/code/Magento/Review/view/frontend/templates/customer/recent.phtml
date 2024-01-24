@@ -6,15 +6,16 @@
 
 /**
  * @var \Magento\Review\Block\Customer\Recent $block
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
 <?php if ($block->getReviews() && count($block->getReviews())): ?>
 <div class="block block-reviews-dashboard">
     <div class="block-title">
-        <strong><?= $block->escapeHtml(__('My Recent Reviews')) ?></strong>
-        <a class="action view" href="<?= $block->escapeUrl($block->getAllReviewsUrl()) ?>">
-            <span><?= $block->escapeHtml(__('View All')) ?></span>
+        <strong><?= $escaper->escapeHtml(__('My Recent Reviews')) ?></strong>
+        <a class="action view" href="<?= $escaper->escapeUrl($block->getAllReviewsUrl()) ?>">
+            <span><?= $escaper->escapeHtml(__('View All')) ?></span>
         </a>
     </div>
     <div class="block-content">
@@ -22,22 +23,22 @@
         <?php foreach ($block->getReviews() as $_review): ?>
             <li class="item">
                 <strong class="product-name">
-                    <a href="<?= $block->escapeUrl($block->getReviewUrl($_review->getReviewId())) ?>">
-                        <?= $block->escapeHtml($_review->getName()) ?>
+                    <a href="<?= $escaper->escapeUrl($block->getReviewUrl($_review->getReviewId())) ?>">
+                        <?= $escaper->escapeHtml($_review->getName()) ?>
                     </a>
                 </strong>
                 <?php if ($_review->getSum()): ?>
                     <?php $rating = $_review->getSum() / $_review->getCount() ?>
                     <div class="rating-summary">
-                         <span class="label"><span><?= $block->escapeHtml(__('Rating')) ?>:</span></span>
-                         <div class="rating-result" title="<?= $block->escapeHtmlAttr($rating) ?>%">
-                             <span>
-                                 <span><?= $block->escapeHtml($rating) ?>%</span>
+                         <span class="label"><span><?= $escaper->escapeHtml(__('Rating')) ?>:</span></span>
+                         <div class="rating-result" title="<?= $escaper->escapeHtmlAttr($rating) ?>%">
+                             <span class="rating_<?= $escaper->escapeUrl($_review->getReviewId())?>">
+                                 <span><?= $escaper->escapeHtml($rating) ?>%</span>
                              </span>
                          </div>
                         <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-                            "width:". $block->escapeHtmlAttr($rating) . "%",
-                            'div.rating-result>span:first-child'
+                            "width:". $escaper->escapeHtmlAttr($rating) . "%",
+                            'div.rating-result>span.rating_' . $escaper->escapeUrl($_review->getReviewId())
                         ) ?>
                      </div>
                 <?php endif; ?>

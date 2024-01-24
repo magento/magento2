@@ -87,7 +87,7 @@ class Image
      */
     public function beforeOpen(AbstractAdapter $subject, $filename): array
     {
-        if ($this->isEnabled) {
+        if ($this->isEnabled && !empty($filename)) {
             $filename = $this->copyFileToTmp($filename);
         }
         return [$filename];
@@ -167,8 +167,9 @@ class Image
     public function __destruct()
     {
         try {
-            foreach ($this->tmpFiles as $tmpFile) {
+            foreach ($this->tmpFiles as $key => $tmpFile) {
                 $this->tmpDirectoryWrite->delete($tmpFile);
+                unset($this->tmpFiles[$key]);
             }
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
@@ -192,7 +193,7 @@ class Image
             $this->tmpDirectoryWrite->create();
             $tmpPath = $this->storeTmpName($filePath);
             $content = $this->remoteDirectoryWrite->getDriver()->fileGetContents($filePath);
-            $filePath = $this->tmpDirectoryWrite->getDriver()->filePutContents($tmpPath, $content)
+            $filePath = $this->tmpDirectoryWrite->getDriver()->filePutContents($tmpPath, $content) >= 0
                 ? $tmpPath
                 : $filePath;
         }

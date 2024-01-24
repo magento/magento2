@@ -7,15 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Exception;
 
+use GraphQL\Error\ClientAware;
+use GraphQL\Error\ProvidesExtensions;
 use Magento\Framework\Phrase;
 use Magento\Framework\Exception\AuthorizationException;
 
 /**
  * Exception for GraphQL to be thrown when authorization fails
+ *
+ * @api
  */
-class GraphQlAuthorizationException extends AuthorizationException implements \GraphQL\Error\ClientAware
+class GraphQlAuthorizationException extends AuthorizationException implements ClientAware, ProvidesExtensions
 {
-    const EXCEPTION_CATEGORY = 'graphql-authorization';
+    public const EXCEPTION_CATEGORY = 'graphql-authorization';
 
     /**
      * @var boolean
@@ -50,5 +54,16 @@ class GraphQlAuthorizationException extends AuthorizationException implements \G
     public function getCategory() : string
     {
         return self::EXCEPTION_CATEGORY;
+    }
+
+    /**
+     * Get error category
+     *
+     * @return array
+     */
+    public function getExtensions(): array
+    {
+        $exceptionCategory['category'] = $this->getCategory();
+        return $exceptionCategory;
     }
 }

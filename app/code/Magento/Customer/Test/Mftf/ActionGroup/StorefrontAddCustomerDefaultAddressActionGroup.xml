@@ -27,6 +27,7 @@
         <fillField  stepKey="fillZip" userInput="{{Address.postcode}}" selector="{{StorefrontCustomerAddressFormSection.zip}}"/>
         <selectOption  stepKey="selectCountry" userInput="{{Address.country}}" selector="{{StorefrontCustomerAddressFormSection.country}}"/>
         <click stepKey="checkUseAsDefaultBillingAddressCheckBox" selector="{{StorefrontCustomerAddressFormSection.useAsDefaultBillingAddressCheckBox}}"/>
+        <scrollTo selector="{{StorefrontCustomerAddressFormSection.useAsDefaultShippingAddressCheckBox}}" stepKey="scrollToUseAsDefaultShippingAddressCheckbox"/>
         <click stepKey="checkUseAsDefaultShippingAddressCheckBox" selector="{{StorefrontCustomerAddressFormSection.useAsDefaultShippingAddressCheckBox}}"/>
         <click stepKey="saveCustomerAddress" selector="{{StorefrontCustomerAddressFormSection.saveAddress}}"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>

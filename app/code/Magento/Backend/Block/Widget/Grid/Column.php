@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Block\Widget\Grid;
 
 use Magento\Backend\Block\Widget;
@@ -46,7 +47,7 @@ class Column extends Widget
     protected $_cssClass = null;
 
     /**
-     * Renderer types
+     * The renderer types
      *
      * @var array
      */
@@ -74,7 +75,7 @@ class Column extends Widget
     ];
 
     /**
-     * Filter types
+     * The filter types
      *
      * @var array
      */
@@ -103,6 +104,8 @@ class Column extends Widget
     protected $_isGrouped = false;
 
     /**
+     * Set property is grouped.
+     *
      * @return void
      */
     public function _construct()
@@ -169,7 +172,8 @@ class Column extends Widget
     }
 
     /**
-     * Get Header html
+     * This method get Header html.
+     *
      * @return string
      */
     public function getHeaderHtml()
@@ -222,7 +226,8 @@ class Column extends Widget
     }
 
     /**
-     * Get header css class name
+     * Get header css class name.
+     *
      * @return string
      */
     public function getHeaderCssClass()
@@ -234,6 +239,8 @@ class Column extends Widget
     }
 
     /**
+     * This method check if is sortable.
+     *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
@@ -256,6 +263,7 @@ class Column extends Widget
 
     /**
      * Get header class names
+     *
      * @return string
      */
     public function getHeaderHtmlProperty()
@@ -291,6 +299,7 @@ class Column extends Widget
         $frameCallback = $this->getFrameCallback();
         if (is_array($frameCallback)) {
             $this->validateFrameCallback($frameCallback);
+            //phpcs:ignore Magento2.Functions.DiscouragedFunction
             $renderedValue = call_user_func($frameCallback, $renderedValue, $row, $this, false);
         }
 
@@ -334,6 +343,7 @@ class Column extends Widget
         $frameCallback = $this->getFrameCallback();
         if (is_array($frameCallback)) {
             $this->validateFrameCallback($frameCallback);
+            //phpcs:ignore Magento2.Functions.DiscouragedFunction
             $renderedValue = call_user_func($frameCallback, $renderedValue, $row, $this, true);
         }
 
@@ -412,12 +422,8 @@ class Column extends Widget
      */
     protected function _getRendererByType()
     {
-        $type = strtolower($this->getType());
-        $rendererClass = isset(
-            $this->_rendererTypes[$type]
-        ) ? $this->_rendererTypes[$type] : $this->_rendererTypes['default'];
-
-        return $rendererClass;
+        $type = strtolower((string) $this->getType());
+        return $this->_rendererTypes[$type] ?? $this->_rendererTypes['default'];
     }
 
     /**
@@ -469,10 +475,8 @@ class Column extends Widget
      */
     protected function _getFilterByType()
     {
-        $type = $this->getFilterType() ? strtolower($this->getFilterType()) : strtolower($this->getType());
-        $filterClass = isset($this->_filterTypes[$type]) ? $this->_filterTypes[$type] : $this->_filterTypes['default'];
-
-        return $filterClass;
+        $type = $this->getFilterType() ? strtolower($this->getFilterType()) : strtolower((string) $this->getType());
+        return $this->_filterTypes[$type] ?? $this->_filterTypes['default'];
     }
 
     /**

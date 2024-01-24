@@ -127,7 +127,7 @@ class CategoryTest extends TestCase
             $categoryModel->getImage(),
             'The path of the expected image does not match the path to the actual image.'
         );
-        $this->assertFileExists($this->mediaDirectory->getAbsolutePath($imageRelativePath));
+        $this->assertTrue($this->mediaDirectory->isExist($imageRelativePath));
     }
 
     /**

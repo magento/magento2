@@ -64,7 +64,7 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
 
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goProductPageOnStorefront">
-            <argument name="productUrl" value="$$createSimpleProduct.sku$$"/>
+            <argument name="productUrl" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad1"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('99.90')}}" stepKey="assertProductFinalPriceProductPage"/>

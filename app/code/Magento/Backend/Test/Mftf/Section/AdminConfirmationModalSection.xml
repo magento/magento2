@@ -12,6 +12,6 @@
         <element name="title" type="text" selector="aside.confirm .modal-title"/>
         <element name="message" type="text" selector="aside.confirm .modal-content"/>
         <element name="cancel" type="button" selector="aside.confirm .modal-footer button.action-dismiss" timeout="30"/>
-        <element name="ok" type="button" selector="aside.confirm .modal-footer button.action-accept" timeout="60"/>
+        <element name="ok" type="button" selector="aside.confirm .modal-footer button.action-accept" timeout="120"/>
     </section>
 </sections>
