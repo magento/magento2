@@ -60,11 +60,11 @@ class CustomerWishlistResolverTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->onlyMethods(['getExtensionAttributes', 'getUserId'])
+            ->addMethods(['getExtensionAttributes', 'getUserId'])
             ->getMockForAbstractClass();
 
         $this->extensionAttributesMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->onlyMethods(['getStore', 'setStore', 'getIsCustomer', 'setIsCustomer'])
+            ->addMethods(['getStore', 'setStore', 'getIsCustomer', 'setIsCustomer'])
             ->getMockForAbstractClass();
 
         $this->contextMock->method('getExtensionAttributes')
@@ -77,7 +77,8 @@ class CustomerWishlistResolverTest extends TestCase
 
         $this->wishlistMock = $this->getMockBuilder(Wishlist::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['loadByCustomerId', 'getId', 'getSharingCode', 'getUpdatedAt', 'getItemsCount'])
+            ->addMethods(['getSharingCode', 'getUpdatedAt'])
+            ->onlyMethods(['loadByCustomerId', 'getId', 'getItemsCount'])
             ->getMock();
 
         $this->wishlistConfigMock = $this->createMock(Config::class);
