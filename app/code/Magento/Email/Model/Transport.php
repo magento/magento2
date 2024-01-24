@@ -172,12 +172,25 @@ class Transport implements TransportInterface
     {
         try {
             $laminasMessage = Message::fromString($this->message->getRawMessage())->setEncoding('utf-8');
+            $fromAddressList = $laminasMessage->getFrom();
             if (2 === $this->isSetReturnPath && $this->returnPathValue) {
                 $laminasMessage->setSender($this->returnPathValue);
-            } elseif (1 === $this->isSetReturnPath && $laminasMessage->getFrom()->count()) {
-                $fromAddressList = $laminasMessage->getFrom();
+            } elseif (1 === $this->isSetReturnPath && $fromAddressList->count()) {
                 $fromAddressList->rewind();
                 $laminasMessage->setSender($fromAddressList->current()->getEmail());
+            } elseif ($fromAddressList->current()) {
+                // Remove directory separators and sendmail params
+                $sender = trim(str_replace(
+                    [
+                        '/',
+                        '-C',
+                        '<',
+                        '>'
+                    ],
+                    '',
+                    ltrim($fromAddressList->current()->getEmail(), '.')
+                ));
+                $laminasMessage->setSender($sender);
             }
 
             $this->getTransport()->send($laminasMessage);
