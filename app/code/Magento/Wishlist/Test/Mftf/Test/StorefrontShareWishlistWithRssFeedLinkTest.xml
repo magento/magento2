@@ -23,7 +23,9 @@
                         stepKey="enableRssConfig"/>
             <magentoCLI command="config:set {{EnableWishlistRssConfig.path}} {{EnableWishlistRssConfig.value}}"
                         stepKey="enableWishlistRssConfig"/>
-            <magentoCLI command="cache:clean config full_page block_html" stepKey="cleanCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page block_html"/>
+            </actionGroup>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>

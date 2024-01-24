@@ -80,7 +80,8 @@ class CouponUsageConsumer
             $data = $this->serializer->unserialize($serializedData);
             $updateInfo = $this->updateInfoFactory->create();
             $updateInfo->setData($data);
-            $this->processor->process($updateInfo);
+            $this->processor->updateCouponUsages($updateInfo);
+            $this->processor->updateRuleUsages($updateInfo);
         } catch (NotFoundException $e) {
             $this->logger->critical($e->getMessage());
             $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;

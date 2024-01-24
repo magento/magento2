@@ -91,10 +91,9 @@ class ShippingDiscountTest extends TestCase
                     'setBaseShippingDiscountAmount',
                     'getDiscountDescription',
                     'setDiscountAmount',
-                    'setBaseDiscountAmount'
                 ]
             )
-            ->onlyMethods(['getQuote'])
+            ->onlyMethods(['getQuote', 'setBaseDiscountAmount'])
             ->disableOriginalConstructor()
             ->getMock();
 

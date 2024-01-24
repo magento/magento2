@@ -10,10 +10,8 @@ namespace Magento\GraphQl\Customer\Attribute;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Test\Fixture\CustomerAttribute;
-use Magento\EavGraphQl\Model\Uid;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -25,7 +23,6 @@ class BooleanTest extends GraphQlAbstract
 {
   customAttributeMetadataV2(attributes: [{attribute_code: "%s", entity_type: "%s"}]) {
     items {
-      uid
       code
       label
       entity_type
@@ -34,7 +31,6 @@ class BooleanTest extends GraphQlAbstract
       default_value
       is_unique
       options {
-        uid
         label
         value
       }
@@ -63,11 +59,6 @@ QRY;
         /** @var AttributeMetadataInterface $attribute */
         $attribute = DataFixtureStorageManager::getStorage()->get('attribute');
 
-        $uid = Bootstrap::getObjectManager()->get(Uid::class)->encode(
-            'customer',
-            $attribute->getAttributeCode()
-        );
-
         $result = $this->graphQlQuery(sprintf(self::QUERY, $attribute->getAttributeCode(), 'customer'));
 
         $this->assertEquals(
@@ -75,7 +66,6 @@ QRY;
                 'customAttributeMetadataV2' => [
                     'items' => [
                         [
-                            'uid' => $uid,
                             'code' => $attribute->getAttributeCode(),
                             'label' => $attribute->getFrontendLabel(),
                             'entity_type' => 'CUSTOMER',
@@ -85,12 +75,10 @@ QRY;
                             'is_unique' => false,
                             'options' => [
                                 [
-                                    'uid' => 'MQ==',
                                     'label' => 'Yes',
                                     'value' => '1'
                                 ],
                                 [
-                                    'uid' => 'MA==',
                                     'label' => 'No',
                                     'value' => '0'
                                 ]

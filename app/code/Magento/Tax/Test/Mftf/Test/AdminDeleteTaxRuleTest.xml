@@ -27,6 +27,7 @@
         </before>
         <after>
             <deleteData stepKey="deleteSimpleProduct" createDataKey="simpleProduct" />
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData stepKey="deleteCustomer" createDataKey="customer" />
         </after>
 

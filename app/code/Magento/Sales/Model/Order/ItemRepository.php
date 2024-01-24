@@ -13,6 +13,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\OrderItemSearchResultInterfaceFactory;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
@@ -23,7 +24,7 @@ use Magento\Sales\Model\ResourceModel\Metadata;
  * Repository class for @see OrderItemInterface
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ItemRepository implements OrderItemRepositoryInterface
+class ItemRepository implements OrderItemRepositoryInterface, ResetAfterRequestInterface
 {
     /**
      * @var DataObjectFactory
@@ -82,6 +83,14 @@ class ItemRepository implements OrderItemRepositoryInterface
         $this->collectionProcessor = $collectionProcessor;
         $this->productOption = $productOption;
         $this->processorPool = $processorPool;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->registry = [];
     }
 
     /**

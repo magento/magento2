@@ -191,7 +191,7 @@
             }
             this.selectAddressEvent = false;
 
-            var data = this.serializeData(container);
+            let data = this.serializeData(container).toObject();
             data[el.name] = id;
 
             this.resetPaymentMethod();

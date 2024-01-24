@@ -17,64 +17,69 @@ use Magento\Sales\Setup\SalesSetup;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\Catalog\Test\Fixture\Attribute as ProductAttribute;
+use Magento\Customer\Test\Fixture\CustomerAttribute;
 
 /**
  * Test EAV attributes metadata retrieval for entity type via GraphQL API
  */
 #[
     DataFixture(
-        Attribute::class,
+        CustomerAttribute::class,
         [
             'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
             'frontend_input' => 'boolean',
             'source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'
         ],
-        'customerAttribute0'
+        'customer_attribute_0'
     ),
     DataFixture(
-        Attribute::class,
+        CustomerAttribute::class,
         [
             'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
             'frontend_input' => 'boolean',
             'source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'
         ],
-        'customerAttribute1'
+        'customer_attribute_1'
     ),
     DataFixture(
-        Attribute::class,
+        CustomerAttribute::class,
         [
             'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
             'frontend_input' => 'boolean',
             'source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'
         ],
-        'customerAttribute2'
+        'customer_attribute_2'
     ),
     DataFixture(
-        Attribute::class,
+        CustomerAttribute::class,
         [
             'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
             'frontend_input' => 'boolean',
             'source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'
         ],
-        'customerAttribute3'
+        'customer_attribute_3'
     ),
     DataFixture(
-        Attribute::class,
+        ProductAttribute::class,
         [
             'entity_type_id' => CategorySetup::CATALOG_PRODUCT_ENTITY_TYPE_ID,
             'frontend_input' => 'boolean',
-            'source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'
+            'source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean',
+            'is_visible_on_front' => 1,
         ],
-        'catalogAttribute3'
+        'catalog_attribute_3'
     ),
     DataFixture(
-        Attribute::class,
+        ProductAttribute::class,
         [
             'entity_type_id' => CategorySetup::CATALOG_PRODUCT_ENTITY_TYPE_ID,
             'frontend_input' => 'boolean',
-            'source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'
+            'source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean',
+            'is_visible_on_front' => 1,
+            'is_comparable' => 1
         ],
-        'catalogAttribute4'
+        'catalog_attribute_4'
     ),
     DataFixture(
         Attribute::class,
@@ -83,33 +88,71 @@ use Magento\TestFramework\Fixture\DataFixtureStorageManager;
             'frontend_input' => 'boolean',
             'source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'
         ],
-        'creditmemoAttribute5'
+        'credit_memo_attribute_5'
     )
 ]
 class AttributesListTest extends GraphQlAbstract
 {
     private const ATTRIBUTE_NOT_FOUND_ERROR = "Attribute was not found in query result";
 
+    /**
+     * @var AttributeInterface|null
+     */
+    private $creditmemoAttribute5;
+
+    /**
+     * @var AttributeInterface|null
+     */
+    private $customerAttribute0;
+
+    /**
+     * @var AttributeInterface|null
+     */
+    private $customerAttribute1;
+
+    /**
+     * @var AttributeInterface|null
+     */
+    private $customerAttribute2;
+
+    /**
+     * @var AttributeInterface|null
+     */
+    private $customerAttribute3;
+
+    /**
+     * @var AttributeInterface|null
+     */
+    private $catalogAttribute3;
+
+    /**
+     * @var AttributeInterface|null
+     */
+    private $catalogAttribute4;
+
+    /**
+     * @inheridoc
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->creditmemoAttribute5 = DataFixtureStorageManager::getStorage()->get('credit_memo_attribute_5');
+        $this->customerAttribute0 = DataFixtureStorageManager::getStorage()->get('customer_attribute_0');
+        $this->customerAttribute1 = DataFixtureStorageManager::getStorage()->get('customer_attribute_1');
+        $this->customerAttribute2 = DataFixtureStorageManager::getStorage()->get('customer_attribute_2');
+        $this->customerAttribute3 = DataFixtureStorageManager::getStorage()->get('customer_attribute_3');
+        $this->customerAttribute3->setIsVisible(false)->save();
+        $this->catalogAttribute3 = DataFixtureStorageManager::getStorage()->get('catalog_attribute_3');
+        $this->catalogAttribute4 = DataFixtureStorageManager::getStorage()->get('catalog_attribute_4');
+    }
+
     public function testAttributesListForCustomerEntityType(): void
     {
-        /** @var AttributeInterface $attribute */
-        $creditmemoAttribute5 = DataFixtureStorageManager::getStorage()->get('creditmemoAttribute5');
-
-        /** @var AttributeInterface $attribute */
-        $customerAttribute0 = DataFixtureStorageManager::getStorage()->get('customerAttribute0');
-        /** @var AttributeInterface $attribute */
-        $customerAttribute1 = DataFixtureStorageManager::getStorage()->get('customerAttribute1');
-        /** @var AttributeInterface $attribute */
-        $customerAttribute2 = DataFixtureStorageManager::getStorage()->get('customerAttribute2');
-        /** @var AttributeInterface $attribute */
-        $customerAttribute3 = DataFixtureStorageManager::getStorage()->get('customerAttribute3');
-        $customerAttribute3->setIsVisible(false)->save();
-
         $queryResult = $this->graphQlQuery(<<<QRY
         {
             attributesList(entityType: CUSTOMER) {
                 items {
-                    uid
                     code
                 }
                 errors {
@@ -119,49 +162,8 @@ class AttributesListTest extends GraphQlAbstract
             }
         }
 QRY);
-
-        $this->assertArrayHasKey('items', $queryResult['attributesList'], 'Query result does not contain items');
-        $this->assertGreaterThanOrEqual(3, count($queryResult['attributesList']['items']));
-
-        $this->assertEquals(
-            $customerAttribute0->getAttributeCode(),
-            $this->getAttributeByCode(
-                $queryResult['attributesList']['items'],
-                $customerAttribute0->getAttributeCode()
-            )['code'],
-            self::ATTRIBUTE_NOT_FOUND_ERROR
-        );
-
-        $this->assertEquals(
-            $customerAttribute1->getAttributeCode(),
-            $this->getAttributeByCode(
-                $queryResult['attributesList']['items'],
-                $customerAttribute1->getAttributeCode()
-            )['code'],
-            self::ATTRIBUTE_NOT_FOUND_ERROR
-        );
-        $this->assertEquals(
-            $customerAttribute2->getAttributeCode(),
-            $this->getAttributeByCode(
-                $queryResult['attributesList']['items'],
-                $customerAttribute2->getAttributeCode()
-            )['code'],
-            self::ATTRIBUTE_NOT_FOUND_ERROR
-        );
-        $this->assertEquals(
-            [],
-            $this->getAttributeByCode(
-                $queryResult['attributesList']['items'],
-                $customerAttribute3->getAttributeCode()
-            )
-        );
-        $this->assertEquals(
-            [],
-            $this->getAttributeByCode(
-                $queryResult['attributesList']['items'],
-                $creditmemoAttribute5->getAttributeCode()
-            )
-        );
+        $this->assertCustomerResults($queryResult);
+        $this->assertEmpty(count($queryResult['attributesList']['errors']));
     }
 
     public function testAttributesListForCatalogProductEntityType(): void
@@ -170,7 +172,6 @@ QRY);
         {
             attributesList(entityType: CATALOG_PRODUCT) {
                 items {
-                    uid
                     code
                 }
                 errors {
@@ -183,27 +184,19 @@ QRY);
         $this->assertArrayHasKey('items', $queryResult['attributesList'], 'Query result does not contain items');
         $this->assertGreaterThanOrEqual(2, count($queryResult['attributesList']['items']));
 
-        /** @var AttributeInterface $attribute */
-        $creditmemoAttribute5 = DataFixtureStorageManager::getStorage()->get('creditmemoAttribute5');
-
-        /** @var AttributeInterface $attribute */
-        $catalogAttribute3 = DataFixtureStorageManager::getStorage()->get('catalogAttribute3');
-        /** @var AttributeInterface $attribute */
-        $catalogAttribute4 = DataFixtureStorageManager::getStorage()->get('catalogAttribute4');
-
         $this->assertEquals(
-            $catalogAttribute3->getAttributeCode(),
+            $this->catalogAttribute3->getAttributeCode(),
             $this->getAttributeByCode(
                 $queryResult['attributesList']['items'],
-                $catalogAttribute3->getAttributeCode()
+                $this->catalogAttribute3->getAttributeCode()
             )['code'],
             self::ATTRIBUTE_NOT_FOUND_ERROR
         );
         $this->assertEquals(
-            $catalogAttribute4->getAttributeCode(),
+            $this->catalogAttribute4->getAttributeCode(),
             $this->getAttributeByCode(
                 $queryResult['attributesList']['items'],
-                $catalogAttribute4->getAttributeCode()
+                $this->catalogAttribute4->getAttributeCode()
             )['code'],
             self::ATTRIBUTE_NOT_FOUND_ERROR
         );
@@ -211,8 +204,72 @@ QRY);
             [],
             $this->getAttributeByCode(
                 $queryResult['attributesList']['items'],
-                $creditmemoAttribute5->getAttributeCode()
+                $this->creditmemoAttribute5->getAttributeCode()
             )
+        );
+    }
+
+    public function testAttributesListFilterForCatalogProductEntityType(): void
+    {
+        $queryResult = $this->graphQlQuery(<<<QRY
+        {
+            attributesList(entityType: CATALOG_PRODUCT, filters: {is_visible_on_front: true, is_comparable: true}) {
+                items {
+                    code
+                    ... on CatalogAttributeMetadata {
+                        is_comparable
+                        is_visible_on_front
+                    }
+                }
+                errors {
+                    type
+                    message
+                }
+            }
+        }
+QRY);
+        $this->assertArrayHasKey('items', $queryResult['attributesList'], 'Query result does not contain items');
+        $this->assertEquals(
+            [
+                'attributesList' => [
+                    'items' => [
+                        0  => [
+                            'code' => $this->catalogAttribute4->getAttributeCode(),
+                            'is_comparable' => true,
+                            'is_visible_on_front' => true
+                        ]
+                    ],
+                    'errors' => []
+                ]
+            ],
+            $queryResult
+        );
+    }
+
+    public function testAttributesListAnyFilterApply(): void
+    {
+        $queryResult = $this->graphQlQuery(<<<QRY
+        {
+            attributesList(entityType: CUSTOMER, filters: {is_filterable: true}) {
+                items {
+                    code
+                    ... on CatalogAttributeMetadata {
+                        is_filterable
+                    }
+                }
+                errors {
+                    type
+                    message
+                }
+            }
+        }
+QRY);
+        $this->assertCustomerResults($queryResult);
+        $this->assertEquals(1, count($queryResult['attributesList']['errors']));
+        $this->assertEquals('FILTER_NOT_FOUND', $queryResult['attributesList']['errors'][0]['type']);
+        $this->assertEquals(
+            'Cannot filter by "is_filterable" as that field does not belong to "customer".',
+            $queryResult['attributesList']['errors'][0]['message']
         );
     }
 
@@ -229,5 +286,54 @@ QRY);
             return $item['code'] == $attribute_code;
         });
         return $attribute[array_key_first($attribute)] ?? [];
+    }
+
+    /**
+     * @param array $queryResult
+     */
+    private function assertCustomerResults(array $queryResult): void
+    {
+        $this->assertArrayHasKey('items', $queryResult['attributesList'], 'Query result does not contain items');
+        $this->assertGreaterThanOrEqual(3, count($queryResult['attributesList']['items']));
+
+        $this->assertEquals(
+            $this->customerAttribute0->getAttributeCode(),
+            $this->getAttributeByCode(
+                $queryResult['attributesList']['items'],
+                $this->customerAttribute0->getAttributeCode()
+            )['code'],
+            self::ATTRIBUTE_NOT_FOUND_ERROR
+        );
+
+        $this->assertEquals(
+            $this->customerAttribute1->getAttributeCode(),
+            $this->getAttributeByCode(
+                $queryResult['attributesList']['items'],
+                $this->customerAttribute1->getAttributeCode()
+            )['code'],
+            self::ATTRIBUTE_NOT_FOUND_ERROR
+        );
+        $this->assertEquals(
+            $this->customerAttribute2->getAttributeCode(),
+            $this->getAttributeByCode(
+                $queryResult['attributesList']['items'],
+                $this->customerAttribute2->getAttributeCode()
+            )['code'],
+            self::ATTRIBUTE_NOT_FOUND_ERROR
+        );
+        $this->assertEquals(
+            [],
+            $this->getAttributeByCode(
+                $queryResult['attributesList']['items'],
+                $this->customerAttribute3->getAttributeCode()
+            )
+        );
+        $this->assertEquals(
+            [],
+            $this->getAttributeByCode(
+                $queryResult['attributesList']['items'],
+                $this->creditmemoAttribute5->getAttributeCode()
+            )
+        );
     }
 }
