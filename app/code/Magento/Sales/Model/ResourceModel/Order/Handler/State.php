@@ -21,15 +21,14 @@ class State
      */
     public function check(Order $order)
     {
-        if ($order->isCanceled() && $order->canUnhold() && $order->canInvoice()) {
-            return $this;
-        }
-
         $currentState = $order->getState();
         if ($this->canBeProcessingStatus($order, $currentState)) {
             $order->setState(Order::STATE_PROCESSING)
                 ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_PROCESSING));
             $currentState = Order::STATE_PROCESSING;
+        }
+        if ($order->isCanceled() && $order->canUnhold() && $order->canInvoice()) {
+            return $this;
         }
 
         if ($this->canBeClosedStatus($order, $currentState)) {
@@ -77,6 +76,10 @@ class State
             && !$order->canShip()
             && $order->getIsNotVirtual()
         ) {
+            return true;
+        }
+
+        if ($order->getIsVirtual() && $order->getStatus() === Order::STATE_CLOSED) {
             return true;
         }
 
