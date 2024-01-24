@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Model\Config\Backend;
 
 use Exception;
@@ -94,12 +96,20 @@ class File extends \Magento\Framework\App\Config\Value
         if (!empty($file)) {
             $uploadDir = $this->_getUploadDir();
             try {
+                // sanitize filename
+                $fileName = strtolower(
+                    preg_replace(
+                        ['#[\\s-]+#', '#[^A-Za-z0-9._ -]+#'],
+                        ['-', ''],
+                        $file['name']
+                    )
+                );
                 /** @var Uploader $uploader */
                 $uploader = $this->_uploaderFactory->create(['fileId' => $file]);
                 $uploader->setAllowedExtensions($this->_getAllowedExtensions());
                 $uploader->setAllowRenameFiles(true);
                 $uploader->addValidateCallback('size', $this, 'validateMaxSize');
-                $result = $uploader->save($uploadDir);
+                $result = $uploader->save($uploadDir, $fileName);
             } catch (Exception $e) {
                 throw new LocalizedException(__('%1', $e->getMessage()));
             }
@@ -114,7 +124,7 @@ class File extends \Magento\Framework\App\Config\Value
             if (is_array($value) && !empty($value['delete'])) {
                 $this->setValue('');
             } elseif (is_array($value) && !empty($value['value'])) {
-                $this->setValue($value['value']);
+                $this->setValueAfterValidation($value['value']);
             } else {
                 $this->unsValue();
             }
@@ -265,5 +275,22 @@ class File extends \Magento\Framework\App\Config\Value
     protected function _getAllowedExtensions()
     {
         return [];
+    }
+
+    /**
+     * Validate if the value is intercepted
+     *
+     * @param string $value
+     * @return void
+     * @throws LocalizedException
+     */
+    private function setValueAfterValidation($value)
+    {
+        // avoid intercepting value
+        if (!preg_match('/^[A-Za-z0-9._\/ -]*$/', $value)) {
+            throw new LocalizedException(__('%1', 'Invalid file name'));
+        }
+
+        $this->setValue($value);
     }
 }

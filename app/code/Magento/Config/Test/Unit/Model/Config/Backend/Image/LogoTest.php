@@ -56,7 +56,7 @@ class LogoTest extends TestCase
             ->willReturn($this->uploaderMock);
         $this->requestDataMock = $this
             ->getMockBuilder(RequestDataInterface::class)
-            ->setMethods(['getTmpName'])
+            ->setMethods(['getTmpName', 'getName'])
             ->getMockForAbstractClass();
         $mediaDirectoryMock = $this->getMockBuilder(WriteInterface::class)
             ->disableOriginalConstructor()
@@ -83,6 +83,9 @@ class LogoTest extends TestCase
         $this->requestDataMock->expects($this->once())
             ->method('getTmpName')
             ->willReturn('/tmp/val');
+        $this->requestDataMock->expects($this->once())
+            ->method('getName')
+            ->willReturn('filename');
         $this->uploaderMock->expects($this->once())
             ->method('setAllowedExtensions')
             ->with(['jpg', 'jpeg', 'gif', 'png']);

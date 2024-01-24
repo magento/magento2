@@ -9,6 +9,7 @@ namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Escaper;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Math\Random;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
@@ -66,12 +67,13 @@ class Image extends AbstractElement
      * Return element html code
      *
      * @return string
+     * @throws LocalizedException
      */
     public function getElementHtml()
     {
         $html = '';
 
-        if ((string)$this->getValue()) {
+        if ((string)$this->getEscapedValue()) {
             $url = $this->_getUrl();
 
             if (!preg_match("/^http\:\/\/|https\:\/\//", $url)) {
@@ -79,22 +81,19 @@ class Image extends AbstractElement
             }
 
             $linkId = 'linkId' .$this->random->getRandomString(8);
-            $html = '<a previewlinkid="' .$linkId .'" href="' .
-                $url .
-                '" ' .
+            $html = '<a previewlinkid="' .$linkId  .'" href="' .
+                $url . '" ' .
                 $this->_getUiId(
                     'link'
                 ) .
                 '>' .
-                '<img src="' .
-                $url .
-                '" id="' .
+                '<img src="' . $url . '" id="' .
                 $this->getHtmlId() .
                 '_image" title="' .
-                $this->getValue() .
+                $this->getEscapedValue() .
                 '"' .
                 ' alt="' .
-                $this->getValue() .
+                $this->getEscapedValue() .
                 '" height="22" width="22" class="small-image-preview v-middle"  ' .
                 $this->_getUiId() .
                 ' />' .
@@ -120,7 +119,7 @@ class Image extends AbstractElement
     protected function _getDeleteCheckbox()
     {
         $html = '';
-        if ($this->getValue()) {
+        if ($this->getEscapedValue()) {
             $label = (string)new \Magento\Framework\Phrase('Delete Image');
             $html .= '<span class="delete-image">';
             $html .= '<input type="checkbox"' .
@@ -153,7 +152,8 @@ class Image extends AbstractElement
      */
     protected function _getHiddenInput()
     {
-        return '<input type="hidden" name="' . parent::getName() . '[value]" value="' . $this->getValue() . '" />';
+        return '<input type="hidden" name="' . parent::getName() .
+            '[value]" value="' . $this->getEscapedValue() . '" />';
     }
 
     /**
@@ -163,7 +163,7 @@ class Image extends AbstractElement
      */
     protected function _getUrl()
     {
-        return $this->getValue();
+        return $this->getEscapedValue();
     }
 
     /**
