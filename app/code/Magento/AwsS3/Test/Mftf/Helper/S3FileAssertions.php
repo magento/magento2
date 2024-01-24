@@ -199,7 +199,7 @@ class S3FileAssertions extends Helper
      */
     public function assertDirectoryExists($path, $message = ''): void
     {
-        $this->assertTrue($this->driver->isDirectory($path), "Failed asserting $path exists. " . $message);
+        $this->assertTrue($this->driver->isDirectoryExists($path), "Failed asserting $path exists. " . $message);
     }
 
     /**

@@ -157,6 +157,29 @@ class AwsS3 implements RemoteDriverInterface
     /**
      * @inheritDoc
      */
+    public function isDirectoryExists($path): bool
+    {
+        if ($path === '/') {
+            return true;
+        }
+
+        $path = $this->normalizeRelativePath($path, true);
+
+        if (!$path) {
+            return true;
+        }
+
+        try {
+            return $this->adapter->directoryExists($path);
+        } catch (FlysystemFilesystemException $e) {
+            $this->logger->error($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function isWritable($path): bool
     {
         return true;

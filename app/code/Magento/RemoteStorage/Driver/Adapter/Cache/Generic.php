@@ -118,7 +118,7 @@ class Generic implements CacheInterface
         ];
         $this->cacheData[$path] = $object;
         $this->cacheAdapter->save(
-            $this->serializer->serialize([$path => $object]),
+            $this->serializer->serialize([$path => $this->cacheData[$path]]),
             $this->prefix . $path,
             [self::CACHE_TAG]
         );

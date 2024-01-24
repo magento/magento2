@@ -47,4 +47,10 @@ interface ExtendedDriverInterface extends DriverInterface
      * @deprecated Method will be moved to DriverInterface
      */
     public function getMetadata(string $path): array;
+
+    /**
+     * @param $path
+     * @return bool
+     */
+    public function isDirectoryExists($path): bool;
 }
