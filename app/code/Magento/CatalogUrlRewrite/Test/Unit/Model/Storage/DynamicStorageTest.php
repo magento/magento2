@@ -160,7 +160,7 @@ class DynamicStorageTest extends TestCase
      */
     public function testFindProductRewriteByRequestPath(
         array $data,
-              $productFromDb,
+        $productFromDb,
         string $categorySuffix,
         $categoryFromDb,
         bool $canBeShownInCategory,

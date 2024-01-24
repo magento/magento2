@@ -20,6 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @deprecated Original class is deprecated
+ * @see Reset
  */
 class ResetTest extends TestCase
 {
@@ -54,7 +55,7 @@ class ResetTest extends TestCase
     }
 
     /**
-     * @covers \Magento\Backend\Block\Page\System\Config\Robots\Reset::getRobotsDefaultCustomInstructions
+     * @covers Reset::getRobotsDefaultCustomInstructions
      */
     public function testGetRobotsDefaultCustomInstructions()
     {
