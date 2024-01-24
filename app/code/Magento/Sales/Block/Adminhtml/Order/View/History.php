@@ -59,7 +59,7 @@ class History extends \Magento\Backend\Block\Template
         $button = $this->getLayout()->createBlock(
             \Magento\Backend\Block\Widget\Button::class
         )->setData(
-            ['label' => __('Update Changes'), 'class' => 'action-save action-secondary', 'onclick' => $onclick]
+            ['label' => __('Update'), 'class' => 'action-save action-secondary', 'onclick' => $onclick]
         );
         $this->setChild('submit_button', $button);
         return parent::_prepareLayout();

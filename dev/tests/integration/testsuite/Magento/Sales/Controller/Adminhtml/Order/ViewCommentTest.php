@@ -52,7 +52,7 @@ class ViewCommentTest extends AbstractBackendController
         $this->dispatch('backend/sales/order/view/');
         $content = $this->getResponse()->getBody();
         $this->assertStringContainsString(
-            '<span>Update Changes</span>',
+            '<span>Update</span>',
             $content
         );
     }
