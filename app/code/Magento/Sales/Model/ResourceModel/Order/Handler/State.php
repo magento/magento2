@@ -27,7 +27,7 @@ class State
                 ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_PROCESSING));
             $currentState = Order::STATE_PROCESSING;
         }
-        if ($order->isCanceled() && $order->canUnhold() && $order->canInvoice()) {
+        if ($order->isCanceled() || $order->canUnhold() || $order->canInvoice()) {
             return $this;
         }
 

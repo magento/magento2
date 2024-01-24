@@ -888,8 +888,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     {
         foreach ($this->getAllItems() as $item) {
             if (!$item->getParentItem()) {
-                $qtyToShip = !$item->getParentItem() || $item->getParentItem()->getProductType() !== Type::TYPE_BUNDLE ?
-                    $item->getQtyToShip() : $item->getSimpleQtyToShip();
+                $qtyToShip = $item->getQtyToShip();
 
                 if ($qtyToShip > 0 && !$item->getIsVirtual() && !$item->getLockedDoShip()) {
                     return true;
