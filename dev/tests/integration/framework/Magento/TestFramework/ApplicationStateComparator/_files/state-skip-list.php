@@ -232,6 +232,7 @@ return [
         'AssetPreProcessorPool' => null,
         Magento\GraphQl\Model\Query\ContextFactory::class => null,
         'viewFileMinifiedFallbackResolver' => null,
+        Magento\RemoteStorage\Driver\DriverPool::class => null,
         Magento\TestFramework\App\State::class => null,
         Magento\Framework\TestFramework\ApplicationStateComparator\SkipListAndFilterList::class => null, // Yes, our test uses mutable state itself :-)
         Magento\Framework\DB\Adapter\Pdo\Mysql\Interceptor::class => null,
