@@ -21,6 +21,7 @@ use Magento\Framework\Url;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\UrlInterface;
 
 /**
  * Test for the widget.
