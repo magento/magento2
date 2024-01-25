@@ -281,10 +281,10 @@ class File extends \Magento\Framework\App\Config\Value
      * Validate if the value is intercepted
      *
      * @param string $value
-     * @return string
+     * @return void
      * @throws LocalizedException
      */
-    private function setValueAfterValidation(string $value): string
+    private function setValueAfterValidation(string $value): void
     {
         // avoid intercepting value
         if (!preg_match('/^[A-Za-z0-9._\/ -]*$/', $value)) {
