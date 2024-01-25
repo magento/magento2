@@ -58,7 +58,7 @@ class DataFixture implements ParserInterface
             $id = $count > 1 ? 1 : '';
             do {
                 $fixtures[] = [
-                    'name' => $alias !== null ? ($alias.($id++)) : null,
+                    'name' => $alias !== null ? $alias.(!empty($id) ? $id++ : '') : null,
                     'factory' => $args[0],
                     'data' => $args[1] ?? [],
                     'scope' => $args['scope'] ?? $args[3] ?? null,
