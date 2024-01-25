@@ -142,43 +142,56 @@ class RenderLayeredTest extends TestCase
         $item3 = $this->createMock(Item::class);
         $item4 = $this->createMock(Item::class);
 
-        $item1->method('__call')->withConsecutive(
-            ['getValue'],
-            ['getCount'],
-            ['getValue'],
-            ['getCount'],
-            ['getLabel']
-        )->willReturnOnConsecutiveCalls(
-            'yellow',
-            3,
-            'yellow',
-            3,
-            'Yellow'
-        );
+        $item1->method('__call')
+            ->willReturnCallback(function ($arg1) use (&$callCount) {
+                if ($callCount == 0 && $arg1 == 'getValue') {
+                    $callCount++;
+                    return 'yellow';
+                } elseif ($callCount == 1 && $arg1 == 'getCount') {
+                    $callCount++;
+                    return 3;
+                } elseif ($callCount == 2 && $arg1 == 'getValue') {
+                    $callCount++;
+                    return 'yellow';
+                } elseif ($callCount == 3 && $arg1 == 'getCount') {
+                    $callCount++;
+                    return 3;
+                } elseif ($callCount == 4 && $arg1 == 'getLabel') {
+                    $callCount++;
+                    return 'Yellow';
+                }
+            });
 
         $item2->method('__call')->with('getValue')->willReturn('blue');
 
-        $item3->method('__call')->withConsecutive(
-            ['getValue'],
-            ['getCount']
-        )->willReturnOnConsecutiveCalls(
-            'red',
-            0
-        );
+        $item3->method('__call')
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'getValue') {
+                    return 'red';
+                } elseif ($arg1 == 'getCount') {
+                    return 0;
+                }
+            });
 
-        $item4->method('__call')->withConsecutive(
-            ['getValue'],
-            ['getCount'],
-            ['getValue'],
-            ['getCount'],
-            ['getLabel']
-        )->willReturnOnConsecutiveCalls(
-            'green',
-            3,
-            'green',
-            0,
-            'Green'
-        );
+        $item4->method('__call')
+            ->willReturnCallback(function ($arg1) use (&$callCount) {
+                if ($callCount == 0 && $arg1 == 'getValue') {
+                    $callCount++;
+                    return 'green';
+                } elseif ($callCount == 1 && $arg1 == 'getCount') {
+                    $callCount++;
+                    return 3;
+                } elseif ($callCount == 2 && $arg1 == 'getValue') {
+                    $callCount++;
+                    return 'green';
+                } elseif ($callCount == 3 && $arg1 == 'getCount') {
+                    $callCount++;
+                    return 0;
+                } elseif ($callCount == 4 && $arg1 == 'getLabel') {
+                    $callCount++;
+                    return 'Green';
+                }
+            });
 
         $this->filterMock->method('getItems')->willReturnOnConsecutiveCalls(
             [$item1],

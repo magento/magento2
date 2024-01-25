@@ -571,10 +571,20 @@ class MultishippingTest extends TestCase
             ->with($shippingAddressMock)
             ->willReturn($orderMock);
         $this->toOrderAddressMock->expects($this->exactly(2))->method('convert')
-            ->withConsecutive(
-                [$billingAddressMock, []],
-                [$shippingAddressMock, []]
-            )->willReturn($orderAddressMock);
+            ->willReturnCallback(function (
+                $arg1,
+                $arg2
+            ) use (
+                $billingAddressMock,
+                $shippingAddressMock,
+                $orderAddressMock
+) {
+                if ($arg1 === $billingAddressMock && empty($arg2)) {
+                    return $orderAddressMock;
+                } elseif ($arg1 === $shippingAddressMock && empty($arg2)) {
+                    return $orderAddressMock;
+                }
+            });
         $this->toOrderPaymentMock->method('convert')->willReturn($orderPaymentMock);
         $this->toOrderItemMock->method('convert')->with($quoteAddressItemMock)->willReturn($orderItemMock);
         $this->quoteMock->expects($this->once())->method('collectTotals')->willReturnSelf();
@@ -658,8 +668,20 @@ class MultishippingTest extends TestCase
             ->willReturn($orderMock);
         $this->toOrderAddressMock->expects($this->exactly(2))
             ->method('convert')
-            ->withConsecutive([$billingAddressMock, []], [$shippingAddressMock, []])
-            ->willReturn($orderAddressMock);
+            ->willReturnCallback(function (
+                $arg1,
+                $arg2
+            ) use (
+                $billingAddressMock,
+                $shippingAddressMock,
+                $orderAddressMock
+) {
+                if ($arg1 === $billingAddressMock && empty($arg2)) {
+                    return $orderAddressMock;
+                } elseif ($arg1 === $shippingAddressMock && empty($arg2)) {
+                    return $orderAddressMock;
+                }
+            });
         $this->toOrderPaymentMock->method('convert')
             ->willReturn($orderPaymentMock);
         $this->toOrderItemMock->method('convert')
@@ -987,17 +1009,23 @@ class MultishippingTest extends TestCase
 
         $this->scopeConfigMock->expects($this->exactly(2))
             ->method('isSetFlag')
-            ->withConsecutive(
-                ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE],
-                ['sales/minimum_order/multi_address', ScopeInterface::SCOPE_STORE]
-            )->willReturnOnConsecutiveCalls(true, false);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'sales/minimum_order/active' && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return true;
+                } elseif ($arg1 == 'sales/minimum_order/multi_address' && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return false;
+                }
+            });
 
         $this->scopeConfigMock->expects($this->exactly(2))
             ->method('getValue')
-            ->withConsecutive(
-                ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE],
-                ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE]
-            )->willReturnOnConsecutiveCalls(100, false);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'sales/minimum_order/amount' && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return 100;
+                } elseif ($arg1 == 'sales/minimum_order/tax_including' && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return false;
+                }
+            });
 
         $this->checkoutSessionMock->expects($this->atLeastOnce())
             ->method('getQuote')
@@ -1024,10 +1052,13 @@ class MultishippingTest extends TestCase
     {
         $this->scopeConfigMock->expects($this->exactly(2))
             ->method('isSetFlag')
-            ->withConsecutive(
-                ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE],
-                ['sales/minimum_order/multi_address', ScopeInterface::SCOPE_STORE]
-            )->willReturnOnConsecutiveCalls(true, true);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'sales/minimum_order/active' && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return true;
+                } elseif ($arg1 == 'sales/minimum_order/multi_address' && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return true;
+                }
+            });
 
         $this->checkoutSessionMock->expects($this->atLeastOnce())
             ->method('getQuote')
@@ -1164,7 +1195,7 @@ class MultishippingTest extends TestCase
      *
      * @return array
      */
-    public function getConfigCreateOrders(): array
+    public static function getConfigCreateOrders(): array
     {
         return [
             [

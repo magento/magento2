@@ -183,8 +183,10 @@ class SaveTest extends TestCase
         ];
 
         $this->requestMock->method('getParam')
-            ->withConsecutive(['parent_id'], ['entity_id'])
-            ->willReturnOnConsecutiveCalls(22, 1);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['parent_id'] => 22,
+                ['entity_id'] => 1
+            });
 
         $customerMock = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()

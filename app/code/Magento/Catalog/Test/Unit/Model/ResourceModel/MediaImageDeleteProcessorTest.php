@@ -133,8 +133,13 @@ class MediaImageDeleteProcessorTest extends TestCase
 
         $this->mediaDirectory->expects($this->any())
             ->method('getRelativePath')
-            ->withConsecutive([$productImages[0]->getFile()], [$productImages[1]->getFile()])
-            ->willReturnOnConsecutiveCalls($productImages[0]->getPath(), $productImages[1]->getPath());
+            ->willReturnCallback(function ($arg) use ($productImages) {
+                if ($arg == $productImages[0]->getFile()) {
+                    return $productImages[0]->getPath();
+                } elseif ($arg == $productImages[1]->getFile()) {
+                    return $productImages[1]->getPath();
+                }
+            });
 
         $this->productGallery->expects($this->any())
             ->method('countImageUses')
@@ -154,7 +159,7 @@ class MediaImageDeleteProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function executeCategoryProductMediaDeleteDataProvider(): array
+    public static function executeCategoryProductMediaDeleteDataProvider(): array
     {
         $imageDirectoryPath = '/media/dir1/dir2/catalog/product/';
         $image1FilePath = '/test/test1.jpg';

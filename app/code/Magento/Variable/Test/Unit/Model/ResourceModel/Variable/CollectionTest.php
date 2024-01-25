@@ -75,13 +75,13 @@ class CollectionTest extends TestCase
             ->willReturn('testMainTable');
         $resource->expects($this->exactly(2))
             ->method('getTable')
-            ->withConsecutive(
-                [$mainTableName],
-                [$tableName]
-            )->willReturnOnConsecutiveCalls(
-                $mainTableName,
-                $tableName
-            );
+            ->willReturnCallback(function ($arg1) use ($mainTableName, $tableName) {
+                if ($arg1 == $mainTableName) {
+                    return $mainTableName;
+                } elseif ($arg1 == $tableName) {
+                    return $tableName;
+                }
+            });
 
         $objectManager = new ObjectManager($this);
         $collection = $objectManager->getObject(

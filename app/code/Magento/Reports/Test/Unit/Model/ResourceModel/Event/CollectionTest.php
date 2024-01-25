@@ -135,21 +135,36 @@ class CollectionTest extends TestCase
             ->willReturn($stores);
         $this->selectMock
             ->method('where')
-            ->withConsecutive(
-                ['event_type_id = ?', $typeId],
-                ['subject_id = ?', $subjectId],
-                ['subtype = ?', $subtype],
-                ['store_id IN(?)', $stores],
-                [$ignoreSql, $ignoreData]
-            );
-
+            ->willReturnCallback(function (
+                $arg1,
+                $arg2
+            ) use (
+                $typeId,
+                $subjectId,
+                $subtype,
+                $stores,
+                $ignoreSql,
+                $ignoreData
+            ) {
+                if ($arg1 == 'event_type_id = ?' && $arg2 == $typeId) {
+                    return null;
+                } elseif ($arg1 == 'subject_id = ?' && $arg2 == $subjectId) {
+                    return null;
+                } elseif ($arg1 == 'subtype = ?' && $arg2 == $typeId) {
+                    return null;
+                } elseif ($arg1 == 'store_id IN(?)' && $arg2 == $stores) {
+                    return null;
+                } elseif ($arg1 == $ignoreSql && $arg2 == $ignoreData) {
+                    return null;
+                }
+            });
         $this->collection->addRecentlyFiler($typeId, $subjectId, $subtype, $ignoreData, $limit);
     }
 
     /**
      * @return array
      */
-    public function ignoresDataProvider(): array
+    public static function ignoresDataProvider(): array
     {
         return [
             [

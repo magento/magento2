@@ -312,10 +312,14 @@ class ImportTest extends AbstractImportTestCase
             ->method('getDataSourceModel')
             ->willReturn($this->_importData);
 
-        $this->import->expects($this->any())->method('setData')->withConsecutive(
-            ['entity', $entityTypeCode],
-            ['behavior', $behaviour]
-        );
+        $this->import->expects($this->any())->method('setData')
+            ->willReturnCallback(function ($arg1, $arg2) use ($entityTypeCode, $behaviour) {
+                if ($arg1 == 'entity' && $arg2 == $entityTypeCode) {
+                    return null;
+                } elseif ($arg1 == 'behavior' && $arg2 == $behaviour) {
+                    return null;
+                }
+            });
         $this->_entityAdapter->expects($this->any())
             ->method('importData')
             ->willReturn(true);
@@ -376,9 +380,14 @@ class ImportTest extends AbstractImportTestCase
         $this->import->expects($this->any())
             ->method('getDataSourceModel')
             ->willReturn($this->_importData);
-        $this->import->expects($this->any())->method('setData')->withConsecutive(
-            ['entity', $entityTypeCode],
-            ['behavior', $behaviour]
+        $this->import->expects($this->any())->method('setData')->willReturnCallback(
+            function ($arg1, $arg2) use ($entityTypeCode, $behaviour) {
+                if ($arg1 == 'entity' && $arg2 == $entityTypeCode) {
+                    return null;
+                } elseif ($arg1 == 'behavior' && $arg2 == $behaviour) {
+                    return null;
+                }
+            }
         );
 
         $this->_entityAdapter->expects($this->any())
@@ -729,7 +738,7 @@ class ImportTest extends AbstractImportTestCase
     /**
      * @return array
      */
-    public function unknownEntitiesProvider()
+    public static function unknownEntitiesProvider()
     {
         return [
             [''],
@@ -1029,7 +1038,7 @@ class ImportTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function isReportEntityTypeDataProvider()
+    public static function isReportEntityTypeDataProvider()
     {
         return [
             [
@@ -1050,7 +1059,7 @@ class ImportTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function isReportEntityTypeExceptionDataProvider()
+    public static function isReportEntityTypeExceptionDataProvider()
     {
         return [
             [

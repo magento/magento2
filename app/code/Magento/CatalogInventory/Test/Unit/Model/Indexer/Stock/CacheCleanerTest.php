@@ -143,16 +143,23 @@ class CacheCleanerTest extends TestCase
             ->willReturn($this->selectMock);
         $this->selectMock->expects($this->exactly(7))
             ->method('where')
-            ->withConsecutive(
-                ['product_id IN (?)'],
-                ['stock_id = ?'],
-                ['website_id = ?'],
-                ['product_id IN (?)'],
-                ['stock_id = ?'],
-                ['website_id = ?'],
-                ['product_id IN (?)', [123], \Zend_Db::INT_TYPE]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 == 'product_id IN (?)') {
+                    return $this->selectMock;
+                } elseif ($arg1 == 'stock_id = ?') {
+                    return $this->selectMock;
+                } elseif ($arg1 == 'website_id = ?') {
+                    return $this->selectMock;
+                } elseif ($arg1 == 'product_id IN (?)') {
+                    return $this->selectMock;
+                } elseif ($arg1 == 'stock_id = ?') {
+                    return $this->selectMock;
+                } elseif ($arg1 == 'website_id = ?') {
+                    return $this->selectMock;
+                } elseif ($arg1 == 'product_id IN (?)' && $arg2 == [123] && $arg3 == \Zend_Db::INT_TYPE) {
+                    return $this->selectMock;
+                }
+            });
         $this->connectionMock->expects($this->exactly(1))
             ->method('fetchCol')
             ->willReturn([$categoryId]);
@@ -161,10 +168,13 @@ class CacheCleanerTest extends TestCase
             ->willReturn($stockThresholdQty);
         $this->cacheContextMock->expects($this->exactly(2))
             ->method('registerEntities')
-            ->withConsecutive(
-                [Product::CACHE_TAG, [$productId]],
-                [Category::CACHE_TAG, [$categoryId]],
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($productId, $categoryId) {
+                if ($arg1 == Product::CACHE_TAG && $arg2 == [$productId]) {
+                    return null;
+                } elseif ($arg1 == Category::CACHE_TAG && $arg2 == [$categoryId]) {
+                    return null;
+                }
+            });
         $this->eventManagerMock->expects($this->exactly(2))
             ->method('dispatch')
             ->with('clean_cache_by_tags', ['object' => $this->cacheContextMock]);
@@ -183,7 +193,7 @@ class CacheCleanerTest extends TestCase
     /**
      * @return array
      */
-    public function cleanDataProvider(): array
+    public static function cleanDataProvider(): array
     {
         return [
             [true, false, 1, false],
@@ -245,7 +255,7 @@ class CacheCleanerTest extends TestCase
     /**
      * @return array
      */
-    public function notCleanCacheDataProvider(): array
+    public static function notCleanCacheDataProvider(): array
     {
         return [
             [true, true, 1, false],

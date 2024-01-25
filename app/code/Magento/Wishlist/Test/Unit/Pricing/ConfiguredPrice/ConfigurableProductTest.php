@@ -119,8 +119,13 @@ class ConfigurableProductTest extends TestCase
 
         $this->saleableItem->expects($this->any())
             ->method('getCustomOption')
-            ->withConsecutive(['simple_product'], ['option_ids'])
-            ->willReturnOnConsecutiveCalls($wishlistItemOptionMock, $wishlistItemOptionMock);
+            ->willReturnCallback(function ($arg1) use ($wishlistItemOptionMock) {
+                if ($arg1 == 'simple_product') {
+                    return $wishlistItemOptionMock;
+                } elseif ($arg1 == 'option_ids') {
+                    return $wishlistItemOptionMock;
+                }
+            });
 
         $wishlistItemOptionMock->expects($this->any())
             ->method('getValue')->willReturn($optionIds);
@@ -190,8 +195,11 @@ class ConfigurableProductTest extends TestCase
 
         $this->saleableItem->expects($this->any())
             ->method('getCustomOption')
-            ->withConsecutive(['simple_product'], ['option_ids'])
-            ->willReturnOnConsecutiveCalls(null, null);
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 'simple_product' || $arg == 'option_ids') {
+                    return null;
+                }
+            });
 
         $this->saleableItem->expects($this->once())
             ->method('getPriceInfo')
@@ -205,7 +213,7 @@ class ConfigurableProductTest extends TestCase
         $this->assertEquals(100, $this->model->getValue());
     }
 
-    public function setOptionsDataProvider(): array
+    public static function setOptionsDataProvider(): array
     {
         return ['options' =>
                 [

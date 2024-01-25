@@ -460,7 +460,7 @@ class ConfigurableTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigurableAttributesAsArrayDataProvider(): array
+    public static function getConfigurableAttributesAsArrayDataProvider(): array
     {
         return [
             [5],
@@ -616,8 +616,13 @@ class ConfigurableTest extends TestCase
         $productMock->expects($this->any())->method('hasData')->willReturn(true);
         $productMock
             ->method('getData')
-            ->withConsecutive(['_cache_instance_store_filter'], ['is_salable'])
-            ->willReturnOnConsecutiveCalls(0, true);
+            ->willReturnCallback(function ($arg) {
+                if ($arg == '_cache_instance_store_filter') {
+                    return 0;
+                } elseif ($arg == 'is_salable') {
+                    return true;
+                }
+            });
         $productMock
             ->method('getSku')
             ->willReturn('SKU-CODE');
@@ -873,12 +878,15 @@ class ConfigurableTest extends TestCase
             ->method('getLinkField')
             ->willReturn('link');
         $productMock->expects($this->any())->method('hasData')
-            ->withConsecutive(['_cache_instance_products'])
-            ->willReturnOnConsecutiveCalls(true);
-
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['_cache_instance_products'] => true
+            });
+        
         $productMock->expects($this->any())->method('getData')
-            ->withConsecutive(['image'], ['image'], ['_cache_instance_products'])
-            ->willReturnOnConsecutiveCalls('no_selection', 'no_selection', [$childProductMock]);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['image'] => 'no_selection',
+                ['_cache_instance_products'] => [$childProductMock]
+            });
 
         $childProductMock->expects($this->any())->method('getData')->with('image')->willReturn('image_data');
         $productMock->expects($this->once())->method('setImage')->with('image_data')->willReturnSelf();

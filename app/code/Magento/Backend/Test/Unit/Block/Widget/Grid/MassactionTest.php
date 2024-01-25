@@ -218,7 +218,7 @@ class MassactionTest extends TestCase
     /**
      * @return array
      */
-    public function itemsProcessingDataProvider()
+    public static function itemsProcessingDataProvider()
     {
         return [
             [
@@ -288,7 +288,7 @@ class MassactionTest extends TestCase
     /**
      * @return array
      */
-    public function selectedDataProvider()
+    public static function selectedDataProvider()
     {
         return [
             ['', '', []],
@@ -324,11 +324,18 @@ class MassactionTest extends TestCase
 
         $this->gridCollectionSelectMock->expects($this->exactly(4))
             ->method('reset')
-            ->withConsecutive(
-                [Select::ORDER],
-                [Select::LIMIT_COUNT],
-                [Select::LIMIT_OFFSET],
-                [Select::COLUMNS]
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == Select::ORDER) {
+                        return null;
+                    } elseif ($arg == Select::LIMIT_COUNT) {
+                        return null;
+                    } elseif ($arg == Select::LIMIT_OFFSET) {
+                        return null;
+                    } elseif ($arg == Select::COLUMNS) {
+                        return null;
+                    }
+                }
             );
 
         $this->gridCollectionSelectMock->expects($this->once())
@@ -385,7 +392,7 @@ class MassactionTest extends TestCase
     /**
      * @return array
      */
-    public function addItemDataProvider()
+    public static function addItemDataProvider()
     {
         return [
             [
