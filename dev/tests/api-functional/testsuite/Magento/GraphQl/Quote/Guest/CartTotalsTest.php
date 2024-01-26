@@ -10,13 +10,11 @@ namespace Magento\GraphQl\Quote\Guest;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
-use Magento\Indexer\Test\Fixture\Indexer;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
 use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
-use Magento\Store\Test\Fixture\Store;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
@@ -241,10 +239,8 @@ class CartTotalsTest extends GraphQlAbstract
     }
 
     #[
-        DataFixture(Store::class),
         DataFixture(ProductFixture::class, as: 'p'),
         DataFixture(GuestCartFixture::class, as: 'cart'),
-        DataFixture(Indexer::class, as: 'indexer'),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p.id$', 'qty' => 2]),
         DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
         DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),

@@ -9,7 +9,6 @@ namespace Magento\GraphQl\OrderCancellation;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\GetCustomerAuthenticationHeader;
-use Magento\Indexer\Test\Fixture\Indexer;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -55,7 +54,6 @@ use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
     ),
     DataFixture(ProductFixture::class, as: 'product'),
     DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'cart'),
-    DataFixture(Indexer::class, as: 'indexer'),
     DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
     DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
     DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
@@ -246,7 +244,6 @@ QUERY;
     }
 
     #[
-        DataFixture(Store::class),
         DataFixture(ProductFixture::class, as: 'product'),
         DataFixture(
             Customer::class,
@@ -265,7 +262,6 @@ QUERY;
             'another'
         ),
         DataFixture(CustomerCart::class, ['customer_id' => '$another.id$'], as: 'cart'),
-        DataFixture(Indexer::class, as: 'indexer'),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
         DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
         DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
@@ -388,7 +384,6 @@ QUERY;
         ),
         DataFixture(ProductFixture::class, as: 'product'),
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'cart'),
-        DataFixture(Indexer::class, as: 'indexer'),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
         DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
         DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
@@ -460,7 +455,6 @@ QUERY;
         ),
         DataFixture(ProductFixture::class, as: 'product'),
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'cart'),
-        DataFixture(Indexer::class, as: 'indexer'),
         DataFixture(
             AddProductToCartFixture::class,
             [
@@ -545,7 +539,6 @@ QUERY;
         ),
         DataFixture(ProductFixture::class, as: 'product'),
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'cart'),
-        DataFixture(Indexer::class, as: 'indexer'),
         DataFixture(
             AddProductToCartFixture::class,
             [
@@ -618,7 +611,6 @@ QUERY;
         ),
         DataFixture(ProductFixture::class, as: 'product'),
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'cart'),
-        DataFixture(Indexer::class, as: 'indexer'),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
         DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
         DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
@@ -761,7 +753,6 @@ QUERY;
         ),
         DataFixture(ProductFixture::class, as: 'product'),
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'cart'),
-        DataFixture(Indexer::class, as: 'indexer'),
         DataFixture(
             AddProductToCartFixture::class,
             [
@@ -915,7 +906,6 @@ QUERY;
         DataFixture(ProductFixture::class, as: 'product1'),
         DataFixture(ProductFixture::class, as: 'product2'),
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'cart'),
-        DataFixture(Indexer::class, as: 'indexer'),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product1.id$']),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product2.id$']),
         DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),

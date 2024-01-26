@@ -17,7 +17,6 @@ use Magento\Checkout\Test\Fixture\SetShippingAddress;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Indexer\Test\Fixture\Indexer;
 use Magento\Quote\Test\Fixture\AddProductToCart;
 use Magento\Quote\Test\Fixture\CustomerCart;
 use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
@@ -79,7 +78,6 @@ class CustomerOrdersTest extends GraphQlAbstract
             as: 'customer'
         ),
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'quote1', scope: 'store2'),
-        DataFixture(Indexer::class, as: 'indexer'),
         DataFixture(AddProductToCart::class, ['cart_id' => '$quote1.id$', 'product_id' => '$product.id$', 'qty' => 1]),
         DataFixture(SetBillingAddress::class, ['cart_id' => '$quote1.id$']),
         DataFixture(SetShippingAddress::class, ['cart_id' => '$quote1.id$']),
