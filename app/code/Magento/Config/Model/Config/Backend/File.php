@@ -279,7 +279,7 @@ class File extends \Magento\Framework\App\Config\Value
     private function setValueAfterValidation(string $value): void
     {
         // avoid intercepting value
-        if (preg_match('/[^a-z0-9_\\-\\.]+/i', $value)) {
+        if (preg_match('/[^a-z0-9_\/\\-\\.]+/i', $value)) {
             throw new LocalizedException(__('Invalid file name'));
         }
 
