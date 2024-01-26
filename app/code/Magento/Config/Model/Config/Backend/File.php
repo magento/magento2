@@ -96,20 +96,12 @@ class File extends \Magento\Framework\App\Config\Value
         if (!empty($file)) {
             $uploadDir = $this->_getUploadDir();
             try {
-                // sanitize filename
-                $fileName = strtolower(
-                    preg_replace(
-                        ['#[\\s-]+#', '#[^A-Za-z0-9._ -]+#'],
-                        ['-', ''],
-                        $file['name']
-                    )
-                );
                 /** @var Uploader $uploader */
                 $uploader = $this->_uploaderFactory->create(['fileId' => $file]);
                 $uploader->setAllowedExtensions($this->_getAllowedExtensions());
                 $uploader->setAllowRenameFiles(true);
                 $uploader->addValidateCallback('size', $this, 'validateMaxSize');
-                $result = $uploader->save($uploadDir, $fileName);
+                $result = $uploader->save($uploadDir);
             } catch (Exception $e) {
                 throw new LocalizedException(__('%1', $e->getMessage()));
             }
@@ -287,7 +279,7 @@ class File extends \Magento\Framework\App\Config\Value
     private function setValueAfterValidation(string $value): void
     {
         // avoid intercepting value
-        if (!preg_match('/^[A-Za-z0-9._\/ -]*$/', $value)) {
+        if (preg_match('/[^a-z0-9_\\-\\.]+/i', $value)) {
             throw new LocalizedException(__('Invalid file name'));
         }
 
