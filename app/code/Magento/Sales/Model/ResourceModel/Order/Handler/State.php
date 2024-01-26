@@ -22,7 +22,7 @@ class State
     public function check(Order $order)
     {
         $currentState = $order->getState();
-        if ($this->canBeProcessingStatus($order, $currentState)) {
+        if ($this->checkForProcessingState($order, $currentState)) {
             $order->setState(Order::STATE_PROCESSING)
                 ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_PROCESSING));
             $currentState = Order::STATE_PROCESSING;
@@ -31,13 +31,13 @@ class State
             return $this;
         }
 
-        if ($this->canBeClosedStatus($order, $currentState)) {
+        if ($this->checkForClosedState($order, $currentState)) {
             $order->setState(Order::STATE_CLOSED)
                 ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_CLOSED));
             return $this;
         }
 
-        if ($this->canBeCompleteStatus($order, $currentState)) {
+        if ($this->checkForCompleteState($order, $currentState)) {
             $order->setState(Order::STATE_COMPLETE)
                 ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_COMPLETE));
             return $this;
@@ -47,13 +47,13 @@ class State
     }
 
     /**
-     * Check if order can be automatically switched to complete status
+     * Check if order can be automatically switched to complete state
      *
      * @param Order $order
      * @param string|null $currentState
      * @return bool
      */
-    private function canBeCompleteStatus(Order $order, ?string $currentState): bool
+    private function checkForCompleteState(Order $order, ?string $currentState): bool
     {
         if ($currentState === Order::STATE_PROCESSING && !$order->canShip()) {
             return true;
@@ -63,13 +63,13 @@ class State
     }
 
     /**
-     * Check if order can be automatically switched to closed status
+     * Check if order can be automatically switched to closed state
      *
      * @param Order $order
      * @param string|null $currentState
      * @return bool
      */
-    private function canBeClosedStatus(Order $order, ?string $currentState): bool
+    private function checkForClosedState(Order $order, ?string $currentState): bool
     {
         if (in_array($currentState, [Order::STATE_PROCESSING, Order::STATE_COMPLETE])
             && !$order->canCreditmemo()
@@ -87,13 +87,13 @@ class State
     }
 
     /**
-     * Check if order can be automatically switched to processing status
+     * Check if order can be automatically switched to processing state
      *
      * @param Order $order
      * @param string|null $currentState
      * @return bool
      */
-    private function canBeProcessingStatus(Order $order, ?string $currentState): bool
+    private function checkForProcessingState(Order $order, ?string $currentState): bool
     {
         if ($currentState == Order::STATE_NEW && $order->getIsInProcess()) {
             return true;
