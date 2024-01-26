@@ -436,6 +436,17 @@ QUERY;
      * @throws AuthenticationException
      */
     #[
+        DataFixture(Store::class),
+        DataFixture(ProductFixture::class, ['sku' => '100000002', 'price' => 10], 'p2'),
+        DataFixture(ProductFixture::class, ['sku' => '100000003', 'price' => 10], 'p3'),
+        DataFixture(ProductFixture::class, ['sku' => '100000004', 'price' => 10], 'p4'),
+        DataFixture(ProductFixture::class, ['sku' => '100000005', 'price' => 10], 'p5'),
+        DataFixture(ProductFixture::class, ['sku' => '100000006', 'price' => 10], 'p6'),
+        DataFixture(ProductFixture::class, ['sku' => '100000007', 'price' => 10], 'p7'),
+        DataFixture(ProductFixture::class, ['sku' => '100000008', 'price' => 10], 'p8'),
+        DataFixture(Indexer::class, as: 'indexer')
+    ]
+    #[
         DataFixture(Customer::class, ['email' => 'customer@example.com'], 'customer'),
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart2'),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart2.id$', 'product_id' => '$p2.id$']),
