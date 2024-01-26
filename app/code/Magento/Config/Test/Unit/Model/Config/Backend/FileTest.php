@@ -152,7 +152,7 @@ class FileTest extends TestCase
             ->willReturn($this->uploaderMock);
         $this->uploaderMock->expects($this->once())
             ->method('save')
-            ->with($uploadDir . '/' . $scope . '/' . $scopeId)
+            ->with($uploadDir . '/' . $scope . '/' . $scopeId, null)
             ->willReturn($result);
 
         $this->assertEquals($this->model, $this->model->beforeSave());
@@ -197,7 +197,7 @@ class FileTest extends TestCase
             ->willReturn($this->uploaderMock);
         $this->uploaderMock->expects($this->once())
             ->method('save')
-            ->with($uploadDir)
+            ->with($uploadDir, null)
             ->willReturn($result);
 
         $this->assertEquals($this->model, $this->model->beforeSave());
@@ -300,7 +300,7 @@ class FileTest extends TestCase
             ->willReturn($this->uploaderMock);
         $this->uploaderMock->expects($this->once())
             ->method('save')
-            ->with($uploadDir)
+            ->with($uploadDir, null)
             ->willThrowException(new \Exception($exception));
 
         $this->model->beforeSave();
