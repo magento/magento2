@@ -288,7 +288,7 @@ class File extends \Magento\Framework\App\Config\Value
     {
         // avoid intercepting value
         if (!preg_match('/^[A-Za-z0-9._\/ -]*$/', $value)) {
-            throw new LocalizedException(__('%1', 'Invalid file name'));
+            throw new LocalizedException(__('Invalid file name'));
         }
 
         $this->setValue($value);
