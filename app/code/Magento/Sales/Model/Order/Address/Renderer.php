@@ -24,26 +24,46 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class Renderer
 {
-    protected AddressConfig $addressConfig;
+    /**
+     * @var AddressConfig
+     */
+    protected $addressConfig;
 
-    protected EventManager $eventManager;
+    /**
+     * @var EventManager
+     */
+    protected $eventManager;
 
-    private ScopeConfigInterface $scopeConfig;
+    /**
+     * @var StoreManagerInterface|null
+     */
+    private $storeManager;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
 
     public function __construct(
         AddressConfig $addressConfig,
         EventManager $eventManager,
-        ScopeConfigInterface $scopeConfig
+        ?ScopeConfigInterface $scopeConfig = null,
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->addressConfig = $addressConfig;
         $this->eventManager = $eventManager;
-        $this->scopeConfig = $scopeConfig;
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
      * Format address in a specific way
+     *
+     * @param Address $address
+     * @param string $type
+     * @return string|null
      */
-    public function format(Address $address, string $type): ?string
+    public function format(Address $address, $type)
     {
         $orderStore = $address->getOrder()->getStore();
         $originalStore = $this->addressConfig->getStore();
