@@ -37,7 +37,7 @@ define([
                 validateProductQty = '_validateWishlistQty',
                 changeCustomOption = 'change ' + options.customOptionsInfo,
                 changeQty = 'change ' + options.qtyInfo,
-                updateWishlist = 'click ' + options.actionElement,
+                updateWishlist = 'click ' + options.productPageWrapper + ' ' + options.actionElement,
                 events = {},
                 key;
 
