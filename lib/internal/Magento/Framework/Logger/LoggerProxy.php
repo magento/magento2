@@ -10,21 +10,23 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\ObjectManager\NoninterceptableInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * Create and use Logger implementation based on deployment configuration
  */
-class LoggerProxy implements LoggerInterface, NoninterceptableInterface
+class LoggerProxy implements LoggerInterface, NoninterceptableInterface, ResetAfterRequestInterface
 {
     /**
      * @var ObjectManagerInterface
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $objectManager;
+    private readonly ObjectManagerInterface $objectManager;
 
     /**
-     * @var LoggerInterface
+     * @var LoggerInterface|null
      */
     private $logger;
 
@@ -37,6 +39,14 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
         ObjectManagerInterface $objectManager
     ) {
         $this->objectManager = $objectManager;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->logger = null;
     }
 
     /**
