@@ -69,11 +69,13 @@ class ProductViewTest extends TestCase
             ->getMock();
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['_wakeup', 'getId', 'getStore'])
+            ->addMethods(['_wakeup'])
+            ->onlyMethods(['getId', 'getStore'])
             ->getMock();
         $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getWebsiteId', '_wakeup'])
+            ->addMethods(['_wakeup'])
+            ->onlyMethods(['getWebsiteId'])
             ->getMock();
 
         $productViewBlock->expects($this->any())->method('getProduct')->willReturn($productMock);

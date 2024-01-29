@@ -71,7 +71,7 @@ class ProductUrlSuffixTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->contextExtensionMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->onlyMethods(
+            ->addMethods(
                 [
                     'getStore'
                 ]

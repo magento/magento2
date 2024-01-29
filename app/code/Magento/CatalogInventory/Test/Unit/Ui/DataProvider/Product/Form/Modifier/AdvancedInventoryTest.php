@@ -54,7 +54,7 @@ class AdvancedInventoryTest extends AbstractModifierTest
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockItemMock = $this->getMockBuilder(StockItemInterface::class)
-            ->onlyMethods(['getData'])
+            ->addMethods(['getData'])
             ->getMockForAbstractClass();
         $this->stockConfigurationMock = $this->getMockBuilder(StockConfigurationInterface::class)
             ->disableOriginalConstructor()
@@ -154,7 +154,7 @@ class AdvancedInventoryTest extends AbstractModifierTest
     /**
      * @return array
      */
-    public function modifyDataProvider()
+    public static function modifyDataProvider()
     {
         return [
             [1, 1, 1],

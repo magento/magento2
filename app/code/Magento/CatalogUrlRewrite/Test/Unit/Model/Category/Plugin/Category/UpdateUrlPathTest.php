@@ -84,6 +84,7 @@ class UpdateUrlPathTest extends TestCase
             ->getMock();
         $this->category = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
+            ->addMethods(['unsUrlPath', 'setUrlPath'])
             ->onlyMethods(
                 [
                     'getStoreId',
@@ -91,9 +92,7 @@ class UpdateUrlPathTest extends TestCase
                     'isObjectNew',
                     'isInRootCategoryList',
                     'getStoreIds',
-                    'setStoreId',
-                    'unsUrlPath',
-                    'setUrlPath',
+                    'setStoreId'
                 ]
             )
             ->getMock();

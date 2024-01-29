@@ -66,7 +66,8 @@ class CombineTest extends TestCase
             'excluded_attribute' => 'Excluded attribute',
         ];
         $productCondition = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['loadAttributeOptions', 'getAttributeOption'])
+            ->addMethods(['getAttributeOption'])
+            ->onlyMethods(['loadAttributeOptions'])
             ->disableOriginalConstructor()
             ->getMock();
         $productCondition->expects($this->any())->method('loadAttributeOptions')->willReturnSelf();

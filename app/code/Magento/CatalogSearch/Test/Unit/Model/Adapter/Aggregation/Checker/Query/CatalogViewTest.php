@@ -94,11 +94,11 @@ class CatalogViewTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->categoryMock = $this->getMockBuilder(CategoryInterface::class)
-            ->onlyMethods(['getIsAnchor'])
+            ->addMethods(['getIsAnchor'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->queryMock = $this->getMockBuilder(QueryInterface::class)
-            ->onlyMethods(['getMust', 'getShould'])
+            ->addMethods(['getMust', 'getShould'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->name = 'Request';

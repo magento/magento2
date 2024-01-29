@@ -122,7 +122,7 @@ class WebsitesTest extends AbstractModifierTest
             ->method('isSingleStoreMode')
             ->willReturn(false);
         $this->groupMock = $this->getMockBuilder(Collection::class)
-            ->onlyMethods(['getId', 'getName', 'getWebsiteId'])
+            ->addMethods(['getId', 'getName', 'getWebsiteId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->groupMock->expects($this->any())

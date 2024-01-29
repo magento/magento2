@@ -48,7 +48,7 @@ class AddFulltextFilterToCollectionTest extends TestCase
             ->method('load')
             ->willReturnSelf();
         $this->collection = $this->getMockBuilder(Collection::class)
-            ->onlyMethods(['addIdFilter'])
+            ->addMethods(['addIdFilter'])
             ->disableOriginalConstructor()
             ->getMock();
 

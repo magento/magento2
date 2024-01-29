@@ -120,19 +120,23 @@ class StockItemRepositoryTest extends TestCase
     {
         $this->stockItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
+            ->addMethods(
+                [
+                    'setStockStatusChangedAutomaticallyFlag',
+                    'hasStockStatusChangedAutomaticallyFlag',
+
+                ]
+            )
             ->onlyMethods(
                 [
                     'getItemId',
                     'getProductId',
                     'setIsInStock',
                     'getIsInStock',
-                    'setStockStatusChangedAutomaticallyFlag',
-                    'getStockStatusChangedAutomaticallyFlag',
                     'getStockStatusChangedAuto',
                     'getManageStock',
                     'setLowStockDate',
                     'setStockStatusChangedAuto',
-                    'hasStockStatusChangedAutomaticallyFlag',
                     'setQty',
                     'getWebsiteId',
                     'setWebsiteId',
@@ -170,7 +174,8 @@ class StockItemRepositoryTest extends TestCase
             ->getMock();
         $this->productFactoryMock = $this->getMockBuilder(ProductFactory::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['load', 'create'])
+            ->addMethods(['load'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
@@ -502,7 +507,9 @@ class StockItemRepositoryTest extends TestCase
                 $mockMethod->with(...$config['with']);
             }
             if (isset($config['withConsecutive'])) {
-                $mockMethod->withConsecutive(...$config['withConsecutive']);
+                $mockMethod->willReturnCallback(fn($param) => match ([$param]) {
+                    [...$config['withConsecutive']] => $mockMethod
+                });
             }
             if (isset($config['willReturnSelf'])) {
                 $mockMethod->willReturnSelf();

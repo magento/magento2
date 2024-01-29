@@ -98,7 +98,7 @@ class StockManagementTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockItemInterfaceMock = $this->getMockBuilder(StockItemInterface::class)
-            ->onlyMethods(['hasAdminArea','getWebsiteId'])
+            ->addMethods(['hasAdminArea','getWebsiteId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->stockManagement = $this->getMockBuilder(StockManagement::class)
@@ -238,7 +238,7 @@ class StockManagementTest extends TestCase
     /**
      * @return array
      */
-    public function productsWithCorrectQtyDataProvider(): array
+    public static function productsWithCorrectQtyDataProvider(): array
     {
         return [
             [
@@ -278,7 +278,7 @@ class StockManagementTest extends TestCase
     /**
      * @return array
      */
-    public function productsWithIncorrectQtyDataProvider(): array
+    public static function productsWithIncorrectQtyDataProvider(): array
     {
         return [
             [

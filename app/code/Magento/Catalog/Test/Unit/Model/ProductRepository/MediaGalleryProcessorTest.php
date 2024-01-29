@@ -147,7 +147,7 @@ class MediaGalleryProcessorTest extends TestCase
         //verify new entries
         $contentDataObject = $this->getMockBuilder(ImageContent::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(null)
+            ->onlyMethods([])
             ->getMock();
         $this->contentFactoryMock->expects($this->once())->method('create')->willReturn($contentDataObject);
         $this->imageProcessorMock->expects($this->once())->method('processImageContent')->willReturn($absolutePath);

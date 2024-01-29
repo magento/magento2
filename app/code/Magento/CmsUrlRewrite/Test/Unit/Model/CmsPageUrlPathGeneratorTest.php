@@ -40,7 +40,7 @@ class CmsPageUrlPathGeneratorTest extends TestCase
         $this->objectManager = new ObjectManagerHelper($this);
         $this->filterManagerMock = $this->getMockBuilder(FilterManager::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['translitUrl'])
+            ->addMethods(['translitUrl'])
             ->getMock();
 
         $this->model = $this->objectManager->getObject(

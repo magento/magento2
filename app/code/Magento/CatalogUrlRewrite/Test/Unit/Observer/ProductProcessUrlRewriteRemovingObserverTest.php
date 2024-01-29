@@ -71,7 +71,7 @@ class ProductProcessUrlRewriteRemovingObserverTest extends TestCase
 
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getProduct'])
+            ->addMethods(['getProduct'])
             ->getMock();
 
         $this->productMock = $this->getMockBuilder(Product::class)

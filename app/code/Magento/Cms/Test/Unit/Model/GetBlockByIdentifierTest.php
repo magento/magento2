@@ -52,7 +52,8 @@ class GetBlockByIdentifierTest extends TestCase
 
         $this->block = $this->getMockBuilder(Block::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setStoreId', 'getId'])
+            ->addMethods(['setStoreId'])
+            ->onlyMethods(['getId'])
             ->getMock();
 
         $this->getBlockByIdentifierCommand = new GetBlockByIdentifier($this->blockFactory, $this->blockResource);

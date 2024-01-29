@@ -44,7 +44,7 @@ class AddInventoryDataObserverTest extends TestCase
 
         $this->event = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getProduct'])
+            ->addMethods(['getProduct'])
             ->getMock();
 
         $this->eventObserver = $this->getMockBuilder(Observer::class)

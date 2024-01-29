@@ -259,14 +259,12 @@ class ProductsListTest extends TestCase
         $this->productsList->setData('product_collection', $collection);
 
         $pagerBlock = $this->getMockBuilder(Pager::class)
+            ->addMethods(['setUseContainer', 'setShowAmounts', 'setTotalLimit'])
             ->onlyMethods([
                 'toHtml',
-                'setUseContainer',
-                'setShowAmounts',
                 'setShowPerPage',
                 'setPageVarName',
                 'setLimit',
-                'setTotalLimit',
                 'setCollection',
             ])->disableOriginalConstructor()
             ->getMock();
@@ -354,7 +352,7 @@ class ProductsListTest extends TestCase
     /**
      * @return array
      */
-    public function createCollectionDataProvider()
+    public static function createCollectionDataProvider()
     {
         return [
             [true, 1, null, 5],
@@ -407,13 +405,9 @@ class ProductsListTest extends TestCase
             ->getMock();
 
         $product = $this->createPartialMock(IdentityInterface::class, ['getIdentities']);
-        $notProduct = $this->getMockBuilder('NotProduct')
-            ->onlyMethods(['getIdentities'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $product->expects($this->once())->method('getIdentities')->willReturn(['product_identity']);
         $collection->expects($this->once())->method('getIterator')->willReturn(
-            new \ArrayIterator([$product, $notProduct])
+            new \ArrayIterator([$product])
         );
         $this->productsList->setData('product_collection', $collection);
 
@@ -431,7 +425,7 @@ class ProductsListTest extends TestCase
     private function getConditionsForCollection($collection)
     {
         $conditions = $this->getMockBuilder(Combine::class)
-            ->onlyMethods(['collectValidatedAttributes'])
+            ->addMethods(['collectValidatedAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
         $conditions->expects($this->once())->method('collectValidatedAttributes')

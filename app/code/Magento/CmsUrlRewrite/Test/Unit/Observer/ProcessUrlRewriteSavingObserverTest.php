@@ -75,7 +75,7 @@ class ProcessUrlRewriteSavingObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->eventMock = $this->getMockBuilder(Event::class)
-            ->onlyMethods(['getObject'])
+            ->addMethods(['getObject'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->eventObserverMock = $this->getMockBuilder(EventObserver::class)
@@ -138,7 +138,7 @@ class ProcessUrlRewriteSavingObserverTest extends TestCase
     /**
      * return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return  [
             ['identifier' => true, 'storeIdChanged' => true],

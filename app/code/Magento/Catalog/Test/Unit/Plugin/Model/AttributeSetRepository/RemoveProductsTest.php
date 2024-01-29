@@ -77,7 +77,7 @@ class RemoveProductsTest extends TestCase
 
         /** @var AttributeSetInterface|MockObject $attributeSet */
         $attributeSet = $this->getMockBuilder(AttributeSetInterface::class)
-            ->onlyMethods(['getId'])
+            ->addMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $attributeSet->expects(self::once())

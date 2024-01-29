@@ -60,7 +60,7 @@ class DataCategoryHashMapTest extends TestCase
         $categoryIdsOther = ['2' => [2, 3, 4]];
 
         $categoryMock = $this->getMockBuilder(CategoryInterface::class)
-            ->onlyMethods(['getResource'])
+            ->addMethods(['getResource'])
             ->getMockForAbstractClass();
         $connectionAdapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $selectMock = $this->createMock(Select::class);

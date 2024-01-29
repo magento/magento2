@@ -46,7 +46,7 @@ class EngineProviderTest extends TestCase
             ->willReturn($currentEngine);
 
         $engineMock = $this->getMockBuilder($currentEngineClass)
-            ->onlyMethods(['isAvailable'])
+            ->addMethods(['isAvailable'])
             ->getMockForAbstractClass();
 
         $this->objectManagerMock->expects($this->once())
@@ -137,7 +137,7 @@ class EngineProviderTest extends TestCase
             ->willReturn($currentEngine);
 
         $engineMock = $this->getMockBuilder($currentEngineClass)
-            ->onlyMethods(['isAvailable'])
+            ->addMethods(['isAvailable'])
             ->getMockForAbstractClass();
 
         $this->objectManagerMock->expects($this->once())

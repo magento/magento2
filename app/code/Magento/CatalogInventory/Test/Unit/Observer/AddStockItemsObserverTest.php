@@ -91,7 +91,7 @@ class AddStockItemsObserverTest extends TestCase
             ->willReturn($defaultScopeId);
 
         $productExtension = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->onlyMethods(['setStockItem'])
+            ->addMethods(['setStockItem'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $productExtension->expects(self::once())

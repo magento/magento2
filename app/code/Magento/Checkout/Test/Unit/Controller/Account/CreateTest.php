@@ -81,7 +81,7 @@ class CreateTest extends TestCase
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
         $this->resultPage = $this->getMockBuilder(ResultInterface::class)
-            ->onlyMethods(['setData'])
+            ->addMethods(['setData'])
             ->getMockForAbstractClass();
 
         $this->action = $objectManagerHelper->getObject(

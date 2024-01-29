@@ -183,7 +183,7 @@ class FormTest extends TestCase
         $objectArguments = $helper->getConstructArguments(Form::class, $data);
         $this->_objectBuilder = $this->getMockBuilder(Form::class)
             ->setConstructorArgs($objectArguments)
-            ->onlyMethods(['something']);
+            ->addMethods(['something']);
         $deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -255,7 +255,7 @@ class FormTest extends TestCase
     /**
      * @return array
      */
-    public function initFormDataProvider()
+    public static function initFormDataProvider()
     {
         return [
             [false],
@@ -374,7 +374,7 @@ class FormTest extends TestCase
     /**
      * @return array
      */
-    public function initGroupDataProvider()
+    public static function initGroupDataProvider()
     {
         return [
             [true, [['field' => 'field', 'label' => 'label']], 1],
@@ -575,7 +575,7 @@ class FormTest extends TestCase
     /**
      * @return array
      */
-    public function initFieldsDataProvider()
+    public static function initFieldsDataProvider()
     {
         return [
             [

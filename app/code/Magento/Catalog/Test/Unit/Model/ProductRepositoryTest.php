@@ -1404,7 +1404,7 @@ class ProductRepositoryTest extends TestCase
         //verify new entries
         $contentDataObject = $this->getMockBuilder(ImageContent::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(null)
+            ->onlyMethods([])
             ->getMock();
         $this->contentFactory->expects($this->once())
             ->method('create')

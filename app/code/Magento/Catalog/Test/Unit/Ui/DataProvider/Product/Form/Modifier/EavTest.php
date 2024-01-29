@@ -228,7 +228,7 @@ class EavTest extends AbstractModifierTest
             ->getMock();
         $this->groupMock = $this->getMockBuilder(Group::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getAttributeGroupCode'])
+            ->addMethods(['getAttributeGroupCode'])
             ->getMock();
         $this->entityTypeMock = $this->getMockBuilder(EntityType::class)
             ->disableOriginalConstructor()
@@ -254,13 +254,13 @@ class EavTest extends AbstractModifierTest
         $this->attributeGroupRepositoryMock = $this->getMockBuilder(ProductAttributeGroupRepositoryInterface::class)
             ->getMockForAbstractClass();
         $this->attributeGroupMock = $this->getMockBuilder(AttributeGroupInterface::class)
-            ->onlyMethods(['getAttributeGroupCode', 'getApplyTo'])
+            ->addMethods(['getAttributeGroupCode', 'getApplyTo'])
             ->getMockForAbstractClass();
         $this->attributeRepositoryMock = $this->getMockBuilder(ProductAttributeRepositoryInterface::class)
             ->getMockForAbstractClass();
         $this->searchCriteriaMock = $this->getMockBuilder(SearchCriteria::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getItems'])
+            ->addMethods(['getItems'])
             ->getMock();
         $this->sortOrderBuilderMock = $this->getMockBuilder(SortOrderBuilder::class)
             ->disableOriginalConstructor()
@@ -268,10 +268,10 @@ class EavTest extends AbstractModifierTest
         $this->searchResultsMock = $this->getMockBuilder(SearchResultsInterface::class)
             ->getMockForAbstractClass();
         $this->eavAttributeMock = $this->getMockBuilder(Attribute::class)
+            ->addMethods(['getAttributeGroupCode'])
             ->onlyMethods(
                 [
                     'load',
-                    'getAttributeGroupCode',
                     'getApplyTo',
                     'getFrontendInput',
                     'getAttributeCode',
@@ -282,7 +282,7 @@ class EavTest extends AbstractModifierTest
             ->disableOriginalConstructor()
             ->getMock();
         $this->productAttributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
-            ->onlyMethods(['getValue'])
+            ->addMethods(['getValue'])
             ->getMockForAbstractClass();
         $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)
             ->getMock();
@@ -328,7 +328,8 @@ class EavTest extends AbstractModifierTest
             ->method('getAttributes')
             ->willReturn([$this->attributeMock]);
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->onlyMethods(['load', 'getId', 'getConfig', 'getBaseCurrencyCode'])
+            ->addMethods(['load', 'getConfig', 'getBaseCurrencyCode'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
         $this->eavAttributeMock->expects($this->any())
             ->method('load')
@@ -530,7 +531,7 @@ class EavTest extends AbstractModifierTest
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function setupAttributeMetaDataProvider()
+    public static function setupAttributeMetaDataProvider()
     {
         return [
             'default_null_prod_not_new_and_required' => [

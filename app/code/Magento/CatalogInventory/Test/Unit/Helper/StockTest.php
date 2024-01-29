@@ -110,7 +110,8 @@ class StockTest extends TestCase
 
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setIsSalable', 'getId'])
+            ->addMethods(['setIsSalable'])
+            ->onlyMethods(['getId'])
             ->getMock();
         $productMock->expects($this->once())
             ->method('setIsSalable')
@@ -126,7 +127,8 @@ class StockTest extends TestCase
 
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setIsSalable', 'getId'])
+            ->addMethods(['setIsSalable'])
+            ->onlyMethods(['getId'])
             ->getMock();
         $productMock->expects($this->once())
             ->method('setIsSalable')

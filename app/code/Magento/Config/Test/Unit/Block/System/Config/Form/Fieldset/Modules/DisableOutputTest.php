@@ -125,12 +125,12 @@ class DisableOutputTest extends TestCase
             ->willReturn(null);
 
         $this->authSessionMock = $this->getMockBuilder(Session::class)
-            ->onlyMethods(['getUser'])
+            ->addMethods(['getUser'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->userMock = $this->getMockBuilder(User::class)
-            ->onlyMethods(['getExtra'])
+            ->addMethods(['getExtra'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -181,16 +181,18 @@ class DisableOutputTest extends TestCase
             'secureRenderer' => $secureRendererMock
         ];
 
+        $this->objectManager->prepareObjectManager();
         $this->object = $this->objectManager->getObject(
             DisableOutput::class,
             $data
         );
 
         $this->elementMock = $this->getMockBuilder(Text::class)
+            ->addMethods(['getExpanded', 'getLegend', 'getComment', 'getTooltip', 'getIsNested'])
             ->onlyMethods(
                 [
-                    'getId', 'getHtmlId', 'getName', 'getExpanded', 'getLegend', 'getComment', 'getTooltip', 'toHtml',
-                    'addField', 'setRenderer', 'getElements', 'getIsNested'
+                    'getId', 'getHtmlId', 'getName', 'toHtml',
+                    'addField', 'setRenderer', 'getElements'
                 ]
             )
             ->disableOriginalConstructor()

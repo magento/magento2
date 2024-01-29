@@ -130,6 +130,7 @@ class CollectionTest extends TestCase
             ->method('create')
             ->willReturn($totalRecordsResolver);
 
+        $this->objectManager->prepareObjectManager();
         $this->advancedCollection = $this->objectManager->getObject(
             Collection::class,
             [
@@ -211,7 +212,8 @@ class CollectionTest extends TestCase
     protected function getCriteriaBuilder()
     {
         $criteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->onlyMethods(['addFilter', 'create', 'setRequestName'])
+            ->addMethods(['setRequestName'])
+            ->onlyMethods(['addFilter', 'create'])
             ->disableOriginalConstructor()
             ->getMock();
 

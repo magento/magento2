@@ -79,7 +79,7 @@ class GenericTest extends TestCase
          */
         $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getIsVirtual'])
+            ->addMethods(['getIsVirtual'])
             ->getMock();
 
         $itemMock->expects($this->once())
