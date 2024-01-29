@@ -360,6 +360,7 @@ interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\
     id: String! @deprecated(reason: "Use `uid` instead.")
     uid: ID! @doc(description: "The unique ID for a `CartItemInterface` object.")
     quantity: Float! @doc(description: "The quantity of this item in the cart.")
+    is_available: Boolean! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CheckProductStockAvailability") @doc(description: "True if requested quantity is less than available stock, false otherwise.")
     prices: CartItemPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemPrices") @doc(description: "Contains details about the price of the item, including taxes and discounts.")
     product: ProductInterface! @doc(description: "Details about an item in the cart.")
     errors: [CartItemError!] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemErrors") @doc(description: "An array of errors encountered while loading the cart item")
@@ -442,3 +443,8 @@ enum CartUserInputErrorType {
     UNDEFINED
 }
 
+type StoreConfig {
+    is_guest_checkout_enabled: Boolean @doc(description: "Extended Config Data - checkout/options/guest_checkout")
+    is_one_page_checkout_enabled: Boolean @doc(description: "Extended Config Data - checkout/options/onepage_checkout_enabled")
+    max_items_in_order_summary: Int @doc(description: "Extended Config Data - checkout/options/max_items_display_count")
+}
