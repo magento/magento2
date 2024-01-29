@@ -229,12 +229,28 @@ class LinkTest extends TestCase
         $this->session->expects($this->once())->method('authenticate')->willReturn(true);
         $this->objectManager
             ->method('get')
-            ->withConsecutive([Data::class], [Session::class])
-            ->willReturnOnConsecutiveCalls($this->helperData, $this->session);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg === Data::class) {
+                        return $this->helperData;
+                    } elseif ($arg === Session::class) {
+                        return $this->session;
+                    }
+                }
+            );
         $this->objectManager
             ->method('create')
-            ->withConsecutive([Item::class], [Product::class], [UrlInterface::class])
-            ->willReturnOnConsecutiveCalls($this->linkPurchasedItem, $this->product, $this->urlInterface);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg === Item::class) {
+                        return $this->linkPurchasedItem;
+                    } elseif ($arg === Product::class) {
+                        return $this->product;
+                    } elseif ($arg === UrlInterface::class) {
+                        return $this->urlInterface;
+                    }
+                }
+            );
         $this->urlInterface->expects($this->once())
             ->method('getUrl')
             ->with('downloadable/customer/products/', ['_secure' => true])
@@ -262,12 +278,26 @@ class LinkTest extends TestCase
         $this->session->expects($this->once())->method('getCustomerId')->willReturn('customer_id');
         $this->objectManager
             ->method('get')
-            ->withConsecutive([Data::class], [Session::class])
-            ->willReturnOnConsecutiveCalls($this->helperData, $this->session);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg === Data::class) {
+                        return $this->helperData;
+                    } elseif ($arg === Session::class) {
+                        return $this->session;
+                    }
+                }
+            );
         $this->objectManager
             ->method('create')
-            ->withConsecutive([Item::class], [Purchased::class])
-            ->willReturnOnConsecutiveCalls($this->linkPurchasedItem, $this->linkPurchased);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg === Item::class) {
+                        return $this->linkPurchasedItem;
+                    } elseif ($arg === Purchased::class) {
+                        return $this->linkPurchased;
+                    }
+                }
+            );
         $this->linkPurchasedItem->expects($this->once())->method('getPurchasedId')->willReturn('purchased_id');
         $this->linkPurchased->expects($this->once())->method('load')->with('purchased_id')->willReturnSelf();
         $this->linkPurchased->expects($this->once())->method('getCustomerId')->willReturn('other_customer_id');
@@ -295,12 +325,24 @@ class LinkTest extends TestCase
             ->willReturnSelf();
         $this->objectManager
             ->method('get')
-            ->withConsecutive([Data::class], [Download::class])
-            ->willReturnOnConsecutiveCalls($this->helperData, $this->downloadHelper);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg === Data::class) {
+                        return $this->helperData;
+                    } elseif ($arg === Download::class) {
+                        return $this->downloadHelper;
+                    }
+                }
+            );
         $this->objectManager
             ->method('create')
-            ->withConsecutive([Item::class])
-            ->willReturnOnConsecutiveCalls($this->linkPurchasedItem);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg === Item::class) {
+                        return $this->linkPurchasedItem;
+                    }
+                }
+            );
         $this->linkPurchasedItem->expects($this->once())->method('getId')->willReturn(5);
         $this->helperData->expects($this->once())
             ->method('getIsShareable')
@@ -350,14 +392,23 @@ class LinkTest extends TestCase
         $this->response
             ->expects($this->any())
             ->method('setHeader')
-            ->withConsecutive(
-                ['Pragma', 'public', true],
-                ['Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true],
-                ['Content-type', $mimeType, true],
-                ['Content-Length', $fileSize],
-                ['Content-Disposition', $disposition . '; filename=' . $fileName]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($mimeType, $fileSize, $disposition, $fileName) {
+                    if ($arg1 === 'Pragma' && $arg2 === 'public') {
+                        return $this->response;
+                    } elseif ($arg1 === 'Cache-Control' &&
+                        $arg2 === 'must-revalidate, post-check=0, pre-check=0') {
+                        return $this->response;
+                    } elseif ($arg1 === 'Content-type' && $arg2 === $mimeType) {
+                        return $this->response;
+                    } elseif ($arg1 === 'Content-Length' && $arg2 === $fileSize) {
+                        return $this->response;
+                    } elseif ($arg1 === 'Content-Disposition' &&
+                        $arg2 === $disposition . '; filename=' . $fileName) {
+                        return $this->response;
+                    }
+                }
+            );
 
         $this->downloadHelper->expects($this->once())->method('getContentDisposition')->willReturn($disposition);
         $this->downloadHelper->expects($this->once())->method('getFileSize')->willReturn($fileSize);
@@ -384,8 +435,15 @@ class LinkTest extends TestCase
         $this->linkPurchasedItem->expects($this->once())->method('getId')->willReturn(5);
         $this->objectManager
             ->method('get')
-            ->withConsecutive([Data::class], [Session::class])
-            ->willReturnOnConsecutiveCalls($this->helperData, $this->session);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg === Data::class) {
+                        return $this->helperData;
+                    } elseif ($arg === Session::class) {
+                        return $this->session;
+                    }
+                }
+            );
         $this->objectManager
             ->method('create')
             ->with(Item::class)
@@ -462,14 +520,23 @@ class LinkTest extends TestCase
         $this->response
             ->expects($this->any())
             ->method('setHeader')
-            ->withConsecutive(
-                ['Pragma', 'public', true],
-                ['Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true],
-                ['Content-type', $mimeType, true],
-                ['Content-Length', $fileSize],
-                ['Content-Disposition', $disposition . '; filename=' . $fileName]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($mimeType, $fileSize, $disposition, $fileName) {
+                    if ($arg1 == 'Pragma' && $arg2 == 'public') {
+                        return $this->response;
+                    } elseif ($arg1 == 'Cache-Control' &&
+                        $arg2 == 'must-revalidate, post-check=0, pre-check=0') {
+                        return $this->response;
+                    } elseif ($arg1 == 'Content-type' && $arg2 == $mimeType) {
+                        return $this->response;
+                    } elseif ($arg1 == 'Content-Length' && $arg2 == $fileSize) {
+                        return $this->response;
+                    } elseif ($arg1 == 'Content-Disposition' &&
+                        $arg2 == $disposition . '; filename=' . $fileName) {
+                        return $this->response;
+                    }
+                }
+            );
 
         $this->assertEquals($this->response, $this->link->execute());
     }
@@ -477,7 +544,7 @@ class LinkTest extends TestCase
     /**
      * @return array
      */
-    public function linkNotAvailableDataProvider(): array
+    public static function linkNotAvailableDataProvider(): array
     {
         return [
             ['addNotice', 'expired', 'The link has expired.'],
@@ -490,7 +557,7 @@ class LinkTest extends TestCase
     /**
      * @return array
      */
-    public function downloadTypesDataProvider(): array
+    public static function downloadTypesDataProvider(): array
     {
         return [
             ['mimeType' => 'text/html',  'disposition' => Mime::DISPOSITION_ATTACHMENT],

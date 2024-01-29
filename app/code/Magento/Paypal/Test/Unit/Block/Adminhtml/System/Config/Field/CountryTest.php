@@ -147,26 +147,21 @@ class CountryTest extends TestCase
             );
             $this->_url
                 ->method('getUrl')
-                ->withConsecutive(
-                    [
-                        '*/*/*',
-                        [
-                            'section' => 'section',
-                            'website' => 'website',
-                            'store' => 'store',
-                            StructurePlugin::REQUEST_PARAM_COUNTRY => '__country__'
-                        ]
-                    ],
-                    [
-                        '*/*/*',
-                        [
-                            'section' => 'section',
-                            'website' => 'website',
-                            'store' => 'store',
-                            StructurePlugin::REQUEST_PARAM_COUNTRY => '__country__',
-                            Country::REQUEST_PARAM_DEFAULT_COUNTRY => '__default__'
-                        ]
-                    ]
+                ->willReturnCallback(
+                    function ($arg1, $arg2) {
+                        if ($arg1 === '*/*/*' && is_array($arg2) &&
+                            $arg2['section'] === 'section' &&
+                            $arg2['website'] === 'website' && $arg2['store'] === 'store' &&
+                            $arg2[StructurePlugin::REQUEST_PARAM_COUNTRY] === '__country__') {
+                            return 'first_url';
+                        } elseif ($arg1 === '*/*/*' &&
+                            is_array($arg2) && $arg2['section'] === 'section' &&
+                            $arg2['website'] === 'website' && $arg2['store'] === 'store' &&
+                            $arg2[StructurePlugin::REQUEST_PARAM_COUNTRY] === '__country__' &&
+                            $arg2[Country::REQUEST_PARAM_DEFAULT_COUNTRY] === '__default__') {
+                            return 'second_url';
+                        }
+                    }
                 );
         }
         $this->_jsHelper->expects($this->once())

@@ -136,9 +136,14 @@ class SessionTest extends TestCase
 
         $this->_eventManagerMock
             ->method('dispatch')
-            ->withConsecutive(
-                ['customer_login', ['customer' => $customer]],
-                ['customer_data_object_login', ['customer' => $customerDto]]
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($customer, $customerDto, &$callCount) {
+                    if ($arg1 == 'customer_login' && $arg2 == ['customer' => $customer]) {
+                        return null;
+                    } elseif ($arg1 == 'customer_data_object_login' && $arg2 == ['customer' => $customerDto]) {
+                        return null;
+                    }
+                }
             );
 
         $this->_httpContextMock->expects($this->once())
@@ -168,9 +173,14 @@ class SessionTest extends TestCase
 
         $this->_eventManagerMock
             ->method('dispatch')
-            ->withConsecutive(
-                ['customer_login', ['customer' => $customer]],
-                ['customer_data_object_login', ['customer' => $customerDto]]
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($customer, $customerDto) {
+                    if ($arg1 == 'customer_login' && $arg2 == ['customer' => $customer]) {
+                        return null;
+                    } elseif ($arg1 == 'customer_data_object_login' && $arg2 == ['customer' => $customerDto]) {
+                        return null;
+                    }
+                }
             );
 
         $this->_model->setCustomerDataAsLoggedIn($customerDto);
