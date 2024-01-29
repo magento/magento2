@@ -80,11 +80,12 @@ class ProcessAdminFinalPriceObserverTest extends TestCase
             ->getMock();
         $this->eventMock = $this
             ->getMockBuilder(Event::class)
-            ->onlyMethods(['getProduct'])
+            ->addMethods(['getProduct'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->rulePricesStorageMock = $this->getMockBuilder(RulePricesStorage::class)
-            ->onlyMethods(['getWebsiteId', 'getRulePrice', 'getCustomerGroupId', 'setRulePrice'])
+            ->addMethods(['getWebsiteId', 'getCustomerGroupId'])
+            ->onlyMethods(['getRulePrice', 'setRulePrice'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
@@ -128,20 +129,19 @@ class ProcessAdminFinalPriceObserverTest extends TestCase
             ->willReturn($this->eventMock);
 
         $productMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['getWebsiteId', 'getCustomerGroupId'])
             ->onlyMethods(
                 [
                     'getStoreId',
-                    'getWebsiteId',
                     'getId',
                     'getData',
-                    'getCustomerGroupId',
                     'setFinalPrice'
                 ]
             )
             ->disableOriginalConstructor()
             ->getMock();
         $dateMock = $this->getMockBuilder(Date::class)
-            ->onlyMethods(['format'])
+            ->addMethods(['format'])
             ->disableOriginalConstructor()
             ->getMock();
 

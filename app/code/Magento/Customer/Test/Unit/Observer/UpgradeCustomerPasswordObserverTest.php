@@ -78,12 +78,12 @@ class UpgradeCustomerPasswordObserverTest extends TestCase
             ->onlyMethods(['getId'])
             ->getMock();
         $customer = $this->getMockBuilder(CustomerInterface::class)
-            ->onlyMethods(['setData'])
+            ->addMethods(['setData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $customerSecure = $this->getMockBuilder(CustomerSecure::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getPasswordHash', 'setPasswordHash'])
+            ->addMethods(['getPasswordHash', 'setPasswordHash'])
             ->getMock();
         $model->expects($this->exactly(2))
             ->method('getId')

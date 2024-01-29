@@ -88,7 +88,7 @@ class StockTest extends TestCase
 
         $this->resource = $this->getMockBuilder(AbstractResource::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getIdFieldName'])
+            ->addMethods(['getIdFieldName'])
             ->getMockForAbstractClass();
 
         $this->resourceCollection = $this->getMockBuilder(AbstractDb::class)
@@ -139,7 +139,7 @@ class StockTest extends TestCase
     /**
      * @return array
      */
-    public function eventsDataProvider()
+    public static function eventsDataProvider()
     {
         return [
             ['cataloginventory_stock_save_before', 'beforeSave', 'stock'],

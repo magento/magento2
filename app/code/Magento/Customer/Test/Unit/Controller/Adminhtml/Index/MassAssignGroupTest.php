@@ -174,7 +174,7 @@ class MassAssignGroupTest extends TestCase
     {
         $customersIds = [10, 11, 12];
         $customerMock = $this->getMockBuilder(CustomerInterface::class)
-            ->onlyMethods(['setData'])
+            ->addMethods(['setData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->customerCollectionMock->expects($this->any())

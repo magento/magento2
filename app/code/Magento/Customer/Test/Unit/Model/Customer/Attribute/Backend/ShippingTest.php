@@ -29,7 +29,7 @@ class ShippingTest extends TestCase
     {
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getDefaultShipping', 'unsetDefaultShipping'])
+            ->addMethods(['getDefaultShipping', 'unsetDefaultShipping'])
             ->getMock();
 
         $object->expects($this->once())->method('getDefaultShipping')->willReturn(null);
@@ -45,12 +45,12 @@ class ShippingTest extends TestCase
         $defaultShipping = 'default Shipping address';
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getDefaultShipping', 'getAddresses', 'setDefaultShipping'])
+            ->addMethods(['getDefaultShipping', 'getAddresses', 'setDefaultShipping'])
             ->getMock();
 
         $address = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getPostIndex', 'getId'])
+            ->addMethods(['getPostIndex', 'getId'])
             ->getMock();
 
         $attribute = $this->getMockBuilder(AbstractAttribute::class)

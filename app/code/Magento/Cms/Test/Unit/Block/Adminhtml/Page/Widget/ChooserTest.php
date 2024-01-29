@@ -106,10 +106,10 @@ class ChooserTest extends TestCase
             ->getMock();
         $this->elementMock = $this->getMockBuilder(AbstractElement::class)
             ->disableOriginalConstructor()
+            ->addMethods(['getValue'])
             ->onlyMethods(
                 [
                     'getId',
-                    'getValue',
                     'setData',
                 ]
             )
@@ -126,20 +126,21 @@ class ChooserTest extends TestCase
             ->getMock();
         $this->chooserMock = $this->getMockBuilder(BlockInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(
+            ->onlyMethods(['toHtml'])
+            ->addMethods(
                 [
                     'setElement',
                     'setConfig',
                     'setFieldsetId',
                     'setSourceUrl',
                     'setUniqId',
-                    'setLabel',
-                    'toHtml',
+                    'setLabel'
                 ]
             )
             ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
         $this->context = $objectManager->getObject(
             Context::class,
             [
@@ -256,7 +257,7 @@ class ChooserTest extends TestCase
     /**
      * @return array
      */
-    public function prepareElementHtmlDataProvider()
+    public static function prepareElementHtmlDataProvider()
     {
         return [
             'elementValue NOT EMPTY, modelBlockId NOT EMPTY' => [

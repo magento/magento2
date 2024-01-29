@@ -59,7 +59,8 @@ class VisitorTest extends TestCase
         $this->registryMock = $this->createMock(Registry::class);
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getSessionId', 'getVisitorData', 'setVisitorData'])
+            ->addMethods(['getVisitorData', 'setVisitorData'])
+            ->onlyMethods(['getSessionId'])
             ->getMock();
         $this->httpRequestMock = $this->createMock(HttpRequest::class);
 

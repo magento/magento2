@@ -164,7 +164,7 @@ class NewsletterTest extends TestCase
         $this->_session = $this->getMockBuilder(
             Session::class
         )->disableOriginalConstructor()
-            ->onlyMethods(
+            ->addMethods(
                 ['setIsUrlNotice', '__wakeup']
             )->getMock();
         $this->_session->expects($this->any())->method('setIsUrlNotice');
@@ -183,28 +183,30 @@ class NewsletterTest extends TestCase
                 ['addSuccess', 'addMessage', 'addException']
             )->getMock();
 
+        $addContextArgs = [
+            'getTranslator',
+            'getFrontController',
+            'getLayoutFactory',
+            'getTitle'
+        ];
+
         $contextArgs = [
             'getHelper',
             'getSession',
             'getAuthorization',
-            'getTranslator',
             'getObjectManager',
-            'getFrontController',
             'getActionFlag',
             'getMessageManager',
-            'getLayoutFactory',
             'getEventManager',
             'getRequest',
             'getResponse',
-            'getTitle',
             'getView'
         ];
-        $contextMock = $this->getMockBuilder(
-            Context::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(
-                $contextArgs
-            )->getMock();
+        $contextMock = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->addMethods($addContextArgs)
+            ->onlyMethods($contextArgs)
+            ->getMock();
         $contextMock->expects($this->any())->method('getRequest')->willReturn($this->_request);
         $contextMock->expects($this->any())->method('getResponse')->willReturn($this->_response);
         $contextMock->expects(

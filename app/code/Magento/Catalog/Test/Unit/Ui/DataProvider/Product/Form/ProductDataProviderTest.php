@@ -65,7 +65,7 @@ class ProductDataProviderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->modifierMockOne = $this->getMockBuilder(ModifierInterface::class)
-            ->onlyMethods(['getData', 'getMeta'])
+            ->addMethods(['getData', 'getMeta'])
             ->getMockForAbstractClass();
 
         $this->model = $this->objectManager->getObject(ProductDataProvider::class, [

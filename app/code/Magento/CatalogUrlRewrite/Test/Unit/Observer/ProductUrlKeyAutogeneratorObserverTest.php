@@ -68,12 +68,12 @@ class ProductUrlKeyAutogeneratorObserverTest extends TestCase
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setUrlKey'])
+            ->addMethods(['setUrlKey'])
             ->getMock();
         $product->expects($this->atLeastOnce())->method('setUrlKey')->with($urlKey);
         $event = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getProduct'])
+            ->addMethods(['getProduct'])
             ->getMock();
         $event->expects($this->atLeastOnce())->method('getProduct')->willReturn($product);
         /** @var Observer|MockObject $observer */
@@ -97,12 +97,12 @@ class ProductUrlKeyAutogeneratorObserverTest extends TestCase
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setUrlKey'])
+            ->addMethods(['setUrlKey'])
             ->getMock();
         $product->expects($this->never())->method('setUrlKey');
         $event = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getProduct'])
+            ->addMethods(['getProduct'])
             ->getMock();
         $event->expects($this->atLeastOnce())->method('getProduct')->willReturn($product);
         /** @var Observer|MockObject $observer */

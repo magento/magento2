@@ -126,7 +126,7 @@ class SaveDownloadableOrderItemObserverTest extends TestCase
 
         $this->resultMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setIsAllowed'])
+            ->addMethods(['setIsAllowed'])
             ->getMock();
 
         $this->storeMock = $this->getMockBuilder(DataObject::class)
@@ -135,7 +135,7 @@ class SaveDownloadableOrderItemObserverTest extends TestCase
 
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getStore', 'getResult', 'getQuote', 'getOrder'])
+            ->addMethods(['getStore', 'getResult', 'getQuote', 'getOrder'])
             ->getMock();
 
         $this->orderMock = $this->getMockBuilder(Order::class)
@@ -224,7 +224,8 @@ class SaveDownloadableOrderItemObserverTest extends TestCase
 
         $purchasedLink = $this->getMockBuilder(Purchased::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['load', 'setLinkSectionTitle', 'save'])
+            ->addMethods(['setLinkSectionTitle'])
+            ->onlyMethods(['load', 'save'])
             ->getMock();
         $purchasedLink->expects($this->once())
             ->method('load')
@@ -319,7 +320,8 @@ class SaveDownloadableOrderItemObserverTest extends TestCase
 
         $purchasedLink = $this->getMockBuilder(Purchased::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['load', 'setLinkSectionTitle', 'save', 'getId'])
+            ->addMethods(['setLinkSectionTitle'])
+            ->onlyMethods(['load', 'save', 'getId'])
             ->getMock();
         $purchasedLink->expects($this->once())
             ->method('load')
@@ -356,7 +358,8 @@ class SaveDownloadableOrderItemObserverTest extends TestCase
     {
         $linkItem = $this->getMockBuilder(\Magento\Downloadable\Model\Link\Purchased\Item::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getStatus', 'getOrderItemId', 'setStatus', 'save', 'setNumberOfDownloadsBought'])
+            ->addMethods(['getStatus', 'getOrderItemId', 'setStatus', 'setNumberOfDownloadsBought'])
+            ->onlyMethods(['save'])
             ->getMock();
         $linkItem->expects($this->any())
             ->method('getStatus')

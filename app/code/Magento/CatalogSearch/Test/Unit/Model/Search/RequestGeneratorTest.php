@@ -67,7 +67,7 @@ class RequestGeneratorTest extends TestCase
     /**
      * @return array
      */
-    public function attributesProvider()
+    public static function attributesProvider()
     {
         return [
             [
@@ -203,12 +203,12 @@ class RequestGeneratorTest extends TestCase
         /** @var \Magento\Catalog\Model\Entity\Attribute|MockObject $attribute */
         $attribute = $this->getMockBuilder(AttributeResourceModel::class)
             ->disableOriginalConstructor()
+            ->addMethods(['getSearchWeight'])
             ->onlyMethods(
                 [
                     'getAttributeCode',
                     'getBackendType',
                     'getIsVisibleInAdvancedSearch',
-                    'getSearchWeight',
                     'getFrontendInput',
                     'getData',
                     'getIsSearchable',

@@ -102,13 +102,15 @@ class RouterTest extends TestCase
 
         /** @var RequestInterface|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->onlyMethods([
+            ->addMethods([
                 'getPathInfo',
-                'setModuleName',
                 'setControllerName',
-                'setActionName',
                 'setParam',
                 'setAlias',
+            ])
+            ->onlyMethods([
+                'setModuleName',
+                'setActionName'
             ])
             ->getMockForAbstractClass();
         $requestMock->expects($this->once())

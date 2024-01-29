@@ -86,7 +86,8 @@ class GroupTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->abstractModelMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['isObjectNew', 'dataHasChangedFor', 'getStoreIds'])
+            ->addMethods(['getStoreIds'])
+            ->onlyMethods(['isObjectNew', 'dataHasChangedFor'])
             ->getMockForAbstractClass();
         $this->subjectMock = $this->getMockBuilder(Group::class)
             ->disableOriginalConstructor()

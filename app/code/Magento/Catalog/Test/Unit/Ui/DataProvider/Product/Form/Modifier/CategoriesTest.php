@@ -10,6 +10,7 @@ namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\DB\Helper as DbHelper;
 use Magento\Framework\UrlInterface;
@@ -81,7 +82,7 @@ class CategoriesTest extends AbstractModifierTest
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->onlyMethods(['getUser'])
+            ->addMethods(['getUser'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->categoryCollectionFactoryMock->expects($this->any())
@@ -126,6 +127,13 @@ class CategoriesTest extends AbstractModifierTest
      */
     protected function createModel()
     {
+        $objects = [
+            [
+                CacheInterface::class,
+                $this->createMock(CacheInterface::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
         return $this->objectManager->getObject(
             Categories::class,
             [
@@ -220,7 +228,7 @@ class CategoriesTest extends AbstractModifierTest
     /**
      * @return array
      */
-    public function modifyMetaLockedDataProvider()
+    public static function modifyMetaLockedDataProvider()
     {
         return [[true], [false]];
     }
@@ -251,7 +259,7 @@ class CategoriesTest extends AbstractModifierTest
             ->will($this->returnValue($roleAclUser));
 
         $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->onlyMethods(['getUser'])
+            ->addMethods(['getUser'])
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -45,7 +45,7 @@ class NoRouteObserverTest extends TestCase
             ->getMock();
         $this->eventMock = $this
             ->getMockBuilder(Event::class)
-            ->onlyMethods(
+            ->addMethods(
                 [
                     'getStatus',
                     'getRedirect',
@@ -55,7 +55,7 @@ class NoRouteObserverTest extends TestCase
             ->getMock();
         $this->objectMock = $this
             ->getMockBuilder(DataObject::class)
-            ->onlyMethods(
+            ->addMethods(
                 [
                     'setLoaded',
                     'setForwardModule',

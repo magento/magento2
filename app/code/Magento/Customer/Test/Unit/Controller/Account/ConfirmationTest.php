@@ -113,7 +113,7 @@ class ConfirmationTest extends TestCase
 
         $blockMock = $this->getMockBuilder(Template::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setEmail', 'setLoginUrl'])
+            ->addMethods(['setEmail', 'setLoginUrl'])
             ->getMock();
 
         $layoutMock->expects($this->once())->method('getBlock')->with('accountConfirmation')->willReturn($blockMock);

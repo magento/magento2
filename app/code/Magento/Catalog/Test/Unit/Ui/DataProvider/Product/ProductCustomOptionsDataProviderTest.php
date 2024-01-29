@@ -76,6 +76,7 @@ class ProductCustomOptionsDataProviderTest extends TestCase
             ->getMockForAbstractClass();
         $this->collectionMock = $this->getMockBuilder(AbstractCollection::class)
             ->disableOriginalConstructor()
+            ->addMethods(['setStoreId'])
             ->onlyMethods([
                 'load',
                 'getSelect',
@@ -83,8 +84,7 @@ class ProductCustomOptionsDataProviderTest extends TestCase
                 'getIterator',
                 'isLoaded',
                 'toArray',
-                'getSize',
-                'setStoreId'
+                'getSize'
             ])
             ->getMockForAbstractClass();
         $this->dbSelectMock = $this->getMockBuilder(DbSelect::class)
@@ -184,7 +184,7 @@ class ProductCustomOptionsDataProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getDataDataProvider()
+    public static function getDataDataProvider()
     {
         return [
             0 => [

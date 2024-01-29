@@ -148,12 +148,10 @@ class ProductTest extends TestCase
     {
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
+            ->addMethods(['getAttribute', 'setQuoteItemQty', 'setQuoteItemPrice'])
             ->onlyMethods(
                 [
-                    'getAttribute',
                     'getId',
-                    'setQuoteItemQty',
-                    'setQuoteItemPrice',
                     'getTypeId',
                     'hasData',
                 ]
@@ -187,7 +185,8 @@ class ProductTest extends TestCase
         /* @var AbstractItem|MockObject $item */
         $item = $this->getMockBuilder(AbstractItem::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setProduct', 'getProduct', 'getChildren'])
+            ->addMethods(['setProduct'])
+            ->onlyMethods(['getProduct', 'getChildren'])
             ->getMockForAbstractClass();
         $item->expects($this->any())
             ->method('getProduct')
@@ -248,7 +247,8 @@ class ProductTest extends TestCase
         /* @var AbstractItem|MockObject $item */
         $item = $this->getMockBuilder(AbstractItem::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setProduct', 'getProduct', 'getChildren'])
+            ->addMethods(['setProduct'])
+            ->onlyMethods(['getProduct', 'getChildren'])
             ->getMockForAbstractClass();
         $item->expects($this->any())
             ->method('getProduct')

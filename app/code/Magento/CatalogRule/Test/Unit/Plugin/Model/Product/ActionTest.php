@@ -41,7 +41,7 @@ class ActionTest extends TestCase
 
         $result = $this->getMockBuilder(\Magento\Catalog\Model\Product\Action::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getAttributesData', 'getProductIds'])
+            ->addMethods(['getAttributesData', 'getProductIds'])
             ->getMock();
 
         $result->expects($this->once())
@@ -67,7 +67,7 @@ class ActionTest extends TestCase
 
         $result = $this->getMockBuilder(\Magento\Catalog\Model\Product\Action::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getAttributesData', 'getProductIds'])
+            ->addMethods(['getAttributesData', 'getProductIds'])
             ->getMock();
 
         $result->expects($this->once())

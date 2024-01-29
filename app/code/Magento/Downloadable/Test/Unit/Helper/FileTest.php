@@ -69,7 +69,7 @@ class FileTest extends TestCase
 
         $this->coreFileStorageDatabase =
             $this->getMockBuilder(Database::class)
-                ->onlyMethods(['create'])
+                ->addMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->appContext = $this->getMockBuilder(Context::class)

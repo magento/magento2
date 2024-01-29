@@ -104,25 +104,23 @@ class StockItemTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $quoteItem = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
+            ->addMethods(['setIsQtyDecimal', 'setUseOldQty', 'setBackorders', 'setStockStateResult'])
             ->onlyMethods(
                 [
                     'getParentItem',
                     'getProduct',
                     'getId',
                     'getQuoteId',
-                    'setIsQtyDecimal',
                     'setData',
-                    'setUseOldQty',
                     'setMessage',
-                    'setBackorders',
-                    '__wakeup',
-                    'setStockStateResult'
+                    '__wakeup'
                 ]
             )
             ->disableOriginalConstructor()
             ->getMock();
         $parentItem = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
-            ->onlyMethods(['getQty', 'setIsQtyDecimal', 'getProduct', '__wakeup'])
+            ->addMethods(['setIsQtyDecimal'])
+            ->onlyMethods(['getQty', 'getProduct', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
         $product = $this->getMockBuilder(Product::class)
@@ -146,7 +144,7 @@ class StockItemTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $result = $this->getMockBuilder(DataObject::class)
-            ->onlyMethods(
+            ->addMethods(
                 [
                     'getItemIsQtyDecimal',
                     'getHasQtyOptionUpdate',
@@ -227,7 +225,8 @@ class StockItemTest extends TestCase
         $productId = 1;
 
         $stockItem = $this->getMockBuilder(Item::class)
-            ->onlyMethods(['checkQuoteItemQty', 'setProductName', 'setIsChildItem', 'hasIsChildItem', '__wakeup'])
+            ->addMethods(['checkQuoteItemQty', 'setProductName', 'setIsChildItem', 'hasIsChildItem'])
+            ->onlyMethods(['__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
         $storeMock = $this->getMockBuilder(Store::class)
@@ -237,7 +236,8 @@ class StockItemTest extends TestCase
             ->method('getWebsiteId')
             ->willReturn($websiteId);
         $quoteItem = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
-            ->onlyMethods(['getProduct', 'getParentItem', 'getQtyToAdd', 'getId', 'getQuoteId', '__wakeup'])
+            ->addMethods(['getQtyToAdd'])
+            ->onlyMethods(['getProduct', 'getParentItem', 'getId', 'getQuoteId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
         $product = $this->getMockBuilder(Product::class)
@@ -249,7 +249,7 @@ class StockItemTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $result = $this->getMockBuilder(DataObject::class)
-            ->onlyMethods(
+            ->addMethods(
                 ['getItemIsQtyDecimal', 'getHasQtyOptionUpdate', 'getItemUseOldQty', 'getMessage', 'getItemBackorders']
             )
             ->disableOriginalConstructor()

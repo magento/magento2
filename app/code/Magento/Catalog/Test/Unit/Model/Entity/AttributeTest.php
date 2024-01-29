@@ -211,7 +211,8 @@ class AttributeTest extends TestCase
         );
 
         $this->resourceMock = $this->getMockBuilder(AbstractResource::class)
-            ->onlyMethods(['_construct', 'getConnection', 'getIdFieldName', 'saveInSetIncluding'])
+            ->addMethods(['getIdFieldName', 'saveInSetIncluding'])
+            ->onlyMethods(['_construct', 'getConnection'])
             ->getMockForAbstractClass();
         $this->cacheManager = $this->getMockBuilder(CacheInterface::class)
             ->getMock();
@@ -226,6 +227,7 @@ class AttributeTest extends TestCase
             ->method('getEventDispatcher')
             ->willReturn($this->eventDispatcher);
         $objectManagerHelper = new ObjectManagerHelper($this);
+        $objectManagerHelper->prepareObjectManager();
         $this->attribute = $objectManagerHelper->getObject(
             Attribute::class,
             [

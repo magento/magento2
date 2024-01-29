@@ -651,7 +651,7 @@ class ProcessCronQueueObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dispatchExceptionInCallbackDataProvider(): array
+    public static function dispatchExceptionInCallbackDataProvider(): array
     {
         $throwable = new TypeError('Description of TypeError');
         return [
@@ -706,21 +706,25 @@ class ProcessCronQueueObserverTest extends TestCase
             ->with('cron_job_run', ['job_name' => 'cron/test_group/test_job1']);
 
         $dateScheduledAt = date('Y-m-d H:i:s', $this->time - 86400);
-        $scheduleMethods = [
+        $addScheduleMethods = [
             'getJobCode',
-            'tryLockJob',
             'getScheduledAt',
-            'save',
             'setStatus',
             'setMessages',
             'setExecutedAt',
-            'setFinishedAt',
+            'setFinishedAt'
+        ];
+        $scheduleMethods = [
+            'tryLockJob',
+            'save',
             '__wakeup',
             'getResource'
         ];
         /** @var Schedule|MockObject $schedule */
         $schedule = $this->getMockBuilder(
             Schedule::class
+        )->addMethods(
+            $addScheduleMethods
         )->onlyMethods(
             $scheduleMethods
         )->disableOriginalConstructor()
@@ -781,8 +785,8 @@ class ProcessCronQueueObserverTest extends TestCase
         $this->scheduleFactoryMock->expects($this->once())
             ->method('create')->willReturn($scheduleMock);
 
-        $testCronJob = $this->getMockBuilder('CronJob')
-            ->onlyMethods(['execute'])->getMock();
+        $testCronJob = $this->getMockBuilder(\stdClass::class)
+            ->addMethods(['execute'])->getMock();
         $testCronJob->expects($this->atLeastOnce())->method('execute')->with($schedule);
 
         $this->objectManagerMock->expects($this->once())
@@ -812,11 +816,10 @@ class ProcessCronQueueObserverTest extends TestCase
             ->method('getParam')->willReturn('test_group');
         $this->cacheMock
             ->method('load')
-            ->withConsecutive(
-                [ProcessCronQueueObserver::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . 'test_group'],
-                [ProcessCronQueueObserver::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . 'test_group']
-            )
-            ->willReturnOnConsecutiveCalls($this->time + 10000000, $this->time - 10000000);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [ProcessCronQueueObserver::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . 'test_group'] => $this->time + 10000000,
+                [ProcessCronQueueObserver::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . 'test_group'] => $this->time - 10000000
+            });
 
         $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn(0);
 
@@ -876,11 +879,10 @@ class ProcessCronQueueObserverTest extends TestCase
         $this->consoleRequestMock->expects($this->any())->method('getParam')->willReturn('default');
         $this->cacheMock
             ->method('load')
-            ->withConsecutive(
-                [ProcessCronQueueObserver::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . 'default'],
-                [ProcessCronQueueObserver::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . 'default']
-            )
-            ->willReturnOnConsecutiveCalls($this->time + 10000000, $this->time - 10000000);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [ProcessCronQueueObserver::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . 'default'] => $this->time + 10000000,
+                [ProcessCronQueueObserver::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . 'default'] => $this->time - 10000000
+            });
 
         $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturnMap(
             [
