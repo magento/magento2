@@ -368,7 +368,7 @@ class ObjectManager
      *
      * @param array $map
      */
-    public function prepareObjectManager($map)
+    public function prepareObjectManager(array $map = [])
     {
         $objectManagerMock = $this->_testObject->getMockBuilder(ObjectManagerInterface::class)
             ->addMethods(['getInstance'])
