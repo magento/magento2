@@ -7,9 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\TestFramework\ApplicationStateComparator;
 
-use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Framework\ObjectManager\Resetter\ResetterInterface;
 use Magento\TestFramework\ObjectManager as TestFrameworkObjectManager;
-use Weakmap;
 
 /**
  * ObjectManager decorator used by GraphQlStateTest for resetting objects and getting initial properties from objects
@@ -122,13 +121,11 @@ class ObjectManager extends TestFrameworkObjectManager implements ObjectManagerI
     }
 
     /**
-     * Returns the WeakMap used by DynamicFactoryDecorator
-     *
-     * @return WeakMap with CollectedObject as values
+     * @inheritDoc
      */
-    public function getWeakMap() : WeakMap
+    public function getResetter(): ResetterInterface
     {
-        return $this->_factory->getWeakMap();
+        return $this->_factory->getResetter();
     }
 
     /**
@@ -142,23 +139,10 @@ class ObjectManager extends TestFrameworkObjectManager implements ObjectManagerI
     }
 
     /**
-     * Resets all factory objects that implement ResetAfterRequestInterface
+     * @inheritDoc
      */
-    public function resetStateWeakMapObjects() : void
+    public function _resetState(): void
     {
         $this->_factory->_resetState();
-    }
-
-    /**
-     * Resets all objects sharing state & implementing ResetAfterRequestInterface
-     */
-    public function resetStateSharedInstances() : void
-    {
-        /** @var object $object */
-        foreach ($this->_sharedInstances as $object) {
-            if ($object instanceof ResetAfterRequestInterface) {
-                $object->_resetState();
-            }
-        }
     }
 }
