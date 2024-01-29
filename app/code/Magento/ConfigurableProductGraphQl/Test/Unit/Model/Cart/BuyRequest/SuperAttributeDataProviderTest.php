@@ -16,6 +16,7 @@ use Magento\ConfigurableProductGraphQl\Model\Options\Collection as OptionCollect
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\Stdlib\ArrayManagerFactory;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -23,6 +24,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test for SuperAttributeDataProvider
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SuperAttributeDataProviderTest extends TestCase
 {
@@ -66,13 +69,15 @@ class SuperAttributeDataProviderTest extends TestCase
         $this->optionCollection = $this->createMock(OptionCollection::class);
         $this->metadataPool = $this->createMock(MetadataPool::class);
         $this->stockState = $this->createMock(StockStateInterface::class);
-
+        $arrayManagerFactory = $this->createMock(ArrayManagerFactory::class);
+        $arrayManagerFactory->method('create')->willReturn($this->arrayManager);
         $this->superAttributeDataProvider = new SuperAttributeDataProvider(
             $this->arrayManager,
             $this->productRepository,
             $this->optionCollection,
             $this->metadataPool,
-            $this->stockState
+            $this->stockState,
+            $arrayManagerFactory,
         );
     }
 
@@ -166,7 +171,6 @@ class SuperAttributeDataProviderTest extends TestCase
                     'values' => [['value_index' => 1]],
                 ]
             ]);
-
         $this->assertEquals(['super_attribute' => [1 => 1]], $this->superAttributeDataProvider->execute($cartItemData));
     }
 }
