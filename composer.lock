@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dec1f664d61e16857ae911bdba6997b3",
+    "content-hash": "3b0190ce3ad4aee648417b2757555e3f",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1957,77 +1957,6 @@
                 }
             ],
             "time": "2023-11-06T23:02:42+00:00"
-        },
-        {
-            "name": "laminas/laminas-db",
-            "version": "2.18.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laminas/laminas-db.git",
-                "reference": "4df7a3f7ffe268e8683306fcec125c269408b295"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-db/zipball/4df7a3f7ffe268e8683306fcec125c269408b295",
-                "reference": "4df7a3f7ffe268e8683306fcec125c269408b295",
-                "shasum": ""
-            },
-            "require": {
-                "laminas/laminas-stdlib": "^3.7.1",
-                "php": "~8.0.0 || ~8.1.0|| ~8.2.0"
-            },
-            "conflict": {
-                "zendframework/zend-db": "*"
-            },
-            "require-dev": {
-                "laminas/laminas-coding-standard": "^2.4.0",
-                "laminas/laminas-eventmanager": "^3.6.0",
-                "laminas/laminas-hydrator": "^4.7",
-                "laminas/laminas-servicemanager": "^3.19.0",
-                "phpunit/phpunit": "^9.5.25"
-            },
-            "suggest": {
-                "laminas/laminas-eventmanager": "Laminas\\EventManager component",
-                "laminas/laminas-hydrator": "(^3.2 || ^4.3) Laminas\\Hydrator component for using HydratingResultSets",
-                "laminas/laminas-servicemanager": "Laminas\\ServiceManager component"
-            },
-            "type": "library",
-            "extra": {
-                "laminas": {
-                    "component": "Laminas\\Db",
-                    "config-provider": "Laminas\\Db\\ConfigProvider"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Laminas\\Db\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Database abstraction layer, SQL abstraction, result set abstraction, and RowDataGateway and TableDataGateway implementations",
-            "homepage": "https://laminas.dev",
-            "keywords": [
-                "db",
-                "laminas"
-            ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-db/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-db/issues",
-                "rss": "https://github.com/laminas/laminas-db/releases.atom",
-                "source": "https://github.com/laminas/laminas-db"
-            },
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
-            "time": "2023-05-05T16:22:28+00:00"
         },
         {
             "name": "laminas/laminas-di",
@@ -4448,6 +4377,101 @@
                 "source": "https://github.com/magento/magento-composer-installer/tree/0.4.0"
             },
             "time": "2022-12-01T15:21:32+00:00"
+        },
+        {
+            "name": "magento/magento-zf-db",
+            "version": "2.19.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/magento-zf-db.git",
+                "reference": "0dc2cc826c02f7b469bc099a6c8a2a8dfdb67222"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/magento/magento-zf-db/zipball/0dc2cc826c02f7b469bc099a6c8a2a8dfdb67222",
+                "reference": "0dc2cc826c02f7b469bc099a6c8a2a8dfdb67222",
+                "shasum": ""
+            },
+            "require": {
+                "laminas/laminas-stdlib": "^3.7.1",
+                "php": "~8.1.0|| ~8.2.0|| ~8.3.0"
+            },
+            "conflict": {
+                "zendframework/zend-db": "*"
+            },
+            "require-dev": {
+                "laminas/laminas-coding-standard": "^2.4.0",
+                "laminas/laminas-eventmanager": "^3.6.0",
+                "laminas/laminas-hydrator": "^4.7",
+                "laminas/laminas-servicemanager": "^3.19.0",
+                "phpunit/phpunit": "^9.5.25"
+            },
+            "suggest": {
+                "laminas/laminas-eventmanager": "Laminas\\EventManager component",
+                "laminas/laminas-hydrator": "(^3.2 || ^4.3) Laminas\\Hydrator component for using HydratingResultSets",
+                "laminas/laminas-servicemanager": "Laminas\\ServiceManager component"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laminas": {
+                    "component": "Laminas\\Db",
+                    "config-provider": "Laminas\\Db\\ConfigProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laminas\\Db\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "LaminasTest\\Db\\": "test/unit/",
+                    "LaminasIntegrationTest\\Db\\": "test/integration/"
+                }
+            },
+            "scripts": {
+                "check": [
+                    "@cs-check",
+                    "@test"
+                ],
+                "cs-check": [
+                    "phpcs"
+                ],
+                "cs-fix": [
+                    "phpcbf"
+                ],
+                "test": [
+                    "phpunit --colors=always --testsuite \"unit test\""
+                ],
+                "test-coverage": [
+                    "phpunit --colors=always --coverage-clover clover.xml"
+                ],
+                "test-integration": [
+                    "phpunit --colors=always --testsuite \"integration test\""
+                ],
+                "upload-coverage": [
+                    "coveralls -v"
+                ]
+            },
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Database abstraction layer, SQL abstraction, result set abstraction, and RowDataGateway and TableDataGateway implementations",
+            "homepage": "https://laminas.dev",
+            "keywords": [
+                "db",
+                "laminas"
+            ],
+            "support": {
+                "docs": "https://docs.laminas.dev/laminas-db/",
+                "issues": "https://github.com/laminas/laminas-db/issues",
+                "source": "https://github.com/laminas/laminas-db",
+                "rss": "https://github.com/laminas/laminas-db/releases.atom",
+                "chat": "https://laminas.dev/chat",
+                "forum": "https://discourse.laminas.dev"
+            },
+            "time": "2024-01-26T18:35:47+00:00"
         },
         {
             "name": "magento/zend-cache",
@@ -10099,27 +10123,26 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "32",
+            "version": "33",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "db2e2e7fa4274a17600129fceec6a06fc2d8357c"
+                "reference": "75215870d446f955ea08acdad9badff647117cfa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/db2e2e7fa4274a17600129fceec6a06fc2d8357c",
-                "reference": "db2e2e7fa4274a17600129fceec6a06fc2d8357c",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/75215870d446f955ea08acdad9badff647117cfa",
+                "reference": "75215870d446f955ea08acdad9badff647117cfa",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-simplexml": "*",
-                "php": "~8.1.0 || ~8.2.0",
-                "phpcompatibility/php-compatibility": "^9.3",
+                "magento/php-compatibility-fork": "^0.1",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
                 "phpcsstandards/phpcsutils": "^1.0.5",
-                "rector/rector": "0.17.12",
+                "rector/rector": "^0.17.12",
                 "squizlabs/php_codesniffer": "^3.6.1",
-                "symfony/polyfill": "^1.16",
                 "webonyx/graphql-php": "^15.0"
             },
             "require-dev": {
@@ -10144,9 +10167,9 @@
             "description": "A set of Magento specific PHP CodeSniffer rules.",
             "support": {
                 "issues": "https://github.com/magento/magento-coding-standard/issues",
-                "source": "https://github.com/magento/magento-coding-standard/tree/v32"
+                "source": "https://github.com/magento/magento-coding-standard/tree/v33"
             },
-            "time": "2023-09-06T16:13:50+00:00"
+            "time": "2023-12-19T17:16:36+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
@@ -10248,6 +10271,75 @@
                 "source": "https://github.com/magento/magento2-functional-testing-framework/tree/4.7.0"
             },
             "time": "2024-01-10T06:53:44+00:00"
+        },
+        {
+            "name": "magento/php-compatibility-fork",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/PHPCompatibilityFork.git",
+                "reference": "1cf031c2a68e3e52e460c5690ed8d1d6d45f4653"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/magento/PHPCompatibilityFork/zipball/1cf031c2a68e3e52e460c5690ed8d1d6d45f4653",
+                "reference": "1cf031c2a68e3e52e460c5690ed8d1d6d45f4653",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4",
+                "phpcsstandards/phpcsutils": "^1.0.5",
+                "squizlabs/php_codesniffer": "^3.7.1"
+            },
+            "replace": {
+                "phpcompatibility/php-compatibility": "*",
+                "wimg/php-compatibility": "*"
+            },
+            "require-dev": {
+                "php-parallel-lint/php-console-highlighter": "^1.0.0",
+                "php-parallel-lint/php-parallel-lint": "^1.3.2",
+                "phpcsstandards/phpcsdevcs": "^1.1.3",
+                "phpcsstandards/phpcsdevtools": "^1.2.0",
+                "phpunit/phpunit": "^4.8.36 || ^5.7.21 || ^6.0 || ^7.0 || ^8.0 || ^9.3.4 || ^10.1.0",
+                "yoast/phpunit-polyfills": "^1.0.5 || ^2.0.0"
+            },
+            "suggest": {
+                "roave/security-advisories": "dev-master || Helps prevent installing dependencies with known security issues."
+            },
+            "type": "phpcodesniffer-standard",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Wim Godden",
+                    "homepage": "https://github.com/wimg",
+                    "role": "lead"
+                },
+                {
+                    "name": "Juliette Reinders Folmer",
+                    "homepage": "https://github.com/jrfnl",
+                    "role": "lead"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/PHPCompatibility/PHPCompatibility/graphs/contributors"
+                }
+            ],
+            "description": "A set of sniffs for PHP_CodeSniffer that checks for PHP cross-version compatibility. This is a fork of phpcompatibility/php-compatibility",
+            "homepage": "http://techblog.wimgodden.be/tag/codesniffer/",
+            "keywords": [
+                "compatibility",
+                "phpcs",
+                "standards",
+                "static analysis"
+            ],
+            "support": {
+                "issues": "https://github.com/PHPCompatibility/PHPCompatibility/issues",
+                "source": "https://github.com/PHPCompatibility/PHPCompatibility"
+            },
+            "time": "2023-11-29T22:34:17+00:00"
         },
         {
             "name": "mustache/mustache",
@@ -10597,68 +10689,6 @@
                 "source": "https://github.com/php-webdriver/php-webdriver/tree/1.15.1"
             },
             "time": "2023-10-20T12:21:20+00:00"
-        },
-        {
-            "name": "phpcompatibility/php-compatibility",
-            "version": "9.3.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PHPCompatibility/PHPCompatibility.git",
-                "reference": "9fb324479acf6f39452e0655d2429cc0d3914243"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PHPCompatibility/PHPCompatibility/zipball/9fb324479acf6f39452e0655d2429cc0d3914243",
-                "reference": "9fb324479acf6f39452e0655d2429cc0d3914243",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3",
-                "squizlabs/php_codesniffer": "^2.3 || ^3.0.2"
-            },
-            "conflict": {
-                "squizlabs/php_codesniffer": "2.6.2"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.5 || ^5.0 || ^6.0 || ^7.0"
-            },
-            "suggest": {
-                "dealerdirect/phpcodesniffer-composer-installer": "^0.5 || This Composer plugin will sort out the PHPCS 'installed_paths' automatically.",
-                "roave/security-advisories": "dev-master || Helps prevent installing dependencies with known security issues."
-            },
-            "type": "phpcodesniffer-standard",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-3.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Wim Godden",
-                    "homepage": "https://github.com/wimg",
-                    "role": "lead"
-                },
-                {
-                    "name": "Juliette Reinders Folmer",
-                    "homepage": "https://github.com/jrfnl",
-                    "role": "lead"
-                },
-                {
-                    "name": "Contributors",
-                    "homepage": "https://github.com/PHPCompatibility/PHPCompatibility/graphs/contributors"
-                }
-            ],
-            "description": "A set of sniffs for PHP_CodeSniffer that checks for PHP cross-version compatibility.",
-            "homepage": "http://techblog.wimgodden.be/tag/codesniffer/",
-            "keywords": [
-                "compatibility",
-                "phpcs",
-                "standards"
-            ],
-            "support": {
-                "issues": "https://github.com/PHPCompatibility/PHPCompatibility/issues",
-                "source": "https://github.com/PHPCompatibility/PHPCompatibility"
-            },
-            "time": "2019-12-27T09:44:58+00:00"
         },
         {
             "name": "phpcsstandards/phpcsutils",
@@ -13139,6 +13169,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "magento/magento-zf-db": 20,
         "magento/composer": 20
     },
     "prefer-stable": true,
