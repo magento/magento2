@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Order;
 
+use Magento\Framework\Model\AbstractModel;
 use Magento\Sales\Model\ResourceModel\EntityAbstract as SalesResource;
 use Magento\Sales\Model\Spi\OrderAddressResourceInterface;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
@@ -124,12 +125,9 @@ class Address extends SalesResource implements OrderAddressResourceInterface
     }
 
     /**
-     * Check is current order address entity has changes, by comparing current object state with stored snapshot
-     *
-     * @param \Magento\Framework\DataObject $entity
-     * @return bool
+     * @inheritdoc
      */
-    protected function isModified(\Magento\Framework\Model\AbstractModel $entity)
+    protected function isModified(AbstractModel $entity): bool
     {
         if (!$entity->getId()) {
             return true;

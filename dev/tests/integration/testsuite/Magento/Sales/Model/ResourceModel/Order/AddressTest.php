@@ -79,7 +79,6 @@ class AddressTest extends TestCase
      * @throws LocalizedException
      */
     #[
-        DbIsolation(false),
         DataFixture(ProductFixture::class, as: 'product'),
         DataFixture(Customer::class, as: 'customer'),
         DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'quote'),
