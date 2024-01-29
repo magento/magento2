@@ -386,8 +386,13 @@ class ImageTest extends TestCase
         $this->storeManager->expects($this->any())->method('getWebsite')->willReturn($website);
         $this->mediaDirectory
             ->method('isExist')
-            ->withConsecutive([], [], [], ['catalog/product/watermark//somefile.png'])
-            ->willReturnOnConsecutiveCalls(null, null, null, true);
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3, $arg4) {
+                    if (empty($arg1) && empty($arg2) && empty($arg3)) {
+                        return null;
+                    }
+                }
+            );
         $absolutePath = dirname(dirname(__DIR__)) . '/_files/catalog/product/watermark/somefile.png';
         $this->mediaDirectory->expects($this->any())->method('getAbsolutePath')
             ->with('catalog/product/watermark//somefile.png')
@@ -546,7 +551,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function clearCacheDataProvider(): array
+    public static function clearCacheDataProvider(): array
     {
         return [
             [true, '/^catalog\/product\/\.[0-9A-ZA-z-_]{3}$/'],

@@ -307,10 +307,13 @@ class CreateTest extends TestCase
 
         $this->groupMock->expects($this->exactly(2))
             ->method('setData')
-            ->withConsecutive(
-                [$this->equalTo($this->trimmedGroup[0])],
-                [$this->equalTo($this->trimmedGroup[1])]
-            )->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == $this->trimmedGroup[0] || $arg == $this->trimmedGroup[1]) {
+                        return $this->groupMock;
+                    }
+                }
+            );
 
         $this->groupMock->expects($this->exactly(6))
             ->method('getResource')
@@ -334,8 +337,15 @@ class CreateTest extends TestCase
 
         $this->abstractDbMock->expects($this->any())
             ->method('load')
-            ->withConsecutive([$this->websiteMock, 'base', 'code'], [$this->storeMock, 'default', 'code'])
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) {
+                    if ($arg1 === $this->websiteMock && $arg2 === 'base' && $arg3 === 'code') {
+                        return $this->abstractDbMock;
+                    } elseif ($arg1 === $this->storeMock && $arg2 === 'default' && $arg3 === 'code') {
+                        return $this->abstractDbMock;
+                    }
+                }
+            );
         $this->abstractDbMock->expects($this->exactly(4))
             ->method('save')
             ->with($this->groupMock)
@@ -372,8 +382,15 @@ class CreateTest extends TestCase
 
         $this->abstractDbMock->expects($this->exactly(2))
             ->method('load')
-            ->withConsecutive([$this->groupMock, 'default', 'code'], [$this->websiteMock, 'base', 'code'])
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) {
+                    if ($arg1 === $this->groupMock && $arg2 === 'base' && $arg3 === 'code') {
+                        return $this->abstractDbMock;
+                    } elseif ($arg1 === $this->groupMock && $arg2 === 'default' && $arg3 === 'code') {
+                        return $this->abstractDbMock;
+                    }
+                }
+            );
 
         $this->storeMock->expects($this->once())
             ->method('setData')

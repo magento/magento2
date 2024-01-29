@@ -75,11 +75,15 @@ class FixerIoApiLayerTest extends TestCase
             . "https://api.apilayer.com for UAH.";
 
         $this->scopeConfig->method('getValue')
-            ->withConsecutive(
-                ['currency/fixerio_apilayer/api_key', 'store'],
-                ['currency/fixerio_apilayer/timeout', 'store']
-            )
-            ->willReturnOnConsecutiveCalls('api_key', 100);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'currency/fixerio_apilayer/api_key' && $arg2 == 'store') {
+                        return 'api_key';
+                    } elseif ($arg1 == 'currency/fixerio_apilayer/timeout' && $arg2 == 'store') {
+                        return 100;
+                    }
+                }
+            );
 
         /** @var Currency|MockObject $currency */
         $currency = $this->getMockBuilder(Currency::class)

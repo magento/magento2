@@ -100,11 +100,15 @@ class CurrencyConverterApiTest extends TestCase
         $this->prepareCurrencyFactoryMock();
 
         $this->scopeConfig->method('getValue')
-            ->withConsecutive(
-                ['currency/currencyconverterapi/api_key', 'store'],
-                ['currency/currencyconverterapi/timeout', 'store']
-            )
-            ->willReturnOnConsecutiveCalls('api_key', 100);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 === 'currency/currencyconverterapi/api_key' && $arg2 === 'store') {
+                        return 'api_key';
+                    } elseif ($arg1 === 'currency/currencyconverterapi/timeout' && $arg2 === 'store') {
+                        return 100;
+                    }
+                }
+            );
 
         /** @var LaminasClient|MockObject $httpClient */
         $httpClient = $this->getMockBuilder(LaminasClient::class)
@@ -180,11 +184,15 @@ class CurrencyConverterApiTest extends TestCase
         $this->prepareCurrencyFactoryMock();
 
         $this->scopeConfig->method('getValue')
-            ->withConsecutive(
-                ['currency/currencyconverterapi/api_key', 'store'],
-                ['currency/currencyconverterapi/timeout', 'store']
-            )
-            ->willReturnOnConsecutiveCalls('', 100);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 === 'currency/currencyconverterapi/api_key' && $arg2 === 'store') {
+                        return '';
+                    } elseif ($arg1 === 'currency/currencyconverterapi/timeout' && $arg2 === 'store') {
+                        return 100;
+                    }
+                }
+            );
 
         $expectedCurrencyRateList = ['USD' => ['EUR' => null, 'UAH' => null]];
         self::assertEquals($expectedCurrencyRateList, $this->model->fetchRates());

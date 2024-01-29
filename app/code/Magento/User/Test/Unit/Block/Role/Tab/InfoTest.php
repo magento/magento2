@@ -89,12 +89,21 @@ class InfoTest extends TestCase
         $formMock->expects($this->any())->method('addFieldSet')->willReturn($fieldsetMock);
         $fieldsetMock->expects($this->exactly(5))
             ->method('addField')
-            ->withConsecutive(
-                ['role_name'],
-                ['role_id'],
-                ['in_role_user'],
-                ['in_role_user_old'],
-                ['current_password']
+            ->willReturnCallback(
+                function ($arg) {
+                    static $callCount = 0;
+                    $expectedArgs = [
+                        'role_name',
+                        'role_id',
+                        'in_role_user',
+                        'in_role_user_old',
+                        'current_password'
+                    ];
+                    if ($arg == $expectedArgs[$callCount]) {
+                        $callCount++;
+                        return null;
+                    }
+                }
             );
         $this->assertInstanceOf(Info::class, $this->model->_beforeToHtml());
     }

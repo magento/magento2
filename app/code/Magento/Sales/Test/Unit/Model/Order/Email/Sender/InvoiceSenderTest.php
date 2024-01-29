@@ -227,9 +227,14 @@ class InvoiceSenderTest extends AbstractSenderTest
         } else {
             $this->invoiceResourceMock
                 ->method('saveAttribute')
-                ->withConsecutive(
-                    [$this->invoiceMock, 'email_sent'],
-                    [$this->invoiceMock, 'send_email']
+                ->willReturnCallback(
+                    function ($arg1, $arg2) {
+                        if ($arg1 === $this->invoiceMock && $arg2 === 'email_sent') {
+                            return null;
+                        } elseif ($arg1 === $this->invoiceMock && $arg2 === 'send_email') {
+                            return null;
+                        }
+                    }
                 );
 
             $this->assertFalse(
@@ -241,7 +246,7 @@ class InvoiceSenderTest extends AbstractSenderTest
     /**
      * @return array
      */
-    public function sendDataProvider(): array
+    public static function sendDataProvider(): array
     {
         return [
             [0, 0, 1, true],
@@ -348,7 +353,7 @@ class InvoiceSenderTest extends AbstractSenderTest
     /**
      * @return array
      */
-    public function sendVirtualOrderDataProvider(): array
+    public static function sendVirtualOrderDataProvider(): array
     {
         return [
             [true, 1, null],

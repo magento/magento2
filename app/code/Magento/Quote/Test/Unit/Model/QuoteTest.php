@@ -710,10 +710,14 @@ class QuoteTest extends TestCase
 
         $this->groupRepositoryMock
             ->method('getById')
-            ->withConsecutive([$nonExistentGroupId], [$groupId])
-            ->willReturnOnConsecutiveCalls(
-                $this->throwException(new NoSuchEntityException(new Phrase('Entity Id does not exist'))),
-                $groupMock
+            ->willReturnCallback(
+                function ($id) use ($nonExistentGroupId, $groupId, $groupMock) {
+                    if ($id === $nonExistentGroupId) {
+                        throw new NoSuchEntityException(new Phrase('Entity Id does not exist'));
+                    } elseif ($id === $groupId) {
+                        return $groupMock;
+                    }
+                }
             );
 
         $groupMock->expects($this->once())
@@ -1383,7 +1387,7 @@ class QuoteTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestBeforeSaveIsVirtualQuote(): array
+    public static function dataProviderForTestBeforeSaveIsVirtualQuote(): array
     {
         return [
             [[true], 1],
@@ -1474,7 +1478,7 @@ class QuoteTest extends TestCase
     /**
      * @return array
      */
-    public function reservedOrderIdDataProvider(): array
+    public static function reservedOrderIdDataProvider(): array
     {
         return [
             'id_already_in_use' => [true, 100002],

@@ -37,7 +37,7 @@ class ImageTest extends TestCase
      *
      * @return array
      */
-    public function getUrlDataProvider(): array
+    public static function getUrlDataProvider(): array
     {
         return [
             ['catalog/product/img.jpg', 'img.jpg'],
