@@ -264,6 +264,7 @@ class Reorder
 
         $addProductResult = null;
         try {
+            $infoBuyRequest->setForceAddToCart(true);
             $addProductResult = $cart->addProduct($product, $infoBuyRequest);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->addError($this->getCartItemErrorMessage($orderItem, $product, $e->getMessage()));
