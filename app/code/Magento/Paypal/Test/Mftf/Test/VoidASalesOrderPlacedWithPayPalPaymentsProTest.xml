@@ -16,7 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-5461"/>
             <group value="paypalPaymentsPro"/>
-            <group value="3rd_party_integration" />
+            <group value="3rd_party_integration"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct"/>
@@ -41,7 +41,8 @@
                 <argument name="cardData" value="VisaDefaultCard"/>
             </actionGroup>
             <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
-            <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitAndAssertSuccessMessage"/>
+            <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+            <waitForText selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeSuccessMessage"/>
         </before>
         <after>
             <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
@@ -53,6 +54,11 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
             <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertTotalsOnOrderViewPageActionGroup" stepKey="checkSubtotal">
+            <argument name="subtotal" value="$123.00"/>
+            <argument name="shippingAndHandling" value="$5.00"/>
+            <argument name="grandTotal" value="$128.00"/>
         </actionGroup>
         <!--Void created order -->
         <actionGroup ref="AdminVoidPendingOrderActionGroup" stepKey="voidPendingOrder"/>
