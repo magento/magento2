@@ -65,7 +65,7 @@
         <waitForElementVisible selector="{{AdminOrderNotesSection.voidAuthorizationNotes('$grabLastTransactionID')}}" stepKey="WaitForVoidAuthorizationNotesWithID"/>
         <grabTextFrom selector="{{AdminOrderNotesSection.voidAuthorizationNotes('$grabLastTransactionID')}}" stepKey="getVoidAuthorizationNotesWithID"/>
         <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistoryTab"/>
-        <waitForText selector="{{AdminOrderCommentsTabSection.authorizationNotes('Voided')}}" userInput="$voidAuthorizationNotesWithID" stepKey="seeOrderHistoryNotes"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.authorizationNotes('Voided')}}" userInput="$getVoidAuthorizationNotesWithID" stepKey="seeOrderHistoryNotes"/>
         <!-- Check the last transaction of the order and validate the details for Void and Authorization-->
         <actionGroup ref="AdminViewTransactionsInOrderActionGroup" stepKey="validateVoidTransaction"/>
         <waitForText selector="{{AdminTransactionsGridSection.isClosed}}" userInput="Yes" stepKey="seeIsClosedIsYes"/>
