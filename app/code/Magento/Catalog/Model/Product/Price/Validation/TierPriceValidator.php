@@ -14,8 +14,11 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Helper\Data as CatalogData;
 
 /**
  * Validate Tier Price and check duplication
@@ -87,6 +90,11 @@ class TierPriceValidator implements ResetAfterRequestInterface
     private $productRepository;
 
     /**
+     * @var CatalogData
+     */
+    private $catalogData;
+
+    /**
      * @var array
      */
     private $productsCacheBySku = [];
@@ -102,6 +110,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
      * @param Result $validationResult
      * @param InvalidSkuProcessor $invalidSkuProcessor
      * @param ProductRepositoryInterface $productRepository
+     * @param CatalogData|null $catalogData
      * @param array $allowedProductTypes [optional]
      */
     public function __construct(
@@ -113,6 +122,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
         Result                                                    $validationResult,
         InvalidSkuProcessor                                       $invalidSkuProcessor,
         ProductRepositoryInterface $productRepository,
+        ?catalogData $catalogData = null,
         array                                                     $allowedProductTypes = []
     ) {
         $this->productIdLocator = $productIdLocator;
@@ -123,6 +133,8 @@ class TierPriceValidator implements ResetAfterRequestInterface
         $this->validationResult = $validationResult;
         $this->invalidSkuProcessor = $invalidSkuProcessor;
         $this->productRepository = $productRepository;
+        $this->catalogData = $catalogData ?? ObjectManager::getInstance()
+                ->get(CatalogData::class);
         $this->allowedProductTypes = $allowedProductTypes;
     }
 
@@ -173,7 +185,6 @@ class TierPriceValidator implements ResetAfterRequestInterface
             }
             $this->checkUnique($price, $existingPrices, $key, $validationResult, true);
             $this->checkGroup($price, $key, $validationResult);
-            $this->checkWebsiteId($price, $key, $validationResult);
         }
 
         return $validationResult;
@@ -359,6 +370,9 @@ class TierPriceValidator implements ResetAfterRequestInterface
     private function checkWebsite(TierPriceInterface $price, $key, Result $validationResult)
     {
         try {
+            if ($this->catalogData->isPriceGlobal() && $price->getWebsiteId() > 0) {
+                throw NoSuchEntityException::singleField('website_id', $price->getWebsiteId());
+            }
             $this->websiteRepository->getById($price->getWebsiteId());
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             $validationResult->addFailedItem(
@@ -531,30 +545,5 @@ class TierPriceValidator implements ResetAfterRequestInterface
     public function _resetState(): void
     {
         $this->customerGroupsByCode = [];
-    }
-
-    /**
-     * Validate the incorrect website id.
-     *
-     * @param TierPriceInterface $price
-     * @param int $key
-     * @param Result $validationResult
-     * @return void
-     */
-    private function checkWebsiteId(TierPriceInterface $price, $key, Result $validationResult)
-    {
-        if (isset($this->productsCacheBySku[$price->getSku()]) &&
-            is_array($this->productsCacheBySku[$price->getSku()]->getTierPrices()) &&
-            count($this->productsCacheBySku[$price->getSku()]->getTierPrices()) > 0 &&
-            (int) $this->allWebsitesValue !== $price->getWebsiteId()
-        ) {
-            $validationResult->addFailedItem(
-                $key,
-                __('Incorrect website ID: %1', $price->getWebsiteId()),
-                [
-                    'websiteId' => $price->getWebsiteId()
-                ]
-            );
-        }
     }
 }
