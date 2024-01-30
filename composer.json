@@ -6,6 +6,12 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/magento-gl/magento2-functional-testing-framework"
+        }
+    ],
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
@@ -98,7 +104,7 @@
         "friendsofphp/php-cs-fixer": "^3.22",
         "lusitanian/oauth": "^0.8",
         "magento/magento-coding-standard": "*",
-        "magento/magento2-functional-testing-framework": "^4.6",
+        "magento/magento2-functional-testing-framework": "dev-ACQE-5264-spomky-otphp-upgrade",
         "pdepend/pdepend": "^2.10",
         "phpmd/phpmd": "^2.12",
         "phpstan/phpstan": "^1.9",
