@@ -16,18 +16,15 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-5461"/>
             <group value="paypalPaymentsPro"/>
-
+            <group value="3rd_party_integration" />
         </annotations>
         <before>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <!--<actionGroup ref="AdminConfigurePayPalPaymentsProActionGroup" stepKey="ConfigPayPalPaymentsPro">
-                <argument name="credentials" value="SamplePaypalPaymentsProConfig"/>
-            </actionGroup>-->
-            <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefront2">
+            <!-- Go to product 1 and add it to cart -->
+            <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefront">
                 <argument name="product" value="$$createSimpleProduct$$"/>
             </actionGroup>
-            <!-- Add product 1 to cart -->
             <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
                 <argument name="productName" value="$createSimpleProduct.name$"/>
             </actionGroup>
@@ -43,42 +40,38 @@
             <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardDataPaypal">
                 <argument name="cardData" value="VisaDefaultCard"/>
             </actionGroup>
-            <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder"/>
-            <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+            <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+            <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitAndAssertSuccessMessage"/>
         </before>
         <after>
-            <!--<magentoCLI command="config:set payment/paypal_payment_pro/active 0" stepKey="disablePayPalExpress"/>
-            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushingCacheAfterCreatingCouponsAndCartPriceRule">
-                <argument name="tags" value="config full_page"/>
-            </actionGroup>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>-->
             <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clickOnRemoveButtonToUnFiltersIfPresent"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
+        <!--Open order in sales -->
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
             <argument name="orderId" value="{$grabOrderNumber}"/>
         </actionGroup>
-        <actionGroup ref="AdminVoidPendingOrderActionGroup" stepKey="voidOrder"/>
+        <!--Void created order -->
+        <actionGroup ref="AdminVoidPendingOrderActionGroup" stepKey="voidPendingOrder"/>
         <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="checkOrderStatus">
             <argument name="status" value="Processing"/>
         </actionGroup>
+        <!--Grab transaction ids -->
         <waitForElementVisible selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="waitForGrabLastTransactionID"/>
         <grabTextFrom selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabLastTransactionID"/>
         <waitForElementVisible selector="{{AdminOrderNotesSection.voidAuthorizationNotes('$grabLastTransactionID')}}" stepKey="WaitForVoidAuthorizationNotesWithID"/>
-        <grabTextFrom selector="{{AdminOrderNotesSection.voidAuthorizationNotes('$grabLastTransactionID')}}" stepKey="voidAuthorizationNotesWithID"/>
-        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
+        <grabTextFrom selector="{{AdminOrderNotesSection.voidAuthorizationNotes('$grabLastTransactionID')}}" stepKey="getVoidAuthorizationNotesWithID"/>
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistoryTab"/>
         <waitForText selector="{{AdminOrderCommentsTabSection.authorizationNotes('Voided')}}" userInput="$voidAuthorizationNotesWithID" stepKey="seeOrderHistoryNotes"/>
-        <!-- Check the last transaction of the order-->
-        <actionGroup ref="AdminViewTransactionsInOrderActionGroup" stepKey="validateVoidTxn"/>
+        <!-- Check the last transaction of the order and validate the details for Void and Authorization-->
+        <actionGroup ref="AdminViewTransactionsInOrderActionGroup" stepKey="validateVoidTransaction"/>
         <waitForText selector="{{AdminTransactionsGridSection.isClosed}}" userInput="Yes" stepKey="seeIsClosedIsYes"/>
-        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForPBackButtonToBeClicked"/>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClicked"/>
         <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButton"/>
-        <actionGroup ref="AdminViewAuthorizationTransactionsInOrderActionGroup" stepKey="validateAuthTxn"/>
+        <actionGroup ref="AdminViewAuthorizationTransactionsInOrderActionGroup" stepKey="validateAuthTransaction"/>
         <waitForText selector="{{AdminTransactionsGridSection.isClosed}}" userInput="Yes" stepKey="seeIsClosedIsYesForAuthorization"/>
     </test>
 </tests>
