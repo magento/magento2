@@ -14,6 +14,7 @@ use Magento\Backend\Block\Page\System\Config\Robots\Reset;
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -37,6 +38,13 @@ class ResetTest extends TestCase
         $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $objectHelper = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ]
+        ];
+        $objectHelper->prepareObjectManager($objects);
         $context = $objectHelper->getObject(
             Context::class,
             ['scopeConfig' => $this->configMock]

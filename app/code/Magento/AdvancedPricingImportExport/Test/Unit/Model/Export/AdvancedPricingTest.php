@@ -14,8 +14,10 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Model\ResourceModel\ProductFactory;
 use Magento\CatalogImportExport\Model\Export\Product;
 use Magento\CatalogImportExport\Model\Export\Product\Type\Factory;
+use Magento\CatalogImportExport\Model\Export\ProductFilterInterface;
 use Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite;
 use Magento\CatalogImportExport\Model\Import\Product\StoreResolver;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Eav\Model\Config;
@@ -33,6 +35,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -154,6 +157,19 @@ class AdvancedPricingTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                ProductFilterInterface::class,
+                $this->createMock(ProductFilterInterface::class)
+            ],
+            [
+                StockConfigurationInterface::class,
+                $this->createMock(StockConfigurationInterface::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+
         $this->localeDate = $this->createMock(Timezone::class);
         $this->config = $this->createPartialMock(Config::class, ['getEntityType']);
         $type = $this->createMock(Type::class);
