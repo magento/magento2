@@ -149,11 +149,10 @@ class SaveTest extends TestCase
         $request = $this->getMockForAbstractClass(RequestInterface::class);
         $request->expects($this->exactly(2))
             ->method('getParam')
-            ->withConsecutive(['data'], ['namespace'])
-            ->willReturnOnConsecutiveCalls(
-                '{"' . Save::ACTIVE_IDENTIFIER . '":"bookmark2"}',
-                'product_listing'
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['data'] => '{"' . Save::ACTIVE_IDENTIFIER . '":"bookmark2"}',
+                ['namespace'] => 'product_listing'
+            });
         $reflectionProperty = new \ReflectionProperty($this->model, '_request');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->model, $request);
@@ -206,12 +205,10 @@ class SaveTest extends TestCase
         $request = $this->getMockForAbstractClass(RequestInterface::class);
         $request->expects($this->atLeast(3))
             ->method('getParam')
-            ->withConsecutive(['data'], ['namespace'], ['namespace'])
-            ->willReturnOnConsecutiveCalls(
-                $currentConfig,
-                'product_listing',
-                'product_listing'
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['data'] => $currentConfig,
+                ['namespace'] => 'product_listing'
+            });
         $reflectionProperty = new \ReflectionProperty($this->model, '_request');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->model, $request);

@@ -163,14 +163,22 @@ class UrlRewriteHandlerTest extends TestCase
             ->willReturn(1);
         $category->expects($this->any())
             ->method('getData')
-            ->withConsecutive(
-                [$this->equalTo('save_rewrites_history')],
-                [$this->equalTo('initial_setup_flag')]
-            )
-            ->willReturnOnConsecutiveCalls(
-                true,
-                null
-            );
+            ->willReturnCallback(function ($arg1) {
+                static $callCount = 0;
+                $callCount++;
+                switch ($callCount) {
+                    case 1:
+                        if ($arg1 == 'save_rewrites_history') {
+                            return true;
+                        }
+                        break;
+                    case 2:
+                        if ($arg1 == 'initial_setup_flag') {
+                            return null;
+                        }
+                        break;
+                }
+            });
 
         /* @var \Magento\Catalog\Model\Category|MockObject $childCategory1 */
         $childCategory1 = $this->getMockBuilder(Category::class)

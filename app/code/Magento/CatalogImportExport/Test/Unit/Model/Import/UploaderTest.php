@@ -194,8 +194,11 @@ class UploaderTest extends TestCase
         // and move the temp file to the destination directory
         $this->directoryMock->expects($this->exactly(2))
             ->method('isWritable')
-            ->withConsecutive([$destDir], [$tmpDir])
-            ->willReturn(true);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$destDir] => true,
+                [$tmpDir] => true
+            });
+
         $this->directoryMock->expects($this->once())->method('getAbsolutePath')
             ->with($destDir)
             ->willReturn($destDir . '/' . $expectedFileName);
@@ -329,7 +332,7 @@ class UploaderTest extends TestCase
     /**
      * @return array
      */
-    public function moveFileUrlDriverPoolDataProvider()
+    public static function moveFileUrlDriverPoolDataProvider()
     {
         return [
             [
@@ -350,7 +353,7 @@ class UploaderTest extends TestCase
     /**
      * @return array
      */
-    public function moveFileUrlDataProvider()
+    public static function moveFileUrlDataProvider()
     {
         return [
             'https_no_file_ext' => [
