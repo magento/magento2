@@ -157,9 +157,14 @@ class AttributeMetadatConverterTest extends TestCase
             ->with('one_value');
         $this->dataObjectHelper->expects($this->exactly(2))
             ->method('populateWithArray')
-            ->withConsecutive(
-                [$optionObject1, ['1'], OptionInterface::class],
-                [$optionObject2, ['2'], OptionInterface::class]
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($optionObject1, $optionObject2) {
+                    if ($arg1 === $optionObject1 && $arg2 === ['1'] && $arg3 === OptionInterface::class) {
+                        return null;
+                    } elseif ($arg1 === $optionObject2 && $arg2 === ['2'] && $arg3 === OptionInterface::class) {
+                        return null;
+                    }
+                }
             );
         $validationRule1 = $this->getMockForAbstractClass(ValidationRuleInterface::class);
         $validationRule2 = $this->getMockForAbstractClass(ValidationRuleInterface::class);

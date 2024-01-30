@@ -386,8 +386,15 @@ class ImageTest extends TestCase
         $this->storeManager->expects($this->any())->method('getWebsite')->willReturn($website);
         $this->mediaDirectory
             ->method('isExist')
-            ->withConsecutive([], [], [], ['catalog/product/watermark//somefile.png'])
-            ->willReturnOnConsecutiveCalls(null, null, null, true);
+            ->willReturnCallback(
+                function ($arg) {
+                    if (empty($arg)) {
+                        return null;
+                    } elseif ($arg === ['catalog/product/watermark//somefile.png']) {
+                        return true;
+                    }
+                }
+            );
         $absolutePath = dirname(dirname(__DIR__)) . '/_files/catalog/product/watermark/somefile.png';
         $this->mediaDirectory->expects($this->any())->method('getAbsolutePath')
             ->with('catalog/product/watermark//somefile.png')

@@ -107,8 +107,15 @@ class ReportTest extends TestCase
             ->willReturnSelf();
         $this->pageMock->expects($this->exactly(2))
             ->method('addBreadcrumb')
-            ->withConsecutive([__('Reports'), __('Reports')], [__('Search Terms'), __('Search Terms')])
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == __('Reports') && $arg2 == __('Reports')) {
+                        return $this->pageMock;
+                    } elseif ($arg1 == __('Search Terms') && $arg2 == __('Search Terms')) {
+                        return $this->pageMock;
+                    }
+                }
+            );
         $this->pageMock->expects($this->once())
             ->method('getConfig')
             ->willReturn($this->pageConfigMock);

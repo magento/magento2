@@ -351,9 +351,13 @@ class CustomerTest extends TestCase
 
         $this->dataObjectProcessor->expects($this->once())
             ->method('buildOutputDataArray')
-            ->withConsecutive(
-                [$customer, CustomerInterface::class]
-            )->willReturn($customerDataAttributes);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($customer, $customerDataAttributes) {
+                    if ($arg1 == $customer && $arg2 == CustomerInterface::class) {
+                        return $customerDataAttributes;
+                    }
+                }
+            );
 
         $attribute->expects($this->exactly(3))
             ->method('getAttributeCode')
