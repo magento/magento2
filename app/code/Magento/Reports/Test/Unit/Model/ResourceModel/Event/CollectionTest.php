@@ -120,6 +120,7 @@ class CollectionTest extends TestCase
      *
      * @return void
      * @dataProvider ignoresDataProvider
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testAddStoreFilter($ignoreData, string $ignoreSql): void
     {

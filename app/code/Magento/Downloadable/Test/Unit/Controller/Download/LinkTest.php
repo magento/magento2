@@ -375,6 +375,7 @@ class LinkTest extends TestCase
      * @param string $disposition
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processDownload($resource, $resourceType, $mimeType, $disposition): void
     {
@@ -465,6 +466,7 @@ class LinkTest extends TestCase
      *
      * @return void
      * @dataProvider downloadTypesDataProvider
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testContentDisposition($mimeType, $disposition): void
     {

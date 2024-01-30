@@ -1073,6 +1073,7 @@ class ProcessCronQueueObserverTest extends TestCase
      * @param string $tableName
      *
      * @return AdapterInterface|MockObject
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function prepareConnectionMock(string $tableName): AdapterInterface
     {

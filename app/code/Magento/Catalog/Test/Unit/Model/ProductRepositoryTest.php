@@ -914,6 +914,7 @@ class ProductRepositoryTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testGetList(): void
     {

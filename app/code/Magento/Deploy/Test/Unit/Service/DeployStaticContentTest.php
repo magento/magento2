@@ -96,6 +96,9 @@ class DeployStaticContentTest extends TestCase
      * @param array $options
      * @param string $expectedContentVersion
      * @dataProvider deployDataProvider
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function testDeploy($options, $expectedContentVersion)
     {

@@ -123,6 +123,8 @@ class StockTest extends TestCase
      *
      * @return void
      * @dataProvider productsDataProvider
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function testLockProductsStock(
         int $websiteId,

@@ -123,11 +123,11 @@ class FreeshippingTest extends TestCase
         $this->scopeConfigMock
             ->method('isSetFlag')
             ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($subtotalInclTax) {
-                if (empty($arg1)) {
-                    return true;
-                } elseif ($arg1 == 'carriers/freeshipping/tax_including' &&
+                if ($arg1 == 'carriers/freeshipping/tax_including' &&
                     $arg2 == ScopeInterface::SCOPE_STORE && $arg3 == null) {
                     return $subtotalInclTax;
+                } else {
+                    return true;
                 }
             });
 

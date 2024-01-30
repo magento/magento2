@@ -171,6 +171,8 @@ class QueueTest extends TestCase
      * Test for getMessages method.
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function testGetMessages()
     {

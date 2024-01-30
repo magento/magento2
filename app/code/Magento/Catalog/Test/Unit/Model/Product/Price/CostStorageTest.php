@@ -252,6 +252,7 @@ class CostStorageTest extends TestCase
      * Test update method with negative cost and without SKU.
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testUpdateWithNegativeCostAndWithoutSku()
     {

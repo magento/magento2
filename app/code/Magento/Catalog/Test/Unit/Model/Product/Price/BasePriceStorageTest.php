@@ -282,6 +282,7 @@ class BasePriceStorageTest extends TestCase
      * Test update method without SKU and with negative price.
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testUpdateWithoutSkuAndWithNegativePrice()
     {

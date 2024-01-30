@@ -183,10 +183,15 @@ class SaveTest extends TestCase
         ];
 
         $this->requestMock->method('getParam')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                ['parent_id'] => 22,
-                ['entity_id'] => 1
-            });
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'parent_id') {
+                        return 22;
+                    } elseif ($arg == 'entity_id') {
+                        return 1;
+                    }
+                }
+            );
 
         $customerMock = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()

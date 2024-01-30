@@ -83,13 +83,13 @@ class ItemTest extends TestCase
      */
     private $serializer;
 
-    const PRODUCT_ID = 1;
-    const PRODUCT_TYPE = 'simple';
+    private const PRODUCT_ID = 1;
+    private const PRODUCT_TYPE = 'simple';
     const PRODUCT_SKU = '12345';
-    const PRODUCT_NAME = 'test_product';
-    const PRODUCT_WEIGHT = '1lb';
-    const PRODUCT_TAX_CLASS_ID = 3;
-    const PRODUCT_COST = 9.00;
+    private const PRODUCT_NAME = 'test_product';
+    private const PRODUCT_WEIGHT = '1lb';
+    private const PRODUCT_TAX_CLASS_ID = 3;
+    private const PRODUCT_COST = 9.00;
 
     /**
      * @inheirtDoc

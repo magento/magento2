@@ -174,10 +174,10 @@ class SetConversionValueObserverTest extends TestCase
         )->method(
             'register'
         ) ->willReturnCallback(
-            function ($arg1, $arg2) {
-                if ($arg1 === Data::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME) {
+            function ($arg1, $arg2) use ($conversionCurrency, $conversionValue) {
+                if ($arg1 === Data::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME && $arg2 == $conversionCurrency) {
                     return null;
-                } elseif ($arg1 === Data::CONVERSION_VALUE_REGISTRY_NAME) {
+                } elseif ($arg1 === Data::CONVERSION_VALUE_REGISTRY_NAME && $arg2 == $conversionValue) {
                     return null;
                 }
             }

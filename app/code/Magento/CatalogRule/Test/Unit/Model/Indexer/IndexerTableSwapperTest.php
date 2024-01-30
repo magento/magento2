@@ -103,9 +103,7 @@ class IndexerTableSwapperTest extends TestCase
                     return $temporaryTableName;
                 }
             });
-
-
-
+        
         $this->assertEquals(
             $temporaryTableName,
             $model->getWorkingTableName($originalTableName)

@@ -98,6 +98,8 @@ class BuilderTest extends TestCase
      * @param array $data
      * @param float $expectedPrice
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function testBuild($data, $expectedPrice)
     {
