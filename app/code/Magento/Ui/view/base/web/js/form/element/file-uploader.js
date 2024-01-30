@@ -68,7 +68,6 @@ define([
             if (fileInput !== undefined) {
                 let targetElement = $(fileInput).closest('.file-uploader-area')[0],
                     dropTargetElement = $(fileInput).closest(this.dropZone)[0],
-                    fileObj = [],
                     formKey = window.FORM_KEY !== undefined ? window.FORM_KEY : $.cookie('form_key'),
                     fileInputName = this.fileInputName,
                     arrayFromObj = Array.from,
@@ -105,12 +104,8 @@ define([
                         }
 
                         if (!allowed.passed)  {
-                            fileObj.push(currentFile);
                             this.aggregateError(file.name, allowed.message);
-
-                            if (this.aggregatedErrors.length === fileObj.length) {
-                                this.uploaderConfig.stop();
-                            }
+                            this.uploaderConfig.stop();
                             return false;
                         }
 

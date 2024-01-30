@@ -74,6 +74,16 @@ define([
                         $.mage.__('We could not detect a size.') :
                         byteConvert(currentFile.size);
 
+                    // check if file is allowed to upload and resize
+                    allowedResize = $.inArray(currentFile.extension, allowedExt) !== -1;
+
+                    if (!allowedResize)  {
+                        fileUploader.aggregateError(currentFile.name,
+                            $.mage.__('Disallowed file type.'));
+                        fileUploader.onLoadingStop();
+                        return false;
+                    }
+
                     fileId = Math.random().toString(33).substr(2, 18);
 
                     tmpl = progressTmpl({
@@ -90,9 +100,6 @@ define([
                         id:  currentFile.id + '-' + fileId,
                         tempFileId:  fileId
                     };
-
-                    // check if resize allowed for file extension
-                    allowedResize = $.inArray(currentFile.extension, allowedExt) !== -1;
 
                     $(tmpl).appendTo(self.element);
                     return modifiedFile;
