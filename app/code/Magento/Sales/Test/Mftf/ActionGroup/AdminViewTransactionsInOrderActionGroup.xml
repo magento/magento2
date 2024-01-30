@@ -11,11 +11,14 @@
         <annotations>
             <description>Click the Transactions button on the Order Details page</description>
         </annotations>
-        <click selector="{{AdminTransactionsGridSection.transactionsSectionBtn}}" stepKey="clickTransactionsButton"/>
+        <waitForElementClickable selector="{{AdminTransactionsGridSection.transactionsSectionBtn}}" stepKey="waitForTransactionsTabToBeClicked"/>
+        <click selector="{{AdminTransactionsGridSection.transactionsSectionBtn}}" stepKey="clickTransactionsTab"/>
         <waitForElementVisible selector="{{AdminTransactionsGridSection.orderTxnTable}}" stepKey="orderTransactionsTableIsVisible"/>
         <selectOption selector="{{AdminTransactionsGridSection.orderTxnTableTypeFilter}}" userInput="void" stepKey="selectVoidTypeTxn" />
+        <waitForElementClickable selector="{{AdminTransactionsGridSection.orderTxnTableSearchBtn}}" stepKey="waitToClickSearch"/>
         <click selector="{{AdminTransactionsGridSection.orderTxnTableSearchBtn}}" stepKey="clickSearch"/>
         <waitForPageLoad stepKey="waitForFilterToLoad"/>
+        <waitForElementClickable selector="{{AdminTransactionsGridSection.orderTxnTableFirstRow}}" stepKey="clickOnVoidTransaction"/>
         <click selector="{{AdminTransactionsGridSection.orderTxnTableFirstRow}}" stepKey="clickVoidTxn"/>
         <waitForPageLoad stepKey="waitForTxnToLoad"/>
         <grabTextFrom selector="{{AdminTransactionsGridSection.transactionId}}" stepKey="getVoidTransaction"/>

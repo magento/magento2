@@ -15,7 +15,8 @@
         <waitForElementClickable selector="{{AdminOrderDetailsMainActionsSection.void}}" stepKey="waitForVoidButtonVisible"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.void}}" stepKey="clickOnVoid"/>
         <waitForText selector="{{AdminConfirmationModalSection.message}}" userInput="Are you sure you want to void the payment?" stepKey="seeConfirmationMessage"/>
-        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmOrderCancel"/>
-        <waitForText selector="{{AdminMessagesSection.success}}" userInput="The payment has been voided." stepKey="seeCancelSuccessMessage"/>
+        <waitForElementClickable selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForOkButtonToBeClicked"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmVoid"/>
+        <waitForText selector="{{AdminMessagesSection.success}}" userInput="The payment has been voided." stepKey="seeVoidedSuccessMessage"/>
     </actionGroup>
 </actionGroups>
