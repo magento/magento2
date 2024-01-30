@@ -370,7 +370,12 @@ class TierPriceValidator implements ResetAfterRequestInterface
     private function checkWebsite(TierPriceInterface $price, $key, Result $validationResult)
     {
         try {
-            if ($this->catalogData->isPriceGlobal() && $price->getWebsiteId() > 0) {
+            if ($this->catalogData->isPriceGlobal() &&
+                isset($this->productsCacheBySku[$price->getSku()]) &&
+                is_array($this->productsCacheBySku[$price->getSku()]->getTierPrices()) &&
+                count($this->productsCacheBySku[$price->getSku()]->getTierPrices()) > 0 &&
+                (int) $this->allWebsitesValue !== $price->getWebsiteId()
+            ) {
                 throw NoSuchEntityException::singleField('website_id', $price->getWebsiteId());
             }
             $this->websiteRepository->getById($price->getWebsiteId());
