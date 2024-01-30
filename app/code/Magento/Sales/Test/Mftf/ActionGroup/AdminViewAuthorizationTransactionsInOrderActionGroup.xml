@@ -15,7 +15,7 @@
         <remove keyForRemoval="assertEquals"/>
         <waitForElementVisible selector="{{AdminTransactionsGridSection.orderTxnTableTypeFilter}}" after="orderTransactionsTableIsVisible" stepKey="waitForTransactionTypeAuthorizationToBeClicked"/>
         <selectOption selector="{{AdminTransactionsGridSection.orderTxnTableTypeFilter}}" userInput="authorization" after="orderTransactionsTableIsVisible" stepKey="selectAuthorizationTypeTxn" />
-        <assertRegExp stepKey="assertEquals" message="pass" after="getAuthorizationTransaction">
+        <assertRegExp stepKey="assertEquals" message="pass">
             <expectedResult type="string">/([0-9a-z\-])*(?&lt;!authorization)$/</expectedResult>
             <actualResult type="variable">getVoidTransaction</actualResult>
         </assertRegExp>
