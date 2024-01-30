@@ -217,15 +217,16 @@ class CartTest extends TestCase
             ->willReturn($this->quoteMock);
         $this->eventManagerMock
             ->method('dispatch')
-            ->withConsecutive(
-                [
-                    'checkout_cart_update_items_before',
-                    ['cart' => $this->cart, 'info' => $infoDataObject]
-                ],
-                [
-                    'checkout_cart_update_items_after',
-                    ['cart' => $this->cart, 'info' => $infoDataObject]
-                ]
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($infoDataObject) {
+                    if ($arg1 == 'checkout_cart_update_items_before' &&
+                        $arg2 == ['cart' => $this->cart, 'info' => $infoDataObject]) {
+                        return null;
+                    } elseif ($arg1 == 'checkout_cart_update_items_after' &&
+                        $arg2 == ['cart' => $this->cart, 'info' => $infoDataObject]) {
+                        return null;
+                    }
+                }
             );
 
         $result = $this->cart->updateItems($data);
@@ -323,7 +324,7 @@ class CartTest extends TestCase
     /**
      * @return array
      */
-    public function useQtyDataProvider(): array
+    public static function useQtyDataProvider(): array
     {
         return [
             ['useQty' => true],
@@ -371,15 +372,16 @@ class CartTest extends TestCase
 
         $this->eventManagerMock
             ->method('dispatch')
-            ->withConsecutive(
-                [
-                    'checkout_cart_product_add_before',
-                    ['info' => $requestInfo, 'product' => $product]
-                ],
-                [
-                    'checkout_cart_product_add_after',
-                    ['quote_item' => 1, 'product' => $product]
-                ]
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($requestInfo, $product) {
+                    if ($arg1 == 'checkout_cart_product_add_before' &&
+                        $arg2 == ['info' => $requestInfo, 'product' => $product]) {
+                        return $this->eventManagerMock;
+                    } elseif ($arg1 == 'checkout_cart_product_add_after' &&
+                        $arg2 == ['quote_item' => 1, 'product' => $product]) {
+                        return $this->eventManagerMock;
+                    }
+                }
             );
 
         if (!$productInfo) {

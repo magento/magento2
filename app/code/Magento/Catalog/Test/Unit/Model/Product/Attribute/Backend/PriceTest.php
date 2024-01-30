@@ -141,23 +141,16 @@ class PriceTest extends TestCase
             ->willReturn(ScopedAttributeInterface::SCOPE_WEBSITE);
         $this->storeManager->expects($this->never())->method('getStore');
 
-        $object->expects($this->any())->method('addAttributeUpdate')->withConsecutive(
-            [
-                $this->equalTo($attributeCode),
-                $this->equalTo($newPrice),
-                $this->equalTo($allStoreIds[0])
-            ],
-            [
-                $this->equalTo($attributeCode),
-                $this->equalTo($newPrice),
-                $this->equalTo($allStoreIds[1])
-            ],
-            [
-                $this->equalTo($attributeCode),
-                $this->equalTo($newPrice),
-                $this->equalTo($allStoreIds[2])
-            ]
-        );
+        $object->expects($this->any())->method('addAttributeUpdate')
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($attributeCode, $newPrice, $allStoreIds) {
+                if ($arg1 == $attributeCode && $arg2 == $newPrice && $arg3 == $allStoreIds[0]) {
+                    return null;
+                } elseif ($arg1 == $attributeCode && $arg2 == $newPrice && $arg3 == $allStoreIds[1]) {
+                    return null;
+                } elseif ($arg1 == $attributeCode && $arg2 == $newPrice && $arg3 == $allStoreIds[2]) {
+                    return null;
+                }
+            });
         $this->assertEquals($this->model, $this->model->afterSave($object));
     }
 

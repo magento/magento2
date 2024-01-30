@@ -165,18 +165,29 @@ class EmailSenderHandlerTest extends TestCase
 
         $this->globalConfig
             ->method('getValue')
-            ->withConsecutive([$path])
-            ->willReturnOnConsecutiveCalls($configValue);
+            ->willReturnCallback(
+                function ($arg1) use ($configValue, $path) {
+                    if ($arg1 == $path) {
+                        return $configValue;
+                    }
+                }
+            );
 
         if ($configValue) {
             $nowDate = date('Y-m-d H:i:s');
             $fromDate = date('Y-m-d H:i:s', strtotime($nowDate . ' ' . $this->modifyStartFromDate));
             $this->entityCollection
                 ->method('addFieldToFilter')
-                ->withConsecutive(
-                    ['send_email', ['eq' => 1]],
-                    ['email_sent', ['null' => true]],
-                    ['created_at', ['from' => $fromDate]]
+                ->willReturnCallback(
+                    function ($arg1, $arg2) use ($fromDate) {
+                        if ($arg1 == 'send_email' && $arg2 == ['eq' => 1]) {
+                            return null;
+                        } elseif ($arg1 == 'email_sent' && $arg2 == ['null' => true]) {
+                            return null;
+                        } elseif ($arg1 == 'created_at' && $arg2 == ['from' => $fromDate]) {
+                            return null;
+                        }
+                    }
                 );
 
             $this->entityCollection

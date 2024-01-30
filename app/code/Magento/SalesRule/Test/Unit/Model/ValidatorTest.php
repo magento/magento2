@@ -412,9 +412,10 @@ class ValidatorTest extends TestCase
         $this->validators->expects($this->atLeastOnce())->method('getValidators')->with('discount')
             ->willReturn([$validator]);
         $validator->method('isValid')
-            ->withConsecutive([$item1], [$item2])
-            ->willReturnOnConsecutiveCalls(false, true);
-
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$item1] => false,
+                [$item2] => true
+            });
         $item1->expects($this->any())->method('getParentItemId')->willReturn(null);
         $item1->expects($this->any())->method('getParentItem')->willReturn(null);
         $item1->expects($this->never())->method('getDiscountCalculationPrice');
@@ -439,8 +440,10 @@ class ValidatorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $actionsCollection->method('validate')
-            ->withConsecutive([$item1], [$item2])
-            ->willReturnOnConsecutiveCalls(true, true);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$item1] => true,
+                [$item2] => true
+            });
         $rule->expects($this->any())->method('getActions')->willReturn($actionsCollection);
         $rule->expects($this->any())->method('getId')->willReturn(1);
 
@@ -671,7 +674,7 @@ class ValidatorTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderForFullShippingDiscount(): array
+    public static function dataProviderForFullShippingDiscount(): array
     {
         return [
             'verify shipping discount when shipping amount is greater than zero' => [

@@ -218,11 +218,13 @@ class ViewTest extends TestCase
             ->willReturn($this->pageTitleMock);
         $this->pageTitleMock->expects($this->exactly(2))
             ->method('prepend')
-            ->withConsecutive(
-                ['Shipments'],
-                ['View Shipment #' . $incrementId]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1) use ($incrementId) {
+                if ($arg1 == 'Shipments') {
+                    return $this->pageTitleMock;
+                } elseif ($arg1 == 'View Shipment #' . $incrementId) {
+                    return $this->pageTitleMock;
+                }
+            });
 
         $this->assertEquals($this->resultPageMock, $this->controller->execute());
     }

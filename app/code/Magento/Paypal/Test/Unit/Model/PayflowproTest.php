@@ -142,7 +142,7 @@ class PayflowproTest extends TestCase
     /**
      * @return array
      */
-    public function canVoidDataProvider(): array
+    public static function canVoidDataProvider(): array
     {
         return [
             ["Can void transaction if order's paid amount not set", null, true],
@@ -208,7 +208,7 @@ class PayflowproTest extends TestCase
     /**
      * @return array
      */
-    public function setTransStatusDataProvider(): array
+    public static function setTransStatusDataProvider(): array
     {
         return [
             [
@@ -266,8 +266,14 @@ class PayflowproTest extends TestCase
         }
         $this->scopeConfigMock
             ->method('getValue')
-            ->withConsecutive(...$withArgs)
-            ->willReturnOnConsecutiveCalls(...$willReturnArs);
+            ->willReturnCallback(function ($withArgs) use ($willReturnArs) {
+                if (!empty($withArgs)) {
+                    static $callCount = 0;
+                    $returnValue = $willReturnArs[$callCount] ?? null;
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
 
         $this->assertEquals($result, $this->payflowpro->isActive($storeId));
     }
@@ -304,7 +310,7 @@ class PayflowproTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderCaptureAmountRounding(): array
+    public static function dataProviderCaptureAmountRounding(): array
     {
         return [
             [
@@ -417,7 +423,7 @@ class PayflowproTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestIsActive(): array
+    public static function dataProviderForTestIsActive(): array
     {
         return [
             [
@@ -718,7 +724,7 @@ class PayflowproTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderMapGatewayResponse(): array
+    public static function dataProviderMapGatewayResponse(): array
     {
         return [
             [

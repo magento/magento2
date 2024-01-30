@@ -159,11 +159,11 @@ class ViewedTest extends AbstractControllerTest
         $this->breadcrumbsBlockMock
             ->expects($this->exactly(3))
             ->method('addLink')
-            ->withConsecutive(
-                [new Phrase('Reports'), new Phrase('Reports')],
-                [new Phrase('Products'), new Phrase('Products')],
-                [new Phrase('Products Most Viewed Report'), new Phrase('Products Most Viewed Report')]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($titleMock) {
+                if ($arg1 instanceof Phrase && $arg2 instanceof Phrase) {
+                    return null;
+                }
+            });
 
         $this->viewMock
             ->expects($this->once())

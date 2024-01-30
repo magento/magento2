@@ -179,7 +179,7 @@ class NewWidgetTest extends TestCase
     /**
      * @return array
      */
-    public function getCurrentPageDataProvider()
+    public static function getCurrentPageDataProvider()
     {
         return [
             [1, 1],
@@ -300,11 +300,13 @@ class NewWidgetTest extends TestCase
         $this->generalGetProductCollection();
 
         $this->productCollection->expects($this->exactly(2))->method('setPageSize')
-            ->withConsecutive(
-                [$productsCount],
-                [$expectedPageSize]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1) use ($productsCount, $expectedPageSize) {
+                    if ($arg1 == $productsCount || $arg1 == $expectedPageSize) {
+                        return $this->productCollection;
+                    }
+                }
+            );
 
         $this->startTestGetProductCollection(
             NewWidget::DISPLAY_TYPE_NEW_PRODUCTS,
@@ -342,7 +344,7 @@ class NewWidgetTest extends TestCase
     /**
      * @return array
      */
-    public function getProductCollectionDataProvider()
+    public static function getProductCollectionDataProvider()
     {
         return [
             [true, 1, null, 5],

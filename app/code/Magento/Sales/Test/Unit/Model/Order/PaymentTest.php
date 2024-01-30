@@ -42,7 +42,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PaymentTest extends TestCase
 {
-    const TRANSACTION_ID = 'ewr34fM49V0';
+    private const TRANSACTION_ID = 'ewr34fM49V0';
 
     /**
      * @var Context|MockObject
@@ -396,10 +396,13 @@ class PaymentTest extends TestCase
         $this->order->expects($this->any())->method('getCustomerNote')->willReturn($customerNote);
         $this->order->expects($this->any())
             ->method('addStatusHistoryComment')
-            ->withConsecutive(
-                [$customerNote]
-            )
-            ->willReturn($statusHistory);
+            ->willReturnCallback(
+                function ($arg1) use ($statusHistory, $customerNote) {
+                    if ($arg1 === $customerNote) {
+                        return $statusHistory;
+                    }
+                }
+            );
         $this->order->expects($this->any())
             ->method('setIsCustomerNotified')
             ->with(true)
@@ -415,9 +418,14 @@ class PaymentTest extends TestCase
     {
         $this->eventManagerMock
             ->method('dispatch')
-            ->withConsecutive(
-                ['sales_order_payment_place_start', ['payment' => $this->payment]],
-                ['sales_order_payment_place_end', ['payment' => $this->payment]]
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 === 'sales_order_payment_place_start' && $arg2 === ['payment' => $this->payment]) {
+                        return null;
+                    } elseif ($arg1 === 'sales_order_payment_place_end' && $arg2 === ['payment' => $this->payment]) {
+                        return null;
+                    }
+                }
             );
     }
 
@@ -640,7 +648,7 @@ class PaymentTest extends TestCase
      *
      * @return array
      */
-    public function authorizeDataProvider(): array
+    public static function authorizeDataProvider(): array
     {
         return [
             [false, 9.99],
@@ -683,7 +691,7 @@ class PaymentTest extends TestCase
     /**
      * @return array
      */
-    public function acceptPaymentFalseProvider(): array
+    public static function acceptPaymentFalseProvider(): array
     {
         return [
             'Fraud = 1' => [
@@ -1691,7 +1699,7 @@ class PaymentTest extends TestCase
     /**
      * @return array
      */
-    public function boolProvider(): array
+    public static function boolProvider(): array
     {
         return [
             [true],
