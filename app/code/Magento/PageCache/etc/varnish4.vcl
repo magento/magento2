@@ -180,22 +180,22 @@ sub vcl_backend_response {
         unset beresp.http.set-cookie;
     }
 
-   # If page is not cacheable then bypass varnish for 2 minutes as Hit-For-Pass
-   if (beresp.ttl <= 0s ||
-       beresp.http.Surrogate-control ~ "no-store" ||
-       (!beresp.http.Surrogate-Control &&
-       beresp.http.Cache-Control ~ "no-cache|no-store") ||
-       beresp.http.Vary == "*") {
-       # Mark as Hit-For-Pass for the next 2 minutes
+    # If page is not cacheable then bypass varnish for 2 minutes as Hit-For-Pass
+    if (beresp.ttl <= 0s ||
+        beresp.http.Surrogate-control ~ "no-store" ||
+        (!beresp.http.Surrogate-Control &&
+        beresp.http.Cache-Control ~ "no-cache|no-store") ||
+        beresp.http.Vary == "*") {
+        # Mark as Hit-For-Pass for the next 2 minutes
         set beresp.ttl = 120s;
         set beresp.uncacheable = true;
     }
 
-   # If the cache key in the Magento response doesn't match the one that was sent in the request, don't cache under the request's key
-   if (bereq.url ~ "/graphql" && bereq.http.X-Magento-Cache-Id && bereq.http.X-Magento-Cache-Id != beresp.http.X-Magento-Cache-Id) {
-      set beresp.ttl = 0s;
-      set beresp.uncacheable = true;
-   }
+    # If the cache key in the Magento response doesn't match the one that was sent in the request, don't cache under the request's key
+    if (bereq.url ~ "/graphql" && bereq.http.X-Magento-Cache-Id && bereq.http.X-Magento-Cache-Id != beresp.http.X-Magento-Cache-Id) {
+        set beresp.ttl = 0s;
+        set beresp.uncacheable = true;
+    }
 
     return (deliver);
 }
