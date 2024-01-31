@@ -125,6 +125,11 @@ class FlatTableBuilderTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testBuild()
     {
         $storeId = 1;

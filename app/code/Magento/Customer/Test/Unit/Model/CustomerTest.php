@@ -1,7 +1,5 @@
 <?php declare(strict_types=1);
 /**
- * Unit test for customer service layer \Magento\Customer\Model\Customer
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */

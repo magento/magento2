@@ -85,7 +85,7 @@ class ItemTest extends TestCase
 
     private const PRODUCT_ID = 1;
     private const PRODUCT_TYPE = 'simple';
-    const PRODUCT_SKU = '12345';
+    private const PRODUCT_SKU = '12345';
     private const PRODUCT_NAME = 'test_product';
     private const PRODUCT_WEIGHT = '1lb';
     private const PRODUCT_TAX_CLASS_ID = 3;

@@ -112,6 +112,10 @@ class AttributeMetadatConverterTest extends TestCase
         ];
     }
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testCreateAttributeMetadataTestWithSource()
     {
         $validatedRules = $this->prepareValidateRules();
