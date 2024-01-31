@@ -10,7 +10,7 @@
         <before>
             <!-- Login -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
-            <!--Config PayPal Payflow Pro-->
+            <!--Config PayPal Payments Pro-->
             <actionGroup ref="AdminConfigurePayPalPaymentsProActionGroup" stepKey="ConfigPayPalPaymentsPro">
                 <argument name="credentials" value="SamplePaypalPaymentsProConfig"/>
             </actionGroup>
