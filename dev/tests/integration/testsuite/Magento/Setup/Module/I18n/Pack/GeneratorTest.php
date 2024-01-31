@@ -80,7 +80,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);
         $paths = $reflection->getProperty('paths');
         $paths->setAccessible(true);
-        $paths->setValue($this->backupRegistrar);
+        $paths->setValue(null, $this->backupRegistrar);
         $paths->setAccessible(false);
     }
 
