@@ -60,7 +60,6 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
         string $operationName,
         string $expected,
     ) : void {
-        $this->markTestSkipped('Fix this later');
         if ($operationName === 'createCustomer') {
             $emails = [$variables['email'], $variables2['email']];
             $this->clearCustomerBeforeTest($emails);
@@ -120,7 +119,6 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
      */
     public function testRequestPasswordResetEmail(): void
     {
-        $this->markTestSkipped('Fix this later');
         $query = $this->getRequestPasswordResetEmailMutation();
         $this->graphQlStateDiff->testState(
             $query,
@@ -139,7 +137,6 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
      */
     public function testResetPassword(): void
     {
-        $this->markTestSkipped('Fix this later');
         $query = $this->getResetPasswordMutation();
         $email = 'customer@example.com';
         $this->graphQlStateDiff->testState(
@@ -160,7 +157,6 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
      */
     public function testChangePassword(): void
     {
-        $this->markTestSkipped('Fix this later');
         $query = $this->getChangePasswordMutation();
         $this->graphQlStateDiff->testState(
             $query,
@@ -204,33 +200,33 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
             'Create Customer' => [
                 <<<'QUERY'
                 mutation($firstname: String!, $lastname: String!, $email: String!, $password: String!) {
-                 createCustomerV2(
-                    input: {
-                     firstname: $firstname,
-                     lastname: $lastname,
-                     email: $email,
-                     password: $password
-                     }
-                ) {
-                    customer {
-                        created_at
-                        prefix
-                        firstname
-                        middlename
-                        lastname
-                        suffix
-                        email
-                        default_billing
-                        default_shipping
-                        date_of_birth
-                        taxvat
-                        is_subscribed
-                        gender
-                        allow_remote_shopping_assistance
+                    createCustomerV2(
+                        input: {
+                         firstname: $firstname,
+                         lastname: $lastname,
+                         email: $email,
+                         password: $password
+                         }
+                    ) {
+                        customer {
+                            created_at
+                            prefix
+                            firstname
+                            middlename
+                            lastname
+                            suffix
+                            email
+                            default_billing
+                            default_shipping
+                            date_of_birth
+                            taxvat
+                            is_subscribed
+                            gender
+                            allow_remote_shopping_assistance
+                        }
                     }
                 }
-            }
-            QUERY,
+                QUERY,
                 [
                     'firstname' => 'John',
                     'lastname' => 'Doe',
@@ -250,17 +246,18 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
             'Update Customer' => [
                 <<<'QUERY'
                     mutation($allow: Boolean!) {
-                       updateCustomerV2(
-                        input: {
-                            allow_remote_shopping_assistance: $allow
+                        updateCustomerV2(
+                            input: {
+                                allow_remote_shopping_assistance: $allow
+                            }
+                        )
+                        {
+                            customer {
+                                allow_remote_shopping_assistance
+                            }
                         }
-                    ) {
-                    customer {
-                        allow_remote_shopping_assistance
                     }
-                }
-            }
-            QUERY,
+                QUERY,
                 ['allow' => true],
                 ['allow' => false],
                 ['email' => 'customer@example.com', 'password' => 'password'],
