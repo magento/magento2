@@ -1164,7 +1164,7 @@ class QuoteTest extends TestCase
     /**
      * @return array[]
      */
-    private function dataProviderForTestAddProductItem(): array
+    public function dataProviderForTestAddProductItem(): array
     {
         return [
             'not_force_item' => [null, false],

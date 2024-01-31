@@ -22,4 +22,9 @@
     <type name="Magento\Sales\Model\Service\InvoiceService">
         <plugin name="addTransactionCommentAfterCapture" type="Magento\Sales\Plugin\Model\Service\Invoice\AddTransactionCommentAfterCapture"/>
     </type>
+    <type name="Magento\Sales\Model\Reorder\Reorder">
+        <arguments>
+            <argument name="forceAdd" xsi:type="boolean">false</argument>
+        </arguments>
+    </type>
 </config>

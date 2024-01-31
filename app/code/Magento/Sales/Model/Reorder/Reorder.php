@@ -105,6 +105,11 @@ class Reorder
     private $orderInfoBuyRequestGetter;
 
     /**
+     * @var bool
+     */
+    private bool $forceAdd;
+
+    /**
      * @param OrderFactory $orderFactory
      * @param CustomerCartResolver $customerCartProvider
      * @param GuestCartResolver $guestCartResolver
@@ -113,6 +118,7 @@ class Reorder
      * @param LoggerInterface $logger
      * @param ProductCollectionFactory $productCollectionFactory
      * @param OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter
+     * @param bool $forceAdd
      */
     public function __construct(
         OrderFactory $orderFactory,
@@ -122,7 +128,8 @@ class Reorder
         ReorderHelper $reorderHelper,
         LoggerInterface $logger,
         ProductCollectionFactory $productCollectionFactory,
-        OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter
+        OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter,
+        bool $forceAdd = false
     ) {
         $this->orderFactory = $orderFactory;
         $this->cartRepository = $cartRepository;
@@ -132,6 +139,7 @@ class Reorder
         $this->guestCartResolver = $guestCartResolver;
         $this->productCollectionFactory = $productCollectionFactory;
         $this->orderInfoBuyRequestGetter = $orderInfoBuyRequestGetter;
+        $this->forceAdd = $forceAdd;
     }
 
     /**
@@ -264,7 +272,7 @@ class Reorder
 
         $addProductResult = null;
         try {
-            $infoBuyRequest->setForceAddToCart(true);
+            $infoBuyRequest->setForceAddToCart($this->forceAdd);
             $addProductResult = $cart->addProduct($product, $infoBuyRequest);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->addError($this->getCartItemErrorMessage($orderItem, $product, $e->getMessage()));
