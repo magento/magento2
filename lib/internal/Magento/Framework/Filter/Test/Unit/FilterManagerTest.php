@@ -175,7 +175,7 @@ class FilterManagerTest extends TestCase
         $value = 'testValue';
         $this->initMocks();
         $filterMock = $this->getMockBuilder('FactoryInterface')
-            ->setMethods(['filter'])->getMock();
+            ->onlyMethods(['filter'])->getMock();
         $filterMock->expects(
             $this->atLeastOnce()
         )->method(

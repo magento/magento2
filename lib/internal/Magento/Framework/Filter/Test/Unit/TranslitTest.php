@@ -73,8 +73,11 @@ class TranslitTest extends TestCase
         $config = $this->getMockBuilder(
             ScopeConfigInterface::class
         )->disableOriginalConstructor()
-            ->setMethods(
-                ['getValue', 'setValue', 'isSetFlag']
+            ->addMethods([
+                'setValue'
+            ])
+            ->onlyMethods(
+                ['getValue', 'isSetFlag']
             )->getMock();
 
         $config->expects(

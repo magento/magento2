@@ -98,7 +98,7 @@ class ExchangeTest extends TestCase
         $this->communicationConfig->expects($this->once())
             ->method('getTopic')->with($topicName)->willReturn($topicData);
         $channel = $this->getMockBuilder(\AMQPChannel::class)
-            ->setMethods(['batch_basic_publish', 'publish_batch'])
+            ->onlyMethods(['batch_basic_publish', 'publish_batch'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->amqpConfig->expects($this->once())->method('getChannel')->willReturn($channel);

@@ -53,7 +53,7 @@ class FactoryTest extends TestCase
 
         $this->optionsMock = $this->getMockBuilder(FactoryOptions::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'isSslEnabled',
                     'getHost',

@@ -50,11 +50,11 @@ class AclResourceTest extends TestCase
     protected function setUp(): void
     {
         $this->connectionFactory = $this->getMockBuilder(ConnectionFactoryInterface::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
         $this->config = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConnectionName'])
+            ->onlyMethods(['getConnectionName'])
             ->getMockForAbstractClass();
         $this->config->expects($this->any())
             ->method('getConnectionName')

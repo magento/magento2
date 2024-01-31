@@ -11,6 +11,7 @@ use Magento\Framework\Amqp\Config;
 use Magento\Framework\Amqp\Connection\Factory as ConnectionFactory;
 use Magento\Framework\Amqp\Connection\FactoryOptions;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AbstractConnection;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -42,9 +43,17 @@ class ConfigTest extends TestCase
 
     protected function setUp(): void
     {
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $objects = [
+            [
+                ConnectionFactory::class,
+                $this->createMock(ConnectionFactory::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConfigData'])
+            ->onlyMethods(['getConfigData'])
             ->getMock();
         $this->connectionFactory = $this->createMock(ConnectionFactory::class);
         $this->amqpConfig = new Config($this->deploymentConfigMock, 'amqp', $this->connectionFactory);
