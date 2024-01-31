@@ -69,7 +69,8 @@ class PropertyLockerTest extends TestCase
         $this->attributeConfigMock->expects($this->once())->method('getLockedFields')->willReturn($lockedFields);
 
         $elementMock = $this->getMockBuilder(AbstractElement::class)
-            ->onlyMethods(['setDisabled', 'setReadonly'])
+            ->addMethods(['setDisabled'])
+            ->onlyMethods(['setReadonly'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $elementMock->expects($this->exactly(2))->method('setDisabled');

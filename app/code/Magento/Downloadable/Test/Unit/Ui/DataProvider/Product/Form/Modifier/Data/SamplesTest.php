@@ -74,7 +74,8 @@ class SamplesTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->onlyMethods(['getSamplesTitle', 'getId', 'getTypeId'])
+            ->addMethods(['getSamplesTitle'])
+            ->onlyMethods(['getId', 'getTypeId'])
             ->getMockForAbstractClass();
         $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
         $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);

@@ -151,7 +151,7 @@ class LinksTest extends TestCase
     /**
      * @return array
      */
-    public function modifyDataDataProvider()
+    public static function modifyDataDataProvider()
     {
         return [
             ['isPurchasedSeparatelyBool' => true, 'PurchasedSeparatelyStr' => '1'],
@@ -185,7 +185,7 @@ class LinksTest extends TestCase
         $currencyMock->expects($this->once())
             ->method('getCurrencySymbol');
         $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->onlyMethods(['getBaseCurrency'])
+            ->addMethods(['getBaseCurrency'])
             ->getMockForAbstractClass();
         $storeMock->expects($this->once())
             ->method('getBaseCurrency')
