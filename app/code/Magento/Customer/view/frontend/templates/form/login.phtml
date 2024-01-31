@@ -7,6 +7,12 @@
 // phpcs:disable Generic.Files.LineLength.TooLong
 
 /** @var \Magento\Customer\Block\Form\Login $block */
+if (!$block->getButtonLockManager()) {
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $block->setButtonLockManager(
+        $objectManager->get(\Magento\Framework\View\Element\ButtonLockManager::class)
+    );
+}
 ?>
 <div class="block block-customer-login">
     <div class="block-title">

@@ -5,6 +5,12 @@
  */
 
 /** @var \Magento\Newsletter\Block\Subscribe $block */
+if (!$block->getButtonLockManager()) {
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $block->setButtonLockManager(
+        $objectManager->get(\Magento\Framework\View\Element\ButtonLockManager::class)
+    );
+}
 ?>
 <div class="block newsletter">
     <div class="title"><strong><?= $block->escapeHtml(__('Newsletter')) ?></strong></div>

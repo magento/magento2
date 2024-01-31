@@ -5,6 +5,12 @@
  */
 
 /** @var \Magento\Review\Block\Form $block */
+if (!$block->getButtonLockManager()) {
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $block->setButtonLockManager(
+        $objectManager->get(\Magento\Framework\View\Element\ButtonLockManager::class)
+    );
+}
 //phpcs:disable Generic.Files.LineLength
 ?>
 <div class="block review-add">

@@ -8,6 +8,12 @@
 // phpcs:disable Generic.Files.LineLength.TooLong
 
 /** @var \Magento\Contact\Block\ContactForm $block */
+if (!$block->getButtonLockManager()) {
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $block->setButtonLockManager(
+        $objectManager->get(\Magento\Framework\View\Element\ButtonLockManager::class)
+        );
+}
 /** @var \Magento\Contact\ViewModel\UserDataProvider $viewModel */
 
 $viewModel = $block->getViewModel();

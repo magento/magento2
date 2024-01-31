@@ -7,6 +7,12 @@
 use Magento\Customer\Block\Widget\Name;
 
 /** @var \Magento\Customer\Block\Form\Edit $block */
+if (!$block->getButtonLockManager()) {
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $block->setButtonLockManager(
+        $objectManager->get(\Magento\Framework\View\Element\ButtonLockManager::class)
+    );
+}
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <form class="form form-edit-account"
