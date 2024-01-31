@@ -115,7 +115,7 @@ class SaveHandlerTest extends TestCase
             ->willReturn($sku);
 
         $extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
-            ->onlyMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
+            ->addMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -165,7 +165,7 @@ class SaveHandlerTest extends TestCase
             ->willReturn($sku);
 
         $extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
-            ->onlyMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
+            ->addMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -230,7 +230,6 @@ class SaveHandlerTest extends TestCase
     {
         $this->configurable = $this->getMockBuilder(Configurable::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
 
         $this->configurableFactory = $this->getMockBuilder(ConfigurableFactory::class)

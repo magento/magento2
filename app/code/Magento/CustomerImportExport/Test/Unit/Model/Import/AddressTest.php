@@ -241,7 +241,7 @@ class AddressTest extends TestCase
     {
         $entityFactory = $this->createMock(EntityFactory::class);
         $attributeCollection = $this->getMockBuilder(Collection::class)
-            ->onlyMethods(['getEntityTypeCode'])
+            ->addMethods(['getEntityTypeCode'])
             ->setConstructorArgs([$entityFactory])
             ->getMock();
         foreach ($this->_attributes as $attributeData) {
@@ -365,6 +365,7 @@ class AddressTest extends TestCase
     protected function _getModelMock()
     {
         $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->_objectManagerMock->prepareObjectManager();
         $modelMock = new Address(
             $this->_stringLib,
             $scopeConfig,
@@ -402,7 +403,7 @@ class AddressTest extends TestCase
      *
      * @return array
      */
-    public function validateRowForUpdateDataProvider()
+    public static function validateRowForUpdateDataProvider()
     {
         return [
             'valid' => [
@@ -423,7 +424,7 @@ class AddressTest extends TestCase
      *
      * @return array
      */
-    public function validateRowForDeleteDataProvider()
+    public static function validateRowForDeleteDataProvider()
     {
         return [
             'valid' => [

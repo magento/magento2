@@ -238,7 +238,7 @@ class DataTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderGetCountryHtmlSelect()
+    public static function dataProviderGetCountryHtmlSelect()
     {
         return [
             [
@@ -306,14 +306,12 @@ class DataTest extends TestCase
 
         $elementHtmlSelect = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
+            ->addMethods(['setName', 'setValue', 'setExtraParams'])
             ->onlyMethods(
                 [
-                    'setName',
                     'setId',
                     'setTitle',
-                    'setValue',
                     'setOptions',
-                    'setExtraParams',
                     'getHtml',
                 ]
             )

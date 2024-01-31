@@ -90,7 +90,7 @@ class ProductRepositorySaveTest extends TestCase
 
         $this->extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
+            ->addMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
             ->getMockForAbstractClass();
 
         $this->eavAttribute = $this->getMockForAbstractClass(ProductAttributeInterface::class);

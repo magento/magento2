@@ -74,9 +74,9 @@ class CountryTest extends TestCase
         $addressMock = $this
             ->getMockBuilder(AbstractAddress::class)
             ->disableOriginalConstructor()
+            ->addMethods(['getCountryId'])
             ->onlyMethods(
                 [
-                    'getCountryId',
                     'getRegion',
                     'getRegionId',
                     'getCountryModel',
@@ -121,7 +121,7 @@ class CountryTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         $countryId = 1;
         $data = [

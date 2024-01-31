@@ -59,11 +59,12 @@ class AccountTest extends TestCase
     {
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setNoReferer', 'unsNoReferer', 'authenticate'])
+            ->addMethods(['setNoReferer', 'unsNoReferer'])
+            ->onlyMethods(['authenticate'])
             ->getMock();
 
         $this->actionMock = $this->getMockBuilder(AccountInterface::class)
-            ->onlyMethods(['getActionFlag'])
+            ->addMethods(['getActionFlag'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -94,7 +95,7 @@ class AccountTest extends TestCase
     ) {
         /** @var callable|MockObject $proceedMock */
         $proceedMock = $this->getMockBuilder(\stdClass::class)
-            ->onlyMethods(['__invoke'])
+            ->addMethods(['__invoke'])
             ->getMock();
 
         $closureMock = Closure::fromCallable($proceedMock);
@@ -122,7 +123,7 @@ class AccountTest extends TestCase
     /**
      * @return array
      */
-    public function beforeExecuteDataProvider()
+    public static function beforeExecuteDataProvider()
     {
         return [
             [

@@ -196,7 +196,8 @@ class ObjectManager
                 ->disableOriginalClone()
                 ->disableArgumentCloning()
                 ->disallowMockingUnknownTypes()
-                ->addMethods(['populateWithArray', 'populate', 'create'])
+                ->addMethods(['populateWithArray', 'populate'])
+                ->onlyMethods(['create'])
                 ->getMock();
 
             $objectFactory->expects($this->_testObject->any())

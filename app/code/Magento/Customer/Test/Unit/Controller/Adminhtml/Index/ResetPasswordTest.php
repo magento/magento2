@@ -155,7 +155,7 @@ class ResetPasswordTest extends TestCase
         $this->_session = $this->getMockBuilder(
             Session::class
         )->disableOriginalConstructor()
-            ->onlyMethods(
+            ->addMethods(
                 ['setIsUrlNotice', '__wakeup']
             )->getMock();
         $this->_session->expects($this->any())->method('setIsUrlNotice');
@@ -188,28 +188,31 @@ class ResetPasswordTest extends TestCase
             ->method('create')
             ->willReturn($this->resultRedirectMock);
 
+        $addContextArgs = [
+            'getTranslator',
+            'getFrontController',
+            'getLayoutFactory'
+        ];
+
         $contextArgs = [
             'getHelper',
             'getSession',
             'getAuthorization',
-            'getTranslator',
             'getObjectManager',
-            'getFrontController',
             'getActionFlag',
             'getMessageManager',
-            'getLayoutFactory',
             'getEventManager',
             'getRequest',
             'getResponse',
             'getView',
             'getResultRedirectFactory'
         ];
-        $contextMock = $this->getMockBuilder(
-            Context::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(
-                $contextArgs
-            )->getMock();
+
+        $contextMock = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->addMethods($addContextArgs)
+            ->onlyMethods($contextArgs)
+            ->getMock();
         $contextMock->expects($this->any())->method('getRequest')->willReturn($this->_request);
         $contextMock->expects($this->any())->method('getResponse')->willReturn($this->_response);
         $contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->_objectManager);

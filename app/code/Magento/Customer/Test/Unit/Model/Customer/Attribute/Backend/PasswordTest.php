@@ -35,7 +35,7 @@ class PasswordTest extends TestCase
         /** @var DataObject|MockObject $object */
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getPassword', 'getPasswordConfirm'])
+            ->addMethods(['getPassword', 'getPasswordConfirm'])
             ->getMock();
 
         $object->expects($this->once())->method('getPassword')->willReturn($password);
@@ -47,7 +47,7 @@ class PasswordTest extends TestCase
     /**
      * @return array
      */
-    public function passwordNegativeDataProvider()
+    public static function passwordNegativeDataProvider()
     {
         return [
             'less-then-6-char' => ['less6'],
@@ -66,7 +66,7 @@ class PasswordTest extends TestCase
         /** @var DataObject|MockObject $object */
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getPassword'])
+            ->addMethods(['getPassword'])
             ->getMock();
 
         $object->expects($this->once())->method('getPassword')->willReturn($password);
@@ -82,7 +82,7 @@ class PasswordTest extends TestCase
         /** @var DataObject|MockObject $object */
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getPassword', 'setPasswordHash', 'hashPassword'])
+            ->addMethods(['getPassword', 'setPasswordHash', 'hashPassword'])
             ->getMock();
 
         $object->expects($this->once())->method('getPassword')->willReturn($password);
@@ -95,7 +95,7 @@ class PasswordTest extends TestCase
     /**
      * @return array
      */
-    public function randomValuesProvider()
+    public static function randomValuesProvider()
     {
         return [
             [false],

@@ -124,7 +124,7 @@ class NewsletterTest extends TestCase
         $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->backendSessionMock = $this->getMockBuilder(Session::class)
-            ->onlyMethods(['getCustomerFormData'])
+            ->addMethods(['getCustomerFormData'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->once())
@@ -140,6 +140,7 @@ class NewsletterTest extends TestCase
         $this->shareConfig = $this->createMock(Share::class);
 
         $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
         $this->model = $objectManager->getObject(
             Newsletter::class,
             [
@@ -191,7 +192,8 @@ class NewsletterTest extends TestCase
 
         $subscriberMock = $this->getMockBuilder(Subscriber::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['loadByCustomer', 'getChangeStatusAt', 'isSubscribed', 'getData'])
+            ->addMethods(['getChangeStatusAt'])
+            ->onlyMethods(['loadByCustomer', 'isSubscribed', 'getData'])
             ->getMock();
         $statusDate = new \DateTime($statusDate);
         $this->localeDateMock->method('formatDateTime')->with($statusDate)->willReturn($dateExpected);
@@ -209,7 +211,7 @@ class NewsletterTest extends TestCase
      *
      * @return array
      */
-    public function getChangeStatusAtDataProvider()
+    public static function getChangeStatusAtDataProvider()
     {
         return
             [

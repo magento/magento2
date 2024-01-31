@@ -27,10 +27,11 @@ class LinkTest extends TestCase
         $layout = $this->getMockBuilder(
             Layout::class
         )->disableOriginalConstructor()
-            ->onlyMethods(
+            ->addMethods(
                 ['helper']
             )->getMock();
 
+        $objectManager->prepareObjectManager();
         $block = $objectManager->getObject(
             Link::class,
             ['layout' => $layout, 'customerUrl' => $helper]

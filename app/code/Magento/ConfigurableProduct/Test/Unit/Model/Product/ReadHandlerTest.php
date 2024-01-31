@@ -85,7 +85,7 @@ class ReadHandlerTest extends TestCase
 
         $extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setConfigurableProductOptions', 'setConfigurableProductLinks'])
+            ->addMethods(['setConfigurableProductOptions', 'setConfigurableProductLinks'])
             ->getMockForAbstractClass();
 
         $product->expects(static::once())

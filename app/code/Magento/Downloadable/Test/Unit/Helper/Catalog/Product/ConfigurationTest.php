@@ -71,7 +71,7 @@ class ConfigurationTest extends TestCase
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['_wakeup', 'getLinksTitle'])
+            ->addMethods(['_wakeup', 'getLinksTitle'])
             ->getMock();
 
         $product->expects($this->once())->method('getLinksTitle')->willReturn('links_title');
@@ -83,7 +83,7 @@ class ConfigurationTest extends TestCase
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['_wakeup', 'getLinksTitle'])
+            ->addMethods(['_wakeup', 'getLinksTitle'])
             ->getMock();
 
         $product->expects($this->once())->method('getLinksTitle')->willReturn(null);
@@ -100,7 +100,8 @@ class ConfigurationTest extends TestCase
         $item = $this->getMockForAbstractClass(ItemInterface::class);
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['_wakeup', 'getLinksTitle', 'getTypeInstance'])
+            ->addMethods(['_wakeup', 'getLinksTitle'])
+            ->onlyMethods(['getTypeInstance'])
             ->getMock();
         $option = $this->getMockForAbstractClass(OptionInterface::class);
         $productType = $this->getMockBuilder(Type::class)

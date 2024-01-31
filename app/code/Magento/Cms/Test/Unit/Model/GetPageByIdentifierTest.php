@@ -52,7 +52,8 @@ class GetPageByIdentifierTest extends TestCase
 
         $this->page = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setStoreId', 'getId'])
+            ->addMethods(['setStoreId'])
+            ->onlyMethods(['getId'])
             ->getMock();
 
         $this->getPageByIdentifierCommand = new GetPageByIdentifier($this->pageFactory, $this->pageResource);

@@ -214,7 +214,8 @@ class SaveTest extends TestCase
             ->getMock();
         $this->resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setActiveMenu', 'getConfig', 'addBreadcrumb'])
+            ->addMethods(['setActiveMenu', 'addBreadcrumb'])
+            ->onlyMethods(['getConfig'])
             ->getMock();
         $this->pageConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -224,7 +225,7 @@ class SaveTest extends TestCase
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['unsCustomerFormData', 'setCustomerFormData'])
+            ->addMethods(['unsCustomerFormData', 'setCustomerFormData'])
             ->getMock();
         $this->formFactoryMock = $this->getMockBuilder(FormFactory::class)
             ->disableOriginalConstructor()

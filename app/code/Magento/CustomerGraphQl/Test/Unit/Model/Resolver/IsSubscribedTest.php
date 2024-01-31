@@ -98,7 +98,7 @@ class IsSubscribedTest extends TestCase
 
         $this->contextExtensionMock = $this->getMockBuilder(ContextExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getStore'])
+            ->addMethods(['getStore'])
             ->getMockForAbstractClass();
 
         $this->customerMock = $this->getMockBuilder(CustomerInterface::class)

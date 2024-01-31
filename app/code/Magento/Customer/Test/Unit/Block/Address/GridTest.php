@@ -101,7 +101,7 @@ class GridTest extends TestCase
         $outputString = 'OutputString';
         /** @var BlockInterface|MockObject $block */
         $block = $this->getMockBuilder(BlockInterface::class)
-            ->onlyMethods(['setCollection'])
+            ->addMethods(['setCollection'])
             ->getMockForAbstractClass();
         /** @var LayoutInterface|MockObject $layout */
         $layout = $this->getMockForAbstractClass(LayoutInterface::class);

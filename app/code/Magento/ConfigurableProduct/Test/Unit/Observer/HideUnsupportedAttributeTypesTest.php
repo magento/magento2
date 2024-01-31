@@ -94,7 +94,7 @@ class HideUnsupportedAttributeTypesTest extends TestCase
     private function createEventMock(MockObject $form = null)
     {
         $event = $this->getMockBuilder(EventObserver::class)
-            ->onlyMethods(['getForm', 'getBlock'])
+            ->addMethods(['getForm', 'getBlock'])
             ->disableOriginalConstructor()
             ->getMock();
         $event->expects($this->any())
@@ -174,7 +174,7 @@ class HideUnsupportedAttributeTypesTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $frontendInput = $this->getMockBuilder(Select::class)
-            ->onlyMethods(['getValues', 'setValues'])
+            ->addMethods(['getValues', 'setValues'])
             ->disableOriginalConstructor()
             ->getMock();
         $frontendInput->expects($this->once())

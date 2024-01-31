@@ -106,11 +106,12 @@ class VariationHandlerTest extends TestCase
     public function testPrepareAttributeSet()
     {
         $productMock = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['getNewVariationsAttributeSetId'])
+            ->addMethods(['getNewVariationsAttributeSetId'])
             ->disableOriginalConstructor()
             ->getMock();
         $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->onlyMethods(['isInSet', 'setAttributeSetId', 'setAttributeGroupId', 'save'])
+            ->addMethods(['setAttributeGroupId'])
+            ->onlyMethods(['isInSet', 'setAttributeSetId', 'save'])
             ->disableOriginalConstructor()
             ->getMock();
         $attributeSetMock = $this->getMockBuilder(Set::class)
@@ -184,9 +185,9 @@ class VariationHandlerTest extends TestCase
         ];
 
         $parentProductMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['getNewVariationsAttributeSetId'])
             ->onlyMethods(
                 [
-                    'getNewVariationsAttributeSetId',
                     'getStockData',
                     'getQuantityAndStockStatus',
                     'getWebsiteIds'
@@ -195,6 +196,7 @@ class VariationHandlerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $newSimpleProductMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['setWebsiteIds'])
             ->onlyMethods(
                 [
                     'save',
@@ -205,7 +207,6 @@ class VariationHandlerTest extends TestCase
                     'getTypeInstance',
                     'getStoreId',
                     'addData',
-                    'setWebsiteIds',
                     'setStatus',
                     'setVisibility'
                 ]
@@ -213,15 +214,16 @@ class VariationHandlerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $productTypeMock = $this->getMockBuilder(Type::class)
-            ->onlyMethods(['getSetAttributes'])
+            ->addMethods(['getSetAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
         $editableAttributeMock = $this->getMockBuilder(Attribute::class)
-            ->onlyMethods(['getIsUnique', 'getAttributeCode', 'getFrontend', 'getIsVisible'])
+            ->addMethods(['getIsVisible'])
+            ->onlyMethods(['getIsUnique', 'getAttributeCode', 'getFrontend'])
             ->disableOriginalConstructor()
             ->getMock();
         $frontendAttributeMock = $this->getMockBuilder(FrontendInterface::class)
-            ->onlyMethods(['getInputType'])
+            ->addMethods(['getInputType'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -262,7 +264,7 @@ class VariationHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderTestGenerateSimpleProducts()
+    public static function dataProviderTestGenerateSimpleProducts()
     {
         return [
             [
@@ -328,7 +330,7 @@ class VariationHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function productDataProviderForProcessMediaGalleryForFillingGallery()
+    public static function productDataProviderForProcessMediaGalleryForFillingGallery()
     {
         return [
             'empty array' => [

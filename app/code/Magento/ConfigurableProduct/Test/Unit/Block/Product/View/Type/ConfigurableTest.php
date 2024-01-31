@@ -207,7 +207,7 @@ class ConfigurableTest extends TestCase
      *
      * @return array
      */
-    public function cacheKeyProvider(): array
+    public static function cacheKeyProvider(): array
     {
         return [
             'without_currency_and_customer_group' => [
@@ -265,7 +265,7 @@ class ConfigurableTest extends TestCase
         ?int $customerGroupId = null
     ): void {
         $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->onlyMethods(['getCurrentCurrency'])
+            ->addMethods(['getCurrentCurrency'])
             ->getMockForAbstractClass();
         $storeMock->expects($this->any())
             ->method('getCode')
@@ -463,7 +463,7 @@ class ConfigurableTest extends TestCase
             ->willReturn('%s');
 
         $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->onlyMethods(['getCurrentCurrency'])
+            ->addMethods(['getCurrentCurrency'])
             ->getMockForAbstractClass();
         $storeMock->expects($this->any())
             ->method('getCurrentCurrency')
@@ -543,7 +543,8 @@ class ConfigurableTest extends TestCase
         ];
 
         $tierPriceMock = $this->getMockBuilder(TierPriceInterface::class)
-            ->onlyMethods(['getTierPriceList', 'getSavePercent'])
+            ->addMethods(['getSavePercent'])
+            ->onlyMethods(['getTierPriceList'])
             ->getMockForAbstractClass();
         $tierPriceMock->expects($this->any())
             ->method('getTierPriceList')

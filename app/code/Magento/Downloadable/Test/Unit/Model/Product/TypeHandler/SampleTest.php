@@ -194,16 +194,20 @@ class SampleTest extends TestCase
     {
         $sample = $this->getMockBuilder(\Magento\Downloadable\Model\Sample::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(
+            ->addMethods(
                 [
-                    'setData',
-                    'setSampleType',
                     'setProductId',
                     'setStoreId',
                     'setProductWebsiteIds',
                     'setNumberOfDownloads',
+                    'setLinkFile'
+                ]
+            )
+            ->onlyMethods(
+                [
+                    'setData',
+                    'setSampleType',
                     'setSampleUrl',
-                    'setLinkFile',
                     'setSampleFile',
                     'save',
                 ]

@@ -56,15 +56,18 @@ class CustomerRegistryTest extends TestCase
         );
         $this->customer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(
+            ->addMethods(
+                [
+                    'getEmail',
+                    'getWebsiteId',
+                    'setEmail',
+                    'setWebsiteId'
+                ]
+            )->onlyMethods(
                 [
                     'load',
                     'getId',
-                    'getEmail',
-                    'getWebsiteId',
                     '__wakeup',
-                    'setEmail',
-                    'setWebsiteId',
                     'loadByEmail',
                 ]
             )
