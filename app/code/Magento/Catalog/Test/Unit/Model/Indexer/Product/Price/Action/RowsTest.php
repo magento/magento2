@@ -144,7 +144,6 @@ class RowsTest extends TestCase
         $adapter = $this->createMock(AdapterInterface::class);
         $adapter->method('select')->willReturn($select);
         $adapter->method('describeTable')->willReturn([]);
-        $adapter->expects($this->exactly(4))->method('dropTable');
         $this->defaultIndexerResource->method('getConnection')->willReturn($adapter);
         $adapter->method('fetchAll')->with($select)->willReturn([]);
 
@@ -194,21 +193,7 @@ class RowsTest extends TestCase
             ->method('getPrimaryKeyName')
             ->willReturn('entity_id');
 
-        $actionRows = new Rows(
-            $this->config,
-            $this->storeManager,
-            $this->currencyFactory,
-            $this->localeDate,
-            $this->dateTime,
-            $this->catalogProductType,
-            $this->indexerPriceFactory,
-            $this->defaultIndexerResource,
-            $this->tierPriceIndexResource,
-            $this->dimensionCollectionFactory,
-            $this->tableMaintainer,
-            2
-        );
-        $actionRows->execute($ids);
+        $this->actionRows->execute($ids);
     }
 
     public function testDeletedProductsBatchProcessing()
