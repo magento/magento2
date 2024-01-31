@@ -55,7 +55,7 @@ class ResetTest extends TestCase
     }
 
     /**
-     * @covers Reset::getRobotsDefaultCustomInstructions
+     * @covers \Magento\Backend\Block\Page\System\Config\Robots\Reset::getRobotsDefaultCustomInstructions
      */
     public function testGetRobotsDefaultCustomInstructions()
     {

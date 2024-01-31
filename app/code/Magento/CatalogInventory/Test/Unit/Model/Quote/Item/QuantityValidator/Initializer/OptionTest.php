@@ -125,7 +125,14 @@ class OptionTest extends TestCase
         );
         $this->resultMock = $this->getMockBuilder(DataObject::class)
             ->addMethods(
-                ['getItemIsQtyDecimal', 'getHasQtyOptionUpdate', 'getOrigQty', 'getMessage', 'getItemBackorders', 'getItemQty']
+                [
+                    'getItemIsQtyDecimal',
+                    'getHasQtyOptionUpdate',
+                    'getOrigQty',
+                    'getMessage',
+                    'getItemBackorders',
+                    'getItemQty'
+                ]
             )
             ->disableOriginalConstructor()
             ->getMock();

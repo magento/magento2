@@ -35,29 +35,21 @@ class ProcessAdminFinalPriceObserverTest extends TestCase
     private $observer;
 
     /**
-     * Store Manager mock
-     *
      * @var StoreManagerInterface
      */
     private $storeManagerMock;
 
     /**
-     * Locale Date mock
-     *
      * @var TimezoneInterface
      */
     private $localeDateMock;
 
     /**
-     * Resource Rule Factory mock
-     *
      * @var RuleFactory
      */
     private $resourceRuleFactoryMock;
 
     /**
-     * Rule Prices Storage mock
-     *
      * @var RulePricesStorage
      */
     private $rulePricesStorageMock;
