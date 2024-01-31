@@ -1055,7 +1055,7 @@ class Category extends AbstractResource implements ResetAfterRequestInterface
         if ($afterCategoryId) {
             $select = $connection->select()->from($table, 'position')->where('entity_id = :entity_id');
             $position = $connection->fetchOne($select, ['entity_id' => $afterCategoryId]);
-            $position++;
+            $position = (int)$position + 1;
         } else {
             $position = 1;
         }
