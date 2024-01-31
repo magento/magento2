@@ -376,8 +376,6 @@ class TierPriceValidator implements ResetAfterRequestInterface
                 count($this->productsCacheBySku[$price->getSku()]->getTierPrices()) > 0 &&
                 (int) $this->allWebsitesValue !== $price->getWebsiteId()
             ) {
-                // phpstan:ignore "File has calls static method. (phpStaticMethodCalls)"
-                throw NoSuchEntityException::singleField('website_id', $price->getWebsiteId());
             }
             $this->websiteRepository->getById($price->getWebsiteId());
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
