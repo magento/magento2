@@ -42,7 +42,7 @@ class WebApiTest extends TestSuite
             foreach ($suites as $testSuite) {
                 /** @var TestSuite $test */
                 foreach ($testSuite as $test) {
-                    $testName = $test->getName();
+                    $testName = $test->name();
 
                     if ($overrideConfig->hasSkippedTest($testName) && !$test instanceof SkippableInterface) {
                         $reflectionClass = new \ReflectionClass($testName);

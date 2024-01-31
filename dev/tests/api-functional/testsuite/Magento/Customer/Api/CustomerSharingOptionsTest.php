@@ -71,7 +71,7 @@ class CustomerSharingOptionsTest extends WebapiAbstract
             ['customerRegistry' => $this->customerRegistry]
         );
 
-        $this->customerHelper = new CustomerHelper();
+        $this->customerHelper = new CustomerHelper($this->name());
         $this->customerData = $this->customerHelper->createSampleCustomer();
         $this->tokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
 
