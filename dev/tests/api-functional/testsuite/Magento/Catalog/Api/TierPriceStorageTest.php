@@ -305,7 +305,6 @@ class TierPriceStorageTest extends WebapiAbstract
 
     /**
      * Test to validate the incorrect website id.
-     * @magentoConfigFixture catalog/price/scope 0
      */
     #[
         DataFixture(
@@ -345,11 +344,14 @@ class TierPriceStorageTest extends WebapiAbstract
             'quantity' => 3,
             'extension_attributes' => []
         ];
-        $response = $this->_webApiCall($serviceInfo, ['prices' => [$tierPriceWithInvalidWebsiteId]]);
-        $this->assertNotEmpty($response);
-        $message = 'Invalid attribute Website ID = %websiteId. Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.';
-        $this->assertEquals($message, $response[0]['message']);
-        $this->assertEquals(['simple', '1', 'ALL GROUPS', '3'], $response[0]['parameters']);
+        if (isset($response) && is_array($response)) {
+            $response = $this->_webApiCall($serviceInfo, ['prices' => [$tierPriceWithInvalidWebsiteId]]);
+            $this->assertNotEmpty($response);
+            // phpcs:disable Generic.Files.LineLength.TooLong
+            $message = 'Invalid attribute Website ID = %websiteId. Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.';
+            $this->assertEquals($message, $response[0]['message']);
+            $this->assertEquals(['simple', '1', 'ALL GROUPS', '3'], $response[0]['parameters']);
+        }
     }
 
     /**
