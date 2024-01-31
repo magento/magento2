@@ -594,6 +594,6 @@
         />
     </type>
     <type name="Magento\Customer\Controller\Address\File\Upload">
-        <plugin name="validateInputTypeBeforeUpload" type="Magento\Customer\Plugin\Address\File\validateInputTypeBeforeUpload"/>
+        <plugin name="validateInputTypeBeforeUpload" type="Magento\Customer\Plugin\Address\File\ValidateInputTypeBeforeUpload"/>
     </type>
 </config>

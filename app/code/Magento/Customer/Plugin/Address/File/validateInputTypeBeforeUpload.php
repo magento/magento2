@@ -11,7 +11,7 @@ use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Controller\Address\File\Upload;
 use Magento\Framework\Exception\LocalizedException;
 
-class validateInputTypeBeforeUpload
+class ValidateInputTypeBeforeUpload
 {
     /**
      * Input type file to validate
@@ -40,7 +40,6 @@ class validateInputTypeBeforeUpload
      * @param Upload $subject
      * @return void
      * @throws LocalizedException
-     *
      */
     public function beforeExecute(Upload $subject): void
     {
@@ -55,5 +54,4 @@ class validateInputTypeBeforeUpload
             }
         }
     }
-
 }
