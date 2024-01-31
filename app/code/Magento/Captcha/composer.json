@@ -4,6 +4,12 @@
     "config": {
         "sort-packages": true
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:magento/magento-zf-db.git"
+        }
+    ],
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
@@ -14,7 +20,7 @@
         "magento/module-store": "*",
         "magento/module-authorization": "*",
         "laminas/laminas-captcha": "^2.12",
-        "laminas/laminas-db | magento/magento-zf-db": "^3.18.0 | 2.19.x-dev"
+        "magento/magento-zf-db": "2.19.x-dev"
     },
     "type": "magento2-module",
     "license": [
