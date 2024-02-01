@@ -387,6 +387,7 @@ class CustomerTest extends TestCase
         $this->_model->setEntityId($customerId);
         $this->_model->setId($customerId);
         $addressDataModel = $this->getMockForAbstractClass(AddressInterface::class);
+        $addressDataModel->expects($this->exactly(4))->method('isDefaultShipping')->willReturn(true);
         $address = $this->getMockBuilder(AddressModel::class)
             ->disableOriginalConstructor()
             ->setMethods(['setCustomer', 'getDataModel'])

@@ -23,6 +23,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Data\Collection;
 
 /**
  * Customer model
@@ -342,13 +343,17 @@ class Customer extends \Magento\Framework\Model\AbstractModel implements ResetAf
     public function getDataModel()
     {
         $customerData = $this->getData();
-        $addressesData = [];
+        $regularAddresses = $defaultAddresses = [];
         /** @var \Magento\Customer\Model\Address $address */
         foreach ($this->getAddresses() as $address) {
             if (!isset($this->storedAddress[$address->getId()])) {
                 $this->storedAddress[$address->getId()] = $address->getDataModel();
             }
-            $addressesData[] = $this->storedAddress[$address->getId()];
+            if ($this->storedAddress[$address->getId()]->isDefaultShipping()) {
+                $defaultAddresses[] = $this->storedAddress[$address->getId()];
+            } else {
+                $regularAddresses[] = $this->storedAddress[$address->getId()];
+            }
         }
         $customerDataObject = $this->customerDataFactory->create();
         $this->dataObjectHelper->populateWithArray(
@@ -356,7 +361,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel implements ResetAf
             $customerData,
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
-        $customerDataObject->setAddresses($addressesData)
+        $customerDataObject->setAddresses(array_merge($defaultAddresses, $regularAddresses))
             ->setId($this->getId());
         return $customerDataObject;
     }
@@ -547,7 +552,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel implements ResetAf
                 $this
             )->addAttributeToSelect(
                 '*'
-            );
+            )->setOrder('default', Collection::SORT_ORDER_DESC);
             foreach ($this->_addressesCollection as $address) {
                 $address->setCustomer($this);
             }
