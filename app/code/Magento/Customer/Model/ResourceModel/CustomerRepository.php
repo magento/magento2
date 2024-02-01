@@ -208,10 +208,10 @@ class CustomerRepository implements CustomerRepositoryInterface
         $delegatedNewOperation = !$customer->getId() ? $this->delegatedStorage->consumeNewOperation() : null;
         $prevCustomerData = $prevCustomerDataArr = null;
         if ($customer->getDefaultBilling()) {
-            $this->validateDefaultAddress($customer, AbstractAddress::TYPE_BILLING);
+            $this->validateDefaultAddress($customer, CustomerInterface::DEFAULT_BILLING);
         }
         if ($customer->getDefaultShipping()) {
-            $this->validateDefaultAddress($customer, AbstractAddress::TYPE_SHIPPING);
+            $this->validateDefaultAddress($customer, CustomerInterface::DEFAULT_SHIPPING);
         }
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
@@ -578,9 +578,9 @@ class CustomerRepository implements CustomerRepositoryInterface
         CustomerInterface $customer,
         string $defaultAddressType
     ): void {
-        $addressId = $defaultAddressType === AbstractAddress::TYPE_BILLING ? $customer->getDefaultBilling()
+        $addressId = $defaultAddressType === CustomerInterface::DEFAULT_BILLING ? $customer->getDefaultBilling()
             : $customer->getDefaultShipping();
-
+       // echo "$defaultAddressType"; exit;
         if ($customer->getAddresses()) {
             foreach ($customer->getAddresses() as $address) {
                 if ((int) $addressId === (int) $address->getId()) {
@@ -588,9 +588,11 @@ class CustomerRepository implements CustomerRepositoryInterface
                 }
             }
 
-            throw InputException::invalidFieldValue(
-                $defaultAddressType === AbstractAddress::TYPE_BILLING ? 'default_billing' : 'default_shipping',
-                $addressId
+            throw new InputException(
+                __(
+                    'The %fieldName value is invalid. Set the correct value and try again.',
+                    ['fieldName' => $defaultAddressType]
+                )
             );
         }
     }
