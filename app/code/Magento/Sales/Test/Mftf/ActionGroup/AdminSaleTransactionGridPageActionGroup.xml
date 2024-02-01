@@ -14,10 +14,14 @@
             <argument name="txnType" type="string"/>
             <argument name="closed" type="string"/>
         </arguments>
+        <waitForElementVisible selector="{{AdminSaleTransactionGridSection.searchOrderId}}" stepKey="waitForOrderIdFieldVisible"/>
         <fillField userInput="{{orderId}}" selector="{{AdminSaleTransactionGridSection.searchOrderId}}" stepKey="fillOrderIdField"/>
+        <waitForElementVisible selector="{{AdminSaleTransactionGridSection.selectTxnType}}" stepKey="waitForTransactionTypeVisible"/>
         <selectOption userInput="{{txnType}}" selector="{{AdminSaleTransactionGridSection.selectTxnType}}" stepKey="selectTransactionType"/>
+        <waitForElementClickable selector="{{AdminSaleTransactionGridSection.searchButton}}" stepKey="waitForSearchButtonVisible"/>
         <click selector="{{AdminSaleTransactionGridSection.searchButton}}" stepKey="clickOnSearchButtonForFilter"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{AdminSaleTransactionGridSection.gridTransactionFirstRowForType}}" stepKey="waitForTxnType"/>
         <grabTextFrom selector="{{AdminSaleTransactionGridSection.gridTransactionFirstRowForType}}" stepKey="grabTextFromTxnTypeGrid"/>
         <grabTextFrom selector="{{AdminSaleTransactionGridSection.gridTransactionFirstRowForClosed}}" stepKey="grabTextFromClosedGrid"/>
         <assertEquals message="compareTxnType" stepKey="assertCompareTxnType">

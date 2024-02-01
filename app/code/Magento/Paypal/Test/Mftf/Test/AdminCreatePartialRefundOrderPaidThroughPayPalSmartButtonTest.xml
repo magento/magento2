@@ -18,7 +18,6 @@
             <testCaseId value="AC-5181"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!-- Create Category and Product -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="_defaultProduct" stepKey="createProduct">
@@ -82,14 +81,15 @@
             <actionGroup ref="FilterInvoiceGridByOrderIdWithCleanFiltersActionGroup" stepKey="filterInvoiceGridByOrderId">
                 <argument name="orderId" value="{$grabOrderNumber}"/>
             </actionGroup>
-            <waitForElementVisible selector="{{AdminInvoicesGridSection.firstRow}}" stepKey="waitForInvoiceGrid"/>
+            <waitForElementClickable selector="{{AdminInvoicesGridSection.firstRow}}" stepKey="waitForInvoiceGrid"/>
             <click selector="{{AdminInvoicesGridSection.firstRow}}" stepKey="openInvoice"/>
             <waitForPageLoad stepKey="waitForInvoiceDetailsPageToLoad"/>
             <!-- Creating Credit Memos from the invoice view page -->
-            <waitForElementVisible selector="{{AdminInvoiceTotalSection.creditMemosButton}}" stepKey="waitForElementToClickCreditMemos"/>
+            <waitForElementClickable selector="{{AdminInvoiceTotalSection.creditMemosButton}}" stepKey="waitForElementToClickCreditMemos"/>
             <click selector="{{AdminInvoiceTotalSection.creditMemosButton}}" stepKey="clickCreditMemosButton"/>
             <actionGroup ref="AdminFillQtyToInvoiceOnCreateInvoicePageActionGroup" stepKey="fillQtyInCreditMemo"/>
             <actionGroup ref="AdminClickUpdateQtysButtonOnCreateInvoicePageActionGroup" stepKey="clickOnUpdateButtonToCreateMemo"/>
+            <waitForElementVisible selector="{{AdminInvoiceTotalSection.grandTotal}}" stepKey="waitForGrandTotalVisible"/>
             <grabTextFrom selector="{{AdminInvoiceTotalSection.grandTotal}}" stepKey="grabGrandTotal"/>
             <assertEquals message="ExpectedPrice" stepKey="assertBundleProductPrice">
                 <actualResult type="variable">$grabGrandTotal</actualResult>
@@ -99,6 +99,7 @@
             <actionGroup ref="AdminClickRefundOfflineOnCreditMemoDetailPageActionGroup" stepKey="clickSubmitInvoice"/>
             <waitForText selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the credit memo." stepKey="seeSuccessMessage"/>
             <waitForText selector="{{AdminCreditMemoOrderInformationSection.orderStatus}}" userInput="Processing" stepKey="waitForTextOrderStatus"/>
+            <waitForElementVisible selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="waitForMemoIdVisible"/>
             <grabTextFrom selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="grabMemoId"/>
             <actionGroup ref="AdminAssertRefundInRefundsGridActionGroup" stepKey="assertRefund">
                 <argument name="orderId" value="{$grabOrderNumber}"/>
@@ -106,6 +107,7 @@
                 <argument name="refundStatus" value="Refunded"/>
                 <argument name="refundedTotal" value="$20.00"/>
             </actionGroup>
+            <waitForElementVisible selector="{{AdminCreditMemosGridSection.grandTotal}}" stepKey="waitForMemoGrandTotal"/>
             <grabTextFrom selector="{{AdminCreditMemosGridSection.grandTotal}}" stepKey="creditMemoGrandTotal"/>
             <assertEquals message="ComparePrice" stepKey="assertCreditMemoGrandTotal">
                 <actualResult type="variable">creditMemoGrandTotal</actualResult>
@@ -116,7 +118,6 @@
                 <argument name="menuUiId" value="{{AdminMenuSales.dataUiId}}"/>
                 <argument name="submenuUiId" value="{{AdminMenuSalesTransactions.dataUiId}}"/>
             </actionGroup>
-            <waitForElementVisible selector="{{AdminSaleTransactionGridSection.searchOrderId}}" stepKey="waitForOrderIdFieldVisible"/>
             <actionGroup ref="AdminSaleTransactionGridPageActionGroup" stepKey="checkCaptureTxnType">
                 <argument name="orderId" value="{$grabOrderNumber}"/>
                 <argument name="txnType" value="Capture"/>
@@ -128,8 +129,6 @@
                 <argument name="closed" value="Yes"/>
             </actionGroup>
         <after>
-            <!-- Disable flat rate method -->
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
             <!-- delete category and product -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
