@@ -195,6 +195,7 @@ return [
         Magento\LoginAsCustomer\Model\GetLoggedAsCustomerAdminId::class => null,
         Magento\CustomerGraphQl\Plugin\ClearCustomerSessionAfterRequest::class => null,
         Laminas\Uri\Uri::class => null,
+        PhpAmqpLib\Connection\AMQPSSLConnection::class => null,
         Magento\TestFramework\Interception\PluginList::class => null,
         // memory leak, wrong sql, potential issues
         Magento\Theme\Model\View\Design::class => null,
