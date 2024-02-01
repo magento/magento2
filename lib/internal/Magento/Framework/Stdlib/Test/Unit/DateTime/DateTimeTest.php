@@ -69,7 +69,7 @@ class DateTimeTest extends TestCase
         /** @var DateTime|MockObject $dateTime */
         $dateTime = $this->getMockBuilder(DateTime::class)
             ->setConstructorArgs([$timezone])
-            ->setMethods(null)
+            ->onlyMethods([])
             ->getMock();
 
         $this->assertEquals(
