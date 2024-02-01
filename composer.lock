@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "693112640cc724dace1017ee381a2bbd",
+    "content-hash": "c7d6d55df68edb65cdacfafa8d780894",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1960,16 +1960,16 @@
         },
         {
             "name": "laminas/laminas-db",
-            "version": "2.19.x-dev",
+            "version": "2.19.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-db.git",
-                "reference": "2cc43420ebfd619fe4e49b8e190d110efff9381a"
+                "reference": "5d8c89d767d4dac7b710c8c6d967f3780f7a5f6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-db/zipball/2cc43420ebfd619fe4e49b8e190d110efff9381a",
-                "reference": "2cc43420ebfd619fe4e49b8e190d110efff9381a",
+                "url": "https://api.github.com/repos/laminas/laminas-db/zipball/5d8c89d767d4dac7b710c8c6d967f3780f7a5f6a",
+                "reference": "5d8c89d767d4dac7b710c8c6d967f3780f7a5f6a",
                 "shasum": ""
             },
             "require": {
@@ -1991,7 +1991,6 @@
                 "laminas/laminas-hydrator": "(^3.2 || ^4.3) Laminas\\Hydrator component for using HydratingResultSets",
                 "laminas/laminas-servicemanager": "Laminas\\ServiceManager component"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "laminas": {
@@ -2028,7 +2027,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2024-02-01T17:35:33+00:00"
+            "time": "2024-02-01T18:53:10+00:00"
         },
         {
             "name": "laminas/laminas-di",
@@ -13146,7 +13145,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "laminas/laminas-db": 20,
         "magento/composer": 20
     },
     "prefer-stable": true,
