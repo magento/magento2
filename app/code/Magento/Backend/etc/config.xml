@@ -23,7 +23,7 @@
                 <forgot_email_identity>general</forgot_email_identity>
             </emails>
             <dashboard>
-                <enable_charts>1</enable_charts>
+                <enable_charts>0</enable_charts>
             </dashboard>
             <upload_configuration>
                 <enable_resize>1</enable_resize>
