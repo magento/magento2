@@ -18,7 +18,7 @@ use Symfony\Component\Console\Input\InputInterface;
  */
 class ShowModeCommand extends Command
 {
-    const AVAILABLE_MODES = ['developer', 'production', 'default'];
+    private const AVAILABLE_MODES = ['developer', 'production', 'default'];
 
     /**
      * Object manager factory
