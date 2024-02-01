@@ -89,7 +89,7 @@ abstract class AbstractDb extends AbstractResource
      * or string 'my_field_name' - will be autoconverted to
      *      array( array( 'field' => 'my_field_name', 'title' => 'my_field_name' ) )
      *
-     * @var array
+     * @var array|null
      */
     protected $_uniqueFields = null;
 
