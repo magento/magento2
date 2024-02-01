@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model\Formatter;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\SalesGraphQl\Model\Order\OrderAddress;
 use Magento\SalesGraphQl\Model\Order\OrderPayments;
@@ -26,16 +28,21 @@ class Order
      */
     private $orderPayments;
 
+    private TimezoneInterface $timezone;
+
     /**
      * @param OrderAddress $orderAddress
      * @param OrderPayments $orderPayments
+     * @param TimezoneInterface|null $timezone
      */
     public function __construct(
         OrderAddress $orderAddress,
-        OrderPayments $orderPayments
+        OrderPayments $orderPayments,
+        TimezoneInterface $timezone = null
     ) {
         $this->orderAddress = $orderAddress;
         $this->orderPayments = $orderPayments;
+        $this->timezone = $timezone ?: ObjectManager::getInstance()->get(TimezoneInterface::class);
     }
 
     /**
@@ -52,7 +59,7 @@ class Order
             'id' => base64_encode($orderModel->getEntityId()),
             'increment_id' => $orderModel->getIncrementId(),
             'number' => $orderModel->getIncrementId(),
-            'order_date' => $orderModel->getCreatedAt(),
+            'order_date' => $this->timezone->date($orderModel->getCreatedAt()),
             'order_number' => $orderModel->getIncrementId(),
             'status' => $orderModel->getStatusLabel(),
             'shipping_method' => $orderModel->getShippingDescription(),

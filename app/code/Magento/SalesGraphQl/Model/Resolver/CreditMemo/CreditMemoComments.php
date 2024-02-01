@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model\Resolver\CreditMemo;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 
 /**
@@ -18,6 +20,14 @@ use Magento\Sales\Api\Data\CreditmemoInterface;
  */
 class CreditMemoComments implements ResolverInterface
 {
+    private TimezoneInterface $timezone;
+
+    public function __construct(
+        TimezoneInterface $timezone = null
+    ) {
+        $this->timezone = $timezone ?: ObjectManager::getInstance()->get(TimezoneInterface::class);
+    }
+
     /**
      * @inheritDoc
      */
@@ -40,7 +50,7 @@ class CreditMemoComments implements ResolverInterface
             if ($comment->getIsVisibleOnFront()) {
                 $comments[] = [
                     'message' => $comment->getComment(),
-                    'timestamp' => $comment->getCreatedAt()
+                    'timestamp' => $this->timezone->date($comment->getCreatedAt())
                 ];
             }
         }
