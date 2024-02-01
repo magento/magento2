@@ -70,18 +70,22 @@ class DomainsRemoveCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            if ($input->getArgument(self::INPUT_KEY_DOMAINS)) {
-                $whitelistBefore = $this->domainManager->getDomains();
-                $removeDomains = $input->getArgument(self::INPUT_KEY_DOMAINS);
-                $removeDomains = array_filter(array_map('trim', $removeDomains), 'strlen');
-                $this->domainManager->removeDomains($removeDomains);
+            $domains = $input->getArgument(self::INPUT_KEY_DOMAINS);
 
-                foreach (array_diff($whitelistBefore, $this->domainManager->getDomains()) as $removedHost) {
-                    $output->writeln(
-                        $removedHost . ' was removed from the whitelist.'
-                    );
-                }
+            if (empty($domains)) {
+                throw new \InvalidArgumentException('Error: Domains parameter is missing.');
             }
+
+            $whitelistBefore = $this->domainManager->getDomains();
+            $removeDomains = array_filter(array_map('trim', $domains), 'strlen');
+            $this->domainManager->removeDomains($removeDomains);
+
+            foreach (array_diff($whitelistBefore, $this->domainManager->getDomains()) as $removedHost) {
+                $output->writeln($removedHost . ' was removed from the whitelist.');
+            }
+        } catch (\InvalidArgumentException $e) {
+            $output->writeln('<error>' . $e->getMessage() . '</error>');
+            return Cli::RETURN_FAILURE;
         } catch (Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
