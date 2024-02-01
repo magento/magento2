@@ -109,6 +109,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
      * @param Result $validationResult
      * @param InvalidSkuProcessor $invalidSkuProcessor
      * @param ProductRepositoryInterface $productRepository
+     * @param CatalogData|null $catalogData
      * @param array $allowedProductTypes [optional]
      */
     public function __construct(
@@ -120,6 +121,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
         Result                                                    $validationResult,
         InvalidSkuProcessor                                       $invalidSkuProcessor,
         ProductRepositoryInterface $productRepository,
+        ?CatalogData $catalogData = null,
         array                                                     $allowedProductTypes = []
     ) {
         $this->productIdLocator = $productIdLocator;
@@ -130,6 +132,8 @@ class TierPriceValidator implements ResetAfterRequestInterface
         $this->validationResult = $validationResult;
         $this->invalidSkuProcessor = $invalidSkuProcessor;
         $this->productRepository = $productRepository;
+        $this->catalogData = $catalogData
+            ?: ObjectManager::getInstance()->get(CatalogData::class);
         $this->allowedProductTypes = $allowedProductTypes;
     }
 
