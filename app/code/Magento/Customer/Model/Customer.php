@@ -23,7 +23,6 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Indexer\IndexerInterface;
-use Magento\Framework\Data\Collection;
 
 /**
  * Customer model
@@ -552,7 +551,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel implements ResetAf
                 $this
             )->addAttributeToSelect(
                 '*'
-            )->setOrder('default', Collection::SORT_ORDER_DESC);
+            );
             foreach ($this->_addressesCollection as $address) {
                 $address->setCustomer($this);
             }
