@@ -13,7 +13,6 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory;
 use Magento\Customer\Api\GroupRepositoryInterface;
-use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Customer\Model\CustomerFactory;
@@ -580,7 +579,6 @@ class CustomerRepository implements CustomerRepositoryInterface
     ): void {
         $addressId = $defaultAddressType === CustomerInterface::DEFAULT_BILLING ? $customer->getDefaultBilling()
             : $customer->getDefaultShipping();
-       // echo "$defaultAddressType"; exit;
         if ($customer->getAddresses()) {
             foreach ($customer->getAddresses() as $address) {
                 if ((int) $addressId === (int) $address->getId()) {
