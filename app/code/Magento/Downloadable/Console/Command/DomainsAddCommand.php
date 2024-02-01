@@ -69,19 +69,23 @@ class DomainsAddCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            if ($input->getArgument(self::INPUT_KEY_DOMAINS)) {
-                $whitelistBefore = $this->domainManager->getDomains();
-                $newDomains = $input->getArgument(self::INPUT_KEY_DOMAINS);
-                $newDomains = array_filter(array_map('trim', $newDomains), 'strlen');
+            $domains = $input->getArgument(self::INPUT_KEY_DOMAINS);
 
-                $this->domainManager->addDomains($newDomains);
-
-                foreach (array_diff($this->domainManager->getDomains(), $whitelistBefore) as $newHost) {
-                    $output->writeln(
-                        $newHost . ' was added to the whitelist.' . PHP_EOL
-                    );
-                }
+            if (empty($domains)) {
+                throw new \InvalidArgumentException('Error: Domains parameter is missing.');
             }
+
+            $whitelistBefore = $this->domainManager->getDomains();
+            $newDomains = array_filter(array_map('trim', $domains), 'strlen');
+
+            $this->domainManager->addDomains($newDomains);
+
+            foreach (array_diff($this->domainManager->getDomains(), $whitelistBefore) as $newHost) {
+                $output->writeln($newHost . ' was added to the whitelist.' . PHP_EOL);
+            }
+        } catch (\InvalidArgumentException $e) {
+            $output->writeln('<error>' . $e->getMessage() . '</error>');
+            return Cli::RETURN_FAILURE;
         } catch (Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
