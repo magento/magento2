@@ -61,7 +61,7 @@ class SetModeCommand extends Command
                 new InputArgument(
                     self::MODE_ARGUMENT,
                     InputArgument::REQUIRED,
-                    'The application mode to set. Available options are "developer", "production", or "default"'
+                    'The application mode to set. Available options are "developer", "production", or "default".'
                 ),
                 new InputOption(
                     self::SKIP_COMPILATION_OPTION,

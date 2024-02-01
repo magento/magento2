@@ -43,7 +43,7 @@ class ShowModeCommand extends Command
      */
     protected function configure()
     {
-        $description = 'Displays current application mode. Available modes: ' . implode(', ', self::AVAILABLE_MODES);
+        $description = 'Displays current application mode. Available modes: ' . implode(', ', self::AVAILABLE_MODES) . '.';
 
         $this->setName('deploy:mode:show')->setDescription($description);
         parent::configure();
