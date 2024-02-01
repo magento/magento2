@@ -370,13 +370,13 @@ class TierPriceValidator implements ResetAfterRequestInterface
     private function checkWebsite(TierPriceInterface $price, $key, Result $validationResult)
     {
         try {
-            if ($this->catalogData->isPriceGlobal() &&
+            /*if ($this->catalogData->isPriceGlobal() &&
                 isset($this->productsCacheBySku[$price->getSku()]) &&
                 is_array($this->productsCacheBySku[$price->getSku()]->getTierPrices()) &&
                 count($this->productsCacheBySku[$price->getSku()]->getTierPrices()) > 0 &&
                 (int) $this->allWebsitesValue !== $price->getWebsiteId()
             ) {
-            }
+            }*/
             $this->websiteRepository->getById($price->getWebsiteId());
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             $validationResult->addFailedItem(
