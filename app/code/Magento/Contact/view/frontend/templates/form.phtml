@@ -12,7 +12,7 @@ if (!$block->getButtonLockManager()) {
     $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
     $block->setButtonLockManager(
         $objectManager->get(\Magento\Framework\View\Element\ButtonLockManager::class)
-        );
+    );
 }
 /** @var \Magento\Contact\ViewModel\UserDataProvider $viewModel */
 
