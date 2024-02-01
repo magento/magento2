@@ -99,7 +99,6 @@
             <actionGroup ref="AdminClickRefundOfflineOnCreditMemoDetailPageActionGroup" stepKey="clickSubmitInvoice"/>
             <waitForText selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the credit memo." stepKey="seeSuccessMessage"/>
             <waitForText selector="{{AdminCreditMemoOrderInformationSection.orderStatus}}" userInput="Processing" stepKey="waitForTextOrderStatus"/>
-            <waitForElementVisible selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="waitForMemoIdVisible"/>
             <grabTextFrom selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="grabMemoId"/>
             <actionGroup ref="AdminAssertRefundInRefundsGridActionGroup" stepKey="assertRefund">
                 <argument name="orderId" value="{$grabOrderNumber}"/>
