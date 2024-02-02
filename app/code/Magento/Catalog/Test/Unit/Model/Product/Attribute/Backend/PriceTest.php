@@ -122,6 +122,10 @@ class PriceTest extends TestCase
         ];
     }
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     public function testAfterSaveWithDifferentStores()
     {
         $newPrice = '9.99';

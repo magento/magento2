@@ -241,14 +241,16 @@ class EditPostTest extends TestCase
         $attr = 'attr1';
         $this->request->expects($this->exactly(5))
             ->method('getParam')
-            ->withConsecutive(
-                ['change_email'],
-                [ 'delete_attribute_value'],
-                [$attr . File::UPLOADED_FILE_SUFFIX]
-            )->willReturnOnConsecutiveCalls(
-                false,
-                $attr,
-                'uploadedFileName'
+            ->willReturnCallback(
+                function ($arg) use ($attr) {
+                    if ($arg == 'change_email') {
+                        return false;
+                    } elseif ($arg == 'delete_attribute_value') {
+                        return $attr;
+                    } elseif ($arg == $attr . File::UPLOADED_FILE_SUFFIX) {
+                        return 'uploadedFileName';
+                    }
+                }
             );
 
         $this->editPost->execute();

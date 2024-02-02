@@ -115,6 +115,7 @@ class CacheCleanerTest extends TestCase
      * @param bool|int $stockThresholdQty
      * @dataProvider cleanDataProvider
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testClean($stockStatusBefore, $stockStatusAfter, $qtyAfter, $stockThresholdQty): void
     {

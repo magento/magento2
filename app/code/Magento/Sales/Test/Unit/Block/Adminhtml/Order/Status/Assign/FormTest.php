@@ -66,6 +66,7 @@ class FormTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testToHtml(): void
     {
@@ -101,13 +102,21 @@ class FormTest extends TestCase
         $fieldset->method('addField')
             ->willReturnCallback(
                 function ($arg1, $arg2, $arg3) use ($statusesForField, $statesForField) {
-                    if ($arg1 === 'status' && $arg2 === 'select' && $arg3['name'] === 'status') {
+                    if ($arg1 === 'status' && $arg2 === 'select' &&
+                        $arg3['name'] == 'status' &&
+                        $arg3['values'] == $statusesForField) {
                         return null;
-                    } elseif ($arg1 === 'state' && $arg2 === 'select' && $arg3['name'] === 'state') {
+                    } elseif ($arg1 == 'state' && $arg2 == 'select' &&
+                        $arg3['name'] == 'state' &&
+                        $arg3['values'] == $statesForField) {
                         return null;
-                    } elseif ($arg1 === 'is_default' && $arg2 === 'checkbox' && $arg3['name'] === 'is_default') {
+                    } elseif ($arg1 == 'is_default' &&
+                        $arg2 == 'checkbox' &&
+                        $arg3['name'] === 'is_default') {
                         return null;
-                    } elseif ($arg1 === 'visible_on_front' && $arg2 === 'checkbox' && $arg3['name'] === 'visible_on_front') {
+                    } elseif ($arg1 == 'visible_on_front' &&
+                        $arg2 == 'checkbox' &&
+                        $arg3['name'] == 'visible_on_front') {
                         return null;
                     }
                 }

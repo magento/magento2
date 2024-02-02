@@ -397,8 +397,8 @@ class PaymentTest extends TestCase
         $this->order->expects($this->any())
             ->method('addStatusHistoryComment')
             ->willReturnCallback(
-                function ($arg1) use ($statusHistory, $customerNote) {
-                    if ($arg1 === $customerNote) {
+                function ($arg) use ($statusHistory, $customerNote) {
+                    if ($arg === $customerNote) {
                         return $statusHistory;
                     }
                 }
@@ -448,10 +448,13 @@ class PaymentTest extends TestCase
             ->willReturn(AbstractMethod::ACTION_AUTHORIZE);
         $this->paymentMethod->expects($this->any())
             ->method('getConfigData')
-            ->withConsecutive(
-                ['order_status'],
-                ['payment_action']
-            )->willReturn($newOrderStatus);
+            ->willReturnCallback(
+                function ($arg) use ($newOrderStatus) {
+                    if ($arg === 'order_status' || $arg == 'payment_action') {
+                        return $newOrderStatus;
+                    }
+                }
+            );
         $this->paymentMethod->expects($this->once())->method('isInitializeNeeded')->willReturn(true);
         $this->paymentMethod->expects($this->once())->method('initialize');
         $this->mockGetDefaultStatus(Order::STATE_NEW, $newOrderStatus, ['first', 'second']);
@@ -470,11 +473,15 @@ class PaymentTest extends TestCase
         $this->order->expects($this->any())->method('getCustomerNote')->willReturn($customerNote);
         $this->order->expects($this->any())
             ->method('addStatusHistoryComment')
-            ->withConsecutive(
-                [$customerNote],
-                [__('Authorized amount of %1', $sum)]
-            )
-            ->willReturn($statusHistory);
+            ->willReturnCallback(
+                function ($arg1) use ($customerNote, $sum, $statusHistory) {
+                    if ($arg1 == $customerNote) {
+                        return $statusHistory;
+                    } elseif ($arg1 == __('Authorized amount of %1', $sum)) {
+                        return $statusHistory;
+                    }
+                }
+            );
         $this->order->expects($this->any())
             ->method('setIsCustomerNotified')
             ->with(true)
@@ -518,9 +525,14 @@ class PaymentTest extends TestCase
             ->willReturnSelf();
         $this->order->expects($this->any())
             ->method('setStatus')
-            ->withConsecutive(
-                [Order::STATUS_FRAUD]
-            )->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == Order::STATUS_FRAUD) {
+                        return $this->order;
+                    }
+                }
+            );
+
         $this->order->expects($this->atLeastOnce())
             ->method('getStatus')
             ->willReturn(Order::STATUS_FRAUD);

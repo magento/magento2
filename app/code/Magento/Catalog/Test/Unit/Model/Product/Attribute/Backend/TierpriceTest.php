@@ -225,7 +225,7 @@ class TierpriceTest extends TestCase
                 }
             });
         $object->expects($this->atLeastOnce())->method('setOrigData')
-            >willReturnCallback(function ($arg1, $arg2) use ($attributeName, $finalTierPrices, $object) {
+            ->willReturnCallback(function ($arg1, $arg2) use ($attributeName, $finalTierPrices, $object) {
                 if ($arg1 === $attributeName && $arg2 === $finalTierPrices) {
                     return $object;
                 } elseif ($arg1 === $attributeName . '_changed' && $arg2 === 0) {

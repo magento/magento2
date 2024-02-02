@@ -237,7 +237,7 @@ class ProcessorTest extends TestCase
     /**
      * @return array
      */
-    public static function sharedIndexDataProvider(): array
+    public function sharedIndexDataProvider(): array
     {
         return [
             'Without dependencies' => [
@@ -267,9 +267,9 @@ class ProcessorTest extends TestCase
                     'indexer_3' => StateInterface::STATUS_VALID
                 ],
                 'expected_reindex_all_calls' => [
-                    'indexer_1' => self::once(),
-                    'indexer_2' => self::never(),
-                    'indexer_3' => self::never()
+                    'indexer_1' => $this->once(),
+                    'indexer_2' => $this->never(),
+                    'indexer_3' => $this->never()
                 ],
                 'executed_shared_indexers' => []
             ],
@@ -307,10 +307,10 @@ class ProcessorTest extends TestCase
                     'indexer_4' => StateInterface::STATUS_VALID
                 ],
                 'expected_reindex_all_calls' => [
-                    'indexer_1' => self::once(),
-                    'indexer_2' => self::never(),
-                    'indexer_3' => self::once(),
-                    'indexer_4' => self::never()
+                    'indexer_1' => $this->once(),
+                    'indexer_2' => $this->never(),
+                    'indexer_3' => $this->once(),
+                    'indexer_4' => $this->never()
                 ],
                 'executed_shared_indexers' => [['indexer_2'], ['indexer_3']]
             ]
@@ -341,12 +341,11 @@ class ProcessorTest extends TestCase
         $indexerRegistryMock
             ->expects($this->exactly(count($executedSharedIndexers)))
             ->method('get')
-            ->willReturnCallback(function ($executedSharedIndexers) use ($emptyIndexer) {
-                if (!empty($executedSharedIndexers)) {
-                    static $callCount = 0;
-                    $returnValue = $emptyIndexer[$callCount] ?? null;
+            ->willReturnCallback(function ($arg1) use ($emptyIndexer, $executedSharedIndexers) {
+                static $callCount = 0;
+                if (in_array($arg1, $executedSharedIndexers[$callCount])) {
                     $callCount++;
-                    return $returnValue;
+                    return $emptyIndexer;
                 }
             });
 

@@ -363,12 +363,12 @@ class CollectionTest extends TestCase
         $resource->expects($this->once())->method('getSelect')->willReturn($select);
         $select->expects($this->once())->method('columns')->with(['product_id' => 'entity_id'])->willReturnSelf();
         $select->expects($this->exactly(2))->method('where')
-            ->willReturnCallback(function ($arg1, $arg2) use ($customerGroupId) {
+            ->willReturnCallback(function ($arg1, $arg2) use ($customerGroupId, $select) {
                 if ($arg1 == 'entity_id IN(?)' && $arg2 == [1]) {
-                    return $this->selectMock;
+                    return $select;
                 } elseif ($arg1 == '(customer_group_id=? AND all_groups=0) OR all_groups=1' &&
                     $arg2 == $customerGroupId) {
-                    return $this->selectMock;
+                    return $select;
                 }
             });
         $select->expects($this->once())->method('order')->with('qty')->willReturnSelf();

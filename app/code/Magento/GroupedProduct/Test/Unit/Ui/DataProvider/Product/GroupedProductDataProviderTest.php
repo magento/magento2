@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 class GroupedProductDataProviderTest extends TestCase
 {
-    const ALLOWED_TYPE = 'simple';
+    private const ALLOWED_TYPE = 'simple';
 
     /**
      * @var ObjectManager

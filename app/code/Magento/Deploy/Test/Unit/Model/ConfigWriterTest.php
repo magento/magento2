@@ -79,6 +79,10 @@ class ConfigWriterTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     public function testSave()
     {
         $values = [
@@ -137,6 +141,10 @@ class ConfigWriterTest extends TestCase
         $this->model->save($values, 'scope', 'scope_code');
     }
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     public function testSaveDefaultScope()
     {
         $values = [

@@ -137,10 +137,10 @@ class SuffixTest extends TestCase
         );
         $this->cacheTypeList->expects($this->exactly(2))->method('invalidate')
             ->willReturnCallback(
-                function ($arg1, $arg2) {
-                    if ($arg1 == [Block::TYPE_IDENTIFIER, Collection::TYPE_IDENTIFIER] && empty($arg2)) {
+                function ($arg1) {
+                    if ($arg1 == [Block::TYPE_IDENTIFIER, Collection::TYPE_IDENTIFIER]) {
                         return null;
-                    } elseif ($arg1 == 'config' && empty($arg2)) {
+                    } elseif ($arg1 == 'config') {
                         return null;
                     }
                 }

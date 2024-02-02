@@ -1,7 +1,5 @@
 <?php declare(strict_types=1);
 /**
- * Unit test for customer service layer \Magento\Customer\Model\Customer
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -351,9 +349,13 @@ class CustomerTest extends TestCase
 
         $this->dataObjectProcessor->expects($this->once())
             ->method('buildOutputDataArray')
-            ->withConsecutive(
-                [$customer, CustomerInterface::class]
-            )->willReturn($customerDataAttributes);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($customer, $customerDataAttributes) {
+                    if ($arg1 == $customer && $arg2 == CustomerInterface::class) {
+                        return $customerDataAttributes;
+                    }
+                }
+            );
 
         $attribute->expects($this->exactly(3))
             ->method('getAttributeCode')

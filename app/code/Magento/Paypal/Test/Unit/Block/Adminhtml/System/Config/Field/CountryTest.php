@@ -113,6 +113,7 @@ class CountryTest extends TestCase
      *
      * @return void
      * @dataProvider renderDataProvider
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testRender(
         ?string $requestCountry,

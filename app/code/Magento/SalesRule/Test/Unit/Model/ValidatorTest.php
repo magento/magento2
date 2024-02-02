@@ -412,9 +412,12 @@ class ValidatorTest extends TestCase
         $this->validators->expects($this->atLeastOnce())->method('getValidators')->with('discount')
             ->willReturn([$validator]);
         $validator->method('isValid')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                [$item1] => false,
-                [$item2] => true
+            ->willReturnCallback(function ($arg1) use ($item1, $item2) {
+                if ($arg1 == $item1) {
+                    return false;
+                } elseif ($arg1 == $item2) {
+                    return true;
+                }
             });
         $item1->expects($this->any())->method('getParentItemId')->willReturn(null);
         $item1->expects($this->any())->method('getParentItem')->willReturn(null);
@@ -440,9 +443,12 @@ class ValidatorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $actionsCollection->method('validate')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                [$item1] => true,
-                [$item2] => true
+            ->willReturnCallback(function ($arg1) use ($item1, $item2) {
+                if ($arg1 == $item1) {
+                    return true;
+                } elseif ($arg1 == $item2) {
+                    return true;
+                }
             });
         $rule->expects($this->any())->method('getActions')->willReturn($actionsCollection);
         $rule->expects($this->any())->method('getId')->willReturn(1);

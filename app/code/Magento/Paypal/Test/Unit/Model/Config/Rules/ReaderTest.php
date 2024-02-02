@@ -112,8 +112,13 @@ class ReaderTest extends TestCase
 
         $this->fileResolver
             ->method('get')
-            ->withConsecutive([], [$expected])
-            ->willReturnOnConsecutiveCalls([], $xml);
+            ->willReturnCallback(
+                function ($arg1) use ($expected, $xml) {
+                    if ($arg1 === $expected) {
+                        return $xml;
+                    }
+                }
+            );
 
         $this->reader = new Reader(
             $this->fileResolver,
@@ -129,7 +134,7 @@ class ReaderTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderReadExistingCountryConfig(): array
+    public static function dataProviderReadExistingCountryConfig(): array
     {
         return [
             ['us', ['<payment/>'], 'adminhtml/rules/payment_us.xml'],
@@ -149,7 +154,7 @@ class ReaderTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderReadOtherCountryConfig(): array
+    public static function dataProviderReadOtherCountryConfig(): array
     {
         return [
             ['no', ['<payment/>'], 'adminhtml/rules/payment_other.xml']

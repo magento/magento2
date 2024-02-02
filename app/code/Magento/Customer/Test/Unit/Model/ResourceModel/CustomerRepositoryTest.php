@@ -548,6 +548,7 @@ class CustomerRepositoryTest extends TestCase
     /**
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testGetList(): void
     {

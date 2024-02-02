@@ -105,6 +105,7 @@ class GalleryTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testLoadDataFromTableByValueId(): void
     {
@@ -251,7 +252,7 @@ class GalleryTest extends TestCase
         $this->select
             ->method('where')
             ->willReturnCallback(
-                function ($arg1, $arg2, $arg3) use ($ids, $storeId, $whereCondition) {
+                function ($arg1, $arg2) use ($ids, $storeId, $whereCondition) {
                     if ($arg1 == 'main.value_id IN(?)' && $arg2 == $ids) {
                         return $this->select;
                     } elseif ($arg1 == 'main.store_id = ?' && $arg2 == $storeId) {
@@ -322,6 +323,7 @@ class GalleryTest extends TestCase
     /**
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testLoadGallery(): void
     {
