@@ -116,7 +116,7 @@ class AbstractFileTest extends TestCase
                     }
                 }
             );
-        
+
         /** @var AbstractFile $abstractLoaderMock */
         $this->assertEquals($this->_dictionaryMock, $abstractLoaderMock->load('test.csv'));
     }
@@ -139,8 +139,11 @@ class AbstractFileTest extends TestCase
         );
         $abstractLoaderMock
             ->method('_readFile')
-            ->withConsecutive()
-            ->willReturn(['phrase1', 'translation1']);
+            ->willReturnCallback(
+                function () {
+                    return ['phrase1', 'translation1'];
+                }
+            );
 
         $this->_factoryMock->expects($this->once())
             ->method('createDictionary')

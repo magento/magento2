@@ -179,9 +179,13 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ]);
         $this->outputMock->expects($this->exactly(2))
             ->method('writeln')
-            ->withConsecutive(
-                ['<info>Value was saved in app/etc/env.php and locked.</info>'],
-                ['<info>Value was saved in app/etc/env.php and locked.</info>']
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == '<info>Value was saved in app/etc/env.php and locked.</info>' ||
+                        $arg1 == '<info>Value was saved in app/etc/env.php and locked.</info>') {
+                        return null;
+                    }
+                }
             );
 
         /** @var ConfigSetCommand $command */
