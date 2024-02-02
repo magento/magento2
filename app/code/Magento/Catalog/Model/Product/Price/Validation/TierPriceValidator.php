@@ -112,6 +112,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
      * @param ProductRepositoryInterface $productRepository
      * @param CatalogData|null $catalogData
      * @param array $allowedProductTypes [optional]
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ProductIdLocatorInterface          $productIdLocator,
