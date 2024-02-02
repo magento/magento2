@@ -17,7 +17,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Catalog\Helper\Data;
 
 /**
  * Validate Tier Price and check duplication
@@ -89,14 +89,14 @@ class TierPriceValidator implements ResetAfterRequestInterface
     private $productRepository;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @var array
      */
     private $productsCacheBySku = [];
+
+    /**
+     * @var Data
+     */
+    private $catalogData;
 
     /**
      * TierPriceValidator constructor.
@@ -109,8 +109,8 @@ class TierPriceValidator implements ResetAfterRequestInterface
      * @param Result $validationResult
      * @param InvalidSkuProcessor $invalidSkuProcessor
      * @param ProductRepositoryInterface $productRepository
-     * @param ScopeConfigInterface|null $scopeConfig
      * @param array $allowedProductTypes [optional]
+     * @param Data|null $catalogData
      */
     public function __construct(
         ProductIdLocatorInterface          $productIdLocator,
@@ -121,8 +121,8 @@ class TierPriceValidator implements ResetAfterRequestInterface
         Result                                                    $validationResult,
         InvalidSkuProcessor                                       $invalidSkuProcessor,
         ProductRepositoryInterface $productRepository,
-        ?ScopeConfigInterface $scopeConfig = null,
-        array                                                     $allowedProductTypes = []
+        array                                                     $allowedProductTypes = [],
+        ?Data $catalogData = null
     ) {
         $this->productIdLocator = $productIdLocator;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -132,9 +132,8 @@ class TierPriceValidator implements ResetAfterRequestInterface
         $this->validationResult = $validationResult;
         $this->invalidSkuProcessor = $invalidSkuProcessor;
         $this->productRepository = $productRepository;
-        $this->scopeConfig = $scopeConfig
-            ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         $this->allowedProductTypes = $allowedProductTypes;
+        $this->catalogData = $catalogData ?: ObjectManager::getInstance()->get(Data::class);
     }
 
     /**
