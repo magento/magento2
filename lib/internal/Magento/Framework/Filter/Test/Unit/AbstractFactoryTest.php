@@ -111,7 +111,7 @@ class AbstractFactoryTest extends TestCase
         $property = new \ReflectionProperty(AbstractFactory::class, 'sharedInstances');
         $property->setAccessible(true);
 
-        $filterMock = $this->getMockBuilder('FactoryInterface')
+        $filterMock = $this->getMockBuilder('Magento\Framework\Filter\FactoryInterface')
             ->onlyMethods(['filter'])->getMock();
         $this->_objectManager->expects(
             $this->atLeastOnce()
