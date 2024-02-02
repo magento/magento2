@@ -381,15 +381,15 @@ define([
                     uploadInput.fileupload({
                         dataType: 'json',
                         dropZone: dropZone,
-                        process: [{
-                            action: 'load',
+                        processQueue: [{
+                            action: 'loadImage',
                             fileTypes: /^image\/(gif|jpeg|png)$/
                         }, {
-                            action: 'resize',
+                            action: 'resizeImage',
                             maxWidth: 1920,
                             maxHeight: 1200
                         }, {
-                            action: 'save'
+                            action: 'saveImage'
                         }],
                         formData: {
                             'form_key': FORM_KEY
