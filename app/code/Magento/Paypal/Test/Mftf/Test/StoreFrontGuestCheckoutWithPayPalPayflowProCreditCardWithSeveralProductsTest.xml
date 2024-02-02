@@ -33,6 +33,8 @@
             <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClickOnButtonToRemoveFiltersIfPresent"/>
             <createData entity="RollbackPaypalPayflowPro" stepKey="rollbackPaypalPayflowProConfig"/>
+            <magentoCLI command="config:set payment/payflow_express/active 0" stepKey="disablePayPalExpress"/>
+            <magentoCLI command="config:set payment/payflow_express_bml/active 0" stepKey="disablePayPalExpressBML"/>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
                 <argument name="tags" value="config full_page"/>
             </actionGroup>

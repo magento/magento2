@@ -32,6 +32,7 @@
         <click selector="{{CmsNewPagePiwSection.header}}" stepKey="clickPageInWebsites"/>
         <waitForElementVisible selector="{{CmsNewPagePiwSection.selectStoreView(selectStoreViewOpt)}}" stepKey="waitForStoreGridReload"/>
         <clickWithLeftButton selector="{{CmsNewPagePiwSection.selectStoreView(selectStoreViewOpt)}}" stepKey="clickStoreView2"/>
+        <scrollTo selector="{{CmsNewPageHierarchySection.header}}" x="0" y="-100" stepKey="scrollToHierarchySection"/>
         <click selector="{{CmsNewPageHierarchySection.header}}" stepKey="clickHierarchy"/>
         <waitForElementVisible selector="{{CmsNewPageHierarchySection.selectHierarchy(selectHierarchyOpt)}}" stepKey="waitForHierarchySection"/>
         <click selector="{{CmsNewPageHierarchySection.selectHierarchy(selectHierarchyOpt)}}" stepKey="clickPageCheckBoxes"/>
