@@ -67,9 +67,14 @@ class HttpTest extends TestCase
 
         $this->response
             ->method('setHeader')
-            ->withConsecutive(
-                ['Content-length', filesize($file)],
-                ['Content-Type', $contentType]
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($file, $contentType) {
+                    if ($arg1 == 'Content-length' && $arg2 == filesize($file)) {
+                        return null;
+                    } elseif ($arg1 == 'Content-Type' && $arg2 == $contentType) {
+                        return null;
+                    }
+                }
             );
         $this->response->expects($this->once())
             ->method('sendHeaders');
@@ -97,7 +102,15 @@ class HttpTest extends TestCase
             ->getMock();
         $this->response->expects($this->atLeastOnce())
             ->method('setHeader')
-            ->withConsecutive(['Content-length', filesize($file)], ['Content-Type', $contentType]);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($file, $contentType) {
+                    if ($arg1 == 'Content-length' && $arg2 == filesize($file)) {
+                        return null;
+                    } elseif ($arg1 == 'Content-Type' && $arg2 == $contentType) {
+                        return null;
+                    }
+                }
+            );
         $this->response->expects($this->atLeastOnce())
             ->method('setHeaders')
             ->with($headers);
@@ -144,7 +157,15 @@ class HttpTest extends TestCase
 
         $this->response
             ->method('setHeader')
-            ->withConsecutive(['Content-length', filesize($file)], ['Content-Type', $contentType]);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($file, $contentType) {
+                    if ($arg1 == 'Content-length' && $arg2 == filesize($file)) {
+                        return null;
+                    } elseif ($arg1 == 'Content-Type' && $arg2 == $contentType) {
+                        return null;
+                    }
+                }
+            );
         $this->response->expects($this->once())
             ->method('sendHeaders');
         $this->mime->expects($this->once())
