@@ -28,13 +28,13 @@ class InterceptionCacheTest extends TestCase
     protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(Config::class)
-            ->setMethods([])
+            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
         $this->interceptionsListMock = $this->getMockBuilder(
             Interceptions::class
         )
-            ->setMethods([])
+            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
     }

@@ -149,7 +149,7 @@ class ServiceInputProcessorTest extends TestCase
 
         $this->fieldNamer = $this->getMockBuilder(FieldNamer::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->methodsMap = $objectManager->getObject(
