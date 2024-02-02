@@ -112,7 +112,7 @@ class AbstractFactoryTest extends TestCase
         $property->setAccessible(true);
 
         $filterMock = $this->getMockBuilder('FactoryInterface')
-            ->setMethods(['filter'])->getMock();
+            ->onlyMethods(['filter'])->getMock();
         $this->_objectManager->expects(
             $this->atLeastOnce()
         )->method(

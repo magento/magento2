@@ -88,7 +88,7 @@ class TaxRulesFixtureTest extends TestCase
 
         $this->taxRuleRepositoryMock = $this->getMockBuilder(TaxRuleRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['save', 'get', 'delete', 'deleteById', 'getList'])
+            ->onlyMethods(['save', 'get', 'delete', 'deleteById', 'getList'])
             ->getMockForAbstractClass();
 
         $this->fixtureModelMock
@@ -101,12 +101,12 @@ class TaxRulesFixtureTest extends TestCase
 
         $this->taxRateCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $taxRateCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAllIds'])
+            ->onlyMethods(['getAllIds'])
             ->getMock();
 
         $this->taxRateCollectionFactoryMock->expects($this->once())

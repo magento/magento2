@@ -39,7 +39,7 @@ class MessageEncoderTest extends TestCase
 
         $this->dataObjectEncoderMock = $this->getMockBuilder(ServiceOutputProcessor::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
         $this->encoder = $this->objectManager->getObject(
             MessageEncoder::class,
@@ -82,7 +82,7 @@ class MessageEncoderTest extends TestCase
         );
         $object = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
         $this->dataObjectEncoderMock
             ->expects($this->once())
@@ -104,7 +104,7 @@ class MessageEncoderTest extends TestCase
         );
         $object = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
         $this->dataObjectEncoderMock
             ->expects($this->once())

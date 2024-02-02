@@ -26,7 +26,7 @@ class MongoDbTest extends TestCase
     protected function setUp(): void
     {
         $this->_collection = $this->getMockBuilder('MongoCollection')
-            ->setMethods(['find', 'findOne', 'distinct', 'save', 'update', 'remove', 'drop'])
+            ->onlyMethods(['find', 'findOne', 'distinct', 'save', 'update', 'remove', 'drop'])
             ->getMock();
         $this->_model = $this->createPartialMock(MongoDb::class, ['_getCollection']);
         $this->_model->expects($this->any())->method('_getCollection')->willReturn($this->_collection);

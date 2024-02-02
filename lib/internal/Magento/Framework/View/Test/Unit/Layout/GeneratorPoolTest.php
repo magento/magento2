@@ -71,7 +71,7 @@ class GeneratorPoolTest extends TestCase
             ->getMock();
         $this->structureMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Data\Structure::class)
             ->disableOriginalConstructor()
-            ->setMethods(['reorderChildElement'])
+            ->onlyMethods(['reorderChildElement'])
             ->getMock();
         $this->generatorContextMock->expects($this->any())->method('getStructure')
             ->willReturn($this->structureMock);

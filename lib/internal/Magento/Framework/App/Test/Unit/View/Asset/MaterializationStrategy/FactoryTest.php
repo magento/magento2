@@ -26,7 +26,7 @@ class FactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
     }
 
@@ -34,7 +34,7 @@ class FactoryTest extends TestCase
     {
         $asset = $this->getAsset();
         $copyStrategy = $this->getMockBuilder(Copy::class)
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
         $copyStrategy->expects($this->once())
             ->method('isSupported')
@@ -54,7 +54,7 @@ class FactoryTest extends TestCase
     {
         $asset = $this->getAsset();
         $copyStrategy = $this->getMockBuilder(Copy::class)
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
         $copyStrategy->expects($this->once())
             ->method('isSupported')
@@ -64,7 +64,7 @@ class FactoryTest extends TestCase
         $supportedStrategy = $this->getMockBuilder(
             StrategyInterface::class
         )
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
         $supportedStrategy->expects($this->once())
             ->method('isSupported')
@@ -79,7 +79,7 @@ class FactoryTest extends TestCase
     {
         $asset = $this->getAsset();
         $copyStrategy = $this->getMockBuilder(Copy::class)
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
         $copyStrategy->expects($this->once())
             ->method('isSupported')
@@ -104,7 +104,7 @@ class FactoryTest extends TestCase
     private function getAsset()
     {
         return $this->getMockBuilder(LocalInterface::class)
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
     }
 }

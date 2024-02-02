@@ -40,11 +40,11 @@ class DefinitionAggregatorTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $intDefProcessor = $this->getMockBuilder(DbDefinitionProcessorInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
         $varcharDefProcessor = $this->getMockBuilder(DbDefinitionProcessorInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->definitonProcessors = [
