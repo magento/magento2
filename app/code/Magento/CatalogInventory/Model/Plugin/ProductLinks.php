@@ -23,7 +23,8 @@ class ProductLinks
     public function __construct(
         private readonly Configuration $configuration,
         private readonly Stock $stockHelper
-    ) {}
+    ) {
+    }
 
     /**
      * Fixes simple products are shown as associated in grouped when set out of stock
