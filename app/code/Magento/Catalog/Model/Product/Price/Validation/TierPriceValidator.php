@@ -17,7 +17,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Catalog\Helper\Data as CatalogData;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Validate Tier Price and check duplication
@@ -89,9 +89,9 @@ class TierPriceValidator implements ResetAfterRequestInterface
     private $productRepository;
 
     /**
-     * @var CatalogData
+     * @var ScopeConfigInterface
      */
-    private $catalogData;
+    private $scopeConfig;
 
     /**
      * @var array
@@ -109,7 +109,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
      * @param Result $validationResult
      * @param InvalidSkuProcessor $invalidSkuProcessor
      * @param ProductRepositoryInterface $productRepository
-     * @param CatalogData|null $catalogData
+     * @param ScopeConfigInterface|null $scopeConfig
      * @param array $allowedProductTypes [optional]
      */
     public function __construct(
@@ -121,7 +121,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
         Result                                                    $validationResult,
         InvalidSkuProcessor                                       $invalidSkuProcessor,
         ProductRepositoryInterface $productRepository,
-        ?CatalogData $catalogData = null,
+        ?ScopeConfigInterface $scopeConfig = null,
         array                                                     $allowedProductTypes = []
     ) {
         $this->productIdLocator = $productIdLocator;
@@ -132,8 +132,8 @@ class TierPriceValidator implements ResetAfterRequestInterface
         $this->validationResult = $validationResult;
         $this->invalidSkuProcessor = $invalidSkuProcessor;
         $this->productRepository = $productRepository;
-        $this->catalogData = $catalogData
-            ?: ObjectManager::getInstance()->get(CatalogData::class);
+        $this->scopeConfig = $scopeConfig
+            ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         $this->allowedProductTypes = $allowedProductTypes;
     }
 
