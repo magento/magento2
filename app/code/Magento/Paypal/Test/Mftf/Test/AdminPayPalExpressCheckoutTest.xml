@@ -17,6 +17,7 @@
             <testCaseId value="AC-6149"/>
             <group value="3rd_party_integration"/>
             <group value="paypalExpress"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Simple product is created  -->
