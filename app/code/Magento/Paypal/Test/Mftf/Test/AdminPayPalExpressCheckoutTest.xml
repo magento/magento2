@@ -19,7 +19,7 @@
             <group value="paypalExpress"/>
         </annotations>
         <before>
-            <!-- Simple product is created and assigned to category -->
+            <!-- Simple product is created  -->
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <field key="price">10.00</field>
             </createData>
