@@ -281,13 +281,13 @@ class EmailMessage extends Message implements EmailMessageInterface
     /**
      * Sanitise email address
      *
-     * @param string $email
-     * @return string
+     * @param ?string $email
+     * @return ?string
      * @throws LocalizedException
      */
-    private function sanitiseEmail(string $email): string
+    private function sanitiseEmail(?string $email): ?string
     {
-        if (str_contains($email, '=??')) {
+        if (isset($email) && str_contains($email, '=??')) {
             $decodedValue = iconv_mime_decode($email, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
             if ($this->isEncoded(trim($email), trim($decodedValue)) &&
                 !$this->emailValidator->isValid((trim($decodedValue)))
@@ -300,12 +300,12 @@ class EmailMessage extends Message implements EmailMessageInterface
     }
 
     /**
-     * Sanitise name
+     * Sanitise sender name
      *
-     * @param string $name
-     * @return string
+     * @param ?string $name
+     * @return ?string
      */
-    private function sanitiseName(string $name): string
+    private function sanitiseName(?string $name): ?string
     {
         return trim(str_replace(
             [
