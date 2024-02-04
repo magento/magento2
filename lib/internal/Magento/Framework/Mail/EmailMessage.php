@@ -9,11 +9,13 @@ namespace Magento\Framework\Mail;
 
 use Laminas\Mail\Exception\InvalidArgumentException as LaminasInvalidArgumentException;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\Exception\InvalidArgumentException;
 use Laminas\Mail\Address as LaminasAddress;
 use Laminas\Mail\AddressList;
 use Laminas\Mime\Message as LaminasMimeMessage;
 use Psr\Log\LoggerInterface;
+use Laminas\Validator\EmailAddress as LaminasEmailAddress;
 
 /**
  * Magento Framework Email message
@@ -22,6 +24,11 @@ use Psr\Log\LoggerInterface;
  */
 class EmailMessage extends Message implements EmailMessageInterface
 {
+    /**
+     * @var LaminasEmailAddress
+     */
+    private $emailValidator;
+
     /**
      * @var MimeMessageInterfaceFactory
      */
@@ -38,6 +45,7 @@ class EmailMessage extends Message implements EmailMessageInterface
     private $logger;
 
     /**
+     * @param LaminasEmailAddress $emailValidator
      * @param MimeMessageInterface $body
      * @param array $to
      * @param MimeMessageInterfaceFactory $mimeMessageFactory
@@ -51,11 +59,13 @@ class EmailMessage extends Message implements EmailMessageInterface
      * @param string|null $encoding
      * @param LoggerInterface|null $logger
      * @throws InvalidArgumentException
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __construct(
+        LaminasEmailAddress $emailValidator,
         MimeMessageInterface $body,
         array $to,
         MimeMessageInterfaceFactory $mimeMessageFactory,
@@ -70,6 +80,7 @@ class EmailMessage extends Message implements EmailMessageInterface
         ?LoggerInterface $logger = null
     ) {
         parent::__construct($encoding);
+        $this->emailValidator = $emailValidator;
         $mimeMessage = new LaminasMimeMessage();
         $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
         $mimeMessage->setParts($body->getParts());
@@ -78,7 +89,10 @@ class EmailMessage extends Message implements EmailMessageInterface
             $this->zendMessage->setSubject($subject);
         }
         if ($sender) {
-            $this->zendMessage->setSender($sender->getEmail(), $sender->getName());
+            $this->zendMessage->setSender(
+                $this->sanitiseEmail($sender->getEmail()),
+                $this->sanitiseName($sender->getName())
+            );
         }
         if (count($to) < 1) {
             throw new InvalidArgumentException('Email message must have at list one addressee');
@@ -120,6 +134,8 @@ class EmailMessage extends Message implements EmailMessageInterface
 
     /**
      * @inheritDoc
+     *
+     * @throws LocalizedException
      */
     public function getFrom(): ?array
     {
@@ -128,6 +144,8 @@ class EmailMessage extends Message implements EmailMessageInterface
 
     /**
      * @inheritDoc
+     *
+     * @throws LocalizedException
      */
     public function getTo(): array
     {
@@ -136,6 +154,8 @@ class EmailMessage extends Message implements EmailMessageInterface
 
     /**
      * @inheritDoc
+     *
+     * @throws LocalizedException
      */
     public function getCc(): ?array
     {
@@ -144,6 +164,8 @@ class EmailMessage extends Message implements EmailMessageInterface
 
     /**
      * @inheritDoc
+     *
+     * @throws LocalizedException
      */
     public function getBcc(): ?array
     {
@@ -152,6 +174,8 @@ class EmailMessage extends Message implements EmailMessageInterface
 
     /**
      * @inheritDoc
+     *
+     * @throws LocalizedException
      */
     public function getReplyTo(): ?array
     {
@@ -160,6 +184,8 @@ class EmailMessage extends Message implements EmailMessageInterface
 
     /**
      * @inheritDoc
+     *
+     * @throws LocalizedException
      */
     public function getSender(): ?Address
     {
@@ -167,11 +193,10 @@ class EmailMessage extends Message implements EmailMessageInterface
         if (!$laminasSender = $this->zendMessage->getSender()) {
             return null;
         }
-
         return $this->addressFactory->create(
             [
-                'email' => $laminasSender->getEmail(),
-                'name' => $laminasSender->getName()
+                'email' => $this->sanitiseEmail($laminasSender->getEmail()),
+                'name' => $this->sanitiseName($laminasSender->getName())
             ]
         );
     }
@@ -207,6 +232,7 @@ class EmailMessage extends Message implements EmailMessageInterface
      *
      * @param AddressList $addressList
      * @return Address[]
+     * @throws LocalizedException
      */
     private function convertAddressListToAddressArray(AddressList $addressList): array
     {
@@ -215,8 +241,8 @@ class EmailMessage extends Message implements EmailMessageInterface
             $arrayList[] =
                 $this->addressFactory->create(
                     [
-                        'email' => $address->getEmail(),
-                        'name' => $address->getName()
+                        'email' => $this->sanitiseEmail($address->getEmail()),
+                        'name' => $this->sanitiseName($address->getName())
                     ]
                 );
         }
@@ -229,13 +255,17 @@ class EmailMessage extends Message implements EmailMessageInterface
      *
      * @param Address[] $arrayList
      * @return AddressList
+     * @throws LaminasInvalidArgumentException|LocalizedException
      */
     private function convertAddressArrayToAddressList(array $arrayList): AddressList
     {
         $laminasAddressList = new AddressList();
         foreach ($arrayList as $address) {
             try {
-                $laminasAddressList->add($address->getEmail(), $address->getName());
+                $laminasAddressList->add(
+                    $this->sanitiseEmail($address->getEmail()),
+                    $this->sanitiseName($address->getName())
+                );
             } catch (LaminasInvalidArgumentException $e) {
                 $this->logger->warning(
                     'Could not add an invalid email address to the mailing queue',
@@ -246,5 +276,61 @@ class EmailMessage extends Message implements EmailMessageInterface
         }
 
         return $laminasAddressList;
+    }
+
+    /**
+     * Sanitise email address
+     *
+     * @param string $email
+     * @return string
+     * @throws LocalizedException
+     */
+    private function sanitiseEmail(string $email): string
+    {
+        if (str_contains($email, '=??')) {
+            $decodedValue = iconv_mime_decode($email, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
+            if ($this->isEncoded(trim($email), trim($decodedValue)) &&
+                !$this->emailValidator->isValid((trim($decodedValue)))
+            ) {
+                throw new LocalizedException(__('Sender email must be a valid email address'));
+            }
+        }
+
+        return $email;
+    }
+
+    /**
+     * Sanitise name
+     *
+     * @param string $name
+     * @return string
+     */
+    private function sanitiseName(string $name): string
+    {
+        return trim(str_replace(
+            [
+                ',',
+                ';',
+                '<',
+                '>',
+                '&lt',
+                '&gt'
+            ],
+            '',
+            $name
+        ));
+    }
+
+    /**
+     * Check email is decoded
+     *
+     * @param string $originalEmail
+     * @param string $decodedEmail
+     * @return bool
+     */
+    private function isEncoded(string $originalEmail, string $decodedEmail): bool
+    {
+        return str_starts_with($originalEmail, '=?')
+            && strlen($originalEmail) !== strlen($decodedEmail);
     }
 }
