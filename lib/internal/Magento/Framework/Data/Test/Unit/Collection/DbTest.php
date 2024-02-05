@@ -403,7 +403,7 @@ class DbTest extends TestCase
             ['select', 'quoteInto', 'prepareSqlCondition', 'fetchOne']
         );
         $selectMock = $this->getMockBuilder(Select::class)
-            ->setMethods(['orWhere', 'where', 'reset', 'columns'])
+            ->onlyMethods(['orWhere', 'where', 'reset', 'columns'])
             ->setConstructorArgs(
                 [
                     'adapter' => $adapterMock,
@@ -463,7 +463,7 @@ class DbTest extends TestCase
     {
         $adapterMock = $this->createPartialMock(Mysql::class, ['select']);
         $selectMock = $this->getMockBuilder(Select::class)
-            ->setMethods(['__toString'])
+            ->onlyMethods(['__toString'])
             ->setConstructorArgs(
                 [
                     'adapter' => $adapterMock,
@@ -493,7 +493,7 @@ class DbTest extends TestCase
             ['select', 'quoteInto', 'prepareSqlCondition', 'fetchOne']
         );
         $selectMock = $this->getMockBuilder(Select::class)
-            ->setMethods(['orWhere', 'where', 'reset', 'columns'])
+            ->onlyMethods(['orWhere', 'where', 'reset', 'columns'])
             ->setConstructorArgs(
                 [
                     'adapter' => $adapterMock,
@@ -529,7 +529,7 @@ class DbTest extends TestCase
     {
         $adapterMock = $this->createPartialMock(Mysql::class, ['select']);
         $selectMock = $this->getMockBuilder(Select::class)
-            ->setMethods(['distinct'])
+            ->onlyMethods(['distinct'])
             ->setConstructorArgs(
                 [
                     'adapter' => $adapterMock,

@@ -47,7 +47,7 @@ class CallbackTest extends TestCase
         };
 
         $mock = $this->getMockBuilder('Foo')
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $mock->method('getValue')
             ->with('arg1', 'arg2')

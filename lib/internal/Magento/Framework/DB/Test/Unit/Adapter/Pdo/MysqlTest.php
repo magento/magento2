@@ -747,7 +747,7 @@ class MysqlTest extends TestCase
             ->getMock();
 
         $adapterMock = $this->getMockBuilder(PdoMysqlAdapter::class)
-            ->setMethods(
+            ->onlyMethods(
                 $methods
             )->setConstructorArgs(
                 [

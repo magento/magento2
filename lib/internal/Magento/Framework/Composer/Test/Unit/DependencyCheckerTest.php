@@ -30,12 +30,12 @@ class DependencyCheckerTest extends TestCase
     protected function setUp(): void
     {
         $this->composerFactory = $this->getMockBuilder(ApplicationFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->composerApp = $this->getMockBuilder(Application::class)
-            ->setMethods(['setAutoExit', 'resetComposer', 'run','__destruct'])
+            ->onlyMethods(['setAutoExit', 'resetComposer', 'run','__destruct'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->composerFactory->method('create')->willReturn($this->composerApp);
