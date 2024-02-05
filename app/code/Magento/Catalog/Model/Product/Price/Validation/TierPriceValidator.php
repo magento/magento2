@@ -18,7 +18,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Catalog\Helper\Data as CatalogData;
+use Magento\Catalog\Helper\Data;
 
 /**
  * Validate Tier Price and check duplication
@@ -90,7 +90,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
     private $productRepository;
 
     /**
-     * @var CatalogData|null
+     * @var Data
      */
     private $catalogData;
 
@@ -111,7 +111,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
      * @param InvalidSkuProcessor $invalidSkuProcessor
      * @param ProductRepositoryInterface $productRepository
      * @param array $allowedProductTypes [optional]
-     * @param CatalogData|null $catalogData
+     * @param Data|null $catalogData
      */
     public function __construct(
         ProductIdLocatorInterface $productIdLocator,
@@ -123,7 +123,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
         InvalidSkuProcessor $invalidSkuProcessor,
         ProductRepositoryInterface $productRepository,
         array $allowedProductTypes = [],
-        ?CatalogData $catalogData = null
+        ?Data $catalogData = null
     ) {
         $this->productIdLocator = $productIdLocator;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -134,7 +134,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
         $this->invalidSkuProcessor = $invalidSkuProcessor;
         $this->productRepository = $productRepository;
         $this->allowedProductTypes = $allowedProductTypes;
-        $this->catalogData = $catalogData ?? ObjectManager::getInstance()->get(CatalogData::class);
+        $this->catalogData = $catalogData ?: ObjectManager::getInstance()->get(Data::class);
     }
 
     /**
