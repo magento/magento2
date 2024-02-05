@@ -27,7 +27,8 @@ class EmailMessage extends Message implements EmailMessageInterface
      */
     private const ARRAY_RCE_CHARACTERS = [
         ',',
-        ';'
+        ';',
+        '=22'
     ];
 
     /**
