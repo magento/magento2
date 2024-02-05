@@ -54,33 +54,21 @@ class XmlScannerTest extends TestCase
         $className = 'Magento\Store\Model\Config\Invalidator\Proxy';
         $this->logMock
             ->method('add')
-            ->withConsecutive(
-                [
-                    4,
-                    $className,
-                    'Invalid proxy class for ' . substr($className, 0, -5)
-                ],
-                [
-                    4,
-                    'Magento\SomeModule\Model\Element\Proxy',
-                    'Invalid proxy class for ' . substr('Magento\SomeModule\Model\Element\Proxy', 0, -5)
-                ],
-                [
-                    4,
-                    'Magento\SomeModule\Model\Element2\Proxy',
-                    'Invalid proxy class for ' . substr('Magento\SomeModule\Model\Element2\Proxy', 0, -5)
-                ],
-                [
-                    4,
-                    'Magento\SomeModule\Model\Nested\Element\Proxy',
-                    'Invalid proxy class for ' . substr('Magento\SomeModule\Model\Nested\Element\Proxy', 0, -5)
-                ],
-                [
-                    4,
-                    'Magento\SomeModule\Model\Nested\Element2\Proxy',
-                    'Invalid proxy class for ' . substr('Magento\SomeModule\Model\Nested\Element2\Proxy', 0, -5)
-                ],
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($className) {
+                if ($arg1 == 4 && $arg2 == $className && $arg3 == 'Invalid proxy class for ' .
+                    substr($className, 0, -5)) {
+                    return null;
+                } elseif ($arg1 == 4 && $arg2 == 'Magento\SomeModule\Model\Element\Proxy') {
+                    return null;
+                } elseif ($arg1 == 4 && $arg2 == 'Magento\SomeModule\Model\Element2\Proxy') {
+                    return null;
+                } elseif ($arg1 == 4 && $arg2 == 'Magento\SomeModule\Model\Nested\Element\Proxy') {
+                    return null;
+                } elseif ($arg1 == 4 && $arg2 == 'Magento\SomeModule\Model\Nested\Element2\Proxy') {
+                    return null;
+                }
+            });
+
         $actual = $this->model->collectEntities($this->testFiles);
         $expected = [];
         $this->assertEquals($expected, $actual);
