@@ -14,7 +14,6 @@ use Laminas\Mail\Address as LaminasAddress;
 use Laminas\Mail\AddressList;
 use Laminas\Mime\Message as LaminasMimeMessage;
 use Psr\Log\LoggerInterface;
-use Laminas\Validator\EmailAddress as LaminasEmailAddress;
 
 /**
  * Magento Framework Email message
@@ -28,11 +27,7 @@ class EmailMessage extends Message implements EmailMessageInterface
      */
     private const ARRAY_RCE_CHARACTERS = [
         ',',
-        ';',
-        '<',
-        '>',
-        '&lt',
-        '&gt'
+        ';'
     ];
 
     /**
@@ -51,11 +46,6 @@ class EmailMessage extends Message implements EmailMessageInterface
     private $logger;
 
     /**
-     * @var LaminasEmailAddress|null
-     */
-    private $emailValidator;
-
-    /**
      * @param MimeMessageInterface $body
      * @param array $to
      * @param MimeMessageInterfaceFactory $mimeMessageFactory
@@ -68,7 +58,6 @@ class EmailMessage extends Message implements EmailMessageInterface
      * @param string|null $subject
      * @param string|null $encoding
      * @param LoggerInterface|null $logger
-     * @param LaminasEmailAddress|null $emailValidator
      * @throws InvalidArgumentException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -86,13 +75,11 @@ class EmailMessage extends Message implements EmailMessageInterface
         ?Address $sender = null,
         ?string $subject = '',
         ?string $encoding = 'utf-8',
-        ?LoggerInterface $logger = null,
-        ?LaminasEmailAddress $emailValidator = null
+        ?LoggerInterface $logger = null
     ) {
         parent::__construct($encoding);
         $mimeMessage = new LaminasMimeMessage();
         $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
-        $this->emailValidator = $emailValidator ?: ObjectManager::getInstance()->get(LaminasEmailAddress::class);
         $mimeMessage->setParts($body->getParts());
         $this->zendMessage->setBody($mimeMessage);
         if ($subject) {
@@ -289,17 +276,10 @@ class EmailMessage extends Message implements EmailMessageInterface
      */
     private function sanitiseEmail(?string $email): ?string
     {
-        if (isset($email) && str_contains($email, '=??')) {
-            $decodedValue = iconv_mime_decode($email, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
-            if (
-                $this->isEncoded(trim($email), trim($decodedValue)) &&
-                !$this->emailValidator->isValid((trim($decodedValue)))
-            ) {
-                $email = trim(str_replace(
-                    '/',
-                    '',
-                    $decodedValue
-                ));
+        if (!empty($email) && str_contains($email, '=?')) {
+            $decodedValue = trim(iconv_mime_decode($email, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8'));
+            if ($this->isEncoded(trim($email), $decodedValue)) {
+                $email = strtolower($decodedValue);
             }
         }
 
@@ -314,7 +294,7 @@ class EmailMessage extends Message implements EmailMessageInterface
      */
     private function sanitiseName(?string $name): ?string
     {
-        if (isset($name)) {
+        if (!empty($name)) {
             return trim(str_replace(
                 self::ARRAY_RCE_CHARACTERS,
                 '',
@@ -326,7 +306,7 @@ class EmailMessage extends Message implements EmailMessageInterface
     }
 
     /**
-     * Check email is decoded
+     * Check email is encoded
      *
      * @param string $originalEmail
      * @param string $decodedEmail
