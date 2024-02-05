@@ -31,7 +31,8 @@ class DeployStaticContentCommand extends Command
     /**
      * Default language value. Always used for adminhtml, fallback if no frontend locale is supplied.
      */
-    const DEFAULT_LANGUAGE_VALUE = 'en_US';
+    public const DEFAULT_LANGUAGE_VALUE = 'en_US';
+    public const NAME = 'setup:static-content:deploy';
 
     /**
      * @var InputValidator
@@ -90,7 +91,7 @@ class DeployStaticContentCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('setup:static-content:deploy')
+        $this->setName(self::NAME)
             ->setDescription('Deploys static view files')
             ->setDefinition($this->options->getOptionsList());
 

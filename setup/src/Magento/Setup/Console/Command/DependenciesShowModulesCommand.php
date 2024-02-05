@@ -14,13 +14,15 @@ use Magento\Setup\Module\Dependency\ServiceLocator;
  */
 class DependenciesShowModulesCommand extends AbstractDependenciesCommand
 {
+    public const NAME = 'info:dependencies:show-modules';
+
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
         $this->setDescription('Shows number of dependencies between modules')
-            ->setName('info:dependencies:show-modules');
+            ->setName(self::NAME);
         parent::configure();
     }
 

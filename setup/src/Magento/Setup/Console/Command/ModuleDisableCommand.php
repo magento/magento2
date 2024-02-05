@@ -10,12 +10,14 @@ namespace Magento\Setup\Console\Command;
  */
 class ModuleDisableCommand extends AbstractModuleManageCommand
 {
+    public const NAME = 'module:disable';
+
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
-        $this->setName('module:disable')
+        $this->setName(self::NAME)
             ->setDescription('Disables specified modules');
         parent::configure();
     }

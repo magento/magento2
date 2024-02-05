@@ -14,6 +14,7 @@ use Magento\Framework\Setup\ConsoleLogger;
 
 class UninstallCommand extends AbstractSetupCommand
 {
+    public const NAME = 'setup:uninstall';
     /**
      * @var InstallerFactory
      */
@@ -29,17 +30,17 @@ class UninstallCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
-        $this->setName('setup:uninstall')
+        $this->setName(self::NAME)
             ->setDescription('Uninstalls the Magento application');
         parent::configure();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

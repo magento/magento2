@@ -10,12 +10,14 @@ namespace Magento\Setup\Console\Command;
  */
 class ModuleEnableCommand extends AbstractModuleManageCommand
 {
+    public const NAME = 'module:enable';
+
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
-        $this->setName('module:enable')
+        $this->setName(self::NAME)
             ->setDescription('Enables specified modules');
         parent::configure();
     }
