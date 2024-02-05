@@ -90,7 +90,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
     private $productRepository;
 
     /**
-     * @var CatalogData
+     * @var CatalogData|null
      */
     private $catalogData;
 
@@ -110,21 +110,21 @@ class TierPriceValidator implements ResetAfterRequestInterface
      * @param Result $validationResult
      * @param InvalidSkuProcessor $invalidSkuProcessor
      * @param ProductRepositoryInterface $productRepository
-     * @param CatalogData|null $catalogData
      * @param array $allowedProductTypes [optional]
+     * @param CatalogData|null $catalogData
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        ProductIdLocatorInterface          $productIdLocator,
-        SearchCriteriaBuilder              $searchCriteriaBuilder,
-        FilterBuilder                      $filterBuilder,
-        GroupRepositoryInterface            $customerGroupRepository,
-        WebsiteRepositoryInterface             $websiteRepository,
-        Result                                                    $validationResult,
-        InvalidSkuProcessor                                       $invalidSkuProcessor,
+        ProductIdLocatorInterface $productIdLocator,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        FilterBuilder $filterBuilder,
+        GroupRepositoryInterface $customerGroupRepository,
+        WebsiteRepositoryInterface $websiteRepository,
+        Result $validationResult,
+        InvalidSkuProcessor $invalidSkuProcessor,
         ProductRepositoryInterface $productRepository,
-        ?catalogData $catalogData = null,
-        array                                                     $allowedProductTypes = []
+        array $allowedProductTypes = [],
+        ?catalogData $catalogData = null
     ) {
         $this->productIdLocator = $productIdLocator;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -134,9 +134,9 @@ class TierPriceValidator implements ResetAfterRequestInterface
         $this->validationResult = $validationResult;
         $this->invalidSkuProcessor = $invalidSkuProcessor;
         $this->productRepository = $productRepository;
+        $this->allowedProductTypes = $allowedProductTypes;
         $this->catalogData = $catalogData ?? ObjectManager::getInstance()
                 ->get(CatalogData::class);
-        $this->allowedProductTypes = $allowedProductTypes;
     }
 
     /**
@@ -368,7 +368,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
      * @param Result $validationResult
      * @return void
      */
-    private function checkWebsite(TierPriceInterface $price, $key, Result $validationResult)
+    private function checkWebsite(TierPriceInterface $price, $key, Result $validationResult): void
     {
         try {
             if ($this->catalogData->isPriceGlobal() &&
