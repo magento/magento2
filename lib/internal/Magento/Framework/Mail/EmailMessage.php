@@ -307,18 +307,22 @@ class EmailMessage extends Message implements EmailMessageInterface
      */
     private function sanitiseName(?string $name): ?string
     {
-        return trim(str_replace(
-            [
-                ',',
-                ';',
-                '<',
-                '>',
-                '&lt',
-                '&gt'
-            ],
-            '',
-            $name
-        ));
+        if (isset($name)) {
+            return trim(str_replace(
+                [
+                    ',',
+                    ';',
+                    '<',
+                    '>',
+                    '&lt',
+                    '&gt'
+                ],
+                '',
+                $name
+            ));
+        }
+
+        return $name;
     }
 
     /**
