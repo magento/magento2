@@ -27,7 +27,7 @@ define([
             modules: {
                 selections: '${ $.selectProvider }'
             },
-            actionClicked: false,
+            actionClicked: false
         },
 
         /**
@@ -61,7 +61,7 @@ define([
                 return this;
             }
 
-            action   = this.getAction(actionIndex);
+            action = this.getAction(actionIndex);
             
             if (action.actionClicked && !action.timeoutExpired) {
                 return this;
@@ -74,7 +74,7 @@ define([
 
             this.actions().forEach(function (item) {
                 item.actionClicked = (item.type === actionIndex);
-            })
+            });
 
             action.timeoutExpired = false;
             setTimeout(function () {
@@ -141,7 +141,7 @@ define([
          */
         _getCallback: function (action, selections) {
             var callback = action.callback,
-                args     = [action, selections];
+                args = [action, selections];
 
             if (utils.isObject(callback)) {
                 args.unshift(callback.target);
