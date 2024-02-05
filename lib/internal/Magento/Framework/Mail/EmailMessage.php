@@ -9,7 +9,6 @@ namespace Magento\Framework\Mail;
 
 use Laminas\Mail\Exception\InvalidArgumentException as LaminasInvalidArgumentException;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\Exception\InvalidArgumentException;
 use Laminas\Mail\Address as LaminasAddress;
 use Laminas\Mail\AddressList;
@@ -25,9 +24,16 @@ use Laminas\Validator\EmailAddress as LaminasEmailAddress;
 class EmailMessage extends Message implements EmailMessageInterface
 {
     /**
-     * @var LaminasEmailAddress
+     * @var array.
      */
-    private $emailValidator;
+    private const ARRAY_RCE_CHARACTERS = [
+        ',',
+        ';',
+        '<',
+        '>',
+        '&lt',
+        '&gt'
+    ];
 
     /**
      * @var MimeMessageInterfaceFactory
@@ -45,7 +51,11 @@ class EmailMessage extends Message implements EmailMessageInterface
     private $logger;
 
     /**
-     * @param LaminasEmailAddress $emailValidator
+     * @var LaminasEmailAddress|null
+     */
+    private $emailValidator;
+
+    /**
      * @param MimeMessageInterface $body
      * @param array $to
      * @param MimeMessageInterfaceFactory $mimeMessageFactory
@@ -58,14 +68,13 @@ class EmailMessage extends Message implements EmailMessageInterface
      * @param string|null $subject
      * @param string|null $encoding
      * @param LoggerInterface|null $logger
+     * @param LaminasEmailAddress|null $emailValidator
      * @throws InvalidArgumentException
-     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __construct(
-        LaminasEmailAddress $emailValidator,
         MimeMessageInterface $body,
         array $to,
         MimeMessageInterfaceFactory $mimeMessageFactory,
@@ -77,12 +86,13 @@ class EmailMessage extends Message implements EmailMessageInterface
         ?Address $sender = null,
         ?string $subject = '',
         ?string $encoding = 'utf-8',
-        ?LoggerInterface $logger = null
+        ?LoggerInterface $logger = null,
+        ?LaminasEmailAddress $emailValidator = null
     ) {
         parent::__construct($encoding);
-        $this->emailValidator = $emailValidator;
         $mimeMessage = new LaminasMimeMessage();
         $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
+        $this->emailValidator = $emailValidator ?: ObjectManager::getInstance()->get(LaminasEmailAddress::class);
         $mimeMessage->setParts($body->getParts());
         $this->zendMessage->setBody($mimeMessage);
         if ($subject) {
@@ -95,7 +105,7 @@ class EmailMessage extends Message implements EmailMessageInterface
             );
         }
         if (count($to) < 1) {
-            throw new InvalidArgumentException('Email message must have at list one addressee');
+            throw new InvalidArgumentException('Email message must have at least one addressee');
         }
         if ($to) {
             $this->zendMessage->setTo($this->convertAddressArrayToAddressList($to));
@@ -135,7 +145,6 @@ class EmailMessage extends Message implements EmailMessageInterface
     /**
      * @inheritDoc
      *
-     * @throws LocalizedException
      */
     public function getFrom(): ?array
     {
@@ -145,7 +154,6 @@ class EmailMessage extends Message implements EmailMessageInterface
     /**
      * @inheritDoc
      *
-     * @throws LocalizedException
      */
     public function getTo(): array
     {
@@ -155,7 +163,6 @@ class EmailMessage extends Message implements EmailMessageInterface
     /**
      * @inheritDoc
      *
-     * @throws LocalizedException
      */
     public function getCc(): ?array
     {
@@ -165,7 +172,6 @@ class EmailMessage extends Message implements EmailMessageInterface
     /**
      * @inheritDoc
      *
-     * @throws LocalizedException
      */
     public function getBcc(): ?array
     {
@@ -175,7 +181,6 @@ class EmailMessage extends Message implements EmailMessageInterface
     /**
      * @inheritDoc
      *
-     * @throws LocalizedException
      */
     public function getReplyTo(): ?array
     {
@@ -185,7 +190,6 @@ class EmailMessage extends Message implements EmailMessageInterface
     /**
      * @inheritDoc
      *
-     * @throws LocalizedException
      */
     public function getSender(): ?Address
     {
@@ -232,7 +236,6 @@ class EmailMessage extends Message implements EmailMessageInterface
      *
      * @param AddressList $addressList
      * @return Address[]
-     * @throws LocalizedException
      */
     private function convertAddressListToAddressArray(AddressList $addressList): array
     {
@@ -255,7 +258,7 @@ class EmailMessage extends Message implements EmailMessageInterface
      *
      * @param Address[] $arrayList
      * @return AddressList
-     * @throws LaminasInvalidArgumentException|LocalizedException
+     * @throws LaminasInvalidArgumentException
      */
     private function convertAddressArrayToAddressList(array $arrayList): AddressList
     {
@@ -283,16 +286,20 @@ class EmailMessage extends Message implements EmailMessageInterface
      *
      * @param ?string $email
      * @return ?string
-     * @throws LocalizedException
      */
     private function sanitiseEmail(?string $email): ?string
     {
         if (isset($email) && str_contains($email, '=??')) {
             $decodedValue = iconv_mime_decode($email, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
-            if ($this->isEncoded(trim($email), trim($decodedValue)) &&
+            if (
+                $this->isEncoded(trim($email), trim($decodedValue)) &&
                 !$this->emailValidator->isValid((trim($decodedValue)))
             ) {
-                throw new LocalizedException(__('Sender email must be a valid email address'));
+                $email = trim(str_replace(
+                    '/',
+                    '',
+                    $decodedValue
+                ));
             }
         }
 
@@ -309,14 +316,7 @@ class EmailMessage extends Message implements EmailMessageInterface
     {
         if (isset($name)) {
             return trim(str_replace(
-                [
-                    ',',
-                    ';',
-                    '<',
-                    '>',
-                    '&lt',
-                    '&gt'
-                ],
+                self::ARRAY_RCE_CHARACTERS,
                 '',
                 $name
             ));
