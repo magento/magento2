@@ -223,7 +223,13 @@ type ApplyCouponToCartOutput @doc(description: "Contains details about the cart 
 }
 
 type PlaceOrderOutput @doc(description: "Contains the results of the request to place an order.") {
-    order: Order! @doc(description: "The ID of the order.")
+    order: Order @doc(description: "The ID of the order.")
+    errors: [PlaceOrderError!]! @doc(description:"An array of place order errors.")
+}
+
+type PlaceOrderError @doc(description:"An error encountered while placing an order."){
+    message: String! @doc(description: "A localized error message.")
+    code: PlaceOrderErrorCodes! @doc(description: "An error code that is specific to place order.")
 }
 
 type Cart @doc(description: "Contains the contents and other details about a guest or customer cart.") {
@@ -454,6 +460,13 @@ enum CartUserInputErrorType {
     PRODUCT_NOT_FOUND
     NOT_SALABLE
     INSUFFICIENT_STOCK
+    UNDEFINED
+}
+enum PlaceOrderErrorCodes {
+    CART_NOT_FOUND
+    CART_NOT_ACTIVE
+    GUEST_EMAIL_MISSING
+    UNABLE_TO_PLACE_ORDER
     UNDEFINED
 }
 
