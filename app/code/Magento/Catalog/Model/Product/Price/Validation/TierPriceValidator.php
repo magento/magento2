@@ -112,7 +112,6 @@ class TierPriceValidator implements ResetAfterRequestInterface
      * @param ProductRepositoryInterface $productRepository
      * @param array $allowedProductTypes [optional]
      * @param CatalogData|null $catalogData
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ProductIdLocatorInterface $productIdLocator,
@@ -135,8 +134,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
         $this->invalidSkuProcessor = $invalidSkuProcessor;
         $this->productRepository = $productRepository;
         $this->allowedProductTypes = $allowedProductTypes;
-        $this->catalogData = $catalogData ?? ObjectManager::getInstance()
-                ->get(CatalogData::class);
+        $this->catalogData = $catalogData ?? ObjectManager::getInstance()->get(CatalogData::class);
     }
 
     /**
