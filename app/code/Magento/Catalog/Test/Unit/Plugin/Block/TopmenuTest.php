@@ -1,14 +1,14 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Plugin\Block;
 
-use Magento\Catalog\Model\Layer;
-use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\MenuCategoryData;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory;
@@ -40,16 +40,6 @@ class TopmenuTest extends TestCase
      * @var MockObject|Store
      */
     protected $storeMock;
-
-    /**
-     * @var MockObject|Resolver
-     */
-    protected $layerResolverMock;
-
-    /**
-     * @var MockObject|Layer
-     */
-    protected $catalogLayerMock;
 
     /**
      * @var MockObject|CollectionFactory
@@ -84,9 +74,7 @@ class TopmenuTest extends TestCase
     protected function setUp(): void
     {
         $this->childrenCategoryMock = $this->_getCleanMock(\Magento\Catalog\Model\Category::class);
-        $this->catalogLayerMock = $this->_getCleanMock(Layer::class);
         $this->categoryMock = $this->_getCleanMock(\Magento\Catalog\Model\Category::class);
-        $this->layerResolverMock = $this->_getCleanMock(Resolver::class);
         $this->menuCategoryData = $this->createMock(MenuCategoryData::class);
         $this->storeMock = $this->_getCleanMock(Store::class);
         $this->storeManagerMock = $this->_getCleanMock(StoreManagerInterface::class);
@@ -101,10 +89,9 @@ class TopmenuTest extends TestCase
         $this->block = (new ObjectManager($this))->getObject(
             Topmenu::class,
             [
-                'categoryCollectionFactory' => $this->categoryCollectionFactoryMock,
+                'collectionFactory' => $this->categoryCollectionFactoryMock,
                 'menuCategoryData' => $this->menuCategoryData,
                 'storeManager' => $this->storeManagerMock,
-                'layerResolver' => $this->layerResolverMock,
             ]
         );
     }
@@ -113,6 +100,7 @@ class TopmenuTest extends TestCase
      * Get clean mock by class name
      *
      * @param string $className
+     *
      * @return MockObject
      */
     protected function _getCleanMock($className)
@@ -122,7 +110,6 @@ class TopmenuTest extends TestCase
 
     /**
      * Test beforeGetHtml
-     *
      */
     public function testBeforeGetHtml()
     {
@@ -167,32 +154,5 @@ class TopmenuTest extends TestCase
         $blockMock->expects($this->once())->method('getMenu')->willReturn($parentCategoryNodeMock);
 
         $this->block->beforeGetHtml($blockMock);
-    }
-
-    public function testAfterGetCacheKeyInfo()
-    {
-        $this->catalogLayerMock->expects($this->once())
-            ->method('getCurrentCategory')
-            ->willReturn($this->childrenCategoryMock);
-        $this->layerResolverMock->expects($this->once())->method('get')
-            ->willReturn($this->catalogLayerMock);
-
-        $blockMock = $this->createMock(\Magento\Theme\Block\Html\Topmenu::class);
-        $result = [];
-
-        $this->assertNotEquals($result, $this->block->afterGetCacheKeyInfo($blockMock, $result));
-    }
-
-    public function testAfterGetCacheKeyInfoNoCategory()
-    {
-        $this->catalogLayerMock->expects($this->once())
-            ->method('getCurrentCategory');
-        $this->layerResolverMock->expects($this->once())->method('get')
-            ->willReturn($this->catalogLayerMock);
-
-        $blockMock = $this->createMock(\Magento\Theme\Block\Html\Topmenu::class);
-        $result = [];
-
-        $this->assertEquals($result, $this->block->afterGetCacheKeyInfo($blockMock, $result));
     }
 }

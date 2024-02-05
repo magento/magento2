@@ -9,6 +9,8 @@ namespace Magento\Setup\Test\Unit\Fixtures;
 
 use Magento\Framework\ObjectManager\ObjectManager;
 use Magento\SalesRule\Model\Coupon;
+use Magento\SalesRule\Model\ResourceModel\Coupon\Collection as CouponCollection;
+use Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory as CouponCollectionFactory;
 use Magento\SalesRule\Model\Rule;
 use Magento\Setup\Fixtures\CartPriceRulesFixture;
 use Magento\Setup\Fixtures\CouponCodesFixture;
@@ -44,6 +46,11 @@ class CouponCodesFixtureTest extends TestCase
     private $couponCodeFactoryMock;
 
     /**
+     * @var CouponCollectionFactory|MockObject
+     */
+    private $couponCollectionFactoryMock;
+
+    /**
      * setUp
      */
     protected function setUp(): void
@@ -54,10 +61,12 @@ class CouponCodesFixtureTest extends TestCase
             \Magento\SalesRule\Model\CouponFactory::class,
             ['create']
         );
+        $this->couponCollectionFactoryMock = $this->createMock(CouponCollectionFactory::class);
         $this->model = new CouponCodesFixture(
             $this->fixtureModelMock,
             $this->ruleFactoryMock,
-            $this->couponCodeFactoryMock
+            $this->couponCodeFactoryMock,
+            $this->couponCollectionFactoryMock
         );
     }
 
@@ -66,6 +75,14 @@ class CouponCodesFixtureTest extends TestCase
      */
     public function testExecute()
     {
+        $couponCollectionMock = $this->createMock(CouponCollection::class);
+        $this->couponCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($couponCollectionMock);
+        $couponCollectionMock->expects($this->once())
+            ->method('getSize')
+            ->willReturn(0);
+
         $websiteMock = $this->createMock(Website::class);
         $websiteMock->expects($this->once())
             ->method('getId')
@@ -127,6 +144,14 @@ class CouponCodesFixtureTest extends TestCase
      */
     public function testNoFixtureConfigValue()
     {
+        $couponCollectionMock = $this->createMock(CouponCollection::class);
+        $this->couponCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($couponCollectionMock);
+        $couponCollectionMock->expects($this->once())
+            ->method('getSize')
+            ->willReturn(0);
+
         $ruleMock = $this->createMock(Rule::class);
         $ruleMock->expects($this->never())->method('save');
 
@@ -144,6 +169,28 @@ class CouponCodesFixtureTest extends TestCase
             ->expects($this->once())
             ->method('getValue')
             ->willReturn(false);
+
+        $this->model->execute();
+    }
+
+    public function testFixtureAlreadyCreated()
+    {
+        $couponCollectionMock = $this->createMock(CouponCollection::class);
+        $this->couponCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($couponCollectionMock);
+        $couponCollectionMock->expects($this->once())
+            ->method('getSize')
+            ->willReturn(1);
+
+        $this->fixtureModelMock
+            ->expects($this->once())
+            ->method('getValue')
+            ->willReturn(1);
+
+        $this->fixtureModelMock->expects($this->never())->method('getObjectManager');
+        $this->ruleFactoryMock->expects($this->never())->method('create');
+        $this->couponCodeFactoryMock->expects($this->never())->method('create');
 
         $this->model->execute();
     }

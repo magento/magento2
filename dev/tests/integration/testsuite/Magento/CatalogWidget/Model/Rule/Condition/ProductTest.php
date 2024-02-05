@@ -102,11 +102,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->conditionProduct->addToCollection($collection);
         $collectedAttributes = $this->conditionProduct->getRule()->getCollectedAttributes();
         $this->assertArrayHasKey('visibility', $collectedAttributes);
-        $query = (string)$collection->getSelect();
-        $this->assertStringNotContainsString('visibility', $query);
-        $this->assertEquals('', $this->conditionProduct->getMappedSqlField());
+        $this->assertEquals(0, $collection->getSize());
+        $this->assertStringContainsString('visibility', (string)$this->conditionProduct->getMappedSqlField());
         $this->assertFalse($this->conditionProduct->hasValueParsed());
-        $this->assertFalse($this->conditionProduct->hasValue());
+        $this->assertTrue($this->conditionProduct->hasValue());
+        $this->assertEquals('4', $this->conditionProduct->getValue());
     }
 
     /**
@@ -121,9 +121,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->conditionProduct->addToCollection($collection);
         $collectedAttributes = $this->conditionProduct->getRule()->getCollectedAttributes();
         $this->assertArrayHasKey('visibility', $collectedAttributes);
-        $query = (string)$collection->getSelect();
-        $this->assertStringNotContainsString('visibility', $query);
-        $this->assertEquals('e.entity_id', $this->conditionProduct->getMappedSqlField());
+        $this->assertEquals(1, $collection->getSize());
+        $this->assertStringContainsString('visibility', (string)$this->conditionProduct->getMappedSqlField());
+        $this->assertFalse($this->conditionProduct->hasValueParsed());
+        $this->assertTrue($this->conditionProduct->hasValue());
+        $this->assertEquals('4', $this->conditionProduct->getValue());
     }
 
     /**

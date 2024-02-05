@@ -72,6 +72,11 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query, [], '', $headerMap);
         $this->assertEquals($customerEmail, $response['changeCustomerPassword']['email']);
 
+        $this->assertEmpty(
+            $response['changeCustomerPassword']['custom_attributes'],
+            'custom_attributes should not contain any static values'
+        );
+
         try {
             // registry contains the old password hash so needs to be reset
             $this->customerRegistry->removeByEmail($customerEmail);
@@ -216,6 +221,18 @@ mutation {
     email
     firstname
     lastname
+    custom_attributes {
+        code
+        ... on AttributeValue {
+          value
+        }
+        ... on AttributeSelectedOptions {
+          selected_options {
+            value
+            label
+          }
+        }
+      }
   }
 }
 QUERY;

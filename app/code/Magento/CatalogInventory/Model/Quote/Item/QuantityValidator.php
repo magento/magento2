@@ -27,8 +27,8 @@ use Magento\Quote\Model\Quote\Item;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @deprecated 100.3.0 Replaced with Multi Source Inventory
- * @link https://devdocs.magento.com/guides/v2.4/inventory/index.html
- * @link https://devdocs.magento.com/guides/v2.4/inventory/inventory-api-reference.html
+ * @link https://developer.adobe.com/commerce/webapi/rest/inventory/index.html
+ * @link https://developer.adobe.com/commerce/webapi/rest/inventory/inventory-api-reference.html
  */
 class QuantityValidator
 {

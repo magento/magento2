@@ -6,9 +6,11 @@
 
 namespace Magento\CatalogGraphQl\Model\Config;
 
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as AttributesCollection;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributesCollectionFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\GraphQl\Schema\Type\Entity\MapperInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as AttributesCollection;
 
 /**
  * Adds custom/eav attribute to catalog products sorting in the GraphQL config.
@@ -31,20 +33,24 @@ class SortAttributeReader implements ReaderInterface
     private $mapper;
 
     /**
-     * @var AttributesCollection
+     * @var AttributesCollectionFactory
      */
-    private $attributesCollection;
+    private $attributesCollectionFactory;
 
     /**
      * @param MapperInterface $mapper
-     * @param AttributesCollection $attributesCollection
+     * @param AttributesCollection $attributesCollection @deprecated @see $attributesCollectionFactory
+     * @param AttributesCollectionFactory|null $attributesCollectionFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         MapperInterface $mapper,
-        AttributesCollection $attributesCollection
+        AttributesCollection $attributesCollection,
+        ?AttributesCollectionFactory $attributesCollectionFactory = null
     ) {
         $this->mapper = $mapper;
-        $this->attributesCollection = $attributesCollection;
+        $this->attributesCollectionFactory = $attributesCollectionFactory
+            ?? ObjectManager::getInstance()->get(AttributesCollectionFactory::class);
     }
 
     /**
@@ -58,7 +64,8 @@ class SortAttributeReader implements ReaderInterface
     {
         $map = $this->mapper->getMappedTypes(self::ENTITY_TYPE);
         $config =[];
-        $attributes = $this->attributesCollection->addSearchableAttributeFilter()->addFilter('used_for_sort_by', 1);
+        $attributes = $this->attributesCollectionFactory->create()
+            ->addSearchableAttributeFilter()->addFilter('used_for_sort_by', 1);
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
         foreach ($attributes as $attribute) {
             $attributeCode = $attribute->getAttributeCode();
@@ -73,7 +80,6 @@ class SortAttributeReader implements ReaderInterface
                 ];
             }
         }
-
         return $config;
     }
 }

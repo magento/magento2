@@ -11,6 +11,7 @@ return [
     'Magento\LiveSearch' => [
         'Magento\Elasticsearch',
         'Magento\Elasticsearch7',
+        'Magento\Elasticsearch8',
         'Magento\OpenSearch'
     ],
 ];

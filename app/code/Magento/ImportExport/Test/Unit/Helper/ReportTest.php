@@ -27,6 +27,7 @@ use Magento\ImportExport\Model\History;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Config;
 use Magento\ImportExport\Model\Import\Entity\Factory;
+use Magento\ImportExport\Model\LocaleEmulatorInterface;
 use Magento\ImportExport\Model\Source\Upload;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -153,7 +154,7 @@ class ReportTest extends TestCase
      */
     public function testGetExecutionTime()
     {
-        $this->markTestIncomplete('Invalid mocks used for DateTime object. Investigate later.');
+        $this->markTestSkipped('Invalid mocks used for DateTime object. Investigate later.');
 
         $startDate = '2000-01-01 01:01:01';
         $endDate = '2000-01-01 02:03:04';
@@ -204,6 +205,9 @@ class ReportTest extends TestCase
         $importHistoryModel = $this->createMock(History::class);
         $localeDate = $this->createMock(\Magento\Framework\Stdlib\DateTime\DateTime::class);
         $upload = $this->createMock(Upload::class);
+        $localeEmulator = $this->getMockForAbstractClass(LocaleEmulatorInterface::class);
+        $localeEmulator->method('emulate')
+            ->willReturnCallback(fn (callable $callback) => $callback());
         $import = new Import(
             $logger,
             $filesystem,
@@ -222,7 +226,8 @@ class ReportTest extends TestCase
             [],
             null,
             null,
-            $upload
+            $upload,
+            $localeEmulator
         );
         $import->setData('entity', 'catalog_product');
         $message = $this->report->getSummaryStats($import);

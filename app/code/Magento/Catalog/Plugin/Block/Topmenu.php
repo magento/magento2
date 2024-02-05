@@ -1,64 +1,37 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Catalog\Plugin\Block;
 
 use Magento\Catalog\Model\Category;
-use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\MenuCategoryData;
 use Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Tree\Node;
 use Magento\Store\Model\StoreManagerInterface;
-use function array_merge;
 
 /**
- * Plugin for top menu block
+ * Plugin that enhances the top menu block by building and managing the category tree
+ * for menu rendering in a storefront.
  */
 class Topmenu
 {
     /**
-     * @var StateDependentCollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
-     * @var MenuCategoryData
-     */
-    private $menuCategoryData;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var Resolver
-     */
-    private $layerResolver;
-
-    /**
-     * Initialize dependencies.
-     *
-     * @param StateDependentCollectionFactory $categoryCollectionFactory
+     * @param StateDependentCollectionFactory $collectionFactory
      * @param MenuCategoryData $menuCategoryData
      * @param StoreManagerInterface $storeManager
-     * @param Resolver $layerResolver
      */
     public function __construct(
-        StateDependentCollectionFactory $categoryCollectionFactory,
-        MenuCategoryData $menuCategoryData,
-        StoreManagerInterface $storeManager,
-        Resolver $layerResolver
+        private readonly StateDependentCollectionFactory $collectionFactory,
+        private readonly MenuCategoryData $menuCategoryData,
+        private readonly StoreManagerInterface $storeManager,
     ) {
-        $this->collectionFactory = $categoryCollectionFactory;
-        $this->menuCategoryData = $menuCategoryData;
-        $this->storeManager = $storeManager;
-        $this->layerResolver = $layerResolver;
     }
 
     /**
@@ -68,7 +41,9 @@ class Topmenu
      * @param string $outermostClass
      * @param string $childrenWrapClass
      * @param int $limit
+     *
      * @return void
+     *
      * @SuppressWarnings("PMD.UnusedFormalParameter")
      */
     public function beforeGetHtml(
@@ -115,6 +90,7 @@ class Topmenu
      * Add list of associated identities to the top menu block for caching purposes.
      *
      * @param \Magento\Theme\Block\Html\Topmenu $subject
+     *
      * @return void
      */
     public function beforeGetIdentities(\Magento\Theme\Block\Html\Topmenu $subject): void
@@ -129,24 +105,9 @@ class Topmenu
             if (!isset($mapping[$category->getParentId()])) {
                 continue;
             }
+
             $subject->addIdentity(Category::CACHE_TAG . '_' . $category->getId());
         }
-    }
-
-    /**
-     * Get current Category from catalog layer
-     *
-     * @return Category|null
-     */
-    private function getCurrentCategory(): ?Category
-    {
-        $catalogLayer = $this->layerResolver->get();
-
-        if (!$catalogLayer) {
-            return null;
-        }
-
-        return $catalogLayer->getCurrentCategory();
     }
 
     /**
@@ -154,6 +115,7 @@ class Topmenu
      *
      * @param Category $category
      * @param bool $isParentActive
+     *
      * @return array
      */
     private function getCategoryAsArray(Category $category, bool $isParentActive): array
@@ -171,7 +133,9 @@ class Topmenu
      *
      * @param int $storeId
      * @param int $rootId
+     *
      * @return \Magento\Catalog\Model\ResourceModel\Category\Collection
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function getCategoryTree(int $storeId, int $rootId)
@@ -191,23 +155,5 @@ class Topmenu
         $collection->addOrder('entity_id', Collection::SORT_ORDER_ASC);
 
         return $collection;
-    }
-
-    /**
-     * Add active
-     *
-     * @param \Magento\Theme\Block\Html\Topmenu $subject
-     * @param string[] $result
-     * @return string[]
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function afterGetCacheKeyInfo(\Magento\Theme\Block\Html\Topmenu $subject, array $result)
-    {
-        $activeCategory = $this->getCurrentCategory();
-        if ($activeCategory) {
-            $result[] = Category::CACHE_TAG . '_' . $activeCategory->getId();
-        }
-
-        return $result;
     }
 }
