@@ -279,7 +279,7 @@ class EmailMessage extends Message implements EmailMessageInterface
         if (!empty($email) && str_contains($email, '=?')) {
             $decodedValue = trim(iconv_mime_decode($email, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8'));
             if ($this->isEncoded(trim($email), $decodedValue)) {
-                $email = strtolower($decodedValue);
+                $email = strtolower(str_replace('=22', '', $email));
             }
         }
 
