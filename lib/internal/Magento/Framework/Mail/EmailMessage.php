@@ -276,9 +276,9 @@ class EmailMessage extends Message implements EmailMessageInterface
      */
     private function sanitiseEmail(?string $email): ?string
     {
-        if (!empty($email) && str_contains($email, '=?')) {
-            $decodedValue = trim(iconv_mime_decode($email, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8'));
-            if ($this->isEncoded(trim($email), $decodedValue)) {
+        if (!empty($email) && str_starts_with($email, '=?')) {
+            $decodedValue = iconv_mime_decode($email, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
+            if ($this->isEncoded($email, $decodedValue)) {
                 $email = strtolower(str_replace('=22', '', $email));
             }
         }
