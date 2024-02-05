@@ -124,7 +124,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
         InvalidSkuProcessor $invalidSkuProcessor,
         ProductRepositoryInterface $productRepository,
         array $allowedProductTypes = [],
-        ?catalogData $catalogData = null
+        ?CatalogData $catalogData = null
     ) {
         $this->productIdLocator = $productIdLocator;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
