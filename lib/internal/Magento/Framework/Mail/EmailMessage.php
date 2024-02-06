@@ -9,6 +9,7 @@ namespace Magento\Framework\Mail;
 
 use Laminas\Mail\Exception\InvalidArgumentException as LaminasInvalidArgumentException;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\Exception\InvalidArgumentException;
 use Laminas\Mail\Address as LaminasAddress;
 use Laminas\Mail\AddressList;
@@ -51,6 +52,7 @@ class EmailMessage extends Message implements EmailMessageInterface
      * @param string|null $encoding
      * @param LoggerInterface|null $logger
      * @throws InvalidArgumentException
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -124,6 +126,7 @@ class EmailMessage extends Message implements EmailMessageInterface
     /**
      * @inheritDoc
      *
+     * @throws LocalizedException
      */
     public function getFrom(): ?array
     {
@@ -133,6 +136,7 @@ class EmailMessage extends Message implements EmailMessageInterface
     /**
      * @inheritDoc
      *
+     * @throws LocalizedException
      */
     public function getTo(): array
     {
@@ -142,6 +146,7 @@ class EmailMessage extends Message implements EmailMessageInterface
     /**
      * @inheritDoc
      *
+     * @throws LocalizedException
      */
     public function getCc(): ?array
     {
@@ -151,6 +156,7 @@ class EmailMessage extends Message implements EmailMessageInterface
     /**
      * @inheritDoc
      *
+     * @throws LocalizedException
      */
     public function getBcc(): ?array
     {
@@ -160,6 +166,7 @@ class EmailMessage extends Message implements EmailMessageInterface
     /**
      * @inheritDoc
      *
+     * @throws LocalizedException
      */
     public function getReplyTo(): ?array
     {
@@ -215,6 +222,7 @@ class EmailMessage extends Message implements EmailMessageInterface
      *
      * @param AddressList $addressList
      * @return Address[]
+     * @throws LocalizedException
      */
     private function convertAddressListToAddressArray(AddressList $addressList): array
     {
@@ -237,7 +245,7 @@ class EmailMessage extends Message implements EmailMessageInterface
      *
      * @param Address[] $arrayList
      * @return AddressList
-     * @throws LaminasInvalidArgumentException
+     * @throws LaminasInvalidArgumentException|LocalizedException
      */
     private function convertAddressArrayToAddressList(array $arrayList): AddressList
     {
@@ -265,33 +273,23 @@ class EmailMessage extends Message implements EmailMessageInterface
      *
      * @param ?string $email
      * @return ?string
+     * @throws LocalizedException
      */
     private function sanitiseEmail(?string $email): ?string
     {
-        if (!empty($email) && str_starts_with($email, '=?')) {
-            return null;
-            //$decodedValue = iconv_mime_decode($email, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
-            // To avoid special characters inside email
-//            if ($this->validateSpecialCharacters($email)) {
-//                $email = null;
-//            }
+        if (!empty($email)) {
+            $decodedValue = iconv_mime_decode($email, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
+            $localPart = explode('@', $decodedValue);
+            if (!empty($localPart[0]) && str_starts_with($email, '=?') && str_contains($localPart[0], ' ')) {
+                throw new LocalizedException(__('Invalid email format'));
+            }
+            if ($this->validateSpecialCharacters($email)) {
+                throw new LocalizedException(__('Invalid email format'));
+            }
         }
 
         return $email;
     }
-
-//    /**
-//     * Check email is encoded
-//     *
-//     * @param string $originalEmail
-//     * @param string $decodedEmail
-//     * @return bool
-//     */
-//    private function isEncoded(string $originalEmail, string $decodedEmail): bool
-//    {
-//        return str_starts_with($originalEmail, '=?')
-//            && strlen($originalEmail) !== strlen($decodedEmail);
-//    }
 
     /**
      * Check email contains invalid characters
@@ -301,6 +299,7 @@ class EmailMessage extends Message implements EmailMessageInterface
      */
     private function validateSpecialCharacters(string $email): int
     {
-        return preg_match('/^=?.*[#!&%~]+.*$/', $email);
+        $localPart = explode('@', $email);
+        return !empty($localPart[0]) ? preg_match('/^.*[#!&%~$+ ]+.*$/', $localPart[0]) : 0;
     }
 }
