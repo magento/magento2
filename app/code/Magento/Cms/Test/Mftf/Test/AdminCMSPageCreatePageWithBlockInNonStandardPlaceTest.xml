@@ -15,7 +15,7 @@
             <description value="Admin should be able to create a CMS Page with standard block in custom place"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-10974"/>
-            <useCaseId value="ACP2E-2639"/>
+            <useCaseId value="ACP2E-2693"/>
             <group value="backend"/>
             <group value="Cms"/>
             <group value="WYSIWYGDisabled"/>
