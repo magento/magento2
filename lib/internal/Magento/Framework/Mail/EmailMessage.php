@@ -280,7 +280,7 @@ class EmailMessage extends Message implements EmailMessageInterface
         if (!empty($email) && str_starts_with($email, '=?')) {
             $decodedValue = iconv_mime_decode($email, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
             $localPart = explode('@', $decodedValue);
-            if (!empty($localPart[0]) && str_contains($localPart[0], ' ')) {
+            if (isset($localPart[0]) && str_contains($localPart[0], ' ')) {
                 throw new LocalizedException(__('Invalid email format'));
             }
         }
