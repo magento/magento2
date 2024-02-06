@@ -9,7 +9,6 @@ namespace Magento\Framework\Mail;
 
 use Laminas\Mail\Exception\InvalidArgumentException as LaminasInvalidArgumentException;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\Exception\InvalidArgumentException;
 use Laminas\Mail\Address as LaminasAddress;
 use Laminas\Mail\AddressList;
@@ -52,7 +51,6 @@ class EmailMessage extends Message implements EmailMessageInterface
      * @param string|null $encoding
      * @param LoggerInterface|null $logger
      * @throws InvalidArgumentException
-     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -126,7 +124,7 @@ class EmailMessage extends Message implements EmailMessageInterface
     /**
      * @inheritDoc
      *
-     * @throws LocalizedException
+     * @throws InvalidArgumentException
      */
     public function getFrom(): ?array
     {
@@ -136,7 +134,7 @@ class EmailMessage extends Message implements EmailMessageInterface
     /**
      * @inheritDoc
      *
-     * @throws LocalizedException
+     * @throws InvalidArgumentException
      */
     public function getTo(): array
     {
@@ -146,7 +144,7 @@ class EmailMessage extends Message implements EmailMessageInterface
     /**
      * @inheritDoc
      *
-     * @throws LocalizedException
+     * @throws InvalidArgumentException
      */
     public function getCc(): ?array
     {
@@ -156,7 +154,7 @@ class EmailMessage extends Message implements EmailMessageInterface
     /**
      * @inheritDoc
      *
-     * @throws LocalizedException
+     * @throws InvalidArgumentException
      */
     public function getBcc(): ?array
     {
@@ -166,7 +164,7 @@ class EmailMessage extends Message implements EmailMessageInterface
     /**
      * @inheritDoc
      *
-     * @throws LocalizedException
+     * @throws InvalidArgumentException
      */
     public function getReplyTo(): ?array
     {
@@ -222,7 +220,7 @@ class EmailMessage extends Message implements EmailMessageInterface
      *
      * @param AddressList $addressList
      * @return Address[]
-     * @throws LocalizedException
+     * @throws InvalidArgumentException
      */
     private function convertAddressListToAddressArray(AddressList $addressList): array
     {
@@ -245,7 +243,7 @@ class EmailMessage extends Message implements EmailMessageInterface
      *
      * @param Address[] $arrayList
      * @return AddressList
-     * @throws LaminasInvalidArgumentException|LocalizedException
+     * @throws LaminasInvalidArgumentException|InvalidArgumentException
      */
     private function convertAddressArrayToAddressList(array $arrayList): AddressList
     {
@@ -273,15 +271,14 @@ class EmailMessage extends Message implements EmailMessageInterface
      *
      * @param ?string $email
      * @return ?string
-     * @throws LocalizedException
+     * @throws InvalidArgumentException
      */
     private function sanitiseEmail(?string $email): ?string
     {
         if (!empty($email) && str_starts_with($email, '=?')) {
             $decodedValue = iconv_mime_decode($email, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
-            $localPart = explode('@', $decodedValue);
-            if (isset($localPart[0]) && str_contains($localPart[0], ' ')) {
-                throw new LocalizedException(__('Invalid email format'));
+            if (str_contains($decodedValue, ' ')) {
+                throw new InvalidArgumentException('Invalid email format');
             }
         }
 
