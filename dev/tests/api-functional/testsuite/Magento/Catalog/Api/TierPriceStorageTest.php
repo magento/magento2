@@ -345,7 +345,7 @@ class TierPriceStorageTest extends WebapiAbstract
             'extension_attributes' => []
         ];
         $response = $this->_webApiCall($serviceInfo, ['prices' => [$tierPriceWithInvalidWebsiteId]]);
-        if (isset($response) && is_array($response)) {
+        if (is_array($response) && count($response) > 0) {
             $this->assertNotEmpty($response);
             // phpcs:disable Generic.Files.LineLength.TooLong
             $message = 'Invalid attribute Website ID = %websiteId. Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.';
