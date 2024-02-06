@@ -14,11 +14,13 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Catalog\Helper\Data;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Validate Tier Price and check duplication
@@ -90,14 +92,14 @@ class TierPriceValidator implements ResetAfterRequestInterface
     private $productRepository;
 
     /**
-     * @var Data
-     */
-    private $catalogData;
-
-    /**
      * @var array
      */
     private $productsCacheBySku = [];
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
 
     /**
      * TierPriceValidator constructor.
@@ -111,7 +113,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
      * @param InvalidSkuProcessor $invalidSkuProcessor
      * @param ProductRepositoryInterface $productRepository
      * @param array $allowedProductTypes [optional]
-     * @param Data|null $catalogData
+     * @param ScopeConfigInterface|null $scopeConfig
      */
     public function __construct(
         ProductIdLocatorInterface $productIdLocator,
@@ -123,7 +125,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
         InvalidSkuProcessor $invalidSkuProcessor,
         ProductRepositoryInterface $productRepository,
         array $allowedProductTypes = [],
-        ?Data $catalogData = null
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         $this->productIdLocator = $productIdLocator;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -134,7 +136,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
         $this->invalidSkuProcessor = $invalidSkuProcessor;
         $this->productRepository = $productRepository;
         $this->allowedProductTypes = $allowedProductTypes;
-        $this->catalogData = $catalogData ?: ObjectManager::getInstance()->get(Data::class);
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -369,7 +371,12 @@ class TierPriceValidator implements ResetAfterRequestInterface
     private function checkWebsite(TierPriceInterface $price, $key, Result $validationResult): void
     {
         try {
-            if ($this->catalogData->isPriceGlobal() &&
+            $this->websiteRepository->getById($price->getWebsiteId());
+            $isGlobalConfig = (int) $this->scopeConfig->getValue(
+                Data::XML_PATH_PRICE_SCOPE,
+                ScopeInterface::SCOPE_STORE
+            );
+            if ($isGlobalConfig === Data::PRICE_SCOPE_GLOBAL &&
                 isset($this->productsCacheBySku[$price->getSku()]) &&
                 is_array($this->productsCacheBySku[$price->getSku()]->getTierPrices()) &&
                 count($this->productsCacheBySku[$price->getSku()]->getTierPrices()) > 0 &&
@@ -378,7 +385,6 @@ class TierPriceValidator implements ResetAfterRequestInterface
                 // phpstan:ignore
                 throw NoSuchEntityException::singleField('website_id', $price->getWebsiteId());
             }
-            $this->websiteRepository->getById($price->getWebsiteId());
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             $validationResult->addFailedItem(
                 $key,
