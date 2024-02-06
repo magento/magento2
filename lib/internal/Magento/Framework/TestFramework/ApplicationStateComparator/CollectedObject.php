@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\TestFramework\ApplicationStateComparator;
 
+use WeakReference;
+
 /**
  * Immutable recursive data structure that holds copy of properties from collected objects.  Created by Collector.
  */
@@ -26,11 +28,13 @@ class CollectedObject
      * @param string $className
      * @param array $properties
      * @param int $objectId
+     * @param WeakReference|null $weakReference
      */
     public function __construct(
         private readonly string $className,
         private readonly array $properties,
         private readonly int $objectId,
+        private ?WeakReference $weakReference,
     ) {
     }
 
@@ -65,6 +69,16 @@ class CollectedObject
     }
 
     /**
+     * Returns the weak reference to object
+     *
+     * @return WeakReference|null
+     */
+    public function getWeakReference() : ?WeakReference
+    {
+        return $this->weakReference;
+    }
+
+    /**
      * Returns a special object that is used to mark a skipped object.
      *
      * @return CollectedObject
@@ -72,7 +86,7 @@ class CollectedObject
     public static function getSkippedObject() : CollectedObject
     {
         if (!self::$skippedObject) {
-            self::$skippedObject = new CollectedObject('(skipped)', [], 0);
+            self::$skippedObject = new CollectedObject('(collected object - skipped)', [], 0, null);
         }
         return self::$skippedObject;
     }
@@ -85,7 +99,12 @@ class CollectedObject
     public static function getRecursionEndObject() : CollectedObject
     {
         if (!self::$recursionEndObject) {
-            self::$recursionEndObject = new CollectedObject('(end of recursion level)', [], 0);
+            self::$recursionEndObject = new CollectedObject(
+                '(collected object - end of recursion level)',
+                [],
+                0,
+                null,
+            );
         }
         return self::$recursionEndObject;
     }
