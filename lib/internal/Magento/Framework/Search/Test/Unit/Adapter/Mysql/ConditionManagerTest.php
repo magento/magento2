@@ -35,7 +35,7 @@ class ConditionManagerTest extends TestCase
 
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['quote', 'quoteIdentifier'])
+            ->onlyMethods(['quote', 'quoteIdentifier'])
             ->getMockForAbstractClass();
         $this->connectionMock->expects($this->any())
             ->method('quote')
