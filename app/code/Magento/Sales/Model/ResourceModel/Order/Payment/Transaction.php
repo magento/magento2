@@ -147,9 +147,6 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
                 );
             }
             $parentId = (int)$this->_lookupByTxnId($orderId, $paymentId, $parentTxnId, $idFieldName);
-            if ($parentId) {
-                $transaction->setData('parent_id', $parentId);
-            }
         }
 
         // make sure unique key won't cause trouble
