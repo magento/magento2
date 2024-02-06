@@ -51,9 +51,9 @@ class ViewUpdatePlugin
     /**
      * Prevent updating a view if the associated indexer is suspended
      *
-    * @param ViewInterface $subject
-    * @param callable $proceed
-    * @return void
+     * @param ViewInterface $subject
+     * @param callable $proceed
+     * @return void
      */
     public function aroundUpdate(ViewInterface $subject, callable $proceed): void
     {

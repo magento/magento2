@@ -26,7 +26,7 @@ class IndexerSetStatusCommand extends AbstractIndexerManageCommand
     /**#@+
      * Names of input arguments or options
      */
-    const INPUT_KEY_STATUS = 'status';
+    private const INPUT_KEY_STATUS = 'status';
     /**#@- */
 
     /**
@@ -47,7 +47,7 @@ class IndexerSetStatusCommand extends AbstractIndexerManageCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -59,7 +59,7 @@ class IndexerSetStatusCommand extends AbstractIndexerManageCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
