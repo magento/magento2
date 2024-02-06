@@ -23,15 +23,6 @@ use Psr\Log\LoggerInterface;
 class EmailMessage extends Message implements EmailMessageInterface
 {
     /**
-     * @var array.
-     */
-    private const ARRAY_RCE_CHARACTERS = [
-        ',',
-        ';',
-        '=22'
-    ];
-
-    /**
      * @var MimeMessageInterfaceFactory
      */
     private $mimeMessageFactory;
@@ -89,7 +80,7 @@ class EmailMessage extends Message implements EmailMessageInterface
         if ($sender) {
             $this->zendMessage->setSender(
                 $this->sanitiseEmail($sender->getEmail()),
-                $this->sanitiseName($sender->getName())
+                $sender->getName()
             );
         }
         if (count($to) < 1) {
@@ -187,8 +178,8 @@ class EmailMessage extends Message implements EmailMessageInterface
         }
         return $this->addressFactory->create(
             [
-                'email' => $this->sanitiseEmail($laminasSender->getEmail()),
-                'name' => $this->sanitiseName($laminasSender->getName())
+                'email' => $laminasSender->getEmail(),
+                'name' => $laminasSender->getName()
             ]
         );
     }
@@ -233,7 +224,7 @@ class EmailMessage extends Message implements EmailMessageInterface
                 $this->addressFactory->create(
                     [
                         'email' => $this->sanitiseEmail($address->getEmail()),
-                        'name' => $this->sanitiseName($address->getName())
+                        'name' => $address->getName()
                     ]
                 );
         }
@@ -255,7 +246,7 @@ class EmailMessage extends Message implements EmailMessageInterface
             try {
                 $laminasAddressList->add(
                     $this->sanitiseEmail($address->getEmail()),
-                    $this->sanitiseName($address->getName())
+                    $address->getName()
                 );
             } catch (LaminasInvalidArgumentException $e) {
                 $this->logger->warning(
@@ -278,44 +269,38 @@ class EmailMessage extends Message implements EmailMessageInterface
     private function sanitiseEmail(?string $email): ?string
     {
         if (!empty($email) && str_starts_with($email, '=?')) {
-            $decodedValue = iconv_mime_decode($email, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
-            if ($this->isEncoded($email, $decodedValue)) {
-                $email = strtolower(str_replace('=22', '', $email));
-            }
+            return null;
+            //$decodedValue = iconv_mime_decode($email, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
+            // To avoid special characters inside email
+//            if ($this->validateSpecialCharacters($email)) {
+//                $email = null;
+//            }
         }
 
         return $email;
     }
 
-    /**
-     * Sanitise sender name
-     *
-     * @param ?string $name
-     * @return ?string
-     */
-    private function sanitiseName(?string $name): ?string
-    {
-        if (!empty($name)) {
-            return trim(str_replace(
-                self::ARRAY_RCE_CHARACTERS,
-                '',
-                $name
-            ));
-        }
-
-        return $name;
-    }
+//    /**
+//     * Check email is encoded
+//     *
+//     * @param string $originalEmail
+//     * @param string $decodedEmail
+//     * @return bool
+//     */
+//    private function isEncoded(string $originalEmail, string $decodedEmail): bool
+//    {
+//        return str_starts_with($originalEmail, '=?')
+//            && strlen($originalEmail) !== strlen($decodedEmail);
+//    }
 
     /**
-     * Check email is encoded
+     * Check email contains invalid characters
      *
-     * @param string $originalEmail
-     * @param string $decodedEmail
-     * @return bool
+     * @param string $email
+     * @return int
      */
-    private function isEncoded(string $originalEmail, string $decodedEmail): bool
+    private function validateSpecialCharacters(string $email): int
     {
-        return str_starts_with($originalEmail, '=?')
-            && strlen($originalEmail) !== strlen($decodedEmail);
+        return preg_match('/^=?.*[#!&%~]+.*$/', $email);
     }
 }
