@@ -277,29 +277,14 @@ class EmailMessage extends Message implements EmailMessageInterface
      */
     private function sanitiseEmail(?string $email): ?string
     {
-        if (!empty($email)) {
+        if (!empty($email) && str_starts_with($email, '=?')) {
             $decodedValue = iconv_mime_decode($email, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
             $localPart = explode('@', $decodedValue);
-            if (!empty($localPart[0]) && str_starts_with($email, '=?') && str_contains($localPart[0], ' ')) {
-                throw new LocalizedException(__('Invalid email format'));
-            }
-            if ($this->validateSpecialCharacters($email)) {
+            if (!empty($localPart[0]) && str_contains($localPart[0], ' ')) {
                 throw new LocalizedException(__('Invalid email format'));
             }
         }
 
         return $email;
-    }
-
-    /**
-     * Check email contains invalid characters
-     *
-     * @param string $email
-     * @return int
-     */
-    private function validateSpecialCharacters(string $email): int
-    {
-        $localPart = explode('@', $email);
-        return !empty($localPart[0]) ? preg_match('/^.*[#!&%~$+ ]+.*$/', $localPart[0]) : 0;
     }
 }
