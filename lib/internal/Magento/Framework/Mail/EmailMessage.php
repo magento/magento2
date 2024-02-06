@@ -173,7 +173,6 @@ class EmailMessage extends Message implements EmailMessageInterface
 
     /**
      * @inheritDoc
-     *
      */
     public function getSender(): ?Address
     {
