@@ -330,6 +330,11 @@ class ImageResizeTest extends TestCase
         }
     }
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
     public function testResizeFromThemesHiddenImagesMediaStorageDatabase()
     {
         $this->databaseMock->expects($this->any())

@@ -22,12 +22,24 @@ use PHPUnit\Framework\TestCase;
  */
 class FreeShippingTest extends TestCase
 {
+    /**
+     * @var int
+     */
     private static $websiteId = 1;
 
+    /**
+     * @var int
+     */
     private static $customerGroupId = 2;
 
+    /**
+     * @var int
+     */
     private static $couponCode = 3;
 
+    /**
+     * @var int
+     */
     private static $storeId = 1;
 
     /**
