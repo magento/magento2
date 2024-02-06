@@ -24,7 +24,7 @@ class Kernel
     protected $cache;
 
     /**
-     * @var Identifier
+     * @var \Magento\Framework\App\PageCache\IdentifierInterface
      */
     protected $identifier;
 
@@ -64,8 +64,13 @@ class Kernel
     private $state;
 
     /**
+     * @var \Magento\Framework\App\PageCache\IdentifierInterface
+     */
+    private $identifierForSave;
+
+    /**
      * @param Cache $cache
-     * @param Identifier $identifier
+     * @param \Magento\Framework\App\PageCache\IdentifierInterface $identifier
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Framework\App\Http\Context|null $context
      * @param \Magento\Framework\App\Http\ContextFactory|null $contextFactory
@@ -73,17 +78,20 @@ class Kernel
      * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
      * @param AppState|null $state
      * @param \Magento\PageCache\Model\Cache\Type|null $fullPageCache
+     * @param  \Magento\Framework\App\PageCache\IdentifierInterface|null $identifierForSave
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\PageCache\Cache $cache,
-        \Magento\Framework\App\PageCache\Identifier $identifier,
+        \Magento\Framework\App\PageCache\IdentifierInterface $identifier,
         \Magento\Framework\App\Request\Http $request,
         \Magento\Framework\App\Http\Context $context = null,
         \Magento\Framework\App\Http\ContextFactory $contextFactory = null,
         \Magento\Framework\App\Response\HttpFactory $httpFactory = null,
         \Magento\Framework\Serialize\SerializerInterface $serializer = null,
         AppState $state = null,
-        \Magento\PageCache\Model\Cache\Type $fullPageCache = null
+        \Magento\PageCache\Model\Cache\Type $fullPageCache = null,
+        \Magento\Framework\App\PageCache\IdentifierInterface $identifierForSave = null
     ) {
         $this->cache = $cache;
         $this->identifier = $identifier;
@@ -101,6 +109,9 @@ class Kernel
         $this->state = $state ?? ObjectManager::getInstance()->get(AppState::class);
         $this->fullPageCache = $fullPageCache ?? ObjectManager::getInstance()->get(
             \Magento\PageCache\Model\Cache\Type::class
+        );
+        $this->identifierForSave = $identifierForSave ?? ObjectManager::getInstance()->get(
+            \Magento\Framework\App\PageCache\IdentifierInterface::class
         );
     }
 
@@ -158,7 +169,7 @@ class Kernel
 
                 $this->fullPageCache->save(
                     $this->serializer->serialize($this->getPreparedData($response)),
-                    $this->identifier->getValue(),
+                    $this->identifierForSave->getValue(),
                     $tags,
                     $maxAge
                 );

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertUsdAndEurOrderTotalsActionGroup">
+        <annotations>
+            <description>Asserts Totals on the Order View page</description>
+        </annotations>
+        <arguments>
+            <argument name="catalogExclTaxUsdValue" type="string" defaultValue="$99.99"/>
+            <argument name="catalogExclTaxEurValue" type="string" defaultValue="€89.36"/>
+            <argument name="catalogInclTaxUsdValue" type="string" defaultValue="$109.99"/>
+            <argument name="catalogInclTaxEurValue" type="string" defaultValue="€98.30"/>
+            <argument name="usdDiscountValue" type="string" defaultValue="$20.04"/>
+            <argument name="eurDiscountValue" type="string" defaultValue="€17.91"/>
+            <argument name="eurSubtotalInclTaxValue" type="string" defaultValue="€80.39"/>
+            <argument name="usdSubtotalInclTaxValue" type="string" defaultValue="$89.95"/>
+            <argument name="eurSubtotalExclTaxValue" type="string" defaultValue="€73.08"/>
+            <argument name="usdSubtotalExclTaxValue" type="string" defaultValue="$81.77"/>
+        </arguments>
+
+        <waitForElement selector="{{AdminOrderTotalSection.catalogTotalPriceExclTax('catalogExclTaxUsdValue')}}" stepKey="checkCatalogExclTaxUsdValue"/>
+        <waitForElement selector="{{AdminOrderTotalSection.catalogTotalPriceExclTax('catalogExclTaxEurValue')}}" stepKey="checkCatalogExclTaxEurValue"/>
+        <waitForElement selector="{{AdminOrderTotalSection.catalogTotalPriceInclTax('catalogInclTaxUsdValue')}}" stepKey="checkCatalogInclTaxUsdValue"/>
+        <waitForElement selector="{{AdminOrderTotalSection.catalogTotalPriceInclTax('catalogInclTaxEurValue')}}" stepKey="checkCatalogInclTaxEurValue"/>
+        <waitForElement selector="{{AdminOrderTotalSection.negotiatedDiscount('usdDiscountValue')}}" stepKey="checkNegotiatedDiscountUsdValue"/>
+        <waitForElement selector="{{AdminOrderTotalSection.negotiatedDiscount('eurDiscountValue')}}" stepKey="checkNegotiatedDiscountEurValue"/>
+        <waitForElement selector="{{AdminOrderTotalSection.subTotalInclTax('eurSubtotalInclTaxValue')}}" stepKey="checkSubtotalInclEurValue"/>
+        <waitForElement selector="{{AdminOrderTotalSection.subTotalInclTax('usdSubtotalInclTaxValue')}}" stepKey="checkSubtotalInclUsdValue"/>
+        <waitForElement selector="{{AdminOrderTotalSection.subTotalExclTax('eurSubtotalExclTaxValue')}}" stepKey="checkSubtotalExclEurValue"/>
+        <waitForElement selector="{{AdminOrderTotalSection.subTotalExclTax('usdSubtotalExclTaxValue')}}" stepKey="checkSubtotalExclUsdValue"/>
+    </actionGroup>
+</actionGroups>

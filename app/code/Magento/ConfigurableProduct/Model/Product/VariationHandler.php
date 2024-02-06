@@ -45,7 +45,7 @@ class VariationHandler implements ResetAfterRequestInterface
     protected $productFactory;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
+     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]|null
      */
     private $attributes;
 
@@ -309,6 +309,6 @@ class VariationHandler implements ResetAfterRequestInterface
      */
     public function _resetState(): void
     {
-        $this->attributes = [];
+        $this->attributes = null;
     }
 }

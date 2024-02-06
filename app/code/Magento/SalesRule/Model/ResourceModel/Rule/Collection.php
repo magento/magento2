@@ -113,26 +113,29 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
         $entityInfo = $this->_getAssociatedEntityInfo($entityType);
         $ruleIdField = $entityInfo['rule_id_field'];
-        $entityIds = $this->getColumnValues($ruleIdField);
+
+        $items = [];
+        foreach ($this->getItems() as $item) {
+            $items[$item->getData($ruleIdField)] = $item;
+        }
 
         $select = $this->getConnection()->select()->from(
             $this->getTable($entityInfo['associations_table'])
         )->where(
             $ruleIdField . ' IN (?)',
-            $entityIds
+            array_keys($items)
         );
 
         $associatedEntities = $this->getConnection()->fetchAll($select);
 
-        array_map(
-            function ($associatedEntity) use ($entityInfo, $ruleIdField, $objectField) {
-                $item = $this->getItemByColumnValue($ruleIdField, $associatedEntity[$ruleIdField]);
-                $itemAssociatedValue = $item->getData($objectField) ?? [];
-                $itemAssociatedValue[] = $associatedEntity[$entityInfo['entity_id_field']];
-                $item->setData($objectField, $itemAssociatedValue);
-            },
-            $associatedEntities
-        );
+        $dataToAdd = [];
+        foreach ($associatedEntities as $associatedEntity) {
+            //group data
+            $dataToAdd[$associatedEntity[$ruleIdField]][] = $associatedEntity[$entityInfo['entity_id_field']];
+        }
+        foreach ($dataToAdd as $id => $value) {
+            $items[$id]->setData($objectField, $value);
+        }
     }
 
     /**
