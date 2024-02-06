@@ -1,0 +1,12 @@
+FROM maven:3.8.6-openjdk-17 as builder
+RUN git clone ------------ && \
+    cd spring-petclinic && \
+    mvn package
+# jar location /spring-petclinic/target/spring-petclinic-2.7.3.jar
+
+FROM openjdk:17
+LABEL project="petclinic"
+LABEL author="dev team"
+EXPOSE 8080
+COPY --from=builder /spring-petclinic/target/spring-petclinic-2.7.3.jar /spring-petclinic-2.7.3.jar
+CMD ["java", "-jar", "/spring-petclinic-2.7.3.jar"]
