@@ -330,7 +330,7 @@ class Discount extends AbstractTotal
      * @param AddressInterface $address
      * @return void
      */
-    protected function aggregateDiscountPerRule(
+    private function aggregateDiscountPerRule(
         AbstractItem $item,
         AddressInterface $address
     ) {
