@@ -17,6 +17,7 @@ interface StateInterface
     const STATUS_WORKING = 'working';
     const STATUS_VALID = 'valid';
     const STATUS_INVALID = 'invalid';
+    const STATUS_SUSPENDED = 'suspended';
 
     /**
      * Return indexer id
