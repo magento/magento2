@@ -149,24 +149,18 @@ class FilesystemTest extends TestCase
         $this->shell
             ->expects($this->exactly(4))
             ->method('execute')
-            ->willReturnCallback(function ($arg1) use ($cacheFlushCmd, $setupDiCompileCmd, $staticContentDeployCmd) {
-                if ($arg1 == $cacheFlushCmd || $arg1 == $setupDiCompileCmd || $arg1 == $staticContentDeployCmd) {
-                    return null;
-                }
-            });
+            ->withConsecutive([$cacheFlushCmd], [$setupDiCompileCmd], [$cacheFlushCmd], [$staticContentDeployCmd]);
 
         $this->output
             ->method('writeln')
-            ->willReturnCallback(function ($arg1) {
-                if ($arg1 == 'Starting compilation' ||
-                    $arg1 == 'Compilation complete' ||
-                    $arg1 == 'Starting deployment of static content' ||
-                    $arg1 == 'Deployment of static content complete' ||
-                    empty($arg1)
-                    ) {
-                    return null;
-                }
-            });
+            ->withConsecutive(
+                ['Starting compilation'],
+                [],
+                ['Compilation complete'],
+                ['Starting deployment of static content'],
+                [],
+                ['Deployment of static content complete']
+            );
 
         $this->deployFilesystem->regenerateStatic($this->output);
     }
