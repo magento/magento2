@@ -49,8 +49,6 @@ class Product extends \Magento\Framework\Url\Helper\Data
     protected $_assetRepo;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
@@ -61,8 +59,6 @@ class Product extends \Magento\Framework\Url\Helper\Data
     protected $_attributeConfig;
 
     /**
-     * Catalog session
-     *
      * @var \Magento\Catalog\Model\Session
      */
     protected $_catalogSession;
