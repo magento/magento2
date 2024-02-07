@@ -22,6 +22,9 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class UrlTest extends TestCase
 {
     /**
