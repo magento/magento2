@@ -127,6 +127,10 @@
                     <label>Use Canonical Link Meta Tag For Products</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="product_url_transliteration" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Apply transliteration for product URL</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
             <group id="price" translate="label" type="text" sortOrder="400" showInDefault="1">
                 <label>Price</label>
