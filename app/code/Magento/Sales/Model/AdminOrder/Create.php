@@ -11,6 +11,7 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Model\Metadata\Form as CustomerForm;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\CustomAttributeListInterface;
 use Magento\Quote\Model\Quote\Item;
@@ -19,7 +20,6 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
-use Magento\Quote\Model\Quote;
 
 /**
  * Order create model
@@ -981,7 +981,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                     $this->moveQuoteItem($item, 'order', $qty);
                     $transferredItems = $this->_session->getTransferredItems() ?? [];
                     $transferredItems['cart'][] = $itemId;
-                    $this->_session->setTransferredItems($transferredItems) ;
+                    $this->_session->setTransferredItems($transferredItems);
                 }
             }
         }
@@ -997,7 +997,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                     $this->addProduct($item->getProduct(), $item->getBuyRequest()->toArray());
                     $transferredItems = $this->_session->getTransferredItems() ?? [];
                     $transferredItems['wishlist'][] = $itemId;
-                    $this->_session->setTransferredItems($transferredItems) ;
+                    $this->_session->setTransferredItems($transferredItems);
                 }
             }
         }
@@ -1383,7 +1383,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             'adminhtml_checkout',
             $this->customerMapper->toFlatArray($customer),
             false,
-            CustomerForm::DONT_IGNORE_INVISIBLE
+            CustomerForm::IGNORE_INVISIBLE
         );
 
         return $customerForm;
