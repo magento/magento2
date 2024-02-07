@@ -41,8 +41,8 @@ class RequestTest extends TestCase
         /** Prepare mocks for request constructor arguments. */
         $this->_deserializerFactory = $this->getMockBuilder(
             DeserializerFactory::class
-        )->setMethods(
-            ['deserialize', 'get']
+        )->onlyMethods(['get'])->addMethods(
+            ['deserialize']
         )->disableOriginalConstructor()
         ->getMock();
         $areaListMock = $this->createMock(AreaList::class);
@@ -53,10 +53,10 @@ class RequestTest extends TestCase
         $this->_cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
         $converterMock = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
-            ->setMethods(['cleanString'])
+            ->onlyMethods(['cleanString'])
             ->getMock();
         $this->_request = $this->getMockBuilder(Request::class)
-            ->setMethods(['getHeader', 'getMethod', 'isGet', 'isPost', 'isPut', 'isDelete', 'getContent'])
+            ->onlyMethods(['getHeader', 'getMethod', 'isGet', 'isPost', 'isPut', 'isDelete', 'getContent'])
             ->setConstructorArgs(
                 [
                     $this->_cookieManagerMock,
@@ -131,7 +131,7 @@ class RequestTest extends TestCase
         $deserializer = $this->getMockBuilder(
             Json::class
         )->disableOriginalConstructor()
-        ->setMethods(
+        ->onlyMethods(
             ['deserialize']
         )->getMock();
         $deserializer->expects(

@@ -106,7 +106,7 @@ class QuoteGeneratorTest extends TestCase
             \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->linkManagement = $this->getMockBuilder(LinkManagementInterface::class)
             ->disableOriginalConstructor()
@@ -116,7 +116,7 @@ class QuoteGeneratorTest extends TestCase
             ->getMockForAbstractClass();
         $this->config = $this->getMockBuilder(QuoteConfiguration::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
                 [
                     'getSimpleCountTo',
                     'getSimpleCountFrom',
