@@ -15,6 +15,6 @@
         <element name="transactionId" type="text" selector="#log_details_fieldset > table > tbody > tr:nth-child(1) > td" />
         <element name="orderTxnTableTypeFilter" type="button" selector="#order_transactions_filter_txn_type"/>
         <element name="orderTxnTableSearchBtn" type="button"  selector="#container button[title='Search']" />
-        <element name="isClosed" type="text" selector="#log_details_fieldset > table > tbody > tr:nth-child(5) > td"/>
+        <element name="transactionData" type="text" selector="//th[contains(text(),'{{transactionData}}')]/following-sibling::td" parameterized="true"/>
     </section>
 </sections>

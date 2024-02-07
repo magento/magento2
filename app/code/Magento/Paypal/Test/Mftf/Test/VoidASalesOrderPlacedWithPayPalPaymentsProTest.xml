@@ -74,10 +74,10 @@
         <waitForText selector="{{AdminOrderCommentsTabSection.authorizationNotes('Voided')}}" userInput="$getVoidAuthorizationNotesWithID" stepKey="seeOrderHistoryNotes"/>
         <!-- Check the last transaction of the order and validate the details for Void and Authorization-->
         <actionGroup ref="AdminViewTransactionsInOrderActionGroup" stepKey="validateVoidTransaction"/>
-        <waitForText selector="{{AdminTransactionsGridSection.isClosed}}" userInput="Yes" stepKey="seeIsClosedIsYes"/>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="Yes" stepKey="seeIfClosedHeaderIsYesForVoid"/>
         <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClicked"/>
         <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButton"/>
         <actionGroup ref="AdminViewAuthorizationTransactionsInOrderActionGroup" stepKey="validateAuthTransaction"/>
-        <waitForText selector="{{AdminTransactionsGridSection.isClosed}}" userInput="Yes" stepKey="seeIsClosedIsYesForAuthorization"/>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="Yes" stepKey="seeIfClosedHeaderIsYesForAuthorization"/>
     </test>
 </tests>
