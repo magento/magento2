@@ -149,7 +149,8 @@ class FilesystemTest extends TestCase
         $this->shell
             ->expects($this->exactly(4))
             ->method('execute')
-            ->withConsecutive([$cacheFlushCmd], [$setupDiCompileCmd], [$cacheFlushCmd], [$staticContentDeployCmd]);
+            ->withConsecutive([$cacheFlushCmd], [$setupDiCompileCmd], [$cacheFlushCmd], [$staticContentDeployCmd])
+            ->willReturn("Compilation complete");
 
         $this->output
             ->method('writeln')
@@ -176,9 +177,18 @@ class FilesystemTest extends TestCase
         $this->expectExceptionMessage(
             ';echo argument has invalid value, run info:language:list for list of available locales'
         );
+        $setupDiCompileCmd = $this->cmdPrefix . 'setup:di:compile';
         $storeLocales = ['fr_FR', 'de_DE', ';echo'];
         $this->storeView->method('retrieveLocales')
             ->willReturn($storeLocales);
+        $cacheFlushCmd = $this->cmdPrefix . 'cache:flush';
+        $staticContentDeployCmd = $this->cmdPrefix . 'setup:static-content:deploy -f '
+            . implode(' ', $storeLocales);
+        $this->shell
+            ->expects($this->exactly(3))
+            ->method('execute')
+            ->withConsecutive([$cacheFlushCmd], [$setupDiCompileCmd], [$cacheFlushCmd], [$staticContentDeployCmd])
+            ->willReturn("Compilation complete");
 
         $this->initAdminLocaleMock('en_US');
 
@@ -196,9 +206,18 @@ class FilesystemTest extends TestCase
         $this->expectExceptionMessage(
             ';echo argument has invalid value, run info:language:list for list of available locales'
         );
+        $setupDiCompileCmd = $this->cmdPrefix . 'setup:di:compile';
         $storeLocales = ['fr_FR', 'de_DE', 'en_US'];
+        $cacheFlushCmd = $this->cmdPrefix . 'cache:flush';
+        $staticContentDeployCmd = $this->cmdPrefix . 'setup:static-content:deploy -f '
+            . implode(' ', $storeLocales);
         $this->storeView->method('retrieveLocales')
             ->willReturn($storeLocales);
+        $this->shell
+            ->expects($this->exactly(3))
+            ->method('execute')
+            ->withConsecutive([$cacheFlushCmd], [$setupDiCompileCmd], [$cacheFlushCmd], [$staticContentDeployCmd])
+            ->willReturn("Compilation complete");
 
         $this->initAdminLocaleMock(';echo');
 
