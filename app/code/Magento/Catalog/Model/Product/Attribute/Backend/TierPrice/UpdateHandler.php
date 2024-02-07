@@ -15,6 +15,7 @@ use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
  * Process tier price data for handled existing product.
@@ -84,6 +85,10 @@ class UpdateHandler extends AbstractHandler
     {
         $attribute = $this->attributeRepository->get('tier_price');
         $priceRows = $entity->getData($attribute->getName());
+        $origPrices = $entity->getOrigData($attribute->getName());
+        if($entity->getTypeId() === Configurable::TYPE_CODE && null !== $origPrices){
+            $priceRows = [];
+        }
         if (null !== $priceRows) {
             if (!is_array($priceRows)) {
                 throw new \Magento\Framework\Exception\InputException(
@@ -96,7 +101,6 @@ class UpdateHandler extends AbstractHandler
             $productId = (int)$entity->getData($identifierField);
 
             // prepare original data to compare
-            $origPrices = $entity->getOrigData($attribute->getName());
             $old = $this->prepareOldTierPriceToCompare($origPrices);
             // prepare data for save
             $new = $this->prepareNewDataForSave($priceRows, $isGlobal);
