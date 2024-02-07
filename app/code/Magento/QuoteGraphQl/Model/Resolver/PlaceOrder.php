@@ -19,6 +19,7 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForCheckout;
 use Magento\QuoteGraphQl\Model\Cart\PlaceOrder as PlaceOrderModel;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\SalesGraphQl\Model\Formatter\Order as OrderFormatter;
 
 /**
  * Resolver for placing order after payment method has already been set
@@ -54,21 +55,6 @@ class PlaceOrder implements ResolverInterface, ResetAfterRequestInterface
     ];
 
     /**
-     * @var GetCartForCheckout
-     */
-    private $getCartForCheckout;
-
-    /**
-     * @var PlaceOrderModel
-     */
-    private $placeOrder;
-
-    /**
-     * @var OrderRepositoryInterface
-     */
-    private $orderRepository;
-
-    /**
      * @var \string[]
      */
     private $errors = [];
@@ -77,15 +63,14 @@ class PlaceOrder implements ResolverInterface, ResetAfterRequestInterface
      * @param GetCartForCheckout $getCartForCheckout
      * @param PlaceOrderModel $placeOrder
      * @param OrderRepositoryInterface $orderRepository
+     * @param OrderFormatter $orderFormatter
      */
     public function __construct(
-        GetCartForCheckout $getCartForCheckout,
-        PlaceOrderModel $placeOrder,
-        OrderRepositoryInterface $orderRepository
+        private readonly GetCartForCheckout $getCartForCheckout,
+        private readonly PlaceOrderModel $placeOrder,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly OrderFormatter $orderFormatter
     ) {
-        $this->getCartForCheckout = $getCartForCheckout;
-        $this->placeOrder = $placeOrder;
-        $this->orderRepository = $orderRepository;
     }
 
     /**
@@ -130,6 +115,7 @@ class PlaceOrder implements ResolverInterface, ResetAfterRequestInterface
                 // @deprecated The order_id field is deprecated, use order_number instead
                 'order_id' => $order->getIncrementId(),
             ],
+            'orderV2' => $this->orderFormatter->format($order),
             'errors' => []
         ];
     }

@@ -224,7 +224,8 @@ type ApplyCouponToCartOutput @doc(description: "Contains details about the cart 
 }
 
 type PlaceOrderOutput @doc(description: "Contains the results of the request to place an order.") {
-    order: Order @doc(description: "The ID of the order.")
+    order: Order @deprecated(reason: "Use `orderV2` instead.") @doc(description: "The ID of the order.")
+    orderV2: CustomerOrder! @doc(description: "Full order information.")
     errors: [PlaceOrderError!]! @doc(description:"An array of place order errors.")
 }
 
