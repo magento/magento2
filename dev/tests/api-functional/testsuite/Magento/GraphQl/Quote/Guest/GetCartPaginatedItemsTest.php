@@ -125,7 +125,7 @@ class GetCartPaginatedItemsTest extends GraphQlAbstract
         $expected = [
             'cart' => [
                 'id' => $maskedQuoteId,
-                'paginated_items' => [
+                'itemsV2' => [
                     'total_count' => 5,
                     'items' => [
                         [
@@ -186,7 +186,7 @@ class GetCartPaginatedItemsTest extends GraphQlAbstract
 {
   cart(cart_id: "{$maskedQuoteId}") {
     id
-    paginated_items(pageSize: {$pageSize} currentPage: {$currentPage}) {
+    itemsV2(pageSize: {$pageSize} currentPage: {$currentPage}) {
       total_count
       items {
         id
