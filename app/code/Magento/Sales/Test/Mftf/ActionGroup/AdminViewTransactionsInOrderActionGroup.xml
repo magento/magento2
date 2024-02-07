@@ -21,7 +21,7 @@
         <waitForElementClickable selector="{{AdminTransactionsGridSection.orderTxnTableFirstRow}}" stepKey="clickOnVoidTransaction"/>
         <click selector="{{AdminTransactionsGridSection.orderTxnTableFirstRow}}" stepKey="clickVoidTxn"/>
         <waitForPageLoad stepKey="waitForTxnToLoad"/>
-        <grabTextFrom selector="{{AdminTransactionsGridSection.transactionId}}" stepKey="getVoidTransaction"/>
+        <grabTextFrom selector="{{AdminTransactionsGridSection.transactionData('Transaction ID')}}" stepKey="getVoidTransaction"/>
         <assertRegExp stepKey="assertEquals" message="pass">
             <expectedResult type="string">/([0-9a-z\-])*(?&lt;!void)$/</expectedResult>
             <actualResult type="variable">getVoidTransaction</actualResult>
