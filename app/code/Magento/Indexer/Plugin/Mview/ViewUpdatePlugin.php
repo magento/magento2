@@ -14,7 +14,7 @@ use Magento\Framework\Mview\ViewInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Plugin to prevent updating a view if the associated indexer is suspended
+ * Plugin to prevent view update if the associated indexer or any indexer sharing the same shared_index is suspended.
  */
 class ViewUpdatePlugin
 {
@@ -49,7 +49,7 @@ class ViewUpdatePlugin
     }
 
     /**
-     * Prevent updating a view if the associated indexer is suspended
+     * Skips updating the view if its associated indexer or any indexer with the same shared index is suspended.
      *
      * @param ViewInterface $subject
      * @param callable $proceed
@@ -57,26 +57,27 @@ class ViewUpdatePlugin
      */
     public function aroundUpdate(ViewInterface $subject, callable $proceed): void
     {
-        $indexerId = $this->mapViewIdToIndexerId($subject->getId());
+        $viewId = $subject->getId();
+        $indexerId = $this->mapViewIdToIndexerId($viewId);
 
         if ($indexerId === null) {
             $proceed();
             return;
         }
 
-        $indexer = $this->indexerRegistry->get($indexerId);
-
-        if ($indexer->getStatus() != StateInterface::STATUS_SUSPENDED) {
-            $proceed();
-        } else {
+        // Check if the direct indexer or any related indexers via shared_index are suspended
+        if ($this->isIndexerOrSharedIndexSuspended($indexerId)) {
             $this->logger->info(
-                "Indexer {$indexer->getId()} is suspended. The view {$subject->getId()} will not be updated."
+                "Suspended status detected for indexer {$indexerId} or its shared index. "
+                . "Any potential update for view {$viewId} will be skipped regardless of backlog status.",
             );
+        } else {
+            $proceed();
         }
     }
 
     /**
-     * Map view ID to indexer ID
+     * Maps a view ID to its corresponding indexer ID.
      *
      * @param string $viewId
      * @return string|null
@@ -89,5 +90,34 @@ class ViewUpdatePlugin
             }
         }
         return null;
+    }
+
+    /**
+     * Determines if the specified indexer or any other indexer that shares its shared_index are suspended.
+     *
+     * @param string $indexerId
+     * @return bool
+     */
+    private function isIndexerOrSharedIndexSuspended(string $indexerId): bool
+    {
+        $indexer = $this->indexerRegistry->get($indexerId);
+        if ($indexer->getStatus() === StateInterface::STATUS_SUSPENDED) {
+            return true;
+        }
+
+        // Retrieve the shared_index ID from the indexer's configuration
+        $sharedIndexId = $this->indexerConfig->getIndexer($indexerId)['shared_index'] ?? null;
+        if ($sharedIndexId !== null) {
+            foreach ($this->indexerConfig->getIndexers() as $otherIndexerId => $config) {
+                if (($config['shared_index'] ?? null) === $sharedIndexId) {
+                    $otherIndexer = $this->indexerRegistry->get($otherIndexerId);
+                    if ($otherIndexer->getStatus() === StateInterface::STATUS_SUSPENDED) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }

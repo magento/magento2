@@ -335,7 +335,7 @@ class Indexer extends DataObject implements IndexerInterface, SuspendableIndexer
     }
 
     /**
-     * Check whether indexer is valid
+     * Checks whether indexer is suspended.
      *
      * @return bool
      */

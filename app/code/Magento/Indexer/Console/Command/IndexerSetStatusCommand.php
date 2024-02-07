@@ -19,7 +19,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command for setting index status for indexers
+ * Command for setting index status for indexers.
  */
 class IndexerSetStatusCommand extends AbstractIndexerManageCommand
 {
@@ -85,7 +85,7 @@ class IndexerSetStatusCommand extends AbstractIndexerManageCommand
     }
 
     /**
-     * Get list of arguments for the command
+     * Gets list of arguments for the command.
      *
      * @return InputOption[]
      */
@@ -102,7 +102,7 @@ class IndexerSetStatusCommand extends AbstractIndexerManageCommand
     }
 
     /**
-     * Check if all CLI command options are provided
+     * Checks if all CLI command options are provided.
      *
      * @param InputInterface $input
      * @return string[]
@@ -136,7 +136,7 @@ class IndexerSetStatusCommand extends AbstractIndexerManageCommand
     }
 
     /**
-     * Update the status of a specified indexer
+     * Updates the status of a specified indexer.
      *
      * @param IndexerInterface $indexer
      * @param string $newStatus
