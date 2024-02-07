@@ -49,7 +49,7 @@ class ShippingMethodValidationRule implements QuoteValidationRuleInterface
             $shippingAddress->setStoreId($quote->getStoreId());
             $shippingMethod = $shippingAddress->getShippingMethod();
             $shippingRate = $shippingAddress->getShippingRateByCode($shippingMethod);
-            $validationResult = $shippingMethod && $shippingRate;
+            $validationResult = $shippingMethod && $shippingRate && $shippingAddress->requestShippingRates();
             if (!$validationResult) {
                 $validationErrors = [__($this->generalMessage)];
             }
