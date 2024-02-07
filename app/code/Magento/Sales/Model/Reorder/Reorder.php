@@ -107,7 +107,7 @@ class Reorder
     /**
      * @var bool
      */
-    private bool $forceAdd;
+    private bool $addToCartInvalidProduct;
 
     /**
      * @param OrderFactory $orderFactory
@@ -118,7 +118,7 @@ class Reorder
      * @param LoggerInterface $logger
      * @param ProductCollectionFactory $productCollectionFactory
      * @param OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter
-     * @param bool $forceAdd
+     * @param bool $addToCartInvalidProduct
      */
     public function __construct(
         OrderFactory $orderFactory,
@@ -129,7 +129,7 @@ class Reorder
         LoggerInterface $logger,
         ProductCollectionFactory $productCollectionFactory,
         OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter,
-        bool $forceAdd = false
+        bool $addToCartInvalidProduct = false
     ) {
         $this->orderFactory = $orderFactory;
         $this->cartRepository = $cartRepository;
@@ -139,7 +139,7 @@ class Reorder
         $this->guestCartResolver = $guestCartResolver;
         $this->productCollectionFactory = $productCollectionFactory;
         $this->orderInfoBuyRequestGetter = $orderInfoBuyRequestGetter;
-        $this->forceAdd = $forceAdd;
+        $this->addToCartInvalidProduct = $addToCartInvalidProduct;
     }
 
     /**
@@ -272,7 +272,7 @@ class Reorder
 
         $addProductResult = null;
         try {
-            $infoBuyRequest->setForceAddToCart($this->forceAdd);
+            $infoBuyRequest->setAddToCartInvalidProduct($this->addToCartInvalidProduct);
             $addProductResult = $cart->addProduct($product, $infoBuyRequest);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->addError($this->getCartItemErrorMessage($orderItem, $product, $e->getMessage()));

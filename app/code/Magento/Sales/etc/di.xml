@@ -1038,9 +1038,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Sales\Model\Reorder\Reorder">
-        <arguments>
-            <argument name="forceAdd" xsi:type="boolean">true</argument>
-        </arguments>
-    </type>
 </config>
