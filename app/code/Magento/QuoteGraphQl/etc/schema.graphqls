@@ -29,6 +29,7 @@ type Mutation {
     mergeCarts(source_cart_id: String! @doc(description: "The guest's cart ID before they login."), destination_cart_id: String @doc(description: "The cart ID after the guest logs in.")): Cart! @doc(description:"Transfer the contents of a guest cart into the cart of a logged-in customer.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\MergeCarts")
     placeOrder(input: PlaceOrderInput @doc(description: "An input object that defines the shopper's cart ID.")): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PlaceOrder") @doc(description:"Convert the quote into an order.")
     addProductsToCart(cartId: String! @doc(description: "The cart ID of the shopper."), cartItems: [CartItemInput!]! @doc(description: "An array that defines the products to add to the cart.")): AddProductsToCartOutput @doc(description:"Add any type of product to the cart.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddProductsToCart")
+    estimateTotals(input: EstimateTotalsInput! @doc(description: "An input object that specifies details for cart totals estimation")): EstimateTotalsOutput! @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\EstimateTotals") @doc(description: "Estimate totals for cart based on the address")
 }
 
 input CreateGuestCartInput {
@@ -474,4 +475,20 @@ type StoreConfig {
     is_guest_checkout_enabled: Boolean @doc(description: "Extended Config Data - checkout/options/guest_checkout")
     is_one_page_checkout_enabled: Boolean @doc(description: "Extended Config Data - checkout/options/onepage_checkout_enabled")
     max_items_in_order_summary: Int @doc(description: "Extended Config Data - checkout/options/max_items_display_count")
+}
+
+input EstimateTotalsInput {
+    cart_id: String! @doc(description: "The unique ID of the cart to query.")
+    address: EstimateAddressInput! @doc(description: "Customer's address to estimate totals.")
+    shipping_method: ShippingMethodInput @doc(description: "Selected shipping method to estimate totals.")
+}
+
+type EstimateTotalsOutput @doc(description: "Estimate totals output.") {
+    cart: Cart @doc(description: "Cart after totals estimation")
+}
+
+input EstimateAddressInput @doc(description: "Contains details about an address.") {
+    country_code: CountryCodeEnum! @doc(description: "The two-letter code representing the customer's country.")
+    region: CustomerAddressRegionInput @doc(description: "An object containing the region name, region code, and region ID.")
+    postcode: String @doc(description: "The customer's ZIP or postal code.")
 }
