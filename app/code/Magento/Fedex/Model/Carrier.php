@@ -1567,7 +1567,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             }
 
             if ($datetime) {
-                $result['shippeddate'] = gmdate('Y-m-d', $datetime->getTimestamp());
+                $result['shippeddate'] = gmdate('Y-m-d H:i:s', $datetime->getTimestamp());
             }
         }
 
@@ -1586,7 +1586,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         $datetime = $this->getDeliveryDateTime($trackInfo);
         if ($datetime) {
-            $result['deliverydate'] = gmdate('Y-m-d', $datetime->getTimestamp());
+            $result['deliverydate'] = gmdate('Y-m-d H:i:s', $datetime->getTimestamp());
             $result['deliverytime'] = gmdate('H:i:s', $datetime->getTimestamp());
         }
 
@@ -1699,7 +1699,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
             $datetime = $this->parseDate(!empty($event['date']) ? $event['date'] : null);
             if ($datetime) {
-                $item['deliverydate'] = gmdate('Y-m-d', $datetime->getTimestamp());
+                $item['deliverydate'] = gmdate('Y-m-d H:i:s', $datetime->getTimestamp());
                 $item['deliverytime'] = gmdate('H:i:s', $datetime->getTimestamp());
             }
 
