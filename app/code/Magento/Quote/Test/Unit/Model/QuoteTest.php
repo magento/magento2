@@ -1167,11 +1167,11 @@ class QuoteTest extends TestCase
     public function dataProviderForTestAddProductItem(): array
     {
         return [
-            'not_force_item' => [null, false],
-            'force_item' => [
+            'not_invalid_product_add' => [null, false],
+            'invalid_product_add' => [
                 new DataObject(
                     [
-                        'force_add_to_cart' => true,
+                        'add_to_cart_invalid_product' => true,
                         'qty' => 1
                     ]
                 ),
