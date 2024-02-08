@@ -76,7 +76,7 @@ class DownloadTest extends TestCase
         $this->escaperMock
             ->method('escapeHtml')
             ->willReturnCallback(
-                function ($arg) use (&$callCount) {
+                function ($arg) {
                     if ($arg == 'file.csv') {
                         return 'file.csv';
                     } elseif ($arg == 'Download') {
