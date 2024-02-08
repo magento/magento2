@@ -21,7 +21,7 @@ class JwsManagerTest extends \PHPUnit\Framework\TestCase
 
     public function testCreatingJwsWithAlgorithmSetInHeadersDirectly(): void
     {
-        $secret = "ZXF1YXRpb24tS2VudHVja3ktY29udGludWVkLWRpZmZlcmVuY2U=";
+        $secret = "ZXF1YXRpb24tS2VudHVja3ktY29udGludWVkLWRpZmZlcmVuY2U";
         $payload = json_encode([
             'MyCustomClaim' => 'some value', // not important at all
             'nbf' => time(),
