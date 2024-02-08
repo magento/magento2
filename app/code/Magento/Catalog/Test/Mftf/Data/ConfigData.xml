@@ -22,6 +22,13 @@
     </entity>
     <entity name="DisableCatalogEmailToFriendOptionConfigData">
         <data key="path">sendfriend/email/enabled</data>
+    <entity name="AllowGuestsToWriteReviewsConfigData">
+        <!-- Magento Default Value -->
+        <data key="path">catalog/review/allow_guest</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisAllowGuestsToWriteReviewsConfigData">
+        <data key="path">catalog/review/allow_guest</data>
         <data key="value">0</data>
     </entity>
 </entities>

@@ -50,6 +50,7 @@
 
     <type name="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface">
         <plugin name="Magento_ConfigurableProduct_Plugin_Model_ResourceModel_Attribute_InStockOptionSelectBuilder_GraphQl" type="Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Attribute\InStockOptionSelectBuilder"/>
+        <plugin name="option_select_website_filter" type="Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Attribute\ScopedOptionSelectBuilder"/>
     </type>
 
     <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
@@ -69,5 +70,19 @@
     </type>
     <type name="Magento\ConfigurableProduct\Model\Product\Configuration\Item\ItemProductResolver">
         <plugin name="configured_variant" type="Magento\ConfigurableProductGraphQl\Plugin\Product\Configuration\Item\ItemResolver"/>
+    </type>
+    <type name="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsCompositeFilter">
+        <arguments>
+            <argument name="configurableOptionsFilters" xsi:type="array">
+                <item name="status" xsi:type="object">Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsStatusFilter</item>
+                <item name="stock_status" xsi:type="object">Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsStockStatusFilter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection">
+        <plugin name="add_stock_information" type="Magento\ConfigurableProductGraphQl\Plugin\AddStockStatusToCollection" />
+    </type>
+    <type name="Magento\Quote\Model\Quote">
+        <plugin name="update_customized_options" type="Magento\ConfigurableProductGraphQl\Plugin\Quote\UpdateCustomizedOptions"/>
     </type>
 </config>

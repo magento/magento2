@@ -17,6 +17,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-40398"/>
             <useCaseId value="MC-39759"/>
+            <skip>
+                <issueId value="MC-41085"/>
+            </skip>
             <group value="productVideo"/>
         </annotations>
         <before>

@@ -15,7 +15,7 @@
         </dev>
         <cms>
             <wysiwyg>
-                <editor_version>mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter</editor_version>
+                <editor_version>mage/adminhtml/wysiwyg/tiny_mce/tinymce5Adapter</editor_version>
             </wysiwyg>
         </cms>
     </default>

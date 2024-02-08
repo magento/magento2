@@ -8,6 +8,7 @@ namespace Magento\Sales\Controller\AbstractController;
 
 /**
  * Interface \Magento\Sales\Controller\AbstractController\OrderViewAuthorizationInterface
+ * @api
  *
  */
 interface OrderViewAuthorizationInterface

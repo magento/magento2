@@ -126,6 +126,26 @@ class CacheTest extends TestCase
      */
     public function testCreateConfigWithRedisConfig()
     {
+        $this->deploymentConfigMock->method('get')->withConsecutive(
+            [CacheConfigOptionsList::CONFIG_PATH_CACHE_ID_PREFIX],
+            [CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_SERVER, '127.0.0.1'],
+            [CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_DATABASE, '0'],
+            [CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_PORT, '6379'],
+            [CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_PASSWORD, ''],
+            [CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_COMPRESS_DATA, '1'],
+            [CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_COMPRESSION_LIB, ''],
+            [CacheConfigOptionsList::CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION, 'false']
+        )->willReturnOnConsecutiveCalls(
+            'XXX_',
+            '127.0.0.1',
+            '0',
+            '6379',
+            '',
+            '1',
+            '',
+            null
+        );
+
         $expectedConfigData = [
             'cache' => [
                 'frontend' => [
@@ -139,7 +159,6 @@ class CacheTest extends TestCase
                             'compress_data' => '1',
                             'compression_lib' => 'gzip',
                         ],
-                        'id_prefix' => $this->expectedIdPrefix(),
                     ]
                 ],
                 'allow_parallel_generation' => null,

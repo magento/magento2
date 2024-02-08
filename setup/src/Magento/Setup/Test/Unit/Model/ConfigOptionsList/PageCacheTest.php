@@ -116,6 +116,24 @@ class PageCacheTest extends TestCase
      */
     public function testCreateConfigWithRedisConfiguration()
     {
+        $this->deploymentConfigMock->method('get')->withConsecutive(
+            [PageCache::CONFIG_PATH_PAGE_CACHE_ID_PREFIX],
+            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER, '127.0.0.1'],
+            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE, '1'],
+            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT, '6379'],
+            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD, ''],
+            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA, '0'],
+            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB, '']
+        )->willReturnOnConsecutiveCalls(
+            'XXX_',
+            '127.0.0.1',
+            '1',
+            '6379',
+            '',
+            '0',
+            ''
+        );
+
         $expectedConfigData = [
             'cache' => [
                 'frontend' => [
@@ -129,7 +147,6 @@ class PageCacheTest extends TestCase
                             'compress_data' => '1',
                             'compression_lib' => 'gzip',
                         ],
-                        'id_prefix' => $this->expectedIdPrefix(),
                     ]
                 ]
             ]

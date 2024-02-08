@@ -34,9 +34,12 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <createData entity="SimpleProduct2" stepKey="simpleProduct"/>
-            <createData entity="ApiFixedBundleProduct" stepKey="createBundleProduct" />
+            <createData entity="ApiFixedBundleProduct" stepKey="createBundleProduct"/>
             <createData entity="CheckboxOption" stepKey="createBundleOption">
                 <requiredEntity createDataKey="createBundleProduct"/>
             </createData>

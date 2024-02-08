@@ -9,6 +9,9 @@ namespace Magento\CatalogRule\Model\Indexer;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
+use Magento\Catalog\Model\Indexer\Product\Price\Processor as PriceIndexProcessor;
+use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\CatalogRule\Model\Indexer\IndexBuilder\ProductLoader;
 use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
 use Magento\CatalogRule\Model\ResourceModel\Rule\Collection as RuleCollection;
@@ -18,6 +21,7 @@ use Magento\Eav\Model\Config;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
@@ -36,11 +40,12 @@ use Psr\Log\LoggerInterface;
  */
 class IndexBuilder
 {
-    const SECONDS_IN_DAY = 86400;
+    public const SECONDS_IN_DAY = 86400;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
      * @deprecated 101.0.0
+     * @see MAGETWO-64518
      * @since 100.1.0
      */
     protected $metadataPool;
@@ -52,6 +57,7 @@ class IndexBuilder
      *
      * @var array
      * @deprecated 101.0.0
+     * @see MAGETWO-38167
      */
     protected $_catalogRuleGroupWebsiteColumnsList = ['rule_id', 'customer_group_id', 'website_id'];
 
@@ -166,6 +172,16 @@ class IndexBuilder
     private $productLoader;
 
     /**
+     * @var IndexerRegistry
+     */
+    private $indexerRegistry;
+
+    /**
+     * @var ProductCollectionFactory
+     */
+    private $productCollectionFactory;
+
+    /**
      * @param RuleCollectionFactory $ruleCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
      * @param ResourceConnection $resource
@@ -186,6 +202,8 @@ class IndexBuilder
      * @param ProductLoader|null $productLoader
      * @param TableSwapper|null $tableSwapper
      * @param TimezoneInterface|null $localeDate
+     * @param ProductCollectionFactory|null $productCollectionFactory
+     * @param IndexerRegistry|null $indexerRegistry
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -209,7 +227,9 @@ class IndexBuilder
         ActiveTableSwitcher $activeTableSwitcher = null,
         ProductLoader $productLoader = null,
         TableSwapper $tableSwapper = null,
-        TimezoneInterface $localeDate = null
+        TimezoneInterface $localeDate = null,
+        ProductCollectionFactory $productCollectionFactory = null,
+        IndexerRegistry $indexerRegistry = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -251,15 +271,18 @@ class IndexBuilder
             ObjectManager::getInstance()->get(TableSwapper::class);
         $this->localeDate = $localeDate ??
             ObjectManager::getInstance()->get(TimezoneInterface::class);
+        $this->indexerRegistry = $indexerRegistry ??
+            ObjectManager::getInstance()->get(IndexerRegistry::class);
+        $this->productCollectionFactory = $productCollectionFactory ??
+            ObjectManager::getInstance()->get(ProductCollectionFactory::class);
     }
 
     /**
      * Reindex by id
      *
      * @param int $id
-     * @throws LocalizedException
      * @return void
-     * @api
+     * @throws LocalizedException
      */
     public function reindexById($id)
     {
@@ -287,7 +310,6 @@ class IndexBuilder
      * @param array $ids
      * @throws LocalizedException
      * @return void
-     * @api
      */
     public function reindexByIds(array $ids)
     {
@@ -323,6 +345,15 @@ class IndexBuilder
             $this->reindexRuleProductPrice->execute($this->batchCount, $productId);
         }
 
+        //the case was not handled via indexer dependency decorator or via mview configuration
+        $ruleIndexer = $this->indexerRegistry->get(RuleProductProcessor::INDEXER_ID);
+        if ($ruleIndexer->isScheduled()) {
+            $priceIndexer = $this->indexerRegistry->get(PriceIndexProcessor::INDEXER_ID);
+            if (!$priceIndexer->isScheduled()) {
+                $priceIndexer->reindexList($ids);
+            }
+        }
+
         $this->reindexRuleGroupWebsite->execute();
     }
 
@@ -331,7 +362,6 @@ class IndexBuilder
      *
      * @throws LocalizedException
      * @return void
-     * @api
      */
     public function reindexFull()
     {
@@ -498,13 +528,20 @@ class IndexBuilder
      */
     private function applyRules(RuleCollection $ruleCollection, Product $product): void
     {
+        /** @var \Magento\CatalogRule\Model\Rule $rule */
         foreach ($ruleCollection as $rule) {
-            if (!$rule->validate($product)) {
-                continue;
-            }
-
+            $productCollection = $this->productCollectionFactory->create();
+            $productCollection->addIdFilter($product->getId());
+            $rule->getConditions()->collectValidatedAttributes($productCollection);
+            $validationResult = [];
             $websiteIds = array_intersect($product->getWebsiteIds(), $rule->getWebsiteIds());
-            $this->assignProductToRule($rule, $product->getId(), $websiteIds);
+            foreach ($websiteIds as $websiteId) {
+                $defaultGroupId = $this->storeManager->getWebsite($websiteId)->getDefaultGroupId();
+                $defaultStoreId = $this->storeManager->getGroup($defaultGroupId)->getDefaultStoreId();
+                $product->setStoreId($defaultStoreId);
+                $validationResult[$websiteId] = $rule->validate($product);
+            }
+            $this->assignProductToRule($rule, $product->getId(), array_keys(array_filter($validationResult)));
         }
 
         $this->cleanProductPriceIndex([$product->getId()]);

@@ -31,7 +31,7 @@ class AddComment extends \Magento\Backend\App\Action
     /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
-    protected $pagePageFactory;
+    protected $resultPageFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory

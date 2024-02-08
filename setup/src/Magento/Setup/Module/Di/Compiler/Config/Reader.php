@@ -14,9 +14,8 @@ use Magento\Setup\Module\Di\Compiler\ArgumentsResolverFactory;
 use Magento\Setup\Module\Di\Definition\Collection as DefinitionsCollection;
 
 /**
- * Class Reader
+ * DI Confir Reader
  *
- * @package Magento\Setup\Module\Di\Compiler\Config
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Reader
@@ -99,11 +98,6 @@ class Reader
         foreach (array_keys($areaConfig->getVirtualTypes()) as $virtualType) {
             $config['instanceTypes'][$virtualType] = $areaConfig->getInstanceType($virtualType);
         }
-
-        // sort configuration to have it in the same order on every build
-        ksort($config['arguments']);
-        ksort($config['preferences']);
-        ksort($config['instanceTypes']);
 
         return $config;
     }

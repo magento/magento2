@@ -33,41 +33,41 @@ class Integration extends \Magento\Framework\Model\AbstractModel
     /**#@+
      * Integration Status values
      */
-    const STATUS_INACTIVE = 0;
+    public const STATUS_INACTIVE = 0;
 
-    const STATUS_ACTIVE = 1;
+    public const STATUS_ACTIVE = 1;
 
-    const STATUS_RECREATED = 2;
+    public const STATUS_RECREATED = 2;
 
     /**#@-*/
 
     /**#@+
      * Integration setup type
      */
-    const TYPE_MANUAL = 0;
+    public const TYPE_MANUAL = 0;
 
-    const TYPE_CONFIG = 1;
+    public const TYPE_CONFIG = 1;
 
     /**#@-*/
 
     /**#@+
      * Integration data key constants.
      */
-    const ID = 'integration_id';
+    public const ID = 'integration_id';
 
-    const NAME = 'name';
+    public const NAME = 'name';
 
-    const EMAIL = 'email';
+    public const EMAIL = 'email';
 
-    const ENDPOINT = 'endpoint';
+    public const ENDPOINT = 'endpoint';
 
-    const IDENTITY_LINK_URL = 'identity_link_url';
+    public const IDENTITY_LINK_URL = 'identity_link_url';
 
-    const SETUP_TYPE = 'setup_type';
+    public const SETUP_TYPE = 'setup_type';
 
-    const CONSUMER_ID = 'consumer_id';
+    public const CONSUMER_ID = 'consumer_id';
 
-    const STATUS = 'status';
+    public const STATUS = 'status';
 
     /**#@-*/
 
@@ -77,6 +77,7 @@ class Integration extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -127,7 +128,6 @@ class Integration extends \Magento\Framework\Model\AbstractModel
      * Get integration status. Cast to the type of STATUS_* constants in order to make strict comparison valid.
      *
      * @return int
-     * @api
      */
     public function getStatus()
     {

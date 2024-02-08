@@ -10,7 +10,10 @@ namespace Magento\Framework\Webapi\Test\Unit;
 use Magento\Eav\Model\TypeLocator;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
+use \Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\App\Cache\Type\Reflection;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Reflection\FieldNamer;
 use Magento\Framework\Reflection\MethodsMap;
@@ -18,7 +21,11 @@ use Magento\Framework\Reflection\NameFinder;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Webapi\Exception;
+use Magento\Framework\Webapi\Validator\IOLimit\DefaultPageSizeSetter;
 use Magento\Framework\Webapi\ServiceInputProcessor;
+use Magento\Framework\Webapi\Validator\IOLimit\IOLimitConfigProvider;
+use Magento\Framework\Webapi\Validator\EntityArrayValidator;
 use Magento\Framework\Webapi\ServiceTypeToEntityTypeMap;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\DataArray;
@@ -34,6 +41,9 @@ use Magento\Webapi\Test\Unit\Service\Entity\SimpleArrayData;
 use Magento\Webapi\Test\Unit\Service\Entity\SimpleData;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Webapi\Validator\EntityArrayValidator\InputArraySizeLimitValue;
+use Magento\Quote\Api\ShipmentEstimationInterface;
+use Magento\Quote\Api\Data\AddressInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -59,12 +69,43 @@ class ServiceInputProcessorTest extends TestCase
     protected $fieldNamer;
 
     /**
+     * @var SearchCriteriaInterface|MockObject
+     */
+    private $searchCriteria;
+
+    /**
      * @var ServiceTypeToEntityTypeMap|MockObject
      */
     private $serviceTypeToEntityTypeMap;
 
+    /**
+     * @var IOLimitConfigProvider|MockObject
+     */
+    private $inputLimitConfig;
+
+    /**
+     * @var DefaultPageSizeSetter|MockObject
+     */
+    private $defaultPageSizeSetter;
+
+    /**
+     * @var AddressInterface|MockObject
+     */
+    protected $addressMock;
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp(): void
     {
+        $this->searchCriteria  = self::getMockBuilder(SearchCriteriaInterface::class)
+            ->getMock();
+        $this->addressMock  = self::getMockBuilder(AddressInterface::class)
+            ->getMock();
+        $objectManagerStatic = [
+            SearchCriteriaInterface::class => $this->searchCriteria,
+            AddressInterface::class => $this->addressMock
+        ];
         $objectManager = new ObjectManager($this);
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
@@ -72,7 +113,11 @@ class ServiceInputProcessorTest extends TestCase
         $this->objectManagerMock->expects($this->any())
             ->method('create')
             ->willReturnCallback(
-                function ($className, $arguments = []) use ($objectManager) {
+                function ($className, $arguments = []) use ($objectManager, $objectManagerStatic) {
+                    if (isset($objectManagerStatic[$className])) {
+                        return $objectManagerStatic[$className];
+                    }
+
                     return $objectManager->getObject($className, $arguments);
                 }
             );
@@ -130,6 +175,16 @@ class ServiceInputProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->inputLimitConfig = self::getMockBuilder(IOLimitConfigProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $inputArraySizeLimitValue = $this->createMock(InputArraySizeLimitValue::class);
+
+        $this->defaultPageSizeSetter = self::getMockBuilder(DefaultPageSizeSetter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->serviceInputProcessor = $objectManager->getObject(
             ServiceInputProcessor::class,
             [
@@ -138,7 +193,14 @@ class ServiceInputProcessorTest extends TestCase
                 'customAttributeTypeLocator' => $this->customAttributeTypeLocator,
                 'attributeValueFactory' => $this->attributeValueFactoryMock,
                 'methodsMap' => $this->methodsMap,
-                'serviceTypeToEntityTypeMap' => $this->serviceTypeToEntityTypeMap
+                'serviceTypeToEntityTypeMap' => $this->serviceTypeToEntityTypeMap,
+                'serviceInputValidator' => new EntityArrayValidator(
+                    50,
+                    $this->inputLimitConfig,
+                    $inputArraySizeLimitValue
+                ),
+                'defaultPageSizeSetter' => $this->defaultPageSizeSetter,
+                'defaultPageSize' => 123
             ]
         );
 
@@ -329,6 +391,47 @@ class ServiceInputProcessorTest extends TestCase
         $this->assertTrue($second instanceof Simple);
         $this->assertEquals(15, $second->getEntityId());
         $this->assertEquals('Second', $second->getName());
+    }
+
+    public function testArrayOfDataObjectPropertiesIsValidated()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectErrorMessage(
+            'Maximum items of type "\\' . Simple::class . '" is 50'
+        );
+        $this->inputLimitConfig->method('isInputLimitingEnabled')
+            ->willReturn(true);
+        $objects = [];
+        for ($i = 0; $i < 51; $i++) {
+            $objects[] = ['entityId' => $i + 1, 'name' => 'Item' . $i];
+        }
+        $data = [
+            'dataObjects' => $objects,
+        ];
+        $this->serviceInputProcessor->process(
+            TestService::class,
+            'dataArray',
+            $data
+        );
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testDefaultPageSizeSetterIsInvoked()
+    {
+        $this->defaultPageSizeSetter->expects(self::once())
+            ->method('processSearchCriteria')
+            ->with($this->searchCriteria);
+
+        $data = [
+            'searchCriteria' => []
+        ];
+        $this->serviceInputProcessor->process(
+            TestService::class,
+            'search',
+            $data
+        );
     }
 
     public function testNestedSimpleArrayProperties()
@@ -608,5 +711,61 @@ class ServiceInputProcessorTest extends TestCase
                 ]
             ]
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function payloadDataProvider(): array
+    {
+        return [
+            [
+                [
+                    'address' => [
+                        "street" => [
+                            "서울 강북구 한천로166길 2 (-서울 강북구 수유동 269-36)"
+                        ],
+                        "city." => "pune",
+                    ],
+                    'cartId' => "30"
+                ],
+                1
+            ],
+            [
+                [
+                    'address' => [
+                        "street" => [
+                            "서울 강북구 한천로166길 2 (-서울 강북구 수유동 269-36)"
+                        ],
+                        "city" => "pune",
+                    ],
+                    'cartId' => "30"
+                ],
+                0
+            ]
+        ];
+    }
+
+    /**
+     * Validate if payload has correct attributes
+     *
+     * @param array $payload
+     * @param int $exception
+     * @return void
+     * @throws Exception
+     * @dataProvider payloadDataProvider
+     */
+    public function testValidateApiPayload(array $payload, int $exception): void
+    {
+        if ($exception) {
+            $this->expectException(InputException::class);
+            $this->expectExceptionMessage('"City." is not supported. Correct the field name and try again.');
+        }
+        $result = $this->serviceInputProcessor->process(
+            ShipmentEstimationInterface::class,
+            'estimateByExtendedAddress',
+            $payload
+        );
+        $this->assertNotEmpty($result);
     }
 }

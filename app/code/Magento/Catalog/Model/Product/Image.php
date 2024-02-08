@@ -11,6 +11,7 @@ use Magento\Catalog\Model\View\Asset\ImageFactory;
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Image as MagentoImage;
 use Magento\Framework\Serialize\SerializerInterface;
 
@@ -29,7 +30,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * Config path for the jpeg image quality value
      */
-    const XML_PATH_JPEG_QUALITY = 'system/upload_configuration/jpeg_quality';
+    public const XML_PATH_JPEG_QUALITY = 'system/upload_configuration/jpeg_quality';
 
     /**
      * @var int
@@ -45,7 +46,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Default quality value (for JPEG images only).
      *
      * @var int
-     * @deprecated 103.0.1 use config setting with path self::XML_PATH_JPEG_QUALITY
+     * @deprecated 103.0.1
+     * @see Use config setting with path self::XML_PATH_JPEG_QUALITY
      */
     protected $_quality = null;
 
@@ -101,7 +103,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var int
-     * @deprecated unused
+     * @deprecated
+     * @see Not used anymore
      */
     protected $_angle;
 
@@ -307,7 +310,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $quality
      * @return $this
-     * @deprecated 103.0.1 use config setting with path self::XML_PATH_JPEG_QUALITY
+     * @deprecated 103.0.1
+     * @see Use config setting with path self::XML_PATH_JPEG_QUALITY
      */
     public function setQuality($quality)
     {
@@ -396,7 +400,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     public function setSize($size)
     {
         // determine width and height from string
-        list($width, $height) = explode('x', strtolower($size), 2);
+        list($width, $height) = explode('x', strtolower((string)$size), 2);
         foreach (['width', 'height'] as $wh) {
             ${$wh}
                 = (int)${$wh};
@@ -457,6 +461,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Get new file
      *
      * @deprecated 102.0.0
+     * @see Image::getBaseFile
      * @return bool|string
      */
     public function getNewFile()
@@ -836,7 +841,15 @@ class Image extends \Magento\Framework\Model\AbstractModel
     public function clearCache()
     {
         $directory = $this->_catalogProductMediaConfig->getBaseMediaPath() . '/cache';
-        $this->_mediaDirectory->delete($directory);
+
+        // If the directory cannot be deleted, it is likely because it is not empty anymore due to lazy loading from
+        // the storefront triggering new cache file creation.
+        // This is expected behavior and is not a cause for concern. Deletable files were deleted as expected.
+        try {
+            $this->_mediaDirectory->delete($directory);
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+        } catch (FileSystemException $e) {
+        }
 
         $this->_coreFileStorageDatabase->deleteFolder($this->_mediaDirectory->getAbsolutePath($directory));
         $this->clearImageInfoFromCache();
@@ -870,6 +883,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     public function getResizedImageInfo()
     {
         try {
+            $image = null;
             if ($this->isBaseFilePlaceholder() == true) {
                 $image = $this->imageAsset->getSourceFile();
             } else {
@@ -920,6 +934,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     {
         $imageInfo = $this->loadImageInfoFromCache($imagePath);
         if (!isset($imageInfo['size'])) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $imageSize = getimagesize($imagePath);
             $this->saveImageInfoToCache(['size' => $imageSize], $imagePath);
             return $imageSize;

@@ -29,23 +29,33 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $imageContent = $this->objectManager->create(
             \Magento\Framework\Api\Data\ImageContentInterface::class
         );
+        $fileExpectedParams = [
+            'type' => 'image/png',
+            'title' => 'my_file',
+            'size' => 212,
+            'width' => 10,
+            'height' => 10,
+            'secret_key' => 'bc9577055da436b9c116',
+        ];
         $imageContent->setName('my_file');
         $imageContent->setType('image/png');
         $imageContent->setBase64EncodedData($this->getImageContent());
         $result = $model->processFileContent($imageContent);
 
-        $this->assertArrayHasKey('fullpath', $result);
-        $this->assertFileExists($result['fullpath']);
-
         /** @var  $filesystem \Magento\Framework\Filesystem */
         $filesystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
+        $directory = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        $this->assertArrayHasKey('fullpath', $result);
+        $this->assertEmpty(array_diff_assoc($fileExpectedParams, $result), 'Some file parameters are not correct');
+        $this->assertTrue($directory->isExist($result['fullpath']));
+
         $this->assertArrayHasKey('quote_path', $result);
-        $filePath = $filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath($result['quote_path']);
-        $this->assertFileExists($filePath);
+        $filePath = $directory->getAbsolutePath($result['quote_path']);
+        $this->assertTrue($directory->isExist($filePath));
 
         $this->assertArrayHasKey('order_path', $result);
-        $filePath = $filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath($result['order_path']);
-        $this->assertFileExists($filePath);
+        $filePath = $directory->getAbsolutePath($result['order_path']);
+        $this->assertTrue($directory->isExist($filePath));
     }
 
     public function pathConfigDataProvider()

@@ -3,13 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\App\Router;
 
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\App\Utility\ReflectionClassFactory;
+use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Module\Dir\Reader as ModuleReader;
+use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Serialize\SerializerInterface;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Class to retrieve action class.
@@ -19,7 +27,7 @@ class ActionList
     /**
      * Not allowed string in route's action path to avoid disclosing admin url
      */
-    const NOT_ALLOWED_IN_NAMESPACE_PATH = 'adminhtml';
+    public const NOT_ALLOWED_IN_NAMESPACE_PATH = 'adminhtml';
 
     /**
      * List of application actions
@@ -35,10 +43,10 @@ class ActionList
         'abstract', 'and', 'array', 'as', 'break', 'callable', 'case', 'catch', 'class', 'clone', 'const',
         'continue', 'declare', 'default', 'die', 'do', 'echo', 'else', 'elseif', 'empty', 'enddeclare',
         'endfor', 'endforeach', 'endif', 'endswitch', 'endwhile', 'eval', 'exit', 'extends', 'final',
-        'for', 'foreach', 'function', 'global', 'goto', 'if', 'implements', 'include', 'instanceof',
-        'insteadof','interface', 'isset', 'list', 'namespace', 'new', 'or', 'print', 'private', 'protected',
-        'public', 'require', 'return', 'static', 'switch', 'throw', 'trait', 'try', 'unset', 'use', 'var',
-        'while', 'xor', 'void',
+        'finally', 'fn', 'for', 'foreach', 'function', 'global', 'goto', 'if', 'implements', 'include', 'instanceof',
+        'insteadof', 'interface', 'isset', 'list', 'match', 'namespace', 'new', 'or', 'print', 'private', 'protected',
+        'public', 'require', 'return', 'static', 'switch', 'throw', 'trait', 'try', 'unset', 'use', 'var', 'void',
+        'while', 'xor', 'yield',
     ];
 
     /**
@@ -52,32 +60,44 @@ class ActionList
     private $actionInterface;
 
     /**
-     * ActionList constructor
-     *
-     * @param \Magento\Framework\Config\CacheInterface $cache
+     * @var ReflectionClassFactory|null
+     */
+    private $reflectionClassFactory;
+
+    /**
+     * @param CacheInterface $cache
      * @param ModuleReader $moduleReader
      * @param string $actionInterface
      * @param string $cacheKey
      * @param array $reservedWords
      * @param SerializerInterface|null $serializer
+     * @param State|null $state
+     * @param DirectoryList|null $directoryList
+     * @param ReflectionClassFactory|null $reflectionClassFactory
+     * @throws FileSystemException
      */
     public function __construct(
-        \Magento\Framework\Config\CacheInterface $cache,
+        CacheInterface $cache,
         ModuleReader $moduleReader,
-        $actionInterface = \Magento\Framework\App\ActionInterface::class,
+        $actionInterface = ActionInterface::class,
         $cacheKey = 'app_action_list',
         $reservedWords = [],
-        SerializerInterface $serializer = null
+        SerializerInterface $serializer = null,
+        State $state = null,
+        DirectoryList $directoryList = null,
+        ReflectionClassFactory $reflectionClassFactory = null
     ) {
         $this->reservedWords = array_merge($reservedWords, $this->reservedWords);
         $this->actionInterface = $actionInterface;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Serialize::class);
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $state = $objectManager->get(State::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Serialize::class);
+        $state = $state ?: ObjectManager::getInstance()->get(State::class);
+        $this->reflectionClassFactory = $reflectionClassFactory
+            ?: ObjectManager::getInstance()->get(ReflectionClassFactory::class);
 
         if ($state->getMode() === State::MODE_PRODUCTION) {
-            $directoryList = $objectManager->get(DirectoryList::class);
-            $file = $directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/' . $cacheKey . '.' . 'php';
+            $directoryList = $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
+            $file = $directoryList->getPath(DirectoryList::GENERATED_METADATA)
+                . '/' . $cacheKey . '.' . 'php';
 
             if (file_exists($file)) {
                 $this->actions = (include $file) ?? $moduleReader->getActionFiles();
@@ -103,17 +123,18 @@ class ActionList
      * @param string $namespace
      * @param string $action
      * @return null|string
+     * @throws ReflectionException
      */
     public function get($module, $area, $namespace, $action)
     {
         if ($area) {
             $area = '\\' . $area;
         }
-        $namespace = strtolower($namespace);
+        $namespace = $namespace !== null ? strtolower($namespace) : '';
         if (strpos($namespace, self::NOT_ALLOWED_IN_NAMESPACE_PATH) !== false) {
             return null;
         }
-        if (in_array(strtolower($action), $this->reservedWords)) {
+        if ($action && in_array(strtolower($action), $this->reservedWords)) {
             $action .= 'action';
         }
         $fullPath = str_replace(
@@ -123,9 +144,35 @@ class ActionList
                 $module . '\\controller' . $area . '\\' . $namespace . '\\' . $action
             )
         );
-        if (isset($this->actions[$fullPath])) {
-            return is_subclass_of($this->actions[$fullPath], $this->actionInterface) ? $this->actions[$fullPath] : null;
+        try {
+            if ($this->validateActionClass($fullPath)) {
+                return $this->actions[$fullPath];
+            }
+        } catch (ReflectionException $e) {
+            return null;
         }
+
         return null;
+    }
+
+    /**
+     * Validate Action Class
+     *
+     * @param string $fullPath
+     * @return bool
+     * @throws ReflectionException
+     */
+    private function validateActionClass(string $fullPath): bool
+    {
+        if (isset($this->actions[$fullPath])) {
+            if (!is_subclass_of($this->actions[$fullPath], $this->actionInterface)) {
+                return false;
+            }
+            $reflectionClass = $this->reflectionClassFactory->create($this->actions[$fullPath]);
+            if ($reflectionClass->isInstantiable()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

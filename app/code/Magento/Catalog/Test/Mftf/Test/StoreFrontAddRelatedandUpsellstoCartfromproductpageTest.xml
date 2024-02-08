@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontAddRelatedandUpsellstoCartfromproductpageTest">
+        <annotations>
+            <stories value="Add Related and Upsells to Cart from product page"/>
+            <title value="Add Related and Upsells to Cart from product page"/>
+            <description value="This test verifies that related and up-sell products can be added to the cart from a product page."/>
+            <testCaseId value="MC-27119"/>
+            <severity value="MAJOR"/>
+        </annotations>
+
+        <before>
+            <!-- Create Category -->
+            <createData entity="_defaultCategory" stepKey="testCategory"/>
+            <!-- Create SimpleProduct -->
+            <createData entity="ApiSimplePrice100Qty100" stepKey="productA">
+                <requiredEntity createDataKey="testCategory"/>
+            </createData>
+            <createData entity="ApiSimplePrice100Qty100" stepKey="productB">
+                <requiredEntity createDataKey="testCategory"/>
+            </createData>
+            <createData entity="ApiSimplePrice100Qty100" stepKey="productC">
+                <requiredEntity createDataKey="testCategory"/>
+            </createData>
+            <!-- Create VirtualProduct -->
+            <createData entity="VirtualProduct" stepKey="productU">
+                <requiredEntity createDataKey="testCategory"/>
+            </createData>
+            <createData entity="VirtualProduct" stepKey="productV">
+                <requiredEntity createDataKey="testCategory"/>
+            </createData>
+            <createData entity="VirtualProduct" stepKey="productW">
+                <requiredEntity createDataKey="testCategory"/>
+            </createData>
+
+            <!-- Assign Product to Category -->
+            <createData entity="AssignProductToCategory" stepKey="assignTestCategoryToTestProduct">
+                <requiredEntity createDataKey="testCategory"/>
+                <requiredEntity createDataKey="productA"/>
+                <requiredEntity createDataKey="productB"/>
+                <requiredEntity createDataKey="productC"/>
+                <requiredEntity createDataKey="productU"/>
+                <requiredEntity createDataKey="productV"/>
+                <requiredEntity createDataKey="productW"/>
+            </createData>
+            <!-- Create Customer -->
+            <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
+        </before>
+
+
+        <after>
+            <!-- delete category,product,customer -->
+            <deleteData createDataKey="testCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="productA" stepKey="deleteSimpleProductA"/>
+            <deleteData createDataKey="productB" stepKey="deleteSimpleProductB"/>
+            <deleteData createDataKey="productC" stepKey="deleteSimpleProductC"/>
+            <deleteData createDataKey="productU" stepKey="deleteVirtualProductU"/>
+            <deleteData createDataKey="productV" stepKey="deleteVirtualProductV"/>
+            <deleteData createDataKey="productW" stepKey="deleteVirtualProductW"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+        </after>
+
+        <!-- Login to Admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <!-- Wait up to 30 seconds for the current page to fully load before continuing. -->
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <!-- Open Product A -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductA">
+            <argument name="productId" value="$$productA.id$$"/>
+        </actionGroup>
+
+        <!-- Open 'Related Products, Up-Sells, and Cross-Sells' section and click Add Related Product-->
+
+        <!-- Select Product B and U in AddRelatedProduct-->
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="selectBProduct">
+            <argument name="sku" value="$$productB.sku$$"/>
+        </actionGroup>
+        <!-- Select Product U-->
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="selectUProduct">
+            <argument name="sku" value="$$productU.sku$$"/>
+        </actionGroup>
+
+        <!--Select Product C and W Add up sell product and Select Product C and W-->
+        <actionGroup ref="AddUpSellProductBySkuActionGroup" stepKey="selectCProduct">
+            <argument name="sku" value="$$productC.sku$"/>
+        </actionGroup>
+        <actionGroup ref="AddUpSellProductBySkuActionGroup" stepKey="selectWProduct">
+            <argument name="sku" value="$$productW.sku$"/>
+        </actionGroup>
+
+        <!--Save the Product A-->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProductA"/>
+
+        <!--Open Product V-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToVProductPage">
+            <argument name="productId" value="$$productV.id$$"/>
+        </actionGroup>
+
+        <!--Repeat Steps-->
+        <!-- Select Product B and U in Add Related Product Section -->
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="selectProductB">
+            <argument name="sku" value="$$productB.sku$$"/>
+        </actionGroup>
+        <!-- Select Product U-->
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="selectProductU">
+            <argument name="sku" value="$$productU.sku$$"/>
+        </actionGroup>
+        <!-- Click 'Add Selected Products' button -->
+
+        <!-- Select Product C and W in AddUpSellProduct-->
+        <actionGroup ref="AddUpSellProductBySkuActionGroup" stepKey="selectProductC">
+            <argument name="sku" value="$$productC.sku$"/>
+        </actionGroup>
+        <actionGroup ref="AddUpSellProductBySkuActionGroup" stepKey="selectProductW">
+            <argument name="sku" value="$$productW.sku$"/>
+        </actionGroup>
+
+        <!--Save the Product-->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProductV"/>
+
+        <!--Open Product Page-->
+
+        <!-- Go to frontend and open product A on Main website -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPageA">
+            <argument name="productUrl" value="$$productA.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <!-- Check Product Page is opened and contains Related Product Block and its products-->
+        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup" stepKey="verifyProductB">
+            <argument name="productName" value="$productB.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup" stepKey="verifyProductU">
+            <argument name="productName" value="$productU.name$"/>
+        </actionGroup>
+
+        <!--Check Product Page is opened and contains Product Up Sell Block and its products-->
+        <scrollTo selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}" stepKey="scrollToUpSellHeadingC"/>
+        <see selector="{{StorefrontProductUpSellProductsSection.upSellProducts}}" userInput="$$productC.name$$" stepKey="assertProductC"/>
+        <scrollTo selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}" stepKey="scrollToUpSellHeadingW"/>
+        <see selector="{{StorefrontProductUpSellProductsSection.upSellProducts}}" userInput="$$productW.name$$" stepKey="assertProductW"/>
+
+        <!--Tick in checkbox near 'Product B' in Related products section-->
+        <click selector="{{StorefrontProductRelatedProductsSection.relatedProductCheckBoxButton('$$productB.name$$')}}" stepKey="checkProductB"/>
+
+        <!--Click Add to Cart-->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$productA.name$$"/>
+        </actionGroup>
+
+        <!-- Verify Two Products are added Product A and B-->
+        <!--Check Product A is there -->
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertAProductNameInMiniCart">
+            <argument name="productName" value="$$productA.name$$"/>
+        </actionGroup>
+        <!--Check Product B is there -->
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertBProductNameInMiniCart2">
+            <argument name="productName" value="$$productB.name$$"/>
+        </actionGroup>
+
+        <!-- See  Success message appears:  'You added Product A to your shopping cart.' -->
+        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$productA.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
+
+        <!--Click on SelectAll-->
+        <click selector="{{StorefrontProductRelatedProductsSection.selectAll}}" stepKey="clickSelectAll"/>
+
+        <!--Checkbox near both products are ticked -->
+        <seeCheckboxIsChecked selector="{{StorefrontProductRelatedProductsSection.relatedProductCheckBoxButton('$$productB.name$$')}}" stepKey="seeCheckboxBIsTicked"/>
+        <seeCheckboxIsChecked selector="{{StorefrontProductRelatedProductsSection.relatedProductCheckBoxButton('$$productU.name$$')}}" stepKey="seeCheckboxUIsTicked"/>
+
+
+        <!--Click Add to Cart-->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="clickAddToCart">
+            <argument name="productName" value="$$productA.name$$"/>
+        </actionGroup>
+
+        <!-- See There are 5 items in the cart now -->
+        <see userInput="5" selector="{{StorefrontMinicartSection.quantity}}" stepKey="assertQuantity"/>
+
+        <!-- 2 Products A -->
+        <seeInField userInput="2" selector="{{StorefrontMinicartSection.itemQuantity($$productA.name$$)}}" stepKey="seeProductsA"/>
+        <!-- 2 Products B -->
+        <seeInField userInput="2" selector="{{StorefrontMinicartSection.itemQuantity($$productB.name$$)}}" stepKey="seeProductBWithProductA"/>
+        <!-- 1 Product U -->
+        <seeInField userInput="1" selector="{{StorefrontMinicartSection.itemQuantity($$productU.name$$)}}" stepKey="seeProductU"/>
+
+        <!-- See  Success message appears:  'You added Product A to your shopping cart.' -->
+        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitForProductAddedAgain"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$productA.name$$ to your shopping cart." stepKey="seeSucessMessage"/>
+
+        <!--Untick B CheckBox-->
+        <click selector="{{StorefrontProductRelatedProductsSection.relatedProductCheckBoxButton('$$productB.name$$')}}" stepKey="untickProductB"/>
+        <!--Check B UnTicked-->
+        <uncheckOption selector="{{StorefrontProductRelatedProductsSection.relatedProductCheckBoxButton('$$productB.name$$')}}" stepKey="checkBIsUnTicked"/>
+
+        <seeCheckboxIsChecked selector="{{StorefrontProductRelatedProductsSection.relatedProductCheckBoxButton('$$productU.name$$')}}" stepKey="checkUIsTicked"/>
+
+        <!-- Click Add to Cart Again-->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPagethree">
+            <argument name="productName" value="$$productA.name$$"/>
+        </actionGroup>
+
+        <!-- See There are 7 items in the cart now -->
+        <see userInput="7" selector="{{StorefrontMinicartSection.quantity}}" stepKey="seeItemsQuantity"/>
+        <!-- 3 Products A -->
+        <seeInField userInput="3" selector="{{StorefrontMinicartSection.itemQuantity($$productA.name$$)}}" stepKey="seeAItemQuantity"/>
+        <!--  2 Products B -->
+        <seeInField userInput="2" selector="{{StorefrontMinicartSection.itemQuantity($$productB.name$$)}}" stepKey="seeBItemQuantity"/>
+        <!--  2 Products U -->
+        <seeInField userInput="2" selector="{{StorefrontMinicartSection.itemQuantity($$productU.name$$)}}" stepKey="seeUItemQuantity"/>
+        <!-- See  Success message appears:  'You added Product A to your shopping cart.' -->
+        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitForElement"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$productA.name$$ to your shopping cart." stepKey="seeSucessMsg"/>
+
+        <!-- Step no .22 is left -->
+        <comment userInput="No Element Reference for CheckBox could be found to automate" stepKey="noElementFound" />
+
+        <!-- Remove all products and Clear Shopping Cart-->
+
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProductAFromCart">
+            <argument name="productName" value="$$productA.name$$"/>
+        </actionGroup>
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProductBFromCart">
+            <argument name="productName" value="$$productB.name$$"/>
+        </actionGroup>
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProductUFromCart">
+            <argument name="productName" value="$$productU.name$$"/>
+        </actionGroup>
+
+        <!-- Go to frontend and open product V on Main website -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductVPage">
+            <argument name="productUrl" value="$$productV.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <!-- Check Product Page is opened and contains Related Product Block and its products in Product V Section-->
+        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup" stepKey="assertProductBinProductVSection">
+            <argument name="productName" value="$productB.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup" stepKey="assertProductU">
+            <argument name="productName" value="$productU.name$"/>
+        </actionGroup>
+
+        <!--Check Product Page is opened and contains Product Up Sell Block and its products in Product V Section-->
+        <scrollTo selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}" stepKey="scrollToSeeHeadingInVSection"/>
+        <see selector="{{StorefrontProductUpSellProductsSection.upSellProducts}}" userInput="$$productC.name$$" stepKey="seeProductCinProductVSection"/>
+        <scrollTo selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}" stepKey="scrollToSeeHeadingInV"/>
+        <see selector="{{StorefrontProductUpSellProductsSection.upSellProducts}}" userInput="$$productW.name$$" stepKey="seeProductWinProductVSection"/>
+        <!--Tick in checkbox near 'Product B' in Related products section-->
+        <click selector="{{StorefrontProductRelatedProductsSection.relatedProductCheckBoxButton('$$productB.name$$')}}" stepKey="tickProductB"/>
+
+        <!--Click Add to Cart-->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addVProductToCart">
+            <argument name="productName" value="$$productV.name$$"/>
+        </actionGroup>
+
+        <!-- Verify Two Products are added Product V and B-->
+        <!--Check Product V is there -->
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertProductV">
+            <argument name="productName" value="$$productV.name$$"/>
+        </actionGroup>
+        <!--Check Product B is there -->
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertProductB">
+            <argument name="productName" value="$$productB.name$$"/>
+        </actionGroup>
+
+        <!-- See  Success message appears:  'You added Product V to your shopping cart.' -->
+        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitForPageToLoad"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$productV.name$$ to your shopping cart." stepKey="seeSuccessMessageForProductV"/>
+
+        <!--Close Mini Cart-->
+        <click selector="{{StorefrontMinicartSection.minicartclose}}" stepKey="closeMiniCart"/>
+
+
+        <!--Click on SelectAll-->
+        <click selector="{{StorefrontProductRelatedProductsSection.selectAll}}" stepKey="clickSelectAllLink"/>
+
+        <!--Checkbox near both products are ticked -->
+        <seeCheckboxIsChecked selector="{{StorefrontProductRelatedProductsSection.relatedProductCheckBoxButton('$$productB.name$$')}}" stepKey="seeCheckboxBIschecked"/>
+        <seeCheckboxIsChecked selector="{{StorefrontProductRelatedProductsSection.relatedProductCheckBoxButton('$$productU.name$$')}}" stepKey="seeCheckboxUIsChecked"/>
+
+
+        <!--Click Add to Cart for Product V-->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductVToCart">
+            <argument name="productName" value="$$productV.name$$"/>
+        </actionGroup>
+
+        <!-- Verify 5 Products there -->
+        <see userInput="5" selector="{{StorefrontMinicartSection.quantity}}" stepKey="verifyItemsQuantity"/>
+        <!-- 2 Products V -->
+        <seeInField userInput="2" selector="{{StorefrontMinicartSection.itemQuantity($$productV.name$$)}}" stepKey="assertProductVQuantity"/>
+        <!-- 2 Products B -->
+        <seeInField userInput="2" selector="{{StorefrontMinicartSection.itemQuantity($$productB.name$$)}}" stepKey="assertProductBItems"/>
+        <!-- 1 Products V -->
+        <seeInField userInput="1" selector="{{StorefrontMinicartSection.itemQuantity($$productU.name$$)}}" stepKey="assertProductUItems"/>
+
+        <!-- See  Success message appears:  'You added Product V to your shopping cart.' -->
+        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitforLoad"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$productV.name$$ to your shopping cart." stepKey="seeAddedToCartMessageForProductV"/>
+
+        <!--Untick B-->
+        <click selector="{{StorefrontProductRelatedProductsSection.relatedProductCheckBoxButton('$$productB.name$$')}}" stepKey="untickcheckboxB"/>
+
+        <!-- See B is Ticked-->
+        <uncheckOption selector="{{StorefrontProductRelatedProductsSection.relatedProductCheckBoxButton('$$productB.name$$')}}" stepKey="seeBIsChecked"/>
+
+        <checkOption selector="{{StorefrontProductRelatedProductsSection.relatedProductCheckBoxButton('$$productU.name$$')}}" stepKey="seeUIsUnchecked"/>
+
+        <!-- Click Add to Cart for Product V-->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartProductV">
+            <argument name="productName" value="$$productV.name$$"/>
+        </actionGroup>
+
+        <!-- Verify 7 Products there -->
+        <see userInput="7" selector="{{StorefrontMinicartSection.quantity}}" stepKey="seeproductquantity"/>
+        <!-- 3 Products V -->
+        <seeInField userInput="3" selector="{{StorefrontMinicartSection.itemQuantity($$productV.name$$)}}" stepKey="seeProductVItemQuantity"/>
+        <!-- 2 Products V -->
+        <seeInField userInput="2" selector="{{StorefrontMinicartSection.itemQuantity($$productB.name$$)}}" stepKey="seeProductBItemQuantity"/>
+        <!-- 2 Products U -->
+        <seeInField userInput="2" selector="{{StorefrontMinicartSection.itemQuantity($$productU.name$$)}}" stepKey="seeProductUItemQuantity"/>
+        <!-- See  Success message appears:  'You added Product V to your shopping cart.' -->
+        <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="seeMessage"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$productV.name$$ to your shopping cart." stepKey="seeSuccessMessageInProductV"/>
+
+    </test>
+</tests>

@@ -17,7 +17,7 @@
             <argument name="address" defaultValue="US_Address_TX" type="entity"/>
         </arguments>
 
-        <grabValueFrom selector="{{CheckoutShippingSection.email}}" stepKey="email"/>
+        <grabValueFrom selector="{{CheckoutShippingSection.emailAddress}}" stepKey="email"/>
         <grabValueFrom selector="{{CheckoutShippingSection.firstName}}" stepKey="firstname"/>
         <grabValueFrom selector="{{CheckoutShippingSection.lastName}}" stepKey="lastname"/>
         <grabValueFrom selector="{{CheckoutShippingSection.street}}" stepKey="street"/>

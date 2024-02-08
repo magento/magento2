@@ -17,6 +17,7 @@
             <testCaseId value="MC-17386"/>
             <useCaseId value="MC-15341"/>
             <group value="catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Login as Admin -->

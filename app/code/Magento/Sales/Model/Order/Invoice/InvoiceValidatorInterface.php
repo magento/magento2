@@ -12,6 +12,7 @@ use Magento\Sales\Model\ValidatorResultInterface;
 
 /**
  * Interface InvoiceValidatorInterface
+ * @api
  */
 interface InvoiceValidatorInterface
 {

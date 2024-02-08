@@ -8,6 +8,7 @@ namespace Magento\Theme\Model\Design\Config;
 /**
  * Interface \Magento\Theme\Model\Design\Config\MetadataProviderInterface
  *
+ * @api
  */
 interface MetadataProviderInterface
 {

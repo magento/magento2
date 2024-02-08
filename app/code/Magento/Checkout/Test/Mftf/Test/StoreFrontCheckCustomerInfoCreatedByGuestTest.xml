@@ -21,6 +21,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use StorefrontCheckCustomerInfoOnOrderPageCreatedByGuestTest instead.</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -57,9 +58,12 @@
         <fillField selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" userInput="{{CustomerEntityOne.password}}" stepKey="TypeConfirmationPassword"/>
         <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickOnCreateAccount"/>
         <see userInput="Thank you for registering" stepKey="verifyAccountCreated"/>
+
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdmin"/>
-        <amOnPage url="{{AdminOrderPage.url({$grabOrderNumber})}}" stepKey="navigateToOrderPage"/>
-        <waitForPageLoad stepKey="waitForCreatedOrderPage"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="navigateToOrderPage">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForCreatedOrderPage"/>
         <see stepKey="seeCustomerName" userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminShipmentOrderInformationSection.customerName}}"/>
     </test>
 </tests>

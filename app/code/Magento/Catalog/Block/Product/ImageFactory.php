@@ -18,6 +18,8 @@ use Magento\Catalog\Helper\Image as ImageHelper;
 
 /**
  * Create imageBlock from product and view.xml
+ *
+ * @api
  */
 class ImageFactory
 {
@@ -165,7 +167,7 @@ class ImageFactory
                 'image_url' => $imageAsset->getUrl(),
                 'width' => $imageMiscParams['image_width'],
                 'height' => $imageMiscParams['image_height'],
-                'label' => $this->getLabel($product, $imageMiscParams['image_type']),
+                'label' => $this->getLabel($product, $imageMiscParams['image_type'] ?? ''),
                 'ratio' => $this->getRatio($imageMiscParams['image_width'] ?? 0, $imageMiscParams['image_height'] ?? 0),
                 'custom_attributes' => $this->filterCustomAttributes($attributes),
                 'class' => $this->getClass($attributes),

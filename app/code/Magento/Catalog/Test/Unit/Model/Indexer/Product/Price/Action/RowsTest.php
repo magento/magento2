@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Price\Action;
 
+use Magento\Framework\Indexer\DimensionalIndexerInterface;
+use Magento\Framework\Search\Request\Dimension;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Catalog\Model\Product\Type;
@@ -94,36 +96,17 @@ class RowsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->config = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->currencyFactory = $this->getMockBuilder(CurrencyFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->localeDate = $this->getMockBuilder(TimezoneInterface::class)
-            ->getMockForAbstractClass();
-        $this->dateTime = $this->getMockBuilder(DateTime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->catalogProductType = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->indexerPriceFactory = $this->getMockBuilder(Factory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->defaultIndexerResource = $this->getMockBuilder(DefaultPrice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->tierPriceIndexResource = $this->getMockBuilder(TierPrice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->dimensionCollectionFactory = $this->getMockBuilder(DimensionCollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->tableMaintainer = $this->getMockBuilder(TableMaintainer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->config = $this->createMock(ScopeConfigInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->currencyFactory = $this->createMock(CurrencyFactory::class);
+        $this->localeDate = $this->createMock(TimezoneInterface::class);
+        $this->dateTime = $this->createMock(DateTime::class);
+        $this->catalogProductType = $this->createMock(Type::class);
+        $this->indexerPriceFactory = $this->createMock(Factory::class);
+        $this->defaultIndexerResource = $this->createMock(DefaultPrice::class);
+        $this->tierPriceIndexResource = $this->createMock(TierPrice::class);
+        $this->dimensionCollectionFactory = $this->createMock(DimensionCollectionFactory::class);
+        $this->tableMaintainer = $this->createMock(TableMaintainer::class);
         $batchSize = 2;
 
         $this->actionRows = new Rows(
@@ -144,7 +127,7 @@ class RowsTest extends TestCase
 
     public function testEmptyIds()
     {
-        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
         $this->expectExceptionMessage('Bad value was supplied.');
         $this->actionRows->execute(null);
     }
@@ -152,44 +135,123 @@ class RowsTest extends TestCase
     public function testBatchProcessing()
     {
         $ids = [1, 2, 3, 4];
-        $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $select->expects($this->any())->method('from')->willReturnSelf();
-        $select->expects($this->any())->method('where')->willReturnSelf();
-        $select->expects($this->any())->method('join')->willReturnSelf();
-        $adapter = $this->getMockBuilder(AdapterInterface::class)->getMockForAbstractClass();
-        $adapter->expects($this->any())->method('select')->willReturn($select);
-        $this->defaultIndexerResource->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($adapter);
-        $adapter->expects($this->any())
-            ->method('fetchAll')
-            ->with($select)
-            ->willReturn([]);
-        $adapter->expects($this->any())
+
+        $select = $this->createMock(Select::class);
+        $select->method('from')->willReturnSelf();
+        $select->method('joinLeft')->willReturnSelf();
+        $select->method('where')->willReturnSelf();
+        $select->method('join')->willReturnSelf();
+        $adapter = $this->createMock(AdapterInterface::class);
+        $adapter->method('select')->willReturn($select);
+        $adapter->method('describeTable')->willReturn([]);
+        $this->defaultIndexerResource->method('getConnection')->willReturn($adapter);
+        $adapter->method('fetchAll')->with($select)->willReturn([]);
+
+        $adapter->expects($this->exactly(4))
             ->method('fetchPairs')
             ->with($select)
-            ->willReturn([]);
-        $multiDimensionProvider = $this->getMockBuilder(MultiDimensionProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->dimensionCollectionFactory->expects($this->exactly(2))
+            ->willReturnOnConsecutiveCalls(
+                [1 => 'simple', 2 => 'virtual'],
+                [],
+                [3 => 'simple', 4 => 'virtual'],
+                [],
+            );
+        $multiDimensionProvider = $this->createMock(MultiDimensionProvider::class);
+        $this->dimensionCollectionFactory->expects($this->exactly(4))
             ->method('create')
             ->willReturn($multiDimensionProvider);
-        $iterator = new \ArrayIterator([]);
-        $multiDimensionProvider->expects($this->exactly(2))
+        $dimension = $this->createMock(Dimension::class);
+        $dimension->method('getName')->willReturn('default');
+        $dimension->method('getValue')->willReturn('0');
+        $iterator = new \ArrayIterator([[$dimension]]);
+        $multiDimensionProvider->expects($this->exactly(4))
             ->method('getIterator')
             ->willReturn($iterator);
-        $this->catalogProductType->expects($this->any())
+        $this->catalogProductType->expects($this->once())
             ->method('getTypesByPriority')
-            ->willReturn([]);
+            ->willReturn(
+                [
+                    'virtual' => ['price_indexer' => '\Price\Indexer'],
+                    'simple' => ['price_indexer' => '\Price\Indexer'],
+                ]
+            );
+        $priceIndexer = $this->createMock(DimensionalIndexerInterface::class);
+        $this->indexerPriceFactory->expects($this->exactly(2))
+            ->method('create')
+            ->with('\Price\Indexer', ['fullReindexAction' => false])
+            ->willReturn($priceIndexer);
+        $priceIndexer->expects($this->exactly(4))
+            ->method('executeByDimensions');
+        $select->expects($this->exactly(4))
+            ->method('deleteFromSelect')
+            ->with('main_table')
+            ->willReturn('');
         $adapter->expects($this->exactly(2))
             ->method('getIndexList')
             ->willReturn(['entity_id'=>['COLUMNS_LIST'=>['test']]]);
         $adapter->expects($this->exactly(2))
             ->method('getPrimaryKeyName')
             ->willReturn('entity_id');
+
+        $this->actionRows->execute($ids);
+    }
+
+    public function testDeletedProductsBatchProcessing()
+    {
+        $ids = [1, 2, 3, 4];
+
+        $select = $this->createMock(Select::class);
+        $select->method('from')->willReturnSelf();
+        $select->method('joinLeft')->willReturnSelf();
+        $select->method('where')->willReturnSelf();
+        $select->method('join')->willReturnSelf();
+        $adapter = $this->createMock(AdapterInterface::class);
+        $adapter->method('select')->willReturn($select);
+        $adapter->method('describeTable')->willReturn([]);
+        $this->defaultIndexerResource->method('getConnection')->willReturn($adapter);
+        $adapter->method('fetchAll')->with($select)->willReturn([]);
+
+        $adapter->expects($this->exactly(4))
+            ->method('fetchPairs')
+            ->with($select)
+            ->willReturnOnConsecutiveCalls([], [], [], []);
+        $multiDimensionProvider = $this->createMock(MultiDimensionProvider::class);
+        $this->dimensionCollectionFactory->expects($this->exactly(2))
+            ->method('create')
+            ->willReturn($multiDimensionProvider);
+        $dimension = $this->createMock(Dimension::class);
+        $dimension->method('getName')->willReturn('default');
+        $dimension->method('getValue')->willReturn('0');
+        $iterator = new \ArrayIterator([[$dimension]]);
+        $multiDimensionProvider->expects($this->exactly(2))
+            ->method('getIterator')
+            ->willReturn($iterator);
+        $this->catalogProductType->expects($this->once())
+            ->method('getTypesByPriority')
+            ->willReturn(
+                [
+                    'virtual' => ['price_indexer' => '\Price\Indexer'],
+                    'simple' => ['price_indexer' => '\Price\Indexer'],
+                ]
+            );
+        $priceIndexer = $this->createMock(DimensionalIndexerInterface::class);
+        $this->indexerPriceFactory->expects($this->exactly(2))
+            ->method('create')
+            ->with('\Price\Indexer', ['fullReindexAction' => false])
+            ->willReturn($priceIndexer);
+        $priceIndexer->expects($this->never())
+            ->method('executeByDimensions');
+        $select->expects($this->exactly(2))
+            ->method('deleteFromSelect')
+            ->with('index_price')
+            ->willReturn('');
+        $adapter->expects($this->exactly(2))
+            ->method('getIndexList')
+            ->willReturn(['entity_id'=>['COLUMNS_LIST'=>['test']]]);
+        $adapter->expects($this->exactly(2))
+            ->method('getPrimaryKeyName')
+            ->willReturn('entity_id');
+
         $this->actionRows->execute($ids);
     }
 }

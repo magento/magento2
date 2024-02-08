@@ -8,10 +8,10 @@ namespace Magento\Catalog\Model\ResourceModel\Attribute;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogEavAttribute;
 use Magento\Store\Model\Website;
 use Magento\Framework\Model\Entity\ScopeInterface;
 
@@ -19,7 +19,6 @@ use Magento\Framework\Model\Entity\ScopeInterface;
  * Builds scope-related conditions for catalog attributes
  *
  * Class ConditionBuilder
- * @package Magento\Catalog\Model\ResourceModel\Attribute
  */
 class ConditionBuilder
 {
@@ -45,6 +44,7 @@ class ConditionBuilder
      * @param ScopeInterface[] $scopes
      * @param string $linkFieldValue
      * @return array
+     * @throws NoSuchEntityException
      */
     public function buildExistingAttributeWebsiteScope(
         AbstractAttribute $attribute,
@@ -56,7 +56,7 @@ class ConditionBuilder
         if (!$website) {
             return [];
         }
-        $storeIds = $website->getStoreIds();
+        $storeIds = $this->getStoreIds($website);
 
         $condition = [
             $metadata->getLinkField() . ' = ?' => $linkFieldValue,
@@ -81,6 +81,7 @@ class ConditionBuilder
      * @param ScopeInterface[] $scopes
      * @param string $linkFieldValue
      * @return array
+     * @throws NoSuchEntityException
      */
     public function buildNewAttributesWebsiteScope(
         AbstractAttribute $attribute,
@@ -92,7 +93,7 @@ class ConditionBuilder
         if (!$website) {
             return [];
         }
-        $storeIds = $website->getStoreIds();
+        $storeIds = $this->getStoreIds($website);
 
         $condition = [
             $metadata->getLinkField() => $linkFieldValue,
@@ -109,8 +110,11 @@ class ConditionBuilder
     }
 
     /**
+     * Get website for website scope
+     *
      * @param array $scopes
      * @return null|Website
+     * @throws NoSuchEntityException
      */
     private function getWebsiteForWebsiteScope(array $scopes)
     {
@@ -119,8 +123,11 @@ class ConditionBuilder
     }
 
     /**
+     * Get store from scopes
+     *
      * @param ScopeInterface[] $scopes
      * @return StoreInterface|null
+     * @throws NoSuchEntityException
      */
     private function getStoreFromScopes(array $scopes)
     {
@@ -131,5 +138,21 @@ class ConditionBuilder
         }
 
         return null;
+    }
+
+    /**
+     * Get storeIds from the website
+     *
+     * @param Website $website
+     * @return array
+     */
+    private function getStoreIds(Website $website): array
+    {
+        $storeIds = $website->getStoreIds();
+
+        if (empty($storeIds) && $website->getCode() === Website::ADMIN_CODE) {
+            $storeIds[] = Store::DEFAULT_STORE_ID;
+        }
+        return $storeIds;
     }
 }
