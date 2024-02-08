@@ -44,6 +44,12 @@ class Renderer
      */
     private $scopeConfig;
 
+    /**
+     * @param AddressConfig $addressConfig
+     * @param EventManager $eventManager
+     * @param ScopeConfigInterface|null $scopeConfig
+     * @param StoreManagerInterface|null $storeManager
+     */
     public function __construct(
         AddressConfig $addressConfig,
         EventManager $eventManager,
@@ -83,6 +89,9 @@ class Renderer
 
     /**
      * Returns locale by storeId
+     *
+     * @param int $storeId
+     * @return string
      */
     private function getLocaleByStoreId(int $storeId): string
     {
