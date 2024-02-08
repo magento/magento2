@@ -12,9 +12,6 @@ use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Framework\OsInfo;
 use Magento\TestFramework\Helper\Amqp;
 
-/**
- * Publisher Consumer Controller
- */
 class PublisherConsumerController
 {
     /**
@@ -208,9 +205,9 @@ class PublisherConsumerController
     {
         $i = 0;
         do {
-            sleep(1);
+            sleep(3);
             $assertion = call_user_func_array($condition, $params);
-        } while (!$assertion && ($i++ < 180));
+        } while (!$assertion && ($i++ < 10));
 
         if (!$assertion) {
             throw new PreconditionFailedException("No asynchronous messages were processed.");
