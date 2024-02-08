@@ -12,7 +12,8 @@ $parentBlock = $block->getParentBlock();
 $track = $block->getData('track');
 ?>
 <div class="table-wrapper">
-    <table class="data table order tracking" id="track-history-table-<?= $escaper->escapeHtml($track->getTracking()) ?>">
+    <table class="data table order tracking"
+           id="track-history-table-<?= $escaper->escapeHtml($track->getTracking()) ?>">
         <caption class="table-caption"><?= $escaper->escapeHtml(__('Track history')) ?></caption>
         <thead>
         <tr>
@@ -23,7 +24,7 @@ $track = $block->getData('track');
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($track->getProgressdetail() as $detail) : ?>
+        <?php foreach ($track->getProgressdetail() as $detail): ?>
             <?php $detailDate = (!empty($detail['deliverydate'])?
                 $parentBlock->formatDeliveryDate($detail['deliverydate']) :
                 ''); ?>
@@ -32,7 +33,8 @@ $track = $block->getData('track');
                 ''); ?>
             <tr>
                 <td data-th="<?= $escaper->escapeHtml(__('Location')) ?>" class="col location">
-                    <?= (!empty($detail['deliverylocation']) ? $escaper->escapeHtml($detail['deliverylocation']) : '') ?>
+                    <?= (!empty($detail['deliverylocation']) ?
+                        $escaper->escapeHtml($detail['deliverylocation']) : '') ?>
                 </td>
                 <td data-th="<?= $escaper->escapeHtml(__('Date')) ?>" class="col date">
                     <?= /* @noEscape */ $detailDate ?>
