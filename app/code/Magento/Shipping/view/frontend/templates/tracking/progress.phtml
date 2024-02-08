@@ -42,7 +42,7 @@ $track = $block->getData('track');
                 <td data-th="<?= $escaper->escapeHtml(__('Local Time')) ?>" class="col time">
                     <?= /* @noEscape */ $detailTime ?></td>
                 <td data-th="<?= $escaper->escapeHtml(__('Description')) ?>" class="col description">
-                    <?= (!empty($detail['activity']) ? $block->escapeHtml($detail['activity']) : '') ?>
+                    <?= (!empty($detail['activity']) ? $escaper->escapeHtml($detail['activity']) : '') ?>
                 </td>
             </tr>
         <?php endforeach; ?>
