@@ -35,6 +35,7 @@
     <type name="Magento\PageCache\Controller\Block">
         <arguments>
             <argument name="layoutCacheKey" xsi:type="object">Magento\Framework\View\Layout\LayoutCacheKeyInterface</argument>
+            <argument name="scopeConfig" xsi:type="object">Magento\Framework\App\Config\ScopeConfigInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\Cache\RuntimeStaleCacheStateModifier">
