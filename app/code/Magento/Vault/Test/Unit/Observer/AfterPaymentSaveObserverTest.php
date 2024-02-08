@@ -88,17 +88,17 @@ class AfterPaymentSaveObserverTest extends TestCase
         $this->encryptorModel = new Encryptor($encryptorRandomGenerator, $deploymentConfigMock);
 
         $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
-            ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken', '__wakeup'])
+            ->onlyMethods(['setVaultPaymentToken', 'getVaultPaymentToken', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->paymentTokenManagementMock = $this->getMockBuilder(PaymentTokenManagement::class)
-            ->setMethods(['saveTokenWithPaymentLink'])
+            ->onlyMethods(['saveTokenWithPaymentLink'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->paymentTokenMock = $this->getMockBuilder(PaymentToken::class)
-            ->setMethods(null)
+            ->onlyMethods(null)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -108,13 +108,13 @@ class AfterPaymentSaveObserverTest extends TestCase
         $this->salesOrderMock = $this->createMock(Order::class);
 
         $this->storeMock = $this->getMockBuilder(Store::class)
-            ->setMethods(['getWebsiteId'])
+            ->onlyMethods(['getWebsiteId'])
             ->disableOriginalConstructor()
             ->getMock();
 
         // Sales Order Payment Model
         $this->salesOrderPaymentMock = $this->getMockBuilder(Payment::class)
-            ->setMethods(['getAdditionalInformation'])
+            ->onlyMethods(['getAdditionalInformation'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->salesOrderPaymentMock->setOrder($this->salesOrderMock);
@@ -122,7 +122,7 @@ class AfterPaymentSaveObserverTest extends TestCase
 
         // Arguments to observer container
         $this->eventObserverArgMock = $this->getMockBuilder(Observer::class)
-            ->setMethods(['getDataByKey'])
+            ->onlyMethods(['getDataByKey'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->eventObserverArgMock->expects($this->any())

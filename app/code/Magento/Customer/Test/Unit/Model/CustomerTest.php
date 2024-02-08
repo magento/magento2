@@ -150,15 +150,15 @@ class CustomerTest extends TestCase
         $this->accountConfirmation = $this->createMock(AccountConfirmation::class);
         $this->addressesFactory = $this->getMockBuilder(AddressCollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->customerDataFactory = $this->getMockBuilder(CustomerInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->dataObjectHelper = $this->getMockBuilder(DataObjectHelper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['populateWithArray'])
+            ->onlyMethods(['populateWithArray'])
             ->getMock();
         $this->mathRandom = $this->createMock(Random::class);
 
@@ -389,13 +389,13 @@ class CustomerTest extends TestCase
         $addressDataModel = $this->getMockForAbstractClass(AddressInterface::class);
         $address = $this->getMockBuilder(AddressModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setCustomer', 'getDataModel'])
+            ->onlyMethods(['setCustomer', 'getDataModel'])
             ->getMock();
         $address->expects($this->atLeastOnce())->method('getDataModel')->willReturn($addressDataModel);
         $addresses = new \ArrayIterator([$address, $address]);
         $addressCollection = $this->getMockBuilder(AddressCollection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setCustomerFilter', 'addAttributeToSelect', 'getIterator', 'getItems'])
+            ->onlyMethods(['setCustomerFilter', 'addAttributeToSelect', 'getIterator', 'getItems'])
             ->getMock();
         $addressCollection->expects($this->atLeastOnce())->method('setCustomerFilter')->willReturnSelf();
         $addressCollection->expects($this->atLeastOnce())->method('addAttributeToSelect')->willReturnSelf();

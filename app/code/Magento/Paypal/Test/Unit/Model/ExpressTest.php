@@ -115,7 +115,7 @@ class ExpressTest extends TestCase
             ['setMethod', 'getApi', 'importPaymentInfo', 'resetApi', 'void']
         );
         $this->eventManager = $this->getMockBuilder(ManagerInterface::class)
-            ->setMethods(['dispatch'])
+            ->onlyMethods(['dispatch'])
             ->getMockForAbstractClass();
 
         $this->pro->method('getApi')

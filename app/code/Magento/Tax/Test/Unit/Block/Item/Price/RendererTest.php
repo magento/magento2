@@ -45,7 +45,7 @@ class RendererTest extends TestCase
         )->getMock();
         $this->taxHelper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'displayCartPriceExclTax',
                 'displayCartBothPrices',
                 'displayCartPriceInclTax',
@@ -75,7 +75,7 @@ class RendererTest extends TestCase
     {
         $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStoreId', '__wakeup'])
+            ->onlyMethods(['getStoreId', '__wakeup'])
             ->getMock();
 
         $itemMock->expects($this->once())
@@ -242,7 +242,7 @@ class RendererTest extends TestCase
 
         $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['formatPrice', '__wakeup'])
+            ->onlyMethods(['formatPrice', '__wakeup'])
             ->getMock();
 
         $this->priceCurrency->expects($this->once())
@@ -252,7 +252,7 @@ class RendererTest extends TestCase
 
         $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore', '__wakeup'])
+            ->onlyMethods(['getStore', '__wakeup'])
             ->getMock();
 
         $itemMock->expects($this->once())
@@ -279,7 +279,7 @@ class RendererTest extends TestCase
 
         $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOrder', '__wakeup'])
+            ->onlyMethods(['getOrder', '__wakeup'])
             ->getMock();
 
         $itemMock->expects($this->once())
@@ -297,7 +297,7 @@ class RendererTest extends TestCase
 
         $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['formatPrice', '__wakeup'])
+            ->onlyMethods(['formatPrice', '__wakeup'])
             ->getMock();
 
         $orderMock->expects($this->once())
@@ -307,7 +307,7 @@ class RendererTest extends TestCase
 
         $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOrder', '__wakeup'])
+            ->onlyMethods(['getOrder', '__wakeup'])
             ->getMock();
 
         $orderItemMock->expects($this->once())
@@ -316,7 +316,7 @@ class RendererTest extends TestCase
 
         $invoiceItemMock = $this->getMockBuilder(InvoiceItem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOrderItem', '__wakeup', 'getStoreId'])
+            ->onlyMethods(['getOrderItem', '__wakeup', 'getStoreId'])
             ->getMock();
 
         $invoiceItemMock->expects($this->once())
@@ -338,7 +338,7 @@ class RendererTest extends TestCase
 
         $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStoreId', '__wakeup'])
+            ->onlyMethods(['getStoreId', '__wakeup'])
             ->getMock();
 
         $itemMock->expects($this->once())
@@ -356,7 +356,7 @@ class RendererTest extends TestCase
         /** @var \Magento\Quote\Model\Quote\Item|MockObject $quoteItemMock */
         $quoteItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCalculationPrice', '__wakeup'])
+            ->onlyMethods(['getCalculationPrice', '__wakeup'])
             ->getMock();
 
         $quoteItemMock->expects($this->once())
@@ -374,7 +374,7 @@ class RendererTest extends TestCase
         /** @var Item|MockObject $orderItemMock */
         $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPrice', '__wakeup'])
+            ->onlyMethods(['getPrice', '__wakeup'])
             ->getMock();
 
         $orderItemMock->expects($this->once())
@@ -396,7 +396,7 @@ class RendererTest extends TestCase
 
         $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getRowTotal',
                     'getTaxAmount',
@@ -437,7 +437,7 @@ class RendererTest extends TestCase
 
         $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getBaseRowTotal',
                     'getBaseTaxAmount',

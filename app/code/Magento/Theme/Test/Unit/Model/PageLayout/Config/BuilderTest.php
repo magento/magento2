@@ -62,7 +62,7 @@ class BuilderTest extends TestCase
     {
         $this->configFactory = $this->getMockBuilder(ConfigFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->fileCollector = $this->getMockBuilder(Aggregated::class)

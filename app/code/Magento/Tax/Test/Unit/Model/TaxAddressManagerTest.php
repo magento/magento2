@@ -39,7 +39,7 @@ class TaxAddressManagerTest extends TestCase
 
         $this->customerSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setDefaultTaxBillingAddress', 'setDefaultTaxShippingAddress'])
+            ->onlyMethods(['setDefaultTaxBillingAddress', 'setDefaultTaxShippingAddress'])
             ->getMock();
 
         $this->manager = $this->objectManager->getObject(
@@ -72,7 +72,7 @@ class TaxAddressManagerTest extends TestCase
 
         /* @var \Magento\Customer\Model\Address|MockObject $address */
         $address = $this->getMockBuilder(Address::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getId',
                 'getCustomer',
                 'getIsPrimaryBilling',
@@ -98,7 +98,7 @@ class TaxAddressManagerTest extends TestCase
 
         /* @var \Magento\Customer\Model\Customer|MockObject $customer */
         $customer = $this->getMockBuilder(Customer::class)
-            ->setMethods(['getDefaultBilling', 'getDefaultShipping'])
+            ->onlyMethods(['getDefaultBilling', 'getDefaultShipping'])
             ->disableOriginalConstructor()
             ->getMock();
         $customer->expects($this->any())->method('getDefaultBilling')->willReturn($customerDefBillAddId);

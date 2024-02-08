@@ -89,7 +89,7 @@ class RegistrationTest extends TestCase
 
         $themeFromConfigMock = $this->getMockBuilder(Theme::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getArea',
                 'getThemePath',
                 'getParentTheme',
@@ -99,7 +99,7 @@ class RegistrationTest extends TestCase
 
         $themeFromDbMock = $this->getMockBuilder(Theme::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'setParentId',
                 'setThemeTitle',
                 'save',

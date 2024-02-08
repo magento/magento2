@@ -71,17 +71,17 @@ class ConfigTest extends TestCase
     {
         $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
         $this->typeFactoryMock = $this->getMockBuilder(TypeFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->collectionFactoryMock =
             $this->getMockBuilder(CollectionFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->cacheStateMock = $this->getMockForAbstractClass(StateInterface::class);
         $this->universalFactoryMock = $this->getMockBuilder(UniversalFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -108,7 +108,7 @@ class ConfigTest extends TestCase
         $attributeCollectionMock = $this->getMockBuilder(
             Collection::class
         )->disableOriginalConstructor()
-            ->setMethods(['getData', 'setEntityTypeFilter'])
+            ->onlyMethods(['getData', 'setEntityTypeFilter'])
             ->getMock();
         $attributeCollectionMock->expects($this->any())
             ->method('setEntityTypeFilter')->willReturnSelf();
@@ -116,7 +116,7 @@ class ConfigTest extends TestCase
             ->method('getData')
             ->willReturn([$attributeData]);
         $entityAttributeMock = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['setData', 'loadByCode', 'toArray'])
+            ->onlyMethods(['setData', 'loadByCode', 'toArray'])
             ->disableOriginalConstructor()
             ->getMock();
         $entityAttributeMock->expects($this->atLeastOnce())->method('setData')
@@ -148,7 +148,7 @@ class ConfigTest extends TestCase
             ->willReturn($collectionStub);
 
         $entityType = $this->getMockBuilder(Type::class)
-            ->setMethods(['getEntity', 'setData', 'getData', 'getEntityTypeCode', 'getId'])
+            ->onlyMethods(['getEntity', 'setData', 'getData', 'getEntityTypeCode', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $entityType->method('getEntityTypeCode')
@@ -213,7 +213,7 @@ class ConfigTest extends TestCase
         $attributeCollectionMock = $this->getMockBuilder(
             Collection::class
         )->disableOriginalConstructor()
-            ->setMethods(['getData', 'setEntityTypeFilter'])
+            ->onlyMethods(['getData', 'setEntityTypeFilter'])
             ->getMock();
         $attributeCollectionMock
             ->expects($this->any())
@@ -223,7 +223,7 @@ class ConfigTest extends TestCase
             ->method('getData')
             ->willReturn([$attributeData]);
         $entityAttributeMock = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['setData', 'setOrigData', 'load', 'toArray'])
+            ->onlyMethods(['setData', 'setOrigData', 'load', 'toArray'])
             ->disableOriginalConstructor()
             ->getMock();
         $entityAttributeMock->method('setData')
@@ -264,7 +264,7 @@ class ConfigTest extends TestCase
             ->willReturn($collectionStub);
 
         $entityType = $this->getMockBuilder(Type::class)
-            ->setMethods(['getEntity', 'setData', 'getData', 'getEntityTypeCode', 'getId'])
+            ->onlyMethods(['getEntity', 'setData', 'getData', 'getEntityTypeCode', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $entityType->method('getEntityTypeCode')

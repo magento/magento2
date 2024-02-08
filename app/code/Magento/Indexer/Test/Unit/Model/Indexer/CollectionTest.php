@@ -56,7 +56,7 @@ class CollectionTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->statesFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

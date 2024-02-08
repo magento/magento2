@@ -118,44 +118,44 @@ class RedirectTest extends TestCase
         $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getParam'])
+            ->onlyMethods(['getParam'])
             ->getMockForAbstractClass();
         $this->redirectMock = $this->getMockBuilder(RedirectInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['redirect'])
+            ->onlyMethods(['redirect'])
             ->getMockForAbstractClass();
         $this->storeResolverMock = $this->getMockBuilder(StoreResolverInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCurrentStoreId'])
+            ->onlyMethods(['getCurrentStoreId'])
             ->getMockForAbstractClass();
         $this->storeRepositoryMock = $this->getMockBuilder(StoreRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getById', 'get'])
+            ->onlyMethods(['getById', 'get'])
             ->getMockForAbstractClass();
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addErrorMessage'])
+            ->onlyMethods(['addErrorMessage'])
             ->getMockForAbstractClass();
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->fromStoreMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCode'])
+            ->onlyMethods(['getCode'])
             ->getMockForAbstractClass();
         $this->targetStoreMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCode'])
+            ->onlyMethods(['getCode'])
             ->getMockForAbstractClass();
         $this->sidResolverMock = $this->getMockBuilder(SidResolverInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUseSessionInUrl'])
+            ->onlyMethods(['getUseSessionInUrl'])
             ->getMockForAbstractClass();
         $this->hashGeneratorMock = $this->createMock(HashGenerator::class);
 
         $this->currentStoreMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBaseUrl'])
+            ->onlyMethods(['getBaseUrl'])
             ->getMock();
         $this->storeRepositoryMock
             ->expects($this->once())

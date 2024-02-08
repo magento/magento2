@@ -35,18 +35,18 @@ class UsersTest extends TestCase
         /** @var Collection|MockObject $userCollectionFactoryMock $userCollectionMock */
         $userCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
         /** @var CollectionFactory|MockObject $userCollectionFactoryMock */
         $userCollectionFactoryMock = $this->getMockBuilder(
             CollectionFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         /** @var RequestInterface|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
         $userCollectionFactoryMock->expects($this->any())->method('create')->willReturn($userCollectionMock);
         $userCollectionMock->expects($this->any())->method('load')->willReturn($userCollectionMock);
@@ -54,7 +54,7 @@ class UsersTest extends TestCase
 
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
         $this->model = $objectManager->getObject(
             Users::class,

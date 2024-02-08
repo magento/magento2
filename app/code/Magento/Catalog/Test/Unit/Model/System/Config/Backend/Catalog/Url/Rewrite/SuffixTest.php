@@ -84,12 +84,12 @@ class SuffixTest extends TestCase
     {
         $this->eventDispatcher = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['dispatch'])
+            ->onlyMethods(['dispatch'])
             ->getMockForAbstractClass();
         $this->eventDispatcher->method('dispatch')->willReturnSelf();
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEventDispatcher'])
+            ->onlyMethods(['getEventDispatcher'])
             ->getMock();
         $this->context->method('getEventDispatcher')->willReturn($this->eventDispatcher);
 
@@ -97,7 +97,7 @@ class SuffixTest extends TestCase
         $this->config = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->cacheTypeList = $this->getMockBuilder(TypeList::class)
             ->disableOriginalConstructor()
-            ->setMethods(['invalidate'])
+            ->onlyMethods(['invalidate'])
             ->getMock();
 
         $this->urlRewriteHelper = $this->getMockBuilder(UrlRewrite::class)
@@ -105,7 +105,7 @@ class SuffixTest extends TestCase
             ->getMock();
         $this->storeManager = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStores'])
+            ->onlyMethods(['getStores'])
             ->getMock();
         $this->storeManager->method('getStores')->willReturn([]);
 
@@ -113,7 +113,7 @@ class SuffixTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->urlFinder =$this->getMockBuilder(UrlFinderInterface::class)
-            ->setMethods(['findAllByData', 'findOneByData'])
+            ->onlyMethods(['findAllByData', 'findOneByData'])
             ->getMockForAbstractClass();
         $this->urlFinder->method('findAllByData')->willReturn([]);
 

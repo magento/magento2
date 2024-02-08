@@ -27,7 +27,7 @@ class TextTest extends TestCase
     {
         $this->model = $this->getMockBuilder(Text::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getReadOnly', 'canManageOptionDefaultOnly', 'getOptionValues'])
+            ->onlyMethods(['getReadOnly', 'canManageOptionDefaultOnly', 'getOptionValues'])
             ->getMock();
     }
 

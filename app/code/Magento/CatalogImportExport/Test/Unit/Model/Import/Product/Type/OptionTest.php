@@ -317,7 +317,7 @@ class OptionTest extends AbstractImportTestCase
         // Create model mock with rewritten _getMultiRowFormat method to support test data with the old format.
         $this->modelMock = $this->getMockBuilder($modelClassName)
             ->setConstructorArgs($modelClassArgs)
-            ->setMethods(['_getMultiRowFormat'])
+            ->onlyMethods(['_getMultiRowFormat'])
             ->getMock();
         $reflection = new \ReflectionClass(Option::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');

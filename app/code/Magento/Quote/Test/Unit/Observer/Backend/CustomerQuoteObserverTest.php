@@ -66,7 +66,7 @@ class CustomerQuoteObserverTest extends TestCase
             ->getMock();
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerDataObject', 'getOrigCustomerDataObject'])
+            ->onlyMethods(['getCustomerDataObject', 'getOrigCustomerDataObject'])
             ->getMock();
         $this->observerMock->expects($this->any())->method('getEvent')->willReturn($this->eventMock);
         $objectManager = new ObjectManager($this);
@@ -143,7 +143,7 @@ class CustomerQuoteObserverTest extends TestCase
         /** @var MockObject|Quote $quoteMock */
         $quoteMock = $this->getMockBuilder(
             Quote::class
-        )->setMethods(
+        )->onlyMethods(
             [
                 'setWebsite',
                 'setCustomerGroupId',

@@ -65,7 +65,7 @@ class DataTest extends TestCase
 
         $this->filter = $this->getMockBuilder(FilterManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['truncate'])
+            ->onlyMethods(['truncate'])
             ->getMock();
 
         $this->escaper = $this->getMockBuilder(Escaper::class)

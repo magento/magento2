@@ -35,7 +35,7 @@ class SubstitutionTest extends TestCase
         $infoMock = $this->getMockBuilder(
             Info::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 []
             )->getMock();
 

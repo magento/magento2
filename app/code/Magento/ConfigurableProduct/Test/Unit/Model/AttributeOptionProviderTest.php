@@ -73,7 +73,7 @@ class AttributeOptionProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->select = $this->getMockBuilder(Select::class)
-            ->setMethods([])
+            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -98,7 +98,7 @@ class AttributeOptionProviderTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->abstractAttribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['getSourceModel', 'getSource'])
+            ->onlyMethods(['getSourceModel', 'getSource'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -155,7 +155,7 @@ class AttributeOptionProviderTest extends TestCase
 
         $source = $this->getMockBuilder(AbstractSource::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAllOptions'])
+            ->onlyMethods(['getAllOptions'])
             ->getMockForAbstractClass();
         $source->expects($this->once())
             ->method('getAllOptions')

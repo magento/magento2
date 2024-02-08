@@ -47,7 +47,7 @@ class SingleFileTest extends TestCase
         $fileType = 'png';
         $customCss = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\FileInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'delete',
                     'save',
@@ -67,7 +67,7 @@ class SingleFileTest extends TestCase
             )
             ->getMock();
         $theme = $this->getMockBuilder(ThemeInterface::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getArea',
                     'getThemePath',
@@ -120,7 +120,7 @@ class SingleFileTest extends TestCase
     {
         $customCss = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\FileInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'delete',
                     'save',
@@ -144,7 +144,7 @@ class SingleFileTest extends TestCase
         $fileType = 'png';
 
         $theme = $this->getMockBuilder(ThemeInterface::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getArea',
                     'getThemePath',

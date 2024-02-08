@@ -71,7 +71,7 @@ class ValidateTest extends TestCase
     {
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getPostValue',
                 'isPost',
             ])

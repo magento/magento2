@@ -62,7 +62,7 @@ class IndexTest extends TestCase
         $request->expects($this->once())->method('getParam')->with('type')->willReturn('rss_feed');
 
         $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->setMethods(['setHeader', 'setBody', 'sendResponse'])
+            ->onlyMethods(['setHeader', 'setBody', 'sendResponse'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

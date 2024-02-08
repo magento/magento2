@@ -120,19 +120,23 @@ class StockItemRepositoryTest extends TestCase
     {
         $this->stockItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
+                [
+                    'setStockStatusChangedAutomaticallyFlag',
+                    'hasStockStatusChangedAutomaticallyFlag',
+
+                ]
+            )
+            ->onlyMethods(
                 [
                     'getItemId',
                     'getProductId',
                     'setIsInStock',
                     'getIsInStock',
-                    'setStockStatusChangedAutomaticallyFlag',
-                    'getStockStatusChangedAutomaticallyFlag',
                     'getStockStatusChangedAuto',
                     'getManageStock',
                     'setLowStockDate',
                     'setStockStatusChangedAuto',
-                    'hasStockStatusChangedAutomaticallyFlag',
                     'setQty',
                     'getWebsiteId',
                     'setWebsiteId',
@@ -159,28 +163,29 @@ class StockItemRepositoryTest extends TestCase
         $this->stockItemFactoryMock = $this->getMockBuilder(
             StockItemInterfaceFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockItemCollectionMock = $this->getMockBuilder(
             StockItemCollectionInterfaceFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productFactoryMock = $this->getMockBuilder(ProductFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'create'])
+            ->addMethods(['load'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId', 'getTypeId', '__wakeup'])
+            ->onlyMethods(['load', 'getId', 'getTypeId', '__wakeup'])
             ->getMock();
 
         $this->productFactoryMock->expects($this->any())->method('create')->willReturn($this->productMock);
 
         $this->queryBuilderFactoryMock = $this->getMockBuilder(QueryBuilderFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->mapperMock = $this->getMockBuilder(MapperFactory::class)
@@ -209,7 +214,7 @@ class StockItemRepositoryTest extends TestCase
         $productCollection->expects($this->any())->method('getFirstItem')->willReturn($this->productMock);
 
         $productCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -399,7 +404,7 @@ class StockItemRepositoryTest extends TestCase
             ->getMock();
         $queryBuilderMock = $this->getMockBuilder(QueryBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setCriteria', 'setResource', 'create'])
+            ->onlyMethods(['setCriteria', 'setResource', 'create'])
             ->getMock();
         $queryMock = $this->getMockBuilder(QueryInterface::class)
             ->getMock();
@@ -502,7 +507,9 @@ class StockItemRepositoryTest extends TestCase
                 $mockMethod->with(...$config['with']);
             }
             if (isset($config['withConsecutive'])) {
-                $mockMethod->withConsecutive(...$config['withConsecutive']);
+                $mockMethod->willReturnCallback(fn($param) => match ([$param]) {
+                    [...$config['withConsecutive']] => $mockMethod
+                });
             }
             if (isset($config['willReturnSelf'])) {
                 $mockMethod->willReturnSelf();

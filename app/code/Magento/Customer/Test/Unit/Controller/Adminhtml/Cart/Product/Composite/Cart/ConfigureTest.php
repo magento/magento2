@@ -104,7 +104,7 @@ class ConfigureTest extends TestCase
             ->willReturn($this->option);
 
         $context = $this->getMockBuilder(Context::class)
-            ->setMethods(['getRequest', 'getObjectManager'])
+            ->onlyMethods(['getRequest', 'getObjectManager'])
             ->disableOriginalConstructor()
             ->getMock();
         $context->expects($this->any())
@@ -123,7 +123,7 @@ class ConfigureTest extends TestCase
             ->getMock();
 
         $this->quoteItemRetriever = $this->getMockBuilder(QuoteItemRetriever::class)
-            ->setMethods(['getById'])
+            ->onlyMethods(['getById'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -149,7 +149,7 @@ class ConfigureTest extends TestCase
             ->getMock();
 
         $quote = $this->getMockBuilder(Quote::class)
-            ->setMethods(['setWebsite', 'getItemById'])
+            ->onlyMethods(['setWebsite', 'getItemById'])
             ->disableOriginalConstructor()
             ->getMock();
         $quote->expects($this->once())

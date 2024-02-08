@@ -46,15 +46,15 @@ class FixerIoApiLayerTest extends TestCase
     {
         $this->currencyFactory = $this->getMockBuilder(CurrencyFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->httpClientFactory = $this->getMockBuilder(LaminasClientFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->model = new FixerIoApiLayer($this->currencyFactory, $this->scopeConfig, $this->httpClientFactory);
@@ -92,7 +92,7 @@ class FixerIoApiLayerTest extends TestCase
         /** @var DataObject|MockObject $currencyMock */
         $httpResponse = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBody'])
+            ->onlyMethods(['getBody'])
             ->getMock();
 
         $this->currencyFactory->method('create')

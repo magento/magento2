@@ -49,7 +49,7 @@ class CountryWithWebsitesTest extends TestCase
     {
         $this->countriesFactoryMock =
             $this->getMockBuilder(CollectionFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->allowedCountriesMock = $this->getMockBuilder(AllowedCountries::class)

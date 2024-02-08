@@ -122,7 +122,7 @@ class PageTest extends TestCase
 
         $query = $this->getMockBuilder(\Zend_Db_Statement_Interface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['fetch'])
+            ->onlyMethods(['fetch'])
             ->getMockForAbstractClass();
         $query->expects($this->exactly(2))
             ->method('fetch')
@@ -163,7 +163,7 @@ class PageTest extends TestCase
             )->willReturnSelf();
 
         $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['select'])
+            ->onlyMethods(['select'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $connection->expects($this->once())
@@ -175,7 +175,7 @@ class PageTest extends TestCase
             ->willReturn($query);
 
         $entityMetadata = $this->getMockBuilder(EntityMetadataInterface::class)
-            ->setMethods(['getLinkField', 'getEntityConnection'])
+            ->onlyMethods(['getLinkField', 'getEntityConnection'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $entityMetadata->expects($this->once())

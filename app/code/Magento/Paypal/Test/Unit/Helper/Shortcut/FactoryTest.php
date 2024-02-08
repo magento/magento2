@@ -57,7 +57,7 @@ class FactoryTest extends TestCase
     {
         $checkoutMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->onlyMethods([])->getMock();
         $instance = $this->getMockBuilder(ValidatorInterface::class)
             ->getMock();
 

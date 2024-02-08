@@ -68,7 +68,7 @@ class OauthServiceTest extends TestCase
     {
         $this->_consumerFactory = $this->getMockBuilder(ConsumerFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->_tokenProviderMock = $this->getMockBuilder(
             Provider::class
@@ -77,7 +77,7 @@ class OauthServiceTest extends TestCase
         $this->_tokenMock = $this->getMockBuilder(
             Token::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['createVerifierToken', 'getType', '__wakeup', 'delete']
             )->getMock();
 
@@ -89,7 +89,7 @@ class OauthServiceTest extends TestCase
         $this->_consumerMock = $this->getMockBuilder(
             Consumer::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getData', 'getId', 'load', 'save', 'delete', '__wakeup']
             )->getMock();
         $this->_consumerData = [
@@ -122,7 +122,7 @@ class OauthServiceTest extends TestCase
         $this->_emptyConsumerMock = $this->getMockBuilder(
             Integration::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getData', 'load', 'getId', 'save', 'delete', '__wakeup']
             )->getMock();
         $this->_emptyConsumerMock->expects($this->any())->method('getId')->willReturn(null);

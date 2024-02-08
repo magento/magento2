@@ -78,7 +78,7 @@ class QueryTest extends TestCase
     {
         /** @var \Magento\Search\Model\Query|MockObject $model */
         $model = $this->getMockBuilder(\Magento\Search\Model\Query::class)
-            ->setMethods(['getNumResults', 'getStoreId', 'getQueryText'])
+            ->onlyMethods(['getNumResults', 'getStoreId', 'getQueryText'])
             ->disableOriginalConstructor()
             ->getMock();
         $model->expects($this->any())

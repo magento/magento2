@@ -45,22 +45,22 @@ class EditTest extends TestCase
     {
         $this->jsonEncoderMock = $this->getMockBuilder(EncoderInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->authSessionsMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->registryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->layoutInterfaceMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setRole', 'setActive', 'getId'])
+            ->onlyMethods(['setRole', 'setActive', 'getId'])
             ->getMockForAbstractClass();
 
         $objectManagerHelper = new ObjectManager($this);

@@ -78,7 +78,7 @@ class AuthenticationTest extends TestCase
 
         $this->backendConfigMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMockForAbstractClass();
         $this->customerRegistryMock = $this->createPartialMock(
             CustomerRegistry::class,

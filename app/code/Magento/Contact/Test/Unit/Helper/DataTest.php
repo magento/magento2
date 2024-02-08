@@ -59,7 +59,7 @@ class DataTest extends TestCase
         $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $contextMock = $this->getMockBuilder(Context::class)
-            ->setMethods(['getScopeConfig'])
+            ->onlyMethods(['getScopeConfig'])
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->any())

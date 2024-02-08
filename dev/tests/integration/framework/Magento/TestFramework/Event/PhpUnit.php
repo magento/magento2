@@ -9,7 +9,7 @@
  */
 namespace Magento\TestFramework\Event;
 
-class PhpUnit implements \PHPUnit\Framework\TestListener
+class PhpUnit
 {
     /**
      * Used when PHPUnit framework instantiates the class on its own and passes nothing to the constructor
@@ -102,7 +102,7 @@ class PhpUnit implements \PHPUnit\Framework\TestListener
         if ($suite instanceof \PHPUnit\Framework\DataProviderTestSuite) {
             return;
         }
-        $this->_eventManager->fireEvent('startTestSuite');
+        $this->_eventManager->fireEvent('testSuiteStarted');
     }
 
     /**

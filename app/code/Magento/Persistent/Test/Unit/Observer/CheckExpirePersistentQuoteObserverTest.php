@@ -98,7 +98,7 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
         $this->checkoutSessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getRequestUri', 'getServer'])
+            ->onlyMethods(['getRequestUri', 'getServer'])
             ->getMockForAbstractClass();
         $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
 
@@ -113,7 +113,7 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
             $this->quoteRepositoryMock
         );
         $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->setMethods(['getCustomerIsGuest', 'getIsPersistent'])
+            ->onlyMethods(['getCustomerIsGuest', 'getIsPersistent'])
             ->disableOriginalConstructor()
             ->getMock();
     }

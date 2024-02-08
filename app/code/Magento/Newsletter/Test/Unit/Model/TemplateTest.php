@@ -136,7 +136,7 @@ class TemplateTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->storeMock = $this->getMockBuilder(Store::class)
-            ->setMethods(['getFrontendName', 'getId', 'getFormattedAddress'])
+            ->onlyMethods(['getFrontendName', 'getId', 'getFormattedAddress'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -202,7 +202,7 @@ class TemplateTest extends TestCase
     protected function getModelMock(array $mockedMethods = [])
     {
         return $this->getMockBuilder(NewsletterTemplateModel::class)
-            ->setMethods(array_merge($mockedMethods, ['__wakeup', '__sleep', '_init']))
+            ->onlyMethods(array_merge($mockedMethods, ['__wakeup', '__sleep', '_init']))
             ->setConstructorArgs(
                 [
                     $this->contextMock,
@@ -276,7 +276,7 @@ class TemplateTest extends TestCase
     {
         class_exists(Filter::class, true);
         $filterTemplate = $this->getMockBuilder(Filter::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setUseSessionInUrl',
                     'setPlainTemplateMode',
@@ -310,7 +310,7 @@ class TemplateTest extends TestCase
         // The following block of code tests to ensure that the store id of the subscriber will be used, if the
         // 'subscriber' variable is set.
         $subscriber = $this->getMockBuilder(Subscriber::class)
-            ->setMethods(['getStoreId'])
+            ->onlyMethods(['getStoreId'])
             ->disableOriginalConstructor()
             ->getMock();
         $subscriber->expects($this->once())

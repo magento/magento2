@@ -69,7 +69,7 @@ class CartUpdateBeforeTest extends TestCase
             ->getMock();
         $this->wishlistFactory = $this->getMockBuilder(WishlistFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->wishlist = $this->getMockBuilder(Wishlist::class)
             ->disableOriginalConstructor()
@@ -100,7 +100,7 @@ class CartUpdateBeforeTest extends TestCase
             ->getMock();
 
         $event = $this->getMockBuilder(Event::class)
-            ->setMethods(['getCart', 'getInfo'])
+            ->onlyMethods(['getCart', 'getInfo'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -109,17 +109,17 @@ class CartUpdateBeforeTest extends TestCase
             ->willReturn($event);
 
         $quoteItem = $this->getMockBuilder(Item::class)
-            ->setMethods(['getProductId', 'getBuyRequest', '__wakeup'])
+            ->onlyMethods(['getProductId', 'getBuyRequest', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $buyRequest = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['setQty'])
+            ->onlyMethods(['setQty'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $infoData = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['toArray'])
+            ->onlyMethods(['toArray'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -131,7 +131,7 @@ class CartUpdateBeforeTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $quote = $this->getMockBuilder(Quote::class)
-            ->setMethods(['getCustomerId', 'getItemById', 'removeItem', '__wakeup'])
+            ->onlyMethods(['getCustomerId', 'getItemById', 'removeItem', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
 

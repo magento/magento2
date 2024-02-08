@@ -51,19 +51,19 @@ class SwitcherTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
         $this->storeFactoryMock = $this->getMockBuilder(StoreFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->storeGroupFactoryMock = $this->getMockBuilder(GroupFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->loadMocks();
         $this->model = $objectManager->getObject(
@@ -93,23 +93,23 @@ class SwitcherTest extends TestCase
     {
         $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLocaleCode', 'isActive', 'getId', 'getGroupId', 'getCollection', 'setLocaleCode'])
+            ->onlyMethods(['getLocaleCode', 'isActive', 'getId', 'getGroupId', 'getCollection', 'setLocaleCode'])
             ->getMock();
         $groupMock = $this->getMockBuilder(Group::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
         /** @var AbstractCollection|MockObject */
         $storeCollectionMock =
             $this->getMockBuilder(AbstractCollection::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['addWebsiteFilter', 'load'])
+                ->onlyMethods(['addWebsiteFilter', 'load'])
                 ->getMockForAbstractClass();
         /** @var AbstractCollection|MockObject */
         $groupCollectionMock =
             $this->getMockBuilder(AbstractCollection::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['addWebsiteFilter', 'load'])
+                ->onlyMethods(['addWebsiteFilter', 'load'])
                 ->getMockForAbstractClass();
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
         $this->storeFactoryMock->expects($this->any())->method('create')->willReturn($storeMock);

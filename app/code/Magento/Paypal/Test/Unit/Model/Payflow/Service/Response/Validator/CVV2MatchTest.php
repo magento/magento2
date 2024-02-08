@@ -47,7 +47,7 @@ class CVV2MatchTest extends TestCase
             ->getMockForAbstractClass();
         $this->payflowproFacade = $this->getMockBuilder(Transparent::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->validator = new CVV2Match();

@@ -91,7 +91,7 @@ class FlatTest extends TestCase
 
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
-            ->setMethods(['where', 'from'])
+            ->onlyMethods(['where', 'from'])
             ->getMock();
         $this->selectMock->expects($this->once())
             ->method('where')
@@ -110,7 +110,7 @@ class FlatTest extends TestCase
             ->willReturn(self::PARENT_PATH);
         $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConnection', 'getTableName'])
+            ->onlyMethods(['getConnection', 'getTableName'])
             ->getMock();
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
@@ -120,7 +120,7 @@ class FlatTest extends TestCase
             ->willReturn(self::TABLE_NAME);
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getResources'])
+            ->onlyMethods(['getResources'])
             ->getMock();
         $this->contextMock->expects($this->any())
             ->method('getResources')
@@ -128,7 +128,7 @@ class FlatTest extends TestCase
 
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMock();
         $this->storeMock->expects($this->any())
             ->method('getId')
@@ -144,11 +144,11 @@ class FlatTest extends TestCase
     {
         $this->categoryCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->categoryCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'addNameToResult',
                     'addUrlRewriteToResult',

@@ -38,7 +38,7 @@ class IsActiveTest extends TestCase
         $this->objectManagerHelper = new ObjectManager($this);
         $this->cmsPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAvailableStatuses'])
+            ->onlyMethods(['getAvailableStatuses'])
             ->getMock();
 
         $this->object = $this->objectManagerHelper->getObject($this->getSourceClassName(), [

@@ -46,12 +46,12 @@ class AbstractAgreementTest extends TestCase
         $helper = new ObjectManager($this);
 
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->setMethods(['dispatch'])
+            ->onlyMethods(['dispatch'])
             ->getMockForAbstractClass();
 
         $this->agreementFactory = $this->getMockBuilder(AgreementFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->payment = $helper->getObject(
@@ -81,7 +81,7 @@ class AbstractAgreementTest extends TestCase
             ->getMock();
         $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup', 'getCustomerId'])
+            ->onlyMethods(['__wakeup', 'getCustomerId'])
             ->getMock();
 
         $this->payment->setInfoInstance($paymentInfo);
@@ -89,7 +89,7 @@ class AbstractAgreementTest extends TestCase
 
         $agreementModel = $this->getMockBuilder(Agreement::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup', 'load', 'getCustomerId', 'getId', 'getReferenceId'])
+            ->onlyMethods(['__wakeup', 'load', 'getCustomerId', 'getId', 'getReferenceId'])
             ->getMock();
 
         $this->agreementFactory->expects(static::once())

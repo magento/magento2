@@ -85,7 +85,7 @@ class ButtonTest extends TestCase
     {
         $column = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getType', 'getId', 'getIndex', 'getStyle', 'getOnclick'])
+            ->onlyMethods(['getType', 'getId', 'getIndex', 'getStyle', 'getOnclick'])
             ->getMock();
         $column->expects($this->any())
             ->method('getType')

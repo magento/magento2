@@ -30,7 +30,7 @@ class DecimalTest extends TestCase
     {
         $this->attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode'])
+            ->onlyMethods(['getAttributeCode'])
             ->getMockForAbstractClass();
         $objectManager = new ObjectManager($this);
         $this->decimal = $objectManager->getObject(Decimal::class);

@@ -48,17 +48,17 @@ class TrackAdminNewPasswordObserverTest extends TestCase
     {
         $this->configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->userMock = $this->getMockBuilder(User::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->authSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setPciAdminUserIsPasswordExpired',
                     'unsPciAdminUserIsPasswordExpired',
@@ -70,7 +70,7 @@ class TrackAdminNewPasswordObserverTest extends TestCase
 
         $this->managerInterfaceMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $helper = new ObjectManager($this);
@@ -100,19 +100,19 @@ class TrackAdminNewPasswordObserverTest extends TestCase
         /** @var Observer|MockObject $eventObserverMock */
         $eventObserverMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         /** @var Event|MockObject */
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getObject'])
+            ->onlyMethods(['getObject'])
             ->getMock();
 
         /** @var \Magento\User\Model\User|MockObject $userMock */
         $userMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getPassword', 'dataHasChangedFor'])
+            ->onlyMethods(['getId', 'getPassword', 'dataHasChangedFor'])
             ->getMock();
 
         $eventObserverMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
@@ -127,7 +127,7 @@ class TrackAdminNewPasswordObserverTest extends TestCase
         /** @var Collection|MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
         $this->managerInterfaceMock
             ->expects($this->once())

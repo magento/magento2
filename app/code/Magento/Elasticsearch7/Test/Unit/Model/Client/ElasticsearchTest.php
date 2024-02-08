@@ -56,7 +56,7 @@ class ElasticsearchTest extends TestCase
     protected function setUp(): void
     {
         $this->elasticsearchClientMock = $this->getMockBuilder(Client::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'indices',
                     'ping',
@@ -70,7 +70,7 @@ class ElasticsearchTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->indicesMock = $this->getMockBuilder(IndicesNamespace::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'exists',
                     'getSettings',

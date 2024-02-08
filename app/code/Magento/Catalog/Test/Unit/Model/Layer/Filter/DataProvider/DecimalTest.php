@@ -33,11 +33,11 @@ class DecimalTest extends TestCase
     {
         $this->filter = $this->getMockBuilder(FilterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
         $this->resource = $this->getMockBuilder(Decimal::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMinMax', 'getCount'])
+            ->onlyMethods(['getMinMax', 'getCount'])
             ->getMock();
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(

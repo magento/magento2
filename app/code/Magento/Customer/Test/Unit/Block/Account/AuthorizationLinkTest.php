@@ -43,11 +43,11 @@ class AuthorizationLinkTest extends TestCase
         $this->_objectManager = new ObjectManager($this);
         $this->httpContext = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $this->_customerUrl = $this->getMockBuilder(Url::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLogoutUrl', 'getLoginUrl'])
+            ->onlyMethods(['getLogoutUrl', 'getLoginUrl'])
             ->getMock();
 
         $context = $this->_objectManager->getObject(\Magento\Framework\View\Element\Template\Context::class);

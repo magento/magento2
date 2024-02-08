@@ -158,7 +158,7 @@ class ListActionTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->title = $this->getMockBuilder('Title')
-            ->setMethods(['prepend'])
+            ->onlyMethods(['prepend'])
             ->getMock();
 
         $this->block->expects($this->any())->method('setActive')->willReturn(1);

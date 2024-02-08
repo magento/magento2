@@ -55,7 +55,7 @@ class SenderTest extends TestCase
     public function testRender(array $passedSender, array $expectedSender)
     {
         $row = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['getTemplateSenderName', 'getTemplateSenderEmail'])
+            ->onlyMethods(['getTemplateSenderName', 'getTemplateSenderEmail'])
             ->getMock();
         $row->expects($this->atLeastOnce())->method('getTemplateSenderName')
             ->willReturn($passedSender['sender']);

@@ -164,7 +164,7 @@ class ImageResizeTest extends TestCase
 
         $this->mediaDirectoryMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAbsolutePath','isFile','getRelativePath'])
+            ->onlyMethods(['getAbsolutePath','isFile','getRelativePath'])
             ->getMock();
 
         $this->filesystemMock->expects($this->any())

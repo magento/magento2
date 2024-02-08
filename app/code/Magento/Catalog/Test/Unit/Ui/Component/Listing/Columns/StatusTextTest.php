@@ -27,7 +27,7 @@ class StatusTextTest extends AbstractColumnTest
         parent::setUp();
 
         $this->statusMock = $this->getMockBuilder(Status::class)
-            ->setMethods(['getOptionText'])
+            ->onlyMethods(['getOptionText'])
             ->disableOriginalConstructor()
             ->getMock();
     }

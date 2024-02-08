@@ -75,7 +75,7 @@ class ObserverTest extends TestCase
             ->getMockForAbstractClass();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId'])
+            ->onlyMethods(['getCustomerId'])
             ->getMock();
         $this->observer = $objectManagerHelper->getObject(
             Observer::class,
@@ -97,7 +97,7 @@ class ObserverTest extends TestCase
         $welcomeMessage =  __('&nbsp;');
         $block = $this->getMockBuilder(AbstractBlock::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setWelcome'])
+            ->onlyMethods(['setWelcome'])
             ->getMock();
         $block->expects($this->once())->method('setWelcome')->with($welcomeMessage);
 

@@ -136,7 +136,7 @@ class ShippingMethodManagementTest extends TestCase
         $this->quoteAddressResource = $this->createMock(QuoteAddressResource::class);
         $this->quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getShippingAddress',
                 'isVirtual',
                 'getItemsCount',
@@ -152,7 +152,7 @@ class ShippingMethodManagementTest extends TestCase
 
         $this->shippingAddress = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getCountryId',
                 'getShippingMethod',
                 'getShippingDescription',
@@ -171,12 +171,12 @@ class ShippingMethodManagementTest extends TestCase
 
         $this->converter = $this->getMockBuilder(ShippingMethodConverter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['modelToDataObject'])
+            ->onlyMethods(['modelToDataObject'])
             ->getMock();
 
         $this->totalsCollector = $this->getMockBuilder(TotalsCollector::class)
             ->disableOriginalConstructor()
-            ->setMethods(['collectAddressTotals'])
+            ->onlyMethods(['collectAddressTotals'])
             ->getMock();
 
         $this->model = $this->objectManager->getObject(
@@ -196,14 +196,14 @@ class ShippingMethodManagementTest extends TestCase
         $this->objectManager->setBackwardCompatibleProperty($this->model, 'dataProcessor', $this->dataProcessor);
 
         $this->extensionAttributesMock = $this->getMockBuilder(CartExtensionInterface::class)
-            ->setMethods(['getShippingAssignments'])
+            ->onlyMethods(['getShippingAssignments'])
             ->getMockForAbstractClass();
 
         $this->shippingMock = $this->getMockForAbstractClass(ShippingInterface::class);
 
         $this->shippingAssignmentBuilder = $this->getMockBuilder(ShippingAssignmentBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getShipping',
                 'setShipping'
             ])
@@ -596,7 +596,7 @@ class ShippingMethodManagementTest extends TestCase
 
         $rate = $this->getMockBuilder(Rate::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
         $methodObject = $this->getMockForAbstractClass(ShippingMethodInterface::class);
         $expectedRates = [$methodObject];
@@ -640,7 +640,7 @@ class ShippingMethodManagementTest extends TestCase
 
         $rate = $this->getMockBuilder(Rate::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
         $methodObject = $this->getMockForAbstractClass(ShippingMethodInterface::class);
 
@@ -717,7 +717,7 @@ class ShippingMethodManagementTest extends TestCase
          * @var \Magento\Customer\Model\Data\Address|MockObject $address
          */
         $address = $this->getMockBuilder(\Magento\Customer\Model\Data\Address::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $address->expects($this->atLeastOnce())

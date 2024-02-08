@@ -24,7 +24,7 @@ class ZeroTotalTest extends TestCase
     {
         $paymentMethod = $this->getMockBuilder(MethodInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         if (!$total) {
@@ -35,7 +35,7 @@ class ZeroTotalTest extends TestCase
 
         $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBaseGrandTotal', '__wakeup'])
+            ->onlyMethods(['getBaseGrandTotal', '__wakeup'])
             ->getMock();
 
         $quote->expects($this->once())

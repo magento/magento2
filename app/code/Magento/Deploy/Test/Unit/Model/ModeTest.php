@@ -110,7 +110,7 @@ class ModeTest extends TestCase
             ->getMock();
         $this->processorFacadeFactory = $this->getMockBuilder(ProcessorFacadeFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
         $this->processorFacade = $this->getMockBuilder(ProcessorFacade::class)
             ->disableOriginalConstructor()

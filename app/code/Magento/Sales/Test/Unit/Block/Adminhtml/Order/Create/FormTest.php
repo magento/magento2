@@ -72,7 +72,7 @@ class FormTest extends TestCase
 
         $this->quoteSession = $this->getMockBuilder(QuoteSession::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId', 'getQuoteId', 'getStoreId', 'getStore', 'getQuote'])
+            ->onlyMethods(['getCustomerId', 'getQuoteId', 'getStoreId', 'getStore', 'getQuote'])
             ->getMock();
         /** @var Create|MockObject $create */
         $create = $this->getMockBuilder(Create::class)

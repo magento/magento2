@@ -48,13 +48,13 @@ class CleanThemeRelatedContentObserverTest extends TestCase
             ->getMock();
 
         $this->themeImageFactory = $this->getMockBuilder(ImageFactory::class)
-            ->setMethods(['create', 'removePreviewImage'])
+            ->onlyMethods(['create', 'removePreviewImage'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->updateCollection = $this->getMockBuilder(
             Collection::class
-        )->setMethods(['addThemeFilter', 'delete'])
+        )->onlyMethods(['addThemeFilter', 'delete'])
             ->disableOriginalConstructor()
             ->getMock();
 

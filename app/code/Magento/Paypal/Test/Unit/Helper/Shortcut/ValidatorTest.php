@@ -100,12 +100,11 @@ class ValidatorTest extends TestCase
     {
         $currentProduct = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup', 'getFinalPrice', 'getTypeId', 'getTypeInstance'])
+            ->onlyMethods(['__wakeup', 'getFinalPrice', 'getTypeId', 'getTypeInstance'])
             ->getMock();
         $typeInstance = $this->getMockBuilder(AbstractType::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $currentProduct->expects($this->any())->method('getFinalPrice')->willReturn($productPrice);
         $currentProduct->expects($this->any())->method('getTypeId')->willReturn('simple');
         $currentProduct->expects($this->any())->method('getTypeInstance')->willReturn($typeInstance);

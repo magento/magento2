@@ -61,19 +61,19 @@ class SwitcherTest extends TestCase
             ->getMockForAbstractClass();
         $this->websiteFactoryMock = $this->getMockBuilder(WebsiteFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->storeFactoryMock = $this->getMockBuilder(StoreFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->websiteMock = $this->getMockBuilder(Website::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId', 'getName'])
+            ->onlyMethods(['load', 'getId', 'getName'])
             ->getMock();
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId', 'getName'])
+            ->onlyMethods(['load', 'getId', 'getName'])
             ->getMock();
         $this->websiteFactoryMock->expects($this->any())
             ->method('create')

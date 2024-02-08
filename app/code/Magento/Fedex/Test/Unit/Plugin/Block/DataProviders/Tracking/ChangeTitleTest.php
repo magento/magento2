@@ -54,7 +54,7 @@ class ChangeTitleTest extends TestCase
         /** @var Status|MockObject $trackingStatusMock */
         $trackingStatusMock = $this->getMockBuilder(Status::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCarrier'])
+            ->onlyMethods(['getCarrier'])
             ->getMock();
         $trackingStatusMock->expects($this::once())
             ->method('getCarrier')

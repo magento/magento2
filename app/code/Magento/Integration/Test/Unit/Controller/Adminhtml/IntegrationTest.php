@@ -163,16 +163,16 @@ abstract class IntegrationTest extends TestCase
             ->getMock();
         $this->_eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['dispatch'])
+            ->onlyMethods(['dispatch'])
             ->getMockForAbstractClass();
         $this->_backendSessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods(['__call', 'getIntegrationData'])
+            ->onlyMethods(['__call', 'getIntegrationData'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->_userMock = $this->getMockBuilder(User::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'load', 'performIdentityCheck'])
+            ->onlyMethods(['getId', 'load', 'performIdentityCheck'])
             ->getMock();
 
         $this->_translateModelMock = $this->getMockBuilder(
@@ -189,7 +189,7 @@ abstract class IntegrationTest extends TestCase
             ->getMock();
         $this->_authMock = $this->getMockBuilder(Auth::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUser', 'logout'])
+            ->onlyMethods(['getUser', 'logout'])
             ->getMock();
         $this->_requestMock = $this->getMockBuilder(
             Http::class
@@ -216,7 +216,7 @@ abstract class IntegrationTest extends TestCase
             ->getMock();
         $this->_escaper = $this->getMockBuilder(
             Escaper::class
-        )->setMethods(
+        )->onlyMethods(
             ['escapeHtml']
         )->disableOriginalConstructor()
             ->getMock();
@@ -231,7 +231,7 @@ abstract class IntegrationTest extends TestCase
             ->getMock();
         $this->securityCookieMock = $this->getMockBuilder(SecurityCookie::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setLogoutReasonCookie'])
+            ->onlyMethods(['setLogoutReasonCookie'])
             ->getMock();
     }
 
@@ -246,7 +246,7 @@ abstract class IntegrationTest extends TestCase
         $this->_viewMock = $this->getMockBuilder(ViewInterface::class)
             ->getMock();
         $this->_layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->setMethods(['getNode'])
+            ->onlyMethods(['getNode'])
             ->getMockForAbstractClass();
         $this->_layoutMergeMock = $this->getMockBuilder(
             Merge::class
@@ -288,12 +288,12 @@ abstract class IntegrationTest extends TestCase
 
         $this->resultRedirectFactory = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->resultFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->_authMock->expects(
@@ -334,7 +334,7 @@ abstract class IntegrationTest extends TestCase
         $integrationCollection =
             $this->getMockBuilder(Collection::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['addUnsecureUrlsFilter', 'getSize'])
+                ->onlyMethods(['addUnsecureUrlsFilter', 'getSize'])
                 ->getMock();
         $integrationCollection->expects($this->any())
             ->method('addUnsecureUrlsFilter')

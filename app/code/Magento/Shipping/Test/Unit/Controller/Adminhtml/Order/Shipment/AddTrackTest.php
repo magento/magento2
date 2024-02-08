@@ -99,7 +99,7 @@ class AddTrackTest extends TestCase
             ShipmentLoader::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['setShipmentId', 'setOrderId', 'setShipment', 'setTracking', 'load'])
+            ->onlyMethods(['setShipmentId', 'setOrderId', 'setShipment', 'setTracking', 'load'])
             ->getMock();
         $this->context = $this->getMockBuilder(Context::class)
             ->addMethods(['getTitle'])
@@ -132,15 +132,15 @@ class AddTrackTest extends TestCase
             ->getMock();
         $this->trackFactory = $this->getMockBuilder(ShipmentTrackInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
         $this->rawResult = $this->getMockBuilder(ResultInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setContents'])
+            ->onlyMethods(['setContents'])
             ->getMockForAbstractClass();
         $resultFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
         $this->context->expects($this->once())
             ->method('getRequest')
@@ -222,7 +222,7 @@ class AddTrackTest extends TestCase
             ->willReturn($shipment);
         $track = $this->getMockBuilder(Track::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup', 'setNumber', 'setCarrierCode', 'setTitle'])
+            ->onlyMethods(['__wakeup', 'setNumber', 'setCarrierCode', 'setTitle'])
             ->getMock();
         $this->trackFactory->expects($this->once())
             ->method('create')

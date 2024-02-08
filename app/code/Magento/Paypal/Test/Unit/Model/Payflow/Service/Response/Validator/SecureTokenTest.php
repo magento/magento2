@@ -40,7 +40,7 @@ class SecureTokenTest extends TestCase
         $this->validator = new SecureToken();
         $this->payflowFacade = $this->getMockBuilder(Transparent::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
     }
 

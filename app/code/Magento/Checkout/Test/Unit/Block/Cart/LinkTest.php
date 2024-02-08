@@ -51,7 +51,7 @@ class LinkTest extends TestCase
         $moduleManager = $this->getMockBuilder(
             Manager::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['isOutputEnabled']
             )->getMock();
         $helper = $this->getMockBuilder(Cart::class)
@@ -83,7 +83,7 @@ class LinkTest extends TestCase
         $helper = $this->getMockBuilder(
             Cart::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getSummaryCount']
             )->getMock();
 

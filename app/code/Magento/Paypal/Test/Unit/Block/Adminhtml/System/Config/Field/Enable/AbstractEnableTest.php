@@ -73,7 +73,7 @@ class AbstractEnableTest extends TestCase
         $mockArguments[] = $this->createMock(SecureHtmlRenderer::class);
         $mockArguments[] = $randomMock;
         $this->elementMock = $this->getMockBuilder(AbstractElement::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getHtmlId',
                     'getTooltip',
@@ -115,7 +115,7 @@ class AbstractEnableTest extends TestCase
     public function testRender()
     {
         $formMock = $this->getMockBuilder(Form::class)
-            ->setMethods(['getFieldNameSuffix'])
+            ->onlyMethods(['getFieldNameSuffix'])
             ->disableOriginalConstructor()
             ->getMock();
 

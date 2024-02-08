@@ -32,10 +32,10 @@ class AttributeSetTextTest extends AbstractColumnTest
         parent::setUp();
 
         $this->attributeSetRepositoryMock = $this->getMockBuilder(AttributeSetRepositoryInterface::class)
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMockForAbstractClass();
         $this->attributeSetMock = $this->getMockBuilder(AttributeSetInterface::class)
-            ->setMethods(['getAttributeSetName'])
+            ->onlyMethods(['getAttributeSetName'])
             ->getMockForAbstractClass();
     }
 

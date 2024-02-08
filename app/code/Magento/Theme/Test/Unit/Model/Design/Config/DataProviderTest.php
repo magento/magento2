@@ -85,7 +85,7 @@ class DataProviderTest extends TestCase
         $collectionFactory = $this->getMockBuilder(
             \Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
         $collectionFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->collection);

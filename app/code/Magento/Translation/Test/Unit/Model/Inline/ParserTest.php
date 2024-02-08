@@ -96,11 +96,11 @@ class ParserTest extends TestCase
             StringUtilsFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resourceMock = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->inputFilterMock = $this->getMockForAbstractClass(FilterInterface::class);
@@ -109,12 +109,12 @@ class ParserTest extends TestCase
             ->willReturn($this->resourceMock);
         $this->cacheManagerMock = $this->getMockBuilder(CacheManager::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->appStateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->model = $this->objectManager->getObject(

@@ -112,7 +112,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
         $this->sortOrderBuilder = Bootstrap::getObjectManager()->create(SortOrderBuilder::class);
         $this->filterGroupBuilder = Bootstrap::getObjectManager()->create(FilterGroupBuilder::class);
-        $this->customerHelper = new CustomerHelper();
+        $this->customerHelper = new CustomerHelper($this->name());
 
         $this->dataObjectProcessor = Bootstrap::getObjectManager()->create(DataObjectProcessor::class);
     }

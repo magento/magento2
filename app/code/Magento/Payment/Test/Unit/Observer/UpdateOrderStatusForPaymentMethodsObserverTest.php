@@ -63,7 +63,7 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends TestCase
         $this->observerMock = $this->getMockBuilder(
             Observer::class
         )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->onlyMethods([])->getMock();
     }
 
     public function testUpdateOrderStatusForPaymentMethodsNotNewState()
@@ -111,7 +111,7 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends TestCase
         $this->eventMock = $this->getMockBuilder(
             Event::class
         )->disableOriginalConstructor()
-            ->setMethods($methodsList)->getMock();
+            ->onlyMethods($methodsList)->getMock();
         $this->observerMock->expects($this->any())->method('getEvent')->willReturn($this->eventMock);
     }
 

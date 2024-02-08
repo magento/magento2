@@ -73,7 +73,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->runTest();
     }
 
-    protected function runTest()
+    /**
+     * @return mixed
+     * @throws \ReflectionException
+     */
+    protected function runTest(): mixed
     {
         $this->prepareFormMethod->invoke($this->block);
         $form = $this->block->getForm();

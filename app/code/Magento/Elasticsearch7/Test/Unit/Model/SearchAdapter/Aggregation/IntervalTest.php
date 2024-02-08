@@ -78,14 +78,14 @@ class IntervalTest extends TestCase
     protected function setUp(): void
     {
         $this->connectionManager = $this->getMockBuilder(ConnectionManager::class)
-            ->setMethods(['getConnection'])
+            ->onlyMethods(['getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->fieldMapper = $this->getMockBuilder(FieldMapperInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->clientConfig = $this->getMockBuilder(Config::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getIndexName',
                 'getEntityType',
             ])
@@ -95,7 +95,7 @@ class IntervalTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->customerSession = $this->getMockBuilder(CustomerSession::class)
-            ->setMethods(['getCustomerGroupId'])
+            ->onlyMethods(['getCustomerGroupId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->customerSession->expects($this->any())
@@ -121,7 +121,7 @@ class IntervalTest extends TestCase
             ->method('getEntityType')
             ->willReturn('product');
         $this->clientMock = $this->getMockBuilder(ElasticsearchClient::class)
-            ->setMethods(['query'])
+            ->onlyMethods(['query'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->connectionManager->expects($this->any())

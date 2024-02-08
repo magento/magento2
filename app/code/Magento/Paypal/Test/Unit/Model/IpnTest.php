@@ -210,7 +210,7 @@ class IpnTest extends TestCase
     {
         /** @var Payment $paymentMock */
         $paymentMock = $this->getMockBuilder(Payment::class)
-            ->setMethods([
+            ->onlyMethods([
                 'getAdditionalInformation',
                 'setTransactionId',
                 'setNotificationResult',

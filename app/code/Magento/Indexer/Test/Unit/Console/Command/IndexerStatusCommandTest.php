@@ -48,7 +48,7 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
         /** @var View|MockObject $viewMock */
         $viewMock = $this->getMockBuilder(View::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getChangelog', 'getState'])
+            ->onlyMethods(['getChangelog', 'getState'])
             ->getMock();
 
         $viewMock->expects($this->any())

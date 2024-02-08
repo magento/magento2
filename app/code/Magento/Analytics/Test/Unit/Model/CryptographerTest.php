@@ -70,7 +70,7 @@ class CryptographerTest extends TestCase
         $this->analyticsTokenMock = $this->createMock(AnalyticsToken::class);
 
         $this->encodedContextFactoryMock = $this->getMockBuilder(EncodedContextFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

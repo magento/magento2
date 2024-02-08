@@ -87,7 +87,7 @@ class CartFixedTest extends TestCase
     protected function setUp(): void
     {
         $this->rule = $this->getMockBuilder(Rule::class)
-            ->setMethods(['getId', 'getApplyToShipping'])
+            ->onlyMethods(['getId', 'getApplyToShipping'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->item = $this->createMock(AbstractItem::class);
@@ -115,10 +115,10 @@ class CartFixedTest extends TestCase
         $dataFactory->method('create')->willReturn($this->data);
         $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['roundPrice'])
+            ->onlyMethods(['roundPrice'])
             ->getMockForAbstractClass();
         $this->deltaPriceRound = $this->getMockBuilder(DeltaPriceRound::class)
-            ->setMethods(['round'])
+            ->onlyMethods(['round'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->cartFixedDiscountHelper = $this->getMockBuilder(CartFixedDiscount::class)
@@ -184,7 +184,7 @@ class CartFixedTest extends TestCase
             ->willReturn(true);
         $cartExtensionMock = $this->getMockBuilder(CartExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getShippingAssignments'])
+            ->onlyMethods(['getShippingAssignments'])
             ->getMockForAbstractClass();
         $this->quote->expects($this->any())->method('getCartFixedRules')->will($this->returnValue([]));
         $store = $this->createMock(Store::class);

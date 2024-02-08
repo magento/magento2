@@ -134,14 +134,14 @@ class StorageTest extends TestCase
 
         $storageModelMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['loadByFileName', '__wakeup'])
+            ->onlyMethods(['loadByFileName', '__wakeup'])
             ->getMock();
         $this->storageMock->expects($this->exactly($callNum))
             ->method('getStorageModel')
             ->willReturn($storageModelMock);
         $fileMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Storage\Database::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', '__wakeup'])
+            ->onlyMethods(['getId', '__wakeup'])
             ->getMock();
         $storageModelMock->expects($this->exactly($callNum))
             ->method('loadByFilename')

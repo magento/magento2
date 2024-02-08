@@ -115,7 +115,7 @@ class SaveTest extends TestCase
             ->getMockForAbstractClass();
         $this->resultJsonFactory = $this->getMockBuilder(JsonFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->json = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()

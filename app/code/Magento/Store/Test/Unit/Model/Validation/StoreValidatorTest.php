@@ -40,7 +40,7 @@ class StoreValidatorTest extends TestCase
     {
         $this->dataObjectValidatorFactoryMock = $this->getMockBuilder(DataObjectFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->dataObjectValidatorMock = $this->createMock(DataObject::class);
         $this->dataObjectValidatorFactoryMock->method('create')

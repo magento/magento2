@@ -76,14 +76,14 @@ class IndexNameResolverTest extends TestCase
 
         $this->connectionManager = $this->getMockBuilder(ConnectionManager::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getConnection',
             ])
             ->getMock();
 
         $this->clientConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getIndexPrefix',
                 'getEntityType',
                 'getIndexSettings',
@@ -95,7 +95,7 @@ class IndexNameResolverTest extends TestCase
             ->getMockForAbstractClass();
 
         $elasticsearchClientMock = $this->getMockBuilder(Client::class)
-            ->setMethods([
+            ->onlyMethods([
                 'indices',
                 'ping',
                 'bulk',
@@ -106,7 +106,7 @@ class IndexNameResolverTest extends TestCase
             ->getMock();
 
         $indicesMock = $this->getMockBuilder(IndicesNamespace::class)
-            ->setMethods([
+            ->onlyMethods([
                 'exists',
                 'getSettings',
                 'create',
@@ -240,7 +240,7 @@ class IndexNameResolverTest extends TestCase
 
         $connectionManager = $this->getMockBuilder(ConnectionManager::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getConnection',
             ])
             ->getMock();

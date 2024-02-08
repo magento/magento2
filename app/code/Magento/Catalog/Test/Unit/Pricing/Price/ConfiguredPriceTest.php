@@ -72,7 +72,7 @@ class ConfiguredPriceTest extends TestCase
         $this->priceInfo->expects($this->any())->method('getPrice')->willReturn($basePrice);
 
         $this->product = $this->getMockBuilder(Product::class)
-            ->setMethods(['getPriceInfo', 'getOptionById', 'getResource'])
+            ->onlyMethods(['getPriceInfo', 'getOptionById', 'getResource'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->product->expects($this->once())->method('getPriceInfo')->willReturn($this->priceInfo);
@@ -142,7 +142,7 @@ class ConfiguredPriceTest extends TestCase
     protected function createOptionTypeStub(Option $option)
     {
         $optionType = $this->getMockBuilder(DefaultType::class)
-            ->setMethods(['setOption', 'setConfigurationItem', 'setConfigurationItemOption', 'getOptionPrice'])
+            ->onlyMethods(['setOption', 'setConfigurationItem', 'setConfigurationItemOption', 'getOptionPrice'])
             ->disableOriginalConstructor()
             ->getMock();
         $optionType->expects($this->atLeastOnce())->method('setOption')->with($option)->willReturnSelf();

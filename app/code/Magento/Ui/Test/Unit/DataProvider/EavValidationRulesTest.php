@@ -38,7 +38,7 @@ class EavValidationRulesTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->attributeMock =
             $this->getMockBuilder(AbstractAttribute::class)
-                ->setMethods(['getFrontendInput', 'getValidateRules'])
+                ->onlyMethods(['getFrontendInput', 'getValidateRules'])
                 ->disableOriginalConstructor()
                 ->getMockForAbstractClass();
 

@@ -92,20 +92,25 @@
         "wikimedia/less.php": "^3.2"
     },
     "require-dev": {
-        "allure-framework/allure-phpunit": "^2",
+        "allure-framework/allure-phpunit": "^3",
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "dg/bypass-finals": "^1.4",
         "friendsofphp/php-cs-fixer": "^3.22",
         "lusitanian/oauth": "^0.8",
         "magento/magento-coding-standard": "*",
-        "magento/magento2-functional-testing-framework": "^4.7",
+        "magento/magento2-functional-testing-framework": "dev-ACQE-5710_ver1",
         "pdepend/pdepend": "^2.10",
         "phpmd/phpmd": "^2.12",
         "phpstan/phpstan": "^1.9, <1.10.29",
-        "phpunit/phpunit": "^9.5",
-        "sebastian/phpcpd": "^6.0",
+        "phpunit/phpunit": "^10.4",
         "symfony/finder": "^6.4"
     },
+    "repositories": [
+        {
+            "type" : "vcs",
+            "url" : "git@github.com:magento-gl/magento2-functional-testing-framework.git"
+        }
+    ],
     "suggest": {
         "ext-pcntl": "Need for run processes in parallel mode"
     },
@@ -387,7 +392,7 @@
         "exclude-from-classmap": [
             "**/dev/**",
             "**/update/**",
-            "**/Test/**"
+            "*/*/Test/**/*Test"
         ]
     },
     "autoload-dev": {

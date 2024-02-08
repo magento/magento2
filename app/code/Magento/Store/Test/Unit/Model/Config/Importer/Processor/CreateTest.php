@@ -125,36 +125,36 @@ class CreateTest extends TestCase
             ->getMock();
         $this->websiteFactoryMock = $this->getMockBuilder(WebsiteFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->groupFactoryMock = $this->getMockBuilder(GroupFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->storeFactoryMock = $this->getMockBuilder(StoreFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();
         $this->abstractDbMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['save', 'load', 'addCommitCallback'])
+            ->onlyMethods(['save', 'load', 'addCommitCallback'])
             ->getMockForAbstractClass();
         $this->websiteMock = $this->getMockBuilder(Website::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setData', 'getResource', 'setDefaultGroupId'])
+            ->onlyMethods(['setData', 'getResource', 'setDefaultGroupId'])
             ->getMock();
         $this->groupMock = $this->getMockBuilder(Group::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getResource', 'getId', 'setData', 'setRootCategoryId',
                 'getDefaultStoreId', 'setDefaultStoreId', 'setWebsite'
             ])
             ->getMock();
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setData', 'getResource', 'setGroup', 'setWebsite', 'getStoreId'])
+            ->onlyMethods(['setData', 'getResource', 'setGroup', 'setWebsite', 'getStoreId'])
             ->getMock();
         $this->websiteFactoryMock->expects($this->any())
             ->method('create')

@@ -130,7 +130,7 @@ class DeleteTest extends TestCase
         $path = 'adminhtml/*/';
         $themeId = 1;
         $theme = $this->getMockBuilder(ThemeInterface::class)
-            ->setMethods(['load', 'getId', 'isVirtual', 'delete'])
+            ->onlyMethods(['load', 'getId', 'isVirtual', 'delete'])
             ->getMockForAbstractClass();
         $this->request->expects($this->any())
             ->method('getParam')
@@ -198,7 +198,7 @@ class DeleteTest extends TestCase
         $path = 'adminhtml/*/';
         $themeId = 1;
         $theme = $this->getMockBuilder(ThemeInterface::class)
-            ->setMethods(['load', 'getId', 'isVirtual'])
+            ->onlyMethods(['load', 'getId', 'isVirtual'])
             ->getMockForAbstractClass();
         $this->request->expects($this->any())
             ->method('getParam')
