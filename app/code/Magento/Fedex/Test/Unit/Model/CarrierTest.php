@@ -650,6 +650,7 @@ class CarrierTest extends TestCase
      */
     public function getTrackResponse($shipTimeStamp, $expectedDate, $expectedTime): array
     {
+        $expectedDateTime = ($expectedDate ? date('Y-m-d', strtotime($expectedDate)) : null).'T'.$expectedTime;
         $trackResponse = '{"transactionId":"4d37cd0c-f4e8-449f-ac95-d4d3132f0572",
         "output":{"completeTrackResults":[{"trackingNumber":"122816215025810","trackResults":[{"trackingNumberInfo":
         {"trackingNumber":"122816215025810","trackingNumberUniqueId":"12013~122816215025810~FDEG","carrierCode":"FDXG"},
@@ -661,14 +662,14 @@ class CarrierTest extends TestCase
         "latestStatusDetail":{"code":"DL","derivedCode":"DL","statusByLocale":"Delivered","description":"Delivered",
         "scanLocation":{"city":"Norton","stateOrProvinceCode":"VA","countryCode":"US","residential":false,
         "countryName":"United States"}},"dateAndTimes":[{"type":"ACTUAL_DELIVERY","dateTime":
-        "'.$expectedDate.'T'.$expectedTime.'"},{"type":"ACTUAL_PICKUP","dateTime":"2016-08-01T00:00:00-06:00"},
+        "'.$expectedDateTime.'"},{"type":"ACTUAL_PICKUP","dateTime":"2016-08-01T00:00:00-06:00"},
         {"type":"SHIP","dateTime":"'.$shipTimeStamp.'"}],"availableImages":[{"type":"SIGNATURE_PROOF_OF_DELIVERY"}],
         "specialHandlings":[{"type":"DIRECT_SIGNATURE_REQUIRED","description":"Direct Signature Required",
         "paymentType":"OTHER"}],"packageDetails":{"packagingDescription":{"type":"YOUR_PACKAGING","description":
         "Package"},"physicalPackagingType":"PACKAGE","sequenceNumber":"1","count":"1","weightAndDimensions":
         {"weight":[{"value":"21.5","unit":"LB"},{"value":"9.75","unit":"KG"}],"dimensions":[{"length":22,"width":17,
         "height":10,"units":"IN"},{"length":55,"width":43,"height":25,"units":"CM"}]},"packageContent":[]},
-        "shipmentDetails":{"possessionStatus":true},"scanEvents":[{"date":"'.$expectedDate.'T'.$expectedTime.'",
+        "shipmentDetails":{"possessionStatus":true},"scanEvents":[{"date":"'.$expectedDateTime.'",
         "eventType":"DL","eventDescription":"Delivered","exceptionCode":"","exceptionDescription":"","scanLocation":
         {"streetLines":[""],"city":"Norton","stateOrProvinceCode":"VA","postalCode":"24273","countryCode":"US",
         "residential":false,"countryName":"United States"},"locationType":"DELIVERY_LOCATION","derivedStatusCode":"DL",
@@ -951,27 +952,27 @@ class CarrierTest extends TestCase
             'tracking1' => [
                 'tracking1',
                 'shipTimestamp' => '2020-08-15T02:06:35+03:00',
-                'expectedDate' => '2014-01-09',
+                'expectedDate' => '2014-01-09 18:31:00',
                 '18:31:00',
                 0,
             ],
             'tracking1-again' => [
                 'tracking1',
                 'shipTimestamp' => '2014-01-09T02:06:35+03:00',
-                'expectedDate' => '2014-01-09',
+                'expectedDate' => '2014-01-09 18:31:00',
                 '18:31:00',
                 0,
             ],
             'tracking2' => [
                 'tracking2',
                 'shipTimestamp' => '2014-01-09T02:06:35+03:00',
-                'expectedDate' => '2014-01-09',
+                'expectedDate' => '2014-01-09 23:06:35',
                 '23:06:35',
             ],
             'tracking3' => [
                 'tracking3',
                 'shipTimestamp' => '2014-01-09T14:06:35',
-                'expectedDate' => '2014-01-09',
+                'expectedDate' => '2014-01-09 18:31:00',
                 '18:31:00',
             ],
             'tracking4' => [
