@@ -18,6 +18,7 @@
             <testCaseId value="AC-2843"/>
             <useCaseId value="ACP2E-690"/>
             <group value="salesRule"/>
+            <group value="guest_checkout"/>
         </annotations>
 
         <before>
@@ -29,6 +30,7 @@
             <!--Delete simple product created during the test-->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <!--Delete customer created during the test-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>

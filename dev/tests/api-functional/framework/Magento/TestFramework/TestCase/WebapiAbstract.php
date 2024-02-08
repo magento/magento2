@@ -8,6 +8,7 @@ namespace Magento\TestFramework\TestCase;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Webapi\Exception as WebapiException;
+use Magento\TestFramework\SkippableTrait;
 use Magento\Webapi\Model\Soap\Fault;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -19,6 +20,8 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
 {
+    use SkippableTrait;
+
     /** TODO: Reconsider implementation of fixture-management methods after implementing several tests */
     /**#@+
      * Auto tear down options in setFixture
