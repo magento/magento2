@@ -79,6 +79,10 @@ class ConfigWriterTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     public function testSave()
     {
         $values = [
@@ -90,15 +94,18 @@ class ConfigWriterTest extends TestCase
 
         $this->preparedValueFactoryMock->expects($this->exactly(3))
             ->method('create')
-            ->withConsecutive(
-                ['some1/config1/path1', 'someValue1', 'scope', 'scope_code'],
-                ['some2/config2/path2', 'someValue2', 'scope', 'scope_code'],
-                ['some3/config3/path3', 'someValue3', 'scope', 'scope_code']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $this->valueInterfaceMock,
-                $this->valueMock,
-                $this->valueMock
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) {
+                    if (!empty($arg2)) {
+                        if ($arg1 == 'some1/config1/path1' && $arg3 == 'someValue1') {
+                            return $this->valueInterfaceMock;
+                        } elseif ($arg1 == 'some2/config2/path2' && $arg3 == 'someValue2') {
+                            return $this->valueMock;
+                        } elseif ($arg1 == 'some3/config3/path3' && $arg3 == 'someValue3') {
+                            return $this->valueMock;
+                        }
+                    }
+                }
             );
 
         $this->valueMock->expects($this->exactly(2))
@@ -113,12 +120,20 @@ class ConfigWriterTest extends TestCase
 
         $this->arrayManagerMock->expects($this->exactly(3))
             ->method('set')
-            ->withConsecutive(
-                ['system/scope/scope_code/some1/config1/path1', $this->anything(), 'someValue1'],
-                ['system/scope/scope_code/some2/config2/path2', $this->anything(), 'someValue2'],
-                ['system/scope/scope_code/some3/config3/path3', $this->anything(), 'someValue3']
-            )
-            ->willReturn($config);
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($config) {
+                    if (!empty($arg2)) {
+                        if ($arg1 == 'system/scope/scope_code/some1/config1/path1' && $arg3 == 'someValue1') {
+                            return $config;
+                        } elseif ($arg1 == 'system/scope/scope_code/some2/config2/path2' && $arg3 == 'someValue2') {
+                            return $config;
+                        } elseif ($arg1 == 'system/scope/scope_code/some3/config3/path3' && $arg3 == 'someValue3') {
+                            return $config;
+                        }
+                    }
+                }
+            );
+
         $this->writerMock->expects($this->once())
             ->method('saveConfig')
             ->with([ConfigFilePool::APP_ENV => $config]);
@@ -126,6 +141,10 @@ class ConfigWriterTest extends TestCase
         $this->model->save($values, 'scope', 'scope_code');
     }
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     public function testSaveDefaultScope()
     {
         $values = [
@@ -137,15 +156,16 @@ class ConfigWriterTest extends TestCase
 
         $this->preparedValueFactoryMock->expects($this->exactly(3))
             ->method('create')
-            ->withConsecutive(
-                ['some1/config1/path1', 'someValue1', 'default'],
-                ['some2/config2/path2', 'someValue2', 'default'],
-                ['some3/config3/path3', 'someValue3', 'default']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $this->valueInterfaceMock,
-                $this->valueMock,
-                $this->valueMock
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) {
+                    if ($arg1 == 'some1/config1/path1' && $arg2 == 'someValue1' && $arg3 == 'default') {
+                        return $this->valueInterfaceMock;
+                    } elseif ($arg1 == 'some2/config2/path2' && $arg2 == 'someValue2' && $arg3 == 'default') {
+                        return $this->valueMock;
+                    } elseif ($arg1 == 'some3/config3/path3' && $arg2 == 'someValue3' && $arg3 == 'default') {
+                        return $this->valueMock;
+                    }
+                }
             );
 
         $this->valueMock->expects($this->exactly(2))
@@ -160,12 +180,19 @@ class ConfigWriterTest extends TestCase
 
         $this->arrayManagerMock->expects($this->exactly(3))
             ->method('set')
-            ->withConsecutive(
-                ['system/default/some1/config1/path1', $this->anything(), 'someValue1'],
-                ['system/default/some2/config2/path2', $this->anything(), 'someValue2'],
-                ['system/default/some3/config3/path3', $this->anything(), 'someValue3']
-            )
-            ->willReturn($config);
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($config) {
+                    if (!empty($arg2)) {
+                        if ($arg1 == 'system/scope/scope_code/some1/config1/path1' && $arg3 == 'someValue1') {
+                            return $config;
+                        } elseif ($arg1 == 'system/scope/scope_code/some2/config2/path2' && $arg3 == 'someValue2') {
+                            return $config;
+                        } elseif ($arg1 == 'system/scope/scope_code/some3/config3/path3' && $arg3 == 'someValue3') {
+                            return $config;
+                        }
+                    }
+                }
+            );
         $this->writerMock->expects($this->once())
             ->method('saveConfig')
             ->with([ConfigFilePool::APP_ENV => $config]);

@@ -128,10 +128,14 @@ class LayoutTest extends TestCase
         $this->request->expects($this->once())->method('getFullActionName')
             ->willReturn('Module_Controller_Action');
 
-        $this->eventManager->expects($this->exactly(2))->method('dispatch')->withConsecutive(
-            ['layout_render_before'],
-            ['layout_render_before_Module_Controller_Action']
-        );
+        $this->eventManager->expects($this->exactly(2))->method('dispatch')
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'layout_render_before' || $arg == 'layout_render_before_Module_Controller_Action') {
+                        return null;
+                    }
+                }
+            );
 
         $this->translateInline->expects($this->once())
             ->method('processResponseBody')

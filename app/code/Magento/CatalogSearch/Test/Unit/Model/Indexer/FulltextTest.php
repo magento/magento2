@@ -131,8 +131,15 @@ class FulltextTest extends TestCase
         );
         $this->fullAction->expects($this->exactly(2))
             ->method('rebuildStoreIndex')
-            ->withConsecutive(...$consecutiveStoreRebuildArguments)
-            ->willReturn(new \ArrayObject([$indexData, $indexData]));
+            ->willReturnCallback(function ($arg1, $arg2) use ($consecutiveStoreRebuildArguments, $indexData) {
+                if ($arg1 == $consecutiveStoreRebuildArguments[0][0] &&
+                    $arg2 == $consecutiveStoreRebuildArguments[0][1]) {
+                    return new \ArrayObject([$indexData, $indexData]);
+                } elseif ($arg1 == $consecutiveStoreRebuildArguments[1][0] &&
+                    $arg2 == $consecutiveStoreRebuildArguments[1][1]) {
+                    return new \ArrayObject([$indexData, $indexData]);
+                }
+            });
 
         $this->model->execute($ids);
     }
@@ -165,8 +172,11 @@ class FulltextTest extends TestCase
         );
         $this->fullAction->expects($this->exactly(2))
             ->method('rebuildStoreIndex')
-            ->withConsecutive(...$consecutiveStoreRebuildArguments)
-            ->willReturn(new \ArrayObject([$indexData, $indexData]));
+            ->willReturnCallback(function (...$consecutiveStoreRebuildArguments) use ($indexData) {
+                if (!empty($consecutiveStoreRebuildArguments)) {
+                    return new \ArrayObject([$indexData, $indexData]);
+                }
+            });
 
         $this->model->execute($ids);
     }
@@ -208,8 +218,11 @@ class FulltextTest extends TestCase
         );
         $this->fullAction->expects($this->exactly(2))
             ->method('rebuildStoreIndex')
-            ->withConsecutive(...$consecutiveStoreRebuildArguments)
-            ->willReturn($indexData);
+            ->willReturnCallback(function (...$consecutiveStoreRebuildArguments) use ($indexData) {
+                if (!empty($consecutiveStoreRebuildArguments)) {
+                    return $indexData;
+                }
+            });
 
         $this->fulltextResource->expects($this->exactly(2))->method('resetSearchResultsByStore');
 

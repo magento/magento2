@@ -329,9 +329,12 @@ class ImportTest extends AbstractImportTestCase
             ->willReturn($this->_importData);
 
         $this->import->expects($this->any())->method('setData')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                ['entity'] => $entityTypeCode,
-                ['behavior'] => $behaviour
+            ->willReturnCallback(function ($arg1, $arg2) use ($entityTypeCode, $behaviour) {
+                if ($arg1 == 'entity' && $arg2 == $entityTypeCode) {
+                    return null;
+                } elseif ($arg1 == 'behavior' && $arg2 == $behaviour) {
+                    return null;
+                }
             });
         $this->_entityAdapter->expects($this->any())
             ->method('importData')
@@ -393,11 +396,15 @@ class ImportTest extends AbstractImportTestCase
         $this->import->expects($this->any())
             ->method('getDataSourceModel')
             ->willReturn($this->_importData);
-        $this->import->expects($this->any())->method('setData')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                ['entity'] => $entityTypeCode,
-                ['behavior'] => $behaviour
-            });
+        $this->import->expects($this->any())->method('setData')->willReturnCallback(
+            function ($arg1, $arg2) use ($entityTypeCode, $behaviour) {
+                if ($arg1 == 'entity' && $arg2 == $entityTypeCode) {
+                    return null;
+                } elseif ($arg1 == 'behavior' && $arg2 == $behaviour) {
+                    return null;
+                }
+            }
+        );
 
         $this->_entityAdapter->expects($this->any())
             ->method('importData')

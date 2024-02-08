@@ -75,15 +75,14 @@ class BundleTest extends TestCase
         $this->minificationMock
             ->expects($this->any())
             ->method('addMinifiedSign')
-            ->withConsecutive(
-                ['onefile.js'],
-                ['onefile.js'],
-                ['path-to-theme/js/bundle/bundle0.js']
-            )
-            ->willReturnOnConsecutiveCalls(
-                'onefile.min.js',
-                'onefile.min.js',
-                'path-to-theme/js/bundle/bundle0.min.js'
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == 'onefile.js') {
+                        return 'onefile.min.js';
+                    } elseif ($arg1 == 'path-to-theme/js/bundle/bundle0.js') {
+                        return 'path-to-theme/js/bundle/bundle0.min.js';
+                    }
+                }
             );
 
         $contextMock = $this->getMockBuilder(FallbackContext::class)

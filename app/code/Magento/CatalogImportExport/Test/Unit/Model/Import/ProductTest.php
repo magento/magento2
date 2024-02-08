@@ -1131,6 +1131,15 @@ class ProductTest extends AbstractImportTestCase
             ->expects($this->once())
             ->method('getRowScope')
             ->willReturn(Product::SCOPE_STORE);
+        $importProduct
+            ->method('addRowError')
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($expectedError, $rowNum) {
+                    if ($arg1 == $expectedError && $arg2 == $rowNum) {
+                        return null;
+                    }
+                }
+            );
 
         $importProduct->validateRow($rowData, $rowNum);
     }

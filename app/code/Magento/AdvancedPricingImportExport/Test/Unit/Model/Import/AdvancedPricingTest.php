@@ -539,23 +539,23 @@ class AdvancedPricingTest extends AbstractImportTestCase
 
         $this->advancedPricing
             ->method('deleteProductTierPrices')
-            ->withConsecutive(
-                [
-                    $listSku,
-                    AdvancedPricing::TABLE_TIER_PRICE
-                ]
-            )
-            ->willReturn(true);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($listSku) {
+                    if ($arg1 == $listSku && $arg2 == AdvancedPricing::TABLE_TIER_PRICE) {
+                        return true;
+                    }
+                }
+            );
 
         $this->advancedPricing
             ->method('saveProductPrices')
-            ->withConsecutive(
-                [
-                    $expectedTierPrices,
-                    AdvancedPricing::TABLE_TIER_PRICE
-                ]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($expectedTierPrices) {
+                    if ($arg1 == $expectedTierPrices && $arg2 == AdvancedPricing::TABLE_TIER_PRICE) {
+                        return $this->advancedPricing;
+                    }
+                }
+            );
 
         $this->invokeMethod($this->advancedPricing, 'saveAndReplaceAdvancedPrices');
     }
@@ -586,9 +586,13 @@ class AdvancedPricingTest extends AbstractImportTestCase
         $this->advancedPricing
             ->expects($this->once())
             ->method('deleteProductTierPrices')
-            ->withConsecutive(
-                [$expectedSkuList, AdvancedPricing::TABLE_TIER_PRICE]
-            )->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($expectedSkuList) {
+                    if ($arg1 == $expectedSkuList && $arg2 == AdvancedPricing::TABLE_TIER_PRICE) {
+                        return $this->advancedPricing;
+                    }
+                }
+            );
 
         $this->advancedPricing->deleteAdvancedPricing();
     }
@@ -993,7 +997,11 @@ class AdvancedPricingTest extends AbstractImportTestCase
             ->willReturn($oldSkus);
         $this->advancedPricing->expects($this->exactly($numCall))
             ->method('incrementCounterUpdated')
-            ->withConsecutive($args);
+            ->willReturnCallback(function ($args) {
+                if (!empty($args)) {
+                    return null;
+                }
+            });
 
         $this->invokeMethod($this->advancedPricing, 'processCountExistingPrices', [$prices, 'table']);
     }

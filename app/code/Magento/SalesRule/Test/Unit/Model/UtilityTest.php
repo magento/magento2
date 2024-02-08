@@ -419,7 +419,7 @@ class UtilityTest extends TestCase
     /**
      * @return array
      */
-    public function mergeIdsDataProvider(): array
+    public static function mergeIdsDataProvider(): array
     {
         return [
             ['id1,id2', '', true, 'id1,id2'],
@@ -540,16 +540,24 @@ class UtilityTest extends TestCase
         $discountData->method('getAmount')
             ->willReturnOnConsecutiveCalls($discountAmount, $discountAmount);
         $discountData->method('setBaseAmount')
-            ->withConsecutive([$roundedBaseDiscount], [$secondRoundedBaseDiscount]);
+            ->willReturnCallback(function ($arg1) use ($roundedBaseDiscount, $secondRoundedBaseDiscount) {
+                if ($arg1 == $roundedBaseDiscount || $arg1 == $secondRoundedBaseDiscount) {
+                    return null;
+                }
+            });
         $discountData->method('setAmount')
-            ->withConsecutive([$roundedDiscount], [$secondRoundedDiscount]);
+            ->willReturnCallback(function ($arg1) use ($roundedDiscount, $secondRoundedDiscount) {
+                if ($arg1 == $roundedDiscount || $arg1 == $secondRoundedDiscount) {
+                    return null;
+                }
+            });
         $discountData->method('getBaseAmount')
             ->willReturnOnConsecutiveCalls($baseDiscountAmount, $baseDiscountAmount);
 
         $this->assertEquals($this->utility, $this->utility->deltaRoundingFix($discountData, $this->item));
     }
 
-    public function deltaRoundingFixDataProvider()
+    public static function deltaRoundingFixDataProvider()
     {
         return [
             ['discountAmount' => 10.003, 'baseDiscountAmount' => 12.465, 'percent' => 15, 'rowTotal' => 100],

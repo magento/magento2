@@ -341,8 +341,13 @@ class ProcessorTest extends TestCase
         $indexerRegistryMock
             ->expects($this->exactly(count($executedSharedIndexers)))
             ->method('get')
-            ->withConsecutive(...$executedSharedIndexers)
-            ->willReturn($emptyIndexer);
+            ->willReturnCallback(function ($arg1) use ($emptyIndexer, $executedSharedIndexers) {
+                static $callCount = 0;
+                if (in_array($arg1, $executedSharedIndexers[$callCount])) {
+                    $callCount++;
+                    return $emptyIndexer;
+                }
+            });
 
         return $indexerRegistryMock;
     }

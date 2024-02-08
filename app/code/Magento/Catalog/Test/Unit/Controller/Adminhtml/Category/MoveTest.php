@@ -141,8 +141,13 @@ class MoveTest extends TestCase
             ->getMock();
         $this->request->expects($this->exactly(2))
             ->method('getPost')
-            ->withConsecutive(['pid', false], ['aid', false])
-            ->willReturnMap([['pid', false, 2], ['aid', false, 1]]);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'pid' && $arg2 == false) {
+                    return 2;
+                } elseif ($arg1 == 'aid' && $arg2 == false) {
+                    return 1;
+                }
+            });
         $this->objectManager->expects($this->once())
             ->method('create')
             ->with(Category::class)
@@ -212,8 +217,13 @@ class MoveTest extends TestCase
             ->getMock();
         $this->request->expects($this->exactly(2))
             ->method('getPost')
-            ->withConsecutive(['pid', false], ['aid', false])
-            ->willReturnMap([['pid', false, 2], ['aid', false, 1]]);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'pid' && $arg2 == false) {
+                    return 2;
+                } elseif ($arg1 == 'aid' && $arg2 == false) {
+                    return 1;
+                }
+            });
         $this->objectManager->expects($this->once())
             ->method('create')
             ->with(Category::class)
@@ -281,8 +291,13 @@ class MoveTest extends TestCase
             ->getMock();
         $this->request->expects($this->exactly(2))
             ->method('getPost')
-            ->withConsecutive(['pid', false], ['aid', false])
-            ->willReturnMap([['pid', false, 2], ['aid', false, 1]]);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'pid' && $arg2 == false) {
+                    return 2;
+                } elseif ($arg1 == 'aid' && $arg2 == false) {
+                    return 1;
+                }
+            });
         $this->objectManager->expects($this->once())
             ->method('create')
             ->with(Category::class)

@@ -485,10 +485,11 @@ namespace Magento\Setup\Test\Unit\Model {
             );
             $this->logger->expects($this->exactly(2))
                 ->method('logSuccess')
-                ->withConsecutive(
-                    ['Magento installation complete.'],
-                    ['Magento Admin URI: /']
-                );
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'Magento installation complete.' || $arg == 'Magento Admin URI: /') {
+                        return null;
+                    }
+                });
 
             $this->object->install($request);
         }
@@ -761,10 +762,11 @@ namespace Magento\Setup\Test\Unit\Model {
             );
             $this->logger->expects($this->exactly(2))
                 ->method('logSuccess')
-                ->withConsecutive(
-                    ['Magento installation complete.'],
-                    ['Magento Admin URI: /']
-                );
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'Magento installation complete.' || $arg == 'Magento Admin URI: /') {
+                        return null;
+                    }
+                });
 
             $this->object->install($request);
         }
@@ -773,7 +775,7 @@ namespace Magento\Setup\Test\Unit\Model {
          * @return array
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
-        public function installWithOrderIncrementPrefixDataProvider(): array
+        public static function installWithOrderIncrementPrefixDataProvider(): array
         {
             return [
                 [
@@ -936,7 +938,11 @@ namespace Magento\Setup\Test\Unit\Model {
             if ($isDeploymentConfigWritable) { // assert remote storage reversion is attempted
                 $this->configWriter
                     ->method('saveConfig')
-                    ->withConsecutive([], [], $remoteStorageReversionArguments);
+                    ->willReturnCallback(function ($arg) use ($remoteStorageReversionArguments) {
+                        if (empty($arg) || $arg == $remoteStorageReversionArguments) {
+                            return null;
+                        }
+                    });
             } else { // assert remote storage reversion is never attempted
                 $this->configWriter
                     ->expects(static::any())
@@ -1006,7 +1012,7 @@ namespace Magento\Setup\Test\Unit\Model {
         /**
          * @return array
          */
-        public function installWithInvalidRemoteStorageConfigurationDataProvider()
+        public static function installWithInvalidRemoteStorageConfigurationDataProvider()
         {
             return [
                 [true],
@@ -1164,6 +1170,7 @@ namespace Magento\Setup\Test\Unit\Model {
                     $willReturnArgs[] = $mockedObject;
                 }
             }
+
             $this->objectManager
                 ->method('get')
                 ->withConsecutive(...$withArgs)
@@ -1200,10 +1207,11 @@ namespace Magento\Setup\Test\Unit\Model {
             );
             $this->logger->expects(static::exactly(2))
                 ->method('logSuccess')
-                ->withConsecutive(
-                    ['Magento installation complete.'],
-                    ['Magento Admin URI: /']
-                );
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'Magento installation complete.' || $arg == 'Magento Admin URI: /') {
+                        return null;
+                    }
+                });
 
             $this->object->install($request);
         }
@@ -1303,7 +1311,12 @@ namespace Magento\Setup\Test\Unit\Model {
 
             $this->configWriter
                 ->method('saveConfig')
-                ->withConsecutive([], [], $remoteStorageReversionArguments);
+                ->willReturnCallback(function ($arg) use ($remoteStorageReversionArguments) {
+                    if (empty($arg) || $arg == $remoteStorageReversionArguments
+                    ) {
+                        return null;
+                    }
+                });
 
             $this->setupFactory->expects(static::once())->method('create')->with($resource)->willReturn($setup);
 
@@ -1339,7 +1352,7 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->object->install($request);
         }
 
-        public function installWithInvalidRemoteStorageConfigurationWithEarlyExceptionDataProvider()
+        public static function installWithInvalidRemoteStorageConfigurationWithEarlyExceptionDataProvider()
         {
             return [
                 [new RuntimeException(__('Remote driver is not available.'))],
@@ -1477,13 +1490,16 @@ namespace Magento\Setup\Test\Unit\Model {
 
             $this->logger
                 ->method('log')
-                ->withConsecutive(
-                    ['Cache types config flushed successfully'],
-                    ['Cache cleared successfully'],
-                    ['File system cleanup:'],
-                    ['The directory \'/generation\' doesn\'t exist - skipping cleanup'],
-                    ['Updating modules:']
-                );
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'Cache types config flushed successfully' ||
+                        $arg == 'Cache cleared successfully' ||
+                        $arg == 'File system cleanup:' ||
+                        $arg == 'The directory \'/generation\' doesn\'t exist - skipping cleanup' ||
+                        $arg == 'Updating modules:'
+                    ) {
+                        return null;
+                    }
+                });
 
             $installer->updateModulesSequence(false);
         }
@@ -1495,11 +1511,14 @@ namespace Magento\Setup\Test\Unit\Model {
             $installer = $this->prepareForUpdateModulesTests();
             $this->logger
                 ->method('log')
-                ->withConsecutive(
-                    ['Cache types config flushed successfully'],
-                    ['Cache cleared successfully'],
-                    ['Updating modules:']
-                );
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'Cache types config flushed successfully' ||
+                        $arg == 'Cache cleared successfully' ||
+                        $arg == 'Updating modules:'
+                    ) {
+                        return null;
+                    }
+                });
 
             $installer->updateModulesSequence(true);
         }
@@ -1556,16 +1575,19 @@ namespace Magento\Setup\Test\Unit\Model {
 
             $this->logger
                 ->method('log')
-                ->withConsecutive(
-                    ['Starting Magento uninstallation:'],
-                    ['Cache cleared successfully'],
-                    ['No database connection defined - skipping database cleanup'],
-                    ['File system cleanup:'],
-                    ["The directory '/var' doesn't exist - skipping cleanup"],
-                    ["The directory '/static' doesn't exist - skipping cleanup"],
-                    ["The file '/config/ConfigOne.php' doesn't exist - skipping cleanup"],
-                    ["The file '/config/ConfigTwo.php' doesn't exist - skipping cleanup"]
-                );
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'Starting Magento uninstallation:' ||
+                        $arg == 'Cache cleared successfully' ||
+                        $arg == 'No database connection defined - skipping database cleanup' ||
+                        $arg == 'File system cleanup:' ||
+                        $arg == "The directory '/var' doesn't exist - skipping cleanup" ||
+                        $arg == "The directory '/static' doesn't exist - skipping cleanup" ||
+                        $arg == "The file '/config/ConfigOne.php' doesn't exist - skipping cleanup" ||
+                        $arg == "The file '/config/ConfigTwo.php' doesn't exist - skipping cleanup"
+                    ) {
+                        return null;
+                    }
+                });
 
             $this->object->uninstall();
         }
@@ -1586,10 +1608,13 @@ namespace Magento\Setup\Test\Unit\Model {
 
             $this->connection
                 ->method('query')
-                ->withConsecutive(
-                    ['DROP DATABASE IF EXISTS `magento`'],
-                    ['CREATE DATABASE IF NOT EXISTS `magento`']
-                );
+                ->willReturnCallback(function ($arg) {
+                    if ($arg == 'DROP DATABASE IF EXISTS `magento`' ||
+                        $arg == 'CREATE DATABASE IF NOT EXISTS `magento`'
+                    ) {
+                        return null;
+                    }
+                });
 
             $this->logger->expects($this->once())->method('log')->with('Cleaning up database `magento`');
             $this->object->cleanupDb();

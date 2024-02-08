@@ -197,8 +197,13 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $this->indexerRegistryMock
             ->expects($this->exactly(count($executedSharedIndexers)))
             ->method('get')
-            ->withConsecutive(...$executedSharedIndexers)
-            ->willReturn($emptyIndexer);
+            ->willReturnCallback(function ($arg1) use ($emptyIndexer, $executedSharedIndexers) {
+                static $callCount = 0;
+                if (in_array($arg1, $executedSharedIndexers[$callCount])) {
+                    $callCount++;
+                    return $emptyIndexer;
+                }
+            });
         $emptyIndexer->method('getState')
             ->willReturn($this->getStateMock(['setStatus']));
 

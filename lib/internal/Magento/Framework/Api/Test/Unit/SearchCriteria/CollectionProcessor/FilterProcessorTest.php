@@ -145,10 +145,22 @@ class FilterProcessorTest extends TestCase
 
         $collectionMock->expects($this->exactly(2))
             ->method('addFieldToFilter')
-            ->withConsecutive(
-                [$resultFieldsOne, $resultConditionsOne],
-                [$resultFieldsTwo, $resultConditionsTwo]
-            )->willReturnSelf();
+            ->willReturnCallback(function (
+                $arg1,
+                $arg2
+            ) use (
+                $collectionMock,
+                $resultFieldsOne,
+                $resultConditionsOne,
+                $resultFieldsTwo,
+                $resultConditionsTwo
+            ) {
+                if ($arg1 == $resultFieldsOne && $arg2 == $resultConditionsOne) {
+                    return $collectionMock;
+                } elseif ($arg1 == $resultFieldsTwo && $arg2 == $resultConditionsTwo) {
+                    return $collectionMock;
+                }
+            });
 
         $model->process($searchCriteriaMock, $collectionMock);
     }

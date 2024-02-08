@@ -80,8 +80,11 @@ class ConfigureTest extends TestCase
 
         $request->expects($this->exactly(3))
             ->method('getParam')
-            ->withConsecutive(['customer_id'], ['id'], ['website_id'])
-            ->willReturnOnConsecutiveCalls($customerId, $this->quoteItemId, $this->websiteId);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['customer_id'] => $customerId,
+                ['id'] => $this->quoteItemId,
+                ['website_id'] => $this->websiteId
+            });
 
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
@@ -149,7 +152,8 @@ class ConfigureTest extends TestCase
             ->getMock();
 
         $quote = $this->getMockBuilder(Quote::class)
-            ->onlyMethods(['setWebsite', 'getItemById'])
+            ->onlyMethods(['getItemById'])
+            ->addMethods(['setWebsite'])
             ->disableOriginalConstructor()
             ->getMock();
         $quote->expects($this->once())

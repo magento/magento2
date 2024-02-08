@@ -22,12 +22,24 @@ use PHPUnit\Framework\TestCase;
  */
 class FreeShippingTest extends TestCase
 {
+    /**
+     * @var int
+     */
     private static $websiteId = 1;
 
+    /**
+     * @var int
+     */
     private static $customerGroupId = 2;
 
+    /**
+     * @var int
+     */
     private static $couponCode = 3;
 
+    /**
+     * @var int
+     */
     private static $storeId = 1;
 
     /**
@@ -77,16 +89,14 @@ class FreeShippingTest extends TestCase
         $this->calculator->method('init')
             ->with(self::$websiteId, self::$customerGroupId, self::$couponCode);
         $this->calculator->method('processFreeShipping')
-            ->withConsecutive(
-                [$fItem],
-                [$sItem]
-            )
             ->willReturnCallback(
-                function () use ($fItem, $sItem, $addressFree, $fItemFree, $sItemFree) {
-                    // emulate behavior of cart rule calculator
-                    $fItem->getAddress()->setFreeShipping($addressFree);
-                    $fItem->setFreeShipping($fItemFree);
-                    $sItem->setFreeShipping($sItemFree);
+                function ($arg1) use ($fItem, $sItem, $addressFree, $fItemFree, $sItemFree) {
+                    if ($arg1 === $fItem) {
+                        $fItem->getAddress()->setFreeShipping($addressFree);
+                        $fItem->setFreeShipping($fItemFree);
+                    } elseif ($arg1 === $sItem) {
+                        $sItem->setFreeShipping($sItemFree);
+                    }
                 }
             );
 
@@ -100,7 +110,7 @@ class FreeShippingTest extends TestCase
      *
      * @return array
      */
-    public function itemsDataProvider(): array
+    public static function itemsDataProvider(): array
     {
         return [
             ['addressFree' => 1, 'fItemFree' => 0, 'sItemFree' => 0, 'expected' => true],
