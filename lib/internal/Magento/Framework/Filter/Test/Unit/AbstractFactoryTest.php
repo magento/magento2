@@ -112,7 +112,7 @@ class AbstractFactoryTest extends TestCase
         $property->setAccessible(true);
 
         $filterMock = $this->getMockBuilder('Magento\Framework\Filter\FactoryInterface')
-            ->onlyMethods(['filter'])->getMock();
+            ->addMethods(['filter'])->getMock();
         $this->_objectManager->expects(
             $this->atLeastOnce()
         )->method(
