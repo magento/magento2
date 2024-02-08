@@ -248,7 +248,7 @@ class ExpressTest extends TestCase
         $paymentInfo->expects(static::exactly(3))
             ->method('setAdditionalInformation')
             ->willReturnCallback(
-                function ($arg1, $arg2) {
+                function ($arg1, $arg2) use ($transportValue) {
                     if ($arg1 == Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT && $arg2 === $transportValue) {
                          return null;
                     } elseif ($arg1 == Checkout::PAYMENT_INFO_TRANSPORT_PAYER_ID && $arg2 === $transportValue) {

@@ -142,7 +142,6 @@ class CollectionTest extends TestCase
             ) use (
                 $typeId,
                 $subjectId,
-                $subtype,
                 $stores,
                 $ignoreSql,
                 $ignoreData

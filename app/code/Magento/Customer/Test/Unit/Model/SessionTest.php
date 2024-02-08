@@ -129,7 +129,7 @@ class SessionTest extends TestCase
         $this->_eventManagerMock
             ->method('dispatch')
             ->willReturnCallback(
-                function ($arg1, $arg2) use ($customer, $customerDto, &$callCount) {
+                function ($arg1, $arg2) use ($customer, $customerDto) {
                     if ($arg1 == 'customer_login' && $arg2 == ['customer' => $customer]) {
                         return null;
                     } elseif ($arg1 == 'customer_data_object_login' && $arg2 == ['customer' => $customerDto]) {

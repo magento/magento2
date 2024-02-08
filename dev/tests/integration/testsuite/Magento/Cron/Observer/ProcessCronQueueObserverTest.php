@@ -84,11 +84,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
 
         $lockManager->expects($this->exactly(count($expectedLockData)))
             ->method('lock')
-            ->willReturnCallback(function (...$expectedLockData) {
-                if (!empty($expectedLockData)) {
-                    return null;
-                }
-            });
+            ->withConsecutive(...$expectedLockData);
 
         $request->setParams(
             [

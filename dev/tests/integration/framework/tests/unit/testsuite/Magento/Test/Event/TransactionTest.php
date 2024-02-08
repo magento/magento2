@@ -57,13 +57,8 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
         };
         $this->_eventManager
             ->method('fireEvent')
-            ->willReturnCallback(
-                function ($arg1) use ($callback, $eventName) {
-                    if ($arg1 == $eventName) {
-                        return $callback;
-                    }
-                }
-            );
+            ->withConsecutive([$eventName])
+            ->willReturnOnConsecutiveCalls($this->returnCallback($callback));
     }
 
     /**
@@ -88,13 +83,8 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
         };
         $this->_eventManager
             ->method('fireEvent')
-            ->willReturnCallback(
-                function ($arg1) use ($callback, $eventName) {
-                    if ($arg1 == $eventName) {
-                        return $callback;
-                    }
-                }
-            );
+            ->withConsecutive([$eventName])
+            ->willReturnOnConsecutiveCalls($this->returnCallback($callback));
     }
 
     /**
@@ -125,13 +115,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
 
         $this->_eventManager
             ->method('fireEvent')
-            ->willReturnCallback(
-                function ($arg) use ($eventManagerWithArgs) {
-                    if ($arg == $eventManagerWithArgs) {
-                        return null;
-                    }
-                }
-            );
+            ->withConsecutive($eventManagerWithArgs);
     }
 
     public function startAndRollbackTransactionDataProvider()
@@ -169,13 +153,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
         $this->_expectTransactionRollback();
         $this->_eventManager
             ->method('fireEvent')
-            ->willReturnCallback(
-                function ($arg1) {
-                    if ($arg1 == 'rollbackTransaction') {
-                        return null;
-                    }
-                }
-            );
+            ->withConsecutive(['rollbackTransaction']);
 
         $this->_object->endTestSuite();
     }

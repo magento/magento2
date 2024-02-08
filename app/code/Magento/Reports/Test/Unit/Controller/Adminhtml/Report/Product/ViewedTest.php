@@ -159,7 +159,7 @@ class ViewedTest extends AbstractControllerTest
         $this->breadcrumbsBlockMock
             ->expects($this->exactly(3))
             ->method('addLink')
-            ->willReturnCallback(function ($arg1, $arg2) use ($titleMock) {
+            ->willReturnCallback(function ($arg1, $arg2) {
                 if ($arg1 instanceof Phrase && $arg2 instanceof Phrase) {
                     return null;
                 }

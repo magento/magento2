@@ -173,7 +173,7 @@ class KernelTest extends TestCase
     /**
      * @return array
      */
-    public static function dataProviderForResultWithCachedData(): array
+    public function dataProviderForResultWithCachedData(): array
     {
         $data = [
             'context' => [
@@ -220,7 +220,7 @@ class KernelTest extends TestCase
     /**
      * @return array
      */
-    public static function dataProviderForResultWithoutCachedData(): array
+    public function dataProviderForResultWithoutCachedData(): array
     {
         return [
             ['existing key', [], false, false],
@@ -251,14 +251,8 @@ class KernelTest extends TestCase
 
         $this->responseMock
             ->method('getHeader')
-            ->willReturnCallback(function ($arg) use ($cacheControlHeader) {
-                if ($arg == 'Cache-Control') {
-                    return $cacheControlHeader;
-                } elseif ($arg == 'X-Magento-Tags') {
-                    return null;
-                }
-            });
-
+            ->withConsecutive(['Cache-Control'], ['X-Magento-Tags'])
+            ->willReturn($cacheControlHeader, null);
         $this->responseMock->expects(
             $this->any()
         )->method(
@@ -271,11 +265,7 @@ class KernelTest extends TestCase
             ->method('setNoCacheHeaders');
         $this->responseMock
             ->method('clearHeader')
-            ->willReturnCallback(function ($arg1, $arg2) {
-                if ($arg1 == 'Set-Cookie' || $arg1 == 'X-Magento-Tags') {
-                    return null;
-                }
-            });
+            ->withConsecutive(['Set-Cookie'], ['X-Magento-Tags']);
         $this->fullPageCacheMock->expects($this->once())
             ->method('save');
         $this->kernel->process($this->responseMock);
@@ -284,7 +274,7 @@ class KernelTest extends TestCase
     /**
      * @return array
      */
-    public static function testProcessSaveCacheDataProvider(): array
+    public function testProcessSaveCacheDataProvider(): array
     {
         return [
             [200],
@@ -325,7 +315,7 @@ class KernelTest extends TestCase
     /**
      * @return array
      */
-    public static function processNotSaveCacheProvider(): array
+    public function processNotSaveCacheProvider(): array
     {
         return [
             ['private, max-age=100', 200, true, false],

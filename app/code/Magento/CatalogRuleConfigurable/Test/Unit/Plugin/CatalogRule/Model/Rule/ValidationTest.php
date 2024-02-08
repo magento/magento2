@@ -128,12 +128,11 @@ class ValidationTest extends TestCase
         $this->productRepositoryMock->expects($this->exactly($runValidateAmount))
             ->method('getById')
             ->willReturnCallback(
-                function ($arg1) use ($parentsIds, $parentsProducts, $storeId) {
+                function ($arg1) use ($parentsIds, $parentsProducts) {
                     $key = array_search($arg1, $parentsIds);
                     if ($key !== false) {
                         return $parentsProducts[$key];
                     }
-                    // Add more if-else logic based on the arguments if needed
                 }
             );
         $this->ruleMock->expects($this->exactly($runValidateAmount))
