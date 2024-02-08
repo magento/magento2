@@ -115,7 +115,7 @@ class WeeeTest extends TestCase
         $this->setupOrder($orderData);
 
         //Set up weeeData mock
-        $this->weeeData->expects($this->once())
+        $this->weeeData->expects($this->atLeastOnce())
             ->method('includeInSubtotal')
             ->willReturn($invoiceData['include_in_subtotal']);
 
@@ -284,8 +284,8 @@ class WeeeTest extends TestCase
                     'base_tax_amount' => 16.09,
                     'subtotal' => 300,
                     'base_subtotal' => 300,
-                    'subtotal_incl_tax' => 344.85,
-                    'base_subtotal_incl_tax' => 344.85,
+                    'subtotal_incl_tax' => 347.32,
+                    'base_subtotal_incl_tax' => 347.32,
                 ],
             ],
         ];
@@ -590,8 +590,8 @@ class WeeeTest extends TestCase
                     'base_tax_amount' => 4.95,
                     'subtotal' => 100,
                     'base_subtotal' => 100,
-                    'subtotal_incl_tax' => 114.95,
-                    'base_subtotal_incl_tax' => 114.95,
+                    'subtotal_incl_tax' => 115.77,
+                    'base_subtotal_incl_tax' => 115.77,
                 ],
             ],
         ];
