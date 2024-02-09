@@ -47,24 +47,13 @@ class MaintenanceMode
     private $eventManager;
 
     /**
-     * @var Utility\IPAddressNormaliser
-     */
-    private $ipAddressNormaliser;
-
-    /**
      * @param Filesystem $filesystem
      * @param Manager|null $eventManager
-     * @param Utility\IPAddressNormaliser $ipAddressNormaliser
      */
-    public function __construct(
-        Filesystem $filesystem,
-        Manager $eventManager = null,
-        Utility\IPAddressNormaliser $ipAddressNormaliser = null
-    ) {
+    public function __construct(Filesystem $filesystem, ?Manager $eventManager = null)
+    {
         $this->flagDir = $filesystem->getDirectoryWrite(self::FLAG_DIR);
         $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(Manager::class);
-        $this->ipAddressNormaliser = $ipAddressNormaliser ?:
-            ObjectManager::getInstance()->get(Utility\IPAddressNormaliser::class);
     }
 
     /**
@@ -130,9 +119,6 @@ class MaintenanceMode
         if (!preg_match('/^[^\s,]+(,[^\s,]+)*$/', $addresses)) {
             throw new \InvalidArgumentException("One or more IP-addresses is expected (comma-separated)\n");
         }
-        $addressList = explode(',', $addresses);
-        $addressList = $this->ipAddressNormaliser->execute($addressList);
-        $addresses = implode(',', $addressList);
         $result = $this->flagDir->writeFile(self::IP_FILENAME, $addresses);
         return false !== $result;
     }
