@@ -1,13 +1,16 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\App\Utility\IPAddress;
 use Magento\Framework\Event\Manager;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
@@ -46,6 +49,7 @@ class MaintenanceModeTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(MaintenanceMode::class, [
             'filesystem' => $filesystem,
+            'ipAddress' => $objectManager->getObject(IPAddress::class),
             'eventManager' => $this->eventManager,
         ]);
     }
