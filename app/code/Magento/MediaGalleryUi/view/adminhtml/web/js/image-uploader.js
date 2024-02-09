@@ -72,40 +72,39 @@ define([
                     hideProgressAfterFinish: true
                 },
 
-            uppyDashboard = new Uppy.Uppy({
-                autoProceed: true,
+                uppyDashboard = new Uppy.Uppy({
+                    autoProceed: true,
+                    // validation before file get added
+                    onBeforeFileAdded: (currentFile) => {
+                        if (!this.isSizeExceeded(currentFile).passed) {
+                            this.addValidationErrorMessage(
+                                $t('Cannot upload "%1". File exceeds maximum file size limit.')
+                                    .replace('%1', currentFile.name)
+                            );
+                            return false;
+                        } else if (!this.isFileNameLengthExceeded(currentFile).passed) {
+                            this.addValidationErrorMessage(
+                                $t('Cannot upload "%1". Filename is too long, must be 90 characters or less.')
+                                    .replace('%1', currentFile.name)
+                            );
+                            return false;
+                        }
 
-                // validation before file get added
-                onBeforeFileAdded: (currentFile) => {
-                    if (!this.isSizeExceeded(currentFile).passed) {
-                        this.addValidationErrorMessage(
-                            $t('Cannot upload "%1". File exceeds maximum file size limit.')
-                                .replace('%1', currentFile.name)
-                        );
-                        return false;
-                    } else if (!this.isFileNameLengthExceeded(currentFile).passed) {
-                        this.addValidationErrorMessage(
-                            $t('Cannot upload "%1". Filename is too long, must be 90 characters or less.')
-                                .replace('%1', currentFile.name)
-                        );
-                        return false;
+                        // code to allow duplicate files from same folder
+                        const modifiedFile = {
+                            ...currentFile,
+                            id:  currentFile.id + '-' + Date.now()
+                        };
+
+                        this.showLoader();
+                        this.count(1);
+                        return modifiedFile;
+                    },
+                    meta: {
+                        'isAjax': true,
+                        'form_key': window.FORM_KEY
                     }
-
-                    // code to allow duplicate files from same folder
-                    const modifiedFile = {
-                        ...currentFile,
-                        id:  currentFile.id + '-' + Date.now()
-                    };
-
-                    this.showLoader();
-                    this.count(1);
-                    return modifiedFile;
-                },
-                meta: {
-                    'isAjax': true,
-                    'form_key': window.FORM_KEY
-                }
-            });
+                });
 
             // initialize Uppy upload
             uppyDashboard.use(Uppy.Dashboard, options);

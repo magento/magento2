@@ -217,18 +217,18 @@ define([
          */
         getSectionValue: function (section, options) {
             switch (this.sections()[section].type()) {
-                case 'each':
-                    return _.find(this.sections()[section].attribute().chosen, function (chosen) {
-                        return _.find(options, function (option) {
-                            return chosen.id == option.id; //eslint-disable-line eqeqeq
-                        });
-                    }).sections()[section];
+            case 'each':
+                return _.find(this.sections()[section].attribute().chosen, function (chosen) {
+                    return _.find(options, function (option) {
+                        return chosen.id == option.id; //eslint-disable-line eqeqeq
+                    });
+                }).sections()[section];
 
-                case 'single':
-                    return this.sections()[section].value();
+            case 'single':
+                return this.sections()[section].value();
 
-                case 'none':
-                    return this[section];
+            case 'none':
+                return this[section];
             }
         },
 
@@ -267,27 +267,27 @@ define([
          */
         fillImagesSection: function () {
             switch (this.sections().images.type()) {
-                case 'each':
-                    if (this.sections().images.attribute()) {
-                        this.sections().images.attribute().chosen.each(function (option) {
-                            option.sections().images = new this.makeImages(
-                                this.getImageProperty($('[data-role=step-gallery-option-' + option.id + ']')),
-                                'thumbnail'
-                            );
-                        }, this);
-                    }
-                    break;
+            case 'each':
+                if (this.sections().images.attribute()) {
+                    this.sections().images.attribute().chosen.each(function (option) {
+                        option.sections().images = new this.makeImages(
+                            this.getImageProperty($('[data-role=step-gallery-option-' + option.id + ']')),
+                            'thumbnail'
+                        );
+                    }, this);
+                }
+                break;
 
-                case 'single':
-                    this.sections().images.value(new this.makeImages(
-                        this.getImageProperty($('[data-role=step-gallery-single]')),
-                        'thumbnail'
-                    ));
-                    break;
+            case 'single':
+                this.sections().images.value(new this.makeImages(
+                    this.getImageProperty($('[data-role=step-gallery-single]')),
+                    'thumbnail'
+                ));
+                break;
 
-                default:
-                    this.sections().images.value(new this.makeImages());
-                    break;
+            default:
+                this.sections().images.value(new this.makeImages());
+                break;
             }
         },
 
@@ -311,19 +311,19 @@ define([
 
             _.each(this.sections(), function (section) {
                 switch (section.type()) {
-                    case 'each':
-                        if (!section.attribute()) {
-                            throw new Error($.mage.__('Please select attribute for {section} section.')
-                                .replace('{section}', section.label));
-                        }
-                        break;
+                case 'each':
+                    if (!section.attribute()) {
+                        throw new Error($.mage.__('Please select attribute for {section} section.')
+                            .replace('{section}', section.label));
+                    }
+                    break;
 
-                    case 'single':
-                        if (!section.value()) {
-                            throw new Error($.mage.__('Please fill in the values for {section} section.')
-                                .replace('{section}', section.label));
-                        }
-                        break;
+                case 'single':
+                    if (!section.value()) {
+                        throw new Error($.mage.__('Please fill in the values for {section} section.')
+                            .replace('{section}', section.label));
+                    }
+                    break;
                 }
             }, this);
             formValid = true;
@@ -341,19 +341,19 @@ define([
          */
         validateImage: function () {
             switch (this.sections().images.type()) {
-                case 'each':
-                    _.each(this.sections().images.attribute().chosen, function (option) {
-                        if (!option.sections().images.images.length) {
-                            throw new Error($.mage.__('Please select image(s) for your attribute.'));
-                        }
-                    });
-                    break;
-
-                case 'single':
-                    if (this.sections().images.value().file == null) {
-                        throw new Error($.mage.__('Please choose image(s).'));
+            case 'each':
+                _.each(this.sections().images.attribute().chosen, function (option) {
+                    if (!option.sections().images.images.length) {
+                        throw new Error($.mage.__('Please select image(s) for your attribute.'));
                     }
-                    break;
+                });
+                break;
+
+            case 'single':
+                if (this.sections().images.value().file == null) {
+                    throw new Error($.mage.__('Please choose image(s).'));
+                }
+                break;
             }
         },
 

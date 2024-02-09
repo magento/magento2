@@ -7,13 +7,14 @@
 // phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
 /** @var $block \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content\Uploader */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Framework\Escaper $escaper */
 ?>
 
 <div id="<?= $block->getHtmlId() ?>" class="uploader">
     <span class="fileinput-button form-buttons">
         <button id="fileupload" title="Browse Files" type="button"
-                name="<?= $block->escapeHtmlAttr($block->getConfig()->getFileField()) ?>"
-                data-url="<?= $block->escapeUrl($block->getConfig()->getUrl()) ?>">
+                name="<?= $escaper->escapeHtmlAttr($block->getConfig()->getFileField()) ?>"
+                data-url="<?= $escaper->escapeUrl($block->getConfig()->getUrl()) ?>">
             <span>Browse Files</span>
         </button>
     </span>

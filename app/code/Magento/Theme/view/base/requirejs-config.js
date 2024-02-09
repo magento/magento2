@@ -66,7 +66,6 @@ var config = {
     },
     paths: {
         'jquery/validate': 'jquery/jquery.validate',
-        'jquery/file-uploader': 'jquery/fileUploader/jquery.fileuploader',
         'jquery/uppy-core': 'jquery/uppy/dist/uppy.min',
         'prototype': 'legacy-build.min',
         'jquery/jquery-storageapi': 'js-storage/storage-wrapper',
