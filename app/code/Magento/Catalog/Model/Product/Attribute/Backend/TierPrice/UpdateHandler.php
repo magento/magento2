@@ -86,7 +86,7 @@ class UpdateHandler extends AbstractHandler
         $attribute = $this->attributeRepository->get('tier_price');
         $priceRows = $entity->getData($attribute->getName());
         $origPrices = $entity->getOrigData($attribute->getName());
-        if($entity->getTypeId() === Configurable::TYPE_CODE && null !== $origPrices){
+        if ($entity->getTypeId() === Configurable::TYPE_CODE && null !== $origPrices) {
             $priceRows = [];
         }
         if (null !== $priceRows) {
