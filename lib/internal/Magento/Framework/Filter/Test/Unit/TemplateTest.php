@@ -9,6 +9,9 @@ namespace Magento\Framework\Filter\Test\Unit;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\Filter\DirectiveProcessor\DependDirective;
+use Magento\Framework\Filter\DirectiveProcessor\IfDirective;
+use Magento\Framework\Filter\DirectiveProcessor\LegacyDirective;
+use Magento\Framework\Filter\DirectiveProcessor\TemplateDirective;
 use Magento\Framework\Filter\Template;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
@@ -47,6 +50,18 @@ class TemplateTest extends TestCase
             [
                 DependDirective::class,
                 $this->createMock(DependDirective::class)
+            ],
+            [
+                IfDirective::class,
+                $this->createMock(IfDirective::class)
+            ],
+            [
+                TemplateDirective::class,
+                $this->createMock(TemplateDirective::class)
+            ],
+            [
+                LegacyDirective::class,
+                $this->createMock(LegacyDirective::class)
             ]
         ];
         $objectManager->prepareObjectManager($objects);

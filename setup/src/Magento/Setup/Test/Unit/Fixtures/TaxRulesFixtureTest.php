@@ -15,6 +15,7 @@ use Magento\Tax\Api\Data\TaxRuleInterfaceFactory;
 use Magento\Tax\Api\TaxRateRepositoryInterface;
 use Magento\Tax\Api\TaxRuleRepositoryInterface;
 use Magento\Tax\Model\ResourceModel\Calculation\Rate\CollectionFactory;
+use Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
