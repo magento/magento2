@@ -223,7 +223,8 @@ class StoresFixtureTest extends TestCase
 
         $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'addData', 'save'])
+            ->addMethods(['addData', 'save'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
 
         $websiteMock->expects($this->exactly(3))
