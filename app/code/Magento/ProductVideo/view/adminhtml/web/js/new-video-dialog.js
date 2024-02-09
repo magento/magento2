@@ -65,10 +65,10 @@ define([
         update: function () {
             var checkVideoID =
                 this.element.find(this.options.container).find('.' + this.options.videoClass).data('code'),
-            eventVideoData = {
-                oldVideoId: checkVideoID ? checkVideoID.toString() : checkVideoID,
-                newVideoId: this.options.videoId ? this.options.videoId.toString() : this.options.videoId
-            };
+                eventVideoData = {
+                    oldVideoId: checkVideoID ? checkVideoID.toString() : checkVideoID,
+                    newVideoId: this.options.videoId ? this.options.videoId.toString() : this.options.videoId
+                };
 
             if (checkVideoID && checkVideoID !== this.options.videoId) {
                 this._doUpdate();
@@ -350,30 +350,30 @@ define([
                 }
                 self._onlyVideoPlayer = true;
             }, this))
-            .createVideoPlayer({
-                videoId: data.videoId,
-                videoProvider: data.videoProvider,
-                useYoutubeNocookie: data.useYoutubeNocookie,
-                reset: false,
-                metaData: {
-                    DOM: {
-                        title: '.video-information.title span',
-                        uploaded: '.video-information.uploaded span',
-                        uploader: '.video-information.uploader span',
-                        duration: '.video-information.duration span',
-                        all: '.video-information span',
-                        wrapper: '.video-information'
-                    },
-                    data: {
-                        title: data.title,
-                        uploaded: data.uploaded,
-                        uploader: data.channel,
-                        duration: data.duration,
-                        uploaderUrl: data.channelId
+                .createVideoPlayer({
+                    videoId: data.videoId,
+                    videoProvider: data.videoProvider,
+                    useYoutubeNocookie: data.useYoutubeNocookie,
+                    reset: false,
+                    metaData: {
+                        DOM: {
+                            title: '.video-information.title span',
+                            uploaded: '.video-information.uploaded span',
+                            uploader: '.video-information.uploader span',
+                            duration: '.video-information.duration span',
+                            all: '.video-information span',
+                            wrapper: '.video-information'
+                        },
+                        data: {
+                            title: data.title,
+                            uploaded: data.uploaded,
+                            uploader: data.channel,
+                            duration: data.duration,
+                            uploaderUrl: data.channelId
+                        }
                     }
-                }
-            })
-            .off('finish_update_video finish_create_video');
+                })
+                .off('finish_update_video finish_create_video');
 
             this._videoRequestComplete = true;
         },
@@ -558,10 +558,10 @@ define([
          */
         _uploadImage: function (file, oldFile, callback) {
             var url = this.options.saveVideoUrl,
-            data = {
-                files: file,
-                url: url
-            };
+                data = {
+                    files: file,
+                    url: url
+                };
 
             this._blockActionButtons(true, true);
             this._uploadFile(data, $.proxy(function (result) {
@@ -625,6 +625,7 @@ define([
                 contentType: false,
                 data: formData,
                 success: function (result, textStatus, jqXHR) {
+                    // eslint-disable-next-line no-useless-call
                     callback.call(null, result, textStatus, jqXHR);
                 }
             });
@@ -678,26 +679,26 @@ define([
                 modalClass: 'mage-new-video-dialog form-inline',
                 title: $.mage.__('New Video'),
                 buttons: [
-                {
-                    text: $.mage.__('Save'),
-                    class: 'action-primary video-create-button',
-                    click: $.proxy(widget._onCreate, widget)
-                },
-                {
-                    text: $.mage.__('Cancel'),
-                    class: 'video-cancel-button',
-                    click: $.proxy(widget._onCancel, widget)
-                },
-                {
-                    text: $.mage.__('Delete'),
-                    class: 'video-delete-button',
-                    click: $.proxy(widget._onDelete, widget)
-                },
-                {
-                    text: $.mage.__('Save'),
-                    class: 'action-primary video-edit',
-                    click: $.proxy(widget._onUpdate, widget)
-                }
+                    {
+                        text: $.mage.__('Save'),
+                        class: 'action-primary video-create-button',
+                        click: $.proxy(widget._onCreate, widget)
+                    },
+                    {
+                        text: $.mage.__('Cancel'),
+                        class: 'video-cancel-button',
+                        click: $.proxy(widget._onCancel, widget)
+                    },
+                    {
+                        text: $.mage.__('Delete'),
+                        class: 'video-delete-button',
+                        click: $.proxy(widget._onDelete, widget)
+                    },
+                    {
+                        text: $.mage.__('Save'),
+                        class: 'action-primary video-edit',
+                        click: $.proxy(widget._onUpdate, widget)
+                    }
                 ],
 
                 /**

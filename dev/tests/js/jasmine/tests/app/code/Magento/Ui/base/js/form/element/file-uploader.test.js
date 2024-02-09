@@ -97,20 +97,20 @@ define([
             });
             it('check for set value', function () {
                 var initialValue = [
-                    {
-                        'name': 'test.png',
-                        'size': 0,
-                        'type': 'image/png',
-                        'url': 'http://localhost:8000/media/wysiwyg/test.png'
-                    }
-                ], expectedValue = [
-                    {
-                        'name': 'test.png',
-                        'size': 2000,
-                        'type': 'image/png',
-                        'url': 'http://localhost:8000/media/wysiwyg/test.png'
-                    }
-                ];
+                        {
+                            'name': 'test.png',
+                            'size': 0,
+                            'type': 'image/png',
+                            'url': 'http://localhost:8000/media/wysiwyg/test.png'
+                        }
+                    ], expectedValue = [
+                        {
+                            'name': 'test.png',
+                            'size': 2000,
+                            'type': 'image/png',
+                            'url': 'http://localhost:8000/media/wysiwyg/test.png'
+                        }
+                    ];
 
                 spyOn(component, 'setImageSize').and.callFake(function () {
                     component.value().size = 2000;
