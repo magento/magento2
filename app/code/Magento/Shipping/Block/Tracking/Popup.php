@@ -92,7 +92,7 @@ class Popup extends \Magento\Framework\View\Element\Template
     public function formatDeliveryTime($time, $date = null)
     {
         if (!empty($date)) {
-            $time = $date;
+            $time = $date . ' ' . $time;
         }
 
         $format = $this->_localeDate->getTimeFormat(\IntlDateFormatter::SHORT);
