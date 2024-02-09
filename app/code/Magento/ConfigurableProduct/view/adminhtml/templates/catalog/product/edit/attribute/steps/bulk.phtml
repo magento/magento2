@@ -495,7 +495,8 @@ $uploadUrl = $block->getUrl('catalog/product_gallery/upload');
                                                                 $escaper->escapeHtmlAttr($attribute->getAttributeCode())
                                                                 ?>"
                                                                 />
-                                                                <?= $escaper->escapeHtml($attribute->getFrontendLabel())?>
+                                                                <?=
+                                                                $escaper->escapeHtml($attribute->getFrontendLabel())?>
                                                             </label>
                                                         </li>
                                                     <?php endforeach; ?>
@@ -578,7 +579,9 @@ $uploadUrl = $block->getUrl('catalog/product_gallery/upload');
                                data-bind="checked:type" />
                         <label for="apply-unique-prices-radio"
                                class="admin__field-label">
-                            <span><?= $escaper->escapeHtml(__('Apply unique prices by attribute to each SKU')); ?></span>
+                            <span><?=
+                                $escaper->escapeHtml(__('Apply unique prices by attribute to each SKU')); ?>
+                            </span>
                         </label>
                     </div>
                 </li>
@@ -680,7 +683,9 @@ $uploadUrl = $block->getUrl('catalog/product_gallery/upload');
                                value="each"
                                data-bind="checked: type" />
                         <label for="apply-unique-inventory-radio" class="admin__field-label">
-                            <span><?= $escaper->escapeHtml(__('Apply unique quantity by attribute to each SKU')) ?></span>
+                            <span>
+                                <?= $escaper->escapeHtml(__('Apply unique quantity by attribute to each SKU')) ?>
+                            </span>
                         </label>
                     </div>
                 </li>
