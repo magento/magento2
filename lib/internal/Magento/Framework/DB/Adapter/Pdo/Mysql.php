@@ -3225,6 +3225,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
             return $value;
         }
 
+        $column['DATA_TYPE'] = str_replace(' /* mariadb-5.3 */', '', $column['DATA_TYPE']);
+
         // return original value if invalid column describe data
         if (!isset($column['DATA_TYPE'])) {
             return $value;
