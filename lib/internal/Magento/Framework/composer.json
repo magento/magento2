@@ -46,7 +46,6 @@
         "magento/zend-pdf": "^1.16",
         "monolog/monolog": "^2.7",
         "ramsey/uuid": "^4.2",
-        "s1lentium/iptools": "^1.1",
         "symfony/console": "^5.4",
         "symfony/intl": "^5.4",
         "symfony/process": "<=5.4.23",

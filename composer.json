@@ -81,7 +81,6 @@
         "phpseclib/mcrypt_compat": "^2.0",
         "phpseclib/phpseclib": "^3.0",
         "ramsey/uuid": "^4.2",
-        "s1lentium/iptools": "^1.1",
         "symfony/console": "^5.4",
         "symfony/intl": "^5.4",
         "symfony/process": "<=5.4.23",
