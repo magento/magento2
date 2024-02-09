@@ -119,6 +119,10 @@ class Url extends \Magento\Framework\DataObject
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )) {
             return $this->filter->translitUrl($str);
+        } else {
+            $str = preg_replace('/\s+/', '-', $str);
+            $str = mb_strtolower($str);
+            $str = trim($str, '-');
         }
 
         return $str;

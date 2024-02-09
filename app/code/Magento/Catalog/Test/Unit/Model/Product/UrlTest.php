@@ -140,6 +140,23 @@ class UrlTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testFormatUrlKeyWithoutTransliteration(): void
+    {
+        $strIn = 'Some string ';
+        $resultString = 'some-string';
+
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->with(
+                \Magento\Catalog\Helper\Product::XML_PATH_APPLY_TRANSLITERATION_TO_URL,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )->willReturn(false);
+        $this->assertEquals($resultString, $this->model->formatUrlKey($strIn));
+    }
+
+    /**
      * @dataProvider getUrlDataProvider
      * @covers \Magento\Catalog\Model\Product\Url::getUrl
      * @covers \Magento\Catalog\Model\Product\Url::getUrlInStore
