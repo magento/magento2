@@ -189,7 +189,8 @@ class StoresFixtureTest extends TestCase
 
         $storeGroupMock = $this->getMockBuilder(GroupInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'addData', 'save'])
+            ->addMethods(['addData', 'save'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
 
         $storeGroupMock->expects($this->exactly(11))
