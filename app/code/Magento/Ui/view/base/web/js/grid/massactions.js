@@ -26,8 +26,7 @@ define([
             noItemsMsg: $t('You haven\'t selected any items!'),
             modules: {
                 selections: '${ $.selectProvider }'
-            },
-            actionClicked: false
+            }
         },
 
         /**
@@ -62,24 +61,13 @@ define([
             }
 
             action = this.getAction(actionIndex);
-            
-            if (action.actionClicked && !action.timeoutExpired) {
-                return this;
-            }
             callback = this._getCallback(action, data);
 
             action.confirm ?
                 this._confirm(action, callback) :
                 callback();
 
-            this.actions().forEach(function (item) {
-                item.actionClicked = (item.type === actionIndex);
-            });
-
-            action.timeoutExpired = false;
-            setTimeout(function () {
-                action.timeoutExpired = true;
-            }, 3000);
+            this.close();
 
             return this;
         },
