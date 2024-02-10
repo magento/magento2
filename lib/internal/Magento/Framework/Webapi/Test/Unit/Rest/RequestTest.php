@@ -44,7 +44,7 @@ class RequestTest extends TestCase
         )->onlyMethods(['get'])->addMethods(
             ['deserialize']
         )->disableOriginalConstructor()
-        ->getMock();
+            ->getMock();
         $areaListMock = $this->createMock(AreaList::class);
         $configScopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
         $areaListMock->expects($this->once())->method('getFrontName')->willReturn('rest');
@@ -131,9 +131,9 @@ class RequestTest extends TestCase
         $deserializer = $this->getMockBuilder(
             Json::class
         )->disableOriginalConstructor()
-        ->onlyMethods(
-            ['deserialize']
-        )->getMock();
+            ->onlyMethods(
+                ['deserialize']
+            )->getMock();
         $deserializer->expects(
             $this->once()
         )->method(

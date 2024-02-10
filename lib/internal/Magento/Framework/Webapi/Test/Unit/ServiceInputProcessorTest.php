@@ -647,9 +647,9 @@ class ServiceInputProcessorTest extends TestCase
                     TestService::CUSTOM_ATTRIBUTE_CODE => $objectManager->getObject(
                         AttributeValue::class,
                         ['data' => [
-                                'attribute_code' => TestService::CUSTOM_ATTRIBUTE_CODE,
-                                'value' => $customAttributeValue
-                            ]
+                            'attribute_code' => TestService::CUSTOM_ATTRIBUTE_CODE,
+                            'value' => $customAttributeValue
+                        ]
                         ]
                     )
                 ]

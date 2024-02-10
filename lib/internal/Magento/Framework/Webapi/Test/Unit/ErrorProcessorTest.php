@@ -62,7 +62,7 @@ class ErrorProcessorTest extends TestCase
             ->getMock();
 
         $this->_loggerMock = $this->getMockBuilder(LoggerInterface::class)
-        ->getMock();
+            ->getMock();
 
         $filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
@@ -258,9 +258,9 @@ class ErrorProcessorTest extends TestCase
             ->method('critical')
             ->willReturnCallback(
 
-                    function (\Exception $loggedException) use ($thrownException) {
-                        $this->assertSame($thrownException, $loggedException->getPrevious());
-                    }
+                function (\Exception $loggedException) use ($thrownException) {
+                    $this->assertSame($thrownException, $loggedException->getPrevious());
+                }
 
             );
         $this->_errorProcessor->maskException($thrownException);
