@@ -73,15 +73,11 @@ class ValidationMessageTest extends TestCase
 
         $this->scopeConfigMock
             ->method('getValue')
-            ->willReturnCallback(
-                function ($arg1, $arg2) use ($minimumAmount) {
-                    if ($arg1 == 'sales/minimum_order/description' && $arg2 == ScopeInterface::SCOPE_STORE) {
-                        return null;
-                    } elseif ($arg1 == 'sales/minimum_order/amount' && $arg2 == ScopeInterface::SCOPE_STORE) {
-                        return $minimumAmount;
-                    }
-                }
-            );
+            ->withConsecutive(
+                ['sales/minimum_order/description', ScopeInterface::SCOPE_STORE],
+                ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE]
+            )
+            ->willReturnOnConsecutiveCalls(null, $minimumAmount);
 
         $this->priceHelperMock->expects($this->once())
             ->method('currency')

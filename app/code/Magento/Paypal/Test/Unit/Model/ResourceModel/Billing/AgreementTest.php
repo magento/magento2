@@ -88,15 +88,11 @@ class AgreementTest extends TestCase
             ->willReturnSelf();
         $this->selectMock->expects($this->exactly(2))
             ->method('where')
-            ->willReturnCallback(
-                function ($arg1, $arg2) {
-                    if ($arg1 == 'pbao.agreement_id IN(?)' && $arg2 == [100]) {
-                        return $this->selectMock;
-                    } elseif ($arg1 == 'main_table.entity_id IN (?)' && $arg2 == [500]) {
-                        return $this->selectMock;
-                    }
-                }
-            );
+            ->withConsecutive(
+                ['pbao.agreement_id IN(?)', [100]],
+                ['main_table.entity_id IN (?)', [500]]
+            )
+            ->willReturnSelf();
         $this->connectionMock->expects($this->once())
             ->method('fetchCol')
             ->with($this->selectMock, [])

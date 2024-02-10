@@ -115,14 +115,9 @@ class GatewayCommandTest extends TestCase
 
         $this->logger->expects(self::exactly(count($validationFailures)))
             ->method('critical')
-            ->willReturnCallback(
-                function ($arg) use ($validationFailures) {
-                    static $index = 0;
-                    $expectedMessage = 'Payment Error: ' . $validationFailures[$index++];
-                    if ($arg == $expectedMessage) {
-                        return null;
-                    }
-                }
+            ->withConsecutive(
+                [self::equalTo('Payment Error: ' . $validationFailures[0])],
+                [self::equalTo('Payment Error: ' . $validationFailures[1])]
             );
 
         $this->command->execute($commandSubject);
@@ -155,12 +150,11 @@ class GatewayCommandTest extends TestCase
 
         $this->logger->expects(self::exactly(count(array_merge($validationFailures, $errorCodes))))
             ->method('critical')
-            ->willReturnCallback(function ($arg1) {
-                if ($arg1 == 'Payment Error: Unauthorized' || $arg1 == 'Payment Error: Failure Mapped' ||
-                    $arg1 == 'Payment Error: Failure #2') {
-                    return null;
-                }
-            });
+            ->withConsecutive(
+                [self::equalTo('Payment Error: Unauthorized')],
+                [self::equalTo('Payment Error: Failure Mapped')],
+                [self::equalTo('Payment Error: Failure #2')]
+            );
 
         $this->command->execute($commandSubject);
     }

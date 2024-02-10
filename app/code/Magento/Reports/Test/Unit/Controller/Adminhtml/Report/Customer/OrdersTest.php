@@ -63,12 +63,10 @@ class OrdersTest extends AbstractControllerTest
             ->with('Magento_Reports::report_customers_orders');
         $this->breadcrumbsBlockMock
             ->method('addLink')
-            ->willReturnCallback(
-                function ($arg1, $arg2) {
-                    if ($arg1 instanceof Phrase && $arg2 instanceof Phrase) {
-                        return null;
-                    }
-                }
+            ->withConsecutive(
+                [new Phrase('Reports'), new Phrase('Reports')],
+                [new Phrase('Customers'), new Phrase('Customers')],
+                [new Phrase('Customers by Number of Orders'), new Phrase('Customers by Number of Orders')]
             );
         $this->orders->execute();
     }

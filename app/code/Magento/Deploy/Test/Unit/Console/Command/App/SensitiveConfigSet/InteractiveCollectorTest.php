@@ -83,17 +83,12 @@ class InteractiveCollectorTest extends TestCase
             ->willReturn('someValue');
         $this->questionFactoryMock->expects($this->exactly(3))
             ->method('create')
-            ->willReturnCallback(
-                function ($arg) use ($configPaths, $questionMock) {
-                    if ($arg == ['question' => $configPaths[0] . ': ']) {
-                        return $questionMock;
-                    } elseif ($arg == ['question' => $configPaths[1] . ': ']) {
-                        return $questionMock;
-                    } elseif ($arg == ['question' => $configPaths[2] . ': ']) {
-                        return $questionMock;
-                    }
-                }
-            );
+            ->withConsecutive(
+                [['question' => $configPaths[0] . ': ']],
+                [['question' => $configPaths[1] . ': ']],
+                [['question' => $configPaths[2] . ': ']]
+            )
+            ->willReturn($questionMock);
 
         $this->assertEquals(
             [

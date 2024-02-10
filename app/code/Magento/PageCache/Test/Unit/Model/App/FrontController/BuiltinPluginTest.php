@@ -120,14 +120,9 @@ class BuiltinPluginTest extends TestCase
         if ($state == State::MODE_DEVELOPER) {
             $this->responseMock
                 ->method('setHeader')
-                ->willReturnCallback(
-                    function ($arg1, $arg2 = null, $arg3 = null) {
-                        if ($arg1 === 'X-Magento-Cache-Control') {
-                            return null;
-                        } elseif ($arg1 === 'X-Magento-Cache-Debug' && $arg2 === 'MISS' && $arg3 === true) {
-                            return null;
-                        }
-                    }
+                ->withConsecutive(
+                    ['X-Magento-Cache-Control'],
+                    ['X-Magento-Cache-Debug', 'MISS', true]
                 );
         } else {
             $this->responseMock->expects($this->never())
@@ -287,7 +282,7 @@ class BuiltinPluginTest extends TestCase
     /**
      * @return array
      */
-    public static function dataProvider(): array
+    public function dataProvider(): array
     {
         return [
             'developer_mode' => [State::MODE_DEVELOPER],

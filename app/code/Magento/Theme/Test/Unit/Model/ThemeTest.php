@@ -167,7 +167,7 @@ class ThemeTest extends TestCase implements TestProvidesServiceInterface
     /**
      * @return array
      */
-    public static function isVirtualDataProvider(): array
+    public function isVirtualDataProvider(): array
     {
         return [
             ['type' => ThemeInterface::TYPE_VIRTUAL, 'isVirtual' => true],
@@ -193,7 +193,7 @@ class ThemeTest extends TestCase implements TestProvidesServiceInterface
     /**
      * @return array
      */
-    public static function isPhysicalDataProvider(): array
+    public function isPhysicalDataProvider(): array
     {
         return [
             ['type' => ThemeInterface::TYPE_VIRTUAL, 'isPhysical' => false],
@@ -219,7 +219,7 @@ class ThemeTest extends TestCase implements TestProvidesServiceInterface
     /**
      * @return array
      */
-    public static function isVisibleDataProvider(): array
+    public function isVisibleDataProvider(): array
     {
         return [
             ['type' => ThemeInterface::TYPE_VIRTUAL, 'isVisible' => true],
@@ -252,7 +252,7 @@ class ThemeTest extends TestCase implements TestProvidesServiceInterface
     /**
      * @return array
      */
-    public static function isDeletableDataProvider(): array
+    public function isDeletableDataProvider(): array
     {
         return [
             [ThemeInterface::TYPE_VIRTUAL, true],
@@ -277,7 +277,7 @@ class ThemeTest extends TestCase implements TestProvidesServiceInterface
     /**
      * @return array
      */
-    public static function getCodeDataProvider(): array
+    public function getCodeDataProvider(): array
     {
         return [
             'string code' => ['theme/code', 'theme/code'],
@@ -329,15 +329,8 @@ class ThemeTest extends TestCase implements TestProvidesServiceInterface
         $this->_model->setId(1);
         $this->resourceCollection
             ->method('addFieldToFilter')
-            ->willReturnCallback(
-                function ($arg1, $arg2) {
-                    if ($arg1 == 'parent_id' && $arg2 == 1) {
-                        return $this->resourceCollection;
-                    } elseif ($arg1 == 'type' && $arg2 == Theme::TYPE_STAGING) {
-                        return $this->resourceCollection;
-                    }
-                }
-            );
+            ->withConsecutive(['parent_id', 1], ['type', Theme::TYPE_STAGING])
+            ->willReturnOnConsecutiveCalls($this->resourceCollection, $this->resourceCollection);
         $this->resourceCollection->expects($this->once())
             ->method('getFirstItem')
             ->willReturn($theme);
@@ -364,15 +357,8 @@ class ThemeTest extends TestCase implements TestProvidesServiceInterface
         $this->_model->setId(1);
         $this->resourceCollection
             ->method('addFieldToFilter')
-            ->willReturnCallback(
-                function ($arg1, $arg2) {
-                    if ($arg1 == 'parent_id' && $arg2 == 1) {
-                        return $this->resourceCollection;
-                    } elseif ($arg1 == 'type' && $arg2 == Theme::TYPE_STAGING) {
-                        return $this->resourceCollection;
-                    }
-                }
-            );
+            ->withConsecutive(['parent_id', 1], ['type', Theme::TYPE_STAGING])
+            ->willReturnOnConsecutiveCalls($this->resourceCollection, $this->resourceCollection);
         $this->resourceCollection->expects($this->once())
             ->method('getFirstItem')
             ->willReturn($theme);

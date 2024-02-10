@@ -364,14 +364,9 @@ class UpdaterTest extends TestCase
 
         $this->itemMock->expects($this->exactly(2))
             ->method('setData')
-            ->willReturnCallback(
-                function ($arg1, $arg2) {
-                    if ($arg1 == 'custom_price' && $arg2 == null) {
-                        return null;
-                    } elseif ($arg1 == 'original_custom_price' && $arg2 == null) {
-                        return null;
-                    }
-                }
+            ->withConsecutive(
+                ['custom_price', null],
+                ['original_custom_price', null]
             );
 
         $this->itemMock->expects($this->once())

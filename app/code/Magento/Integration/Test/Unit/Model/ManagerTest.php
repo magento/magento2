@@ -142,10 +142,8 @@ class ManagerTest extends TestCase
         $this->integrationServiceMock->expects($this->once())->method('create')->with($integrationsData2);
         $this->integrationServiceMock
             ->method('findByName')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                ['TestIntegration1'] => $intLookupData1,
-                ['TestIntegration2'] => $intLookupData2
-            });
+            ->withConsecutive(['TestIntegration1'], ['TestIntegration2'])
+            ->willReturnOnConsecutiveCalls($intLookupData1, $intLookupData2);
         $this->integrationServiceMock
             ->method('update')
             ->with($intUpdateData1);
@@ -241,10 +239,8 @@ class ManagerTest extends TestCase
         // Integration2 does not exist, so create it
         $this->integrationServiceMock
             ->method('findByName')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                ['TestIntegration1'] => $integrationObject,
-                ['TestIntegration2'] => $integrationObject
-            });
+            ->withConsecutive(['TestIntegration1'], ['TestIntegration2'])
+            ->willReturnOnConsecutiveCalls($integrationObject, $integrationObject);
 
         $this->integrationManager->processConfigBasedIntegrations($integrations);
     }

@@ -138,23 +138,40 @@ class QueueManagementTest extends TestCase
             ->getMock();
         $this->messageStatusCollectionFactory->expects($this->once())->method('create')->willReturn($collection);
         $this->scopeConfig->expects($this->exactly(8))->method('getValue')
-            ->willReturnCallback(
-                function ($path, $scope) {
-                    if ($path == QueueManagement::XML_PATH_SUCCESSFUL_MESSAGES_LIFETIME &&
-                        $scope == ScopeInterface::SCOPE_STORE) {
-                        return 1;
-                    } elseif ($path == QueueManagement::XML_PATH_FAILED_MESSAGES_LIFETIME &&
-                        $scope == ScopeInterface::SCOPE_STORE) {
-                        return 1;
-                    } elseif ($path == QueueManagement::XML_PATH_NEW_MESSAGES_LIFETIME &&
-                        $scope == ScopeInterface::SCOPE_STORE) {
-                        return 1;
-                    } elseif ($path == QueueManagement::XML_PATH_RETRY_IN_PROGRESS_AFTER &&
-                        $scope == ScopeInterface::SCOPE_STORE) {
-                        return 1;
-                    }
-                }
-            );
+            ->withConsecutive(
+                [
+                    QueueManagement::XML_PATH_SUCCESSFUL_MESSAGES_LIFETIME,
+                    ScopeInterface::SCOPE_STORE,
+                ],
+                [
+                    QueueManagement::XML_PATH_FAILED_MESSAGES_LIFETIME,
+                    ScopeInterface::SCOPE_STORE,
+                ],
+                [
+                    QueueManagement::XML_PATH_NEW_MESSAGES_LIFETIME,
+                    ScopeInterface::SCOPE_STORE,
+                ],
+                [
+                    QueueManagement::XML_PATH_RETRY_IN_PROGRESS_AFTER,
+                    ScopeInterface::SCOPE_STORE,
+                ],
+                [
+                    QueueManagement::XML_PATH_SUCCESSFUL_MESSAGES_LIFETIME,
+                    ScopeInterface::SCOPE_STORE,
+                ],
+                [
+                    QueueManagement::XML_PATH_FAILED_MESSAGES_LIFETIME,
+                    ScopeInterface::SCOPE_STORE,
+                ],
+                [
+                    QueueManagement::XML_PATH_NEW_MESSAGES_LIFETIME,
+                    ScopeInterface::SCOPE_STORE,
+                ],
+                [
+                    QueueManagement::XML_PATH_RETRY_IN_PROGRESS_AFTER,
+                    ScopeInterface::SCOPE_STORE,
+                ]
+            )->willReturn(1);
         $collection->expects($this->once())->method('addFieldToFilter')
             ->with(
                 'status',

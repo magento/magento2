@@ -410,23 +410,17 @@ class DataTest extends TestCase
 
         $factory
             ->method('create')
-            ->willReturnCallback(
-                function (
-                    $arg1,
-                    $arg2
-                ) use (
-                    $firstAttribute,
-                    $entity,
-                    $firstDataModel,
-                    $secondDataModel,
-                    $secondAttribute
-                ) {
-                    if ($arg1 === $firstAttribute && $arg2 === $entity) {
-                        return $firstDataModel;
-                    } elseif ($arg1 === $secondAttribute && $arg2 === $entity) {
-                        return $secondDataModel;
-                    }
-                }
+            ->withConsecutive(
+                [$firstAttribute, $entity],
+                [$secondAttribute, $entity],
+                [$firstAttribute, $entity],
+                [$secondAttribute, $entity]
+            )
+            ->willReturnOnConsecutiveCalls(
+                $firstDataModel,
+                $secondDataModel,
+                $firstDataModel,
+                $secondDataModel
             );
 
         $this->assertFalse($validator->isValid($entity));

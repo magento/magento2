@@ -123,26 +123,17 @@ class TransparentTest extends TestCase
         }
 
         $gatewayToken = 'gateway_token';
-        $this->payment->expects($this->once())->method('getParentTransactionId')
-            ->willReturn($parentTransactionId);
-        $this->payment->expects($this->exactly($setParentTransactionIdCalls))
-            ->method('setParentTransactionId');
-        $this->payment->expects($this->exactly($setAdditionalInformationCalls))
-            ->method('setAdditionalInformation')->with(Payflowpro::PNREF, $gatewayToken);
-        $this->payment->expects($this->exactly(4))
-            ->method('getAdditionalInformation')->willReturnCallback(
-                function ($arg) {
-                    if ($arg == 'result_code') {
-                        return 0;
-                    } elseif ($arg == Payflowpro::PNREF) {
-                        return Payflowpro::PNREF;
-                    }
-                }
-            );
-        $this->paymentExtensionAttributes->expects($this->once())
-            ->method('getVaultPaymentToken')->willReturn($this->paymentToken);
-        $this->paymentToken->expects($this->exactly($getGatewayTokenCalls))
-            ->method('getGatewayToken')->willReturn($gatewayToken);
+        $this->payment->expects($this->once())->method('getParentTransactionId')->willReturn($parentTransactionId);
+        $this->payment->expects($this->exactly($setParentTransactionIdCalls))->method('setParentTransactionId');
+        $this->payment->expects($this->exactly($setAdditionalInformationCalls))->method('setAdditionalInformation')->with(Payflowpro::PNREF, $gatewayToken);
+        $this->payment->expects($this->exactly(4))->method('getAdditionalInformation')->withConsecutive(
+            ['result_code'],
+            [Payflowpro::PNREF],
+            [Payflowpro::PNREF],
+            [Payflowpro::PNREF],
+        )->willReturn(0, '', Payflowpro::PNREF, Payflowpro::PNREF);
+        $this->paymentExtensionAttributes->expects($this->once())->method('getVaultPaymentToken')->willReturn($this->paymentToken);
+        $this->paymentToken->expects($this->exactly($getGatewayTokenCalls))->method('getGatewayToken')->willReturn($gatewayToken);
 
         $this->subject->capture($this->payment, 100);
     }
@@ -152,7 +143,7 @@ class TransparentTest extends TestCase
      *
      * @return array
      */
-    public static function captureCorrectIdDataProvider(): array
+    public function captureCorrectIdDataProvider(): array
     {
         return [
             'No Transaction ID' => [''],
@@ -204,7 +195,7 @@ class TransparentTest extends TestCase
     /**
      * @return array
      */
-    public static function validAuthorizeRequestDataProvider(): array
+    public function validAuthorizeRequestDataProvider(): array
     {
         return [
             [
@@ -240,11 +231,11 @@ class TransparentTest extends TestCase
     private function getPaymentConfigInterfaceFactory()
     {
         $paymentConfigInterfaceFactory = $this->getMockBuilder(PaymentConfigInterfaceFactory::class)
-            ->onlyMethods(['create'])
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->paymentConfig = $this->getMockBuilder(PaymentConfigInterface::class)
-            ->onlyMethods(['setStoreId', 'setMethodInstance', 'setMethod', 'getBuildNotationCode'])
+            ->setMethods(['setStoreId', 'setMethodInstance', 'setMethod', 'getBuildNotationCode'])
             ->getMockForAbstractClass();
 
         $paymentConfigInterfaceFactory->method('create')->willReturn($this->paymentConfig);
@@ -258,11 +249,11 @@ class TransparentTest extends TestCase
     private function getPaymentExtensionInterfaceFactory()
     {
         $paymentExtensionInterfaceFactory = $this->getMockBuilder(PaymentExtensionInterfaceFactory::class)
-            ->onlyMethods(['create'])
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $orderPaymentExtension = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->onlyMethods(
+            ->setMethods(
                 ['setVaultPaymentToken', 'getVaultPaymentToken', 'setNotificationMessage', 'getNotificationMessage']
             )
             ->disableOriginalConstructor()
@@ -324,7 +315,7 @@ class TransparentTest extends TestCase
     private function getPayPalCartFactory()
     {
         $payPalCartFactory = $this->getMockBuilder(PayPalCartFactory::class)
-            ->onlyMethods(['create'])
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->payPalCart = $this->getMockBuilder(PayPalCart::class)
@@ -359,7 +350,7 @@ class TransparentTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->paymentExtensionAttributes = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->onlyMethods(
+            ->setMethods(
                 ['setVaultPaymentToken', 'getVaultPaymentToken', 'setNotificationMessage', 'getNotificationMessage']
             )
             ->getMockForAbstractClass();

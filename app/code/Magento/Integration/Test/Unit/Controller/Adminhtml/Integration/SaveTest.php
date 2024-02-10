@@ -226,10 +226,11 @@ class SaveTest extends IntegrationTest
 
         $this->_requestMock->expects($this->exactly(2))
             ->method('getParam')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                [Save::PARAM_INTEGRATION_ID] => self::INTEGRATION_ID,
-                [Info::DATA_CONSUMER_PASSWORD] => $passwordString
-            });
+            ->withConsecutive(
+                [Save::PARAM_INTEGRATION_ID],
+                [Info::DATA_CONSUMER_PASSWORD]
+            )
+            ->willReturnOnConsecutiveCalls(self::INTEGRATION_ID, $passwordString);
 
         $intData = $this->_getSampleIntegrationData();
         $this->_integrationSvcMock->expects($this->once())
@@ -264,10 +265,11 @@ class SaveTest extends IntegrationTest
 
         $this->_requestMock->expects($this->any())
             ->method('getParam')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                [Save::PARAM_INTEGRATION_ID] => self::INTEGRATION_ID,
-                [Info::DATA_CONSUMER_PASSWORD] => $passwordString
-            });
+            ->withConsecutive(
+                [Save::PARAM_INTEGRATION_ID],
+                [Info::DATA_CONSUMER_PASSWORD]
+            )
+            ->willReturnOnConsecutiveCalls(self::INTEGRATION_ID, $passwordString);
 
         $intData = $this->_getSampleIntegrationData();
         $this->_integrationSvcMock->expects($this->once())

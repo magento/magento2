@@ -199,14 +199,9 @@ class OrderSenderTest extends AbstractSenderTest
         } else {
             $this->orderResourceMock
                 ->method('saveAttribute')
-                ->willReturnCallback(
-                    function ($arg1, $arg2) {
-                        if ($arg1 === $this->orderMock && $arg2 === 'email_sent') {
-                            return null;
-                        } elseif ($arg1 === $this->orderMock && $arg2 === 'send_email') {
-                            return null;
-                        }
-                    }
+                ->withConsecutive(
+                    [$this->orderMock, 'email_sent'],
+                    [$this->orderMock, 'send_email']
                 );
 
             $this->assertFalse(
@@ -238,7 +233,7 @@ class OrderSenderTest extends AbstractSenderTest
     /**
      * @return array
      */
-    public static function sendDataProvider(): array
+    public function sendDataProvider(): array
     {
         return [
             [0, 0, true, false],
@@ -364,7 +359,7 @@ class OrderSenderTest extends AbstractSenderTest
     /**
      * @return array
      */
-    public static function sendVirtualOrderDataProvider(): array
+    public function sendVirtualOrderDataProvider(): array
     {
         return [
             [true, 1, null],

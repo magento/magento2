@@ -155,16 +155,15 @@ class DataProviderTest extends TestCase
             ->willReturn('default');
         $this->settingCheckerMock->expects($this->any())
             ->method('isReadOnly')
-            ->willReturnCallback(
-                function ($arg1, $arg2, $arg3) {
-                    if ($arg1 == 'design/head/welcome' && $arg2 == 'stores' && $arg3 == 'default') {
-                        return true;
-                    } elseif ($arg1 == 'design/head/logo' && $arg2 == 'stores' && $arg3 == 'default') {
-                        return false;
-                    } elseif ($arg1 == 'design/head/head' && $arg2 == 'stores' && $arg3 == 'default') {
-                        return true;
-                    }
-                }
+            ->withConsecutive(
+                ['design/head/welcome', 'stores', 'default'],
+                ['design/head/logo', 'stores', 'default'],
+                ['design/head/head', 'stores', 'default']
+            )
+            ->willReturnOnConsecutiveCalls(
+                true,
+                false,
+                true
             );
 
         $this->objectManager->setBackwardCompatibleProperty(
@@ -179,7 +178,7 @@ class DataProviderTest extends TestCase
     /**
      * @return array
      */
-    public static function getMetaDataProvider()
+    public function getMetaDataProvider()
     {
         return [
             [

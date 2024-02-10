@@ -218,15 +218,11 @@ class ViewTest extends TestCase
             ->willReturn($id);
         $this->pageTitleMock->expects($this->exactly(2))
             ->method('prepend')
-            ->willReturnCallback(
-                function ($arg1) use ($titlePart) {
-                    if ($arg1 == 'Orders') {
-                        return $this->pageTitleMock;
-                    } elseif ($arg1 == $titlePart) {
-                        return $this->pageTitleMock;
-                    }
-                }
-            );
+            ->withConsecutive(
+                ['Orders'],
+                [$titlePart]
+            )
+            ->willReturnSelf();
 
         $this->assertInstanceOf(
             Page::class,
@@ -315,14 +311,9 @@ class ViewTest extends TestCase
     {
         $this->coreRegistryMock->expects($this->exactly(2))
             ->method('register')
-            ->willReturnCallback(
-                function ($arg1, $arg2) {
-                    if ($arg1 == 'sales_order' && $arg2 === $this->orderMock) {
-                        return null;
-                    } elseif ($arg1 == 'current_order' && $arg2 === $this->orderMock) {
-                        return null;
-                    }
-                }
+            ->withConsecutive(
+                ['sales_order', $this->orderMock],
+                ['current_order', $this->orderMock]
             );
     }
 
@@ -354,15 +345,11 @@ class ViewTest extends TestCase
             ->willReturnSelf();
         $this->resultPageMock->expects($this->exactly(2))
             ->method('addBreadcrumb')
-            ->willReturnCallback(
-                function ($arg1, $arg2) {
-                    if ($arg1 == 'Sales' && $arg2 == 'Sales') {
-                        return $this->resultPageMock;
-                    } elseif ($arg1 == 'Orders' && $arg2 == 'Orders') {
-                        return $this->resultPageMock;
-                    }
-                }
-            );
+            ->withConsecutive(
+                ['Sales', 'Sales'],
+                ['Orders', 'Orders']
+            )
+            ->willReturnSelf();
     }
 
     /**

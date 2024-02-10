@@ -101,12 +101,13 @@ class SoapTest extends TestCase
             ->willReturn($expectedResult);
         $this->logger
             ->method('debug')
-            ->willReturnCallback(
-                function ($args) use ($expectedResult) {
-                    if ($args === ['request' => ['body']] || $args === ['response' => $expectedResult]) {
-                        return null;
-                    }
-                }
+            ->withConsecutive(
+                [
+                    ['request' => ['body']]
+                ],
+                [
+                    ['response' => $expectedResult]
+                ]
             );
 
         static::assertEquals(
@@ -139,13 +140,7 @@ class SoapTest extends TestCase
             ->willReturn('RequestTrace');
         $this->logger
             ->method('debug')
-            ->willReturnCallback(
-                function ($args) {
-                    if ($args === [['request' => ['body']]] || $args === [['trace' => 'RequestTrace']]) {
-                        return null;
-                    }
-                }
-            );
+            ->withConsecutive([['request' => ['body']]], [['trace' => 'RequestTrace']]);
 
         $this->gatewayClient->placeRequest($transferObject);
     }

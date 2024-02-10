@@ -75,15 +75,8 @@ class DownloadTest extends TestCase
         $row = new DataObject($data);
         $this->escaperMock
             ->method('escapeHtml')
-            ->willReturnCallback(
-                function ($arg) {
-                    if ($arg == 'file.csv') {
-                        return 'file.csv';
-                    } elseif ($arg == 'Download') {
-                        return 'Download';
-                    }
-                }
-            );
+            ->withConsecutive(['file.csv'], ['Download'])
+            ->willReturnOnConsecutiveCalls('file.csv', 'Download');
         $this->assertEquals('<p> file.csv</p><a href="url">Download</a>', $this->download->_getValue($row));
     }
 }

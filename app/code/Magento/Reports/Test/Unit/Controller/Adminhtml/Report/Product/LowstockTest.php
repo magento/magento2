@@ -83,12 +83,10 @@ class LowstockTest extends AbstractControllerTest
         $this->breadcrumbsBlockMock
             ->expects($this->exactly(3))
             ->method('addLink')
-            ->willReturnCallback(
-                function ($arg1, $arg2) {
-                    if ($arg1 instanceof Phrase && $arg2 instanceof Phrase) {
-                        return null;
-                    }
-                }
+            ->withConsecutive(
+                [new Phrase('Reports'), new Phrase('Reports')],
+                [new Phrase('Products'), new Phrase('Products')],
+                [new Phrase('Low Stock'), new Phrase('Low Stock')]
             );
 
         $this->lowstock->execute();

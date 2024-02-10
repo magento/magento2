@@ -115,11 +115,7 @@ class BundleTest extends TestCase
             ->willReturn($extensionAttributesDuplicate);
         $extensionAttributesDuplicate->expects($this->once())
             ->method('setBundleProductOptions')
-            ->willReturnCallback(function ($bundleOptions) {
-                if ($bundleOptions) {
-                    return null;
-                }
-            });
+            ->withConsecutive([$bundleOptions]);
 
         $this->model->build($product, $duplicate);
     }

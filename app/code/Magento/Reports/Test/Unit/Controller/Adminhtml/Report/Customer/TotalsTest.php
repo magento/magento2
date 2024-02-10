@@ -63,12 +63,10 @@ class TotalsTest extends AbstractControllerTest
             ->with('Magento_Reports::report_customers_totals');
         $this->breadcrumbsBlockMock
             ->method('addLink')
-            ->willReturnCallback(
-                function ($arg1, $arg2) {
-                    if ($arg1 instanceof Phrase && $arg2 instanceof Phrase) {
-                        return $this->breadcrumbsBlockMock;
-                    }
-                }
+            ->withConsecutive(
+                [new Phrase('Reports'), new Phrase('Reports')],
+                [new Phrase('Customers'), new Phrase('Customers')],
+                [new Phrase('Customers by Orders Total'), new Phrase('Customers by Orders Total')]
             );
         $this->totals->execute();
     }

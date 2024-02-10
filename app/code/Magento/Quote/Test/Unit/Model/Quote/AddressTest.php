@@ -257,7 +257,7 @@ class AddressTest extends TestCase
      * @param void
      * @return array
      */
-    public static function getDataProvider(): array
+    public function getDataProvider(): array
     {
         return [
             'Non-virtual Quote' => [
@@ -538,13 +538,8 @@ class AddressTest extends TestCase
             ->willReturnSelf();
 
         $this->storeManager->method('getStore')
-            ->willReturnCallback(
-                function ($arg) use ($storeId,) {
-                    if ($arg === $storeId || is_null($arg)) {
-                        return $this->store;
-                    }
-                }
-            );
+            ->withConsecutive([$storeId], [null])
+            ->willReturn($this->store);
 
         $this->store->method('getBaseCurrency')
             ->willReturn($baseCurrency);

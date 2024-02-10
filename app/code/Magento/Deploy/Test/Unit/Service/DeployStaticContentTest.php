@@ -172,41 +172,23 @@ class DeployStaticContentTest extends TestCase
         } else {
             $this->objectManager->expects($this->exactly(4))
                 ->method('create')
-                ->willReturnCallback(
-                    function (
-                        $class,
-                        $params
-                    ) use (
-                        $deployPackageService,
-                        $deployRjsConfig,
-                        $deployI18n,
-                        $deployBundle
-                    ) {
-                        if ($class === DeployPackage::class &&
-                            $params === ['logger' => $this->logger]) {
-                            return $deployPackageService;
-                        } elseif ($class === DeployRequireJsConfig::class &&
-                            $params === ['logger' => $this->logger]) {
-                            return $deployRjsConfig;
-                        } elseif ($class === DeployTranslationsDictionary::class &&
-                            $params === ['logger' => $this->logger]) {
-                            return $deployI18n;
-                        } elseif ($class === Bundle::class &&
-                            $params === ['logger' => $this->logger]) {
-                            return $deployBundle;
-                        }
-                    }
+                ->withConsecutive(
+                    [DeployPackage::class, ['logger' => $this->logger]],
+                    [DeployRequireJsConfig::class, ['logger' => $this->logger]],
+                    [DeployTranslationsDictionary::class, ['logger' => $this->logger]],
+                    [Bundle::class, ['logger' => $this->logger]]
+                )
+                ->willReturnOnConsecutiveCalls(
+                    $deployPackageService,
+                    $deployRjsConfig,
+                    $deployI18n,
+                    $deployBundle
                 );
 
             $this->objectManager->expects($this->exactly(1))
                 ->method('get')
-                ->willReturnCallback(
-                    function ($class) use ($minifyTemplates) {
-                        if ($class === MinifyTemplates::class) {
-                            return $minifyTemplates;
-                        }
-                    }
-                );
+                ->withConsecutive([MinifyTemplates::class])
+                ->willReturnOnConsecutiveCalls($minifyTemplates);
         }
 
         $this->assertNull($this->service->deploy($options));
@@ -215,7 +197,7 @@ class DeployStaticContentTest extends TestCase
     /**
      * @return array
      */
-    public static function deployDataProvider()
+    public function deployDataProvider()
     {
         return [
             [

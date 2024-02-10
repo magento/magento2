@@ -75,15 +75,11 @@ class FixerIoTest extends TestCase
             . "http://data.fixer.io for UAH.";
 
         $this->scopeConfig->method('getValue')
-            ->willReturnCallback(
-                function ($arg1, $arg2) {
-                    if ($arg1 === 'currency/fixerio/api_key' && $arg2 === 'store') {
-                        return 'api_key';
-                    } elseif ($arg1 === 'currency/fixerio/timeout' && $arg2 === 'store') {
-                        return 100;
-                    }
-                }
-            );
+            ->withConsecutive(
+                ['currency/fixerio/api_key', 'store'],
+                ['currency/fixerio/timeout', 'store']
+            )
+            ->willReturnOnConsecutiveCalls('api_key', 100);
 
         /** @var Currency|MockObject $currency */
         $currency = $this->getMockBuilder(Currency::class)

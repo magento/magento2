@@ -124,7 +124,7 @@ class RefundOperationTest extends TestCase
      *
      * @return array
      */
-    public static function executeNotRefundedCreditmemoDataProvider(): array
+    public function executeNotRefundedCreditmemoDataProvider(): array
     {
         return [
             [Creditmemo::STATE_OPEN],
@@ -286,7 +286,7 @@ class RefundOperationTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public static function baseAmountsDataProvider(): array
+    public function baseAmountsDataProvider(): array
     {
         return [
             [[
@@ -423,11 +423,8 @@ class RefundOperationTest extends TestCase
         $item2->expects($this->once())->method('getQty')->willReturn(0);
         $item2
             ->method('isDeleted')
-            ->willReturnCallback(
-                function () {
-                    return false;
-                }
-            );
+            ->withConsecutive([], [true])
+            ->willReturnOnConsecutiveCalls(false, null);
 
         $item2->expects($this->never())->method('register');
 

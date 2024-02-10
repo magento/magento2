@@ -202,15 +202,13 @@ class ModeTest extends TestCase
             ->willReturn([]);
         $this->writerMock->expects($this->exactly(2))
             ->method("saveConfig")
-            ->willReturnCallback(
-                function ($data) use (&$dataStorage) {
-                    if ($data === [ConfigFilePool::APP_ENV => [State::PARAM_MODE => State::MODE_PRODUCTION]]) {
-                        $dataStorage = $data;
-                    } elseif ($data === [ConfigFilePool::APP_ENV => [State::PARAM_MODE => State::MODE_DEVELOPER]]) {
-                        $dataStorage = $data;
-                    }
-                }
-            );
+            ->withConsecutive(
+                [$this->equalTo([ConfigFilePool::APP_ENV => [State::PARAM_MODE => State::MODE_PRODUCTION]])],
+                [$this->equalTo([ConfigFilePool::APP_ENV => [State::PARAM_MODE => State::MODE_DEVELOPER]])]
+            )
+            ->willReturnCallback(function ($data) use (&$dataStorage) {
+                $dataStorage = $data;
+            });
         $this->readerMock->expects($this->any())
             ->method('load')
             ->willReturnCallback(function () use (&$dataStorage) {

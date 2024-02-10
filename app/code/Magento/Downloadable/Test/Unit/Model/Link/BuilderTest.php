@@ -109,35 +109,39 @@ class BuilderTest extends TestCase
         $basePath = 'l/e/f/gm';
         $baseSamplePath = 's/l/e/f/gm';
         $linkFileName = 'cat1.png';
-        $this->objectCopyServiceMock->expects($this->exactly(2))->method('getDataFromFieldset')
-            ->willReturnCallback(
-                function ($arg1, $arg2, $arg3) use ($data, $downloadableData) {
-                    if ($arg1 == 'downloadable_data' &&
-                        $arg2 == 'to_link' &&
-                        $arg3 == $data) {
-                        return $downloadableData;
-                    } elseif ($arg1 == 'downloadable_link_sample_data' &&
-                        $arg2 == 'to_link_sample'
-                        && $arg3 == $data['sample']) {
-                        return $downloadableData;
-                    }
-                }
-            );
+        $this->objectCopyServiceMock->expects($this->exactly(2))->method('getDataFromFieldset')->withConsecutive(
+            [
+                'downloadable_data',
+                'to_link',
+                $data
+            ],
+            [
+                'downloadable_link_sample_data',
+                'to_link_sample',
+                $data['sample']
+            ]
+        )->willReturn($downloadableData);
         $this->service->setData($data);
         $this->dataObjectHelperMock->method('populateWithArray')
-            ->willReturnCallback(
-                function ($arg1, $arg2, $arg3) use ($data, $downloadableData) {
-                    if ($arg1 === $this->linkMock &&
-                        $arg2 === array_merge($data, $downloadableData) &&
-                        $arg3 === LinkInterface::class) {
-                        return $this->linkMock;
-                    } elseif ($arg1 === $this->linkMock &&
-                        $arg2 === array_merge($data, $downloadableData, $data['sample']) &&
-                        $arg3 === LinkInterface::class) {
-                        return $this->linkMock;
-                    }
-                }
-            );
+            ->withConsecutive(
+                [
+                    $this->linkMock,
+                    array_merge(
+                        $data,
+                        $downloadableData
+                    ),
+                    LinkInterface::class
+                ],
+                [
+                    $this->linkMock,
+                    array_merge(
+                        $data,
+                        $downloadableData,
+                        $data['sample']
+                    ),
+                    LinkInterface::class
+                ]
+            )->willReturn($this->linkMock);
         $this->linkMock->expects($this->once())->method('getLinkType')->willReturn(Download::LINK_TYPE_FILE);
         $linkModel = $this->getMockBuilder(Link::class)
             ->disableOriginalConstructor()
@@ -149,30 +153,18 @@ class BuilderTest extends TestCase
         $linkModel->expects($this->once())->method('getBaseSamplePath')->willReturn($baseSamplePath);
         $this->downloadFileMock->expects($this->exactly(2))
             ->method('moveFileFromTmp')
-            ->willReturnCallback(
-                function (
-                    $arg1,
-                    $arg2,
-                    $arg3
-                ) use (
+            ->withConsecutive(
+                [
                     $baseTmpPath,
                     $basePath,
-                    $data,
+                    $data['file']
+                ],
+                [
                     $baseSampleTmpPath,
                     $baseSamplePath,
-                    $linkFileName
-                ) {
-                    if ($arg1 == $baseTmpPath &&
-                        $arg2 == $basePath &&
-                        $arg3 == $data['file']) {
-                        return $linkFileName;
-                    } elseif ($arg1 == $baseSampleTmpPath &&
-                        $arg2 == $baseSamplePath &&
-                        $arg3 == $data['sample']['file']) {
-                        return $linkFileName;
-                    }
-                }
-            );
+                    $data['sample']['file']
+                ]
+            )->willReturn($linkFileName);
         $this->linkMock->expects($this->once())->method('setLinkFile')->with($linkFileName);
         $this->linkMock->expects($this->once())->method('setLinkUrl')->with(null);
         $this->linkMock->expects($this->once())->method('getSampleType')->willReturn(Download::LINK_TYPE_FILE);
@@ -208,14 +200,13 @@ class BuilderTest extends TestCase
             ]
         ];
         $downloadableData = ['sort_order' => 1];
-        $this->objectCopyServiceMock->expects($this->once())->method('getDataFromFieldset')
-            ->willReturnCallback(
-                function ($arg1, $arg2, $arg3) use ($data, $downloadableData) {
-                    if ($arg1 == 'downloadable_data' && $arg2 == 'to_link' && $arg3 == $data) {
-                        return $downloadableData;
-                    }
-                }
-            );
+        $this->objectCopyServiceMock->expects($this->once())->method('getDataFromFieldset')->withConsecutive(
+            [
+                'downloadable_data',
+                'to_link',
+                $data
+            ]
+        )->willReturn($downloadableData);
         $this->service->setData($data);
         $this->dataObjectHelperMock->method('populateWithArray')
             ->with(
@@ -236,7 +227,7 @@ class BuilderTest extends TestCase
     /**
      * @return array
      */
-    public static function buildProvider()
+    public function buildProvider()
     {
         $expectedPrice = 0;
         $expectedOrder = 1;

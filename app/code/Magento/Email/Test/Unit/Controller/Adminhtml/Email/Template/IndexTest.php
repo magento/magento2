@@ -165,10 +165,8 @@ class IndexTest extends TestCase
             ->with('Email Templates');
         $this->layoutMock
             ->method('getBlock')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                ['menu'] => $this->menuBlockMock,
-                ['breadcrumbs'] => $this->breadcrumbsBlockMock
-            });
+            ->withConsecutive(['menu'], ['breadcrumbs'])
+            ->willReturnOnConsecutiveCalls($this->menuBlockMock, $this->breadcrumbsBlockMock);
         $this->breadcrumbsBlockMock->expects($this->any())
             ->method('addLink')
             ->willReturnSelf();

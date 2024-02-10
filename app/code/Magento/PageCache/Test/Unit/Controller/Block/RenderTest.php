@@ -165,17 +165,8 @@ class RenderTest extends TestCase
         $this->requestMock->expects($this->once())->method('isAjax')->willReturn(true);
         $this->requestMock
             ->method('getParam')
-            ->willReturnCallback(
-                function ($arg1, $arg2) {
-                    if (empty($arg1) && empty($arg2)) {
-                        return null;
-                    } elseif ($arg1 === 'blocks' && $arg2 === '') {
-                        return '';
-                    } elseif ($arg1 === 'handles' && $arg2 === '') {
-                        return '';
-                    }
-                }
-            );
+            ->withConsecutive([], [], [], [], [], [], ['blocks', ''], ['handles', ''])
+            ->willReturnOnConsecutiveCalls(null, null, null, null, null, null, '', '');
         $this->layoutCacheKeyMock->expects($this->never())
             ->method('addCacheKeys');
         $this->action->execute();
@@ -210,16 +201,15 @@ class RenderTest extends TestCase
             ->willReturn('magento_pagecache');
         $this->requestMock
             ->method('getParam')
-            ->willReturnCallback(
-                function ($arg1, $arg2 = '') use ($originalRequest, $blocks, $handles) {
-                    if ($arg1 === 'originalRequest') {
-                        return $originalRequest;
-                    } elseif ($arg1 === 'blocks' && $arg2 === '') {
-                        return json_encode($blocks);
-                    } elseif ($arg1 === 'handles' && $arg2 === '') {
-                        return base64_encode(json_encode($handles));
-                    }
-                }
+            ->withConsecutive(
+                ['originalRequest'],
+                ['blocks', ''],
+                ['handles', '']
+            )
+            ->willReturnOnConsecutiveCalls(
+                $originalRequest,
+                json_encode($blocks),
+                base64_encode(json_encode($handles))
             );
         $this->requestMock
             ->method('getRequestUri')
@@ -238,15 +228,8 @@ class RenderTest extends TestCase
             ->method('addCacheKeys');
         $this->layoutMock
             ->method('getBlock')
-            ->willReturnCallback(
-                function ($arg1) use ($blocks, $blockInstance1, $blockInstance2) {
-                    if ($arg1 === $blocks[0]) {
-                        return $blockInstance1;
-                    } elseif ($arg1 === $blocks[1]) {
-                        return $blockInstance2;
-                    }
-                }
-            );
+            ->withConsecutive([$blocks[0]], [$blocks[1]])
+            ->willReturnOnConsecutiveCalls($blockInstance1, $blockInstance2);
 
         $this->translateInline->expects($this->once())
             ->method('processResponseBody')

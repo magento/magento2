@@ -118,15 +118,10 @@ class ImageTest extends TestCase
         $selectMock = $this->getVisibleImagesSelectMock();
         $selectMock->expects($this->exactly(2))
             ->method('reset')
-            ->willReturnCallback(
-                function ($arg) use ($selectMock) {
-                    if ($arg == 'columns') {
-                        return $selectMock;
-                    } elseif ($arg == 'distinct') {
-                        return $selectMock;
-                    }
-                }
-            );
+            ->withConsecutive(
+                ['columns'],
+                ['distinct']
+            )->willReturnSelf();
         $selectMock->expects($this->once())
             ->method('columns')
             ->with(new \Zend_Db_Expr('count(distinct value)'))
@@ -163,15 +158,10 @@ class ImageTest extends TestCase
         $selectMock = $this->getUsedImagesSelectMock();
         $selectMock->expects($this->exactly(2))
             ->method('reset')
-            ->willReturnCallback(
-                function ($arg) use ($selectMock) {
-                    if ($arg == 'columns') {
-                        return $selectMock;
-                    } elseif ($arg == 'distinct') {
-                        return $selectMock;
-                    }
-                }
-            );
+            ->withConsecutive(
+                ['columns'],
+                ['distinct']
+            )->willReturnSelf();
         $selectMock->expects($this->once())
             ->method('columns')
             ->with(new \Zend_Db_Expr('count(distinct value)'))
@@ -348,7 +338,7 @@ class ImageTest extends TestCase
      * Data Provider
      * @return array
      */
-    public static function dataProvider(): array
+    public function dataProvider(): array
     {
         return [
             [300, 300],

@@ -122,10 +122,8 @@ class DeleteFilesTest extends TestCase
             ->willReturn(['files' => 'file']);
         $this->objectManager
             ->method('get')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                [Data::class] => $jsonData,
-                [WisiwygStorage::class] => $this->storage
-            });
+            ->withConsecutive([Data::class], [WisiwygStorage::class])
+            ->willReturnOnConsecutiveCalls($jsonData, $this->storage);
         $this->storage->expects($this->once())
             ->method('deleteFile')
             ->with('file');

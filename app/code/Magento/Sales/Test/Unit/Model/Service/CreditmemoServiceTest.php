@@ -373,15 +373,8 @@ class CreditmemoServiceTest extends TestCase
         $order->method('getBaseTotalRefunded')
             ->willReturn($baseTotalRefunded);
         $this->priceCurrency->method('round')
-            ->willReturnCallback(
-                function ($arg) use ($baseTotalRefunded, $baseGrandTotal, $baseTotalPaid) {
-                    if ($arg == $baseTotalRefunded + $baseGrandTotal) {
-                        return $baseTotalRefunded + $baseGrandTotal;
-                    } elseif ($arg == $baseTotalPaid) {
-                        return $baseTotalPaid;
-                    }
-                }
-            );
+            ->withConsecutive([$baseTotalRefunded + $baseGrandTotal], [$baseTotalPaid])
+            ->willReturnOnConsecutiveCalls($baseTotalRefunded + $baseGrandTotal, $baseTotalPaid);
         $order->method('getBaseTotalPaid')
             ->willReturn($baseTotalPaid);
         $baseAvailableRefund = $baseTotalPaid - $baseTotalRefunded;
@@ -455,15 +448,8 @@ class CreditmemoServiceTest extends TestCase
         $order->method('getTotalRefunded')
             ->willReturn($totalRefunded);
         $this->priceCurrency->method('round')
-            ->willReturnCallback(
-                function ($arg1, $arg2) use ($baseTotalRefunded, $baseGrandTotal, $baseTotalPaid) {
-                    if ($arg1 == $baseTotalRefunded + $baseGrandTotal) {
-                        return $baseTotalRefunded + $baseGrandTotal;
-                    } elseif ($arg2 == $baseTotalPaid) {
-                        return $baseTotalPaid;
-                    }
-                }
-            );
+            ->withConsecutive([$baseTotalRefunded + $baseGrandTotal], [$baseTotalPaid])
+            ->willReturnOnConsecutiveCalls($baseTotalRefunded + $baseGrandTotal, $baseTotalPaid);
         $order->method('getBaseTotalPaid')
             ->willReturn($baseTotalPaid);
         $order->method('getTotalPaid')

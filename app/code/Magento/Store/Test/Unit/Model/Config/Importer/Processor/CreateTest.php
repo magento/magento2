@@ -307,13 +307,10 @@ class CreateTest extends TestCase
 
         $this->groupMock->expects($this->exactly(2))
             ->method('setData')
-            ->willReturnCallback(
-                function ($arg) {
-                    if ($arg == $this->trimmedGroup[0] || $arg == $this->trimmedGroup[1]) {
-                        return $this->groupMock;
-                    }
-                }
-            );
+            ->withConsecutive(
+                [$this->equalTo($this->trimmedGroup[0])],
+                [$this->equalTo($this->trimmedGroup[1])]
+            )->willReturnSelf();
 
         $this->groupMock->expects($this->exactly(6))
             ->method('getResource')
@@ -337,15 +334,8 @@ class CreateTest extends TestCase
 
         $this->abstractDbMock->expects($this->any())
             ->method('load')
-            ->willReturnCallback(
-                function ($arg1, $arg2, $arg3) {
-                    if ($arg1 === $this->websiteMock && $arg2 === 'base' && $arg3 === 'code') {
-                        return $this->abstractDbMock;
-                    } elseif ($arg1 === $this->storeMock && $arg2 === 'default' && $arg3 === 'code') {
-                        return $this->abstractDbMock;
-                    }
-                }
-            );
+            ->withConsecutive([$this->websiteMock, 'base', 'code'], [$this->storeMock, 'default', 'code'])
+            ->willReturnSelf();
         $this->abstractDbMock->expects($this->exactly(4))
             ->method('save')
             ->with($this->groupMock)
@@ -382,15 +372,8 @@ class CreateTest extends TestCase
 
         $this->abstractDbMock->expects($this->exactly(2))
             ->method('load')
-            ->willReturnCallback(
-                function ($arg1, $arg2, $arg3) {
-                    if ($arg1 === $this->groupMock && $arg2 === 'base' && $arg3 === 'code') {
-                        return $this->abstractDbMock;
-                    } elseif ($arg1 === $this->groupMock && $arg2 === 'default' && $arg3 === 'code') {
-                        return $this->abstractDbMock;
-                    }
-                }
-            );
+            ->withConsecutive([$this->groupMock, 'default', 'code'], [$this->websiteMock, 'base', 'code'])
+            ->willReturnSelf();
 
         $this->storeMock->expects($this->once())
             ->method('setData')

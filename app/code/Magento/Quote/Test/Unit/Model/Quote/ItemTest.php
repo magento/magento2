@@ -226,15 +226,8 @@ class ItemTest extends TestCase
 
         $this->localeFormat
             ->method('getNumber')
-            ->willReturnCallback(
-                function ($arg1) use ($quantityToAdd, $existingQuantity, $preparedQuantityToAdd) {
-                    if ($arg1 == $quantityToAdd) {
-                        return $preparedQuantityToAdd;
-                    } elseif ($arg1 == $preparedQuantityToAdd + $existingQuantity) {
-                        return $preparedQuantityToAdd + $existingQuantity;
-                    }
-                }
-            );
+            ->withConsecutive([$quantityToAdd], [$preparedQuantityToAdd + $existingQuantity])
+            ->willReturnOnConsecutiveCalls($preparedQuantityToAdd, $preparedQuantityToAdd + $existingQuantity);
 
         $this->model->addQty($quantityToAdd);
         $this->assertEquals($preparedQuantityToAdd, $this->model->getQtyToAdd());
@@ -1303,14 +1296,9 @@ class ItemTest extends TestCase
         $message2 = 'message2';
 
         $this->errorInfos->method('addItem')
-            ->willReturnCallback(
-                function ($arg1, $arg2, $arg3) use ($message, $message2) {
-                    if ($arg1 == null && $arg2 == null && $arg3 == $message) {
-                        return null;
-                    } elseif ($arg1 == null && $arg2 == null && $arg3 == $message2) {
-                        return null;
-                    }
-                }
+            ->withConsecutive(
+                [null, null, $message],
+                [null, null, $message2]
             );
         $this->assertEquals($this->model, $this->model->addErrorInfo(null, null, $message));
         $this->assertEquals($this->model, $this->model->addErrorInfo(null, null, $message2));
@@ -1341,14 +1329,9 @@ class ItemTest extends TestCase
         $message2 = 'message2';
 
         $this->errorInfos->method('addItem')
-            ->willReturnCallback(
-                function ($arg1, $arg2, $arg3) use ($message, $message2) {
-                    if ($arg1 == null && $arg2 == null && $arg3 == $message) {
-                        return null;
-                    } elseif ($arg1 == null && $arg2 == null && $arg3 == $message2) {
-                        return null;
-                    }
-                }
+            ->withConsecutive(
+                [null, null, $message],
+                [null, null, $message2]
             );
         $this->assertEquals($this->model, $this->model->addErrorInfo(null, null, $message));
         $this->assertEquals($this->model, $this->model->addErrorInfo(null, null, $message2));

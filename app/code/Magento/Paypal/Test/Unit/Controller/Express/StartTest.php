@@ -13,9 +13,6 @@ use Magento\Paypal\Test\Unit\Controller\ExpressTest;
 
 class StartTest extends ExpressTest
 {
-    /**
-     * @var string
-     */
     protected $name = 'Start';
 
     /**
@@ -31,10 +28,8 @@ class StartTest extends ExpressTest
             ->with((bool)$buttonParam);
 
         $this->request->method('getParam')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                ['bml'] => $buttonParam,
-                [Checkout::PAYMENT_INFO_BUTTON] => $buttonParam
-            });
+            ->withConsecutive(['bml'], [Checkout::PAYMENT_INFO_BUTTON])
+            ->willReturnOnConsecutiveCalls($buttonParam, $buttonParam);
         $this->customerData->expects($this->any())
             ->method('getId')
             ->willReturn(1);
@@ -47,7 +42,7 @@ class StartTest extends ExpressTest
     /**
      * @return array
      */
-    public static function startActionDataProvider(): array
+    public function startActionDataProvider(): array
     {
         return [['1'], [null]];
     }

@@ -59,17 +59,12 @@ class RuleQuoteRecollectTotalsOnDemandTest extends TestCase
         $selectRange1->method('from')
             ->willReturnSelf();
         $selectRange1->method('where')
-            ->willReturnCallback(
-                function ($arg1, $arg2) use ($selectRange1, $ruleId) {
-                    if ($arg1 === 'is_active = ?' && $arg2 === 1) {
-                        return $selectRange1;
-                    } elseif ($arg1 === 'FIND_IN_SET(?, applied_rule_ids)' && $arg2 === $ruleId) {
-                        return $selectRange1;
-                    } elseif ($arg1 === 'entity_id > ?' && $arg2 === 0) {
-                        return $selectRange1;
-                    }
-                }
-            );
+            ->withConsecutive(
+                ['is_active = ?', 1],
+                ['FIND_IN_SET(?, applied_rule_ids)', $ruleId],
+                ['entity_id > ?', 0],
+            )
+            ->willReturnSelf();
         $selectRange1->method('order')
             ->with('entity_id ' . Select::SQL_ASC)
             ->willReturnSelf();
@@ -79,17 +74,12 @@ class RuleQuoteRecollectTotalsOnDemandTest extends TestCase
         $selectRange2->method('from')
             ->willReturnSelf();
         $selectRange2->method('where')
-            ->willReturnCallback(
-                function ($arg1, $arg2) use ($selectRange2, $ruleId) {
-                    if ($arg1 === 'is_active = ?' && $arg2 === 1) {
-                        return $selectRange2;
-                    } elseif ($arg1 === 'FIND_IN_SET(?, applied_rule_ids)' && $arg2 === $ruleId) {
-                        return $selectRange2;
-                    } elseif ($arg1 === 'entity_id > ?' && $arg2 === 10000) {
-                        return $selectRange2;
-                    }
-                }
-            );
+            ->withConsecutive(
+                ['is_active = ?', 1],
+                ['FIND_IN_SET(?, applied_rule_ids)', $ruleId],
+                ['entity_id > ?', 10000],
+            )
+            ->willReturnSelf();
         $selectRange2->method('order')
             ->with('entity_id ' . Select::SQL_ASC)
             ->willReturnSelf();
@@ -108,10 +98,10 @@ class RuleQuoteRecollectTotalsOnDemandTest extends TestCase
             ->willReturn(range(1, 10000), range(10001, 18999));
         $connection->expects($this->exactly(19))
             ->method('update')
-            ->willReturnCallback(
-                function ($arg1, $arg2, $arg3) use ($mainTableName) {
-                    for ($iteration = 0; $iteration < 19; $iteration++) {
-                        $expectedArg = [
+            ->withConsecutive(
+                ...array_map(
+                    static function (int $iteration) use ($mainTableName) {
+                        return [
                             $mainTableName,
                             ['trigger_recollect' => 1],
                             [
@@ -121,11 +111,9 @@ class RuleQuoteRecollectTotalsOnDemandTest extends TestCase
                                 ),
                             ]
                         ];
-                        if ($arg1 === $expectedArg[0] && $arg2 === $expectedArg[1] && $arg3 === $expectedArg[2]) {
-                            return null;
-                        }
-                    }
-                }
+                    },
+                    range(0, 18)
+                )
             );
         $this->resourceModel->method('getConnection')
             ->willReturn($connection);

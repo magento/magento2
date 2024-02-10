@@ -42,7 +42,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PaymentTest extends TestCase
 {
-    private const TRANSACTION_ID = 'ewr34fM49V0';
+    const TRANSACTION_ID = 'ewr34fM49V0';
 
     /**
      * @var Context|MockObject
@@ -396,13 +396,10 @@ class PaymentTest extends TestCase
         $this->order->expects($this->any())->method('getCustomerNote')->willReturn($customerNote);
         $this->order->expects($this->any())
             ->method('addStatusHistoryComment')
-            ->willReturnCallback(
-                function ($arg) use ($statusHistory, $customerNote) {
-                    if ($arg === $customerNote) {
-                        return $statusHistory;
-                    }
-                }
-            );
+            ->withConsecutive(
+                [$customerNote]
+            )
+            ->willReturn($statusHistory);
         $this->order->expects($this->any())
             ->method('setIsCustomerNotified')
             ->with(true)
@@ -418,14 +415,9 @@ class PaymentTest extends TestCase
     {
         $this->eventManagerMock
             ->method('dispatch')
-            ->willReturnCallback(
-                function ($arg1, $arg2) {
-                    if ($arg1 === 'sales_order_payment_place_start' && $arg2 === ['payment' => $this->payment]) {
-                        return null;
-                    } elseif ($arg1 === 'sales_order_payment_place_end' && $arg2 === ['payment' => $this->payment]) {
-                        return null;
-                    }
-                }
+            ->withConsecutive(
+                ['sales_order_payment_place_start', ['payment' => $this->payment]],
+                ['sales_order_payment_place_end', ['payment' => $this->payment]]
             );
     }
 
@@ -448,13 +440,10 @@ class PaymentTest extends TestCase
             ->willReturn(AbstractMethod::ACTION_AUTHORIZE);
         $this->paymentMethod->expects($this->any())
             ->method('getConfigData')
-            ->willReturnCallback(
-                function ($arg) use ($newOrderStatus) {
-                    if ($arg === 'order_status' || $arg == 'payment_action') {
-                        return $newOrderStatus;
-                    }
-                }
-            );
+            ->withConsecutive(
+                ['order_status'],
+                ['payment_action']
+            )->willReturn($newOrderStatus);
         $this->paymentMethod->expects($this->once())->method('isInitializeNeeded')->willReturn(true);
         $this->paymentMethod->expects($this->once())->method('initialize');
         $this->mockGetDefaultStatus(Order::STATE_NEW, $newOrderStatus, ['first', 'second']);
@@ -473,15 +462,11 @@ class PaymentTest extends TestCase
         $this->order->expects($this->any())->method('getCustomerNote')->willReturn($customerNote);
         $this->order->expects($this->any())
             ->method('addStatusHistoryComment')
-            ->willReturnCallback(
-                function ($arg1) use ($customerNote, $sum, $statusHistory) {
-                    if ($arg1 == $customerNote) {
-                        return $statusHistory;
-                    } elseif ($arg1 == __('Authorized amount of %1', $sum)) {
-                        return $statusHistory;
-                    }
-                }
-            );
+            ->withConsecutive(
+                [$customerNote],
+                [__('Authorized amount of %1', $sum)]
+            )
+            ->willReturn($statusHistory);
         $this->order->expects($this->any())
             ->method('setIsCustomerNotified')
             ->with(true)
@@ -525,14 +510,9 @@ class PaymentTest extends TestCase
             ->willReturnSelf();
         $this->order->expects($this->any())
             ->method('setStatus')
-            ->willReturnCallback(
-                function ($arg) {
-                    if ($arg == Order::STATUS_FRAUD) {
-                        return $this->order;
-                    }
-                }
-            );
-
+            ->withConsecutive(
+                [Order::STATUS_FRAUD]
+            )->willReturnSelf();
         $this->order->expects($this->atLeastOnce())
             ->method('getStatus')
             ->willReturn(Order::STATUS_FRAUD);
@@ -660,7 +640,7 @@ class PaymentTest extends TestCase
      *
      * @return array
      */
-    public static function authorizeDataProvider(): array
+    public function authorizeDataProvider(): array
     {
         return [
             [false, 9.99],
@@ -703,7 +683,7 @@ class PaymentTest extends TestCase
     /**
      * @return array
      */
-    public static function acceptPaymentFalseProvider(): array
+    public function acceptPaymentFalseProvider(): array
     {
         return [
             'Fraud = 1' => [
@@ -1711,7 +1691,7 @@ class PaymentTest extends TestCase
     /**
      * @return array
      */
-    public static function boolProvider(): array
+    public function boolProvider(): array
     {
         return [
             [true],

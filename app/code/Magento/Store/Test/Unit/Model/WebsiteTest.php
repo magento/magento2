@@ -129,12 +129,9 @@ class WebsiteTest extends TestCase
     {
         $this->typeList->expects($this->exactly(2))
             ->method('cleanType')
-            ->willReturnCallback(
-                function ($arg) {
-                    if ($arg == 'full_page' || $arg == Config::TYPE_IDENTIFIER) {
-                        return null;
-                    }
-                }
+            ->withConsecutive(
+                ['full_page'],
+                [Config::TYPE_IDENTIFIER]
             );
 
         $this->model->afterDelete();

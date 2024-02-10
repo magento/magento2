@@ -98,25 +98,12 @@ class FileIteratorTest extends TestCase
         }
         $this->moduleDirResolverMock
             ->method('getModuleName')
-            ->willReturnCallback(function (...$moduleDirResolverWithArgs) use ($moduleDirResolverWillReturnArgs) {
-                if (!empty($moduleDirResolverWithArgs)) {
-                    static $callCount = 0;
-                    $returnValue = $moduleDirResolverWillReturnArgs[$callCount];
-                    $callCount++;
-                    return $returnValue;
-                }
-            });
-
+            ->withConsecutive(...$moduleDirResolverWithArgs)
+            ->willReturnOnConsecutiveCalls(...$moduleDirResolverWillReturnArgs);
         $this->fileReadFactory
             ->method('create')
-            ->willReturnCallback(function (...$fileReadFactoryWithArgs) use ($fileReadFactoryWillReturnArgs) {
-                if (!empty($fileReadFactoryWithArgs)) {
-                    static $callCount = 0;
-                    $returnValue = $fileReadFactoryWillReturnArgs[$callCount];
-                    $callCount++;
-                    return $returnValue;
-                }
-            });
+            ->withConsecutive(...$fileReadFactoryWithArgs)
+            ->willReturnOnConsecutiveCalls(...$fileReadFactoryWillReturnArgs);
         $this->fileRead
             ->method('readAll')
             ->willReturnOnConsecutiveCalls(...$fileReadWillReturnArgs);

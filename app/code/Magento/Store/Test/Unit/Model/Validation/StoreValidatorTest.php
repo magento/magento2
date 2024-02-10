@@ -66,12 +66,9 @@ class StoreValidatorTest extends TestCase
      */
     public function testIsValid(\Magento\Framework\DataObject $value, bool $isValid, array $messages): void
     {
-        $ruleMock = $this->ruleMocks;
         $this->dataObjectValidatorMock->expects($this->exactly(count($this->ruleMocks)))
             ->method('addRule')
-            ->willReturnCallback(function ($ruleMock) {
-                return null;
-            });
+            ->withConsecutive(...$this->ruleMocks);
         $this->dataObjectValidatorMock->expects($this->once())
             ->method('isValid')
             ->with($value)
