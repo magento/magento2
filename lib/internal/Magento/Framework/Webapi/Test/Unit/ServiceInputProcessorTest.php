@@ -395,7 +395,7 @@ class ServiceInputProcessorTest extends TestCase
     public function testArrayOfDataObjectPropertiesIsValidated()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectErrorMessage(
+        $this->expectExceptionMessage(
             'Maximum items of type "\\' . Simple::class . '" is 50'
         );
         $this->inputLimitConfig->method('isInputLimitingEnabled')
