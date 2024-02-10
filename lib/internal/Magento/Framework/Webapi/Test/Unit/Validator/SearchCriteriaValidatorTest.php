@@ -32,6 +32,12 @@ class SearchCriteriaValidatorTest extends TestCase
 
     protected function setUp(): void
     {
+        set_error_handler(
+            static function ( $errno, $errstr ) {
+                throw new \Exception( $errstr, $errno );
+            },
+            E_ALL
+        );
         $this->config = self::getMockBuilder(IOLimitConfigProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -73,7 +79,7 @@ class SearchCriteriaValidatorTest extends TestCase
     public function testFailsPageSizeWhenAboveMaxLimit()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectErrorMessage('Maximum SearchCriteria pageSize is 3');
+        $this->expectExceptionMessage('Maximum SearchCriteria pageSize is 3');
 
         $this->config->method('isInputLimitingEnabled')
             ->willReturn(true);
