@@ -11,6 +11,7 @@ use Magento\Backend\App\Config;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\Acl;
 use Magento\Framework\Acl\Builder;
+use Magento\Framework\Session\SessionStartChecker;
 use Magento\Framework\Session\Storage;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
@@ -96,6 +97,13 @@ class SessionTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SessionStartChecker::class,
+                $this->createMock(SessionStartChecker::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->session = $objectManager->getObject(
             Session::class,
             [

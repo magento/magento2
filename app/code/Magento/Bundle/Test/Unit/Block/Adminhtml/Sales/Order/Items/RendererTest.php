@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Sales\Order\Items;
 
 use Magento\Bundle\Block\Adminhtml\Sales\Order\Items\Renderer;
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Order\Creditmemo;
@@ -40,6 +42,17 @@ class RendererTest extends TestCase
             ->getMock();
         $this->serializer = $this->createMock(Json::class);
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->model = $objectManager->getObject(
             Renderer::class,
             ['serializer' => $this->serializer]

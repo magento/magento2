@@ -16,12 +16,14 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\Store\Model\ScopeInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
+use Psr\Log\LoggerInterface;
 
 class DynamicStorageTest extends TestCase
 {
@@ -71,6 +73,11 @@ class DynamicStorageTest extends TestCase
     private $productFactoryMock;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -118,12 +125,26 @@ class DynamicStorageTest extends TestCase
             ->method('create')
             ->willReturn($this->productResourceMock);
 
+        $this->logger = $this->getMockBuilder(LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                LoggerInterface::class,
+                $this->createMock(LoggerInterface::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+
         $this->object = new DynamicStorage(
             $this->urlRewriteFactoryMock,
             $this->dataObjectHelperMock,
             $this->resourceConnectionMock,
             $this->scopeConfigMock,
-            $this->productFactoryMock
+            $this->productFactoryMock,
+            $this->logger
         );
     }
 
@@ -139,7 +160,7 @@ class DynamicStorageTest extends TestCase
      */
     public function testFindProductRewriteByRequestPath(
         array $data,
-        $productFromDb,
+              $productFromDb,
         string $categorySuffix,
         $categoryFromDb,
         bool $canBeShownInCategory,
