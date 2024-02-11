@@ -170,7 +170,7 @@ class ProductScopeRewriteGenerator
                     $productId,
                     Product::ENTITY
                 )) {
-                    if (count($visibleForStores) == 0 || in_array((int)$id, $visibleForStores)) {
+                    if (count($visibleForStores) === 0 || in_array((int)$id, $visibleForStores)) {
                         $mergeDataProvider->merge(
                             $this->generateForSpecificStoreView(
                                 $id,
@@ -182,7 +182,7 @@ class ProductScopeRewriteGenerator
                         );
                     }
                 } else {
-                    if (count($visibleForStores) == 0 || in_array((int)$id, $visibleForStores)) {
+                    if (count($visibleForStores) === 0 || in_array((int)$id, $visibleForStores)) {
                         $scopedProduct = $this->productRepository->getById($productId, false, $id);
                         $mergeDataProvider->merge(
                             $this->generateForSpecificStoreView(
