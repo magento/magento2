@@ -70,7 +70,7 @@ class StoresFixtureTest extends TestCase
 
         $this->storeManagerMock = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getGroup',
                     'getGroups',
@@ -87,21 +87,19 @@ class StoresFixtureTest extends TestCase
 
         $this->categoryFactoryMock = $this->getMockBuilder(CategoryFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $categoryMock = $this->getMockBuilder(CategoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['create', 'setDefaultSortBy', 'save'])
+            ->onlyMethods(
                 [
-                    'create',
                     'setName',
                     'setPath',
                     'setLevel',
                     'setAvailableSortBy',
-                    'setDefaultSortBy',
                     'setIsActive',
-                    'save'
                 ]
             )
             ->getMockForAbstractClass();
@@ -144,7 +142,7 @@ class StoresFixtureTest extends TestCase
 
         $this->localeConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAllowedLocales'])
+            ->onlyMethods(['getAllowedLocales'])
             ->getMock();
 
         $this->localeConfigMock->expects($this->once())
@@ -157,7 +155,8 @@ class StoresFixtureTest extends TestCase
 
         $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getRootCategoryId', 'addData', 'save'])
+            ->addMethods(['getRootCategoryId', 'addData', 'save'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
 
         $storeMock->expects($this->exactly(11))
@@ -190,7 +189,8 @@ class StoresFixtureTest extends TestCase
 
         $storeGroupMock = $this->getMockBuilder(GroupInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'addData', 'save'])
+            ->addMethods(['addData', 'save'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
 
         $storeGroupMock->expects($this->exactly(11))
@@ -223,7 +223,8 @@ class StoresFixtureTest extends TestCase
 
         $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'addData', 'save'])
+            ->addMethods(['addData', 'save'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
 
         $websiteMock->expects($this->exactly(3))

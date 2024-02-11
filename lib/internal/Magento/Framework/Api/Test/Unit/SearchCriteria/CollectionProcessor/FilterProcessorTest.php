@@ -170,7 +170,7 @@ class FilterProcessorTest extends TestCase
         $this->expectException('InvalidArgumentException');
         /** @var \stdClass|MockObject $customFilterMock */
         $customFilterMock = $this->getMockBuilder(\stdClass::class)
-            ->setMethods(['apply'])
+            ->addMethods(['apply'])
             ->getMock();
 
         $customFilterField = 'customFilterField';

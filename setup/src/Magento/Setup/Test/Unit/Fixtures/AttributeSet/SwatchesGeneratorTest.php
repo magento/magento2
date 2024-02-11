@@ -54,7 +54,7 @@ class SwatchesGeneratorTest extends TestCase
         // Mock image generator factory
         $imageGeneratorFactoryMock = $this->getMockBuilder(ImagesGeneratorFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $imageGeneratorFactoryMock
