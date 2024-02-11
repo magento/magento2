@@ -73,7 +73,7 @@ class CouponCodeValidationTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->cartRepositoryMock = $this->getMockBuilder(CartRepositoryInterface::class)
-            ->onlyMethods(['getItems'])
+            ->addMethods(['getItems'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->searchCriteriaBuilderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)

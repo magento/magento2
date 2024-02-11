@@ -154,7 +154,8 @@ class AbstractModelTest extends TestCase
         $conditionsArray = ['conditions' => 'serialized'];
         $serializedConditions = json_encode($conditionsArray);
         $conditions = $this->getMockBuilder(Combine::class)
-            ->onlyMethods(['setRule', 'setId', 'setPrefix', 'loadArray'])
+            ->addMethods(['setRule', 'setId', 'setPrefix'])
+            ->onlyMethods(['loadArray'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -176,7 +177,8 @@ class AbstractModelTest extends TestCase
         $actionsArray = ['actions' => 'some_actions'];
         $actionsSerialized = json_encode($actionsArray);
         $actions = $this->getMockBuilder(Collection::class)
-            ->onlyMethods(['setRule', 'setId', 'setPrefix', 'loadArray'])
+            ->addMethods(['setRule', 'setId', 'setPrefix'])
+            ->onlyMethods(['loadArray'])
             ->disableOriginalConstructor()
             ->getMock();
 

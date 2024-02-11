@@ -201,10 +201,10 @@ class DefaultFrontendTest extends TestCase
     {
         return $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
+            ->addMethods(['getValidateRules'])
             ->onlyMethods([
                 'getIsRequired',
                 'getFrontendClass',
-                'getValidateRules',
                 'getAttributeCode',
                 'getSource'
             ])

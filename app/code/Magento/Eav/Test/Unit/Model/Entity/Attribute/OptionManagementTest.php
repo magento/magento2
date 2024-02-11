@@ -504,7 +504,7 @@ class OptionManagementTest extends TestCase
     private function getAttributeOption()
     {
         return $this->getMockBuilder(EavAttributeOptionInterface::class)
-            ->onlyMethods(['getSourceLabels'])
+            ->addMethods(['getSourceLabels'])
             ->getMockForAbstractClass();
     }
 

@@ -72,7 +72,7 @@ class SpecificationPluginTest extends TestCase
             ->getMockForAbstractClass();
         $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getCustomerId'])
+            ->addMethods(['getCustomerId'])
             ->getMock();
         $this->billingAgreementCollectionMock = $this->getMockBuilder(BillingAgreementCollection::class)
             ->disableOriginalConstructor()

@@ -110,15 +110,8 @@ class PrintActionTest extends TestCase
         $this->creditmemoLoaderMock = $this->getMockBuilder(
             CreditmemoLoader::class
         )->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'setOrderId',
-                    'setCreditmemoId',
-                    'setCreditmemo',
-                    'setInvoiceId',
-                    'load'
-                ]
-            )
+            ->addMethods(['setOrderId', 'setCreditmemoId', 'setCreditmemo', 'setInvoiceId'])
+            ->onlyMethods(['load'])
             ->getMock();
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMock();

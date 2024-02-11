@@ -63,7 +63,8 @@ class ReportConcurrentAdminsTest extends TestCase
             ->getMock();
         $this->backendAuthSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['isLoggedIn', 'getUser'])
+            ->addMethods(['getUser'])
+            ->onlyMethods(['isLoggedIn'])
             ->getMock();
         $this->usersFactory = $this->getMockBuilder(UsersFactory::class)
             ->disableOriginalConstructor()

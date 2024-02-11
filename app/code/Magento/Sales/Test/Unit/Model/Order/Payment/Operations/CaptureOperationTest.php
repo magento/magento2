@@ -107,7 +107,8 @@ class CaptureOperationTest extends TestCase
 
         /** @var Payment|MockObject  $orderPayment | */
         $orderPayment = $this->getMockBuilder(Payment::class)
-            ->onlyMethods(['setCreatedInvoice', 'getOrder', 'getMethodInstance', 'getIsFraudDetected'])
+            ->addMethods(['setCreatedInvoice'])
+            ->onlyMethods(['getOrder', 'getMethodInstance', 'getIsFraudDetected'])
             ->disableOriginalConstructor()
             ->getMock();
         $orderPayment->expects($this->once())

@@ -228,7 +228,7 @@ class GrandTotalDetailsPluginTest extends TestCase
 
         $extensionAttributeMock = $this->getMockBuilder(
             TotalSegmentExtensionInterface::class
-        )->onlyMethods(
+        )->addMethods(
             [
                 'setTaxGrandtotalDetails',
 

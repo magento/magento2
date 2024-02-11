@@ -51,7 +51,8 @@ class ReportConcurrentAdminsToNewRelicTest extends TestCase
             ->getMock();
         $this->backendAuthSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['isLoggedIn', 'getUser'])
+            ->addMethods(['getUser'])
+            ->onlyMethods(['isLoggedIn'])
             ->getMock();
         $this->newRelicWrapper = $this->getMockBuilder(NewRelicWrapper::class)
             ->disableOriginalConstructor()

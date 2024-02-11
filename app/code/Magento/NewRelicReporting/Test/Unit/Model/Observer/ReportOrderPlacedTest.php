@@ -107,7 +107,7 @@ class ReportOrderPlacedTest extends TestCase
             ->method('isNewRelicEnabled')
             ->willReturn(true);
         $event = $this->getMockBuilder(Event::class)
-            ->onlyMethods(['getOrder'])
+            ->addMethods(['getOrder'])
             ->disableOriginalConstructor()
             ->getMock();
         $eventObserver->expects($this->once())

@@ -75,7 +75,7 @@ class RequestSecureTokenTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->sessionTransparent = $this->getMockBuilder(Generic::class)
-            ->onlyMethods(['setQuoteId'])
+            ->addMethods(['setQuoteId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->secureTokenService = $this->getMockBuilder(
@@ -85,7 +85,7 @@ class RequestSecureTokenTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->sessionManager = $this->getMockBuilder(SessionManager::class)
-            ->onlyMethods(['getQuote'])
+            ->addMethods(['getQuote'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->transparent = $this->getMockBuilder(Transparent::class)

@@ -77,8 +77,9 @@ class OauthServiceTest extends TestCase
         $this->_tokenMock = $this->getMockBuilder(
             Token::class
         )->disableOriginalConstructor()
-            ->onlyMethods(
-                ['createVerifierToken', 'getType', '__wakeup', 'delete']
+            ->onlyMethods(['createVerifierToken', '__wakeup', 'delete'])
+            ->addMethods(
+                ['getType']
             )->getMock();
 
         $this->_tokenFactoryMock = $this->createPartialMock(

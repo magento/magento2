@@ -59,7 +59,7 @@ class RelationPersisterTest extends TestCase
             ->getMock();
 
         $this->link = $this->getMockBuilder(Link::class)
-            ->onlyMethods(['getLinkTypeId', 'getProductId', 'getLinkedProductId'])
+            ->addMethods(['getLinkTypeId', 'getProductId', 'getLinkedProductId'])
             ->disableOriginalConstructor()
             ->getMock();
 

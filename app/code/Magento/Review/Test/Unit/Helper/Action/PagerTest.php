@@ -25,8 +25,9 @@ class PagerTest extends TestCase
         $sessionMock = $this->getMockBuilder(
             Session::class
         )->disableOriginalConstructor()
+            ->addMethods(['setData'])
             ->onlyMethods(
-                ['setData', 'getData']
+                ['getData']
             )->getMock();
         $sessionMock->expects(
             $this->any()

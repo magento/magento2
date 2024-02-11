@@ -70,7 +70,7 @@ class EngineTest extends TestCase
             IndexScopeResolver::class
         )
             ->disableOriginalConstructor()
-            ->onlyMethods(['getVisibleInSiteIds'])
+            ->addMethods(['getVisibleInSiteIds'])
             ->getMock();
 
         $objectManager = new ObjectManagerHelper($this);

@@ -106,7 +106,7 @@ class AttributeTest extends TestCase
 
         /** @var IndexerInterface|MockObject $indexerMock */
         $indexerMock = $this->getMockBuilder(IndexerInterface::class)
-            ->onlyMethods(['getData'])
+            ->addMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

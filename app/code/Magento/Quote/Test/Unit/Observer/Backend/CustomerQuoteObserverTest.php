@@ -66,7 +66,7 @@ class CustomerQuoteObserverTest extends TestCase
             ->getMock();
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getCustomerDataObject', 'getOrigCustomerDataObject'])
+            ->addMethods(['getCustomerDataObject', 'getOrigCustomerDataObject'])
             ->getMock();
         $this->observerMock->expects($this->any())->method('getEvent')->willReturn($this->eventMock);
         $objectManager = new ObjectManager($this);
@@ -145,13 +145,11 @@ class CustomerQuoteObserverTest extends TestCase
             Quote::class
         )->onlyMethods(
             [
-                'setWebsite',
-                'setCustomerGroupId',
                 'getCustomerGroupId',
                 'collectTotals',
                 '__wakeup',
             ]
-        )->disableOriginalConstructor()
+        )->addMethods(['setWebsite', 'setCustomerGroupId'])->disableOriginalConstructor()
             ->getMock();
         $websiteCount = count($websites);
         $this->quoteRepositoryMock->expects($this->once())

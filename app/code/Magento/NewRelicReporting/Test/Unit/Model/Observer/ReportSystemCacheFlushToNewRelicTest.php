@@ -57,7 +57,7 @@ class ReportSystemCacheFlushToNewRelicTest extends TestCase
             ->getMock();
         $this->backendAuthSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getUser'])
+            ->addMethods(['getUser'])
             ->getMock();
         $this->deploymentsFactory = $this->getMockBuilder(
             DeploymentsFactory::class

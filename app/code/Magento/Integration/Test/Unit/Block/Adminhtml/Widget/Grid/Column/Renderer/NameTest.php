@@ -74,7 +74,7 @@ class NameTest extends TestCase
     {
         $column = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getIndex', 'getEditable', 'getGetter'])
+            ->addMethods(['getIndex', 'getEditable', 'getGetter'])
             ->getMock();
         $column->expects($this->any())
             ->method('getIndex')
@@ -89,7 +89,7 @@ class NameTest extends TestCase
 
         $integrationMock = $this->getMockBuilder(Integration::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getName', 'getEndpoint', 'getIdentityLinkUrl'])
+            ->addMethods(['getName', 'getEndpoint', 'getIdentityLinkUrl'])
             ->getMock();
         $integrationMock->expects($this->any())->method('getName')->willReturn($name);
         $integrationMock->expects($this->any())->method('getEndpoint')->willReturn($endpoint);

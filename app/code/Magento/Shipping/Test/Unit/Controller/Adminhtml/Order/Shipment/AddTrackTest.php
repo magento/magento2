@@ -99,7 +99,8 @@ class AddTrackTest extends TestCase
             ShipmentLoader::class
         )
             ->disableOriginalConstructor()
-            ->onlyMethods(['setShipmentId', 'setOrderId', 'setShipment', 'setTracking', 'load'])
+            ->onlyMethods(['load'])
+            ->addMethods(['setShipmentId', 'setOrderId', 'setShipment', 'setTracking'])
             ->getMock();
         $this->context = $this->getMockBuilder(Context::class)
             ->addMethods(['getTitle'])
@@ -136,7 +137,7 @@ class AddTrackTest extends TestCase
             ->getMockForAbstractClass();
         $this->rawResult = $this->getMockBuilder(ResultInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setContents'])
+            ->addMethods(['setContents'])
             ->getMockForAbstractClass();
         $resultFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()

@@ -225,14 +225,10 @@ class ProTest extends TestCase
         );
         $this->apiMock = $this->getMockBuilder($apiType)
             ->setConstructorArgs($args)
+            ->addMethods(['__wakeup', 'getTransactionId', 'setAuthorizationId', 'setIsCaptureComplete', 'setAmount'])
             ->onlyMethods(
                 [
-                    '__wakeup',
-                    'getTransactionId',
                     'getDataUsingMethod',
-                    'setAuthorizationId',
-                    'setIsCaptureComplete',
-                    'setAmount'
                 ]
             )
             ->getMock();
@@ -249,7 +245,7 @@ class ProTest extends TestCase
     {
         $paymentMock = $this->getMockBuilder(Info::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([
+            ->addMethods([
                 'getParentTransactionId', 'getOrder', 'getShouldCloseParentTransaction', 'isCaptureFinal',
             ])
             ->getMock();

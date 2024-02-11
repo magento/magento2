@@ -121,7 +121,8 @@ class NewActionTest extends TestCase
         $this->shipmentLoader = $this->getMockBuilder(
             ShipmentLoader::class
         )->disableOriginalConstructor()
-            ->onlyMethods(['setShipmentId', 'setOrderId', 'setShipment', 'setTracking', 'load'])
+            ->addMethods(['setShipmentId', 'setOrderId', 'setShipment', 'setTracking'])
+            ->onlyMethods(['load'])
             ->getMock();
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()

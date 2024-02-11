@@ -35,7 +35,8 @@ class TaxClassTest extends TestCase
 
         $attributeFactoryMock = $this->getMockBuilder(AttributeFactory::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['create', '__wakeup'])
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['create'])
             ->getMock();
         $attributeFactoryMock
             ->expects($this->any())

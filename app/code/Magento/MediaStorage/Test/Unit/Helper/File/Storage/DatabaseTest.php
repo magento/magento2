@@ -382,7 +382,8 @@ class DatabaseTest extends TestCase
             ->willReturn($dbModelMock);
         $resourceModelMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['deleteFolder', '__wakeup'])
+            ->addMethods(['deleteFolder'])
+            ->onlyMethods(['__wakeup'])
             ->getMockForAbstractClass();
         $dbModelMock->expects($this->exactly($callNum))
             ->method('getResource')

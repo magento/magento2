@@ -121,7 +121,7 @@ class GroupedTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $extensionAttributes = $this->getMockBuilder(ProductLinkExtensionInterface::class)
-            ->onlyMethods(['setQty', 'getQty'])
+            ->addMethods(['setQty', 'getQty'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $linkedProduct->expects($this->once())->method('getTypeId')->willReturn(Grouped::TYPE_CODE);

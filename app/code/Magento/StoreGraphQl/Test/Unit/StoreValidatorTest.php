@@ -47,6 +47,7 @@ class StoreValidatorTest extends TestCase
         $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(HttpRequestInterface::class)
             ->disableOriginalConstructor()
+            ->addMethods(['getHeader'])
             ->onlyMethods(
                 [
                     'isPost',
@@ -55,7 +56,6 @@ class StoreValidatorTest extends TestCase
                     'isDelete',
                     'isPut',
                     'isAjax',
-                    'getHeader'
                 ]
             )
             ->getMockForAbstractClass();

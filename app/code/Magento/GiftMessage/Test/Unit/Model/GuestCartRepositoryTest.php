@@ -58,7 +58,8 @@ class GuestCartRepositoryTest extends TestCase
 
         /** @var QuoteIdMask|MockObject $quoteIdMaskMock */
         $quoteIdMaskMock = $this->getMockBuilder(QuoteIdMask::class)
-            ->onlyMethods(['getQuoteId', 'load'])
+            ->addMethods(['getQuoteId'])
+            ->onlyMethods(['load'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -94,7 +95,8 @@ class GuestCartRepositoryTest extends TestCase
 
         /** @var QuoteIdMask|MockObject $quoteIdMaskMock */
         $quoteIdMaskMock = $this->getMockBuilder(QuoteIdMask::class)
-            ->onlyMethods(['getQuoteId', 'load'])
+            ->addMethods(['getQuoteId'])
+            ->onlyMethods(['load'])
             ->disableOriginalConstructor()
             ->getMock();
 

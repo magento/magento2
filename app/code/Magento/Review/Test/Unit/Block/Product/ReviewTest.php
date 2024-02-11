@@ -121,7 +121,8 @@ class ReviewTest extends TestCase
 
         $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['create', '__wakeup'])
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->collectionFactory->expects(static::once())
@@ -169,7 +170,8 @@ class ReviewTest extends TestCase
 
         $this->storeManager = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getStore', '__wakeup'])
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['getStore'])
             ->getMock();
 
         $this->storeManager->expects(static::any())

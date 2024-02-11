@@ -136,11 +136,11 @@ class ShippingMethodManagementTest extends TestCase
         $this->quoteAddressResource = $this->createMock(QuoteAddressResource::class);
         $this->quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
+            ->addMethods(['getQuoteCurrencyCode'])
             ->onlyMethods([
                 'getShippingAddress',
                 'isVirtual',
                 'getItemsCount',
-                'getQuoteCurrencyCode',
                 'getBillingAddress',
                 'collectTotals',
                 'save',
@@ -152,19 +152,16 @@ class ShippingMethodManagementTest extends TestCase
 
         $this->shippingAddress = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
+            ->addMethods(['getShippingDescription', 'getShippingAmount', 'getBaseShippingAmount',
+                'setShippingMethod', 'setCollectShippingRates'])
             ->onlyMethods([
                 'getCountryId',
                 'getShippingMethod',
-                'getShippingDescription',
-                'getShippingAmount',
-                'getBaseShippingAmount',
                 'getGroupedAllShippingRates',
                 'collectShippingRates',
                 'requestShippingRates',
-                'setShippingMethod',
                 'getShippingRateByCode',
                 'addData',
-                'setCollectShippingRates',
                 '__wakeup',
             ])
             ->getMock();
@@ -196,14 +193,14 @@ class ShippingMethodManagementTest extends TestCase
         $this->objectManager->setBackwardCompatibleProperty($this->model, 'dataProcessor', $this->dataProcessor);
 
         $this->extensionAttributesMock = $this->getMockBuilder(CartExtensionInterface::class)
-            ->onlyMethods(['getShippingAssignments'])
+            ->addMethods(['getShippingAssignments'])
             ->getMockForAbstractClass();
 
         $this->shippingMock = $this->getMockForAbstractClass(ShippingInterface::class);
 
         $this->shippingAssignmentBuilder = $this->getMockBuilder(ShippingAssignmentBuilder::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([
+            ->addMethods([
                 'getShipping',
                 'setShipping'
             ])

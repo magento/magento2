@@ -71,7 +71,7 @@ class OrderRefundCreationArgumentsTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->extensionAttributesMock = $this->getMockBuilder(CreditmemoCreationArgumentsExtensionInterface::class)
-            ->onlyMethods(['getReturnToStockItems'])
+            ->addMethods(['getReturnToStockItems'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
