@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\ObjectManager\Resetter;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
@@ -38,8 +37,8 @@ class Resetter implements ResetterInterface
     private array $reflectionCache = [];
 
     /**
-     * Constructor
-     *
+     * @param ComponentRegistrarInterface $componentRegistrar
+     * @param array $classList
      * @return void
      * @phpcs:disable Magento2.Functions.DiscouragedFunction
      */
@@ -69,7 +68,6 @@ class Resetter implements ResetterInterface
             yield $modulePath . '/etc/' . self::RESET_PATH;
         }
     }
-
 
     /**
      * Add instance to be reset later
