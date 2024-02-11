@@ -23,12 +23,12 @@ class SetModeCommand extends Command
     /**
      * Name of "target application mode" input argument
      */
-   public const MODE_ARGUMENT = 'mode';
+    public const MODE_ARGUMENT = 'mode';
 
     /**
      * Name of "skip compilation" input option
      */
-   public const SKIP_COMPILATION_OPTION = 'skip-compilation';
+    public const SKIP_COMPILATION_OPTION = 'skip-compilation';
 
     /**
      * Object manager factory
