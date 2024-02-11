@@ -331,7 +331,7 @@ class QueryFactoryTest extends TestCase
             ->willReturnCallback(
                 function ($arg) use ($cleanedRawText) {
                     if ($arg == $cleanedRawText) {
-                        return 0;
+                        return $arg;
                     }
                 }
             );
@@ -340,7 +340,7 @@ class QueryFactoryTest extends TestCase
             ->willReturnCallback(
                 function ($arg) use ($cleanedRawText) {
                     if ($arg == $cleanedRawText) {
-                        return $cleanedRawText;
+                        return strlen($cleanedRawText);
                     }
                 }
             );

@@ -606,21 +606,17 @@ class FileTest extends AbstractFormTestCase
 
         $this->requestMock
             ->method('getParam')
-            ->willReturnCallback(
-                function ($arg) use ($requestScope, $attributeCode, $fileName) {
-                    if ($arg == $requestScope) {
-                        return function () use ($attributeCode, $fileName) {
-                            return [
-                                $attributeCode => [
-                                    [
-                                        'file' => $fileName
-                                    ]
-                                ]
-                            ];
-                        };
-                    }
+            ->willReturnCallback(function ($arg1) use ($requestScope, $attributeCode, $fileName) {
+                if ($arg1 == $requestScope) {
+                    return [
+                        $attributeCode => [
+                            [
+                                'file' => $fileName
+                            ]
+                        ]
+                    ];
                 }
-            );
+            });
 
         $model = $this->initialize(
             [

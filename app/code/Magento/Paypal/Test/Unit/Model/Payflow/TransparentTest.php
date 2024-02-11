@@ -130,15 +130,23 @@ class TransparentTest extends TestCase
         $this->payment->expects($this->exactly($setAdditionalInformationCalls))
             ->method('setAdditionalInformation')->with(Payflowpro::PNREF, $gatewayToken);
         $this->payment->expects($this->exactly(4))
-            ->method('getAdditionalInformation')->willReturnCallback(
-                function ($arg) {
-                    if ($arg == 'result_code') {
-                        return 0;
-                    } elseif ($arg == Payflowpro::PNREF) {
-                        return Payflowpro::PNREF;
-                    }
+            ->method('getAdditionalInformation')
+            ->willReturnCallback(function ($args) {
+                static $callCount = 0;
+                if ($callCount == 0 && $args == 'result_code') {
+                    $callCount++;
+                    return 0;
+                } elseif ($callCount == 1 && $args == Payflowpro::PNREF) {
+                    $callCount++;
+                    return '';
+                } elseif ($callCount == 2 && $args == Payflowpro::PNREF) {
+                    $callCount++;
+                    return Payflowpro::PNREF;
+                } elseif ($callCount == 3 && $args == Payflowpro::PNREF) {
+                    $callCount++;
+                    return Payflowpro::PNREF;
                 }
-            );
+            });
         $this->paymentExtensionAttributes->expects($this->once())
             ->method('getVaultPaymentToken')->willReturn($this->paymentToken);
         $this->paymentToken->expects($this->exactly($getGatewayTokenCalls))

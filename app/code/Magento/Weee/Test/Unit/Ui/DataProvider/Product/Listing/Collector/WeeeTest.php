@@ -144,17 +144,25 @@ class WeeeTest extends TestCase
             ->method('getData')
             ->willReturnCallback(
                 function ($arg) {
-                    if (empty($arg)) {
+                     static $callCount = 0;
+                    if ($callCount==0) {
+                        $callCount++;
                         return [
                             'amount' => 12.1,
                             'tax_amount' => 12,
                             'amount_excl_tax' => 71
                         ];
-                    } elseif ($arg == 'amount') {
+                    } elseif ($callCount==1 && $arg == 'amount') {
+                        $callCount++;
                         return 12.1;
-                    } elseif ($arg == 'tax_amount') {
+                    } elseif ($callCount==2 && $arg == 'tax_amount') {
+                        $callCount++;
                         return 12.1;
-                    } elseif ($arg == 'amount_excl_tax') {
+                    } elseif ($callCount==3 && $arg == 'amount_excl_tax') {
+                        $callCount++;
+                        return 12.1;
+                    } elseif ($callCount==4) {
+                        $callCount++;
                         return 12.1;
                     }
                 }

@@ -520,23 +520,14 @@ class LinkTest extends TestCase
         $this->response
             ->expects($this->any())
             ->method('setHeader')
-            ->willReturnCallback(
-                function ($arg1, $arg2) use ($mimeType, $fileSize, $disposition, $fileName) {
-                    if ($arg1 == 'Pragma' && $arg2 == 'public') {
-                        return $this->response;
-                    } elseif ($arg1 == 'Cache-Control' &&
-                        $arg2 == 'must-revalidate, post-check=0, pre-check=0') {
-                        return $this->response;
-                    } elseif ($arg1 == 'Content-type' && $arg2 == $mimeType) {
-                        return $this->response;
-                    } elseif ($arg1 == 'Content-Length' && $arg2 == $fileSize) {
-                        return $this->response;
-                    } elseif ($arg1 == 'Content-Disposition' &&
-                        $arg2 == $disposition . '; filename=' . $fileName) {
-                        return $this->response;
-                    }
-                }
-            );
+            ->withConsecutive(
+                ['Pragma', 'public', true],
+                ['Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true],
+                ['Content-type', $mimeType, true],
+                ['Content-Length', $fileSize],
+                ['Content-Disposition', $disposition . '; filename=' . $fileName]
+            )
+            ->willReturnSelf();
 
         $this->assertEquals($this->response, $this->link->execute());
     }

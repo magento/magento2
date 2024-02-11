@@ -96,9 +96,9 @@ class SimpleCollectorTest extends TestCase
             ->method('create')
             ->willReturnCallback(
                 function ($arg) use ($pathQuestionMock, $valueQuestionMock) {
-                    if ($arg[0]['question'] === 'Please enter config path: ') {
+                    if ($arg['question'] === 'Please enter config path: ') {
                         return $pathQuestionMock;
-                    } elseif ($arg[0]['question'] === 'Please enter value: ') {
+                    } elseif ($arg['question'] === 'Please enter value: ') {
                         return $valueQuestionMock;
                     }
                 }
@@ -176,9 +176,9 @@ class SimpleCollectorTest extends TestCase
             ->method('create')
             ->willReturnCallback(
                 function ($arg) use ($pathQuestionMock, $valueQuestionMock) {
-                    if ($arg[0]['question'] === 'Please enter config path: ') {
+                    if ($arg['question'] === 'Please enter config path: ') {
                         return $pathQuestionMock;
-                    } elseif ($arg[0]['question'] === 'Please enter value: ') {
+                    } elseif ($arg['question'] === 'Please enter value: ') {
                         return $valueQuestionMock;
                     }
                 }

@@ -451,10 +451,10 @@ class CreditmemoServiceTest extends TestCase
             ->willReturn($totalRefunded);
         $this->priceCurrency->method('round')
             ->willReturnCallback(
-                function ($arg1, $arg2) use ($baseTotalRefunded, $baseGrandTotal, $baseTotalPaid) {
-                    if ($arg1 == $baseTotalRefunded + $baseGrandTotal) {
+                function ($arg) use ($baseTotalRefunded, $baseGrandTotal, $baseTotalPaid) {
+                    if ($arg == $baseTotalRefunded + $baseGrandTotal) {
                         return $baseTotalRefunded + $baseGrandTotal;
-                    } elseif ($arg2 == $baseTotalPaid) {
+                    } elseif ($arg == $baseTotalPaid) {
                         return $baseTotalPaid;
                     }
                 }
