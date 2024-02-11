@@ -16,7 +16,6 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Console\Cli;
 
-
 /**
  * Downloadable Products Download Helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -317,7 +316,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * @param OutputInterface $output
      * @return int
      */
-    public static function handleException(Exception $e, OutputInterface $output): int
+    public function handleException(Exception $e, OutputInterface $output): int
     {
         $output->writeln('<error>' . $e->getMessage() . '</error>');
         if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
@@ -333,7 +332,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * @return void
      * @throws InvalidArgumentException
      */
-    public static function validateDomains(array $domains): void
+    public function validateDomains(array $domains): void
     {
         if (empty($domains)) {
             throw new InvalidArgumentException('Error: Domains parameter is missing.');
