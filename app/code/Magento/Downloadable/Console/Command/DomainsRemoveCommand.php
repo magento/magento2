@@ -77,23 +77,36 @@ class DomainsRemoveCommand extends Command
             }
 
             $whitelistBefore = $this->domainManager->getDomains();
-            $removeDomains = array_filter(array_map('trim', $domains), 'strlen');
-            $this->domainManager->removeDomains($removeDomains);
+            $removedDomains = array_filter(array_map('trim', $domains), 'strlen');
 
-            foreach (array_diff($whitelistBefore, $this->domainManager->getDomains()) as $removedHost) {
-                $output->writeln($removedHost . ' was removed from the whitelist.');
+            $this->domainManager->removeDomains($removedDomains);
+
+            foreach (array_intersect($removedDomains, $whitelistBefore) as $removedHost) {
+                $output->writeln($removedHost . ' was removed from the whitelist.' . PHP_EOL);
             }
         } catch (\InvalidArgumentException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             return Cli::RETURN_FAILURE;
         } catch (Exception $e) {
-            $output->writeln('<error>' . $e->getMessage() . '</error>');
-            if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
-                $output->writeln($e->getTraceAsString());
-            }
-            return Cli::RETURN_FAILURE;
+            return $this->handleException($e, $output);
         }
 
         return Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Handle any exception thrown during command execution.
+     *
+     * @param Exception $e
+     * @param OutputInterface $output
+     * @return int
+     */
+    protected function handleException(Exception $e, OutputInterface $output): int
+    {
+        $output->writeln('<error>' . $e->getMessage() . '</error>');
+        if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+            $output->writeln($e->getTraceAsString());
+        }
+        return Cli::RETURN_FAILURE;
     }
 }

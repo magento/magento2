@@ -87,13 +87,25 @@ class DomainsAddCommand extends Command
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             return Cli::RETURN_FAILURE;
         } catch (Exception $e) {
-            $output->writeln('<error>' . $e->getMessage() . '</error>');
-            if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
-                $output->writeln($e->getTraceAsString());
-            }
-            return Cli::RETURN_FAILURE;
+            return $this->handleException($e, $output);
         }
 
         return Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Handle any exception thrown during command execution.
+     *
+     * @param Exception $e
+     * @param OutputInterface $output
+     * @return int
+     */
+    protected function handleException(Exception $e, OutputInterface $output): int
+    {
+        $output->writeln('<error>' . $e->getMessage() . '</error>');
+        if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+            $output->writeln($e->getTraceAsString());
+        }
+        return Cli::RETURN_FAILURE;
     }
 }
