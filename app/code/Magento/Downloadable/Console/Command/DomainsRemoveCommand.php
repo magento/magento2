@@ -7,12 +7,14 @@
 namespace Magento\Downloadable\Console\Command;
 
 use Exception;
+use InvalidArgumentException;
 use Magento\Downloadable\Api\DomainManagerInterface as DomainManager;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Downloadable\Helper\Download as DownloadManager;
 
 /**
  * Class DomainsRemoveCommand
@@ -32,14 +34,22 @@ class DomainsRemoveCommand extends Command
     private $domainManager;
 
     /**
+     * @var DownloadManager
+     */
+    private $downloadManager;
+
+    /**
      * DomainsRemoveCommand constructor.
      *
      * @param DomainManager $domainManager
+     * @param DownloadManager $downloadManager
      */
     public function __construct(
-        DomainManager $domainManager
+        DomainManager   $domainManager,
+        DownloadManager $downloadManager
     ) {
         $this->domainManager = $domainManager;
+        $this->downloadManager = $downloadManager;
         parent::__construct();
     }
 
@@ -72,7 +82,7 @@ class DomainsRemoveCommand extends Command
         try {
             $domains = $input->getArgument(self::INPUT_KEY_DOMAINS);
 
-            $this->validateDomains($domains);
+            $this->downloadManager->validateDomains($domains);
 
             $whitelistBefore = $this->domainManager->getDomains();
             $removedDomains = array_filter(array_map('trim', $domains), 'strlen');
@@ -84,51 +94,10 @@ class DomainsRemoveCommand extends Command
             }
 
             return Cli::RETURN_SUCCESS;
-        } catch (\InvalidArgumentException $e) {
-            return $this->handleInvalidArgumentException($e, $output);
+        } catch (InvalidArgumentException $e) {
+            return $this->downloadManager->handleInvalidArgumentException($e, $output);
         } catch (Exception $e) {
-            return $this->handleException($e, $output);
+            return $this->downloadManager->handleException($e, $output);
         }
     }
-
-    /**
-     * Validate the input domains array
-     *
-     * @param array $domains
-     * @return void
-     */
-    protected function validateDomains(array $domains)
-    {
-        if (empty($domains)) {
-            throw new \InvalidArgumentException('Error: Domains parameter is missing.');
-        }
-    }
-
-    /**
-     * Handle the \InvalidArgumentException exception.
-     *
-     * @param \InvalidArgumentException $e
-     * @param OutputInterface $output
-     * @return int
-     */
-    protected function handleInvalidArgumentException(\InvalidArgumentException $e, OutputInterface $output): int
-    {
-        $output->writeln('<error>' . $e->getMessage() . '</error>');
-        return Cli::RETURN_FAILURE;
-    }
-
-    /**
-     * Handle any other exception thrown during command execution
-     * @param Exception $e
-     * @param OutputInterface $output
-     * @return int
-     */
-  protected function handleException(Exception $e, OutputInterface $output): int
-  {
-      $output->writeln('<error>' . $e->getMessage() . '</error>');
-      if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
-          $output->writeln($e->getTraceAsString());
-      }
-      return Cli::RETURN_FAILURE;
-  }
 }
