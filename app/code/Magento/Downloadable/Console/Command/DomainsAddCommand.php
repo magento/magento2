@@ -71,9 +71,7 @@ class DomainsAddCommand extends Command
         try {
             $domains = $input->getArgument(self::INPUT_KEY_DOMAINS);
 
-            if (empty($domains)) {
-                throw new \InvalidArgumentException('Error: Domains parameter is missing.');
-            }
+            $this->validateDomains($domains);
 
             $whitelistBefore = $this->domainManager->getDomains();
             $newDomains = array_filter(array_map('trim', $domains), 'strlen');
@@ -83,18 +81,43 @@ class DomainsAddCommand extends Command
             foreach (array_diff($this->domainManager->getDomains(), $whitelistBefore) as $newHost) {
                 $output->writeln($newHost . ' was added to the whitelist.' . PHP_EOL);
             }
+
+            return Cli::RETURN_SUCCESS;
         } catch (\InvalidArgumentException $e) {
-            $output->writeln('<error>' . $e->getMessage() . '</error>');
-            return Cli::RETURN_FAILURE;
+            return $this->handleInvalidArgumentException($e, $output);
         } catch (Exception $e) {
             return $this->handleException($e, $output);
         }
-
-        return Cli::RETURN_SUCCESS;
     }
 
     /**
-     * Handle any exception thrown during command execution.
+     * Validate the input domains array
+     *
+     * @param array $domains
+     * @return void
+     */
+    protected function validateDomains(array $domains)
+    {
+        if (empty($domains)) {
+            throw new \InvalidArgumentException('Error: Domains parameter is missing.');
+        }
+    }
+
+    /**
+     * Handle the \InvalidArgumentException exception.
+     *
+     * @param \InvalidArgumentException $e
+     * @param OutputInterface $output
+     * @return int
+     */
+    protected function handleInvalidArgumentException(\InvalidArgumentException $e, OutputInterface $output): int
+    {
+        $output->writeln('<error>' . $e->getMessage() . '</error>');
+        return Cli::RETURN_FAILURE;
+    }
+
+    /**
+     * Handle any exception thrown during command execution
      *
      * @param Exception $e
      * @param OutputInterface $output

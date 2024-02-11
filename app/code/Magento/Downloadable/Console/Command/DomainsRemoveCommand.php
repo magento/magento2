@@ -72,9 +72,7 @@ class DomainsRemoveCommand extends Command
         try {
             $domains = $input->getArgument(self::INPUT_KEY_DOMAINS);
 
-            if (empty($domains)) {
-                throw new \InvalidArgumentException('Error: Domains parameter is missing.');
-            }
+            $this->validateDomains($domains);
 
             $whitelistBefore = $this->domainManager->getDomains();
             $removedDomains = array_filter(array_map('trim', $domains), 'strlen');
@@ -84,29 +82,53 @@ class DomainsRemoveCommand extends Command
             foreach (array_intersect($removedDomains, $whitelistBefore) as $removedHost) {
                 $output->writeln($removedHost . ' was removed from the whitelist.' . PHP_EOL);
             }
+
+            return Cli::RETURN_SUCCESS;
         } catch (\InvalidArgumentException $e) {
-            $output->writeln('<error>' . $e->getMessage() . '</error>');
-            return Cli::RETURN_FAILURE;
+            return $this->handleInvalidArgumentException($e, $output);
         } catch (Exception $e) {
             return $this->handleException($e, $output);
         }
-
-        return Cli::RETURN_SUCCESS;
     }
 
     /**
-     * Handle any exception thrown during command execution.
+     * Validate the input domains array
      *
+     * @param array $domains
+     * @return void
+     */
+    protected function validateDomains(array $domains)
+    {
+        if (empty($domains)) {
+            throw new \InvalidArgumentException('Error: Domains parameter is missing.');
+        }
+    }
+
+    /**
+     * Handle the \InvalidArgumentException exception.
+     *
+     * @param \InvalidArgumentException $e
+     * @param OutputInterface $output
+     * @return int
+     */
+    protected function handleInvalidArgumentException(\InvalidArgumentException $e, OutputInterface $output): int
+    {
+        $output->writeln('<error>' . $e->getMessage() . '</error>');
+        return Cli::RETURN_FAILURE;
+    }
+
+    /**
+     * Handle any other exception thrown during command execution
      * @param Exception $e
      * @param OutputInterface $output
      * @return int
      */
-    protected function handleException(Exception $e, OutputInterface $output): int
-    {
-        $output->writeln('<error>' . $e->getMessage() . '</error>');
-        if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
-            $output->writeln($e->getTraceAsString());
-        }
-        return Cli::RETURN_FAILURE;
-    }
+  protected function handleException(Exception $e, OutputInterface $output): int
+  {
+      $output->writeln('<error>' . $e->getMessage() . '</error>');
+      if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+          $output->writeln($e->getTraceAsString());
+      }
+      return Cli::RETURN_FAILURE;
+  }
 }
