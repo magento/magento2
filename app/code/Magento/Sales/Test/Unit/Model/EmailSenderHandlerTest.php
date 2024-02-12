@@ -256,6 +256,12 @@ class EmailSenderHandlerTest extends TestCase
                         ->expects($this->once())
                         ->method('saveAttribute')
                         ->with($collectionItem);
+                } else {
+                    $collectionItem
+                        ->expects($this->once())
+                        ->method('setEmailSent')
+                        ->with(false)
+                        ->willReturn($collectionItem);
                 }
             }
         }
