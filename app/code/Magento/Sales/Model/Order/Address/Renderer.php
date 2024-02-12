@@ -81,10 +81,11 @@ class Renderer
         $this->eventManager->dispatch('customer_address_format', ['type' => $formatType, 'address' => $address]);
         $addressData = $address->getData();
         $addressData['locale'] = $this->getLocaleByStoreId((int) $orderStore->getId());
+        $rendered = $formatType->getRenderer()->renderArray($addressData);
 
         $this->addressConfig->setStore($originalStore);
 
-        return $formatType->getRenderer()->renderArray($addressData);
+        return $rendered;
     }
 
     /**
