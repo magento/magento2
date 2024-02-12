@@ -142,22 +142,30 @@ class WeeeTest extends TestCase
         $weeAttributes = ['weee_1' => $weeAttribute];
         $weeAttribute->expects($this->exactly(6))
             ->method('getData')
-            ->withConsecutive(
-                [],
-                ['amount'],
-                ['tax_amount'],
-                ['amount_excl_tax']
-            )
-            ->willReturnOnConsecutiveCalls(
-                [
-                    'amount' => 12.1,
-                    'tax_amount' => 12,
-                    'amount_excl_tax' => 71
-                ],
-                12.1,
-                12.1,
-                12.1,
-                12.1
+            ->willReturnCallback(
+                function ($arg) {
+                     static $callCount = 0;
+                    if ($callCount==0) {
+                        $callCount++;
+                        return [
+                            'amount' => 12.1,
+                            'tax_amount' => 12,
+                            'amount_excl_tax' => 71
+                        ];
+                    } elseif ($callCount==1 && $arg == 'amount') {
+                        $callCount++;
+                        return 12.1;
+                    } elseif ($callCount==2 && $arg == 'tax_amount') {
+                        $callCount++;
+                        return 12.1;
+                    } elseif ($callCount==3 && $arg == 'amount_excl_tax') {
+                        $callCount++;
+                        return 12.1;
+                    } elseif ($callCount==4) {
+                        $callCount++;
+                        return 12.1;
+                    }
+                }
             );
         $this->priceCurrencyMock->expects($this->exactly(5))
             ->method('format')

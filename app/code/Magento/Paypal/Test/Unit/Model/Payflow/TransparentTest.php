@@ -109,6 +109,7 @@ class TransparentTest extends TestCase
      * @param string $parentTransactionId
      * @throws InvalidTransitionException
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testCaptureCorrectId(string $parentTransactionId)
     {
@@ -123,17 +124,34 @@ class TransparentTest extends TestCase
         }
 
         $gatewayToken = 'gateway_token';
-        $this->payment->expects($this->once())->method('getParentTransactionId')->willReturn($parentTransactionId);
-        $this->payment->expects($this->exactly($setParentTransactionIdCalls))->method('setParentTransactionId');
-        $this->payment->expects($this->exactly($setAdditionalInformationCalls))->method('setAdditionalInformation')->with(Payflowpro::PNREF, $gatewayToken);
-        $this->payment->expects($this->exactly(4))->method('getAdditionalInformation')->withConsecutive(
-            ['result_code'],
-            [Payflowpro::PNREF],
-            [Payflowpro::PNREF],
-            [Payflowpro::PNREF],
-        )->willReturn(0, '', Payflowpro::PNREF, Payflowpro::PNREF);
-        $this->paymentExtensionAttributes->expects($this->once())->method('getVaultPaymentToken')->willReturn($this->paymentToken);
-        $this->paymentToken->expects($this->exactly($getGatewayTokenCalls))->method('getGatewayToken')->willReturn($gatewayToken);
+        $this->payment->expects($this->once())->method('getParentTransactionId')
+            ->willReturn($parentTransactionId);
+        $this->payment->expects($this->exactly($setParentTransactionIdCalls))
+            ->method('setParentTransactionId');
+        $this->payment->expects($this->exactly($setAdditionalInformationCalls))
+            ->method('setAdditionalInformation')->with(Payflowpro::PNREF, $gatewayToken);
+        $this->payment->expects($this->exactly(4))
+            ->method('getAdditionalInformation')
+            ->willReturnCallback(function ($args) {
+                static $callCount = 0;
+                if ($callCount == 0 && $args == 'result_code') {
+                    $callCount++;
+                    return 0;
+                } elseif ($callCount == 1 && $args == Payflowpro::PNREF) {
+                    $callCount++;
+                    return '';
+                } elseif ($callCount == 2 && $args == Payflowpro::PNREF) {
+                    $callCount++;
+                    return Payflowpro::PNREF;
+                } elseif ($callCount == 3 && $args == Payflowpro::PNREF) {
+                    $callCount++;
+                    return Payflowpro::PNREF;
+                }
+            });
+        $this->paymentExtensionAttributes->expects($this->once())
+            ->method('getVaultPaymentToken')->willReturn($this->paymentToken);
+        $this->paymentToken->expects($this->exactly($getGatewayTokenCalls))
+            ->method('getGatewayToken')->willReturn($gatewayToken);
 
         $this->subject->capture($this->payment, 100);
     }
@@ -143,7 +161,7 @@ class TransparentTest extends TestCase
      *
      * @return array
      */
-    public function captureCorrectIdDataProvider(): array
+    public static function captureCorrectIdDataProvider(): array
     {
         return [
             'No Transaction ID' => [''],
@@ -195,7 +213,7 @@ class TransparentTest extends TestCase
     /**
      * @return array
      */
-    public function validAuthorizeRequestDataProvider(): array
+    public static function validAuthorizeRequestDataProvider(): array
     {
         return [
             [

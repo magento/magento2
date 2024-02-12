@@ -37,6 +37,7 @@ class ValidationMessageTest extends TestCase
     /**
      * @var MockObject
      * @deprecated since 101.0.0
+     * @see no alternatives
      */
     private $currencyMock;
 

@@ -140,7 +140,7 @@ class FileTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function extractValueNoRequestScopeDataProvider(): array
+    public static function extractValueNoRequestScopeDataProvider(): array
     {
         return [
             'no_file' => [[]],
@@ -199,7 +199,7 @@ class FileTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function extractValueWithRequestScopeDataProvider(): array
+    public static function extractValueWithRequestScopeDataProvider(): array
     {
         return [
             'requestScope' => [[], 'requestScope'],
@@ -256,7 +256,7 @@ class FileTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueNotToUploadDataProvider(): array
+    public static function validateValueNotToUploadDataProvider(): array
     {
         return [
             'emptyValue' => [true, [], true],
@@ -327,7 +327,7 @@ class FileTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueToUploadDataProvider(): array
+    public static function validateValueToUploadDataProvider(): array
     {
         return [
             'notValid' => [
@@ -526,7 +526,7 @@ class FileTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function outputValueDataProvider(): array
+    public static function outputValueDataProvider(): array
     {
         return [
             ElementFactory::OUTPUT_FORMAT_TEXT => [ElementFactory::OUTPUT_FORMAT_TEXT],
@@ -606,16 +606,17 @@ class FileTest extends AbstractFormTestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive([$requestScope])
-            ->willReturnOnConsecutiveCalls(
-                [
-                    $attributeCode => [
-                        [
-                            'file' => $fileName
+            ->willReturnCallback(function ($arg1) use ($requestScope, $attributeCode, $fileName) {
+                if ($arg1 == $requestScope) {
+                    return [
+                        $attributeCode => [
+                            [
+                                'file' => $fileName
+                            ]
                         ]
-                    ]
-                ]
-            );
+                    ];
+                }
+            });
 
         $model = $this->initialize(
             [

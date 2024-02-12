@@ -460,7 +460,7 @@ class ConfigurableTest extends TestCase
     /**
      * @return array
      */
-    public static function getConfigurableAttributesAsArrayDataProvider(): array
+    public function getConfigurableAttributesAsArrayDataProvider(): array
     {
         return [
             [5],
@@ -615,14 +615,11 @@ class ConfigurableTest extends TestCase
         $productMock->expects($this->once())->method('getStatus')->willReturn(1);
         $productMock->expects($this->any())->method('hasData')->willReturn(true);
         $productMock
+            ->expects($this->once())
             ->method('getData')
-            ->willReturnCallback(function ($arg) {
-                if ($arg == '_cache_instance_store_filter') {
-                    return 0;
-                } elseif ($arg == 'is_salable') {
-                    return true;
-                }
-            });
+            ->withConsecutive(['_cache_instance_store_filter'], ['is_salable'])
+            ->willReturnOnConsecutiveCalls(0, true);
+        
         $productMock
             ->method('getSku')
             ->willReturn('SKU-CODE');
@@ -881,7 +878,7 @@ class ConfigurableTest extends TestCase
             ->willReturnCallback(fn($param) => match ([$param]) {
                 ['_cache_instance_products'] => true
             });
-        
+
         $productMock->expects($this->any())->method('getData')
             ->willReturnCallback(fn($param) => match ([$param]) {
                 ['image'] => 'no_selection',
