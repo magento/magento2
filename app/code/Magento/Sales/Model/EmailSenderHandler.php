@@ -136,6 +136,11 @@ class EmailSenderHandler
                             $item->setEmailSent(true),
                             'email_sent'
                         );
+                    } else {
+                        $this->entityResource->saveAttribute(
+                            $item->setEmailSent(false),
+                            'email_sent'
+                        );
                     }
                 }
             }
