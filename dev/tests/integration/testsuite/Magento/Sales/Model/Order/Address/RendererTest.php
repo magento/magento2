@@ -125,8 +125,6 @@ class RendererTest extends TestCase
     public function testFormatNonDisplayedCompanyField()
     {
         $orderFixtureStore = $this->objectManager->create(Order::class)->loadByIncrementId('100000001');
-
-        $website = $storeManager->getWebsite(false, true)['test'];
         $configData = [
             'section' => 'customer',
             'website' => $orderFixtureStore->getStore()->getWebsite()->getId(),
@@ -139,11 +137,9 @@ class RendererTest extends TestCase
                 ],
             ],
         ];
-
         $configFactory = $this->objectManager->get(Factory::class);
         $config = $configFactory->create(['data' => $configData]);
         $config->save();
-
         $address = $orderFixtureStore->getBillingAddress();
         self::assertStringNotContainsString('Test Company', $this->orderAddressRenderer->format($address, 'html'));
     }
