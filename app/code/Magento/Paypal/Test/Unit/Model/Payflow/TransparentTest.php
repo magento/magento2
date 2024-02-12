@@ -109,6 +109,7 @@ class TransparentTest extends TestCase
      * @param string $parentTransactionId
      * @throws InvalidTransitionException
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testCaptureCorrectId(string $parentTransactionId)
     {

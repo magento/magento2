@@ -114,8 +114,10 @@ class ReaderTest extends TestCase
             ->method('get')
             ->willReturnCallback(
                 function ($arg1) use ($expected, $xml) {
-                    if ($arg1 === $expected) {
+                    if ($arg1 == $expected) {
                         return $xml;
+                    } else {
+                        return [];
                     }
                 }
             );

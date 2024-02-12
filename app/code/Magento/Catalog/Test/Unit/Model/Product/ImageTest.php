@@ -390,7 +390,7 @@ class ImageTest extends TestCase
                 function ($arg) {
                     if (empty($arg)) {
                         return null;
-                    } elseif ($arg === ['catalog/product/watermark//somefile.png']) {
+                    } elseif ($arg == 'catalog/product/watermark//somefile.png') {
                         return true;
                     }
                 }
