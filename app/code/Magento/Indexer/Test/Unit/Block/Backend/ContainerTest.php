@@ -9,6 +9,9 @@ namespace Magento\Indexer\Test\Unit\Block\Backend;
 
 use Magento\Backend\Block\Widget\Button\ButtonList;
 use Magento\Backend\Block\Widget\Context;
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Indexer\Block\Backend\Container;
 use PHPUnit\Framework\TestCase;
@@ -17,6 +20,19 @@ class ContainerTest extends TestCase
 {
     public function testPseudoConstruct()
     {
+        $objectManager = new ObjectManager($this);
+
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $headerText = __('Indexer Management');
         $buttonList = $this->createPartialMock(
             ButtonList::class,
