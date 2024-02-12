@@ -112,7 +112,8 @@ class SubtotalTest extends TestCase
         $this->quoteDetailsDataObjectFactoryMock =
             $this->getMockBuilder(QuoteDetailsInterfaceFactory::class)
                 ->disableOriginalConstructor()
-                ->onlyMethods(['create', 'setBillingAddress', 'setShippingAddress'])->getMock();
+                ->addMethods(['setBillingAddress', 'setShippingAddress'])
+                ->onlyMethods(['create'])->getMock();
         $this->keyDataObjectFactoryMock = $this->createPartialMock(
             TaxClassKeyInterfaceFactory::class,
             ['create']
@@ -159,11 +160,12 @@ class SubtotalTest extends TestCase
 
         $this->addressMock = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([
-                'getAssociatedTaxables', 'getQuote', 'getBillingAddress',
-                'getRegionId', 'getAllItems', '__wakeup',
+            ->addMethods([
+                'getAssociatedTaxables', 'getBillingAddress',
                 'getParentItem',
-            ])->getMock();
+            ])
+            ->onlyMethods([
+                'getQuote', 'getRegionId', 'getAllItems', '__wakeup'])->getMock();
 
         $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
@@ -172,7 +174,7 @@ class SubtotalTest extends TestCase
         $this->storeMock = $this->getMockBuilder(
             Store::class
         )->disableOriginalConstructor()
-            ->onlyMethods(['getStoreId'])->getMock();
+            ->addMethods(['getStoreId'])->getMock();
         $this->quoteMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
         $this->storeMock->expects($this->any())->method('getStoreId')->willReturn(111);
     }

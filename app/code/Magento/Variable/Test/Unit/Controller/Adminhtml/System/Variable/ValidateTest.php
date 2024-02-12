@@ -79,7 +79,8 @@ class ValidateTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->onlyMethods(['initMessages', 'getMessagesBlock'])
+            ->onlyMethods(['getMessagesBlock'])
+            ->addMethods(['initMessages'])
             ->getMockForAbstractClass();
         $this->layoutMock->expects($this->any())
             ->method('getMessagesBlock')
@@ -92,10 +93,10 @@ class ValidateTest extends TestCase
 
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getPost'])
+            ->addMethods(['getPost'])
             ->getMockForAbstractClass();
         $responseMock = $this->getMockBuilder(ResponseInterface::class)
-            ->onlyMethods(['setError', 'setHtmlMessage'])
+            ->addMethods(['setError', 'setHtmlMessage'])
             ->getMockForAbstractClass();
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();

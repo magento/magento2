@@ -127,7 +127,7 @@ class RestTest extends TestCase
 
         $this->_routeMock = $this->getRouteMock();
         $this->_serviceMock = $this->getMockBuilder(self::SERVICE_ID)
-            ->onlyMethods([self::SERVICE_METHOD])
+            ->addMethods([self::SERVICE_METHOD])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -138,13 +138,13 @@ class RestTest extends TestCase
             ->getMock();
 
         $paramsOverriderMock = $this->getMockBuilder(ParamsOverrider::class)
-            ->onlyMethods(['overrideParams'])
+            ->addMethods(['overrideParams'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $dataObjectProcessorMock = $this->getMockBuilder(DataObjectProcessor::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getMethodReturnType'])
+            ->addMethods(['getMethodReturnType'])
             ->getMockForAbstractClass();
 
         $layoutMock = $this->getMockBuilder(LayoutInterface::class)

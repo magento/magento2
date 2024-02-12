@@ -102,7 +102,7 @@ class ShipmentDocumentFactoryTest extends TestCase
 
         $this->shipmentMock = $this->getMockBuilder(ShipmentInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['addComment', 'addTrack', 'setCustomerNote', 'setCustomerNoteNotify'])
+            ->addMethods(['addComment', 'addTrack', 'setCustomerNote', 'setCustomerNoteNotify'])
             ->getMockForAbstractClass();
 
         $this->hydratorPoolMock = $this->getMockBuilder(HydratorPool::class)

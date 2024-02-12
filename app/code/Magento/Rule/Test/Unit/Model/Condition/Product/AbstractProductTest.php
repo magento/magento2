@@ -364,7 +364,8 @@ class AbstractProductTest extends TestCase
             ->willReturn($attrObjectSourceAllOptionsValue);
 
         $attributeObjectMock = $this->getMockBuilder(Attribute::class)
-            ->onlyMethods(['usesSource', 'getFrontendInput', 'getSource', 'getAllOptions'])
+            ->addMethods(['getAllOptions'])
+            ->onlyMethods(['usesSource', 'getFrontendInput', 'getSource'])
             ->disableOriginalConstructor()
             ->getMock();
         $attributeObjectMock->method('usesSource')->willReturn(true);

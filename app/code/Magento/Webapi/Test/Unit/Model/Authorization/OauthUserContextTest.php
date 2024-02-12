@@ -57,7 +57,7 @@ class OauthUserContextTest extends TestCase
 
         $this->request = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getConsumerId'])
+            ->addMethods(['getConsumerId'])
             ->getMock();
 
         $this->integrationService = $this->getMockBuilder(IntegrationServiceInterface::class)

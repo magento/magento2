@@ -63,15 +63,19 @@ class RegistrationTest extends TestCase
         $theme = $this->getMockBuilder(ThemeInterface::class)
             ->onlyMethods(
                 [
-                    'setParentId',
                     'getId',
                     'getFullPath',
-                    'getParentTheme',
+                    'getParentTheme'
+                ]
+            )
+            ->addMethods(
+                [
+                    'setParentId',
                     'getCustomization',
                     'getPreviewImage',
                     'getThemeImage',
                     'setType',
-                    'save',
+                    'save'
                 ]
             )
             ->getMockForAbstractClass();
@@ -79,10 +83,12 @@ class RegistrationTest extends TestCase
             ->getMock();
         $parentThemeFromCollectionId = 123;
         $parentThemeFromCollection = $this->getMockBuilder(ThemeInterface::class)
-            ->onlyMethods(['getType', 'getId'])
+            ->onlyMethods(['getId'])
+            ->addMethods(['getType'])
             ->getMockForAbstractClass();
         $themeFromCollection = $this->getMockBuilder(ThemeInterface::class)
-            ->onlyMethods(['setType', 'save', 'getParentTheme', 'getType', 'getParentId', 'setParentId'])
+            ->addMethods(['setType', 'save', 'getType', 'getParentId', 'setParentId'])
+            ->onlyMethods(['getParentTheme'])
             ->getMockForAbstractClass();
         $collection = $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Theme\Data\Collection::class)
             ->disableOriginalConstructor()

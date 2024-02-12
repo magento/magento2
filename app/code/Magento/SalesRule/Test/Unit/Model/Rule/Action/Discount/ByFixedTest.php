@@ -103,7 +103,7 @@ class ByFixedTest extends TestCase
         $rule = $this->getMockBuilder(
             Rule::class
         )->disableOriginalConstructor()
-            ->onlyMethods(
+            ->addMethods(
                 ['getDiscountAmount']
             )->getMock();
 
@@ -117,10 +117,9 @@ class ByFixedTest extends TestCase
         $item = $this->getMockBuilder(
             AbstractItem::class
         )->disableOriginalConstructor()
+            ->addMethods(['getDiscountAmount', 'getBaseDiscountAmount',])
             ->onlyMethods(
                 [
-                    'getDiscountAmount',
-                    'getBaseDiscountAmount',
                     'getQuote',
                     'getAddress',
                     'getOptionByCode',

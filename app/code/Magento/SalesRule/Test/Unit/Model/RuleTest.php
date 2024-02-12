@@ -131,7 +131,8 @@ class RuleTest extends TestCase
     {
         $prodConditionMock = $this->getMockBuilder(Combine::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setRule', 'setId', 'loadArray', 'getConditions'])
+            ->addMethods(['setRule', 'setId'])
+            ->onlyMethods(['loadArray', 'getConditions'])
             ->getMock();
 
         $prodConditionMock->expects($this->any())
@@ -154,7 +155,8 @@ class RuleTest extends TestCase
     {
         $conditionMock = $this->getMockBuilder(\Magento\SalesRule\Model\Rule\Condition\Combine::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setRule', 'setId', 'loadArray', 'getConditions'])
+            ->addMethods(['setRule', 'setId'])
+            ->onlyMethods(['loadArray', 'getConditions'])
             ->getMock();
         $conditionMock->expects($this->any())
             ->method('setRule')

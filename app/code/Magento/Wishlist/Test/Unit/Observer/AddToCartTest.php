@@ -65,7 +65,7 @@ class AddToCartTest extends TestCase
     {
         $this->checkoutSession = $this->getMockBuilder(
             Session::class
-        )->onlyMethods(
+        )->addMethods(
             [
                 'getSharedWishlist',
                 'getWishlistPendingMessages',
@@ -82,7 +82,8 @@ class AddToCartTest extends TestCase
             ->getMock();
         $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setWishlistItemCount', 'isLoggedIn', 'getCustomerId'])
+            ->addMethods(['setWishlistItemCount'])
+            ->onlyMethods(['isLoggedIn', 'getCustomerId'])
             ->getMock();
         $this->wishlistFactory = $this->getMockBuilder(WishlistFactory::class)
             ->disableOriginalConstructor()
@@ -117,13 +118,13 @@ class AddToCartTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $event = $this->getMockBuilder(Event::class)
-            ->onlyMethods(['getRequest', 'getResponse'])
+            ->addMethods(['getRequest', 'getResponse'])
             ->disableOriginalConstructor()
             ->getMock();
         $request = $this->getMockBuilder(RequestInterface::class)
             ->getMock();
         $response = $this->getMockBuilder(ResponseInterface::class)
-            ->onlyMethods(['setRedirect'])
+            ->addMethods(['setRedirect'])
             ->getMockForAbstractClass();
         $wishlists = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()

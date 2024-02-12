@@ -72,7 +72,8 @@ class SwatchAttributesProviderTest extends TestCase
 
         $attributeMock =  $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setStoreId', 'getData', 'setData', 'getSource', 'hasData'])
+            ->addMethods(['setStoreId'])
+            ->onlyMethods(['getData', 'setData', 'getSource', 'hasData'])
             ->getMock();
 
         $configAttributeMock = $this->getMockBuilder(Configurable\Attribute::class)->addMethods(['getProductAttribute'])

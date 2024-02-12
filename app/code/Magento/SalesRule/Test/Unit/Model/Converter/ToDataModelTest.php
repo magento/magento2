@@ -107,11 +107,12 @@ class ToDataModelTest extends TestCase
 
         $this->salesRule = $this->getMockBuilder(Rule::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['_construct', 'getData', 'getConditionsSerialized', 'getActionsSerialized'])
+            ->addMethods(['getConditionsSerialized', 'getActionsSerialized'])
+            ->onlyMethods(['_construct', 'getData'])
             ->getMock();
 
         $this->serializer = $this->getMockBuilder(Json::class)
-            ->onlyMethods(null)
+            ->addMethods([])
             ->getMock();
 
         $this->extensionFactoryMock = $this->getMockBuilder(RuleExtensionFactory::class)
@@ -206,11 +207,13 @@ class ToDataModelTest extends TestCase
 
         $dataModel = $this->getMockBuilder(\Magento\SalesRule\Model\Data\Rule::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['create', 'getStoreLabels', 'setStoreLabels', 'getCouponType', 'setCouponType'])
+            ->addMethods(['create'])
+            ->onlyMethods(['getStoreLabels', 'setStoreLabels', 'getCouponType', 'setCouponType'])
             ->getMock();
 
         $dataLabel = $this->getMockBuilder(RuleLabelInterface::class)
-            ->onlyMethods(['setStoreId', 'setStoreLabel', 'setStoreLabels'])
+            ->addMethods(['setStoreLabels'])
+            ->onlyMethods(['setStoreId', 'setStoreLabel'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

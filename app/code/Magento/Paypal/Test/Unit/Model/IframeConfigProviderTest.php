@@ -26,7 +26,8 @@ class IframeConfigProviderTest extends TestCase
         $urlBuilder->expects($this->atLeastOnce())->method('getUrl')->willReturn('http://iframe.url');
 
         $payment = $this->getMockBuilder(Payflowpro::class)
-            ->onlyMethods(['isAvailable', 'getFrameActionUrl'])
+            ->addMethods(['getFrameActionUrl'])
+            ->onlyMethods(['isAvailable'])
             ->setMockClassName('paymentInstance')
             ->disableOriginalConstructor()
             ->getMock();

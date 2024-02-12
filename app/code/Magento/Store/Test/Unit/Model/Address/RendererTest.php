@@ -36,7 +36,7 @@ class RendererTest extends TestCase
 
         $filterManager = $this->getMockBuilder(FilterManager::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['template'])
+            ->addMethods(['template'])
             ->getMock();
 
         $filterManager->expects($this->once())

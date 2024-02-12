@@ -59,10 +59,8 @@ class ConfigurableProductTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->saleableItem = $this->getMockBuilder(SaleableInterface::class)
-            ->onlyMethods([
-                'getPriceInfo',
-                'getCustomOption',
-            ])
+            ->addMethods(['getCustomOption'])
+            ->onlyMethods(['getPriceInfo'])
             ->getMockForAbstractClass();
 
         $this->calculator = $this->getMockBuilder(CalculatorInterface::class)

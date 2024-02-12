@@ -82,7 +82,7 @@ class CategoryNameTest extends TestCase
             ->willReturn($attributeCode);
         $store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getRootCategoryId'])
+            ->addMethods(['getRootCategoryId'])
             ->getMockForAbstractClass();
         $store->expects($this->any())
             ->method('getRootCategoryId')

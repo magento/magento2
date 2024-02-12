@@ -74,7 +74,7 @@ class CatalogProductListCollectionAppendSummaryFieldsObserverTest extends TestCa
     {
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getCollection'])
+            ->addMethods(['getCollection'])
             ->getMock();
 
         $this->observerMock = $this->createMock(Observer::class);

@@ -88,19 +88,17 @@ class ToPercentTest extends TestCase
         $rule = $this->getMockBuilder(
             Rule::class
         )->disableOriginalConstructor()
-            ->onlyMethods(
+            ->addMethods(
                 ['getDiscountAmount', 'getDiscountQty']
             )->getMock();
 
         $item = $this->getMockBuilder(
             AbstractItem::class
         )->disableOriginalConstructor()
+            ->addMethods(['getDiscountAmount', 'getBaseDiscountAmount',
+                'getDiscountPercent', 'setDiscountPercent',])
             ->onlyMethods(
                 [
-                    'getDiscountAmount',
-                    'getBaseDiscountAmount',
-                    'getDiscountPercent',
-                    'setDiscountPercent',
                     'getQuote',
                     'getAddress',
                     'getOptionByCode',

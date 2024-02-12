@@ -56,7 +56,7 @@ class BackendModelFactoryTest extends TestCase
             ->getMock();
         $this->backendModel = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setValue'])
+            ->addMethods(['setValue'])
             ->getMock();
 
         $this->model = new BackendModelFactory(

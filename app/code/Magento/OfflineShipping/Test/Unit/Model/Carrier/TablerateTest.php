@@ -73,7 +73,8 @@ class TablerateTest extends TestCase
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['create', 'isSetFlag', 'getValue'])
+            ->addMethods(['create'])
+            ->onlyMethods(['isSetFlag', 'getValue'])
             ->getMockForAbstractClass();
 
         $this->errorFactoryMock = $this
@@ -99,7 +100,8 @@ class TablerateTest extends TestCase
         $this->tablerateFactoryMock = $this
             ->getMockBuilder(TablerateFactory::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['create', 'getRate'])
+            ->addMethods([ 'getRate'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->helper = new ObjectManager($this);
@@ -131,19 +133,17 @@ class TablerateTest extends TestCase
 
         $request = $this->getMockBuilder(RateRequest::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getAllItems', 'getPackageQty', 'getFreeShipping'])
+            ->addMethods(['getAllItems', 'getPackageQty', 'getFreeShipping'])
             ->getMock();
 
         $item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
+            ->addMethods(['getHasChildren', 'getChildren',  'getQty'])
             ->onlyMethods(
                 [
                     'getProduct',
                     'getParentItem',
-                    'getHasChildren',
                     'isShipSeparately',
-                    'getChildren',
-                    'getQty',
                     'getFreeShipping',
                     'getBaseRowTotal'
                 ]
@@ -167,7 +167,8 @@ class TablerateTest extends TestCase
 
         $method = $this->getMockBuilder(Method::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setCarrier', 'setCarrierTitle', 'setMethod', 'setMethodTitle', 'setPrice', 'setCost'])
+            ->onlyMethods([ 'setPrice'])
+            ->addMethods(['setCarrier', 'setCarrierTitle', 'setMethod', 'setMethodTitle', 'setCost'])
             ->getMock();
         $this->methodFactoryMock->expects($this->once())->method('create')->willReturn($method);
 

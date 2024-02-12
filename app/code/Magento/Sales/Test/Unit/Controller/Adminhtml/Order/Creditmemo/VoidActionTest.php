@@ -125,7 +125,8 @@ class VoidActionTest extends TestCase
     {
         $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getInvoice', 'getOrder', 'cancel', 'getId', 'void'])
+            ->addMethods(['cancel', 'void'])
+            ->onlyMethods(['getInvoice', 'getOrder', 'getId'])
             ->getMock();
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()

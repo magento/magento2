@@ -75,7 +75,7 @@ class DateTest extends TestCase
     {
         $columnMock = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getIndex', 'getPeriodType'])
+            ->addMethods(['getIndex', 'getPeriodType'])
             ->getMock();
         $columnMock->expects($this->once())->method('getIndex')->willReturn($objectDataIndex);
         $columnMock->expects($this->atLeastOnce())->method('getPeriodType')->willReturn($periodType);

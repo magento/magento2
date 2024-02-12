@@ -90,7 +90,7 @@ class PopupDeliveryDateTest extends TestCase
     {
         return $this->getMockBuilder(Status::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getCarrier'])
+            ->addMethods(['getCarrier'])
             ->getMock();
     }
 

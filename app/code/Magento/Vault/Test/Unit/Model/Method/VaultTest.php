@@ -148,7 +148,7 @@ class VaultTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $extensionAttributes = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->onlyMethods(['setVaultPaymentToken', 'getVaultPaymentToken'])
+            ->addMethods(['setVaultPaymentToken', 'getVaultPaymentToken'])
             ->getMockForAbstractClass();
 
         $commandManagerPool = $this->getMockForAbstractClass(CommandManagerPoolInterface::class);

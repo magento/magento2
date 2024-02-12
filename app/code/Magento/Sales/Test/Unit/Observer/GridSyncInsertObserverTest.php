@@ -48,7 +48,7 @@ class GridSyncInsertObserverTest extends TestCase
             ->getMockForAbstractClass();
         $this->eventObserverMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(
+            ->addMethods(
                 [
                     'getObject',
                     'getDataObject'

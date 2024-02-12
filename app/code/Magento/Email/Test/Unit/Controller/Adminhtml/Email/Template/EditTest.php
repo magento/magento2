@@ -107,7 +107,8 @@ class EditTest extends TestCase
             ->getMock();
         $this->menuBlockMock = $this->getMockBuilder(Menu::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setActive', 'getMenuModel', 'getParentItems'])
+            ->addMethods(['setActive', 'getParentItems'])
+            ->onlyMethods(['getMenuModel'])
             ->getMock();
         $this->breadcrumbsBlockMock = $this->getMockBuilder(Breadcrumbs::class)
             ->disableOriginalConstructor()
@@ -115,11 +116,12 @@ class EditTest extends TestCase
             ->getMock();
         $this->editBlockMock = $this->getMockBuilder(Breadcrumbs::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setEditMode'])
+            ->addMethods(['setEditMode'])
             ->getMock();
         $this->resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setActiveMenu', 'getConfig', 'addBreadcrumb'])
+            ->addMethods(['setActiveMenu', 'addBreadcrumb'])
+            ->onlyMethods([ 'getConfig'])
             ->getMock();
         $this->pageConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -128,7 +130,8 @@ class EditTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->templateMock = $this->getMockBuilder(BackendTemplate::class)
-            ->onlyMethods(['getId', 'getTemplateCode', 'load'])
+            ->addMethods(['getTemplateCode'])
+            ->onlyMethods(['getId', 'load'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->templateMock->expects($this->once())

@@ -77,17 +77,17 @@ class DeleteTest extends TestCase
 
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setRedirect'])
+            ->addMethods(['setRedirect'])
             ->getMockForAbstractClass();
 
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getPost'])
+            ->addMethods(['getPost'])
             ->getMockForAbstractClass();
 
         $this->authSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getUser'])
+            ->addMethods(['getUser'])
             ->getMock();
 
         $this->userMock = $this->getMockBuilder(User::class)

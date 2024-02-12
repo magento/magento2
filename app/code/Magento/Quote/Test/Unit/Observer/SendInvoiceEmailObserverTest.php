@@ -86,7 +86,7 @@ class SendInvoiceEmailObserverTest extends TestCase
             ->getMock();
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getQuote', 'getOrder'])
+            ->addMethods(['getQuote', 'getOrder'])
             ->getMock();
         $this->observerMock = $this->createPartialMock(Observer::class, ['getEvent']);
         $this->observerMock->expects($this->any())->method('getEvent')->willReturn($eventMock);

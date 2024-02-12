@@ -68,7 +68,7 @@ class PredispatchNewsletterObserverTest extends TestCase
         $this->urlMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setRedirect'])
+            ->addMethods(['setRedirect'])
             ->getMockForAbstractClass();
         $this->redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
         $this->newsletterConfig = $this->createMock(Config::class);
@@ -87,7 +87,8 @@ class PredispatchNewsletterObserverTest extends TestCase
     {
         $observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getResponse', 'getData', 'setRedirect'])
+            ->onlyMethods(['getData'])
+            ->addMethods(['getResponse', 'setRedirect'])
             ->getMockForAbstractClass();
 
         $this->newsletterConfig->expects($this->once())
@@ -113,7 +114,7 @@ class PredispatchNewsletterObserverTest extends TestCase
     {
         $observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getControllerAction', 'getResponse'])
+            ->addMethods(['getControllerAction', 'getResponse'])
             ->getMockForAbstractClass();
 
         $this->newsletterConfig->expects($this->once())

@@ -307,7 +307,8 @@ class AbstractEntityTest extends TestCase
         /** @var AbstractEntity|MockObject $model */
         $model = $this->getMockBuilder(AbstractEntity::class)
             ->setConstructorArgs($arguments)
-            ->onlyMethods(['_getValue', 'beginTransaction', 'commit', 'rollback', 'getConnection'])
+            ->addMethods(['_getValue'])
+            ->onlyMethods(['beginTransaction', 'commit', 'rollback', 'getConnection'])
             ->getMock();
         $model->expects($this->any())->method('_getValue')->willReturn($eavConfig);
         $model->expects($this->any())->method('getConnection')->willReturn($this->_getConnectionMock());

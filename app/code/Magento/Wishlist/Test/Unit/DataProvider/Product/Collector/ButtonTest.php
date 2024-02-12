@@ -65,7 +65,7 @@ class ButtonTest extends TestCase
             ->getMockForAbstractClass();
         $productRendererExtensionMock = $this->getMockBuilder(ProductRenderExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setWishlistButton'])
+            ->addMethods(['setWishlistButton'])
             ->getMockForAbstractClass();
         $buttonInterfaceMock = $this->getMockBuilder(ButtonInterface::class)
             ->disableOriginalConstructor()
@@ -104,7 +104,7 @@ class ButtonTest extends TestCase
             ->getMockForAbstractClass();
         $productRendererExtensionMock = $this->getMockBuilder(ProductRenderExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setWishlistButton'])
+            ->addMethods(['setWishlistButton'])
             ->getMockForAbstractClass();
 
         $productRendererMock->expects($this->once())

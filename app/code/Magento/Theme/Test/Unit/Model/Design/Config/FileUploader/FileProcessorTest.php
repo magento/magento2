@@ -83,7 +83,7 @@ class FileProcessorTest extends TestCase
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMockForAbstractClass();
         $this->store = $this->getMockBuilder(StoreInterface::class)
-            ->onlyMethods(['getBaseUrl'])
+            ->addMethods(['getBaseUrl'])
             ->getMockForAbstractClass();
 
         $this->fileProcessor = new FileProcessor(

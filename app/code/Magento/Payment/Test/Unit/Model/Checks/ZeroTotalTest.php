@@ -35,7 +35,8 @@ class ZeroTotalTest extends TestCase
 
         $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getBaseGrandTotal', '__wakeup'])
+            ->addMethods(['getBaseGrandTotal'])
+            ->onlyMethods(['__wakeup'])
             ->getMock();
 
         $quote->expects($this->once())

@@ -114,7 +114,8 @@ class RelationTest extends TestCase
             ->getMock();
         $this->orderStatusHistoryMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setParentId', 'setOrder'])
+            ->addMethods(['setParentId'])
+            ->onlyMethods(['setOrder'])
             ->getMock();
         $this->orderStatusHistoryMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Status\History::class)
             ->disableOriginalConstructor()

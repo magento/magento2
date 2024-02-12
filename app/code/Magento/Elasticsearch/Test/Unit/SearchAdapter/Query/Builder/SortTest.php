@@ -80,7 +80,7 @@ class SortTest extends TestCase
         /** @var MockObject|RequestInterface $request */
         $request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getSort'])
+            ->addMethods(['getSort'])
             ->getMockForAbstractClass();
         $request->expects($this->any())
             ->method('getSort')

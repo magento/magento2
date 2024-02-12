@@ -18,7 +18,8 @@ class ProductTest extends TestCase
     {
         $collectionClassName = AbstractCollection::class;
         $collectionMock = $this->getMockBuilder($collectionClassName)
-            ->onlyMethods(['addAttributeToFilter', 'getSize'])->disableOriginalConstructor()
+            ->addMethods(['addAttributeToFilter'])
+            ->onlyMethods(['getSize'])->disableOriginalConstructor()
             ->getMock();
         $collectionMock->expects($this->once())->method('addAttributeToFilter')
             ->with('tax_class_id', 1)->willReturnSelf();

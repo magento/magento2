@@ -47,6 +47,13 @@ class SingleFileTest extends TestCase
         $fileType = 'png';
         $customCss = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\FileInterface::class)
             ->disableOriginalConstructor()
+            ->addMethods(
+                [
+                    'setData',
+                    'getType',
+                    'prepareFile'
+                ]
+            )
             ->onlyMethods(
                 [
                     'delete',
@@ -59,14 +66,12 @@ class SingleFileTest extends TestCase
                     'getTheme',
                     'setTheme',
                     'getCustomizationService',
-                    'setCustomizationService',
-                    'setData',
-                    'getType',
-                    'prepareFile',
+                    'setCustomizationService'
                 ]
             )
             ->getMock();
         $theme = $this->getMockBuilder(ThemeInterface::class)
+            ->addMethods(['getCustomization'])
             ->onlyMethods(
                 [
                     'getArea',
@@ -77,7 +82,6 @@ class SingleFileTest extends TestCase
                     'isPhysical',
                     'getInheritedThemes',
                     'getId',
-                    'getCustomization',
                 ]
             )
             ->getMockForAbstractClass();
@@ -120,6 +124,7 @@ class SingleFileTest extends TestCase
     {
         $customCss = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\FileInterface::class)
             ->disableOriginalConstructor()
+            ->addMethods(['setData', 'getType', 'prepareFile'])
             ->onlyMethods(
                 [
                     'delete',
@@ -132,10 +137,7 @@ class SingleFileTest extends TestCase
                     'getTheme',
                     'setTheme',
                     'getCustomizationService',
-                    'setCustomizationService',
-                    'setData',
-                    'getType',
-                    'prepareFile',
+                    'setCustomizationService'
                 ]
             )
             ->getMock();
@@ -144,6 +146,7 @@ class SingleFileTest extends TestCase
         $fileType = 'png';
 
         $theme = $this->getMockBuilder(ThemeInterface::class)
+            ->addMethods(['getCustomization'])
             ->onlyMethods(
                 [
                     'getArea',
@@ -154,7 +157,6 @@ class SingleFileTest extends TestCase
                     'isPhysical',
                     'getInheritedThemes',
                     'getId',
-                    'getCustomization',
                 ]
             )
             ->getMockForAbstractClass();

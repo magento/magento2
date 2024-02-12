@@ -30,7 +30,8 @@ class HintTest extends TestCase
         $om = new ObjectManager($this);
 
         $this->element = $this->getMockBuilder(AbstractElement::class)
-            ->onlyMethods(['getComment', 'getHtmlId'])
+            ->addMethods(['getComment'])
+            ->onlyMethods(['getHtmlId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

@@ -121,7 +121,8 @@ class ComparedTest extends TestCase
 
         $this->resourceMock = $this->getMockBuilder(AbstractResource::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getIdFieldName', '_construct', 'getConnection'])
+            ->addMethods(['getIdFieldName'])
+            ->onlyMethods(['_construct', 'getConnection'])
             ->getMockForAbstractClass();
         $this->dbMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
@@ -149,7 +150,7 @@ class ComparedTest extends TestCase
     {
         $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getEntityId'])
+            ->addMethods(['getEntityId'])
             ->getMock();
         $collection->expects($this->once())->method('getEntityId')->willReturn(1);
 

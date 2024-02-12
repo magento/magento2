@@ -42,7 +42,7 @@ class VariablesTest extends TestCase
     protected function setup(): void
     {
         $this->configMock = $this->getMockBuilder(SearchInterface::class)
-            ->onlyMethods(['getElementByConfigPath'])
+            ->addMethods(['getElementByConfigPath'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $helper = new ObjectManager($this);

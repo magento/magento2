@@ -187,7 +187,7 @@ class CustomerLoginObserverTest extends TestCase
             ->getMock();
         $eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getProduct'])->getMock();
+            ->addMethods(['getProduct'])->getMock();
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();

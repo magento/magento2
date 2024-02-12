@@ -95,7 +95,8 @@ class ReportCountsTest extends TestCase
             ->onlyMethods(['create'])
             ->getMock();
         $this->countsModelMock = $this->getMockBuilder(Counts::class)
-            ->onlyMethods(['getCount', 'load', 'setEntityId', 'setType', 'setCount', 'setUpdatedAt', 'save'])
+            ->addMethods(['getCount', 'setType', 'setCount', 'setUpdatedAt'])
+            ->onlyMethods(['load', 'setEntityId', 'save'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->countsCollectionFactoryMock = $this

@@ -134,7 +134,8 @@ class StorageTest extends TestCase
 
         $storageModelMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['loadByFileName', '__wakeup'])
+            ->addMethods(['loadByFileName'])
+            ->onlyMethods(['__wakeup'])
             ->getMock();
         $this->storageMock->expects($this->exactly($callNum))
             ->method('getStorageModel')

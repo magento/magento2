@@ -199,7 +199,7 @@ class AttributeRepositoryTest extends TestCase
 
         $entityTypeMock = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getAdditionalAttributeTable'])
+            ->addMethods(['getAdditionalAttributeTable'])
             ->getMock();
         $entityTypeMock->expects($this->once())
             ->method('getAdditionalAttributeTable')

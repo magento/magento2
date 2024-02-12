@@ -230,7 +230,8 @@ class CommonTaxCollectorTest extends TestCase
         /** @var MockObject|QuoteItem $quoteItem */
         $quoteItem = $this->getMockBuilder(QuoteItem::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getPrice', 'setPrice', 'getCustomPrice', 'setCustomPrice'])
+            ->addMethods(['getCustomPrice'])
+            ->onlyMethods(['getPrice', 'setPrice', 'setCustomPrice'])
             ->getMock();
         $this->taxHelper->method('applyTaxOnCustomPrice')->willReturn(true);
         $quoteItem->method('getCustomPrice')->willReturn(true);

@@ -129,7 +129,7 @@ class RowBaseAndTotalBaseCalculatorTestCase extends TestCase
             ->getMockForAbstractClass();
         $this->quoteDetailsItemExtension = $this->getMockBuilder(QuoteDetailsItemExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getPriceForTaxCalculation'])
+            ->addMethods(['getPriceForTaxCalculation'])
             ->getMockForAbstractClass();
         $this->mockItem->expects($this->any())->method('getExtensionAttributes')
             ->willReturn($this->quoteDetailsItemExtension);

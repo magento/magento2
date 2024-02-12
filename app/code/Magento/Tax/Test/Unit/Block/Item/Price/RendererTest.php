@@ -242,7 +242,8 @@ class RendererTest extends TestCase
 
         $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['formatPrice', '__wakeup'])
+            ->addMethods(['formatPrice'])
+            ->onlyMethods(['__wakeup'])
             ->getMock();
 
         $this->priceCurrency->expects($this->once())
@@ -316,7 +317,8 @@ class RendererTest extends TestCase
 
         $invoiceItemMock = $this->getMockBuilder(InvoiceItem::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getOrderItem', '__wakeup', 'getStoreId'])
+            ->addMethods(['getStoreId'])
+            ->onlyMethods(['getOrderItem', '__wakeup'])
             ->getMock();
 
         $invoiceItemMock->expects($this->once())
@@ -338,7 +340,8 @@ class RendererTest extends TestCase
 
         $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getStoreId', '__wakeup'])
+            ->addMethods(['getStoreId'])
+            ->onlyMethods(['__wakeup'])
             ->getMock();
 
         $itemMock->expects($this->once())

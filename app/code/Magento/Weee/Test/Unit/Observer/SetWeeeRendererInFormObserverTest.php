@@ -59,7 +59,7 @@ class SetWeeeRendererInFormObserverTest extends TestCase
         /** @var Event|MockObject $eventMock */
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getForm'])
+            ->addMethods(['getForm'])
             ->getMock();
 
         /** @var Observer|MockObject $observerMock */

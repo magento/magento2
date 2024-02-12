@@ -57,7 +57,8 @@ class ToOrderConverterTest extends TestCase
 
         $this->quoteAddressMock = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getAppliedTaxes', 'getItemsAppliedTaxes'])
+            ->addMethods(['getItemsAppliedTaxes'])
+            ->onlyMethods(['getAppliedTaxes'])
             ->getMock();
         $this->subjectMock = $this->getMockBuilder(ToOrder::class)
             ->disableOriginalConstructor()
@@ -78,7 +79,7 @@ class ToOrderConverterTest extends TestCase
     protected function setupOrderExtensionAttributeMock()
     {
         $orderExtensionAttributeMock = $this->getMockBuilder(OrderExtensionInterface::class)
-            ->onlyMethods(
+            ->addMethods(
                 [
                     'setAppliedTaxes',
                     'setConvertingFromQuote',

@@ -115,11 +115,12 @@ class MsrpPriceTest extends TestCase
         $extensionAttributes = $this->getMockBuilder(
             PriceInfoExtensionInterface::class
         )
-            ->onlyMethods(['setMsrp'])
+            ->addMethods(['setMsrp'])
             ->getMockForAbstractClass();
 
         $priceInfo = $this->getMockBuilder(MsrpPriceInfoInterface::class)
-            ->onlyMethods(['getPrice', 'getExtensionAttributes'])
+            ->addMethods(['getPrice'])
+            ->onlyMethods(['getExtensionAttributes'])
             ->getMockForAbstractClass();
         $amountInterface = $this->getMockForAbstractClass(AmountInterface::class);
         $amountInterface->expects($this->once())

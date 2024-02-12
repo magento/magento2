@@ -191,7 +191,8 @@ class InvoiceQuantityValidatorTest extends TestCase
     {
         $orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'getQtyToInvoice', 'isDummy', 'getSku'])
+            ->onlyMethods(['getSku'])
+            ->addMethods(['getId', 'getQtyToInvoice', 'isDummy'])
             ->getMockForAbstractClass();
         $orderItemMock->expects($this->any())->method('getId')->willReturn($id);
         $orderItemMock->expects($this->any())->method('getQtyToInvoice')->willReturn($qtyToInvoice);

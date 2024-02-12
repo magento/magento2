@@ -74,7 +74,8 @@ class AttributeLoaderTest extends TestCase
         $this->entityTypeMock->expects($this->once())
             ->method('getAttributeModel')->willReturn(Entity::DEFAULT_ATTRIBUTE_MODEL);
         $attributeMock = $this->getMockBuilder(EntityAttribute::class)
-            ->onlyMethods(['setAttributeCode', 'setBackendType', 'setIsGlobal', 'setEntityType', 'setEntityTypeId'])
+            ->addMethods(['setIsGlobal'])
+            ->onlyMethods(['setAttributeCode', 'setBackendType', 'setEntityType', 'setEntityTypeId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectManagerMock->expects($this->once())

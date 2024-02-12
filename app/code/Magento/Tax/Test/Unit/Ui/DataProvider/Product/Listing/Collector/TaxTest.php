@@ -71,7 +71,7 @@ class TaxTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->extensionAttributes = $this->getMockBuilder(PriceInfoExtensionInterface::class)
-            ->onlyMethods(['setTaxAdjustments'])
+            ->addMethods(['setTaxAdjustments'])
             ->getMockForAbstractClass();
 
         $this->priceInfoFactory = $this->getMockBuilder(PriceInfoInterfaceFactory::class)
@@ -115,7 +115,7 @@ class TaxTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $priceInfo = $this->getMockBuilder(PriceInfoInterface::class)
-            ->onlyMethods(['getPrice'])
+            ->addMethods(['getPrice'])
             ->getMockForAbstractClass();
         $amount = $this->getMockBuilder(AmountInterface::class)
             ->getMockForAbstractClass();

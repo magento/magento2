@@ -94,7 +94,7 @@ class LogoutAllTest extends TestCase
 
         $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setIsUrlNotice'])
+            ->addMethods(['setIsUrlNotice'])
             ->getMock();
         $this->contextMock->expects($this->any())
             ->method('getSession')
@@ -115,7 +115,7 @@ class LogoutAllTest extends TestCase
 
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setRedirect'])
+            ->addMethods(['setRedirect'])
             ->getMockForAbstractClass();
         $this->contextMock->expects($this->any())
             ->method('getResponse')

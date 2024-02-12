@@ -382,8 +382,8 @@ class FromcartTest extends TestCase
 
         $quoteItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
+            ->addMethods(['getProductId'])
             ->onlyMethods([
-                'getProductId',
                 'getBuyRequest',
                 'getProduct',
             ])

@@ -85,8 +85,8 @@ class IntervalTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->clientConfig = $this->getMockBuilder(Config::class)
+            ->addMethods(['getIndexName'])
             ->onlyMethods([
-                'getIndexName',
                 'getEntityType',
             ])
             ->disableOriginalConstructor()

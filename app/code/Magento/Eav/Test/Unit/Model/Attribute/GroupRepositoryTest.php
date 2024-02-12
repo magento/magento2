@@ -285,7 +285,7 @@ class GroupRepositoryTest extends TestCase
     {
         $filterInterfaceMock = $this->getMockBuilder(FilterGroup::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([
+            ->addMethods([
                 'getField',
                 'getValue',
             ])

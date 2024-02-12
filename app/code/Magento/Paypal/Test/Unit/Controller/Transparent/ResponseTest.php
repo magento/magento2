@@ -77,7 +77,7 @@ class ResponseTest extends TestCase
     protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->onlyMethods(['getPostValue'])
+            ->addMethods(['getPostValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->coreRegistryMock = $this->getMockBuilder(Registry::class)
@@ -85,7 +85,8 @@ class ResponseTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultLayoutMock = $this->getMockBuilder(Layout::class)
-            ->onlyMethods(['addDefaultHandle', 'getLayout', 'getUpdate', 'load'])
+            ->addMethods(['getUpdate', 'load'])
+            ->onlyMethods(['addDefaultHandle', 'getLayout'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultLayoutFactoryMock = $this->getMockBuilder(LayoutFactory::class)
@@ -97,7 +98,8 @@ class ResponseTest extends TestCase
             ->willReturn($this->resultLayoutMock);
         $this->transactionMock = $this->getMockBuilder(
             Transaction::class
-        )->onlyMethods(['getResponseObject', 'validateResponse', 'savePaymentInQuote'])
+        )->onlyMethods(['getResponseObject', 'savePaymentInQuote'])
+            ->addMethods(['validateResponse'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock = $this->getMockBuilder(Context::class)
