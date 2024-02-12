@@ -9,6 +9,7 @@ namespace Magento\Sales\Test\Unit\Model\Order\Address;
 
 use Magento\Customer\Block\Address\Renderer\RendererInterface as CustomerAddressBlockRenderer;
 use Magento\Customer\Model\Address\Config as CustomerAddressConfig;
+use Magento\Directory\Helper\Data;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface as EventManager;
@@ -16,8 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address as OrderAddress;
 use Magento\Sales\Model\Order\Address\Renderer as OrderAddressRenderer;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -121,7 +121,7 @@ class RendererTest extends TestCase
             ->willReturn($addressData);
         $this->storeConfigMock->expects($this->once())
             ->method('getValue')
-            ->willReturn(1);
+            ->willReturn('1');
         $this->customerAddressBlockRendererMock->expects(static::once())
             ->method('renderArray')
             ->with($addressData, null)
@@ -152,12 +152,14 @@ class RendererTest extends TestCase
      */
     private function setStoreExpectations(): void
     {
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
+        $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
+
         $this->orderMock->expects(self::once())->method('getStore')->willReturn($storeMock);
         // One call to setup the store from the order, and an other one to rollback to the original store value
-        $this->storeConfigMock->expects(self::exactly(2))->method('setStore')->with($storeMock);
+        $this->customerAddressConfigMock->expects(self::once())->method('getStore')->willReturn($storeMock);
+        $this->customerAddressConfigMock->expects(self::any())->method('setStore')->with($storeMock);
     }
 }
