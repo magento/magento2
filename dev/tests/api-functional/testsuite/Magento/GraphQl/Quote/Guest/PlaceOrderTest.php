@@ -7,12 +7,29 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Catalog\Test\Fixture\ProductStock as ProductStockFixture;
+use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
+use Magento\Checkout\Test\Fixture\SetDeliveryMethod as SetDeliveryMethodFixture;
+use Magento\Checkout\Test\Fixture\SetGuestEmail as SetGuestEmailFixture;
+use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethodFixture;
+use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Registry;
-use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
+use Magento\GiftMessage\Test\Fixture\GiftMessage;
+use Magento\Indexer\Test\Fixture\Indexer;
+use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\CustomerCart;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
+use Magento\Quote\Test\Fixture\QuoteIdMask;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -21,11 +38,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class PlaceOrderTest extends GraphQlAbstract
 {
-    /**
-     * @var GetMaskedQuoteIdByReservedOrderId
-     */
-    private $getMaskedQuoteIdByReservedOrderId;
-
     /**
      * @var CollectionFactory
      */
@@ -47,43 +59,50 @@ class PlaceOrderTest extends GraphQlAbstract
     private $orderFactory;
 
     /**
+     * @var QuoteIdToMaskedQuoteIdInterface
+     */
+    private $quoteIdToMaskedQuoteIdInterface;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
+        $this->quoteIdToMaskedQuoteIdInterface = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->orderFactory = $objectManager->get(OrderFactory::class);
         $this->orderCollectionFactory = $objectManager->get(CollectionFactory::class);
         $this->orderRepository = $objectManager->get(OrderRepositoryInterface::class);
-        $this->orderFactory = $objectManager->get(OrderFactory::class);
         $this->registry = $objectManager->get(Registry::class);
         /** @var ScopeConfigInterface $scopeConfig */
         $scopeConfig = $objectManager->get(ScopeConfigInterface::class);
         $scopeConfig->clean();
     }
 
-    /**
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoConfigFixture default_store carriers/flatrate/active 1
-     * @magentoConfigFixture default_store carriers/tablerate/active 1
-     * @magentoConfigFixture default_store carriers/freeshipping/active 1
-     * @magentoConfigFixture default_store payment/banktransfer/active 1
-     * @magentoConfigFixture default_store payment/cashondelivery/active 1
-     * @magentoConfigFixture default_store payment/checkmo/active 1
-     * @magentoConfigFixture default_store payment/purchaseorder/active 1
-     * @magentoConfigFixture default_store customer/create_account/auto_group_assign 0
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_checkmo_payment_method.php
-     */
+    #[
+        Config('carriers/flatrate/active', '1', 'store', 'default'),
+        Config('carriers/tablerate/active', '1', 'store', 'default'),
+        Config('carriers/freeshipping/active', '1', 'store', 'default'),
+        Config('payment/banktransfer/active', '1', 'store', 'default'),
+        Config('payment/cashondelivery/active', '1', 'store', 'default'),
+        Config('payment/checkmo/active', '1', 'store', 'default'),
+        Config('payment/purchaseorder/active', '1', 'store', 'default'),
+        Config('customer/create_account/auto_group_assign', '0', 'store', 'default'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(Indexer::class, as: 'indexer'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_quote'], as: 'cart'),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
+    ]
     public function testPlaceOrder()
     {
         $reservedOrderId = 'test_quote';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
 
         $query = $this->getQuery($maskedQuoteId);
         $response = $this->graphQlMutation($query);
@@ -91,34 +110,37 @@ class PlaceOrderTest extends GraphQlAbstract
         self::assertArrayHasKey('placeOrder', $response);
         self::assertArrayHasKey('order_number', $response['placeOrder']['order']);
         self::assertEquals($reservedOrderId, $response['placeOrder']['order']['order_number']);
+        self::assertEmpty(count($response['placeOrder']['errors']));
         $orderIncrementId = $response['placeOrder']['order']['order_number'];
         $order = $this->orderFactory->create();
         $order->loadByIncrementId($orderIncrementId);
         $this->assertNotEmpty($order->getEmailSent());
     }
 
-    /**
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoConfigFixture default_store carriers/flatrate/active 1
-     * @magentoConfigFixture default_store carriers/tablerate/active 1
-     * @magentoConfigFixture default_store carriers/freeshipping/active 1
-     * @magentoConfigFixture default_store payment/banktransfer/active 1
-     * @magentoConfigFixture default_store payment/cashondelivery/active 1
-     * @magentoConfigFixture default_store payment/checkmo/active 1
-     * @magentoConfigFixture default_store payment/purchaseorder/active 1
-     * @magentoConfigFixture default_store customer/create_account/auto_group_assign 1
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_checkmo_payment_method.php
-     */
+    #[
+        Config('carriers/flatrate/active', '1', 'store', 'default'),
+        Config('carriers/tablerate/active', '1', 'store', 'default'),
+        Config('carriers/freeshipping/active', '1', 'store', 'default'),
+        Config('payment/banktransfer/active', '1', 'store', 'default'),
+        Config('payment/cashondelivery/active', '1', 'store', 'default'),
+        Config('payment/checkmo/active', '1', 'store', 'default'),
+        Config('payment/purchaseorder/active', '1', 'store', 'default'),
+        Config('customer/create_account/auto_group_assign', '1', 'store', 'default'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(Indexer::class, as: 'indexer'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_quote'], as: 'cart'),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
+    ]
     public function testPlaceOrderWithAutoGroup()
     {
         $reservedOrderId = 'test_quote';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
 
         $query = $this->getQuery($maskedQuoteId);
         $response = $this->graphQlMutation($query);
@@ -126,15 +148,16 @@ class PlaceOrderTest extends GraphQlAbstract
         self::assertArrayHasKey('placeOrder', $response);
         self::assertArrayHasKey('order_number', $response['placeOrder']['order']);
         self::assertEquals($reservedOrderId, $response['placeOrder']['order']['order_number']);
+        self::assertEmpty(count($response['placeOrder']['errors']));
         $orderIncrementId = $response['placeOrder']['order']['order_number'];
         $order = $this->orderFactory->create();
         $order->loadByIncrementId($orderIncrementId);
         $this->assertNotEmpty($order->getEmailSent());
     }
 
-    /**
-     * @magentoConfigFixture default_store customer/create_account/auto_group_assign 0
-     */
+    #[
+        Config('customer/create_account/auto_group_assign', '0', 'store', 'default'),
+    ]
     public function testPlaceOrderIfCartIdIsEmpty()
     {
         $this->expectException(\Exception::class);
@@ -146,239 +169,290 @@ class PlaceOrderTest extends GraphQlAbstract
         $this->graphQlMutation($query);
     }
 
-    /**
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoConfigFixture default_store carriers/flatrate/active 1
-     * @magentoConfigFixture default_store carriers/tablerate/active 1
-     * @magentoConfigFixture default_store carriers/freeshipping/active 1
-     * @magentoConfigFixture default_store payment/banktransfer/active 1
-     * @magentoConfigFixture default_store payment/cashondelivery/active 1
-     * @magentoConfigFixture default_store payment/checkmo/active 1
-     * @magentoConfigFixture default_store payment/purchaseorder/active 1
-     * @magentoConfigFixture default_store customer/create_account/auto_group_assign 0
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_checkmo_payment_method.php
-     *
-     */
+    #[
+        Config('carriers/flatrate/active', '1', 'store', 'default'),
+        Config('carriers/tablerate/active', '1', 'store', 'default'),
+        Config('carriers/freeshipping/active', '1', 'store', 'default'),
+        Config('payment/banktransfer/active', '1', 'store', 'default'),
+        Config('payment/cashondelivery/active', '1', 'store', 'default'),
+        Config('payment/checkmo/active', '1', 'store', 'default'),
+        Config('payment/purchaseorder/active', '1', 'store', 'default'),
+        Config('customer/create_account/auto_group_assign', '0', 'store', 'default'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(Indexer::class, as: 'indexer'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_quote'], as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
+    ]
     public function testPlaceOrderWithNoEmail()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Guest email for cart is missing.');
-
-        $reservedOrderId = 'test_quote';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
         $query = $this->getQuery($maskedQuoteId);
 
-        $this->graphQlMutation($query);
+        $response = $this->graphQlMutation($query);
+        self::assertEquals(1, count($response['placeOrder']['errors']));
+        self::assertEquals('GUEST_EMAIL_MISSING', $response['placeOrder']['errors'][0]['code']);
+        self::assertEquals(
+            'Guest email for cart is missing.',
+            $response['placeOrder']['errors'][0]['message']
+        );
     }
 
-    /**
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
-     */
+    #[
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_quote'], as: 'cart'),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+    ]
     public function testPlaceOrderWithNoItemsInCart()
     {
-        $reservedOrderId = 'test_quote';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
         $query = $this->getQuery($maskedQuoteId);
-
-        self::expectExceptionMessage(
-            'Unable to place order: A server error stopped your order from being placed. ' .
-            'Please try to place your order again'
+        $response = $this->graphQlMutation($query);
+        self::assertEquals(1, count($response['placeOrder']['errors']));
+        self::assertEquals('UNABLE_TO_PLACE_ORDER', $response['placeOrder']['errors'][0]['code']);
+        self::assertEquals(
+            'A server error stopped your order from being placed. Please try to place your order again.',
+            $response['placeOrder']['errors'][0]['message']
         );
-        $this->graphQlMutation($query);
     }
 
-    /**
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     */
+    #[
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(Indexer::class, as: 'indexer'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_quote'], as: 'cart'),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+    ]
     public function testPlaceOrderWithNoShippingAddress()
     {
-        $reservedOrderId = 'test_quote';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
         $query = $this->getQuery($maskedQuoteId);
-
-        self::expectExceptionMessage(
-            'Unable to place order: Some addresses can\'t be used due to the configurations for specific countries'
+        $response = $this->graphQlMutation($query);
+        self::assertEquals(1, count($response['placeOrder']['errors']));
+        self::assertEquals('UNABLE_TO_PLACE_ORDER', $response['placeOrder']['errors'][0]['code']);
+        self::assertEquals(
+            'Some addresses can\'t be used due to the configurations for specific countries.',
+            $response['placeOrder']['errors'][0]['message']
         );
-        $this->graphQlMutation($query);
     }
 
-    /**
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     */
+    #[
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(Indexer::class, as: 'indexer'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_quote'], as: 'cart'),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+    ]
     public function testPlaceOrderWithNoShippingMethod()
     {
-        $reservedOrderId = 'test_quote';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
         $query = $this->getQuery($maskedQuoteId);
-
-        self::expectExceptionMessage(
-            'Unable to place order: The shipping method is missing. Select the shipping method and try again'
+        $response = $this->graphQlMutation($query);
+        self::assertEquals(1, count($response['placeOrder']['errors']));
+        self::assertEquals('UNABLE_TO_PLACE_ORDER', $response['placeOrder']['errors'][0]['code']);
+        self::assertEquals(
+            'The shipping method is missing. Select the shipping method and try again.',
+            $response['placeOrder']['errors'][0]['message']
         );
-        $this->graphQlMutation($query);
     }
 
-    /**
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoConfigFixture default_store carriers/flatrate/active 1
-     * @magentoConfigFixture default_store carriers/tablerate/active 1
-     * @magentoConfigFixture default_store carriers/freeshipping/active 1
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     */
+    #[
+        Config('carriers/flatrate/active', '1', 'store', 'default'),
+        Config('carriers/tablerate/active', '1', 'store', 'default'),
+        Config('carriers/freeshipping/active', '1', 'store', 'default'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(Indexer::class, as: 'indexer'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_quote'], as: 'cart'),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+    ]
     public function testPlaceOrderWithNoBillingAddress()
     {
-        $reservedOrderId = 'test_quote';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
         $query = $this->getQuery($maskedQuoteId);
 
-        self::expectExceptionMessageMatches(
-            '/Unable to place order: Please check the billing address information*/'
+        $response = $this->graphQlMutation($query);
+        self::assertEquals(1, count($response['placeOrder']['errors']));
+        self::assertEquals('UNABLE_TO_PLACE_ORDER', $response['placeOrder']['errors'][0]['code']);
+        self::assertStringContainsString(
+            'Please check the billing address information.',
+            $response['placeOrder']['errors'][0]['message']
         );
-        $this->graphQlMutation($query);
     }
 
-    /**
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoConfigFixture default_store carriers/flatrate/active 1
-     * @magentoConfigFixture default_store carriers/tablerate/active 1
-     * @magentoConfigFixture default_store carriers/freeshipping/active 1
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     */
+    #[
+        Config('carriers/flatrate/active', '1', 'store', 'default'),
+        Config('carriers/tablerate/active', '1', 'store', 'default'),
+        Config('carriers/freeshipping/active', '1', 'store', 'default'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(Indexer::class, as: 'indexer'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_quote'], as: 'cart'),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+    ]
     public function testPlaceOrderWithNoPaymentMethod()
     {
-        $reservedOrderId = 'test_quote';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
         $query = $this->getQuery($maskedQuoteId);
-
-        self::expectExceptionMessage('Unable to place order: Enter a valid payment method and try again');
-        $this->graphQlMutation($query);
+        $response = $this->graphQlMutation($query);
+        self::assertEquals(1, count($response['placeOrder']['errors']));
+        self::assertEquals('UNABLE_TO_PLACE_ORDER', $response['placeOrder']['errors'][0]['code']);
+        self::assertEquals(
+            'Enter a valid payment method and try again.',
+            $response['placeOrder']['errors'][0]['message']
+        );
     }
 
-    /**
-     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 1
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoConfigFixture default_store carriers/flatrate/active 1
-     * @magentoConfigFixture default_store carriers/tablerate/active 1
-     * @magentoConfigFixture default_store carriers/freeshipping/active 1
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_out_of_stock.php
-     */
+    #[
+        Config('carriers/flatrate/active', '1', 'store', 'default'),
+        Config('carriers/tablerate/active', '1', 'store', 'default'),
+        Config('carriers/freeshipping/active', '1', 'store', 'default'),
+        Config('cataloginventory/options/enable_inventory_check', 1),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(Indexer::class, as: 'indexer'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_quote'], as: 'cart'),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(
+            ProductStockFixture::class,
+            [
+                'prod_id' => '$product.id$',
+                'is_in_stock' => 0,
+                'prod_qty' => 0
+            ],
+            'prodStock'
+        ),
+    ]
     public function testPlaceOrderWithOutOfStockProduct()
     {
-        $reservedOrderId = 'test_quote';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
         $query = $this->getQuery($maskedQuoteId);
-
-        self::expectExceptionMessage('Unable to place order: Some of the products are out of stock');
-        $this->graphQlMutation($query);
+        $response = $this->graphQlMutation($query);
+        self::assertEquals(1, count($response['placeOrder']['errors']));
+        self::assertEquals('UNABLE_TO_PLACE_ORDER', $response['placeOrder']['errors'][0]['code']);
+        self::assertEquals(
+            'Some of the products are out of stock.',
+            $response['placeOrder']['errors'][0]['message']
+        );
     }
 
-    /**
-     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 0
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoConfigFixture default_store carriers/flatrate/active 1
-     * @magentoConfigFixture default_store carriers/tablerate/active 1
-     * @magentoConfigFixture default_store carriers/freeshipping/active 1
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_out_of_stock.php
-     */
+    #[
+        Config('carriers/flatrate/active', '1', 'store', 'default'),
+        Config('carriers/tablerate/active', '1', 'store', 'default'),
+        Config('carriers/freeshipping/active', '1', 'store', 'default'),
+        Config('cataloginventory/options/enable_inventory_check', 0),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(Indexer::class, as: 'indexer'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_quote'], as: 'cart'),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(
+            ProductStockFixture::class,
+            [
+                'prod_id' => '$product.id$',
+                'is_in_stock' => 0,
+                'prod_qty' => 0
+            ],
+            'prodStock'
+        )
+    ]
     public function testPlaceOrderWithOutOfStockProductWithDisabledInventoryCheck()
     {
-        $reservedOrderId = 'test_quote';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
         $query = $this->getQuery($maskedQuoteId);
-
-        self::expectExceptionMessage('Unable to place order: Enter a valid payment method and try again.');
-        $this->graphQlMutation($query);
+        $response = $this->graphQlMutation($query);
+        self::assertEquals(1, count($response['placeOrder']['errors']));
+        self::assertEquals('UNABLE_TO_PLACE_ORDER', $response['placeOrder']['errors'][0]['code']);
+        self::assertEquals(
+            'Enter a valid payment method and try again.',
+            $response['placeOrder']['errors'][0]['message']
+        );
     }
 
-    /**
-     * _security
-     * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoConfigFixture default_store carriers/flatrate/active 1
-     * @magentoConfigFixture default_store carriers/tablerate/active 1
-     * @magentoConfigFixture default_store carriers/freeshipping/active 1
-     * @magentoConfigFixture default_store payment/banktransfer/active 1
-     * @magentoConfigFixture default_store payment/cashondelivery/active 1
-     * @magentoConfigFixture default_store payment/checkmo/active 1
-     * @magentoConfigFixture default_store payment/purchaseorder/active 1
-     * @magentoConfigFixture default_store customer/create_account/auto_group_assign 0
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_checkmo_payment_method.php
-     */
+    #[
+        Config('carriers/flatrate/active', '1', 'store', 'default'),
+        Config('carriers/tablerate/active', '1', 'store', 'default'),
+        Config('carriers/freeshipping/active', '1', 'store', 'default'),
+        Config('payment/banktransfer/active', '1', 'store', 'default'),
+        Config('payment/cashondelivery/active', '1', 'store', 'default'),
+        Config('payment/checkmo/active', '1', 'store', 'default'),
+        Config('payment/purchaseorder/active', '1', 'store', 'default'),
+        Config('customer/create_account/auto_group_assign', '0', 'store', 'default'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(Customer::class, as: 'customer'),
+        DataFixture(Indexer::class, as: 'indexer'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(QuoteIdMask::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+    ]
     public function testPlaceOrderOfCustomerCart()
     {
-        $reservedOrderId = 'test_quote';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+        $maskedQuoteId = DataFixtureStorageManager::getStorage()->get('quoteIdMask')->getMaskedId();
         $query = $this->getQuery($maskedQuoteId);
 
         self::expectExceptionMessageMatches('/The current user cannot perform operations on cart*/');
         $this->graphQlMutation($query);
     }
 
-    /**
-     * Test place order with gift message options
-     *
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoConfigFixture default_store carriers/flatrate/active 1
-     * @magentoConfigFixture default_store carriers/tablerate/active 1
-     * @magentoConfigFixture default_store carriers/freeshipping/active 1
-     * @magentoConfigFixture default_store payment/banktransfer/active 1
-     * @magentoConfigFixture default_store payment/cashondelivery/active 1
-     * @magentoConfigFixture default_store payment/checkmo/active 1
-     * @magentoConfigFixture default_store payment/purchaseorder/active 1
-     * @magentoConfigFixture sales/gift_options/allow_order 1
-     * @magentoConfigFixture default_store customer/create_account/auto_group_assign 1
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_gift_options.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_checkmo_payment_method.php
-     */
+    #[
+        Config('carriers/flatrate/active', '1', 'store', 'default'),
+        Config('carriers/tablerate/active', '1', 'store', 'default'),
+        Config('carriers/freeshipping/active', '1', 'store', 'default'),
+        Config('payment/banktransfer/active', '1', 'store', 'default'),
+        Config('payment/cashondelivery/active', '1', 'store', 'default'),
+        Config('payment/checkmo/active', '1', 'store', 'default'),
+        Config('payment/purchaseorder/active', '1', 'store', 'default'),
+        Config('sales/gift_options/allow_order', 1),
+        Config('customer/create_account/auto_group_assign', '1', 'store', 'default'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(Indexer::class, as: 'indexer'),
+        DataFixture(GiftMessage::class, as: 'message'),
+        DataFixture(
+            GuestCartFixture::class,
+            [
+                'reserved_order_id' => 'test_quote',
+                'message_id' => '$message.id$'
+            ],
+            'cart'
+        ),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
+    ]
     public function testPlaceOrderWithGiftMessage()
     {
         $reservedOrderId = 'test_quote';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
-
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
         $query = $this->getQuery($maskedQuoteId);
         $response = $this->graphQlMutation($query);
 
@@ -402,6 +476,10 @@ mutation {
   placeOrder(input: {cart_id: "{$maskedQuoteId}"}) {
     order {
       order_number
+    }
+    errors {
+      message
+      code
     }
   }
 }
