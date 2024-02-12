@@ -115,16 +115,10 @@ class IndexerSetStatusCommand extends AbstractIndexerManageCommand
             StateInterface::STATUS_INVALID,
             StateInterface::STATUS_SUSPENDED,
         ];
-        $acceptedValuesString = '"' . implode('", "', $acceptedValues) . '"';
         $inputStatus = $input->getArgument(self::INPUT_KEY_STATUS);
 
-        if (!$inputStatus) {
-            $errors[] = sprintf(
-                'Missing argument "%s". Accepted values are %s.',
-                self::INPUT_KEY_STATUS,
-                $acceptedValuesString
-            );
-        } elseif (!in_array($inputStatus, $acceptedValues, true)) {
+        if (!in_array($inputStatus, $acceptedValues, true)) {
+            $acceptedValuesString = '"' . implode('", "', $acceptedValues) . '"';
             $errors[] = sprintf(
                 'Invalid status "%s". Accepted values are %s.',
                 $inputStatus,

@@ -35,7 +35,8 @@ class State extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 'status IN (?)',
                 [
                     StateInterface::STATUS_WORKING,
-                    StateInterface::STATUS_SUSPENDED
+                    StateInterface::STATUS_SUSPENDED,
+                    StateInterface::STATUS_INVALID
                 ]
             );
             $data['status'] = $this->getConnection()->getCheckSql(
