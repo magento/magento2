@@ -76,12 +76,8 @@ class CustomerLoggedInObserverTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'getCustomerAddress',
-                    'getData'
-                ]
-            )
+            ->addMethods(['getCustomerAddress'])
+            ->onlyMethods(['getData'])
             ->getMock();
 
         $this->groupRepositoryMock = $this->getMockBuilder(GroupRepository::class)
@@ -90,7 +86,7 @@ class CustomerLoggedInObserverTest extends TestCase
 
         $this->customerSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(
+            ->addMethods(
                 [
                     'setCustomerTaxClassId',
                     'setDefaultTaxBillingAddress',

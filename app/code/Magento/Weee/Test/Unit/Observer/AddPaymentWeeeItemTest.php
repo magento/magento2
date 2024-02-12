@@ -75,7 +75,7 @@ class AddPaymentWeeeItemTest extends TestCase
         $parentItemMock = $this->createMock(Item::class);
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getCart'])
+            ->addMethods(['getCart'])
             ->getMock();
 
         $asCustomItem = $this->prepareShouldBeAddedAsCustomItem($isEnabled, $includeInSubtotal);

@@ -95,7 +95,7 @@ class StorageTest extends TestCase
         $this->extensionAttributes = $this->getMockBuilder(
             \Magento\Theme\Api\Data\DesignConfigExtensionInterface::class
         )->disableOriginalConstructor()
-            ->onlyMethods(['getDesignConfigData', 'setDesignConfigData'])->getMock();
+            ->addMethods(['getDesignConfigData', 'setDesignConfigData'])->getMock();
         $this->designConfigData = $this->getMockBuilder(DesignConfigDataInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -111,7 +111,7 @@ class StorageTest extends TestCase
             ->getMockForAbstractClass();
         $this->designConfigExtension = $this->getMockBuilder(
             \Magento\Theme\Api\Data\DesignConfigExtensionInterface::class
-        )->onlyMethods(['getDesignConfigData'])->getMockForAbstractClass();
+        )->addMethods(['getDesignConfigData'])->getMockForAbstractClass();
 
         $this->model = new Storage(
             $this->transactionFactoryMock,

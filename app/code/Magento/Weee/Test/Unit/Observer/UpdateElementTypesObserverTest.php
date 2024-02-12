@@ -64,12 +64,12 @@ class UpdateElementTypesObserverTest extends TestCase
 
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getResponse'])
+            ->addMethods(['getResponse'])
             ->getMock();
 
         $this->responseMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getTypes', 'setTypes'])
+            ->addMethods(['getTypes', 'setTypes'])
             ->getMock();
 
         $this->observer = $this->objectManager->getObject(UpdateElementTypesObserver::class);

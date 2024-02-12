@@ -77,7 +77,8 @@ class InitialThemeSourceTest extends TestCase
             ->getMock();
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['sort', 'from'])
+            ->addMethods(['sort'])
+            ->onlyMethods(['from'])
             ->getMock();
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->getMockForAbstractClass();

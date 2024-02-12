@@ -59,10 +59,8 @@ class ConfigurableProductTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->saleableItem = $this->getMockBuilder(SaleableInterface::class)
-            ->onlyMethods([
-                'getPriceInfo',
-                'getCustomOption',
-            ])
+            ->addMethods(['getCustomOption'])
+            ->onlyMethods(['getPriceInfo'])
             ->getMockForAbstractClass();
 
         $this->calculator = $this->getMockBuilder(CalculatorInterface::class)
@@ -119,8 +117,10 @@ class ConfigurableProductTest extends TestCase
 
         $this->saleableItem->expects($this->any())
             ->method('getCustomOption')
-            ->withConsecutive(['simple_product'], ['option_ids'])
-            ->willReturnOnConsecutiveCalls($wishlistItemOptionMock, $wishlistItemOptionMock);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['simple_product'] => $wishlistItemOptionMock,
+                ['option_ids'] => $wishlistItemOptionMock
+            });
 
         $wishlistItemOptionMock->expects($this->any())
             ->method('getValue')->willReturn($optionIds);
@@ -190,8 +190,10 @@ class ConfigurableProductTest extends TestCase
 
         $this->saleableItem->expects($this->any())
             ->method('getCustomOption')
-            ->withConsecutive(['simple_product'], ['option_ids'])
-            ->willReturnOnConsecutiveCalls(null, null);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['simple_product'] => null,
+                ['option_ids'] => null
+            });
 
         $this->saleableItem->expects($this->once())
             ->method('getPriceInfo')

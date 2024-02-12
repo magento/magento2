@@ -140,7 +140,8 @@ class TokensConfigProviderTest extends TestCase
             ->getMock();
         $this->session = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getCustomerId', 'getReordered', 'getStoreId','getQuote'])
+            ->addMethods(['getCustomerId', 'getStoreId', 'getReordered'])
+            ->onlyMethods(['getQuote'])
             ->getMock();
         $this->dateTimeFactory = $this->getMockBuilder(DateTimeFactory::class)
             ->disableOriginalConstructor()

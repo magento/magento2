@@ -60,11 +60,8 @@ class CustomerLoggedInTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'getCustomerAddress', 'getData'
-                ]
-            )
+            ->onlyMethods(['getData'])
+            ->addMethods(['getCustomerAddress'])
             ->getMock();
 
         $this->moduleManagerMock = $this->getMockBuilder(Manager::class)

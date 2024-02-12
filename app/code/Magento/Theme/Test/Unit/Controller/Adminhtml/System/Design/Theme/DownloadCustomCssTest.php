@@ -99,7 +99,8 @@ class DownloadCustomCssTest extends TestCase
         $this->redirect = $this->getMockBuilder(RedirectInterface::class)
             ->getMock();
         $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->onlyMethods(['sendResponse', 'setRedirect'])
+            ->onlyMethods(['sendResponse'])
+            ->addMethods(['setRedirect'])
             ->getMockForAbstractClass();
         $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMock();
@@ -163,7 +164,7 @@ class DownloadCustomCssTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $theme = $this->getMockBuilder(ThemeInterface::class)
-            ->onlyMethods(['getCustomization'])
+            ->addMethods(['getCustomization'])
             ->getMockForAbstractClass();
         $file->expects($this->once())
             ->method('getContent')

@@ -301,9 +301,10 @@ class WishlistTest extends TestCase
     {
         $customerId = 1;
         $customerServiceMock = $this->getMockForAbstractClass(CustomerInterface::class);
-        $wishlist = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)->onlyMethods(
-            ['getId', '__wakeup', 'getCustomerId', 'getItemCollection', 'getSharingCode']
-        )->disableOriginalConstructor()
+        $wishlist = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)
+            ->addMethods(['getSharingCode'])
+            ->onlyMethods(['getId', '__wakeup', 'getCustomerId', 'getItemCollection'])
+            ->disableOriginalConstructor()
             ->getMock();
         $wishlist->expects($this->once())->method('getCustomerId')->willReturn($customerId);
         $this->wishlistHelperMock->expects($this->any())->method('getWishlist')
@@ -322,9 +323,10 @@ class WishlistTest extends TestCase
     public function testGetCacheKey()
     {
         $wishlistId = 1;
-        $wishlist = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)->onlyMethods(
-            ['getId', '__wakeup', 'getCustomerId', 'getItemCollection', 'getSharingCode']
-        )->disableOriginalConstructor()
+        $wishlist = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)
+            ->addMethods(['getSharingCode'])
+            ->onlyMethods(['getId', '__wakeup', 'getCustomerId', 'getItemCollection'])
+            ->disableOriginalConstructor()
             ->getMock();
         $wishlist->expects($this->once())->method('getId')->willReturn($wishlistId);
         $this->wishlistHelperMock->expects($this->any())->method('getWishlist')
@@ -339,9 +341,10 @@ class WishlistTest extends TestCase
 
     public function testIsAuthRequired()
     {
-        $wishlist = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)->onlyMethods(
-            ['getId', '__wakeup', 'getCustomerId', 'getItemCollection', 'getSharingCode']
-        )->disableOriginalConstructor()
+        $wishlist = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)
+            ->addMethods(['getSharingCode'])
+            ->onlyMethods(['getId', '__wakeup', 'getCustomerId', 'getItemCollection'])
+            ->disableOriginalConstructor()
             ->getMock();
         $wishlist->expects($this->any())->method('getSharingCode')
             ->willReturn('somesharingcode');

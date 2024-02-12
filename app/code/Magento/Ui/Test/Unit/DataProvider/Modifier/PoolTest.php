@@ -44,7 +44,7 @@ class PoolTest extends TestCase
             ->getMock();
         $this->dataProviderMockOne =
             $this->getMockBuilder(ModifierInterface::class)
-                ->onlyMethods(['getData', 'getMeta', 'setData', 'setMeta'])
+                ->addMethods(['getData', 'getMeta', 'setData', 'setMeta'])
                 ->getMockForAbstractClass();
         $this->dataProviderMockTwo = clone $this->dataProviderMockOne;
 
