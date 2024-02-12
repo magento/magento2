@@ -12,22 +12,30 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\ValidationResultsInterfaceFactory;
+use Magento\Customer\Api\SessionCleanerInterface;
 use Magento\Customer\Helper\View;
 use Magento\Customer\Model\AccountConfirmation;
 use Magento\Customer\Model\AccountManagement;
+use Magento\Customer\Model\AccountManagement\Authenticate;
 use Magento\Customer\Model\AccountManagementApi;
 use Magento\Customer\Model\AddressRegistry;
+use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\Config\Share;
+use Magento\Customer\Model\Customer\CredentialsValidator;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Data\CustomerSecure;
+use Magento\Customer\Model\ForgotPasswordToken\GetCustomerByToken;
+use Magento\Customer\Model\Logger as CustomerLogger;
 use Magento\Customer\Model\Metadata\Validator;
 use Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory;
 use Magento\Directory\Model\AllowedCountries;
+use Magento\Eav\Model\Validator\Attribute\Backend;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Authorization;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Event\ManagerInterface;
@@ -300,6 +308,61 @@ class AccountManagementApiTest extends TestCase
             ->getMockForAbstractClass();
         $this->authorizationMock = $this->createMock(Authorization::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $objects = [
+            [
+                CredentialsValidator::class,
+                $this->createMock(CredentialsValidator::class)
+            ],
+            [
+                DateTimeFactory::class,
+                $this->createMock(DateTimeFactory::class)
+            ],
+            [
+                AccountConfirmation::class,
+                $this->createMock(AccountConfirmation::class)
+            ],
+            [
+                SearchCriteriaBuilder::class,
+                $this->createMock(SearchCriteriaBuilder::class)
+            ],
+            [
+                AddressRegistry::class,
+                $this->createMock(AddressRegistry::class)
+            ],
+            [
+                GetCustomerByToken::class,
+                $this->createMock(GetCustomerByToken::class)
+            ],
+            [
+                AllowedCountries::class,
+                $this->createMock(AllowedCountries::class)
+            ],
+            [
+                SessionCleanerInterface::class,
+                $this->createMock(SessionCleanerInterface::class)
+            ],
+            [
+                AuthorizationInterface::class,
+                $this->createMock(AuthorizationInterface::class)
+            ],
+            [
+                AuthenticationInterface::class,
+                $this->createMock(AuthenticationInterface::class)
+            ],
+            [
+                Backend::class,
+                $this->createMock(Backend::class)
+            ],
+            [
+                CustomerLogger::class,
+                $this->createMock(CustomerLogger::class)
+            ],
+            [
+                Authenticate::class,
+                $this->createMock(Authenticate::class)
+            ]
+        ];
+        $this->objectManagerHelper->prepareObjectManager($objects);
         $this->accountManagement = $this->objectManagerHelper->getObject(
             AccountManagementApi::class,
             [

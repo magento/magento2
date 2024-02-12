@@ -18,6 +18,7 @@ use Magento\Customer\Model\Session\Storage;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Session\SessionStartChecker;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Url;
 use Magento\Framework\UrlFactory;
@@ -96,6 +97,13 @@ class SessionTest extends TestCase
             ->getMock();
         $this->customerRepositoryMock = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
         $helper = new ObjectManagerHelper($this);
+        $objects = [
+            [
+                SessionStartChecker::class,
+                $this->createMock(SessionStartChecker::class)
+            ]
+        ];
+        $helper->prepareObjectManager($objects);
         $this->responseMock = $this->createMock(Http::class);
         $this->_model = $helper->getObject(
             Session::class,
