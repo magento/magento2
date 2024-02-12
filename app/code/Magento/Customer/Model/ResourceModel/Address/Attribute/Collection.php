@@ -55,9 +55,12 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Attribute\Collect
             $connection,
             $resource
         );
-        $this->addressConfig ??= ObjectManager::getInstance()->get(AddressConfig::class);
+        $this->addressConfig = $addressConfig ?? ObjectManager::getInstance()->get(AddressConfig::class);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getWebsite()
     {
         if ($this->_website === null) {
