@@ -38,7 +38,7 @@ class Renderer
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
-    
+
     /**
      * @var StoreManagerInterface|null
      */
