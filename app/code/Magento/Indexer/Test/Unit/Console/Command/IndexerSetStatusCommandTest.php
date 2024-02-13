@@ -67,7 +67,7 @@ class IndexerSetStatusCommandTest extends AbstractIndexerCommandCommonSetup
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage(
-            'Invalid status "wrong_status". Accepted values are "valid", "invalid", "suspended".'
+            'Invalid status "wrong_status". Accepted values are "invalid", "suspended", "valid".'
         );
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['status' => 'wrong_status']);

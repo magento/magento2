@@ -94,8 +94,8 @@ class IndexerSetStatusCommand extends AbstractIndexerManageCommand
         $modeOptions[] = new InputArgument(
             self::INPUT_KEY_STATUS,
             InputArgument::REQUIRED,
-            'Indexer status type [' . StateInterface::STATUS_VALID
-            . '|' . StateInterface::STATUS_INVALID . '|' . StateInterface::STATUS_SUSPENDED . ']'
+            'Indexer status type [' . StateInterface::STATUS_INVALID
+            . '|' . StateInterface::STATUS_SUSPENDED . '|' . StateInterface::STATUS_VALID . ']'
         );
 
         return array_merge($modeOptions, parent::getInputList());
@@ -111,9 +111,9 @@ class IndexerSetStatusCommand extends AbstractIndexerManageCommand
     {
         $errors = [];
         $acceptedValues = [
-            StateInterface::STATUS_VALID,
             StateInterface::STATUS_INVALID,
             StateInterface::STATUS_SUSPENDED,
+            StateInterface::STATUS_VALID
         ];
         $inputStatus = $input->getArgument(self::INPUT_KEY_STATUS);
 
