@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5177a4064c7c800c8ac6ea94ff564106",
+    "content-hash": "87ebacd11034a7d5c096c9a3fd573935",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -6217,12 +6217,12 @@
             "version": "8.4.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/sabberworm/PHP-CSS-Parser.git",
+                "url": "https://github.com/MyIntervals/PHP-CSS-Parser.git",
                 "reference": "e41d2140031d533348b2192a83f02d8dd8a71d30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sabberworm/PHP-CSS-Parser/zipball/e41d2140031d533348b2192a83f02d8dd8a71d30",
+                "url": "https://api.github.com/repos/MyIntervals/PHP-CSS-Parser/zipball/e41d2140031d533348b2192a83f02d8dd8a71d30",
                 "reference": "e41d2140031d533348b2192a83f02d8dd8a71d30",
                 "shasum": ""
             },
@@ -6260,8 +6260,8 @@
                 "stylesheet"
             ],
             "support": {
-                "issues": "https://github.com/sabberworm/PHP-CSS-Parser/issues",
-                "source": "https://github.com/sabberworm/PHP-CSS-Parser/tree/8.4.0"
+                "issues": "https://github.com/MyIntervals/PHP-CSS-Parser/issues",
+                "source": "https://github.com/MyIntervals/PHP-CSS-Parser/tree/8.4.0"
             },
             "time": "2021-12-11T13:40:54+00:00"
         },
