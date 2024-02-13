@@ -18,6 +18,7 @@ use Magento\Indexer\Console\Command\IndexerReindexCommand;
 use Magento\Indexer\Model\Config;
 use Magento\Indexer\Model\Processor\MakeSharedIndexValid;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -64,6 +65,13 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $objects = [
+            [
+                LoggerInterface::class,
+                $this->createMock(LoggerInterface::class)
+            ]
+        ];
+        $this->objectManagerHelper->prepareObjectManager($objects);
         $this->configMock = $this->createMock(Config::class);
         $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()
@@ -249,7 +257,8 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     {
         /** @var MockObject|StateInterface $state */
         $state = $this->getMockBuilder(StateInterface::class)
-            ->setMethods($methods)
+            ->onlyMethods(['loadByIndexer', 'setStatus'])
+            ->addMethods(['save'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $state->method('getStatus')
