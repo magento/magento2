@@ -132,8 +132,8 @@ class Address extends SalesResource implements OrderAddressResourceInterface
         if (!$entity->getId()) {
             return true;
         }
-        $snapChatData = $this->entitySnapshot->getSnapshotData($entity);
-        foreach ($snapChatData as $field => $value) {
+        $snapShotData = $this->entitySnapshot->getSnapshotData($entity);
+        foreach ($snapShotData as $field => $value) {
             $fieldValue = $entity->getDataByKey($field);
             if (is_numeric($fieldValue) && is_numeric($value)) {
                 if ($fieldValue !== $value) {
