@@ -35,14 +35,14 @@ class Renderer
     protected $eventManager;
 
     /**
-     * @var StoreManagerInterface|null
-     */
-    private $storeManager;
-
-    /**
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
+    
+    /**
+     * @var StoreManagerInterface|null
+     */
+    private $storeManager;
 
     /**
      * @param AddressConfig $addressConfig
