@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model\Payflow;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
@@ -86,6 +87,15 @@ class TransparentTest extends TestCase
     protected function setUp(): void
     {
         $this->initPayment();
+
+        $helper = new ObjectManagerHelper($this);
+        $objects = [
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $helper->prepareObjectManager($objects);
 
         $this->subject = (new ObjectManagerHelper($this))
             ->getObject(
@@ -231,11 +241,11 @@ class TransparentTest extends TestCase
     private function getPaymentConfigInterfaceFactory()
     {
         $paymentConfigInterfaceFactory = $this->getMockBuilder(PaymentConfigInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->paymentConfig = $this->getMockBuilder(PaymentConfigInterface::class)
-            ->setMethods(['setStoreId', 'setMethodInstance', 'setMethod', 'getBuildNotationCode'])
+            ->addMethods(['setStoreId', 'setMethodInstance', 'setMethod', 'getBuildNotationCode'])
             ->getMockForAbstractClass();
 
         $paymentConfigInterfaceFactory->method('create')->willReturn($this->paymentConfig);
@@ -249,11 +259,11 @@ class TransparentTest extends TestCase
     private function getPaymentExtensionInterfaceFactory()
     {
         $paymentExtensionInterfaceFactory = $this->getMockBuilder(PaymentExtensionInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $orderPaymentExtension = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->setMethods(
+            ->onlyMethods(
                 ['setVaultPaymentToken', 'getVaultPaymentToken', 'setNotificationMessage', 'getNotificationMessage']
             )
             ->disableOriginalConstructor()
@@ -315,7 +325,7 @@ class TransparentTest extends TestCase
     private function getPayPalCartFactory()
     {
         $payPalCartFactory = $this->getMockBuilder(PayPalCartFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->payPalCart = $this->getMockBuilder(PayPalCart::class)
@@ -350,7 +360,7 @@ class TransparentTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->paymentExtensionAttributes = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->setMethods(
+            ->onlyMethods(
                 ['setVaultPaymentToken', 'getVaultPaymentToken', 'setNotificationMessage', 'getNotificationMessage']
             )
             ->getMockForAbstractClass();

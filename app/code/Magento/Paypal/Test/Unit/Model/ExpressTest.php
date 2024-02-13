@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Checkout\Model\Session;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
@@ -115,12 +116,19 @@ class ExpressTest extends TestCase
             ['setMethod', 'getApi', 'importPaymentInfo', 'resetApi', 'void']
         );
         $this->eventManager = $this->getMockBuilder(ManagerInterface::class)
-            ->setMethods(['dispatch'])
+            ->onlyMethods(['dispatch'])
             ->getMockForAbstractClass();
 
         $this->pro->method('getApi')
             ->willReturn($this->nvp);
         $this->helper = new ObjectManager($this);
+        $objects = [
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $this->helper->prepareObjectManager($objects);
     }
 
     /**
