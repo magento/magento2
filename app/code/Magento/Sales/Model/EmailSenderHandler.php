@@ -132,20 +132,11 @@ class EmailSenderHandler
 
                 /** @var \Magento\Sales\Model\AbstractModel $item */
                 foreach ($entityCollection->getItems() as $item) {
-                    if ($this->emailSender->send($item, true)) {
-                        $this->entityResource->saveAttribute(
-                            $item->setEmailSent(true),
-                            'email_sent'
-                        );
-                    } else {
-                        // When the email is failed to send, the email_sent attribute
-                        // should be set to false, preventing this email from being
-                        // sent over and over again in the next cron runs.
-                        $this->entityResource->saveAttribute(
-                            $item->setEmailSent(false),
-                            'email_sent'
-                        );
-                    }
+                    $isEmailSent = $this->emailSender->send($item, true);
+                    $this->entityResource->saveAttribute(
+                        $item->setEmailSent($isEmailSent),
+                        'email_sent'
+                    );
                 }
             }
         }

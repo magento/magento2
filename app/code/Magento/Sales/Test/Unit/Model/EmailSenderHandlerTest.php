@@ -245,24 +245,16 @@ class EmailSenderHandlerTest extends TestCase
                     ->method('isEnabled')
                     ->willReturn(true);
 
-                if ($emailSendingResult) {
-                    $collectionItem
-                        ->expects($this->once())
-                        ->method('setEmailSent')
-                        ->with(true)
-                        ->willReturn($collectionItem);
+                $collectionItem
+                    ->expects($this->once())
+                    ->method('setEmailSent')
+                    ->with($emailSendingResult)
+                    ->willReturn($collectionItem);
 
-                    $this->entityResource
-                        ->expects($this->once())
-                        ->method('saveAttribute')
-                        ->with($collectionItem);
-                } else {
-                    $collectionItem
-                        ->expects($this->once())
-                        ->method('setEmailSent')
-                        ->with(false)
-                        ->willReturn($collectionItem);
-                }
+                $this->entityResource
+                    ->expects($this->once())
+                    ->method('saveAttribute')
+                    ->with($collectionItem);
             }
         }
 
