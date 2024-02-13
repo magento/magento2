@@ -17,6 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address as OrderAddress;
 use Magento\Sales\Model\Order\Address\Renderer as OrderAddressRenderer;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -67,6 +68,11 @@ class RendererTest extends TestCase
     private $storeConfigMock;
 
     /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManagerMck;
+
+    /**
      * @ingeritdoc
      */
     protected function setUp(): void
@@ -100,8 +106,8 @@ class RendererTest extends TestCase
             [
                 'addressConfig' => $this->customerAddressConfigMock,
                 'eventManager' => $this->eventManagerMock,
-                'storeManager' => $this->storeManagerMck,
-                'scopeConfig' => $this->storeConfigMock
+                'scopeConfig' => $this->storeConfigMock,
+                'storeManager' => $this->storeManagerMck
             ]
         );
     }
