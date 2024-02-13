@@ -179,7 +179,7 @@ class RendererTest extends TestCase
         $matcher = $this->exactly(count($expected));
         $this->storeManagerMck->expects(self::once())->method('getStore')->willReturn($originalStoreMock);
         $this->storeManagerMck->expects($matcher)->method('setCurrentStore')->with(
-            $this->callback(function($store) use ($expected) {
+            $this->callback(function ($store) use ($matcher, $expected) {
                 $this->assertEquals($store, $expected[$matcher->getInvocationCount() - 1]);
                 return $this->storeManagerMck;
             })
@@ -190,7 +190,7 @@ class RendererTest extends TestCase
         $matcher = $this->exactly(count($expected));
         $this->customerAddressConfigMock->expects(self::once())->method('getStore')->willReturn($storeMock);
         $this->customerAddressConfigMock->expects($matcher)->method('setStore')->with(
-            $this->callback(function($store) use ($expected) {
+            $this->callback(function ($store) use ($matcher, $expected) {
                 $this->assertEquals($store, $expected[$matcher->getInvocationCount() - 1]);
                 return $this->customerAddressConfigMock;
             })
