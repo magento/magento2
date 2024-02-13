@@ -18,5 +18,5 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Attribute\Collect
      *
      * @var string
      */
-    protected $_entityTypeCode = 'customer_address'; 
+    protected $_entityTypeCode = 'customer_address';
 }
