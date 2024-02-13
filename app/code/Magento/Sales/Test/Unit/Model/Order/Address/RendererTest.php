@@ -90,12 +90,17 @@ class RendererTest extends TestCase
             ->willReturn($this->orderMock);
 
         $this->storeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->storeManagerMck = $this->getMockBuilder(StoreManagerInterface::class)
+            ->onlyMethods(['setCurrentStore', 'getStore])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->orderAddressRenderer = $this->objectManagerHelper->getObject(
             OrderAddressRenderer::class,
             [
                 'addressConfig' => $this->customerAddressConfigMock,
                 'eventManager' => $this->eventManagerMock,
+                'storeManager' => $this->storeManagerMck,
                 'scopeConfig' => $this->storeConfigMock
             ]
         );
@@ -152,14 +157,23 @@ class RendererTest extends TestCase
      */
     private function setStoreExpectations(): void
     {
+        $originalStoreMock = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getId'])
+            ->getMockForAbstractClass();
         $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
 
         $this->orderMock->expects(self::once())->method('getStore')->willReturn($storeMock);
+
+        // One call to setup the store from the order, and an other one to rollback to the original store value
+        $this->storeManagerMck->expects(self::once())->method('getStore')->willReturn($originalStoreMock);
+        $this->storeManagerMck->expects($this->exactly(2))->method('setCurrentStore')->withConsecutive([$storeMock], [$originalStoreMock]);
+
         // One call to setup the store from the order, and an other one to rollback to the original store value
         $this->customerAddressConfigMock->expects(self::once())->method('getStore')->willReturn($storeMock);
-        $this->customerAddressConfigMock->expects(self::any())->method('setStore')->with($storeMock);
+        $this->customerAddressConfigMock->expects($this->exactly(2))->method('setStore')->withConsecutive([$storeMock], [$originalStoreMock]);
     }
 }
