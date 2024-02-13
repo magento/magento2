@@ -97,7 +97,7 @@ class RendererTest extends TestCase
 
         $this->storeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->storeManagerMck = $this->getMockBuilder(StoreManagerInterface::class)
-            ->onlyMethods(['setCurrentStore', 'getStore])
+            ->onlyMethods(['setCurrentStore', 'getStore'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -175,11 +175,25 @@ class RendererTest extends TestCase
         $this->orderMock->expects(self::once())->method('getStore')->willReturn($storeMock);
 
         // One call to setup the store from the order, and an other one to rollback to the original store value
+        $expected = [$storeMock, $originalStoreMock];
+        $matcher = $this->exactly(count($expected));
         $this->storeManagerMck->expects(self::once())->method('getStore')->willReturn($originalStoreMock);
-        $this->storeManagerMck->expects($this->exactly(2))->method('setCurrentStore')->withConsecutive([$storeMock], [$originalStoreMock]);
+        $this->storeManagerMck->expects($matcher)->method('setCurrentStore')->with(
+            $this->callback(function($store) use ($expected) {
+                $this->assertEquals($store, $expected[$matcher->getInvocationCount() - 1]);
+                return $this->storeManagerMck;
+            })
+        );
 
         // One call to setup the store from the order, and an other one to rollback to the original store value
+        $expected = [$storeMock, $originalStoreMock];
+        $matcher = $this->exactly(count($expected));
         $this->customerAddressConfigMock->expects(self::once())->method('getStore')->willReturn($storeMock);
-        $this->customerAddressConfigMock->expects($this->exactly(2))->method('setStore')->withConsecutive([$storeMock], [$originalStoreMock]);
+        $this->customerAddressConfigMock->expects($matcher)->method('setStore')->with(
+            $this->callback(function($store) use ($expected) {
+                $this->assertEquals($store, $expected[$matcher->getInvocationCount() - 1]);
+                return $this->customerAddressConfigMock;
+            })
+        );
     }
 }
