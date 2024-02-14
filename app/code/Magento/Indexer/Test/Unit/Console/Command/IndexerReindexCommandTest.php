@@ -60,18 +60,16 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     private $objectManagerHelper;
 
     /**
+     * @var LoggerInterface|MockObject
+     */
+    private $loggerMock;
+
+    /**
      * Set up
      */
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $objects = [
-            [
-                LoggerInterface::class,
-                $this->createMock(LoggerInterface::class)
-            ]
-        ];
-        $this->objectManagerHelper->prepareObjectManager($objects);
         $this->configMock = $this->createMock(Config::class);
         $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()
@@ -82,6 +80,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $this->dependencyInfoProviderMock = $this->objectManagerHelper->getObject(DependencyInfoProvider::class, [
             'config' => $this->configMock,
         ]);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         parent::setUp();
     }
 
@@ -101,7 +100,13 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     public function testGetOptions()
     {
         $this->stateMock->expects($this->never())->method('setAreaCode');
-        $this->command = new IndexerReindexCommand($this->objectManagerFactory);
+        $this->command = new IndexerReindexCommand(
+            $this->objectManagerFactory,
+            $this->indexerRegistryMock,
+            $this->dependencyInfoProviderMock,
+            $this->makeSharedValidMock,
+            $this->loggerMock
+        );
         $optionsList = $this->command->getInputList();
         $this->assertCount(1, $optionsList);
         $this->assertSame('index', $optionsList[0]->getName());
@@ -127,7 +132,13 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             ]
         );
         $this->indexerFactory->expects($this->never())->method('create');
-        $this->command = new IndexerReindexCommand($this->objectManagerFactory);
+        $this->command = new IndexerReindexCommand(
+            $this->objectManagerFactory,
+            $this->indexerRegistryMock,
+            $this->dependencyInfoProviderMock,
+            $this->makeSharedValidMock,
+            $this->loggerMock
+        );
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
         $actualValue = $commandTester->getDisplay();
@@ -170,7 +181,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             $indexer->method('getState')
                 ->willReturn(
                     $this->getStateMock(
-                        ['loadByIndexer', 'setStatus', 'save'],
+                        ['loadByIndexer', 'setStatus'],
                         $states[$indexer->getId()] ?? []
                     )
                 );
@@ -186,16 +197,11 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $this->indexerRegistryMock
             ->expects($this->exactly(count($executedSharedIndexers)))
             ->method('get')
-            ->willReturnCallback(function ($executedSharedIndexers) use ($emptyIndexer) {
-                if (!empty($executedSharedIndexers)) {
-                    static $callCount = 0;
-                    $returnValue = $emptyIndexer[$callCount] ?? null;
-                    $callCount++;
-                    return $returnValue;
-                }
+            ->willReturnCallback(function (...$executedSharedIndexers) use ($emptyIndexer) {
+                return $emptyIndexer;
             });
         $emptyIndexer->method('getState')
-            ->willReturn($this->getStateMock(['setStatus', 'save']));
+            ->willReturn($this->getStateMock(['setStatus']));
 
         $this->makeSharedValidMock = $this->objectManagerHelper->getObject(MakeSharedIndexValid::class, [
             'config' => $this->configMock,
@@ -207,7 +213,8 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             $this->objectManagerFactory,
             $this->indexerRegistryMock,
             $this->dependencyInfoProviderMock,
-            $this->makeSharedValidMock
+            $this->makeSharedValidMock,
+            $this->loggerMock
         );
 
         $commandTester = new CommandTester($this->command);
@@ -263,8 +270,8 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     {
         /** @var MockObject|StateInterface $state */
         $state = $this->getMockBuilder(StateInterface::class)
-            ->onlyMethods(['loadByIndexer', 'setStatus'])
             ->addMethods(['save'])
+            ->onlyMethods($methods)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $state->method('getStatus')
@@ -451,7 +458,13 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             ->method('reindexAll')
             ->willThrowException(new \Exception());
         $this->initIndexerCollectionByItems([$indexerOne]);
-        $this->command = new IndexerReindexCommand($this->objectManagerFactory);
+        $this->command = new IndexerReindexCommand(
+            $this->objectManagerFactory,
+            $this->indexerRegistryMock,
+            $this->dependencyInfoProviderMock,
+            $this->makeSharedValidMock,
+            $this->loggerMock
+        );
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['index' => ['indexer_1']]);
         $actualValue = $commandTester->getDisplay();
@@ -493,7 +506,13 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
                 )
             )
         );
-        $this->command = new IndexerReindexCommand($this->objectManagerFactory);
+        $this->command = new IndexerReindexCommand(
+            $this->objectManagerFactory,
+            $this->indexerRegistryMock,
+            $this->dependencyInfoProviderMock,
+            $this->makeSharedValidMock,
+            $this->loggerMock
+        );
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['index' => $inputIndexers]);
         $this->assertSame(Cli::RETURN_FAILURE, $commandTester->getStatusCode());

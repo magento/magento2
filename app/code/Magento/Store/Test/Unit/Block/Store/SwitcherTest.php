@@ -93,23 +93,26 @@ class SwitcherTest extends TestCase
     {
         $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getLocaleCode', 'isActive', 'getId', 'getGroupId', 'getCollection', 'setLocaleCode'])
+            ->addMethods(['getLocaleCode', 'setLocaleCode'])
+            ->onlyMethods(['isActive', 'getId', 'getGroupId', 'getCollection'])
             ->getMock();
         $groupMock = $this->getMockBuilder(Group::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
+            ->onlyMethods(['getCollection', 'getId'])
             ->getMock();
         /** @var AbstractCollection|MockObject */
         $storeCollectionMock =
             $this->getMockBuilder(AbstractCollection::class)
                 ->disableOriginalConstructor()
-                ->onlyMethods(['addWebsiteFilter', 'load'])
+                ->addMethods(['addWebsiteFilter'])
+                ->onlyMethods(['load'])
                 ->getMockForAbstractClass();
         /** @var AbstractCollection|MockObject */
         $groupCollectionMock =
             $this->getMockBuilder(AbstractCollection::class)
                 ->disableOriginalConstructor()
-                ->onlyMethods(['addWebsiteFilter', 'load'])
+                ->addMethods(['addWebsiteFilter'])
+                ->onlyMethods(['load'])
                 ->getMockForAbstractClass();
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
         $this->storeFactoryMock->expects($this->any())->method('create')->willReturn($storeMock);

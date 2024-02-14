@@ -23,9 +23,11 @@ use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\DesignInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Setup\Module\I18n\Locale;
 use Magento\Store\Model\App\Emulation;
 use Magento\Store\Model\ScopeInterface;
@@ -180,6 +182,14 @@ class TemplateTest extends TestCase
      */
     protected function getModelMock(array $mockedMethods = [])
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                Database::class,
+                $this->createMock(Database::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         return $this->getMockBuilder(Template::class)
             ->onlyMethods(array_merge($mockedMethods, ['__wakeup', '__sleep', '_init']))
             ->setConstructorArgs(
@@ -227,7 +237,7 @@ class TemplateTest extends TestCase
     public function testGetTemplateFilterWithEmptyValue()
     {
         $filterTemplate = $this->getMockBuilder(\Magento\Framework\Filter\Template::class)
-            ->onlyMethods(['setUseAbsoluteLinks', 'setStoreId', 'setUrlModel'])
+            ->addMethods(['setUseAbsoluteLinks', 'setStoreId', 'setUrlModel'])
             ->disableOriginalConstructor()
             ->getMock();
         $filterTemplate->expects($this->once())
@@ -237,7 +247,7 @@ class TemplateTest extends TestCase
         $this->filterFactory->method('create')
             ->willReturn($filterTemplate);
         $designConfig = $this->getMockBuilder(DataObject::class)
-            ->onlyMethods(['getStore'])
+            ->addMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -523,7 +533,8 @@ class TemplateTest extends TestCase
 
         class_exists(Template::class, true);
         $filterTemplate = $this->getMockBuilder(\Magento\Framework\Filter\Template::class)
-            ->onlyMethods(['setVariables', 'setStoreId', 'filter'])
+            ->addMethods(['setStoreId'])
+            ->onlyMethods(['setVariables', 'filter'])
             ->disableOriginalConstructor()
             ->getMock();
         $model->expects($this->once())
@@ -534,7 +545,7 @@ class TemplateTest extends TestCase
             ->method('applyDesignConfig');
 
         $designConfig = $this->getMockBuilder(DataObject::class)
-            ->onlyMethods(['getStore'])
+            ->addMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMock();
         $storeId = 'storeId';

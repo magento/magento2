@@ -9,8 +9,10 @@ namespace Magento\Vault\Test\Unit\Observer;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Encryption\Encryptor;
+use Magento\Framework\Encryption\KeyValidator;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Math\Random;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderPaymentExtension;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
@@ -77,6 +79,14 @@ class AfterPaymentSaveObserverTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                KeyValidator::class,
+                $this->createMock(KeyValidator::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         /** @var Random|MockObject $encryptorRandomGenerator */
         $encryptorRandomGenerator = $this->createMock(Random::class);
         /** @var DeploymentConfig|MockObject $deploymentConfigMock */
@@ -88,7 +98,7 @@ class AfterPaymentSaveObserverTest extends TestCase
         $this->encryptorModel = new Encryptor($encryptorRandomGenerator, $deploymentConfigMock);
 
         $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
-            ->onlyMethods(['setVaultPaymentToken', 'getVaultPaymentToken', '__wakeup'])
+            ->addMethods(['setVaultPaymentToken', 'getVaultPaymentToken', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -66,12 +66,12 @@ class UserTest extends TestCase
     {
         $this->userMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
+            ->onlyMethods(['getId'])
             ->getMock();
 
         $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
+            ->onlyMethods(['getConnection'])
             ->getMock();
 
         $this->roleFactoryMock = $this->getMockBuilder(RoleFactory::class)
@@ -81,7 +81,7 @@ class UserTest extends TestCase
 
         $this->roleMock = $this->getMockBuilder(Role::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
+            ->onlyMethods(['load', 'getId', 'getRoleUsers'])
             ->getMock();
 
         $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
@@ -91,7 +91,7 @@ class UserTest extends TestCase
 
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
+            ->onlyMethods(['from', 'where', 'joinLeft', 'order', 'limit'])
             ->getMock();
 
         $this->dbAdapterMock = $this->getMockBuilder(AdapterInterface::class)
@@ -168,7 +168,7 @@ class UserTest extends TestCase
     {
         $methodUserMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getUserId'])
+            ->addMethods(['getUserId'])
             ->getMock();
         $returnData = [1, 2, 3];
         $uid = 1234;
@@ -339,7 +339,7 @@ class UserTest extends TestCase
     {
         $methodUserMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getUserId', 'getRoleId'])
+            ->addMethods(['getUserId', 'getRoleId'])
             ->getMock();
         $uid = 1234;
         $roleId = 44;
@@ -358,7 +358,7 @@ class UserTest extends TestCase
     {
         $methodUserMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getUserId', 'getRoleId'])
+            ->addMethods(['getUserId', 'getRoleId'])
             ->getMock();
         $uid = 1234;
         $roleId = 44;
@@ -422,7 +422,7 @@ class UserTest extends TestCase
         $roleId = 123;
         $methodUserMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['hasRoleId', 'getRoleId', 'getExtra', 'setExtra'])
+            ->addMethods(['hasRoleId', 'getRoleId', 'getExtra', 'setExtra'])
             ->getMock();
         $methodUserMock->expects($this->once())->method('hasRoleId')->willReturn(true);
         $methodUserMock->expects($this->once())->method('getRoleId')->willReturn($roleId);
@@ -462,7 +462,7 @@ class UserTest extends TestCase
     {
         $methodUserMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getExtra', 'setExtra'])
+            ->addMethods(['getExtra', 'setExtra'])
             ->getMock();
         $extraData = ['user', 'extra', 'data'];
 
@@ -494,7 +494,7 @@ class UserTest extends TestCase
     {
         $methodUserMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getExtra', 'setExtra'])
+            ->addMethods(['getExtra', 'setExtra'])
             ->getMock();
         $extraData = null;
 

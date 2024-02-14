@@ -57,8 +57,9 @@ class CollectionTest extends TestCase
 
         $this->resourceMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
+            ->addMethods(['deleteSessionsOlderThen', 'updateStatusByUserId'])
             ->onlyMethods(
-                ['getConnection', 'getMainTable', 'getTable', 'deleteSessionsOlderThen', 'updateStatusByUserId']
+                ['getConnection', 'getMainTable', 'getTable']
             )
             ->getMockForAbstractClass();
 
@@ -113,12 +114,12 @@ class CollectionTest extends TestCase
         $this->collectionMock->expects($this->exactly(3))
             ->method('addFieldToFilter')
             ->willReturnCallback(function ($arg1, $arg2) use ($userId, $status, $sessionIdToExclude) {
-                if ($arg1 === 'user_id' && $arg2 === $userId) {
-                    return $this->collectionMock;
-                } elseif ($arg1 === 'status' && $arg2 === $status) {
-                    return $this->collectionMock;
-                } elseif ($arg1 === 'id' && $arg2 === ['neq' => $sessionIdToExclude]) {
-                    return $this->collectionMock;
+                if ($arg1 == 'user_id' && $arg2 == $userId) {
+                    return $this;
+                } elseif ($arg1 == 'status' && $arg2 == $status) {
+                    return $this;
+                } elseif ($arg1 == 'id' && $arg2 == ['neq' => $sessionIdToExclude]) {
+                    return $this;
                 }
             });
 

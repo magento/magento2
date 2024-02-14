@@ -67,7 +67,7 @@ class ChangeTest extends TestCase
     {
         $this->encryptMock = $this->getMockBuilder(EncryptorInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setNewKey', 'exportKeys'])
+            ->addMethods(['setNewKey', 'exportKeys'])
             ->getMockForAbstractClass();
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
@@ -91,7 +91,8 @@ class ChangeTest extends TestCase
             ->getMock();
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['from', 'where', 'update'])
+            ->addMethods(['update'])
+            ->onlyMethods(['from', 'where'])
             ->getMock();
         $translationClassName = TransactionManagerInterface::class;
         $this->transactionMock = $this->getMockBuilder($translationClassName)

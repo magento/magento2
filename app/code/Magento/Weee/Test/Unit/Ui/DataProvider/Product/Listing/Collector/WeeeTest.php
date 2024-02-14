@@ -66,7 +66,7 @@ class WeeeTest extends TestCase
             ->getMock();
 
         $this->extensionAttributes = $this->getMockBuilder(PriceInfoExtensionInterface::class)
-            ->onlyMethods(['setWeeeAttributes', 'setWeeeAdjustment'])
+            ->addMethods(['setWeeeAttributes', 'setWeeeAdjustment'])
             ->getMockForAbstractClass();
 
         $this->priceInfoExtensionFactory = $this->getMockBuilder(PriceInfoExtensionInterfaceFactory::class)
@@ -99,14 +99,15 @@ class WeeeTest extends TestCase
             ->onlyMethods(['getPriceInfo', 'getStoreId'])
             ->getMockForAbstractClass();
         $weeAttribute  = $this->getMockBuilder(WeeeAdjustmentAttributeInterface::class)
-            ->onlyMethods(['getData'])
+            ->addMethods(['getData'])
             ->getMockForAbstractClass();
         $this->weeeAdjustmentAttributeFactory->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($weeAttribute);
         $priceInfo = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getExtensionAttributes', 'getPrice', 'setExtensionAttributes'])
+            ->onlyMethods(['getPrice'])
+            ->addMethods(['getExtensionAttributes', 'setExtensionAttributes'])
             ->getMock();
         $price = $this->getMockBuilder(FinalPrice::class)
             ->disableOriginalConstructor()

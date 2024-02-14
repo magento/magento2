@@ -145,6 +145,8 @@ class ImageResizeTest extends TestCase
         $this->testImageHiddenFilename = "image_hidden.jpg";
         $this->testfilepath = "/image.jpg";
         $this->testImageHiddenfilepath = "/image_hidden.jpg";
+
+
         $this->appStateMock = $this->createMock(State::class);
         $this->imageConfigMock = $this->createMock(MediaConfig::class);
         $this->productImageMock = $this->createMock(ProductImage::class);
@@ -194,27 +196,18 @@ class ImageResizeTest extends TestCase
 
         $this->imageConfigMock->expects($this->any())
             ->method('getMediaPath')
-            ->willReturnCallback(
-                function ($arg) {
-                    if ($arg == $this->testfilename) {
-                        return $this->testfilepath;
-                    } elseif ($arg == $this->testImageHiddenFilename) {
-                        return $this->testImageHiddenfilepath;
-                    }
-                }
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$this->testfilename] => $this->testfilepath,
+                [$this->testImageHiddenFilename] => $this->testImageHiddenfilepath
+            });
 
         $this->mediaDirectoryMock->expects($this->any())
             ->method('getAbsolutePath')
-            ->willReturnCallback(
-                function ($arg) {
-                    if ($arg == $this->testfilepath) {
-                        return $this->testfilepath;
-                    } elseif ($arg == $this->testImageHiddenfilepath) {
-                        return $this->testImageHiddenfilepath;
-                    }
-                }
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$this->testfilename] => $this->testfilepath,
+                [$this->testImageHiddenFilename] => $this->testImageHiddenfilepath
+            });
+
         $this->mediaDirectoryMock->expects($this->any())
             ->method('getRelativePath')
             ->willReturnOnConsecutiveCalls($this->testfilepath, $this->testImageHiddenfilepath);
@@ -295,8 +288,10 @@ class ImageResizeTest extends TestCase
         $this->mediaDirectoryMock->expects($this->any())
             ->method('isFile')
             ->willReturnCallback(
-                function ($arg) {
-                    if ($arg == $this->testfilepath || $arg == $this->testImageHiddenfilepath) {
+                function ($arg1) {
+                    if ($arg1 == $this->testfilepath) {
+                        return true;
+                    } elseif ($arg1 == $this->testImageHiddenfilepath) {
                         return true;
                     }
                 }
@@ -305,8 +300,10 @@ class ImageResizeTest extends TestCase
         $this->databaseMock->expects($this->any())
             ->method('saveFileToFilesystem')
             ->willReturnCallback(
-                function ($arg) {
-                    if ($arg == $this->testfilepath || $arg == $this->testImageHiddenfilepath) {
+                function ($arg1) {
+                    if ($arg1 === $this->testfilepath) {
+                        return null;
+                    } elseif ($arg1 === $this->testImageHiddenfilepath) {
                         return null;
                     }
                 }
@@ -314,9 +311,11 @@ class ImageResizeTest extends TestCase
         $this->databaseMock->expects($this->any())
             ->method('saveFile')
             ->willReturnCallback(
-                function ($arg) {
-                    if ($arg == $this->testfilepath || $arg == $this->testImageHiddenfilepath) {
-                        return null;
+                function ($arg1) {
+                    if ($arg1 === $this->testfilepath) {
+                        return [];
+                    } elseif ($arg1 === $this->testImageHiddenfilepath) {
+                        return [];
                     }
                 }
             );
@@ -330,11 +329,6 @@ class ImageResizeTest extends TestCase
         }
     }
 
-    /**
-     * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
     public function testResizeFromThemesHiddenImagesMediaStorageDatabase()
     {
         $this->databaseMock->expects($this->any())
@@ -380,8 +374,10 @@ class ImageResizeTest extends TestCase
         $this->mediaDirectoryMock->expects($this->any())
             ->method('isFile')
             ->willReturnCallback(
-                function ($arg) {
-                    if ($arg == $this->testfilepath || $arg == $this->testImageHiddenfilepath) {
+                function ($arg1) {
+                    if ($arg1 == $this->testfilepath) {
+                        return true;
+                    } elseif ($arg1 == $this->testImageHiddenfilepath) {
                         return true;
                     }
                 }
@@ -390,8 +386,10 @@ class ImageResizeTest extends TestCase
         $this->databaseMock->expects($this->any())
             ->method('saveFileToFilesystem')
             ->willReturnCallback(
-                function ($arg) {
-                    if ($arg == $this->testfilepath || $arg == $this->testImageHiddenfilepath) {
+                function ($arg1) {
+                    if ($arg1 === $this->testfilepath) {
+                        return null;
+                    } elseif ($arg1 === $this->testImageHiddenfilepath) {
                         return null;
                     }
                 }
@@ -399,8 +397,10 @@ class ImageResizeTest extends TestCase
         $this->databaseMock->expects($this->any())
             ->method('saveFile')
             ->willReturnCallback(
-                function ($arg) {
-                    if ($arg == $this->testfilepath || $arg == $this->testImageHiddenfilepath) {
+                function ($arg1) {
+                    if ($arg1 === $this->testfilepath) {
+                        return null;
+                    } elseif ($arg1 === $this->testImageHiddenfilepath) {
                         return null;
                     }
                 }
@@ -416,6 +416,7 @@ class ImageResizeTest extends TestCase
             $this->assertEmpty($resizeInfo['error']);
             $generator->next();
         }
+
     }
 
     public function testResizeFromThemesUnsupportedImage()
@@ -448,12 +449,15 @@ class ImageResizeTest extends TestCase
         $this->mediaDirectoryMock->expects($this->any())
             ->method('isFile')
             ->willReturnCallback(
-                function ($arg) {
-                    if ($arg == $this->testfilepath || $arg == $this->testImageHiddenfilepath) {
+                function ($arg1) {
+                    if ($arg1 == $this->testfilepath) {
+                        return true;
+                    } elseif ($arg1 == $this->testImageHiddenfilepath) {
                         return true;
                     }
                 }
             );
+
 
         $generator = $this->service->resizeFromThemes(['test-theme'], true);
         while ($generator->valid()) {

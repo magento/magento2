@@ -14,6 +14,7 @@ use Magento\Framework\App\AreaInterface;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\State;
+use Magento\Framework\Escaper;
 use Magento\Framework\Locale\Resolver;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -87,7 +88,8 @@ class SoapTest extends TestCase
 
         $this->_soapServerMock = $this->getMockBuilder(Server::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getApiCharset', 'generateUri', 'handle', 'setWSDL', 'setEncoding', 'setReturnResponse'])
+            ->addMethods(['setWSDL', 'setEncoding', 'setReturnResponse'])
+            ->onlyMethods(['getApiCharset', 'generateUri', 'handle'])
             ->getMock();
         $this->_wsdlGeneratorMock = $this->getMockBuilder(Generator::class)
             ->disableOriginalConstructor()
@@ -199,6 +201,14 @@ class SoapTest extends TestCase
         $this->_wsdlGeneratorMock->expects($this->any())->method('generate')->willReturn($wsdl);
         $encoding = "utf-8";
         $this->_soapServerMock->expects($this->any())->method('getApiCharset')->willReturn($encoding);
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                Escaper::class,
+                $this->createMock(Escaper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->_soapController->dispatch($this->_requestMock);
 
         $expectedMessage = <<<EXPECTED_MESSAGE

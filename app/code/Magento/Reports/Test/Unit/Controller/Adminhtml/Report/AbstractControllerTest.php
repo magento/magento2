@@ -110,7 +110,7 @@ abstract class AbstractControllerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->abstractBlockMock = $this->getMockBuilder(AbstractBlock::class)
-            ->onlyMethods(['getCsvFile', 'getExcelFile', 'setSaveParametersInSession', 'getCsv', 'getExcel'])
+            ->addMethods(['getCsvFile', 'getExcelFile', 'setSaveParametersInSession', 'getCsv', 'getExcel'])
             ->disableOriginalConstructor()
             ->getMock();
 

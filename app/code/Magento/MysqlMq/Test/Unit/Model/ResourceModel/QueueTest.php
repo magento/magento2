@@ -63,7 +63,8 @@ class QueueTest extends TestCase
         $tableName = 'queue_message';
         $messageId = 2;
         $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->onlyMethods(['insert', 'lastInsertId'])
+            ->addMethods(['lastInsertId'])
+            ->onlyMethods(['insert'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->resources->expects($this->exactly(2))->method('getConnection')->with('default')->willReturn($connection);
@@ -87,7 +88,8 @@ class QueueTest extends TestCase
         $tableName = 'queue_message';
         $messageIds = [3, 4];
         $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->onlyMethods(['insertMultiple', 'lastInsertId'])
+            ->onlyMethods(['insertMultiple'])
+            ->addMethods(['lastInsertId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->resources->expects($this->atLeastOnce())
@@ -171,8 +173,6 @@ class QueueTest extends TestCase
      * Test for getMessages method.
      *
      * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function testGetMessages()
     {
@@ -311,7 +311,7 @@ class QueueTest extends TestCase
         $this->resources->expects($this->once())->method('getTableName')->with($tableName)->willReturn($tableName);
         $connection->expects($this->exactly(2))->method('update')
             ->willReturnCallback(
-                function ($arg1, $arg2, $arg3) use ($tableName, $relationIds) {
+                function ($arg1, $arg2, $arg3) use ($relationIds, $tableName) {
                     if ($arg1 == $tableName &&
                         $arg2 == ['status' => QueueManagement::MESSAGE_STATUS_IN_PROGRESS] &&
                         $arg3 == ['id = ?' => $relationIds[0]]

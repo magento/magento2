@@ -166,7 +166,8 @@ abstract class IntegrationTest extends TestCase
             ->onlyMethods(['dispatch'])
             ->getMockForAbstractClass();
         $this->_backendSessionMock = $this->getMockBuilder(Session::class)
-            ->onlyMethods(['__call', 'getIntegrationData'])
+            ->addMethods(['getIntegrationData'])
+            ->onlyMethods(['__call'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -246,7 +247,7 @@ abstract class IntegrationTest extends TestCase
         $this->_viewMock = $this->getMockBuilder(ViewInterface::class)
             ->getMock();
         $this->_layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->onlyMethods(['getNode'])
+            ->addMethods(['getNode'])
             ->getMockForAbstractClass();
         $this->_layoutMergeMock = $this->getMockBuilder(
             Merge::class

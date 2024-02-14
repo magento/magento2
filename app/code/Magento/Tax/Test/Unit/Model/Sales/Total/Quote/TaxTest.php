@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Tax\Test\Unit\Model\Sales\Total\Quote;
 
 use Magento\Catalog\Model\Product;
+use Magento\Customer\Api\AccountManagementInterface as CustomerAccountManagement;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
@@ -23,6 +24,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Tax\Api\Data\QuoteDetailsInterface;
 use Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory;
+use Magento\Tax\Api\Data\QuoteDetailsItemExtensionInterfaceFactory;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
@@ -30,6 +32,7 @@ use Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory;
 use Magento\Tax\Api\Data\TaxDetailsInterface;
 use Magento\Tax\Api\TaxCalculationInterface;
 use Magento\Tax\Helper\Data;
+use Magento\Tax\Helper\Data as TaxHelper;
 use Magento\Tax\Model\Calculation;
 use Magento\Tax\Model\Calculation\CalculatorFactory;
 use Magento\Tax\Model\Calculation\TotalBaseCalculator;
@@ -387,6 +390,21 @@ class TaxTest extends TestCase
             ->willReturn($calculationSequence);
 
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                TaxHelper::class,
+                $this->createMock(TaxHelper::class)
+            ],
+            [
+                QuoteDetailsItemExtensionInterfaceFactory::class,
+                $this->createMock(QuoteDetailsItemExtensionInterfaceFactory::class)
+            ],
+            [
+                CustomerAccountManagement::class,
+                $this->createMock(CustomerAccountManagement::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $taxTotalsCalcModel = $objectManager->getObject(
             Tax::class,
             ['taxData' => $taxData]
@@ -434,7 +452,7 @@ class TaxTest extends TestCase
             ->willReturnSelf();
 
         $itemDataObjectMock = $this->getMockBuilder(QuoteDetailsItemInterface::class)
-            ->onlyMethods(['getAssociatedTaxables'])
+            ->addMethods(['getAssociatedTaxables'])
             ->getMockForAbstractClass();
         $itemDataObjectFactoryMock = $this->getMockBuilder(QuoteDetailsItemInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -448,12 +466,14 @@ class TaxTest extends TestCase
 
         $regionFactory = $this->getMockBuilder(RegionInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setRegionId', 'create'])
+            ->addMethods(['setRegionId'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $addressFactory = $this->getMockBuilder(AddressInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getRegionBuilder', 'create'])
+            ->addMethods(['getRegionBuilder'])
+            ->onlyMethods(['create'])
             ->getMock();
         $region = $this->getMockForAbstractClass(RegionInterface::class, [], '', false);
         $regionFactory->method('setRegionId')
@@ -466,7 +486,8 @@ class TaxTest extends TestCase
         $product = $this->createMock(Product::class);
         $item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getParentItem', 'getHasChildren', 'getProduct', 'getQuote', 'getCode'])
+            ->addMethods(['getHasChildren', 'getCode'])
+            ->onlyMethods(['getParentItem', 'getProduct', 'getQuote'])
             ->getMock();
         $item->method('getParentItem')
             ->willReturn(null);
@@ -603,7 +624,7 @@ class TaxTest extends TestCase
 
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['convertPrice'])
+            ->addMethods(['convertPrice'])
             ->getMock();
         $quote = $this->createMock(Quote::class);
         $items = [];

@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Payment\Model\Method\ConfigInterface as PaymentConfigInterface;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory as PaymentConfigInterfaceFactory;
@@ -87,16 +88,14 @@ class TransparentTest extends TestCase
     protected function setUp(): void
     {
         $this->initPayment();
-
-        $helper = new ObjectManagerHelper($this);
+        $objectManager = new ObjectManager($this);
         $objects = [
             [
                 DirectoryHelper::class,
                 $this->createMock(DirectoryHelper::class)
             ]
         ];
-        $helper->prepareObjectManager($objects);
-
+        $objectManager->prepareObjectManager($objects);
         $this->subject = (new ObjectManagerHelper($this))
             ->getObject(
                 PayPalPayflowTransparent::class,
@@ -119,7 +118,6 @@ class TransparentTest extends TestCase
      * @param string $parentTransactionId
      * @throws InvalidTransitionException
      * @throws LocalizedException
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testCaptureCorrectId(string $parentTransactionId)
     {
@@ -134,34 +132,17 @@ class TransparentTest extends TestCase
         }
 
         $gatewayToken = 'gateway_token';
-        $this->payment->expects($this->once())->method('getParentTransactionId')
-            ->willReturn($parentTransactionId);
-        $this->payment->expects($this->exactly($setParentTransactionIdCalls))
-            ->method('setParentTransactionId');
-        $this->payment->expects($this->exactly($setAdditionalInformationCalls))
-            ->method('setAdditionalInformation')->with(Payflowpro::PNREF, $gatewayToken);
-        $this->payment->expects($this->exactly(4))
-            ->method('getAdditionalInformation')
-            ->willReturnCallback(function ($args) {
-                static $callCount = 0;
-                if ($callCount == 0 && $args == 'result_code') {
-                    $callCount++;
-                    return 0;
-                } elseif ($callCount == 1 && $args == Payflowpro::PNREF) {
-                    $callCount++;
-                    return '';
-                } elseif ($callCount == 2 && $args == Payflowpro::PNREF) {
-                    $callCount++;
-                    return Payflowpro::PNREF;
-                } elseif ($callCount == 3 && $args == Payflowpro::PNREF) {
-                    $callCount++;
-                    return Payflowpro::PNREF;
-                }
+        $this->payment->expects($this->once())->method('getParentTransactionId')->willReturn($parentTransactionId);
+        $this->payment->expects($this->exactly($setParentTransactionIdCalls))->method('setParentTransactionId');
+        $this->payment->expects($this->exactly($setAdditionalInformationCalls))->method('setAdditionalInformation')->with(Payflowpro::PNREF, $gatewayToken);
+        $this->payment->expects($this->exactly(4))->method('getAdditionalInformation')
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['result_code'] => 0,
+                [Payflowpro::PNREF] => '',
+                [Payflowpro::PNREF], [Payflowpro::PNREF] => Payflowpro::PNREF
             });
-        $this->paymentExtensionAttributes->expects($this->once())
-            ->method('getVaultPaymentToken')->willReturn($this->paymentToken);
-        $this->paymentToken->expects($this->exactly($getGatewayTokenCalls))
-            ->method('getGatewayToken')->willReturn($gatewayToken);
+        $this->paymentExtensionAttributes->expects($this->once())->method('getVaultPaymentToken')->willReturn($this->paymentToken);
+        $this->paymentToken->expects($this->exactly($getGatewayTokenCalls))->method('getGatewayToken')->willReturn($gatewayToken);
 
         $this->subject->capture($this->payment, 100);
     }
@@ -171,7 +152,7 @@ class TransparentTest extends TestCase
      *
      * @return array
      */
-    public static function captureCorrectIdDataProvider(): array
+    public function captureCorrectIdDataProvider(): array
     {
         return [
             'No Transaction ID' => [''],
@@ -223,7 +204,7 @@ class TransparentTest extends TestCase
     /**
      * @return array
      */
-    public static function validAuthorizeRequestDataProvider(): array
+    public function validAuthorizeRequestDataProvider(): array
     {
         return [
             [
@@ -378,7 +359,7 @@ class TransparentTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->paymentExtensionAttributes = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->onlyMethods(
+            ->addMethods(
                 ['setVaultPaymentToken', 'getVaultPaymentToken', 'setNotificationMessage', 'getNotificationMessage']
             )
             ->getMockForAbstractClass();

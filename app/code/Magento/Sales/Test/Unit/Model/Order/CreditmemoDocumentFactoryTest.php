@@ -142,11 +142,9 @@ class CreditmemoDocumentFactoryTest extends TestCase
 
         $this->commentMock = $this->getMockBuilder(CreditmemoCommentInterface::class)
             ->disableOriginalConstructor()
+            ->addMethods(['setStoreId', 'setCreditmemo'])
             ->onlyMethods(
-                array_merge(
-                    get_class_methods(CreditmemoCommentInterface::class),
-                    ['setStoreId', 'setCreditmemo']
-                )
+                    get_class_methods(CreditmemoCommentInterface::class)
             )
             ->getMock();
         $this->factory = $this->objectManager->getObject(

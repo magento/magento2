@@ -56,6 +56,7 @@ class ElasticsearchTest extends TestCase
     protected function setUp(): void
     {
         $this->elasticsearchClientMock = $this->getMockBuilder(Client::class)
+            ->addMethods(['suggest'])
             ->onlyMethods(
                 [
                     'indices',
@@ -63,13 +64,13 @@ class ElasticsearchTest extends TestCase
                     'bulk',
                     'search',
                     'scroll',
-                    'suggest',
                     'info',
                 ]
             )
             ->disableOriginalConstructor()
             ->getMock();
         $this->indicesMock = $this->getMockBuilder(IndicesNamespace::class)
+            ->addMethods(['deleteMapping'])
             ->onlyMethods(
                 [
                     'exists',
@@ -77,7 +78,6 @@ class ElasticsearchTest extends TestCase
                     'create',
                     'delete',
                     'putMapping',
-                    'deleteMapping',
                     'getMapping',
                     'stats',
                     'updateAliases',
@@ -154,6 +154,13 @@ class ElasticsearchTest extends TestCase
      */
     public function testBuildConfig(array $options, $expectedResult): void
     {
+        $objects = [
+            [
+                DynamicTemplatesProvider::class,
+                $this->createMock(DynamicTemplatesProvider::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
         $buildConfig = new Elasticsearch($options);
         $config = $this->getPrivateMethod(Elasticsearch::class, 'buildESConfig');
         $result = $config->invoke($buildConfig, $options);

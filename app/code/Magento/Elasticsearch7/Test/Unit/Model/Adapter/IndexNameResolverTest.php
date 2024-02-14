@@ -11,6 +11,7 @@ use Elasticsearch\Client;
 use Elasticsearch\Namespaces\IndicesNamespace;
 use Magento\AdvancedSearch\Model\Client\ClientInterface as ElasticsearchClient;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
+use Magento\Elasticsearch7\Model\Adapter\DynamicTemplatesProvider;
 use Magento\Elasticsearch7\Model\Client\Elasticsearch;
 use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
 use Magento\Elasticsearch\Model\Config;
@@ -73,7 +74,13 @@ class IndexNameResolverTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
-
+        $objects = [
+            [
+                DynamicTemplatesProvider::class,
+                $this->createMock(DynamicTemplatesProvider::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
         $this->connectionManager = $this->getMockBuilder(ConnectionManager::class)
             ->disableOriginalConstructor()
             ->onlyMethods([
@@ -83,10 +90,10 @@ class IndexNameResolverTest extends TestCase
 
         $this->clientConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
+            ->addMethods(['getIndexSettings'])
             ->onlyMethods([
                 'getIndexPrefix',
                 'getEntityType',
-                'getIndexSettings',
             ])
             ->getMock();
 
@@ -106,12 +113,12 @@ class IndexNameResolverTest extends TestCase
             ->getMock();
 
         $indicesMock = $this->getMockBuilder(IndicesNamespace::class)
+            ->addMethods(['deleteMapping'])
             ->onlyMethods([
                 'exists',
                 'getSettings',
                 'create',
                 'putMapping',
-                'deleteMapping',
                 'existsAlias',
                 'updateAliases',
                 'stats'

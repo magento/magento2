@@ -58,7 +58,7 @@ class ValidatorTest extends TestCase
             ->getMock();
         $designConfigExtensionMock =
             $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigExtensionInterface::class)
-                ->onlyMethods(['getDesignConfigData'])
+                ->addMethods(['getDesignConfigData'])
                 ->getMockForAbstractClass();
         $designElementMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
@@ -103,7 +103,7 @@ class ValidatorTest extends TestCase
             ->getMock();
         $designConfigExtensionMock =
             $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigExtensionInterface::class)
-                ->onlyMethods(['getDesignConfigData'])
+                ->addMethods(['getDesignConfigData'])
                 ->getMockForAbstractClass();
         $designElementMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()

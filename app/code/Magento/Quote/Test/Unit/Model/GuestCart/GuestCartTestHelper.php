@@ -41,7 +41,8 @@ class GuestCartTestHelper
     public function mockQuoteIdMask($maskedCartId, $cartId)
     {
         $quoteIdMaskMock = $this->testCase->getMockBuilder(QuoteIdMask::class)
-            ->onlyMethods(['load', 'getQuoteId', 'getMaskedId'])
+            ->addMethods(['getQuoteId', 'getMaskedId'])
+            ->onlyMethods(['load'])
             ->disableOriginalConstructor()
             ->getMock();
         $quoteIdMaskFactoryMock = $this->testCase->getMockBuilder(QuoteIdMaskFactory::class)

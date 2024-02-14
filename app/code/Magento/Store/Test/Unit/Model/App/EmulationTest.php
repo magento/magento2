@@ -98,7 +98,7 @@ class EmulationTest extends TestCase
         // Mocks
         $this->designMock = $this->getMockBuilder(Design::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])->getMock();
+            ->onlyMethods(['loadChange', 'getData'])->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->onlyMethods([])->getMockForAbstractClass();
@@ -120,7 +120,8 @@ class EmulationTest extends TestCase
         $this->viewDesignMock = $this->getMockForAbstractClass(DesignInterface::class);
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['__wakeup', 'getStoreId'])
+            ->addMethods(['getStoreId'])
+            ->onlyMethods(['__wakeup'])
             ->getMock();
         $this->rendererMock = $this->createMock(RendererInterface::class);
 

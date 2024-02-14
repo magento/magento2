@@ -85,12 +85,15 @@ class LowstockTest extends AbstractControllerTest
             ->method('addLink')
             ->willReturnCallback(
                 function ($arg1, $arg2) {
-                    if ($arg1 instanceof Phrase && $arg2 instanceof Phrase) {
+                    if ($arg1 == new Phrase('Reports') && $arg2 == new Phrase('Reports')) {
+                        return null;
+                    } elseif ($arg1 == new Phrase('Products') && $arg2 == new Phrase('Products')) {
+                        return null;
+                    } elseif ($arg1 == new Phrase('Low Stock') && $arg2 == new Phrase('Low Stock')) {
                         return null;
                     }
                 }
             );
-
         $this->lowstock->execute();
     }
 }

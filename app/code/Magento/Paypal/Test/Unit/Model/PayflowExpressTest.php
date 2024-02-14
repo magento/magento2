@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Paypal\Model\Api\Nvp;
 use Magento\Paypal\Model\Payflow;
@@ -39,6 +40,13 @@ class PayflowExpressTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $proFactory = $this->getMockBuilder(
             ProFactory::class
         )->disableOriginalConstructor()
@@ -47,10 +55,10 @@ class PayflowExpressTest extends TestCase
         $paypalPro = $this->getMockBuilder(
             Pro::class
         )->disableOriginalConstructor()
-            ->onlyMethods([])->getMock();
+            ->onlyMethods(['getApi'])->getMock();
         $this->transactionRepository = $this->getMockBuilder(TransactionRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getByTransactionType'])
+            ->addMethods(['getByTransactionType'])
             ->getMockForAbstractClass();
         $paypalPro->expects($this->any())->method('getApi')->willReturn($api);
 

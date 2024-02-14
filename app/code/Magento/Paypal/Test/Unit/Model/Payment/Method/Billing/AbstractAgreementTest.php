@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model\Payment\Method\Billing;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -54,6 +55,13 @@ class AbstractAgreementTest extends TestCase
             ->onlyMethods(['create'])
             ->getMock();
 
+        $objects = [
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $helper->prepareObjectManager($objects);
         $this->payment = $helper->getObject(
             AbstractAgreementStub::class,
             [
@@ -81,7 +89,8 @@ class AbstractAgreementTest extends TestCase
             ->getMock();
         $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['__wakeup', 'getCustomerId'])
+            ->addMethods(['getCustomerId'])
+            ->onlyMethods(['__wakeup'])
             ->getMock();
 
         $this->payment->setInfoInstance($paymentInfo);
@@ -89,7 +98,8 @@ class AbstractAgreementTest extends TestCase
 
         $agreementModel = $this->getMockBuilder(Agreement::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['__wakeup', 'load', 'getCustomerId', 'getId', 'getReferenceId'])
+            ->addMethods(['getCustomerId', 'getReferenceId'])
+            ->onlyMethods(['__wakeup', 'load', 'getId'])
             ->getMock();
 
         $this->agreementFactory->expects(static::once())

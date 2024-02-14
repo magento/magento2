@@ -48,7 +48,18 @@ class ContainerTest extends TestCase
 
         $contextMock->expects($this->once())->method('getUrlBuilder')->willReturn($urlBuilderMock);
         $contextMock->expects($this->once())->method('getButtonList')->willReturn($buttonList);
-
+        $objectManagerHelper = new ObjectManager($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
         $block = new Container($contextMock);
 
         $this->assertEquals($block->getHeaderText(), $headerText);

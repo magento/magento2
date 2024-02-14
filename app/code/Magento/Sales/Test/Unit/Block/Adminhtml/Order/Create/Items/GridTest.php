@@ -15,7 +15,9 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\CatalogInventory\Model\StockRegistry;
 use Magento\CatalogInventory\Model\StockState;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\DataObject;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\AbstractBlock;
@@ -110,7 +112,7 @@ class GridTest extends TestCase
         $sessionMock->expects($this->any())->method('getQuote')->willReturn($quoteMock);
         $wishlistFactoryMock = $this->getMockBuilder(WishlistFactory::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['methods'])
+            ->addMethods(['methods'])
             ->getMock();
 
         $giftMessageSave = $this->getMockBuilder(\Magento\Giftmessage\Model\Save::class)
@@ -141,6 +143,17 @@ class GridTest extends TestCase
             ->willReturn($this->stockItemMock);
 
         $this->objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
         $this->block = $this->objectManager->getObject(
             Grid::class,
             [
@@ -158,7 +171,8 @@ class GridTest extends TestCase
 
         $this->priceRenderBlock = $this->getMockBuilder(Template::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setItem', 'toHtml'])
+            ->addMethods(['setItem'])
+            ->onlyMethods(['toHtml'])
             ->getMock();
 
         $this->layoutMock = $this->getMockBuilder(Layout::class)

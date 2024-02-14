@@ -101,7 +101,8 @@ class ViewedTest extends AbstractControllerTest
 
         $responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setRedirect', 'sendResponse'])
+            ->addMethods(['setRedirect'])
+            ->onlyMethods(['sendResponse'])
             ->getMockForAbstractClass();
 
         $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
@@ -159,12 +160,18 @@ class ViewedTest extends AbstractControllerTest
         $this->breadcrumbsBlockMock
             ->expects($this->exactly(3))
             ->method('addLink')
-            ->willReturnCallback(function ($arg1, $arg2) use ($titleMock) {
-                if ($arg1 instanceof Phrase && $arg2 instanceof Phrase) {
-                    return null;
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == new Phrase('Reports') && $arg2 == new Phrase('Reports')) {
+                        return null;
+                    } elseif ($arg1 == new Phrase('Products') && $arg2 == new Phrase('Products')) {
+                        return null;
+                    } elseif ($arg1 == new Phrase('Products Most Viewed Report') &&
+                        $arg2 == new Phrase('Products Most Viewed Report')) {
+                        return null;
+                    }
                 }
-            });
-
+            );
         $this->viewMock
             ->expects($this->once())
             ->method('renderLayout');
@@ -187,7 +194,7 @@ class ViewedTest extends AbstractControllerTest
             ->getMockForAbstractClass();
 
         $sessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods(['setIsUrlNotice'])
+            ->addMethods(['setIsUrlNotice'])
             ->disableOriginalConstructor()
             ->getMock();
 

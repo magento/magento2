@@ -7,11 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
+use Magento\Backend\Model\Menu\Item\Factory;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Controller\Adminhtml\Integration\Delete;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Integration\Model\Integration as IntegrationModel;
 use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest;
 
@@ -25,7 +28,18 @@ class DeleteTest extends IntegrationTest
     protected function setUp(): void
     {
         parent::setUp();
-
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                Factory::class,
+                $this->createMock(Factory::class)
+            ],
+            [
+                SerializerInterface::class,
+                $this->createMock(SerializerInterface::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->integrationController = $this->_createIntegrationController('Delete');
 
         $resultRedirect = $this->getMockBuilder(Redirect::class)

@@ -147,9 +147,9 @@ class FreeShippingTest extends TestCase
         /** @var Quote|MockObject $quote */
         $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
+            ->addMethods(['getCouponCode'])
             ->onlyMethods(
                 [
-                    'getCouponCode',
                     'getCustomerGroupId',
                     'getShippingAddress',
                     'getStoreId',
@@ -199,7 +199,7 @@ class FreeShippingTest extends TestCase
         /** @var Item|MockObject $item */
         $item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getHasChildren'])
+            ->addMethods(['getHasChildren'])
             ->getMock();
         $item->setQuote($quote);
         $item->setNoDiscount(0);

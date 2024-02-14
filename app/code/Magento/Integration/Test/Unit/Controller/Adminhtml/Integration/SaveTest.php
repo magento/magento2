@@ -7,11 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
+use Magento\Backend\Model\Menu\Item\Factory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
 use Magento\Integration\Controller\Adminhtml\Integration\Save;
@@ -47,6 +50,18 @@ class SaveTest extends IntegrationTest
             ->method('escapeHtml')
             ->willReturnArgument(0);
 
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                Factory::class,
+                $this->createMock(Factory::class)
+            ],
+            [
+                SerializerInterface::class,
+                $this->createMock(SerializerInterface::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }
@@ -226,10 +241,15 @@ class SaveTest extends IntegrationTest
 
         $this->_requestMock->expects($this->exactly(2))
             ->method('getParam')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                [Save::PARAM_INTEGRATION_ID] => self::INTEGRATION_ID,
-                [Info::DATA_CONSUMER_PASSWORD] => $passwordString
-            });
+            ->willReturnCallback(
+                function ($arg1) use ($passwordString) {
+                    if ($arg1 == Save::PARAM_INTEGRATION_ID) {
+                        return self::INTEGRATION_ID;
+                    } elseif ($arg1 == Info::DATA_CONSUMER_PASSWORD) {
+                        return $passwordString;
+                    }
+                }
+            );
 
         $intData = $this->_getSampleIntegrationData();
         $this->_integrationSvcMock->expects($this->once())
@@ -264,10 +284,15 @@ class SaveTest extends IntegrationTest
 
         $this->_requestMock->expects($this->any())
             ->method('getParam')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                [Save::PARAM_INTEGRATION_ID] => self::INTEGRATION_ID,
-                [Info::DATA_CONSUMER_PASSWORD] => $passwordString
-            });
+            ->willReturnCallback(
+                function ($arg1) use ($passwordString) {
+                    if ($arg1 == Save::PARAM_INTEGRATION_ID) {
+                        return self::INTEGRATION_ID;
+                    } elseif ($arg1 == Info::DATA_CONSUMER_PASSWORD) {
+                        return $passwordString;
+                    }
+                }
+            );
 
         $intData = $this->_getSampleIntegrationData();
         $this->_integrationSvcMock->expects($this->once())

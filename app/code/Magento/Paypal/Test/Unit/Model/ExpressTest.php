@@ -122,13 +122,6 @@ class ExpressTest extends TestCase
         $this->pro->method('getApi')
             ->willReturn($this->nvp);
         $this->helper = new ObjectManager($this);
-        $objects = [
-            [
-                DirectoryHelper::class,
-                $this->createMock(DirectoryHelper::class)
-            ]
-        ];
-        $this->helper->prepareObjectManager($objects);
     }
 
     /**
@@ -137,7 +130,14 @@ class ExpressTest extends TestCase
     public function testSetApiProcessableErrors()
     {
         $this->nvp->expects($this->once())->method('setProcessableErrors')->with($this->errorCodes);
-
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->model = $this->helper->getObject(
             Express::class,
             [
@@ -256,12 +256,15 @@ class ExpressTest extends TestCase
         $paymentInfo->expects(static::exactly(3))
             ->method('setAdditionalInformation')
             ->willReturnCallback(
-                function ($arg1, $arg2) {
-                    if ($arg1 == Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT && $arg2 === $transportValue) {
-                         return null;
-                    } elseif ($arg1 == Checkout::PAYMENT_INFO_TRANSPORT_PAYER_ID && $arg2 === $transportValue) {
+                function ($arg1, $arg2) use ($transportValue) {
+                    if ($arg1 === Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT
+                        && $arg2 === $transportValue) {
                         return null;
-                    } elseif ($arg1 == Checkout::PAYMENT_INFO_TRANSPORT_TOKEN && $arg2 === $transportValue) {
+                    } elseif ($arg1 === Checkout::PAYMENT_INFO_TRANSPORT_PAYER_ID
+                        && $arg2 === $transportValue) {
+                        return null;
+                    } elseif ($arg1 === Checkout::PAYMENT_INFO_TRANSPORT_TOKEN
+                        && $arg2 === $transportValue) {
                         return null;
                     }
                 }

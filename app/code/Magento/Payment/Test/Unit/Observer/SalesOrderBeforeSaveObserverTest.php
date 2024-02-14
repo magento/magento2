@@ -43,7 +43,7 @@ class SalesOrderBeforeSaveObserverTest extends TestCase
         $this->observerMock = $this->getMockBuilder(
             Observer::class
         )->disableOriginalConstructor()
-            ->onlyMethods([])->getMock();
+            ->onlyMethods(['getEvent'])->getMock();
     }
 
     public function testSalesOrderBeforeSaveMethodNotFree()
@@ -210,7 +210,7 @@ class SalesOrderBeforeSaveObserverTest extends TestCase
         $this->eventMock = $this->getMockBuilder(
             Event::class
         )->disableOriginalConstructor()
-            ->onlyMethods($methodsList)->getMock();
+            ->addMethods($methodsList)->getMock();
         $this->observerMock->expects($this->any())->method('getEvent')->willReturn($this->eventMock);
     }
 

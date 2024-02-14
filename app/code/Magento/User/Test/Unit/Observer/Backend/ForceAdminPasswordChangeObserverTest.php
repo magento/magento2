@@ -79,16 +79,19 @@ class ForceAdminPasswordChangeObserverTest extends TestCase
 
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
+            ->onlyMethods(['clearStorage'])
             ->getMock();
 
         $this->authSessionMock = $this->getMockBuilder(\Magento\Backend\Model\Auth\Session::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(
+            ->addMethods(
                 [
                     'setPciAdminUserIsPasswordExpired',
                     'unsPciAdminUserIsPasswordExpired',
-                    'getPciAdminUserIsPasswordExpired',
+                    'getPciAdminUserIsPasswordExpired'
+                ])
+            ->onlyMethods(
+                [
                     'isLoggedIn',
                     'clearStorage'
                 ]
@@ -137,13 +140,13 @@ class ForceAdminPasswordChangeObserverTest extends TestCase
         /** @var Observer|MockObject $eventObserverMock */
         $eventObserverMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
+            ->onlyMethods(['getEvent'])
             ->getMock();
 
         /** @var Event|MockObject */
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getControllerAction', 'getRequest'])
+            ->addMethods(['getControllerAction', 'getRequest'])
             ->getMock();
 
         $this->configInterfaceMock
@@ -155,12 +158,13 @@ class ForceAdminPasswordChangeObserverTest extends TestCase
         /** @var Action $controllerMock */
         $controllerMock = $this->getMockBuilder(AbstractAction::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getRedirect', 'getRequest'])
+            ->addMethods(['getRedirect'])
+            ->onlyMethods(['getRequest'])
             ->getMockForAbstractClass();
         /** @var RequestInterface $requestMock */
         $requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getFullActionName', 'setDispatched'])
+            ->addMethods(['getFullActionName', 'setDispatched'])
             ->getMockForAbstractClass();
         $eventMock->expects($this->once())->method('getControllerAction')->willReturn($controllerMock);
         $eventMock->expects($this->once())->method('getRequest')->willReturn($requestMock);

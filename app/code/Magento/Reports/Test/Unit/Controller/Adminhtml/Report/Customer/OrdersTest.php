@@ -65,7 +65,12 @@ class OrdersTest extends AbstractControllerTest
             ->method('addLink')
             ->willReturnCallback(
                 function ($arg1, $arg2) {
-                    if ($arg1 instanceof Phrase && $arg2 instanceof Phrase) {
+                    if ($arg1 == new Phrase('Reports') && $arg2 == new Phrase('Reports')) {
+                        return null;
+                    } elseif ($arg1 == new Phrase('Customers') && $arg2 == new Phrase('Customers')) {
+                        return null;
+                    } elseif ($arg1 == new Phrase('Customers by Number of Orders') &&
+                        $arg2 == new Phrase('Customers by Number of Orders')) {
                         return null;
                     }
                 }

@@ -58,11 +58,15 @@ class TrackAdminNewPasswordObserverTest extends TestCase
 
         $this->authSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(
+            ->addMethods(
                 [
                     'setPciAdminUserIsPasswordExpired',
                     'unsPciAdminUserIsPasswordExpired',
-                    'getPciAdminUserIsPasswordExpired',
+                    'getPciAdminUserIsPasswordExpired'
+                ]
+            )
+            ->onlyMethods(
+                [
                     'isLoggedIn',
                     'clearStorage'
                 ]
@@ -100,13 +104,13 @@ class TrackAdminNewPasswordObserverTest extends TestCase
         /** @var Observer|MockObject $eventObserverMock */
         $eventObserverMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
+            ->onlyMethods(['getEvent'])
             ->getMock();
 
         /** @var Event|MockObject */
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getObject'])
+            ->addMethods(['getObject'])
             ->getMock();
 
         /** @var \Magento\User\Model\User|MockObject $userMock */
