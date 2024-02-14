@@ -68,8 +68,7 @@ class ConfigWriterTest extends TestCase
             ->getMockForAbstractClass();
         $this->valueMock = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
-            ->addMethods(['getValue'])
-            ->onlyMethods(['validateBeforeSave', 'beforeSave', 'afterSave'])
+            ->setMethods(['validateBeforeSave', 'beforeSave', 'getValue', 'afterSave'])
             ->getMock();
 
         $this->model = new ConfigWriter(
@@ -127,16 +126,16 @@ class ConfigWriterTest extends TestCase
             ->method('set')
             ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($config) {
                 if ($arg1 == 'system/scope/scope_code/some1/config1/path1'
-                        && is_array($arg2)
-                        && $arg3 == 'someValue1') {
+                    && is_array($arg2)
+                    && $arg3 == 'someValue1') {
                     return $config;
                 } elseif ($arg1 == 'system/scope/scope_code/some2/config2/path2'
-                        && is_array($arg2)
-                        && $arg3 == 'someValue2') {
+                    && is_array($arg2)
+                    && $arg3 == 'someValue2') {
                     return $config;
                 } elseif ($arg1 == 'system/scope/scope_code/some3/config3/path3'
-                        && is_array($arg2)
-                        && $arg3 == 'someValue3') {
+                    && is_array($arg2)
+                    && $arg3 == 'someValue3') {
                     return $config;
                 }
             });
@@ -186,16 +185,16 @@ class ConfigWriterTest extends TestCase
             ->method('set')
             ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($config) {
                 if ($arg1 == 'system/default/some1/config1/path1'
-                        && is_array($arg2)
-                        && $arg3 == 'someValue1') {
+                    && is_array($arg2)
+                    && $arg3 == 'someValue1') {
                     return $config;
                 } elseif ($arg1 == 'system/default/some2/config2/path2'
-                        && is_array($arg2)
-                        && $arg3 == 'someValue2') {
+                    && is_array($arg2)
+                    && $arg3 == 'someValue2') {
                     return $config;
                 } elseif ($arg1 == 'system/default/some3/config3/path3'
-                        && is_array($arg2)
-                        && $arg3 == 'someValue3') {
+                    && is_array($arg2)
+                    && $arg3 == 'someValue3') {
                     return $config;
                 }
             });
