@@ -181,7 +181,7 @@ class RendererTest extends TestCase
         $this->storeManagerMck->expects($matcher)->method('setCurrentStore')->with(
             $this->callback(function ($store) use ($matcher, $expected) {
                 $this->assertEquals($store, $expected[$matcher->getInvocationCount() - 1]);
-                return $this->storeManagerMck;
+                return true;
             })
         );
 
@@ -192,7 +192,7 @@ class RendererTest extends TestCase
         $this->customerAddressConfigMock->expects($matcher)->method('setStore')->with(
             $this->callback(function ($store) use ($matcher, $expected) {
                 $this->assertEquals($store, $expected[$matcher->getInvocationCount() - 1]);
-                return $this->customerAddressConfigMock;
+                return true;
             })
         );
     }
