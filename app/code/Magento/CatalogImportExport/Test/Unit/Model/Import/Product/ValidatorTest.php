@@ -9,6 +9,7 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
 
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\Type\Simple;
+use Magento\CatalogImportExport\Model\Import\Product\UniqueAttributeValidator;
 use Magento\CatalogImportExport\Model\Import\Product\Validator;
 use Magento\CatalogImportExport\Model\Import\Product\Validator\Media;
 use Magento\CatalogImportExport\Model\Import\Product\Validator\Website;
@@ -38,6 +39,11 @@ class ValidatorTest extends TestCase
     /** @var Validator\Website|MockObject */
     protected $validatorTwo;
 
+    /**
+     * @var UniqueAttributeValidator|MockObject
+     */
+    private $uniqueAttributeValidator;
+
     protected function setUp(): void
     {
         $entityTypeModel = $this->createPartialMock(
@@ -60,6 +66,7 @@ class ValidatorTest extends TestCase
             Website::class,
             ['init', 'isValid', 'getMessages']
         );
+        $this->uniqueAttributeValidator = $this->createMock(UniqueAttributeValidator::class);
 
         $this->validators = [$this->validatorOne, $this->validatorTwo];
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -67,7 +74,8 @@ class ValidatorTest extends TestCase
             Validator::class,
             [
                 'string' => new StringUtils(),
-                'validators' => $this->validators
+                'validators' => $this->validators,
+                'uniqueAttributeValidator' => $this->uniqueAttributeValidator
             ]
         );
         $this->validator->init($this->context);
@@ -79,10 +87,18 @@ class ValidatorTest extends TestCase
      * @param array $rowData
      * @param bool $isValid
      * @param string $attrCode
+     * @param bool $uniqueAttributeValidatorResult
      * @dataProvider attributeValidationProvider
      */
-    public function testAttributeValidation($behavior, $attrParams, $rowData, $isValid, $attrCode = 'attribute_code')
-    {
+    public function testAttributeValidation(
+        string $behavior,
+        array $attrParams,
+        array $rowData,
+        bool $isValid,
+        string $attrCode = 'attribute_code',
+        bool $uniqueAttributeValidatorResult = true
+    ) {
+        $this->uniqueAttributeValidator->method('isValid')->willReturn($uniqueAttributeValidatorResult);
         $this->context->method('getMultipleValueSeparator')->willReturn(Product::PSEUDO_MULTI_LINE_SEPARATOR);
         $this->context->expects($this->any())->method('getBehavior')->willReturn($behavior);
         $result = $this->validator->isAttributeValid(
@@ -217,6 +233,14 @@ class ValidatorTest extends TestCase
                 ['product_type' => 'any', 'unique_attribute' => 'unique-value', Product::COL_SKU => 'sku-0'],
                 true,
                 'unique_attribute'
+            ],
+            [
+                Import::BEHAVIOR_APPEND,
+                ['is_required' => true, 'type' => 'varchar', 'is_unique' => true],
+                ['product_type' => 'any', 'unique_attribute' => 'unique-value', Product::COL_SKU => 'sku-0'],
+                false,
+                'unique_attribute',
+                false
             ]
         ];
     }
