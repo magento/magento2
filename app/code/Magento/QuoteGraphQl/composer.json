@@ -12,6 +12,7 @@
         "magento/module-customer": "*",
         "magento/module-customer-graph-ql": "*",
         "magento/module-sales": "*",
+        "magento/module-sales-graph-ql": "*",
         "magento/module-directory": "*",
         "magento/module-graph-ql": "*",
         "magento/module-gift-message": "*",
