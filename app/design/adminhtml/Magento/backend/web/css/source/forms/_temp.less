@@ -155,6 +155,8 @@
 
     .action-delete {
         .lib-button-reset();
+
+        /* @codingStandardsIgnoreStart */
         .lib-icon-font(
             @icon-remove-small__content,
             @icons-admin__font-name,
@@ -164,6 +166,7 @@
             @_icon-font-position: after,
             @_icon-font-color: @color-brown-darker
         );
+        /* @codingStandardsIgnoreEnd */
 
         span {
             max-height: 1px;
@@ -408,18 +411,15 @@ label.mage-error {
             width: 16px;
             z-index: 1;
 
-            /**
-             * @codingStandardsIgnoreStart
-             */
             &:before {
-                &:extend(.admin__control-checkbox + label:before);
+                &:extend(.admin__control-checkbox + label::before);
                 left: 0;
                 position: absolute;
                 top: 0;
             }
 
             &:after {
-                &:extend(.action-multicheck-wrap .action-multicheck-toggle:after);
+                &:extend(.action-multicheck-wrap .action-multicheck-toggle::after);
                 top: 40% !important;
             }
         }
@@ -427,7 +427,7 @@ label.mage-error {
         &:focus {
             + label {
                 &:after {
-                    &:extend(.action-multicheck-wrap .action-multicheck-toggle._active:after);
+                    &:extend(.action-multicheck-wrap .action-multicheck-toggle._active::after);
                 }
             }
         }
@@ -435,9 +435,8 @@ label.mage-error {
         &._checked {
             + label {
                 &:before {
-                    &:extend(.admin__control-checkbox:checked + label:before);
+                    &:extend(.admin__control-checkbox::checked + label::before);
                 }
-                //  @codingStandardsIgnoreEnd
             }
 
             &._indeterminate {
@@ -464,8 +463,8 @@ label.mage-error {
 
 .admin__data-grid-toolbar {
     *,
-    *:before,
-    *:after {
+    *::before,
+    *::after {
         box-sizing: border-box;
     }
 

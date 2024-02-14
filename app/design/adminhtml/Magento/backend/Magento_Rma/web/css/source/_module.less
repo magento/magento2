@@ -6,22 +6,19 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .rma-request-details,
     .rma-wrapper .order-shipping-address {
-        float: left;
-        /**
-         * @codingStandardsIgnoreStart
-         */
+        /* @codingStandardsIgnoreStart */
         #mix-grid .width(6, 12);
-        //@codingStandardsIgnoreEnd
+        /* @codingStandardsIgnoreEnd */
+        float: left;
     }
 
     .rma-confirmation,
-    .rma-wrapper .order-return-address, .rma-wrapper .order-shipping-method {
-        float: right;
-        /**
-        * @codingStandardsIgnoreStart
-        */
+    .rma-wrapper .order-return-address,
+    .rma-wrapper .order-shipping-method {
+        /* @codingStandardsIgnoreStart */
         #mix-grid .width(6, 12);
-        //@codingStandardsIgnoreEnd
+        /* @codingStandardsIgnoreEnd */
+        float: right;
     }
 }
 
