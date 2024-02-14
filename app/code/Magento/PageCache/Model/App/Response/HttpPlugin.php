@@ -22,8 +22,7 @@ class HttpPlugin
      */
     public function beforeSendResponse(HttpResponse $subject)
     {
-        if (
-            $subject instanceof NotCacheableInterface
+        if ($subject instanceof NotCacheableInterface
             || $subject->headersSent()
             || $subject->setMetadata("NotCacheable")
         ) {
