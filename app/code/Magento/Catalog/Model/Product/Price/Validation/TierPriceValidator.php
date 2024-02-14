@@ -378,9 +378,6 @@ class TierPriceValidator implements ResetAfterRequestInterface
                 ScopeInterface::SCOPE_STORE
             );
             if ($isGlobalConfig === Data::PRICE_SCOPE_GLOBAL &&
-                isset($this->productsCacheBySku[$price->getSku()]) &&
-                is_array($this->productsCacheBySku[$price->getSku()]->getTierPrices()) &&
-                count($this->productsCacheBySku[$price->getSku()]->getTierPrices()) > 0 &&
                 (int) $this->allWebsitesValue !== $price->getWebsiteId()
             ) {
                 throw NoSuchEntityException::singleField('website_id', $price->getWebsiteId());
