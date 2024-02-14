@@ -20,9 +20,14 @@ class ProcessorFactory
      */
     public function createProcessor()
     {
-        $objectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
-        $objectManager = $objectManagerFactory->create($_SERVER);
-        $response = $objectManager->create(\Magento\Framework\App\Response\Http::class);
-        return new Processor($response);
+        try {
+            $objectManager = AppObjectManager::getInstance();
+            return $objectManager->create(Processor::class);
+        } catch (\RuntimeException $exception) {
+            $objectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
+            $objectManager = $objectManagerFactory->create($_SERVER);
+            $response = $objectManager->create(\Magento\Framework\App\Response\Http::class);
+            return new Processor($response);
+        }
     }
 }
