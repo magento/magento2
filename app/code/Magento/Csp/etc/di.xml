@@ -111,4 +111,16 @@
             <argument name="cache" xsi:type="object">Magento\Csp\Model\BlockCache</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Asset\GroupedCollection">
+        <plugin name="addResourceIntegrity" type="Magento\Csp\Plugin\AddAssetIntegrity" />
+    </type>
+    <type name="Magento\Csp\Plugin\AddAssetIntegrity">
+        <arguments>
+            <argument name="controllerActions" xsi:type="array">
+                <item name="storeFrontCheckoutIndexAction" xsi:type="string">checkout_index_index</item>
+                <item name="adminSalesOrderCreateAction" xsi:type="string">sales_order_create_index</item>
+                <item name="adminSalesOrderLoadBlockAction" xsi:type="string">sales_order_create_loadBlock</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
