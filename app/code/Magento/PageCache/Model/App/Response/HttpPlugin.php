@@ -24,7 +24,7 @@ class HttpPlugin
     {
         if ($subject instanceof NotCacheableInterface
             || $subject->headersSent()
-            || $subject->setMetadata("NotCacheable")
+            || $subject->getMetadata("NotCacheable")
         ) {
             return;
         }
