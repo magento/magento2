@@ -72,6 +72,10 @@ class EmailSenderHandler
      * @var string
      */
     private $modifyStartFromDate;
+
+    /**
+     * @var int
+     */
     private int $maxSendAttempts;
 
     /**
