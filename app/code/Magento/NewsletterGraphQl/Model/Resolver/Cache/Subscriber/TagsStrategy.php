@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CustomerGraphQl\Model\Resolver\Cache\Subscriber;
+namespace Magento\NewsletterGraphQl\Model\Resolver\Cache\Subscriber;
 
 use Magento\Customer\Model\Customer;
 use Magento\Framework\App\Cache\Tag\StrategyInterface;

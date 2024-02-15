@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CustomerGraphQl\Model\Resolver\Cache\Subscriber;
+namespace Magento\NewsletterGraphQl\Model\Resolver\Cache\Subscriber;
 
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Cache\IdentityInterface;
 
