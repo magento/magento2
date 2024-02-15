@@ -37,7 +37,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-    /**
+/**
  * @SuppressWarnings(PHPMD)
  */
 class AdvancedPricingTest extends TestCase
@@ -151,8 +151,6 @@ class AdvancedPricingTest extends TestCase
      * @var StubProduct|Product
      */
     protected $object;
-
-
     /**
      * Set Up
      */
@@ -266,8 +264,6 @@ class AdvancedPricingTest extends TestCase
         foreach ($constructorMethods as $method) {
             $this->advancedPricing->expects($this->once())->method($method)->willReturnSelf();
         }
-
-
         $this->advancedPricing->__construct(
             $this->localeDate,
             $this->config,

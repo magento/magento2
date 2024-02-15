@@ -338,7 +338,7 @@ class ImageTest extends TestCase
      * Data Provider
      * @return array
      */
-    public function dataProvider(): array
+    public static function dataProvider(): array
     {
         return [
             [300, 300],
