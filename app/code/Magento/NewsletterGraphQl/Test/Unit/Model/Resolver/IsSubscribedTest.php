@@ -6,10 +6,10 @@
 
 declare(strict_types=1);
 
-namespace Magento\CustomerGraphQl\Test\Unit\Model\Resolver;
+namespace Magento\NewsletterGraphQl\Test\Unit\Model\Resolver;
 
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\CustomerGraphQl\Model\Resolver\IsSubscribed;
+use Magento\NewsletterGraphQl\Model\Resolver\IsSubscribed;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
