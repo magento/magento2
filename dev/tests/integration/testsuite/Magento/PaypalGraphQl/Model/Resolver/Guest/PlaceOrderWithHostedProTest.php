@@ -118,6 +118,10 @@ class PlaceOrderWithHostedProTest extends TestCase
       order {
         order_number
       }
+      errors {
+        message
+        code
+      }
     }
 }
 QUERY;
@@ -192,23 +196,25 @@ QUERY;
       order {
         order_number
       }
+      errors {
+        message
+        code
+      }
     }
 }
 QUERY;
 
         $exceptionMessage = 'Declined response message from PayPal gateway';
         $exception = new LocalizedException(__($exceptionMessage));
-        $expectedExceptionMessage = 'Unable to place order: A server error stopped your order from being placed. ' .
-            'Please try to place your order again';
+        $expectedErrorCode = 'UNDEFINED';
 
         $this->nvpMock->method('call')->willThrowException($exception);
 
         $response = $this->graphQlRequest->send($query);
         $responseData = $this->json->unserialize($response->getContent());
-        $this->assertArrayHasKey('errors', $responseData);
-        $actualError = $responseData['errors'][0];
-        $this->assertEquals($expectedExceptionMessage, $actualError['message']);
-        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['extensions']['category']);
+        $this->assertArrayHasKey('errors', $responseData['data']['placeOrder']);
+        $actualError = $responseData['data']['placeOrder']['errors'][0];
+        $this->assertEquals($expectedErrorCode, $actualError['code']);
     }
 
     /**
