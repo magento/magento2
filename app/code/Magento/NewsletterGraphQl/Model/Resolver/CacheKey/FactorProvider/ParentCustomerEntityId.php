@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider;
+namespace Magento\NewsletterGraphQl\Model\Resolver\CacheKey\FactorProvider;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
