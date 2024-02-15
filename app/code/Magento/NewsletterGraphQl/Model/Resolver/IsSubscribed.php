@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CustomerGraphQl\Model\Resolver;
+namespace Magento\NewsletterGraphQl\Model\Resolver;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\App\ObjectManager;
