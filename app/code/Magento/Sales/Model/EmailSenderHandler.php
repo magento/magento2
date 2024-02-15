@@ -5,11 +5,15 @@
  */
 namespace Magento\Sales\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\App\Config\ValueInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Model\Order\Email\Container\IdentityInterface;
+use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
+use Magento\Sales\Model\ResourceModel\EntityAbstract;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Sales emails sending
@@ -68,16 +72,18 @@ class EmailSenderHandler
      * @var string
      */
     private $modifyStartFromDate;
+    private int $maxSendAttempts;
 
     /**
-     * @param \Magento\Sales\Model\Order\Email\Sender $emailSender
-     * @param \Magento\Sales\Model\ResourceModel\EntityAbstract $entityResource
+     * @param Sender $emailSender
+     * @param EntityAbstract $entityResource
      * @param AbstractCollection $entityCollection
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
+     * @param ScopeConfigInterface $globalConfig
      * @param IdentityInterface|null $identityContainer
-     * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
+     * @param StoreManagerInterface|null $storeManager
      * @param ValueFactory|null $configValueFactory
      * @param string|null $modifyStartFromDate
+     * @param int $maxSendAttempts
      */
     public function __construct(
         \Magento\Sales\Model\Order\Email\Sender $emailSender,
@@ -87,7 +93,8 @@ class EmailSenderHandler
         IdentityInterface $identityContainer = null,
         \Magento\Store\Model\StoreManagerInterface $storeManager = null,
         ?ValueFactory $configValueFactory = null,
-        ?string $modifyStartFromDate = null
+        ?string $modifyStartFromDate = null,
+        int $maxSendAttempts = null
     ) {
         $this->emailSender = $emailSender;
         $this->entityResource = $entityResource;
@@ -101,6 +108,7 @@ class EmailSenderHandler
 
         $this->configValueFactory = $configValueFactory ?: ObjectManager::getInstance()->get(ValueFactory::class);
         $this->modifyStartFromDate = $modifyStartFromDate ?: $this->modifyStartFromDate;
+        $this->maxSendAttempts = $maxSendAttempts ?? 3;
     }
 
     /**
@@ -112,7 +120,13 @@ class EmailSenderHandler
     {
         if ($this->globalConfig->getValue('sales_email/general/async_sending')) {
             $this->entityCollection->addFieldToFilter('send_email', ['eq' => 1]);
-            $this->entityCollection->addFieldToFilter('email_sent', ['null' => true]);
+            $this->entityCollection->addFieldToFilter(
+                'email_sent',
+                [
+                    ['null' => true],
+                    ['lteq' => -1]
+                ]
+            );
             $this->filterCollectionByStartFromDate($this->entityCollection);
             $this->entityCollection->setPageSize(
                 $this->globalConfig->getValue('sales_email/general/sending_limit')
@@ -132,9 +146,17 @@ class EmailSenderHandler
 
                 /** @var \Magento\Sales\Model\AbstractModel $item */
                 foreach ($entityCollection->getItems() as $item) {
+                    $sendAttempts = $item->getEmailSent() ?? -$this->maxSendAttempts;
                     $isEmailSent = $this->emailSender->send($item, true);
+
+                    if ($isEmailSent) {
+                        $sendAttempts = 1;
+                    } else {
+                        $sendAttempts++;
+                    }
+
                     $this->entityResource->saveAttribute(
-                        $item->setEmailSent($isEmailSent),
+                        $item->setEmailSent($sendAttempts),
                         'email_sent'
                     );
                 }
