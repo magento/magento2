@@ -1,22 +1,21 @@
 {
     "name": "magento/module-order-cancellation-graph-ql",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~8.1.0||~8.2.0||~8.3.0",
+        "magento/framework": "*",
+        "magento/module-sales": "*",
+        "magento/module-sales-graph-ql": "*",
+        "magento/module-order-cancellation": "*"
+    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "config": {
-        "sort-packages": true
-    },
-    "version": "100.4.0-beta2",
-    "require": {
-        "php": "~8.1.0||~8.2.0||~8.3.0",
-        "magento/framework": "103.0.*",
-        "magento/module-sales": "103.0.*",
-        "magento/module-sales-graph-ql": "100.4.*",
-        "magento/module-order-cancellation": "100.4.*"
-    },
     "autoload": {
         "files": [
             "registration.php"
@@ -26,4 +25,3 @@
         }
     }
 }
-
