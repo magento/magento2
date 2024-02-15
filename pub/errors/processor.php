@@ -204,7 +204,7 @@ class Processor
         if (isset($_GET['id'])) {
             $this->loadReport($_GET['id']);
         }
-        $this->response->setMetadata("NotCacheable", true);
+        $response->setMetadata("NotCacheable", true);
     }
 
     /**

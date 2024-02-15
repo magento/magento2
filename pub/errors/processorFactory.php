@@ -5,9 +5,11 @@
  */
 // phpcs:disable PSR1.Files.SideEffects
 namespace Magento\Framework\Error;
+
 // phpcs:ignore Magento2.Functions.DiscouragedFunction,Magento2.Security.IncludeFile
 require_once realpath(__DIR__) . '/../../app/bootstrap.php';
 require_once 'processor.php'; // phpcs:ignore Magento2.Security.IncludeFile
+use Magento\Framework\App\ObjectManager as AppObjectManager;
 
 /**
  * Error processor factory
