@@ -26,7 +26,8 @@
         "magento/module-product-video": "*",
         "magento/module-configurable-sample-data": "*",
         "magento/module-product-links-sample-data": "*",
-        "magento/module-tax": "*"
+        "magento/module-tax": "*",
+        "magento/module-catalog-widget": "*"
     },
     "type": "magento2-module",
     "license": [
