@@ -136,7 +136,7 @@ type Customer @doc(description: "Defines the customer name, addresses, and other
     date_of_birth: String @doc(description: "The customer's date of birth.")
     taxvat: String @doc(description: "The customer's Value-added tax (VAT) number (for corporate customers).")
     id: Int @doc(description: "The ID assigned to the customer.") @deprecated(reason: "`id` is not needed as part of `Customer`, because on the server side, it can be identified based on the customer token used for authentication. There is no need to know customer ID on the client side.")
-    is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\IsSubscribed")
+    is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter.") @resolver(class: "\\Magento\\NewsletterGraphQl\\Model\\Resolver\\IsSubscribed")
     addresses: [CustomerAddress] @doc(description: "An array containing the customer's shipping and billing addresses.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddresses")
     gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2).")
     custom_attributes(attributeCodes: [ID!]): [AttributeValueInterface] @doc(description: "Customer's custom attributes.") @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\CustomAttributeFilter")
