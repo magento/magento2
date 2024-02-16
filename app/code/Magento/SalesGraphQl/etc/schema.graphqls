@@ -110,6 +110,7 @@ interface OrderItemInterface @doc(description: "Order item details.") @typeResol
     quantity_invoiced: Float @doc(description: "The number of invoiced items.")
     quantity_canceled: Float @doc(description: "The number of canceled items.")
     quantity_returned: Float @doc(description: "The number of returned items.")
+    product: ProductInterface @doc(description: "The ProductInterface object, which contains details about the base product") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\ProductResolver")
 }
 
 type OrderItem implements OrderItemInterface {
