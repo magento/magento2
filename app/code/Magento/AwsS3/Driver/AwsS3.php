@@ -169,12 +169,18 @@ class AwsS3 implements RemoteDriverInterface
             return true;
         }
 
-        try {
-            return $this->adapter->directoryExists($path);
-        } catch (FlysystemFilesystemException $e) {
-            $this->logger->error($e->getMessage());
-            return false;
+        $pathStats = $this->stat($path);
+
+        if ($pathStats['type'] == self::TYPE_DIR) {
+            try {
+                return $this->adapter->directoryExists($path);
+            } catch (FlysystemFilesystemException $e) {
+                $this->logger->error($e->getMessage());
+                return false;
+            }
         }
+
+        return false; // Return false if the path is not a directory
     }
 
     /**
