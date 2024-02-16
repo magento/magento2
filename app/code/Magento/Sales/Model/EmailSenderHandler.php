@@ -84,14 +84,14 @@ class EmailSenderHandler
      * @param string|null $modifyStartFromDate
      */
     public function __construct(
-        Sender                $emailSender,
-        EntityAbstract        $entityResource,
-        AbstractCollection    $entityCollection,
-        ScopeConfigInterface  $globalConfig,
-        IdentityInterface     $identityContainer = null,
+        Sender $emailSender,
+        EntityAbstract $entityResource,
+        AbstractCollection $entityCollection,
+        ScopeConfigInterface $globalConfig,
+        IdentityInterface $identityContainer = null,
         StoreManagerInterface $storeManager = null,
-        ?ValueFactory         $configValueFactory = null,
-        ?string               $modifyStartFromDate = null,
+        ?ValueFactory $configValueFactory = null,
+        ?string $modifyStartFromDate = null,
     ) {
         $this->emailSender = $emailSender;
         $this->entityResource = $entityResource;
