@@ -373,10 +373,11 @@ class TierPriceValidator implements ResetAfterRequestInterface
     {
         try {
             $this->websiteRepository->getById($price->getWebsiteId());
-            $isGlobalConfig = (int) $this->scopeConfig->getValue(
+            $isGlobalConfig = $this->scopeConfig->getValue(
                 Data::XML_PATH_PRICE_SCOPE,
                 ScopeInterface::SCOPE_STORE
             );
+            $isGlobalConfig = isset($isGlobalConfig) ? (int) $isGlobalConfig : null;
             if ($isGlobalConfig === Data::PRICE_SCOPE_GLOBAL &&
                 (int) $this->allWebsitesValue !== $price->getWebsiteId()
             ) {
