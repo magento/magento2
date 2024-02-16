@@ -7,14 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Csp\Plugin;
 
-use Magento\Csp\Model\Asset\SubResourceIntegrity;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\View\Asset\AssetInterface;
 use Magento\Framework\View\Asset\GroupedCollection;
-use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\LocalInterface;
-use Magento\Framework\App\Request\Http;
+use Magento\Csp\Model\SubresourceIntegrityRepository;
 
 /**
  * Plugin to add integrity to assets on page load
@@ -22,29 +19,11 @@ use Magento\Framework\App\Request\Http;
 class AddAssetIntegrity
 {
     /**
-     * @var GroupedCollection
-     */
-    private GroupedCollection $groupedCollection;
-
-    /**
-     * @var SubResourceIntegrity
-     */
-    private SubResourceIntegrity $resourceIntegrity;
-
-    /**
-     * Constant for asset content type
+     * Expected asset content type.
+     *
+     * @var string
      */
     private const CONTENT_TYPE = 'js';
-
-    /**
-     * @var Filesystem
-     */
-    private Filesystem $filesystem;
-
-    /**
-     * @var array $controllerActions
-     */
-    private array $controllerActions;
 
     /**
      * @var Http
@@ -52,25 +31,27 @@ class AddAssetIntegrity
     private Http $request;
 
     /**
-     * constructor
-     *
-     * @param GroupedCollection $groupedCollection
-     * @param SubResourceIntegrity $resourceIntegrity
-     * @param Filesystem $fileSystem
+     * @var SubresourceIntegrityRepository
+     */
+    private SubresourceIntegrityRepository $integrityRepository;
+
+    /**
+     * @var array $controllerActions
+     */
+    private array $controllerActions;
+
+    /**
      * @param Http $request
+     * @param SubresourceIntegrityRepository $integrityRepository
      * @param array $controllerActions
      */
     public function __construct(
-        GroupedCollection $groupedCollection,
-        SubResourceIntegrity $resourceIntegrity,
-        Filesystem $fileSystem,
         Http $request,
+        SubresourceIntegrityRepository $integrityRepository,
         array $controllerActions = []
     ) {
-        $this->groupedCollection = $groupedCollection;
-        $this->resourceIntegrity = $resourceIntegrity;
-        $this->filesystem = $fileSystem;
         $this->request = $request;
+        $this->integrityRepository = $integrityRepository;
         $this->controllerActions = $controllerActions;
     }
 
@@ -80,47 +61,31 @@ class AddAssetIntegrity
      * @param GroupedCollection $subject
      * @param AssetInterface $asset
      * @param array $properties
+     *
      * @return array
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @throws FileSystemException
      */
     public function beforeGetFilteredProperties(
         GroupedCollection $subject,
         AssetInterface $asset,
         array $properties = []
-    ):array {
+    ): array {
+        if ($asset instanceof LocalInterface) {
+            if (in_array($this->request->getFullActionName(), $this->controllerActions)) {
+                if ($asset->getContentType() === self::CONTENT_TYPE) {
+                    $integrity = $this->integrityRepository->getByUrl(
+                        $asset->getUrl()
+                    );
 
-        $path = $asset instanceof LocalInterface ? $asset->getpath(): $asset->getUrl();
-        $actionName = $this->request->getFullActionName();
-        if (in_array($actionName, $this->controllerActions) &&
-            $this->checkFileExists($path)
-        ) {
-            $contentType = $asset->getContentType();
-            $fileContent = $asset->getContent();
-            $attributes = [];
-
-            if ($fileContent && $contentType === self::CONTENT_TYPE) {
-                $integrity = $this->resourceIntegrity->generateAssetIntegrity($path, $fileContent);
-                if ($integrity) {
-                    $attributes['integrity'] = $integrity;
-                    $attributes['crossorigin'] = 'anonymous';
-                    $properties['attributes'] = $attributes;
+                    if ($integrity) {
+                        $properties['attributes']['integrity'] = $integrity->getHash();
+                        $properties['attributes']['crossorigin'] = 'anonymous';
+                    }
                 }
             }
         }
-        return [$asset, $properties];
-    }
 
-    /**
-     * Check if file exist
-     *
-     * @param string $relPath
-     * @return bool
-     * @throws FileSystemException
-     */
-    private function checkFileExists($relPath)
-    {
-        $dir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
-        return $dir->isExist($relPath);
+        return [$asset, $properties];
     }
 }
