@@ -364,7 +364,9 @@ class ObjectManager
     }
 
     /**
-     * @param $map
+     * Prepare getInstance for mock objects in array $map
+     *
+     * @param array $map
      */
     public function prepareObjectManager(array $map = [])
     {

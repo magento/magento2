@@ -11,6 +11,7 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory;
 use Magento\Elasticsearch\Model\Indexer\IndexerHandler;
+use Magento\Framework\Amqp\ConfigPool as AmqpConfigPool;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory;
 use Magento\CatalogSearch\Model\Indexer\Scope\State;
@@ -21,6 +22,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Indexer\Model\ProcessManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -79,6 +81,22 @@ class FulltextTest extends TestCase
         $stateMock = $this->getMockBuilder(State::class)
             ->getMock();
         $objectManagerHelper = new ObjectManagerHelper($this);
+
+        $objects = [
+            [
+                \Magento\Framework\Registry::class,
+                $this->createMock(\Magento\Framework\Registry::class)
+            ],
+            [
+                LoggerInterface::class,
+                $this->createMock(LoggerInterface::class)
+            ],
+            [
+                AmqpConfigPool::class,
+                $this->createMock(AmqpConfigPool::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
 
         $this->processManager = new ProcessManager(
             $this->getClassMock(ResourceConnection::class)

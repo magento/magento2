@@ -11,13 +11,16 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Escaper;
 use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\Result\Layout;
 use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
 use Magento\ImportExport\Controller\Adminhtml\Import\Validate;
 use Magento\ImportExport\Helper\Report;
 use Magento\ImportExport\Model\History;
+use Magento\ImportExport\Model\Import\RenderErrorMessages;
 use Magento\ImportExport\Model\Report\ReportProcessorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -69,6 +72,19 @@ class ValidateTest extends TestCase
 
     protected function setUp(): void
     {
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $objects = [
+            [
+                Escaper::class,
+                $this->createMock(Escaper::class)
+            ],
+            [
+                RenderErrorMessages::class,
+                $this->createMock(RenderErrorMessages::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
+
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->onlyMethods([

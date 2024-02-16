@@ -94,7 +94,6 @@ class SaveActionTest extends TestCase
             $this->linkManagement,
             $this->storeManager,
             $this->addChildren
-
         );
     }
 

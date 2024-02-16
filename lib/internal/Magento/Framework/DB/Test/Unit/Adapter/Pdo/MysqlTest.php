@@ -88,7 +88,7 @@ class MysqlTest extends TestCase
     /**
      * Data Provider for testPrepareColumnValueForBigint
      */
-    public function bigintResultProvider()
+    public static function bigintResultProvider()
     {
         return [
             [1, 1],
@@ -434,7 +434,7 @@ class MysqlTest extends TestCase
     /**
      * @return array
      */
-    public function addColumnDataProvider()
+    public static function addColumnDataProvider()
     {
         return [
             [
@@ -466,7 +466,7 @@ class MysqlTest extends TestCase
     /**
      * @return array
      */
-    public function getIndexNameDataProvider()
+    public static function getIndexNameDataProvider()
     {
         // 65 characters long - will be compressed
         $longTableName = '__________________________________________________long_table_name';
@@ -602,7 +602,7 @@ class MysqlTest extends TestCase
     /**
      * @return array
      */
-    public function addIndexWithDuplicationsInDBDataProvider(): array
+    public static function addIndexWithDuplicationsInDBDataProvider(): array
     {
         return [
             'New unique index' => [
@@ -816,7 +816,7 @@ class MysqlTest extends TestCase
      *
      * @return array[]
      */
-    public function columnDataForTest(): array
+    public static function columnDataForTest(): array
     {
         return [
           [
@@ -884,8 +884,9 @@ class MysqlTest extends TestCase
         $adapter->expects($matcher)
             ->method('_beginTransaction')
             ->willReturnCallback(
-                function () use ($matcher, $exception) {
-                    if ($matcher->getInvocationCount() === 1) {
+                function () use ($exception) {
+                    static $counter = 0;
+                    if (++$counter === 1) {
                         throw $exception;
                     }
                 }
@@ -897,7 +898,7 @@ class MysqlTest extends TestCase
     /**
      * @return array[]
      */
-    public function retryExceptionDataProvider(): array
+    public static function retryExceptionDataProvider(): array
     {
         $serverHasGoneAwayException = new \PDOException();
         $serverHasGoneAwayException->errorInfo = [1 => 2006];
@@ -932,7 +933,7 @@ class MysqlTest extends TestCase
     /**
      * @return array[]
      */
-    public function exceptionDataProvider(): array
+    public static function exceptionDataProvider(): array
     {
         $pdoException = new \PDOException();
         $pdoException->errorInfo = [1 => 1213];

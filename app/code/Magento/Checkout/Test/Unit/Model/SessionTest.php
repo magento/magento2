@@ -59,7 +59,6 @@ class SessionTest extends TestCase
             ]
         ];
         $this->helper->prepareObjectManager($objects);
-
     }
 
     /**

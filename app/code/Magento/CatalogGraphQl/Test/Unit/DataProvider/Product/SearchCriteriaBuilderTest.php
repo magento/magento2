@@ -10,6 +10,7 @@ namespace Magento\CatalogGraphQl\Test\Unit\DataProvider\Product;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\CatalogGraphQl\DataProvider\Product\RequestDataBuilder;
 use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
 use Magento\Eav\Model\Config;
 use Magento\Framework\Api\Filter;
@@ -19,6 +20,8 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
+use Magento\Framework\Search\Request\Config as SearchConfig;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -72,6 +75,18 @@ class SearchCriteriaBuilderTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $objects = [
+            [
+                SearchConfig::class,
+                $this->createMock(SearchConfig::class)
+            ],
+            [
+                RequestDataBuilder::class,
+                $this->createMock(RequestDataBuilder::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
         $this->builder = $this->createMock(Builder::class);
         $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->filterBuilder = $this->createMock(FilterBuilder::class);
