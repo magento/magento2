@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Csp\Model;
 
+use Psr\Log\LoggerInterface;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\RuntimeException;
-use Magento\Csp\Model\SubresourceIntegrityFactory;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
@@ -32,6 +32,11 @@ class SubresourceIntegrityRepository
     private CacheInterface $cache;
 
     /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
      * @var DeploymentConfig
      */
     private DeploymentConfig $config;
@@ -50,17 +55,20 @@ class SubresourceIntegrityRepository
      * constructor
      *
      * @param CacheInterface $cache
+     * @param LoggerInterface $logger
      * @param DeploymentConfig $config
      * @param SerializerInterface $serializer
      * @param SubresourceIntegrityFactory $integrityFactory
      */
     public function __construct(
         CacheInterface $cache,
+        LoggerInterface $logger,
         DeploymentConfig $config,
         SerializerInterface $serializer,
         SubresourceIntegrityFactory $integrityFactory
     ) {
         $this->cache = $cache;
+        $this->logger = $logger;
         $this->config = $config;
         $this->serializer = $serializer;
         $this->integrityFactory = $integrityFactory;
@@ -92,33 +100,34 @@ class SubresourceIntegrityRepository
      * Gets all available Integrity objects.
      *
      * @return SubresourceIntegrity[]
-     *
-     * @throws FileSystemException
-     * @throws RuntimeException
      */
     public function getAll(): array
     {
-        $defaultCachePrefix = $this->config->get(
-            "cache/frontend/default/id_prefix"
-        );
-
-        $cacheIds = $this->cache->getFrontend()->getLowLevelFrontend()
-            ->getIdsMatchingAnyTags(
-                [$defaultCachePrefix . self::CACHE_PREFIX]
-            );
-
         $result = [];
 
-        foreach ($cacheIds as $id) {
-            $integrity = $this->cache->load($id);
+        try {
+            $defaultCachePrefix = $this->config->get(
+                "cache/frontend/default/id_prefix"
+            );
 
-            if ($integrity) {
-                $result[] = $this->integrityFactory->create(
-                    [
-                        "data" => $this->serializer->unserialize($integrity)
-                    ]
+            $cacheIds = $this->cache->getFrontend()->getLowLevelFrontend()
+                ->getIdsMatchingAnyTags(
+                    [$defaultCachePrefix . self::CACHE_PREFIX]
                 );
+
+            foreach ($cacheIds as $id) {
+                $integrity = $this->cache->load($id);
+
+                if ($integrity) {
+                    $result[] = $this->integrityFactory->create(
+                        [
+                            "data" => $this->serializer->unserialize($integrity)
+                        ]
+                    );
+                }
             }
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
         }
 
         return $result;
