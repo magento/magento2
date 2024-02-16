@@ -163,12 +163,17 @@ class EmailSenderHandlerTest extends TestCase
         ?bool $emailSendingResult,
         ?int $expectedIsEmailSent
     ): void {
-        $path = 'sales_email/general/async_sending';
-
         $this->globalConfig
             ->method('getValue')
-            ->withConsecutive([$path])
-            ->willReturnOnConsecutiveCalls($configValue);
+            ->willReturnCallback(function ($path) use ($configValue) {
+                if ($path === 'sales_email/general/async_sending') {
+                    return $configValue;
+                }
+                if ($path === 'sales_email/general/async_sending_attempts') {
+                    return 3;
+                }
+                return null;
+            });
 
         if ($configValue) {
             $nowDate = date('Y-m-d H:i:s');

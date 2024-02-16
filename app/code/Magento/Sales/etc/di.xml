@@ -220,7 +220,6 @@
     <type name="Magento\Sales\Model\EmailSenderHandler">
         <arguments>
             <argument name="modifyStartFromDate" xsi:type="string">-1 day</argument>
-            <argument name="maxSendAttempts" xsi:type="number">3</argument>
         </arguments>
     </type>
     <virtualType name="SalesOrderIndexGridSyncRemove" type="Magento\Sales\Observer\GridSyncRemoveObserver">
