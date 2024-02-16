@@ -291,7 +291,7 @@
         <item type="directory">Lib::varien</item>
         <item type="directory">Lib::jquery/editableMultiselect</item>
         <item type="directory">Lib::jquery/jstree</item>
-        <item type="directory">Lib::jquery/fileUploader</item>
+        <item type="directory">Lib::jquery/uppy</item>
         <item type="directory">Lib::css</item>
         <item type="directory">Lib::lib</item>
         <item type="directory">Lib::extjs</item>
