@@ -121,7 +121,9 @@ class AddAssetIntegrity
         File $result
     ): File
     {
-        $this->getIntegrity($result);
+        if ($result->getContentType() === self::CONTENT_TYPE) {
+            $this->getIntegrity($result);
+        }
         return $result;
     }
 
@@ -141,7 +143,9 @@ class AddAssetIntegrity
         AssetInterface $asset
     ): bool
     {
-        $this->getIntegrity($asset);
+        if ($asset->getContentType() === self::CONTENT_TYPE) {
+            $this->getIntegrity($asset);
+        }
         return $result;
     }
 

@@ -113,7 +113,7 @@
         </arguments>
     </type>
     <type name="Magento\Framework\View\Asset\GroupedCollection">
-        <plugin name="addResourceIntegrity" type="Magento\Csp\Plugin\AddAssetIntegrity" />
+        <plugin name="addDefaultPropertiesToGroup" type="Magento\Csp\Plugin\AddAssetIntegrity" />
     </type>
     <type name="Magento\Csp\Plugin\AddAssetIntegrity">
         <arguments>
@@ -123,5 +123,11 @@
                 <item name="adminSalesOrderLoadBlockAction" xsi:type="string">sales_order_create_loadBlock</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Framework\App\View\Asset\Publisher">
+        <plugin name="addResourceIntegrity" type="Magento\Csp\Plugin\AddAssetIntegrity"/>
+    </type>
+    <type name="Magento\RequireJs\Model\FileManager">
+        <plugin name="addAssetIntegrityToRequireJSConfig" type="Magento\Csp\Plugin\AddAssetIntegrity"/>
     </type>
 </config>
