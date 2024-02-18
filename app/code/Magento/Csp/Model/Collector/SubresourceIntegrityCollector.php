@@ -36,11 +36,14 @@ class SubresourceIntegrityCollector implements PolicyCollectorInterface
     public function collect(array $defaultPolicies = []): array
     {
         $integrityHashes = [];
+        $assetIntegrity = $this->integrityRepository->getAll();
 
-        foreach ($this->integrityRepository->getAll() as $integrity) {
+        foreach ($assetIntegrity as $integrity) {
             $hashParts = explode("-", $integrity->getHash());
 
-            $integrityHashes[$hashParts[1]] = $hashParts[0];
+            if (is_array($hashParts) && count($hashParts) > 1) {
+                $integrityHashes[$hashParts[1]] = $hashParts[0];
+            }
         }
 
         if ($integrityHashes) {

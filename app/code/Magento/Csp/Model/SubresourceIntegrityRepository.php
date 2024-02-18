@@ -15,7 +15,7 @@ use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
- * Subresource Integrity repository.
+ * Class contains methods equivalent to repository design to manage SRI hashes in cache
  */
 class SubresourceIntegrityRepository
 {
