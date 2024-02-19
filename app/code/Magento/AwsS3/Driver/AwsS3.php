@@ -509,7 +509,11 @@ class AwsS3 implements RemoteDriverInterface
     private function directoryExists(string $path): bool
     {
         try {
-            return $this->adapter->fileExists($path);
+            if($this->isTypeDirectory($path)) {
+                return $this->adapter->directoryExists($path);
+            } else {
+                return $this->adapter->fileExists($path);
+            }
         } catch (Throwable $e) {
             // catch closed iterator
             return false;
