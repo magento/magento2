@@ -82,6 +82,10 @@ class MaintenanceMode
                     return false;
                 }
 
+                if (!$this->ipAddress->isValidRange($allowed)) {
+                    continue;
+                }
+
                 if ($this->ipAddress->rangeContainsAddress($allowed, $remoteAddr)) {
                     return false;
                 }
