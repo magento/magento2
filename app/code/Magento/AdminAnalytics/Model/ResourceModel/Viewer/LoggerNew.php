@@ -17,7 +17,7 @@ use Magento\Framework\App\ResourceConnection;
  *
  * Saves and retrieves release notification viewer log data.
  */
-class Logger
+class LoggerNew
 {
     /**
      * Admin Analytics usage version log table name

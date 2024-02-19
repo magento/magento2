@@ -1,7 +1,21 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/************************************************************************
+ *
+ *  ADOBE CONFIDENTIAL
+ *  ___________________
+ *
+ *  Copyright 2024 Adobe
+ *  All Rights Reserved.
+ *
+ *  NOTICE: All information contained herein is, and remains
+ *  the property of Adobe and its suppliers, if any. The intellectual
+ *  and technical concepts contained herein are proprietary to Adobe
+ *  and its suppliers and are protected by all applicable intellectual
+ *  property laws, including trade secret and copyright laws.
+ *  Dissemination of this information or reproduction of this material
+ *  is strictly forbidden unless prior written permission is obtained
+ *  from Adobe.
+ *  ************************************************************************
  */
 
 /**
@@ -11,6 +25,23 @@ namespace Magento\TestFramework\Inspection;
 
 class WordsFinder
 {
+    /**
+     * File path public repo changed file list.
+     */
+    private const CHANGED_PUBLIC_REPO_FILE =
+        '/dev/tests/static/testsuite/Magento/Test/_files/changed_files_public.txt';
+
+    /**
+     * File path private repo changed file list.
+     */
+    private const CHANGED_PRIVATE_REPO_FILE =
+        '/dev/tests/static/testsuite/Magento/Test/_files/changed_files_private.txt';
+
+    /**
+     * @var string
+     */
+    private $_prefix = '/var/www/html/';
+
     /**
      * List of file extensions, that indicate a binary file
      *
@@ -22,18 +53,11 @@ class WordsFinder
     ];
 
     /**
-     * Copyright string which must be present in every non-binary file
+     * Copyright string which must be present in every non-binary private repo file
      *
      * @var string
      */
-    protected $copyrightString = 'Copyright © Magento, Inc. All rights reserved.';
-
-    /**
-     * Copying string which must be present in every non-binary file right after copyright string
-     *
-     * @var string
-     */
-    protected $copyingString = 'See COPYING.txt for license details.';
+    protected $copyrightAdobeString = 'ADOBE CONFIDENTIAL';
 
     /**
      * List of extensions for which copyright check must be skipped
@@ -59,6 +83,20 @@ class WordsFinder
     protected $isCopyrightChecked;
 
     /**
+     * Changed Private Repo files
+     *
+     * @var array
+     */
+    protected $_changedPrivateRepoFileList;
+
+    /**
+     * Changed Private and public Repo files
+     *
+     * @var array
+     */
+    protected $_changedAllFiles;
+
+    /**
      * Words to search for
      *
      * @var array
@@ -80,7 +118,7 @@ class WordsFinder
     protected $_baseDir;
 
     /**
-     * Component Registrar
+     * Component Registrar Class
      *
      * @var \Magento\Framework\Component\ComponentRegistrar
      */
@@ -130,6 +168,9 @@ class WordsFinder
         }
 
         $this->isCopyrightChecked = $isCopyrightChecked;
+        $this->_changedPrivateRepoFileList = $this->getChangedPrivateRepoFileList();
+        $this->_changedAllFiles =
+            array_merge($this->_changedPrivateRepoFileList, $this->getChangedPublicRepoFileList());
     }
 
     /**
@@ -224,7 +265,7 @@ class WordsFinder
             }
 
             if (isset($exclude[$path])) {
-                $exclude[$path] = array_merge($excludes, $exclude[$path]);
+                $exclude[$path] = [...$excludes,...$exclude[$path]];
             } else {
                 $exclude[$path] = $excludes;
             }
@@ -233,17 +274,17 @@ class WordsFinder
         // Merge with already present whitelist
         foreach ($whitelist as $newPath => $newWords) {
             if (isset($this->_whitelist[$newPath])) {
-                $newWords = array_merge($this->_whitelist[$newPath], $newWords);
+                $newWords = [...$this->_whitelist[$newPath],...$newWords];
             }
             $this->_whitelist[$newPath] = array_unique($newWords);
         }
-
         foreach ($exclude as $newPath => $newWords) {
             if (isset($this->exclude[$newPath])) {
-                $newWords = array_merge($this->exclude[$newPath], $newWords);
+                $newWords = [...$this->exclude[$newPath],$newWords];
             }
             $this->exclude[$newPath] = array_unique($newWords);
         }
+
         return $this;
     }
 
@@ -262,6 +303,7 @@ class WordsFinder
 
     /**
      * Checks the file content and name against the list of words. Do not check content of binary files.
+     *
      * Exclude whitelisted entries.
      *
      * @param  string $file
@@ -302,17 +344,34 @@ class WordsFinder
                 $foundWords[] = $word;
             }
         }
-        if ($contents && $this->isCopyrightChecked && !$this->isCopyrightCheckSkipped($file)
-            && (($copyrightStringPosition = mb_strpos($contents, $this->copyrightString)) === false
-            || ($copyingStringPosition = strpos($contents, $this->copyingString)) === false
-            || $copyingStringPosition - $copyrightStringPosition - mb_strlen($this->copyrightString) > 10)
-        ) {
-            $foundWords[] = 'Copyright string is missing';
+
+        if (substr($file, 0, strlen($this->_prefix)) == $this->_prefix) {
+            $file = substr($file, strlen($this->_prefix));
         }
+
+        if ($contents && !$this->isCopyrightCheckSkipped($file)) {
+
+            if (in_array($file, $this->_changedPrivateRepoFileList)) {
+                if ((strpos($contents, $this->copyrightAdobeString) === false)
+                ) {
+                    $foundWords[] = 'Copyright content is not valid';
+                }
+            }
+
+            if (in_array($file, $this->_changedAllFiles)) {
+                if ((strpos($contents, $this->getCopyrightYear()) === false)) {
+                    $foundWords[] = 'Copyright file created year is not valid';
+                }
+            }
+
+        }
+
         return $foundWords;
     }
 
     /**
+     * Check if copyright check skip
+     *
      * @param string $path
      * @return bool
      */
@@ -376,5 +435,51 @@ class WordsFinder
             return $file;
         }
         return substr($file, strlen($this->_baseDir) + 1);
+    }
+
+    /**
+     * Changed Private File List
+     *
+     * @return array
+     */
+    private function getChangedPrivateRepoFileList()
+    {
+        $data = [];
+        $changedFilesList = BP .self::CHANGED_PRIVATE_REPO_FILE;
+        if (file_exists($changedFilesList)) {
+            $changedFilesList = file($changedFilesList);
+            foreach ($changedFilesList as $file) {
+                $data[] = trim($file);
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Changed Public File List
+     *
+     * @return array
+     */
+    private function getChangedPublicRepoFileList()
+    {
+        $data = [];
+        $changedFilesList = BP .self::CHANGED_PUBLIC_REPO_FILE;
+        if (file_exists($changedFilesList)) {
+            $changedFilesList = file($changedFilesList);
+            foreach ($changedFilesList as $file) {
+                $data[] = trim($file);
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Get copyright text
+     *
+     * @return string
+     */
+    private function getCopyrightYear()
+    {
+        return  'Copyright '.date('Y').' Adobe';
     }
 }
