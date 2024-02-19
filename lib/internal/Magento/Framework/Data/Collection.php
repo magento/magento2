@@ -825,7 +825,7 @@ class Collection implements
      * Retrieve item by id
      *
      * @param string|int $idValue
-     * @return DataObject
+     * @return DataObject|null
      */
     public function getItemById($idValue)
     {

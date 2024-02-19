@@ -109,9 +109,6 @@ class SaveActionTest extends TestCase
             ->method('getMetadata')
             ->willReturn($metadata);
 
-        $this->linkManagement->expects($this->once())
-            ->method('getChildren')
-            ->willReturn([]);
         $this->product->expects($this->once())
             ->method('setIsRelationsChanged')
             ->with(true);
