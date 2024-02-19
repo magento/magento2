@@ -545,7 +545,7 @@ class MaintenanceModeTest extends TestCase
     public function testOffSetMultipleAddresses()
     {
         $mapisExist = [
-            [MaintenanceMode::FLAG_FILENAME, false],
+            [MaintenanceMode::FLAG_FILENAME, true],
             [MaintenanceMode::IP_FILENAME, true],
         ];
         $this->flagDir->method('isExist')
@@ -553,14 +553,17 @@ class MaintenanceModeTest extends TestCase
         $this->flagDir->method('delete')
             ->willReturnMap($mapisExist);
 
+        $inputString = '127.0.0.1,203.0.113.71/32,10.50.60.123/32';
         $this->flagDir->method('readFile')
             ->with(MaintenanceMode::IP_FILENAME)
-            ->willReturn('203.0.113.71/32,10.50.60.123/32');
+            ->willReturn($inputString);
 
-        $expectedArray = ['203.0.113.71/32', '10.50.60.123/32'];
-        $this->model->setAddresses('203.0.113.71,10.50.60.123');
+        $expectedArray = ['127.0.0.1', '203.0.113.71/32', '10.50.60.123/32'];
+        $this->model->setAddresses($inputString);
         $this->assertEquals($expectedArray, $this->model->getAddressInfo());
+        $this->assertFalse($this->model->isOn('127.0.0.1'));
+        $this->assertTrue($this->model->isOn('127.0.0.2'));
         $this->assertFalse($this->model->isOn('203.0.113.71'));
-        $this->assertFalse($this->model->isOn('198.51.100.85'));
+        $this->assertTrue($this->model->isOn('198.51.100.85'));
     }
 }
