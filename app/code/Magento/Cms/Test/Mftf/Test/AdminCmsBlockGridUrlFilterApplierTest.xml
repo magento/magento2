@@ -17,9 +17,12 @@
             <severity value="MAJOR"/>
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4931106"/>
             <group value="Cms"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenCmsBlocksGridActionGroup" stepKey="goToCMSBlockPage"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
             <createData entity="Sales25offBlock" stepKey="createBlock"/>
         </before>
         <after>

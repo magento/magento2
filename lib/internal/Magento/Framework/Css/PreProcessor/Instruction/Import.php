@@ -20,11 +20,11 @@ class Import implements PreProcessorInterface
     /**
      * Pattern of 'import' instruction
      */
-    const REPLACE_PATTERN =
+    public const REPLACE_PATTERN =
         '#@import[\s]*'
-        .'(?P<start>[\(\),\w\s]*?[\'\"][\s]*)'
-        .'(?P<path>[^\)\'\"]*?)'
-        .'(?P<end>[\s]*[\'\"][\s\w]*[\)]?)[\s]*;#';
+        . '(?P<start>[\(\),\w\s]*?[\'\"][\s]*)'
+        . '(?P<path>[^\)\'\"]*?)'
+        . '(?P<end>[\s]*[\'\"][\s\w]*[\)]?)[\s]*;#';
 
     /**
      * @var \Magento\Framework\View\Asset\NotationResolver\Module
@@ -56,7 +56,7 @@ class Import implements PreProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(Chain $chain)
     {
@@ -136,7 +136,7 @@ class Import implements PreProcessorInterface
 
         $start = $matchedContent['start'];
         $end = $matchedContent['end'];
-        if (strpos(trim($start), 'url') !== 0) {
+        if ($start && strpos(trim($start), 'url') !== 0) {
             $this->recordRelatedFile($matchedFileId, $asset);
         }
 

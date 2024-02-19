@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
 
 /**
@@ -62,6 +63,9 @@ class AttributeOptionProvider
                     'attribute_id' => 'a.attribute_id',
                     'attribute_code' => 'a.attribute_code',
                     'attribute_label' => 'a.frontend_label',
+                    'attribute_type' => 'a.frontend_input',
+                    'position' => 'attribute_configuration.position',
+                    'is_filterable' => 'attribute_configuration.is_filterable',
                 ]
             )
             ->joinLeft(
@@ -70,6 +74,11 @@ class AttributeOptionProvider
                 [
                     'attribute_store_label' => 'attribute_label.value',
                 ]
+            )
+            ->joinLeft(
+                ['attribute_configuration' => $this->resourceConnection->getTableName('catalog_eav_attribute')],
+                'a.attribute_id = attribute_configuration.attribute_id',
+                []
             )
             ->joinLeft(
                 ['options' => $this->resourceConnection->getTableName('eav_attribute_option')],
@@ -95,13 +104,15 @@ class AttributeOptionProvider
             )->where(
                 'a.attribute_id = options.attribute_id AND option_value.store_id = ?',
                 Store::DEFAULT_STORE_ID
+            )->order(
+                'options.sort_order ' . Select::SQL_ASC
             );
 
-        $select->where('option_value.option_id IN (?)', $optionIds);
+        $select->where('option_value.option_id IN (?) OR  attribute_configuration.is_filterable = 2', $optionIds);
 
         if (!empty($attributeCodes)) {
             $select->orWhere(
-                'a.attribute_code in (?) AND a.frontend_input = \'boolean\'',
+                'a.attribute_code in (?) AND a.frontend_input in (\'boolean\', \'price\')',
                 $attributeCodes
             );
         }
@@ -112,11 +123,11 @@ class AttributeOptionProvider
     /**
      * Format result
      *
-     * @param \Magento\Framework\DB\Select $select
+     * @param Select $select
      * @return array
      * @throws \Zend_Db_Statement_Exception
      */
-    private function formatResult(\Magento\Framework\DB\Select $select): array
+    private function formatResult(Select $select): array
     {
         $statement = $this->resourceConnection->getConnection()->query($select);
 
@@ -126,12 +137,16 @@ class AttributeOptionProvider
                 $result[$option['attribute_code']] = [
                     'attribute_id' => $option['attribute_id'],
                     'attribute_code' => $option['attribute_code'],
-                    'attribute_label' => $option['attribute_store_label']
-                        ? $option['attribute_store_label'] : $option['attribute_label'],
+                    'attribute_label' => $option['attribute_store_label'] ?: $option['attribute_label'],
+                    'attribute_type' => $option['attribute_type'],
+                    'position' => $option['position'],
+                    'is_filterable' => (int) $option['is_filterable'],
                     'options' => [],
                 ];
             }
-            $result[$option['attribute_code']]['options'][$option['option_id']] = $option['option_label'];
+            if (!empty($option['option_id'])) {
+                $result[$option['attribute_code']]['options'][$option['option_id']] = $option['option_label'];
+            }
         }
 
         return $result;

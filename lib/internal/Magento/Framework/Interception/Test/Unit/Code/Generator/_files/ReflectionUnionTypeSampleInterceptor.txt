@@ -1,0 +1,32 @@
+namespace Magento\Framework\Interception\Code\Generator\ReflectionUnionTypeSample;
+
+/**
+ * Interceptor class for @see \Magento\Framework\Interception\Code\Generator\ReflectionUnionTypeSample
+ */
+class Interceptor extends \Magento\Framework\Interception\Code\Generator\ReflectionUnionTypeSample implements \Magento\Framework\Interception\InterceptorInterface
+{
+    use \Magento\Framework\Interception\Interceptor;
+
+    public function __construct()
+    {
+        $this->___init();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValue() : int|string
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'getValue');
+        return $pluginInfo ? $this->___callPlugins('getValue', func_get_args(), $pluginInfo) : parent::getValue();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setValue(int|string $value)
+    {
+        $pluginInfo = $this->pluginList->getNext($this->subjectType, 'setValue');
+        return $pluginInfo ? $this->___callPlugins('setValue', func_get_args(), $pluginInfo) : parent::setValue($value);
+    }
+}

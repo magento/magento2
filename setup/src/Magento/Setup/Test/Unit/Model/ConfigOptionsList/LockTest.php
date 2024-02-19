@@ -85,6 +85,7 @@ class LockTest extends TestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function createConfigDataProvider(): array
     {
@@ -93,10 +94,7 @@ class LockTest extends TestCase
                 'options' => [],
                 'expectedResult' => [
                     'lock' => [
-                        'provider' => LockBackendFactory::LOCK_DB,
-                        'config' => [
-                            'prefix' => null,
-                        ],
+                        'provider' => LockBackendFactory::LOCK_DB
                     ],
                 ],
             ],
@@ -164,6 +162,127 @@ class LockTest extends TestCase
                         'provider' => LockBackendFactory::LOCK_FILE,
                         'config' => [
                             'path' => '/my/path',
+                        ],
+                    ],
+                ],
+            ],
+            'Check specific db lock prefix null options' => [
+                'options' => [
+                    LockConfigOptionsList::INPUT_KEY_LOCK_PROVIDER => LockBackendFactory::LOCK_DB,
+                    LockConfigOptionsList::INPUT_KEY_LOCK_DB_PREFIX => null
+                ],
+                'expectedResult' => [
+                    'lock' => [
+                        'provider' => LockBackendFactory::LOCK_DB
+                    ],
+                ],
+            ],
+            'Check specific db lock prefix empty options' => [
+                'options' => [
+                    LockConfigOptionsList::INPUT_KEY_LOCK_PROVIDER => LockBackendFactory::LOCK_DB,
+                    LockConfigOptionsList::INPUT_KEY_LOCK_DB_PREFIX => ''
+                ],
+                'expectedResult' => [
+                    'lock' => [
+                        'provider' => LockBackendFactory::LOCK_DB,
+                        'config' => [
+                            'prefix' => '',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @param array $options
+     * @param array $expectedResult
+     * @dataProvider updateConfigDataProvider
+     */
+    public function testUpdateConfig(array $options, array $expectedResult)
+    {
+        $valueMap = [
+            [ 'lock/config/prefix', null, 'saved_prefix' ],
+            [ 'lock/provider', 'db', 'db' ]
+        ];
+        $this->deploymentConfigMock
+            ->expects($this->any())
+            ->method('get')
+            ->willReturnMap($valueMap);
+        $data = $this->lockConfigOptionsList->createConfig($options, $this->deploymentConfigMock);
+        $this->assertInstanceOf(ConfigData::class, $data);
+        $this->assertTrue($data->isOverrideWhenSave());
+        $this->assertSame($expectedResult, $data->getData());
+    }
+
+    /**
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function updateConfigDataProvider(): array
+    {
+        return [
+            'Check existent value for lock-db-prefix is not erased with no parameter specified' => [
+                'options' => [],
+                'expectedResult' => [
+                    'lock' => [
+                        'provider' => LockBackendFactory::LOCK_DB,
+                        'config' => [
+                            'prefix' => 'saved_prefix',
+                        ],
+                    ],
+                ],
+            ],
+            'Check lock-db-prefix options overrides existing value when parameter is specified' => [
+                'options' => [
+                    LockConfigOptionsList::INPUT_KEY_LOCK_PROVIDER => LockBackendFactory::LOCK_DB,
+                    LockConfigOptionsList::INPUT_KEY_LOCK_DB_PREFIX => 'new_prefix'
+                ],
+                'expectedResult' => [
+                    'lock' => [
+                        'provider' => LockBackendFactory::LOCK_DB,
+                        'config' => [
+                            'prefix' => 'new_prefix',
+                        ],
+                    ],
+                ],
+            ],
+            'Check lock-db-prefix options overrides existing value when only this parameter is specified' => [
+                'options' => [
+                    LockConfigOptionsList::INPUT_KEY_LOCK_DB_PREFIX => 'new_prefix'
+                ],
+                'expectedResult' => [
+                    'lock' => [
+                        'provider' => LockBackendFactory::LOCK_DB,
+                        'config' => [
+                            'prefix' => 'new_prefix',
+                        ],
+                    ],
+                ],
+            ],
+            'Check that lock-db-prefix value is not erased when when only lock-provider is specified as db' => [
+                'options' => [
+                    LockConfigOptionsList::INPUT_KEY_LOCK_PROVIDER => LockBackendFactory::LOCK_DB,
+                ],
+                'expectedResult' => [
+                    'lock' => [
+                        'provider' => LockBackendFactory::LOCK_DB,
+                        'config' => [
+                            'prefix' => 'saved_prefix',
+                        ],
+                    ],
+                ],
+            ],
+            'Check specific db lock prefix empty options overrides existing value' => [
+                'options' => [
+                    LockConfigOptionsList::INPUT_KEY_LOCK_PROVIDER => LockBackendFactory::LOCK_DB,
+                    LockConfigOptionsList::INPUT_KEY_LOCK_DB_PREFIX => ''
+                ],
+                'expectedResult' => [
+                    'lock' => [
+                        'provider' => LockBackendFactory::LOCK_DB,
+                        'config' => [
+                            'prefix' => '',
                         ],
                     ],
                 ],

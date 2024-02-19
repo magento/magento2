@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminConfigurableProductVerifyOptionPriceActionGroup">
+        <arguments>
+            <argument name="optionLabel" type="string" defaultValue="{{colorConfigurableProductAttribute1.name}}"/>
+            <argument name="price" type="string" defaultValue="10"/>
+        </arguments>
+        <grabValueFrom selector="{{AdminProductFormConfigurationsSection.confProductPriceCell(optionLabel)}}" stepKey="getOptionPrice"/>
+        <assertEquals stepKey="assertEquals">
+            <expectedResult type="string">{{price}}</expectedResult>
+            <actualResult type="variable">getOptionPrice</actualResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

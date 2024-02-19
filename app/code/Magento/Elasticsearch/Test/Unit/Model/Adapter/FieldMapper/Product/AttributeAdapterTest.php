@@ -254,6 +254,7 @@ class AttributeAdapterTest extends TestCase
             ['multiselect', false, true],
             ['int', false, false],
             ['int', true, true],
+            ['boolean', true, false],
         ];
     }
 

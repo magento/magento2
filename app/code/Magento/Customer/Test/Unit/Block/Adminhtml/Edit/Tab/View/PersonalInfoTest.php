@@ -246,7 +246,7 @@ class PersonalInfoTest extends TestCase
     {
         return [
             ['2015-03-04 12:00:00', '2015-03-04 12:00:00'],
-            ['Never', null]
+            ['Never', '']
         ];
     }
 

@@ -102,6 +102,7 @@ class ConfigurableViewOnCategoryPageTest extends TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Catalog/_files/reindex_catalog_inventory_stock.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_category.php
      *
      * @return void
@@ -125,7 +126,7 @@ class ConfigurableViewOnCategoryPageTest extends TestCase
             __('As low as') . ' $10.00'
         );
         $this->resetPageLayout();
-        $this->assertProductPrice('configurable', __('As low as') . ' $150.00');
+        $this->assertProductPrice('configurable', '$150.00');
     }
 
     /**

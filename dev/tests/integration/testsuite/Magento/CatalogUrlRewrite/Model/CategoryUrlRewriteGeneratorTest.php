@@ -11,12 +11,14 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\UrlRewrite\Model\OptionProvider;
+use Magento\UrlRewrite\Model\Storage\DbStorage;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use PHPUnit\Framework\Exception;
@@ -44,6 +46,9 @@ class CategoryUrlRewriteGeneratorTest extends TestCase
      */
     public function testGenerateUrlRewritesWithoutSaveHistory()
     {
+        $resource = $this->objectManager->get(ResourceConnection::class);
+        $connection = $resource->getConnection();
+        $connection->delete(DbStorage::TABLE_NAME);
         /** @var Category $category */
         $category = $this->objectManager->create(Category::class);
         $category->load(3);

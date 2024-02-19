@@ -52,6 +52,9 @@ class MessagesTest extends TestCase
      */
     private $escaperMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
@@ -77,7 +80,7 @@ class MessagesTest extends TestCase
                 'collectionFactory' => $this->collectionFactory,
                 'messageFactory' => $this->messageFactory,
                 'interpretationStrategy' => $this->messageInterpretationStrategy,
-                'escaper' => $this->escaperMock,
+                'escaper' => $this->escaperMock
             ]
         );
     }
@@ -85,7 +88,7 @@ class MessagesTest extends TestCase
     /**
      * @return MockObject|Collection
      */
-    protected function initMessageCollection()
+    protected function initMessageCollection(): Collection
     {
         $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
@@ -97,7 +100,10 @@ class MessagesTest extends TestCase
         return $collection;
     }
 
-    public function testSetMessages()
+    /**
+     * @return void
+     */
+    public function testSetMessages(): void
     {
         $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
@@ -109,14 +115,20 @@ class MessagesTest extends TestCase
         $this->assertSame($collection, $this->messages->getMessageCollection());
     }
 
-    public function testGetMessageCollection()
+    /**
+     * @return void
+     */
+    public function testGetMessageCollection(): void
     {
         $collection = $this->initMessageCollection();
 
         $this->assertSame($collection, $this->messages->getMessageCollection());
     }
 
-    public function testAddMessages()
+    /**
+     * @return void
+     */
+    public function testAddMessages(): void
     {
         $messageOne = $this->getMockForAbstractClass(MessageInterface::class);
         $messageTwo = $this->getMockForAbstractClass(MessageInterface::class);
@@ -125,12 +137,9 @@ class MessagesTest extends TestCase
 
         $collection = $this->initMessageCollection();
 
-        $collection->expects($this->at(0))
+        $collection
             ->method('addMessage')
-            ->with($messageOne);
-        $collection->expects($this->at(1))
-            ->method('addMessage')
-            ->with($messageTwo);
+            ->withConsecutive([$messageOne], [$messageTwo]);
 
         $collectionForAdd = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
@@ -143,7 +152,10 @@ class MessagesTest extends TestCase
         $this->assertSame($this->messages, $this->messages->addMessages($collectionForAdd));
     }
 
-    public function testAddMessage()
+    /**
+     * @return void
+     */
+    public function testAddMessage(): void
     {
         $message = $this->getMockForAbstractClass(MessageInterface::class);
 
@@ -156,7 +168,10 @@ class MessagesTest extends TestCase
         $this->assertSame($this->messages, $this->messages->addMessage($message));
     }
 
-    public function testAddError()
+    /**
+     * @return void
+     */
+    public function testAddError(): void
     {
         $messageText = 'Some message error text';
 
@@ -175,7 +190,10 @@ class MessagesTest extends TestCase
         $this->assertSame($this->messages, $this->messages->addError($messageText));
     }
 
-    public function testAddWarning()
+    /**
+     * @return void
+     */
+    public function testAddWarning(): void
     {
         $messageText = 'Some message warning text';
 
@@ -194,7 +212,10 @@ class MessagesTest extends TestCase
         $this->assertSame($this->messages, $this->messages->addWarning($messageText));
     }
 
-    public function testAddNotice()
+    /**
+     * @return void
+     */
+    public function testAddNotice(): void
     {
         $messageText = 'Some message notice text';
 
@@ -213,7 +234,10 @@ class MessagesTest extends TestCase
         $this->assertSame($this->messages, $this->messages->addNotice($messageText));
     }
 
-    public function testAddSuccess()
+    /**
+     * @return void
+     */
+    public function testAddSuccess(): void
     {
         $messageText = 'Some message success text';
 
@@ -232,7 +256,10 @@ class MessagesTest extends TestCase
         $this->assertSame($this->messages, $this->messages->addSuccess($messageText));
     }
 
-    public function testGetMessagesByType()
+    /**
+     * @return void
+     */
+    public function testGetMessagesByType(): void
     {
         $messageType = MessageInterface::TYPE_SUCCESS;
         $resultMessages = [$this->getMockForAbstractClass(MessageInterface::class)];
@@ -246,18 +273,24 @@ class MessagesTest extends TestCase
         $this->assertSame($resultMessages, $this->messages->getMessagesByType($messageType));
     }
 
-    public function testGetMessageTypes()
+    /**
+     * @return void
+     */
+    public function testGetMessageTypes(): void
     {
         $types = [
             MessageInterface::TYPE_ERROR,
             MessageInterface::TYPE_WARNING,
             MessageInterface::TYPE_NOTICE,
-            MessageInterface::TYPE_SUCCESS,
+            MessageInterface::TYPE_SUCCESS
         ];
         $this->assertEquals($types, $this->messages->getMessageTypes());
     }
 
-    public function testGetCacheKeyInfo()
+    /**
+     * @return void
+     */
+    public function testGetCacheKeyInfo(): void
     {
         $emptyMessagesCacheKey = ['storage_types' => ''];
         $this->assertEquals($emptyMessagesCacheKey, $this->messages->getCacheKeyInfo());
@@ -267,7 +300,10 @@ class MessagesTest extends TestCase
         $this->assertEquals($messagesCacheKey, $this->messages->getCacheKeyInfo());
     }
 
-    public function testGetGroupedHtml()
+    /**
+     * @return void
+     */
+    public function testGetGroupedHtml(): void
     {
         $this->messages->setNameInLayout('nameInLayout');
 
@@ -332,7 +368,7 @@ class MessagesTest extends TestCase
                     [MessageInterface::TYPE_ERROR, [$errorMock]],
                     [MessageInterface::TYPE_WARNING, [$warningMock, $warningMock]],
                     [MessageInterface::TYPE_NOTICE, [$noticeMock, $noticeMock, $noticeMock]],
-                    [MessageInterface::TYPE_SUCCESS, [$successMock, $successMock, $successMock, $successMock]],
+                    [MessageInterface::TYPE_SUCCESS, [$successMock, $successMock, $successMock, $successMock]]
                 ]
             );
 

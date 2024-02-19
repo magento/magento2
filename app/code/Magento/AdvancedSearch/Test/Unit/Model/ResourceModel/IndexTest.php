@@ -60,6 +60,9 @@ class IndexTest extends TestCase
      */
     private $resourceConnectionMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
@@ -98,6 +101,9 @@ class IndexTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testGetPriceIndexDataUsesFrontendPriceIndexerTable(): void
     {
         $storeId = 1;
@@ -116,5 +122,74 @@ class IndexTest extends TestCase
         $this->adapterMock->expects($this->once())->method('fetchAll')->with($selectMock)->willReturn([]);
 
         $this->assertEmpty($this->model->getPriceIndexData([1], $storeId));
+    }
+
+    /**
+     * @param array $testData
+     * @dataProvider providerForTestPriceIndexData
+     *
+     * @return void
+     */
+    public function testGetPriceIndexData(array $testData): void
+    {
+        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
+        $storeMock->expects($this->any())->method('getId')->willReturn(1);
+        $storeMock->method('getWebsiteId')->willReturn($testData['website_id']);
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->with(1)->willReturn($storeMock);
+
+        $selectMock = $this->createMock(Select::class);
+        $selectMock->expects($this->any())->method('union')->willReturnSelf();
+        $this->adapterMock->expects($this->any())->method('select')->willReturn($selectMock);
+        $this->adapterMock->expects($this->any())->method('fetchAll')->with($selectMock)->willReturn([$testData]);
+        $expectedData = [
+            $testData['entity_id'] => [
+                $testData['customer_group_id'] => round((float) $testData['min_price'], 2)
+            ]
+        ];
+
+        $this->assertEquals($this->model->getPriceIndexData([1], 1), $expectedData);
+    }
+
+    /**
+     * @return array
+     */
+    public function providerForTestPriceIndexData(): array
+    {
+        return [
+            [
+               [
+                   'website_id' => 1,
+                   'entity_id' => 1,
+                   'customer_group_id' => 1,
+                   'min_price' => '12.12'
+               ]
+            ],
+            [
+                [
+                    'website_id' => 1,
+                    'entity_id' => 2,
+                    'customer_group_id' => 2,
+                    'min_price' => null
+                ]
+            ],
+            [
+                [
+                    'website_id' => 1,
+                    'entity_id' => 3,
+                    'customer_group_id' => 3,
+                    'min_price' => 12.12
+                ]
+            ],
+            [
+                [
+                    'website_id' => 1,
+                    'entity_id' => 3,
+                    'customer_group_id' => 3,
+                    'min_price' => ''
+                ]
+            ]
+        ];
     }
 }

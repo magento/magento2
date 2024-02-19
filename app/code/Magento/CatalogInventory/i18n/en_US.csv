@@ -71,3 +71,5 @@ Stock,Stock
 "Qty Uses Decimals","Qty Uses Decimals"
 "Allow Multiple Boxes for Shipping","Allow Multiple Boxes for Shipping"
 "Done","Done"
+"The requested qty exceeds the maximum qty allowed in shopping cart","The requested qty exceeds the maximum qty allowed in shopping cart"
+"You cannot use decimal quantity for this product.","You cannot use decimal quantity for this product."

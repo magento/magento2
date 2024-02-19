@@ -35,9 +35,9 @@
     <preference for="Magento\SalesRule\Api\Data\DiscountDataInterface"
                 type="Magento\SalesRule\Model\Data\DiscountData" />
     <preference for="Magento\SalesRule\Model\Spi\RuleQuoteRecollectTotalsInterface"
-                type="\Magento\SalesRule\Model\Rule\RuleQuoteRecollectTotalsOnDemand" />
+                type="Magento\SalesRule\Model\Rule\RuleQuoteRecollectTotalsOnDemand" />
     <preference for="Magento\SalesRule\Model\Spi\QuoteResetAppliedRulesInterface"
-                type="\Magento\SalesRule\Model\Rule\QuoteResetAppliedRules" />
+                type="Magento\SalesRule\Model\Rule\QuoteResetAppliedRules" />
     <type name="Magento\SalesRule\Helper\Coupon">
         <arguments>
             <argument name="couponParameters" xsi:type="array">
@@ -198,4 +198,9 @@
     <preference
             for="Magento\SalesRule\Model\Spi\CodeLimitManagerInterface"
             type="Magento\SalesRule\Model\Coupon\CodeLimitManager" />
+    <type name="Magento\SalesRule\Observer\RuleQuoteRecollectTotalsObserver">
+        <arguments>
+            <argument name="recollectTotals" xsi:type="object">Magento\SalesRule\Model\Rule\RuleQuoteRecollectTotalsAsync\Proxy</argument>
+        </arguments>
+    </type>
 </config>

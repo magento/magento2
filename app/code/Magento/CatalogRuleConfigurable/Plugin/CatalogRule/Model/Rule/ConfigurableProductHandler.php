@@ -42,13 +42,26 @@ class ConfigurableProductHandler
     }
 
     /**
+     * Match configurable child products if configurable product match the condition
+     *
      * @param \Magento\CatalogRule\Model\Rule $rule
-     * @param array $productIds
+     * @param \Closure $proceed
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function afterGetMatchingProductIds(\Magento\CatalogRule\Model\Rule $rule, array $productIds)
-    {
+    public function aroundGetMatchingProductIds(
+        \Magento\CatalogRule\Model\Rule $rule,
+        \Closure $proceed
+    ) {
+        $productsFilter = $rule->getProductsFilter() ? (array) $rule->getProductsFilter() : [];
+        if ($productsFilter) {
+            $parentProductIds = $this->configurable->getParentIdsByChild($productsFilter);
+            $rule->setProductsFilter(array_unique(array_merge($productsFilter, $parentProductIds)));
+        }
+
+        $productIds = $proceed();
+
         $configurableProductIds = $this->configurableProductsProvider->getIds(array_keys($productIds));
         foreach ($configurableProductIds as $productId) {
             if (!isset($this->childrenProducts[$productId])) {
@@ -58,11 +71,15 @@ class ConfigurableProductHandler
             $parentValidationResult = isset($productIds[$productId])
                 ? array_filter($productIds[$productId])
                 : [];
+            $processAllChildren = !$productsFilter || in_array($productId, $productsFilter);
             foreach ($subProductIds as $subProductId) {
-                $childValidationResult = isset($productIds[$subProductId])
-                    ? array_filter($productIds[$subProductId])
-                    : [];
-                $productIds[$subProductId] = $parentValidationResult + $childValidationResult;
+                if ($processAllChildren || in_array($subProductId, $productsFilter)) {
+                    $childValidationResult = isset($productIds[$subProductId])
+                        ? array_filter($productIds[$subProductId])
+                        : [];
+                    $productIds[$subProductId] = $parentValidationResult + $childValidationResult;
+                }
+
             }
             unset($productIds[$productId]);
         }

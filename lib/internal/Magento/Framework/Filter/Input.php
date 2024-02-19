@@ -1,95 +1,32 @@
 <?php
 /**
- * Filter data collector
- *
- * Model for multi-filtering all data which set to models
- * Example:
- * <code>
- * /** @var $filterFactory \Magento\Framework\Filter\InputFactory {@*}
- * $filter = $filterFactory->create()
- *     ->setFilters(array(
- *      'list_values' => array(
- *          'children_filters' => array( //filters will applied to all children
- *              array(
- *                  'zend' => 'StringToUpper',
- *                  'args' => array('encoding' => 'utf-8')),
- *              array('zend' => 'StripTags')
- *          )
- *      ),
- *      'list_values_with_name' => array(
- *          'children_filters' => array(
- *              'item1' => array(
- *                  array(
- *                      'zend' => 'StringToUpper',
- *                      'args' => array('encoding' => 'utf-8'))),
- *              'item2' => array(
- *                  array('model' => \Magento\Framework\Filter\Input\MaliciousCode::class)
- *              ),
- *              'item3' => array(
- *                  array(
- *                      'helper' => 'Module\Helper\Class\Name',
- *                      'method' => 'stripTags',
- *                      'args' => array('<p> <div>', true))
- *              )
- *          )
- *      )
- *  ));
- *  $filter->addFilter('name2', new \Zend_Filter_Alnum());
- *  $filter->addFilter('name1',
- *      array(
- *          'zend' => 'StringToUpper',
- *          'args' => array('encoding' => 'utf-8')));
- *  $filter->addFilter('name1', array('zend' => 'StripTags'), \Zend_Filter::CHAIN_PREPEND);
- *  $filter->addFilters(protected $_filtersToAdd = array(
- *      'list_values_with_name' => array(
- *          'children_filters' => array(
- *              'deep_list' => array(
- *                  'children_filters' => array(
- *                      'sub1' => array(
- *                          array(
- *                              'zend' => 'StringToLower',
- *                              'args' => array('encoding' => 'utf-8'))),
- *                      'sub2' => array(array('zend' => 'Int'))
- *                  )
- *              )
- *          )
- *      )
- *  ));
- *  $filter->filter(array(
- *      'name1' => 'some <b>string</b>',
- *      'name2' => '888 555',
- *      'list_values' => array(
- *          'some <b>string2</b>',
- *          'some <p>string3</p>',
- *      ),
- *      'list_values_with_name' => array(
- *          'item1' => 'some <b onclick="alert(\'2\')">string4</b>',
- *         'item2' => 'some <b onclick="alert(\'1\')">string5</b>',
- *          'item3' => 'some <p>string5</p> <b>bold</b> <div>div</div>',
- *          'deep_list' => array(
- *              'sub1' => 'toLowString',
- *              'sub2' => '5 TO INT',
- *          )
- *      )
- *  ));
- * </code>
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter;
 
-class Input implements \Zend_Filter_Interface
+use Exception;
+use Laminas\Filter\FilterInterface;
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\ObjectManagerInterface;
+
+/**
+ * Filter data collector
+ */
+class Input implements FilterInterface
 {
+    private const CHAIN_APPEND  = 'append';
+    private const CHAIN_PREPEND = 'prepend';
+
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
+    public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -105,13 +42,13 @@ class Input implements \Zend_Filter_Interface
      * Add filter
      *
      * @param string $name
-     * @param array|\Zend_Filter_Interface $filter
+     * @param array|FilterInterface $filter
      * @param string $placement
      * @return $this
      */
-    public function addFilter($name, $filter, $placement = \Zend_Filter::CHAIN_APPEND)
+    public function addFilter($name, $filter, $placement = self::CHAIN_APPEND)
     {
-        if ($placement == \Zend_Filter::CHAIN_PREPEND) {
+        if ($placement == self::CHAIN_PREPEND) {
             array_unshift($this->_filters[$name], $filter);
         } else {
             $this->_filters[$name][] = $filter;
@@ -122,23 +59,23 @@ class Input implements \Zend_Filter_Interface
     /**
      * Add a filter to the end of the chain
      *
-     * @param  array|\Zend_Filter_Interface $filter
+     * @param FilterInterface $filter
      * @return $this
      */
-    public function appendFilter(\Zend_Filter_Interface $filter)
+    public function appendFilter(FilterInterface $filter)
     {
-        return $this->addFilter($filter, \Zend_Filter::CHAIN_APPEND);
+        return $this->addFilter('', $filter);
     }
 
     /**
      * Add a filter to the start of the chain
      *
-     * @param  array|\Zend_Filter_Interface $filter
+     * @param  array|FilterInterface $filter
      * @return $this
      */
     public function prependFilter($filter)
     {
-        return $this->addFilter($filter, \Zend_Filter::CHAIN_PREPEND);
+        return $this->addFilter('', $filter, self::CHAIN_PREPEND);
     }
 
     /**
@@ -176,7 +113,7 @@ class Input implements \Zend_Filter_Interface
      * Get filters
      *
      * @param string|null $name Get filter for selected name
-     * @return array|\Zend_Filter_Interface
+     * @return array|FilterInterface
      */
     public function getFilters($name = null)
     {
@@ -205,7 +142,7 @@ class Input implements \Zend_Filter_Interface
      * @param array|null $filters
      * @param bool $isFilterListSimple
      * @return array
-     * @throws \Exception when filter is not found or not instance of defined instances
+     * @throws Exception when filter is not found or not instance of defined instances
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _filter(array $data, &$filters = null, $isFilterListSimple = false)
@@ -227,8 +164,8 @@ class Input implements \Zend_Filter_Interface
                 $value = $this->_filter($value, $filters[$key]['children_filters'], $isChildrenFilterListSimple);
             } else {
                 foreach ($itemFilters as $filterData) {
-                    if ($zendFilter = $this->_getZendFilter($filterData)) {
-                        $value = $zendFilter->filter($value);
+                    if ($laminasFilter = $this->_getLaminasFilter($filterData)) {
+                        $value = $laminasFilter->filter($value);
                     } elseif ($filtrationHelper = $this->_getFiltrationHelper($filterData)) {
                         $value = $this->_applyFiltrationWithHelper($value, $filtrationHelper, $filterData);
                     }
@@ -243,34 +180,33 @@ class Input implements \Zend_Filter_Interface
      * Call specified helper method for $value filtration
      *
      * @param mixed $value
-     * @param \Magento\Framework\App\Helper\AbstractHelper $helper
+     * @param AbstractHelper $helper
      * @param array $filterData
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     protected function _applyFiltrationWithHelper(
         $value,
-        \Magento\Framework\App\Helper\AbstractHelper $helper,
+        AbstractHelper $helper,
         array $filterData
     ) {
         if (!isset($filterData['method']) || empty($filterData['method'])) {
-            throw new \Exception("Helper filtration method is not set");
+            throw new FilterException("Helper filtration method is not set");
         }
         if (!isset($filterData['args']) || empty($filterData['args'])) {
             $filterData['args'] = [];
         }
         $filterData['args'] = [-100 => $value] + $filterData['args'];
         // apply filter
-        $value = call_user_func_array([$helper, $filterData['method']], $filterData['args']);
-        return $value;
+        return call_user_func_array([$helper, $filterData['method']], $filterData['args']);
     }
 
     /**
      * Try to create Magento helper for filtration based on $filterData. Return false on failure
      *
-     * @param \Zend_Filter_Interface|array $filterData
-     * @return false|\Magento\Framework\App\Helper\AbstractHelper
-     * @throws \Exception
+     * @param FilterInterface|array $filterData
+     * @return false|AbstractHelper
+     * @throws Exception
      */
     protected function _getFiltrationHelper($filterData)
     {
@@ -279,41 +215,40 @@ class Input implements \Zend_Filter_Interface
             $helper = $filterData['helper'];
             if (is_string($helper)) {
                 $helper = $this->_objectManager->get($helper);
-            } elseif (!$helper instanceof \Magento\Framework\App\Helper\AbstractHelper) {
-                throw new \Exception("Filter '{$helper}' not found");
+            } elseif (!$helper instanceof AbstractHelper) {
+                throw new FilterException("Filter '{$helper}' not found");
             }
         }
         return $helper;
     }
 
     /**
-     * Try to create Zend filter based on $filterData. Return false on failure
+     * Try to create Laminas filter based on $filterData. Return false on failure
      *
-     * @param \Zend_Filter_Interface|array $filterData
-     * @return false|\Zend_Filter_Interface
+     * @param FilterInterface|array $filterData
+     * @return false|FilterInterface
      */
-    protected function _getZendFilter($filterData)
+    protected function _getLaminasFilter($filterData)
     {
-        $zendFilter = false;
-        if (is_object($filterData) && $filterData instanceof \Zend_Filter_Interface) {
-            /** @var $zendFilter \Zend_Filter_Interface */
-            $zendFilter = $filterData;
+        $laminasFilter = false;
+        if ($filterData instanceof FilterInterface) {
+            $laminasFilter = $filterData;
         } elseif (isset($filterData['model'])) {
-            $zendFilter = $this->_createCustomZendFilter($filterData);
-        } elseif (isset($filterData['zend'])) {
-            $zendFilter = $this->_createNativeZendFilter($filterData);
+            $laminasFilter = $this->_createCustomLaminasFilter($filterData);
+        } elseif (isset($filterData['laminas'])) {
+            $laminasFilter = $this->_createNativeLaminasFilter($filterData);
         }
-        return $zendFilter;
+        return $laminasFilter;
     }
 
     /**
      * Get Magento filters
      *
      * @param array $filterData
-     * @return \Zend_Filter_Interface
-     * @throws \Exception
+     * @return FilterInterface
+     * @throws Exception
      */
-    protected function _createCustomZendFilter($filterData)
+    protected function _createCustomLaminasFilter($filterData)
     {
         $filter = $filterData['model'];
         if (!isset($filterData['args'])) {
@@ -325,28 +260,28 @@ class Input implements \Zend_Filter_Interface
         if (is_string($filter)) {
             $filter = $this->_objectManager->create($filter, $filterData['args']);
         }
-        if (!$filter instanceof \Zend_Filter_Interface) {
-            throw new \Exception('Filter is not instance of \Zend_Filter_Interface');
+        if (!$filter instanceof FilterInterface) {
+            throw new FilterException('Filter is not instance of FilterInterface');
         }
         return $filter;
     }
 
     /**
-     * Get native \Zend_Filter
+     * Get native Filter
      *
      * @param array $filterData
-     * @return \Zend_Filter_Interface
-     * @throws \Exception
+     * @return FilterInterface
+     * @throws Exception
      */
-    protected function _createNativeZendFilter($filterData)
+    protected function _createNativeLaminasFilter($filterData)
     {
-        $filter = $filterData['zend'];
+        $filter = $filterData['laminas'];
         if (is_string($filter)) {
-            $filterClassName = 'Zend_Filter_' . ucfirst($filter);
-            if (!is_a($filterClassName, \Zend_Filter_Interface::class, true)) {
-                throw new \Exception('Filter is not instance of \Zend_Filter_Interface');
+            $filterClassName = '\\Laminas\\Filter\\' . ucfirst($filter);
+            if (!is_a($filterClassName, FilterInterface::class, true)) {
+                throw new FilterException('Filter is not instance of FilterInterface');
             }
-            $filterClassOptions = isset($filterData['args']) ? $filterData['args'] : [];
+            $filterClassOptions = $filterData['args'] ?? [];
             $filter = new $filterClassName(...array_values($filterClassOptions));
         }
 

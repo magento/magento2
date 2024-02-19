@@ -95,6 +95,7 @@
                                                                 <item name="element" xsi:type="string">#opc-new-shipping-address</item>
                                                                 <item name="options" xsi:type="array">
                                                                     <item name="type" xsi:type="string">popup</item>
+                                                                    <item name="modalClass" xsi:type="string">new-shipping-address-modal</item>
                                                                     <item name="responsive" xsi:type="boolean">true</item>
                                                                     <item name="innerScroll" xsi:type="boolean">true</item>
                                                                     <item name="title" xsi:type="string" translate="true">Shipping Address</item>
@@ -372,7 +373,7 @@
                                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/summary/shipping</item>
                                                                 <item name="config" xsi:type="array">
                                                                     <item name="title" xsi:type="string" translate="true">Shipping</item>
-                                                                    <item name="notCalculatedMessage" xsi:type="string" translate="true">Not yet calculated</item>
+                                                                    <item name="notCalculatedMessage" xsi:type="string" translate="true">Selected shipping method is not available. Please select another shipping method for this order.</item>
                                                                 </item>
                                                             </item>
                                                             <item name="grand-total" xsi:type="array">
@@ -445,5 +446,6 @@
             </block>
         </referenceContainer>
         <referenceContainer name="page.messages" remove="true"/>
+        <referenceBlock name="authentication-popup" remove="true"/>
     </body>
 </page>

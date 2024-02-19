@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCustomizableOptionWithOneOptionActionGroup">
+        <annotations>
+            <description>Requires Navigation to the Product Creation page. Adds custom Option with one option.</description>
+        </annotations>
+
+        <click selector="{{AdminProductFormBundleSection.customizableOptionsToggle}}" stepKey="expandCustomOptions"/>
+        <scrollTo selector="{{AdminProductFormBundleSection.customizableOptionsToggle}}" stepKey="scrollUpABit"/>
+        <wait stepKey="waitForScroll" time="10"/>
+        <click selector="{{AdminProductFormBundleSection.addButtonOption}}" stepKey="clickAddButtonOption"/>
+        <waitForElementVisible selector="{{AdminProductFormBundleSection.customOptionXTitle}}" stepKey="waitForOptions"/>
+        <fillField selector="{{AdminProductFormBundleSection.customOptionXTitle}}" userInput="op1" stepKey="fillOptionTitle"/>
+        <wait stepKey="waitForFillTitle" time="10"/>
+        <click selector="{{AdminProductFormBundleSection.customOptionSelectType}}" stepKey="selectType"/>
+        <click selector="{{AdminProductFormBundleSection.customOptionSelectField}}" stepKey="selectField"/>
+        <click selector="{{AdminProductFormBundleSection.uncheckRequired}}" stepKey="uncheckRequired"/>
+        <fillField selector="{{AdminProductFormBundleSection.customizableOptionPrice}}" userInput="30" stepKey="fillPrice"/>
+        <click selector="{{AdminProductFormBundleSection.priceType}}" stepKey="clickPriceType"/>
+        <click selector="{{AdminProductFormBundleSection.priceTypeSelectPercent}}" stepKey="selectPercent"/>
+    </actionGroup>
+</actionGroups>

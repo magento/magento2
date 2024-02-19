@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-135"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -24,6 +25,9 @@
         </before>
         <after>
             <deleteData createDataKey="product" stepKey="delete"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
     </test>
 </tests>

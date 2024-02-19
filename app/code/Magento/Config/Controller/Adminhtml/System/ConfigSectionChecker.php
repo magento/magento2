@@ -6,6 +6,7 @@
 
 namespace Magento\Config\Controller\Adminhtml\System;
 
+use Laminas\Permissions\Acl\Exception\InvalidArgumentException;
 use Magento\Framework\Exception\NotFoundException;
 
 /**
@@ -41,11 +42,14 @@ class ConfigSectionChecker
     {
         try {
             if (false == $this->_configStructure->getElement($sectionId)->isAllowed()) {
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception('');
             }
             return true;
-        } catch (\Zend_Acl_Exception $e) {
+        } catch (InvalidArgumentException $e) {
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
             throw new NotFoundException(__('Page not found.'));
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $e) {
             return false;
         }

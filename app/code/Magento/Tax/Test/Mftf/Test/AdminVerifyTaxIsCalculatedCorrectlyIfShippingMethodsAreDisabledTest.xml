@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyTaxIsCalculatedCorrectlyIfShippingMethodsAreDisabledTest">
+        <annotations>
+            <features value="Tax is calculated based on Tax Rule"/>
+            <stories value="Verify Tax is calculated based on Tax Rule even if all Shipping methods are disabled"/>
+            <title value="Verify Tax is calculated based on Tax Rule"/>
+            <description value="Verify Tax is calculated based on Tax Rule even if all Shipping methods are disabled"/>
+            <testCaseId value="AC-3895"/>
+            <severity value="MAJOR"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- Create category -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+             <!--Create Product-->
+            <createData entity="SimpleProduct2" stepKey="createProduct">
+                <field key="price">100</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Disable shipping method -->
+            <createData entity="DisableFlatRateShippingMethodConfig" stepKey="disableFlatRate"/>
+            <!-- reindex -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- delete created product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- delete created category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory1"/>
+            <!-- delete created Tax Rate & Rule -->
+            <!-- Go to the tax rule page and delete the row created-->
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPage"/>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
+                <argument name="name" value="SampleRule"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+            <!-- Go to the tax rate page -->
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
+            <!-- Delete the tax rate that was created -->
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
+            <comment userInput="Preserve BiC" stepKey="deleteCARate"/>
+            <!-- Revert back configuration -->
+            <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
+            <!-- reindex and flush cache -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Login to backend -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <!-- Go to tax rule page -->
+        <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulePage"/>
+        <click stepKey="addNewTaxRate" selector="{{AdminGridMainControls.add}}"/>
+        <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
+        <!-- Add CA tax rule -->
+        <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addCATaxRate">
+            <argument name="taxCode" value="SimpleTaxCA"/>
+        </actionGroup>
+        <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+        <!-- reindex and flush cache -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAgain">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+            <argument name="tags" value="full_page"/>
+        </actionGroup>
+        <!-- Go to storefront product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="GoToProductPage">
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!--Add to cart -->
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="product2AddToCart"/>
+        <!--Click on mini cart-->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+        <!--Click on view and edit cart link-->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMiniCart"/>
+        <waitForPageLoad stepKey="waitForViewAndEditCartToOpen"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <!-- Fill shipping and tax details-->
+        <actionGroup ref="StorefrontCheckoutCartFillEstimateShippingAndTaxActionGroup" stepKey="setEstimateShippingAndTaxAddressToUnitedStates">
+            <argument name="country" value="United States"/>
+            <argument name="state" value="California"/>
+            <argument name="postcode" value="90310"/>
+        </actionGroup>
+        <!-- Assert tax and order amount -->
+        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="8.25" stepKey="assertTaxAmount"/>
+        <actionGroup ref="AssertStorefrontShoppingCartSummaryItemsActionGroup" stepKey="assertCartTotals">
+            <argument name="subtotal" value="$100.00"/>
+            <argument name="total" value="$108.25"/>
+        </actionGroup>
+
+    </test>
+</tests>
+

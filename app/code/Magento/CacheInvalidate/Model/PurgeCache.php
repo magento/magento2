@@ -5,6 +5,8 @@
  */
 namespace Magento\CacheInvalidate\Model;
 
+use Exception;
+use Generator;
 use Magento\Framework\Cache\InvalidateLogger;
 use Magento\PageCache\Model\Cache\Server;
 use Laminas\Http\Client\Adapter\Socket;
@@ -15,7 +17,7 @@ use Laminas\Uri\Uri;
  */
 class PurgeCache
 {
-    const HEADER_X_MAGENTO_TAGS_PATTERN = 'X-Magento-Tags-Pattern';
+    public const HEADER_X_MAGENTO_TAGS_PATTERN = 'X-Magento-Tags-Pattern';
 
     /**
      * @var Server
@@ -95,21 +97,21 @@ class PurgeCache
      * Split tags into batches to suit Varnish max. header size
      *
      * @param array $tags
-     * @return \Generator
+     * @return Generator
      */
-    private function chunkTags(array $tags): \Generator
+    private function chunkTags(array $tags): Generator
     {
         $currentBatchSize = 0;
         $formattedTagsChunk = [];
         foreach ($tags as $formattedTag) {
             // Check if (currentBatchSize + length of next tag + number of pipe delimiters) would exceed header size.
-            if ($currentBatchSize + strlen($formattedTag) + count($formattedTagsChunk) > $this->maxHeaderSize) {
+            if ($currentBatchSize + strlen($formattedTag ?: '') + count($formattedTagsChunk) > $this->maxHeaderSize) {
                 yield implode('|', $formattedTagsChunk);
                 $formattedTagsChunk = [];
                 $currentBatchSize = 0;
             }
 
-            $currentBatchSize += strlen($formattedTag);
+            $currentBatchSize += strlen($formattedTag ?: '');
             $formattedTagsChunk[] = $formattedTag;
         }
         if (!empty($formattedTagsChunk)) {
@@ -141,7 +143,7 @@ class PurgeCache
                 );
                 $socketAdapter->read();
                 $socketAdapter->close();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $unresponsiveServerError[] = "Cache host: " . $server->getHost() . ":" . $server->getPort() .
                     "resulted in error message: " . $e->getMessage();
             }

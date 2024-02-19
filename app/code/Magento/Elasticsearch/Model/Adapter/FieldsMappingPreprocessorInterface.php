@@ -9,6 +9,8 @@ namespace Magento\Elasticsearch\Model\Adapter;
 
 /**
  * Modifies fields mapping before save
+ *
+ * @api
  */
 interface FieldsMappingPreprocessorInterface
 {

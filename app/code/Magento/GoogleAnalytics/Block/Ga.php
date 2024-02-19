@@ -17,8 +17,6 @@ use Magento\Framework\App\ObjectManager;
 class Ga extends \Magento\Framework\View\Element\Template
 {
     /**
-     * Google analytics data
-     *
      * @var \Magento\GoogleAnalytics\Helper\Data
      */
     protected $_googleAnalyticsData = null;
@@ -84,6 +82,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/method-reference#set
      * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/method-reference#gaObjectMethods
      * @deprecated 100.2.0 please use getPageTrackingData method
+     * @see getPageTrackingData method
      */
     public function getPageTrackingCode($accountId)
     {
@@ -105,6 +104,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      *
      * @return string|void
      * @deprecated 100.2.0 please use getOrdersTrackingData method
+     * @see getOrdersTrackingData method
      */
     public function getOrdersTrackingCode()
     {
@@ -122,17 +122,19 @@ class Ga extends \Magento\Framework\View\Element\Template
         foreach ($collection as $order) {
             $result[] = "ga('set', 'currencyCode', '" . $order->getOrderCurrencyCode() . "');";
             foreach ($order->getAllVisibleItems() as $item) {
+                $quantity = $item->getQtyOrdered() * 1;
+                $format = fmod($quantity, 1) !== 0.00 ? '%.2f' : '%d';
                 $result[] = sprintf(
                     "ga('ec:addProduct', {
                         'id': '%s',
                         'name': '%s',
-                        'price': '%s',
-                        'quantity': %s
+                        'price': %.2f,
+                        'quantity': $format
                     });",
                     $this->escapeJsQuote($item->getSku()),
                     $this->escapeJsQuote($item->getName()),
-                    $item->getPrice(),
-                    $item->getQtyOrdered()
+                    (float)$item->getPrice(),
+                    $quantity
                 );
             }
 
@@ -140,15 +142,15 @@ class Ga extends \Magento\Framework\View\Element\Template
                 "ga('ec:setAction', 'purchase', {
                     'id': '%s',
                     'affiliation': '%s',
-                    'revenue': '%s',
-                    'tax': '%s',
-                    'shipping': '%s'
+                    'revenue': %.2f,
+                    'tax': %.2f,
+                    'shipping': %.2f
                 });",
                 $order->getIncrementId(),
                 $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
-                $order->getGrandTotal(),
-                $order->getTaxAmount(),
-                $order->getShippingAmount()
+                (float)$order->getGrandTotal(),
+                (float)$order->getTaxAmount(),
+                (float)$order->getShippingAmount(),
             );
 
             $result[] = "ga('send', 'pageview');";
@@ -234,19 +236,20 @@ class Ga extends \Magento\Framework\View\Element\Template
 
         foreach ($collection as $order) {
             foreach ($order->getAllVisibleItems() as $item) {
+                $quantity = $item->getQtyOrdered() * 1;
                 $result['products'][] = [
                     'id' => $this->escapeJsQuote($item->getSku()),
                     'name' =>  $this->escapeJsQuote($item->getName()),
-                    'price' => $item->getPrice(),
-                    'quantity' => $item->getQtyOrdered(),
+                    'price' => (float)$item->getPrice(),
+                    'quantity' => $quantity,
                 ];
             }
             $result['orders'][] = [
                 'id' =>  $order->getIncrementId(),
                 'affiliation' => $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
-                'revenue' => $order->getGrandTotal(),
-                'tax' => $order->getTaxAmount(),
-                'shipping' => $order->getShippingAmount(),
+                'revenue' => (float)$order->getGrandTotal(),
+                'tax' => (float)$order->getTaxAmount(),
+                'shipping' => (float)$order->getShippingAmount(),
             ];
             $result['currency'] = $order->getOrderCurrencyCode();
         }
@@ -261,8 +264,8 @@ class Ga extends \Magento\Framework\View\Element\Template
     private function getOptPageUrl()
     {
         $optPageURL = '';
-        $pageName = trim($this->getPageName());
-        if ($pageName && substr($pageName, 0, 1) == '/' && strlen($pageName) > 1) {
+        $pageName = $this->getPageName() !== null ? trim($this->getPageName()) : '';
+        if ($pageName && substr($pageName, 0, 1) === '/' && strlen($pageName) > 1) {
             $optPageURL = ", '" . $this->escapeHtmlAttr($pageName, false) . "'";
         }
         return $optPageURL;

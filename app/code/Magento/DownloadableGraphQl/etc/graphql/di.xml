@@ -67,4 +67,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\UrlRewriteGraphQl\Model\RoutableInterfaceTypeResolver">
+        <arguments>
+            <argument name="productTypeNameResolvers" xsi:type="array">
+                <item name="downloadable_product_type_resolver" xsi:type="object">Magento\DownloadableGraphQl\Model\DownloadableProductTypeResolver</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

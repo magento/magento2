@@ -225,6 +225,25 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
+     */
+    public function testMultipleMultiselectTextValues()
+    {
+        $expectedArray = [];
+
+        for ($i = 1; $i < 200; $i++) {
+            $expectedArray[] = sprintf('Multiselect option %d', $i);
+        }
+
+        $product = $this->productRepository->get('simple_ms_3');
+
+        self::assertEquals(
+            $expectedArray,
+            $product->getAttributeText('multiselect_attribute_text')
+        );
+    }
+
     public function testGetCustomDesignDate()
     {
         $this->assertEquals(['from' => null, 'to' => null], $this->_model->getCustomDesignDate());
