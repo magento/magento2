@@ -103,7 +103,7 @@ class SqlVersionProviderTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         return [
             'MariaDB-10.6' => [

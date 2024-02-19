@@ -129,7 +129,7 @@ class AclResourceTest extends TestCase
     /**
      * @return array
      */
-    public function getTableNameDataProvider()
+    public static function getTableNameDataProvider()
     {
         return [
             ['tableName', self::TABLE_PREFIX . 'tableName'],
@@ -157,7 +157,7 @@ class AclResourceTest extends TestCase
     /**
      * @return array
      */
-    public function getTableNameMappedDataProvider()
+    public static function getTableNameMappedDataProvider()
     {
         return [
             ['tableName', 'tableName', 'mappedTableName', 'mappedTableName'],

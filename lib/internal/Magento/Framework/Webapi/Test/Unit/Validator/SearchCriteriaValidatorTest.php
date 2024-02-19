@@ -89,7 +89,7 @@ class SearchCriteriaValidatorTest extends TestCase
     public function testFailsPageSizeWhenAboveMaxLimitUsingConfig()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectErrorMessage('Maximum SearchCriteria pageSize is 50');
+        $this->expectExceptionMessage('Maximum SearchCriteria pageSize is 50');
 
         $this->config->method('isInputLimitingEnabled')
             ->willReturn(true);

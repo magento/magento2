@@ -74,7 +74,7 @@ class HiddenTest extends TestCase
     /**
      * @return array
      */
-    public function getElementHtmlDataProvider()
+    public static function getElementHtmlDataProvider()
     {
         return [
             ['some_value'],

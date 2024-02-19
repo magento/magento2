@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Scanner;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Module\Di\Code\Scanner\XmlScanner;
 use Magento\Setup\Module\Di\Compiler\Log\Log;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class XmlScannerTest extends TestCase
 {
@@ -34,6 +36,14 @@ class XmlScannerTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManagerHelper = new ObjectManager($this);
+        $objects = [
+            [
+                LoggerInterface::class,
+                $this->createMock(LoggerInterface::class)
+            ],
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
         $this->logMock = $this->createMock(Log::class);
         $this->model = new XmlScanner($this->logMock);
         $testDir = __DIR__ . '/../../' . '/_files';

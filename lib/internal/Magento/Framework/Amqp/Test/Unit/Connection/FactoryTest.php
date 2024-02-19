@@ -114,7 +114,7 @@ class FactoryTest extends TestCase
     /**
      * @return array
      */
-    public function connectionDataProvider()
+    public static function connectionDataProvider()
     {
         return [
             [

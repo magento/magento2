@@ -207,7 +207,7 @@ class BootstrapTest extends TestCase
     /**
      * @return array
      */
-    public function testIsDeveloperModeDataProvider()
+    public static function testIsDeveloperModeDataProvider()
     {
         return [
             [null, null, false],
@@ -279,7 +279,7 @@ class BootstrapTest extends TestCase
     /**
      * @return array
      */
-    public function assertMaintenanceDataProvider()
+    public static function assertMaintenanceDataProvider()
     {
         return [
             [true, false],
@@ -306,7 +306,7 @@ class BootstrapTest extends TestCase
     /**
      * @return array
      */
-    public function assertInstalledDataProvider()
+    public static function assertInstalledDataProvider()
     {
         return [
             [false, true],

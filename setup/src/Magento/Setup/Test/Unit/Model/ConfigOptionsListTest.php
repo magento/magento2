@@ -13,6 +13,7 @@ use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Encryption\KeyValidator;
 use Magento\Framework\Setup\Option\FlagConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Model\ConfigGenerator;
 use Magento\Setup\Model\ConfigOptionsList;
 use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
@@ -58,6 +59,42 @@ class ConfigOptionsListTest extends TestCase
 
     protected function setUp(): void
     {
+        $objectManagerHelper = new ObjectManager($this);
+        $objects = [
+            [
+                \Magento\Setup\Model\ConfigOptionsList\Session::class,
+                $this->createMock(\Magento\Setup\Model\ConfigOptionsList\Session::class)
+            ],
+            [
+                \Magento\Setup\Model\ConfigOptionsList\Cache::class,
+                $this->createMock(\Magento\Setup\Model\ConfigOptionsList\Cache::class)
+            ],
+            [
+                \Magento\Setup\Model\ConfigOptionsList\PageCache::class,
+                $this->createMock(\Magento\Setup\Model\ConfigOptionsList\PageCache::class)
+            ],
+            [
+                \Magento\Setup\Model\ConfigOptionsList\Lock::class,
+                $this->createMock(\Magento\Setup\Model\ConfigOptionsList\Lock::class)
+            ],
+            [
+                \Magento\Setup\Model\ConfigOptionsList\Directory::class,
+                $this->createMock(\Magento\Setup\Model\ConfigOptionsList\Directory::class)
+            ],
+            [
+                \Magento\Setup\Model\ConfigOptionsList\BackpressureLogger::class,
+                $this->createMock(\Magento\Setup\Model\ConfigOptionsList\BackpressureLogger::class)
+            ],
+            [
+                KeyValidator::class,
+                $this->createMock(KeyValidator::class)
+            ],
+            [
+                DriverOptions::class,
+                $this->createMock(DriverOptions::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
         $this->generator = $this->createMock(ConfigGenerator::class);
         $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
         $this->dbValidator = $this->createMock(DbValidator::class);
