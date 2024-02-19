@@ -176,9 +176,6 @@
                 <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="string">
                     Magento\CustomerGraphQl\Model\Resolver\Cache\Customer\ResolverCacheIdentity
                 </item>
-                <item name="Magento\CustomerGraphQl\Model\Resolver\IsSubscribed" xsi:type="string">
-                    Magento\CustomerGraphQl\Model\Resolver\Cache\Subscriber\ResolverCacheIdentity
-                </item>
             </argument>
         </arguments>
     </type>
@@ -207,9 +204,6 @@
             <argument name="factorProviders" xsi:type="array">
                 <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="array">
                     <item name="current_customer_id" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\CurrentCustomerId</item>
-                </item>
-                <item name="Magento\CustomerGraphQl\Model\Resolver\IsSubscribed" xsi:type="array">
-                    <item name="parent_customer_entity_id" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\ParentCustomerEntityId</item>
                 </item>
             </argument>
         </arguments>
