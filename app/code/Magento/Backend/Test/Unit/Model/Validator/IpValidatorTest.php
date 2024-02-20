@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Backend\Test\Unit\Model\Validator;
 
 use Magento\Backend\Model\Validator\IpValidator;
+use Magento\Framework\App\Utility\IPAddress;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -25,7 +26,9 @@ class IpValidatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->ipValidator = new IpValidator();
+        $this->ipValidator = new IpValidator(
+            new IPAddress()
+        );
     }
 
     /**
