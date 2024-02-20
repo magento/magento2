@@ -7,6 +7,7 @@
 namespace Magento\Indexer\Model;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 use Magento\Framework\Indexer\ActionFactory;
 use Magento\Framework\Indexer\ActionInterface;
 use Magento\Framework\Indexer\Config\DependencyInfoProviderInterface;
@@ -16,6 +17,7 @@ use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Indexer\StructureFactory;
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
+use Magento\Framework\Indexer\SuspendableIndexerInterface;
 use Magento\Framework\Mview\View\ChangelogTableNotExistsException;
 use Magento\Framework\Mview\ViewInterface;
 use Magento\Indexer\Model\Indexer\CollectionFactory;
@@ -26,7 +28,7 @@ use Magento\Indexer\Model\Indexer\StateFactory;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
+class Indexer extends DataObject implements IndexerInterface, SuspendableIndexerInterface
 {
     /**
      * @var string
@@ -346,6 +348,16 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
     public function isInvalid()
     {
         return $this->getState()->getStatus() == StateInterface::STATUS_INVALID;
+    }
+
+    /**
+     * Checks whether indexer is suspended.
+     *
+     * @return bool
+     */
+    public function isSuspended(): bool
+    {
+        return $this->getState()->getStatus() === StateInterface::STATUS_SUSPENDED;
     }
 
     /**
