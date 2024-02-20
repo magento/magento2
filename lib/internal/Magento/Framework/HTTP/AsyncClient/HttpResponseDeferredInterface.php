@@ -12,6 +12,8 @@ use Magento\Framework\Async\CancelableDeferredInterface;
 
 /**
  * Deferred HTTP response.
+ *
+ * @api
  */
 interface HttpResponseDeferredInterface extends CancelableDeferredInterface
 {

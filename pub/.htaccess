@@ -62,6 +62,25 @@
     php_flag suhosin.session.cryptua off
 </IfModule>
 
+<IfModule mod_php.c>
+############################################
+## Adjust memory limit
+
+    php_value memory_limit 756M
+    php_value max_execution_time 18000
+
+############################################
+## Disable automatic session start
+## before autoload was initialized
+
+    php_flag session.auto_start off
+
+############################################
+## Enable resulting html compression
+
+    #php_flag zlib.output_compression on
+</IfModule>
+
 <IfModule mod_security.c>
 ###########################################
 # Disable POST processing to not break multiple image upload

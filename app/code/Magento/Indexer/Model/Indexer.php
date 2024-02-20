@@ -6,6 +6,7 @@
 
 namespace Magento\Indexer\Model;
 
+use Magento\Framework\DataObject;
 use Magento\Framework\Indexer\ActionFactory;
 use Magento\Framework\Indexer\ActionInterface;
 use Magento\Framework\Indexer\ConfigInterface;
@@ -14,13 +15,14 @@ use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Indexer\StructureFactory;
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
+use Magento\Framework\Indexer\SuspendableIndexerInterface;
 
 /**
  * Indexer model.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
+class Indexer extends DataObject implements IndexerInterface, SuspendableIndexerInterface
 {
     /**
      * @var string
@@ -333,6 +335,16 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
     }
 
     /**
+     * Checks whether indexer is suspended.
+     *
+     * @return bool
+     */
+    public function isSuspended(): bool
+    {
+        return $this->getState()->getStatus() === StateInterface::STATUS_SUSPENDED;
+    }
+
+    /**
      * Check whether indexer is working
      *
      * @return bool
@@ -441,8 +453,10 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
             }
             try {
                 $this->getActionInstance()->executeFull();
-                $state->setStatus(StateInterface::STATUS_VALID);
-                $state->save();
+                if ($this->workingStateProvider->isWorking($this->getId())) {
+                    $state->setStatus(StateInterface::STATUS_VALID);
+                    $state->save();
+                }
                 if (!empty($sharedIndexers)) {
                     $this->resumeSharedViews($sharedIndexers);
                 }

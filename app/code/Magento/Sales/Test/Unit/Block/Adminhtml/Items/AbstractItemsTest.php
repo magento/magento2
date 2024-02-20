@@ -26,10 +26,14 @@ use PHPUnit\Framework\TestCase;
  */
 class AbstractItemsTest extends TestCase
 {
-    /** @var ObjectManagerHelper */
+    /**
+     * @var ObjectManagerHelper
+     */
     protected $objectManagerHelper;
 
-    /** @var MockObject */
+    /**
+     * @var MockObject
+     */
     protected $stockItemMock;
 
     /**
@@ -37,12 +41,15 @@ class AbstractItemsTest extends TestCase
      */
     protected $stockRegistry;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->stockRegistry = $this->getMockBuilder(StockRegistry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStockItem'])
+            ->onlyMethods(['getStockItem'])
             ->getMock();
 
         $this->stockItemMock = $this->createPartialMock(
@@ -55,7 +62,10 @@ class AbstractItemsTest extends TestCase
             ->willReturn($this->stockItemMock);
     }
 
-    public function testGetItemRenderer()
+    /**
+     * @return void
+     */
+    public function testGetItemRenderer(): void
     {
         $layout = $this->createPartialMock(
             Layout::class,
@@ -88,7 +98,10 @@ class AbstractItemsTest extends TestCase
         $this->assertSame($renderer, $renderer->getColumnRenderer('block-name'));
     }
 
-    public function testGetItemRendererThrowsExceptionForNonexistentRenderer()
+    /**
+     * @return void
+     */
+    public function testGetItemRendererThrowsExceptionForNonexistentRenderer(): void
     {
         $this->expectException('RuntimeException');
         $this->expectExceptionMessage('Renderer for type "some-type" does not exist.');
@@ -97,12 +110,10 @@ class AbstractItemsTest extends TestCase
             Layout::class,
             ['getChildName', 'getBlock']
         );
-        $layout->expects($this->at(0))
-            ->method('getChildName')
+        $layout->method('getChildName')
             ->with(null, 'some-type')
             ->willReturn('some-block-name');
-        $layout->expects($this->at(1))
-            ->method('getBlock')
+        $layout->method('getBlock')
             ->with('some-block-name')
             ->willReturn($renderer);
 
@@ -124,12 +135,14 @@ class AbstractItemsTest extends TestCase
      * @param bool $canReturnToStock
      * @param array $itemConfig
      * @param bool $result
+     *
+     * @return void
      * @dataProvider canReturnItemToStockDataProvider
      */
-    public function testCanReturnItemToStock($canReturnToStock, $itemConfig, $result)
+    public function testCanReturnItemToStock(bool $canReturnToStock, array $itemConfig, bool $result): void
     {
-        $productId = isset($itemConfig['product_id']) ? $itemConfig['product_id'] : null;
-        $manageStock = isset($itemConfig['manage_stock']) ? $itemConfig['manage_stock'] : null;
+        $productId = $itemConfig['product_id'] ?? null;
+        $manageStock = $itemConfig['manage_stock'] ?? false;
         $item = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo\Item::class)->addMethods(
             ['hasCanReturnToStock', 'setCanReturnToStock', 'getCanReturnToStock']
         )
@@ -160,8 +173,13 @@ class AbstractItemsTest extends TestCase
      * @param array $itemConfig
      * @return array
      */
-    protected function prepareServiceMockDependency($item, $canReturnToStock, $productId, $manageStock, $itemConfig)
-    {
+    protected function prepareServiceMockDependency(
+        MockObject $item,
+        bool $canReturnToStock,
+        ?int $productId,
+        bool $manageStock,
+        array $itemConfig
+    ): array {
         $dependencies = [];
 
         $this->stockItemMock->expects($this->any())
@@ -208,11 +226,14 @@ class AbstractItemsTest extends TestCase
         return $dependencies;
     }
 
-    public function testCanReturnItemToStockEmpty()
+    /**
+     * @return void
+     */
+    public function testCanReturnItemToStockEmpty(): void
     {
         $stockConfiguration = $this->getMockBuilder(Configuration::class)
             ->disableOriginalConstructor()
-            ->setMethods(['canSubtractQty'])
+            ->onlyMethods(['canSubtractQty'])
             ->getMock();
         $stockConfiguration->expects($this->once())
             ->method('canSubtractQty')
@@ -232,13 +253,13 @@ class AbstractItemsTest extends TestCase
     /**
      * @return array
      */
-    public function canReturnItemToStockDataProvider()
+    public function canReturnItemToStockDataProvider(): array
     {
         return [
             [true, ['has_can_return_to_stock' => true], true],
             [false, ['has_can_return_to_stock' => true], false],
             [false, ['has_can_return_to_stock' => false, 'product_id' => 2, 'manage_stock' => false], false],
-            [true, ['has_can_return_to_stock' => false, 'product_id' => 2, 'manage_stock' => true], true],
+            [true, ['has_can_return_to_stock' => false, 'product_id' => 2, 'manage_stock' => true], true]
         ];
     }
 }

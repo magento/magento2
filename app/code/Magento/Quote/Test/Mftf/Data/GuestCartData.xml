@@ -25,4 +25,8 @@
         <requiredEntity type="payment_method">PaymentMethodCheckMoneyOrder</requiredEntity>
         <requiredEntity type="billing_address">BillingAddressTX</requiredEntity>
     </entity>
+
+    <entity name="OrderId" type="orderId">
+           <var key="order_id" entityKey="return" entityType="orderId"/>
+    </entity>
 </entities>

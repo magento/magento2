@@ -11,6 +11,8 @@ use Magento\Csp\Api\Data\PolicyInterface;
 
 /**
  * Utility for classes responsible for rendering and templates that allows whitelist inline sources.
+ *
+ * @api
  */
 interface InlineUtilInterface
 {

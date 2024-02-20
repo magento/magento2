@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="PayPalPayflowProConfigSection">
+        <element name="configureBtn" type="button" selector="//*[@id='row_payment_{{countryCode}}_paypal_payment_gateways']//*[@id='payment_{{countryCode}}_paypal_payment_gateways']//*[@id='row_payment_{{countryCode}}_paypal_payment_gateways_paypal_payflowpro_with_express_checkout']//*[@id='payment_{{countryCode}}_paypal_payment_gateways_paypal_payflowpro_with_express_checkout-head']" parameterized="true"/>
+        <element name="partner" type="button" selector="#payment_{{countryCode}}_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal_payflow_required_paypal_payflow_api_settings_partner" parameterized="true"/>
+        <element name="user" type="button" selector="#payment_{{countryCode}}_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal_payflow_required_paypal_payflow_api_settings_user" parameterized="true"/>
+        <element name="vendor" type="button" selector="#payment_{{countryCode}}_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal_payflow_required_paypal_payflow_api_settings_vendor" parameterized="true"/>
+        <element name="password" type="button" selector="#payment_{{countryCode}}_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal_payflow_required_paypal_payflow_api_settings_pwd" parameterized="true"/>
+        <element name="testmode" type="button" selector="#payment_{{countryCode}}_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal_payflow_required_paypal_payflow_api_settings_sandbox_flag" parameterized="true"/>
+        <element name="enableSolution" type="button" selector="#payment_{{countryCode}}_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal_payflow_required_enable_paypal_payflow" parameterized="true"/>
+        <element name="enableVault" type="button" selector="#payment_{{countryCode}}_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal_payflow_required_payflowpro_cc_vault_active" parameterized="true"/>
+        <element name="paymentGateway" type="button" selector="//*[@id='payment_{{countryCode}}_other_paypal_payment_solutions']//*[@id='payment_{{countryCode}}_paypal_payment_gateways-head']" parameterized="true"/>    </section>
+</sections>

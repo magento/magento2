@@ -44,7 +44,7 @@ class ConfigurableProductHandlerTest extends TestCase
     {
         $this->configurableMock = $this->createPartialMock(
             Configurable::class,
-            ['getChildrenIds']
+            ['getChildrenIds', 'getParentIdsByChild']
         );
         $this->configurableProductsProviderMock = $this->createPartialMock(
             ConfigurableProductsProvider::class,
@@ -61,22 +61,29 @@ class ConfigurableProductHandlerTest extends TestCase
     /**
      * @return void
      */
-    public function testAfterGetMatchingProductIdsWithSimpleProduct()
+    public function testAroundGetMatchingProductIdsWithSimpleProduct()
     {
         $this->configurableProductsProviderMock->expects($this->once())->method('getIds')->willReturn([]);
         $this->configurableMock->expects($this->never())->method('getChildrenIds');
+        $this->ruleMock->expects($this->never())
+            ->method('setProductsFilter');
 
         $productIds = ['product' => 'valid results'];
         $this->assertEquals(
             $productIds,
-            $this->configurableProductHandler->afterGetMatchingProductIds($this->ruleMock, $productIds)
+            $this->configurableProductHandler->aroundGetMatchingProductIds(
+                $this->ruleMock,
+                function () {
+                    return ['product' => 'valid results'];
+                }
+            )
         );
     }
 
     /**
      * @return void
      */
-    public function testAfterGetMatchingProductIdsWithConfigurableProduct()
+    public function testAroundGetMatchingProductIdsWithConfigurableProduct()
     {
         $this->configurableProductsProviderMock->expects($this->once())->method('getIds')
             ->willReturn(['conf1', 'conf2']);
@@ -84,6 +91,8 @@ class ConfigurableProductHandlerTest extends TestCase
             ['conf1', true, [ 0 => ['simple1']]],
             ['conf2', true, [ 0 => ['simple1', 'simple2']]],
         ]);
+        $this->ruleMock->expects($this->never())
+            ->method('setProductsFilter');
 
         $this->assertEquals(
             [
@@ -96,21 +105,118 @@ class ConfigurableProductHandlerTest extends TestCase
                     3 => true,
                 ]
             ],
-            $this->configurableProductHandler->afterGetMatchingProductIds(
+            $this->configurableProductHandler->aroundGetMatchingProductIds(
                 $this->ruleMock,
-                [
-                    'conf1' => [
-                        0 => true,
-                        1 => true,
-                    ],
-                    'conf2' => [
-                        0 => false,
-                        1 => false,
-                        3 => true,
-                        4 => false,
-                    ],
-                ]
+                function () {
+                    return [
+                        'conf1' => [
+                            0 => true,
+                            1 => true,
+                        ],
+                        'conf2' => [
+                            0 => false,
+                            1 => false,
+                            3 => true,
+                            4 => false,
+                        ],
+                    ];
+                }
             )
         );
+    }
+
+    /**
+     * @param array $productsFilter
+     * @param array $expectedProductsFilter
+     * @param array $matchingProductIds
+     * @param array $expectedMatchingProductIds
+     * @return void
+     * @dataProvider aroundGetMatchingProductIdsDataProvider
+     */
+    public function testAroundGetMatchingProductIdsWithProductsFilter(
+        array $productsFilter,
+        array $expectedProductsFilter,
+        array $matchingProductIds,
+        array $expectedMatchingProductIds
+    ): void {
+        $configurableProducts = [
+            'conf1' => ['simple11', 'simple12'],
+            'conf2' => ['simple21', 'simple22'],
+        ];
+        $this->configurableProductsProviderMock->method('getIds')
+            ->willReturnCallback(
+                function ($ids) use ($configurableProducts) {
+                    return array_intersect($ids, array_keys($configurableProducts));
+                }
+            );
+        $this->configurableMock->method('getChildrenIds')
+            ->willReturnCallback(
+                function ($id) use ($configurableProducts) {
+                    return [0 => $configurableProducts[$id] ?? []];
+                }
+            );
+
+        $this->configurableMock->method('getParentIdsByChild')
+            ->willReturnCallback(
+                function ($ids) use ($configurableProducts) {
+                    $result = [];
+                    foreach ($configurableProducts as $configurableProduct => $childProducts) {
+                        if (array_intersect($ids, $childProducts)) {
+                            $result[] = $configurableProduct;
+                        }
+                    }
+                    return $result;
+                }
+            );
+
+        $this->ruleMock->method('getProductsFilter')
+            ->willReturn($productsFilter);
+
+        $this->ruleMock->expects($this->once())
+            ->method('setProductsFilter')
+            ->willReturn($expectedProductsFilter);
+
+        $this->assertEquals(
+            $expectedMatchingProductIds,
+            $this->configurableProductHandler->aroundGetMatchingProductIds(
+                $this->ruleMock,
+                function () use ($matchingProductIds) {
+                    return $matchingProductIds;
+                }
+            )
+        );
+    }
+
+    /**
+     * @return array[]
+     */
+    public function aroundGetMatchingProductIdsDataProvider(): array
+    {
+        return [
+            [
+                ['simple1',],
+                ['simple1',],
+                ['simple1' => [1 => false]],
+                ['simple1' => [1 => false],],
+            ],
+            [
+                ['simple11',],
+                ['simple11', 'conf1',],
+                ['simple11' => [1 => false], 'conf1' => [1 => true],],
+                ['simple11' => [1 => true],],
+            ],
+            [
+                ['simple11', 'simple12',],
+                ['simple11', 'conf1',],
+                ['simple11' => [1 => false], 'conf1' => [1 => true],],
+                ['simple11' => [1 => true], 'simple12' => [1 => true],],
+            ],
+            [
+                ['conf1', 'simple11', 'simple12'],
+                ['conf1', 'simple11', 'simple12'],
+                ['conf1' => [1 => true], 'simple11' => [1 => false], 'simple12' => [1 => false]],
+                ['simple11' => [1 => true], 'simple12' => [1 => true]],
+            ],
+        ];
     }
 }

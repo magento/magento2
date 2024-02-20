@@ -37,7 +37,8 @@
             "created_at": true
         },
         "index": {
-            "OAUTH_TOKEN_CONSUMER_ID": true
+            "OAUTH_TOKEN_CONSUMER_ID": true,
+            "OAUTH_TOKEN_CREATED_AT": true
         },
         "constraint": {
             "PRIMARY": true,

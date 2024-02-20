@@ -23,6 +23,9 @@ use ReflectionClass;
 
 /**
  * Provides tests for \Magento\TestFramework\Application.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
  */
 class ApplicationTest extends \PHPUnit\Framework\TestCase
 {
@@ -148,26 +151,24 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                 true
             );
 
+        $withArgs = [];
         // Add expected shell execution calls
-        foreach ($expectedShellExecutionCalls as $index => $expectedShellExecutionArguments) {
-            $this->shell
-                ->expects($this->at($index))
-                ->method('execute')
-                ->with(...$expectedShellExecutionArguments);
+        foreach ($expectedShellExecutionCalls as $expectedShellExecutionArguments) {
+            $withArgs[] = $expectedShellExecutionArguments;
         }
 
         if ($isExceptionExpected) {
             $this->expectException(DomainException::class);
             $this->expectExceptionMessage('"command" must be present in post install setup command arrays');
         } else {
-            $this->shell
-                ->expects($this->at($index + 1))
-                ->method('execute')
-                ->with(
-                    PHP_BINARY . ' -f %s cache:disable -vvv --bootstrap=%s',
-                    [BP . '/bin/magento', $this->getInitParamsQuery($tmpDir)]
-                );
+            $withArgs[] = [
+                PHP_BINARY . ' -f %s cache:disable -vvv --bootstrap=%s',
+                [BP . '/bin/magento', $this->getInitParamsQuery($tmpDir)]
+            ];
         }
+        $this->shell
+            ->method('execute')
+            ->withConsecutive(...$withArgs);
 
         $subject->install(false);
     }
@@ -182,7 +183,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
         $installShellCommandExpectation = [
             PHP_BINARY . ' -f %s setup:install -vvv ' .
             '--db-host=%s --db-user=%s --db-password=%s --db-name=%s --db-prefix=%s ' .
-            '--magento-init-params=%s',
+            '--use-secure=%s --use-secure-admin=%s --magento-init-params=%s --no-interaction',
             [
                 BP . '/bin/magento',
                 '/tmp/mysql.sock',
@@ -190,7 +191,10 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                 '',
                 'magento_integration_tests',
                 '',
+                '0',
+                '0',
                 $this->getInitParamsQuery(sys_get_temp_dir()),
+                true
             ]
         ];
 
@@ -210,7 +214,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                 [
                     $installShellCommandExpectation,
                     [
-                        PHP_BINARY . ' -f %s %s -vvv ' .
+                        PHP_BINARY . ' -f %s %s -vvv --no-interaction ' .
                         '--host=%s --dbname=%s --username=%s --password=%s --magento-init-params=%s',
                         [
                             BP . '/bin/magento',
@@ -231,7 +235,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                 [
                     $installShellCommandExpectation,
                     [
-                        PHP_BINARY . ' -f %s %s -vvv %s %s --option1=%s -option2=%s --magento-init-params=%s',
+                        PHP_BINARY . ' -f %s %s -vvv --no-interaction %s %s --option1=%s -option2=%s --magento-init-params=%s', // phpcs:ignore
                         [
                             BP . '/bin/magento',
                             'fake:command',

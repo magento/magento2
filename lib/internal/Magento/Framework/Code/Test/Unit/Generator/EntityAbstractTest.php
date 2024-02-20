@@ -15,28 +15,25 @@ use Magento\Framework\Code\Generator\DefinedClasses;
 
 class EntityAbstractTest extends TestCase
 {
-    /**#@+
+    /**
      * Source and result class parameters
      */
-    const RESULT_FILE = 'MyResult/MyResult.php';
+    public const RESULT_FILE = 'MyResult/MyResult.php';
 
-    const RESULT_DIRECTORY = 'MyResult';
-
-    /**#@-*/
+    public const RESULT_DIRECTORY = 'MyResult';
 
     /**
      * Basic code generation directory
      */
-    const GENERATION_DIRECTORY = 'generation';
+    public const GENERATION_DIRECTORY = 'generation';
 
-    /**#@+
+    /**
      * Generated code before and after code style fix
      */
-    const SOURCE_CODE = "a = 1; b = array (); {\n\n some source code \n\n}";
+    public const SOURCE_CODE = "a = 1; b = array (); {\n\n some source code \n\n}";
 
-    const RESULT_CODE = "a = 1; b = array(); {\n some generated php code \n}";
+    public const RESULT_CODE = "a = 1; b = array(); {\n some generated php code \n}";
 
-    /**#@-*/
     /**
      * Model under test
      *
@@ -57,7 +54,7 @@ class EntityAbstractTest extends TestCase
     protected function setUp(): void
     {
         $this->sourceClass = '\\' . DataObject::class;
-        $this->resultClass = '\\' . \Magento\Framework\DataObject_MyResult::class;
+        $this->resultClass = '\\Magento\\Framework\\DataObject_MyResult';
         $this->_model = $this->getMockForAbstractClass(EntityAbstract::class);
     }
 
@@ -262,10 +259,10 @@ class EntityAbstractTest extends TestCase
         }
 
         return [
-            'source_class' => $this->sourceClass,
-            'result_class' => $this->resultClass,
-            'io_object' => $ioObject,
-            'code_generator' => null,
+            'sourceClassName' => $this->sourceClass,
+            'resultClassName' => $this->resultClass,
+            'ioObject' => $ioObject,
+            'classGenerator' => null,
             'definedClasses' => $definedClassesMock,
         ];
     }
@@ -294,21 +291,21 @@ class EntityAbstractTest extends TestCase
 
         $codeGenerator->expects($this->once())
             ->method('generate')
-            ->willReturn($willWriteCode ? self::RESULT_CODE : null);
+            ->willReturn($willWriteCode ? self::RESULT_CODE : '');
 
         // Add configuration for the generation step
         /** @var \PHPUnit\Framework\MockObject\MockObject $ioObject */
-        $ioObject = $mocks['io_object'];
+        $ioObject = $mocks['ioObject'];
         if ($willWriteCode) {
             $ioObject->expects($this->once())->method('writeResultFile')->with(self::RESULT_FILE, self::RESULT_CODE);
         }
         $ioObject->expects($this->any())->method('generateResultFileName')->willReturn(self::RESULT_FILE);
 
         return [
-            'source_class' => $mocks['source_class'],
-            'result_class' => $mocks['result_class'],
-            'io_object' => $ioObject,
-            'code_generator' => $codeGenerator,
+            'sourceClassName' => $mocks['sourceClassName'],
+            'resultClassName' => $mocks['resultClassName'],
+            'ioObject' => $ioObject,
+            'classGenerator' => $codeGenerator,
             'definedClasses' => $mocks['definedClasses'],
         ];
     }

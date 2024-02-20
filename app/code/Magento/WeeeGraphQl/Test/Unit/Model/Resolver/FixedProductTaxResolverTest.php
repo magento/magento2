@@ -28,17 +28,17 @@ class FixedProductTaxResolverTest extends TestCase
     /**
      * @var MockObject|ContextInterface
      */
-    private $context;
+    private $contextMock;
 
     /**
      * @var MockObject|WeeeHelper
      */
-    private $weeeHelper;
+    private $weeeHelperMock;
 
     /**
      * @var TaxHelper|MockObject
      */
-    private $taxHelper;
+    private $taxHelperMock;
 
     /**
      * @var FixedProductTax
@@ -85,110 +85,136 @@ class FixedProductTaxResolverTest extends TestCase
     ];
 
     /**
+     * @var ContextExtensionInterface|MockObject
+     */
+    private $contextExtensionAttributesMock;
+
+    /**
+     * @var StoreInterface|MockObject
+     */
+    private $storeMock;
+
+    /**
+     * @var CartItemInterface|MockObject
+     */
+    private $cartItemMock;
+
+    /**
+     * @var Field|MockObject
+     */
+    private $fieldMock;
+
+    /**
+     * @var ResolveInfo|MockObject
+     */
+    private $resolveInfoMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(ContextInterface::class)
-            ->setMethods(['getExtensionAttributes'])
+        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
+            ->addMethods(['getExtensionAttributes'])
             ->getMockForAbstractClass();
 
-        $this->weeeHelper = $this->getMockBuilder(WeeeHelper::class)
+        $this->weeeHelperMock = $this->getMockBuilder(WeeeHelper::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['isEnabled', 'getApplied'])
             ->getMock();
-        $this->taxHelper = $this->getMockBuilder(TaxHelper::class)
+        $this->taxHelperMock = $this->getMockBuilder(TaxHelper::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getPriceDisplayType'])
             ->getMock();
 
-        $this->resolver = new FixedProductTax(
-            $this->weeeHelper,
-            $this->taxHelper,
-        );
+        $this->contextExtensionAttributesMock = $this->getMockBuilder(ContextExtensionInterface::class)
+            ->addMethods(['getStore'])
+            ->getMockForAbstractClass();
+        $this->storeMock = $this->createMock(StoreInterface::class);
+        $this->cartItemMock = $this->createMock(CartItemInterface::class);
+        $this->fieldMock = $this->createMock(Field::class);
+        $this->resolveInfoMock = $this->createMock(ResolveInfo::class);
+
+        $this->resolver = new FixedProductTax($this->weeeHelperMock, $this->taxHelperMock);
     }
 
     /**
-     * Verifies that exception is thrown if model is not specified
+     * Verifies that exception is thrown if model is not specified.
+     *
+     * @return void
      */
     public function testShouldThrowException(): void
     {
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessageMatches('/value should be specified/');
 
-        $this->resolver->resolve(
-            $this->getFieldStub(),
-            null,
-            $this->getResolveInfoStub()
-        );
+        $this->resolver->resolve($this->fieldMock, null, $this->resolveInfoMock);
     }
 
     /**
-     * Verifies that result is empty if FPT config is disabled
+     * Verifies that result is empty if FPT config is disabled.
+     *
+     * @return void
      */
     public function testShouldReturnEmptyResult(): void
     {
-        $store = $this->createMock(StoreInterface::class);
-        $cartItem = $this->createMock(CartItemInterface::class);
-        $contextExtensionAttributes = $this->createMock(ContextExtensionInterface::class);
-        $contextExtensionAttributes->method('getStore')
-            ->willreturn($store);
-        $this->context->method('getExtensionAttributes')
-            ->willReturn($contextExtensionAttributes);
+        $this->contextExtensionAttributesMock->method('getStore')
+            ->willreturn($this->storeMock);
+        $this->contextMock->method('getExtensionAttributes')
+            ->willReturn($this->contextExtensionAttributesMock);
 
-        $this->weeeHelper->method('isEnabled')
-            ->with($store)
+        $this->weeeHelperMock->method('isEnabled')
+            ->with($this->storeMock)
             ->willReturn(false);
 
-        $this->weeeHelper->expects($this->never())
+        $this->weeeHelperMock->expects($this->never())
             ->method('getApplied');
 
         $this->assertEquals(
             [],
             $this->resolver->resolve(
-                $this->getFieldStub(),
-                $this->context,
-                $this->getResolveInfoStub(),
-                ['model' => $cartItem]
+                $this->fieldMock,
+                $this->contextMock,
+                $this->resolveInfoMock,
+                ['model' => $this->cartItemMock]
             )
         );
     }
 
     /**
-     * @dataProvider shouldReturnResultDataProvider
      * @param int $displayType
      * @param array $expected
+     *
+     * @return void
+     * @dataProvider shouldReturnResultDataProvider
      */
     public function testShouldReturnResult(int $displayType, array $expected): void
     {
-        $store = $this->createMock(StoreInterface::class);
-        $cartItem = $this->createMock(CartItemInterface::class);
-        $contextExtensionAttributes = $this->createMock(ContextExtensionInterface::class);
-        $contextExtensionAttributes->method('getStore')
-            ->willreturn($store);
-        $this->context->method('getExtensionAttributes')
-            ->willReturn($contextExtensionAttributes);
+        $this->contextExtensionAttributesMock->method('getStore')
+            ->willreturn($this->storeMock);
+        $this->contextMock->method('getExtensionAttributes')
+            ->willReturn($this->contextExtensionAttributesMock);
 
-        $this->weeeHelper->method('isEnabled')
-            ->with($store)
+        $this->weeeHelperMock->method('isEnabled')
+            ->with($this->storeMock)
             ->willReturn(true);
 
-        $this->weeeHelper->expects($this->once())
+        $this->weeeHelperMock->expects($this->once())
             ->method('getApplied')
             ->willReturn($this->fpts);
 
-        $this->taxHelper->expects($this->once())
+        $this->taxHelperMock->expects($this->once())
             ->method('getPriceDisplayType')
             ->willReturn($displayType);
 
         $this->assertEquals(
             $expected,
             $this->resolver->resolve(
-                $this->getFieldStub(),
-                $this->context,
-                $this->getResolveInfoStub(),
+                $this->fieldMock,
+                $this->contextMock,
+                $this->resolveInfoMock,
                 [
-                    'model' => $cartItem,
+                    'model' => $this->cartItemMock,
                     'price' => [
                         'currency' => 'USD'
                     ]
@@ -256,29 +282,5 @@ class FixedProductTaxResolverTest extends TestCase
                 ]
             ]
         ];
-    }
-
-    /**
-     * @return MockObject|Field
-     */
-    private function getFieldStub(): Field
-    {
-        /** @var MockObject|Field $fieldMock */
-        $fieldMock = $this->getMockBuilder(Field::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        return $fieldMock;
-    }
-
-    /**
-     * @return MockObject|ResolveInfo
-     */
-    private function getResolveInfoStub(): ResolveInfo
-    {
-        /** @var MockObject|ResolveInfo $resolveInfoMock */
-        $resolveInfoMock = $this->getMockBuilder(ResolveInfo::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        return $resolveInfoMock;
     }
 }

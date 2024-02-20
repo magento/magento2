@@ -18,6 +18,8 @@ use Magento\Quote\Model\Quote;
  */
 class Discounts implements ResolverInterface
 {
+    public const TYPE_SHIPPING = "SHIPPING";
+    public const TYPE_ITEM = "ITEM";
     /**
      * @inheritdoc
      */
@@ -42,6 +44,7 @@ class Discounts implements ResolverInterface
         $discountValues=[];
         $address = $quote->getShippingAddress();
         $totalDiscounts = $address->getExtensionAttributes()->getDiscounts();
+
         if ($totalDiscounts && is_array($totalDiscounts)) {
             foreach ($totalDiscounts as $value) {
                 $discount = [];
@@ -49,13 +52,13 @@ class Discounts implements ResolverInterface
                 $discount['label'] = $value->getRuleLabel() ?: __('Discount');
                 /* @var \Magento\SalesRule\Api\Data\DiscountDataInterface $discountData */
                 $discountData = $value->getDiscountData();
+                $discount['applied_to'] = $discountData->getAppliedTo();
                 $amount['value'] = $discountData->getAmount();
                 $amount['currency'] = $quote->getQuoteCurrencyCode();
                 $discount['amount'] = $amount;
                 $discountValues[] = $discount;
             }
-            return $discountValues;
         }
-        return null;
+        return $discountValues ?: null;
     }
 }

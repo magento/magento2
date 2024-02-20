@@ -32,27 +32,29 @@ use Magento\Sitemap\Model\ResourceModel\Sitemap as SitemapResource;
  * @method \Magento\Sitemap\Model\Sitemap setStoreId(int $value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  * @api
  * @since 100.0.2
  */
 class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
-    const OPEN_TAG_KEY = 'start';
+    public const OPEN_TAG_KEY = 'start';
 
-    const CLOSE_TAG_KEY = 'end';
+    public const CLOSE_TAG_KEY = 'end';
 
-    const INDEX_FILE_PREFIX = 'sitemap';
+    public const INDEX_FILE_PREFIX = 'sitemap';
 
-    const TYPE_INDEX = 'sitemap';
+    public const TYPE_INDEX = 'sitemap';
 
-    const TYPE_URL = 'url';
+    public const TYPE_URL = 'url';
 
     private const ROOT_DIRECTORY = 'sitemap';
 
     /**
      * Last mode date min value
      */
-    const LAST_MOD_MIN_VAL = '0000-01-01 00:00:00';
+    public const LAST_MOD_MIN_VAL = '0000-01-01 00:00:00';
 
     /**
      * Real file path
@@ -62,8 +64,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     protected $_filePath;
 
     /**
-     * Sitemap items
-     *
      * @var array
      */
     protected $_sitemapItems = [];
@@ -114,8 +114,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     protected $_stream;
 
     /**
-     * Sitemap data
-     *
      * @var \Magento\Sitemap\Helper\Data
      */
     protected $_sitemapData;
@@ -164,6 +162,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @inheritdoc
      *
      * @since 100.1.5
+     *
+     * @var string|array|bool
      */
     protected $_cacheTag = [Value::CACHE_TAG];
 
@@ -182,8 +182,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     private $configReader;
 
     /**
-     * Sitemap Item Factory
-     *
      * @var \Magento\Sitemap\Model\SitemapItemInterfaceFactory
      */
     private $sitemapItemFactory;
@@ -428,7 +426,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         /**
          * Check allow filename
          */
-        if (!preg_match('#^[a-zA-Z0-9_\.]+$#', $this->getSitemapFilename())) {
+        if ($this->getSitemapFilename() === null || !preg_match('#^[a-zA-Z0-9_\.]+$#', $this->getSitemapFilename())) {
             throw new LocalizedException(
                 __(
                     'Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename.'
@@ -484,10 +482,9 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
 
         if ($this->_sitemapIncrement == 1) {
             // In case when only one increment file was created use it as default sitemap
-            $path = rtrim($this->getSitemapPath(), '/')
-                . '/'
-                . $this->_getCurrentSitemapFilename($this->_sitemapIncrement);
-            $destination = rtrim($this->getSitemapPath(), '/') . '/' . $this->getSitemapFilename();
+            $sitemapPath = $this->getSitemapPath() !== null ? rtrim($this->getSitemapPath(), '/') : '';
+            $path = $sitemapPath . '/' . $this->_getCurrentSitemapFilename($this->_sitemapIncrement);
+            $destination = $sitemapPath . '/' . $this->getSitemapFilename();
 
             $this->_directory->renameFile($path, $destination);
         } else {
@@ -642,7 +639,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
             $fileName = $this->_getCurrentSitemapFilename($this->_sitemapIncrement);
         }
 
-        $path = rtrim($this->getSitemapPath(), '/') . '/' . $fileName;
+        $path = ($this->getSitemapPath() !== null ? rtrim($this->getSitemapPath(), '/') : '') . '/' . $fileName;
         $this->_stream = $this->_directory->openFile($path);
 
         $fileHeader = sprintf($this->_tags[$type][self::OPEN_TAG_KEY], $type);
@@ -687,7 +684,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _getCurrentSitemapFilename($index)
     {
-        return str_replace('.xml', '', $this->getSitemapFilename()) . '-' . $this->getStoreId() . '-' . $index . '.xml';
+        return ($this->getSitemapFilename() !== null ? str_replace('.xml', '', $this->getSitemapFilename()) : '')
+            . '-' . $this->getStoreId() . '-' . $index . '.xml';
     }
 
     /**
@@ -723,7 +721,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _getUrl($url, $type = UrlInterface::URL_TYPE_LINK)
     {
-        return $this->_getStoreBaseUrl($type) . ltrim($url, '/');
+        return $this->_getStoreBaseUrl($type) . ($url !== null ? ltrim($url, '/') : '');
     }
 
     /**

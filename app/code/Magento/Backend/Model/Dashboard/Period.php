@@ -12,6 +12,7 @@ namespace Magento\Backend\Model\Dashboard;
  */
 class Period
 {
+    public const PERIOD_TODAY = 'today';
     public const PERIOD_24_HOURS = '24h';
     public const PERIOD_7_DAYS = '7d';
     public const PERIOD_1_MONTH = '1m';
@@ -30,6 +31,7 @@ class Period
     public function getDatePeriods(): array
     {
         return [
+            static::PERIOD_TODAY => __('Today'),
             static::PERIOD_24_HOURS => __('Last 24 Hours'),
             static::PERIOD_7_DAYS => __('Last 7 Days'),
             static::PERIOD_1_MONTH => __('Current Month'),
@@ -46,6 +48,7 @@ class Period
     public function getPeriodChartUnits(): array
     {
         return [
+            static::PERIOD_TODAY => self::PERIOD_UNIT_HOUR,
             static::PERIOD_24_HOURS => self::PERIOD_UNIT_HOUR,
             static::PERIOD_7_DAYS => self::PERIOD_UNIT_DAY,
             static::PERIOD_1_MONTH => self::PERIOD_UNIT_DAY,

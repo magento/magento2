@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace Magento\Framework\View\Test\Unit\Design\Theme\Image;
 
+use Magento\Framework\File\Http;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
@@ -48,7 +49,7 @@ class UploaderTest extends TestCase
     protected function setUp(): void
     {
         $this->_filesystemMock = $this->createMock(Filesystem::class);
-        $this->_transferAdapterMock = $this->createMock(\Zend_File_Transfer_Adapter_Http::class);
+        $this->_transferAdapterMock = $this->createMock(Http::class);
         $this->_fileUploader = $this->createMock(\Magento\Framework\File\Uploader::class);
 
         $adapterFactory = $this->createMock(FileTransferFactory::class);

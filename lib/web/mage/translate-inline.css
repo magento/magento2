@@ -8,6 +8,14 @@
     outline: dotted 1px red !important;
 }
 
+.trnslate-inline-area .window-translate-inline {
+    z-index: 903;
+}
+
+.trnslate-inline-area .ui-widget-overlay.ui-front {
+    z-index: 902;
+}
+
 * html .translate-inline,
 * + html .translate-inline {
     border: dotted 1px red !important;

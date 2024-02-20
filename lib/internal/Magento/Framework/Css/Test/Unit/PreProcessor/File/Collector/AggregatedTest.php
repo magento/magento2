@@ -57,8 +57,7 @@ class AggregatedTest extends TestCase
     protected $loggerMock;
 
     /**
-     * Setup tests
-     * @return void
+     * @inheritdoc
      */
     protected function setup(): void
     {
@@ -83,7 +82,10 @@ class AggregatedTest extends TestCase
             ->getMock();
     }
 
-    public function testGetFilesEmpty()
+    /**
+     * @return void
+     */
+    public function testGetFilesEmpty(): void
     {
         $this->libraryFilesMock->expects($this->any())->method('getFiles')->willReturn([]);
         $this->baseFilesMock->expects($this->any())->method('getFiles')->willReturn([]);
@@ -117,10 +119,11 @@ class AggregatedTest extends TestCase
      * *
      * @return void
      */
-    public function testGetFiles($libraryFiles, $baseFiles, $themeFiles)
+    public function testGetFiles($libraryFiles, $baseFiles, $themeFiles): void
     {
-        $this->fileListMock->expects($this->at(0))->method('add')->with($libraryFiles);
-        $this->fileListMock->expects($this->at(1))->method('add')->with($baseFiles);
+        $this->fileListMock
+            ->method('add')
+            ->withConsecutive([$libraryFiles], [$baseFiles]);
         $this->fileListMock->expects($this->any())->method('getAll')->willReturn(['returnedFile']);
 
         $subPath = '*';
@@ -159,11 +162,11 @@ class AggregatedTest extends TestCase
      *
      * @return array
      */
-    public function getFilesDataProvider()
+    public function getFilesDataProvider(): array
     {
         return [
             'all files' => [['file1'], ['file2'], ['file3']],
-            'no library' => [[], ['file1', 'file2'], ['file3']],
+            'no library' => [[], ['file1', 'file2'], ['file3']]
         ];
     }
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillAndSaveCustomerAddressWithoutRegionActionGroup" extends="AdminFillAndSaveCustomerAddressInformationActionGroup">
+        <annotations>
+            <description>Fill and save customer address information omitting the region.</description>
+        </annotations>
+        <arguments>
+            <argument name="address" type="entity"/>
+        </arguments>
+        <remove keyForRemoval="fillRegion"/>
+        <selectOption selector="{{AdminCustomerAddressesSection.state}}" userInput="{{address.state}}" stepKey="fillRegion" after="clickRegionToOpenListOfRegions"/>
+    </actionGroup>
+</actionGroups>

@@ -18,6 +18,7 @@
             <useCaseId value="MC-18821"/>
             <testCaseId value="MC-11531"/>
             <group value="Swatches"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Create category and configurable product with two options-->
@@ -32,6 +33,10 @@
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttribute">
                 <argument name="productAttributeLabel" value="{{visualSwatchAttribute.default_label}}"/>
+            </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
             </actionGroup>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>

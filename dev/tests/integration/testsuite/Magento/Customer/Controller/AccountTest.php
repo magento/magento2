@@ -113,6 +113,7 @@ class AccountTest extends AbstractController
         $customer->save();
 
         $this->getRequest()->setParam('token', $token);
+        $this->getRequest()->setParam('id', 1);
 
         $this->dispatch('customer/account/createPassword');
 
@@ -266,7 +267,7 @@ class AccountTest extends AbstractController
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
-    public function testResetPasswordPostNoTokenAction()
+    public function testResetPasswordPostNoEmail()
     {
         $this->getRequest()
             ->setParam('id', 1)
@@ -282,7 +283,7 @@ class AccountTest extends AbstractController
         $this->dispatch('customer/account/resetPasswordPost');
         $this->assertRedirect($this->stringContains('customer/account/'));
         $this->assertSessionMessages(
-            $this->equalTo(['Something went wrong while saving the new password.']),
+            $this->equalTo(['&quot;email&quot; is required. Enter and try again.']),
             MessageInterface::TYPE_ERROR
         );
     }
@@ -622,7 +623,8 @@ class AccountTest extends AbstractController
         $customerRegistry = $this->_objectManager->get(CustomerRegistry::class);
         $customerData = $customerRegistry->retrieveByEmail($email);
         $token = $customerData->getRpToken();
-        $this->assertForgotPasswordEmailContent($token);
+        $customerId = $customerData->getId();
+        $this->assertForgotPasswordEmailContent($token, $customerId);
 
         /* Set new email */
         /** @var CustomerRepositoryInterface $customerRepository */
@@ -701,10 +703,11 @@ class AccountTest extends AbstractController
      * @param string $token
      * @return void
      */
-    private function assertForgotPasswordEmailContent(string $token): void
+    private function assertForgotPasswordEmailContent(string $token, int $customerId): void
     {
         $message = $this->transportBuilderMock->getSentMessage();
-        $pattern = "/<a.+customer\/account\/createPassword\/\?token={$token}.+Set\s+a\s+New\s+Password<\/a\>/";
+        //phpcs:ignore
+        $pattern = "/<a.+customer\/account\/createPassword\/\?id={$customerId}&amp;token={$token}.+Set\s+a\s+New\s+Password<\/a\>/";
         $rawMessage = $message->getBody()->getParts()[0]->getRawContent();
         $messageConstraint = $this->logicalAnd(
             new StringContains('There was recently a request to change the password for your account.'),

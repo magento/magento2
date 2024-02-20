@@ -114,6 +114,14 @@
                 <async_indexing>0</async_indexing>
             </grid>
         </dev>
+        <system>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <sales_logo_folder>sales/store/logo</sales_logo_folder>
+                    <sales_logo_html_folder>sales/store/logo_html</sales_logo_html_folder>
+                </allowed_resources>
+            </media_storage_configuration>
+        </system>
         <customer>
           <create_account>
               <email_required_create_order>1</email_required_create_order>

@@ -21,8 +21,11 @@
 
         <amOnPage url="{{urlKey}}.html" stepKey="goToStorefrontPage"/>
         <waitForPageLoad stepKey="waitForProductFrontPageToLoad"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productOptionSelect(productAttribute)}}" stepKey="waitForOptions"/>
         <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect(productAttribute)}}" userInput="{{productOption}}" stepKey="selectOption1"/>
         <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="{{qty}}" stepKey="fillProductQuantity"/>
+        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartDisabled}}" stepKey="waitForAddToCartButtonToRemoveDisabledState"/>
+        <waitForElementClickable selector="{{StorefrontProductActionSection.addToCart}}" stepKey="waitForAddToCartButton"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="clickOnAddToCartButton"/>
         <waitForPageLoad stepKey="waitForProductToAddInCart"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>

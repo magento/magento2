@@ -79,7 +79,7 @@ class SessionTest extends TestCase
             ['getCookie', 'setPublicCookie']
         );
         $this->storage = $this->getMockBuilder(Storage::class)
-            ->addMethods(['getUser', 'getAcl', 'setAcl'])
+            ->addMethods(['getUser'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->sessionConfig = $this->createPartialMock(
@@ -133,8 +133,6 @@ class SessionTest extends TestCase
         $userMock->expects($this->any())->method('getReloadAclFlag')->willReturn(true);
         $userMock->expects($this->once())->method('setReloadAclFlag')->with('0')->willReturnSelf();
         $userMock->expects($this->once())->method('save');
-        $this->storage->expects($this->once())->method('setAcl')->with($aclMock);
-        $this->storage->expects($this->any())->method('getAcl')->willReturn($aclMock);
         if ($isUserPassedViaParams) {
             $this->session->refreshAcl($userMock);
         } else {
@@ -250,7 +248,7 @@ class SessionTest extends TestCase
             $aclMock = $this->getMockBuilder(Acl::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-            $this->storage->expects($this->any())->method('getAcl')->willReturn($aclMock);
+            $this->session->setAcl($aclMock);
         }
         if ($isUserDefined) {
             $userMock = $this->getMockBuilder(User::class)

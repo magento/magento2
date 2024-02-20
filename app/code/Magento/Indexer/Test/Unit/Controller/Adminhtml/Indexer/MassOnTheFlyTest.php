@@ -82,7 +82,7 @@ class MassOnTheFlyTest extends TestCase
     protected $indexReg;
 
     /**
-     * @return ResponseInterface
+     * @var ResponseInterface
      */
     protected $response;
 
@@ -223,6 +223,8 @@ class MassOnTheFlyTest extends TestCase
                 ->willReturn($indexerInterface);
 
             if ($exception !== null) {
+                $indexerInterface->expects($this->any())
+                    ->method('isScheduled')->willReturn(true);
                 $indexerInterface->expects($this->any())
                     ->method('setScheduled')->with(false)->willThrowException($exception);
             } else {

@@ -149,14 +149,9 @@ QUERY;
         );
 
         $this->gatewayMock
-            ->expects($this->at(0))
             ->method('postRequest')
-            ->willReturn($paypalResponse);
-
-        $this->gatewayMock
-            ->expects($this->at(1))
-            ->method('postRequest')
-            ->willReturn(
+            ->willReturnOnConsecutiveCalls(
+                $paypalResponse,
                 new DataObject(
                     [
                         'result' => '0',
@@ -176,11 +171,10 @@ QUERY;
                         'expdate' => '0221',
                         'cardtype' => '0',
                         'iavs' => 'N',
-                        'result_code' => '0',
+                        'result_code' => '0'
                     ]
                 )
             );
-
         $response = $this->graphQlRequest->send($query, [], '', $requestHeaders);
         $responseData = $this->json->unserialize($response->getContent());
 

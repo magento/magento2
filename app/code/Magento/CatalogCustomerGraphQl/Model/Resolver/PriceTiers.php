@@ -18,12 +18,13 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Resolver for price_tiers
  */
-class PriceTiers implements ResolverInterface
+class PriceTiers implements ResolverInterface, ResetAfterRequestInterface
 {
     /**
      * @var TiersFactory
@@ -124,10 +125,6 @@ class PriceTiers implements ResolverInterface
             return [];
         }
 
-        if (!$product->getTierPrices()) {
-            return [];
-        }
-
         $productId = (int)$product->getId();
         $this->tiers->addProductFilter($productId);
 
@@ -185,7 +182,7 @@ class PriceTiers implements ResolverInterface
             "discount" => $discount,
             "quantity" => $tierPrice->getQty(),
             "final_price" => [
-                "value" => $tierPrice->getValue(),
+                "value" => $tierPrice->getValue() * $tierPrice->getQty(),
                 "currency" => $currencyCode
             ]
         ];
@@ -215,5 +212,16 @@ class PriceTiers implements ResolverInterface
         } else {
             $this->tierPricesQty[$qty] = $key;
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->tierPricesQty = [];
+        $this->formatAndFilterTierPrices = [];
+        $this->customerGroupId = null;
+        $this->tiers = null;
     }
 }

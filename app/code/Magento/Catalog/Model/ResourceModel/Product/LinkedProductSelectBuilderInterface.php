@@ -7,6 +7,8 @@ namespace Magento\Catalog\Model\ResourceModel\Product;
 
 /**
  * Provide Select object for retrieve product id with minimal price
+ *
+ * @api
  */
 interface LinkedProductSelectBuilderInterface
 {

@@ -16,6 +16,7 @@
             <severity value="AVERAGE"/>
             <testCaseId value="MC-37382"/>
             <group value="configuration"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

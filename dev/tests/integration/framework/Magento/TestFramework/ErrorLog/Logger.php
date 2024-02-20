@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\TestFramework\ErrorLog;
 
+use Magento\Framework\Logger\Monolog;
 use Monolog\Handler\HandlerInterface;
+use Monolog\DateTimeImmutable;
 
-class Logger extends \Magento\Framework\Logger\Monolog
+class Logger extends Monolog
 {
     /**
      * @var array
@@ -16,55 +20,70 @@ class Logger extends \Magento\Framework\Logger\Monolog
 
     /**
      * Minimum error level to log message
-     * Possible values: -1 ignore all errors, and level constants form http://tools.ietf.org/html/rfc5424 standard
+     * Possible values: -1 ignore all errors,
+     * and level constants form http://tools.ietf.org/html/rfc5424 standard
      *
      * @var int
      */
     protected $minimumErrorLevel;
 
     /**
-     * @param string             $name       The logging channel
-     * @param HandlerInterface[] $handlers   Optional stack of handlers, the first one in the array is called first, etc
-     * @param callable[]         $processors Optional array of processors
+     * @param string $name The logging channel
+     * @param HandlerInterface[] $handlers Optional stack of handlers, the first one in the array is called first, etc
+     * @param callable[] $processors Optional array of processors
      */
-    public function __construct($name, array $handlers = [], array $processors = [])
-    {
-        $this->minimumErrorLevel = defined('TESTS_ERROR_LOG_LISTENER_LEVEL') ? TESTS_ERROR_LOG_LISTENER_LEVEL : -1;
+    public function __construct(
+        string $name,
+        array $handlers = [],
+        array $processors = []
+    ) {
+        $this->minimumErrorLevel = defined('TESTS_ERROR_LOG_LISTENER_LEVEL')
+            ? TESTS_ERROR_LOG_LISTENER_LEVEL
+            : -1;
         parent::__construct($name, $handlers, $processors);
     }
 
     /**
+     * Clear messages
+     *
      * @return void
      */
-    public function clearMessages()
+    public function clearMessages(): void
     {
         $this->messages = [];
     }
 
     /**
+     * Get messages
+     *
      * @return array
      */
-    public function getMessages()
+    public function getMessages(): array
     {
         return $this->messages;
     }
 
     /**
-     * @{inheritDoc}
+     * @inheritdoc
      *
-     * @param  integer $level   The logging level
-     * @param  string  $message The log message
-     * @param  array   $context The log context
-     * @return Boolean Whether the record has been processed
+     * @param int $level The logging level
+     * @param string $message The log message
+     * @param array $context The log context
+     * @param DateTimeImmutable $datetime Optional log date to log into the past or future
+     * @return bool Whether the record has been processed
      */
-    public function addRecord($level, $message, array $context = [])
-    {
+    public function addRecord(
+        int $level,
+        string $message,
+        array $context = [],
+        DateTimeImmutable $datetime = null
+    ): bool {
         if ($level <= $this->minimumErrorLevel) {
             $this->messages[] = [
                 'level' => $this->getLevelName($level),
                 'message' => $message,
             ];
         }
-        return parent::addRecord($level, $message, $context);
+        return parent::addRecord($level, $message, $context, $datetime);
     }
 }

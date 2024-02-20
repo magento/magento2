@@ -25,6 +25,16 @@ class SqlVersionProvider
 
     public const MARIA_DB_10_VERSION = '10.';
 
+    public const MARIA_DB_10_4_VERSION = '10.4.';
+
+    public const MARIA_DB_10_6_VERSION = '10.6.';
+
+    public const MYSQL_8_0_29_VERSION = '8.0.29';
+
+    public const MARIA_DB_10_6_11_VERSION = '10.6.11';
+
+    public const MARIA_DB_10_4_27_VERSION = '10.4.27';
+
     /**#@-*/
 
     /**
@@ -115,5 +125,56 @@ class SqlVersionProvider
             ->fetchPairs(sprintf('SHOW variables LIKE "%s"', self::VERSION_VAR_NAME));
 
         return $versionOutput[self::VERSION_VAR_NAME];
+    }
+
+    /**
+     * Check if MySQL version is greater than equal to 8.0.29
+     *
+     * @return bool
+     * @throws ConnectionException
+     */
+    public function isMysqlGte8029(): bool
+    {
+        $sqlVersion = $this->getSqlVersion();
+        $isMariaDB = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_VERSION);
+        $sqlExactVersion = $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
+        if (!$isMariaDB && version_compare($sqlExactVersion, '8.0.29', '>=')) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if MariaDB version is greater than equal to 10.6.11
+     *
+     * @return bool
+     * @throws ConnectionException
+     */
+    public function isMariaDBGte10611(): bool
+    {
+        $sqlVersion = $this->getSqlVersion();
+        $isMariaDB106 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_6_VERSION);
+        $sqlExactVersion = $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
+        if ($isMariaDB106 && version_compare($sqlExactVersion, '10.6.11', '>=')) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if MariaDB version is greater than equal to 10.4.27
+     *
+     * @return bool
+     * @throws ConnectionException
+     */
+    public function isMariaDBGte10427(): bool
+    {
+        $sqlVersion = $this->getSqlVersion();
+        $isMariaDB104 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_4_VERSION);
+        $sqlExactVersion = $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
+        if ($isMariaDB104 && version_compare($sqlExactVersion, '10.4.27', '>=')) {
+            return true;
+        }
+        return false;
     }
 }

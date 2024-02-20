@@ -15,6 +15,7 @@
     <preference for="Magento\GraphQl\Model\Query\ContextFactoryInterface" type="Magento\GraphQl\Model\Query\ContextFactory"/>
     <preference for="Magento\GraphQl\Model\Query\ContextParametersInterface" type="Magento\GraphQl\Model\Query\ContextParameters"/>
     <preference for="Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface" type="Magento\Framework\GraphQl\Query\Resolver\ArgumentsCompositeProcessor"/>
+    <preference for="Magento\GraphQl\Model\Query\Logger\LoggerInterface" type="Magento\GraphQl\Model\Query\Logger\LoggerPool"/>
     <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">
@@ -103,4 +104,15 @@
             <argument name="queryComplexity" xsi:type="number">300</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\CompositeValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="backpressureValidator" xsi:type="object">
+                    Magento\GraphQl\Model\Backpressure\BackpressureFieldValidator
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\GraphQl\Model\Backpressure\RequestTypeExtractorInterface"
+                type="Magento\GraphQl\Model\Backpressure\CompositeRequestTypeExtractor"/>
 </config>

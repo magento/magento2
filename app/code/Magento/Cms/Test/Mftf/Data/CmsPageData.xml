@@ -76,7 +76,7 @@
         <data key="height">1000</data>
     </entity>
     <entity name="ImageUpload3" type="uploadImage">
-        <data key="title" unique="suffix">Image1</data>
+        <data key="title">Title of the magento image</data>
         <data key="price">1.00</data>
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
