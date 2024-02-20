@@ -196,7 +196,7 @@ class MaintenanceModeTest extends TestCase
      *
      * @return void
      */
-    public function testSetSingleAddressV4Legacy()
+    public function testSetSingleAddressV4Legacy(): void
     {
         $mapisExist = [
             [MaintenanceMode::FLAG_FILENAME, true],
@@ -223,7 +223,7 @@ class MaintenanceModeTest extends TestCase
      *
      * @return void
      */
-    public function testSetSingleAddressV4()
+    public function testSetSingleAddressV4(): void
     {
         $mapisExist = [
             [MaintenanceMode::FLAG_FILENAME, true],
@@ -250,7 +250,7 @@ class MaintenanceModeTest extends TestCase
      *
      * @return void
      */
-    public function testSetSingleAddressV6Legacy()
+    public function testSetSingleAddressV6Legacy(): void
     {
         $mapisExist = [
             [MaintenanceMode::FLAG_FILENAME, true],
@@ -277,7 +277,7 @@ class MaintenanceModeTest extends TestCase
      *
      * @return void
      */
-    public function testSetSingleAddressV6()
+    public function testSetSingleAddressV6(): void
     {
         $mapisExist = [
             [MaintenanceMode::FLAG_FILENAME, true],
@@ -304,7 +304,7 @@ class MaintenanceModeTest extends TestCase
      *
      * @return void
      */
-    public function testSetSingleAddressRangeV4()
+    public function testSetSingleAddressRangeV4(): void
     {
         $mapisExist = [
             [MaintenanceMode::FLAG_FILENAME, true],
@@ -331,7 +331,7 @@ class MaintenanceModeTest extends TestCase
      *
      * @return void
      */
-    public function testSetSingleAddressRangeV6()
+    public function testSetSingleAddressRangeV6(): void
     {
         $mapisExist = [
             [MaintenanceMode::FLAG_FILENAME, true],
@@ -358,7 +358,7 @@ class MaintenanceModeTest extends TestCase
      *
      * @return void
      */
-    public function testOnSetMultipleAddressesV4()
+    public function testOnSetMultipleAddressesV4(): void
     {
         $mapisExist = [
             [MaintenanceMode::FLAG_FILENAME, true],
@@ -388,7 +388,7 @@ class MaintenanceModeTest extends TestCase
      *
      * @return void
      */
-    public function testOnSetMultipleAddressesV6()
+    public function testOnSetMultipleAddressesV6(): void
     {
         $mapisExist = [
             [MaintenanceMode::FLAG_FILENAME, true],
@@ -418,7 +418,7 @@ class MaintenanceModeTest extends TestCase
      *
      * @return void
      */
-    public function testOnSetMultipleAddressesMixed()
+    public function testOnSetMultipleAddressesMixed(): void
     {
         $mapisExist = [
             [MaintenanceMode::FLAG_FILENAME, true],
@@ -450,7 +450,7 @@ class MaintenanceModeTest extends TestCase
      *
      * @return void
      */
-    public function testOnSetMultipleAddressRangesV4()
+    public function testOnSetMultipleAddressRangesV4(): void
     {
         $mapisExist = [
             [MaintenanceMode::FLAG_FILENAME, true],
@@ -480,7 +480,7 @@ class MaintenanceModeTest extends TestCase
      *
      * @return void
      */
-    public function testOnSetMultipleAddressRangesV6()
+    public function testOnSetMultipleAddressRangesV6(): void
     {
         $mapisExist = [
             [MaintenanceMode::FLAG_FILENAME, true],
@@ -510,7 +510,7 @@ class MaintenanceModeTest extends TestCase
      *
      * @return void
      */
-    public function testOnSetMultipleAddressRangesMixed()
+    public function testOnSetMultipleAddressRangesMixed(): void
     {
         $mapisExist = [
             [MaintenanceMode::FLAG_FILENAME, true],
