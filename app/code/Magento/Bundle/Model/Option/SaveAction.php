@@ -351,6 +351,7 @@ class SaveAction
             );
         }
 
+        // @phpstan-ignore-next-line
         if (empty($existingOption)) {
             $existingOption = $optionCollection->getNewEmptyItem();
         }
