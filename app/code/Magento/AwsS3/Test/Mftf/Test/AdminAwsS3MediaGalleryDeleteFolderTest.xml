@@ -58,7 +58,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
-
+        <magentoCLI command="remote-storage:sync" timeout="120" stepKey="syncRemoteStorage"/>
         <!-- Verify Images & Directories in S3 & Local File System -->
         <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileExists" stepKey="assertS3BaseImageExists">
             <argument name="filePath">media/wysiwyg/{{AdminMediaGalleryFolderData.name}}/{{AdminMediaGalleryFolder2Data.name}}/{{ImageUpload.file}}</argument>
