@@ -374,7 +374,8 @@ class TierPriceValidator implements ResetAfterRequestInterface
         try {
             $this->websiteRepository->getById($price->getWebsiteId());
             $isWebsiteScope = $this->scopeConfig
-                ->isSetFlag(Data::XML_PATH_PRICE_SCOPE,
+                ->isSetFlag(
+                    Data::XML_PATH_PRICE_SCOPE,
                     ScopeInterface::SCOPE_STORE,
                     ScopeConfigInterface::SCOPE_TYPE_DEFAULT
                 );
