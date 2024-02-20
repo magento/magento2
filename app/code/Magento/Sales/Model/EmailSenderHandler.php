@@ -24,6 +24,11 @@ use Magento\Store\Model\StoreManagerInterface;
 class EmailSenderHandler
 {
     /**
+     * Configuration path for defining asynchronous email sending attempts
+     */
+    public const XML_PATH_ASYNC_SENDING_ATTEMPTS = 'sales_email/general/async_sending_attempts';
+
+    /**
      * Email sender model.
      *
      * @var Sender
@@ -131,7 +136,7 @@ class EmailSenderHandler
             /** @var \Magento\Store\Api\Data\StoreInterface[] $stores */
             $stores = $this->getStores(clone $this->entityCollection);
 
-            $maxSendAttempts = $this->globalConfig->getValue('sales_email/general/async_sending_attempts');
+            $maxSendAttempts = $this->globalConfig->getValue(self::XML_PATH_ASYNC_SENDING_ATTEMPTS);
 
             /** @var \Magento\Store\Model\Store $store */
             foreach ($stores as $store) {
