@@ -615,11 +615,16 @@ class ConfigurableTest extends TestCase
         $productMock->expects($this->once())->method('getStatus')->willReturn(1);
         $productMock->expects($this->any())->method('hasData')->willReturn(true);
         $productMock
-            ->expects($this->once())
             ->method('getData')
-            ->withConsecutive(['_cache_instance_store_filter'], ['is_salable'])
-            ->willReturnOnConsecutiveCalls(0, true);
-        
+            ->willReturnCallback(function ($arg) {
+                static $callCount = 0;
+                $callCount++;
+                if ($arg == '_cache_instance_store_filter') {
+                    return $callCount === 1 ? 0 : null;
+                } elseif ($arg == 'is_salable') {
+                    return $callCount === 2 ? true : null;
+                }
+            });
         $productMock
             ->method('getSku')
             ->willReturn('SKU-CODE');
@@ -875,14 +880,19 @@ class ConfigurableTest extends TestCase
             ->method('getLinkField')
             ->willReturn('link');
         $productMock->expects($this->any())->method('hasData')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                ['_cache_instance_products'] => true
+            ->willReturnCallback(function ($arg) {
+                if ($arg == '_cache_instance_products') {
+                    return true;
+                }
             });
 
         $productMock->expects($this->any())->method('getData')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                ['image'] => 'no_selection',
-                ['_cache_instance_products'] => [$childProductMock]
+            ->willReturnCallback(function ($arg) use ($childProductMock) {
+                if ($arg == 'image') {
+                    return 'no_selection';
+                } elseif ($arg == '_cache_instance_products') {
+                    return [$childProductMock];
+                }
             });
 
         $childProductMock->expects($this->any())->method('getData')->with('image')->willReturn('image_data');

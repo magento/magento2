@@ -251,8 +251,13 @@ class KernelTest extends TestCase
 
         $this->responseMock
             ->method('getHeader')
-            ->withConsecutive(['Cache-Control'], ['X-Magento-Tags'])
-            ->willReturn($cacheControlHeader, null);
+            ->willReturnCallback(function ($arg) use ($cacheControlHeader) {
+                if ($arg == 'Cache-Control') {
+                    return $cacheControlHeader;
+                } elseif ($arg == 'X-Magento-Tags') {
+                    return null;
+                }
+            });
         $this->responseMock->expects(
             $this->any()
         )->method(
@@ -265,7 +270,11 @@ class KernelTest extends TestCase
             ->method('setNoCacheHeaders');
         $this->responseMock
             ->method('clearHeader')
-            ->withConsecutive(['Set-Cookie'], ['X-Magento-Tags']);
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 'Set-Cookie' || $arg == 'X-Magento-Tags') {
+                    return null;
+                }
+            });
         $this->fullPageCacheMock->expects($this->once())
             ->method('save');
         $this->kernel->process($this->responseMock);
