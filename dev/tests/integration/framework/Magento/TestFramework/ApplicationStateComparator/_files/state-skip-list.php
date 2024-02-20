@@ -195,6 +195,7 @@ return [
         Magento\LoginAsCustomer\Model\GetLoggedAsCustomerAdminId::class => null,
         Magento\CustomerGraphQl\Plugin\ClearCustomerSessionAfterRequest::class => null,
         Laminas\Uri\Uri::class => null,
+        PhpAmqpLib\Connection\AMQPSSLConnection::class => null,
         Magento\TestFramework\Interception\PluginList::class => null,
         // memory leak, wrong sql, potential issues
         Magento\Theme\Model\View\Design::class => null,
@@ -232,6 +233,7 @@ return [
         'AssetPreProcessorPool' => null,
         Magento\GraphQl\Model\Query\ContextFactory::class => null,
         'viewFileMinifiedFallbackResolver' => null,
+        Magento\RemoteStorage\Driver\DriverPool::class => null,
         Magento\TestFramework\App\State::class => null,
         Magento\Framework\TestFramework\ApplicationStateComparator\SkipListAndFilterList::class => null, // Yes, our test uses mutable state itself :-)
         Magento\Framework\DB\Adapter\Pdo\Mysql\Interceptor::class => null,
