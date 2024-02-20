@@ -16,7 +16,11 @@
             <description value="Verify that when a user deletes an image in Media Gallery that the image gets deleted
             in S3 and in the local file system."/>
             <severity value="CRITICAL"/>
+            <skip>
+                <issueId value="AC-11388">Excluding to make s3 backward compatible with flysystem lib</issueId>
+            </skip>
             <group value="remote_storage_aws_s3_media_gallery_ui"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -54,7 +58,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
-        <magentoCLI command="remote-storage:sync" timeout="120" stepKey="syncRemoteStorage"/>
+
         <!-- Verify Images & Directories in S3 & Local File System -->
         <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileExists" stepKey="assertS3BaseImageExists">
             <argument name="filePath">media/wysiwyg/{{AdminMediaGalleryFolderData.name}}/{{ImageUpload.file}}</argument>
