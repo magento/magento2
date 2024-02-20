@@ -17,8 +17,10 @@ use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\ResourceModel\Entity\Type;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface as Adapter;
+use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ResourceConnections\DB\Select;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -79,6 +81,14 @@ class AttributeTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                PoisonPillPutInterface::class,
+                $this->createMock(PoisonPillPutInterface::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['from', 'where', 'join', 'deleteFromSelect'])
@@ -90,7 +100,8 @@ class AttributeTest extends TestCase
 
         $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['delete', 'getConnection'])
+            ->addMethods(['delete'])
+            ->onlyMethods(['getConnection'])
             ->getMock();
 
         $this->contextMock = $this->getMockBuilder(Context::class)
@@ -162,7 +173,7 @@ class AttributeTest extends TestCase
 
         $abstractModelMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getEntityAttributeId','getEntityTypeId'])
+            ->addMethods(['getEntityAttributeId','getEntityTypeId'])
             ->getMockForAbstractClass();
         $abstractModelMock->expects($this->any())->method('getEntityAttributeId')->willReturn($entityAttributeId);
         $abstractModelMock->expects($this->any())->method('getEntityTypeId')->willReturn($entityTypeId);
@@ -174,7 +185,8 @@ class AttributeTest extends TestCase
 
         $backendModelMock = $this->getMockBuilder(AbstractBackend::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getBackend', 'getTable'])
+            ->addMethods(['getBackend'])
+            ->onlyMethods(['getTable'])
             ->getMock();
 
         $abstractAttributeMock = $this->getMockBuilder(AbstractAttribute::class)

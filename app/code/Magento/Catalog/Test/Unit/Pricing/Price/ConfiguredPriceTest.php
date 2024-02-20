@@ -12,11 +12,13 @@ use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Model\Product\Option\Type\DefaultType;
+use Magento\Catalog\Pricing\Price\ConfiguredOptions;
 use Magento\Catalog\Pricing\Price\ConfiguredPrice;
 use Magento\Framework\Pricing\Adjustment\Calculator;
 use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -65,6 +67,15 @@ class ConfiguredPriceTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                ConfiguredOptions::class,
+                $this->createMock(ConfiguredOptions::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+
         $basePrice = $this->getMockForAbstractClass(PriceInterface::class);
         $basePrice->expects($this->any())->method('getValue')->willReturn($this->basePriceValue);
 

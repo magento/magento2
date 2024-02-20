@@ -14,12 +14,14 @@ use Magento\Catalog\Model\Product\Option\Type\DefaultType;
 use Magento\Catalog\Model\Product\Option\Type\Select;
 use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Catalog\Pricing\Price\CustomOptionPrice;
+use Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator;
 use Magento\Framework\DataObject;
 use Magento\Framework\Pricing\Adjustment\Calculator;
 use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
 use Magento\Framework\Pricing\PriceInfoInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -63,6 +65,14 @@ class CustomOptionPriceTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                CustomOptionPriceCalculator::class,
+                $this->createMock(CustomOptionPriceCalculator::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->product = $this->createPartialMock(
             Product::class,
             ['getOptionById', 'getPriceInfo', 'getOptions']

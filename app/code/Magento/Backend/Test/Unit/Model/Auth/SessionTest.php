@@ -135,7 +135,8 @@ class SessionTest extends TestCase
             ->getMock();
         $this->aclBuilder->expects($this->any())->method('getAcl')->willReturn($aclMock);
         $userMock = $this->getMockBuilder(User::class)
-            ->onlyMethods(['getReloadAclFlag', 'setReloadAclFlag', 'unsetData', 'save'])
+            ->addMethods(['getReloadAclFlag', 'setReloadAclFlag'])
+            ->onlyMethods(['unsetData', 'save'])
             ->disableOriginalConstructor()
             ->getMock();
         $userMock->expects($this->any())->method('getReloadAclFlag')->willReturn(true);
@@ -277,7 +278,7 @@ class SessionTest extends TestCase
     /**
      * @return array
      */
-    public function isAllowedDataProvider()
+    public static function isAllowedDataProvider()
     {
         return [
             "Negative: User not defined" => [false, true, true, false],
@@ -300,7 +301,7 @@ class SessionTest extends TestCase
     /**
      * @return array
      */
-    public function firstPageAfterLoginDataProvider()
+    public static function firstPageAfterLoginDataProvider()
     {
         return [
             'First page after login' => [true],
