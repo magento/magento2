@@ -12,6 +12,14 @@ namespace Magento\Csp\Model;
  */
 class SubresourceIntegrity extends \Magento\Framework\DataObject
 {
+
+    /**
+     * Expected asset content type.
+     *
+     * @var string
+     */
+    public const CONTENT_TYPE = 'js';
+
     /**
      * Gets an integrity URL.
      *

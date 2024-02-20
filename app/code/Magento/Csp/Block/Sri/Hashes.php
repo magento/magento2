@@ -60,8 +60,9 @@ class Hashes extends Template
     public function getSerialized(): string
     {
         $result = [];
+        $assetIntegrity = $this->integrityRepository->getAll();
 
-        foreach ($this->integrityRepository->getAll() as $integrity) {
+        foreach ($assetIntegrity as $integrity) {
             $result[$integrity->getUrl()] = $integrity->getHash();
         }
 
