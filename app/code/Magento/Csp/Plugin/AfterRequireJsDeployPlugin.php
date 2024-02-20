@@ -47,8 +47,7 @@ class AfterRequireJsDeployPlugin
         SubresourceIntegrityRepository $integrityRepository,
         FileUtility $file,
         Http $request
-    )
-    {
+    ) {
         $this->integrityRepository = $integrityRepository;
         $this->file = $file;
         $this->request = $request;
@@ -66,8 +65,7 @@ class AfterRequireJsDeployPlugin
     public function afterCreateRequireJsConfigAsset(
         FileManager $subject,
         File $result
-    ): File
-    {
+    ):File {
         if ($result->getContentType() === SubresourceIntegrity::CONTENT_TYPE) {
             $this->file->generateIntegrity($result);
         }
@@ -86,8 +84,7 @@ class AfterRequireJsDeployPlugin
     public function afterCreateRequireJsMixinsAsset(
         FileManager $subject,
         File $result
-    ): File
-    {
+    ): File {
         if ($result->getContentType() === SubresourceIntegrity::CONTENT_TYPE) {
             $this->file->generateIntegrity($result);
         }

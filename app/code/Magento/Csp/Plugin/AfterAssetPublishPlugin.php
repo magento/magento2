@@ -58,8 +58,7 @@ class AfterAssetPublishPlugin
         Publisher $subject,
         bool $result,
         AssetInterface $asset
-    ): bool
-    {
+    ):bool {
         if ($asset->getContentType() === SubresourceIntegrity::CONTENT_TYPE) {
             $this->file->generateIntegrity($asset);
         }

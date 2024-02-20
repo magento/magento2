@@ -65,9 +65,8 @@ class AddDefaultPropertiesToGroupPlugin
         GroupedCollection $subject,
         AssetInterface $asset,
         array $properties = []
-    ): array
-    {
-        if($this->canExecute($asset)) {
+    ):array {
+        if ($this->canExecute($asset)) {
             $integrity = $this->integrityRepository->getByUrl($asset->getUrl());
             if ($integrity && $integrity->getHash()) {
                 $properties['attributes']['integrity'] = $integrity->getHash();

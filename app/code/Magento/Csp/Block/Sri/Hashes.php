@@ -15,6 +15,7 @@ use Magento\Csp\Model\SubresourceIntegrityRepository;
 
 /**
  * Block for Subresource Integrity hashes rendering.
+ * @api
  */
 class Hashes extends Template
 {
