@@ -9,15 +9,14 @@
  */
 namespace Magento\TestFramework\Event;
 
-use ReflectionMethod;
+use PHPUnit\Event\TestSuite\Started;
 use PHPUnit\Event\TestSuite\StartedSubscriber;
 
 
 final class TestSuitStartedSubsciber implements StartedSubscriber
 {
-    public function notify(\PHPUnit\Event\TestSuite\Started $event): void{
-        $mageEvent = \Magento\TestFramework\Event\Magento::getDefaultEventManager();
+    public function notify(Started $event): void{
+        $mageEvent = Magento::getDefaultEventManager();
         $mageEvent->fireEvent('startTestSuite');
-
     }
 }

@@ -9,11 +9,10 @@
  */
 namespace Magento\TestFramework\Event;
 
-use Magento\Framework\Event;
 use PHPUnit\Runner;
 use PHPUnit\TextUI;
 
-final class PhpUnitExtensionFinished implements Runner\Extension\Extension
+final class TestPreprationFinished implements Runner\Extension\Extension
 {
     public function bootstrap(
         TextUI\Configuration\Configuration $configuration,
@@ -21,6 +20,6 @@ final class PhpUnitExtensionFinished implements Runner\Extension\Extension
         Runner\Extension\ParameterCollection $parameters
     ): void
     {
-        $facade->registerSubscriber(new PhpUnitExtensionSubsscriberFinished());
+        $facade->registerSubscriber(new TestPreprationFinishedSubscriber());
     }
 }
