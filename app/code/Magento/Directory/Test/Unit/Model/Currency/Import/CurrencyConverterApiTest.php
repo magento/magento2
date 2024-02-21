@@ -117,7 +117,7 @@ class CurrencyConverterApiTest extends TestCase
         /** @var DataObject|MockObject $currencyMock */
         $httpResponse = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getBody'])
+            ->addMethods(['getBody'])
             ->getMock();
 
         $this->httpClientFactory->expects($this->once())->method('create')->willReturn($httpClient);

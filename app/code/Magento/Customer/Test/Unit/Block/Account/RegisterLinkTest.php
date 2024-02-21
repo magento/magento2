@@ -11,7 +11,9 @@ use Magento\Customer\Block\Account\RegisterLink;
 use Magento\Customer\Model\Context;
 use Magento\Customer\Model\Registration;
 use Magento\Customer\Model\Url;
+use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,6 +29,17 @@ class RegisterLinkTest extends TestCase
     protected function setUp(): void
     {
         $this->_objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $this->_objectManager->prepareObjectManager($objects);
     }
 
     /**
@@ -73,7 +86,7 @@ class RegisterLinkTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderToHtml()
+    public static function dataProviderToHtml()
     {
         return [
             [true, true, true],

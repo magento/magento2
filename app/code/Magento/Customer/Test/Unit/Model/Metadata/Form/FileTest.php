@@ -18,6 +18,8 @@ use Magento\Framework\File\Uploader;
 use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\Io\File as IoFile;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -70,6 +72,14 @@ class FileTest extends AbstractFormTestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                IoFile::class,
+                $this->createMock(IoFile::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->urlEncode = $this->getMockBuilder(EncoderInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

@@ -71,23 +71,18 @@ class ChangeTest extends TestCase
             ->getMockForAbstractClass();
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
         $this->structureMock = $this->getMockBuilder(Structure::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
         $this->writerMock = $this->getMockBuilder(Writer::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
         $this->adapterMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
         $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
@@ -97,12 +92,10 @@ class ChangeTest extends TestCase
         $translationClassName = TransactionManagerInterface::class;
         $this->transactionMock = $this->getMockBuilder($translationClassName)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
         $relationClassName = ObjectRelationProcessor::class;
         $this->objRelationMock = $this->getMockBuilder($relationClassName)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
         $this->randomMock = $this->createMock(Random::class);
 

@@ -12,7 +12,6 @@ use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogInventory\Api\Data\StockInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
-use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
@@ -20,7 +19,6 @@ use Magento\CatalogInventory\Model\StockRegistry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -64,16 +62,6 @@ class StockRegistryTest extends TestCase
      * @var StockItemRepositoryInterface|MockObject
      */
     protected $stockItemRepository;
-
-    /**
-     * @var StockItemCriteriaInterfaceFactory|MockObject
-     */
-    protected $criteriaFactory;
-
-    /**
-     * @var StockConfigurationInterface|MockObject
-     */
-    protected $stockConfiguration;
 
     /**
      * @var Product|MockObject
@@ -142,26 +130,12 @@ class StockRegistryTest extends TestCase
             ->method('save')
             ->willReturn($this->stockItem);
 
-        $this->stockConfiguration = $this->getMockForAbstractClass(
-            StockConfigurationInterface::class,
-            ['getDefaultScopeId'],
-            '',
-            false
-        );
-        $this->criteriaFactory = $this->getMockBuilder(StockItemCriteriaInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-
-
         $this->stockRegistry = $this->objectManagerHelper->getObject(
             StockRegistry::class,
             [
-                'stockConfiguration' => $this->stockConfiguration,
                 'stockRegistryProvider' => $this->stockRegistryProvider,
-                'stockItemRepository' => $this->stockItemRepository,
-                'criteriaFactory' => $this->criteriaFactory,
                 'productFactory' => $this->productFactory,
+                'stockItemRepository' => $this->stockItemRepository
             ]
         );
     }

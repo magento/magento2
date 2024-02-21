@@ -285,7 +285,7 @@ class ConfigurableTest extends TestCase
             ->with('_cache_instance_used_product_attribute_ids')
             ->willReturn(true);
         $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->addMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
+            ->onlyMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
             ->getMockForAbstractClass();
         $this->entityMetadata->expects($this->any())
             ->method('getLinkField')
@@ -619,7 +619,7 @@ class ConfigurableTest extends TestCase
             ->method('getData')
             ->withConsecutive(['_cache_instance_store_filter'], ['is_salable'])
             ->willReturnOnConsecutiveCalls(0, true);
-        
+
         $productMock
             ->method('getSku')
             ->willReturn('SKU-CODE');

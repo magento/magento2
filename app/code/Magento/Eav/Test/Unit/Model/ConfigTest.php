@@ -16,8 +16,10 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
 use Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Validator\UniversalFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -69,6 +71,15 @@ class ConfigTest extends TestCase
 
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                ScopeConfigInterface::class,
+                $this->createMock(ScopeConfigInterface::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+
         $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
         $this->typeFactoryMock = $this->getMockBuilder(TypeFactory::class)
             ->onlyMethods(['create'])
@@ -172,7 +183,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getAttributeCacheDataProvider()
+    public static function getAttributeCacheDataProvider()
     {
         return [
             'cache-disabled' => [

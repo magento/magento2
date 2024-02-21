@@ -7,6 +7,8 @@ namespace Magento\Developer\Test\Unit\Console\Command;
 
 use Magento\Developer\Console\Command\SourceThemeDeployCommand;
 use Magento\Framework\App\View\Asset\Publisher;
+use Magento\Framework\Filesystem\Io\File;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Validator\Locale;
 use Magento\Framework\View\Asset\File\NotFoundException;
 use Magento\Framework\View\Asset\LocalInterface;
@@ -60,6 +62,14 @@ class SourceThemeDeployCommandTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                File::class,
+                $this->createMock(File::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->validatorMock = $this->getMockBuilder(Locale::class)
             ->disableOriginalConstructor()
             ->getMock();

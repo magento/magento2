@@ -96,7 +96,7 @@ class FixerIoTest extends TestCase
         /** @var DataObject|MockObject $currencyMock */
         $httpResponse = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getBody'])
+            ->addMethods(['getBody'])
             ->getMock();
 
         $this->currencyFactory->method('create')

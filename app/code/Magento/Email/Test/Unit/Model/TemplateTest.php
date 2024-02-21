@@ -180,7 +180,7 @@ class TemplateTest extends TestCase
      * @param array $mockedMethods
      * @return Template|MockObject
      */
-    protected function getModelMock(array $mockedMethods = [])
+    protected function getModelMock(array $mockedMethods = [], array $addMockedMethods = [])
     {
         $objectManager = new ObjectManager($this);
         $objects = [
@@ -191,6 +191,7 @@ class TemplateTest extends TestCase
         ];
         $objectManager->prepareObjectManager($objects);
         return $this->getMockBuilder(Template::class)
+            ->addMethods($addMockedMethods)
             ->onlyMethods(array_merge($mockedMethods, ['__wakeup', '__sleep', '_init']))
             ->setConstructorArgs(
                 [
@@ -251,7 +252,7 @@ class TemplateTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $model = $this->getModelMock(['getUseAbsoluteLinks', 'getDesignConfig']);
+        $model = $this->getModelMock(['getDesignConfig'],['getUseAbsoluteLinks']);
         $model->expects($this->once())
             ->method('getDesignConfig')
             ->willReturn($designConfig);
@@ -335,7 +336,7 @@ class TemplateTest extends TestCase
     /**
      * @return array
      */
-    public function loadDefaultDataProvider()
+    public static function loadDefaultDataProvider()
     {
         return [
             'empty' => [

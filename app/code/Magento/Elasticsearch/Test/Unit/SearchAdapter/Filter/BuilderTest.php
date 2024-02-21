@@ -96,10 +96,19 @@ class BuilderTest extends TestCase
      */
     public function testBuild($filterMock, $filterType)
     {
-        $filter = $this->getMockBuilder($filterMock)
-            ->onlyMethods(['getMust', 'getType', 'getShould', 'getMustNot'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $filter = $this->getMockBuilder($filterMock);
+        if($filterMock=="Magento\Framework\Search\Request\FilterInterface")
+        {
+            $filter = $filter->onlyMethods(['getType'])
+                ->addMethods(['getMust', 'getShould', 'getMustNot'])
+                ->disableOriginalConstructor()
+                ->getMockForAbstractClass();
+        }
+        else{
+            $filter = $filter->onlyMethods(['getMust', 'getType', 'getShould', 'getMustNot'])
+                ->disableOriginalConstructor()
+                ->getMockForAbstractClass();
+        }
         $filter->expects($this->any())
             ->method('getType')
             ->willReturn($filterType);
@@ -132,7 +141,7 @@ class BuilderTest extends TestCase
     public function testBuildNegation($filterMock, $filterType)
     {
         $filter = $this->getMockBuilder($filterMock)
-            ->onlyMethods(['getMust', 'getType', 'getShould', 'getMustNot'])
+            ->addMethods(['getMust', 'getType', 'getShould', 'getMustNot'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $filter->expects($this->any())

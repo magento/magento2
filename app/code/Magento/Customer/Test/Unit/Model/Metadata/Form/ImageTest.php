@@ -24,6 +24,8 @@ use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Driver\File as Driver;
 use Magento\Framework\Filesystem\Io\File;
+use Magento\Framework\Filesystem\Io\File as IoFile;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -101,7 +103,14 @@ class ImageTest extends AbstractFormTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                IoFile::class,
+                $this->createMock(IoFile::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->urlEncode = $this->getMockBuilder(EncoderInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

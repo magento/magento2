@@ -48,7 +48,6 @@ class DefaultItemTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->configurationPool = $this->getMockBuilder(ConfigurationPool::class)
-            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
         $checkoutHelper = $this->getMockBuilder(Data::class)
