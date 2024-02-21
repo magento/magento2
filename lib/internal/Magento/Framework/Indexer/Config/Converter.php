@@ -8,9 +8,20 @@ namespace Magento\Framework\Indexer\Config;
 use Magento\Framework\Config\ConverterInterface;
 use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\Phrase;
+use Magento\Framework\Indexer\Config\Converter\SortingAdjustmentInterface;
 
 class Converter implements ConverterInterface
 {
+    /**
+     * @var SortingAdjustmentInterface
+     */
+    private SortingAdjustmentInterface $sortingAdjustment;
+
+    public function __construct(SortingAdjustmentInterface $sortingAdjustment)
+    {
+        $this->sortingAdjustment = $sortingAdjustment;
+    }
+
     /**
      * Convert dom node tree to array
      *
@@ -47,8 +58,7 @@ class Converter implements ConverterInterface
             $output[$indexerId] = $data;
         }
         $output = $this->sortByDependencies($output);
-
-        return $output;
+        return $this->sortingAdjustment->adjust($output);
     }
 
     /**
