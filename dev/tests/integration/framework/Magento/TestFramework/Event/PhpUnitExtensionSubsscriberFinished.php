@@ -9,13 +9,14 @@
  */
 namespace Magento\TestFramework\Event;
 
-use ReflectionMethod;
-use PHPUnit\Event\Test\PreparationStartedSubscriber;
+use PHPUnit\Event\Test\FinishedSubscriber;
+use PHPUnit\Event\Test\Finished;
 use Magento\TestFramework\Helper\Bootstrap;
 
-final class PhpUnitExtensionSubsscriber implements PreparationStartedSubscriber
+
+final class PhpUnitExtensionSubsscriberFinished implements FinishedSubscriber
 {
-    public function notify(\PHPUnit\Event\Test\PreparationStarted $event): void{
+    public function notify(\PHPUnit\Event\Test\Finished $event): void{
         $className = $event->test()->className();
         $methodName = $event->test()->methodName();
 
@@ -23,7 +24,7 @@ final class PhpUnitExtensionSubsscriber implements PreparationStartedSubscriber
         $assetRepo = $objectManager->create($className, ['name' => $methodName]);
 
         $mageEvent = \Magento\TestFramework\Event\Magento::getDefaultEventManager();
-//        $mageEvent->fireEvent('startTest', [new \Magento\AdobeStockAsset\Test\Integration\Model\AssetRepositoryTest($methodName)]);
-        $mageEvent->fireEvent('startTest', [$assetRepo]);
+//        $mageEvent->fireEvent('endTest', [new \Magento\AdobeStockAsset\Test\Integration\Model\AssetRepositoryTest($methodName)], true);
+        $mageEvent->fireEvent('endTest', [$assetRepo]);
     }
 }
