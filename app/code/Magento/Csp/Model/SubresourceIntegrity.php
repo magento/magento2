@@ -12,7 +12,6 @@ namespace Magento\Csp\Model;
  */
 class SubresourceIntegrity extends \Magento\Framework\DataObject
 {
-
     /**
      * Expected asset content type.
      *
@@ -25,7 +24,7 @@ class SubresourceIntegrity extends \Magento\Framework\DataObject
      *
      * @return string|null
      */
-    public function getUrl(): string|null
+    public function getUrl(): ?string
     {
         return $this->getData("url");
     }
@@ -35,7 +34,7 @@ class SubresourceIntegrity extends \Magento\Framework\DataObject
      *
      * @return string|null
      */
-    public function getHash(): string|null
+    public function getHash(): ?string
     {
         return $this->getData("hash");
     }

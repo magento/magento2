@@ -20,7 +20,6 @@ use Magento\Csp\Model\SubresourceIntegrityRepository;
  */
 class File
 {
-
     /**
      * @var Filesystem
      */

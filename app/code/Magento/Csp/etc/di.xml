@@ -33,6 +33,7 @@
                 <item name="whitelist" xsi:type="object" sortOrder="2">Magento\Csp\Model\Collector\CspWhitelistXmlCollector\Proxy</item>
                 <item name="controller" xsi:type="object" sortOrder="100">Magento\Csp\Model\Collector\ControllerCollector\Proxy</item>
                 <item name="dynamic" xsi:type="object" sortOrder="3">Magento\Csp\Model\Collector\DynamicCollector\Proxy</item>
+                <item name="sri" xsi:type="object" sortOrder="2">Magento\Csp\Model\Collector\SubresourceIntegrityCollector\Proxy</item>
             </argument>
             <argument name="mergers" xsi:type="array">
                 <item name="composite" xsi:type="object">Magento\Csp\Model\Collector\MergerInterface</item>

@@ -7,15 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Csp\Model;
 
-use Psr\Log\LoggerInterface;
 use Magento\Framework\App\CacheInterface;
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
- * Class contains methods equivalent to repository design to manage SRI hashes in cache
+ * Class contains methods equivalent to repository design to manage SRI hashes in cache.
  */
 class SubresourceIntegrityRepository
 {
@@ -24,22 +20,17 @@ class SubresourceIntegrityRepository
      *
      * @var string
      */
-    private const CACHE_PREFIX = 'INTEGRITY_HASH';
+    private const CACHE_PREFIX = 'INTEGRITY';
+
+    /**
+     * @var array|null
+     */
+    private ?array $data = null;
 
     /**
      * @var CacheInterface
      */
     private CacheInterface $cache;
-
-    /**
-     * @var LoggerInterface
-     */
-    private LoggerInterface $logger;
-
-    /**
-     * @var DeploymentConfig
-     */
-    private DeploymentConfig $config;
 
     /**
      * @var SerializerInterface
@@ -52,24 +43,16 @@ class SubresourceIntegrityRepository
     private SubresourceIntegrityFactory $integrityFactory;
 
     /**
-     * constructor
-     *
      * @param CacheInterface $cache
-     * @param LoggerInterface $logger
-     * @param DeploymentConfig $config
      * @param SerializerInterface $serializer
      * @param SubresourceIntegrityFactory $integrityFactory
      */
     public function __construct(
         CacheInterface $cache,
-        LoggerInterface $logger,
-        DeploymentConfig $config,
         SerializerInterface $serializer,
         SubresourceIntegrityFactory $integrityFactory
     ) {
         $this->cache = $cache;
-        $this->logger = $logger;
-        $this->config = $config;
         $this->serializer = $serializer;
         $this->integrityFactory = $integrityFactory;
     }
@@ -83,17 +66,15 @@ class SubresourceIntegrityRepository
      */
     public function getByUrl(string $url): ?SubresourceIntegrity
     {
-        $integrity = $this->cache->load(
-            self::CACHE_PREFIX . $url
-        );
+        $data = $this->getData();
 
-        if (!$integrity) {
-            return null;
+        if (isset($data[$url])) {
+            return $this->integrityFactory->create(
+                ["data" => $data[$url]]
+            );
         }
 
-        return $this->integrityFactory->create(
-            ["data" => $this->serializer->unserialize($integrity)]
-        );
+        return null;
     }
 
     /**
@@ -105,29 +86,12 @@ class SubresourceIntegrityRepository
     {
         $result = [];
 
-        try {
-            $defaultCachePrefix = $this->config->get(
-                "cache/frontend/default/id_prefix"
+        foreach ($this->getData() as $integrity) {
+            $result[] = $this->integrityFactory->create(
+                [
+                    "data" => $integrity
+                ]
             );
-
-            $cacheIds = $this->cache->getFrontend()->getLowLevelFrontend()
-                ->getIdsMatchingAnyTags(
-                    [$defaultCachePrefix . self::CACHE_PREFIX]
-                );
-
-            foreach ($cacheIds as $id) {
-                $integrity = $this->cache->load($id);
-
-                if ($integrity) {
-                    $result[] = $this->integrityFactory->create(
-                        [
-                            "data" => $this->serializer->unserialize($integrity)
-                        ]
-                    );
-                }
-            }
-        } catch (\Exception $e) {
-            $this->logger->critical($e);
         }
 
         return $result;
@@ -142,24 +106,35 @@ class SubresourceIntegrityRepository
      */
     public function save(SubresourceIntegrity $integrity): bool
     {
+        $data = $this->getData();
+
+        $data[$integrity->getUrl()] = [
+            "url" => $integrity->getUrl(),
+            "hash" => $integrity->getHash()
+        ];
+
+        $this->data = $data;
+
         return $this->cache->save(
-            $this->serializer->serialize($integrity->getData()),
-            self::CACHE_PREFIX . $integrity->getUrl(),
+            $this->serializer->serialize($this->data),
+            self::CACHE_PREFIX,
             [self::CACHE_PREFIX]
         );
     }
 
     /**
-     * Clear contents of cache
+     * Loads integrity data from a storage.
      *
-     * @param string $url
-     *
-     * @return bool
+     * @return array
      */
-    public function deleteByUrl(string $url): bool
+    private function getData(): array
     {
-        return $this->cache->clean(
-            [self::CACHE_PREFIX . $url]
-        );
+        if ($this->data === null) {
+            $cache = $this->cache->load(self::CACHE_PREFIX);
+
+            $this->data = $cache ? $this->serializer->unserialize($cache) : [];
+        }
+
+        return $this->data;
     }
 }
