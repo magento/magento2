@@ -7,6 +7,7 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
@@ -145,6 +146,7 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
             );
             $customerForm->setInvisibleIgnored(true);
 
+            $this->setCurrentCustomerStore();
             $data = $customerForm->extractData($this->getRequest(), 'customer');
 
             if ($customer->getWebsiteId()) {
@@ -161,11 +163,11 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
                 $entity_id = $submittedData['entity_id'];
                 $customer->setId($entity_id);
             }
-            if (isset($data['website_id']) && is_numeric($data['website_id'])) {
-                $website = $this->storeManager->getWebsite($data['website_id']);
-                $storeId = current($website->getStoreIds());
-                $this->storeManager->setCurrentStore($storeId);
-            }
+            /* if (isset($data['website_id']) && is_numeric($data['website_id'])) {
+                 $website = $this->storeManager->getWebsite($data['website_id']);
+                 $storeId = current($website->getStoreIds());
+                 $this->storeManager->setCurrentStore($storeId);
+             }*/
             $errors = $this->customerAccountManagement->validate($customer)->getMessages();
         } catch (\Magento\Framework\Validator\Exception $exception) {
             /* @var $error Error */
@@ -205,5 +207,23 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
 
         $resultJson->setData($response);
         return $resultJson;
+    }
+
+    /**
+     * Set store ID for the current customer.
+     *
+     * @return void
+     */
+    private function setCurrentCustomerStore(): void
+    {
+        $requestData = $this->getRequest()->getParam(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
+
+        $storeId = $requestData['store_id'] ?? null;
+        if (!$storeId) {
+            $websiteId = $requestData['website_id'] ?? null;
+            $website = $this->storeManager->getWebsite($websiteId);
+            $storeId = current($website->getStoreIds());
+        }
+        $this->storeManager->setCurrentStore($storeId);
     }
 }

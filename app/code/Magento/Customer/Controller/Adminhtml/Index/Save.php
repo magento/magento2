@@ -335,6 +335,8 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
 
         if ($this->getRequest()->getPostValue()) {
             try {
+                $this->setCurrentCustomerStore();
+
                 // optional fields might be set in request for future processing by observers in other modules
                 $customerData = $this->_extractCustomerData();
 
@@ -549,6 +551,24 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
             : null;
 
         return $customerId;
+    }
+
+    /**
+     * Set store ID for the current customer.
+     *
+     * @return void
+     */
+    private function setCurrentCustomerStore(): void
+    {
+        $originalRequestData = $this->getRequest()->getPostValue(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
+
+        $storeId = $originalRequestData['store_id'] ?? null;
+        if (!$storeId) {
+            $websiteId = $originalRequestData['website_id'] ?? null;
+            $website = $this->storeManager->getWebsite($websiteId);
+            $storeId = current($website->getStoreIds());
+        }
+        $this->storeManager->setCurrentStore($storeId);
     }
 
     /**
