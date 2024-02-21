@@ -21,6 +21,7 @@ use Magento\Store\Model\Store;
 
 /**
  * Class responsibly for persistence of prices.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PricePersistence
 {
@@ -47,49 +48,49 @@ class PricePersistence
     private $productIdLocator;
 
     /**
-     * Metadata pool.
+     * Metadata pool property to get a metadata.
      *
      * @var MetadataPool
      */
     private $metadataPool;
 
     /**
-     * Attribute code.
+     * Attribute code attribute to get the attribute id.
      *
      * @var string
      */
     private $attributeCode;
 
     /**
-     * Attribute ID.
+     * Attribute ID property to store the attribute id.
      *
      * @var int
      */
     private $attributeId;
 
     /**
-     * Items per operation.
+     * Items per operation to chunk the array in a batch.
      *
      * @var int
      */
     private $itemsPerOperation = 500;
 
     /**
-     * Product Action.
+     * Product action property to update the attributes.
      *
      * @var Action
      */
     private $productAction;
 
     /**
-     * Product Action.
+     * Core Date to get the gm date.
      *
      * @var CoreDate
      */
     private $coreDate;
 
     /**
-     * Product Action.
+     * Date time property to format the date.
      *
      * @var DateTime
      */
@@ -124,9 +125,9 @@ class PricePersistence
         $this->metadataPool = $metadataPool;
         $this->productAction = $productAction ?: ObjectManager::getInstance()
             ->get(Action::class);
-        $this->coreDate = $productAction ?: ObjectManager::getInstance()
+        $this->coreDate = $coreDate ?: ObjectManager::getInstance()
             ->get(CoreDate::class);
-        $this->dateTime = $productAction ?: ObjectManager::getInstance()
+        $this->dateTime = $dateTime ?: ObjectManager::getInstance()
             ->get(DateTime::class);
     }
 
@@ -284,8 +285,8 @@ class PricePersistence
         try {
             $this->productAction->updateAttributes(
                 $productIds,
-                [ProductInterface::UPDATED_AT => $this->dateTime->formatDate($this->coreDate->gmtDate())]
-                ,Store::DEFAULT_STORE_ID
+                [ProductInterface::UPDATED_AT => $this->dateTime->formatDate($this->coreDate->gmtDate())],
+                Store::DEFAULT_STORE_ID
             );
         } catch (\Exception $e) {
             throw new CouldNotSaveException(
