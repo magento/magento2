@@ -22,12 +22,12 @@ class ConsoleLogger extends AbstractLogger
     /**
      * Type for informational message
      */
-    const INFO = 'info';
+    public const INFO = 'info';
 
     /**
      * Type for error message
      */
-    const ERROR = 'error';
+    public const ERROR = 'error';
 
     /**
      * Public static files directory read interface
@@ -132,7 +132,7 @@ class ConsoleLogger extends AbstractLogger
     /**
      * @inheritdoc
      */
-    public function log($level, $message, array $context = [])
+    public function log($level, $message, array $context = []): void
     {
         if (!isset($this->verbosityLevelMap[$level])) {
             $level = self::INFO;
@@ -217,7 +217,7 @@ class ConsoleLogger extends AbstractLogger
      * @param array $process
      * @return void
      */
-    private function updateProcessInfo($deployedPackagePath, array & $process)
+    private function updateProcessInfo($deployedPackagePath, array &$process)
     {
         $packageDeploymentInfo = $this->getPackageDeploymentInfo($deployedPackagePath . '/info.json');
         if ($packageDeploymentInfo) {
@@ -291,7 +291,7 @@ class ConsoleLogger extends AbstractLogger
         $display = str_repeat('=', $completeBars);
         if ($completeBars < 28) {
             $emptyBars = 28 - $completeBars
-                - $this->formatterHelper->strlenWithoutDecoration($output->getFormatter(), '>');
+                - FormatterHelper::width($this->formatterHelper->removeDecoration($output->getFormatter(), '>'));
             $display .= '>' . str_repeat('-', $emptyBars);
         }
         return $display;
