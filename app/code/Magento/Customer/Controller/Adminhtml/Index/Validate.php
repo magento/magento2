@@ -163,11 +163,6 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
                 $entity_id = $submittedData['entity_id'];
                 $customer->setId($entity_id);
             }
-            /* if (isset($data['website_id']) && is_numeric($data['website_id'])) {
-                 $website = $this->storeManager->getWebsite($data['website_id']);
-                 $storeId = current($website->getStoreIds());
-                 $this->storeManager->setCurrentStore($storeId);
-             }*/
             $errors = $this->customerAccountManagement->validate($customer)->getMessages();
         } catch (\Magento\Framework\Validator\Exception $exception) {
             /* @var $error Error */
