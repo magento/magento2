@@ -10,9 +10,14 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\ProductIdLocatorInterface;
 use Magento\Catalog\Model\ResourceModel\Attribute;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Catalog\Model\Product\Action;
+use Magento\Framework\Stdlib\DateTime\DateTime as CoreDate;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Store\Model\Store;
 
 /**
  * Class responsibly for persistence of prices.
@@ -70,6 +75,27 @@ class PricePersistence
     private $itemsPerOperation = 500;
 
     /**
+     * Product Action.
+     *
+     * @var Action
+     */
+    private $productAction;
+
+    /**
+     * Product Action.
+     *
+     * @var CoreDate
+     */
+    private $coreDate;
+
+    /**
+     * Product Action.
+     *
+     * @var DateTime
+     */
+    private $dateTime;
+
+    /**
      * PricePersistence constructor.
      *
      * @param Attribute $attributeResource
@@ -77,19 +103,31 @@ class PricePersistence
      * @param ProductIdLocatorInterface $productIdLocator
      * @param MetadataPool $metadataPool
      * @param string $attributeCode
+     * @param Action|null $productAction
+     * @param CoreDate|null $coreDate
+     * @param DateTime|null $dateTime
      */
     public function __construct(
         Attribute $attributeResource,
         ProductAttributeRepositoryInterface $attributeRepository,
         ProductIdLocatorInterface $productIdLocator,
         MetadataPool $metadataPool,
-        $attributeCode = ''
+        $attributeCode = '',
+        ?Action $productAction = null,
+        ?CoreDate $coreDate = null,
+        ?DateTime $dateTime = null
     ) {
         $this->attributeResource = $attributeResource;
         $this->attributeRepository = $attributeRepository;
         $this->attributeCode = $attributeCode;
         $this->productIdLocator = $productIdLocator;
         $this->metadataPool = $metadataPool;
+        $this->productAction = $productAction ?: ObjectManager::getInstance()
+            ->get(Action::class);
+        $this->coreDate = $productAction ?: ObjectManager::getInstance()
+            ->get(CoreDate::class);
+        $this->dateTime = $productAction ?: ObjectManager::getInstance()
+            ->get(DateTime::class);
     }
 
     /**
@@ -232,5 +270,28 @@ class PricePersistence
     {
         return $this->metadataPool->getMetadata(ProductInterface::class)
             ->getLinkField();
+    }
+
+    /**
+     * Update last updated date.
+     *
+     * @param array $productIds
+     * @return void
+     * @throws CouldNotSaveException
+     */
+    public function updateLastUpdatedAt(array $productIds): void
+    {
+        try {
+            $this->productAction->updateAttributes(
+                $productIds,
+                [ProductInterface::UPDATED_AT => $this->dateTime->formatDate($this->coreDate->gmtDate())]
+                ,Store::DEFAULT_STORE_ID
+            );
+        } catch (\Exception $e) {
+            throw new CouldNotSaveException(
+                __("The attribute can't be saved."),
+                $e
+            );
+        }
     }
 }
