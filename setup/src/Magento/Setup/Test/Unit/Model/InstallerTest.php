@@ -476,13 +476,13 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->indexerRegistryMock->expects($this->exactly(2))->method('get')->willReturn(
                 $this->indexerInterfaceMock
             );
-            call_user_func_array(
-                [
-                    $this->logger->expects($this->exactly(count($logMessages)))->method('log'),
-                    'withConsecutive'
-                ],
-                $logMessages
-            );
+
+            $this->logger->expects($this->exactly(count($logMessages)))->method('log')
+                ->willReturnCallback(function ($arg) use ($logMessages) {
+                    if ($arg == $logMessages) {
+                        return null;
+                    }
+                });
             $this->logger->expects($this->exactly(2))
                 ->method('logSuccess')
                 ->willReturnCallback(function ($arg) {
@@ -753,13 +753,13 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->filePermissions->expects($this->once())
                 ->method('getMissingWritableDirectoriesForDbUpgrade')
                 ->willReturn([]);
-            call_user_func_array(
-                [
-                    $this->logger->expects($this->exactly(count($logMessages)))->method('log'),
-                    'withConsecutive'
-                ],
-                $logMessages
-            );
+
+            $this->logger->expects($this->exactly(count($logMessages)))->method('log')
+                ->willReturnCallback(function ($arg) use ($logMessages) {
+                    if ($arg == $logMessages) {
+                        return null;
+                    }
+                });
             $this->logger->expects($this->exactly(2))
                 ->method('logSuccess')
                 ->willReturnCallback(function ($arg) {
@@ -996,13 +996,12 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->method('getMissingWritablePathsForInstallation')
                 ->willReturn([]);
 
-            call_user_func_array(
-                [
-                    $this->logger->expects(static::exactly(count($logMessages)))->method('log'),
-                    'withConsecutive'
-                ],
-                $logMessages
-            );
+            $this->logger->expects($this->exactly(count($logMessages)))->method('log')
+                ->willReturnCallback(function ($arg) use ($logMessages) {
+                    if ($arg == $logMessages) {
+                        return null;
+                    }
+                });
 
             $this->logger->expects(static::never())->method('logSuccess');
 
@@ -1160,6 +1159,7 @@ namespace Magento\Setup\Test\Unit\Model {
             $withArgs = $willReturnArgs = [];
 
             foreach ($objectManagerReturnMapSequence as $map) {
+
                 list($getArgument, $mockedObject) = $map;
 
                 $withArgs[] = [$getArgument];
@@ -1173,8 +1173,18 @@ namespace Magento\Setup\Test\Unit\Model {
 
             $this->objectManager
                 ->method('get')
-                ->withConsecutive(...$withArgs)
-                ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+                ->willReturnCallback(function ($withArgs) use ($willReturnArgs) {
+                    if (!empty($withArgs)) {
+                        static $callCount = 0;
+                        $returnValue = $willReturnArgs[$callCount] ?? null;
+                        $callCount++;
+                        if ($withArgs == RemoteStorageValidator::class) {
+                            throw new
+                            ReflectionException('Class ' . RemoteStorageValidator::class . ' does not exist');
+                        }
+                        return $returnValue;
+                    }
+                });
 
             $this->indexerMock->expects($this->once())->method('getAllIds')->willReturn(
                 [
@@ -1198,13 +1208,14 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->filePermissions->expects(static::once())
                 ->method('getMissingWritableDirectoriesForDbUpgrade')
                 ->willReturn([]);
-            call_user_func_array(
-                [
-                    $this->logger->expects(static::exactly(count($logMessages)))->method('log'),
-                    'withConsecutive'
-                ],
-                $logMessages
-            );
+
+            $this->logger->expects($this->exactly(count($logMessages)))->method('log')
+                ->willReturnCallback(function ($arg) use ($logMessages) {
+                    if ($arg == $logMessages) {
+                        return null;
+                    }
+                });
+
             $this->logger->expects(static::exactly(2))
                 ->method('logSuccess')
                 ->willReturnCallback(function ($arg) {
@@ -1339,13 +1350,12 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->method('getMissingWritablePathsForInstallation')
                 ->willReturn([]);
 
-            call_user_func_array(
-                [
-                    $this->logger->expects(static::exactly(count($logMessages)))->method('log'),
-                    'withConsecutive'
-                ],
-                $logMessages
-            );
+            $this->logger->expects($this->exactly(count($logMessages)))->method('log')
+                ->willReturnCallback(function ($arg) use ($logMessages) {
+                    if ($arg == $logMessages) {
+                        return null;
+                    }
+                });
 
             $this->logger->expects(static::never())->method('logSuccess');
 

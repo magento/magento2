@@ -219,7 +219,16 @@ class FlatTableBuilderTest extends TestCase
                     $temporaryValueTableName,
                     $eavCustomValueField
                 ) {
-                    if ($arg1 === ['dstatus' => $attributeTable] && empty($arg3)) {
+                    if ($arg1 === ['dstatus' => $attributeTable] &&
+                        $arg2 ===
+                        sprintf(
+                            'e.%s = dstatus.%s AND dstatus.store_id = %s AND dstatus.attribute_id = %s',
+                            $linkField,
+                            $linkField,
+                            $storeId,
+                            $statusId
+                        )
+                        && empty($arg3)) {
                             return $selectMock;
 
                     } elseif ($arg1 === $temporaryTableName &&
