@@ -5,7 +5,6 @@ type Query {
     """phpcs:ignore Magento2.GraphQL.ValidArgumentName"""
     cart(cart_id: String! @doc(description: "The unique ID of the cart to query.")): Cart @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart") @doc(description:"Return information about the specified shopping cart.") @cache(cacheable: false)
     customerCart: Cart! @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CustomerCart") @doc(description:"Return information about the customer's shopping cart.") @cache(cacheable: false)
-    estimateShippingMethods(input: EstimateShippingMethodsInput! @doc(description: "An input object that specifies details for estimation of available shipping methods")): [AvailableShippingMethod] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\EstimateShippingMethods") @doc(description: "Estimate shipping method(s) for cart based on address")
 }
 
 type Mutation {
@@ -30,6 +29,7 @@ type Mutation {
     placeOrder(input: PlaceOrderInput @doc(description: "An input object that defines the shopper's cart ID.")): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PlaceOrder") @doc(description:"Convert the quote into an order.")
     addProductsToCart(cartId: String! @doc(description: "The cart ID of the shopper."), cartItems: [CartItemInput!]! @doc(description: "An array that defines the products to add to the cart.")): AddProductsToCartOutput @doc(description:"Add any type of product to the cart.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddProductsToCart")
     estimateTotals(input: EstimateTotalsInput! @doc(description: "An input object that specifies details for cart totals estimation")): EstimateTotalsOutput! @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\EstimateTotals") @doc(description: "Estimate totals for cart based on the address")
+    estimateShippingMethods(input: EstimateTotalsInput! @doc(description: "An input object that specifies details for estimation of available shipping methods")): [AvailableShippingMethod] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\EstimateShippingMethods") @doc(description: "Estimate shipping method(s) for cart based on address")
 }
 
 input CreateGuestCartInput {
@@ -66,6 +66,47 @@ input CartItemInput @doc(description: "Defines an item to be added to the cart."
     parent_sku: String @doc(description: "For a child product, the SKU of its parent product.")
     selected_options: [ID!] @doc(description: "The selected options for the base product, such as color or size, using the unique ID for an object such as `CustomizableRadioOption`, `CustomizableDropDownOption`, or `ConfigurableProductOptionsValues`.")
     entered_options: [EnteredOptionInput!] @doc(description: "An array of entered options for the base product, such as personalization text.")
+}
+
+enum SortQuoteItemsEnum @doc(description: "Specifies the field to use for sorting quote items") {
+    ITEM_ID
+    CREATED_AT
+    UPDATED_AT
+    PRODUCT_ID
+    SKU
+    NAME
+    DESCRIPTION
+    WEIGHT
+    QTY
+    PRICE
+    BASE_PRICE
+    CUSTOM_PRICE
+    DISCOUNT_PERCENT
+    DISCOUNT_AMOUNT
+    BASE_DISCOUNT_AMOUNT
+    TAX_PERCENT
+    TAX_AMOUNT
+    BASE_TAX_AMOUNT
+    ROW_TOTAL
+    BASE_ROW_TOTAL
+    ROW_TOTAL_WITH_DISCOUNT
+    ROW_WEIGHT
+    PRODUCT_TYPE
+    BASE_TAX_BEFORE_DISCOUNT
+    TAX_BEFORE_DISCOUNT
+    ORIGINAL_CUSTOM_PRICE
+    PRICE_INC_TAX
+    BASE_PRICE_INC_TAX
+    ROW_TOTAL_INC_TAX
+    BASE_ROW_TOTAL_INC_TAX
+    DISCOUNT_TAX_COMPENSATION_AMOUNT
+    BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT
+    FREE_SHIPPING
+}
+
+input QuoteItemsSortInput @doc(description: "Specifies the field to use for sorting quote items") {
+    field: SortQuoteItemsEnum! @doc(description: "Specifies the quote items field to sort by")
+    order: SortEnum! @doc(description: "Specifies the order of quote items' sorting")
 }
 
 input CustomizableOptionInput @doc(description: "Defines a customizable option.") {
@@ -147,12 +188,6 @@ input SetShippingMethodsOnCartInput @doc(description: "Applies one or shipping m
 input ShippingMethodInput @doc(description: "Defines the shipping carrier and method.") {
     carrier_code: String! @doc(description: "A string that identifies a commercial carrier or an offline delivery method.")
     method_code: String! @doc(description: "A string that indicates which service a commercial carrier will use to ship items. For offline delivery methods, this value is similar to the label displayed on the checkout page.")
-}
-
-input EstimateShippingMethodsInput @doc(description: "Defines the input required for `estimateShippingMethods` query") {
-    cart_id: String! @doc(description: "The unique ID of the cart to query.")
-    country_id: String! @doc(description: "The country code to estimate available shipping method(s)")
-    address: CustomerAddressInput @doc(description: "Customer's address to estimate available shipping method(s)")
 }
 
 input SetPaymentMethodAndPlaceOrderInput @doc(description: "Applies a payment method to the quote.") {
@@ -237,7 +272,7 @@ type PlaceOrderError @doc(description:"An error encountered while placing an ord
 type Cart @doc(description: "Contains the contents and other details about a guest or customer cart.") {
     id: ID! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\MaskedCartId") @doc(description: "The unique ID for a `Cart` object.")
     items: [CartItemInterface] @deprecated(reason: "Use `itemsV2` instead.") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItems") @doc(description: "An array of products that have been added to the cart.")
-    itemsV2(pageSize: Int = 20, currentPage: Int = 1): CartItems @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemsPaginated")
+    itemsV2(pageSize: Int = 20, currentPage: Int = 1, sort: QuoteItemsSortInput): CartItems @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemsPaginated")
     applied_coupon: AppliedCoupon @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupon") @deprecated(reason: "Use `applied_coupons` instead.")
     applied_coupons: [AppliedCoupon] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupons") @doc(description:"An array of `AppliedCoupon` objects. Each object contains the `code` text attribute, which specifies the coupon code.")
     email: String @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartEmail") @doc(description: "The email address of the guest or customer.")
