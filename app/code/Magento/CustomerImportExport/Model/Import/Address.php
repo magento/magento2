@@ -6,6 +6,7 @@
 
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites as CountryWithWebsitesSource;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ObjectManager;
@@ -253,6 +254,11 @@ class Address extends AbstractCustomer
     private $indexerProcessor;
 
     /**
+     * @var Share
+     */
+    private $configShare;
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -272,7 +278,8 @@ class Address extends AbstractCustomer
      * @param array $data
      * @param CountryWithWebsitesSource|null $countryWithWebsites
      * @param AddressStorage|null $addressStorage
-     * @param Processor $indexerProcessor
+     * @param Processor|null $indexerProcessor
+     * @param Share|null $configShare
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -297,7 +304,8 @@ class Address extends AbstractCustomer
         array $data = [],
         ?CountryWithWebsitesSource $countryWithWebsites = null,
         ?AddressStorage $addressStorage = null,
-        ?Processor $indexerProcessor = null
+        ?Processor $indexerProcessor = null,
+        ?Share $configShare = null
     ) {
         $this->_customerFactory = $customerFactory;
         $this->_addressFactory = $addressFactory;
@@ -325,7 +333,8 @@ class Address extends AbstractCustomer
             $collectionFactory,
             $eavConfig,
             $storageFactory,
-            $data
+            $data,
+            $configShare
         );
 
         $this->_entityTable = isset(
@@ -351,6 +360,7 @@ class Address extends AbstractCustomer
         $this->indexerProcessor = $indexerProcessor
             ?: ObjectManager::getInstance()->get(Processor::class);
 
+        $this->configShare = $configShare ?? ObjectManager::getInstance()->get(Share::class);
         $this->_initAttributes();
         $this->_initCountryRegions();
     }

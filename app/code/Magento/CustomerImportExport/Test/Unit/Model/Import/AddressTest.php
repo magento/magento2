@@ -9,6 +9,7 @@ namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 
 use Magento\Customer\Model\Address\Validator\Postcode;
 use Magento\Customer\Model\AddressFactory;
+use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\Indexer\Processor;
 use Magento\Customer\Model\ResourceModel\Address\Attribute as AddressAttribute;
@@ -150,6 +151,11 @@ class AddressTest extends TestCase
     private $countryWithWebsites;
 
     /**
+     * @var Share|MockObject
+     */
+    private $configShare;
+
+    /**
      * Init entity adapter model
      */
     protected function setUp(): void
@@ -171,6 +177,7 @@ class AddressTest extends TestCase
 
             ->method('getAllOptions')
             ->willReturn([]);
+        $this->configShare = $this->createMock(Share::class);
         $this->_model = $this->_getModelMock();
         $this->errorAggregator = $this->createPartialMock(
             ProcessingErrorAggregator::class,
@@ -387,7 +394,8 @@ class AddressTest extends TestCase
             $this->_getModelDependencies(),
             $this->countryWithWebsites,
             $this->createMock(\Magento\CustomerImportExport\Model\ResourceModel\Import\Address\Storage::class),
-            $this->createMock(Processor::class)
+            $this->createMock(Processor::class),
+            $this->configShare
         );
 
         $property = new \ReflectionProperty($modelMock, '_availableBehaviors');
@@ -445,6 +453,10 @@ class AddressTest extends TestCase
     public function testValidateRowForUpdate(array $rowData, array $errors, $isValid = false)
     {
         $this->_model->setParameters(['behavior' => Import::BEHAVIOR_ADD_UPDATE]);
+
+        $this->configShare->expects($this->once())
+            ->method('isGlobalScope')
+            ->willReturn(false);
 
         if ($isValid) {
             $this->assertTrue($this->_model->validateRow($rowData, 0));
