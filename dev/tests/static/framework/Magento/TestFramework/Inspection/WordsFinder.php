@@ -87,14 +87,14 @@ class WordsFinder
      *
      * @var array
      */
-    protected $_changedPrivateRepoFileList;
+    private $changedPrivateRepoFileList;
 
     /**
      * Changed Private and public Repo files
      *
      * @var array
      */
-    protected $_changedAllFiles;
+    private $changedAllFiles;
 
     /**
      * Words to search for
@@ -168,9 +168,9 @@ class WordsFinder
         }
 
         $this->isCopyrightChecked = $isCopyrightChecked;
-        $this->_changedPrivateRepoFileList = $this->getChangedPrivateRepoFileList();
-        $this->_changedAllFiles =
-            array_merge($this->_changedPrivateRepoFileList, $this->getChangedPublicRepoFileList());
+        $this->changedPrivateRepoFileList = $this->getChangedPrivateRepoFileList();
+        $this->changedAllFiles =
+            array_merge($this->changedPrivateRepoFileList, $this->getChangedPublicRepoFileList());
     }
 
     /**
@@ -351,16 +351,16 @@ class WordsFinder
 
         if ($contents && !$this->isCopyrightCheckSkipped($file)) {
 
-            if (in_array($file, $this->_changedPrivateRepoFileList)) {
+            if (in_array($file, $this->changedPrivateRepoFileList)) {
                 if ((strpos($contents, $this->copyrightAdobeString) === false)
                 ) {
                     $foundWords[] = 'Copyright content is not valid';
                 }
             }
 
-            if (in_array($file, $this->_changedAllFiles)) {
+            if (in_array($file, $this->changedAllFiles)) {
                 if ((strpos($contents, $this->getCopyrightYear()) === false)) {
-                    $foundWords[] = 'Copyright file created year is not valid';
+                    $foundWords[] = 'Copyright year is not valid';
                 }
             }
 
