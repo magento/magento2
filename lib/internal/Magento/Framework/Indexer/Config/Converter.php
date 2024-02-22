@@ -17,6 +17,9 @@ class Converter implements ConverterInterface
      */
     private SortingAdjustmentInterface $sortingAdjustment;
 
+    /**
+     * @param SortingAdjustmentInterface $sortingAdjustment
+     */
     public function __construct(SortingAdjustmentInterface $sortingAdjustment)
     {
         $this->sortingAdjustment = $sortingAdjustment;
@@ -249,6 +252,7 @@ class Converter implements ConverterInterface
      * @param \DOMNode $node
      * @return string
      * @deprecated 101.0.0
+     * @see not used anymore
      */
     protected function getTranslatedNodeValue(\DOMNode $node)
     {
@@ -369,6 +373,7 @@ class Converter implements ConverterInterface
                 );
             }
             $relatedResult = $this->expandDependencies($list, $relatedIndexerId, $accumulated);
+            // phpstan:ignore
             $result = array_unique(array_merge($result, $relatedResult));
         }
         return $result;
