@@ -376,7 +376,7 @@ class Converter implements ConverterInterface
             $relatedResult = $this->expandDependencies($list, $relatedIndexerId, $accumulated);
             $addedResult[] = $relatedResult;
         }
-        $result = array_merge(...$result, ...$addedResult);
+        $result = array_merge($result, ...$addedResult);
         return array_unique($result);
     }
 }
