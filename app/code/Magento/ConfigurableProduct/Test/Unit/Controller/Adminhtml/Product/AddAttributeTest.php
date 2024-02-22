@@ -101,7 +101,8 @@ class AddAttributeTest extends TestCase
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['_wakeup', 'getId'])
+            ->addMethods(['_wakeup'])
+            ->onlyMethods(['getId'])
             ->getMock();
 
         $this->productBuilder->expects($this->once())->method('build')->with($this->request)->willReturn($product);

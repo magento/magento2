@@ -35,6 +35,11 @@ class Magento implements ObserverInterface
         self::$_defaultEventManager = $eventManager;
     }
 
+    public static function getDefaultEventManager()
+    {
+        return self::$_defaultEventManager;
+    }
+
     /**
      * Constructor
      *

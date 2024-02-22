@@ -63,12 +63,13 @@ class PluginTest extends TestCase
         $this->attribute = $this->getMockBuilder(
             \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute::class
         )
-            ->onlyMethods(['getUsedAttributes', 'getAttributeId'])
+            ->addMethods(['getAttributeId'])
+            ->onlyMethods(['getUsedAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->magentoObject = $this->getMockBuilder(DataObject::class)
-            ->onlyMethods(['getId'])
+            ->addMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
 
