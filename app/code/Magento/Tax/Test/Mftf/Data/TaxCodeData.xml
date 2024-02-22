@@ -85,5 +85,11 @@
         <data key="country">United States</data>
         <data key="zip">10001</data>
         <data key="rate">10</data>
+    <entity name="SimpleTaxTexas" type="tax">
+        <data key="identifier" unique="suffix" >Texas</data>
+        <data key="state">Texas</data>
+        <data key="country">United States</data>
+        <data key="zip">*</data>
+        <data key="rate">8.3</data>
     </entity>
 </entities>
