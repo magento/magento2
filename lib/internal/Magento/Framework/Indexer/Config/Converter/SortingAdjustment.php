@@ -21,7 +21,7 @@ namespace Magento\Framework\Indexer\Config\Converter;
 class SortingAdjustment implements SortingAdjustmentInterface
 {
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     public function adjust(array $indexersList): array
     {

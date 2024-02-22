@@ -348,6 +348,7 @@ class Converter implements ConverterInterface
     {
         $accumulated[] = $indexerId;
         $result = $list[$indexerId]['dependencies'] ?? [];
+        $addedResult = [];
         foreach ($result as $relatedIndexerId) {
             if (in_array($relatedIndexerId, $accumulated)) {
                 throw new ConfigurationMismatchException(
@@ -373,9 +374,9 @@ class Converter implements ConverterInterface
                 );
             }
             $relatedResult = $this->expandDependencies($list, $relatedIndexerId, $accumulated);
-            // phpstan:ignore
-            $result = array_unique(array_merge($result, $relatedResult));
+            $addedResult[] = $relatedResult;
         }
-        return $result;
+        $result = array_merge(...$result, ...$addedResult);
+        return array_unique($result);
     }
 }
