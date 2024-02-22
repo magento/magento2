@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © 2024 Your Company Name
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Plugin\Catalog\Model\Product\Attribute\Backend\TierPrice;
