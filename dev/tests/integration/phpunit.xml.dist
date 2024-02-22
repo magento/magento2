@@ -90,7 +90,7 @@
             <parameter name="config" value="allure/allure.config.php" />
         </bootstrap>
         <bootstrap class="Magento\TestFramework\Event\TestSuitStarted" />
-        <bootstrap class="Magento\TestFramework\Event\PhpUnitExtension" />
-        <bootstrap class="Magento\TestFramework\Event\PhpUnitExtensionFinished" />
+        <bootstrap class="Magento\TestFramework\Event\TestPreprationStarted" />
+        <bootstrap class="Magento\TestFramework\Event\TestPreprationFinished" />
     </extensions>
 </phpunit>
