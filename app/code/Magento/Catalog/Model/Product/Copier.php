@@ -124,7 +124,10 @@ class Copier
         $this->attributeCopier->copyProductAttributes($product, $duplicate);
         $this->setStoresUrl($product, $duplicate);
         $this->optionRepository->duplicate($product, $duplicate);
-
+        $product->getResource()->duplicate(
+            $product->getData($metadata->getLinkField()),
+            $duplicate->getData($metadata->getLinkField())
+        );
         return $duplicate;
     }
 
