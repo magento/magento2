@@ -172,7 +172,7 @@ class ProductUrlRewriteGeneratorTest extends TestCase
         $productMock->expects($this->once())
             ->method('getVisibility')
             ->willReturn(Product\Visibility::VISIBILITY_NOT_VISIBLE);
-        $productMock->expects($this->exactly(2))
+        $productMock->expects($this->exactly(3))
             ->method('getStoreId')
             ->willReturn($storeId);
         $productCategoriesMock = $this->getMockBuilder(Collection::class)

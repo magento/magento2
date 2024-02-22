@@ -527,7 +527,6 @@ class CartFixedTest extends TestCase
         $rule->setDiscountAmount($percentDiscount);
         $this->saveRule($rule);
         $quote = $this->getQuote('test_quote_with_simple_products');
-        $quote->setCouponCode('2?ds5!2d');
         $quote->collectTotals();
         $this->quoteRepository->save($quote);
         $this->assertEquals(21.98, $quote->getBaseSubtotal());
