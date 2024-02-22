@@ -270,8 +270,8 @@ class StorageTest extends TestCase
      */
     public function testGetThumbnailPathNotFound(): void
     {
-          $this->expectException('InvalidArgumentException');
-          $this->expectExceptionMessage('The image not found');
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('The image not found');
 
         $this->filesystemDriver->method('getRealpathSafety')
             ->willReturnArgument(0);
