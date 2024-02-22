@@ -16,7 +16,7 @@ use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
-use Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator;
+use Magento\Catalog\Pricing\Price\CalculateCustomOptionCatalogRule;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -30,9 +30,9 @@ class ValueTest extends TestCase
     private $model;
 
     /**
-     * @var CustomOptionPriceCalculator|MockObject
+     * @var CalculateCustomOptionCatalogRule|MockObject
      */
-    private $customOptionPriceCalculatorMock;
+    private $calculateCustomOptionCatalogRule;
 
     /**
      * @inheritDoc
@@ -42,8 +42,8 @@ class ValueTest extends TestCase
         $mockedResource = $this->getMockedResource();
         $mockedCollectionFactory = $this->getMockedValueCollectionFactory();
 
-        $this->customOptionPriceCalculatorMock = $this->createMock(
-            CustomOptionPriceCalculator::class
+        $this->calculateCustomOptionCatalogRule = $this->createMock(
+            CalculateCustomOptionCatalogRule::class
         );
 
         $helper = new ObjectManager($this);
@@ -52,7 +52,7 @@ class ValueTest extends TestCase
             [
                 'resource' => $mockedResource,
                 'valueCollectionFactory' => $mockedCollectionFactory,
-                'customOptionPriceCalculator' => $this->customOptionPriceCalculatorMock
+                'calculateCustomOptionCatalogRule' => $this->calculateCustomOptionCatalogRule
             ]
         );
         $this->model->setOption($this->getMockedOption());
@@ -80,8 +80,8 @@ class ValueTest extends TestCase
         $this->assertEquals($price, $this->model->getPrice(false));
 
         $percentPrice = 100.0;
-        $this->customOptionPriceCalculatorMock->expects($this->atLeastOnce())
-            ->method('getOptionPriceByPriceCode')
+        $this->calculateCustomOptionCatalogRule->expects($this->atLeastOnce())
+            ->method('execute')
             ->willReturn($percentPrice);
         $this->assertEquals($percentPrice, $this->model->getPrice(true));
     }
