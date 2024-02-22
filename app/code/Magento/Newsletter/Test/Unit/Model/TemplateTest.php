@@ -18,9 +18,11 @@ use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\Filter\Template;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\DesignInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Newsletter\Model\Template as NewsletterTemplateModel;
 use Magento\Newsletter\Model\Template\Filter;
@@ -115,6 +117,14 @@ class TemplateTest extends TestCase
 
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                Database::class,
+                $this->createMock(Database::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -191,6 +201,7 @@ class TemplateTest extends TestCase
         $this->filterFactoryMock = $this->getMockBuilder(FilterFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
+
     }
 
     /**
@@ -199,9 +210,10 @@ class TemplateTest extends TestCase
      * @param $mockedMethods array
      * @return NewsletterTemplateModel|MockObject
      */
-    protected function getModelMock(array $mockedMethods = [])
+    protected function getModelMock(array $mockedMethods = [], array $addMockedMethods = [])
     {
         return $this->getMockBuilder(NewsletterTemplateModel::class)
+            ->addMethods($addMockedMethods)
             ->onlyMethods(array_merge($mockedMethods, ['__wakeup', '__sleep', '_init']))
             ->setConstructorArgs(
                 [
@@ -230,7 +242,9 @@ class TemplateTest extends TestCase
             [
                 'getTemplateFilter',
                 'getDesignConfig',
-                'applyDesignConfig',
+                'applyDesignConfig'
+            ],
+            [
                 'setVariables',
             ]
         );
@@ -310,7 +324,7 @@ class TemplateTest extends TestCase
         // The following block of code tests to ensure that the store id of the subscriber will be used, if the
         // 'subscriber' variable is set.
         $subscriber = $this->getMockBuilder(Subscriber::class)
-            ->onlyMethods(['getStoreId'])
+            ->addMethods(['getStoreId'])
             ->disableOriginalConstructor()
             ->getMock();
         $subscriber->expects($this->once())

@@ -211,7 +211,8 @@ class QueueManagementTest extends TestCase
     private function getMessageStatusMock()
     {
         $messageStatus = $this->getMockBuilder(MessageStatus::class)
-            ->onlyMethods(['getStatus', 'setStatus', 'save', 'getId', 'getUpdatedAt'])
+            ->addMethods(['getStatus', 'setStatus', 'getUpdatedAt'])
+            ->onlyMethods(['save', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $messageStatus->expects($this->once())->method('getUpdatedAt')->willReturn('2010-01-01 00:00:00');

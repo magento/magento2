@@ -76,12 +76,10 @@ class FormTest extends TestCase
             ->getMock();
 
         $this->checkoutSessionMock = $this->getMockBuilder(Session::class)
-            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 
         $paymentConfigMock = $this->getMockBuilder(Config::class)
-            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -148,7 +146,7 @@ class FormTest extends TestCase
      *
      * @return array
      */
-    public function getMethodConfigDataDataProvider()
+    public static function getMethodConfigDataDataProvider()
     {
         return [
             ['gateway_name', 'payment_gateway', 'payment_gateway'],
@@ -189,7 +187,7 @@ class FormTest extends TestCase
      *
      * @return array
      */
-    public function getCgiUrlDataProvider()
+    public static function getCgiUrlDataProvider()
     {
         return [
             [

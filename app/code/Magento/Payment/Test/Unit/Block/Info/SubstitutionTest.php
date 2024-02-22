@@ -124,10 +124,7 @@ class SubstitutionTest extends TestCase
     {
         $abstractBlock = $this->getMockBuilder(
             AbstractBlock::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(
-                []
-            )->getMock();
+        )->disableOriginalConstructor()->getMock();
         $childAbstractBlock = clone($abstractBlock);
 
         $abstractBlock->expects($this->any())->method('getParentBlock')->willReturn($childAbstractBlock);
@@ -137,10 +134,7 @@ class SubstitutionTest extends TestCase
 
         $infoMock = $this->getMockBuilder(
             Info::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(
-                []
-            )->getMock();
+        )->disableOriginalConstructor()->getMock();
         $methodMock = $this->getMockBuilder(
             MethodInterface::class
         )->getMockForAbstractClass();

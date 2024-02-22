@@ -128,7 +128,7 @@ class AbstractEnableTest extends TestCase
     public function testRender()
     {
         $formMock = $this->getMockBuilder(Form::class)
-            ->onlyMethods(['getFieldNameSuffix'])
+            ->addMethods(['getFieldNameSuffix'])
             ->disableOriginalConstructor()
             ->getMock();
 

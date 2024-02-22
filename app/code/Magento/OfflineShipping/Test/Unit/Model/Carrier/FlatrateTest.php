@@ -75,7 +75,8 @@ class FlatrateTest extends TestCase
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['create', 'isSetFlag', 'getValue'])
+            ->addMethods(['create'])
+            ->onlyMethods(['isSetFlag', 'getValue'])
             ->getMockForAbstractClass();
 
         $this->errorFactoryMock = $this
@@ -236,7 +237,7 @@ class FlatrateTest extends TestCase
     /**
      * @return array
      */
-    public function collectRatesWithGlobalFreeShippingDataProvider()
+    public static function collectRatesWithGlobalFreeShippingDataProvider()
     {
         return [
             ['freeshipping' => true],
