@@ -9,19 +9,32 @@ namespace Magento\Framework\Indexer\Test\Unit\Config;
 
 use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\Indexer\Config\Converter;
+use Magento\Framework\Indexer\Config\Converter\SortingAdjustmentInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ConverterTest extends TestCase
 {
     /**
-     * @var Converter|MockObject
+     * @var Converter
      */
     protected $_model;
 
+    /**
+     * @var SortingAdjustmentInterface|MockObject
+     */
+    private $sortingAdjustment;
+
     protected function setUp(): void
     {
-        $this->_model = new Converter();
+        $this->sortingAdjustment = $this->getMockBuilder(SortingAdjustmentInterface::class)
+            ->getMockForAbstractClass();
+        $this->sortingAdjustment->method("adjust")->will(
+            $this->returnCallback(function ($arg) {
+                return $arg;
+            })
+        );
+        $this->_model = new Converter($this->sortingAdjustment);
     }
 
     public function testConvert()
