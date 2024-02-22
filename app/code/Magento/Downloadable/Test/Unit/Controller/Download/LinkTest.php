@@ -517,16 +517,30 @@ class LinkTest extends TestCase
         $this->downloadHelper->expects($this->once())->method('getFilename')->willReturn($fileName);
         $this->downloadHelper->expects($this->once())->method('getContentType')->willReturn($mimeType);
         $this->response->expects($this->once())->method('setHttpResponseCode')->with(200)->willReturnSelf();
-        $this->response
-            ->expects($this->any())
+
+        $this->response->expects($this->any())
             ->method('setHeader')
-            ->withConsecutive(
-                ['Pragma', 'public', true],
-                ['Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true],
-                ['Content-type', $mimeType, true],
-                ['Content-Length', $fileSize],
-                ['Content-Disposition', $disposition . '; filename=' . $fileName]
-            )
+            ->with('Pragma', 'public', true)
+            ->willReturnSelf();
+
+        $this->response->expects($this->any())
+            ->method('setHeader')
+            ->with('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
+            ->willReturnSelf();
+
+        $this->response->expects($this->any())
+            ->method('setHeader')
+            ->with('Content-type', $mimeType, true)
+            ->willReturnSelf();
+
+        $this->response->expects($this->any())
+            ->method('setHeader')
+            ->with('Content-Length', $fileSize)
+            ->willReturnSelf();
+
+        $this->response->expects($this->any())
+            ->method('setHeader')
+            ->with('Content-Disposition', $disposition . '; filename=' . $fileName)
             ->willReturnSelf();
 
         $this->assertEquals($this->response, $this->link->execute());

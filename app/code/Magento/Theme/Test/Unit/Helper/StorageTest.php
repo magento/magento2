@@ -376,10 +376,10 @@ class StorageTest extends TestCase
             ->method('decode')
             ->willReturnCallback(
                 function ($arg) use ($notRoot, $filename, $decode) {
-                    if ($arg === $notRoot) {
-                        return $decode;
-                    } elseif ($arg === $filename) {
-                        return $decode;
+                    if ($arg == $notRoot) {
+                        return $decode($arg);
+                    } elseif ($arg == $filename) {
+                        return $decode($arg);
                     }
                 }
             );
@@ -519,14 +519,13 @@ class StorageTest extends TestCase
     {
         $this->request
             ->method('getParam')
-            ->willReturnCallback(
-                function ($param) {
-                    if ($param == Storage::PARAM_THEME_ID) {
-                        return 6;
-                    } elseif ($param == Storage::PARAM_CONTENT_TYPE) {
-                        return \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE;
-                    }
-                }
+            ->withConsecutive(
+                [Storage::PARAM_THEME_ID],
+                [Storage::PARAM_CONTENT_TYPE]
+            )
+            ->willReturnOnConsecutiveCalls(
+                6,
+                \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE
             );
     }
 
@@ -547,14 +546,8 @@ class StorageTest extends TestCase
         $this->contextHelper->expects($this->any())->method('getRequest')->willReturn($this->request);
         $this->request
             ->method('getParam')
-            ->willReturnCallback(function ($withArgs) use ($willReturnArgs) {
-                if (!empty($withArgs)) {
-                    static $callCount = 0;
-                    $returnValue = $willReturnArgs[$callCount] ?? null;
-                    $callCount++;
-                    return $returnValue;
-                }
-            });
+            ->withConsecutive(...$withArgs)
+            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
 
         $this->helper = new Storage(
             $this->contextHelper,
