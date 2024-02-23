@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Paypal\Test\Unit\Model;
 
 use Laminas\Http\Exception\RuntimeException;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
@@ -105,6 +106,13 @@ class PayflowproTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->helper = new ObjectManager($this);
+        $objects = [
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $this->helper->prepareObjectManager($objects);
         $this->payflowpro = $this->helper->getObject(
             Payflowpro::class,
             [

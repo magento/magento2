@@ -81,7 +81,7 @@ class ValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function isContextAvailableDataProvider()
+    public static function isContextAvailableDataProvider()
     {
         return [
             [false, false],
@@ -104,6 +104,7 @@ class ValidatorTest extends TestCase
             ->getMock();
         $typeInstance = $this->getMockBuilder(AbstractType::class)
             ->disableOriginalConstructor()
+            ->onlyMethods(['canConfigure'])
             ->getMockForAbstractClass();
         $currentProduct->expects($this->any())->method('getFinalPrice')->willReturn($productPrice);
         $currentProduct->expects($this->any())->method('getTypeId')->willReturn('simple');
@@ -129,7 +130,7 @@ class ValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function isPriceOrSetAvailableDataProvider()
+    public static function isPriceOrSetAvailableDataProvider()
     {
         return [
             [false, 1, true, true],
@@ -165,7 +166,7 @@ class ValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function isMethodAvailableDataProvider()
+    public static function isMethodAvailableDataProvider()
     {
         return [
             [true, true],

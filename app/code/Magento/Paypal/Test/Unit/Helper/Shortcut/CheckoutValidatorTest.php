@@ -96,7 +96,6 @@ class CheckoutValidatorTest extends TestCase
     {
         $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
         $isInCatalog = false;
         $paymentCode = 'code';

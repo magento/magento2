@@ -131,8 +131,8 @@ class AbstractAgreementTest extends TestCase
             ->method('setAdditionalInformation')
             ->willReturnMap(
                 [
-                    AbstractAgreement::TRANSPORT_BILLING_AGREEMENT_ID, $baId,
-                    AbstractAgreement::PAYMENT_INFO_REFERENCE_ID, $referenceId
+                    [AbstractAgreement::TRANSPORT_BILLING_AGREEMENT_ID, $baId],
+                    [AbstractAgreement::PAYMENT_INFO_REFERENCE_ID, $referenceId]
                 ]
             );
 

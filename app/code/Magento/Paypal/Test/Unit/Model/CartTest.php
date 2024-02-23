@@ -40,7 +40,7 @@ class CartTest extends TestCase
      * @param array $data
      * @param string $dataName
      */
-    public function __construct($name = null, array $data = [], $dataName = '')
+    public function __construct($name = null, array $data = [], string $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
         $this->_validItem = new DataObject(
@@ -78,7 +78,7 @@ class CartTest extends TestCase
      * @param array $items
      * @dataProvider invalidGetAllItemsDataProvider
      */
-    public function testInvalidGetAllItems($items)
+    public function testInvalidGetAllItems(array $items)
     {
         $taxContainer = new DataObject(
             ['base_discount_tax_compensation_amount' => 0.2, 'base_shipping_discount_tax_compensation_amnt' => 0.1]
