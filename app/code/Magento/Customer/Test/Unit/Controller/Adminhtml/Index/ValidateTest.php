@@ -20,9 +20,15 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\DataObject;
 use Magento\Framework\Message\Error;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Validator\Exception;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -85,6 +91,11 @@ class ValidateTest extends TestCase
     /** @var Validate */
     protected $controller;
 
+    /**
+     * @var MockObject|StoreManagerInterface
+     */
+    private $storeManagerMock;
+
     protected function setUp(): void
     {
         if (!function_exists('libxml_set_external_entity_loader')) {
@@ -143,6 +154,10 @@ class ValidateTest extends TestCase
         );
         $this->resultJsonFactory->expects($this->once())->method('create')->willReturn($this->resultJson);
 
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $objectHelper = new ObjectManager($this);
         $this->controller = $objectHelper->getObject(
             Validate::class,
@@ -155,19 +170,36 @@ class ValidateTest extends TestCase
                 'customerAccountManagement' => $this->customerAccountManagement,
                 'resultJsonFactory' => $this->resultJsonFactory,
                 'dataObjectHelper' => $this->dataObjectHelper,
+                'storeManager' => $this->storeManagerMock
             ]
         );
+
     }
 
     public function testExecute()
     {
         $customerEntityId = 2;
-        $this->request->expects($this->once())
+        $this->request->expects($this->exactly(2))
             ->method('getParam')
             ->with('customer')
             ->willReturn([
-                'entity_id' => $customerEntityId
+                'entity_id' => $customerEntityId,
+                'website_id' => 1
             ]);
+
+        $storeIds = [1];
+        $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getStoreIds'])
+            ->getMockForAbstractClass();
+        $websiteMock->expects($this->once())
+            ->method('getStoreIds')
+            ->willReturn($storeIds);
+        $this->storeManagerMock->expects($this->once())
+            ->method('getWebsite')
+            ->with(1)
+            ->willReturn($websiteMock);
+        $this->storeManagerMock->expects($this->once())->method('setCurrentStore')->with(1);
 
         $this->customer->expects($this->once())
             ->method('setId')
@@ -268,7 +300,7 @@ class ValidateTest extends TestCase
 
     public function testExecuteWithNewCustomerAndNoEntityId()
     {
-        $this->request->expects($this->once())
+        $this->request->expects($this->exactly(2))
             ->method('getParam')
             ->with('customer')
             ->willReturn([]);

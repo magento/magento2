@@ -561,14 +561,15 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
     private function setCurrentCustomerStore(): void
     {
         $originalRequestData = $this->getRequest()->getPostValue(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
-
-        $storeId = $originalRequestData['store_id'] ?? null;
-        if (!$storeId) {
-            $websiteId = $originalRequestData['website_id'] ?? null;
-            $website = $this->storeManager->getWebsite($websiteId);
-            $storeId = current($website->getStoreIds());
+        if ($originalRequestData) {
+            $storeId = $originalRequestData['store_id'] ?? null;
+            if (!$storeId) {
+                $websiteId = $originalRequestData['website_id'] ?? null;
+                $website = $this->storeManager->getWebsite($websiteId);
+                $storeId = $website ? current($website->getStoreIds()) : null;
+            }
+            $this->storeManager->setCurrentStore($storeId);
         }
-        $this->storeManager->setCurrentStore($storeId);
     }
 
     /**

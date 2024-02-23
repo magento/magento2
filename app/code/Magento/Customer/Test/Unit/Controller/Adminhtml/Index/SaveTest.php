@@ -287,12 +287,13 @@ class SaveTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $website = $this->createPartialMock(\Magento\Store\Model\Website::class, ['getStoreIds']);
-        $website->method('getStoreIds')
+        $website->expects($this->exactly(2))->method('getStoreIds')
             ->willReturn([1]);
         $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMockForAbstractClass();
-        $storeManager->method('getWebsite')
+        $storeManager->expects($this->exactly(2))->method('getWebsite')
             ->willReturn($website);
+        $storeManager->expects($this->exactly(2))->method('setCurrentStore')->with(1);
 
         $objectManager = new ObjectManager($this);
 
@@ -347,6 +348,7 @@ class SaveTest extends TestCase
                 'code' => 'value',
                 'coolness' => false,
                 'disable_auto_group_change' => 'false',
+                'website_id' => 1
             ],
             'subscription_status' => [$subscriptionWebsite => $subscriptionStatus],
             'subscription_store' => [$subscriptionWebsite => $subscriptionStore],
@@ -356,12 +358,14 @@ class SaveTest extends TestCase
             'code' => 'value',
             'coolness' => false,
             'disable_auto_group_change' => 'false',
+            'website_id' => 1
         ];
         $compactedData = [
             'entity_id' => $customerId,
             'code' => 'value',
             'coolness' => false,
             'disable_auto_group_change' => 'false',
+            'website_id' => 1,
             CustomerInterface::DEFAULT_BILLING => 2,
             CustomerInterface::DEFAULT_SHIPPING => 2
         ];
@@ -381,6 +385,7 @@ class SaveTest extends TestCase
             'confirmation' => false,
             'sendemail_store_id' => '1',
             'id' => $customerId,
+            'website_id' => 1
         ];
 
         /** @var AttributeMetadataInterface|MockObject $customerFormMock */

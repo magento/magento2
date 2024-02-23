@@ -212,13 +212,14 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
     private function setCurrentCustomerStore(): void
     {
         $requestData = $this->getRequest()->getParam(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
-
-        $storeId = $requestData['store_id'] ?? null;
-        if (!$storeId) {
-            $websiteId = $requestData['website_id'] ?? null;
-            $website = $this->storeManager->getWebsite($websiteId);
-            $storeId = current($website->getStoreIds());
+        if ($requestData) {
+            $storeId = $requestData['store_id'] ?? null;
+            if (!$storeId) {
+                $websiteId = $requestData['website_id'] ?? null;
+                $website = $this->storeManager->getWebsite($websiteId);
+                $storeId = $website ? current($website->getStoreIds()) : null;
+            }
+            $this->storeManager->setCurrentStore($storeId);
         }
-        $this->storeManager->setCurrentStore($storeId);
     }
 }
