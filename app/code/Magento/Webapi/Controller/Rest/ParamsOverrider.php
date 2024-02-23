@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Webapi\Controller\Rest;
 
@@ -262,7 +263,7 @@ class ParamsOverrider
      * @return \Magento\Framework\Reflection\MethodsMap
      *
      * @deprecated 100.1.0
-     * @see
+     * @see \Magento\Framework\Reflection\MethodsMap
      */
     private function getMethodsMap()
     {
