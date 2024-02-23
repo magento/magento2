@@ -59,9 +59,9 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\Escaper $escaper,
+        array $data = [],
         array $singleSelectionTypes = [],
-        CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule = null,
-        array $data = []
+        CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule = null
     ) {
         $this->string = $string;
         $this->_escaper = $escaper;
