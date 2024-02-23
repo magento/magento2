@@ -7,6 +7,7 @@
 namespace Magento\Webapi\Controller\Rest;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Rest\Request\ParamOverriderInterface;
 use Magento\Webapi\Model\Config\Converter;
 use Magento\Framework\Reflection\MethodsMap;
@@ -53,9 +54,12 @@ class ParamsOverrider
      * @param array $inputData Incoming data from request
      * @param array $parameters Contains parameters to replace or default
      * @return array Data in same format as $inputData with appropriate parameters added or changed
+     * @throws NoSuchEntityException
      */
     public function override(array $inputData, array $parameters)
     {
+        $inputData = $this->validateInputData($inputData);
+
         foreach ($parameters as $name => $paramData) {
             $arrayKeys = explode('.', $name);
             if ($paramData[Converter::KEY_FORCE] || !$this->isNestedArrayValueSet($inputData, $arrayKeys)) {
@@ -70,6 +74,27 @@ class ParamsOverrider
         }
         return $inputData;
     }
+
+    /**
+     * Validates InputData
+     *
+     * @param array $inputData
+     * @return array
+     */
+    private function validateInputData(array $inputData): array
+    {
+        $result = [];
+
+        $data = array_filter($inputData, function ($k) use (&$result) {
+            $key = is_string($k) ? strtolower(str_replace('_', "", $k)) : $k;
+            return !isset($result[$key]) && ($result[$key] = true);
+        }, ARRAY_FILTER_USE_KEY);
+
+        return array_map(function ($value) {
+            return is_array($value) ? $this->validateInputData($value) : $value;
+        }, $data);
+    }
+
 
     /**
      * Determine if a nested array value is set.
