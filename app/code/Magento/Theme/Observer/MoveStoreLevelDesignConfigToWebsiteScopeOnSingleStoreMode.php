@@ -58,7 +58,7 @@ class MoveStoreLevelDesignConfigToWebsiteScopeOnSingleStoreMode implements Obser
                 $designConfig->setScope(ScopeInterface::SCOPE_WEBSITES);
                 $designConfig->setScopeId($websiteId);
                 $this->designConfigRepository->save($designConfig);
-                // At this point store design config the same as website design config.
+                // At this point store design config is the same as website design config.
                 // By saving store design config, we will preserve inheritance from website scope.
                 $designConfig->setScope(ScopeInterface::SCOPE_STORES);
                 $designConfig->setScopeId($storeId);
