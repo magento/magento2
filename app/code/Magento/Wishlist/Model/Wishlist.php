@@ -150,6 +150,11 @@ class Wishlist extends AbstractModel implements IdentityInterface
     private $stockConfiguration;
 
     /**
+     * @var StockRegistryInterface|null
+     */
+    private $stockRegistry;
+
+    /**
      * Constructor
      *
      * @param Context $context
@@ -212,6 +217,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
         $this->productRepository = $productRepository;
         $this->stockConfiguration = $stockConfiguration
             ?: ObjectManager::getInstance()->get(StockConfigurationInterface::class);
+        $this->stockRegistry = $stockRegistry ?: ObjectManager::getInstance()->get(StockRegistryInterface::class);
     }
 
     /**
@@ -520,7 +526,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
             }
             $candidate->setWishlistStoreId($storeId);
 
-            $qty = $candidate->getQty() ? $candidate->getQty() : 1;
+            $qty = $candidate->getQty() ?: $this->getMinSaleQty($candidate);
             // No null values as qty. Convert zero to 1.
             $item = $this->_addCatalogProduct($candidate, $qty, $forciblySetQty);
             $items[] = $item;
@@ -784,5 +790,22 @@ class Wishlist extends AbstractModel implements IdentityInterface
             $identities = [self::CACHE_TAG . '_' . $this->getId()];
         }
         return $identities;
+    }
+
+    /**
+     * Returns min sale qty for product
+     *
+     * @param Product $product
+     *
+     * @return float
+     */
+    private function getMinSaleQty(Product $product): float
+    {
+        $stockItem = $this->stockRegistry->getStockItem(
+            $product->getId(),
+            $product->getStore()->getWebsiteId()
+        );
+
+        return $stockItem && $stockItem->getMinSaleQty() ? $stockItem->getMinSaleQty() : 1;
     }
 }

@@ -262,7 +262,7 @@ class WishlistTest extends TestCase
     {
         $storeId = 1;
         $productId = 1;
-        $stores = [(new DataObject())->setId($storeId)];
+        $stores = [(new DataObject())->setId($storeId)->setWebsiteId(1)];
 
         $newItem = $this->prepareWishlistItem();
 
@@ -290,13 +290,13 @@ class WishlistTest extends TestCase
         $instanceType = $this->getMockBuilder(AbstractType::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $cartCandidate = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $cartCandidate->expects($this->any())->method('getStore')->willReturn($stores[0]);
         $instanceType->expects($this->once())
             ->method('processConfiguration')
-            ->willReturn(
-                $this->getMockBuilder(Product::class)
-                    ->disableOriginalConstructor()
-                    ->getMock()
-            );
+            ->willReturn($cartCandidate);
 
         $newProduct = $this->getMockBuilder(
             Product::class
