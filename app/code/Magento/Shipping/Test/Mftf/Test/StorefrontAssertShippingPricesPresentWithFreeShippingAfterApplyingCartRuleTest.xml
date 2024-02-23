@@ -71,31 +71,33 @@
                 <argument name="freeShippingOption" value="{{CartPriceRuleFreeShippingWithCouponAppliedOnly.simple_free_shipping}}"/>
             </actionGroup>
             <actionGroup ref="AdminCartPriceRuleSaveActionGroup" stepKey="saveCartPriceRule"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
         </before>
         <after>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin2"/>
 
             <!-- Delete product -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
 
             <!-- Delete cart price rule for free shipping -->
             <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllCartPriceRules"/>
+
+            <!-- Disable free shipping method -->
             <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage2"/>
+            <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
+            <createData entity="setFreeShippingSubtotalToDefault" stepKey="setFreeShippingSubtotalToDefault"/>
+
+            <!-- Turn off table rates shipping method -->
             <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="switchDefaultWebsite2">
                 <argument name="website" value="_defaultWebsite"/>
             </actionGroup>
-
-            <!-- Turn off table rates shipping method -->
             <actionGroup ref="AdminChangeTableRatesShippingMethodStatusActionGroup" stepKey="disableTableRatesShippingMethodForDefaultWebsite">
                 <argument name="status" value="0"/>
             </actionGroup>
             <checkOption selector="{{AdminShippingMethodTableRatesSection.carriersTableRateConditionName}}" stepKey="disableUseDefaultCondition"/>
             <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig2"/>
 
-            <!-- Disable free shipping method -->
-            <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
-            <createData entity="setFreeShippingSubtotalToDefault" stepKey="setFreeShippingSubtotalToDefault"/>
-
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout2"/>
         </after>
 
         <!-- Add product to cart and check shipping prices -->
