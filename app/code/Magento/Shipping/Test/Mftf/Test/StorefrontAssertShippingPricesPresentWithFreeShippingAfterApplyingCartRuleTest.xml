@@ -26,7 +26,7 @@
             <title value="Assert that table rate shipping price will be correct after cart price rule for free shipping applied"/>
             <description value="Table rate price should be displayed correctly on checkout after applied free shipment cart price rule"/>
             <severity value="AVERAGE"/>
-            <testCaseId value="ACP2E-2763"/>
+            <testCaseId value="AC-11402"/>
             <useCaseId value="ACP2E-2763"/>
             <group value="shipping"/>
             <group value="SalesRule"/>
@@ -46,6 +46,9 @@
             </actionGroup>
             <actionGroup ref="AdminChangeTableRatesShippingMethodStatusActionGroup" stepKey="enableTableRatesShippingMethodForDefaultWebsite">
                 <argument name="status" value="1"/>
+            </actionGroup>
+            <actionGroup ref="AdminChangeTableRatesShippingMethodConditionActionGroup" stepKey="selectPriceVsDestinationCondition">
+                <argument name="condition" value="{{TableRateShippingMethodConfig.package_value_with_discount}}"/>
             </actionGroup>
             <actionGroup ref="AdminImportFileTableRatesShippingMethodActionGroup" stepKey="importCSVFile">
                 <argument name="file" value="price_tablerates.csv"/>
@@ -85,6 +88,7 @@
             <actionGroup ref="AdminChangeTableRatesShippingMethodStatusActionGroup" stepKey="disableTableRatesShippingMethodForDefaultWebsite">
                 <argument name="status" value="0"/>
             </actionGroup>
+            <checkOption selector="{{AdminShippingMethodTableRatesSection.carriersTableRateConditionName}}" stepKey="disableUseDefaultCondition"/>
             <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig2"/>
 
             <!-- Disable free shipping method -->
