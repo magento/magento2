@@ -10,8 +10,8 @@
     <test name="AdminPayPalExpressCheckoutTest">
         <annotations>
             <features value="PayPal"/>
-            <stories value="Paypal express checkout configuration"/>
-            <title value="Paypal Express Checkout configuration with valid credentials"/>
+            <stories value="Guest Checkout using Checkout with PayPal button from Product Page and Free Shipping"/>
+            <title value="Guest Checkout using Checkout with PayPal button from Product Page and Free Shipping"/>
             <description value="Place an order using paypal express checkout as payment method"/>
             <severity value="CRITICAL"/>
             <testCaseId value="AC-6149"/>
