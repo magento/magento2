@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Utility;
 
 use Magento\Framework\Exception\LocalizedException;
