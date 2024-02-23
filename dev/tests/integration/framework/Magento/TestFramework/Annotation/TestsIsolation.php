@@ -130,21 +130,21 @@ class TestsIsolation
     private function checkIsolationRequired(TestCase $test): bool
     {
         $isRequired = false;
-        if (!$test->getTestResultObject()) {
+        if (!$test->result()) {
             return $isRequired;
         }
-        $passedClasses = $test->getTestResultObject()->passedClasses();
-
-        if ($passedClasses) {
-            $testFilename = current($passedClasses);
+//        $passedClasses = $test->getTestResultObject()->passedClasses();
+//
+//        if ($passedClasses) {
+//            $testFilename = current($passedClasses);
 
             foreach ($this->testTypesToCheckIsolation as $testType) {
-                if (false !== strpos($testFilename, \sprintf('/dev/tests/%s/', $testType))) {
+                if (false !== strpos($test->name(), \sprintf('/dev/tests/%s/', $testType))) {
                     $isRequired = true;
                     break;
                 }
             }
-        }
+//        }
 
         return $isRequired;
     }
