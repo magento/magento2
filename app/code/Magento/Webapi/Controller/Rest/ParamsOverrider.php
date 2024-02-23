@@ -95,7 +95,6 @@ class ParamsOverrider
         }, $data);
     }
 
-
     /**
      * Determine if a nested array value is set.
      *
@@ -120,6 +119,7 @@ class ParamsOverrider
 
     /**
      * Set a nested array value.
+     * phpcs:disable Magento2.Annotation.MethodArguments.VisualAlignment
      *
      * @param array &$nestedArray
      * @param string[] $arrayKeys
@@ -262,6 +262,7 @@ class ParamsOverrider
      * @return \Magento\Framework\Reflection\MethodsMap
      *
      * @deprecated 100.1.0
+     * @see
      */
     private function getMethodsMap()
     {
