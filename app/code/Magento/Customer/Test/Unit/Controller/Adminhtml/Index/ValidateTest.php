@@ -173,7 +173,6 @@ class ValidateTest extends TestCase
                 'storeManager' => $this->storeManagerMock
             ]
         );
-
     }
 
     public function testExecute()
