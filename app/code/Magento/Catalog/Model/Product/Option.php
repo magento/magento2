@@ -163,11 +163,11 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         Option\Validator\Pool $validatorPool,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = [],
         ProductCustomOptionValuesInterfaceFactory $customOptionValuesFactory = null,
-        CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule = null,
         array $optionGroups = [],
         array $optionTypesToGroups = [],
-        array $data = []
+        CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule = null
     ) {
         $this->productOptionValue = $productOptionValue;
         $this->optionTypeFactory = $optionFactory;
