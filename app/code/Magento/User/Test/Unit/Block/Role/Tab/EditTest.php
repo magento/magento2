@@ -9,8 +9,10 @@ namespace Magento\User\Test\Unit\Block\Role\Tab;
 
 use Magento\Authorization\Model\Acl\AclRetriever;
 use Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Acl\AclResource\ProviderInterface;
 use Magento\Framework\Acl\RootResource;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Integration\Helper\Data;
@@ -49,7 +51,6 @@ class EditTest extends TestCase
     {
         $this->rootResourceMock = $this->getMockBuilder(RootResource::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
 
         $this->rulesCollectionFactoryMock = $this
@@ -60,18 +61,15 @@ class EditTest extends TestCase
 
         $this->aclRetrieverMock = $this->getMockBuilder(AclRetriever::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
 
         $this->aclResourceProviderMock = $this->getMockBuilder(
             ProviderInterface::class
         )->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
 
         $this->integrationDataMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
 
         $this->coreRegistryMock = $this->getMockBuilder(Registry::class)
@@ -80,6 +78,17 @@ class EditTest extends TestCase
             ->getMock();
 
         $this->objectManagerHelper = new ObjectManager($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $this->objectManagerHelper->prepareObjectManager($objects);
         $this->model = $this->objectManagerHelper->getObject(
             Edit::class,
             [
@@ -142,7 +151,7 @@ class EditTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderBoolValues()
+    public static function dataProviderBoolValues()
     {
         return [[true], [false]];
     }

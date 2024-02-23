@@ -181,7 +181,6 @@ class TypeTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->serializer = $this->getMockBuilder(Json::class)
-            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
         $this->metadataPool = $this->getMockBuilder(MetadataPool::class)

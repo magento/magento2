@@ -82,7 +82,6 @@ class ShipmentLoaderTest extends TestCase
             ->getMock();
         $this->registryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
         $this->trackFactoryMock = $this->getMockBuilder(ShipmentTrackCreationInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -90,11 +89,9 @@ class ShipmentLoaderTest extends TestCase
             ->getMock();
         $this->messageManagerMock = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
         $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
         $this->itemFactoryMock = $this->getMockBuilder(ShipmentItemCreationInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -102,7 +99,6 @@ class ShipmentLoaderTest extends TestCase
             ->getMock();
         $this->documentFactoryMock = $this->getMockBuilder(ShipmentDocumentFactory::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
 
         $data = [
@@ -134,7 +130,6 @@ class ShipmentLoaderTest extends TestCase
     {
         $shipmentModelMock = $this->getMockBuilder(Shipment::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
         $this->shipmentRepositoryMock->expects($this->once())
             ->method('get')
@@ -167,7 +162,6 @@ class ShipmentLoaderTest extends TestCase
             ->willReturn(true);
         $shipmentModelMock = $this->getMockBuilder(Shipment::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
         $trackMock = $this->getMockBuilder(ShipmentTrackCreationInterface::class)
             ->disableOriginalConstructor()

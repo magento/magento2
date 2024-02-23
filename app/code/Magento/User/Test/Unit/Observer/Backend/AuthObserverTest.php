@@ -71,7 +71,6 @@ class AuthObserverTest extends TestCase
     {
         $this->configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->userMock = $this->getMockBuilder(\Magento\User\Model\ResourceModel\User::class)
@@ -81,7 +80,6 @@ class AuthObserverTest extends TestCase
 
         $this->urlInterfaceMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->authSessionMock = $this->getMockBuilder(Session::class)
@@ -106,22 +104,18 @@ class AuthObserverTest extends TestCase
 
         $this->encryptorMock = $this->getMockBuilder(EncryptorInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->managerInterfaceMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
 
         $this->messageInterfaceMock = $this->getMockBuilder(MessageInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $helper = new ObjectManager($this);

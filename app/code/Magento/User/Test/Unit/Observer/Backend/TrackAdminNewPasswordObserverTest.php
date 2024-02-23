@@ -48,12 +48,10 @@ class TrackAdminNewPasswordObserverTest extends TestCase
     {
         $this->configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->userMock = $this->getMockBuilder(User::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
 
         $this->authSessionMock = $this->getMockBuilder(Session::class)
@@ -74,7 +72,6 @@ class TrackAdminNewPasswordObserverTest extends TestCase
 
         $this->managerInterfaceMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $helper = new ObjectManager($this);
@@ -131,7 +128,6 @@ class TrackAdminNewPasswordObserverTest extends TestCase
         /** @var Collection|MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
         $this->managerInterfaceMock
             ->expects($this->once())

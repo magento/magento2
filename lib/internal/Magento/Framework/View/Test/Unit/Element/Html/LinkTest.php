@@ -80,8 +80,7 @@ class LinkTest extends TestCase
             ->method('isSetFlag')
             ->willReturn(true);
 
-        $resolverMock = $this->getMockBuilder(Resolver::class)
-            ->onlyMethods([])->disableOriginalConstructor()
+        $resolverMock = $this->getMockBuilder(Resolver::class)->disableOriginalConstructor()
             ->getMock();
 
         $contextMock = $this->getMockBuilder(Context::class)

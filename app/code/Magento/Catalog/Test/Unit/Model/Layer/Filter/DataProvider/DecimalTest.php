@@ -33,7 +33,6 @@ class DecimalTest extends TestCase
     {
         $this->filter = $this->getMockBuilder(FilterInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
         $this->resource = $this->getMockBuilder(Decimal::class)
             ->disableOriginalConstructor()

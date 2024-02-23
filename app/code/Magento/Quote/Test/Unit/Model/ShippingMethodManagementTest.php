@@ -193,7 +193,7 @@ class ShippingMethodManagementTest extends TestCase
         $this->objectManager->setBackwardCompatibleProperty($this->model, 'dataProcessor', $this->dataProcessor);
 
         $this->extensionAttributesMock = $this->getMockBuilder(CartExtensionInterface::class)
-            ->addMethods(['getShippingAssignments'])
+            ->onlyMethods(['getShippingAssignments'])
             ->getMockForAbstractClass();
 
         $this->shippingMock = $this->getMockForAbstractClass(ShippingInterface::class);
@@ -593,7 +593,6 @@ class ShippingMethodManagementTest extends TestCase
 
         $rate = $this->getMockBuilder(Rate::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
         $methodObject = $this->getMockForAbstractClass(ShippingMethodInterface::class);
         $expectedRates = [$methodObject];
@@ -637,7 +636,6 @@ class ShippingMethodManagementTest extends TestCase
 
         $rate = $this->getMockBuilder(Rate::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
         $methodObject = $this->getMockForAbstractClass(ShippingMethodInterface::class);
 
@@ -700,7 +698,7 @@ class ShippingMethodManagementTest extends TestCase
     /**
      * @return array
      */
-    public function getAddressDataProvider()
+    public static function getAddressDataProvider()
     {
         return [
             [1, 1, 5, true],

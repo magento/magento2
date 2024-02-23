@@ -63,7 +63,6 @@ class SuggestTest extends TestCase
             ->getMockForAbstractClass();
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
         $this->url = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()

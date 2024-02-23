@@ -59,11 +59,9 @@ class CompiledTest extends TestCase
         ];
         $this->objectManager->prepareObjectManager($objects);
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->config = $this->getMockBuilder(ConfigInterface::class)
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->sharedInstances = [];

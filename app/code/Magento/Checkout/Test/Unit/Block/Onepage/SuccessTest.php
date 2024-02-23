@@ -62,7 +62,6 @@ class SuccessTest extends TestCase
 
         $this->layout = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->checkoutSession = $this->getMockBuilder(Session::class)
@@ -71,17 +70,14 @@ class SuccessTest extends TestCase
 
         $eventManager = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $urlBuilder = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
         $scopeConfig->expects($this->any())
             ->method('getValue')
@@ -170,7 +166,7 @@ class SuccessTest extends TestCase
     /**
      * @return array
      */
-    public function invisibleStatusesProvider()
+    public static function invisibleStatusesProvider()
     {
         return [
             [[Order::STATE_PENDING_PAYMENT, 'status2'],  false],

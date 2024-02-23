@@ -71,7 +71,6 @@ class DataTest extends TestCase
         $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->onlyMethods(['getUrl'])
@@ -144,7 +143,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function queryTextDataProvider()
+    public static function queryTextDataProvider()
     {
         return [
             ['', 100, ''],
@@ -178,7 +177,7 @@ class DataTest extends TestCase
      *
      * @return array
      */
-    public function getSuggestUrlDataProvider()
+    public static function getSuggestUrlDataProvider()
     {
         return [
             'non-secure' => [

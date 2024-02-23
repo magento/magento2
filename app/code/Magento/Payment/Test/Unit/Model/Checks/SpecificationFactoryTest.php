@@ -35,14 +35,12 @@ class SpecificationFactoryTest extends TestCase
     {
         $specification = $this->getMockBuilder(
             SpecificationInterface::class
-        )->disableOriginalConstructor()
-            ->onlyMethods([])->getMock();
+        )->disableOriginalConstructor()->getMock();
         $specificationMapping = [self::SPECIFICATION_KEY => $specification];
 
         $expectedComposite = $this->getMockBuilder(
             Composite::class
-        )->disableOriginalConstructor()
-            ->onlyMethods([])->getMock();
+        )->disableOriginalConstructor()->getMock();
         $modelFactory = new SpecificationFactory($this->_compositeFactory, $specificationMapping);
         $this->_compositeFactory->expects($this->once())->method('create')->with(
             ['list' => $specificationMapping]

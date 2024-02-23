@@ -122,7 +122,6 @@ class EditTest extends TestCase
             ->with(Product::class)
             ->willReturn($product);
         $messageManager = $this->getMockBuilder(ManagerInterface::class)
-            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $messageManager->expects($this->any())->method('addErrorMessage')->willReturn(true);

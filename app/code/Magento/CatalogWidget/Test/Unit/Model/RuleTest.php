@@ -50,7 +50,6 @@ class RuleTest extends TestCase
     public function testGetConditionsInstance()
     {
         $condition = $this->getMockBuilder(Combine::class)
-            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
         $this->combineFactory->expects($this->once())->method('create')->willReturn($condition);

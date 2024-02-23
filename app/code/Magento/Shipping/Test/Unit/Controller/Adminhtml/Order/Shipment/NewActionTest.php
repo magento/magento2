@@ -126,7 +126,6 @@ class NewActionTest extends TestCase
             ->getMock();
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
         $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->context = $this->createPartialMock(Context::class, [

@@ -73,7 +73,6 @@ class AttributeOptionProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->select = $this->getMockBuilder(Select::class)
-            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -195,7 +194,7 @@ class AttributeOptionProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getAttributeOptionsDataProvider()
+    public static function getAttributeOptionsDataProvider()
     {
         return [
             [
@@ -229,7 +228,7 @@ class AttributeOptionProviderTest extends TestCase
     /**
      * @return array
      */
-    public function optionsWithBackendModelDataProvider()
+    public static function optionsWithBackendModelDataProvider()
     {
         return [
             [

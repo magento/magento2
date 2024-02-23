@@ -35,8 +35,7 @@ class CanUseForCurrencyTest extends TestCase
     {
         $paymentMethod = $this->getMockBuilder(
             MethodInterface::class
-        )->disableOriginalConstructor()
-            ->onlyMethods([])->getMock();
+        )->disableOriginalConstructor()->getMock();
         $paymentMethod->expects($this->once())->method('canUseForCurrency')->with(
             self::EXPECTED_CURRENCY_CODE
         )->willReturn($expectation);
@@ -58,7 +57,7 @@ class CanUseForCurrencyTest extends TestCase
     /**
      * @return array
      */
-    public function paymentMethodDataProvider()
+    public static function paymentMethodDataProvider()
     {
         return [[true], [false]];
     }

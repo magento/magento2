@@ -151,7 +151,7 @@ class HelperTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $productExtensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->addMethods(['getCategoryLinks', 'setCategoryLinks'])
+            ->onlyMethods(['getCategoryLinks', 'setCategoryLinks'])
             ->getMockForAbstractClass();
         $this->productMock->setExtensionAttributes($productExtensionAttributes);
 
@@ -289,7 +289,6 @@ class HelperTest extends TestCase
 
         $customOptionMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
         $firstExpectedCustomOption = clone $customOptionMock;
         $firstExpectedCustomOption->setData($optionsData['option2']);
@@ -325,7 +324,6 @@ class HelperTest extends TestCase
             ->willReturnCallback(
                 function () {
                     return $this->getMockBuilder(ProductLink::class)
-                        ->onlyMethods([])
                         ->disableOriginalConstructor()
                         ->getMock();
                 }

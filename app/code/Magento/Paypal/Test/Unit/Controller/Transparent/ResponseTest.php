@@ -115,7 +115,6 @@ class ResponseTest extends TestCase
             ->getMock();
         $this->payflowFacade = $this->getMockBuilder(Transparent::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
         $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
             ->disableOriginalConstructor()

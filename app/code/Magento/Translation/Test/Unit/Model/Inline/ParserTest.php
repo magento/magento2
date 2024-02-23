@@ -85,6 +85,14 @@ class ParserTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                \Magento\Framework\Translate\InlineInterface::class,
+                $this->createMock(\Magento\Framework\Translate\InlineInterface::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
+
         $this->translateInlineMock =
             $this->getMockForAbstractClass(InlineInterface::class);
         $this->appCacheMock = $this->getMockForAbstractClass(TypeListInterface::class);
@@ -100,7 +108,6 @@ class ParserTest extends TestCase
             ->getMock();
         $this->resourceMock = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
 
         $this->inputFilterMock = $this->getMockForAbstractClass(FilterInterface::class);
@@ -109,12 +116,10 @@ class ParserTest extends TestCase
             ->willReturn($this->resourceMock);
         $this->cacheManagerMock = $this->getMockBuilder(CacheManager::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
 
         $this->appStateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
 
         $this->model = $this->objectManager->getObject(

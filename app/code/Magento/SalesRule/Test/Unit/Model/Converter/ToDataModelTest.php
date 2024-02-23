@@ -81,7 +81,6 @@ class ToDataModelTest extends TestCase
     {
         $this->ruleFactory = $this->getMockBuilder(RuleFactory::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
 
         $this->ruleDataFactory = $this->getMockBuilder(RuleInterfaceFactory::class)
@@ -97,7 +96,6 @@ class ToDataModelTest extends TestCase
 
         $this->dataObjectProcessor = $this->getMockBuilder(DataObjectProcessor::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
 
         $this->ruleLabelFactory = $this->getMockBuilder(RuleLabelInterfaceFactory::class)

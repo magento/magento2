@@ -86,7 +86,6 @@ class UserTest extends TestCase
 
         $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
 
         $this->selectMock = $this->getMockBuilder(Select::class)
@@ -96,12 +95,10 @@ class UserTest extends TestCase
 
         $this->dbAdapterMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->aclDataCacheMock = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $helper = new ObjectManager($this);

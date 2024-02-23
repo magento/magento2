@@ -58,7 +58,6 @@ class CurrencyConverterApiTest extends TestCase
             ->getMock();
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $objectManagerHelper = new ObjectManagerHelper($this);

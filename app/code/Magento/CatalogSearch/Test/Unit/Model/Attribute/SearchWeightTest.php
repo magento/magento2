@@ -58,7 +58,6 @@ class SearchWeightTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->attributeResourceModel = $this->getMockBuilder(Attribute::class)
-            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
         $this->closure = function (AbstractModel $model) {

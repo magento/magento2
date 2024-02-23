@@ -52,16 +52,13 @@ class StoreTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->websiteMock = $this->getMockBuilder(Website::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
         $this->groupMock = $this->getMockBuilder(Group::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
 
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
 
         $this->storeManagerMock = $this->getMockForAbstractClass(

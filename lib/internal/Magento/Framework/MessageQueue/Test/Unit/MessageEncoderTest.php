@@ -103,7 +103,6 @@ class MessageEncoderTest extends TestCase
         );
         $object = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
         $this->dataObjectEncoderMock
             ->expects($this->once())

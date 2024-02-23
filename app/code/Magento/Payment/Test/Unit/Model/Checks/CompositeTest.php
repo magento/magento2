@@ -28,13 +28,11 @@ class CompositeTest extends TestCase
             )->getMock();
         $paymentMethod = $this->getMockBuilder(
             MethodInterface::class
-        )->disableOriginalConstructor()
-            ->onlyMethods([])->getMock();
+        )->disableOriginalConstructor()->getMock();
 
         $specification = $this->getMockBuilder(
             SpecificationInterface::class
-        )->disableOriginalConstructor()
-            ->onlyMethods([])->getMock();
+        )->disableOriginalConstructor()->getMock();
         $specification->expects($this->once())->method('isApplicable')->with($paymentMethod, $quote)->willReturn(
             $expectation
         );
@@ -45,7 +43,7 @@ class CompositeTest extends TestCase
     /**
      * @return array
      */
-    public function paymentMethodDataProvider()
+    public static function paymentMethodDataProvider()
     {
         return [[true], [false]];
     }

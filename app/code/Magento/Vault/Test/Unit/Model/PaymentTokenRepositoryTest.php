@@ -149,7 +149,6 @@ class PaymentTokenRepositoryTest extends TestCase
                 'collectionFactory' => $this->collectionFactoryMock,
                 'collectionProcessor' => $this->collectionProcessor
             ])
-            ->onlyMethods([])
             ->getMock();
     }
 

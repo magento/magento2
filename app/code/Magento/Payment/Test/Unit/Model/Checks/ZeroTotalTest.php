@@ -24,7 +24,6 @@ class ZeroTotalTest extends TestCase
     {
         $paymentMethod = $this->getMockBuilder(MethodInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         if (!$total) {
@@ -50,7 +49,7 @@ class ZeroTotalTest extends TestCase
     /**
      * @return array
      */
-    public function paymentMethodDataProvider()
+    public static function paymentMethodDataProvider()
     {
         return [['not_free', 0, false], ['free', 1, true]];
     }

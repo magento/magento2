@@ -120,8 +120,7 @@ class PayflowExpressTest extends TestCase
     {
         $paymentInfo = $this->getMockBuilder(
             Payment::class
-        )->disableOriginalConstructor()
-            ->onlyMethods([])->getMock();
+        )->disableOriginalConstructor()->getMock();
         $this->_model->setData('info_instance', $paymentInfo);
         return $paymentInfo;
     }
@@ -135,8 +134,7 @@ class PayflowExpressTest extends TestCase
     {
         return $this->getMockBuilder(
             Transaction::class
-        )->disableOriginalConstructor()
-            ->onlyMethods([])->getMock();
+        )->disableOriginalConstructor()->getMock();
     }
 
     public function testCanFetchTransactionInfo()

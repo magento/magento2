@@ -37,8 +37,7 @@ class CanUseInternalTest extends TestCase
             )->getMock();
         $paymentMethod = $this->getMockBuilder(
             MethodInterface::class
-        )->disableOriginalConstructor()
-            ->onlyMethods([])->getMock();
+        )->disableOriginalConstructor()->getMock();
         $paymentMethod->expects($this->once())->method('canUseInternal')->willReturn(
             $expectation
         );
@@ -48,7 +47,7 @@ class CanUseInternalTest extends TestCase
     /**
      * @return array
      */
-    public function paymentMethodDataProvider()
+    public static function paymentMethodDataProvider()
     {
         return [[true], [false]];
     }

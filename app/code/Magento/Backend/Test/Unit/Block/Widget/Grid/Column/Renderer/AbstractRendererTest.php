@@ -44,7 +44,6 @@ class AbstractRendererTest extends TestCase
         $this->renderer =
             $this->getMockBuilder(AbstractRenderer::class)
                 ->disableOriginalConstructor()
-                ->onlyMethods([])
                 ->getMock();
     }
 

@@ -110,11 +110,9 @@ class EditBillingTest extends TestCase
         $this->objectManagerMock->expects($this->any())->method('get')->willReturnMap($valueMap);
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
         $response = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
         $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->atLeastOnce())

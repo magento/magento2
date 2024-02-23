@@ -131,7 +131,6 @@ class FulltextFilterTest extends TestCase
         $this->expectException('InvalidArgumentException');
         /** @var MviewCollection $mviewCollection */
         $mviewCollection = $this->getMockBuilder(MviewCollection::class)
-            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 
