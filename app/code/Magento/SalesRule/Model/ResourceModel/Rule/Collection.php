@@ -343,13 +343,9 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
                 'customer_group_ids.' .
                 $entityInfo['entity_id_field'] .
                 ' = cgw.' .
-                $entityInfo['entity_id_field'] . ' AND ' . $websiteId . ' = cgw.website_id',
+                $entityInfo['entity_id_field'] . ' AND ' . (int) $websiteId . ' = cgw.website_id',
                 []
-            )->where(
-                'cgw.website_id IS NULL',
-                $websiteId,
-                \Zend_Db::INT_TYPE
-            );
+            )->where('cgw.website_id IS NULL');
 
             $this->getDateApplier()->applyDate($this->getSelect(), $now);
 
