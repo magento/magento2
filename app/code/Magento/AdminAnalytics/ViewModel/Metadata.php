@@ -86,7 +86,7 @@ class Metadata implements ArgumentInterface
      */
     public function getCurrentUser() :string
     {
-        return hash('sha256', 'ADMIN_USER' . $this->authSession->getUser()->getEmail());
+        return hash('xxh128', 'ADMIN_USER' . $this->authSession->getUser()->getEmail());
     }
 
     /**

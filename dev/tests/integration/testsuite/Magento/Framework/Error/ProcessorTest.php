@@ -54,7 +54,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             1 => 'exceptionTrace',
             'script_name' => 'processor.php'
         ];
-        $reportData['report_id'] = hash('sha256', implode('', $reportData));
+        $reportData['report_id'] = hash('xxh128', implode('', $reportData));
         $expectedReportData = array_merge($reportData, ['url' => '']);
         $processor = $this->createProcessor();
         $processor->saveReport($reportData);

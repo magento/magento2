@@ -99,7 +99,7 @@ class CryptographerTest extends TestCase
     {
         $token = 'some-token-value';
         $this->source = 'Some text';
-        $this->key = hash('sha256', $token);
+        $this->key = hash('xxh128', $token);
 
         $checkEncodedContext = function ($parameters) {
             $emptyRequiredParameters =

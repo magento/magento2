@@ -87,7 +87,7 @@ class FileRecorder
      */
     private function getFileRelativePath()
     {
-        return $this->fileSubdirectoryPath . hash('sha256', time())
+        return $this->fileSubdirectoryPath . hash('xxh128', time())
             . '/' . $this->encodedFileName;
     }
 

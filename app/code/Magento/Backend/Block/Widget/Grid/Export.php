@@ -317,7 +317,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      */
     public function getCsvFile()
     {
-        $name = hash('sha256', microtime());
+        $name = hash('xxh128', microtime());
         $file = $this->_path . '/' . $name . '.csv';
 
         $this->_directory->create($this->_path);
@@ -447,7 +447,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
 
         $convert = new \Magento\Framework\Convert\Excel($collection->getIterator(), [$this, 'getRowRecord']);
 
-        $name = hash('sha256', microtime());
+        $name = hash('xxh128', microtime());
         $file = $this->_path . '/' . $name . '.xml';
 
         $this->_directory->create($this->_path);

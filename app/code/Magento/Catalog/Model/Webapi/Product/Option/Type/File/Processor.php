@@ -66,7 +66,7 @@ class Processor
         $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $fileAbsolutePath = $mediaDirectory->getAbsolutePath($filePath);
         $fileContent = $mediaDirectory->readFile($filePath);
-        $fileHash = hash('sha256', $fileContent);
+        $fileHash = hash('xxh128', $fileContent);
         $imageSize = getimagesizefromstring($fileContent);
         $stat = $mediaDirectory->stat($fileAbsolutePath);
         $result = [

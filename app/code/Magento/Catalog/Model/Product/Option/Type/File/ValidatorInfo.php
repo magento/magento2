@@ -164,7 +164,7 @@ class ValidatorInfo extends Validator
      */
     protected function buildSecretKey($fileRelativePath)
     {
-        return substr(hash('sha256', $this->rootDirectory->readFile($fileRelativePath)), 0, 20);
+        return substr(hash('xxh128', $this->rootDirectory->readFile($fileRelativePath)), 0, 20);
     }
 
     /**

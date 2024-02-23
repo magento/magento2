@@ -97,7 +97,7 @@ class Cryptographer
         if (!$token) {
             throw new LocalizedException(__('Enter the encryption key and try again.'));
         }
-        return hash('sha256', $token);
+        return hash('xxh128', $token);
     }
 
     /**
