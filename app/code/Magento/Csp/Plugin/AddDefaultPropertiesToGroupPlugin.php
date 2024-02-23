@@ -10,46 +10,33 @@ namespace Magento\Csp\Plugin;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\View\Asset\AssetInterface;
 use Magento\Framework\View\Asset\GroupedCollection;
-use Magento\Framework\View\Asset\LocalInterface;
-use Magento\Csp\Model\SubresourceIntegrityRepository;
-use Magento\Csp\Model\SubresourceIntegrity;
+use Magento\Csp\Model\SubresourceIntegrityRepositoryPool;
 
 /**
- * Plugin to add integrity to assets on page load
+ * Plugin to add integrity to assets on page load.
  */
 class AddDefaultPropertiesToGroupPlugin
 {
-
     /**
      * @var Http
      */
     private Http $request;
 
     /**
-     * @var SubresourceIntegrityRepository
+     * @var SubresourceIntegrityRepositoryPool
      */
-    private SubresourceIntegrityRepository $integrityRepository;
+    private SubresourceIntegrityRepositoryPool $integrityRepositoryPool;
 
     /**
-     * @var array $controllerActions
-     */
-    private array $controllerActions;
-
-    /**
-     * Constructor
-     *
      * @param Http $request
-     * @param SubresourceIntegrityRepository $integrityRepository
-     * @param array $controllerActions
+     * @param SubresourceIntegrityRepositoryPool $integrityRepositoryPool
      */
     public function __construct(
         Http $request,
-        SubresourceIntegrityRepository $integrityRepository,
-        array $controllerActions = []
+        SubresourceIntegrityRepositoryPool $integrityRepositoryPool
     ) {
         $this->request = $request;
-        $this->integrityRepository = $integrityRepository;
-        $this->controllerActions = $controllerActions;
+        $this->integrityRepositoryPool = $integrityRepositoryPool;
     }
 
     /**
@@ -65,31 +52,18 @@ class AddDefaultPropertiesToGroupPlugin
         GroupedCollection $subject,
         AssetInterface $asset,
         array $properties = []
-    ):array {
-        if ($this->canExecute($asset)) {
-            $integrity = $this->integrityRepository->getByUrl($asset->getUrl());
-            if ($integrity && $integrity->getHash()) {
-                $properties['attributes']['integrity'] = $integrity->getHash();
-                $properties['attributes']['crossorigin'] = 'anonymous';
-            }
-        }
-        return [$asset, $properties];
-    }
+    ): array {
+        $integrityRepository = $this->integrityRepositoryPool->get(
+            $this->request->getFullActionName()
+        );
 
-    /**
-     * Check if beforeGetFilteredProperties plugin should execute
-     *
-     * @param AssetInterface $asset
-     * @return bool
-     */
-    private function canExecute(AssetInterface $asset): bool
-    {
-        if ($asset instanceof LocalInterface &&
-            in_array($this->request->getFullActionName(), $this->controllerActions) &&
-            $asset->getContentType() === SubresourceIntegrity::CONTENT_TYPE
-        ) {
-            return true;
+        $integrity = $integrityRepository->getByUrl($asset->getUrl());
+
+        if ($integrity && $integrity->getHash()) {
+            $properties['attributes']['integrity'] = $integrity->getHash();
+            $properties['attributes']['crossorigin'] = 'anonymous';
         }
-        return false;
+
+        return [$asset, $properties];
     }
 }

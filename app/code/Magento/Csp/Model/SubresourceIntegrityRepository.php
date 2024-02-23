@@ -28,6 +28,11 @@ class SubresourceIntegrityRepository
     private ?array $data = null;
 
     /**
+     * @var string|null
+     */
+    private ?string $context;
+
+    /**
      * @var CacheInterface
      */
     private CacheInterface $cache;
@@ -46,15 +51,18 @@ class SubresourceIntegrityRepository
      * @param CacheInterface $cache
      * @param SerializerInterface $serializer
      * @param SubresourceIntegrityFactory $integrityFactory
+     * @param string|null $context
      */
     public function __construct(
         CacheInterface $cache,
         SerializerInterface $serializer,
-        SubresourceIntegrityFactory $integrityFactory
+        SubresourceIntegrityFactory $integrityFactory,
+        ?string $context = null
     ) {
         $this->cache = $cache;
         $this->serializer = $serializer;
         $this->integrityFactory = $integrityFactory;
+        $this->context = $context;
     }
 
     /**
@@ -117,7 +125,7 @@ class SubresourceIntegrityRepository
 
         return $this->cache->save(
             $this->serializer->serialize($this->data),
-            self::CACHE_PREFIX,
+            $this->getCacheKey(),
             [self::CACHE_PREFIX]
         );
     }
@@ -130,11 +138,27 @@ class SubresourceIntegrityRepository
     private function getData(): array
     {
         if ($this->data === null) {
-            $cache = $this->cache->load(self::CACHE_PREFIX);
+            $cache = $this->cache->load($this->getCacheKey());
 
             $this->data = $cache ? $this->serializer->unserialize($cache) : [];
         }
 
         return $this->data;
+    }
+
+    /**
+     * Gets a cache key based on current context.
+     *
+     * @return string
+     */
+    private function getCacheKey(): string
+    {
+        $cacheKey = self::CACHE_PREFIX;
+
+        if ($this->context) {
+            $cacheKey .= "_" . $this->context;
+        }
+
+        return $cacheKey;
     }
 }

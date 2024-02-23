@@ -127,5 +127,17 @@
               <email_required_create_order>1</email_required_create_order>
           </create_account>
         </customer>
+        <csp>
+            <sri>
+                <covered_assets>
+                    <checkout_index_index>
+                        <require_js>.*\/frontend\/Magento\/luma\/[a-z]{2}_[A-Z]{2}\/requirejs\/require.js</require_js>
+                        <mixins_js>.*\/frontend\/Magento\/luma\/[a-z]{2}_[A-Z]{2}\/mage\/requirejs\/mixins.js</mixins_js>
+                        <requirejs_config_js>.*\/frontend\/Magento\/luma\/[a-z]{2}_[A-Z]{2}\/requirejs-config.js</requirejs_config_js>
+                        <sri_js>.*\/frontend\/Magento\/luma\/[a-z]{2}_[A-Z]{2}\/Magento_Csp\/js\/sri.js</sri_js>
+                    </checkout_index_index>
+                </covered_assets>
+            </sri>
+        </csp>
     </default>
 </config>

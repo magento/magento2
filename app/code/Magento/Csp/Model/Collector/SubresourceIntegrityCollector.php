@@ -7,9 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Csp\Model\Collector;
 
+use Magento\Framework\App\Request\Http;
 use Magento\Csp\Model\Policy\FetchPolicy;
 use Magento\Csp\Api\PolicyCollectorInterface;
-use Magento\Csp\Model\SubresourceIntegrityRepository;
+use Magento\Csp\Model\SubresourceIntegrityRepositoryPool;
 
 /**
  * Collects policies auto-defined by Subresource Integrity.
@@ -17,17 +18,25 @@ use Magento\Csp\Model\SubresourceIntegrityRepository;
 class SubresourceIntegrityCollector implements PolicyCollectorInterface
 {
     /**
-     * @var SubresourceIntegrityRepository
+     * @var Http
      */
-    private SubresourceIntegrityRepository $integrityRepository;
+    private Http $request;
 
     /**
-     * @param SubresourceIntegrityRepository $integrityRepository
+     * @var SubresourceIntegrityRepositoryPool
+     */
+    private SubresourceIntegrityRepositoryPool $integrityRepositoryPool;
+
+    /**
+     * @param Http $request
+     * @param SubresourceIntegrityRepositoryPool $integrityRepositoryPool
      */
     public function __construct(
-        SubresourceIntegrityRepository $integrityRepository
+        Http $request,
+        SubresourceIntegrityRepositoryPool $integrityRepositoryPool
     ) {
-        $this->integrityRepository = $integrityRepository;
+        $this->request = $request;
+        $this->integrityRepositoryPool = $integrityRepositoryPool;
     }
 
     /**
@@ -36,9 +45,12 @@ class SubresourceIntegrityCollector implements PolicyCollectorInterface
     public function collect(array $defaultPolicies = []): array
     {
         $integrityHashes = [];
-        $assetIntegrity = $this->integrityRepository->getAll();
 
-        foreach ($assetIntegrity as $integrity) {
+        $integrityRepository = $this->integrityRepositoryPool->get(
+            $this->request->getFullActionName()
+        );
+
+        foreach ($integrityRepository->getAll() as $integrity) {
             $hashParts = explode("-", $integrity->getHash());
 
             if (is_array($hashParts) && count($hashParts) > 1) {

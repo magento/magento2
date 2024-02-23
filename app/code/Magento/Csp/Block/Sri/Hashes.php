@@ -7,14 +7,13 @@ namespace Magento\Csp\Block\Sri;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\Template;
-use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Csp\Model\SubresourceIntegrityRepository;
+use Magento\Csp\Model\SubresourceIntegrityRepositoryPool;
 
 /**
  * Block for Subresource Integrity hashes rendering.
+ *
  * @api
  */
 class Hashes extends Template
@@ -25,26 +24,26 @@ class Hashes extends Template
     private SerializerInterface $serializer;
 
     /**
-     * @var SubresourceIntegrityRepository
+     * @var SubresourceIntegrityRepositoryPool
      */
-    private SubresourceIntegrityRepository $integrityRepository;
+    private SubresourceIntegrityRepositoryPool $integrityRepositoryPool;
 
     /**
      * @param Context $context
      * @param array $data
-     * @param SubresourceIntegrityRepository|null $integrityRepository
+     * @param SubresourceIntegrityRepositoryPool|null $integrityRepositoryPool
      * @param SerializerInterface|null $serializer
      */
     public function __construct(
         Context $context,
         array $data = [],
-        ?SubresourceIntegrityRepository $integrityRepository = null,
+        ?SubresourceIntegrityRepositoryPool $integrityRepositoryPool = null,
         ?SerializerInterface $serializer = null
     ) {
         parent::__construct($context, $data);
 
-        $this->integrityRepository = $integrityRepository ?: ObjectManager::getInstance()
-            ->get(SubresourceIntegrityRepository::class);
+        $this->integrityRepositoryPool = $integrityRepositoryPool ?: ObjectManager::getInstance()
+            ->get(SubresourceIntegrityRepositoryPool::class);
 
         $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(SerializerInterface::class);
@@ -54,16 +53,16 @@ class Hashes extends Template
      * Retrieve serialized integrity hashes.
      *
      * @return string
-     *
-     * @throws FileSystemException
-     * @throws RuntimeException
      */
     public function getSerialized(): string
     {
         $result = [];
-        $assetIntegrity = $this->integrityRepository->getAll();
 
-        foreach ($assetIntegrity as $integrity) {
+        $integrityRepository = $this->integrityRepositoryPool->get(
+            $this->getRequest()->getFullActionName()
+        );
+
+        foreach ($integrityRepository->getAll() as $integrity) {
             $result[$integrity->getUrl()] = $integrity->getHash();
         }
 
