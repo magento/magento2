@@ -235,7 +235,7 @@ class TransparentTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->paymentConfig = $this->getMockBuilder(PaymentConfigInterface::class)
-            ->setMethods(['setStoreId', 'setMethodInstance', 'setMethod', 'getBuildNotationCode'])
+            ->addMethods(['setStoreId', 'setMethodInstance', 'setMethod', 'getBuildNotationCode', 'getPaymentAction'])
             ->getMockForAbstractClass();
 
         $paymentConfigInterfaceFactory->method('create')->willReturn($this->paymentConfig);
@@ -345,6 +345,23 @@ class TransparentTest extends TestCase
     {
         $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
+            ->addMethods(['getIsTransactionApproved'])
+            ->onlyMethods(
+                [
+                    'setTransactionId',
+                    'setIsTransactionClosed',
+                    'getCcExpYear',
+                    'getCcExpMonth',
+                    'getExtensionAttributes',
+                    'getOrder',
+                    'authorize',
+                    'canFetchTransactionInfo',
+                    'getParentTransactionId',
+                    'setParentTransactionId',
+                    'setAdditionalInformation',
+                    'getAdditionalInformation'
+                ]
+            )
             ->getMock();
         $this->order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
@@ -360,7 +377,16 @@ class TransparentTest extends TestCase
         $this->payment->method('getCcExpYear')->willReturn('2019');
         $this->payment->method('getCcExpMonth')->willReturn('05');
         $this->payment->method('getExtensionAttributes')->willReturn($this->paymentExtensionAttributes);
+        $this->payment->method('getIsTransactionApproved')->willReturn(true);
 
         return $this->payment;
+    }
+
+    public function testFetchTransactionInfo()
+    {
+        $this->payment->method('canFetchTransactionInfo')->willReturn(false);
+        $this->paymentConfig->method('getPaymentAction')->willReturn('authorize');
+        $this->payment->expects($this->never())->method('authorize');
+        $this->subject->fetchTransactionInfo($this->payment, '123');
     }
 }
