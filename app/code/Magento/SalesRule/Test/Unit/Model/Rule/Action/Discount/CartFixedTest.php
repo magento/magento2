@@ -185,22 +185,22 @@ class CartFixedTest extends TestCase
             ->willReturn(true);
         $cartExtensionMock = $this->getMockBuilder(CartExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->addMethods(['getShippingAssignments'])
+            ->onlyMethods(['getShippingAssignments'])
             ->getMockForAbstractClass();
         $this->quote->expects($this->any())->method('getCartFixedRules')->will($this->returnValue([]));
         $store = $this->createMock(Store::class);
         $this->priceCurrency
             ->expects($this->atLeastOnce())
             ->method('convert')
-            ->willReturnArgument($ruleDetails['rounded_amount']);
+            ->willReturnArgument((int)$ruleDetails['rounded_amount']);
         $this->priceCurrency
             ->expects($this->atLeastOnce())
             ->method('roundPrice')
-            ->willReturnArgument($ruleDetails['rounded_amount']);
+            ->willReturnArgument((int)$ruleDetails['rounded_amount']);
         $this->deltaPriceRound
             ->expects($this->any())
             ->method('round')
-            ->willReturnArgument($ruleDetails['base_items_price']);
+            ->willReturnArgument((int)$ruleDetails['base_items_price']);
         $this->quote->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $this->quote->method('isVirtual')
             ->willReturn(false);

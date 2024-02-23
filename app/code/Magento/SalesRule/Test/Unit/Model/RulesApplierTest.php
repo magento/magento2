@@ -9,12 +9,15 @@ namespace Magento\SalesRule\Test\Unit\Model;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\ExtensionAttributesInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\Manager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Rule\Model\Action\Collection;
+use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
 use Magento\SalesRule\Model\Quote\ChildrenValidationLocator;
 use Magento\SalesRule\Model\Rule;
 use Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory;
@@ -66,6 +69,14 @@ class RulesApplierTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                RuleDiscountInterfaceFactory::class,
+                $this->createMock(RuleDiscountInterfaceFactory::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->calculatorFactory = $this->createMock(
             CalculatorFactory::class
         );
@@ -211,7 +222,7 @@ class RulesApplierTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderChildren(): array
+    public static function dataProviderChildren(): array
     {
         return [
             ['isChildren' => true, 'isContinue' => false],
