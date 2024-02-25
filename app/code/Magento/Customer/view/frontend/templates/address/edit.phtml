@@ -4,20 +4,30 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Customer\Block\Address\Edit $block */
-/** @var \Magento\Customer\ViewModel\Address $viewModel */
-/** @var \Magento\Framework\Escaper $escaper */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
-/** @var \Magento\Customer\ViewModel\Address\RegionProvider $regionProvider */
+use Magento\Customer\Block\Address\Edit;
+use Magento\Customer\Block\Widget\City;
+use Magento\Customer\Block\Widget\Company;
+use Magento\Customer\Block\Widget\Fax;
+use Magento\Customer\Block\Widget\Telephone;
+use Magento\Customer\ViewModel\Address;
+use Magento\Customer\ViewModel\Address\RegionProvider;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/** @var Edit $block */
+/** @var Address $viewModel */
+/** @var Escaper $escaper */
+/** @var SecureHtmlRenderer $secureRenderer */
+/** @var RegionProvider $regionProvider */
 $viewModel = $block->getViewModel();
 $regionProvider = $block->getRegionProvider();
 ?>
-<?php $_company = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Company::class) ?>
-<?php $_telephone = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Telephone::class) ?>
-<?php $_fax = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Fax::class) ?>
+<?php $_company = $block->getLayout()->createBlock(Company::class) ?>
+<?php $_telephone = $block->getLayout()->createBlock(Telephone::class) ?>
+<?php $_fax = $block->getLayout()->createBlock(Fax::class) ?>
 <?php $_country_id = $block->getAttributeData()->getFrontendLabel('country_id'); ?>
 <?php $_street = $block->getAttributeData()->getFrontendLabel('street'); ?>
-<?php $_city = $block->getAttributeData()->getFrontendLabel('city'); ?>
+<?php $_city = $block->getLayout()->createBlock(City::class); ?>
 <?php $_region = $block->getAttributeData()->getFrontendLabel('region'); ?>
 <?php $_selectRegion = 'Please select a region, state or province.'; ?>
 <?php $_displayAll = $block->getConfig('general/region/display_all'); ?>
@@ -138,19 +148,11 @@ $regionProvider = $block->getRegionProvider();
                         <?= !$_displayAll ? ' disabled="disabled"' : '' ?>/>
             </div>
         </div>
-        <div class="field city required">
-            <label class="label" for="city">
-                <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('city') ?></span>
-            </label>
-            <div class="control">
-                <input type="text"
-                       name="city"
-                       value="<?= $escaper->escapeHtmlAttr($block->getAddress()->getCity()) ?>"
-                       title="<?= $escaper->escapeHtmlAttr(__('City')) ?>"
-                       class="input-text <?= $escaper->escapeHtmlAttr($_cityValidationClass) ?>"
-                       id="city">
-            </div>
-        </div>
+
+        <?php if ($_city->isEnabled()): ?>
+            <?= $_city->setCity($block->getAddress()->getCity())->toHtml() ?>
+        <?php endif ?>
+
         <div class="field zip required">
             <label class="label" for="zip">
                 <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?></span>

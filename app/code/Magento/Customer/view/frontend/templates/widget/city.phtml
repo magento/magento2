@@ -1,0 +1,31 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\Customer\Block\Widget\City;
+use Magento\Framework\Escaper;
+
+/** @var City $block */
+/** @var Escaper $escaper */
+?>
+
+<div class="field city <?= $block->isRequired() ? 'required' : '' ?>">
+    <label for="city" class="label">
+        <span>
+            <?= $escaper->escapeHtml(__('City')) ?>
+        </span>
+    </label>
+    <div class="control">
+        <input type="text"
+               name="city"
+               id="city"
+               value="<?= $escaper->escapeHtmlAttr($block->getCity()) ?>"
+               title="<?= $escaper->escapeHtmlAttr(__('City')) ?>"
+               class="input-text <?= $escaper->escapeHtmlAttr(
+                   $block->getAttributeValidationClass('city')
+               ) ?>"
+        >
+    </div>
+</div>

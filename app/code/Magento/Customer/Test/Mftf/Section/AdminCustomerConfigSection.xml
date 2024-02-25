@@ -17,5 +17,6 @@
         <element name="showTelephoneInherit" type="checkbox" selector="#customer_address_telephone_show_inherit"/>
         <element name="showCompany" type="select" selector="#customer_address_company_show"/>
         <element name="showCompanyInherit" type="select" selector="#customer_address_company_show_inherit"/>
+        <element name="showCity" type="select" selector="#customer_address_city_show"/>
     </section>
 </sections>
