@@ -637,7 +637,12 @@ define([
 
                 if (href.host.match(/youtube\.com/) && href.search) {
 
-                    id = href.search.split('v=')[1];
+                    if(href.search.indexOf("shorts") > -1) {
+                        id = href.search.replace(/shorts\//, 'watch?v=').split('v=')[1];
+                    } else {
+                        id = href.search.split('v=')[1];
+                    }
+                    
 
                     if (id) {
                         ampersandPosition = id.indexOf('&');
@@ -649,7 +654,11 @@ define([
                     }
 
                 } else if (href.host.match(/youtube\.com|youtu\.be|youtube-nocookie.com/)) {
-                    id = href.pathname.replace(/^\/(embed\/|v\/)?/, '').replace(/\/.*/, '');
+                    if(href.pathname.indexOf("shorts") > -1) {
+                        id = href.pathname.replace(/shorts\//, 'watch?v=').split('v=')[1];
+                    } else {
+                        id = href.pathname.replace(/^\/(embed\/|v\/)?/, '').replace(/\/.*/, '');
+                    }
                     type = 'youtube';
 
                     if (href.host.match(/youtube-nocookie.com/)) {
