@@ -48,6 +48,8 @@ class StockStatusProvider implements ResolverInterface
         $stockStatus = $this->stockStatusRepository->get($product->getId());
         $productStockStatus = (int)$stockStatus->getStockStatus();
 
-        return $productStockStatus === StockStatusInterface::STATUS_IN_STOCK ? 'IN_STOCK' : 'OUT_OF_STOCK';
+        return $productStockStatus === StockStatusInterface::STATUS_IN_STOCK && $product->isAvailable() ?
+            'IN_STOCK' :
+            'OUT_OF_STOCK';
     }
 }
