@@ -31,8 +31,16 @@ class State extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $data = parent::prepareDataForUpdate($object);
 
         if (isset($data['status']) && StateInterface::STATUS_VALID === $data['status']) {
+            $condition = $this->getConnection()->quoteInto(
+                'status IN (?)',
+                [
+                    StateInterface::STATUS_WORKING,
+                    StateInterface::STATUS_SUSPENDED,
+                    StateInterface::STATUS_INVALID
+                ]
+            );
             $data['status'] = $this->getConnection()->getCheckSql(
-                $this->getConnection()->quoteInto('status = ?', StateInterface::STATUS_WORKING),
+                $condition,
                 $this->getConnection()->quote($data['status']),
                 'status'
             );

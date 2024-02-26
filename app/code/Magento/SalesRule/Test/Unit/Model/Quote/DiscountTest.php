@@ -103,7 +103,7 @@ class DiscountTest extends TestCase
                 [
                     'canApplyRules',
                     'reset',
-                    'init',
+                    'initFromQuote',
                     'initTotals',
                     'sortItemsByPriority',
                     'setSkipActionsValidation',

@@ -32,6 +32,10 @@ use Magento\Framework\GraphQl\Query\Uid;
  */
 class CartItemsPaginated implements ResolverInterface
 {
+    private const SORT_ORDER_BY = 'item_id';
+
+    private const SORT_ORDER = 'ASC';
+
     /**
      * @param GetPaginatedCartItems $pagination
      * @param Uid $uidEncoder
@@ -52,21 +56,22 @@ class CartItemsPaginated implements ResolverInterface
         }
         /** @var Quote $cart */
         $cart = $value['model'];
-
-        if (isset($args['currentPage']) && $args['currentPage'] < 1) {
-            throw new GraphQlInputException(__('currentPage value must be greater than 0.'));
-        }
-        if (isset($args['pageSize']) && $args['pageSize'] < 1) {
-            throw new GraphQlInputException(__('pageSize value must be greater than 0.'));
-        }
+        $this->validate($args);
 
         $pageSize = $args['pageSize'];
         $currentPage = $args['currentPage'];
         $offset = ($currentPage - 1) * $pageSize;
-        $itemsData = [];
+        $order = CartItemsPaginated::SORT_ORDER;
+        $orderBy = CartItemsPaginated::SORT_ORDER_BY;
 
+        if (!empty($args['sort'])) {
+            $order = $args['sort']['order'];
+            $orderBy = mb_strtolower($args['sort']['field']);
+        }
+
+        $itemsData = [];
         try {
-            $paginatedCartItems = $this->pagination->execute($cart, $pageSize, $offset);
+            $paginatedCartItems = $this->pagination->execute($cart, $pageSize, (int) $offset, $orderBy, $order);
             $cartProductsData = $this->getCartProductsData($paginatedCartItems['products']);
 
             foreach ($paginatedCartItems['items'] as $cartItem) {
@@ -93,11 +98,27 @@ class CartItemsPaginated implements ResolverInterface
                 'page_info' => [
                     'page_size' => $pageSize,
                     'current_page' => $currentPage,
-                    'total_pages' => (int)ceil($paginatedCartItems['total'] / $pageSize)
+                    'total_pages' => (int) ceil($paginatedCartItems['total'] / $pageSize)
                 ],
             ];
         } catch (\Exception $e) {
             throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
+        }
+    }
+
+    /**
+     * Validates arguments passed to resolver
+     *
+     * @param array $args
+     * @throws GraphQlInputException
+     */
+    private function validate(array $args)
+    {
+        if (isset($args['currentPage']) && $args['currentPage'] < 1) {
+            throw new GraphQlInputException(__('currentPage value must be greater than 0.'));
+        }
+        if (isset($args['pageSize']) && $args['pageSize'] < 1) {
+            throw new GraphQlInputException(__('pageSize value must be greater than 0.'));
         }
     }
 

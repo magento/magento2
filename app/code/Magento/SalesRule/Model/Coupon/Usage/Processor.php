@@ -7,8 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Model\Coupon\Usage;
 
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\SalesRule\Api\CouponRepositoryInterface;
 use Magento\SalesRule\Model\Coupon;
-use Magento\SalesRule\Model\CouponFactory;
 use Magento\SalesRule\Model\ResourceModel\Coupon\Usage;
 use Magento\SalesRule\Model\Rule\CustomerFactory;
 use Magento\SalesRule\Model\RuleFactory;
@@ -19,41 +20,19 @@ use Magento\SalesRule\Model\RuleFactory;
 class Processor
 {
     /**
-     * @var RuleFactory
-     */
-    private $ruleFactory;
-
-    /**
-     * @var CustomerFactory
-     */
-    private $ruleCustomerFactory;
-
-    /**
-     * @var CouponFactory
-     */
-    private $couponFactory;
-
-    /**
-     * @var Usage
-     */
-    private $couponUsage;
-
-    /**
      * @param RuleFactory $ruleFactory
      * @param CustomerFactory $ruleCustomerFactory
-     * @param CouponFactory $couponFactory
      * @param Usage $couponUsage
+     * @param CouponRepositoryInterface $couponRepository
+     * @param SearchCriteriaBuilder $criteriaBuilder
      */
     public function __construct(
-        RuleFactory $ruleFactory,
-        CustomerFactory $ruleCustomerFactory,
-        CouponFactory $couponFactory,
-        Usage $couponUsage
+        private readonly RuleFactory $ruleFactory,
+        private readonly CustomerFactory $ruleCustomerFactory,
+        private readonly Usage $couponUsage,
+        private readonly CouponRepositoryInterface $couponRepository,
+        private readonly SearchCriteriaBuilder $criteriaBuilder
     ) {
-        $this->ruleFactory = $ruleFactory;
-        $this->ruleCustomerFactory = $ruleCustomerFactory;
-        $this->couponFactory = $couponFactory;
-        $this->couponUsage = $couponUsage;
     }
 
     /**
@@ -79,16 +58,18 @@ class Processor
      */
     public function updateCouponUsages(UpdateInfo $updateInfo): void
     {
-        $coupon = $this->retrieveCoupon($updateInfo);
-        if (!$coupon) {
+        $isIncrement = $updateInfo->isIncrement();
+        $coupons = $this->retrieveCoupons($updateInfo);
+
+        if ($updateInfo->isCouponAlreadyApplied()) {
             return;
         }
 
-        $isIncrement = $updateInfo->isIncrement();
-        if (!$updateInfo->isCouponAlreadyApplied()
-            && ($updateInfo->isIncrement() || $coupon->getTimesUsed() > 0)) {
-            $coupon->setTimesUsed($coupon->getTimesUsed() + ($isIncrement ? 1 : -1));
-            $coupon->save();
+        foreach ($coupons as $coupon) {
+            if ($updateInfo->isIncrement() || $coupon->getTimesUsed() > 0) {
+                $coupon->setTimesUsed($coupon->getTimesUsed() + ($isIncrement ? 1 : -1));
+                $coupon->save();
+            }
         }
     }
 
@@ -129,11 +110,16 @@ class Processor
 
         $isIncrement = $updateInfo->isIncrement();
         foreach ($updateInfo->getAppliedRuleIds() as $ruleId) {
+            $rule = $this->ruleFactory->create();
+            $rule->load($ruleId);
+            if (!$rule->getId()) {
+                continue;
+            }
             $this->updateCustomerRuleUsages($isIncrement, $ruleId, $customerId);
         }
 
-        $coupon = $this->retrieveCoupon($updateInfo);
-        if ($coupon) {
+        $coupons = $this->retrieveCoupons($updateInfo);
+        foreach ($coupons as $coupon) {
             $this->couponUsage->updateCustomerCouponTimesUsed($customerId, $coupon->getId(), $isIncrement);
         }
     }
@@ -167,17 +153,25 @@ class Processor
      * Retrieve coupon from update info
      *
      * @param UpdateInfo $updateInfo
-     * @return Coupon|null
+     * @return Coupon[]
      */
-    private function retrieveCoupon(UpdateInfo $updateInfo): ?Coupon
+    private function retrieveCoupons(UpdateInfo $updateInfo): array
     {
-        if (!$updateInfo->getCouponCode()) {
-            return null;
+        if (!$updateInfo->getCouponCode() && empty($updateInfo->getCouponCodes())) {
+            return [];
         }
 
-        $coupon = $this->couponFactory->create();
-        $coupon->loadByCode($updateInfo->getCouponCode());
+        $coupons = $updateInfo->getCouponCodes();
+        if ($updateInfo->getCouponCode() && !in_array($updateInfo->getCouponCode(), $coupons)) {
+            array_unshift($coupons, $updateInfo->getCouponCode());
+        }
 
-        return $coupon->getId() ? $coupon : null;
+        return $this->couponRepository->getList(
+            $this->criteriaBuilder->addFilter(
+                'code',
+                $coupons,
+                'in'
+            )->create()
+        )->getItems();
     }
 }
