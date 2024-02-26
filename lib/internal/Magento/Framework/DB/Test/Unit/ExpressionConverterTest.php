@@ -12,6 +12,10 @@ use PHPUnit\Framework\TestCase;
 
 class ExpressionConverterTest extends TestCase
 {
+    /** Length of 64 characters, to go over max MySql identifier length */
+    private const STUB_LENGTH64 = '________________________________________________________________';
+    private const STUB_LENGTH40 = '________________________________________';
+
     /**
      * @dataProvider shortenEntityNameDataProvider
      */
@@ -26,38 +30,43 @@ class ExpressionConverterTest extends TestCase
      */
     public function shortenEntityNameDataProvider()
     {
-        $length64 = '________________________________________________________________';
-        $length40 = '________________________________________';
         return [
             'Short identifier' => [
                 'already_short',
                 'pre_',
-                'already_short'
+                'pre_already_short'
             ],
-            'Hashed identifer' => [
-                $length64 . '_cannotBeAbbreviated',
+            'Hashed identifier' => [
+                self::STUB_LENGTH64 . '_cannotBeAbbreviated',
                 'pre_',
                 'pre_'
             ],
-            'Hashed identifer with long prefix' => [
-                $length64 . '_cannotBeAbbreviated',
-                'pre_' . $length40,
-                '8d703c761bf8a322a999'
+            'Hashed identifier with long prefix' => [
+                self::STUB_LENGTH64 . '_cannotBeAbbreviated',
+                'pre_' . self::STUB_LENGTH64,
+                'be55448d703c761bf8a322a9993c9ed3'
+            ],
+            'Short hashed identifier with long prefix' => [
+                self::STUB_LENGTH64 . '_cannotBeAbbreviated',
+                'pre_' . self::STUB_LENGTH40,
+                'pre_' . self::STUB_LENGTH40 . 'be55448d'
             ],
             'Abbreviated identifier' => [
-                $length40 . 'downloadable_notification_index',
+                self::STUB_LENGTH40 . 'downloadable_notification_index',
                 'pre_',
-                $length40 . 'dl_ntfc_idx'
+                'pre_' . self::STUB_LENGTH40 . 'dl_ntfc_idx'
             ]
         ];
     }
 
     public function testShortenEntityNameReducedHash()
     {
-        /** Length of 64 characters, to go over max MySql identifier length */
-        $length64 = '________________________________________________________________';
-        $longPrefix = 'pre_____________________________________';
-        $shortenedName = ExpressionConverter::shortenEntityName($length64 . '_cannotBeAbbreviated', $longPrefix);
-        $this->assertStringStartsNotWith('pre', $shortenedName);
+        $longPrefix = substr_replace(self::STUB_LENGTH64, 'pre_', 0, 4);
+
+        $shortenedName = ExpressionConverter::shortenEntityName(
+            self::STUB_LENGTH64 . '_cannotBeAbbreviated',
+            $longPrefix
+        );
+        $this->assertStringStartsNotWith('pre_', $shortenedName);
     }
 }
