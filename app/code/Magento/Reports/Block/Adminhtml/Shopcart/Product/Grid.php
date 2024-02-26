@@ -8,13 +8,12 @@ namespace Magento\Reports\Block\Adminhtml\Shopcart\Product;
 /**
  * Adminhtml products in carts report grid block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 {
     /**
-     * @var \Magento\Reports\Model\ResourceModel\Quote\CollectionFactory
+     * @var \Magento\Reports\Model\ResourceModel\Quote\Item\CollectionFactory
      */
     protected $quoteItemCollectionFactory;
 
@@ -24,10 +23,12 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     protected $queryResolver;
 
     /**
+     * Factory constructor
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Reports\Model\ResourceModel\Quote\Item\CollectionFactory $quoteItemCollectionFactory
      * @param \Magento\Quote\Model\QueryResolver $queryResolver
+     * @param \Magento\Reports\Model\ResourceModel\Quote\Item\CollectionFactory $quoteItemCollectionFactory
      * @param array $data
      */
     public function __construct(
@@ -43,6 +44,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     }
 
     /**
+     * Call Internal constructor
+     *
      * @return void
      */
     protected function _construct()
@@ -52,6 +55,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     }
 
     /**
+     * Prepare collection
+     *
      * @return \Magento\Backend\Block\Widget\Grid
      */
     protected function _prepareCollection()
@@ -64,6 +69,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     }
 
     /**
+     * Prepare columns
+     *
      * @return \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
@@ -141,6 +148,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     }
 
     /**
+     * Get Row Url
+     *
      * @param \Magento\Framework\DataObject $row
      *
      * @return string
