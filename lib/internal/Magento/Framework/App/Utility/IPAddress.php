@@ -23,7 +23,7 @@ class IPAddress
      */
     public function isValidAddress(string $address): bool
     {
-        return filter_var($address, FILTER_VALIDATE_IP);
+        return $address === filter_var($address, FILTER_VALIDATE_IP);
     }
 
     /**
