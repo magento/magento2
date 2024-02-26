@@ -343,8 +343,7 @@ class ReorderTest extends TestCase
             ->willThrowException($exception);
         $this->loggerMock
             ->expects($this->any())
-            ->method('critical')
-            ->willReturn($exception);
+            ->method('critical');
         $this->messageManagerMock
             ->expects($this->once())
             ->method('addErrorMessage')
