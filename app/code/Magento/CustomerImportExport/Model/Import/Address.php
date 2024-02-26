@@ -254,11 +254,6 @@ class Address extends AbstractCustomer
     private $indexerProcessor;
 
     /**
-     * @var Share
-     */
-    private $configShare;
-
-    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -360,7 +355,6 @@ class Address extends AbstractCustomer
         $this->indexerProcessor = $indexerProcessor
             ?: ObjectManager::getInstance()->get(Processor::class);
 
-        $this->configShare = $configShare ?? ObjectManager::getInstance()->get(Share::class);
         $this->_initAttributes();
         $this->_initCountryRegions();
     }
