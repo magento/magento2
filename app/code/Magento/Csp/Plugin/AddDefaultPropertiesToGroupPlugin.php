@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Csp\Plugin;
 
-use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\State;
 use Magento\Framework\View\Asset\AssetInterface;
 use Magento\Framework\View\Asset\GroupedCollection;
 use Magento\Csp\Model\SubresourceIntegrityRepositoryPool;
@@ -18,9 +18,9 @@ use Magento\Csp\Model\SubresourceIntegrityRepositoryPool;
 class AddDefaultPropertiesToGroupPlugin
 {
     /**
-     * @var Http
+     * @var State
      */
-    private Http $request;
+    private State $state;
 
     /**
      * @var SubresourceIntegrityRepositoryPool
@@ -28,14 +28,14 @@ class AddDefaultPropertiesToGroupPlugin
     private SubresourceIntegrityRepositoryPool $integrityRepositoryPool;
 
     /**
-     * @param Http $request
+     * @param State $state
      * @param SubresourceIntegrityRepositoryPool $integrityRepositoryPool
      */
     public function __construct(
-        Http $request,
+        State $state,
         SubresourceIntegrityRepositoryPool $integrityRepositoryPool
     ) {
-        $this->request = $request;
+        $this->state = $state;
         $this->integrityRepositoryPool = $integrityRepositoryPool;
     }
 
@@ -54,7 +54,7 @@ class AddDefaultPropertiesToGroupPlugin
         array $properties = []
     ): array {
         $integrityRepository = $this->integrityRepositoryPool->get(
-            $this->request->getFullActionName()
+            $this->state->getAreaCode()
         );
 
         $integrity = $integrityRepository->getByUrl($asset->getUrl());

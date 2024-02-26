@@ -12,7 +12,6 @@ use Magento\RequireJs\Model\FileManager;
 use Magento\Framework\App\View\Asset\Publisher;
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\AssetInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Csp\Model\SubresourceIntegrityFactory;
 use Magento\Csp\Model\SubresourceIntegrity\HashGenerator;
 use Magento\Csp\Model\SubresourceIntegrityRepositoryPool;
@@ -30,11 +29,6 @@ class GenerateAssetIntegrity
     private const CONTENT_TYPES = ["js"];
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private ScopeConfigInterface $config;
-
-    /**
      * @var HashGenerator
      */
     private HashGenerator $hashGenerator;
@@ -50,18 +44,15 @@ class GenerateAssetIntegrity
     private SubresourceIntegrityRepositoryPool $integrityRepositoryPool;
 
     /**
-     * @param ScopeConfigInterface $config
      * @param HashGenerator $hashGenerator
      * @param SubresourceIntegrityFactory $integrityFactory
      * @param SubresourceIntegrityRepositoryPool $integrityRepositoryPool
      */
     public function __construct(
-        ScopeConfigInterface $config,
         HashGenerator $hashGenerator,
         SubresourceIntegrityFactory $integrityFactory,
         SubresourceIntegrityRepositoryPool $integrityRepositoryPool
     ) {
-        $this->config = $config;
         $this->hashGenerator = $hashGenerator;
         $this->integrityFactory = $integrityFactory;
         $this->integrityRepositoryPool = $integrityRepositoryPool;
@@ -124,28 +115,23 @@ class GenerateAssetIntegrity
      */
     private function generateIntegrity(LocalInterface $asset): void
     {
-        $assetsCoveredBySri = $this->config->getValue(
-            "csp/sri/covered_assets"
+        $integrity = $this->integrityFactory->create(
+            [
+                "data" => [
+                    'hash' => $this->hashGenerator->generate(
+                        $asset->getContent()
+                    ),
+                    'url' => $asset->getUrl()
+                ]
+            ]
         );
 
-        foreach ($assetsCoveredBySri ?: [] as $action => $patterns) {
-            foreach ($patterns as $pattern) {
-                if (preg_match("/" . $pattern . "/", $asset->getUrl())) {
-                    $integrity = $this->integrityFactory->create(
-                        [
-                            "data" => [
-                                'hash' => $this->hashGenerator->generate(
-                                    $asset->getContent()
-                                ),
-                                'url' => $asset->getUrl()
-                            ]
-                        ]
-                    );
+        $area = explode(
+            "/",
+            parse_url($asset->getUrl(), PHP_URL_PATH)
+        )[3];
 
-                    $this->integrityRepositoryPool->get($action)
-                        ->save($integrity);
-                }
-            }
-        }
+        $this->integrityRepositoryPool->get($area)
+            ->save($integrity);
     }
 }

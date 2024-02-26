@@ -7,6 +7,7 @@ namespace Magento\Csp\Block\Sri;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Csp\Model\SubresourceIntegrityRepositoryPool;
@@ -50,7 +51,9 @@ class Hashes extends Template
     }
 
     /**
-     * Retrieve serialized integrity hashes.
+     * Retrieves integrity hashes in serialized format.
+     *
+     * @throws LocalizedException
      *
      * @return string
      */
@@ -59,7 +62,7 @@ class Hashes extends Template
         $result = [];
 
         $integrityRepository = $this->integrityRepositoryPool->get(
-            $this->getRequest()->getFullActionName()
+            $this->_appState->getAreaCode()
         );
 
         foreach ($integrityRepository->getAll() as $integrity) {
