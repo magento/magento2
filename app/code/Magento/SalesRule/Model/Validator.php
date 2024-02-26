@@ -8,24 +8,29 @@ namespace Magento\SalesRule\Model;
 
 use Laminas\Validator\ValidatorInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\SalesRule\Helper\CartFixedDiscount;
 use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection as RulesCollection;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * SalesRule Validator Model
  *
  * Allows dispatching before and after events for each controller action
  *
- * @method mixed getCouponCode()
+ * @method string getCouponCode()
  * @method Validator setCouponCode($code)
- * @method mixed getWebsiteId()
+ * @method string[] getCouponCodes()
+ * @method Validator setCouponCodes($codes)
+ * @method int getWebsiteId()
  * @method Validator setWebsiteId($id)
- * @method mixed getCustomerGroupId()
+ * @method int getCustomerGroupId()
  * @method Validator setCustomerGroupId($id)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -110,6 +115,16 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
     private $cartFixedDiscountHelper;
 
     /**
+     * @var ValidateCouponCode
+     */
+    private $validateCouponCode;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param CollectionFactory $collectionFactory
@@ -119,10 +134,12 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param Validator\Pool $validators
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param CartFixedDiscount|null $cartFixedDiscount
+     * @param StoreManagerInterface|null $storeManager
+     * @param ValidateCouponCode|null $validateCouponCode
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -138,7 +155,9 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        ?CartFixedDiscount $cartFixedDiscount = null
+        ?CartFixedDiscount $cartFixedDiscount = null,
+        StoreManagerInterface $storeManager = null,
+        ValidateCouponCode $validateCouponCode = null
     ) {
         $this->_collectionFactory = $collectionFactory;
         $this->_catalogData = $catalogData;
@@ -149,6 +168,10 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
         $this->messageManager = $messageManager;
         $this->cartFixedDiscountHelper = $cartFixedDiscount ?:
             ObjectManager::getInstance()->get(CartFixedDiscount::class);
+        $this->storeManager = $storeManager ?:
+            ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->validateCouponCode = $validateCouponCode ?:
+            ObjectManager::getInstance()->get(ValidateCouponCode::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -173,10 +196,45 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
      * @param int $customerGroupId
      * @param string $couponCode
      * @return $this
+     * @deprecated
+     * @see self::initFromQuote()
      */
     public function init($websiteId, $customerGroupId, $couponCode)
     {
-        $this->setWebsiteId($websiteId)->setCustomerGroupId($customerGroupId)->setCouponCode($couponCode);
+        $this->setWebsiteId($websiteId)
+            ->setCustomerGroupId($customerGroupId)
+            ->setCouponCode($couponCode);
+
+        return $this;
+    }
+
+    /**
+     * Init validator
+     * Init process load collection of rules for specific website,
+     * customer group and coupon code
+     *
+     * @param CartInterface $quote
+     * @return $this
+     * @throws NoSuchEntityException
+     */
+    public function initFromQuote(CartInterface $quote)
+    {
+        $validCoupons = $this->validateCouponCode->execute(
+            $quote->getCouponCode() ? [$quote->getCouponCode()] : [],
+            $quote->getCustomerIsGuest() ? null : (int) $quote->getCustomer()->getId()
+        );
+
+        if (empty($validCoupons)) {
+            $quote->setCouponCode('');
+        }
+
+        $this->init(
+            $this->storeManager->getStore($quote->getStoreId())->getWebsiteId(),
+            $quote->getCustomerGroupId(),
+            $quote->getCouponCode()
+        );
+
+        $this->setCouponCodes($validCoupons);
 
         return $this;
     }
@@ -205,10 +263,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
     public function getRules(Address $address = null)
     {
         $addressId = $this->getAddressId($address);
-        $key = $this->getWebsiteId() . '_'
-            . $this->getCustomerGroupId() . '_'
-            . $this->getCouponCode() . '_'
-            . $addressId;
+        $key = $this->getCacheKey($addressId);
         if (!isset($this->_rules[$key])) {
             $this->_rules[$key] = $this->_collectionFactory->create()
                 ->setValidationFilter(
@@ -216,12 +271,38 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
                     $this->getCustomerGroupId(),
                     $this->getCouponCode(),
                     null,
-                    $address
+                    $address,
+                    $this->getCouponCodes() ?? []
                 )
                 ->addFieldToFilter('is_active', 1)
                 ->load();
         }
         return $this->_rules[$key];
+    }
+
+    /**
+     * Retrieve cache key
+     *
+     * @param int $addressId
+     * @return string
+     */
+    private function getCacheKey($addressId): string
+    {
+        $couponKey = $this->getCouponCode();
+        if (!empty($this->getCouponCodes())) {
+            $codes = array_values($this->getCouponCodes());
+            sort($codes);
+            $couponKey = implode('_', $codes);
+        }
+        return implode(
+            '_',
+            [
+                $this->getWebsiteId(),
+                $this->getCustomerGroupId(),
+                $couponKey,
+                $addressId
+            ]
+        );
     }
 
     /**
@@ -317,8 +398,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
         $appliedRuleIds = $this->rulesApplier->applyRules(
             $item,
             [$rule],
-            $this->_skipActionsValidation,
-            $this->getCouponCode()
+            $this->_skipActionsValidation
         );
         $this->rulesApplier->setAppliedRuleIds($item, $appliedRuleIds);
 
@@ -426,7 +506,12 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
                     'amount' => $discountAmount,
                     'base_amount' => $baseDiscountAmount
                 ];
-                $this->rulesApplier->addShippingDiscountDescription($address, $rule, $data);
+                $this->rulesApplier->addShippingDiscountDescription(
+                    $address,
+                    $rule,
+                    $data,
+                    !empty($this->getCouponCodes()) ? $this->getCouponCodes() : [$this->getCouponCode()]
+                );
             }
             $discountAmount = min($address->getShippingDiscountAmount() + $discountAmount, $shippingAmount);
             $baseDiscountAmount = min(
@@ -437,8 +522,11 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
             $address->setBaseShippingDiscountAmount($this->priceCurrency->roundPrice($baseDiscountAmount));
             $appliedRuleIds[$rule->getRuleId()] = $rule->getRuleId();
 
-            $this->rulesApplier->maintainAddressCouponCode($address, $rule, $this->getCouponCode());
-            $this->rulesApplier->addDiscountDescription($address, $rule);
+            $this->rulesApplier->addDiscountDescription(
+                $address,
+                $rule,
+                !empty($this->getCouponCodes()) ? $this->getCouponCodes() : [$this->getCouponCode()]
+            );
             if ($rule->getStopRulesProcessing()) {
                 break;
             }
