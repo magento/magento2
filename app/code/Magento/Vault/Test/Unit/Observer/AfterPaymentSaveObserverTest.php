@@ -98,7 +98,8 @@ class AfterPaymentSaveObserverTest extends TestCase
         $this->encryptorModel = new Encryptor($encryptorRandomGenerator, $deploymentConfigMock);
 
         $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
-            ->addMethods(['setVaultPaymentToken', 'getVaultPaymentToken', '__wakeup'])
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['setVaultPaymentToken', 'getVaultPaymentToken'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -108,7 +109,6 @@ class AfterPaymentSaveObserverTest extends TestCase
             ->getMock();
 
         $this->paymentTokenMock = $this->getMockBuilder(PaymentToken::class)
-            ->onlyMethods(null)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -214,7 +214,7 @@ class AfterPaymentSaveObserverTest extends TestCase
      *
      * @return array
      */
-    public function positiveCaseDataProvider()
+    public static function positiveCaseDataProvider()
     {
         return [
             [

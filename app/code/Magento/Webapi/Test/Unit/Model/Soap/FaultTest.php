@@ -9,7 +9,9 @@ namespace Magento\Webapi\Test\Unit\Model\Soap;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\Escaper;
 use Magento\Framework\Locale\Resolver;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Webapi\Exception;
 use Magento\Webapi\Model\Soap\Fault;
 use Magento\Webapi\Model\Soap\Server;
@@ -44,6 +46,14 @@ class FaultTest extends TestCase
 
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                Escaper::class,
+                $this->createMock(Escaper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->_requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         /** Initialize SUT. */
         $details = ['param1' => 'value1', 'param2' => 2];

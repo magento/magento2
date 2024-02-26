@@ -19,6 +19,7 @@ use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\Image\Adapter\Gd2;
 use Magento\Framework\Image\AdapterFactory;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\DecoderInterface;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\MediaStorage\Model\File\Uploader;
@@ -88,6 +89,18 @@ class StorageTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                \Magento\Framework\Filesystem\Io\File::class,
+                $this->createMock(\Magento\Framework\Filesystem\Io\File::class)
+            ],
+            [
+                DriverInterface::class,
+                $this->createMock(DriverInterface::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->filesystem = $this->createMock(Filesystem::class);
 
         $file = $this->createPartialMock(File::class, ['getPathInfo']);

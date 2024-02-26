@@ -507,7 +507,6 @@ class StockItemRepositoryTest extends TestCase
                 $mockMethod->with(...$config['with']);
             }
             if (isset($config['willReturnCallback'])) {
-                print_r($config['willReturnCallback']);
                 $mockMethod->willReturnCallback(...$config['willReturnCallback']);
             }
             if (isset($config['willReturnSelf'])) {

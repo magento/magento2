@@ -104,6 +104,13 @@ class CarrierTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                DataHelper::class,
+                $this->createMock(DataHelper::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
 
         $this->scope = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
@@ -123,7 +130,7 @@ class CarrierTest extends TestCase
         $data = ['id' => 'usps', 'store' => '1'];
 
         $this->error = $this->getMockBuilder(Error::class)
-            ->onlyMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
+            ->addMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
             ->getMock();
 
         $this->errorFactory = $this->getMockBuilder(ErrorFactory::class)
@@ -522,7 +529,6 @@ class CarrierTest extends TestCase
             ->getMock();
         $rateResult = $this->getMockBuilder(Result::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(null)
             ->getMock();
         $rateFactory->method('create')
             ->willReturn($rateResult);
