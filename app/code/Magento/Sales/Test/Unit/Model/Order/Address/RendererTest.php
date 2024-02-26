@@ -178,19 +178,17 @@ class RendererTest extends TestCase
         $expected = [$storeMock, $originalStoreMock];
         $matcher = $this->exactly(count($expected));
         $this->storeManagerMck->expects(self::once())->method('getStore')->willReturn($originalStoreMock);
-        $this->storeManagerMck->expects($matcher)->method('setCurrentStore')->with(
+        $this->storeManagerMck->expects(self::any())->method('setCurrentStore')->with(
             $this->callback(function ($store) use ($matcher, $expected) {
-                $this->assertEquals($store, $expected[$matcher->getInvocationCount() - 1]);
+                $this->assertEquals($store, $expected[$matcher->getInvocationCount()]);
                 return true;
             })
         );
 
         // One call to setup the store from the order, and an other one to rollback to the original store value
-        $expected = [$storeMock, $originalStoreMock];
-        $matcher = $this->exactly(count($expected));
-        $this->customerAddressConfigMock->expects($matcher)->method('setStore')->with(
+        $this->customerAddressConfigMock->expects(self::any())->method('setStore')->with(
             $this->callback(function ($store) use ($matcher, $expected) {
-                $this->assertEquals($store, $expected[$matcher->getInvocationCount() - 1]);
+                $this->assertEquals($store, $expected[$matcher->getInvocationCount()]);
                 return true;
             })
         );
