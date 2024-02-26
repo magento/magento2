@@ -81,7 +81,7 @@ class Options implements OptionSourceInterface
         preg_match('/\$[:]*{(.)*}/', $name ?: '', $matches);
         if (count($matches) > 0) {
             $name = $this->escaper->escapeHtml($this->escaper->escapeJs($name));
-        } elseif (preg_match('/^[a-zA-Z\s\']+$/u', $name)) {
+        } elseif (preg_match("/^(?=.*')[a-zA-Z0-9' ]+$/", $name)) {
             return $name;
         } else {
             $name = $this->escaper->escapeHtml($name);
