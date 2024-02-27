@@ -29,4 +29,12 @@ interface SourceInterface
      * @return mixed
      */
     public function getOptionText($value);
+
+    /**
+     * Get option id by label.
+     *
+     * @param string $label
+     * @return null|string
+     */
+    public function getOptionIdByLabel($label);
 }
