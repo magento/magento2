@@ -14,10 +14,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Catalog\Model\Product\Action;
-use Magento\Framework\Stdlib\DateTime\DateTime as CoreDate;
-use Magento\Framework\Stdlib\DateTime;
-use Magento\Store\Model\Store;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 
 /**
  * Class responsibly for persistence of prices.
@@ -76,21 +73,7 @@ class PricePersistence
     private $itemsPerOperation = 500;
 
     /**
-     * Product action property to update the attributes.
-     *
-     * @var Action
-     */
-    private $productAction;
-
-    /**
-     * Core Date to get the gm date.
-     *
-     * @var CoreDate
-     */
-    private $coreDate;
-
-    /**
-     * Date time property to format the date.
+     * Date time property to get the gm date.
      *
      * @var DateTime
      */
@@ -104,8 +87,6 @@ class PricePersistence
      * @param ProductIdLocatorInterface $productIdLocator
      * @param MetadataPool $metadataPool
      * @param string $attributeCode
-     * @param Action|null $productAction
-     * @param CoreDate|null $coreDate
      * @param DateTime|null $dateTime
      */
     public function __construct(
@@ -114,8 +95,6 @@ class PricePersistence
         ProductIdLocatorInterface $productIdLocator,
         MetadataPool $metadataPool,
         $attributeCode = '',
-        ?Action $productAction = null,
-        ?CoreDate $coreDate = null,
         ?DateTime $dateTime = null
     ) {
         $this->attributeResource = $attributeResource;
@@ -123,10 +102,6 @@ class PricePersistence
         $this->attributeCode = $attributeCode;
         $this->productIdLocator = $productIdLocator;
         $this->metadataPool = $metadataPool;
-        $this->productAction = $productAction ?: ObjectManager::getInstance()
-            ->get(Action::class);
-        $this->coreDate = $coreDate ?: ObjectManager::getInstance()
-            ->get(CoreDate::class);
         $this->dateTime = $dateTime ?: ObjectManager::getInstance()
             ->get(DateTime::class);
     }
@@ -283,10 +258,10 @@ class PricePersistence
     public function updateLastUpdatedAt(array $productIds): void
     {
         try {
-            $this->productAction->updateAttributes(
-                $productIds,
-                [ProductInterface::UPDATED_AT => $this->dateTime->formatDate($this->coreDate->gmtDate())],
-                Store::DEFAULT_STORE_ID
+            $this->attributeResource->getConnection()->update(
+                $this->attributeResource->getTable('catalog_product_entity'),
+                [ProductInterface::UPDATED_AT => $this->dateTime->gmtDate()],
+                ['entity_id IN(?)' => $productIds]
             );
         } catch (\Exception $e) {
             throw new CouldNotSaveException(
