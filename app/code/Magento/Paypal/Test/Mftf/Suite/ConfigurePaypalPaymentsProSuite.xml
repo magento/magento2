@@ -17,7 +17,7 @@
         </before>
         <after>
             <!-- Cleanup Paypal configurations -->
-            <magentoCLI command="config:set payment/paypal_payment_pro/active 0" stepKey="disablePayPalExpress"/>
+            <magentoCLI command="config:set payment/paypal_payment_pro/active 0" stepKey="disablePayPalPaymentsPro"/>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
                 <argument name="tags" value="config full_page"/>
             </actionGroup>
