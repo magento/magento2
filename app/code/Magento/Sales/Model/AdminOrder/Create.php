@@ -906,8 +906,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                         }
                         $canBeRestored = $this->restoreTransferredItem('cart', $cartItemsToRestore);
 
+                        $cartItem = $cart->addProduct($product, $info);
                         if (!$canBeRestored) {
-                            $cartItem = $cart->addProduct($product, $info);
                             if (is_string($cartItem)) {
                                 throw new \Magento\Framework\Exception\LocalizedException(__($cartItem));
                             }
