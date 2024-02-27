@@ -36,6 +36,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Theme\Model\View\Design;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Email\Model\ResourceModel\Template as TemplateResourceModel;
 
 /**
  * Covers \Magento\Email\Model\Template
@@ -117,6 +118,18 @@ class TemplateTest extends TestCase
 
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                Database::class,
+                $this->createMock(Database::class)
+            ],
+            [
+                TemplateResourceModel::class,
+                $this->createMock(TemplateResourceModel::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -182,18 +195,23 @@ class TemplateTest extends TestCase
      */
     protected function getModelMock(array $mockedMethods = [], array $addMockedMethods = [])
     {
-        $objectManager = new ObjectManager($this);
-        $objects = [
-            [
-                Database::class,
-                $this->createMock(Database::class)
-            ]
-        ];
-        $objectManager->prepareObjectManager($objects);
-        return $this->getMockBuilder(Template::class)
-            ->addMethods($addMockedMethods)
-            ->onlyMethods(array_merge($mockedMethods, ['__wakeup', '__sleep', '_init']))
-            ->setConstructorArgs(
+        $mockBuilder =  $this->getMockBuilder(Template::class);
+        if(!empty($addMockedMethods) && !empty($mockedMethods))
+        {
+            $mockBuilder = $mockBuilder->addMethods($addMockedMethods)
+                ->onlyMethods(array_merge($mockedMethods, ['__wakeup', '__sleep', '_init']));
+        }
+        else if(!empty($addMockedMethods))
+        {
+            $mockBuilder = $mockBuilder->addMethods($addMockedMethods)
+                ->onlyMethods(['__wakeup', '__sleep', '_init']);
+        }
+        else
+        {
+            $mockBuilder = $mockBuilder->onlyMethods(array_merge($mockedMethods, ['__wakeup', '__sleep', '_init']));
+        }
+
+        $mockBuilder = $mockBuilder->setConstructorArgs(
                 [
                     $this->context,
                     $this->design,
@@ -213,6 +231,7 @@ class TemplateTest extends TestCase
                 ]
             )
             ->getMock();
+        return $mockBuilder;
     }
 
     public function testSetAndGetIsChildTemplate()
@@ -405,13 +424,15 @@ class TemplateTest extends TestCase
                 'getDesignConfig',
                 'loadDefault',
                 'load',
+            ],
+            [
                 'getTemplateText',
                 'setTemplateText',
             ]
         );
 
         $designConfig = $this->getMockBuilder(DataObject::class)
-            ->onlyMethods(['getStore'])
+            ->addMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -446,7 +467,7 @@ class TemplateTest extends TestCase
     /**
      * @return array
      */
-    public function loadByConfigPathDataProvider()
+    public static function loadByConfigPathDataProvider()
     {
         return [
             'Load from filesystem' => [
@@ -478,7 +499,7 @@ class TemplateTest extends TestCase
      */
     public function testIsValidForSend($senderName, $senderEmail, $templateSubject, $expectedValue)
     {
-        $model = $this->getModelMock(['getSenderName', 'getSenderEmail', 'getTemplateSubject']);
+        $model = $this->getModelMock([],['getSenderName', 'getSenderEmail', 'getTemplateSubject']);
         $model->expects($this->any())
             ->method('getSenderName')
             ->willReturn($senderName);
@@ -494,7 +515,7 @@ class TemplateTest extends TestCase
     /**
      * @return array
      */
-    public function isValidForSendDataProvider()
+    public static function isValidForSendDataProvider()
     {
         return [
             'should be valid' => [
@@ -594,7 +615,7 @@ class TemplateTest extends TestCase
     /**
      * @return array
      */
-    public function getVariablesOptionArrayDataProvider()
+    public static function getVariablesOptionArrayDataProvider()
     {
         return [
             'empty variables' => [
@@ -699,7 +720,7 @@ class TemplateTest extends TestCase
     /**
      * @return array
      */
-    public function processTemplateVariable()
+    public static function processTemplateVariable()
     {
         return [
             'numeric id' => [
@@ -797,7 +818,7 @@ class TemplateTest extends TestCase
     /**
      * @return array
      */
-    public function getTypeDataProvider()
+    public static function getTypeDataProvider()
     {
         return [['text', 1], ['html', 2]];
     }

@@ -2468,7 +2468,6 @@ class TypeTest extends TestCase
             ['info_buyRequest', new DataObject(['value' => json_encode(['bundle_option' => ''])])]
         ]);
         $product->setCustomOption(json_encode([]));
-
         $this->model->checkProductBuyState($product);
     }
 

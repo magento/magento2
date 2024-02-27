@@ -185,7 +185,7 @@ class CartFixedTest extends TestCase
             ->willReturn(true);
         $cartExtensionMock = $this->getMockBuilder(CartExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getShippingAssignments'])
+            ->addMethods(['getShippingAssignments'])
             ->getMockForAbstractClass();
         $this->quote->expects($this->any())->method('getCartFixedRules')->will($this->returnValue([]));
         $store = $this->createMock(Store::class);

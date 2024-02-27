@@ -193,7 +193,7 @@ class ShippingMethodManagementTest extends TestCase
         $this->objectManager->setBackwardCompatibleProperty($this->model, 'dataProcessor', $this->dataProcessor);
 
         $this->extensionAttributesMock = $this->getMockBuilder(CartExtensionInterface::class)
-            ->onlyMethods(['getShippingAssignments'])
+            ->addMethods(['getShippingAssignments'])
             ->getMockForAbstractClass();
 
         $this->shippingMock = $this->getMockForAbstractClass(ShippingInterface::class);

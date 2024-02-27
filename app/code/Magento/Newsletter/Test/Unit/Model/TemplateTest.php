@@ -212,28 +212,42 @@ class TemplateTest extends TestCase
      */
     protected function getModelMock(array $mockedMethods = [], array $addMockedMethods = [])
     {
-        return $this->getMockBuilder(NewsletterTemplateModel::class)
-            ->addMethods($addMockedMethods)
-            ->onlyMethods(array_merge($mockedMethods, ['__wakeup', '__sleep', '_init']))
-            ->setConstructorArgs(
-                [
-                    $this->contextMock,
-                    $this->designMock,
-                    $this->registryMock,
-                    $this->appEmulationMock,
-                    $this->storeManagerMock,
-                    $this->assetRepoMock,
-                    $this->filesystemMock,
-                    $this->scopeConfigMock,
-                    $this->emailConfigMock,
-                    $this->templateFactoryMock,
-                    $this->filterManagerMock,
-                    $this->urlModelMock,
-                    $this->requestMock,
-                    $this->filterFactoryMock,
-                ]
-            )
-            ->getMock();
+        $mockBuilder =  $this->getMockBuilder(NewsletterTemplateModel::class);
+
+        if(!empty($addMockedMethods) && !empty($mockedMethods))
+        {
+            $mockBuilder = $mockBuilder->addMethods($addMockedMethods)
+                ->onlyMethods(array_merge($mockedMethods, ['__wakeup', '__sleep', '_init']));
+        }
+        else if(!empty($addMockedMethods))
+        {
+            $mockBuilder = $mockBuilder->addMethods($addMockedMethods)
+                ->onlyMethods(['__wakeup', '__sleep', '_init']);
+        }
+        else
+        {
+            $mockBuilder = $mockBuilder->onlyMethods(array_merge($mockedMethods, ['__wakeup', '__sleep', '_init']));
+        }
+
+        $mockBuilder = $mockBuilder->setConstructorArgs(
+            [
+                $this->contextMock,
+                $this->designMock,
+                $this->registryMock,
+                $this->appEmulationMock,
+                $this->storeManagerMock,
+                $this->assetRepoMock,
+                $this->filesystemMock,
+                $this->scopeConfigMock,
+                $this->emailConfigMock,
+                $this->templateFactoryMock,
+                $this->filterManagerMock,
+                $this->urlModelMock,
+                $this->requestMock,
+                $this->filterFactoryMock,
+            ]
+        )->getMock();
+        return $mockBuilder;
     }
 
     public function testGetProcessedTemplateSubject()
@@ -378,7 +392,7 @@ class TemplateTest extends TestCase
     /**
      * @return array
      */
-    public function getProcessedTemplateDataProvider()
+    public static function getProcessedTemplateDataProvider()
     {
         return [
             'default' => [
@@ -428,7 +442,7 @@ class TemplateTest extends TestCase
      */
     public function testIsValidForSend($senderName, $senderEmail, $templateSubject, $expectedValue)
     {
-        $model = $this->getModelMock(['getTemplateSenderName', 'getTemplateSenderEmail', 'getTemplateSubject']);
+        $model = $this->getModelMock([],['getTemplateSenderName', 'getTemplateSenderEmail', 'getTemplateSubject']);
         $model->expects($this->any())
             ->method('getTemplateSenderName')
             ->willReturn($senderName);
@@ -444,7 +458,7 @@ class TemplateTest extends TestCase
     /**
      * @return array
      */
-    public function isValidForSendDataProvider()
+    public static function isValidForSendDataProvider()
     {
         return [
             'should be valid' => [

@@ -247,6 +247,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->priceCurrency = $priceCurrency;
         $this->_stockRegistry = $stockRegistry;
         $this->_stockState = $stockState;
+        $this->serializer = $serializer;
 
         $this->metadataPool = $metadataPool
             ?: ObjectManager::getInstance()->get(MetadataPool::class);

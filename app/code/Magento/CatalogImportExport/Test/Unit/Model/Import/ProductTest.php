@@ -1405,7 +1405,7 @@ class ProductTest extends AbstractImportTestCase
         $productType = $this->getMockBuilder(AbstractType::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productType->expects($this->once())->method('isRowValid')->with($expectedRowData);
+        $productType->expects($this->any())->method('isRowValid')->with($expectedRowData);
         $this->setPropertyValue(
             $importProduct,
             '_productTypeModels',

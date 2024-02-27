@@ -98,8 +98,7 @@ class AfterPaymentSaveObserverTest extends TestCase
         $this->encryptorModel = new Encryptor($encryptorRandomGenerator, $deploymentConfigMock);
 
         $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
-            ->addMethods(['__wakeup'])
-            ->onlyMethods(['setVaultPaymentToken', 'getVaultPaymentToken'])
+            ->addMethods(['__wakeup', 'setVaultPaymentToken', 'getVaultPaymentToken'])
             ->disableOriginalConstructor()
             ->getMock();
 
