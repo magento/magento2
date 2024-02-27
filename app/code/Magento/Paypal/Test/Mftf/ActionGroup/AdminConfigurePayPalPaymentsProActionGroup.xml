@@ -32,7 +32,7 @@
         <fillField selector ="{{PayPalPaymentsProConfigSection.vendor(countryCode)}}" userInput="{{credentials.paypal_paymentspro_vendor}}" stepKey="inputVendor"/>
         <waitForElementVisible selector="{{PayPalPaymentsProConfigSection.password(countryCode)}}" stepKey="waitForPassword"/>
         <fillField selector ="{{PayPalPaymentsProConfigSection.password(countryCode)}}" userInput="{{credentials.paypal_paymentspro_password}}" stepKey="inputPassword"/>
-        <selectOption selector="{{PayPalPaymentsProConfigSection.testmode(countryCode)}}" userInput="Yes" stepKey="enableTestMode"/>
+        <selectOption selector="{{PayPalPaymentsProConfigSection.testMode(countryCode)}}" userInput="Yes" stepKey="enableTestMode"/>
         <selectOption selector ="{{PayPalPaymentsProConfigSection.enableSolution(countryCode)}}" userInput="Yes" stepKey="enableSolution"/>
         <waitForElementClickable selector="{{AdminConfigSection.saveButton}}" stepKey="waitForSaveButtonBecomeClickable"/>
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
