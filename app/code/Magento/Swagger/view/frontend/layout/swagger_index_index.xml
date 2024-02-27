@@ -29,6 +29,7 @@
         <referenceBlock name="translate" remove="true"/>
         <referenceBlock name="theme.active.editor" remove="true" />
         <referenceBlock name="requirejs-config" remove="true"/>
+        <referenceBlock name="google.maps.api" remove="true"/>
         <referenceContainer name="root">
             <block name="swaggerUiContent" class="Magento\Swagger\Block\Index" template="Magento_Swagger::swagger-ui/index.phtml" />
         </referenceContainer>
