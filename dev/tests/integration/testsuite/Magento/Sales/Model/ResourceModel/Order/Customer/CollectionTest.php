@@ -22,11 +22,17 @@ class CollectionTest extends TestCase
     private $objectManager;
 
     /**
+     * @var Collection
+     */
+    private $collection;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->collection = $objectManager->get(Collection::class);
     }
 
     /**
@@ -84,5 +90,38 @@ class CollectionTest extends TestCase
 
         $this->assertEquals($website->getName(), $customerWithStoreWebsiteFilter->getWebsiteName());
         $this->assertEquals($store->getName(), $customerWithStoreWebsiteFilter->getStoreName());
+    }
+
+    /**
+     * Attribute data provider
+     *
+     * @return array
+     */
+    public function joinAttribute():array
+    {
+        return [
+            ['billing_postcode'],
+            ['billing_city'],
+            ['billing_telephone'],
+            ['billing_region'],
+            ['billing_country_id']
+        ];
+    }
+
+    /**
+     * Attribute presence test
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @dataProvider joinAttribute
+     * @param string $attribute
+     * @return void
+     */
+    public function testAttributePresent($attribute): void
+    {
+        $customers = $this->collection->getItems();
+        foreach ($customers as $customer) {
+            $this->assertNotEmpty($customer->getData($attribute), "Attribute '$attribute' is not present");
+        }
     }
 }
