@@ -19,6 +19,7 @@ final class TestPreprationStartedSubscriber implements PreparationStartedSubscri
         $objectManager = Bootstrap::getObjectManager();
         $assetRepo = $objectManager->create($className, ['name' => $methodName]);
 
+        Magento::setCurrentEventObject($event);
         $mageEvent = Magento::getDefaultEventManager();
         $mageEvent->fireEvent('startTest', [$assetRepo]);
     }
