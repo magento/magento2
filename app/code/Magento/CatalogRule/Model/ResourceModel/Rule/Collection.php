@@ -159,12 +159,13 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      *
      * @return array
      * @deprecated 100.1.0
+     * @see https://github.com/magento/magento2/commit/d063251cf0ce6717795fdb646a534cc0c2b22c05
      */
     private function getAssociatedEntitiesMap()
     {
         if (!$this->_associatedEntitiesMap) {
             $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()
-                // phpstan:ignore
+                // @phpstan-ignore-next-line - this is a virtual type defined in di.xml
                 ->get(\Magento\CatalogRule\Model\ResourceModel\Rule\AssociatedEntityMap::class)
                 ->getData();
         }

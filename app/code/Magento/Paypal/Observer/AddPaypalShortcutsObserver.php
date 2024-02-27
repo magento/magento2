@@ -57,9 +57,13 @@ class AddPaypalShortcutsObserver implements ObserverInterface
             SmartButton::class => PaypalConfig::METHOD_WPS_EXPRESS,
             \Magento\Paypal\Block\Express\Shortcut::class => PaypalConfig::METHOD_WPP_EXPRESS,
             \Magento\Paypal\Block\Bml\Shortcut::class => PaypalConfig::METHOD_WPP_EXPRESS,
+            // @phpstan-ignore-next-line - this is a virtual type defined in di.xml
             \Magento\Paypal\Block\WpsExpress\Shortcut::class => PaypalConfig::METHOD_WPS_EXPRESS,
+            // @phpstan-ignore-next-line - this is a virtual type defined in di.xml
             \Magento\Paypal\Block\WpsBml\Shortcut::class => PaypalConfig::METHOD_WPS_EXPRESS,
+            // @phpstan-ignore-next-line - this is a virtual type defined in di.xml
             \Magento\Paypal\Block\PayflowExpress\Shortcut::class => PaypalConfig::METHOD_WPP_PE_EXPRESS,
+            // @phpstan-ignore-next-line - this is a virtual type defined in di.xml
             \Magento\Paypal\Block\Payflow\Bml\Shortcut::class => PaypalConfig::METHOD_WPP_PE_EXPRESS
         ];
         foreach ($blocks as $blockInstanceName => $paymentMethodCode) {
