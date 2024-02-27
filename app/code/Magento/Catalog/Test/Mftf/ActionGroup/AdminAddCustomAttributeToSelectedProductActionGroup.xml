@@ -25,7 +25,7 @@
         <checkOption selector="{{AdminProductAttributeSetGridSection.selectFromAttributeResult(attributeCode)}}" stepKey="selectAttributeFromDisplayedResult"/>
         <click selector="{{AdminProductAttributeSetGridSection.addSelected}}" stepKey="clickAddSelectedButton" />
         <waitForPageLoad stepKey="waitForAttributesToBeAdded"/>
-        <scrollTo selector="{{AdminProductFormSection.attributeTab}}" stepKey="scrollToAttributeTab" />
+        <scrollTo selector="{{AdminProductFormSection.attributeTab}}" x="0" y="-100" stepKey="scrollToAttributeTab" />
         <click selector="{{AdminProductFormSection.attributeTab}}" stepKey="expandAttributeTab" />
         <selectOption selector="{{AdminProductFormSection.customSelectField(attributeCode)}}" userInput="{{adminOption1}}" stepKey="selectAvalueFromDropdown"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="saveTheProduct" />
