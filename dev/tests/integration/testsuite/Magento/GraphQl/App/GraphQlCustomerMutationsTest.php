@@ -32,6 +32,10 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
+        if (!class_exists(GraphQlStateDiff::class)) {
+            $this->markTestSkipped('GraphQlStateDiff class is not available on this version of Magento.');
+        }
+
         $this->graphQlStateDiff = new GraphQlStateDiff();
         parent::setUp();
     }
