@@ -156,6 +156,11 @@ class AddressTest extends TestCase
     private $configShare;
 
     /**
+     * @var Storage
+     */
+    private $customerStorage;
+
+    /**
      * Init entity adapter model
      */
     protected function setUp(): void
@@ -205,7 +210,7 @@ class AddressTest extends TestCase
             ->getMock();
         $connection = $this->createMock(\stdClass::class);
         $attributeCollection = $this->_createAttrCollectionMock();
-        $customerStorage = $this->_createCustomerStorageMock();
+        $this->customerStorage = $this->_createCustomerStorageMock();
         $customerEntity = $this->_createCustomerEntityMock();
         $addressCollection = new Collection(
             $this->createMock(EntityFactory::class)
@@ -229,7 +234,7 @@ class AddressTest extends TestCase
             'bunch_size' => 1,
             'attribute_collection' => $attributeCollection,
             'entity_type_id' => 1,
-            'customer_storage' => $customerStorage,
+            'customer_storage' => $this->customerStorage,
             'customer_entity' => $customerEntity,
             'address_collection' => $addressCollection,
             'entity_table' => 'not_used',
@@ -457,6 +462,33 @@ class AddressTest extends TestCase
         $this->configShare->expects($this->once())
             ->method('isGlobalScope')
             ->willReturn(false);
+
+        if ($isValid) {
+            $this->assertTrue($this->_model->validateRow($rowData, 0));
+        } else {
+            $this->assertFalse($this->_model->validateRow($rowData, 0));
+        }
+    }
+
+    /**
+     * @dataProvider validateRowForUpdateDataProvider
+     *
+     * @param array $rowData
+     * @param array $errors
+     * @param boolean $isValid
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function testValidateRowForUpdateGlobalCustomer(array $rowData, array $errors, $isValid = false)
+    {
+        $this->_model->setParameters(['behavior' => Import::BEHAVIOR_ADD_UPDATE]);
+
+        $this->configShare->expects($this->once())
+            ->method('isGlobalScope')
+            ->willReturn(true);
+
+        $this->customerStorage->expects($this->once())
+            ->method('getCustomerIdByEmail')
+            ->willReturn(1);
 
         if ($isValid) {
             $this->assertTrue($this->_model->validateRow($rowData, 0));
