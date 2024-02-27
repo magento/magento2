@@ -37,5 +37,6 @@
         <waitForElementClickable selector="{{AdminConfigSection.saveButton}}" stepKey="waitForSaveButtonBecomeClickable"/>
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForSaving"/>
+        <waitForText selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeConfigSuccessMessage"/>
     </actionGroup>
 </actionGroups>
