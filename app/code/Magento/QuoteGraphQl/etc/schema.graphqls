@@ -438,6 +438,7 @@ type Discount @doc(description:"Defines an individual discount. A discount can b
     amount: Money! @doc(description:"The amount of the discount.")
     applied_to: CartDiscountType! @doc(description:"The type of the entity the discount is applied to.")
     label: String! @doc(description:"A description of the discount.")
+    coupon: AppliedCoupon @doc(description:"The coupon related to the discount.")
 }
 
 enum CartDiscountType {
