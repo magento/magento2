@@ -73,6 +73,7 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     created_at: String @deprecated(reason: "Use the `order_date` field instead.")
     grand_total: Float  @deprecated(reason: "Use the `totals.grand_total` field instead.")
     token: String! @doc(description: "The token that can be used to retrieve the order using order query.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Token")
+    applied_coupons: [AppliedCoupon!]! @doc(description: "Coupons applied to the order.")
 }
 
 type OrderAddress @doc(description: "Contains detailed information about an order's billing and shipping addresses."){
@@ -110,6 +111,7 @@ interface OrderItemInterface @doc(description: "Order item details.") @typeResol
     quantity_invoiced: Float @doc(description: "The number of invoiced items.")
     quantity_canceled: Float @doc(description: "The number of canceled items.")
     quantity_returned: Float @doc(description: "The number of returned items.")
+    product: ProductInterface @doc(description: "The ProductInterface object, which contains details about the base product") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\ProductResolver")
 }
 
 type OrderItem implements OrderItemInterface {
