@@ -24,5 +24,6 @@ final class TestPreprationFinishedSubscriber implements FinishedSubscriber
 
         $mageEvent = Magento::getDefaultEventManager();
         $mageEvent->fireEvent('endTest', [$assetRepo], true);
+        Magento::setCurrentEventObject(null);
     }
 }
