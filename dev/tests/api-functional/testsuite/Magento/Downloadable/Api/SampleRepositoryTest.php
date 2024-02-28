@@ -317,7 +317,7 @@ class SampleRepositoryTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function getInvalidSortOrder()
+    public static function getInvalidSortOrder()
     {
         return [
             [-1],
