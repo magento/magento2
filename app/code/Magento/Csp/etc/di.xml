@@ -114,4 +114,7 @@
     <type name="Magento\Framework\View\Asset\GroupedCollection">
         <plugin name="addDefaultPropertiesToGroup" type="Magento\Csp\Plugin\AddDefaultPropertiesToGroupPlugin" />
     </type>
+    <type name="Magento\RequireJs\Model\FileManager">
+        <plugin name="addResourceIntegrityAfterAssetCreate" type="Magento\Csp\Plugin\GenerateAssetIntegrity"/>
+    </type>
 </config>
