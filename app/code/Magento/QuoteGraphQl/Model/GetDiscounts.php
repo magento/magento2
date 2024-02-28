@@ -18,14 +18,17 @@ namespace Magento\QuoteGraphQl\Model;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote;
 use Magento\SalesRule\Api\CouponRepositoryInterface;
 use Magento\SalesRule\Api\Data\CouponInterface;
 use Magento\SalesRule\Api\Data\RuleDiscountInterface;
 
-class GetDiscounts
+class GetDiscounts implements ResetAfterRequestInterface
 {
+    private array $couponsByCode = [];
+
     /**
      * @param CouponRepositoryInterface $couponRepository
      * @param SearchCriteriaBuilder $criteriaBuilder
@@ -96,12 +99,24 @@ class GetDiscounts
         if (!$couponCode) {
             return null;
         }
+        if (isset($this->couponsByCode[$couponCode])) {
+            return $this->couponsByCode[$couponCode];
+        }
         $couponModels = $this->couponRepository->getList(
             $this->criteriaBuilder->addFilter('code', $couponCode)->create()
         )->getItems();
         if (empty($couponModels)) {
             return null;
         }
-        return reset($couponModels);
+        $this->couponsByCode[$couponCode] = reset($couponModels);
+        return $this->couponsByCode[$couponCode];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _resetState(): void
+    {
+        $this->couponsByCode = [];
     }
 }
