@@ -18,7 +18,6 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteId;
-use Magento\Quote\Model\QuoteIdMask;
 use Magento\Store\Model\ScopeInterface;
 use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
 
@@ -28,6 +27,8 @@ use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFil
  * Plugin that checks if checkout agreement enabled and validates all agreements.
  * Current plugin is duplicate from Magento\CheckoutAgreements\Model\Checkout\Plugin\Validation due to different
  * interfaces of payment information and makes check before processing of payment information.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GuestValidation
 {
