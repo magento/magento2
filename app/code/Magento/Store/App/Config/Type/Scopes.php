@@ -72,7 +72,7 @@ class Scopes implements ConfigTypeInterface
             $path = $this->convertIdPathToCodePath($patchChunks);
         }
 
-        return $this->data->getData(strtolower($path));
+        return $this->data->getData($path);
     }
 
     /**

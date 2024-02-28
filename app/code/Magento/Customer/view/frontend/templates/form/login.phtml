@@ -37,7 +37,7 @@
                     <div class="control">
                         <input name="login[password]" type="password"
                             <?php if ($block->isAutocompleteDisabled()): ?> autocomplete="off"<?php endif; ?>
-                               class="input-text" id="pass"
+                               class="input-text" id="password"
                                title="<?= $block->escapeHtmlAttr(__('Password')) ?>"
                                data-validate="{required:true}">
                     </div>
@@ -68,7 +68,7 @@
                     "components": {
                         "showPassword": {
                             "component": "Magento_Customer/js/show-password",
-                            "passwordSelector": "#pass"
+                            "passwordSelector": "#password"
                         }
                     }
                 }

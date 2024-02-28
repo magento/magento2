@@ -170,4 +170,42 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\ResolverIdentityClassProvider">
+        <arguments>
+            <argument name="cacheableResolverClassNameIdentityMap" xsi:type="array">
+                <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="string">
+                    Magento\CustomerGraphQl\Model\Resolver\Cache\Customer\ResolverCacheIdentity
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\HydratorDehydratorProvider">
+        <arguments>
+            <argument name="hydratorConfig" xsi:type="array">
+                <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="array">
+                    <item name="model_hydrator" xsi:type="array">
+                        <item name="sortOrder" xsi:type="string">10</item>
+                        <item name="class" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\Cache\Customer\ModelHydrator</item>
+                    </item>
+                </item>
+            </argument>
+            <argument name="dehydratorConfig" xsi:type="array">
+                <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="array">
+                    <item name="model_dehydrator" xsi:type="array">
+                        <item name="sortOrder" xsi:type="string">10</item>
+                        <item name="class" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\Cache\Customer\ModelDehydrator</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\Provider">
+        <arguments>
+            <argument name="factorProviders" xsi:type="array">
+                <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="array">
+                    <item name="current_customer_id" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\CurrentCustomerId</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

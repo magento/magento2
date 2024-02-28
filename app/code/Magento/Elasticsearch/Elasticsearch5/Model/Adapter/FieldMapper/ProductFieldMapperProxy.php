@@ -3,67 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper;
 
-use Magento\AdvancedSearch\Model\Client\ClientResolver;
-use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
-
 /**
- * Proxy for product fields mappers
+ * @deprecated Handle the Backward Compatibility issue with ES7 and ES8
+ * @see AC-10652
+ * phpcs:disable Generic.Files.LineLength.TooLong
  */
-class ProductFieldMapperProxy implements FieldMapperInterface
+class ProductFieldMapperProxy extends \Magento\Elasticsearch\ElasticAdapter\Model\Adapter\FieldMapper\ProductFieldMapperProxy
 {
-    /**
-     * @var ClientResolver
-     */
-    private $clientResolver;
-
-    /**
-     * @var FieldMapperInterface[]
-     */
-    private $productFieldMappers;
-
-    /**
-     * CategoryFieldsProviderProxy constructor.
-     * @param ClientResolver $clientResolver
-     * @param FieldMapperInterface[] $productFieldMappers
-     */
-    public function __construct(
-        ClientResolver $clientResolver,
-        array $productFieldMappers
-    ) {
-        $this->clientResolver = $clientResolver;
-        $this->productFieldMappers = $productFieldMappers;
-    }
-
-    /**
-     * @return FieldMapperInterface
-     */
-    private function getProductFieldMapper()
-    {
-        return $this->productFieldMappers[$this->clientResolver->getCurrentEngine()];
-    }
-
-    /**
-     * Get field name
-     *
-     * @param string $attributeCode
-     * @param array $context
-     * @return string
-     */
-    public function getFieldName($attributeCode, $context = [])
-    {
-        return $this->getProductFieldMapper()->getFieldName($attributeCode, $context);
-    }
-
-    /**
-     * Get all entity attribute types
-     *
-     * @param array $context
-     * @return array
-     */
-    public function getAllAttributesTypes($context = [])
-    {
-        return $this->getProductFieldMapper()->getAllAttributesTypes($context);
-    }
 }

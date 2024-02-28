@@ -458,5 +458,6 @@ class Http extends Request implements
         $this->headers = null;
         $this->metadata = [];
         $this->content = '';
+        $this->distroBaseUrl = null;
     }
 }

@@ -136,10 +136,10 @@ type Customer @doc(description: "Defines the customer name, addresses, and other
     date_of_birth: String @doc(description: "The customer's date of birth.")
     taxvat: String @doc(description: "The customer's Value-added tax (VAT) number (for corporate customers).")
     id: Int @doc(description: "The ID assigned to the customer.") @deprecated(reason: "`id` is not needed as part of `Customer`, because on the server side, it can be identified based on the customer token used for authentication. There is no need to know customer ID on the client side.")
-    is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\IsSubscribed")
+    is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter.") @resolver(class: "\\Magento\\NewsletterGraphQl\\Model\\Resolver\\IsSubscribed")
     addresses: [CustomerAddress] @doc(description: "An array containing the customer's shipping and billing addresses.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddresses")
     gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2).")
-    custom_attributes(uids: [ID!]): [AttributeValueInterface] @doc(description: "Customer's custom attributes.") @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\CustomAttributeFilter")
+    custom_attributes(attributeCodes: [ID!]): [AttributeValueInterface] @doc(description: "Customer's custom attributes.") @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\CustomAttributeFilter")
 }
 
 type CustomerAddress @doc(description: "Contains detailed information about a customer's billing or shipping address."){
@@ -164,7 +164,7 @@ type CustomerAddress @doc(description: "Contains detailed information about a cu
     default_shipping: Boolean @doc(description: "Indicates whether the address is the customer's default shipping address.")
     default_billing: Boolean @doc(description: "Indicates whether the address is the customer's default billing address.")
     custom_attributes: [CustomerAddressAttribute] @deprecated(reason: "Use custom_attributesV2 instead.")
-    custom_attributesV2(uids: [ID!]): [AttributeValueInterface!]! @doc(description: "Custom attributes assigned to the customer address.") @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddressCustomAttributeFilter")
+    custom_attributesV2(attributeCodes: [ID!]): [AttributeValueInterface!]! @doc(description: "Custom attributes assigned to the customer address.") @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddressCustomAttributeFilter")
     extension_attributes: [CustomerAddressAttribute] @doc(description: "Contains any extension attributes for the address.")
 }
 
@@ -253,6 +253,7 @@ enum CountryCodeEnum @doc(description: "The list of country codes.") {
     GQ @doc(description: "Equatorial Guinea")
     ER @doc(description: "Eritrea")
     EE @doc(description: "Estonia")
+    SZ @doc(description: "Eswatini")
     ET @doc(description: "Ethiopia")
     FK @doc(description: "Falkland Islands")
     FO @doc(description: "Faroe Islands")
@@ -393,7 +394,6 @@ enum CountryCodeEnum @doc(description: "The list of country codes.") {
     SD @doc(description: "Sudan")
     SR @doc(description: "Suriname")
     SJ @doc(description: "Svalbard & Jan Mayen")
-    SZ @doc(description: "Swaziland")
     SE @doc(description: "Sweden")
     CH @doc(description: "Switzerland")
     SY @doc(description: "Syria")
