@@ -27,6 +27,9 @@ use Magento\SalesRule\Api\Data\RuleDiscountInterface;
 
 class GetDiscounts implements ResetAfterRequestInterface
 {
+    /**
+     * @var CouponInterface[]
+     */
     private array $couponsByCode = [];
 
     /**
