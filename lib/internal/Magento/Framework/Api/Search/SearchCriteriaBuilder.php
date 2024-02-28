@@ -8,6 +8,7 @@ namespace Magento\Framework\Api\Search;
 
 use Magento\Framework\Api\AbstractSimpleObjectBuilder;
 use Magento\Framework\Api\ObjectFactory;
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 
 /**
@@ -32,6 +33,11 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
      * @var array
      */
     private $filters = [];
+
+    /**
+     * @var array
+     */
+    private $sortOrders = [];
 
     /**
      * @param ObjectFactory $objectFactory
@@ -60,7 +66,7 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
                 ->addFilter($filter)
                 ->create();
         }
-        $this->data[SearchCriteria::SORT_ORDERS] = [$this->sortOrderBuilder->create()];
+        $this->data[SearchCriteria::SORT_ORDERS] = $this->sortOrders;
         return parent::create();
     }
 
@@ -77,14 +83,30 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
     }
 
     /**
+     * Add sort order
+     *
      * @param string $field
      * @param string $direction
      * @return $this
      */
     public function addSortOrder($field, $direction)
     {
-        $this->sortOrderBuilder->setDirection($direction)
-            ->setField($field);
+        $sortOrder = $this->sortOrderBuilder->setDirection($direction)
+            ->setField($field)
+            ->create();
+        $this->sortOrders[] = $sortOrder;
+        return $this;
+    }
+
+    /**
+     * Set sort orders
+     *
+     * @param SortOrder[] $sortOrders
+     * @return $this
+     */
+    public function setSortOrders(array $sortOrders)
+    {
+        $this->sortOrders = $sortOrders;
         return $this;
     }
 
