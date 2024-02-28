@@ -241,7 +241,7 @@ class ImageTest extends TestCase
             ]
         );
 
-        $this->assertCount($imagesCount, $imageModel->getAllProductImages());
+        $this->assertCount($imagesCount, iterator_to_array($imageModel->getAllProductImages(), false));
     }
 
     /**
@@ -287,7 +287,7 @@ class ImageTest extends TestCase
             ]
         );
 
-        $this->assertCount($imagesCount, $imageModel->getUsedProductImages());
+        $this->assertCount($imagesCount, iterator_to_array($imageModel->getUsedProductImages()));
     }
 
     /**

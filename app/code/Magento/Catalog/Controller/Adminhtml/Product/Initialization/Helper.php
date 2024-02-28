@@ -309,6 +309,7 @@ class Helper
 
                     $linkProduct = $this->productRepository->getById($linkData['id']);
                     $link = $this->productLinkFactory->create();
+                    echo $product->getSku();
                     $link->setSku($product->getSku())
                         ->setLinkedProductSku($linkProduct->getSku())
                         ->setLinkType($linkType)

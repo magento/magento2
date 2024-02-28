@@ -2557,7 +2557,7 @@ class TypeTest extends TestCase
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getId', 'getStoreId', 'getCustomOption', 'getTypeInstance'])
-            ->addMethods(['_wakeup', 'getHasOptions', 'setStoreFilter'])
+            ->addMethods(['_wakeup', 'getHasOptions', 'setStoreFilter', 'setCustomOption'])
             ->getMock();
         $product->method('getTypeInstance')->willReturn($product);
         $product->method('setStoreFilter')->willReturn($product);

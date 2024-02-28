@@ -19,6 +19,7 @@ use Magento\Framework\Message\Collection;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Messages;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
@@ -73,6 +74,26 @@ class MoveTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                \Magento\Store\Model\StoreManagerInterface::class,
+                $this->createMock(\Magento\Store\Model\StoreManagerInterface::class)
+            ],
+            [
+                \Magento\Framework\Registry::class,
+                $this->createMock(\Magento\Framework\Registry::class)
+            ],
+            [
+                \Magento\Cms\Model\Wysiwyg\Config::class,
+                $this->createMock(\Magento\Cms\Model\Wysiwyg\Config::class)
+            ],
+            [
+                \Magento\Backend\Model\Auth\Session::class,
+                $this->createMock(\Magento\Backend\Model\Auth\Session::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
         $this->resultJsonFactoryMock = $this->getMockBuilder(JsonFactory::class)
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()

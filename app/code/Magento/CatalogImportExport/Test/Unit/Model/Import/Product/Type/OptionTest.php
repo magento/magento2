@@ -251,10 +251,10 @@ class OptionTest extends AbstractImportTestCase
 
         $addExpectations = false;
         $deleteBehavior = false;
-        $testName = $this->getName(true);
+        $testName = $this->name(true);
         if ($testName == 'testImportDataAppendBehavior' || $testName == 'testImportDataDeleteBehavior') {
             $addExpectations = true;
-            $deleteBehavior = $this->getName() == 'testImportDataDeleteBehavior' ? true : false;
+            $deleteBehavior = $this->name() == 'testImportDataDeleteBehavior' ? true : false;
         }
 
         $doubleOptions = false;
@@ -875,7 +875,7 @@ class OptionTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function validateRowStoreViewCodeFieldDataProvider(): array
+    public static function validateRowStoreViewCodeFieldDataProvider(): array
     {
         return [
             'with_store_view_code' => [
@@ -930,7 +930,7 @@ class OptionTest extends AbstractImportTestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function validateRowDataProvider(): array
+    public static function validateRowDataProvider(): array
     {
         return [
             'main_valid' => [
@@ -1027,7 +1027,7 @@ class OptionTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function validateAmbiguousDataDataProvider(): array
+    public static function validateAmbiguousDataDataProvider(): array
     {
         return [
             'ambiguity_several_input_rows' => [
