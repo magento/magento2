@@ -13,11 +13,16 @@ use Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface;
 use Magento\CheckoutAgreements\Model\AgreementsProvider;
 use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
 use Magento\CheckoutAgreements\Model\Checkout\Plugin\GuestValidation;
+use Magento\CheckoutAgreements\Model\EmulateStore;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\PaymentExtension;
+use Magento\Quote\Api\Data\PaymentExtensionInterface;
 use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Quote\Model\MaskedQuoteIdToQuoteId;
+use Magento\Quote\Model\Quote;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\RuntimeException;
@@ -73,6 +78,26 @@ class GuestValidationTest extends TestCase
      */
     private $agreementsFilterMock;
 
+    /**
+     * @var Quote|MockObject
+     */
+    private Quote|MockObject $quoteMock;
+
+    /**
+     * @var MaskedQuoteIdToQuoteId|MockObject
+     */
+    private MaskedQuoteIdToQuoteId|MockObject $maskedQuoteIdToQuoteIdMock;
+
+    /**
+     * @var CartRepositoryInterface|MockObject
+     */
+    private CartRepositoryInterface|MockObject $cartRepositoryMock;
+
+    /**
+     * @var EmulateStore|MockObject
+     */
+    private EmulateStore|MockObject $emulateStoreMock;
+
     protected function setUp(): void
     {
         $this->agreementsValidatorMock = $this->getMockForAbstractClass(AgreementsValidatorInterface::class);
@@ -87,18 +112,38 @@ class GuestValidationTest extends TestCase
         $this->agreementsFilterMock = $this->createMock(
             ActiveStoreAgreementsFilter::class
         );
+        $this->quoteMock = $this->createMock(Quote::class);
+        $this->maskedQuoteIdToQuoteIdMock = $this->createMock(MaskedQuoteIdToQuoteId::class);
+        $this->cartRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->emulateStoreMock = $this->createMock(EmulateStore::class);
+
+        $storeId = 1;
+        $this->quoteMock->expects($this->once())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+        $this->maskedQuoteIdToQuoteIdMock->expects($this->once())
+            ->method('execute')
+            ->with('0CQwCntNHR4yN9P5PUAzbxatvDvBXOce')
+            ->willReturn(1000);
+        $this->cartRepositoryMock->expects($this->once())
+            ->method('get')
+            ->willReturn($this->quoteMock);
 
         $this->model = new GuestValidation(
             $this->agreementsValidatorMock,
             $this->scopeConfigMock,
             $this->checkoutAgreementsListMock,
-            $this->agreementsFilterMock
+            $this->agreementsFilterMock,
+            $this->maskedQuoteIdToQuoteIdMock,
+            $this->cartRepositoryMock,
+            $this->emulateStoreMock
         );
     }
 
     public function testBeforeSavePaymentInformationAndPlaceOrder()
     {
-        $cartId = '100';
+        $storeId = 1;
+        $cartId = '0CQwCntNHR4yN9P5PUAzbxatvDvBXOce';
         $email = 'email@example.com';
         $agreements = [1, 2, 3];
         $this->scopeConfigMock
@@ -115,10 +160,15 @@ class GuestValidationTest extends TestCase
             ->with($searchCriteriaMock)
             ->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
-        $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(true);
         $this->paymentMock->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
+        $this->emulateStoreMock->expects($this->once())
+            ->method('execute')
+            ->with($storeId, $this->callback(function ($callback) {
+                return is_callable($callback);
+            }))
+            ->willReturn(true);
         $this->model->beforeSavePaymentInformationAndPlaceOrder(
             $this->subjectMock,
             $cartId,
@@ -131,9 +181,16 @@ class GuestValidationTest extends TestCase
     public function testBeforeSavePaymentInformationAndPlaceOrderIfAgreementsNotValid()
     {
         $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
-        $cartId = 100;
+        $storeId = 1;
+        $cartId = '0CQwCntNHR4yN9P5PUAzbxatvDvBXOce';
         $email = 'email@example.com';
         $agreements = [1, 2, 3];
+        $this->emulateStoreMock->expects($this->once())
+            ->method('execute')
+            ->with($storeId, $this->callback(function ($callback) {
+                return is_callable($callback);
+            }))
+            ->willReturn(false);
         $this->scopeConfigMock
             ->expects($this->once())
             ->method('isSetFlag')
@@ -148,7 +205,6 @@ class GuestValidationTest extends TestCase
             ->with($searchCriteriaMock)
             ->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
-        $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(false);
         $this->paymentMock->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
@@ -172,9 +228,10 @@ class GuestValidationTest extends TestCase
      */
     private function getPaymentExtension(): MockObject
     {
-        $mockBuilder = $this->getMockBuilder(PaymentExtension::class);
+        $mockBuilder = $this->getMockBuilder(PaymentExtensionInterface::class)
+            ->disableOriginalConstructor();
         try {
-            $mockBuilder->addMethods(['getAgreementIds']);
+            $mockBuilder->onlyMethods(['getAgreementIds', 'setAgreementIds']);
         } catch (RuntimeException $e) {
             // Payment extension already generated.
         }
