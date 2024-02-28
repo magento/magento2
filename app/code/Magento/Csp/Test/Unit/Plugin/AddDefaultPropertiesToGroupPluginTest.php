@@ -9,12 +9,13 @@ namespace Magento\Csp\Test\Unit\Plugin;
 
 use Magento\Csp\Model\SubresourceIntegrity;
 use Magento\Csp\Model\SubresourceIntegrityRepository;
-use Magento\Framework\App\Request\Http;
+use Magento\Csp\Model\SubresourceIntegrityRepositoryPool;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Csp\Plugin\AddDefaultPropertiesToGroupPlugin;
 use Magento\Framework\View\Asset\File;
 use Magento\Framework\View\Asset\GroupedCollection;
+use Magento\Framework\App\State;
 
 /**
  * Test for class Magento\Csp\Plugin\AddDefaultPropertiesToGroupPlugin
@@ -26,17 +27,17 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
     /**
      * @var MockObject
      */
-    private MockObject $requestMock;
-
-    /**
-     * @var MockObject
-     */
     private MockObject $assetInterfaceMock;
 
     /**
      * @var MockObject
      */
-    private MockObject $integrityRepositoryMock;
+    private MockObject $integrityRepositoryPoolMock;
+
+    /**
+     * @var MockObject
+     */
+    private MockObject $stateMock;
 
     /**
      * @var array $controllerActions
@@ -56,23 +57,21 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->integrityRepositoryMock = $this->getMockBuilder(SubresourceIntegrityRepository::class)
+        $this->integrityRepositoryPoolMock = $this->getMockBuilder(SubresourceIntegrityRepositoryPool::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getByUrl'])
+            ->onlyMethods(['get'])
             ->getMock();
         $this->assetInterfaceMock = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getUrl', 'getContentType'])
             ->getMockForAbstractClass();
-        $this->requestMock = $this->getMockBuilder(Http::class)
+        $this->stateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getFullActionName'])
+            ->onlyMethods(['getAreaCode'])
             ->getMock();
-        $this->controllerActions = ['checkout_index_index', 'sales_order_create'];
         $this->plugin = new AddDefaultPropertiesToGroupPlugin(
-            $this->requestMock,
-            $this->integrityRepositoryMock,
-            $this->controllerActions
+            $this->stateMock,
+            $this->integrityRepositoryPoolMock
         );
     }
 
@@ -83,10 +82,15 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
      */
     public function testBeforeGetFilteredProperties(): void
     {
+        $integrityRepositoryMock = $this->getMockBuilder(SubresourceIntegrityRepository::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getByUrl'])
+            ->getMock();
         $groupedCollectionMock = $this->getMockBuilder(GroupedCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $url = 'https://magento.test/static/version1708401324/frontend/Magento/luma/en_US/jquery.js';
+        $area = 'frontend';
 
         $data = new SubresourceIntegrity(
             [
@@ -97,29 +101,10 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
         $properties['attributes']['integrity'] = $data->getHash();
         $properties['attributes']['crossorigin'] = 'anonymous';
         $expected = [$this->assetInterfaceMock, $properties];
-        $this->assetInterfaceMock->expects($this->once())->method('getContentType')->willReturn('js');
+        $this->stateMock->expects($this->once())->method('getAreaCode')->willReturn($area);
+        $this->integrityRepositoryPoolMock->expects($this->once())->method('get')->with($area)->willReturn($integrityRepositoryMock);
         $this->assetInterfaceMock->expects($this->once())->method('getUrl')->willReturn($url);
-        $this->integrityRepositoryMock->expects($this->once())->method('getByUrl')->with($url)->willReturn($data);
-        $this->requestMock->expects($this->once())->method('getFullActionName')->willReturn('sales_order_create');
-        $this->assertEquals($expected,
-            $this->plugin->beforeGetFilteredProperties($groupedCollectionMock, $this->assetInterfaceMock
-            )
-        );
-    }
-
-    /**
-     * Test for plugin with css assets
-     *
-     * @return void
-     */
-    public function testBeforeGetFilteredPropertiesForCssAssets(): void
-    {
-        $groupedCollectionMock = $this->getMockBuilder(GroupedCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $expected = [$this->assetInterfaceMock, []];
-        $this->assetInterfaceMock->expects($this->once())->method('getContentType')->willReturn('css');
-        $this->requestMock->expects($this->once())->method('getFullActionName')->willReturn('sales_order_create');
+        $integrityRepositoryMock->expects($this->once())->method('getByUrl')->with($url)->willReturn($data);
         $this->assertEquals($expected,
             $this->plugin->beforeGetFilteredProperties($groupedCollectionMock, $this->assetInterfaceMock
             )
