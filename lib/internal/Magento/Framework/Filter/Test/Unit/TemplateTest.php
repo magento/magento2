@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Filter\Test\Unit;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Filter\DirectiveProcessor\DependDirective;
 use Magento\Framework\Filter\Template;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
@@ -41,6 +42,14 @@ class TemplateTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+
+        $objects = [
+            [
+                DependDirective::class,
+                $this->createMock(DependDirective::class)
+            ],
+        ];
+        $objectManager->prepareObjectManager($objects);
 
         $this->store = $objectManager->getObject(Store::class);
 
@@ -82,7 +91,7 @@ class TemplateTest extends TestCase
 
         // Build arbitrary object to pass into the addAfterFilterCallback method
         $callbackObject = $this->getMockBuilder('stdObject')
-            ->setMethods(['afterFilterCallbackMethod'])
+            ->onlyMethods(['afterFilterCallbackMethod'])
             ->getMock();
 
         $callbackObject->expects($this->once())
@@ -114,7 +123,7 @@ class TemplateTest extends TestCase
 
         // Build arbitrary object to pass into the addAfterFilterCallback method
         $callbackObject = $this->getMockBuilder('stdObject')
-            ->setMethods(['afterFilterCallbackMethod'])
+            ->onlyMethods(['afterFilterCallbackMethod'])
             ->getMock();
 
         $callbackObject->expects($this->once())

@@ -202,10 +202,10 @@ class StorageTest extends TestCase
         $thumbnailPath = '/' . implode(
             '/',
             [
-                \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE,
-                \Magento\Theme\Model\Wysiwyg\Storage::THUMBNAIL_DIRECTORY,
-                $image
-            ]
+                    \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE,
+                    \Magento\Theme\Model\Wysiwyg\Storage::THUMBNAIL_DIRECTORY,
+                    $image
+                ]
         );
 
         $this->customization->expects(
@@ -374,8 +374,15 @@ class StorageTest extends TestCase
         };
         $this->urlDecoder
             ->method('decode')
-            ->withConsecutive([$notRoot], [$filename])
-            ->willReturnOnConsecutiveCalls($this->returnCallback($decode), $this->returnCallback($decode));
+            ->willReturnCallback(
+                function ($arg) use ($notRoot, $filename, $decode) {
+                    if ($arg === $notRoot) {
+                        return $decode;
+                    } elseif ($arg === $filename) {
+                        return $decode;
+                    }
+                }
+            );
 
         $this->assertEquals(
             '../image/not/a/root/filename.ext',
@@ -386,7 +393,7 @@ class StorageTest extends TestCase
     /**
      * @return array
      */
-    public function getStorageTypeForNameDataProvider(): array
+    public static function getStorageTypeForNameDataProvider(): array
     {
         return [
             'font' => [\Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT, Storage::FONTS],
@@ -492,7 +499,7 @@ class StorageTest extends TestCase
     /**
      * @return array
      */
-    public function getCurrentPathDataProvider(): array
+    public static function getCurrentPathDataProvider(): array
     {
         $rootPath = '/' . \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE;
 
@@ -512,13 +519,14 @@ class StorageTest extends TestCase
     {
         $this->request
             ->method('getParam')
-            ->withConsecutive(
-                [Storage::PARAM_THEME_ID],
-                [Storage::PARAM_CONTENT_TYPE]
-            )
-            ->willReturnOnConsecutiveCalls(
-                6,
-                \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE
+            ->willReturnCallback(
+                function ($param) {
+                    if ($param == Storage::PARAM_THEME_ID) {
+                        return 6;
+                    } elseif ($param == Storage::PARAM_CONTENT_TYPE) {
+                        return \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE;
+                    }
+                }
             );
     }
 
@@ -539,8 +547,14 @@ class StorageTest extends TestCase
         $this->contextHelper->expects($this->any())->method('getRequest')->willReturn($this->request);
         $this->request
             ->method('getParam')
-            ->withConsecutive(...$withArgs)
-            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+            ->willReturnCallback(function ($withArgs) use ($willReturnArgs) {
+                if (!empty($withArgs)) {
+                    static $callCount = 0;
+                    $returnValue = $willReturnArgs[$callCount] ?? null;
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
 
         $this->helper = new Storage(
             $this->contextHelper,

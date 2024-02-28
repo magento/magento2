@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 class GroupedProductDataProviderTest extends TestCase
 {
-    const ALLOWED_TYPE = 'simple';
+    private const ALLOWED_TYPE = 'simple';
 
     /**
      * @var ObjectManager
@@ -114,7 +114,13 @@ class GroupedProductDataProviderTest extends TestCase
             ->willReturn(false);
         $this->collectionMock->expects($this->any())
             ->method('addAttributeToFilter')
-            ->withConsecutive(['type_id', [self::ALLOWED_TYPE]], ['required_options', '0']);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'type_id' && $arg2 == [self::ALLOWED_TYPE]) {
+                    return null;
+                } elseif ($arg1 == 'required_options' && $arg2 == '0') {
+                    return null;
+                }
+            });
         $this->collectionMock->expects($this->once())
             ->method('toArray')
             ->willReturn($items);

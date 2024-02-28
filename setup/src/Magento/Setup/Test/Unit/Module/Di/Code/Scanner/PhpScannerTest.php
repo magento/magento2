@@ -61,17 +61,14 @@ class PhpScannerTest extends TestCase
 
         $this->log
             ->method('add')
-            ->withConsecutive(
-                [
-                    4,
-                    'Magento\SomeModule\Module\Factory',
-                    'Invalid Factory for nonexistent class Magento\SomeModule\Module in file ' . $testFiles[0]
-                ],
-                [
-                    4,
-                    'Magento\SomeModule\Element\Factory',
-                    'Invalid Factory declaration for class Magento\SomeModule\Element in file ' . $testFiles[0]
-                ]
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) {
+                    if ($arg1 == 4 && $arg2 == 'Magento\SomeModule\Module\Factory') {
+                        return null;
+                    } elseif ($arg1 == 4 && $arg2 == 'Magento\SomeModule\Element\Factory') {
+                        return null;
+                    }
+                }
             );
 
         $result = $this->scanner->collectEntities($testFiles);

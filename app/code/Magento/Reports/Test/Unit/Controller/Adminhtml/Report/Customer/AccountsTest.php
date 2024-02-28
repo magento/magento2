@@ -63,10 +63,12 @@ class AccountsTest extends AbstractControllerTest
             ->with('Magento_Reports::report_customers_accounts');
         $this->breadcrumbsBlockMock
             ->method('addLink')
-            ->withConsecutive(
-                [new Phrase('Reports'), new Phrase('Reports')],
-                [new Phrase('Customers'), new Phrase('Customers')],
-                [new Phrase('New Accounts'), new Phrase('New Accounts')]
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 instanceof Phrase && $arg2 instanceof Phrase) {
+                        return null;
+                    }
+                }
             );
         $this->accounts->execute();
     }

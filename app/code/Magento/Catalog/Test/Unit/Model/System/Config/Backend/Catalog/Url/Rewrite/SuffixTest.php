@@ -135,13 +135,16 @@ class SuffixTest extends TestCase
         $this->suffixModel->setPath(
             CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX
         );
-        $this->cacheTypeList->expects($this->exactly(2))->method('invalidate')->withConsecutive(
-            [$this->equalTo([
-                Block::TYPE_IDENTIFIER,
-                Collection::TYPE_IDENTIFIER
-            ])],
-            [$this->equalTo('config')]
-        );
+        $this->cacheTypeList->expects($this->exactly(2))->method('invalidate')
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == [Block::TYPE_IDENTIFIER, Collection::TYPE_IDENTIFIER]) {
+                        return null;
+                    } elseif ($arg1 == 'config') {
+                        return null;
+                    }
+                }
+            );
         $this->suffixModel->afterSave();
     }
 

@@ -120,7 +120,7 @@ class BootstrapTest extends TestCase
             ->willReturn($this->objectManager);
 
         $this->bootstrapMock = $this->getMockBuilder(Bootstrap::class)
-            ->setMethods(['assertMaintenance', 'assertInstalled', 'getIsExpected', 'isInstalled', 'terminate'])
+            ->onlyMethods(['assertMaintenance', 'assertInstalled', 'getIsExpected', 'isInstalled', 'terminate'])
             ->setConstructorArgs([$this->objectManagerFactory, '', ['value1', 'value2']])
             ->getMock();
     }

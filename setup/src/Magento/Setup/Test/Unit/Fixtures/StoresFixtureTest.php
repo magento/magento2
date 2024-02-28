@@ -166,27 +166,15 @@ class StoresFixtureTest extends TestCase
 
         $storeMock->expects($this->exactly(11))
             ->method('addData')
-            ->withConsecutive(
-                [
-                    [
-                        'store_id' => null,
-                        'name' => 'Store view 2 - website_id_1 - group_id_1',
-                        'website_id' => 1,
-                        'group_id' => 1,
-                        'code' => 'store_view_2',
-                    ]
-                ],
-                [
-                    [
-                        'store_id' => null,
-                        'name' => 'Store view 3 - website_id_1 - group_id_1',
-                        'website_id' => 1,
-                        'group_id' => 1,
-                        'code' => 'store_view_3',
-                    ]
-                ]
-            )
-            ->willReturn($storeMock);
+            ->willReturnCallback(
+                function ($arg) use ($storeMock) {
+                    if ($arg['name'] == 'Store view 2 - website_id_1 - group_id_1') {
+                        return $storeMock;
+                    } elseif ($arg['name'] == 'Store view 3 - website_id_1 - group_id_1') {
+                        return $storeMock;
+                    }
+                }
+            );
 
         $storeGroupMock = $this->getMockBuilder(GroupInterface::class)
             ->disableOriginalConstructor()
@@ -199,27 +187,15 @@ class StoresFixtureTest extends TestCase
 
         $storeGroupMock->expects($this->exactly(5))
             ->method('addData')
-            ->withConsecutive(
-                [
-                    [
-                        'group_id' => null,
-                        'website_id' => 1,
-                        'name' => 'Store Group 2 - website_id_1',
-                        'code' => 'store_group_2',
-                        'root_category_id' => $categoryMock,
-                    ]
-                ],
-                [
-                    [
-                        'group_id' => null,
-                        'website_id' => 1,
-                        'name' => 'Store Group 3 - website_id_1',
-                        'code' => 'store_group_3',
-                        'root_category_id' => $categoryMock,
-                    ]
-                ]
-            )
-            ->willReturn($storeGroupMock);
+            ->willReturnCallback(
+                function ($arg) use ($storeGroupMock, $categoryMock) {
+                    if ($arg['name'] == 'Store Group 2 - website_id_1') {
+                        return $storeGroupMock;
+                    } elseif ($arg['name'] == 'Store Group 3 - website_id_1') {
+                        return $storeGroupMock;
+                    }
+                }
+            );
 
         $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
@@ -232,25 +208,15 @@ class StoresFixtureTest extends TestCase
 
         $websiteMock->expects($this->exactly(2))
             ->method('addData')
-            ->withConsecutive(
-                [
-                    [
-                        'website_id' => null,
-                        'code' => 'website_2',
-                        'name' => 'Website 2',
-                        'is_default' => false,
-                    ]
-                ],
-                [
-                    [
-                        'website_id' => null,
-                        'code' => 'website_3',
-                        'name' => 'Website 3',
-                        'is_default' => false,
-                    ]
-                ]
-            )
-            ->willReturn($storeGroupMock);
+            ->willReturnCallback(
+                function ($arg) use ($websiteMock, $storeGroupMock) {
+                    if ($arg['code'] == 'website_2') {
+                        return $storeGroupMock;
+                    } elseif ($arg['code'] == 'website_3') {
+                        return $storeGroupMock;
+                    }
+                }
+            );
 
         $this->storeManagerMock->expects($this->once())
             ->method('getGroups')

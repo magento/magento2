@@ -9,10 +9,12 @@ namespace Magento\Checkout\Test\Unit\Block\Cart;
 
 use Magento\Checkout\Block\Cart\Link;
 use Magento\Checkout\Helper\Cart;
+use Magento\Framework\Math\Random;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\TestCase;
 
 class LinkTest extends TestCase
@@ -25,6 +27,18 @@ class LinkTest extends TestCase
     protected function setUp(): void
     {
         $this->_objectManagerHelper = new ObjectManager($this);
+
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $this->_objectManagerHelper->prepareObjectManager($objects);
     }
 
     public function testGetUrl()

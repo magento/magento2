@@ -16,6 +16,8 @@ use Magento\Backend\Model\Menu\Config;
 use Magento\Backend\Model\Menu\Filter\IteratorFactory;
 use Magento\Backend\Model\Menu\Item;
 use Magento\Backend\Model\UrlInterface;
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -73,6 +75,17 @@ class MenuTest extends TestCase
             ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
         $this->menu =  $objectManagerHelper->getObject(
             Menu::class,
             [

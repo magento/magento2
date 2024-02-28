@@ -145,8 +145,6 @@ class ImageResizeTest extends TestCase
         $this->testImageHiddenFilename = "image_hidden.jpg";
         $this->testfilepath = "/image.jpg";
         $this->testImageHiddenfilepath = "/image_hidden.jpg";
-
-
         $this->appStateMock = $this->createMock(State::class);
         $this->imageConfigMock = $this->createMock(MediaConfig::class);
         $this->productImageMock = $this->createMock(ProductImage::class);
@@ -164,7 +162,7 @@ class ImageResizeTest extends TestCase
 
         $this->mediaDirectoryMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getAbsolutePath','isFile','getRelativePath'])
+            ->addMethods(['getAbsolutePath','isFile','getRelativePath'])
             ->getMock();
 
         $this->filesystemMock->expects($this->any())
@@ -196,12 +194,27 @@ class ImageResizeTest extends TestCase
 
         $this->imageConfigMock->expects($this->any())
             ->method('getMediaPath')
-            ->withConsecutive([$this->testfilename], [$this->testImageHiddenFilename])
-            ->willReturnOnConsecutiveCalls($this->testfilepath, $this->testImageHiddenfilepath);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == $this->testfilename) {
+                        return $this->testfilepath;
+                    } elseif ($arg == $this->testImageHiddenFilename) {
+                        return $this->testImageHiddenfilepath;
+                    }
+                }
+            );
+
         $this->mediaDirectoryMock->expects($this->any())
             ->method('getAbsolutePath')
-            ->withConsecutive([$this->testfilepath], [$this->testImageHiddenfilepath])
-            ->willReturnOnConsecutiveCalls($this->testfilepath, $this->testImageHiddenfilepath);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == $this->testfilepath) {
+                        return $this->testfilepath;
+                    } elseif ($arg == $this->testImageHiddenfilepath) {
+                        return $this->testImageHiddenfilepath;
+                    }
+                }
+            );
         $this->mediaDirectoryMock->expects($this->any())
             ->method('getRelativePath')
             ->willReturnOnConsecutiveCalls($this->testfilepath, $this->testImageHiddenfilepath);
@@ -281,15 +294,32 @@ class ImageResizeTest extends TestCase
 
         $this->mediaDirectoryMock->expects($this->any())
             ->method('isFile')
-            ->withConsecutive([$this->testfilepath], [$this->testImageHiddenfilepath])
-            ->willReturn(true);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == $this->testfilepath || $arg == $this->testImageHiddenfilepath) {
+                        return true;
+                    }
+                }
+            );
 
         $this->databaseMock->expects($this->any())
             ->method('saveFileToFilesystem')
-            ->withConsecutive([$this->testfilepath], [$this->testImageHiddenfilepath]);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == $this->testfilepath || $arg == $this->testImageHiddenfilepath) {
+                        return null;
+                    }
+                }
+            );
         $this->databaseMock->expects($this->any())
             ->method('saveFile')
-            ->withConsecutive([$this->testfilepath], [$this->testImageHiddenfilepath]);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == $this->testfilepath || $arg == $this->testImageHiddenfilepath) {
+                        return null;
+                    }
+                }
+            );
 
         $generator = $this->service->resizeFromThemes(['test-theme'], true);
         while ($generator->valid()) {
@@ -344,15 +374,32 @@ class ImageResizeTest extends TestCase
 
         $this->mediaDirectoryMock->expects($this->any())
             ->method('isFile')
-            ->withConsecutive([$this->testfilepath], [$this->testImageHiddenfilepath])
-            ->willReturn(true);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == $this->testfilepath || $arg == $this->testImageHiddenfilepath) {
+                        return true;
+                    }
+                }
+            );
 
         $this->databaseMock->expects($this->any())
             ->method('saveFileToFilesystem')
-            ->withConsecutive([$this->testfilepath], [$this->testImageHiddenfilepath]);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == $this->testfilepath || $arg == $this->testImageHiddenfilepath) {
+                        return null;
+                    }
+                }
+            );
         $this->databaseMock->expects($this->any())
             ->method('saveFile')
-            ->withConsecutive([$this->testfilepath], [$this->testImageHiddenfilepath]);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == $this->testfilepath || $arg == $this->testImageHiddenfilepath) {
+                        return null;
+                    }
+                }
+            );
 
         $this->assertEquals(2, $this->service->getCountProductImages());
         $this->assertEquals(1, $this->service->getCountProductImages(true));
@@ -364,7 +411,6 @@ class ImageResizeTest extends TestCase
             $this->assertEmpty($resizeInfo['error']);
             $generator->next();
         }
-
     }
 
     public function testResizeFromThemesUnsupportedImage()
@@ -396,8 +442,13 @@ class ImageResizeTest extends TestCase
 
         $this->mediaDirectoryMock->expects($this->any())
             ->method('isFile')
-            ->withConsecutive([$this->testfilepath], [$this->testImageHiddenfilepath])
-            ->willReturn(true);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == $this->testfilepath || $arg == $this->testImageHiddenfilepath) {
+                        return true;
+                    }
+                }
+            );
 
         $generator = $this->service->resizeFromThemes(['test-theme'], true);
         while ($generator->valid()) {

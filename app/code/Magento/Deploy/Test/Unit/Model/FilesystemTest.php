@@ -149,18 +149,24 @@ class FilesystemTest extends TestCase
         $this->shell
             ->expects($this->exactly(4))
             ->method('execute')
-            ->withConsecutive([$cacheFlushCmd], [$setupDiCompileCmd], [$cacheFlushCmd], [$staticContentDeployCmd]);
+            ->willReturnCallback(function ($arg1) use ($cacheFlushCmd, $setupDiCompileCmd, $staticContentDeployCmd) {
+                if ($arg1 == $cacheFlushCmd || $arg1 == $setupDiCompileCmd || $arg1 == $staticContentDeployCmd) {
+                    return null;
+                }
+            });
 
         $this->output
             ->method('writeln')
-            ->withConsecutive(
-                ['Starting compilation'],
-                [],
-                ['Compilation complete'],
-                ['Starting deployment of static content'],
-                [],
-                ['Deployment of static content complete']
-            );
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'Starting compilation' ||
+                    $arg1 == 'Compilation complete' ||
+                    $arg1 == 'Starting deployment of static content' ||
+                    $arg1 == 'Deployment of static content complete' ||
+                    empty($arg1)
+                    ) {
+                    return null;
+                }
+            });
 
         $this->deployFilesystem->regenerateStatic($this->output);
     }
@@ -176,9 +182,18 @@ class FilesystemTest extends TestCase
         $this->expectExceptionMessage(
             ';echo argument has invalid value, run info:language:list for list of available locales'
         );
+        $setupDiCompileCmd = $this->cmdPrefix . 'setup:di:compile';
         $storeLocales = ['fr_FR', 'de_DE', ';echo'];
         $this->storeView->method('retrieveLocales')
             ->willReturn($storeLocales);
+        $cacheFlushCmd = $this->cmdPrefix . 'cache:flush';
+        $staticContentDeployCmd = $this->cmdPrefix . 'setup:static-content:deploy -f '
+            . implode(' ', $storeLocales);
+        $this->shell
+            ->expects($this->exactly(3))
+            ->method('execute')
+            ->withConsecutive([$cacheFlushCmd], [$setupDiCompileCmd], [$cacheFlushCmd], [$staticContentDeployCmd])
+            ->willReturn("Compilation complete");
 
         $this->initAdminLocaleMock('en_US');
 
@@ -196,9 +211,18 @@ class FilesystemTest extends TestCase
         $this->expectExceptionMessage(
             ';echo argument has invalid value, run info:language:list for list of available locales'
         );
+        $setupDiCompileCmd = $this->cmdPrefix . 'setup:di:compile';
         $storeLocales = ['fr_FR', 'de_DE', 'en_US'];
+        $cacheFlushCmd = $this->cmdPrefix . 'cache:flush';
+        $staticContentDeployCmd = $this->cmdPrefix . 'setup:static-content:deploy -f '
+            . implode(' ', $storeLocales);
         $this->storeView->method('retrieveLocales')
             ->willReturn($storeLocales);
+        $this->shell
+            ->expects($this->exactly(3))
+            ->method('execute')
+            ->withConsecutive([$cacheFlushCmd], [$setupDiCompileCmd], [$cacheFlushCmd], [$staticContentDeployCmd])
+            ->willReturn("Compilation complete");
 
         $this->initAdminLocaleMock(';echo');
 

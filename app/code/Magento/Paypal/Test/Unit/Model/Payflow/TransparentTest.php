@@ -123,17 +123,26 @@ class TransparentTest extends TestCase
         }
 
         $gatewayToken = 'gateway_token';
-        $this->payment->expects($this->once())->method('getParentTransactionId')->willReturn($parentTransactionId);
-        $this->payment->expects($this->exactly($setParentTransactionIdCalls))->method('setParentTransactionId');
-        $this->payment->expects($this->exactly($setAdditionalInformationCalls))->method('setAdditionalInformation')->with(Payflowpro::PNREF, $gatewayToken);
-        $this->payment->expects($this->exactly(4))->method('getAdditionalInformation')->withConsecutive(
-            ['result_code'],
-            [Payflowpro::PNREF],
-            [Payflowpro::PNREF],
-            [Payflowpro::PNREF],
-        )->willReturn(0, '', Payflowpro::PNREF, Payflowpro::PNREF);
-        $this->paymentExtensionAttributes->expects($this->once())->method('getVaultPaymentToken')->willReturn($this->paymentToken);
-        $this->paymentToken->expects($this->exactly($getGatewayTokenCalls))->method('getGatewayToken')->willReturn($gatewayToken);
+        $this->payment->expects($this->once())->method('getParentTransactionId')
+            ->willReturn($parentTransactionId);
+        $this->payment->expects($this->exactly($setParentTransactionIdCalls))
+            ->method('setParentTransactionId');
+        $this->payment->expects($this->exactly($setAdditionalInformationCalls))
+            ->method('setAdditionalInformation')->with(Payflowpro::PNREF, $gatewayToken);
+        $this->payment->expects($this->exactly(4))
+            ->method('getAdditionalInformation')->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'result_code') {
+                        return 0;
+                    } elseif ($arg == Payflowpro::PNREF) {
+                        return Payflowpro::PNREF;
+                    }
+                }
+            );
+        $this->paymentExtensionAttributes->expects($this->once())
+            ->method('getVaultPaymentToken')->willReturn($this->paymentToken);
+        $this->paymentToken->expects($this->exactly($getGatewayTokenCalls))
+            ->method('getGatewayToken')->willReturn($gatewayToken);
 
         $this->subject->capture($this->payment, 100);
     }
@@ -143,7 +152,7 @@ class TransparentTest extends TestCase
      *
      * @return array
      */
-    public function captureCorrectIdDataProvider(): array
+    public static function captureCorrectIdDataProvider(): array
     {
         return [
             'No Transaction ID' => [''],
@@ -195,7 +204,7 @@ class TransparentTest extends TestCase
     /**
      * @return array
      */
-    public function validAuthorizeRequestDataProvider(): array
+    public static function validAuthorizeRequestDataProvider(): array
     {
         return [
             [

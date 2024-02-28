@@ -97,7 +97,7 @@ class AbstractBlockTest extends TestCase
         $this->cacheStateMock = $this->getMockForAbstractClass(CacheStateInterface::class);
         $this->lockQuery = $this->getMockBuilder(LockGuardedCacheLoader::class)
             ->disableOriginalConstructor()
-            ->setMethods(['lockedLoadData'])
+            ->onlyMethods(['lockedLoadData'])
             ->getMockForAbstractClass();
         $this->sidResolverMock = $this->getMockForAbstractClass(SidResolverInterface::class);
         $this->sessionMock = $this->getMockForAbstractClass(SessionManagerInterface::class);

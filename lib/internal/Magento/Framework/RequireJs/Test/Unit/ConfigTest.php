@@ -78,11 +78,13 @@ class ConfigTest extends TestCase
             ->willReturn($this->fileReader);
         $repo = $this->createMock(Repository::class);
         $this->context = $this->getMockBuilder(ContextInterface::class)
-            ->setMethods(
+            ->onlyMethods([
+                'getPath',
+                'getBaseUrl',
+            ])
+            ->addMethods(
                 [
                     'getConfigPath',
-                    'getPath',
-                    'getBaseUrl',
                     'getAreaCode',
                     'getThemePath',
                     'getLocale'

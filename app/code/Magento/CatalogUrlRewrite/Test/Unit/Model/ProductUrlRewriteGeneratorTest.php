@@ -148,8 +148,10 @@ class ProductUrlRewriteGeneratorTest extends TestCase
             ->getMock();
         $productCategoriesMock->expects($this->exactly(2))
             ->method('addAttributeToSelect')
-            ->withConsecutive(['url_key'], ['url_path'])
-            ->willReturnSelf();
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['url_key'] => $productCategoriesMock,
+                ['url_path'] => $productCategoriesMock
+            });
         $productMock->expects($this->once())
             ->method('getCategoryCollection')
             ->willReturn($productCategoriesMock);
@@ -170,7 +172,7 @@ class ProductUrlRewriteGeneratorTest extends TestCase
         $productMock->expects($this->once())
             ->method('getVisibility')
             ->willReturn(Product\Visibility::VISIBILITY_NOT_VISIBLE);
-        $productMock->expects($this->exactly(2))
+        $productMock->expects($this->exactly(3))
             ->method('getStoreId')
             ->willReturn($storeId);
         $productCategoriesMock = $this->getMockBuilder(Collection::class)
@@ -178,8 +180,15 @@ class ProductUrlRewriteGeneratorTest extends TestCase
             ->getMock();
         $productCategoriesMock->expects($this->exactly(2))
             ->method('addAttributeToSelect')
-            ->withConsecutive(['url_key'], ['url_path'])
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg) use ($productCategoriesMock) {
+                    if ($arg == 'url_key') {
+                        return $productCategoriesMock;
+                    } elseif ($arg == 'url_path') {
+                        return $productCategoriesMock;
+                    }
+                }
+            );
         $productMock->expects($this->once())
             ->method('getCategoryCollection')
             ->willReturn($productCategoriesMock);

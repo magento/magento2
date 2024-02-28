@@ -26,6 +26,29 @@ class Magento implements ObserverInterface
     protected $_eventManager;
 
     /**
+     * @var $_eventObject
+     */
+    protected static $_eventObject;
+
+    /**
+     * Assign current Event Object
+     *
+     * @param $eventObject
+     */
+    public static function setCurrentEventObject($eventObject = null)
+    {
+        self::$_eventObject = $eventObject;
+    }
+
+    /**
+     * Get Current Event Object
+     */
+    public static function getCurrentEventObject()
+    {
+        return self::$_eventObject;
+    }
+
+    /**
      * Assign default event manager instance
      *
      * @param \Magento\TestFramework\EventManager $eventManager
@@ -33,6 +56,14 @@ class Magento implements ObserverInterface
     public static function setDefaultEventManager(\Magento\TestFramework\EventManager $eventManager = null)
     {
         self::$_defaultEventManager = $eventManager;
+    }
+
+    /**
+     * Get Default Event Manager
+     */
+    public static function getDefaultEventManager()
+    {
+        return self::$_defaultEventManager;
     }
 
     /**

@@ -337,19 +337,18 @@ class AfterImportDataObserverTest extends TestCase
         $this->importProduct
             ->expects($this->exactly($productsCount))
             ->method('getNewSku')
-            ->withConsecutive(
-                [$this->products[0][ImportProduct::COL_SKU]],
-                [$this->products[1][ImportProduct::COL_SKU]]
-            )
-            ->will($this->onConsecutiveCalls($newSku[0], $newSku[1]));
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$this->products[0][ImportProduct::COL_SKU]] => $newSku[0],
+                [$this->products[1][ImportProduct::COL_SKU]] => $newSku[1]
+            });
 
         $this->importProduct
             ->expects($this->exactly($productsCount))
             ->method('getProductCategories')
-            ->withConsecutive(
-                [$this->products[0][ImportProduct::COL_SKU]],
-                [$this->products[1][ImportProduct::COL_SKU]]
-            )->willReturn([]);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$this->products[0][ImportProduct::COL_SKU]] => [],
+                [$this->products[1][ImportProduct::COL_SKU]] => []
+            });
         $getProductWebsitesCallsCount = $productsCount * 2;
         $this->importProduct
             ->expects($this->exactly($getProductWebsitesCallsCount))

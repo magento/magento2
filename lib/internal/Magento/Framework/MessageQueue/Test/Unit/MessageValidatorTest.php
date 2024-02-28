@@ -47,7 +47,7 @@ class MessageValidatorTest extends TestCase
         );
         $object = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->model->validate('customer.created', $object, true);
@@ -60,7 +60,7 @@ class MessageValidatorTest extends TestCase
         );
         $object = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->model->validate('customer.created', [$object, 'password', 'redirect'], true);
@@ -151,11 +151,11 @@ class MessageValidatorTest extends TestCase
     {
         $customerMock = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
         $customerMockTwo = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         return [

@@ -11,10 +11,12 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Tree;
 use Magento\Cms\Helper\Wysiwyg\Images;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\DataObject;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -62,6 +64,19 @@ class TreeTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+
         $contextMock = $this->createMock(Context::class);
         $this->cmsWysiwygImagesMock = $this->createMock(Images::class);
         $this->coreRegistryMock = $this->createMock(Registry::class);

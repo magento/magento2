@@ -44,12 +44,12 @@ class AdminConfigFixtureTest extends TestCase
         $this->object
             ->method('_getConfigValue')
             ->willReturnCallback(
-                function ($config) {
-                    static $configValues = [
-                        'any_config' => 'some_value'
-                    ];
-
-                    return $configValues[$config] ?? null;
+                function ($arg1) {
+                    if ($arg1 == 'any_config') {
+                        return 'some_value';
+                    } elseif ($arg1 == 'any_config') {
+                        return 'some_value';
+                    }
                 }
             );
 
@@ -85,12 +85,12 @@ class AdminConfigFixtureTest extends TestCase
         $this->object
             ->method('_getConfigValue')
             ->willReturnCallback(
-                function ($config) {
-                    static $configValues = [
-                        'any_config' => 'some_value'
-                    ];
-
-                    return $configValues[$config] ?? null;
+                function ($arg1) {
+                    if ($arg1 == 'any_config') {
+                        return 'some_value';
+                    } elseif ($arg1 == 'any_config') {
+                        return 'some_value';
+                    }
                 }
             );
 

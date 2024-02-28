@@ -144,11 +144,26 @@ class ConvertToCsvTest extends TestCase
             ->willReturn([]);
         $this->metadataProvider->expects($this->exactly(2))
             ->method('getRowData')
-            ->withConsecutive([$document1, [], []], [$document2, [], []])
-            ->willReturn($data);
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($document1, $document2, $data) {
+                    if ($arg1 === $document1 && empty($arg2) && empty($arg3)) {
+                        return $data;
+                    } elseif ($arg1 === $document2 && empty($arg2) && empty($arg3)) {
+                        return $data;
+                    }
+                }
+            );
         $this->metadataProvider->expects($this->exactly(2))
             ->method('convertDate')
-            ->withConsecutive([$document1, $componentName], [$document2, $componentName]);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($document1, $document2, $componentName) {
+                    if ($arg1 === $document1 && $arg2 === $componentName) {
+                        return null;
+                    } elseif ($arg1 === $document2 && $arg2 === $componentName) {
+                        return null;
+                    }
+                }
+            );
 
         $result = $this->model->getCsvFile();
         $this->assertIsArray($result);
@@ -258,8 +273,13 @@ class ConvertToCsvTest extends TestCase
 
         $searchCriteria->expects($this->exactly(3))
             ->method('setCurrentPage')
-            ->withConsecutive([1], [2], [3])
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg) use ($searchCriteria) {
+                    if ($arg == 1 || $arg == 2 || $arg == 3) {
+                        return $searchCriteria;
+                    }
+                }
+            );
 
         $searchCriteria->expects($this->once())
             ->method('setPageSize')

@@ -15,6 +15,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Json\Encoder;
 use Magento\Framework\Phrase;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Webapi\ErrorProcessor;
 
 use Magento\Framework\Webapi\Exception as WebapiException;
@@ -41,10 +43,19 @@ class ErrorProcessorTest extends TestCase
 
     protected function setUp(): void
     {
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $objects = [
+            [
+                Json::class,
+                $this->createMock(Json::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
+
         /** Set up mocks for SUT. */
         $this->encoderMock = $this->getMockBuilder(Encoder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['encode'])
+            ->onlyMethods(['encode'])
             ->getMock();
 
         $this->_appStateMock = $this->getMockBuilder(State::class)
@@ -247,11 +258,11 @@ class ErrorProcessorTest extends TestCase
         $this->_loggerMock->expects($this->once())
             ->method('critical')
             ->willReturnCallback(
-                
+
                     function (\Exception $loggedException) use ($thrownException) {
                         $this->assertSame($thrownException, $loggedException->getPrevious());
                     }
-                
+
             );
         $this->_errorProcessor->maskException($thrownException);
     }
