@@ -702,7 +702,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
     }
 
     /**
-     * @magentoConfigFixture current_store catalog/seo/generate_category_product_rewrites 1
+     * @magentoConfigFixture catalog/seo/generate_category_product_rewrites 1
      */
     #[
         AppIsolation(true),
@@ -766,7 +766,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
     }
 
     /**
-     * @magentoConfigFixture current_store catalog/seo/generate_category_product_rewrites 1
+     * @magentoConfigFixture catalog/seo/generate_category_product_rewrites 1
      */
     #[
         DataFixture(StoreFixture::class, ['group_id' => 1, 'website_id' => 1], as: 'store2'),
@@ -860,7 +860,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
     }
 
     /**
-     * @magentoConfigFixture current_store catalog/seo/generate_category_product_rewrites 0
+     * @magentoConfigFixture catalog/seo/generate_category_product_rewrites 0
      */
     #[
         AppIsolation(true),
@@ -875,7 +875,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
     ]
     public function testNotVisibleOnDefaultStoreVisibleOnDefaultScopeIgnoreCategories()
     {
-        $category = $this->fixtures->get('category');
         $product = $this->fixtures->get('product');
         $secondStore = $this->fixtures->get('store2');
 
@@ -917,7 +916,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
     }
 
     /**
-     * @magentoConfigFixture current_store catalog/seo/generate_category_product_rewrites 0
+     * @magentoConfigFixture catalog/seo/generate_category_product_rewrites 0
      */
     #[
         DataFixture(StoreFixture::class, ['group_id' => 1, 'website_id' => 1], as: 'store2'),
