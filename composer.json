@@ -16,12 +16,6 @@
         "preferred-install": "dist",
         "sort-packages": true
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:glo71317/Cm_Cache_Backend_Redis.git"
-        }
-    ],
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "ext-bcmath": "*",
@@ -42,7 +36,7 @@
         "ext-zip": "*",
         "lib-libxml": "*",
         "colinmollenhour/cache-backend-file": "^1.4",
-        "colinmollenhour/cache-backend-redis": "dev-performance-issue",
+        "colinmollenhour/cache-backend-redis": "^1.16",
         "colinmollenhour/credis": "^1.15",
         "colinmollenhour/php-redis-session-abstract": "^1.5",
         "composer/composer": "^2.0, !=2.2.16",

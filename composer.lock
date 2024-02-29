@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2d30c980d7a303f5c0283f55c22ef617",
+    "content-hash": "678dbb9cee85823c3efa1841d8e237c1",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -303,16 +303,16 @@
         },
         {
             "name": "colinmollenhour/cache-backend-redis",
-            "version": "dev-performance-issue",
+            "version": "1.17.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/glo71317/Cm_Cache_Backend_Redis.git",
-                "reference": "3711c78091809de15a09d3ee5ed213b0b402f8f3"
+                "url": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis.git",
+                "reference": "d403f4473e1b3cc616fa59d187e817543b6620c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/glo71317/Cm_Cache_Backend_Redis/zipball/3711c78091809de15a09d3ee5ed213b0b402f8f3",
-                "reference": "3711c78091809de15a09d3ee5ed213b0b402f8f3",
+                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_Redis/zipball/d403f4473e1b3cc616fa59d187e817543b6620c1",
+                "reference": "d403f4473e1b3cc616fa59d187e817543b6620c1",
                 "shasum": ""
             },
             "require": {
@@ -329,14 +329,7 @@
                     "Cm/Cache/Backend/Redis.php"
                 ]
             },
-            "scripts": {
-                "test": [
-                    "vendor/bin/phpunit tests"
-                ],
-                "php-cs-fixer": [
-                    "vendor/bin/php-cs-fixer fix --diff"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause-Modification"
             ],
@@ -348,9 +341,10 @@
             "description": "Zend_Cache backend using Redis with full support for tags.",
             "homepage": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis",
             "support": {
-                "source": "https://github.com/glo71317/Cm_Cache_Backend_Redis/tree/performance-issue"
+                "issues": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis/issues",
+                "source": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis/tree/1.17.1"
             },
-            "time": "2024-02-22T08:06:06+00:00"
+            "time": "2023-12-21T21:56:18+00:00"
         },
         {
             "name": "colinmollenhour/credis",
@@ -13150,7 +13144,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "colinmollenhour/cache-backend-redis": 20,
         "magento/composer": 10
     },
     "prefer-stable": true,
