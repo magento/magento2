@@ -13,13 +13,13 @@ namespace Magento\Csp\Model;
 class SubresourceIntegrity extends \Magento\Framework\DataObject
 {
     /**
-     * Gets an integrity URL.
+     * Gets an integrity Path.
      *
      * @return string|null
      */
-    public function getUrl(): ?string
+    public function getPath(): ?string
     {
-        return $this->getData("url");
+        return $this->getData("path");
     }
 
     /**

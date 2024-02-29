@@ -66,19 +66,24 @@ class SubresourceIntegrityRepository
     }
 
     /**
-     * Gets an Integrity object by URL.
+     * Gets an Integrity object by path.
      *
-     * @param string $url
+     * @param string $path
      *
      * @return SubresourceIntegrity|null
      */
-    public function getByUrl(string $url): ?SubresourceIntegrity
+    public function getByPath(string $path): ?SubresourceIntegrity
     {
         $data = $this->getData();
 
-        if (isset($data[$url])) {
+        if (isset($data[$path])) {
             return $this->integrityFactory->create(
-                ["data" => $data[$url]]
+                [
+                    "data" => [
+                        "path" => $path,
+                        "hash" => $data[$path]
+                    ]
+                ]
             );
         }
 
@@ -94,10 +99,13 @@ class SubresourceIntegrityRepository
     {
         $result = [];
 
-        foreach ($this->getData() as $integrity) {
+        foreach ($this->getData() as $path => $hash) {
             $result[] = $this->integrityFactory->create(
                 [
-                    "data" => $integrity
+                    "data" => [
+                        "path" => $path,
+                        "hash" => $hash
+                    ]
                 ]
             );
         }
@@ -116,10 +124,7 @@ class SubresourceIntegrityRepository
     {
         $data = $this->getData();
 
-        $data[$integrity->getUrl()] = [
-            "url" => $integrity->getUrl(),
-            "hash" => $integrity->getHash()
-        ];
+        $data[$integrity->getPath()] = $integrity->getHash();
 
         $this->data = $data;
 
@@ -127,6 +132,20 @@ class SubresourceIntegrityRepository
             $this->serializer->serialize($this->data),
             $this->getCacheKey(),
             [self::CACHE_PREFIX]
+        );
+    }
+
+    /**
+     * Deletes all Integrity objects.
+     *
+     * @return bool
+     */
+    public function deleteAll(): bool
+    {
+        $this->data = null;
+
+        return $this->cache->remove(
+            $this->getCacheKey()
         );
     }
 

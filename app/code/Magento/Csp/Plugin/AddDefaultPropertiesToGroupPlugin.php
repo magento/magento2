@@ -9,6 +9,7 @@ namespace Magento\Csp\Plugin;
 
 use Magento\Framework\App\State;
 use Magento\Framework\View\Asset\AssetInterface;
+use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\GroupedCollection;
 use Magento\Csp\Model\SubresourceIntegrityRepositoryPool;
 
@@ -53,15 +54,17 @@ class AddDefaultPropertiesToGroupPlugin
         AssetInterface $asset,
         array $properties = []
     ): array {
-        $integrityRepository = $this->integrityRepositoryPool->get(
-            $this->state->getAreaCode()
-        );
+        if ($asset instanceof LocalInterface) {
+            $integrityRepository = $this->integrityRepositoryPool->get(
+                $this->state->getAreaCode()
+            );
 
-        $integrity = $integrityRepository->getByUrl($asset->getUrl());
+            $integrity = $integrityRepository->getByPath($asset->getPath());
 
-        if ($integrity && $integrity->getHash()) {
-            $properties['attributes']['integrity'] = $integrity->getHash();
-            $properties['attributes']['crossorigin'] = 'anonymous';
+            if ($integrity && $integrity->getHash()) {
+                $properties['attributes']['integrity'] = $integrity->getHash();
+                $properties['attributes']['crossorigin'] = 'anonymous';
+            }
         }
 
         return [$asset, $properties];

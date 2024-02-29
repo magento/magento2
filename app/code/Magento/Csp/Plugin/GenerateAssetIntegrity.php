@@ -121,15 +121,12 @@ class GenerateAssetIntegrity
                     'hash' => $this->hashGenerator->generate(
                         $asset->getContent()
                     ),
-                    'url' => $asset->getUrl()
+                    'path' => $asset->getPath()
                 ]
             ]
         );
 
-        $area = explode(
-            "/",
-            parse_url($asset->getUrl(), PHP_URL_PATH)
-        )[3];
+        $area = explode("/", $asset->getPath())[0];
 
         $this->integrityRepositoryPool->get($area)
             ->save($integrity);

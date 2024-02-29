@@ -5,6 +5,7 @@
  */
 namespace Magento\Csp\Block\Sri;
 
+use Magento\Framework\UrlInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Exception\LocalizedException;
@@ -65,8 +66,14 @@ class Hashes extends Template
             $this->_appState->getAreaCode()
         );
 
+        $baseUrl = $this->_urlBuilder->getBaseUrl(
+            ["_type" => UrlInterface::URL_TYPE_STATIC]
+        );
+
         foreach ($integrityRepository->getAll() as $integrity) {
-            $result[$integrity->getUrl()] = $integrity->getHash();
+            $url = $baseUrl . $integrity->getPath();
+
+            $result[$url] = $integrity->getHash();
         }
 
         return $this->serializer->serialize($result);
