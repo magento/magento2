@@ -18,7 +18,6 @@ namespace Magento\QuoteGraphQl\Model;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Model\Quote;
-use Magento\SalesRule\Api\Data\RuleDiscountInterface;
 
 class GetDiscounts
 {
@@ -26,7 +25,7 @@ class GetDiscounts
      * Get Discount Values
      *
      * @param Quote $quote
-     * @param RuleDiscountInterface[]|null $discounts
+     * @param array $discounts
      * @return array|null
      * @throws LocalizedException
      */
