@@ -57,7 +57,7 @@ class WordsFinder
      *
      * @var string
      */
-    protected $copyrightAdobeString = 'ADOBE CONFIDENTIAL';
+    private $copyrightAdobeString = 'ADOBE CONFIDENTIAL';
 
     /**
      * List of extensions for which copyright check must be skipped
@@ -482,8 +482,8 @@ class WordsFinder
      */
     private function isCopyrightYearValid($content)
     {
-        $yearPattern = '/Copyright (\d{4}) Adobe/';
-        if (preg_match($yearPattern, $content, $matches)) {
+        $pattern = '/Copyright (\d{4}) Adobe/';
+        if (preg_match($pattern, $content, $matches)) {
             $year = intval($matches[1]);
             if ($year >= 2010 && $year <= date("Y")) {
                 return true;
