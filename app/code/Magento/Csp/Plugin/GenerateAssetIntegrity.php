@@ -13,8 +13,8 @@ use Magento\Framework\App\View\Asset\Publisher;
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\AssetInterface;
 use Magento\Csp\Model\SubresourceIntegrityFactory;
+use Magento\Csp\Model\SubresourceIntegrityCollector;
 use Magento\Csp\Model\SubresourceIntegrity\HashGenerator;
-use Magento\Csp\Model\SubresourceIntegrityRepositoryPool;
 
 /**
  * Plugin to add asset integrity value after static content deploy.
@@ -39,23 +39,23 @@ class GenerateAssetIntegrity
     private SubresourceIntegrityFactory $integrityFactory;
 
     /**
-     * @var SubresourceIntegrityRepositoryPool
+     * @var SubresourceIntegrityCollector
      */
-    private SubresourceIntegrityRepositoryPool $integrityRepositoryPool;
+    private SubresourceIntegrityCollector $integrityCollector;
 
     /**
      * @param HashGenerator $hashGenerator
      * @param SubresourceIntegrityFactory $integrityFactory
-     * @param SubresourceIntegrityRepositoryPool $integrityRepositoryPool
+     * @param SubresourceIntegrityCollector $integrityCollector
      */
     public function __construct(
         HashGenerator $hashGenerator,
         SubresourceIntegrityFactory $integrityFactory,
-        SubresourceIntegrityRepositoryPool $integrityRepositoryPool
+        SubresourceIntegrityCollector $integrityCollector
     ) {
         $this->hashGenerator = $hashGenerator;
         $this->integrityFactory = $integrityFactory;
-        $this->integrityRepositoryPool = $integrityRepositoryPool;
+        $this->integrityCollector = $integrityCollector;
     }
 
     /**
@@ -126,9 +126,6 @@ class GenerateAssetIntegrity
             ]
         );
 
-        $area = explode("/", $asset->getPath())[0];
-
-        $this->integrityRepositoryPool->get($area)
-            ->save($integrity);
+        $this->integrityCollector->collect($integrity);
     }
 }

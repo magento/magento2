@@ -136,6 +136,30 @@ class SubresourceIntegrityRepository
     }
 
     /**
+     * Saves a bunch of Integrity objects.
+     *
+     * @param SubresourceIntegrity[] $bunch
+     *
+     * @return bool
+     */
+    public function saveBunch(array $bunch): bool
+    {
+        $data = $this->getData();
+
+        foreach ($bunch as $integrity) {
+            $data[$integrity->getPath()] = $integrity->getHash();
+        }
+
+        $this->data = $data;
+
+        return $this->cache->save(
+            $this->serializer->serialize($this->data),
+            $this->getCacheKey(),
+            [self::CACHE_PREFIX]
+        );
+    }
+
+    /**
      * Deletes all Integrity objects.
      *
      * @return bool

@@ -123,4 +123,7 @@
     <type name="Magento\RequireJs\Model\FileManager">
         <plugin name="addResourceIntegrityAfterAssetCreate" type="Magento\Csp\Plugin\GenerateAssetIntegrity"/>
     </type>
+    <type name="Magento\Deploy\Service\DeployStaticContent">
+        <plugin name="storeAssetIntegrityHashes" type="Magento\Csp\Plugin\StoreAssetIntegrityHashes" />
+    </type>
 </config>
