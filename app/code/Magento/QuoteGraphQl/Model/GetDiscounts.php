@@ -16,32 +16,12 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model;
 
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
-use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote;
-use Magento\SalesRule\Api\CouponRepositoryInterface;
-use Magento\SalesRule\Api\Data\CouponInterface;
 use Magento\SalesRule\Api\Data\RuleDiscountInterface;
 
-class GetDiscounts implements ResetAfterRequestInterface
+class GetDiscounts
 {
-    /**
-     * @var CouponInterface[]
-     */
-    private array $couponsByCode = [];
-
-    /**
-     * @param CouponRepositoryInterface $couponRepository
-     * @param SearchCriteriaBuilder $criteriaBuilder
-     */
-    public function __construct(
-        private readonly CouponRepositoryInterface $couponRepository,
-        private readonly SearchCriteriaBuilder $criteriaBuilder
-    ) {
-    }
-
     /**
      * Get Discount Values
      *
@@ -57,7 +37,6 @@ class GetDiscounts implements ResetAfterRequestInterface
         }
 
         $discountValues = [];
-        $coupon = $this->getCoupon($quote);
         foreach ($discounts as $value) {
             $discountData = $value->getDiscountData();
             $discountValues[] = [
@@ -67,59 +46,11 @@ class GetDiscounts implements ResetAfterRequestInterface
                     'value' => $discountData->getAmount(),
                     'currency' => $quote->getQuoteCurrencyCode()
                 ],
-                'coupon' => $this->getFormattedCoupon($coupon, (int) $value->getRuleID())
+                'discount_model' => $value,
+                'quote_model' => $quote
             ];
         }
 
         return $discountValues;
-    }
-
-    /**
-     * Get formatted coupon for the rule id
-     *
-     * @param CouponInterface|null $coupon
-     * @param int $ruleId
-     * @return array|null
-     */
-    private function getFormattedCoupon(?CouponInterface $coupon, int $ruleId): ?array
-    {
-        if ($coupon && $coupon->getRuleId() && $coupon->getRuleId() == $ruleId) {
-            return ['code' => $coupon->getCode()];
-        }
-        return null;
-    }
-
-    /**
-     * Retrieve coupon data object
-     *
-     * @param CartInterface $quote
-     * @return CouponInterface|null
-     * @throws LocalizedException
-     */
-    private function getCoupon(CartInterface $quote): ?CouponInterface
-    {
-        $couponCode = $quote->getCouponCode();
-        if (!$couponCode) {
-            return null;
-        }
-        if (isset($this->couponsByCode[$couponCode])) {
-            return $this->couponsByCode[$couponCode];
-        }
-        $couponModels = $this->couponRepository->getList(
-            $this->criteriaBuilder->addFilter('code', $couponCode)->create()
-        )->getItems();
-        if (empty($couponModels)) {
-            return null;
-        }
-        $this->couponsByCode[$couponCode] = reset($couponModels);
-        return $this->couponsByCode[$couponCode];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function _resetState(): void
-    {
-        $this->couponsByCode = [];
     }
 }
