@@ -484,7 +484,7 @@ class SampleRepositoryTest extends WebapiAbstract
         $this->assertNotEmpty($link['sample_file']);
     }
 
-    public function getListForAbsentProductProvider()
+    public static function getListForAbsentProductProvider()
     {
         $sampleExpectation = [
             'fields' => [

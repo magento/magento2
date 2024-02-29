@@ -158,7 +158,7 @@ class CustomerSharingOptionsTest extends WebapiAbstract
      *
      * @return array
      */
-    public function getCustomerDataWebsiteScopeDataProvider(): array
+    public static function getCustomerDataWebsiteScopeDataProvider(): array
     {
         return [
             'Default Store View' => [
@@ -177,7 +177,7 @@ class CustomerSharingOptionsTest extends WebapiAbstract
      *
      * @return array
      */
-    public function getCustomerDataGlobalScopeDataProvider(): array
+    public static function getCustomerDataGlobalScopeDataProvider(): array
     {
         return [
             'Default Store View' => [

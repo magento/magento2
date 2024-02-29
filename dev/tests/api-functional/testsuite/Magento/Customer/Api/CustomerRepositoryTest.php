@@ -732,7 +732,7 @@ class CustomerRepositoryTest extends WebapiAbstract
      *
      * @return array
      */
-    public function subscriptionDataProvider(): array
+    public static function subscriptionDataProvider(): array
     {
         return [
             'subscribed user' => [true],
@@ -1147,7 +1147,7 @@ class CustomerRepositoryTest extends WebapiAbstract
      *
      * @return array
      */
-    public function customerDataProvider(): array
+    public static function customerDataProvider(): array
     {
         return [
             ['firstname', 'Jane ☺ ', 'First Name is not valid!'],
@@ -1208,7 +1208,7 @@ class CustomerRepositoryTest extends WebapiAbstract
      *
      * @return array
      */
-    public function customerWithMultiByteDataProvider(): array
+    public static function customerWithMultiByteDataProvider(): array
     {
         return [
             [
@@ -1264,7 +1264,7 @@ class CustomerRepositoryTest extends WebapiAbstract
      *
      * @return array
      */
-    public function customerValidNameDataProvider(): array
+    public static function customerValidNameDataProvider(): array
     {
         return [
             [
