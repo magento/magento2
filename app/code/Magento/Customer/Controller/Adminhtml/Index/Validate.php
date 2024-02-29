@@ -12,6 +12,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Address\Mapper;
+use Magento\Customer\Model\SetCustomerStore;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
@@ -20,7 +21,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObjectFactory as ObjectFactory;
 use Magento\Framework\Message\Error;
 use Magento\Customer\Controller\Adminhtml\Index as CustomerAction;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class for validation of customer
@@ -30,9 +30,9 @@ use Magento\Store\Model\StoreManagerInterface;
 class Validate extends CustomerAction implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
-     * @var StoreManagerInterface
+     * @var SetCustomerStore|null
      */
-    private $storeManager;
+    private $customerStore;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
@@ -60,7 +60,7 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param StoreManagerInterface|null $storeManager
+     * @param SetCustomerStore|null $customerStore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -89,7 +89,7 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        ?StoreManagerInterface $storeManager = null
+        ?SetCustomerStore $customerStore = null
     ) {
         parent::__construct(
             $context,
@@ -118,8 +118,7 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
             $resultForwardFactory,
             $resultJsonFactory
         );
-
-        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->customerStore = $customerStore ?? ObjectManager::getInstance()->get(SetCustomerStore::class);
     }
 
     /**
@@ -146,7 +145,9 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
             );
             $customerForm->setInvisibleIgnored(true);
 
-            $this->setCurrentCustomerStore();
+            $this->customerStore->setStore(
+                $this->getRequest()->getParam(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER)
+            );
             $data = $customerForm->extractData($this->getRequest(), 'customer');
 
             if ($customer->getWebsiteId()) {
@@ -202,24 +203,5 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
 
         $resultJson->setData($response);
         return $resultJson;
-    }
-
-    /**
-     * Set store ID for the current customer.
-     *
-     * @return void
-     */
-    private function setCurrentCustomerStore(): void
-    {
-        $requestData = $this->getRequest()->getParam(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
-        if ($requestData) {
-            $storeId = $requestData['store_id'] ?? null;
-            if (!$storeId) {
-                $websiteId = $requestData['website_id'] ?? null;
-                $website = $this->storeManager->getWebsite($websiteId);
-                $storeId = $website ? current($website->getStoreIds()) : null;
-            }
-            $this->storeManager->setCurrentStore($storeId);
-        }
     }
 }

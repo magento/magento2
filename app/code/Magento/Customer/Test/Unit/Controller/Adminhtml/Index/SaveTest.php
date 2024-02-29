@@ -26,6 +26,7 @@ use Magento\Customer\Model\Address\Mapper;
 use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Model\Metadata\FormFactory;
+use Magento\Customer\Model\SetCustomerStore;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
@@ -44,8 +45,6 @@ use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Newsletter\Model\SubscriptionManagerInterface;
-use Magento\Store\Api\Data\WebsiteInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -286,14 +285,9 @@ class SaveTest extends TestCase
         $this->emailNotificationMock = $this->getMockBuilder(EmailNotificationInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $website = $this->createPartialMock(\Magento\Store\Model\Website::class, ['getStoreIds']);
-        $website->expects($this->exactly(2))->method('getStoreIds')
-            ->willReturn([1]);
-        $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-        $storeManager->expects($this->exactly(2))->method('getWebsite')
-            ->willReturn($website);
-        $storeManager->expects($this->exactly(2))->method('setCurrentStore')->with(1);
+
+        $customerStoreMock = $this->createMock(SetCustomerStore::class);
+        $customerStoreMock->expects($this->once())->method('setStore');
 
         $objectManager = new ObjectManager($this);
 
@@ -320,7 +314,7 @@ class SaveTest extends TestCase
                 'addressRepository' => $this->customerAddressRepositoryMock,
                 'addressMapper' => $this->customerAddressMapperMock,
                 'subscriptionManager' => $this->subscriptionManager,
-                'storeManager' => $storeManager,
+                'customerStore' => $customerStoreMock
             ]
         );
 
@@ -348,7 +342,6 @@ class SaveTest extends TestCase
                 'code' => 'value',
                 'coolness' => false,
                 'disable_auto_group_change' => 'false',
-                'website_id' => 1
             ],
             'subscription_status' => [$subscriptionWebsite => $subscriptionStatus],
             'subscription_store' => [$subscriptionWebsite => $subscriptionStore],
@@ -358,14 +351,12 @@ class SaveTest extends TestCase
             'code' => 'value',
             'coolness' => false,
             'disable_auto_group_change' => 'false',
-            'website_id' => 1
         ];
         $compactedData = [
             'entity_id' => $customerId,
             'code' => 'value',
             'coolness' => false,
             'disable_auto_group_change' => 'false',
-            'website_id' => 1,
             CustomerInterface::DEFAULT_BILLING => 2,
             CustomerInterface::DEFAULT_SHIPPING => 2
         ];
@@ -385,7 +376,6 @@ class SaveTest extends TestCase
             'confirmation' => false,
             'sendemail_store_id' => '1',
             'id' => $customerId,
-            'website_id' => 1
         ];
 
         /** @var AttributeMetadataInterface|MockObject $customerFormMock */
