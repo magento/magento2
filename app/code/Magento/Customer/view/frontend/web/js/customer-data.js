@@ -47,7 +47,17 @@ define([
      * Invalidate Cache By Close Cookie Session
      */
     invalidateCacheByCloseCookieSession = function () {
+        var isLoggedIn = parseInt(options.isLoggedIn, 10) || 0;
+
         if (!$.cookieStorage.isSet('mage-cache-sessid')) {
+            storage.removeAll();
+        }
+
+        if (!$.localStorage.isSet('mage-customer-login')) {
+            $.localStorage.set('mage-customer-login', isLoggedIn);
+        }
+        if ($.localStorage.get('mage-customer-login') !== isLoggedIn) {
+            $.localStorage.set('mage-customer-login', isLoggedIn);
             storage.removeAll();
         }
 
@@ -222,6 +232,13 @@ define([
                 path: '/',
                 expires: new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000)
             });
+
+            if (options.cookieDomain) {
+                $.cookieStorage.setConf({
+                    domain: options.cookieDomain
+                });
+            }
+
             storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
             storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
         },

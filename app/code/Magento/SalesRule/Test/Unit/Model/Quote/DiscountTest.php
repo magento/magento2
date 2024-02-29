@@ -103,7 +103,7 @@ class DiscountTest extends TestCase
                 [
                     'canApplyRules',
                     'reset',
-                    'init',
+                    'initFromQuote',
                     'initTotals',
                     'sortItemsByPriority',
                     'setSkipActionsValidation',
@@ -117,11 +117,6 @@ class DiscountTest extends TestCase
             ->getMock();
         $this->rule = $this->getMockBuilder(Rule::class)
             ->disableOriginalConstructor()
-            ->addMethods(
-                [
-                    'getSimpleAction'
-                ]
-            )
             ->getMock();
         $this->eventManagerMock = $this->createMock(Manager::class);
         $priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
@@ -219,7 +214,15 @@ class DiscountTest extends TestCase
         $this->shippingAssignmentMock->expects($this->any())->method('getItems')->willReturn([$itemNoDiscount]);
         $this->addressMock->expects($this->any())->method('getShippingAmount')->willReturn(true);
 
-        $totalMock = $this->createMock(Total::class);
+        $totalMock = $this->getMockBuilder(Total::class)
+            ->addMethods(
+                [
+                    'getBaseDiscountAmount'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $totalMock->expects($this->any())->method('getBaseDiscountAmount')->willReturn(0.0);
 
         $this->assertInstanceOf(
             Discount::class,
@@ -265,7 +268,15 @@ class DiscountTest extends TestCase
         $this->addressMock->expects($this->any())->method('getQuote')->willReturn($quoteMock);
         $this->addressMock->expects($this->any())->method('getShippingAmount')->willReturn(true);
         $this->shippingAssignmentMock->expects($this->any())->method('getItems')->willReturn([$itemWithParentId]);
-        $totalMock = $this->createMock(Total::class);
+        $totalMock = $this->getMockBuilder(Total::class)
+            ->addMethods(
+                [
+                    'getBaseDiscountAmount'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $totalMock->expects($this->any())->method('getBaseDiscountAmount')->willReturn(0.0);
 
         $this->assertInstanceOf(
             Discount::class,
@@ -334,7 +345,16 @@ class DiscountTest extends TestCase
         $this->addressMock->expects($this->any())->method('getShippingAmount')->willReturn(true);
         $this->shippingAssignmentMock->expects($this->any())->method('getItems')->willReturn([$itemWithChildren]);
 
-        $totalMock = $this->createMock(Total::class);
+        $totalMock = $this->getMockBuilder(Total::class)
+            ->addMethods(
+                [
+                    'getBaseDiscountAmount'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $totalMock->expects($this->any())->method('getBaseDiscountAmount')->willReturn(0.0);
+
         $this->assertInstanceOf(
             Discount::class,
             $this->discount->collect($quoteMock, $this->shippingAssignmentMock, $totalMock)
@@ -353,10 +373,11 @@ class DiscountTest extends TestCase
 
         $quoteMock = $this->createMock(Quote::class);
         $totalMock = $this->getMockBuilder(Total::class)
-            ->addMethods(['getDiscountAmount', 'getDiscountDescription'])
+            ->addMethods(['getDiscountAmount', 'getDiscountDescription', 'getBaseDiscountAmount'])
             ->disableOriginalConstructor()
             ->getMock();
 
+        $totalMock->expects($this->any())->method('getBaseDiscountAmount')->willReturn(0.0);
         $totalMock->expects($this->once())->method('getDiscountAmount')->willReturn($discountAmount);
         $totalMock->expects($this->once())->method('getDiscountDescription')->willReturn($discountDescription);
         $this->assertEquals($expectedResult, $this->discount->fetch($quoteMock, $totalMock));

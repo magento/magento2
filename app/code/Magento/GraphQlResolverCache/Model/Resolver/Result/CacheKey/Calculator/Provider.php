@@ -12,19 +12,24 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator;
 
 /**
- * Provides custom cache key calculators for the resolvers chain.
+ * Provides cache key calculators for the resolvers chain.
  */
 class Provider implements ProviderInterface
 {
     /**
      * @var array
      */
-    private array $customFactorProviders = [];
+    private array $factorProviders = [];
 
     /**
      * @var array
      */
     private array $keyCalculatorInstances = [];
+
+    /**
+     * Dev docs link
+     */
+    private const DEV_DOCS = "https://developer.adobe.com/commerce/webapi/graphql/develop";
 
     /**
      * @var ObjectManagerInterface
@@ -33,18 +38,18 @@ class Provider implements ProviderInterface
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param array $customFactorProviders
+     * @param array $factorProviders
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        array $customFactorProviders = []
+        array $factorProviders = []
     ) {
         $this->objectManager = $objectManager;
-        $this->customFactorProviders = $customFactorProviders;
+        $this->factorProviders = $factorProviders;
     }
 
     /**
-     * Initialize custom cache key calculator for the given resolver.
+     * Initialize cache key calculator for the given resolver.
      *
      * @param ResolverInterface $resolver
      *
@@ -56,15 +61,19 @@ class Provider implements ProviderInterface
         if (isset($this->keyCalculatorInstances[$resolverClass])) {
             return;
         }
-        $customKeyFactorProviders = $this->getCustomFactorProvidersForResolver($resolver);
-        if (empty($customKeyFactorProviders)) {
-            $this->keyCalculatorInstances[$resolverClass] = $this->objectManager->get(Calculator::class);
+        $factorProviders = $this->getFactorProvidersForResolver($resolver);
+        if ($factorProviders === null) {
+            $devDocs = self::DEV_DOCS;
+            throw new \InvalidArgumentException(
+                "GraphQL Resolver Cache key factors are not determined for {$resolverClass} or its parents. " .
+                "See {$devDocs} for information about configuring cache key factors for a resolver."
+            );
         } else {
-            $runtimePoolKey = $this->generateCustomProvidersKey($customKeyFactorProviders);
+            $runtimePoolKey = $this->generateKeyFromFactorProviders($factorProviders);
             if (!isset($this->keyCalculatorInstances[$runtimePoolKey])) {
                 $this->keyCalculatorInstances[$runtimePoolKey] = $this->objectManager->create(
                     Calculator::class,
-                    ['factorProviders' => $customKeyFactorProviders]
+                    ['factorProviders' => $factorProviders]
                 );
             }
             $this->keyCalculatorInstances[$resolverClass] = $this->keyCalculatorInstances[$runtimePoolKey];
@@ -72,14 +81,17 @@ class Provider implements ProviderInterface
     }
 
     /**
-     * Generate runtime pool key from the set of custom providers.
+     * Generate runtime pool key from the set of factor providers.
      *
-     * @param array $customProviders
+     * @param array $factorProviders
      * @return string
      */
-    private function generateCustomProvidersKey(array $customProviders): string
+    private function generateKeyFromFactorProviders(array $factorProviders): string
     {
-        $keyArray = array_keys($customProviders);
+        if (empty($factorProviders)) {
+            return '';
+        }
+        $keyArray = array_keys($factorProviders);
         sort($keyArray);
         return implode('_', $keyArray);
     }
@@ -112,18 +124,22 @@ class Provider implements ProviderInterface
     }
 
     /**
-     * Get custom cache key factor providers for the given resolver object.
+     * Get a list of cache key factor providers for the given resolver object.
      *
      * @param ResolverInterface $resolver
-     * @return array
+     * @return array|null
      */
-    private function getCustomFactorProvidersForResolver(ResolverInterface $resolver): array
+    private function getFactorProvidersForResolver(ResolverInterface $resolver): ?array
     {
+        $resultsToMerge = [];
         foreach ($this->getResolverClassChain($resolver) as $resolverClass) {
-            if (!empty($this->customFactorProviders[$resolverClass])) {
-                return $this->customFactorProviders[$resolverClass];
+            if (isset($this->factorProviders[$resolverClass])
+                && is_array($this->factorProviders[$resolverClass])
+            ) {
+                $resultsToMerge []= $this->factorProviders[$resolverClass];
             }
         }
-        return [];
+        // avoid using array_merge in a loop
+        return !empty($resultsToMerge) ? array_merge(...$resultsToMerge) : null;
     }
 }

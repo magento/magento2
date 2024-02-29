@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Model\Product\Price\Validation;
 
 use Magento\Catalog\Api\Data\TierPriceInterface;
-use Magento\Catalog\Model\Product\Price\TierPricePersistence;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ProductIdLocatorInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
@@ -55,11 +55,6 @@ class TierPriceValidator implements ResetAfterRequestInterface
     private $validationResult;
 
     /**
-     * @var TierPricePersistence
-     */
-    private $tierPricePersistence;
-
-    /**
      * Groups by code cache.
      *
      * @var array
@@ -87,6 +82,16 @@ class TierPriceValidator implements ResetAfterRequestInterface
     private $allowedProductTypes = [];
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @var array
+     */
+    private $productsCacheBySku = [];
+
+    /**
      * TierPriceValidator constructor.
      *
      * @param ProductIdLocatorInterface $productIdLocator
@@ -94,9 +99,9 @@ class TierPriceValidator implements ResetAfterRequestInterface
      * @param FilterBuilder $filterBuilder
      * @param GroupRepositoryInterface $customerGroupRepository
      * @param WebsiteRepositoryInterface $websiteRepository
-     * @param TierPricePersistence $tierPricePersistence
      * @param Result $validationResult
      * @param InvalidSkuProcessor $invalidSkuProcessor
+     * @param ProductRepositoryInterface $productRepository
      * @param array $allowedProductTypes [optional]
      */
     public function __construct(
@@ -105,9 +110,9 @@ class TierPriceValidator implements ResetAfterRequestInterface
         FilterBuilder                      $filterBuilder,
         GroupRepositoryInterface            $customerGroupRepository,
         WebsiteRepositoryInterface             $websiteRepository,
-        TierPricePersistence $tierPricePersistence,
         Result                                                    $validationResult,
         InvalidSkuProcessor                                       $invalidSkuProcessor,
+        ProductRepositoryInterface $productRepository,
         array                                                     $allowedProductTypes = []
     ) {
         $this->productIdLocator = $productIdLocator;
@@ -115,9 +120,9 @@ class TierPriceValidator implements ResetAfterRequestInterface
         $this->filterBuilder = $filterBuilder;
         $this->customerGroupRepository = $customerGroupRepository;
         $this->websiteRepository = $websiteRepository;
-        $this->tierPricePersistence = $tierPricePersistence;
         $this->validationResult = $validationResult;
         $this->invalidSkuProcessor = $invalidSkuProcessor;
+        $this->productRepository = $productRepository;
         $this->allowedProductTypes = $allowedProductTypes;
     }
 
@@ -310,7 +315,16 @@ class TierPriceValidator implements ResetAfterRequestInterface
      */
     private function checkQuantity(TierPriceInterface $price, $key, Result $validationResult)
     {
-        if ($price->getQuantity() < 1) {
+        $sku = $price->getSku();
+        if (isset($this->productsCacheBySku[$sku])) {
+            $product = $this->productsCacheBySku[$sku];
+        } else {
+            $product = $this->productRepository->get($price->getSku());
+            $this->productsCacheBySku[$sku] = $product;
+        }
+
+        $canUseQtyDecimals = $product->getTypeInstance()->canUseQtyDecimals();
+        if ($price->getQuantity() <= 0 || $price->getQuantity() < 1 && !$canUseQtyDecimals) {
             $validationResult->addFailedItem(
                 $key,
                 __(
@@ -476,10 +490,19 @@ class TierPriceValidator implements ResetAfterRequestInterface
             $item = array_shift($items);
 
             if (!$item) {
+                $this->customerGroupsByCode[$code] = false;
                 return false;
             }
 
-            $this->customerGroupsByCode[strtolower($item->getCode())] = $item->getId();
+            $itemCode = $item->getCode();
+            $itemId = $item->getId();
+
+            if (strtolower($itemCode) !== $code) {
+                $this->customerGroupsByCode[$code] = false;
+                return false;
+            }
+
+            $this->customerGroupsByCode[strtolower($itemCode)] = $itemId;
         }
 
         return $this->customerGroupsByCode[$code];

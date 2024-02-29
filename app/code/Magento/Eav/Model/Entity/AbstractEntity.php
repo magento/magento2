@@ -56,7 +56,7 @@ abstract class AbstractEntity extends AbstractResource implements
     /**
      * Entity type configuration
      *
-     * @var Type
+     * @var Type|null
      */
     protected $_type;
 
@@ -89,7 +89,7 @@ abstract class AbstractEntity extends AbstractResource implements
     protected $_staticAttributes = [];
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $_entityTable;
 
@@ -103,7 +103,7 @@ abstract class AbstractEntity extends AbstractResource implements
     /**
      * Entity table identification field name
      *
-     * @var string
+     * @var string|null
      */
     protected $_entityIdField;
 
@@ -553,7 +553,16 @@ abstract class AbstractEntity extends AbstractResource implements
      */
     public function loadAllAttributes($object = null)
     {
-        return $this->attributeLoader->loadAllAttributes($this, $object);
+        $result = $this->attributeLoader->loadAllAttributes($this, $object);
+        if ($object instanceof DataObject && $object->getAttributeSetId()) {
+            $suffix = $this->getAttributesCacheSuffix($object);
+            $this->_attrSetEntity->addSetInfo(
+                $this->getEntityType(),
+                $this->getAttributesByScope($suffix),
+                $object->getAttributeSetId()
+            );
+        }
+        return $result;
     }
 
     /**
