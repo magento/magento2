@@ -249,8 +249,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param string $uri
      * @param array|string $params
      * @return void
-     *
-     * @see \Magento\Framework\HTTP\Client#post($uri, $params)
      */
     public function post(string $uri, array|string $params): void
     {
@@ -265,8 +263,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param string $uri
      * @param array|string $params
      * @return void
-     *
-     * @see \Magento\Framework\HTTP\Client#patch($uri, $params)
      */
     public function put(string $uri, array|string $params): void
     {
@@ -281,8 +277,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param string $uri
      * @param array|string $params
      * @return void
-     *
-     * @see \Magento\Framework\HTTP\Client#patch($uri, $params)
      */
     public function patch(string $uri, array|string $params): void
     {
@@ -373,8 +367,6 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Get response status code
-     *
-     * @see lib\Magento\Framework\HTTP\Client#getStatus()
      *
      * @return int
      */
