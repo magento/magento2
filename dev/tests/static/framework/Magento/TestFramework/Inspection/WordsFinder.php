@@ -40,7 +40,7 @@ class WordsFinder
     /**
      * @var string
      */
-    private $_prefix = '/var/www/html/';
+    private $prefix = '/var/www/html/';
 
     /**
      * List of file extensions, that indicate a binary file
@@ -345,8 +345,8 @@ class WordsFinder
             }
         }
 
-        if (substr($file, 0, strlen($this->_prefix)) == $this->_prefix) {
-            $file = substr($file, strlen($this->_prefix));
+        if (substr($file, 0, strlen($this->prefix)) == $this->prefix) {
+            $file = substr($file, strlen($this->prefix));
         }
 
         if ($contents && !$this->isCopyrightCheckSkipped($file)) {
@@ -354,12 +354,13 @@ class WordsFinder
             if (in_array($file, $this->changedPrivateRepoFileList)) {
                 if ((strpos($contents, $this->copyrightAdobeString) === false)
                 ) {
+
                     $foundWords[] = 'Copyright content is not valid';
                 }
             }
 
             if (in_array($file, $this->changedAllFiles)) {
-                if ((strpos($contents, $this->getCopyrightYear()) === false)) {
+                if ($this->isCopyrightYearValid($contents) === false) {
                     $foundWords[] = 'Copyright year is not valid';
                 }
             }
@@ -474,12 +475,23 @@ class WordsFinder
     }
 
     /**
-     * Get copyright text
+     * Check is copyright year valid or not
      *
-     * @return string
+     * @param string $content
+     * @return bool
      */
-    private function getCopyrightYear()
+    private function isCopyrightYearValid($content)
     {
-        return  'Copyright '.date('Y').' Adobe';
+        $yearPattern = '/Copyright (\d{4}) Adobe/';
+        if (preg_match($yearPattern, $content, $matches)) {
+            $year = intval($matches[1]);
+            if ($year >= 2010 && $year <= date("Y")) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }
