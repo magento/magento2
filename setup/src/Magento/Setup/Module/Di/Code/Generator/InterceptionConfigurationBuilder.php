@@ -13,6 +13,7 @@ use Magento\Framework\App\Interception\Cache\CompiledConfig;
 use Magento\Framework\Interception\Config\Config as InterceptionConfig;
 use Magento\Setup\Module\Di\Code\Reader\Type;
 use Magento\Framework\ObjectManager\InterceptableValidator;
+use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 
 class InterceptionConfigurationBuilder
 {
@@ -49,24 +50,32 @@ class InterceptionConfigurationBuilder
     private $interceptableValidator;
 
     /**
+     * @var ConfigInterface
+     */
+    private $omConfig;
+
+    /**
      * @param InterceptionConfig $interceptionConfig
      * @param PluginList $pluginList
      * @param Type $typeReader
      * @param Manager $cacheManager
      * @param InterceptableValidator $interceptableValidator
+     * @param ConfigInterface $omConfig
      */
     public function __construct(
         InterceptionConfig $interceptionConfig,
         PluginList $pluginList,
         Type $typeReader,
         Manager $cacheManager,
-        InterceptableValidator $interceptableValidator
+        InterceptableValidator $interceptableValidator,
+        ConfigInterface $omConfig
     ) {
         $this->interceptionConfig = $interceptionConfig;
         $this->pluginList = $pluginList;
         $this->typeReader = $typeReader;
         $this->cacheManager = $cacheManager;
         $this->interceptableValidator = $interceptableValidator;
+        $this->omConfig = $omConfig;
     }
 
     /**
@@ -201,8 +210,9 @@ class InterceptionConfigurationBuilder
         foreach ($interceptionConfiguration as &$plugins) {
             $pluginsMethods = [];
             foreach ($plugins as $plugin) {
+                $realPlugin = $this->omConfig->getOriginalInstanceType($plugin);
                 $pluginsMethods = array_unique(
-                    array_merge($pluginsMethods, array_keys($pluginDefinitionList->getMethodList($plugin)))
+                    array_merge($pluginsMethods, array_keys($pluginDefinitionList->getMethodList($realPlugin)))
                 );
             }
             $plugins = $pluginsMethods;
