@@ -43,6 +43,7 @@
             <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
             <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
             <waitForText selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeSuccessMessage"/>
+            <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumber"/>
         </before>
         <after>
             <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
@@ -68,7 +69,7 @@
         <!--Grab transaction ids -->
         <waitForElementVisible selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="waitForGrabLastTransactionID"/>
         <grabTextFrom selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabLastTransactionID"/>
-        <waitForElementVisible selector="{{AdminOrderNotesSection.voidAuthorizationNotes('$grabLastTransactionID')}}" stepKey="WaitForVoidAuthorizationNotesWithID"/>
+        <waitForElementVisible selector="{{AdminOrderNotesSection.voidAuthorizationNotes('$grabLastTransactionID')}}" stepKey="waitForVoidAuthorizationNotesWithID"/>
         <grabTextFrom selector="{{AdminOrderNotesSection.voidAuthorizationNotes('$grabLastTransactionID')}}" stepKey="getVoidAuthorizationNotesWithID"/>
         <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistoryTab"/>
         <waitForText selector="{{AdminOrderCommentsTabSection.authorizationNotes('Voided')}}" userInput="$getVoidAuthorizationNotesWithID" stepKey="seeOrderHistoryNotes"/>
