@@ -20,7 +20,7 @@ interface ClientInterface
      * @param int $value value in seconds
      * @return void
      */
-    public function setTimeout($value);
+    public function setTimeout(int $value): void;
 
     /**
      * Set request headers from hash
@@ -28,7 +28,7 @@ interface ClientInterface
      * @param array $headers an array of header names as keys and header values as values
      * @return void
      */
-    public function setHeaders($headers);
+    public function setHeaders(array $headers): void;
 
     /**
      * Add header to request
@@ -37,7 +37,7 @@ interface ClientInterface
      * @param string $value value of the HTTP header
      * @return void
      */
-    public function addHeader($name, $value);
+    public function addHeader(string $name, string $value): void;
 
     /**
      * Remove header from request
@@ -45,7 +45,7 @@ interface ClientInterface
      * @param string $name name of the HTTP header
      * @return void
      */
-    public function removeHeader($name);
+    public function removeHeader(string $name): void;
 
     /**
      * Set login credentials for basic authentication.
@@ -54,7 +54,7 @@ interface ClientInterface
      * @param string $pass user password
      * @return void
      */
-    public function setCredentials($login, $pass);
+    public function setCredentials(string $login, string $pass): void;
 
     /**
      * Add cookie to request
@@ -63,7 +63,7 @@ interface ClientInterface
      * @param string $value value of the cookie
      * @return void
      */
-    public function addCookie($name, $value);
+    public function addCookie(string $name, string $value): void;
 
     /**
      * Remove cookie from request
@@ -71,7 +71,7 @@ interface ClientInterface
      * @param string $name name of the cookie
      * @return void
      */
-    public function removeCookie($name);
+    public function removeCookie(string $name): void;
 
     /**
      * Set request cookies from hash
@@ -79,30 +79,30 @@ interface ClientInterface
      * @param array $cookies an array of cookies with cookie names as keys and cookie values as value
      * @return void
      */
-    public function setCookies($cookies);
+    public function setCookies(array $cookies): void;
 
     /**
      * Remove cookies from request
      *
      * @return void
      */
-    public function removeCookies();
+    public function removeCookies(): void;
 
     /**
      * Make GET request
      *
      * @param string $uri full uri
-     * @return array
+     * @return void
      */
-    public function get($uri);
+    public function get(string $uri): void;
 
     /**
      * Make DELETE request
      *
      * @param string $uri full uri
-     * @return array
+     * @return void
      */
-    public function delete($uri);
+    public function delete(string $uri): void;
 
     /**
      * Make POST request
@@ -111,7 +111,7 @@ interface ClientInterface
      * @param array|string $params POST fields array or string in case of JSON or XML data
      * @return void
      */
-    public function post($uri, $params);
+    public function post(string $uri, array|string $params): void;
 
     /**
      * Make PATCH request
@@ -120,7 +120,7 @@ interface ClientInterface
      * @param array|string $params PATCH fields array or string in case of JSON or XML data
      * @return void
      */
-    public function patch($uri, $params);
+    public function patch(string $uri, array|string $params): void;
 
     /**
      * Make PUT request
@@ -129,35 +129,35 @@ interface ClientInterface
      * @param array|string $params PUT fields array or string in case of JSON or XML data
      * @return void
      */
-    public function put($uri, $params);
+    public function put(string $uri, array|string $params): void;
 
     /**
      * Get response headers
      *
      * @return array
      */
-    public function getHeaders();
+    public function getHeaders(): array;
 
     /**
      * Get response body
      *
      * @return string
      */
-    public function getBody();
+    public function getBody(): string;
 
     /**
      * Get response status code
      *
      * @return int
      */
-    public function getStatus();
+    public function getStatus(): int;
 
     /**
      * Get response cookies (k=>v)
      *
      * @return array
      */
-    public function getCookies();
+    public function getCookies(): array;
 
     /**
      * Set additional option
@@ -166,7 +166,7 @@ interface ClientInterface
      * @param string $value
      * @return void
      */
-    public function setOption($key, $value);
+    public function setOption(string $key, string $value): void;
 
     /**
      * Set additional options
@@ -174,5 +174,5 @@ interface ClientInterface
      * @param array $arr
      * @return void
      */
-    public function setOptions($arr);
+    public function setOptions(array $arr): void;
 }

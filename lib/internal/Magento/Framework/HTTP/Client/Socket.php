@@ -86,7 +86,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param int $value
      * @return void
      */
-    public function setTimeout($value)
+    public function setTimeout(int $value): void
     {
         $this->_timeout = (int)$value;
     }
@@ -97,7 +97,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param string $host
      * @param int $port
      */
-    public function __construct($host = null, $port = 80)
+    public function __construct(string $host = null, int $port = 80)
     {
         if ($host) {
             $this->connect($host, (int)$port);
@@ -111,7 +111,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param int $port
      * @return void
      */
-    public function connect($host, $port = 80)
+    public function connect(string $host, int $port = 80): void
     {
         $this->_host = $host;
         $this->_port = (int)$port;
@@ -122,7 +122,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      *
      * @return void
      */
-    public function disconnect()
+    public function disconnect(): void
     {
         @fclose($this->_sock);
     }
@@ -133,7 +133,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param array $headers
      * @return void
      */
-    public function setHeaders($headers)
+    public function setHeaders(array $headers): void
     {
         $this->_headers = $headers;
     }
@@ -145,7 +145,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param string $value value ex. "http://google.com"
      * @return void
      */
-    public function addHeader($name, $value)
+    public function addHeader(string $name, string $value): void
     {
         $this->_headers[$name] = $value;
     }
@@ -156,7 +156,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param string $name
      * @return void
      */
-    public function removeHeader($name)
+    public function removeHeader(string $name): void
     {
         unset($this->_headers[$name]);
     }
@@ -170,7 +170,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param string $pass password
      * @return void
      */
-    public function setCredentials($login, $pass)
+    public function setCredentials(string $login, string $pass): void
     {
         $val = base64_encode("{$login}:{$pass}");
         $this->addHeader("Authorization", "Basic {$val}");
@@ -183,7 +183,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param string $value
      * @return void
      */
-    public function addCookie($name, $value)
+    public function addCookie(string $name, string $value): void
     {
         $this->_cookies[$name] = $value;
     }
@@ -194,7 +194,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param string $name
      * @return void
      */
-    public function removeCookie($name)
+    public function removeCookie(string $name): void
     {
         unset($this->_cookies[$name]);
     }
@@ -205,7 +205,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param array $cookies
      * @return void
      */
-    public function setCookies($cookies)
+    public function setCookies(array $cookies): void
     {
         $this->_cookies = $cookies;
     }
@@ -215,7 +215,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      *
      * @return void
      */
-    public function removeCookies()
+    public function removeCookies(): void
     {
         $this->setCookies([]);
     }
@@ -226,7 +226,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param string $uri full uri path
      * @return void
      */
-    public function get($uri)
+    public function get(string $uri): void
     {
         $this->makeRequest("GET", $this->parseUrl($uri));
     }
@@ -237,7 +237,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param string $uri full uri path
      * @return void
      */
-    public function delete($uri)
+    public function delete(string $uri): void
     {
         $this->makeRequest("DELETE", $this->parseUrl($uri));
     }
@@ -249,7 +249,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @return string ex. /index.php?a=b
      * @throws \InvalidArgumentException
      */
-    protected function parseUrl($uri)
+    protected function parseUrl(string $uri): string
     {
         $parts = parse_url($uri);
         if (!empty($parts['user']) && !empty($parts['pass'])) {
@@ -283,7 +283,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param array|string $params use string in case of JSON or XML POST request
      * @return void
      */
-    public function post($uri, $params)
+    public function post(string $uri, array|string $params): void
     {
         $this->makeRequest("POST", $this->parseUrl($uri), $params);
     }
@@ -295,7 +295,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param array|string $params use string in case of JSON or XML POST request
      * @return void
      */
-    public function patch($uri, $params)
+    public function patch(string $uri, array|string $params): void
     {
         $this->makeRequest("PATCH", $this->parseUrl($uri), $params);
     }
@@ -307,7 +307,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param array|string $params use string in case of JSON or XML POST request
      * @return void
      */
-    public function put($uri, $params)
+    public function put(string $uri, array|string $params): void
     {
         $this->makeRequest("PUT", $this->parseUrl($uri), $params);
     }
@@ -317,7 +317,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      *
      * @return array
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->_responseHeaders;
     }
@@ -327,7 +327,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      *
      * @return string
      */
-    public function getBody()
+    public function getBody(): string
     {
         return $this->_responseBody;
     }
@@ -337,7 +337,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      *
      * @return array
      */
-    public function getCookies()
+    public function getCookies(): array
     {
         if (empty($this->_responseHeaders['Set-Cookie'])) {
             return [];
@@ -364,7 +364,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      *
      * @return array
      */
-    public function getCookiesFull()
+    public function getCookiesFull(): array
     {
         if (empty($this->_responseHeaders['Set-Cookie'])) {
             return [];
@@ -399,7 +399,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      *
      * @return void
      */
-    protected function processResponseHeaders()
+    protected function processResponseHeaders(): void
     {
         $crlf = "\r\n";
         $this->_responseHeaders = [];
@@ -432,7 +432,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      *
      * @return void
      */
-    protected function processResponseBody()
+    protected function processResponseBody(): void
     {
         $this->_responseBody = '';
 
@@ -447,15 +447,14 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @return void
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function processResponse()
+    protected function processResponse(): void
     {
         $response = '';
         $responseLine = trim(fgets($this->_sock, 1024));
 
         $line = explode(" ", $responseLine, 3);
         if (count($line) != 3) {
-            // phpstan:ignore "Result of method Magento\Framework\HTTP\Client\Socket::doError() (void) is used."
-            return $this->doError("Invalid response line returned from server: " . $responseLine);
+            $this->doError("Invalid response line returned from server: " . $responseLine);
         }
         $this->_responseStatus = (int)$line[1];
         $this->processResponseHeaders();
@@ -470,7 +469,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      *
      * @return void
      */
-    protected function processRedirect() // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+    protected function processRedirect(): void // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
         // TODO: implement redirects support
     }
@@ -482,7 +481,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      *
      * @return int
      */
-    public function getStatus()
+    public function getStatus(): int
     {
         return $this->_responseStatus;
     }
@@ -496,13 +495,12 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @return void
      * @throws \Exception
      */
-    protected function makeRequest($method, $uri, $params = [])
+    protected function makeRequest(string $method, string $uri, array|string $params = []): void
     {
         $errno = $errstr = '';
         $this->_sock = @fsockopen($this->_host, $this->_port, $errno, $errstr, $this->_timeout);
         if (!$this->_sock) {
-            // phpstan:ignore "Result of method Magento\Framework\HTTP\Client\Socket::doError() (void) is used."
-            return $this->doError(sprintf("[errno: %d] %s", $errno, $errstr));
+            $this->doError(sprintf("[errno: %d] %s", $errno, $errstr));
         }
 
         $crlf = "\r\n";
@@ -534,7 +532,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @return void
      * @throws \Exception
      */
-    public function doError($string)
+    public function doError(string $string): void
     {
         // phpcs:ignore Magento2.Exceptions.DirectThrow
         throw new \Exception($string);
@@ -546,7 +544,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param array $append
      * @return string
      */
-    protected function headersToString($append = [])
+    protected function headersToString(array $append = []): string
     {
         $headers = [];
         $headers["Host"] = $this->_host;
@@ -566,7 +564,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setOptions($arr) // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+    public function setOptions(array $arr): void // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
         // Stub
     }
@@ -579,7 +577,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setOption($name, $value) // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+    public function setOption(string $name, string $value): void // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
         // Stub
     }

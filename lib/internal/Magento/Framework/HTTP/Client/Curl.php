@@ -112,7 +112,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param int $value value in seconds
      * @return void
      */
-    public function setTimeout($value)
+    public function setTimeout(int $value): void
     {
         $this->_timeout = (int)$value;
     }
@@ -120,7 +120,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     /**
      * @param int|null $sslVersion
      */
-    public function __construct($sslVersion = null)
+    public function __construct(int $sslVersion = null)
     {
         $this->sslVersion = $sslVersion;
     }
@@ -131,7 +131,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param array $headers
      * @return void
      */
-    public function setHeaders($headers)
+    public function setHeaders(array $headers): void
     {
         $this->_headers = $headers;
     }
@@ -143,7 +143,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param string $value value ex. "http://google.com"
      * @return void
      */
-    public function addHeader($name, $value)
+    public function addHeader(string $name, string $value): void
     {
         $this->_headers[$name] = $value;
     }
@@ -154,7 +154,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param string $name
      * @return void
      */
-    public function removeHeader($name)
+    public function removeHeader(string $name): void
     {
         unset($this->_headers[$name]);
     }
@@ -168,7 +168,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param string $pass password
      * @return void
      */
-    public function setCredentials($login, $pass)
+    public function setCredentials(string $login, string $pass): void
     {
         $val = base64_encode("{$login}:{$pass}");
         $this->addHeader("Authorization", "Basic {$val}");
@@ -181,7 +181,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param string $value
      * @return void
      */
-    public function addCookie($name, $value)
+    public function addCookie(string $name, string $value): void
     {
         $this->_cookies[$name] = $value;
     }
@@ -192,7 +192,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param string $name
      * @return void
      */
-    public function removeCookie($name)
+    public function removeCookie(string $name): void
     {
         unset($this->_cookies[$name]);
     }
@@ -203,7 +203,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param array $cookies
      * @return void
      */
-    public function setCookies($cookies)
+    public function setCookies(array $cookies): void
     {
         $this->_cookies = $cookies;
     }
@@ -213,7 +213,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      *
      * @return void
      */
-    public function removeCookies()
+    public function removeCookies(): void
     {
         $this->setCookies([]);
     }
@@ -224,7 +224,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param string $uri uri relative to host, ex. "/index.php"
      * @return void
      */
-    public function get($uri)
+    public function get(string $uri): void
     {
         $this->makeRequest("GET", $uri);
     }
@@ -235,7 +235,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param string $uri uri relative to host, ex. "/index.php"
      * @return void
      */
-    public function delete($uri)
+    public function delete(string $uri): void
     {
         $this->makeRequest("DELETE", $uri);
     }
@@ -252,7 +252,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      *
      * @see \Magento\Framework\HTTP\Client#post($uri, $params)
      */
-    public function post($uri, $params)
+    public function post(string $uri, array|string $params): void
     {
         $this->makeRequest("POST", $uri, $params);
     }
@@ -268,7 +268,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      *
      * @see \Magento\Framework\HTTP\Client#patch($uri, $params)
      */
-    public function put($uri, $params)
+    public function put(string $uri, array|string $params): void
     {
         $this->makeRequest("PUT", $uri, $params);
     }
@@ -284,7 +284,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      *
      * @see \Magento\Framework\HTTP\Client#patch($uri, $params)
      */
-    public function patch($uri, $params)
+    public function patch(string $uri, array|string $params): void
     {
         $this->makeRequest("PATCH", $uri, $params);
     }
@@ -294,7 +294,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      *
      * @return array
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->_responseHeaders;
     }
@@ -304,7 +304,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      *
      * @return string
      */
-    public function getBody()
+    public function getBody(): string
     {
         return $this->_responseBody;
     }
@@ -314,7 +314,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      *
      * @return array
      */
-    public function getCookies()
+    public function getCookies(): array
     {
         if (empty($this->_responseHeaders['Set-Cookie'])) {
             return [];
@@ -341,7 +341,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      *
      * @return array
      */
-    public function getCookiesFull()
+    public function getCookiesFull(): array
     {
         if (empty($this->_responseHeaders['Set-Cookie'])) {
             return [];
@@ -378,7 +378,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      *
      * @return int
      */
-    public function getStatus()
+    public function getStatus(): int
     {
         return $this->_responseStatus;
     }
@@ -397,7 +397,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function makeRequest($method, $uri, $params = [])
+    protected function makeRequest(string $method, string $uri, array|string $params = []): void
     {
         $this->_ch = curl_init();
         $this->curlOption(CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS | CURLPROTO_FTP | CURLPROTO_FTPS);
@@ -464,7 +464,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @return void
      * @throws \Exception
      */
-    public function doError($string)
+    public function doError(string $string): void
     {
         //  phpcs:ignore Magento2.Exceptions.DirectThrow
         throw new \Exception($string);
@@ -479,7 +479,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function parseHeaders($ch, $data)
+    protected function parseHeaders($ch, string $data): int
     {
         $data = $data !== null ? $data : '';
         if ($this->_headerCount == 0) {
@@ -516,7 +516,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param mixed $value
      * @return void
      */
-    protected function curlOption($name, $value)
+    protected function curlOption(string $name, $value): void
     {
         curl_setopt($this->_ch, $name, $value);
     }
@@ -527,7 +527,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param array $arr
      * @return void
      */
-    protected function curlOptions($arr)
+    protected function curlOptions(array $arr): void
     {
         curl_setopt_array($this->_ch, $arr);
     }
@@ -538,7 +538,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param array $arr
      * @return void
      */
-    public function setOptions($arr)
+    public function setOptions(array $arr): void
     {
         $this->_curlUserOptions = $arr;
     }
@@ -550,7 +550,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param mixed $value
      * @return void
      */
-    public function setOption($name, $value)
+    public function setOption(string $name, $value): void
     {
         $this->_curlUserOptions[$name] = $value;
     }
