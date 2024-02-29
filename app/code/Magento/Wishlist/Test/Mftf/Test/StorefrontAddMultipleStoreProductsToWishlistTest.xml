@@ -118,7 +118,7 @@
         </actionGroup>
         <click selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="addSecondProductToWishlist"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
-        <see userInput="$$secondProduct.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}" stepKey="seeProduct2InWishlistOnSecondStore"/>
+        <waitForText userInput="$$secondProduct.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}" stepKey="seeProduct2InWishlistOnSecondStore"/>
         <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickSwitchStoreButtonOnSecondStore"/>
         <click selector="{{StorefrontFooterSection.storeLink('Main Website Store')}}" stepKey="selectDefaultStoreToSwitchOn"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
