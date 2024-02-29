@@ -234,7 +234,7 @@ class ValidationTest extends TestCase
         $mockBuilder = $this->getMockBuilder(PaymentExtensionInterface::class)
             ->disableOriginalConstructor();
         try {
-            $mockBuilder->onlyMethods(['getAgreementIds', 'setAgreementIds']);
+            $mockBuilder->addMethods(['getAgreementIds', 'setAgreementIds']);
         } catch (RuntimeException $e) {
             // Payment extension already generated.
         }

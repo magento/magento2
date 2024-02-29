@@ -80,7 +80,7 @@ class EmulateStoreTest extends TestCase
                 });
         }
 
-        $this->emulateStore->execute($storeId, function () use ($currentStoreId) {
+        $this->emulateStore->execute($storeId, function () {
         }, [1, 2, 3]);
     }
 
