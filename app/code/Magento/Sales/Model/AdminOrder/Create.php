@@ -826,7 +826,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     public function moveQuoteItem($item, $moveTo, $qty)
     {
@@ -886,11 +888,20 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                             );
                         }
 
-                        $cartItem = $cart->addProduct($product, $info);
-                        if (is_string($cartItem)) {
-                            throw new \Magento\Framework\Exception\LocalizedException(__($cartItem));
+                        $cartItems = $cart->getAllVisibleItems();
+                        $cartItemsToRestore = [];
+                        foreach ($cartItems as $cartItem) {
+                            $cartItemsToRestore[$cartItem->getItemId()] = $cartItem->getItemId();
                         }
-                        $cartItem->setPrice($item->getProduct()->getPrice());
+                        $canBeRestored = $this->restoreTransferredItem('cart', $cartItemsToRestore);
+
+                        if (!$canBeRestored) {
+                            $cartItem = $cart->addProduct($product, $info);
+                            if (is_string($cartItem)) {
+                                throw new \Magento\Framework\Exception\LocalizedException(__($cartItem));
+                            }
+                            $cartItem->setPrice($item->getProduct()->getPrice());
+                        }
                         $this->_needCollectCart = true;
                         $removeItem = true;
                     }
@@ -933,7 +944,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                         )->setStoreId(
                             $this->getSession()->getStoreId()
                         );
-                        $wishlist->addNewItem($item->getProduct(), $info);
+                        $wishlistItems = $wishlist->getItemCollection()->getItems();
+                        $canBeRestored = $this->restoreTransferredItem('wishlist', $wishlistItems);
+                        if (!$canBeRestored) {
+                            $wishlist->addNewItem($item->getProduct(), $info);
+                        }
                         $removeItem = true;
                     }
                     break;
@@ -980,8 +995,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 if ($item) {
                     $this->moveQuoteItem($item, 'order', $qty);
                     $transferredItems = $this->_session->getTransferredItems() ?? [];
-                    $transferredItems['cart'][] = $itemId;
-                    $this->_session->setTransferredItems($transferredItems) ;
+                    $transferredItems['cart'][$itemId] = $itemId;
+                    $this->_session->setTransferredItems($transferredItems);
                 }
             }
         }
@@ -996,8 +1011,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 if ($item->getId()) {
                     $this->addProduct($item->getProduct(), $item->getBuyRequest()->toArray());
                     $transferredItems = $this->_session->getTransferredItems() ?? [];
-                    $transferredItems['wishlist'][] = $itemId;
-                    $this->_session->setTransferredItems($transferredItems) ;
+                    $transferredItems['wishlist'][$itemId] = $itemId;
+                    $this->_session->setTransferredItems($transferredItems);
                 }
             }
         }
@@ -2092,6 +2107,30 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         } catch (\Throwable $exception) {
             $this->_logger->error($exception);
         }
+    }
+
+    /**
+     * Restore items that were transferred from ordered items to their original sources (cart, wishlist, ...)
+     *
+     * @param string $area
+     * @param \Magento\Quote\Model\Quote\Item[]|\Magento\Wishlist\Model\Item[] $items
+     * @return bool
+     */
+    private function restoreTransferredItem(string $area, array $items): bool
+    {
+        $transferredItems = $this->_session->getTransferredItems() ?? [];
+        if (!isset($transferredItems[$area])) {
+            return false;
+        }
+        $itemToRestore = array_intersect_key($items, $transferredItems[$area]);
+        $itemToRestoreId = array_key_first($itemToRestore);
+
+        if ($itemToRestoreId) {
+            unset($transferredItems[$area][$itemToRestoreId]);
+            $this->_session->setTransferredItems($transferredItems);
+            return true;
+        }
+        return false;
     }
 
     /**

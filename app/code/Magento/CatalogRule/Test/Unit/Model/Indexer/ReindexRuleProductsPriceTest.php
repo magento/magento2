@@ -7,21 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
-use Magento\CatalogRule\Model\Indexer\ProductPriceCalculator;
-use Magento\CatalogRule\Model\Indexer\ReindexRuleProductPrice;
+use Magento\CatalogRule\Model\Indexer\ReindexRuleProductsPrice;
 use Magento\CatalogRule\Model\Indexer\ReindexRuleProductsPriceProcessor;
-use Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor;
 use Magento\CatalogRule\Model\Indexer\RuleProductsSelectBuilder;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Zend_Db_Statement_Exception;
 
-class ReindexRuleProductPriceTest extends TestCase
+class ReindexRuleProductsPriceTest extends TestCase
 {
     /**
-     * @var ReindexRuleProductPrice
+     * @var ReindexRuleProductsPrice
      */
     private $model;
 
@@ -36,21 +35,6 @@ class ReindexRuleProductPriceTest extends TestCase
     private $ruleProductsSelectBuilderMock;
 
     /**
-     * @var ProductPriceCalculator|MockObject
-     */
-    private $productPriceCalculatorMock;
-
-    /**
-     * @var TimezoneInterface|MockObject
-     */
-    private $localeDate;
-
-    /**
-     * @var RuleProductPricesPersistor|MockObject
-     */
-    private $pricesPersistorMock;
-
-    /**
      * @var ReindexRuleProductsPriceProcessor|MockObject
      */
     private $reindexRuleProductsPriceProcessorMock;
@@ -62,29 +46,25 @@ class ReindexRuleProductPriceTest extends TestCase
     {
         $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->ruleProductsSelectBuilderMock = $this->createMock(RuleProductsSelectBuilder::class);
-        $this->productPriceCalculatorMock = $this->createMock(ProductPriceCalculator::class);
-        $this->localeDate = $this->getMockForAbstractClass(TimezoneInterface::class);
-        $this->pricesPersistorMock = $this->createMock(RuleProductPricesPersistor::class);
         $this->reindexRuleProductsPriceProcessorMock = $this->createMock(ReindexRuleProductsPriceProcessor::class);
 
-        $this->model = new ReindexRuleProductPrice(
+        $this->model = new ReindexRuleProductsPrice(
             $this->storeManagerMock,
+            $this->reindexRuleProductsPriceProcessorMock,
             $this->ruleProductsSelectBuilderMock,
-            $this->productPriceCalculatorMock,
-            $this->localeDate,
-            $this->pricesPersistorMock,
             true,
-            $this->reindexRuleProductsPriceProcessorMock
         );
     }
 
     /**
      * @return void
+     * @throws LocalizedException
+     * @throws Zend_Db_Statement_Exception
      */
     public function testExecute(): void
     {
         $websiteId = 234;
-        $productId = 55;
+        $productIds = [55, 66];
 
         $websiteMock = $this->getMockForAbstractClass(WebsiteInterface::class);
         $websiteMock->expects($this->once())
@@ -96,26 +76,36 @@ class ReindexRuleProductPriceTest extends TestCase
 
         $statementMock = $this->createMock(\Zend_Db_Statement_Interface::class);
         $this->ruleProductsSelectBuilderMock->expects($this->once())
-            ->method('build')
-            ->with($websiteId, $productId, true)
+            ->method('buildSelect')
+            ->with($websiteId, $productIds, true)
             ->willReturn($statementMock);
 
         $ruleData = [
-            'product_id' => 100,
-            'website_id' => 1,
-            'customer_group_id' => 2,
-            'from_time' => mktime(0, 0, 0, (int)date('m'), (int)date('d') - 100),
-            'to_time' => mktime(0, 0, 0, (int)date('m'), (int)date('d') + 100),
-            'action_stop' => true
+            [
+                'product_id' => 100,
+                'website_id' => 1,
+                'customer_group_id' => 2,
+                'from_time' => mktime(0, 0, 0, (int)date('m'), (int)date('d') - 100),
+                'to_time' => mktime(0, 0, 0, (int)date('m'), (int)date('d') + 100),
+                'action_stop' => true
+            ],
+            [
+                'product_id' => 200,
+                'website_id' => 1,
+                'customer_group_id' => 2,
+                'from_time' => mktime(0, 0, 0, (int)date('m'), (int)date('d') - 100),
+                'to_time' => mktime(0, 0, 0, (int)date('m'), (int)date('d') + 100),
+                'action_stop' => true
+            ]
         ];
 
         $statementMock
             ->method('fetch')
-            ->willReturnOnConsecutiveCalls($ruleData, false);
+            ->willReturnOnConsecutiveCalls($ruleData[0], $ruleData[1], false);
 
         $this->reindexRuleProductsPriceProcessorMock->expects($this->once())
             ->method('execute');
 
-        $this->assertTrue($this->model->execute(1, $productId, true));
+        $this->assertTrue($this->model->execute(1, $productIds, true));
     }
 }
