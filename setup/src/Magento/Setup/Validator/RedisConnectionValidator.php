@@ -25,8 +25,7 @@ class RedisConnectionValidator
             'db' => '',
             'password' => null,
             'timeout' => null,
-            'persistent' => '',
-            'use_lua' => false
+            'persistent' => ''
         ];
 
         $config = array_merge($default, $redisOptions);
