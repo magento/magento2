@@ -50,13 +50,34 @@ class Identifier implements IdentifierInterface
      */
     public function getValue()
     {
+        $url = $this->request->getUriString();
+        list($baseUrl, $query) = $this->reconstructUrl($url);
         $data = [
             $this->request->isSecure(),
-            $this->request->getUriString(),
+            $baseUrl,
+            $query,
             $this->request->get(\Magento\Framework\App\Response\Http::COOKIE_VARY_STRING)
                 ?: $this->context->getVaryString()
         ];
-
         return sha1($this->serializer->serialize($data));
+    }
+
+    /**
+     * Reconstruct url and sort query
+     *
+     * @param string $url
+     * @return array
+     */
+    private function reconstructUrl($url)
+    {
+        $baseUrl = strtok((string)$url, '?');
+        $query = $this->request->getQuery()->toArray();
+        if (!empty($query)) {
+            ksort($query);
+            $query = http_build_query($query);
+        } else {
+            $query = '';
+        }
+        return [$baseUrl, $query];
     }
 }
