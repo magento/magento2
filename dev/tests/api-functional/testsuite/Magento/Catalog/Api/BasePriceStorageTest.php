@@ -157,4 +157,46 @@ class BasePriceStorageTest extends WebapiAbstract
 
         $this->assertEquals($expectedResponse, $response);
     }
+
+    /**
+     * Test update last updated at method.
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testUpdateLastUpdatedAt()
+    {
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
+        $product = $productRepository->get(self::SIMPLE_PRODUCT_SKU);
+        $productUpdatedAt = $product->getUpdatedAt();
+        $newUpdateAt = $this->objectManager->create(\Magento\Framework\Stdlib\DateTime\DateTime::class)->gmtDate();
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/base-prices?XDEBUG_SESSION_START=PHPSTORM',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Update',
+            ],
+        ];
+        $newPrice = 9999;
+        $storeId = 0;
+        $response = $this->_webApiCall(
+            $serviceInfo,
+            [
+                'prices' => [
+                    [
+                        'price' => $newPrice,
+                        'store_id' => $storeId,
+                        'sku' => self::SIMPLE_PRODUCT_SKU,
+                    ]
+                ]
+            ]
+        );
+
+        $this->assertEmpty($response);
+        $this->assertGreaterThanOrEqual(strtotime($productUpdatedAt), strtotime($newUpdateAt));
+    }
 }
