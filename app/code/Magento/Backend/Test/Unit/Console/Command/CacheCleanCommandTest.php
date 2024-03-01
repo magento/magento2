@@ -22,14 +22,22 @@ class CacheCleanCommandTest extends AbstractCacheManageCommandTest
     /**
      * @param array $param
      * @param array $types
+     * @param bool $shouldDispatch
      * @param string $output
      * @dataProvider executeDataProvider
      */
-    public function testExecute($param, $types, $output)
+    public function testExecute($param, $types, $shouldDispatch, $output)
     {
-        $this->cacheManagerMock->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
+        $this->cacheManagerMock->expects($this->once())->method('getAvailableTypes')->willReturn([
+            'A', 'B', 'C', 'full_page'
+        ]);
         $this->cacheManagerMock->expects($this->once())->method('clean')->with($types);
-        $this->eventManagerMock->expects($this->once())->method('dispatch')->with($this->cacheEventName);
+
+        if ($shouldDispatch) {
+            $this->eventManagerMock->expects($this->once())->method('dispatch')->with($this->cacheEventName);
+        } else {
+            $this->eventManagerMock->expects($this->never())->method('dispatch');
+        }
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($param);
