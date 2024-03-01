@@ -276,6 +276,37 @@ class CategoryRepositoryTest extends TestCase
         $this->model->save($categoryMock);
     }
 
+    public function testSaveWithStoreId()
+    {
+        $this->storeMock->expects($this->any())->method('getId')->willReturn(1);
+        $categoryId = null;
+        $parentCategoryId = 15;
+        $newCategoryId = 25;
+        $categoryData = ['store_id' => 3, 'level' => '1', 'path' => '1/2', 'parent_id' => 1, 'name' => 'category'];
+        $dataForSave = ['store_id' => 3, 'name' => 'category', 'path' => 'path', 'parent_id' => 15, 'level' => null];
+        $this->extensibleDataObjectConverterMock
+            ->expects($this->once())
+            ->method('toNestedArray')
+            ->willReturn($categoryData);
+        $categoryMock = $this->createMock(CategoryModel::class);
+        $parentCategoryMock = $this->createMock(CategoryModel::class);
+        $categoryMock->expects($this->any())->method('getId')
+            ->will($this->onConsecutiveCalls($categoryId, $newCategoryId));
+        $this->categoryFactoryMock->expects($this->exactly(2))->method('create')->willReturn($parentCategoryMock);
+        $parentCategoryMock->expects($this->atLeastOnce())->method('getId')->willReturn($parentCategoryId);
+
+        $categoryMock->expects($this->once())->method('getParentId')->willReturn($parentCategoryId);
+        $categoryMock->expects($this->once())->method('hasData')->willReturn(true);
+        $categoryMock->expects($this->once())->method('getStoreId')->willReturn(3);
+        $parentCategoryMock->expects($this->once())->method('getPath')->willReturn('path');
+        $categoryMock->expects($this->once())->method('validate')->willReturn(true);
+        $this->categoryResourceMock->expects($this->once())
+            ->method('save')
+            ->willReturn(DataObject::class);
+        $this->populateWithValuesMock->expects($this->once())->method('execute')->with($categoryMock, $dataForSave);
+        $this->assertEquals($categoryMock, $this->model->save($categoryMock));
+    }
+
     /**
      * @dataProvider saveWithValidateCategoryExceptionDataProvider
      */
