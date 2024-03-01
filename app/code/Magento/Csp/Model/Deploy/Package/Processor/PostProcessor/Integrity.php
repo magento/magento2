@@ -64,7 +64,7 @@ class Integrity implements ProcessorInterface
     public function process(Package $package, array $options): bool
     {
         $staticDir = $this->filesystem->getDirectoryRead(
-            DirectoryList::STATIC_VIEW
+            DirectoryList::ROOT
         );
 
         foreach ($package->getFiles() as $file) {
@@ -73,7 +73,7 @@ class Integrity implements ProcessorInterface
                     [
                         "data" => [
                             'hash' => $this->hashGenerator->generate(
-                                $staticDir->readFile($file->getDeployedFilePath())
+                                $staticDir->readFile($file->getSourcePath())
                             ),
                             'path' => $file->getDeployedFilePath()
                         ]
