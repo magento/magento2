@@ -182,7 +182,7 @@ class Discount extends AbstractTotal
                 }
             }
         }
-        $this->calculator->init($store->getWebsiteId(), $quote->getCustomerGroupId(), $quote->getCouponCode());
+        $this->calculator->initFromQuote($quote);
         $this->calculator->initTotals($items, $address);
         $items = $this->calculator->sortItemsByPriority($items, $address);
         $itemsToApplyRules = $items;
