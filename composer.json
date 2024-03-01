@@ -286,6 +286,7 @@
         "magento/module-sales-graph-ql": "*",
         "magento/module-sales-inventory": "*",
         "magento/module-sales-rule": "*",
+        "magento/module-sales-rule-graph-ql": "*",
         "magento/module-sales-sequence": "*",
         "magento/module-sample-data": "*",
         "magento/module-search": "*",
