@@ -101,37 +101,10 @@ class IndexNameResolverTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $elasticsearchClientMock = $this->getMockBuilder(Client::class)
-            ->onlyMethods([
-                'indices',
-                'ping',
-                'bulk',
-                'search',
-                'scroll',
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $indicesMock = $this->getMockBuilder(IndicesNamespace::class)
-            ->addMethods(['deleteMapping'])
-            ->onlyMethods([
-                'exists',
-                'getSettings',
-                'create',
-                'putMapping',
-                'existsAlias',
-                'updateAliases',
-                'stats'
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $elasticsearchClientMock->expects($this->any())
-            ->method('indices')
-            ->willReturn($indicesMock);
         $this->client = $this->getMockBuilder(Elasticsearch::class)
             ->setConstructorArgs([
                 'options' => $this->getClientOptions(),
-                'elasticsearchClient' => $elasticsearchClientMock
+                'elasticsearchClient' => null
             ])
             ->getMock();
 

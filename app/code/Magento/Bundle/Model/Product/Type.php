@@ -247,7 +247,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->priceCurrency = $priceCurrency;
         $this->_stockRegistry = $stockRegistry;
         $this->_stockState = $stockState;
-        $this->serializer = $serializer;
 
         $this->metadataPool = $metadataPool
             ?: ObjectManager::getInstance()->get(MetadataPool::class);
@@ -363,15 +362,13 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             if ($product->hasCustomOptions()) {
                 $customOption = $product->getCustomOption('bundle_selection_ids');
                 $selectionIds = $this->serializer->unserialize($customOption->getValue());
-                if (!empty($selectionIds)) {
-                    $selections = $this->getSelectionsByIds($selectionIds, $product);
-                    foreach ($selections->getItems() as $selection) {
-                        $qtyOption = $product->getCustomOption('selection_qty_' . $selection->getSelectionId());
-                        if ($qtyOption) {
-                            $weight += $selection->getWeight() * $qtyOption->getValue();
-                        } else {
-                            $weight += $selection->getWeight();
-                        }
+                $selections = $this->getSelectionsByIds($selectionIds, $product);
+                foreach ($selections->getItems() as $selection) {
+                    $qtyOption = $product->getCustomOption('selection_qty_' . $selection->getSelectionId());
+                    if ($qtyOption) {
+                        $weight += $selection->getWeight() * $qtyOption->getValue();
+                    } else {
+                        $weight += $selection->getWeight();
                     }
                 }
             }
@@ -391,22 +388,15 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         if ($product->hasCustomOptions()) {
             $customOption = $product->getCustomOption('bundle_selection_ids');
             $selectionIds = $this->serializer->unserialize($customOption->getValue());
-            if (!empty($selectionIds)) {
-                $selections = $this->getSelectionsByIds($selectionIds, $product);
-                $virtualCount = 0;
-                foreach ($selections->getItems() as $selection) {
-                    if ($selection->isVirtual()) {
-                        $virtualCount++;
-                    }
+            $selections = $this->getSelectionsByIds($selectionIds, $product);
+            $virtualCount = 0;
+            foreach ($selections->getItems() as $selection) {
+                if ($selection->isVirtual()) {
+                    $virtualCount++;
                 }
-            }
-            else
-            {
-                $selections = [];
             }
 
             return $virtualCount === count($selections);
-
         }
 
         return false;
@@ -1173,8 +1163,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     public function canConfigure($product)
     {
         return $product instanceof \Magento\Catalog\Model\Product && $product->isAvailable() && parent::canConfigure(
-            $product
-        );
+                $product
+            );
     }
 
     /**

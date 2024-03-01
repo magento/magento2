@@ -99,6 +99,14 @@ class AbstractEnableTest extends TestCase
             [
                 DirectoryHelper::class,
                 $this->createMock(DirectoryHelper::class)
+            ],
+            [
+                \Magento\Framework\Translate\InlineInterface::class,
+                $this->createMock(\Magento\Framework\Translate\InlineInterface::class)
+            ],
+            [
+                \Magento\Framework\ZendEscaper::class,
+                $this->createMock(\Magento\Framework\ZendEscaper::class)
             ]
         ];
         $objectManager->prepareObjectManager($objects);

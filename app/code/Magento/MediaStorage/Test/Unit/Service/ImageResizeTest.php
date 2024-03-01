@@ -148,7 +148,8 @@ class ImageResizeTest extends TestCase
 
 
         $this->appStateMock = $this->createMock(State::class);
-        $this->imageConfigMock = $this->createMock(MediaConfig::class);
+        $this->imageConfigMock = $this->getMockBuilder(MediaConfig::class)
+                                    ->getMock();
         $this->productImageMock = $this->createMock(ProductImage::class);
         $this->imageFactoryMock = $this->createMock(ImageFactory::class);
         $this->paramsBuilderMock = $this->createMock(ParamsBuilder::class);
@@ -204,8 +205,8 @@ class ImageResizeTest extends TestCase
         $this->mediaDirectoryMock->expects($this->any())
             ->method('getAbsolutePath')
             ->willReturnCallback(fn($param) => match ([$param]) {
-                [$this->testfilename] => $this->testfilepath,
-                [$this->testImageHiddenFilename] => $this->testImageHiddenfilepath
+                [$this->testfilepath] => $this->testfilepath,
+                [$this->testImageHiddenfilepath] => $this->testImageHiddenfilepath
             });
 
         $this->mediaDirectoryMock->expects($this->any())

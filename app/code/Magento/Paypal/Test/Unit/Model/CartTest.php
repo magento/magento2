@@ -101,6 +101,15 @@ class CartTest extends TestCase
      */
     public function invalidGetAllItemsDataProvider()
     {
+        $this->_validItem = new DataObject(
+            [
+                'parent_item' => null,
+                'price' => 2.0,
+                'qty' => 3,
+                'name' => 'valid item',
+                'original_item' => new DataObject(['base_row_total' => 6.0]),
+            ]
+        );
         return [
             [[]],
             [

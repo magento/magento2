@@ -152,7 +152,7 @@ class StorageTest extends TestCase
             $this->imageFactory,
             $this->urlEncoder,
             $this->urlDecoder,
-            null,
+            $file,
             $this->filesystemDriver
         );
 
@@ -534,7 +534,7 @@ class StorageTest extends TestCase
     /**
      * @return array
      */
-    public function booleanCasesDataProvider(): array
+    public static function booleanCasesDataProvider(): array
     {
         return [[true], [false]];
     }

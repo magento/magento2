@@ -74,9 +74,9 @@ class ValidatorTest extends TestCase
         $designElementMock->expects($this->once())->method('getPath')->willReturn($fieldConfig['path']);
         $designElementMock->expects($this->once())->method('getValue')->willReturn($fieldConfig['field']);
 
-        $templateMock = $this->getMockBuilder(\Magento\Email\Model\TemplateInterface::class)
-            ->onlyMethods(['getTemplateText', 'emulateDesign', 'loadDefault', 'revertDesign', 'setForcedArea'])
-            ->getMock();
+        $templateMock = $this->getMockBuilder(\Magento\Framework\Mail\TemplateInterface::class)
+            ->addMethods(['getTemplateText', 'emulateDesign', 'loadDefault', 'revertDesign', 'setForcedArea'])
+            ->getMockForAbstractClass();
 
         $this->templateFactoryMock->expects($this->once())->method('create')->willReturn($templateMock);
         $templateMock->expects($this->once())->method('getTemplateText')->willReturn(
@@ -119,9 +119,9 @@ class ValidatorTest extends TestCase
         $designElementMock->expects($this->once())->method('getPath')->willReturn($fieldConfig['path']);
         $designElementMock->expects($this->once())->method('getValue')->willReturn($fieldConfig['field']);
 
-        $templateMock = $this->getMockBuilder(\Magento\Email\Model\TemplateInterface::class)
-            ->onlyMethods(['getTemplateText', 'emulateDesign', 'loadDefault', 'revertDesign', 'setForcedArea'])
-            ->getMock();
+        $templateMock = $this->getMockBuilder(\Magento\Framework\Mail\TemplateInterface::class)
+            ->addMethods(['getTemplateText', 'emulateDesign', 'loadDefault', 'revertDesign', 'setForcedArea'])
+            ->getMockForAbstractClass();
 
         $this->templateFactoryMock->expects($this->once())->method('create')->willReturn($templateMock);
         $templateMock->expects($this->once())->method('getTemplateText')->willReturn(

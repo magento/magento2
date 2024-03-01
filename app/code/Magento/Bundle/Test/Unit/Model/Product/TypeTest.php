@@ -182,6 +182,7 @@ class TypeTest extends TestCase
             ->getMock();
         $this->serializer = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
+            ->onlyMethods([])
             ->getMock();
         $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
@@ -1870,8 +1871,8 @@ class TypeTest extends TestCase
         $selectionMock->expects($this->once())
             ->method('count')
             ->willReturn(1);
-
-        $this->assertTrue($this->model->isVirtual($productMock));
+        $isVirtual = (bool)$this->model->isVirtual($productMock);
+        $this->assertTrue($isVirtual);
     }
 
     /**

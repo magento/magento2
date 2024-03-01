@@ -58,18 +58,15 @@ class SourceThemeDeployCommandTest extends TestCase
     private $assetRepositoryMock;
 
     /**
+     * @var File|MockObject
+     */
+    private $fileMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
-        $objects = [
-            [
-                File::class,
-                $this->createMock(File::class)
-            ]
-        ];
-        $objectManager->prepareObjectManager($objects);
         $this->validatorMock = $this->getMockBuilder(Locale::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -79,11 +76,16 @@ class SourceThemeDeployCommandTest extends TestCase
         $this->assetRepositoryMock = $this->getMockBuilder(Repository::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->fileMock = $this->getMockBuilder(File::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([])
+            ->getMock();
 
         $this->sourceThemeDeployCommand = new SourceThemeDeployCommand(
             $this->validatorMock,
             $this->assetPublisherMock,
-            $this->assetRepositoryMock
+            $this->assetRepositoryMock,
+            $this->fileMock
         );
     }
 

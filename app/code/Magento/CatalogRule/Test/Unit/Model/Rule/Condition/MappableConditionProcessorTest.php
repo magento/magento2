@@ -1000,6 +1000,7 @@ class MappableConditionProcessorTest extends TestCase
     {
         $mock = $this->getMockBuilder(CombinedCondition::class)
             ->disableOriginalConstructor()
+            ->onlyMethods([])
             ->getMock();
 
         $mock->setConditions($subConditions);
@@ -1017,6 +1018,7 @@ class MappableConditionProcessorTest extends TestCase
     {
         $mock = $this->getMockBuilder(SimpleCondition::class)
             ->disableOriginalConstructor()
+            ->onlyMethods([])
             ->getMock();
 
         $mock->setAttribute($attribute);

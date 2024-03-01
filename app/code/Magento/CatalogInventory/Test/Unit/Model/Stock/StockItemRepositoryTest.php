@@ -124,7 +124,7 @@ class StockItemRepositoryTest extends TestCase
                 [
                     'setStockStatusChangedAutomaticallyFlag',
                     'hasStockStatusChangedAutomaticallyFlag',
-
+                    'getStockStatusChangedAutomaticallyFlag'
                 ]
             )
             ->onlyMethods(

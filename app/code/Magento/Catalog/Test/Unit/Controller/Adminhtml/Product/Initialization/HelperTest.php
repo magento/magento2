@@ -12,7 +12,6 @@ use Magento\Catalog\Api\Data\CategoryLinkInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
-use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory as ProductLinkFactory;
 use Magento\Catalog\Api\Data\ProductLinkTypeInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface as ProductRepository;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
@@ -183,10 +182,6 @@ class HelperTest extends TestCase
             [
                 ProductCustomOptionInterfaceFactory::class,
                 $this->customOptionFactoryMock
-            ],
-            [
-                ProductLinkFactory::class,
-                $this->productLinkFactoryMock
             ]
         ];
         $this->prepareObjectManager($objects);
@@ -294,6 +289,7 @@ class HelperTest extends TestCase
 
         $customOptionMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
+            ->onlyMethods([])
             ->getMock();
         $firstExpectedCustomOption = clone $customOptionMock;
         $firstExpectedCustomOption->setData($optionsData['option2']);
@@ -329,6 +325,7 @@ class HelperTest extends TestCase
             ->willReturnCallback(
                 function () {
                     return $this->getMockBuilder(ProductLink::class)
+                        ->onlyMethods([])
                         ->disableOriginalConstructor()
                         ->getMock();
                 }
