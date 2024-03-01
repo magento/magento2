@@ -443,7 +443,7 @@ class WordsFinder
      *
      * @return array
      */
-    private function getChangedPrivateRepoFileList()
+    private function getChangedPrivateRepoFileList(): array
     {
         $data = [];
         $changedFilesList = BP .self::CHANGED_PRIVATE_REPO_FILE;
@@ -461,7 +461,7 @@ class WordsFinder
      *
      * @return array
      */
-    private function getChangedPublicRepoFileList()
+    private function getChangedPublicRepoFileList(): array
     {
         $data = [];
         $changedFilesList = BP .self::CHANGED_PUBLIC_REPO_FILE;
@@ -480,7 +480,7 @@ class WordsFinder
      * @param string $content
      * @return bool
      */
-    private function isCopyrightYearValid($content)
+    private function isCopyrightYearValid($content): bool
     {
         $pattern = '/Copyright (\d{4}) Adobe/';
         if (preg_match($pattern, $content, $matches)) {
