@@ -98,7 +98,7 @@ class ImagesTest extends TestCase
      *
      * @return array
      */
-    public function providerGetImageHtmlDeclaration()
+    public static function providerGetImageHtmlDeclaration()
     {
         return [
             [true, 'wysiwyg/hello.png', true, '<img src="http://example.com/media/wysiwyg/hello.png" alt="" />'],
