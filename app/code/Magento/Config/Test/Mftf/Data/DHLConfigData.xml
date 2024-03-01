@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="dhlConfigData">
+        <data key="gateway_url">https://xmlpi-ea.dhl.com/XMLShippingServlet</data>
+        <data key="access_id">EvgeniyUSA</data>
+        <data key="password">okG43dHy7</data>
+        <data key="account_number">965269748</data>
+        <data key="show_method_applicable">Yes</data>
+        <data key="debug">Yes</data>
+    </entity>
+</entities>

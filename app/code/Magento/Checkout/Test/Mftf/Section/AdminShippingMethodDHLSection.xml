@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminShippingMethodDHLSection">
+        <element name="carriersDHLSelectAllowSpecific" type="input" selector="#carriers_dhl_sallowspecific"/>
+        <element name="carriersDHLAccountField" type="input" selector="#carriers_dhl_account"/>
+        <element name="carriersDHLSelectBox" type="input" selector="#carriers_dhl_active"/>
+        <element name="carriersDHLTabOpen" type="button" selector="#carriers_dhl-head.open"/>
+        <element name="carriersDHLShowMethod" type="input" selector="#carriers_dhl_showmethod"/>
+        <element name="carriersDHLDebug" type="input" selector="#carriers_dhl_debug"/>
+        <element name="carriersDHLSandbox" type="input" selector="#carriers_dhl_sandbox_mode"/>
+    </section>
+</sections>

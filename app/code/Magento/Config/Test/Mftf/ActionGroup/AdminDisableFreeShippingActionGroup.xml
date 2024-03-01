@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDisableFreeShippingActionGroup">
+        <conditionalClick selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingSectionHead}}" dependentSelector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingSectionHeadOpen}}" visible="false" stepKey="openFreeShippingSection"/>
+        <waitForElementVisible selector="{{AdminShippingMethodFreeShippingSection.carriersSelectFreeShippingActive}}" stepKey="waitForFreeShippingDefaultCheckbox"/>
+        <selectOption selector="{{AdminShippingMethodFreeShippingSection.carriersSelectFreeShippingActive}}" userInput="No" stepKey="selectOptionForFreeShipping"/>
+        <checkOption selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingActive}}" stepKey="clickOnFreeShippingCheckbox"/>
+        <waitForElementVisible selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingSelectAllowSpecific}}" stepKey="waitForShipApplicableDefaultCheckbox"/>
+        <selectOption selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingSelectAllowSpecific}}" userInput="All Allowed Countries" stepKey="selectOptionForAllowSpecificCountries"/>
+        <checkOption selector="{{AdminShippingMethodFreeShippingSection.carriersFreeShippingAllowSpecific}}" stepKey="clickOnShipApplicaleCountries"/>
+    </actionGroup>
+</actionGroups>
