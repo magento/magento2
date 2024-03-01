@@ -86,8 +86,8 @@ class PriceTest extends TestCase
                 'tier_price' => 15
             ],
             'configurable' => [
-                'price' => 0,
-                'final_price' => 0,
+                'price' => 10,
+                'final_price' => 9,
                 'min_price' => 9,
                 'max_price' => 30,
                 'tier_price' => 15
@@ -118,8 +118,8 @@ class PriceTest extends TestCase
                 'tier_price' => 15
             ],
             'configurable' => [
-                'price' => 0,
-                'final_price' => 0,
+                'price' => 10,
+                'final_price' => 4.5,
                 'min_price' => 4.5,
                 'max_price' => 23,
                 'tier_price' => 15

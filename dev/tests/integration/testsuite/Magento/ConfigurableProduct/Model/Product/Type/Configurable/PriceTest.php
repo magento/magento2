@@ -87,7 +87,7 @@ class PriceTest extends TestCase
         $this->assertPrice(10);
         $this->assertIndexTableData(
             'configurable',
-            ['price' => 0, 'final_price' => 0, 'min_price' => 10, 'max_price' => 20, 'tier_price' => null]
+            ['price' => 10, 'final_price' => 10, 'min_price' => 10, 'max_price' => 20, 'tier_price' => null]
         );
         $this->assertIndexTableData(
             'simple_10',
@@ -110,7 +110,7 @@ class PriceTest extends TestCase
             'fixture_second_store',
             [$this, 'assertIndexTableData'],
             'configurable',
-            ['price' => 0, 'final_price' => 0, 'min_price' => 10, 'max_price' => 30, 'tier_price' => null]
+            ['price' => 20, 'final_price' => 10, 'min_price' => 10, 'max_price' => 30, 'tier_price' => null]
         );
         $this->executeInStoreContext->execute(
             'fixture_second_store',
@@ -127,7 +127,7 @@ class PriceTest extends TestCase
         $this->assertPrice(150);
         $this->assertIndexTableData(
             'configurable',
-            ['price' => 0, 'final_price' => 0, 'min_price' => 150, 'max_price' => 150, 'tier_price' => null]
+            ['price' => 150, 'final_price' => 150, 'min_price' => 150, 'max_price' => 150, 'tier_price' => null]
         );
         $this->assertIndexTableData(
             'simple_option_1',
@@ -195,7 +195,7 @@ class PriceTest extends TestCase
         $configurable = $this->getProduct('configurable');
         $this->assertIndexTableData(
             'configurable',
-            ['price' => 0, 'final_price' => 0, 'min_price' => 9, 'max_price' => 30, 'tier_price' => 15]
+            ['price' => 10, 'final_price' => 9, 'min_price' => 9, 'max_price' => 15, 'tier_price' => 15]
         );
         $this->assertIndexTableData(
             'simple_10',

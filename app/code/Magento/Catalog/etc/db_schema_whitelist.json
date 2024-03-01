@@ -777,7 +777,9 @@
             "website_id": true,
             "min_price": true,
             "max_price": true,
-            "tier_price": true
+            "tier_price": true,
+            "price": true,
+            "final_price": true
         },
         "constraint": {
             "PRIMARY": true
@@ -790,7 +792,9 @@
             "website_id": true,
             "min_price": true,
             "max_price": true,
-            "tier_price": true
+            "tier_price": true,
+            "price": true,
+            "final_price": true
         },
         "constraint": {
             "PRIMARY": true

@@ -224,9 +224,11 @@ class Configurable implements DimensionalIndexerInterface
         // adds price of custom option, that was applied in DefaultPrice::_applyCustomOption
         $selectForCrossUpdate->columns(
             [
-                'min_price' => new \Zend_Db_Expr('i.min_price - i.price + io.min_price'),
-                'max_price' => new \Zend_Db_Expr('i.max_price - i.price + io.max_price'),
+                'min_price' => 'io.min_price',
+                'max_price' => 'io.max_price',
                 'tier_price' => 'io.tier_price',
+                'price' => 'io.price',
+                'final_price' => 'io.final_price',
             ]
         );
 

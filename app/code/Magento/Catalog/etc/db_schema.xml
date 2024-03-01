@@ -1301,6 +1301,10 @@
                 comment="Max Price"/>
         <column xsi:type="decimal" name="tier_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Tier Price"/>
+        <column xsi:type="decimal" name="price" scale="6" precision="20" unsigned="false" nullable="true"
+                comment="Price"/>
+        <column xsi:type="decimal" name="final_price" scale="6" precision="20" unsigned="false" nullable="true"
+                comment="Final Price"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
             <column name="customer_group_id"/>
@@ -1321,6 +1325,10 @@
                 comment="Max Price"/>
         <column xsi:type="decimal" name="tier_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Tier Price"/>
+        <column xsi:type="decimal" name="price" scale="6" precision="20" unsigned="false" nullable="true"
+                comment="Price"/>
+        <column xsi:type="decimal" name="final_price" scale="6" precision="20" unsigned="false" nullable="true"
+                comment="Final Price"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
             <column name="customer_group_id"/>
