@@ -15,6 +15,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Store\Model\App\Emulation;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -48,9 +49,9 @@ class Validation
     private $quoteRepository;
 
     /**
-     * @var EmulateStore
+     * @var Emulation
      */
-    private EmulateStore $emulateStore;
+    private Emulation $storeEmulation;
 
     /**
      * @param AgreementsValidatorInterface $agreementsValidator
@@ -58,7 +59,7 @@ class Validation
      * @param CheckoutAgreementsListInterface $checkoutAgreementsList
      * @param ActiveStoreAgreementsFilter $activeStoreAgreementsFilter
      * @param CartRepositoryInterface $quoteRepository
-     * @param EmulateStore $emulateStore
+     * @param Emulation $storeEmulation
      */
     public function __construct(
         \Magento\Checkout\Api\AgreementsValidatorInterface $agreementsValidator,
@@ -66,14 +67,14 @@ class Validation
         \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $checkoutAgreementsList,
         \Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter $activeStoreAgreementsFilter,
         CartRepositoryInterface $quoteRepository,
-        EmulateStore $emulateStore
+        Emulation $storeEmulation
     ) {
         $this->agreementsValidator = $agreementsValidator;
         $this->scopeConfiguration = $scopeConfiguration;
         $this->checkoutAgreementsList = $checkoutAgreementsList;
         $this->activeStoreAgreementsFilter = $activeStoreAgreementsFilter;
         $this->quoteRepository = $quoteRepository;
-        $this->emulateStore = $emulateStore;
+        $this->storeEmulation = $storeEmulation;
     }
 
     /**
@@ -114,11 +115,9 @@ class Validation
             ? []
             : $paymentMethod->getExtensionAttributes()->getAgreementIds();
 
-        $isValid = $this->emulateStore->execute(
-            $storeId,
-            $this->agreementsValidator->isValid(...),
-            [$agreements]
-        );
+        $this->storeEmulation->startEnvironmentEmulation($storeId);
+        $isValid = $this->agreementsValidator->isValid($agreements);
+        $this->storeEmulation->stopEnvironmentEmulation();
 
         if (!$isValid) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(

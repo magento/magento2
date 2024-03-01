@@ -10,14 +10,13 @@ use Magento\Checkout\Api\AgreementsValidatorInterface;
 use Magento\Checkout\Api\GuestPaymentInformationManagementInterface;
 use Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface;
 use Magento\CheckoutAgreements\Model\AgreementsProvider;
-use Magento\CheckoutAgreements\Model\EmulateStore;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\PaymentInterface;
-use Magento\Quote\Model\MaskedQuoteIdToQuoteId;
+use Magento\Quote\Api\GuestCartRepositoryInterface;
+use Magento\Store\Model\App\Emulation;
 use Magento\Store\Model\ScopeInterface;
 use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
 
@@ -53,45 +52,37 @@ class GuestValidation
     private $activeStoreAgreementsFilter;
 
     /**
-     * @var MaskedQuoteIdToQuoteId
+     * @var GuestCartRepositoryInterface
      */
-    private MaskedQuoteIdToQuoteId $maskedQuoteIdToQuoteId;
+    private GuestCartRepositoryInterface $quoteRepository;
 
     /**
-     * @var CartRepositoryInterface
+     * @var Emulation
      */
-    private CartRepositoryInterface $quoteRepository;
-
-    /**
-     * @var EmulateStore
-     */
-    private EmulateStore $emulateStore;
+    private Emulation $storeEmulation;
 
     /**
      * @param AgreementsValidatorInterface $agreementsValidator
      * @param ScopeConfigInterface $scopeConfiguration
      * @param CheckoutAgreementsListInterface $checkoutAgreementsList
      * @param ActiveStoreAgreementsFilter $activeStoreAgreementsFilter
-     * @param MaskedQuoteIdToQuoteId $maskedQuoteIdToQuoteId
-     * @param CartRepositoryInterface $quoteRepository
-     * @param EmulateStore $emulateStore
+     * @param GuestCartRepositoryInterface $quoteRepository
+     * @param Emulation $storeEmulation
      */
     public function __construct(
         \Magento\Checkout\Api\AgreementsValidatorInterface $agreementsValidator,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration,
         \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $checkoutAgreementsList,
         \Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter $activeStoreAgreementsFilter,
-        MaskedQuoteIdToQuoteId $maskedQuoteIdToQuoteId,
-        CartRepositoryInterface $quoteRepository,
-        EmulateStore $emulateStore
+        GuestCartRepositoryInterface $quoteRepository,
+        Emulation $storeEmulation
     ) {
         $this->agreementsValidator = $agreementsValidator;
         $this->scopeConfiguration = $scopeConfiguration;
         $this->checkoutAgreementsList = $checkoutAgreementsList;
         $this->activeStoreAgreementsFilter = $activeStoreAgreementsFilter;
-        $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->quoteRepository = $quoteRepository;
-        $this->emulateStore = $emulateStore;
+        $this->storeEmulation = $storeEmulation;
     }
 
     /**
@@ -114,8 +105,7 @@ class GuestValidation
         AddressInterface $billingAddress = null
     ) {
         if ($this->isAgreementEnabled()) {
-            $quoteId = $this->maskedQuoteIdToQuoteId->execute($cartId);
-            $quote = $this->quoteRepository->get($quoteId);
+            $quote = $this->quoteRepository->get($cartId);
             $storeId = $quote->getStoreId();
             $this->validateAgreements($paymentMethod, $storeId);
         }
@@ -135,11 +125,9 @@ class GuestValidation
             ? []
             : $paymentMethod->getExtensionAttributes()->getAgreementIds();
 
-        $isValid = $this->emulateStore->execute(
-            $storeId,
-            $this->agreementsValidator->isValid(...),
-            [$agreements]
-        );
+        $this->storeEmulation->startEnvironmentEmulation($storeId);
+        $isValid = $this->agreementsValidator->isValid($agreements);
+        $this->storeEmulation->stopEnvironmentEmulation();
 
         if (!$isValid) {
             throw new CouldNotSaveException(
