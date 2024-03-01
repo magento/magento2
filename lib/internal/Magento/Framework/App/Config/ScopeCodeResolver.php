@@ -32,6 +32,25 @@ class ScopeCodeResolver
     }
 
     /**
+     * Get scope code
+     *
+     * @param string $scopeType
+     * @param string|null $scopeCode
+     * @return ScopeInterface|mixed
+     */
+    public function resolvedScopeCode($scopeType, $scopeCode)
+    {
+        if ($scopeType !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
+            $scopeResolver = $this->scopeResolverPool->get($scopeType);
+            $resolverScopeCode = $scopeResolver->getScope($scopeCode);
+        } else {
+            $resolverScopeCode = $scopeCode;
+        }
+
+        return $resolverScopeCode;
+    }
+
+    /**
      * Resolve scope code
      *
      * @param string $scopeType
@@ -44,12 +63,7 @@ class ScopeCodeResolver
             return $this->resolvedScopeCodes[$scopeType][$scopeCode];
         }
 
-        if ($scopeType !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-            $scopeResolver = $this->scopeResolverPool->get($scopeType);
-            $resolverScopeCode = $scopeResolver->getScope($scopeCode);
-        } else {
-            $resolverScopeCode = $scopeCode;
-        }
+        $resolverScopeCode = $this->resolvedScopeCode($scopeType, $scopeCode);
 
         if ($resolverScopeCode instanceof ScopeInterface) {
             $resolverScopeCode = $resolverScopeCode->getCode();

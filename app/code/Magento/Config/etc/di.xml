@@ -103,6 +103,7 @@
             <argument name="reader" xsi:type="object">Magento\Config\App\Config\Type\System\Reader\Proxy</argument>
             <argument name="lockQuery" xsi:type="object">systemConfigQueryLocker</argument>
         </arguments>
+        <plugin name="change_system_config_path" type="Magento\Config\Plugin\App\Config\Type\System\ChangeConfigPath" sortOrder="10" />
     </type>
 
     <virtualType name="systemConfigQueryLocker" type="Magento\Framework\Cache\LockGuardedCacheLoader">
