@@ -111,14 +111,18 @@
             <argument name="cache" xsi:type="object">Magento\Csp\Model\BlockCache</argument>
         </arguments>
     </type>
+    <type name="Magento\Deploy\Package\Package">
+        <arguments>
+            <argument name="postProcessors" xsi:type="array">
+                <item name="integrity" xsi:type="object">Magento\Csp\Model\Deploy\Package\Processor\PostProcessor\Integrity</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\View\Asset\GroupedCollection">
         <plugin name="addDefaultPropertiesToGroup" type="Magento\Csp\Plugin\AddDefaultPropertiesToGroupPlugin" />
     </type>
     <type name="Magento\Deploy\Service\DeployStaticContent">
         <plugin name="removeAllAssetIntegrityHashes" type="Magento\Csp\Plugin\RemoveAllAssetIntegrityHashes" />
-    </type>
-    <type name="Magento\Framework\App\View\Asset\Publisher">
-        <plugin name="addResourceIntegrityAfterAssetPublish" type="Magento\Csp\Plugin\GenerateAssetIntegrity"/>
     </type>
     <type name="Magento\RequireJs\Model\FileManager">
         <plugin name="addResourceIntegrityAfterAssetCreate" type="Magento\Csp\Plugin\GenerateAssetIntegrity"/>

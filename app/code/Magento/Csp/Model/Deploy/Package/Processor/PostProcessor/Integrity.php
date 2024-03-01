@@ -5,25 +5,25 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Csp\Plugin;
+namespace Magento\Csp\Model\Deploy\Package\Processor\PostProcessor;
 
-use Magento\Framework\View\Asset\File;
-use Magento\RequireJs\Model\FileManager;
+use Magento\Framework\Filesystem;
+use Magento\Deploy\Package\Package;
 use Magento\Csp\Model\SubresourceIntegrityFactory;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Csp\Model\SubresourceIntegrityCollector;
+use Magento\Deploy\Package\Processor\ProcessorInterface;
 use Magento\Csp\Model\SubresourceIntegrity\HashGenerator;
 
 /**
- * Plugin to add asset integrity value after static content deploy.
+ * Post-processor that generates integrity hashes after static content package deployed.
  */
-class GenerateAssetIntegrity
+class Integrity implements ProcessorInterface
 {
     /**
-     * Supported content types.
-     *
-     * @var array
+     * @var Filesystem
      */
-    private const CONTENT_TYPES = ["js"];
+    private Filesystem $filesystem;
 
     /**
      * @var HashGenerator
@@ -41,43 +41,41 @@ class GenerateAssetIntegrity
     private SubresourceIntegrityCollector $integrityCollector;
 
     /**
+     * @param Filesystem $filesystem
      * @param HashGenerator $hashGenerator
      * @param SubresourceIntegrityFactory $integrityFactory
      * @param SubresourceIntegrityCollector $integrityCollector
      */
     public function __construct(
+        Filesystem $filesystem,
         HashGenerator $hashGenerator,
         SubresourceIntegrityFactory $integrityFactory,
         SubresourceIntegrityCollector $integrityCollector
     ) {
+        $this->filesystem = $filesystem;
         $this->hashGenerator = $hashGenerator;
         $this->integrityFactory = $integrityFactory;
         $this->integrityCollector = $integrityCollector;
     }
 
     /**
-     * Generates integrity for RequireJs config.
-     *
-     * @param FileManager $subject
-     * @param File $result
-     *
-     * @return File
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
-    public function afterCreateRequireJsConfigAsset(
-        FileManager $subject,
-        File $result
-    ): File {
-        if (PHP_SAPI == 'cli') {
-            if (in_array($result->getContentType(), self::CONTENT_TYPES)) {
+    public function process(Package $package, array $options): bool
+    {
+        $staticDir = $this->filesystem->getDirectoryRead(
+            DirectoryList::STATIC_VIEW
+        );
+
+        foreach ($package->getFiles() as $file) {
+            if ($file->getExtension() == "js") {
                 $integrity = $this->integrityFactory->create(
                     [
                         "data" => [
                             'hash' => $this->hashGenerator->generate(
-                                $result->getContent()
+                                $staticDir->readFile($file->getDeployedFilePath())
                             ),
-                            'path' => $result->getPath()
+                            'path' => $file->getDeployedFilePath()
                         ]
                     ]
                 );
@@ -86,6 +84,6 @@ class GenerateAssetIntegrity
             }
         }
 
-        return $result;
+        return true;
     }
 }
