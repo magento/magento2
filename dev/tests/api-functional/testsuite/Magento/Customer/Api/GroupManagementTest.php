@@ -73,7 +73,7 @@ class GroupManagementTest extends WebapiAbstract
      *
      * @return array
      */
-    public function getDefaultGroupDataProvider()
+    public static function getDefaultGroupDataProvider()
     {
         return [
             'admin' => [
@@ -174,7 +174,7 @@ class GroupManagementTest extends WebapiAbstract
      *
      * @return array
      */
-    public function isReadonlyDataProvider()
+    public static function isReadonlyDataProvider()
     {
         return [
             'NOT LOGGED IN' => [0, false],
