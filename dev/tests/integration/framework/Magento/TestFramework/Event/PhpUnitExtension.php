@@ -24,7 +24,8 @@ final class PhpUnitExtension implements Runner\Extension\Extension
             new TestSuitStartedSubscriber(),
             new TestSuitEndSubscriber(),
             new PhpUnitExtensionSubscriber(),
-            new PhpUnitExtensionSubscriberFinished()
+            new PhpUnitExtensionSubscriberFinished(),
+            new TestErroredSubscriber()
         );
     }
 }
