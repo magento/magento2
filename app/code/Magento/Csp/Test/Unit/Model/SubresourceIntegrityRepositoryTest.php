@@ -79,18 +79,50 @@ class SubresourceIntegrityRepositoryTest extends TestCase
         $data = new SubresourceIntegrity(
             [
                 'hash' => 'testhash',
-                'url' => 'http://magento.test'
+                'path' => 'js/jquery.js'
             ]
         );
 
-        $expected[$data->getUrl()] = [
-            'url' => $data->getUrl(),
-            'hash' => $data->getHash()
-        ];
+        $expected[$data->getPath()] = $data->getHash();
         $serialized = json_encode($expected);
         $this->cacheMock->expects($this->once())->method('load')->willReturn(false);
         $this->serializerMock->expects($this->once())->method('serialize')->with($expected)->willReturn($serialized);
         $this->cacheMock->expects($this->once())->method('save')->willReturn(true);
         $this->assertTrue($this->subresourceIntegrityRepository->save($data));
+    }
+
+    /** Test that cache saves in bunch
+     *
+     *
+     * @return void
+     */
+    public function testSaveBunch(): void
+    {
+        $bunch1 = new SubresourceIntegrity(
+            [
+                'hash' => 'testhash',
+                'path' => 'js/jquery.js'
+            ]
+        );
+
+        $bunch2 = new SubresourceIntegrity(
+            [
+                'hash' => 'testhash2',
+                'path' => 'js/test.js'
+            ]
+        );
+
+        $bunches = [$bunch1, $bunch2];
+
+         $expected = [];
+
+         foreach($bunches as $bunch){
+             $expected[$bunch->getPath()] = $bunch->getHash();
+         }
+        $serializedBunch = json_encode($expected);
+        $this->cacheMock->expects($this->once())->method('load')->willReturn(false);
+        $this->serializerMock->expects($this->once())->method('serialize')->with($expected)->willReturn($serializedBunch);
+        $this->cacheMock->expects($this->once())->method('save')->willReturn(true);
+        $this->assertTrue($this->subresourceIntegrityRepository->saveBunch($bunches));
     }
 }

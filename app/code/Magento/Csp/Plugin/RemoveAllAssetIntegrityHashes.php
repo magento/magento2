@@ -32,8 +32,7 @@ class RemoveAllAssetIntegrityHashes
     }
 
     /**
-     * Removes existing integrity hashes for all assets
-     * before static content deploy.
+     * Removes existing integrity hashes before static content deploy
      *
      * @param DeployStaticContent $subject
      * @param array $options

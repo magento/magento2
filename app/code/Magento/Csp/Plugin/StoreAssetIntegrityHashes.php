@@ -39,8 +39,7 @@ class StoreAssetIntegrityHashes
     }
 
     /**
-     * Stores generated integrity hashes for all assets
-     * after static content deploy.
+     * Stores generated integrity hashes after static content deploy
      *
      * @param DeployStaticContent $subject
      * @param mixed $result

@@ -40,11 +40,6 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
     private MockObject $stateMock;
 
     /**
-     * @var array $controllerActions
-     */
-    private array $controllerActions;
-
-    /**
      * @var AddDefaultPropertiesToGroupPlugin
      */
     private AddDefaultPropertiesToGroupPlugin $plugin;
@@ -63,7 +58,7 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
             ->getMock();
         $this->assetInterfaceMock = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getUrl', 'getContentType'])
+            ->onlyMethods(['getPath'])
             ->getMockForAbstractClass();
         $this->stateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
@@ -84,29 +79,34 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
     {
         $integrityRepositoryMock = $this->getMockBuilder(SubresourceIntegrityRepository::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getByUrl'])
+            ->onlyMethods(['getByPath'])
             ->getMock();
         $groupedCollectionMock = $this->getMockBuilder(GroupedCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $url = 'https://magento.test/static/version1708401324/frontend/Magento/luma/en_US/jquery.js';
+        $path = 'jquery.js';
         $area = 'frontend';
 
         $data = new SubresourceIntegrity(
             [
                 'hash' => 'testhash',
-                'url' => $url
+                'path' => $path
             ]
         );
         $properties['attributes']['integrity'] = $data->getHash();
         $properties['attributes']['crossorigin'] = 'anonymous';
         $expected = [$this->assetInterfaceMock, $properties];
         $this->stateMock->expects($this->once())->method('getAreaCode')->willReturn($area);
-        $this->integrityRepositoryPoolMock->expects($this->once())->method('get')->with($area)->willReturn($integrityRepositoryMock);
-        $this->assetInterfaceMock->expects($this->once())->method('getUrl')->willReturn($url);
-        $integrityRepositoryMock->expects($this->once())->method('getByUrl')->with($url)->willReturn($data);
-        $this->assertEquals($expected,
-            $this->plugin->beforeGetFilteredProperties($groupedCollectionMock, $this->assetInterfaceMock
+        $this->integrityRepositoryPoolMock->expects($this->once())->method('get')->with($area)
+            ->willReturn(
+                $integrityRepositoryMock
+            );
+        $this->assetInterfaceMock->expects($this->once())->method('getPath')->willReturn($path);
+        $integrityRepositoryMock->expects($this->once())->method('getByPath')->with($path)->willReturn($data);
+        $this->assertEquals(
+            $expected,
+            $this->plugin->beforeGetFilteredProperties(
+                $groupedCollectionMock, $this->assetInterfaceMock
             )
         );
     }
