@@ -6,8 +6,11 @@
 
 namespace Magento\Catalog\Api;
 
+use Magento\Catalog\Model\ProductRepository;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
+use Magento\Catalog\Model\ProductRepositoryFactory;
 
 /**
  * BasePriceStorage test.
@@ -24,11 +27,17 @@ class BasePriceStorageTest extends WebapiAbstract
     private $objectManager;
 
     /**
+     * @var ProductRepositoryFactory
+     */
+    private $repositoryFactory;
+
+    /**
      * Set up.
      */
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->repositoryFactory = Bootstrap::getObjectManager()->get(ProductRepositoryFactory::class);
     }
 
     /**
@@ -165,11 +174,9 @@ class BasePriceStorageTest extends WebapiAbstract
      */
     public function testUpdateLastUpdatedAt()
     {
-        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-        /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
-        $product = $productRepository->get(self::SIMPLE_PRODUCT_SKU);
-        $productUpdatedAt = $product->getUpdatedAt();
-        $newUpdateAt = $this->objectManager->create(\Magento\Framework\Stdlib\DateTime\DateTime::class)->gmtDate();
+        /** @var ProductRepository $beforeProductRepository */
+        $beforeProductRepository = $this->repositoryFactory->create();
+        $beforeProductUpdatedAt = $beforeProductRepository->get(self::SIMPLE_PRODUCT_SKU)->getUpdatedAt();
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/base-prices?XDEBUG_SESSION_START=PHPSTORM',
@@ -195,8 +202,11 @@ class BasePriceStorageTest extends WebapiAbstract
                 ]
             ]
         );
-
         $this->assertEmpty($response);
-        $this->assertGreaterThanOrEqual(strtotime($productUpdatedAt), strtotime($newUpdateAt));
+
+        /** @var ProductRepository $afterProductRepository */
+        $afterProductRepository = $this->repositoryFactory->create();
+        $afterProductUpdatedAt = $afterProductRepository->get(self::SIMPLE_PRODUCT_SKU)->getUpdatedAt();
+        $this->assertTrue(strtotime($afterProductUpdatedAt) >= strtotime($beforeProductUpdatedAt));
     }
 }

@@ -261,7 +261,7 @@ class PricePersistence
             $this->attributeResource->getConnection()->update(
                 $this->attributeResource->getTable('catalog_product_entity'),
                 [ProductInterface::UPDATED_AT => $this->dateTime->gmtDate()],
-                ['entity_id IN(?)' => $productIds]
+                [$this->getEntityLinkField(). ' IN(?)' => $productIds]
             );
         } catch (\Exception $e) {
             throw new CouldNotSaveException(
