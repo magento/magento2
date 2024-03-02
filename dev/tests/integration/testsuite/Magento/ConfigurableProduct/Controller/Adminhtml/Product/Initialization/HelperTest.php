@@ -151,7 +151,7 @@ class HelperTest extends TestCase
     /**
      * @return array
      */
-    public function initializeDataProvider(): array
+    public static function initializeDataProvider(): array
     {
         return [
             'children_with_same_image_and_roles' => [
@@ -248,9 +248,9 @@ class HelperTest extends TestCase
     /**
      * @return array
      */
-    public function initializeWithExistingChildImagesDataProvider(): array
+    public static function initializeWithExistingChildImagesDataProvider(): array
     {
-        $dataProvider = $this->initializeDataProvider();
+        $dataProvider = self::initializeDataProvider();
         unset($dataProvider['children_with_different_images'], $dataProvider['children_with_different_image_roles']);
 
         return array_values($dataProvider);
