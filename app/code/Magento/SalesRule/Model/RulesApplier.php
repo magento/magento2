@@ -112,10 +112,11 @@ class RulesApplier
      * @param AbstractItem $item
      * @param array $rules
      * @param bool $skipValidation
+     * @param string $couponCodes
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function applyRules($item, $rules, $skipValidation)
+    public function applyRules($item, $rules, $skipValidation, array $couponCodes = [])
     {
         $address = $item->getAddress();
         $appliedRuleIds = [];
@@ -142,7 +143,7 @@ class RulesApplier
                 }
             }
 
-            $this->applyRule($item, $rule, $address);
+            $this->applyRule($item, $rule, $address, $couponCodes);
             $appliedRuleIds[$rule->getRuleId()] = $rule->getRuleId();
         }
 
@@ -228,10 +229,11 @@ class RulesApplier
      *
      * @param AbstractItem $item
      * @param Rule $rule
-     * @param \Magento\Quote\Model\Quote\Address $address
+     * @param Address $address
+     * @param string[] $couponCodes
      * @return $this
      */
-    protected function applyRule($item, $rule, $address)
+    protected function applyRule($item, $rule, $address, array $couponCodes = [])
     {
         if ($item->getChildren() && $item->isChildrenCalculated()) {
             $cloneItem = clone $item;
@@ -239,7 +241,7 @@ class RulesApplier
             $applyToChildren = false;
             foreach ($item->getChildren() as $childItem) {
                 if ($rule->getActions()->validate($childItem)) {
-                    $discountData = $this->getDiscountData($childItem, $rule, $address);
+                    $discountData = $this->getDiscountData($childItem, $rule, $address, $couponCodes);
                     $this->setDiscountData($discountData, $childItem);
                     $applyToChildren = true;
                 }
@@ -248,15 +250,15 @@ class RulesApplier
              * validate without children
              */
             if (!$applyToChildren && $rule->getActions()->validate($cloneItem)) {
-                $discountData = $this->getDiscountData($item, $rule, $address);
+                $discountData = $this->getDiscountData($item, $rule, $address, $couponCodes);
                 $this->setDiscountData($discountData, $item);
             }
         } else {
-            $discountData = $this->getDiscountData($item, $rule, $address);
+            $discountData = $this->getDiscountData($item, $rule, $address, $couponCodes);
             $this->setDiscountData($discountData, $item);
         }
 
-        $this->addDiscountDescription($address, $rule);
+        $this->addDiscountDescription($address, $rule, $couponCodes);
         $this->maintainAddressCouponCode($address, $rule, $address->getQuote()->getCouponCode());
 
         return $this;
@@ -267,10 +269,11 @@ class RulesApplier
      *
      * @param AbstractItem $item
      * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Quote\Model\Quote\Address $address
+     * @param Address $address
+     * @param string[] $couponCodes
      * @return Data
      */
-    protected function getDiscountData($item, $rule, $address)
+    protected function getDiscountData($item, $rule, $address, array $couponCodes = [])
     {
         $qty = $this->validatorUtility->getItemQty($item, $rule);
 
@@ -279,7 +282,7 @@ class RulesApplier
         $discountData = $discountCalculator->calculate($rule, $item, $qty);
         $this->eventFix($discountData, $item, $rule, $qty);
         $this->validatorUtility->deltaRoundingFix($discountData, $item);
-        $this->setDiscountBreakdown($discountData, $item, $rule, $address);
+        $this->setDiscountBreakdown($discountData, $item, $rule, $address, $couponCodes);
 
         /**
          * We can't use row total here because row total not include tax
@@ -297,10 +300,11 @@ class RulesApplier
      * @param Data $discountData
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Quote\Model\Quote\Address $address
+     * @param Address $address
+     * @param string[] $couponCodes
      * @return $this
      */
-    private function setDiscountBreakdown($discountData, $item, $rule, $address)
+    private function setDiscountBreakdown($discountData, $item, $rule, $address, array $couponCodes = [])
     {
         if ($discountData->getAmount() > 0 && $item->getExtensionAttributes()) {
             $data = [
@@ -310,10 +314,9 @@ class RulesApplier
                 'base_original_amount' => $discountData->getBaseOriginalAmount()
             ];
             $itemDiscount = $this->discountDataInterfaceFactory->create(['data' => $data]);
-            $ruleLabel = $rule->getStoreLabel($address->getQuote()->getStore()) ?: __('Discount');
             $data = [
                 'discount' => $itemDiscount,
-                'rule' => $ruleLabel,
+                'rule' => $this->getRuleLabel($address, $rule, $couponCodes),
                 'rule_id' => $rule->getId(),
             ];
             /** @var RuleDiscount $itemDiscount */
