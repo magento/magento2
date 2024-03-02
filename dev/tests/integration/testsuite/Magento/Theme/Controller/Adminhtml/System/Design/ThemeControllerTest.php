@@ -50,6 +50,12 @@ class ThemeControllerTest extends \Magento\TestFramework\TestCase\AbstractBacken
         $this->assertStringContainsString($name, $output);
     }
 
+    /**
+     * testing uploaded favicon file
+     *
+     * @throws FileSystemException
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testUploadFaviconAction()
     {
         $names = ['favicon-x-icon.ico', 'favicon-vnd-microsoft.ico'];
