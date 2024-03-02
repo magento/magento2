@@ -11,7 +11,6 @@ use Magento\Framework\Filesystem\DirectoryList;
 
 /**
  * @magentoAppArea adminhtml
- * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 class ThemeControllerTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -63,6 +62,7 @@ class ThemeControllerTest extends \Magento\TestFramework\TestCase\AbstractBacken
             $this->dispatch('backend/admin/design_config_fileUploader/save');
             $output = $this->getResponse()->getBody();
             if (!in_array('imagick', get_loaded_extensions()) || $this->imageAdapter == 'GD2') {
+                // phpcs:disable Magento2.Files.LineLength
                 $this->assertStringContainsString(
                     '{"error":"File validation failed.\n            Check Image Processing Settings in the Store Configuration."',
                     $output
