@@ -4,7 +4,7 @@
  *  ADOBE CONFIDENTIAL
  *  ___________________
  *
- *  Copyright 2024 Adobe
+ *  Copyright 2013 Adobe
  *  All Rights Reserved.
  *
  *  NOTICE: All information contained herein is, and remains
@@ -480,7 +480,7 @@ class WordsFinder
      * @param string $content
      * @return bool
      */
-    private function isCopyrightYearValid($content): bool
+    private function isCopyrightYearValid(string $content): bool
     {
         $pattern = '/Copyright (\d{4}) Adobe/';
         if (preg_match($pattern, $content, $matches)) {
