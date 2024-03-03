@@ -4,14 +4,18 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Customer\Block\Widget;
 
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Helper\Address as AddressHelper;
 use Magento\Customer\Model\Options;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template\Context;
 
 /**
@@ -28,17 +32,17 @@ class City extends AbstractWidget
     /**
      * the attribute code
      */
-    const ATTRIBUTE_CODE = 'city';
+    public const ATTRIBUTE_CODE = 'city';
 
     /**
      * @var AddressMetadataInterface
      */
-    protected $addressMetadata;
+    private $addressMetadata;
 
     /**
      * @var Options
      */
-    protected $options;
+    private $options;
 
     /**
      * @param Context $context
@@ -63,7 +67,7 @@ class City extends AbstractWidget
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     public function _construct()
     {
@@ -74,31 +78,26 @@ class City extends AbstractWidget
     }
 
     /**
-     * Can show config value
-     *
-     * @param string $key
-     *
-     * @return bool
-     */
-    protected function _showConfig($key)
-    {
-        return (bool)$this->getConfig($key);
-    }
-
-    /**
      * Can show prefix
      *
      * @return bool
      */
     public function showCity()
     {
-        return $this->_isAttributeVisible(self::ATTRIBUTE_CODE);
+        return $this->isAttributeVisible(self::ATTRIBUTE_CODE);
     }
 
     /**
-     * @inheritdoc
+     * Retrieve customer attribute instance
+     *
+     * @param string $attributeCode
+     *
+     * @return AttributeMetadataInterface|null
+     * @throws LocalizedException
      */
+    //@codingStandardsIgnoreStart
     protected function _getAttribute($attributeCode)
+    //@codingStandardsIgnoreEnd
     {
         if ($this->getForceUseCustomerAttributes() || $this->getObject() instanceof CustomerInterface) {
             return parent::_getAttribute($attributeCode);
@@ -106,7 +105,7 @@ class City extends AbstractWidget
 
         try {
             $attribute = $this->addressMetadata->getAttributeMetadata($attributeCode);
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+        } catch (NoSuchEntityException $e) {
             return null;
         }
 
@@ -147,11 +146,13 @@ class City extends AbstractWidget
     }
 
     /**
+     * Checks is attribute visible
+     *
      * @param string $attributeCode
      *
      * @return bool
      */
-    private function _isAttributeVisible(string $attributeCode)
+    private function isAttributeVisible(string $attributeCode)
     {
         $attributeMetadata = $this->_getAttribute($attributeCode);
         return $attributeMetadata ? (bool)$attributeMetadata->isVisible() : false;

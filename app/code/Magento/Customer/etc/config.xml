@@ -59,7 +59,7 @@
                 <telephone_show>req</telephone_show>
                 <company_show>opt</company_show>
                 <fax_show/>
-                <city_show>opt</city_show>
+                <city_show>req</city_show>
             </address>
             <startup>
                 <redirect_dashboard>0</redirect_dashboard>

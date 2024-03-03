@@ -84,6 +84,8 @@ class General implements ValidatorInterface
      * @param AbstractAddress $address
      * @return array
      * @throws LocalizedException|ValidateException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function checkOptionalFields(AbstractAddress $address)
     {
@@ -108,8 +110,8 @@ class General implements ValidatorInterface
         }
 
         if ($this->isCityRequired()
-            && !ValidatorChain::is($address->getCity(), NotEmpty::class))
-        {
+            && !ValidatorChain::is($address->getCity(), NotEmpty::class)
+        ) {
             $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'city']);
         }
 
