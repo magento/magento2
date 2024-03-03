@@ -106,7 +106,8 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
         $this->assertEquals(
             $expected,
             $this->plugin->beforeGetFilteredProperties(
-                $groupedCollectionMock, $this->assetInterfaceMock
+                $groupedCollectionMock,
+                $this->assetInterfaceMock
             )
         );
     }

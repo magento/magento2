@@ -114,14 +114,15 @@ class SubresourceIntegrityRepositoryTest extends TestCase
 
         $bunches = [$bunch1, $bunch2];
 
-         $expected = [];
+        $expected = [];
 
-         foreach($bunches as $bunch){
-             $expected[$bunch->getPath()] = $bunch->getHash();
-         }
+        foreach ($bunches as $bunch) {
+            $expected[$bunch->getPath()] = $bunch->getHash();
+        }
         $serializedBunch = json_encode($expected);
         $this->cacheMock->expects($this->once())->method('load')->willReturn(false);
-        $this->serializerMock->expects($this->once())->method('serialize')->with($expected)->willReturn($serializedBunch);
+        $this->serializerMock->expects($this->once())->method('serialize')
+            ->with($expected)->willReturn($serializedBunch);
         $this->cacheMock->expects($this->once())->method('save')->willReturn(true);
         $this->assertTrue($this->subresourceIntegrityRepository->saveBunch($bunches));
     }
