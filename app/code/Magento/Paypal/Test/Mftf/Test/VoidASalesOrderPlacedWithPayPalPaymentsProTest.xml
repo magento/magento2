@@ -34,7 +34,6 @@
             <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
                 <argument name="shippingMethod" value="Flat Rate"/>
             </actionGroup>
-            <waitForElementVisible selector="{{StorefrontPaypalCheckoutSection.creditCard}}" stepKey="waitForCreditCardPaymentMethod"/>
             <actionGroup ref="StorefrontCheckoutSelectPaypalPaymentMethodActionGroup" stepKey="selectPaypalPaymentMethod"/>
             <waitForPageLoad stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
             <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardDataPaypal">
