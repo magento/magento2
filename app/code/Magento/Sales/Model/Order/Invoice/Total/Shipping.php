@@ -36,8 +36,13 @@ class Shipping extends AbstractTotal
             $invoice->setShippingInclTax($shippingInclTax);
             $invoice->setBaseShippingInclTax($baseShippingInclTax);
 
-            $invoice->setGrandTotal($invoice->getGrandTotal() + $orderShippingAmount);
-            $invoice->setBaseGrandTotal($invoice->getBaseGrandTotal() + $baseOrderShippingAmount);
+            $grandTotal = $invoice->getGrandTotal() + $orderShippingAmount < 0.0001
+            ? 0 : $invoice->getGrandTotal() + $orderShippingAmount;
+            $baseGrandTotal = $invoice->getBaseGrandTotal() + $baseOrderShippingAmount < 0.0001
+            ? 0 : $invoice->getBaseGrandTotal() + $baseOrderShippingAmount;
+
+            $invoice->setGrandTotal($grandTotal);
+            $invoice->setBaseGrandTotal($baseGrandTotal);
         }
         return $this;
     }
