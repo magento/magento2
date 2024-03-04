@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Csp\Plugin;
 
 use Magento\Framework\App\Area;
+use Magento\Deploy\Package\Package;
 use Magento\Deploy\Console\DeployStaticOptions;
 use Magento\Deploy\Service\DeployStaticContent;
 use Magento\Csp\Model\SubresourceIntegrityRepositoryPool;
@@ -46,7 +47,7 @@ class RemoveAllAssetIntegrityHashes
         array $options
     ): void {
         if (PHP_SAPI == 'cli' && !$this->isRefreshContentVersionOnly($options)) {
-            foreach ([Area::AREA_FRONTEND, Area::AREA_ADMINHTML] as $area) {
+            foreach ([Package::BASE_AREA, Area::AREA_FRONTEND, Area::AREA_ADMINHTML] as $area) {
                 $this->integrityRepositoryPool->get($area)
                     ->deleteAll();
             }

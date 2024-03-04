@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Csp\Plugin;
 
 use Magento\Framework\App\State;
+use Magento\Deploy\Package\Package;
 use Magento\Framework\View\Asset\AssetInterface;
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\GroupedCollection;
@@ -56,10 +57,18 @@ class AddDefaultPropertiesToGroupPlugin
     ): array {
         if ($asset instanceof LocalInterface) {
             $integrityRepository = $this->integrityRepositoryPool->get(
-                $this->state->getAreaCode()
+                Package::BASE_AREA
             );
 
             $integrity = $integrityRepository->getByPath($asset->getPath());
+
+            if (!$integrity) {
+                $integrityRepository = $this->integrityRepositoryPool->get(
+                    $this->state->getAreaCode()
+                );
+
+                $integrity = $integrityRepository->getByPath($asset->getPath());
+            }
 
             if ($integrity && $integrity->getHash()) {
                 $properties['attributes']['integrity'] = $integrity->getHash();
