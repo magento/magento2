@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4c446ddc8170dedd5786e6259de7d89c",
+    "content-hash": "d4e3e380a5cd4f0f5e6d33d70b1cee3f",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -4288,16 +4288,16 @@
         },
         {
             "name": "magento/composer",
-            "version": "dev-develop",
+            "version": "1.10.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/composer.git",
-                "reference": "2c5c08a668e378eeed1e8c6e50315c14af4ca3ce"
+                "reference": "3941875c84a54f195ad5aaa1826f5b2f0f122fe5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/composer/zipball/2c5c08a668e378eeed1e8c6e50315c14af4ca3ce",
-                "reference": "2c5c08a668e378eeed1e8c6e50315c14af4ca3ce",
+                "url": "https://api.github.com/repos/magento/composer/zipball/3941875c84a54f195ad5aaa1826f5b2f0f122fe5",
+                "reference": "3941875c84a54f195ad5aaa1826f5b2f0f122fe5",
                 "shasum": ""
             },
             "require": {
@@ -4308,7 +4308,6 @@
             "require-dev": {
                 "phpunit/phpunit": "^9"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -4323,9 +4322,9 @@
             "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
             "support": {
                 "issues": "https://github.com/magento/composer/issues",
-                "source": "https://github.com/magento/composer/tree/develop"
+                "source": "https://github.com/magento/composer/tree/1.10.0-beta1"
             },
-            "time": "2023-12-19T16:58:46+00:00"
+            "time": "2024-02-07T21:13:02+00:00"
         },
         {
             "name": "magento/composer-dependency-version-audit-plugin",
@@ -13145,7 +13144,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "magento/composer": 20
+        "magento/composer": 10
     },
     "prefer-stable": true,
     "prefer-lowest": false,
