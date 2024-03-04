@@ -40,7 +40,7 @@ class UpdatedIdListProvider implements NotSyncedDataProviderInterface
         ?IdListBuilder $idListQueryBuilder = null
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->idListQueryBuilder = $idListQueryBuilder ?? ObjectManager::getInstance()->get(IdListBuilder::class);
+        $this->idListQueryBuilder = $idListQueryBuilder ?? ObjectManager::getInstance()->create(IdListBuilder::class);
     }
 
     /**
