@@ -21,6 +21,9 @@ use Magento\Csp\Model\SubresourceIntegrity\HashGenerator;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Csp\Model\SubresourceIntegrityCollector;
 
+/**
+ * Class Adds Integrity attribute to requirejs-map.js asset
+ */
 class Map extends \Magento\Deploy\Package\Processor\PostProcessor\Map
 {
 
@@ -55,6 +58,8 @@ class Map extends \Magento\Deploy\Package\Processor\PostProcessor\Map
     private FileSystem $filesystem;
 
     /**
+     * Constructor
+     *
      * @param DeployStaticFile $deployStaticFile
      * @param PhpFormatter $formatter
      * @param PackageFileFactory $packageFileFactory
