@@ -20,6 +20,7 @@ use Magento\Catalog\Setup\CategorySetup;
 use Magento\Catalog\Setup\CategorySetupFactory;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\Patch\PatchInterface;
 
 class UpdateDefaultSortyByBackendType implements DataPatchInterface
 {
@@ -49,7 +50,7 @@ class UpdateDefaultSortyByBackendType implements DataPatchInterface
     /**
      * @inheritdoc
      */
-    public function apply()
+    public function apply(): UpdateDefaultSortyByBackendType
     {
         $mediaBackendModel = \Magento\Catalog\Model\Category\Attribute\Backend\DefaultSortby::class;
         /** @var CategorySetup $categorySetup */
@@ -60,6 +61,8 @@ class UpdateDefaultSortyByBackendType implements DataPatchInterface
             'backend_model',
             $mediaBackendModel
         );
+
+        return $this;
     }
 
     /**

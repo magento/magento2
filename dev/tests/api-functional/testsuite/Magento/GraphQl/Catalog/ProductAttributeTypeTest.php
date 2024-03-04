@@ -156,7 +156,7 @@ QUERY;
             'catalog_product'
         ];
         $attributeTypes = [
-            'String[]',
+            'String',
             'String[]',
             'Int',
             'CatalogInventoryDataStockItemInterface[]',
