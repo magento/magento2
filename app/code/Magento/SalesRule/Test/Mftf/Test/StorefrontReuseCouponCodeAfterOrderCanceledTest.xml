@@ -94,7 +94,7 @@
             <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
             <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
         </actionGroup>
-        <magentoCron stepKey="runCronAfterPlacingOrder"/>
+        <magentoCron groups="default" stepKey="runCronAfterPlacingOrder"/>
 
         <!-- Get Order id -->
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
@@ -114,7 +114,7 @@
         <!-- Cancel order -->
         <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelOrder"/>
         <waitForPageLoad stepKey="waitForOrderDetailsToLoad"/>
-        <magentoCron stepKey="runCronAfterCancelingOrder"/>
+        <magentoCron groups="default" stepKey="runCronAfterCancelingOrder"/>
 
         <!-- Open My Account Page from Customer dropdown -->
         <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage"/>
