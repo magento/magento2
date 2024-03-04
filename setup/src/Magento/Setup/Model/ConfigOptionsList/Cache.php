@@ -31,6 +31,8 @@ class Cache implements ConfigOptionsListInterface
     public const INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD = 'cache-backend-redis-password';
     public const INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESS_DATA = 'cache-backend-redis-compress-data';
     public const INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESSION_LIB = 'cache-backend-redis-compression-lib';
+    public const INPUT_KEY_CACHE_BACKEND_REDIS_LUA_KEY = 'cache-backend-redis-lua-key';
+    public const INPUT_KEY_CACHE_BACKEND_REDIS_LUA_VALUE = 'cache-backend-redis-lua-value';
     public const INPUT_KEY_CACHE_ID_PREFIX = 'cache-id-prefix';
     public const INPUT_KEY_CACHE_ALLOW_PARALLEL_CACHE_GENERATION = 'allow-parallel-generation';
 
@@ -41,6 +43,8 @@ class Cache implements ConfigOptionsListInterface
     public const CONFIG_PATH_CACHE_BACKEND_PASSWORD = 'cache/frontend/default/backend_options/password';
     public const CONFIG_PATH_CACHE_BACKEND_COMPRESS_DATA = 'cache/frontend/default/backend_options/compress_data';
     public const CONFIG_PATH_CACHE_BACKEND_COMPRESSION_LIB = 'cache/frontend/default/backend_options/compression_lib';
+    public const CONFIG_PATH_CACHE_BACKEND_USE_LUA = 'cache/frontend/default/backend_options/_useLua';
+    public const CONFIG_PATH_CACHE_BACKEND_USE_LUA_VALUE = 'cache/frontend/default/backend_options/use_lua';
     public const CONFIG_PATH_CACHE_ID_PREFIX = 'cache/frontend/default/id_prefix';
     public const CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION = 'cache/allow_parallel_generation';
 
@@ -55,6 +59,8 @@ class Cache implements ConfigOptionsListInterface
         self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESS_DATA => '1',
         self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESSION_LIB => '',
         self::INPUT_KEY_CACHE_ALLOW_PARALLEL_CACHE_GENERATION => 'false',
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_LUA_KEY => 'true',
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_LUA_VALUE => 'false'
     ];
 
     /**
@@ -75,6 +81,8 @@ class Cache implements ConfigOptionsListInterface
         self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESS_DATA => self::CONFIG_PATH_CACHE_BACKEND_COMPRESS_DATA,
         self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESSION_LIB => self::CONFIG_PATH_CACHE_BACKEND_COMPRESSION_LIB,
         self::INPUT_KEY_CACHE_ALLOW_PARALLEL_CACHE_GENERATION => self::CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION,
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_LUA_KEY => self::CONFIG_PATH_CACHE_BACKEND_USE_LUA,
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_LUA_VALUE => self::CONFIG_PATH_CACHE_BACKEND_USE_LUA_VALUE,
     ];
 
     /**
@@ -250,6 +258,20 @@ class Cache implements ConfigOptionsListInterface
             : $deploymentConfig->get(
                 self::CONFIG_PATH_CACHE_BACKEND_PASSWORD,
                 $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD)
+            );
+
+        $config['_useLua'] = isset($options[self::INPUT_KEY_CACHE_BACKEND_REDIS_LUA_KEY])
+            ? $options[self::INPUT_KEY_CACHE_BACKEND_REDIS_LUA_KEY]
+            : $deploymentConfig->get(
+                self::CONFIG_PATH_CACHE_BACKEND_USE_LUA,
+                $this->getDefaultConfigValue(self::CONFIG_PATH_CACHE_BACKEND_USE_LUA)
+            );
+
+        $config['use_lua'] = isset($options[self::INPUT_KEY_CACHE_BACKEND_REDIS_LUA_VALUE])
+            ? $options[self::INPUT_KEY_CACHE_BACKEND_REDIS_LUA_VALUE]
+            : $deploymentConfig->get(
+                self::CONFIG_PATH_CACHE_BACKEND_USE_LUA_VALUE,
+                $this->getDefaultConfigValue(self::CONFIG_PATH_CACHE_BACKEND_USE_LUA_VALUE)
             );
 
         return $this->redisValidator->isValidConnection($config);

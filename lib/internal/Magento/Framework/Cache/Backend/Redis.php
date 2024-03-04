@@ -31,8 +31,6 @@ class Redis extends \Cm_Cache_Backend_Redis
     public function __construct($options = [])
     {
         $this->preloadKeys = $options['preload_keys'] ?? [];
-        $options['use_lua'] = false;
-        $options['_useLua'] = true;
         parent::__construct($options);
     }
 
