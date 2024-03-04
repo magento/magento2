@@ -93,7 +93,7 @@
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "^2",
-        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7 || ^1.0",
         "dg/bypass-finals": "^1.4",
         "friendsofphp/php-cs-fixer": "^3.22",
         "lusitanian/oauth": "^0.8",
@@ -286,6 +286,7 @@
         "magento/module-sales-graph-ql": "*",
         "magento/module-sales-inventory": "*",
         "magento/module-sales-rule": "*",
+        "magento/module-sales-rule-graph-ql": "*",
         "magento/module-sales-sequence": "*",
         "magento/module-sample-data": "*",
         "magento/module-search": "*",
