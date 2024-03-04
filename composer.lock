@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "678dbb9cee85823c3efa1841d8e237c1",
+    "content-hash": "d4e3e380a5cd4f0f5e6d33d70b1cee3f",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -303,16 +303,16 @@
         },
         {
             "name": "colinmollenhour/cache-backend-redis",
-            "version": "1.17.1",
+            "version": "1.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis.git",
-                "reference": "d403f4473e1b3cc616fa59d187e817543b6620c1"
+                "reference": "3fc3e9149097f67cded1c425088e37d7fa8083ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_Redis/zipball/d403f4473e1b3cc616fa59d187e817543b6620c1",
-                "reference": "d403f4473e1b3cc616fa59d187e817543b6620c1",
+                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_Redis/zipball/3fc3e9149097f67cded1c425088e37d7fa8083ed",
+                "reference": "3fc3e9149097f67cded1c425088e37d7fa8083ed",
                 "shasum": ""
             },
             "require": {
@@ -342,22 +342,22 @@
             "homepage": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis",
             "support": {
                 "issues": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis/issues",
-                "source": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis/tree/1.17.1"
+                "source": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis/tree/1.16.0"
             },
-            "time": "2023-12-21T21:56:18+00:00"
+            "time": "2023-01-18T03:00:27+00:00"
         },
         {
             "name": "colinmollenhour/credis",
-            "version": "v1.16.0",
+            "version": "v1.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/credis.git",
-                "reference": "5641140e14a9679f5a6f66c97268727f9558b881"
+                "reference": "28810439de1d9597b7ba11794ed9479fb6f3de7c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/credis/zipball/5641140e14a9679f5a6f66c97268727f9558b881",
-                "reference": "5641140e14a9679f5a6f66c97268727f9558b881",
+                "url": "https://api.github.com/repos/colinmollenhour/credis/zipball/28810439de1d9597b7ba11794ed9479fb6f3de7c",
+                "reference": "28810439de1d9597b7ba11794ed9479fb6f3de7c",
                 "shasum": ""
             },
             "require": {
@@ -389,9 +389,9 @@
             "homepage": "https://github.com/colinmollenhour/credis",
             "support": {
                 "issues": "https://github.com/colinmollenhour/credis/issues",
-                "source": "https://github.com/colinmollenhour/credis/tree/v1.16.0"
+                "source": "https://github.com/colinmollenhour/credis/tree/v1.15.0"
             },
-            "time": "2023-10-26T17:02:51+00:00"
+            "time": "2023-04-18T15:34:23+00:00"
         },
         {
             "name": "colinmollenhour/php-redis-session-abstract",
