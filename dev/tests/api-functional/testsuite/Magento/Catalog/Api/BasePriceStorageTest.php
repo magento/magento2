@@ -13,13 +13,13 @@ use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 use Magento\Catalog\Model\ProductRepositoryFactory;
 
 /**
- * BasePriceStorage test.
+ * Base price storage test to test the update and update with invalid parameter.
  */
 class BasePriceStorageTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogBasePriceStorageV1';
-    const SERVICE_VERSION = 'V1';
-    const SIMPLE_PRODUCT_SKU = 'simple';
+    private const SERVICE_NAME = 'catalogBasePriceStorageV1';
+    private const SERVICE_VERSION = 'V1';
+    private const SIMPLE_PRODUCT_SKU = 'simple';
 
     /**
      * @var \Magento\TestFramework\ObjectManager
