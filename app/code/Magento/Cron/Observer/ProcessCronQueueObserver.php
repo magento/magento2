@@ -9,8 +9,8 @@
  */
 namespace Magento\Cron\Observer;
 
-use Laminas\Http\PhpEnvironment\Request as Environment;
 use Exception;
+use Laminas\Http\PhpEnvironment\Request as Environment;
 use Magento\Cron\Model\DeadlockRetrierInterface;
 use Magento\Cron\Model\ResourceModel\Schedule\Collection as ScheduleCollection;
 use Magento\Cron\Model\Schedule;
@@ -185,6 +185,11 @@ class ProcessCronQueueObserver implements ObserverInterface
     private $retrier;
 
     /**
+     * @var array
+     */
+    private $ignoreMismatches = [];
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Cron\Model\ScheduleFactory $scheduleFactory
      * @param \Magento\Framework\App\CacheInterface $cache
@@ -201,6 +206,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param DeadlockRetrierInterface $retrier
      * @param Environment $environment
+     * @param array $ignoreMismatches
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -219,7 +225,8 @@ class ProcessCronQueueObserver implements ObserverInterface
         \Magento\Framework\Lock\LockManagerInterface $lockManager,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         DeadlockRetrierInterface $retrier,
-        Environment $environment
+        Environment $environment,
+        array $ignoreMismatches = []
     ) {
         $this->_objectManager = $objectManager;
         $this->_scheduleFactory = $scheduleFactory;
@@ -237,6 +244,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         $this->lockManager = $lockManager;
         $this->eventManager = $eventManager;
         $this->retrier = $retrier;
+        $this->ignoreMismatches = $ignoreMismatches;
     }
 
     /**
@@ -783,6 +791,9 @@ class ProcessCronQueueObserver implements ObserverInterface
     private function cleanupScheduleMismatches()
     {
         foreach ($this->invalid as $jobCode => $scheduledAtList) {
+            if (in_array($jobCode, $this->ignoreMismatches)) {
+                continue;
+            }
             $this->cleanup(
                 [
                     'status = ?' => Schedule::STATUS_PENDING,
