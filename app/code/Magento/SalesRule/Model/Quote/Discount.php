@@ -110,6 +110,15 @@ class Discount extends AbstractTotal
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->setCode(self::COLLECTOR_TYPE_CODE);
+    }
+
+    /**
      * Collect address discount amount
      *
      * @param Quote $quote
@@ -173,7 +182,7 @@ class Discount extends AbstractTotal
                 }
             }
         }
-        $this->calculator->init($store->getWebsiteId(), $quote->getCustomerGroupId(), $quote->getCouponCode());
+        $this->calculator->initFromQuote($quote);
         $this->calculator->initTotals($items, $address);
         $items = $this->calculator->sortItemsByPriority($items, $address);
         $itemsToApplyRules = $items;
