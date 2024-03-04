@@ -128,4 +128,10 @@
     <type name="Magento\RequireJs\Model\FileManager">
         <plugin name="addResourceIntegrityAfterAssetCreate" type="Magento\Csp\Plugin\GenerateAssetIntegrity"/>
     </type>
+    <preference for="Magento\Deploy\Package\Processor\PostProcessor\Map" type="Magento\Csp\Model\Deploy\Package\Processor\PostProcessor\Map" />
+    <type name="Magento\Csp\Model\Deploy\Package\Processor\PostProcessor\Map">
+        <arguments>
+            <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
 </config>
