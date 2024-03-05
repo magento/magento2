@@ -57,24 +57,24 @@ class ConfigurableTest extends TestCase
     {
         $this->variationHandler = $this->getMockBuilder(VariationHandler::class)
             ->disableOriginalConstructor()
-            ->setMethods(['generateSimpleProducts', 'prepareAttributeSet'])
+            ->onlyMethods(['generateSimpleProducts', 'prepareAttributeSet'])
             ->getMock();
 
         $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getParam', 'getPost'])
+            ->onlyMethods(['getParam', 'getPost'])
             ->getMock();
 
         $this->optionFactory = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getTypeId', 'setAttributeSetId', 'getExtensionAttributes', 'setNewVariationsAttributeSetId',
-                'setCanSaveConfigurableAttributes', 'setExtensionAttributes'
+            ->addMethods(['setNewVariationsAttributeSetId', 'setCanSaveConfigurableAttributes'])
+            ->onlyMethods([
+                'getTypeId', 'setAttributeSetId', 'getExtensionAttributes', 'setExtensionAttributes'
             ])
             ->getMock();
 
@@ -168,7 +168,7 @@ class ConfigurableTest extends TestCase
 
         $extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setConfigurableProductOptions', 'setConfigurableProductLinks'])
+            ->addMethods(['setConfigurableProductOptions', 'setConfigurableProductLinks'])
             ->getMockForAbstractClass();
         $this->product->expects(static::once())
             ->method('getExtensionAttributes')
@@ -234,7 +234,7 @@ class ConfigurableTest extends TestCase
 
         $extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setConfigurableProductOptions', 'setConfigurableProductLinks'])
+            ->addMethods(['setConfigurableProductOptions', 'setConfigurableProductLinks'])
             ->getMockForAbstractClass();
         $this->product->expects(static::once())
             ->method('getExtensionAttributes')
