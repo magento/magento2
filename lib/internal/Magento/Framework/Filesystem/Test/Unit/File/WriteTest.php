@@ -124,12 +124,11 @@ class WriteTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\FileSystemException');
         $data = 'data';
-        $emptyTranslation = '';
 
         $this->driver->expects($this->once())
             ->method('fileWrite')
             ->with($this->resource, $data)
-            ->willThrowException(new FileSystemException(new Phrase($emptyTranslation)));
+            ->willThrowException(new FileSystemException(new Phrase('Unit test')));
 
         $this->file->write($data);
     }
@@ -140,12 +139,11 @@ class WriteTest extends TestCase
         $data = [];
         $delimiter = ',';
         $enclosure = '"';
-        $emptyTranslation = '';
 
         $this->driver->expects($this->once())
             ->method('filePutCsv')
             ->with($this->resource, $data, $delimiter, $enclosure)
-            ->willThrowException(new FileSystemException(new Phrase($emptyTranslation)));
+            ->willThrowException(new FileSystemException(new Phrase('Unit test')));
 
         $this->file->writeCsv($data, $delimiter, $enclosure);
     }
@@ -153,12 +151,11 @@ class WriteTest extends TestCase
     public function testFlushException()
     {
         $this->expectException('Magento\Framework\Exception\FileSystemException');
-        $emptyTranslation = '';
 
         $this->driver->expects($this->once())
             ->method('fileFlush')
             ->with($this->resource)
-            ->willThrowException(new FileSystemException(new Phrase($emptyTranslation)));
+            ->willThrowException(new FileSystemException(new Phrase('Unit test')));
 
         $this->file->flush();
     }

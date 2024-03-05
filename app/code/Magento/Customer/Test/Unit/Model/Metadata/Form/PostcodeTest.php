@@ -64,10 +64,12 @@ class PostcodeTest extends AbstractFormTestCase
      */
     public function testValidateValue($value, $expected, $countryId, $isOptional)
     {
-        $storeLabel = 'Zip/Postal Code';
-        $this->attributeMetadataMock->expects($this->atLeastOnce())
-            ->method('getStoreLabel')
-            ->willReturn($storeLabel);
+        if ($expected !== true) {
+            $storeLabel = 'Zip/Postal Code';
+            $this->attributeMetadataMock->expects($this->atLeastOnce())
+                ->method('getStoreLabel')
+                ->willReturn($storeLabel);
+        }
 
         $this->directoryHelper->expects($this->once())
             ->method('isZipCodeOptional')

@@ -152,8 +152,8 @@ class RegionTest extends TestCase
             'with no defined regions' => [[]],
             'with defined regions' => [
                 [
-                    new DataObject(['value' => 'Bavaria']),
-                    new DataObject(['value' => 'Saxony']),
+                    new DataObject(['value' => 'Bavaria', 'label' => 'Bavaria']),
+                    new DataObject(['value' => 'Saxony', 'label' => 'Saxony']),
                 ],
             ]
         ];
