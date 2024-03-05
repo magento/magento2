@@ -157,13 +157,13 @@ class HelperTest extends TestCase
             'children_with_same_image_and_roles' => [
                 'child_products' => [
                     'simple_10' => [
-                        'media_gallery' => $this->getMediaGallery(['ben062bdw2v' => '/m/a/magento_image.jpg.tmp']),
+                        'media_gallery' => self::getMediaGallery(['ben062bdw2v' => '/m/a/magento_image.jpg.tmp']),
                         'images' => [
                             '/m/a/magento_image.jpg.tmp' => ['swatch_image', 'small_image', 'image', 'thumbnail'],
                         ],
                     ],
                     'simple_20' => [
-                        'media_gallery' => $this->getMediaGallery(['ben062bdw2v' => '/m/a/magento_image.jpg.tmp']),
+                        'media_gallery' => self::getMediaGallery(['ben062bdw2v' => '/m/a/magento_image.jpg.tmp']),
                         'images' => [
                             '/m/a/magento_image.jpg.tmp' => ['swatch_image', 'small_image', 'image', 'thumbnail'],
                         ],
@@ -181,13 +181,13 @@ class HelperTest extends TestCase
             'children_with_different_images' => [
                 'child_products' => [
                     'simple_10' => [
-                        'media_gallery' => $this->getMediaGallery(['ben062bdw2v' => '/m/a/magento_image.jpg.tmp']),
+                        'media_gallery' => self::getMediaGallery(['ben062bdw2v' => '/m/a/magento_image.jpg.tmp']),
                         'images' => [
                             '/m/a/magento_image.jpg.tmp' => ['swatch_image', 'small_image', 'image', 'thumbnail'],
                         ],
                     ],
                     'simple_20' => [
-                        'media_gallery' => $this->getMediaGallery(
+                        'media_gallery' => self::getMediaGallery(
                             ['lrwuv5ukisn' => '/m/a/magento_small_image.jpg.tmp']
                         ),
                         'images' => [
@@ -207,7 +207,7 @@ class HelperTest extends TestCase
             'children_with_different_image_roles' => [
                 'child_products' => [
                     'simple_10' => [
-                        'media_gallery' => $this->getMediaGallery(
+                        'media_gallery' => self::getMediaGallery(
                             [
                                 'ben062bdw2v' => '/m/a/magento_image.jpg.tmp',
                                 'lrwuv5ukisn' => '/m/a/magento_small_image.jpg.tmp',
@@ -219,7 +219,7 @@ class HelperTest extends TestCase
                         ],
                     ],
                     'simple_20' => [
-                        'media_gallery' => $this->getMediaGallery(
+                        'media_gallery' => self::getMediaGallery(
                             [
                                 'ben062bdw2v' => '/m/a/magento_image.jpg.tmp',
                                 'lrwuv5ukisn' => '/m/a/magento_small_image.jpg.tmp',

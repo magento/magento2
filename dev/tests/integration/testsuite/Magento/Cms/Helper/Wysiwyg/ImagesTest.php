@@ -112,7 +112,7 @@ class ImagesTest extends TestCase
                         'e3ttZWRpYSB1cmw9Ind5c2l3eWcvaGVsbG8ucG5nIn19/'
                     );
 
-                    $this->assertStringContainsString($expectedResult, parse_url($actualResult, PHP_URL_PATH));
+                    self::assertStringContainsString($expectedResult, parse_url($actualResult, PHP_URL_PATH));
                 },
             ],
             [true, 'wysiwyg/hello.png', false, 'http://example.com/media/wysiwyg/hello.png'],

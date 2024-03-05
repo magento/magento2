@@ -98,7 +98,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         //Isolate test from actual configuration, and leave only sample data.
         $this->compiler = $this->getMockBuilder(CompilerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['compile'])
+            ->onlyMethods(['compile'])
             ->getMockForAbstractClass();
 
         $this->reader = $this->objectManager->create(
