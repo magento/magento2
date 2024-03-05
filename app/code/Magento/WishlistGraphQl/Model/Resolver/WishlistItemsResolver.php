@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\WishlistGraphQl\Model\Resolver;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -17,12 +16,18 @@ use Magento\Wishlist\Model\ResourceModel\Item\Collection as WishlistItemCollecti
 use Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory as WishlistItemCollectionFactory;
 use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\Wishlist;
+use Magento\Wishlist\Model\WishlistFactory;
 
 /**
  * Fetches the Wishlist Items data according to the GraphQL schema
  */
 class WishlistItemsResolver implements ResolverInterface
 {
+    /**
+     * @var WishlistFactory
+     */
+    private $wishlistFactory;
+
     /**
      * @var WishlistItemCollectionFactory
      */
@@ -36,13 +41,16 @@ class WishlistItemsResolver implements ResolverInterface
     /**
      * @param WishlistItemCollectionFactory $wishlistItemCollectionFactory
      * @param StoreManagerInterface $storeManager
+     * @param WishlistFactory $wishlistFactory
      */
     public function __construct(
         WishlistItemCollectionFactory $wishlistItemCollectionFactory,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        WishlistFactory $wishlistFactory
     ) {
         $this->wishlistItemCollectionFactory = $wishlistItemCollectionFactory;
         $this->storeManager = $storeManager;
+        $this->wishlistFactory = $wishlistFactory;
     }
 
     /**
@@ -56,7 +64,7 @@ class WishlistItemsResolver implements ResolverInterface
         array $args = null
     ) {
         if (!isset($value['model'])) {
-            throw new LocalizedException(__('Missing key "model" in Wishlist value data'));
+            $value['model'] = $this->wishlistFactory->create();
         }
         /** @var Wishlist $wishlist */
         $wishlist = $value['model'];
