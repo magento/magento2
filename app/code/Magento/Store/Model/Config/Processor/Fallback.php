@@ -10,6 +10,7 @@ use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\TableNotFoundException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\App\Config\Type\Scopes;
 use Magento\Store\Model\ResourceModel\Store;
 use Magento\Store\Model\ResourceModel\Store\AllStoresCollectionFactory;
@@ -20,7 +21,7 @@ use Magento\Store\Model\ResourceModel\Website\AllWebsitesCollectionFactory;
 /**
  * Fallback through different scopes and merge them
  */
-class Fallback implements PostProcessorInterface
+class Fallback implements PostProcessorInterface, ResetAfterRequestInterface
 {
     /**
      * @var Scopes
@@ -276,5 +277,14 @@ class Fallback implements PostProcessorInterface
             $this->storeData = [];
             $this->websiteData = [];
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->storeData = [];
+        $this->websiteData = [];
     }
 }

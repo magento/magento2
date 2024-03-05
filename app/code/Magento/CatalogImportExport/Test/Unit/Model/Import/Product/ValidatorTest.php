@@ -47,7 +47,7 @@ class ValidatorTest extends TestCase
         $entityTypeModel->expects($this->any())->method('retrieveAttributeFromCache')->willReturn([]);
         $this->context = $this->createPartialMock(
             Product::class,
-            ['retrieveProductTypeByName', 'retrieveMessageTemplate', 'getBehavior']
+            ['retrieveProductTypeByName', 'retrieveMessageTemplate', 'getBehavior', 'getMultipleValueSeparator']
         );
         $this->context->expects($this->any())->method('retrieveProductTypeByName')->willReturn($entityTypeModel);
         $this->context->expects($this->any())->method('retrieveMessageTemplate')->willReturn('error message');
@@ -83,6 +83,7 @@ class ValidatorTest extends TestCase
      */
     public function testAttributeValidation($behavior, $attrParams, $rowData, $isValid, $attrCode = 'attribute_code')
     {
+        $this->context->method('getMultipleValueSeparator')->willReturn(Product::PSEUDO_MULTI_LINE_SEPARATOR);
         $this->context->expects($this->any())->method('getBehavior')->willReturn($behavior);
         $result = $this->validator->isAttributeValid(
             $attrCode,

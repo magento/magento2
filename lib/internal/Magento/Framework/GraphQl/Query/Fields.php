@@ -102,7 +102,9 @@ class Fields implements ResetAfterRequestInterface
             if (is_array($value)) {
                 $this->extractVariables($fields, $value);
             } else {
-                $fields[$key] = $key;
+                if (is_string($key)) {
+                    $fields[$key] = $key;
+                }
             }
         }
     }

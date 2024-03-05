@@ -312,6 +312,7 @@
     <type name="Magento\Theme\Model\Theme\ThemeProvider">
         <arguments>
             <argument name="cache" xsi:type="object">configured_design_cache</argument>
+            <argument name="deploymentConfig" xsi:type="object">Magento\Framework\App\DeploymentConfig\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Theme\Model\Theme\StoreThemesResolver">
