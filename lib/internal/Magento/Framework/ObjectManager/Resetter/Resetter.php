@@ -87,7 +87,7 @@ class Resetter implements ResetterInterface
     {
         /* Note: We force garbage collection to clean up cyclic referenced objects before _resetState()
          * This is to prevent calling _resetState() on objects that will be destroyed by garbage collector. */
-        gc_collect_cycles();
+        //gc_collect_cycles();
         if (!$this->weakMapSorter) {
             $this->weakMapSorter = $this->objectManager->get(WeakMapSorter::class);
         }
