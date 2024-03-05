@@ -198,17 +198,21 @@ class TreeTest extends TestCase
             ->will($this->onConsecutiveCalls($treeNodeMock1, $treeNodeMock2));
         $node = $this->getMockBuilder(Node::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
+                [
+                    'getParentId',
+                    'getPosition',
+                    'getLevel',
+                    'getProductCount',
+                ]
+            )
+            ->onlyMethods(
                 [
                     'hasChildren',
                     'getChildren',
                     'getId',
-                    'getParentId',
                     'getName',
-                    'getPosition',
-                    'getLevel',
-                    'getIsActive',
-                    'getProductCount',
+                    'getIsActive'
                 ]
             )
             ->getMock();
@@ -241,17 +245,21 @@ class TreeTest extends TestCase
 
         $node = $this->getMockBuilder(Node::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
+                [
+                    'getParentId',
+                    'getPosition',
+                    'getLevel',
+                    'getProductCount'
+                ]
+            )
+            ->onlyMethods(
                 [
                     'hasChildren',
                     'getChildren',
                     'getId',
-                    'getParentId',
                     'getName',
-                    'getPosition',
-                    'getLevel',
-                    'getIsActive',
-                    'getProductCount',
+                    'getIsActive'
                 ]
             )
             ->getMock();
