@@ -58,4 +58,53 @@
         <data key="zip">78729</data>
         <data key="rate">0.125</data>
     </entity>
+    <entity name="ProductRateTax" type="tax">
+        <data key="identifier" unique="suffix">Product Rate</data>
+        <data key="state">California</data>
+        <data key="country">United States</data>
+        <data key="zip">90001</data>
+        <data key="rate">10</data>
+    </entity>
+    <entity name="ShippingRateTax" type="tax">
+        <data key="identifier" unique="suffix">Shipping Rate</data>
+        <data key="state">California</data>
+        <data key="country">United States</data>
+        <data key="zip">90001</data>
+        <data key="rate">5</data>
+    </entity>
+    <entity name="ProductRateTaxNY" type="tax">
+        <data key="identifier" unique="suffix">Product Rate NY</data>
+        <data key="state">New York</data>
+        <data key="country">United States</data>
+        <data key="zip">10001</data>
+        <data key="rate">20</data>
+    </entity>
+    <entity name="ShippingRateTaxNY" type="tax">
+        <data key="identifier" unique="suffix">Shipping Rate NY</data>
+        <data key="state">New York</data>
+        <data key="country">United States</data>
+        <data key="zip">10001</data>
+        <data key="rate">10</data>
+    </entity>
+    <entity name="SimpleTaxTexas" type="tax">
+        <data key="identifier" unique="suffix" >Texas</data>
+        <data key="state">Texas</data>
+        <data key="country">United States</data>
+        <data key="zip">*</data>
+        <data key="rate">8.3</data>
+    </entity>
+    <entity name="ShippingRateTaxCA" type="tax">
+        <data key="identifier" unique="suffix">Shipping Rate</data>
+        <data key="state">California</data>
+        <data key="country">United States</data>
+        <data key="zip">*</data>
+        <data key="rate">5</data>
+    </entity>
+    <entity name="ProductRateTaxCA" type="tax">
+        <data key="identifier" unique="suffix">Product Rate</data>
+        <data key="state">California</data>
+        <data key="country">United States</data>
+        <data key="zip">*</data>
+        <data key="rate">4</data>
+    </entity>
 </entities>
