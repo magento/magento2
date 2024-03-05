@@ -248,10 +248,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
                 $parameterType = $this->typeProcessor->getParamType($parameter);
 
                 try {
-                    if (
-                        ltrim($parameterType, "\\") === SimplexmlElement::Class &&
-                        strtolower($parameter->getName()) === "sourcedata"
-                    ) {
+                    if (ltrim($parameterType, "\\") === SimplexmlElement::Class &&
+                        strtolower($parameter->getName()) === "sourcedata") {
                         throw new InputException(new Phrase('Invalid input.'));
                     }
 
