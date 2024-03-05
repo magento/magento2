@@ -607,12 +607,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                         && !is_array($value)
                         && !$attribute->isStatic()
                         && $value !== null
-                        && !$this->scopeOverriddenValue->containsValue(
-                            ProductInterface::class,
-                            $product,
-                            $attributeCode,
-                            $product->getStoreId()
-                        )
                     ) {
                         $product->setData(
                             $attributeCode,
