@@ -85,7 +85,7 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $path = 'jquery.js';
-        $area = 'frontend';
+        $area = 'base';
 
         $data = new SubresourceIntegrity(
             [
@@ -96,7 +96,6 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
         $properties['attributes']['integrity'] = $data->getHash();
         $properties['attributes']['crossorigin'] = 'anonymous';
         $expected = [$this->assetInterfaceMock, $properties];
-        $this->stateMock->expects($this->once())->method('getAreaCode')->willReturn($area);
         $this->integrityRepositoryPoolMock->expects($this->once())->method('get')->with($area)
             ->willReturn(
                 $integrityRepositoryMock
