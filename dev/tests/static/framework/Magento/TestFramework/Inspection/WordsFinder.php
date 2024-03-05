@@ -280,11 +280,10 @@ class WordsFinder
         }
         foreach ($exclude as $newPath => $newWords) {
             if (isset($this->exclude[$newPath])) {
-                $newWords = [...$this->exclude[$newPath],$newWords];
+                $newWords = [...$this->exclude[$newPath],...$newWords];
             }
             $this->exclude[$newPath] = array_unique($newWords);
         }
-
         return $this;
     }
 
@@ -345,7 +344,7 @@ class WordsFinder
             }
         }
 
-        if (substr($file, 0, strlen($this->prefix)) == $this->prefix) {
+        if (substr($file, 0, strlen($this->prefix)) === $this->prefix) {
             $file = substr($file, strlen($this->prefix));
         }
 
@@ -446,7 +445,7 @@ class WordsFinder
     private function getChangedPrivateRepoFileList(): array
     {
         $data = [];
-        $changedFilesList = BP .self::CHANGED_PRIVATE_REPO_FILE;
+        $changedFilesList = BP . self::CHANGED_PRIVATE_REPO_FILE;
         if (file_exists($changedFilesList)) {
             $changedFilesList = file($changedFilesList);
             foreach ($changedFilesList as $file) {
@@ -464,7 +463,7 @@ class WordsFinder
     private function getChangedPublicRepoFileList(): array
     {
         $data = [];
-        $changedFilesList = BP .self::CHANGED_PUBLIC_REPO_FILE;
+        $changedFilesList = BP . self::CHANGED_PUBLIC_REPO_FILE;
         if (file_exists($changedFilesList)) {
             $changedFilesList = file($changedFilesList);
             foreach ($changedFilesList as $file) {
