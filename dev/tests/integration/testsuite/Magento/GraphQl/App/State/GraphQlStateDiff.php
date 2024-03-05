@@ -60,9 +60,9 @@ class GraphQlStateDiff
      */
     public function __construct(TestCase $test = null)
     {
-        if (8 == PHP_MAJOR_VERSION && PHP_MINOR_VERSION < 4) {
+        if (8 == PHP_MAJOR_VERSION && 3 == PHP_MINOR_VERSION && PHP_RELEASE_VERSION  < 5) {
             $test->markTestSkipped(
-                "This test isn't compatible with PHP 8.3 versions less than PHP 8.3.4 because of "
+                "This test isn't compatible with PHP 8.3 versions less than PHP 8.3.5 because of "
                 . "bug in garbage collector. https://github.com/php/php-src/issues/13569"
                 . " will roll back in AC-11491"
             );
