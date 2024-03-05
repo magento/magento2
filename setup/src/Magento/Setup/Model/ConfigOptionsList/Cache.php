@@ -59,8 +59,8 @@ class Cache implements ConfigOptionsListInterface
         self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESS_DATA => '1',
         self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESSION_LIB => '',
         self::INPUT_KEY_CACHE_ALLOW_PARALLEL_CACHE_GENERATION => 'false',
-        self::INPUT_KEY_CACHE_BACKEND_REDIS_LUA_KEY => 'true',
-        self::INPUT_KEY_CACHE_BACKEND_REDIS_USE_LUA => 'false'
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_LUA_KEY => true,
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_USE_LUA => false
     ];
 
     /**
