@@ -168,7 +168,7 @@ class CreateAccountTest extends TestCase
     /**
      * @return array
      */
-    public function createInvalidAccountDataProvider(): array
+    public static function createInvalidAccountDataProvider(): array
     {
         return [
             'empty_firstname' => [
@@ -209,7 +209,7 @@ class CreateAccountTest extends TestCase
             ],
             'invalid_password_maximum_length' => [
                 'customer_data' => [],
-                'password' => $this->getRandomNumericString(257),
+                'password' => self::getRandomNumericString(257),
                 'error_type' => InputException::class,
                 'error_message' => ['Please enter a password with at most 256 characters.'],
             ],
