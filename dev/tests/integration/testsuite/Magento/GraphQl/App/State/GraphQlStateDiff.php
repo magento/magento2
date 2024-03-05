@@ -57,8 +57,10 @@ class GraphQlStateDiff
 
     /**
      * Constructor
+     *
+     * @param TestCase $test
      */
-    public function __construct(TestCase $test = null)
+    public function __construct(TestCase $test)
     {
         if (8 == PHP_MAJOR_VERSION && 3 == PHP_MINOR_VERSION && PHP_RELEASE_VERSION  < 5) {
             $test->markTestSkipped(
