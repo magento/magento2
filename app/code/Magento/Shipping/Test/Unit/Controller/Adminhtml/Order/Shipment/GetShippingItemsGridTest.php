@@ -122,8 +122,13 @@ class GetShippingItemsGridTest extends TestCase
             ->with($result)->willReturnSelf();
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['order_id'], ['shipment_id'], ['shipment'], ['tracking'], ['index'])
-            ->willReturnOnConsecutiveCalls($orderId, $shipmentId, $shipment, $tracking);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['order_id'] => $orderId,
+                ['shipment_id'] => $shipmentId,
+                ['shipment'] => $shipment,
+                ['tracking'] =>  $tracking,
+                ['index'] => null
+            });
         $gridMock->expects($this->once())
             ->method('setIndex')->willReturnSelf();
         $gridMock->expects($this->once())
