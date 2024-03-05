@@ -247,6 +247,10 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
                 $parameterType = $this->typeProcessor->getParamType($parameter);
 
                 try {
+                    if (strtolower($parameter->getName()) === "sourcedata" && $parameterType === "\Magento\Framework\Simplexml\Element") {
+                        throw new InputException(new Phrase('Request method is invalid.'));
+                    }
+
                     $res[$parameter->getName()] = $this->convertValue($data[$parameter->getName()], $parameterType);
                 } catch (\ReflectionException $e) {
                     // Parameter was not correclty declared or the class is uknown.
