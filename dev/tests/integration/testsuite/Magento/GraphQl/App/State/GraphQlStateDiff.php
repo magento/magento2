@@ -116,6 +116,13 @@ class GraphQlStateDiff
         string $expected,
         TestCase $test
     ): void {
+        if (8 == PHP_MAJOR_VERSION && PHP_MINOR_VERSION < 4) {
+            $test->markTestSkipped(
+                "This test isn't compatible with PHP 8.3 versions less than PHP 8.3.4 because of "
+                . "bug in garbage collector. https://github.com/php/php-src/issues/13569"
+                . " will roll back in AC-11491"
+            );
+        }
         if (array_key_exists(1, $authInfo)) {
             $authInfo1 = $authInfo[0];
             $authInfo2 = $authInfo[1];

@@ -24,7 +24,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class GraphQlControllerTest extends \Magento\TestFramework\Indexer\TestCase
 {
-    public const CONTENT_TYPE = 'application/json';
+    const CONTENT_TYPE = 'application/json';
 
     /** @var \Magento\Framework\ObjectManagerInterface */
     private $objectManager;
@@ -56,12 +56,6 @@ class GraphQlControllerTest extends \Magento\TestFramework\Indexer\TestCase
 
     protected function setUp(): void
     {
-        if (version_compare(PHP_VERSION, '8.3', '>=')) {
-            ini_set("zend.enable_gc",0);
-            $this->markTestSkipped(
-                'Test is skip and un-skip again in scope of this - AC-11491 on this version of Magento.'
-            );
-        }
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
@@ -181,7 +175,7 @@ query GetProducts(\$filterInput:ProductAttributeFilterInput){
             id
             name
             sku
-        }
+        }  
     }
 }
 QUERY;
@@ -229,12 +223,12 @@ QUERY;
     }
   ])
     {
-      items{
+      items{        
       attribute_code
       attribute_type
       entity_type
-    }
-    }
+    }      
+    }  
   }
 QUERY;
 
