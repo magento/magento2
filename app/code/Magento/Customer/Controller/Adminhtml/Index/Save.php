@@ -66,14 +66,14 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
     private $subscriptionManager;
 
     /**
+     * @var SetCustomerStore
+     */
+    private $customerStore;
+
+    /**
      * @var AddressRegistry
      */
     private $addressRegistry;
-
-    /**
-     * @var SetCustomerStore|null
-     */
-    private $customerStore;
 
     /**
      * Constructor
@@ -104,8 +104,8 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
      * @param ForwardFactory $resultForwardFactory
      * @param JsonFactory $resultJsonFactory
      * @param SubscriptionManagerInterface $subscriptionManager
+     * @param SetCustomerStore $customerStore
      * @param AddressRegistry|null $addressRegistry
-     * @param SetCustomerStore|null $customerStore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -135,8 +135,8 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
         ForwardFactory $resultForwardFactory,
         JsonFactory $resultJsonFactory,
         SubscriptionManagerInterface $subscriptionManager,
-        AddressRegistry $addressRegistry = null,
-        ?SetCustomerStore $customerStore = null
+        SetCustomerStore $customerStore,
+        AddressRegistry $addressRegistry = null
     ) {
         parent::__construct(
             $context,
@@ -166,8 +166,8 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
             $resultJsonFactory
         );
         $this->subscriptionManager = $subscriptionManager;
+        $this->customerStore = $customerStore;
         $this->addressRegistry = $addressRegistry ?: ObjectManager::getInstance()->get(AddressRegistry::class);
-        $this->customerStore = $customerStore ?? ObjectManager::getInstance()->get(SetCustomerStore::class);
     }
 
     /**
