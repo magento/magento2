@@ -349,11 +349,9 @@ class WordsFinder
         }
 
         if ($contents && !$this->isCopyrightCheckSkipped($file)) {
-
             if (in_array($file, $this->changedPrivateRepoFileList)) {
                 if ((strpos($contents, $this->copyrightAdobeString) === false)
                 ) {
-
                     $foundWords[] = 'Copyright content is not valid';
                 }
             }
@@ -363,9 +361,7 @@ class WordsFinder
                     $foundWords[] = 'Copyright year is not valid';
                 }
             }
-
         }
-
         return $foundWords;
     }
 
