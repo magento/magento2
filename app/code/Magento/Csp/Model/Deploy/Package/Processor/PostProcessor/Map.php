@@ -13,7 +13,7 @@ use Magento\Deploy\Service\DeployStaticFile;
 use Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\FileSystem;
+use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\View\Asset\RepositoryMap;
 use Magento\Csp\Model\SubresourceIntegrityFactory;
@@ -23,6 +23,8 @@ use Magento\Csp\Model\SubresourceIntegrityCollector;
 
 /**
  * Class Adds Integrity attribute to requirejs-map.js asset
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Map extends \Magento\Deploy\Package\Processor\PostProcessor\Map
 {
@@ -92,9 +94,10 @@ class Map extends \Magento\Deploy\Package\Processor\PostProcessor\Map
 
     /**
      * @inheritdoc
+     *
      * @throws FileSystemException
      */
-    public function process(Package $package, array $options)
+    public function process(Package $package, array $options): bool
     {
         parent::process($package, $options);
         $fileName = $this->minification->addMinifiedSign(RepositoryMap::REQUIRE_JS_MAP_NAME);
@@ -118,6 +121,7 @@ class Map extends \Magento\Deploy\Package\Processor\PostProcessor\Map
                 $this->integrityCollector->collect($integrity);
             }
         }
+        return true;
     }
 
     /**
