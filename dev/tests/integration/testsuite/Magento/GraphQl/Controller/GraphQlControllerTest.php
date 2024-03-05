@@ -57,6 +57,7 @@ class GraphQlControllerTest extends \Magento\TestFramework\Indexer\TestCase
     protected function setUp(): void
     {
         if (version_compare(PHP_VERSION, '8.3', '>=')) {
+            ini_set("zend.enable_gc",0);
             $this->markTestSkipped(
                 'Test is skip and un-skip again in scope of this - AC-11491 on this version of Magento.'
             );
