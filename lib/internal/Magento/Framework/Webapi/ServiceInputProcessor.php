@@ -22,6 +22,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Simplexml\Element as SimplexmlElement;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Webapi\CustomAttribute\PreprocessorInterface;
 use Laminas\Code\Reflection\ClassReflection;
@@ -247,8 +248,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
                 $parameterType = $this->typeProcessor->getParamType($parameter);
 
                 try {
-                    if (strtolower($parameter->getName()) === "sourcedata" && $parameterType === "\Magento\Framework\Simplexml\Element") {
-                        throw new InputException(new Phrase('Request method is invalid.'));
+                    if (
+                        ltrim($parameterType, "\\") === SimplexmlElement::Class &&
+                        strtolower($parameter->getName()) === "sourcedata"
+                    ) {
+                        throw new InputException(new Phrase('Invalid input.'));
                     }
 
                     $res[$parameter->getName()] = $this->convertValue($data[$parameter->getName()], $parameterType);
