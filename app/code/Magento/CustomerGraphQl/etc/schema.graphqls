@@ -5,6 +5,7 @@ type StoreConfig {
     required_character_classes_number : String @doc(description: "The number of different character classes (lowercase, uppercase, digits, special characters) required in a password.")
     minimum_password_length : String @doc(description: "The minimum number of characters required for a valid password.")
     autocomplete_on_storefront : Boolean @doc(description: "Indicates whether to enable autocomplete on login and forgot password forms.")
+    create_account_confirmation: Boolean @doc(description: "Indicates if the new accounts need confirmation.")
 }
 
 type Query {
@@ -146,6 +147,7 @@ type Customer @doc(description: "Defines the customer name, addresses, and other
     addresses: [CustomerAddress] @doc(description: "An array containing the customer's shipping and billing addresses.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddresses")
     gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2).")
     custom_attributes(attributeCodes: [ID!]): [AttributeValueInterface] @doc(description: "Customer's custom attributes.") @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\CustomAttributeFilter")
+    confirmation_status: ConfirmationStatusEnum! @doc(description: "The customer's confirmation status.") @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\ConfirmationStatus")
 }
 
 type CustomerAddress @doc(description: "Contains detailed information about a customer's billing or shipping address."){
@@ -472,4 +474,9 @@ enum ValidationRuleEnum @doc(description: "List of validation rule names applied
     MAX_FILE_SIZE
     MAX_IMAGE_HEIGHT
     MAX_IMAGE_WIDTH
+}
+
+enum ConfirmationStatusEnum @doc(description: "List of account confirmation statuses.") {
+    ACCOUNT_CONFIRMED @doc(description: "Account confirmed")
+    ACCOUNT_CONFIRMATION_NOT_REQUIRED @doc(description: "Account confirmation not required")
 }
