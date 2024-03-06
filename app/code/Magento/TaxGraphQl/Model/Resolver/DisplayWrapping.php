@@ -24,7 +24,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 /**
  * @inheritdoc
  */
-class DisplayGiftWrapping implements ResolverInterface
+class DisplayWrapping implements ResolverInterface
 {
     /**
      * @param EnumLookup $enumLookup
@@ -45,7 +45,7 @@ class DisplayGiftWrapping implements ResolverInterface
     ) {
         if (isset($value['shopping_cart_display_tax_gift_wrapping'])) {
             return $this->enumLookup->getEnumValueFromField(
-                'TaxGiftWrappingEnum',
+                'TaxWrappingEnum',
                 $value['shopping_cart_display_tax_gift_wrapping']
             );
         }

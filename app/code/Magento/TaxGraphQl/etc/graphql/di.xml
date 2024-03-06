@@ -34,7 +34,7 @@
     <type name="Magento\Framework\GraphQl\Schema\Type\Enum\DefaultDataMapper">
         <arguments>
             <argument name="map" xsi:type="array">
-                <item name="TaxGiftWrappingEnum" xsi:type="array">
+                <item name="TaxWrappingEnum" xsi:type="array">
                     <item name="display_excluding_tax" xsi:type="string">1</item>
                     <item name="display_including_tax" xsi:type="string">2</item>
                     <item name="display_type_both" xsi:type="string">3</item>
