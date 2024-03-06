@@ -49,7 +49,7 @@
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
         <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="goToShippingAndFillDetails"/>
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="Texas" stepKey="fillState2"/>
-        <waitForPageLoad stepKey="waitForProductPage1"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
         <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFreeShipping">
             <argument name="shippingMethodName" value="Flat Rate"/>
         </actionGroup>
