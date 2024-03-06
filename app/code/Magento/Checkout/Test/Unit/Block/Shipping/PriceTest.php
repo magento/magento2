@@ -18,8 +18,6 @@ use PHPUnit\Framework\TestCase;
 
 class PriceTest extends TestCase
 {
-    const SUBTOTAL = 10;
-
     /**
      * @var Price
      */

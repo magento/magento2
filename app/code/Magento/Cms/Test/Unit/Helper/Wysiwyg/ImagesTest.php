@@ -362,7 +362,8 @@ class ImagesTest extends TestCase
 
     /**
      * @param bool $allowedValue
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function generalSettingsIsUsingStaticUrlsAllowed($allowedValue)
     {

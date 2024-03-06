@@ -25,6 +25,9 @@ use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DynamicStorageTest extends TestCase
 {
     /**
@@ -195,6 +198,7 @@ class DynamicStorageTest extends TestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function findProductRewriteByRequestPathDataProvider(): array
     {

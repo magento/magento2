@@ -35,7 +35,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ProductTest extends TestCase
 {
-    const STUB_CATEGORY_ID = 5;
+    private const STUB_CATEGORY_ID = 5;
     /** @var SalesRuleProduct */
     protected $model;
 

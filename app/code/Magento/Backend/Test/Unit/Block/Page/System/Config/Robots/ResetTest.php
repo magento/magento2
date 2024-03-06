@@ -20,6 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @deprecated Original class is deprecated
+ * @see Reset
  */
 class ResetTest extends TestCase
 {

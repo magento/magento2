@@ -128,7 +128,7 @@ class DefaultConfigProviderTest extends TestCase
         $this->addressMetadata = $this->createMock(AddressMetadataInterface::class);
         $attributeOptionManager = $this->createMock(AttributeOptionManagementInterface::class);
         $customerAddressData = $this->createMock(CustomerAddressDataProvider::class);
-        $escaper = $this->createMock(Escaper::class);
+        $this->escaper = $this->createMock(Escaper::class);
         $this->model = new DefaultConfigProvider(
             $checkoutHelper,
             $this->checkoutSession,
@@ -160,7 +160,7 @@ class DefaultConfigProviderTest extends TestCase
             $this->addressMetadata,
             $attributeOptionManager,
             $customerAddressData,
-            $escaper
+            $this->escaper
         );
     }
 

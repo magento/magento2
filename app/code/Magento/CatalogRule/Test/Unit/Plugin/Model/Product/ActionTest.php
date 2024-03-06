@@ -36,6 +36,7 @@ class ActionTest extends TestCase
     {
         $subject = $this->getMockBuilder(\Magento\Catalog\Model\Product\Action::class)
             ->disableOriginalConstructor()
+            ->onlyMethods([])
             ->getMock();
 
         $result = $this->getMockBuilder(\Magento\Catalog\Model\Product\Action::class)
@@ -61,6 +62,7 @@ class ActionTest extends TestCase
         $productIds = [1, 2, 3];
         $subject = $this->getMockBuilder(\Magento\Catalog\Model\Product\Action::class)
             ->disableOriginalConstructor()
+            ->onlyMethods([])
             ->getMock();
 
         $result = $this->getMockBuilder(\Magento\Catalog\Model\Product\Action::class)
