@@ -122,10 +122,13 @@ class IndexTest extends TestCase
 
         $this->resultPageMock
             ->method('setHeader')
-            ->withConsecutive(
-                ['Status', '404 File not found'],
-                ['Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0']
-            )->willReturn($this->resultPageMock);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'Status' && $arg2 == '404 File not found') {
+                    return $this->resultPageMock;
+                } elseif ($arg1 == 'Cache-Control' && $arg2 == 'no-store, no-cache, must-revalidate, max-age=0') {
+                    return $this->resultPageMock;
+                }
+            });
 
         $this->_cmsHelperMock->expects(
             $this->once()
