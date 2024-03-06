@@ -41,6 +41,11 @@ class InvokerDefaultTest extends TestCase
     protected $_appStateMock;
 
     /**
+     * @var MockObject
+     */
+    protected $_scopeConfigMock;
+
+    /**
      * @var InvokerDefault
      */
     protected $_invokerDefault;
@@ -59,11 +64,13 @@ class InvokerDefaultTest extends TestCase
             ['execute']
         );
         $this->_appStateMock = $this->createMock(State::class);
+        $this->_scopeConfigMock = $this->createMock(\Magento\Framework\App\Config::class);
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->_invokerDefault = new InvokerDefault(
             $this->_observerFactoryMock,
             $this->_appStateMock,
+            $this->_scopeConfigMock,
             $this->loggerMock
         );
     }
@@ -214,5 +221,65 @@ class InvokerDefaultTest extends TestCase
     public function dataProviderForMethodIsNotDefined()
     {
         return ['shared' => [true], 'non shared' => [false]];
+    }
+
+    public function testDispatchWithIfconfigFalse()
+    {
+        $this->_observerFactoryMock->expects($this->never())->method('get');
+        $this->_observerFactoryMock->expects($this->never())->method('create');
+
+        $this->_scopeConfigMock->expects(
+            $this->any()
+        )->method(
+            'isSetFlag'
+        )->with(
+            'test/path/value'
+        )->willReturn(
+            false
+        );
+
+        $this->_invokerDefault->dispatch(['ifconfig' => 'test/path/value'], $this->_observerMock);
+    }
+
+    public function testDispatchWithIfconfigTrue()
+    {
+        $this->_listenerMock->expects($this->once())->method('execute');
+        $this->_scopeConfigMock->expects(
+            $this->any()
+        )->method(
+            'isSetFlag'
+        )->with(
+            'test/path/value'
+        )->willReturn(
+            true
+        );
+        $this->_observerFactoryMock->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            'class_name'
+        )->willReturn(
+            $this->_listenerMock
+        );
+
+        $this->_invokerDefault->dispatch(['instance' => 'class_name',
+            'ifconfig' => 'test/path/value'], $this->_observerMock);
+    }
+
+    public function testDispatchWithIfconfigMissing()
+    {
+        $this->_listenerMock->expects($this->once())->method('execute');
+        $this->_observerFactoryMock->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            'class_name'
+        )->willReturn(
+            $this->_listenerMock
+        );
+
+        $this->_invokerDefault->dispatch(['instance' => 'class_name'], $this->_observerMock);
     }
 }
