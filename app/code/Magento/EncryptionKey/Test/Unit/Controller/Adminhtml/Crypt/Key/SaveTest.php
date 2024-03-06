@@ -114,8 +114,11 @@ class SaveTest extends TestCase
         $newKey = 'RSASHA9000VERYSECURESUPERMANKEY';
         $this->requestMock
             ->method('getPost')
-            ->withConsecutive(['generate_random'], ['crypt_key'])
-            ->willReturnOnConsecutiveCalls(0, $key);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['generate_random'] => 0,
+                ['crypt_key'] => $key
+            });
+
         $this->encryptMock->expects($this->once())->method('validateKey');
         $this->changeMock->expects($this->once())->method('changeEncryptionKey')->willReturn($newKey);
         $this->managerMock->expects($this->once())->method('addSuccessMessage')->with($expectedMessage);
@@ -133,8 +136,10 @@ class SaveTest extends TestCase
         $key = null;
         $this->requestMock
             ->method('getPost')
-            ->withConsecutive(['generate_random'], ['crypt_key'])
-            ->willReturnOnConsecutiveCalls(0, $key);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['generate_random'] => 0,
+                ['crypt_key'] => $key
+            });
         $this->managerMock->expects($this->once())->method('addErrorMessage');
 
         $this->model->execute();
@@ -148,8 +153,9 @@ class SaveTest extends TestCase
         $newKey = 'RSASHA9000VERYSECURESUPERMANKEY';
         $this->requestMock
             ->method('getPost')
-            ->withConsecutive(['generate_random'])
-            ->willReturnOnConsecutiveCalls(1);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['generate_random'] => 1
+            });
 
         $this->changeMock->expects($this->once())->method('changeEncryptionKey')->willReturn($newKey);
         $this->managerMock->expects($this->once())->method('addSuccessMessage');
