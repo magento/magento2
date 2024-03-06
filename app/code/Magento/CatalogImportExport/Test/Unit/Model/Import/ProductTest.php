@@ -1132,8 +1132,8 @@ class ProductTest extends AbstractImportTestCase
         $importProduct
             ->method('addRowError')
             ->willReturnCallback(
-                function ($arg1, $arg2) use ($expectedError, $rowNum) {
-                    if ($arg1 == $expectedError && $arg2 == $rowNum) {
+                function ($arg1) use ($rowNum) {
+                    if ($arg1 == $rowNum) {
                         return null;
                     }
                 }
