@@ -28,6 +28,7 @@ interface AddressRepositoryInterface
      * @param int $addressId
      * @return \Magento\Customer\Api\Data\AddressInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getById($addressId);
 
