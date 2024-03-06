@@ -47,6 +47,7 @@ use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Newsletter\Model\SubscriptionManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Save customer action.
@@ -69,6 +70,11 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
      * @var AddressRegistry
      */
     private $addressRegistry;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
      * @var SetCustomerStore|null
@@ -105,8 +111,10 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
      * @param JsonFactory $resultJsonFactory
      * @param SubscriptionManagerInterface $subscriptionManager
      * @param AddressRegistry|null $addressRegistry
+     * @param StoreManagerInterface|null $storeManager
      * @param SetCustomerStore|null $customerStore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Context $context,
@@ -136,6 +144,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
         JsonFactory $resultJsonFactory,
         SubscriptionManagerInterface $subscriptionManager,
         AddressRegistry $addressRegistry = null,
+        ?StoreManagerInterface $storeManager = null,
         ?SetCustomerStore $customerStore = null
     ) {
         parent::__construct(
@@ -167,7 +176,8 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
         );
         $this->subscriptionManager = $subscriptionManager;
         $this->addressRegistry = $addressRegistry ?: ObjectManager::getInstance()->get(AddressRegistry::class);
-        $this->customerStore = $customerStore ?: ObjectManager::getInstance()->get(SetCustomerStore::class);
+        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->customerStore = $customerStore ?? ObjectManager::getInstance()->get(SetCustomerStore::class);
     }
 
     /**

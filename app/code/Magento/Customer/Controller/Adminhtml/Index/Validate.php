@@ -17,9 +17,11 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObjectFactory as ObjectFactory;
 use Magento\Framework\Message\Error;
 use Magento\Customer\Controller\Adminhtml\Index as CustomerAction;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class for validation of customer
@@ -29,7 +31,12 @@ use Magento\Customer\Controller\Adminhtml\Index as CustomerAction;
 class Validate extends CustomerAction implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
-     * @var SetCustomerStore
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var SetCustomerStore|null
      */
     private $customerStore;
 
@@ -59,8 +66,10 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param SetCustomerStore $customerStore
+     * @param StoreManagerInterface|null $storeManager
+     * @param SetCustomerStore|null $customerStore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -88,7 +97,8 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        SetCustomerStore $customerStore
+        ?StoreManagerInterface $storeManager = null,
+        ?SetCustomerStore $customerStore = null
     ) {
         parent::__construct(
             $context,
@@ -117,7 +127,8 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
             $resultForwardFactory,
             $resultJsonFactory
         );
-        $this->customerStore = $customerStore;
+        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->customerStore = $customerStore ?? ObjectManager::getInstance()->get(SetCustomerStore::class);
     }
 
     /**
