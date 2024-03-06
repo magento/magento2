@@ -511,6 +511,10 @@ type StoreConfig {
     is_guest_checkout_enabled: Boolean @doc(description: "Extended Config Data - checkout/options/guest_checkout")
     is_one_page_checkout_enabled: Boolean @doc(description: "Extended Config Data - checkout/options/onepage_checkout_enabled")
     max_items_in_order_summary: Int @doc(description: "Extended Config Data - checkout/options/max_items_display_count")
+    cart_summary_display_quantity: Int @doc(description: "Extended Config Data - checkout/cart_link/use_qty")
+    minicart_display: Boolean @doc(description: "Extended Config Data - checkout/sidebar/display")
+    minicart_max_items: Int @doc(description: "Extended Config Data - checkout/sidebar/count")
+    cart_expires_in_days: Int @doc(description: "Extended Config Data - checkout/cart/delete_quote_after")
 }
 
 input EstimateTotalsInput {
