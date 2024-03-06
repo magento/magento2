@@ -144,7 +144,7 @@ class ComponentRegistrarFixture
             $reflection = new ReflectionClass(self::REGISTRAR_CLASS);
             $paths = $reflection->getProperty(self::PATHS_FIELD);
             $paths->setAccessible(true);
-            $paths->setValue($this->origComponents);
+            $paths->setValue(null, $this->origComponents);
             $paths->setAccessible(false);
             $this->origComponents = null;
         }

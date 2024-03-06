@@ -14,6 +14,7 @@ use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Event;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\Message\Collection;
 use Magento\Framework\Message\ManagerInterface;
@@ -241,6 +242,71 @@ class AuthObserverTest extends TestCase
             return;
         }
         $this->fail('An expected exception has not been raised.');
+    }
+
+    /**
+     * @magentoConfigFixture admin/security/password_lifetime 1
+     * @return void
+     * @throws LocalizedException
+     */
+    public function testAdminAuthenticatePasswordExpire(): void
+    {
+        $password = "myP@sw0rd";
+        $uid = 123;
+        $authResult = true;
+        $lockExpires = false;
+        $userPassword = [
+            'expires' => 1,
+            'last_updated' => 1694661402
+        ];
+
+        /** @var Observer|MockObject $eventObserverMock */
+        $eventObserverMock = $this->getMockBuilder(Observer::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
+        /** @var Event|MockObject */
+        $eventMock = $this->getMockBuilder(Event::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getPassword', 'getUser', 'getResult'])
+            ->getMock();
+
+        /** @var ModelUser|MockObject $userMock */
+        $userMock = $this->getMockBuilder(\Magento\User\Model\User::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getId', 'getLockExpires', 'getPassword', 'save'])
+            ->getMock();
+
+        $eventObserverMock->expects($this->atLeastOnce())->method('getEvent')->willReturn($eventMock);
+        $eventMock->expects($this->once())->method('getPassword')->willReturn($password);
+        $eventMock->expects($this->once())->method('getUser')->willReturn($userMock);
+        $eventMock->expects($this->once())->method('getResult')->willReturn($authResult);
+        $userMock->expects($this->atLeastOnce())->method('getId')->willReturn($uid);
+        $userMock->expects($this->once())->method('getLockExpires')->willReturn($lockExpires);
+        $this->userMock->expects($this->once())->method('unlock');
+        $this->userMock->expects($this->once())->method('getLatestPassword')->willReturn($userPassword);
+        $this->configInterfaceMock
+            ->expects($this->atLeastOnce())
+            ->method('getValue')
+            ->willReturn(1);
+
+        /** @var Collection|MockObject $collectionMock */
+        $collectionMock = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
+        $this->managerInterfaceMock->expects($this->once())->method('getMessages')->willReturn($collectionMock);
+        $collectionMock
+            ->expects($this->once())
+            ->method('getLastAddedMessage')
+            ->willReturn($this->messageInterfaceMock);
+        $this->messageInterfaceMock->expects($this->once())->method('setIdentifier')->willReturnSelf();
+        $this->authSessionMock->expects($this->once())->method('setPciAdminUserIsPasswordExpired');
+        $this->encryptorMock->expects($this->once())->method('validateHashVersion')->willReturn(false);
+
+        $this->model->execute($eventObserverMock);
     }
 
     public function testAdminAuthenticateUpdateLockingInfo()

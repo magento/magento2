@@ -28,17 +28,17 @@ class ConfigTest extends TestCase
     /**
      * Pending status stub
      */
-    const STUB_PENDING_STATUS_CODE = 'pending';
+    private const STUB_PENDING_STATUS_CODE = 'pending';
 
     /**
      * Store view with id 2
      */
-    const STUB_STORE_VIEW_WITH_ID_2 = 2;
+    private const STUB_STORE_VIEW_WITH_ID_2 = 2;
 
     /**
      * Pending label in store view 2
      */
-    const STUB_STORE_VIEW_LABEL_WITH_ID_2 = 'Pending-2';
+    private const STUB_STORE_VIEW_LABEL_WITH_ID_2 = 'Pending-2';
 
     /**
      * @var  Config
@@ -65,6 +65,9 @@ class ConfigTest extends TestCase
      */
     protected $storeManagerMock;
 
+    /**
+     * @var StatusLabel|MockObject
+     */
     protected $statusLabel;
 
     /**
@@ -80,7 +83,8 @@ class ConfigTest extends TestCase
         ]);
         $this->statusFactoryMock = $this->getMockBuilder(StatusFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'create'])
+            ->addMethods(['load'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->orderStatusCollectionFactoryMock = $this->createPartialMock(
             CollectionFactory::class,
@@ -248,7 +252,7 @@ class ConfigTest extends TestCase
      *
      * @return array
      */
-    public function getStatusesDataProvider()
+    public static function getStatusesDataProvider()
     {
         return [
             'processing state' => [

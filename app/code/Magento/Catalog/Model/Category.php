@@ -109,6 +109,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @var \Magento\UrlRewrite\Model\UrlRewrite
      * @deprecated 102.0.0
+     * @see \Magento\UrlRewrite\Model\UrlFinderInterface
      */
     protected $_urlRewrite;
 
@@ -315,6 +316,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\ResourceModel\Category
      * @deprecated 102.0.6 because resource models should be used directly
+     * @see \Magento\Catalog\Model\ResourceModel\Category
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      * @since 102.0.6
      */
@@ -615,6 +617,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                     UrlRewrite::ENTITY_ID => $this->getId(),
                     UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
                     UrlRewrite::STORE_ID => $this->getStoreId(),
+                    UrlRewrite::REDIRECT_TYPE => 0
                 ]
             );
             if ($rewrite) {
