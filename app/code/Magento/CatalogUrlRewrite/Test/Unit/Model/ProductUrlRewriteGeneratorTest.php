@@ -101,7 +101,7 @@ class ProductUrlRewriteGeneratorTest extends TestCase
         $this->objectRegistryFactory = $this->getMockBuilder(
             ObjectRegistryFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
         $this->storeViewService = $this->getMockBuilder(StoreViewService::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -148,8 +148,10 @@ class ProductUrlRewriteGeneratorTest extends TestCase
             ->getMock();
         $productCategoriesMock->expects($this->exactly(2))
             ->method('addAttributeToSelect')
-            ->withConsecutive(['url_key'], ['url_path'])
-            ->willReturnSelf();
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['url_key'] => $productCategoriesMock,
+                ['url_path'] => $productCategoriesMock
+            });
         $productMock->expects($this->once())
             ->method('getCategoryCollection')
             ->willReturn($productCategoriesMock);
