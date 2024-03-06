@@ -63,7 +63,7 @@ class CategoryUrlSuffixTest extends TestCase
     {
         $this->contextMock = $this->getMockBuilder(ContextInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getExtensionAttributes'
                 ]
@@ -71,7 +71,7 @@ class CategoryUrlSuffixTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->contextExtensionMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->setMethods(
+            ->addMethods(
                 [
                     'getStore'
                 ]
@@ -79,7 +79,7 @@ class CategoryUrlSuffixTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getId'
                 ]
