@@ -61,10 +61,12 @@ class EstimateShippingMethodsTest extends GraphQlAbstract
         $maskedQuoteId = DataFixtureStorageManager::getStorage()->get('quoteIdMask')->getMaskedId();
 
         $query = <<<QUERY
-        query {
+        mutation {
             estimateShippingMethods(input:{
               cart_id: "{$maskedQuoteId}"
-              country_id: "US"
+              address: {
+                country_code: US
+              }
             })
             {
               amount{
@@ -80,7 +82,7 @@ class EstimateShippingMethodsTest extends GraphQlAbstract
             }
           }
 QUERY;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
         self::assertEquals(
             $this->getExpectedQueryResponseForGuest($currencyCode),
             $response['estimateShippingMethods']
@@ -133,15 +135,15 @@ QUERY;
         $maskedQuoteId = DataFixtureStorageManager::getStorage()->get('quoteIdMask')->getMaskedId();
 
         $query = <<<QUERY
-        query {
+        mutation {
             estimateShippingMethods(input:{
               cart_id: "{$maskedQuoteId}"
-              country_id: "US"
               address: {
+                country_code: US
                 region: {
                     region_id: 2
                 }
-              }
+                }
             })
             {
               amount{
@@ -157,7 +159,7 @@ QUERY;
             }
           }
 QUERY;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
         self::assertEquals(
             $this->getExpectedTablerateQueryResponseForGuest($currencyCode),
             $response['estimateShippingMethods']
@@ -211,16 +213,16 @@ QUERY;
         $maskedQuoteId = DataFixtureStorageManager::getStorage()->get('quoteIdMask')->getMaskedId();
 
         $query = <<<QUERY
-        query {
+        mutation {
             estimateShippingMethods(input:{
-              cart_id: "{$maskedQuoteId}"
-              country_id: "US"
-              address: {
-                region: {
-                    region_id: 1
-                }
-              }
-            })
+                cart_id: "{$maskedQuoteId}"
+                address: {
+                  country_code: US
+                  region: {
+                      region_id: 1
+                  }
+                  }
+              })
             {
               amount{
                 currency
@@ -235,7 +237,7 @@ QUERY;
             }
           }
 QUERY;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
         self::assertEquals(
             $this->getExpectedTablerateQueryResponseForLoggedInCustomer($currencyCode),
             $response['estimateShippingMethods']
@@ -271,11 +273,13 @@ QUERY;
         $maskedQuoteId = DataFixtureStorageManager::getStorage()->get('quoteIdMask')->getMaskedId();
 
         $query = <<<QUERY
-        query {
+        mutation {
             estimateShippingMethods(input:{
-              cart_id: "{$maskedQuoteId}"
-              country_id: "US"
-            })
+                cart_id: "{$maskedQuoteId}"
+                address: {
+                  country_code: US
+                  }
+              })
             {
               amount{
                 currency
@@ -290,7 +294,7 @@ QUERY;
             }
           }
 QUERY;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlMutation($query);
         self::assertEquals(
             $this->getExpectedQueryResponseForLoggedInCustomer($currencyCode),
             $response['estimateShippingMethods']
@@ -314,13 +318,13 @@ QUERY;
         $maskedQuoteId = DataFixtureStorageManager::getStorage()->get('quoteIdMask')->getMaskedId();
 
         $query = <<<QUERY
-query {
+mutation {
     estimateShippingMethods(input:{
-      cart_id:"{$maskedQuoteId}"
-      address :{
-        postcode: "90210"
-      }
-    })
+        cart_id: "{$maskedQuoteId}"
+        address: {
+          postcode: "90210"
+          }
+      })
     {
       amount{
         currency
@@ -337,9 +341,9 @@ query {
 QUERY;
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage(
-            'Field EstimateShippingMethodsInput.country_id of required type String! was not provided.'
+            'Field EstimateAddressInput.country_code of required type CountryCodeEnum! was not provided.'
         );
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     #[
@@ -357,9 +361,11 @@ QUERY;
     public function testMissingRequiredCartId()
     {
         $query = <<<QUERY
-query {
+mutation {
     estimateShippingMethods(input:{
-      country_id:"US"
+        address: {
+            country_code: US
+        }
     })
     {
       amount{
@@ -377,9 +383,9 @@ query {
 QUERY;
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage(
-            'Field EstimateShippingMethodsInput.cart_id of required type String! was not provided.'
+            'Field EstimateTotalsInput.cart_id of required type String! was not provided.'
         );
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
     }
 
     /**

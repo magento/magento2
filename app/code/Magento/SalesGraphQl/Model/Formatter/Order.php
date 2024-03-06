@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model\Formatter;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\SalesGraphQl\Model\Order\OrderAddress;
 use Magento\SalesGraphQl\Model\Order\OrderPayments;
@@ -43,13 +44,14 @@ class Order
      *
      * @param OrderInterface $orderModel
      * @return array
+     * @throws LocalizedException
      */
     public function format(OrderInterface $orderModel): array
     {
         return [
             'created_at' => $orderModel->getCreatedAt(),
             'grand_total' => $orderModel->getGrandTotal(),
-            'id' => base64_encode($orderModel->getEntityId()),
+            'id' => base64_encode((string)$orderModel->getEntityId()),
             'increment_id' => $orderModel->getIncrementId(),
             'number' => $orderModel->getIncrementId(),
             'order_date' => $orderModel->getCreatedAt(),
@@ -59,6 +61,7 @@ class Order
             'shipping_address' => $this->orderAddress->getOrderShippingAddress($orderModel),
             'billing_address' => $this->orderAddress->getOrderBillingAddress($orderModel),
             'payment_methods' => $this->orderPayments->getOrderPaymentMethod($orderModel),
+            'applied_coupons' => $orderModel->getCouponCode() ? ['code' => $orderModel->getCouponCode()] : [],
             'model' => $orderModel,
         ];
     }

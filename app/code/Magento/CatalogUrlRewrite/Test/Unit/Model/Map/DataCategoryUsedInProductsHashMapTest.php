@@ -108,7 +108,11 @@ class DataCategoryUsedInProductsHashMapTest extends TestCase
             ->willReturnSelf();
         $this->hashMapPoolMock
             ->method('resetMap')
-            ->withConsecutive([DataProductHashMap::class, 1], [DataCategoryHashMap::class, 1]);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == DataProductHashMap::class || $arg2 == 1) {
+                    return null;
+                }
+            });
 
         $this->assertEquals($categoryIds, $this->model->getAllData(1));
         $this->assertEquals($categoryIds[2], $this->model->getData(1, 2));

@@ -116,14 +116,14 @@ class SaveTest extends TestCase
             ['storage' => new Storage()]
         );
         $this->_sessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods(['setFormData'])
+            ->addMethods(['setFormData'])
             ->setConstructorArgs($constructArguments)
             ->getMock();
         $this->resultForwardFactoryMock = $this->getMockBuilder(
             ForwardFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultForwardMock = $this->getMockBuilder(Forward::class)
             ->disableOriginalConstructor()
@@ -132,7 +132,7 @@ class SaveTest extends TestCase
             RedirectFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
@@ -170,14 +170,14 @@ class SaveTest extends TestCase
             ->willReturn($creditmemoManagement);
         $this->creditmemoSender = $this->getMockBuilder(CreditMemoSender::class)
             ->disableOriginalConstructor()
-            ->setMethods(['send'])
+            ->onlyMethods(['send'])
             ->getMock();
         $this->creditmemoSender->expects($this->any())
             ->method('send')
             ->willReturn(true);
         $this->salesData = $this->getMockBuilder(SalesData::class)
             ->disableOriginalConstructor()
-            ->setMethods(['canSendNewCreditmemoEmail'])
+            ->onlyMethods(['canSendNewCreditmemoEmail'])
             ->getMock();
         $this->memoLoaderMock = $this->createMock(CreditmemoLoader::class);
         $this->_controller = $helper->getObject(
@@ -296,7 +296,7 @@ class SaveTest extends TestCase
     /**
      * @return array
      */
-    public function testExecuteEmailsDataProvider()
+    public static function testExecuteEmailsDataProvider()
     {
         /**
         * string $sendEmail
