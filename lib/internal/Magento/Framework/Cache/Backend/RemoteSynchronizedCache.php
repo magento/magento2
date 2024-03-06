@@ -231,20 +231,9 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function save($data, $id, $tags = [], $specificLifetime = false)
     {
-        $dataToSave = $data;
-        $remHash = $this->loadRemoteDataVersion($id);
-        $isRemoteUpToDate = false;
-        if ($remHash !== false && $this->getDataVersion($data) === $remHash) {
-            $remoteData = $this->remote->load($id);
-            if ($remoteData !== false && $this->getDataVersion($data) === $this->getDataVersion($remoteData)) {
-                $isRemoteUpToDate = true;
-                $dataToSave = $remoteData;
-            }
-        }
-        if (!$isRemoteUpToDate) {
-            $this->remote->save($data, $id, $tags, $specificLifetime);
-            $this->saveRemoteDataVersion($data, $id, $tags, $specificLifetime);
-        }
+
+        $this->remote->save($data, $id, $tags, $specificLifetime);
+        $this->saveRemoteDataVersion($data, $id, $tags, $specificLifetime);
 
         if ($this->_options['use_stale_cache']) {
             $this->unlock($id);
@@ -258,7 +247,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
 
         // Local cache doesn't save tags intentionally since it will cause inconsistency after flushing the cache
         // in multinode environment
-        return $this->local->save($dataToSave, $id, [], $specificLifetime);
+        return $this->local->save($data, $id, [], $specificLifetime);
     }
 
     /**
