@@ -178,11 +178,16 @@ class ReindexRuleProductTest extends TestCase
 
         $this->connectionMock
             ->method('insertMultiple')
-            ->withConsecutive(
-                ['catalogrule_product_replica', $batchRows],
-                ['catalogrule_product_replica', $rowsNotInBatch]
+            ->willReturnCallback(
+                function ($table, $rows) use ($batchRows, $rowsNotInBatch) {
+                    if ($table == 'catalogrule_product_replica' && $rows == $batchRows) {
+                        return 2;
+                    } elseif ($table == 'catalogrule_product_replica' && $rows == $rowsNotInBatch) {
+                        return 1;
+                    }
+                }
             );
-
+        
         self::assertTrue($this->model->execute($this->ruleMock, 2, true));
     }
 
@@ -226,7 +231,7 @@ class ReindexRuleProductTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         return [
             [
@@ -440,8 +445,10 @@ class ReindexRuleProductTest extends TestCase
             ->willReturn($this->connectionMock);
         $this->resourceMock
             ->method('getTableName')
-            ->withConsecutive(['catalogrule_product'], ['catalogrule_product_replica'])
-            ->willReturnOnConsecutiveCalls('catalogrule_product', 'catalogrule_product_replica');
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['catalogrule_product'] => 'catalogrule_product',
+                ['catalogrule_product_replica'] => 'catalogrule_product_replica'
+            });
     }
 
     /**

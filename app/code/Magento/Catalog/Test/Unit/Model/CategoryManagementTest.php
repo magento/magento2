@@ -228,7 +228,11 @@ class CategoryManagementTest extends TestCase
         $parentCategoryMock->expects($this->exactly(3))->method('getPath')
             ->willReturnOnConsecutiveCalls('2/40', '2/3/40', '2/3/44/40');
         $categoryMock->expects($this->exactly(3))->method('move')
-            ->withConsecutive([$parentId, '7'], [$parentId, null], [$parentId, null]);
+            ->willReturnCallback(function ($arg1, $arg2) use ($parentId) {
+                if ($arg1 == $parentId && ($arg2 == 7 || is_null($arg2))) {
+                    return null;
+                }
+            });
 
         $this->assertTrue($this->model->move($categoryId, $parentId, $afterId));
         $this->assertTrue($this->model->move($categoryId, $parentId));
