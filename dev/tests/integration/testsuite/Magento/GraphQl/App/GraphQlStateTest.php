@@ -39,7 +39,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
             $this->markTestSkipped('GraphQlStateDiff class is not available on this version of Magento.');
         }
 
-        $this->graphQlStateDiff = new GraphQlStateDiff();
+        $this->graphQlStateDiff = new GraphQlStateDiff($this);
         parent::setUp();
     }
 
