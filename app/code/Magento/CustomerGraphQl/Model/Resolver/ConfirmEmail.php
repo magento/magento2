@@ -20,6 +20,7 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
 use Magento\Framework\Exception\State\InputMismatchException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
+use Magento\Framework\Exception\StateException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
@@ -66,13 +67,15 @@ class ConfirmEmail implements ResolverInterface
         if (!$this->emailValidator->isValid($args['input']['email'])) {
             throw new GraphQlInputException(__('Email is invalid'));
         }
-
         try {
             $customer = $this->accountManagement->activate($args['input']['email'], $args['input']['confirmation_key']);
         } catch (InvalidTransitionException | InputMismatchException $e) {
-            throw new GraphQlInputException(__($e->getMessage()));
+            throw new GraphQlInputException(__($e->getRawMessage()));
+        } catch (StateException) {
+            throw new GraphQlInputException(__('This confirmation key is invalid or has expired.'));
+        } catch (\Exception) {
+            throw new GraphQlInputException(__('There was an error confirming the account'));
         }
-
         return ['customer' => $this->extractCustomerData->execute($customer)];
     }
 }

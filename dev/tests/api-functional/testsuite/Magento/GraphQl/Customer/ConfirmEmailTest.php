@@ -106,6 +106,7 @@ QUERY;
     public function testConfirmEmailWrongEmail()
     {
         $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Email is invalid');
 
         $this->graphQlMutation(
             sprintf(
@@ -126,6 +127,7 @@ QUERY;
     public function testConfirmEmailWrongConfirmation()
     {
         $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The confirmation token is invalid. Verify the token and try again.');
 
         $this->graphQlMutation(
             sprintf(
