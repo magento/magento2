@@ -29,7 +29,8 @@ class DisplayGiftWrapping implements ResolverInterface
     /**
      * @param EnumLookup $enumLookup
      */
-    public function __construct(private readonly EnumLookup $enumLookup) {
+    public function __construct(private readonly EnumLookup $enumLookup)
+    {
     }
 
     /**
