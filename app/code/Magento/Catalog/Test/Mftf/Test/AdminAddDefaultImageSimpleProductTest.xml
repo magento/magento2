@@ -11,49 +11,52 @@
     <test name="AdminAddDefaultImageSimpleProductTest">
         <annotations>
             <features value="Catalog"/>
-            <stories value="Add/remove images and videos for all product types and category"/>
-            <title value="Admin should be able to add default image for a Simple Product"/>
-            <description value="Admin should be able to add default images for a Simple Product"/>
+            <title value="Storefront Fotorama arrows test"/>
+            <description value="Check arrows next to the thumbs are not visible than there is room for all pictures."/>
             <severity value="BLOCKER"/>
-            <testCaseId value="MC-113"/>
             <group value="Catalog"/>
             <group value="cloud"/>
         </annotations>
         <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
 
-        <!--Create product-->
-        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
-        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
-        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateSimpleProduct">
-            <argument name="product" value="SimpleProduct3"/>
+        <!-- Open Product for edit -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="findCreatedProductInGrid">
+            <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
-        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillSimpleProductMain">
-            <argument name="product" value="SimpleProduct3"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="goToEditProductPage">
+            <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 
-        <!-- Add image to product -->
-        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForProductSimple">
+        <!-- Add images to product -->
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addFirstImageToProduct">
             <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addSecondImageToProduct">
+            <argument name="image" value="ProductImage"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addThirdImageToProduct">
+            <argument name="image" value="TestImageNew"/>
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
 
-        <!-- Assert product image in admin product form -->
-        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProductImageAdminProductPage"/>
-
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
-            <argument name="product" value="SimpleProduct3"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openCreatedProductPage">
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
 
-        <!-- Assert product image in storefront product page -->
-        <actionGroup ref="AssertProductImageStorefrontProductPageActionGroup" stepKey="assertProductImageStorefrontProductPage">
-            <argument name="product" value="SimpleProduct3"/>
-            <argument name="image" value="MagentoLogo"/>
-        </actionGroup>
+        <!-- Assert Fotorama arrows aren't visible -->
+        <dontSeeElement selector="{{StorefrontProductMediaSection.fotoramaPrevButton}}" stepKey="dontSeePrevButton"/>
+        <dontSeeElement selector="{{StorefrontProductMediaSection.fotoramaNextButton}}" stepKey="dontSeeNextButton"/>
     </test>
 </tests>
