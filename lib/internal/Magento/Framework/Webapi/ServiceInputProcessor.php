@@ -41,6 +41,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
     public const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
 
     /**
+     *  Input param to be rejected when it contains xml content
+     */
+    public const REJECTED_INPUT_PARAM_SOURCEDATA = 'sourcedata';
+
+    /**
      * @var TypeProcessor
      */
     protected $typeProcessor;
@@ -249,7 +254,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
 
                 try {
                     if (ltrim($parameterType, "\\") === SimplexmlElement::Class &&
-                        strtolower($parameter->getName()) === "sourcedata") {
+                        strtolower($parameter->getName()) === self::REJECTED_INPUT_PARAM_SOURCEDATA) {
                         throw new InputException(new Phrase('Invalid input.'));
                     }
 
