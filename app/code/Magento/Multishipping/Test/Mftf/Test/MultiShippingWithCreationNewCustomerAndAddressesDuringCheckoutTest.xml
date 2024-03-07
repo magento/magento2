@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="MultiShippingWithCreationNewCustomerAndAddressesDuringCheckoutTest">
+        <annotations>
+            <stories value="Multi shipping with creation new customer and addresses during checkout"/>
+            <title value="Verify Multi shipping with creation new customer and addresses during checkout"/>
+            <description value="Verify Multi shipping with creation new customer and addresses during checkout"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4685" />
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminArea"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="name">simple product</field>
+            </createData>
+            <!-- Create configurable product -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="name">config product</field>
+            </createData>
+            <!--  Search for the Created Configurable Product -->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openConfigurableProductEditPage">
+                <argument name="productId" value="$createConfigProduct.id$"/>
+            </actionGroup>
+            <waitForElementVisible selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="waitForCreateConfigurationsElementToBeVisible"/>
+            <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>
+            <waitForPageLoad stepKey="waitForSelectAttributesPage"/>
+            <actionGroup ref="CreateOptionsForAttributeActionGroup" stepKey="createOptions">
+                <argument name="attributeName" value="Color"/>
+                <argument name="firstOptionName" value="Red"/>
+                <argument name="secondOptionName" value="Green"/>
+            </actionGroup>
+            <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextButtonToBeClickable"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton"/>
+            <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" stepKey="waitForApplySinglePriceRadioButtonToBeClickable"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" stepKey="clickOnApplySinglePriceToAllSkus"/>
+            <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.singlePrice}}" stepKey="waitForPriceFieldToBeVisible"/>
+            <fillField selector="{{AdminCreateProductConfigurationsPanel.singlePrice}}" userInput="10" stepKey="enterAttributePrice"/>
+            <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="waitForApplySingleQuantityRadioButtonToBeClickable"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+            <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.quantity}}" stepKey="waitForQuantityFieldToBeVisible"/>
+            <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="100" stepKey="enterAttributeQuantity"/>
+            <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextButtonToBeClickableInPanelPage"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextStep"/>
+            <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextPageOpened"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="generateProducts"/>
+            <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
+            <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="clickOnConfirmInPopup"/>
+            <waitForElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearGridFilters"/>
+            <actionGroup ref="AdminDeleteAllProductsFromGridActionGroup" stepKey="deleteAllProducts"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Delete the Created Color attribute-->
+            <actionGroup ref="AdminDeleteCreatedColorSpecificAttributeActionGroup" stepKey="deleteRedColorAttribute">
+                <argument name="Color" value="Red"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteCreatedColorSpecificAttributeActionGroup" stepKey="deleteGreenColorAttribute">
+                <argument name="Color" value="Green"/>
+            </actionGroup>
+            <!-- Delete customer -->
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+        <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="openCategoryPage">
+            <argument name="categoryUrl" value="$$createCategory.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <!-- Add configurable product to the cart  -->
+        <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCart1">
+            <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$" />
+            <argument name="productAttribute" value="Color"/>
+            <argument name="productOption" value="Red"/>
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCart2">
+            <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$" />
+            <argument name="productAttribute" value="Color"/>
+            <argument name="productOption" value="Green"/>
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="navigateToCartPage"/>
+        <!-- Click 'Check Out with Multiple Addresses' -->
+        <waitForElementVisible selector="{{MultishippingSection.shippingMultipleCheckout}}" stepKey="waitMultipleAddressShippingButton"/>
+        <click selector="{{MultishippingSection.shippingMultipleCheckout}}" stepKey="clickToMultipleAddressShippingButton"/>
+        <!--Create an account-->
+        <waitForElementVisible selector="{{AdminCreateUserSection.createAnAccountButtonForCustomer}}" stepKey="waitCreateAnAccountButton"/>
+        <click selector="{{AdminCreateUserSection.createAnAccountButtonForCustomer}}" stepKey="clickOnCreateAnAccountButton"/>
+        <waitForPageLoad stepKey="waitForCreateAccountPageToLoad"/>
+        <actionGroup ref="EnterAddressDetailsActionGroup" stepKey="enterAddressInfo">
+            <argument name="Address" value="US_Address_CA"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontFillCustomerCreateAnAccountActionGroup" stepKey="fillDetails">
+            <argument name="customer" value="CustomerEntityOne"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <waitForElementVisible selector="{{MultishippingSection.enterNewAddress}}" stepKey="waitForAddressButtonToBeClickable"/>
+        <click selector="{{MultishippingSection.enterNewAddress}}" stepKey="clickOnAddress"/>
+        <waitForPageLoad stepKey="waitForAddressFieldsPageOpen"/>
+        <actionGroup ref="FillNewCustomerAddressFieldsActionGroup" stepKey="editAddressFields">
+            <argument name="address" value="DE_Address_Berlin_Not_Default_Address"/>
+            <argument name="address" value="DE_Address_Berlin_Not_Default_Address"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSaveCustomerAddressActionGroup" stepKey="saveAddress"/>
+        <waitForPageLoad stepKey="waitForShippingPageToOpen"/>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectCAAddress">
+            <argument name="sequenceNumber" value="1"/>
+            <argument name="option" value="John Doe, 7700 West Parmer Lane 113, Los Angeles, California 90001, United States"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectCAAddressForSecondProduct">
+            <argument name="sequenceNumber" value="2"/>
+            <argument name="option" value="John Doe, 7700 West Parmer Lane 113, Los Angeles, California 90001, United States"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectGEAddress">
+            <argument name="sequenceNumber" value="3"/>
+            <argument name="option" value="John Doe, Augsburger Strabe 41, Berlin, Berlin 10789, Germany"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontChangeMultishippingItemQtyActionGroup" stepKey="setProductQuantity">
+            <argument name="sequenceNumber" value="3"/>
+            <argument name="quantity" value="10"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSaveAddressActionGroup" stepKey="saveAddresses"/>
+        <waitForPageLoad stepKey="waitForPageToLoadProperly"/>
+        <waitForElement selector="{{ShippingMethodSection.productDetails('simple product','1')}}" stepKey="assertSimpleProductDetails"/>
+        <waitForElement selector="{{ShippingMethodSection.productDetails('config product','1')}}" stepKey="assertConfigProductRedDetails"/>
+        <waitForElement selector="{{ShippingMethodSection.productDetails('config product','10')}}" stepKey="assertConfigProductGreenDetails"/>
+        <!-- Click 'Continue to Billing Information' -->
+        <actionGroup ref="StorefrontLeaveDefaultShippingMethodsAndGoToBillingInfoActionGroup" stepKey="useDefaultShippingMethod"/>
+        <!-- Click 'Go to Review Your Order' -->
+        <actionGroup ref="SelectBillingInfoActionGroup" stepKey="useDefaultBillingMethod"/>
+        <!-- Click 'Place Order' -->
+        <actionGroup ref="PlaceOrderActionGroup" stepKey="placeOrder"/>
+        <waitForPageLoad stepKey="waitForOrderPlace"/>
+        <grabTextFrom selector="{{StorefrontMultipleShippingMethodSection.orderId('1')}}" stepKey="grabFirstOrderId"/>
+        <grabTextFrom selector="{{StorefrontMultipleShippingMethodSection.orderId('2')}}" stepKey="grabSecondOrderId"/>
+        <!-- Go to My Account > My Orders  and  verify orderId-->
+        <actionGroup ref="StorefrontNavigateToCustomerOrdersHistoryPageActionGroup" stepKey="goToMyOrdersPage"/>
+        <waitForPageLoad stepKey="waitForMyOrdersPageLoad"/>
+        <waitForElement selector="{{StorefrontCustomerOrdersGridSection.orderView({$grabFirstOrderId})}}" stepKey="seeFirstOrder"/>
+        <waitForElement selector="{{StorefrontCustomerOrdersGridSection.orderView({$grabSecondOrderId})}}" stepKey="seeSecondOrder"/>
+        <!-- Logout customer -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+    </test>
+</tests>

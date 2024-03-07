@@ -126,8 +126,10 @@ class ProductListPluginTest extends TestCase
         $this->resource->expects($this->once())->method('getConnection')->willReturn($connection);
         $this->resource->expects($this->exactly(2))
             ->method('getTableName')
-            ->withConsecutive(['catalog_product_entity'], ['catalog_product_super_link'])
-            ->willReturnOnConsecutiveCalls('catalog_product_entity', 'catalog_product_super_link');
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['catalog_product_entity'] => 'catalog_product_entity',
+                ['catalog_product_super_link'] => 'catalog_product_super_link'
+            });
 
         $collection = $this->createMock(Collection::class);
         $this->productCollectionFactory->expects($this->once())->method('create')->willReturn($collection);
