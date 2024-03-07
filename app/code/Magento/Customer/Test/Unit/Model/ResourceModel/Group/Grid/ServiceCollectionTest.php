@@ -241,7 +241,7 @@ class ServiceCollectionTest extends TestCase
     /**
      * @return array
      */
-    public function addFieldToFilterInconsistentArraysDataProvider()
+    public static function addFieldToFilterInconsistentArraysDataProvider()
     {
         return [
             'missingCondition' => [
