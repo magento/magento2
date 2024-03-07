@@ -61,7 +61,8 @@ class SelectAttributesTest extends TestCase
             ->getMock();
         $this->buttonMock = $this->getMockBuilder(Button::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isAllowed', 'getAuthorization', 'toHtml'])
+            ->addMethods(['isAllowed'])
+            ->onlyMethods(['getAuthorization', 'toHtml'])
             ->getMock();
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
@@ -94,7 +95,7 @@ class SelectAttributesTest extends TestCase
     public function testGetAddNewAttributeButton($isAllowed, $result)
     {
         $productMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['getStoreId'])
+            ->addMethods(['getStoreId'])
             ->getMockForAbstractClass();
         $this->registryMock->expects($this->any())
             ->method('registry')
@@ -121,7 +122,7 @@ class SelectAttributesTest extends TestCase
     /**
      * @return array
      */
-    public function attributesDataProvider()
+    public static function attributesDataProvider()
     {
         return [
             [false, ''],
