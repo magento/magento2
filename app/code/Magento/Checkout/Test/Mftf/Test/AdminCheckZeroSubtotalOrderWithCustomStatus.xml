@@ -45,6 +45,15 @@
             <magentoCLI command="config:set {{EnableFreeOrderStatusPending.path}} {{EnableFreeOrderStatusPending.value}}" stepKey="disablePaymentMethodsSettingConfig"/>
             <magentoCLI command="config:set {{EnableFreeOrderPaymentAutomaticInvoiceAction.path}} {{EnableFreeOrderPaymentAutomaticInvoiceAction.value}}" stepKey="enableFreeOrderPaymentAutomaticInvoiceAction"/>
             <actionGroup ref="CliDisableFreeShippingMethodActionGroup" stepKey="disableFreeShippingConfig"/>
+            <!-- Unassign order status -->
+            <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatus"/>
+            <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterStatusGrid">
+                <argument name="statusLabel" value="{{defaultOrderStatus.label}}"/>
+                <argument name="statusCode" value="{{defaultOrderStatus.status}}"/>
+            </actionGroup>
+            <click selector="{{AdminOrderStatusGridSection.unassign}}" stepKey="unassignOrderStatus"/>
+            <waitForPageLoad stepKey="waitForGridLoad"/>
+
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="simpleproduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCartPriceRule" stepKey="deleteSalesRule"/>
@@ -79,7 +88,9 @@
         <!-- Assign status to state -->
         <click selector="{{AdminOrderStatusGridSection.assignStatusToStateBtn}}" stepKey="clickAssignStatusBtn"/>
         <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderStatus}}" userInput="{{defaultOrderStatus.label}}" stepKey="selectOrderStatus"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear1"/>
         <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderState}}" userInput="{{OrderState.new}}" stepKey="selectOrderState"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear2"/>
         <checkOption selector="{{AdminAssignOrderStatusToStateSection.orderStatusAsDefault}}" stepKey="orderStatusAsDefault"/>
         <uncheckOption selector="{{AdminAssignOrderStatusToStateSection.visibleOnStorefront}}" stepKey="visibleOnStorefront"/>
         <click selector="{{AdminAssignOrderStatusToStateSection.saveStatusAssignment}}" stepKey="clickSaveStatus"/>
