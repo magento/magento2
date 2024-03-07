@@ -74,7 +74,7 @@ class CsvTest extends TestCase
      *
      * @return array
      */
-    public function destructDataProvider(): array
+    public static function destructDataProvider(): array
     {
         return [
             'temporary file' => [$this->destination, true],

@@ -61,7 +61,7 @@ class PriceFilterTest extends AbstractFiltersTest
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function getFiltersDataProvider(): array
+    public static function getFiltersDataProvider(): array
     {
         return [
             'auto_calculation_variation_with_small_price_difference' => [

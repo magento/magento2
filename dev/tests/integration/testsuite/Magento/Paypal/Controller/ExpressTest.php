@@ -175,7 +175,7 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
         ];
 
         $nvpMock = $this->getMockBuilder(Nvp::class)
-            ->setMethods($nvpMethods)
+            ->onlyMethods($nvpMethods)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -186,7 +186,7 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $apiFactoryMock = $this->getMockBuilder(ApiFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $apiFactoryMock->method('create')

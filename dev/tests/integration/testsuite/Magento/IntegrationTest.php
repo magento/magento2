@@ -71,7 +71,7 @@ class IntegrationTest extends TestSuite
         $params = getopt('c:', ['configuration:']);
         $defaultConfigFile = file_exists(__DIR__ . '../../phpunit.xml')
             ? __DIR__ . '/../../phpunit.xml'
-            : __DIR__ . '/../../phpunit.xml.dist';
+            : __DIR__ . '/../../phpunit.xml';
         $longConfig = $params['configuration'] ?? $defaultConfigFile;
         $shortConfig = $params['c'] ?? '';
 
