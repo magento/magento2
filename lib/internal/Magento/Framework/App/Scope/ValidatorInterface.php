@@ -3,12 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Scope;
 
 use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Interface Validator for validating scope and scope code
+ *
+ * @api
  */
 interface ValidatorInterface
 {

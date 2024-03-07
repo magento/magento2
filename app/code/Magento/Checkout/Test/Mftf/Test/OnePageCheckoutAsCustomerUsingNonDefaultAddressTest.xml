@@ -18,8 +18,10 @@
             <testCaseId value="MC-14739"/>
             <group value="checkout"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 1" stepKey="EnablingGuestCheckoutLogin"/>
             <!-- Create Simple Product -->
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
                 <field key="price">560</field>
@@ -40,6 +42,7 @@
 
             <!-- Delete customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 0" stepKey="DisablingGuestCheckoutLogin"/>
         </after>
 
         <!-- Add Simple Product to cart -->
@@ -75,21 +78,24 @@
         <selectOption selector="{{CheckoutShippingSection.addressDropdown}}" userInput="{{UK_Not_Default_Address.street[0]}}" stepKey="addAddress"/>
 
         <!-- Check order summary in checkout -->
-        <click selector="{{CheckoutShippingSection.updateAddress}}" stepKey="clickToUpdate"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="StorefrontClickUpdateAddressInCheckoutActionGroup" stepKey="clickToUpdate"/>
+        <comment userInput="BIC workaround" stepKey="waitForPageLoad"/>
 
         <!-- Place order -->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCheckoutPaymentSectionPageLoad"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="orderIsSuccessfullyPlaced"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="openOrderViewPage"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Open created order in backend -->
-        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
-            <argument name="orderId" value="$grabOrderNumber"/>
+        <comment userInput="BIC workaround" stepKey="goToOrders"/>
+        <comment userInput="BIC workaround" stepKey="filterOrderGridById"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="filterOrdersGridById">
+            <argument name="entityId" value="{$grabOrderId}"/>
         </actionGroup>
 
         <!-- Assert order total -->

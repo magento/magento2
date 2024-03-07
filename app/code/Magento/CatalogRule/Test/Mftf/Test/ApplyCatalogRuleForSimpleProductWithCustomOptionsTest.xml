@@ -20,6 +20,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use StorefrontApplyCatalogRuleForSimpleProductsWithCustomOptionsTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Login as Admin -->
@@ -42,7 +43,9 @@
             <updateData createDataKey="createProduct1" entity="productWithCustomOptions" stepKey="updateProductWithOptions1"/>
             <updateData createDataKey="createProduct2" entity="productWithCustomOptions" stepKey="updateProductWithOptions2"/>
             <updateData createDataKey="createProduct3" entity="productWithCustomOptions" stepKey="updateProductWithOptions3"/>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete products and category -->

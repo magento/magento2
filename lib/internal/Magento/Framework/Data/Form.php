@@ -72,7 +72,10 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     }
 
     /**
-     * @param RendererInterface $renderer
+     * Method to set element renderer.
+     *
+     * @param RendererInterface|null $renderer
+     *
      * @return void
      */
     public static function setElementRenderer(RendererInterface $renderer = null)
@@ -81,7 +84,10 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     }
 
     /**
-     * @param RendererInterface $renderer
+     * Method to set fieldset renderer.
+     *
+     * @param RendererInterface|null $renderer
+     *
      * @return void
      */
     public static function setFieldsetRenderer(RendererInterface $renderer = null)
@@ -90,7 +96,10 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     }
 
     /**
-     * @param RendererInterface $renderer
+     * Method to set fieldset element renderer.
+     *
+     * @param RendererInterface|null $renderer
+     *
      * @return void
      */
     public static function setFieldsetElementRenderer(RendererInterface $renderer = null)
@@ -99,6 +108,8 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     }
 
     /**
+     * Method to get element renderer.
+     *
      * @return RendererInterface
      */
     public static function getElementRenderer()
@@ -107,6 +118,8 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     }
 
     /**
+     * Method to get fieldset renderer.
+     *
      * @return RendererInterface
      */
     public static function getFieldsetRenderer()
@@ -115,6 +128,8 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     }
 
     /**
+     * Method to get fieldset element renderer.
+     *
      * @return RendererInterface
      */
     public static function getFieldsetElementRenderer()
@@ -159,7 +174,10 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     }
 
     /**
+     * Method to add element to collection.
+     *
      * @param AbstractElement $element
+     *
      * @return $this
      */
     public function addElementToCollection($element)
@@ -170,7 +188,10 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     }
 
     /**
+     * Method to check element id.
+     *
      * @param string $elementId
+     *
      * @return bool
      * @throws \Exception
      */
@@ -185,6 +206,8 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     }
 
     /**
+     * Method to get form.
+     *
      * @return $this
      */
     public function getForm()
@@ -207,7 +230,10 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     }
 
     /**
+     * Method to set values.
+     *
      * @param array $values
+     *
      * @return $this
      */
     public function setValues($values)
@@ -223,7 +249,10 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     }
 
     /**
+     * Method to add values.
+     *
      * @param array $values
+     *
      * @return $this
      */
     public function addValues($values)
@@ -258,8 +287,11 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     }
 
     /**
+     * Method to add suffix to name.
+     *
      * @param string $name
      * @param string $suffix
+     *
      * @return string
      */
     public function addSuffixToName($name, $suffix)
@@ -279,7 +311,10 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     }
 
     /**
+     * Method to remove field.
+     *
      * @param string $elementId
+     *
      * @return $this
      */
     public function removeField($elementId)
@@ -291,7 +326,10 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     }
 
     /**
+     * Method to set field container id prefix.
+     *
      * @param string $prefix
+     *
      * @return $this
      */
     public function setFieldContainerIdPrefix($prefix)
@@ -301,6 +339,8 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     }
 
     /**
+     * Method to get field container id prefix.
+     *
      * @return string
      */
     public function getFieldContainerIdPrefix()
@@ -309,6 +349,8 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     }
 
     /**
+     * Method to html.
+     *
      * @return string
      */
     public function toHtml()
@@ -319,7 +361,9 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
         if ($useContainer) {
             $html .= '<form ' . $this->serialize($this->getHtmlAttributes()) . '>';
             $html .= '<div>';
-            if (strtolower($this->getData('method')) == 'post') {
+            $method = is_string($this->getData('method')) ? strtolower($this->getData('method')) : '';
+
+            if ($method == 'post') {
                 $html .= '<input name="form_key" type="hidden" value="' . $this->formKey->getFormKey() . '" />';
             }
             $html .= '</div>';
@@ -337,6 +381,8 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
     }
 
     /**
+     * Method to get Html.
+     *
      * @return string
      */
     public function getHtml()

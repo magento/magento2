@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-196"/>
             <group value="ConfigurableProduct"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -90,7 +91,9 @@
             <deleteData createDataKey="categoryHandle" stepKey="deleteCategory"/>
             <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductAttribute"/>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="productIndexPage"/>

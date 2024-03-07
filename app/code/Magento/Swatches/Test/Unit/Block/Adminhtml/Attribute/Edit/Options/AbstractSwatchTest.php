@@ -69,6 +69,9 @@ class AbstractSwatchTest extends TestCase
      */
     protected $connectionMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
@@ -81,10 +84,8 @@ class AbstractSwatchTest extends TestCase
         $this->universalFactoryMock = $this->createMock(UniversalFactory::class);
         $this->swatchHelperMock = $this->createMock(Media::class);
 
-        $this->block = $this->getMockBuilder(
-            AbstractSwatch::class
-        )
-            ->setMethods(['getData'])
+        $this->block = $this->getMockBuilder(AbstractSwatch::class)
+            ->onlyMethods(['getData'])
             ->setConstructorArgs(
                 [
                     'context' => $this->contextMock,
@@ -99,14 +100,15 @@ class AbstractSwatchTest extends TestCase
             ->getMock();
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['quoteInto'])
+            ->onlyMethods(['quoteInto'])
             ->getMockForAbstractClass();
     }
 
     /**
+     * @return void
      * @dataProvider dataForGetStoreOptionValues
      */
-    public function testGetStoreOptionValues($values)
+    public function testGetStoreOptionValues($values): void
     {
         $this->block->expects($this->once())->method('getData')->with('store_option_values_1')->willReturn($values);
         if ($values === null) {
@@ -159,20 +161,21 @@ class AbstractSwatchTest extends TestCase
             $attrOptionCollectionMock->expects($this->any())->method('getSelect')->willReturn($zendDbSelectMock);
             $zendDbSelectMock->expects($this->any())->method('joinLeft')->willReturnSelf();
 
-            $option->expects($this->at(0))->method('getId')->willReturn(14);
-            $option->expects($this->at(1))->method('getValue')->willReturn('Blue');
-            $option->expects($this->at(2))->method('getId')->willReturn(14);
-            $option->expects($this->at(3))->method('getLabel')->willReturn('#0000FF');
-            $option->expects($this->at(4))->method('getId')->willReturn(15);
-            $option->expects($this->at(5))->method('getValue')->willReturn('Black');
-            $option->expects($this->at(6))->method('getId')->willReturn(15);
-            $option->expects($this->at(7))->method('getLabel')->willReturn('#000000');
+            $option
+                ->method('getId')
+                ->willReturnOnConsecutiveCalls(14, 14, 15, 15);
+            $option
+                ->method('getLabel')
+                ->willReturnOnConsecutiveCalls('#0000FF', '#000000');
+            $option
+                ->method('getValue')
+                ->willReturnOnConsecutiveCalls('Blue', 'Black');
 
             $values = [
                 14 => 'Blue',
                 'swatch' => [
                     14 => '#0000FF',
-                    15 => '#000000',
+                    15 => '#000000'
                 ],
                 15 =>'Black'
             ];
@@ -184,18 +187,18 @@ class AbstractSwatchTest extends TestCase
     /**
      * @return array
      */
-    public function dataForGetStoreOptionValues()
+    public function dataForGetStoreOptionValues(): array
     {
         return [
             [
                 [
                     14 => 'Blue',
-                    15 => 'Black',
-                ],
+                    15 => 'Black'
+                ]
             ],
             [
-                null,
-            ],
+                null
+            ]
         ];
     }
 }

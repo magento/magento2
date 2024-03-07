@@ -8,15 +8,17 @@ declare(strict_types=1);
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Sales\Model\Order\Create\ValidateCoupon;
 
 /**
  * Adminhtml sales orders creation process controller
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.AllPurposeAction)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class Create extends \Magento\Backend\App\Action
 {
@@ -40,25 +42,32 @@ abstract class Create extends \Magento\Backend\App\Action
     protected $resultForwardFactory;
 
     /**
+     * @var ValidateCoupon
+     */
+    private $validateCoupon;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\Escaper $escaper
      * @param PageFactory $resultPageFactory
      * @param ForwardFactory $resultForwardFactory
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param ValidateCoupon|null $validateCoupon
      */
     public function __construct(
         Action\Context $context,
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Framework\Escaper $escaper,
         PageFactory $resultPageFactory,
-        ForwardFactory $resultForwardFactory
+        ForwardFactory $resultForwardFactory,
+        ValidateCoupon $validateCoupon = null
     ) {
         parent::__construct($context);
         $productHelper->setSkipSaleableCheck(true);
         $this->escaper = $escaper;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
+        $this->validateCoupon = $validateCoupon ?: ObjectManager::getInstance()->get(ValidateCoupon::class);
     }
 
     /**
@@ -312,41 +321,7 @@ abstract class Create extends \Magento\Backend\App\Action
         }
 
         $data = $this->getRequest()->getPost('order');
-        $couponCode = '';
-        if (isset($data) && isset($data['coupon']['code'])) {
-            $couponCode = trim($data['coupon']['code']);
-        }
-
-        if (!empty($couponCode)) {
-            $isApplyDiscount = false;
-            foreach ($this->_getQuote()->getAllItems() as $item) {
-                if (!$item->getNoDiscount()) {
-                    $isApplyDiscount = true;
-                    break;
-                }
-            }
-            if (!$isApplyDiscount) {
-                $this->messageManager->addErrorMessage(
-                    __(
-                        '"%1" coupon code was not applied. Do not apply discount is selected for item(s)',
-                        $this->escaper->escapeHtml($couponCode)
-                    )
-                );
-            } else {
-                if ($this->_getQuote()->getCouponCode() !== $couponCode) {
-                    $this->messageManager->addErrorMessage(
-                        __(
-                            'The "%1" coupon code isn\'t valid. Verify the code and try again.',
-                            $this->escaper->escapeHtml($couponCode)
-                        )
-                    );
-                } else {
-                    $this->messageManager->addSuccessMessage(__('The coupon code has been accepted.'));
-                }
-            }
-        } elseif (isset($data['coupon']['code']) && empty($couponCode)) {
-            $this->messageManager->addSuccessMessage(__('The coupon code has been removed.'));
-        }
+        $this->validateCoupon->execute($this->_getQuote(), $data);
 
         return $this;
     }
@@ -401,7 +376,7 @@ abstract class Create extends \Magento\Backend\App\Action
      */
     protected function _getAclResource()
     {
-        $action = strtolower($this->getRequest()->getActionName());
+        $action = strtolower($this->getRequest()->getActionName() ?? '');
         if (in_array($action, ['index', 'save', 'cancel']) && $this->_getSession()->getReordered()) {
             $action = 'reorder';
         }

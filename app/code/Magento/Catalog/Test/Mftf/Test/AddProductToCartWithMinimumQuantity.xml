@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AddProductToCartWithMinimumQuantity">
+        <annotations>
+            <features value="Catalog"/>
+            <title value="Add Product to Cart with Decimals Minimum Qty Allowed Set"/>
+            <description value="User Can Add Product to Cart with Decimals Minimum Qty Allowed Set"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-26718"/>
+            <stories value="Add Product to cart with Minimum Quantity Allowed"/>
+        </annotations>
+        <before>
+            <!-- create category -->
+            <createData entity="_defaultCategory" stepKey="testCategory"/>
+            <!-- create product -->
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="testCategory"/>
+            </createData>
+        </before>
+        <!-- delete category and product -->
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="testCategory" stepKey="deleteSimpleCategory"/>
+        </after>
+
+        <!-- Login to Admin Panel -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin" />
+
+        <!-- Open Product Page by ID -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
+
+        <!-- Open Advanced Inventory Section -->
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink"/>
+
+        <!-- Set Decimal Quantity as 0.5 -->
+        <actionGroup ref="AdminSetQtyUsesDecimalsConfigActionGroup" stepKey="setQtyUsesDecimalsConfig">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+
+        <!-- Set Minimum Allowed Quantity as 0.5 -->
+        <actionGroup ref="AdminSetMinAllowedQtyForProductActionGroup" stepKey="fillMiniAllowedQty">
+            <argument name="qty" value="0.5"/>
+        </actionGroup>
+
+        <!-- Click on Done Button -->
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickOnDoneButton"/>
+
+        <!-- Click on Save Button -->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
+
+        <!-- Navigate to Category Page on StoreFront -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
+            <argument name="category" value="$$testCategory$$"/>
+        </actionGroup>
+
+        <!-- Add Product to Cart from Category Page -->
+        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProductToCart">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Click on Show Mini Cart Section -->
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCart"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+
+        <!-- Grab Quantity Value from MiniCart-->
+        <grabValueFrom selector="{{StorefrontMinicartSection.itemQuantity($$createSimpleProduct.name$$)}}" stepKey="grabProductQtyInMinicart"/>
+
+        <!-- Assert Quantity value equals 0.5 -->
+        <assertEquals stepKey="assertquantityValuesAreEqualfromCatalogPage">
+            <actualResult type="string">$grabProductQtyInMinicart</actualResult>
+            <expectedResult type="string">0.5</expectedResult>
+        </assertEquals>
+
+        <!-- Navigate to Product Page on StoreFront -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+            <argument name="productUrl" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Add Product to Cart from Category Page -->
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
+
+        <!-- Grab Quantity Value from MiniCart-->
+        <grabValueFrom selector="{{StorefrontMinicartSection.itemQuantity($$createSimpleProduct.name$$)}}" stepKey="grabProductQtyInShowMinicart"/>
+
+        <!-- Assert Quantity value equals 1 -->
+        <assertEquals stepKey="assertquantityValuesAreEqualfromProductPage">
+            <actualResult type="string">$grabProductQtyInShowMinicart</actualResult>
+            <expectedResult type="string">1</expectedResult>
+        </assertEquals>
+
+
+    </test>
+</tests>

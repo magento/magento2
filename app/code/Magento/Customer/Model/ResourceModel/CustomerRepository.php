@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
@@ -204,7 +203,8 @@ class CustomerRepository implements CustomerRepositoryInterface
         $prevCustomerData = $prevCustomerDataArr = null;
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
-            $prevCustomerDataArr = $prevCustomerData->__toArray();
+            $prevCustomerDataArr = $this->prepareCustomerData($prevCustomerData->__toArray());
+            $customer->setCreatedAt($prevCustomerData->getCreatedAt());
         }
         /** @var $customer \Magento\Customer\Model\Data\Customer */
         $customerArr = $customer->__toArray();
@@ -219,6 +219,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         $customer->setAddresses($origAddresses);
         /** @var CustomerModel $customerModel */
         $customerModel = $this->customerFactory->create(['data' => $customerData]);
+        $this->populateWithOrigData($customerModel, $prevCustomerDataArr);
         //Model's actual ID field maybe different than "id" so "id" field from $customerData may be ignored.
         $customerModel->setId($customer->getId());
         $storeId = $customerModel->getStoreId();
@@ -293,6 +294,21 @@ class CustomerRepository implements CustomerRepositoryInterface
             ]
         );
         return $savedCustomer;
+    }
+
+    /**
+     * Populate customer model with previous data
+     *
+     * @param CustomerModel $customerModel
+     * @param ?array $prevCustomerDataArr
+     */
+    private function populateWithOrigData(CustomerModel $customerModel, ?array $prevCustomerDataArr)
+    {
+        if (!empty($prevCustomerDataArr)) {
+            foreach ($prevCustomerDataArr as $field => $value) {
+                $customerModel->setOrigData($field, $value);
+            }
+        }
     }
 
     /**
@@ -390,8 +406,8 @@ class CustomerRepository implements CustomerRepositoryInterface
      * Retrieve customers which match a specified criteria.
      *
      * This call returns an array of objects, but detailed information about each object’s attributes might not be
-     * included. See https://devdocs.magento.com/codelinks/attributes.html#CustomerRepositoryInterface to determine
-     * which call to use to get detailed information about all attributes for an object.
+     * included. See https://developer.adobe.com/commerce/webapi/rest/attributes#CustomerRepositoryInterface
+     * to determine which call to use to get detailed information about all attributes for an object.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Customer\Api\Data\CustomerSearchResultsInterface
@@ -468,6 +484,7 @@ class CustomerRepository implements CustomerRepositoryInterface
      * Helper function that adds a FilterGroup to the collection.
      *
      * @deprecated 101.0.0
+     * @see no alternative
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
@@ -510,5 +527,30 @@ class CustomerRepository implements CustomerRepositoryInterface
         if (!isset($customerArr['group_id']) && $prevCustomerDataArr && isset($prevCustomerDataArr['group_id'])) {
             $customerModel->setGroupId($prevCustomerDataArr['group_id']);
         }
+    }
+
+    /**
+     * Prepare customer data.
+     *
+     * @param array $customerData
+     * @return array
+     */
+    private function prepareCustomerData(array $customerData): array
+    {
+        if (isset($customerData[CustomerInterface::CUSTOM_ATTRIBUTES])) {
+            foreach ($customerData[CustomerInterface::CUSTOM_ATTRIBUTES] as $attribute) {
+                if (empty($attribute['value'])
+                    && !empty($attribute['selected_options'])
+                    && is_array($attribute['selected_options'])
+                ) {
+                    $attribute['value'] = implode(',', array_map(function ($option): string {
+                        return $option['value'] ?? '';
+                    }, $attribute['selected_options']));
+                }
+                $customerData[$attribute['attribute_code']] = $attribute['value'];
+            }
+            unset($customerData[CustomerInterface::CUSTOM_ATTRIBUTES]);
+        }
+        return $customerData;
     }
 }

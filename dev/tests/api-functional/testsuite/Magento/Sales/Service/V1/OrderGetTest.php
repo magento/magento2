@@ -16,13 +16,13 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class OrderGetTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/orders';
+    private const RESOURCE_PATH = '/V1/orders';
 
-    const SERVICE_READ_NAME = 'salesOrderRepositoryV1';
+    private const SERVICE_READ_NAME = 'salesOrderRepositoryV1';
 
-    const SERVICE_VERSION = 'V1';
+    private const SERVICE_VERSION = 'V1';
 
-    const ORDER_INCREMENT_ID = '100000001';
+    private const ORDER_INCREMENT_ID = '100000001';
 
     /**
      * @var ObjectManagerInterface
@@ -74,7 +74,7 @@ class OrderGetTest extends WebapiAbstract
         $expectedShippingAddress = [
             'address_type' => 'shipping',
             'city' => 'Los Angeles',
-            'email' => 'customer@null.com',
+            'email' => 'customer@example.com',
             'postcode' => '11111',
             'region' => 'CA'
         ];
@@ -132,9 +132,21 @@ class OrderGetTest extends WebapiAbstract
         $appliedTaxes = $result['extension_attributes']['item_applied_taxes'];
         self::assertEquals($expectedTax['type'], $appliedTaxes[0]['type']);
         self::assertNotEmpty($appliedTaxes[0]['applied_taxes']);
-        self::assertTrue($result['extension_attributes']['converting_from_quote']);
+        self::assertFalse($result['extension_attributes']['converting_from_quote']);
         self::assertArrayHasKey('payment_additional_info', $result['extension_attributes']);
         self::assertNotEmpty($result['extension_attributes']['payment_additional_info']);
+        $taxes = $result['extension_attributes']['taxes'];
+        $this->assertCount(1, $taxes);
+        $this->assertEquals('US-NY-*-Rate 1', $taxes[0]['code']);
+        $this->assertEquals(8.37, $taxes[0]['percent']);
+        $this->assertCount(1, $result['extension_attributes']['additional_itemized_taxes']);
+        $shippingTaxItem = $result['extension_attributes']['additional_itemized_taxes'][0];
+        $this->assertEquals(8.37, $shippingTaxItem['tax_percent']);
+        $this->assertEquals(45, $shippingTaxItem['amount']);
+        $this->assertEquals(45, $shippingTaxItem['base_amount']);
+        $this->assertEquals(45, $shippingTaxItem['real_amount']);
+        $this->assertEquals('shipping', $shippingTaxItem['taxable_item_type']);
+        $this->assertEquals('US-NY-*-Rate 1', $shippingTaxItem['tax_code']);
     }
 
     /**

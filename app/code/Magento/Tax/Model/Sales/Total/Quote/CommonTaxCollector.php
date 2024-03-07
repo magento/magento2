@@ -6,6 +6,7 @@
 
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
+use Magento\Customer\Api\AccountManagementInterface as CustomerAccountManagement;
 use Magento\Customer\Api\Data\AddressInterfaceFactory as CustomerAddressFactory;
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
 use Magento\Customer\Api\Data\RegionInterfaceFactory as CustomerAddressRegionFactory;
@@ -36,61 +37,63 @@ class CommonTaxCollector extends AbstractTotal
     /**#@+
      * Constants defined for type of items
      */
-    const ITEM_TYPE_SHIPPING = 'shipping';
-    const ITEM_TYPE_PRODUCT = 'product';
+    public const ITEM_TYPE_SHIPPING = 'shipping';
+    public const ITEM_TYPE_PRODUCT = 'product';
     /**#@-*/
 
     /**
      * Constant for shipping item code
      */
-    const ITEM_CODE_SHIPPING = 'shipping';
+    public const ITEM_CODE_SHIPPING = 'shipping';
 
     /**#@+
      * Constants for array keys
      */
-    const KEY_ITEM = 'item';
-    const KEY_BASE_ITEM = 'base_item';
+    public const KEY_ITEM = 'item';
+    public const KEY_BASE_ITEM = 'base_item';
     /**#@-*/
 
     /**#@+
      * Constants for fields in associated taxables array
      */
-    const KEY_ASSOCIATED_TAXABLE_TYPE = 'type';
-    const KEY_ASSOCIATED_TAXABLE_CODE = 'code';
-    const KEY_ASSOCIATED_TAXABLE_UNIT_PRICE = 'unit_price';
-    const KEY_ASSOCIATED_TAXABLE_BASE_UNIT_PRICE = 'base_unit_price';
-    const KEY_ASSOCIATED_TAXABLE_QUANTITY = 'quantity';
-    const KEY_ASSOCIATED_TAXABLE_TAX_CLASS_ID = 'tax_class_id';
-    const KEY_ASSOCIATED_TAXABLE_PRICE_INCLUDES_TAX = 'price_includes_tax';
-    const KEY_ASSOCIATED_TAXABLE_ASSOCIATION_ITEM_CODE = 'associated_item_code';
+    public const KEY_ASSOCIATED_TAXABLE_TYPE = 'type';
+    public const KEY_ASSOCIATED_TAXABLE_CODE = 'code';
+    public const KEY_ASSOCIATED_TAXABLE_UNIT_PRICE = 'unit_price';
+    public const KEY_ASSOCIATED_TAXABLE_BASE_UNIT_PRICE = 'base_unit_price';
+    public const KEY_ASSOCIATED_TAXABLE_QUANTITY = 'quantity';
+    public const KEY_ASSOCIATED_TAXABLE_TAX_CLASS_ID = 'tax_class_id';
+    public const KEY_ASSOCIATED_TAXABLE_PRICE_INCLUDES_TAX = 'price_includes_tax';
+    public const KEY_ASSOCIATED_TAXABLE_ASSOCIATION_ITEM_CODE = 'associated_item_code';
     /**#@-*/
 
     /**
      * When an extra taxable item is associated with quote and not with an item, this value
      * is used as associated item code
      */
-    const ASSOCIATION_ITEM_CODE_FOR_QUOTE = 'quote';
+    public const ASSOCIATION_ITEM_CODE_FOR_QUOTE = 'quote';
 
     /**#@+
      * Constants for fields in tax details for associated taxable items
      */
-    const KEY_TAX_DETAILS_TYPE = 'type';
-    const KEY_TAX_DETAILS_CODE = 'code';
-    const KEY_TAX_DETAILS_PRICE_EXCL_TAX = 'price_excl_tax';
-    const KEY_TAX_DETAILS_BASE_PRICE_EXCL_TAX = 'base_price_excl_tax';
-    const KEY_TAX_DETAILS_PRICE_INCL_TAX = 'price_incl_tax';
-    const KEY_TAX_DETAILS_BASE_PRICE_INCL_TAX = 'base_price_incl_tax';
-    const KEY_TAX_DETAILS_ROW_TOTAL = 'row_total_excl_tax';
-    const KEY_TAX_DETAILS_BASE_ROW_TOTAL = 'base_row_total_excl_tax';
-    const KEY_TAX_DETAILS_ROW_TOTAL_INCL_TAX = 'row_total_incl_tax';
-    const KEY_TAX_DETAILS_BASE_ROW_TOTAL_INCL_TAX = 'base_row_total_incl_tax';
-    const KEY_TAX_DETAILS_TAX_PERCENT = 'tax_percent';
-    const KEY_TAX_DETAILS_ROW_TAX = 'row_tax';
-    const KEY_TAX_DETAILS_BASE_ROW_TAX = 'base_row_tax';
-    const KEY_TAX_DETAILS_APPLIED_TAXES = 'applied_taxes';
+    public const KEY_TAX_DETAILS_TYPE = 'type';
+    public const KEY_TAX_DETAILS_CODE = 'code';
+    public const KEY_TAX_DETAILS_PRICE_EXCL_TAX = 'price_excl_tax';
+    public const KEY_TAX_DETAILS_BASE_PRICE_EXCL_TAX = 'base_price_excl_tax';
+    public const KEY_TAX_DETAILS_PRICE_INCL_TAX = 'price_incl_tax';
+    public const KEY_TAX_DETAILS_BASE_PRICE_INCL_TAX = 'base_price_incl_tax';
+    public const KEY_TAX_DETAILS_ROW_TOTAL = 'row_total_excl_tax';
+    public const KEY_TAX_DETAILS_BASE_ROW_TOTAL = 'base_row_total_excl_tax';
+    public const KEY_TAX_DETAILS_ROW_TOTAL_INCL_TAX = 'row_total_incl_tax';
+    public const KEY_TAX_DETAILS_BASE_ROW_TOTAL_INCL_TAX = 'base_row_total_incl_tax';
+    public const KEY_TAX_DETAILS_TAX_PERCENT = 'tax_percent';
+    public const KEY_TAX_DETAILS_ROW_TAX = 'row_tax';
+    public const KEY_TAX_DETAILS_BASE_ROW_TAX = 'base_row_tax';
+    public const KEY_TAX_DETAILS_APPLIED_TAXES = 'applied_taxes';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var \Magento\Tax\Model\Config
+     */
     protected $_config;
 
     /**
@@ -145,6 +148,11 @@ class CommonTaxCollector extends AbstractTotal
     private $quoteDetailsItemExtensionFactory;
 
     /**
+     * @var CustomerAccountManagement
+     */
+    private $customerAccountManagement;
+
+    /**
      * Class constructor
      *
      * @param \Magento\Tax\Model\Config $taxConfig
@@ -156,6 +164,8 @@ class CommonTaxCollector extends AbstractTotal
      * @param CustomerAddressRegionFactory $customerAddressRegionFactory
      * @param TaxHelper|null $taxHelper
      * @param QuoteDetailsItemExtensionInterfaceFactory|null $quoteDetailsItemExtensionInterfaceFactory
+     * @param CustomerAccountManagement|null $customerAccountManagement
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Tax\Model\Config $taxConfig,
@@ -166,7 +176,8 @@ class CommonTaxCollector extends AbstractTotal
         CustomerAddressFactory $customerAddressFactory,
         CustomerAddressRegionFactory $customerAddressRegionFactory,
         TaxHelper $taxHelper = null,
-        QuoteDetailsItemExtensionInterfaceFactory $quoteDetailsItemExtensionInterfaceFactory = null
+        QuoteDetailsItemExtensionInterfaceFactory $quoteDetailsItemExtensionInterfaceFactory = null,
+        ?CustomerAccountManagement $customerAccountManagement = null
     ) {
         $this->taxCalculationService = $taxCalculationService;
         $this->quoteDetailsDataObjectFactory = $quoteDetailsDataObjectFactory;
@@ -178,6 +189,17 @@ class CommonTaxCollector extends AbstractTotal
         $this->taxHelper = $taxHelper ?: ObjectManager::getInstance()->get(TaxHelper::class);
         $this->quoteDetailsItemExtensionFactory = $quoteDetailsItemExtensionInterfaceFactory ?:
             ObjectManager::getInstance()->get(QuoteDetailsItemExtensionInterfaceFactory::class);
+        $this->customerAccountManagement = $customerAccountManagement ??
+            ObjectManager::getInstance()->get(CustomerAccountManagement::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->counter = 0;
     }
 
     /**
@@ -411,7 +433,24 @@ class CommonTaxCollector extends AbstractTotal
     public function populateAddressData(QuoteDetailsInterface $quoteDetails, QuoteAddress $address)
     {
         $quoteDetails->setBillingAddress($this->mapAddress($address->getQuote()->getBillingAddress()));
-        $quoteDetails->setShippingAddress($this->mapAddress($address));
+        if ($address->getAddressType() === QuoteAddress::ADDRESS_TYPE_BILLING
+            && !$address->getCountryId()
+            && $address->getQuote()->isVirtual()
+            && $address->getQuote()->getCustomerId()
+        ) {
+            $defaultBillingAddress = $this->customerAccountManagement->getDefaultBillingAddress(
+                $address->getQuote()->getCustomerId()
+            );
+            $addressCopy = $address;
+            if ($defaultBillingAddress) {
+                $addressCopy = clone $address;
+                $addressCopy->importCustomerAddressData($defaultBillingAddress);
+            }
+
+            $quoteDetails->setShippingAddress($this->mapAddress($addressCopy));
+        } else {
+            $quoteDetails->setShippingAddress($this->mapAddress($address));
+        }
         return $quoteDetails;
     }
 
@@ -563,21 +602,24 @@ class CommonTaxCollector extends AbstractTotal
             /** @var TaxDetailsItemInterface $baseTaxDetail */
             $baseTaxDetail = $itemTaxDetail[self::KEY_BASE_ITEM];
             $quoteItem = $keyedAddressItems[$code];
-            $this->updateItemTaxInfo($quoteItem, $taxDetail, $baseTaxDetail, $store);
 
-            //Update aggregated values
-            if ($quoteItem->getHasChildren() && $quoteItem->isChildrenCalculated()) {
-                //avoid double counting
-                continue;
+            if (!$quoteItem->isDeleted()) {
+                $this->updateItemTaxInfo($quoteItem, $taxDetail, $baseTaxDetail, $store);
+
+                //Update aggregated values
+                if ($quoteItem->getHasChildren() && $quoteItem->isChildrenCalculated()) {
+                    //avoid double counting
+                    continue;
+                }
+                $subtotal += $taxDetail->getRowTotal();
+                $baseSubtotal += $baseTaxDetail->getRowTotal();
+                $discountTaxCompensation += $taxDetail->getDiscountTaxCompensationAmount();
+                $baseDiscountTaxCompensation += $baseTaxDetail->getDiscountTaxCompensationAmount();
+                $tax += $taxDetail->getRowTax();
+                $baseTax += $baseTaxDetail->getRowTax();
+                $subtotalInclTax += $taxDetail->getRowTotalInclTax();
+                $baseSubtotalInclTax += $baseTaxDetail->getRowTotalInclTax();
             }
-            $subtotal += $taxDetail->getRowTotal();
-            $baseSubtotal += $baseTaxDetail->getRowTotal();
-            $discountTaxCompensation += $taxDetail->getDiscountTaxCompensationAmount();
-            $baseDiscountTaxCompensation += $baseTaxDetail->getDiscountTaxCompensationAmount();
-            $tax += $taxDetail->getRowTax();
-            $baseTax += $baseTaxDetail->getRowTax();
-            $subtotalInclTax += $taxDetail->getRowTotalInclTax();
-            $baseSubtotalInclTax += $baseTaxDetail->getRowTotalInclTax();
         }
 
         //Set aggregated values
@@ -594,6 +636,7 @@ class CommonTaxCollector extends AbstractTotal
         $address = $shippingAssignment->getShipping()->getAddress();
         $address->setBaseTaxAmount($baseTax);
         $address->setBaseSubtotalTotalInclTax($baseSubtotalInclTax);
+        $address->setSubtotalInclTax($subtotalInclTax);
         $address->setSubtotal($total->getSubtotal());
         $address->setBaseSubtotal($total->getBaseSubtotal());
 
@@ -636,7 +679,7 @@ class CommonTaxCollector extends AbstractTotal
                 $associatedItemId = null;
                 if ($itemType == self::ITEM_TYPE_PRODUCT) {
                     //Use item id instead of tax calculation id
-                    $itemId = $keyedAddressItems[$itemTaxCalculationId]->getId();
+                    $itemId = $this->getQuoteItemId($keyedAddressItems, $itemTaxCalculationId);
                 } else {
                     if ($taxDetails->getAssociatedItemCode()
                         && $taxDetails->getAssociatedItemCode() != self::ASSOCIATION_ITEM_CODE_FOR_QUOTE) {
@@ -921,5 +964,22 @@ class CommonTaxCollector extends AbstractTotal
     protected function getNextIncrement()
     {
         return ++$this->counter;
+    }
+
+    /**
+     * Returns quote_item_id, as structure differs for usual shipping and multishipping approaches
+     *
+     * @param AbstractItem[] $keyedAddressItems
+     * @param string $itemTaxCalculationId
+     *
+     * @return mixed
+     */
+    private function getQuoteItemId(array $keyedAddressItems, string $itemTaxCalculationId)
+    {
+        if (isset($keyedAddressItems[$itemTaxCalculationId]["quote_item"])) {
+            return $keyedAddressItems[$itemTaxCalculationId]["quote_item"]->getId();
+        } else {
+            return $keyedAddressItems[$itemTaxCalculationId]->getId();
+        }
     }
 }

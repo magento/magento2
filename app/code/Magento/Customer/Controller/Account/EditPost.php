@@ -1,19 +1,22 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\SessionCleanerInterface;
+use Magento\Customer\Model\AccountConfirmation;
 use Magento\Customer\Model\AddressRegistry;
+use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\Customer\Mapper;
 use Magento\Customer\Model\EmailNotificationInterface;
+use Magento\Customer\Model\Metadata\Form\File;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\InvalidRequestException;
@@ -26,10 +29,12 @@ use Magento\Customer\Model\CustomerExtractor;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Escaper;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\SessionException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Customer\Controller\AbstractAccount;
 use Magento\Framework\Phrase;
@@ -40,18 +45,19 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * Customer edit account information controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class EditPost extends AbstractAccount implements CsrfAwareActionInterface, HttpPostActionInterface
 {
     /**
      * Form code for data extractor
      */
-    const FORM_DATA_EXTRACTOR_CODE = 'customer_account_edit';
+    public const FORM_DATA_EXTRACTOR_CODE = 'customer_account_edit';
 
     /**
      * @var AccountManagementInterface
      */
-    protected $customerAccountManagement;
+    protected $accountManagement;
 
     /**
      * @var CustomerRepositoryInterface
@@ -104,37 +110,53 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
     private $filesystem;
 
     /**
-     * @var SessionCleanerInterface|null
+     * @var SessionCleanerInterface
      */
     private $sessionCleaner;
 
     /**
+     * @var AccountConfirmation
+     */
+    private $accountConfirmation;
+
+    /**
+     * @var Url
+     */
+    private Url $customerUrl;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
-     * @param AccountManagementInterface $customerAccountManagement
+     * @param AccountManagementInterface $accountManagement
      * @param CustomerRepositoryInterface $customerRepository
      * @param Validator $formKeyValidator
      * @param CustomerExtractor $customerExtractor
      * @param Escaper|null $escaper
      * @param AddressRegistry|null $addressRegistry
-     * @param Filesystem $filesystem
+     * @param Filesystem|null $filesystem
      * @param SessionCleanerInterface|null $sessionCleaner
+     * @param AccountConfirmation|null $accountConfirmation
+     * @param Url|null $customerUrl
+     * @param Mapper|null $customerMapper
      */
     public function __construct(
         Context $context,
         Session $customerSession,
-        AccountManagementInterface $customerAccountManagement,
+        AccountManagementInterface $accountManagement,
         CustomerRepositoryInterface $customerRepository,
         Validator $formKeyValidator,
         CustomerExtractor $customerExtractor,
         ?Escaper $escaper = null,
-        AddressRegistry $addressRegistry = null,
-        Filesystem $filesystem = null,
-        ?SessionCleanerInterface $sessionCleaner = null
+        ?AddressRegistry $addressRegistry = null,
+        ?Filesystem $filesystem = null,
+        ?SessionCleanerInterface $sessionCleaner = null,
+        ?AccountConfirmation $accountConfirmation = null,
+        ?Url $customerUrl = null,
+        ?Mapper $customerMapper = null
     ) {
         parent::__construct($context);
         $this->session = $customerSession;
-        $this->customerAccountManagement = $customerAccountManagement;
+        $this->accountManagement = $accountManagement;
         $this->customerRepository = $customerRepository;
         $this->formKeyValidator = $formKeyValidator;
         $this->customerExtractor = $customerExtractor;
@@ -142,6 +164,10 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         $this->addressRegistry = $addressRegistry ?: ObjectManager::getInstance()->get(AddressRegistry::class);
         $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(Filesystem::class);
         $this->sessionCleaner = $sessionCleaner ?: ObjectManager::getInstance()->get(SessionCleanerInterface::class);
+        $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
+            ->get(AccountConfirmation::class);
+        $this->customerUrl = $customerUrl ?: ObjectManager::getInstance()->get(Url::class);
+        $this->customerMapper = $customerMapper ?: ObjectManager::getInstance()->get(Mapper::class);
     }
 
     /**
@@ -163,7 +189,6 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      * Get email notification
      *
      * @return EmailNotificationInterface
-     * @deprecated 100.1.0
      */
     private function getEmailNotification()
     {
@@ -179,7 +204,6 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      */
     public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
     {
-        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('*/*/edit');
 
@@ -202,50 +226,55 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      *
      * @return Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws SessionException
      */
     public function execute()
     {
-        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         $validFormKey = $this->formKeyValidator->validate($this->getRequest());
 
         if ($validFormKey && $this->getRequest()->isPost()) {
-            $currentCustomerDataObject = $this->getCustomerDataObject($this->session->getCustomerId());
-            $customerCandidateDataObject = $this->populateNewCustomerDataObject(
-                $this->_request,
-                $currentCustomerDataObject
-            );
+            $customer = $this->getCustomerDataObject($this->session->getCustomerId());
+            $customerCandidate = $this->populateNewCustomerDataObject($this->_request, $customer);
 
-            $attributeToDelete = $this->_request->getParam('delete_attribute_value');
-            if ($attributeToDelete !== null) {
-                $this->deleteCustomerFileAttribute(
-                    $customerCandidateDataObject,
-                    $attributeToDelete
-                );
+            $attributeToDelete = (string)$this->_request->getParam('delete_attribute_value');
+            if ($attributeToDelete !== "") {
+                $attributesToDelete = $this->prepareAttributesToDelete($attributeToDelete);
+                foreach ($attributesToDelete as $attribute) {
+                    $uploadedValue = $this->_request->getParam($attribute . File::UPLOADED_FILE_SUFFIX);
+                    if ((string)$uploadedValue === "") {
+                        $this->deleteCustomerFileAttribute($customerCandidate, $attribute);
+                    }
+                }
             }
 
             try {
                 // whether a customer enabled change email option
-                $this->processChangeEmailRequest($currentCustomerDataObject);
+                $isEmailChanged = $this->processChangeEmailRequest($customer);
 
                 // whether a customer enabled change password option
-                $isPasswordChanged = $this->changeCustomerPassword($currentCustomerDataObject->getEmail());
+                $isPasswordChanged = $this->changeCustomerPassword($customer->getEmail());
 
                 // No need to validate customer address while editing customer profile
-                $this->disableAddressValidation($customerCandidateDataObject);
+                $this->disableAddressValidation($customerCandidate);
 
-                $this->customerRepository->save($customerCandidateDataObject);
+                $this->customerRepository->save($customerCandidate);
+                $updatedCustomer = $this->customerRepository->getById($customerCandidate->getId());
+
                 $this->getEmailNotification()->credentialsChanged(
-                    $customerCandidateDataObject,
-                    $currentCustomerDataObject->getEmail(),
+                    $updatedCustomer,
+                    $customer->getEmail(),
                     $isPasswordChanged
                 );
-                $this->dispatchSuccessEvent($customerCandidateDataObject);
+
+                $this->dispatchSuccessEvent($updatedCustomer);
                 $this->messageManager->addSuccessMessage(__('You saved the account information.'));
-                // logout from current session if password changed.
-                if ($isPasswordChanged) {
+                // logout from current session if password or email changed.
+                if ($isPasswordChanged || $isEmailChanged) {
                     $this->session->logout();
                     $this->session->start();
+                    $this->addComplexSuccessMessage($customer, $updatedCustomer);
+
                     return $resultRedirect->setPath('customer/account/login');
                 }
                 return $resultRedirect->setPath('customer/account');
@@ -275,11 +304,50 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
             $this->session->setCustomerFormData($this->getRequest()->getPostValue());
         }
 
-        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('*/*/edit');
 
         return $resultRedirect;
+    }
+
+    /**
+     * Convert comma-separated list of attributes to delete into array
+     *
+     * @param string $attribute
+     * @return array
+     */
+    private function prepareAttributesToDelete(string $attribute) : array
+    {
+        $result = [];
+        if ($attribute !== "") {
+            if (str_contains($attribute, ',')) {
+                $result = explode(',', $attribute);
+            } else {
+                $result[] = $attribute;
+            }
+            $result = array_unique($result);
+        }
+        return $result;
+    }
+
+    /**
+     * Adds a complex success message if email confirmation is required
+     *
+     * @param CustomerInterface $outdatedCustomer
+     * @param CustomerInterface $updatedCustomer
+     * @throws LocalizedException
+     */
+    private function addComplexSuccessMessage(
+        CustomerInterface $outdatedCustomer,
+        CustomerInterface $updatedCustomer
+    ): void {
+        if (($outdatedCustomer->getEmail() !== $updatedCustomer->getEmail())
+            && $this->accountConfirmation->isCustomerEmailChangedConfirmRequired($updatedCustomer)) {
+            $this->messageManager->addComplexSuccessMessage(
+                'confirmAccountSuccessMessage',
+                ['url' => $this->customerUrl->getEmailConfirmationUrl($updatedCustomer->getEmail())]
+            );
+        }
     }
 
     /**
@@ -302,6 +370,8 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      * @param int $customerId
      *
      * @return CustomerInterface
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     private function getCustomerDataObject($customerId)
     {
@@ -341,7 +411,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      *
      * @param string $email
      * @return boolean
-     * @throws InvalidEmailOrPasswordException|InputException
+     * @throws InvalidEmailOrPasswordException|InputException|LocalizedException
      */
     protected function changeCustomerPassword($email)
     {
@@ -354,7 +424,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
                 throw new InputException(__('Password confirmation doesn\'t match entered password.'));
             }
 
-            $isPasswordChanged = $this->customerAccountManagement->changePassword($email, $currPass, $newPass);
+            $isPasswordChanged = $this->accountManagement->changePassword($email, $currPass, $newPass);
         }
 
         return $isPasswordChanged;
@@ -364,7 +434,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      * Process change email request
      *
      * @param CustomerInterface $currentCustomerDataObject
-     * @return void
+     * @return bool
      * @throws InvalidEmailOrPasswordException
      * @throws UserLockedException
      */
@@ -377,21 +447,21 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
                     $currentCustomerDataObject->getId(),
                     $this->getRequest()->getPost('current_password')
                 );
-                $this->sessionCleaner->clearFor($currentCustomerDataObject->getId());
+                $this->sessionCleaner->clearFor((int) $currentCustomerDataObject->getId());
+                return true;
             } catch (InvalidEmailOrPasswordException $e) {
                 throw new InvalidEmailOrPasswordException(
                     __("The password doesn't match this account. Verify the password and try again.")
                 );
             }
         }
+        return false;
     }
 
     /**
      * Get Customer Mapper instance
      *
      * @return Mapper
-     *
-     * @deprecated 100.1.3
      */
     private function getCustomerMapper()
     {
@@ -421,17 +491,14 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      * @param CustomerInterface $customerCandidateDataObject
      * @param string $attributeToDelete
      * @return void
+     * @throws FileSystemException
      */
     private function deleteCustomerFileAttribute(
         CustomerInterface $customerCandidateDataObject,
         string $attributeToDelete
     ) : void {
         if ($attributeToDelete !== '') {
-            if (strpos($attributeToDelete, ',') !== false) {
-                $attributes = explode(',', $attributeToDelete);
-            } else {
-                $attributes[] = $attributeToDelete;
-            }
+            $attributes = $this->prepareAttributesToDelete($attributeToDelete);
             foreach ($attributes as $attr) {
                 $attributeValue = $customerCandidateDataObject->getCustomAttribute($attr);
                 if ($attributeValue!== null) {

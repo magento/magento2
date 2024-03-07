@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyMultipleProductRatingsOnCategoryPageTest">
+        <annotations>
+            <features value="Review"/>
+            <stories value="Review By Customers"/>
+            <title value="StoreFront inconsistent products rating on category page"/>
+            <description value="Check if product rating is the same at list, table view on PLP and customers account."/>
+            <severity value="AVERAGE"/>
+            <useCaseId value="ACP2E-111"/>
+            <testCaseId value="AC-1187"/>
+        </annotations>
+        <before>
+            <!-- Enable singe store view to view ratings -->
+            <magentoCLI command="config:set general/single_store_mode/enabled 1" stepKey="enabledSingleStoreMode"/>
+            <!-- Login -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <!-- Create product and category -->
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="createProduct1">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createProduct2">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete reviews -->
+            <actionGroup ref="AdminOpenReviewsPageActionGroup" stepKey="openAllReviewsPage"/>
+            <actionGroup ref="AdminDeleteReviewsByUserNicknameActionGroup" stepKey="deleteCustomerReview"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearNickNameReviewFilters"/>
+            <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="CustomerEntityOne.email"/>
+            </actionGroup>
+            <!-- delete Category and Products -->
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <!-- Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!-- Disable single store view back -->
+            <magentoCLI command="config:set general/single_store_mode/enabled 0" stepKey="enabledSingleStoreMode"/>
+        </after>
+
+        <!-- Go to frontend and make a user account and login with it -->
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
+            <argument name="Customer" value="CustomerEntityOne"/>
+        </actionGroup>
+        <!-- Go to the first product view page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage1">
+            <argument name="productUrl" value="$$createProduct1.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Click on reviews and add reviews with current user -->
+        <click selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="openReviewTab1"/>
+        <!-- Set product rating stars -->
+        <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setQualityStars1">
+            <argument name="ratingName" value="Quality"/>
+            <argument name="stars" value="3"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setValueStars1">
+            <argument name="ratingName" value="Value"/>
+            <argument name="stars" value="4"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setPriceStars1">
+            <argument name="ratingName" value="Price"/>
+            <argument name="stars" value="5"/>
+        </actionGroup>
+        <!-- Click on reviews and add reviews with current user -->
+        <actionGroup ref="StorefrontAddProductReviewActionGroup" stepKey="addReview1"/>
+        <!-- Go to second product view page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage2">
+            <argument name="productUrl" value="$$createProduct2.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Click on reviews and add reviews with current user -->
+        <click selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="openReviewTab2"/>
+        <!-- Set product rating stars -->
+        <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setQualityStars2">
+            <argument name="ratingName" value="Quality"/>
+            <argument name="stars" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setValueStars2">
+            <argument name="ratingName" value="Value"/>
+            <argument name="stars" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setPriceStars2">
+            <argument name="ratingName" value="Price"/>
+            <argument name="stars" value="1"/>
+        </actionGroup>
+        <!-- Add review -->
+        <actionGroup ref="StorefrontAddProductReviewActionGroup" stepKey="addReview2"/>
+        <!-- Approve all reviews -->
+        <actionGroup ref="AdminOpenPendingReviewsPageActionGroup" stepKey="openPendingReviewsPage"/>
+        <actionGroup ref="AdminApproveAllReviewsActionGroup" stepKey="approveAllCustomerReview"/>
+        <!--Start Checking reviews -->
+        <!-- Navigate to PLP and check product rating for list and table views -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStoreViewHomePage"/>
+        <!-- Open products in category section -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="goToStorefrontCategoryPage">
+            <argument name="categoryName" value="$$category.name$$" />
+        </actionGroup>
+        <!-- Grid mode is default -->
+        <!-- Check stars at grid view for first product -->
+        <grabAttributeFrom selector="#rating-result_$$createProduct1.id$$ span" userInput="style" stepKey="getFirstProductStarsAtGridView"/>
+        <assertEquals stepKey="checkFirstProductStarsAtGridView">
+            <actualResult type="string">$getFirstProductStarsAtGridView</actualResult>
+            <expectedResult type="string">width: 80%;</expectedResult>
+        </assertEquals>
+        <!-- Check stars at grid view for second product -->
+        <grabAttributeFrom selector="#rating-result_$$createProduct2.id$$ span" userInput="style" stepKey="getSecondProductStarsAtGridView"/>
+        <assertEquals stepKey="checkSecondProductStarsAtGridView">
+            <actualResult type="string">$getSecondProductStarsAtGridView</actualResult>
+            <expectedResult type="string">width: 20%;</expectedResult>
+        </assertEquals>
+        <!-- Switch category view to list mode -->
+        <actionGroup ref="StorefrontSwitchCategoryViewToListModeActionGroup" stepKey="switchCategoryViewToListMode"/>
+        <!-- Check stars at list view for first product -->
+        <grabAttributeFrom selector="#rating-result_$$createProduct1.id$$ span" userInput="style" stepKey="getFirstProductStarsAtListView"/>
+        <assertEquals stepKey="checkFirstProductStarsAtListView">
+            <actualResult type="string">$getFirstProductStarsAtListView</actualResult>
+            <expectedResult type="string">width: 80%;</expectedResult>
+        </assertEquals>
+        <!-- Check stars at list view for second product -->
+        <grabAttributeFrom selector="#rating-result_$$createProduct2.id$$ span" userInput="style" stepKey="getSecondProductStarsAtListView"/>
+        <assertEquals stepKey="checkSecondProductStarsAtListView">
+            <actualResult type="string">$getSecondProductStarsAtListView</actualResult>
+            <expectedResult type="string">width: 20%;</expectedResult>
+        </assertEquals>
+        <!-- Navigate to user account and check product ratings -->
+        <!-- Checking that all 3 reviews on the My Product Reviews page have one star ratings  -->
+        <actionGroup ref="StorefrontNavigateToMyProductReviewsPageActionGroup" stepKey="navigateToProductReviewsPage"/>
+        <seeElement selector="{{StorefrontMyProductReviewsSection.reviewRating('2', '80%')}}"  stepKey="seeFirstOneStarReviewOnMyReviews"/>
+        <seeElement selector="{{StorefrontMyProductReviewsSection.reviewRating('1', '20%')}}"  stepKey="seeSecondOneStarReviewOnMyReviews"/>
+        <!-- Click on see details button of two reviews -->
+        <!-- Navigate to user account and check product ratings -->
+        <amOnPage url="review/customer/" stepKey="amOnCustomerReviewPage2"/>
+        <!-- Click on second product review -->
+        <click selector="{{StorefrontMyProductReviewsSection.reviewSeeDetails('1')}}" stepKey="clickFirstReviewRow"/>
+        <grabAttributeFrom selector="#rating-result_$$createProduct2.id$$ span" userInput="style" stepKey="getSecondProductResultStarsUnderProductName1"/>
+        <assertEquals stepKey="checkSecondProductResultStarsUnderProductName1">
+            <actualResult type="string">$getSecondProductResultStarsUnderProductName1</actualResult>
+            <expectedResult type="string">width: 20%;</expectedResult>
+        </assertEquals>
+        <!-- Navigate to user account and check product ratings -->
+        <amOnPage url="review/customer/" stepKey="amOnCustomerReviewPage3"/>
+        <!-- Click on first product review -->
+        <click selector="{{StorefrontMyProductReviewsSection.reviewSeeDetails('2')}}" stepKey="clickSecondReviewRow"/>
+        <grabAttributeFrom selector="#rating-result_$$createProduct1.id$$ span" userInput="style" stepKey="getFirstProductResultStarsUnderProductName2"/>
+        <assertEquals stepKey="checkFirstProductResultStarsUnderProductName2">
+            <actualResult type="string">$getFirstProductResultStarsUnderProductName2</actualResult>
+            <expectedResult type="string">width: 80%;</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

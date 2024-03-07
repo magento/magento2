@@ -104,14 +104,16 @@ class CategoryTest extends TestCase
     private $indexerProcessorMock;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected function setUp(): void
     {
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->selectMock->expects($this->at(2))->method('where')->willReturnSelf();
+        $this->selectMock
+            ->method('where')
+            ->willReturn($this->selectMock);
         $this->selectMock->expects($this->once())->method('from')->willReturnSelf();
         $this->selectMock->expects($this->once())->method('joinLeft')->willReturnSelf();
         $this->connectionMock = $this->getMockBuilder(Adapter::class)->getMockForAbstractClass();
@@ -170,7 +172,7 @@ class CategoryTest extends TestCase
     /**
      * @return void
      */
-    public function testFindWhereAttributeIs()
+    public function testFindWhereAttributeIs(): void
     {
         $entityIdsFilter = [1, 2];
         $expectedValue = 123;

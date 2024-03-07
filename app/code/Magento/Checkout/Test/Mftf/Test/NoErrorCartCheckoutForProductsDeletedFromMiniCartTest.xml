@@ -41,8 +41,9 @@
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$createSimpleProduct.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
         <!-- open the minicart -->
-        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickShowMinicart1"/>
-        <click selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="editProductFromMiniCart"/>
+        <comment userInput="BIC workaround" stepKey="clickShowMinicart1"/>
+        <comment userInput="BIC workaround" stepKey="editProductFromMiniCart"/>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCartFromMiniCart"/>
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickShowMinicart2"/>
         <click selector="{{StorefrontMinicartSection.deleteMiniCartItem}}" stepKey="deleteMiniCartItem"/>
         <waitForElementVisible selector="{{StoreFrontRemoveItemModalSection.message}}" stepKey="waitFortheConfirmationModal"/>

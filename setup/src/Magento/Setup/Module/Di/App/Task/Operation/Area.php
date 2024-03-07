@@ -95,10 +95,12 @@ class Area implements OperationInterface
             $config = $this->configReader->generateCachePerScope($definitionsCollection, $areaCode);
             $config = $this->modificationChain->modify($config);
 
-            $this->configWriter->write(
-                $areaCode,
-                $config
-            );
+            // sort configuration to have it in the same order on every build
+            ksort($config['arguments']);
+            ksort($config['preferences']);
+            ksort($config['instanceTypes']);
+
+            $this->configWriter->write($areaCode, $config);
         }
     }
 

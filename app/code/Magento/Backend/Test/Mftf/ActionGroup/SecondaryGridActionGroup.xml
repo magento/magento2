@@ -23,12 +23,16 @@
         <click stepKey="resetFilters" selector="{{AdminSecondaryGridSection.resetFilters}}"/>
         <fillField stepKey="fillIdentifier" selector="{{searchInput}}" userInput="{{name}}"/>
         <click stepKey="searchForName" selector="{{AdminSecondaryGridSection.searchButton}}"/>
+        <waitForPageLoad stepKey="waitForPageLoad" />
+        <waitForElementClickable selector="{{AdminSecondaryGridSection.firstRow}}" stepKey="waitForResult"/>
         <click stepKey="clickResult" selector="{{AdminSecondaryGridSection.firstRow}}"/>
         <waitForPageLoad stepKey="waitForTaxRateLoad"/>
 
         <!-- delete the rule -->
+        <waitForElementClickable selector="{{AdminStoresMainActionsSection.deleteButton}}" stepKey="waitForDelete"/>
         <click stepKey="clickDelete" selector="{{AdminStoresMainActionsSection.deleteButton}}"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForConfirmationModal"/>
         <click stepKey="clickOk" selector="{{AdminConfirmationModalSection.ok}}"/>
-        <see stepKey="seeSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="deleted"/>
+        <waitForText stepKey="seeSuccess" selector="{{AdminMessagesSection.success}}" userInput="deleted"/>
     </actionGroup>
 </actionGroups>

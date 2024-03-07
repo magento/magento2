@@ -42,18 +42,20 @@
             <div class="block-content" aria-labelledby="block-customer-login-heading">
                 <form data-role="login"
                       data-bind="submit:login"
-                      method="post">
+                      method="post"
+                      novalidate="novalidate">
                     <div class="fieldset"
                               data-bind="attr: {'data-hasrequired': $t('* Required Fields')}">
                         <div class="field field-email required">
                             <label class="label" for="login-email"><span data-bind="i18n: 'Email Address'"></span></label>
                             <div class="control">
-                                <input type="email"
-                                       class="input-text"
+                                <input name="username"
                                        id="login-email"
-                                       name="username"
+                                       type="email"
+                                       class="input-text"
                                        data-bind="attr: {autocomplete: autocomplete}"
-                                       data-validate="{required:true, 'validate-email':true}" />
+                                       data-validate="{required:true, 'validate-email':true}"
+                                />
                             </div>
                         </div>
                         <div class="field field-password required">

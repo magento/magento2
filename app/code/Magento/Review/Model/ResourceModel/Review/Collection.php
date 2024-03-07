@@ -14,48 +14,41 @@ namespace Magento\Review\Model\ResourceModel\Review;
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
-     * Review table
      *
      * @var string
      */
     protected $_reviewTable = null;
 
     /**
-     * Review detail table
      *
      * @var string
      */
     protected $_reviewDetailTable = null;
 
     /**
-     * Review status table
      *
      * @var string
      */
     protected $_reviewStatusTable = null;
 
     /**
-     * Review entity table
      *
      * @var string
      */
     protected $_reviewEntityTable = null;
 
     /**
-     * Review store table
      *
      * @var string
      */
     protected $_reviewStoreTable = null;
 
     /**
-     * Add store data flag
      * @var bool
      */
     protected $_addStoreDataFlag = false;
 
     /**
-     * Review data
      *
      * @var \Magento\Review\Helper\Data
      */
@@ -125,7 +118,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $this->getSelect()->join(
             ['detail' => $this->getReviewDetailTable()],
             'main_table.review_id = detail.review_id',
-            ['detail_id', 'title', 'detail', 'nickname', 'customer_id']
+            ['detail_id', 'store_id', 'title', 'detail', 'nickname', 'customer_id']
         );
         return $this;
     }

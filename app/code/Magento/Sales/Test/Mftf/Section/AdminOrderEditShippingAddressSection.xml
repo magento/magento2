@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminOrderEditShippingAddressSection">
+        <element name="NamePrefix" type="input" selector="#prefix"/>
+        <element name="FirstName" type="input" selector="#firstname"/>
+        <element name="MiddleName" type="input" selector="#middlename"/>
+        <element name="LastName" type="input" selector="#olastname"/>
+        <element name="NameSuffix" type="input" selector="#suffix"/>
+        <element name="Company" type="input" selector="#company"/>
+        <element name="StreetLine1" type="input" selector="#street0"/>
+        <element name="StreetLine2" type="input" selector="#street1"/>
+        <element name="StreetLine3" type="input" selector="#street2"/>
+        <element name="StreetLine4" type="input" selector="#street3"/>
+        <element name="City" type="input" selector="#city"/>
+        <element name="Country" type="select" selector="#country_id"/>
+        <element name="State" type="select" selector="#region_id"/>
+        <element name="Province" type="input" selector="#region"/>
+        <element name="PostalCode" type="input" selector="#postcode"/>
+        <element name="Phone" type="input" selector="#telephone"/>
+        <element name="Fax" type="input" selector="#fax"/>
+        <element name="VatNumber" type="input" selector="#vat_id"/>
+        <element name="SaveAddress" type="button" selector="#save"/>
+    </section>
+</sections>
