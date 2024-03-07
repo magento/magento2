@@ -92,7 +92,7 @@ class NameTest extends TestCase
                 'middleName' => '',
                 'lastNameName' => 'O`Doe',
                 'message' => 'Special character ampersand(&) must be allowed in names'
-            ],
+            ]
         ];
     }
     /**
