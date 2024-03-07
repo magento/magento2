@@ -30,7 +30,6 @@
         <before>
             <!-- Enable configuration -->
             <magentoCLI command="config:set sales/cancellation/enabled 1" stepKey="EnablingSalesCancellation"/>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="_defaultProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -39,6 +38,12 @@
             <createData entity="CustomerCart" stepKey="createCustomerCart">
                 <requiredEntity createDataKey="createCustomer"/>
             </createData>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <createData entity="CustomerCartItem" stepKey="addCartItemOne">
                 <requiredEntity createDataKey="createCustomerCart"/>
                 <requiredEntity createDataKey="createSimpleProduct"/>
@@ -88,6 +93,7 @@
         <grabTextFrom selector="{{CustomerOrderCancellationSection.referenceToLatestOrderId}}" stepKey="getOrderId"/>
 
         <!--Go to Admin Sales Order View Page-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminSalesOrderViewPage.url({$getOrderId})}}" stepKey="navigateToSalesOrderViewPage"/>
         <waitForPageLoad stepKey="waitForAdminSalesOrderViewPageLoad"/>
 
