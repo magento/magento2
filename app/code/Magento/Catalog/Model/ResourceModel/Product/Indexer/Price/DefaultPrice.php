@@ -14,8 +14,6 @@ use Magento\Framework\Indexer\DimensionalIndexerInterface;
  * For correctly work need define product type id
  *
  * @api
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  * @deprecated 102.0.6 Not used anymore for price indexation. Class left for backward compatibility

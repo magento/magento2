@@ -21,8 +21,6 @@
  * @method \Magento\CatalogRule\Model\Rule\Product\Price setLatestStartDate(string $value)
  * @method string getEarliestEndDate()
  * @method \Magento\CatalogRule\Model\Rule\Product\Price setEarliestEndDate(string $value)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CatalogRule\Model\Rule\Product;
 
@@ -48,7 +46,7 @@ class Price extends \Magento\Framework\Model\AbstractModel
      * @param string $entityId
      * @param string $customerGroupId
      * @param string $websiteId
-     * @param array $updateFields       the array fields for compare with rule price and update
+     * @param array $updateFields the array fields for compare with rule price and update
      * @param string $websiteDate
      * @return $this
      */
