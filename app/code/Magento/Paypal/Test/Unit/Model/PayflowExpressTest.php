@@ -55,7 +55,7 @@ class PayflowExpressTest extends TestCase
         $paypalPro = $this->getMockBuilder(
             Pro::class
         )->disableOriginalConstructor()
-            ->onlyMethods(['getApi'])->getMock();
+            ->onlyMethods(['getApi','setMethod'])->getMock();
         $this->transactionRepository = $this->getMockBuilder(TransactionRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->addMethods(['getByTransactionType'])
