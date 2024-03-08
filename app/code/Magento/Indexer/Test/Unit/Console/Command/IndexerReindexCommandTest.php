@@ -287,7 +287,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function executeWithIndexDataProvider()
+    public static function executeWithIndexDataProvider()
     {
         return [
             'Without dependencies' => [
@@ -323,9 +323,9 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
                     ],
                 ],
                 'expected_reindex_all_calls' => [
-                    'indexer_1' => $this->once(),
-                    'indexer_2' => $this->never(),
-                    'indexer_3' => $this->never(),
+                    'indexer_1' => self::once(),
+                    'indexer_2' => self::never(),
+                    'indexer_3' => self::never(),
                 ],
                 'executed_indexers' => ['indexer_1'],
                 'executed_shared_indexers' => [],
@@ -381,11 +381,11 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
                     ],
                 ],
                 'expected_reindex_all_calls' => [
-                    'indexer_1' => $this->once(),
-                    'indexer_2' => $this->never(),
-                    'indexer_3' => $this->once(),
-                    'indexer_4' => $this->never(),
-                    'indexer_5' => $this->once(),
+                    'indexer_1' => self::once(),
+                    'indexer_2' => self::never(),
+                    'indexer_3' => self::once(),
+                    'indexer_4' => self::never(),
+                    'indexer_5' => self::once(),
                 ],
                 'executed_indexers' => ['indexer_3', 'indexer_1', 'indexer_5'],
                 'executed_shared_indexers' => [['indexer_2'], ['indexer_3']],
@@ -439,11 +439,11 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
                     ],
                 ],
                 'expected_reindex_all_calls' => [
-                    'indexer_1' => $this->once(),
-                    'indexer_2' => $this->never(),
-                    'indexer_3' => $this->once(),
-                    'indexer_4' => $this->once(),
-                    'indexer_5' => $this->once(),
+                    'indexer_1' => self::once(),
+                    'indexer_2' => self::never(),
+                    'indexer_3' => self::once(),
+                    'indexer_4' => self::once(),
+                    'indexer_5' => self::once(),
                 ],
                 'executed_indexers' => ['indexer_1', 'indexer_4', 'indexer_3', 'indexer_5'],
                 'executed_shared_indexers' => [],

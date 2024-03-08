@@ -32,7 +32,7 @@ class DefaultTest extends TestCase
     /**
      * Expiration frame
      */
-    const EXPIRE_FRAME = 86400;
+    private const EXPIRE_FRAME = 86400;
 
     /**
      * Captcha default config data

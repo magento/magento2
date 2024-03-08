@@ -108,7 +108,7 @@ class UrlRewriteHandlerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->mergeDataProviderFactoryMock = $this->getMockBuilder(MergeDataProviderFactory::class)
-            ->onlyMethods(['create'])
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->mergeDataProviderMock = $this->getMockBuilder(MergeDataProvider::class)

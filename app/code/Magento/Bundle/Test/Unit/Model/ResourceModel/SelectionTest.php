@@ -89,7 +89,12 @@ class SelectionTest extends TestCase
             ->willReturn('catalog_product_bundle_selection_price');
         $this->context->expects($this->once())->method('getResources')->willReturn($parentResources);
 
-        $selection = new ResourceSelection($this->context, $this->metadataPool, 'test_connection_name',$this->entityManager);
+        $selection = new ResourceSelection(
+            $this->context,
+            $this->metadataPool,
+            'test_connection_name',
+            $this->entityManager
+        );
         $selection->saveSelectionPrice($item);
     }
 }

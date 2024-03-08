@@ -30,6 +30,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Backend\Controller\Adminhtml\Auth\Login.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LoginTest extends TestCase
 {
