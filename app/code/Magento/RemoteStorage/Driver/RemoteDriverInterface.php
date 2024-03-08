@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\RemoteStorage\Driver;
 
-use Magento\RemoteStorage\Driver\ExtendedRemoteDriverInterface;
+use Magento\Framework\Filesystem\ExtendedDriverInterface;
 
 /**
  * Remote storage driver.
  * @api
  */
-interface RemoteDriverInterface extends ExtendedRemoteDriverInterface
+interface RemoteDriverInterface extends ExtendedDriverInterface
 {
     /**
      * Test storage connection.
@@ -21,4 +21,12 @@ interface RemoteDriverInterface extends ExtendedRemoteDriverInterface
      * @throws DriverException
      */
     public function test(): void;
+
+    /**
+     * To check if directory exists
+     *
+     * @param string $path
+     * @return bool
+     */
+    public function isDirectoryExists($path): bool;
 }

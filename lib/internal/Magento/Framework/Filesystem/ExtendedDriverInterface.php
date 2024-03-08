@@ -13,6 +13,9 @@ use Magento\Framework\Exception\FileSystemException;
  * Provides extension for Driver interface.
  *
  * @see DriverInterface
+ *
+ * @deprecated Method will be moved to DriverInterface
+ * @see DriverInterface
  */
 interface ExtendedDriverInterface extends DriverInterface
 {
@@ -42,7 +45,6 @@ interface ExtendedDriverInterface extends DriverInterface
      * @throws FileSystemException
      *
      * @deprecated Method will be moved to DriverInterface
-     * @see DriverInterface
      */
     public function getMetadata(string $path): array;
 }
