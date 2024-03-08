@@ -49,6 +49,11 @@ class ProcessorTest extends TestCase
     protected $viewProcessorMock;
 
     /**
+     * @var IndexerRegistry|MockObject
+     */
+    private $indexerRegistryMock;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -77,6 +82,11 @@ class ProcessorTest extends TestCase
             false
         );
 
+        $this->indexerRegistryMock = $this->createPartialMock(
+            IndexerRegistry::class,
+            ['get']
+        );
+
         $indexerRegistryMock = $this->getIndexRegistryMock([]);
         $makeSharedValidMock = new MakeSharedIndexValid(
             $this->configMock,
@@ -88,7 +98,8 @@ class ProcessorTest extends TestCase
             $this->indexerFactoryMock,
             $this->indexersFactoryMock,
             $this->viewProcessorMock,
-            $makeSharedValidMock
+            $makeSharedValidMock,
+            $this->indexerRegistryMock
         );
     }
 
@@ -97,39 +108,53 @@ class ProcessorTest extends TestCase
      */
     public function testReindexAllInvalid(): void
     {
-        $indexers = ['indexer1' => [], 'indexer2' => []];
+        $indexers = [
+            'indexer1' => [],
+            'indexer2' => [],
+            'indexer3' => []
+        ];
+        $indexerReturnMap = [
+            ['indexer1', ['shared_index' => null]],
+            ['indexer2', ['shared_index' => null]],
+            ['indexer3', ['shared_index' => null]]
+        ];
 
         $this->configMock->expects($this->once())->method('getIndexers')->willReturn($indexers);
+        $this->configMock->method('getIndexer')->willReturnMap($indexerReturnMap);
 
+        // Invalid Indexer
         $state1Mock = $this->createPartialMock(State::class, ['getStatus', '__wakeup']);
-        $state1Mock->expects($this->exactly(2))
+        $state1Mock->expects($this->exactly(3))
             ->method('getStatus')
-            ->willReturnOnConsecutiveCalls(StateInterface::STATUS_INVALID, StateInterface::STATUS_VALID);
-        $indexer1Mock = $this->createPartialMock(
-            Indexer::class,
-            ['load', 'getState', 'reindexAll']
-        );
-        $indexer1Mock->expects($this->exactly(2))->method('getState')->willReturn($state1Mock);
+            ->willReturnOnConsecutiveCalls(
+                StateInterface::STATUS_INVALID,
+                StateInterface::STATUS_INVALID,
+                StateInterface::STATUS_VALID
+            );
+        $indexer1Mock = $this->createPartialMock(Indexer::class, ['load', 'getState', 'reindexAll']);
+        $indexer1Mock->expects($this->exactly(3))->method('getState')->willReturn($state1Mock);
         $indexer1Mock->expects($this->once())->method('reindexAll');
 
+        // Valid Indexer
         $state2Mock = $this->createPartialMock(State::class, ['getStatus', '__wakeup']);
-        $state2Mock->expects(
-            $this->once()
-        )->method(
-            'getStatus'
-        )->willReturn(
-            StateInterface::STATUS_VALID
-        );
-        $indexer2Mock = $this->createPartialMock(
-            Indexer::class,
-            ['load', 'getState', 'reindexAll']
-        );
-        $indexer2Mock->expects($this->never())->method('reindexAll');
+        $state2Mock->expects($this->once())->method('getStatus')->willReturn(StateInterface::STATUS_VALID);
+        $indexer2Mock = $this->createPartialMock(Indexer::class, ['load', 'getState', 'reindexAll']);
         $indexer2Mock->expects($this->once())->method('getState')->willReturn($state2Mock);
+        $indexer2Mock->expects($this->never())->method('reindexAll');
+
+        // Suspended Indexer
+        $state3Mock = $this->createPartialMock(State::class, ['getStatus', '__wakeup']);
+        $state3Mock->expects($this->exactly(2))->method('getStatus')->willReturnOnConsecutiveCalls(
+            StateInterface::STATUS_INVALID,
+            StateInterface::STATUS_SUSPENDED
+        );
+        $indexer3Mock = $this->createPartialMock(Indexer::class, ['load', 'getState', 'reindexAll']);
+        $indexer3Mock->expects($this->exactly(2))->method('getState')->willReturn($state3Mock);
+        $indexer3Mock->expects($this->never())->method('reindexAll');
 
         $this->indexerFactoryMock
             ->method('create')
-            ->willReturnOnConsecutiveCalls($indexer1Mock, $indexer2Mock);
+            ->willReturnOnConsecutiveCalls($indexer1Mock, $indexer2Mock, $indexer3Mock);
 
         $this->model->reindexAllInvalid();
     }
@@ -163,12 +188,9 @@ class ProcessorTest extends TestCase
         $indexerMocks = [];
         foreach ($indexers as $indexerData) {
             $stateMock = $this->createPartialMock(State::class, ['getStatus', '__wakeup']);
-            $stateMock->expects($this->any())
-                ->method('getStatus')
-                ->willReturnOnConsecutiveCalls(
-                    $indexerStates[$indexerData['indexer_id']],
-                    StateInterface::STATUS_VALID
-                );
+            $sequence = $indexerStates[$indexerData['indexer_id']] ?? [StateInterface::STATUS_VALID];
+            $stateMock->method('getStatus')->willReturnOnConsecutiveCalls(...$sequence);
+
             $indexerMock = $this->createPartialMock(Indexer::class, ['load', 'getState', 'reindexAll']);
             $indexerMock->expects($this->any())->method('getState')->willReturn($stateMock);
             $indexerMock->expects($expectedReindexAllCalls[$indexerData['indexer_id']])->method('reindexAll');
@@ -177,6 +199,16 @@ class ProcessorTest extends TestCase
         $this->indexerFactoryMock
             ->method('create')
             ->willReturnOnConsecutiveCalls(...$indexerMocks);
+
+        $stateMock = $this->createPartialMock(State::class, ['getStatus', '__wakeup']);
+        $stateMock->expects($this->any())
+            ->method('getStatus')
+            ->willReturn(StateInterface::STATUS_INVALID);
+        $indexerMock = $this->createPartialMock(Indexer::class, ['load', 'getState', 'reindexAll']);
+        $indexerMock->expects($this->any())->method('getState')->willReturn($stateMock);
+
+        $this->indexerRegistryMock->method('get')
+            ->willReturn($indexerMock);
 
         $indexerRegistryMock = $this->getIndexRegistryMock($executedSharedIndexers);
 
@@ -189,9 +221,67 @@ class ProcessorTest extends TestCase
             $this->indexerFactoryMock,
             $this->indexersFactoryMock,
             $this->viewProcessorMock,
-            $makeSharedValidMock
+            $makeSharedValidMock,
+            $this->indexerRegistryMock
         );
         $model->reindexAllInvalid();
+    }
+
+    /**
+     * Test that any indexers within a group that share a common 'shared_index' ID are suspended.
+     *
+     * @param array $indexers
+     * @param array $indexerStates
+     * @param array $expectedReindexAllCalls
+     *
+     * @return void
+     * @dataProvider suspendedIndexDataProvider
+     */
+    public function testReindexAllInvalidWithSuspendedStatus(
+        array $indexers,
+        array $indexerStates,
+        array $expectedReindexAllCalls
+    ): void {
+        $this->configMock->expects($this->exactly(3))->method('getIndexers')->willReturn($indexers);
+        $this->configMock
+            ->method('getIndexer')
+            ->willReturnMap(
+                array_map(
+                    function ($elem) {
+                        return [$elem['indexer_id'], $elem];
+                    },
+                    $indexers
+                )
+            );
+        $indexerMocks = [];
+        foreach ($indexers as $indexerData) {
+            $stateMock = $this->createPartialMock(State::class, ['getStatus', '__wakeup']);
+            $sequence = $indexerStates[$indexerData['indexer_id']] ?? [StateInterface::STATUS_VALID];
+            $stateMock->method('getStatus')->willReturnOnConsecutiveCalls(...$sequence);
+
+            $indexerMock = $this->createPartialMock(Indexer::class, ['load', 'getState', 'reindexAll']);
+            $indexerMock->expects($this->any())->method('getState')->willReturn($stateMock);
+            $indexerMock->expects($expectedReindexAllCalls[$indexerData['indexer_id']])->method('reindexAll');
+            $indexerMocks[] = $indexerMock;
+        }
+        $this->indexerFactoryMock
+            ->method('create')
+            ->willReturnOnConsecutiveCalls(...$indexerMocks);
+
+        $stateMock = $this->createPartialMock(State::class, ['getStatus', '__wakeup']);
+        $stateMock->expects($this->exactly(3))
+            ->method('getStatus')
+            ->willReturnOnConsecutiveCalls(
+                StateInterface::STATUS_SUSPENDED,
+                StateInterface::STATUS_INVALID,
+                StateInterface::STATUS_SUSPENDED
+            );
+        $indexerMock = $this->createPartialMock(Indexer::class, ['load', 'getState', 'reindexAll']);
+        $indexerMock->expects($this->exactly(3))->method('getState')->willReturn($stateMock);
+
+        $this->indexerRegistryMock->method('get')->willReturn($indexerMock);
+
+        $this->model->reindexAllInvalid();
     }
 
     /**
@@ -262,9 +352,13 @@ class ProcessorTest extends TestCase
                     ],
                 ],
                 'indexer_states' => [
-                    'indexer_1' => StateInterface::STATUS_INVALID,
-                    'indexer_2' => StateInterface::STATUS_VALID,
-                    'indexer_3' => StateInterface::STATUS_VALID
+                    'indexer_1' => [
+                        StateInterface::STATUS_INVALID,
+                        StateInterface::STATUS_INVALID,
+                        StateInterface::STATUS_VALID
+                    ],
+                    'indexer_2' => [StateInterface::STATUS_VALID],
+                    'indexer_3' => [StateInterface::STATUS_VALID]
                 ],
                 'expected_reindex_all_calls' => [
                     'indexer_1' => $this->once(),
@@ -301,10 +395,18 @@ class ProcessorTest extends TestCase
                     ]
                 ],
                 'indexer_states' => [
-                    'indexer_1' => StateInterface::STATUS_INVALID,
-                    'indexer_2' => StateInterface::STATUS_VALID,
-                    'indexer_3' => StateInterface::STATUS_INVALID,
-                    'indexer_4' => StateInterface::STATUS_VALID
+                    'indexer_1' => [
+                        StateInterface::STATUS_INVALID,
+                        StateInterface::STATUS_INVALID,
+                        StateInterface::STATUS_VALID
+                    ],
+                    'indexer_2' => [StateInterface::STATUS_VALID],
+                    'indexer_3' => [
+                        StateInterface::STATUS_INVALID,
+                        StateInterface::STATUS_INVALID,
+                        StateInterface::STATUS_VALID
+                    ],
+                    'indexer_4' => [StateInterface::STATUS_VALID]
                 ],
                 'expected_reindex_all_calls' => [
                     'indexer_1' => $this->once(),
@@ -313,6 +415,59 @@ class ProcessorTest extends TestCase
                     'indexer_4' => $this->never()
                 ],
                 'executed_shared_indexers' => [['indexer_2'], ['indexer_3']]
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function suspendedIndexDataProvider(): array
+    {
+        return [
+            'Indexers' => [
+                'indexers' => [
+                    'indexer_1' => [
+                        'indexer_id' => 'indexer_1',
+                        'title' => 'Title indexer 1',
+                        'shared_index' => null,
+                        'dependencies' => []
+                    ],
+                    'indexer_2' => [
+                        'indexer_id' => 'indexer_2',
+                        'title' => 'Title indexer 2',
+                        'shared_index' => 'common_shared_index',
+                        'dependencies' => []
+                    ],
+                    'indexer_3' => [
+                        'indexer_id' => 'indexer_3',
+                        'title' => 'Title indexer 3',
+                        'shared_index' => 'common_shared_index',
+                        'dependencies' => []
+                    ]
+                ],
+                'indexer_states' => [
+                    'indexer_1' => [
+                        StateInterface::STATUS_INVALID,
+                        StateInterface::STATUS_INVALID,
+                        StateInterface::STATUS_VALID
+                    ],
+                    'indexer_2' => [
+                        StateInterface::STATUS_INVALID,
+                        StateInterface::STATUS_INVALID,
+                        StateInterface::STATUS_VALID
+                    ],
+                    'indexer_3' => [
+                        StateInterface::STATUS_INVALID,
+                        StateInterface::STATUS_INVALID,
+                        StateInterface::STATUS_VALID
+                    ]
+                ],
+                'expected_reindex_all_calls' => [
+                    'indexer_1' => $this->once(),
+                    'indexer_2' => $this->never(),
+                    'indexer_3' => $this->never()
+                ]
             ]
         ];
     }

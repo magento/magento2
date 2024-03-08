@@ -22,6 +22,8 @@ use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Helper\Reorder as ReorderHelper;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\OrderFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ItemCollection;
 use Psr\Log\LoggerInterface;
 
@@ -105,6 +107,11 @@ class Reorder
     private $orderInfoBuyRequestGetter;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @var bool
      */
     private bool $addToCartInvalidProduct;
@@ -118,6 +125,7 @@ class Reorder
      * @param LoggerInterface $logger
      * @param ProductCollectionFactory $productCollectionFactory
      * @param OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter
+     * @param StoreManagerInterface|null $storeManager
      * @param bool $addToCartInvalidProduct
      */
     public function __construct(
@@ -129,6 +137,7 @@ class Reorder
         LoggerInterface $logger,
         ProductCollectionFactory $productCollectionFactory,
         OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter,
+        ?StoreManagerInterface   $storeManager = null,
         bool $addToCartInvalidProduct = false
     ) {
         $this->orderFactory = $orderFactory;
@@ -139,6 +148,8 @@ class Reorder
         $this->guestCartResolver = $guestCartResolver;
         $this->productCollectionFactory = $productCollectionFactory;
         $this->orderInfoBuyRequestGetter = $orderInfoBuyRequestGetter;
+        $this->storeManager = $storeManager
+            ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
         $this->addToCartInvalidProduct = $addToCartInvalidProduct;
     }
 
@@ -172,6 +183,7 @@ class Reorder
             return $this->prepareOutput($cart);
         }
 
+        $storeId = (string) $this->storeManager->getStore()->getId();
         $this->addItemsToCart($cart, $order->getItemsCollection(), $storeId);
 
         try {

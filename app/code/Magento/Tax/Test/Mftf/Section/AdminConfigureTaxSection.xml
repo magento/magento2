@@ -54,6 +54,7 @@
         <element name="dropdownDisplayZeroTaxCart" type="checkbox" selector="#row_tax_cart_display_zero_tax select"/>
 
         <element name="ordersInvoicesCreditSales" type="block" selector="#tax_sales_display-head" timeout="30"/>
+        <element name="taxSalesDisplayHeadOpen" type="block" selector="#tax_sales_display-head.open" timeout="30"/>
         <element name="systemValueIncludeTaxTotalSales" type="checkbox" selector="#row_tax_sales_display_grandtotal input[type='checkbox']"/>
         <element name="dropdownIncludeTaxTotalSales" type="checkbox" selector="#row_tax_sales_display_grandtotal select"/>
         <element name="systemValueDisplayTaxSummarySales" type="checkbox" selector="#row_tax_sales_display_full_summary input[type='checkbox']"/>
@@ -68,6 +69,14 @@
         <element name="dropdownIncludingFPTAndFPTDescription" type="checkbox" selector="#row_tax_weee_display_list select"/>
         <element name="systemValueApplyTaxToFpt" type="checkbox" selector="#row_tax_weee_apply_vat input[type='checkbox']"/>
         <element name="dropdownApplyTaxToFpt" type="checkbox" selector="#row_tax_weee_apply_vat select"/>
+        <element name="orderInvoiceSubtotalInherit" type="checkbox" selector="#tax_sales_display_subtotal_inherit"/>
+        <element name="orderInvoiceDisplaySubtotal" type="select" selector="#tax_sales_display_subtotal"/>
+        <element name="taxSalesDisplaySubtotal" type="checkbox" selector="#tax_sales_display_grandtotal_inherit"/>
+        <element name="taxSalesDisplayGrandTotal" type="select" selector="#tax_sales_display_grandtotal"/>
+        <element name="taxSalesDisplayFullSummaryInherit" type="checkbox" selector="#tax_sales_display_full_summary_inherit"/>
+        <element name="taxSalesDisplayFullSummary" type="select" selector="#tax_sales_display_full_summary"/>
+        <element name="taxSalesDisplayZeroTaxInherit" type="checkbox" selector="#tax_sales_display_zero_tax_inherit"/>
+        <element name="taxSalesDisplayZeroTax" type="select" selector="#tax_sales_display_zero_tax"/>
 
         <element name="taxClassesCondition" type="block" selector="//a[@id='tax_classes-head' and @class='open']" timeout="30"/>
         <element name="useSystemValue" type="checkbox" selector="#tax_classes_default_product_tax_class_inherit"/>
