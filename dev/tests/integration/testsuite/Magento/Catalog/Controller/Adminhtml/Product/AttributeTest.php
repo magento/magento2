@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -332,7 +334,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\View\DesignInterface::class
         )->setDesignTheme(
-            1
+            'Magento/backend'
         );
         /** @var \Magento\Framework\TranslateInterface $translate */
         $translate = $this->_objectManager->get(\Magento\Framework\TranslateInterface::class);
