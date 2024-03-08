@@ -48,9 +48,8 @@
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton"/>
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
 
-        <!--Open UrlRewrite Page-->
-        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteIndexPage"/>
-        <waitForPageLoad stepKey="waitForUrlRewritePage"/>
+        <actionGroup ref="AdminOpenUrlRewritesGridPageActionGroup" stepKey="openUrlRewriteIndexPage"/>
+        <comment userInput="Adding the comment to replace action for preserving backward compatibility" stepKey="waitForUrlRewritePage"/>
 
         <!--Verify Updated Category UrlKey-->
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>

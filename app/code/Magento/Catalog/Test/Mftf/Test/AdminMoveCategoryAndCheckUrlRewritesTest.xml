@@ -54,9 +54,8 @@
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage2"/>
         <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#" />
 
-        <!--Open Url Rewrite Page-->
-        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteIndexPage"/>
-        <waitForPageLoad stepKey="waitForUrlRewritePage"/>
+        <actionGroup ref="AdminOpenUrlRewritesGridPageActionGroup" stepKey="openUrlRewriteIndexPage"/>
+        <comment userInput="Adding the comment to replace action for preserving backward compatibility" stepKey="waitForUrlRewritePage"/>
 
         <!--Search third level category Redirect Path, Target Path and Redirect Type-->
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
@@ -84,9 +83,8 @@
         <waitForPageLoad stepKey="waitForPageToLoad3"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You moved the category." stepKey="seeSuccessMoveMessage"/>
 
-        <!--Open Url Rewrite page  -->
-        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteIndexPage1"/>
-        <waitForPageLoad stepKey="waitForUrlRewritePage1"/>
+        <actionGroup ref="AdminOpenUrlRewritesGridPageActionGroup" stepKey="openUrlRewriteIndexPage1"/>
+        <comment userInput="Adding the comment to replace action for preserving backward compatibility" stepKey="waitForUrlRewritePage1"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters1"/>
         <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="{{FirstLevelSubCat.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" stepKey="fillCategoryUrlKey1"/>
         <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickOrderApplyFilters1"/>
