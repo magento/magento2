@@ -78,14 +78,15 @@ class SalesEventOrderToQuoteObserverTest extends TestCase
         $this->observerMock = $this->createMock(Observer::class);
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOrder', 'getQuote'])
+            ->addMethods(['getOrder', 'getQuote'])
             ->getMock();
         $this->orderMock = $this->getMockBuilder(Order::class)
-            ->setMethods(['getReordered', 'getStore', 'getGiftMessageId'])
+            ->addMethods(['getReordered', 'getGiftMessageId'])
+            ->onlyMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->setMethods(['setGiftMessageId'])
+            ->addMethods(['setGiftMessageId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->storeMock = $this->createMock(Store::class);
@@ -164,7 +165,7 @@ class SalesEventOrderToQuoteObserverTest extends TestCase
      *
      * @return array
      */
-    public function giftMessageDataProvider(): array
+    public static function giftMessageDataProvider(): array
     {
         return [
             [false, true],
