@@ -54,14 +54,13 @@ class AddressSnapshotTest extends TestCase
 
         $dataObjectMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods([
                 'getId',
-                'getData',
-                'getDataByKey',
                 'getIsDefaultBilling',
                 'getIsDefaultShipping',
                 'getIsCustomerSaveTransaction',
             ])
+            ->onlyMethods(['getData', 'getDataByKey'])
             ->getMock();
 
         $dataObjectMock->expects($this->any())
@@ -97,7 +96,7 @@ class AddressSnapshotTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderIsModified()
+    public static function dataProviderIsModified()
     {
         return [
             [false, 1, 1, true],
@@ -111,10 +110,8 @@ class AddressSnapshotTest extends TestCase
     {
         $dataObjectMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getId',
-                'getData',
-            ])
+            ->addMethods(['getId'])
+            ->onlyMethods(['getData'])
             ->getMock();
 
         $dataObjectMock->expects($this->any())

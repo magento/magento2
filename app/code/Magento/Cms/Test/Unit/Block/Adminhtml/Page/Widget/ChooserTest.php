@@ -90,14 +90,14 @@ class ChooserTest extends TestCase
             ->getMockForAbstractClass();
         $this->escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'escapeHtml',
                 ]
             )
             ->getMock();
         $this->pageFactoryMock = $this->getMockBuilder(PageFactory::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'create',
                 ]
@@ -106,17 +106,17 @@ class ChooserTest extends TestCase
             ->getMock();
         $this->elementMock = $this->getMockBuilder(AbstractElement::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['getValue'])
+            ->onlyMethods(
                 [
                     'getId',
-                    'getValue',
                     'setData',
                 ]
             )
             ->getMock();
         $this->cmsPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getTitle',
                     'load',
@@ -126,20 +126,21 @@ class ChooserTest extends TestCase
             ->getMock();
         $this->chooserMock = $this->getMockBuilder(BlockInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(['toHtml'])
+            ->addMethods(
                 [
                     'setElement',
                     'setConfig',
                     'setFieldsetId',
                     'setSourceUrl',
                     'setUniqId',
-                    'setLabel',
-                    'toHtml',
+                    'setLabel'
                 ]
             )
             ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
         $this->context = $objectManager->getObject(
             Context::class,
             [
@@ -256,7 +257,7 @@ class ChooserTest extends TestCase
     /**
      * @return array
      */
-    public function prepareElementHtmlDataProvider()
+    public static function prepareElementHtmlDataProvider()
     {
         return [
             'elementValue NOT EMPTY, modelBlockId NOT EMPTY' => [
