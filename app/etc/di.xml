@@ -93,6 +93,7 @@
     <preference for="Magento\Framework\Stdlib\Cookie\CookieScopeInterface" type="Magento\Framework\Stdlib\Cookie\CookieScope" />
     <preference for="Magento\Framework\Stdlib\Cookie\CookieReaderInterface" type="Magento\Framework\Stdlib\Cookie\PhpCookieReader" />
     <preference for="Magento\Framework\Stdlib\CookieManagerInterface" type="Magento\Framework\Stdlib\Cookie\PhpCookieManager" />
+    <preference for="Magento\Framework\Stdlib\CookieDisablerInterface" type="Magento\Framework\Stdlib\Cookie\PhpCookieDisabler" />
     <preference for="Magento\Framework\TranslateInterface" type="Magento\Framework\Translate" />
     <preference for="Magento\Framework\Config\ScopeListInterface" type="interceptionConfigScope" />
     <preference for="Magento\Framework\View\Design\Theme\Label\ListInterface" type="Magento\Theme\Model\ResourceModel\Theme\Collection" />
