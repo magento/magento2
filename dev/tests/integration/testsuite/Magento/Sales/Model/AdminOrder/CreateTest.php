@@ -986,7 +986,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     {
         $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Data\Customer::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getId',
                     'getGroupId',

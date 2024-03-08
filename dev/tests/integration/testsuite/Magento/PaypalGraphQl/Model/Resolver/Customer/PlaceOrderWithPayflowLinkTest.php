@@ -70,11 +70,11 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
             ->getMock();
         $this->gateway = $this->getMockBuilder(Gateway::class)
             ->disableOriginalConstructor()
-            ->setMethods(['postRequest'])
+            ->onlyMethods(['postRequest'])
             ->getMock();
 
         $requestFactory = $this->getMockBuilder(RequestFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

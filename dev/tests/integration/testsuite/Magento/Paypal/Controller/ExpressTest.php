@@ -196,7 +196,7 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_objectManager->addSharedInstance($apiFactoryMock, ApiFactory::class);
 
         $sessionMock = $this->getMockBuilder(GenericSession::class)
-            ->setMethods(['getExpressCheckoutToken'])
+            ->onlyMethods(['getExpressCheckoutToken'])
             ->setConstructorArgs(
                 [
                     $this->_objectManager->get(\Magento\Framework\App\Request\Http::class),

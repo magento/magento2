@@ -53,7 +53,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
         $this->quoteSession = $this->getMockBuilder(QuoteSession::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId', 'getStore', 'getStoreId', 'getQuote'])
+            ->onlyMethods(['getCustomerId', 'getStore', 'getStoreId', 'getQuote'])
             ->getMock();
 
         $this->block = $this->objectManager->create(

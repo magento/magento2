@@ -29,7 +29,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         /** @var \PHPUnit\Framework\MockObject\MockObject $blockMock */
 //        $blockMock = $this->getMockBuilder(
 //            \Magento\Framework\View\Element\BlockInterface::class
-//        )->disableOriginalConstructor()->setMethods(
+//        )->disableOriginalConstructor()->onlyMethods(
 //            ['setTitle', 'toHtml']
 //        )->getMock();
         $blockMock = $this->getMockBuilder(

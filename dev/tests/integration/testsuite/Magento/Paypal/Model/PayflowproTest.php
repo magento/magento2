@@ -43,10 +43,10 @@ class PayflowproTest extends TestCase
     {
         $this->_objectManager = Bootstrap::getObjectManager();
         $httpClientFactoryMock = $this->getMockBuilder(LaminasClientFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_httpClientMock = $this->getMockBuilder(LaminasClient::class)->setMethods([])
+        $this->_httpClientMock = $this->getMockBuilder(LaminasClient::class)->onlyMethods([])
             ->disableOriginalConstructor()->getMock();
         $this->_httpClientMock->expects($this->any())->method('setUri')->willReturnSelf();
         $this->_httpClientMock->expects($this->any())->method('setOptions')->willReturnSelf();

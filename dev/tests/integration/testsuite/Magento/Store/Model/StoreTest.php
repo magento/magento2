@@ -74,7 +74,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         ];
 
         return $this->getMockBuilder(\Magento\Store\Model\Store::class)
-            ->setMethods(['getUrl'])
+            ->onlyMethods(['getUrl'])
             ->setConstructorArgs($this->modelParams)
             ->getMock();
     }

@@ -48,7 +48,7 @@ class MethodsTest extends \PHPUnit\Framework\TestCase
         if ($code == \Magento\Payment\Model\Method\Substitution::CODE) {
             $paymentInfo = $this->getMockBuilder(
                 \Magento\Payment\Model\Info::class
-            )->disableOriginalConstructor()->setMethods(
+            )->disableOriginalConstructor()->onlyMethods(
                 []
             )->getMock();
             $paymentInfo->expects(

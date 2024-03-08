@@ -71,7 +71,7 @@ class AccountTest extends TestCase
 
         $this->session = $this->getMockBuilder(SessionQuote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId','getQuote'])
+            ->onlyMethods(['getCustomerId','getQuote'])
             ->getMock();
         $this->session->method('getQuote')
             ->willReturn($quote);
@@ -177,7 +177,7 @@ class AccountTest extends TestCase
 
         $this->session = $this->getMockBuilder(SessionQuote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId', 'getQuote'])
+            ->onlyMethods(['getCustomerId', 'getQuote'])
             ->getMock();
         $this->session->method('getQuote')
             ->willReturn($quote);
@@ -240,7 +240,7 @@ class AccountTest extends TestCase
 
         $this->session = $this->getMockBuilder(SessionQuote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId', 'getQuote'])
+            ->onlyMethods(['getCustomerId', 'getQuote'])
             ->getMock();
         $this->session->method('getQuote')
             ->willReturn($quote);

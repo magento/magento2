@@ -212,7 +212,7 @@ class PayflowproVoidTest extends TestCase
 
         /** @var Payflowpro|MockObject $instance */
         $instance = $this->getMockBuilder(Payflowpro::class)
-            ->setMethods(['setStore', 'getInfoInstance'])
+            ->onlyMethods(['setStore', 'getInfoInstance'])
             ->setConstructorArgs(
                 [
                     $this->objectManager->get(Context::class),
