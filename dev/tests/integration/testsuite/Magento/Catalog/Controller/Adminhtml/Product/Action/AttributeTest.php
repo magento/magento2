@@ -187,7 +187,7 @@ class AttributeTest extends AbstractBackendController
      *
      * @return array
      */
-    public function validateActionDataProvider()
+    public static function validateActionDataProvider()
     {
         return [
             [
@@ -210,7 +210,7 @@ class AttributeTest extends AbstractBackendController
      *
      * @return array
      */
-    public function saveActionVisibilityAttrDataProvider()
+    public static function saveActionVisibilityAttrDataProvider()
     {
         return [
             ['arguments' => ['visibility' => Visibility::VISIBILITY_BOTH]],

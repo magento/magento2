@@ -124,7 +124,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function storeIdDataProvider(): array
+    public static function storeIdDataProvider(): array
     {
         return [
             [1, 'store_id = ?'],

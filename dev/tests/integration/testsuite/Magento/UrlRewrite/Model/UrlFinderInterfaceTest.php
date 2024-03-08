@@ -47,7 +47,7 @@ class UrlFinderInterfaceTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function findOneDataProvider(): array
+    public static function findOneDataProvider(): array
     {
         return [
             ['string', 'test_page1', 0],

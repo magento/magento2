@@ -233,7 +233,7 @@ class CheckoutTest extends TestCase
     /**
      * @return array
      */
-    public function placeGuestQuoteDataProvider(): array
+    public static function placeGuestQuoteDataProvider(): array
     {
         return [
             'case with account email absent' => [null, 'paypal_account@email.com'],

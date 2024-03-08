@@ -65,14 +65,14 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getTestCases()
+    public static function getTestCases()
     {
         return [
             '
-                #1 Testing product price for dynamic bundle 
+                #1 Testing product price for dynamic bundle
                 with one required option and tier price
             ' => [
-                'strategy' => $this->getBundleConfiguration1(),
+                'strategy' => self::getBundleConfiguration1(),
                 'expectedResults' => [
                     // 0.5 * 10
                     'minimalPrice' => 5,
@@ -82,10 +82,10 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #2 Testing product price for dynamic bundle 
+                #2 Testing product price for dynamic bundle
                 with one non required option and tier price
             ' => [
-                'strategy' => $this->getBundleConfiguration2(),
+                'strategy' => self::getBundleConfiguration2(),
                 'expectedResults' => [
                     // 0.5 * 2 * 10
                     'minimalPrice' => 10,
@@ -95,10 +95,10 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #3 Testing product price for dynamic bundle 
+                #3 Testing product price for dynamic bundle
                 with one required checkbox type option and tier price
             ' => [
-                'strategy' => $this->getBundleConfiguration3(),
+                'strategy' => self::getBundleConfiguration3(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
@@ -108,10 +108,10 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #4 Testing product price for dynamic bundle 
+                #4 Testing product price for dynamic bundle
                 with one required multi type option and tier price
             ' => [
-                'strategy' => $this->getBundleConfiguration4(),
+                'strategy' => $self::getBundleConfiguration4(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
@@ -121,10 +121,10 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #5 Testing product price for dynamic bundle 
+                #5 Testing product price for dynamic bundle
                 with one required radio type option and tier price
             ' => [
-                'strategy' => $this->getBundleConfiguration5(),
+                'strategy' => self::getBundleConfiguration5(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
@@ -135,10 +135,10 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #6 Testing product price for dynamic bundle 
+                #6 Testing product price for dynamic bundle
                 with two required options and tier price
             ' => [
-                'strategy' => $this->getBundleConfiguration6(),
+                'strategy' => self::getBundleConfiguration6(),
                 'expectedResults' => [
                     // 0.5 * (1 * 10 + 1 * 10)
                     'minimalPrice' => 10,
@@ -148,10 +148,10 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #7 Testing product price for dynamic bundle 
+                #7 Testing product price for dynamic bundle
                 with one required option, one non required option and tier price
             ' => [
-                'strategy' => $this->getBundleConfiguration7(),
+                'strategy' => self::getBundleConfiguration7(),
                 'expectedResults' => [
                     // 0.5 * (1 * 10)
                     'minimalPrice' => 5,
@@ -161,10 +161,10 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #8 Testing product price for dynamic bundle 
+                #8 Testing product price for dynamic bundle
                 with two non required options and tier price
             ' => [
-                'strategy' => $this->getBundleConfiguration8(),
+                'strategy' => self::getBundleConfiguration8(),
                 'expectedResults' => [
                     // 0.5 * (1 * 10)
                     'minimalPrice' => 5,
@@ -174,10 +174,10 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #9 Testing product price for dynamic bundle 
+                #9 Testing product price for dynamic bundle
                 with tier price and with simple with tier price
             ' => [
-                'strategy' => $this->getBundleConfiguration9(),
+                'strategy' => self::getBundleConfiguration9(),
                 'expectedResults' => [
                     // 0.5 * 1 * 2.5
                     'minimalPrice' => 1.25,
@@ -356,7 +356,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
      * Dynamic bundle with one required radio type option and tier price
      * @return array
      */
-    private function getBundleConfiguration5()
+    private static function getBundleConfiguration5()
     {
         $optionsData = [
             [
@@ -573,7 +573,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
      * Dynamic bundle with tier price and with simple with tier price
      * @return array
      */
-    private function getBundleConfiguration9()
+    private static function getBundleConfiguration9()
     {
         $optionsData = [
             [

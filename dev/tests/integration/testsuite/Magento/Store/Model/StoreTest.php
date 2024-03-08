@@ -98,7 +98,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function loadDataProvider()
+    public static function loadDataProvider()
     {
         return [[1, 1], ['default', 1], ['nostore', null]];
     }
@@ -154,7 +154,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getBaseUrlDataProvider()
+    public static function getBaseUrlDataProvider()
     {
         return [
             [UrlInterface::URL_TYPE_WEB, false, false, 'http://localhost/'],
@@ -434,7 +434,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function saveValidationDataProvider()
+    public static function saveValidationDataProvider()
     {
         return [
             'empty store name' => [['name' => '']],
@@ -482,7 +482,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      * @return array
      * @see self::testIsUseStoreInUrl;
      */
-    public function isUseStoreInUrlDataProvider()
+    public static function isUseStoreInUrlDataProvider()
     {
         return [
             [true, null, false, true],
@@ -516,7 +516,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $model->isCurrentlySecure());
     }
 
-    public function isCurrentlySecureDataProvider()
+    public static function isCurrentlySecureDataProvider()
     {
         return [
             [true, ['HTTPS' => 'on']],

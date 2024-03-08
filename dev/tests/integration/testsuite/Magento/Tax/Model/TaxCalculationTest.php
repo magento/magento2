@@ -828,19 +828,19 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedTaxDetails, $this->convertObjectToArray($taxDetails));
     }
 
-    public function calculateTaxTotalBasedDataProvider()
+    public static function calculateTaxTotalBasedDataProvider()
     {
         return array_merge(
-            $this->calculateTaxNoTaxInclDataProvider(),
-            $this->calculateTaxTaxInclDataProvider(),
-            $this->calculateTaxRoundingDataProvider()
+            self::calculateTaxNoTaxInclDataProvider(),
+            self::calculateTaxTaxInclDataProvider(),
+            self::calculateTaxRoundingDataProvider()
         );
     }
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function calculateTaxNoTaxInclDataProvider()
+    public static function calculateTaxNoTaxInclDataProvider()
     {
         $prodNoTaxInclBase = [
             'quote_details' => [
@@ -983,7 +983,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function calculateTaxTaxInclDataProvider()
+    public static function calculateTaxTaxInclDataProvider()
     {
         $productTaxInclBase = [
             'quote_details' => [
@@ -1132,7 +1132,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function calculateTaxRoundingDataProvider()
+    public static function calculateTaxRoundingDataProvider()
     {
         $prodRoundingNoTaxInclBase = [
             'quote_details' => [
@@ -2157,9 +2157,9 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    protected function setupMultiRuleQuote()
+    protected static function setupMultiRuleQuote()
     {
-        $baseQuote = $this->getBaseQuoteData();
+        $baseQuote = self::getBaseQuoteData();
 
         $baseQuote['items'][] = [
             'code' => 'sku_1',
@@ -2198,7 +2198,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function getBaseQuoteResult()
+    protected static function getBaseQuoteResult()
     {
         $result = [
             'subtotal' => 183.75,
@@ -2394,11 +2394,11 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function multiRulesRowBasedDataProvider()
+    public static function multiRulesRowBasedDataProvider()
     {
-        $quoteDetails = $this->setupMultiRuleQuote();
+        $quoteDetails = self::setupMultiRuleQuote();
 
-        $results = $this->getBaseQuoteResult();
+        $results = self::getBaseQuoteResult();
 
         return [
             'multi rules, multi rows' => [
@@ -2431,11 +2431,11 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function multiRulesTotalBasedDataProvider()
+    public static function multiRulesTotalBasedDataProvider()
     {
-        $quoteDetails = $this->setupMultiRuleQuote();
+        $quoteDetails = self::setupMultiRuleQuote();
 
-        $results = $this->getBaseQuoteResult();
+        $results = self::getBaseQuoteResult();
 
         //Differences from the row base result
         $results['subtotal'] = 183.76;
@@ -2478,11 +2478,11 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function multiRulesUnitBasedDataProvider()
+    public static function multiRulesUnitBasedDataProvider()
     {
-        $quoteDetails = $this->setupMultiRuleQuote();
+        $quoteDetails = self::setupMultiRuleQuote();
 
-        $results = $this->getBaseQuoteResult();
+        $results = self::getBaseQuoteResult();
 
         //Differences from the row base result
         $results['subtotal'] = 183.79;
@@ -2646,7 +2646,7 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    private function getBaseQuoteData()
+    private static function getBaseQuoteData()
     {
         $baseQuote = [
             'billing_address' => [

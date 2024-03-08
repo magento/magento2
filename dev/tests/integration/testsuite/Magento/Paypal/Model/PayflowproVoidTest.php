@@ -108,7 +108,7 @@ class PayflowproVoidTest extends TestCase
     /**
      * @return array
      */
-    public function orderCancelSuccessDataProvider(): array
+    public static function orderCancelSuccessDataProvider(): array
     {
         return [
             'Authorization has expired' => [
