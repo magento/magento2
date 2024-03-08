@@ -105,7 +105,9 @@ class DataTest extends TestCase
         }
         $item
             ->method('setPeriod')
-            ->withConsecutive(...$withArgs);
+            ->willReturnCallback(function (...$withArgs) {
+                return null;
+            });
 
         $this->data->prepareIntervalsCollection($collection, $from, $to, $period);
     }
@@ -113,7 +115,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function intervalsDataProvider(): array
+    public static function intervalsDataProvider(): array
     {
         return [
             [
