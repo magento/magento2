@@ -66,12 +66,10 @@ class UserTest extends TestCase
     {
         $this->userMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
             ->getMock();
 
         $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getConnection'])
             ->getMock();
 
         $this->roleFactoryMock = $this->getMockBuilder(RoleFactory::class)
@@ -81,7 +79,6 @@ class UserTest extends TestCase
 
         $this->roleMock = $this->getMockBuilder(Role::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['load', 'getId', 'getRoleUsers'])
             ->getMock();
 
         $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
@@ -90,7 +87,6 @@ class UserTest extends TestCase
 
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['from', 'where', 'joinLeft', 'order', 'limit'])
             ->getMock();
 
         $this->dbAdapterMock = $this->getMockBuilder(AdapterInterface::class)

@@ -187,7 +187,7 @@ class ElasticsearchTest extends TestCase
     /**
      * Get options data provider.
      */
-    public function getOptionsDataProvider()
+    public static function getOptionsDataProvider()
     {
         return [
             [
