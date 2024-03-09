@@ -14,8 +14,8 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -83,6 +83,7 @@ class FileTest extends TestCase
             ]
         ];
         $objectManager->prepareObjectManager($objects);
+
         $this->factoryMock = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
             ->getMock();

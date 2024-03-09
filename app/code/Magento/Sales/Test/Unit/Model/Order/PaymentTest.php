@@ -448,10 +448,13 @@ class PaymentTest extends TestCase
             ->willReturn(AbstractMethod::ACTION_AUTHORIZE);
         $this->paymentMethod->expects($this->any())
             ->method('getConfigData')
-            ->withConsecutive(
-                ['order_status'],
-                ['payment_action']
-            )->willReturn($newOrderStatus);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($newOrderStatus) {
+                    if ($arg1 == 'order_status' || $arg2 == 'payment_action') {
+                        return $newOrderStatus;
+                    }
+                }
+            );
         $this->paymentMethod->expects($this->once())->method('isInitializeNeeded')->willReturn(true);
         $this->paymentMethod->expects($this->once())->method('initialize');
         $this->mockGetDefaultStatus(Order::STATE_NEW, $newOrderStatus, ['first', 'second']);
@@ -470,11 +473,13 @@ class PaymentTest extends TestCase
         $this->order->expects($this->any())->method('getCustomerNote')->willReturn($customerNote);
         $this->order->expects($this->any())
             ->method('addStatusHistoryComment')
-            ->withConsecutive(
-                [$customerNote],
-                [__('Authorized amount of %1', $sum)]
-            )
-            ->willReturn($statusHistory);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($customerNote,$statusHistory,$sum) {
+                    if ($arg1 == $customerNote || $arg2 == __('Authorized amount of %1', $sum)) {
+                        return $statusHistory;
+                    }
+                }
+            );
         $this->order->expects($this->any())
             ->method('setIsCustomerNotified')
             ->with(true)
@@ -518,9 +523,13 @@ class PaymentTest extends TestCase
             ->willReturnSelf();
         $this->order->expects($this->any())
             ->method('setStatus')
-            ->withConsecutive(
-                [Order::STATUS_FRAUD]
-            )->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == Order::STATUS_FRAUD) {
+                        return $this->order;
+                    }
+                }
+            );
         $this->order->expects($this->atLeastOnce())
             ->method('getStatus')
             ->willReturn(Order::STATUS_FRAUD);

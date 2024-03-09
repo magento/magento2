@@ -17,6 +17,7 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Rule\Model\Action\Collection;
+use Magento\SalesRule\Api\Data\DiscountDataInterfaceFactory;
 use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
 use Magento\SalesRule\Model\Quote\ChildrenValidationLocator;
 use Magento\SalesRule\Model\Rule;
@@ -25,6 +26,7 @@ use Magento\SalesRule\Model\Rule\Action\Discount\Data;
 use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 use Magento\SalesRule\Model\Rule\Action\Discount\DiscountInterface;
 use Magento\SalesRule\Model\RulesApplier;
+use Magento\SalesRule\Model\SelectRuleCoupon;
 use Magento\SalesRule\Model\Utility;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -65,6 +67,21 @@ class RulesApplierTest extends TestCase
     protected $childrenValidationLocator;
 
     /**
+     * RuleDiscountInterfaceFactory|MockObject
+     */
+    protected $ruleDiscountInterfaceFactoryMock;
+
+    /**
+     * @var DiscountDataInterfaceFactory|MockObject
+     */
+    protected $discountDataInterfaceFactoryMock;
+
+    /**
+     * @var SelectRuleCoupon|MockObject
+     */
+    protected $selectRuleCouponMock;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -93,12 +110,28 @@ class RulesApplierTest extends TestCase
             ChildrenValidationLocator::class,
             ['isChildrenValidationRequired']
         );
+        $this->ruleDiscountInterfaceFactoryMock = $this->getMockBuilder(RuleDiscountInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMockForAbstractClass();
+        $this->discountDataInterfaceFactoryMock = $this->getMockBuilder(DiscountDataInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMockForAbstractClass();
+        $this->selectRuleCouponMock = $this->getMockBuilder(SelectRuleCoupon::class)
+                                        ->disableOriginalConstructor()
+                                        ->onlyMethods(['execute'])
+                                        ->getMock();
+
         $this->rulesApplier = new RulesApplier(
             $this->calculatorFactory,
             $this->eventManager,
             $this->validatorUtility,
             $this->childrenValidationLocator,
-            $this->discountFactory
+            $this->discountFactory,
+            $this->ruleDiscountInterfaceFactoryMock,
+            $this->discountDataInterfaceFactoryMock,
+            $this->selectRuleCouponMock
         );
     }
 
@@ -116,7 +149,7 @@ class RulesApplierTest extends TestCase
         $positivePrice = 1;
         $skipValidation = false;
         $item = $this->getPreparedItem();
-        $couponCode = 111;
+        $couponCode = [111];
 
         $ruleId = 1;
         $appliedRuleIds = [$ruleId => $ruleId];

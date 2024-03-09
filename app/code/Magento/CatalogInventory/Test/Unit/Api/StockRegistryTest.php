@@ -84,7 +84,7 @@ class StockRegistryTest extends TestCase
         $this->productFactory = $this->createPartialMock(ProductFactory::class, ['create']);
         $this->productFactory->expects($this->any())
             ->method('create')
-            ->willReturn(self::PRODUCT_ID);
+            ->willReturn($this->product);
 
         $this->stock = $this->getMockForAbstractClass(
             StockInterface::class,
@@ -159,7 +159,7 @@ class StockRegistryTest extends TestCase
     {
         $this->assertEquals(
             $this->stockItem,
-            $this->stockRegistry->getStockItemBySku(self::PRODUCT_ID, self::WEBSITE_ID)
+            $this->stockRegistry->getStockItemBySku(self::PRODUCT_SKU, self::WEBSITE_ID)
         );
     }
 
