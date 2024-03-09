@@ -22,6 +22,8 @@ use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Helper\Reorder as ReorderHelper;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\OrderFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ItemCollection;
 use Psr\Log\LoggerInterface;
 
@@ -105,6 +107,11 @@ class Reorder
     private $orderInfoBuyRequestGetter;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param OrderFactory $orderFactory
      * @param CustomerCartResolver $customerCartProvider
      * @param GuestCartResolver $guestCartResolver
@@ -113,6 +120,7 @@ class Reorder
      * @param LoggerInterface $logger
      * @param ProductCollectionFactory $productCollectionFactory
      * @param OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter
+     * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
         OrderFactory $orderFactory,
@@ -122,7 +130,8 @@ class Reorder
         ReorderHelper $reorderHelper,
         LoggerInterface $logger,
         ProductCollectionFactory $productCollectionFactory,
-        OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter
+        OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter,
+        ?StoreManagerInterface   $storeManager = null
     ) {
         $this->orderFactory = $orderFactory;
         $this->cartRepository = $cartRepository;
@@ -132,6 +141,8 @@ class Reorder
         $this->guestCartResolver = $guestCartResolver;
         $this->productCollectionFactory = $productCollectionFactory;
         $this->orderInfoBuyRequestGetter = $orderInfoBuyRequestGetter;
+        $this->storeManager = $storeManager
+            ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -164,6 +175,7 @@ class Reorder
             return $this->prepareOutput($cart);
         }
 
+        $storeId = (string) $this->storeManager->getStore()->getId();
         $this->addItemsToCart($cart, $order->getItemsCollection(), $storeId);
 
         try {
