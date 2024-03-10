@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Block\Product\Widget;
 
+use Magento\Framework\App\Http\Context as HttpContext;
+
 /**
  * New products widget
  */
@@ -13,29 +15,29 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
     /**
      * Display products type - all products
      */
-    const DISPLAY_TYPE_ALL_PRODUCTS = 'all_products';
+    public const DISPLAY_TYPE_ALL_PRODUCTS = 'all_products';
 
     /**
      * Display products type - new products
      */
-    const DISPLAY_TYPE_NEW_PRODUCTS = 'new_products';
+    public const DISPLAY_TYPE_NEW_PRODUCTS = 'new_products';
 
     /**
      * Default value whether show pager or not
      */
-    const DEFAULT_SHOW_PAGER = false;
+    public const DEFAULT_SHOW_PAGER = false;
 
     /**
      * Default value for products per page
      */
-    const DEFAULT_PRODUCTS_PER_PAGE = 5;
+    public const DEFAULT_PRODUCTS_PER_PAGE = 5;
 
     /**
      * Name of request parameter for page number value
      *
      * @deprecated
      */
-    const PAGE_VAR_NAME = 'np';
+    public const PAGE_VAR_NAME = 'np';
 
     /**
      * Instance of pager block
@@ -134,13 +136,15 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      */
     public function getCacheKeyInfo()
     {
+        $store = $this->_storeManager->getStore();
         return array_merge(
             parent::getCacheKeyInfo(),
             [
                 $this->getDisplayType(),
                 $this->getProductsPerPage(),
                 (int) $this->getRequest()->getParam($this->getData('page_var_name'), 1),
-                $this->serializer->serialize($this->getRequest()->getParams())
+                $this->serializer->serialize($this->getRequest()->getParams()),
+                $this->httpContext->getValue(HttpContext::CONTEXT_CURRENCY) ?: $store->getDefaultCurrency()->getCode()
             ]
         );
     }
@@ -268,7 +272,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
             ? $arguments['display_minimal_price']
             : true;
 
-            /** @var \Magento\Framework\Pricing\Render $priceRender */
+        /** @var \Magento\Framework\Pricing\Render $priceRender */
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');
 
         $price = '';
