@@ -130,8 +130,10 @@ class CategoryTest extends TestCase
         $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->request
             ->method('getParam')
-            ->withConsecutive(['cid'], ['store_id'])
-            ->willReturnOnConsecutiveCalls(1, null);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['cid'] => 1,
+                ['store_id'] => null
+            });
 
         $this->httpContext = $this->createMock(Context::class);
         $this->catalogHelper = $this->createMock(Data::class);

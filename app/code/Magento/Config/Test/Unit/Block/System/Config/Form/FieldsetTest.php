@@ -96,12 +96,12 @@ class FieldsetTest extends TestCase
     protected function setUp(): void
     {
         $this->authSessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods(['getUser'])
+            ->addMethods(['getUser'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->userMock = $this->getMockBuilder(User::class)
-            ->setMethods(['getExtra'])
+            ->addMethods(['getExtra'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -200,7 +200,8 @@ class FieldsetTest extends TestCase
         $this->userMock->expects($this->any())->method('getExtra')->willReturn($extra);
         $this->_helperMock->expects($this->any())->method('getScript')->willReturnArgument(0);
         $fieldMock = $this->getMockBuilder(Text::class)
-            ->setMethods(['getId', 'getTooltip', 'toHtml', 'getHtmlId', 'getIsNested', 'getExpanded'])
+            ->addMethods(['getTooltip', 'getIsNested', 'getExpanded'])
+            ->onlyMethods(['getId', 'toHtml', 'getHtmlId'])
             ->disableOriginalConstructor()
             ->getMock();
         $fieldMock->expects($this->any())->method('getId')->willReturn('test_field_id');
@@ -209,7 +210,8 @@ class FieldsetTest extends TestCase
         $fieldMock->expects($this->any())->method('getHtmlId')->willReturn('test_field_HTML_id');
 
         $fieldSetMock = $this->getMockBuilder(\Magento\Framework\Data\Form\Element\Fieldset::class)
-            ->setMethods(['getId', 'getTooltip', 'toHtml', 'getHtmlId', 'getIsNested', 'getExpanded'])
+            ->addMethods(['getTooltip', 'getIsNested', 'getExpanded'])
+            ->onlyMethods(['getId', 'toHtml', 'getHtmlId'])
             ->disableOriginalConstructor()
             ->getMock();
         $fieldSetMock->expects($this->any())->method('getId')->willReturn('test_fieldset_id');
