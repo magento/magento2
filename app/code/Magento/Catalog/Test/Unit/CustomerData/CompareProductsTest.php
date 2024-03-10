@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\CustomerData;
@@ -17,11 +16,15 @@ use Magento\Catalog\Model\Product\Url;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CompareProductsTest extends TestCase
 {
     /**
@@ -65,6 +68,11 @@ class CompareProductsTest extends TestCase
     private $websiteMock;
 
     /**
+     * @var UrlInterface|MockObject
+     */
+    private $urlBuilder;
+
+    /**
      * @var array
      */
     private $productValueMap = [
@@ -88,6 +96,9 @@ class CompareProductsTest extends TestCase
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->storeManagerMock = $this->getMockBuilder(
             StoreManagerInterface::class
@@ -97,7 +108,7 @@ class CompareProductsTest extends TestCase
         $this->websiteMock = $this->getMockBuilder(
             Website::class
         )->onlyMethods(
-            ['getId',]
+            ['getId']
         )->disableOriginalConstructor()
             ->getMock();
 
@@ -110,8 +121,8 @@ class CompareProductsTest extends TestCase
                 'productUrl' => $this->productUrlMock,
                 'outputHelper' => $this->outputHelperMock,
                 'scopeConfig'  => $this->scopeConfigMock,
-                'storeManager' => $this->storeManagerMock
-
+                'storeManager' => $this->storeManagerMock,
+                'urlBuilder' => $this->urlBuilder
             ]
         );
     }
@@ -219,9 +230,10 @@ class CompareProductsTest extends TestCase
             ->method('getItemCollection')
             ->willReturn($itemCollectionMock);
 
-        $this->helperMock->expects($this->once())
-            ->method('getListUrl')
+        $this->urlBuilder->expects($this->once())
+            ->method('getUrl')
             ->willReturn('http://list.url');
+
         $this->storeManagerMock->expects($this->any())->method('getWebsite')->willReturn($this->websiteMock);
         $this->websiteMock->expects($this->any())->method('getId')->willReturn(1);
         $this->assertEquals(
@@ -269,8 +281,8 @@ class CompareProductsTest extends TestCase
         $this->helperMock->expects($this->never())
             ->method('getItemCollection');
 
-        $this->helperMock->expects($this->once())
-            ->method('getListUrl')
+        $this->urlBuilder->expects($this->once())
+            ->method('getUrl')
             ->willReturn('http://list.url');
 
         $this->storeManagerMock->expects($this->any())->method('getWebsite')->willReturn($this->websiteMock);
@@ -314,8 +326,8 @@ class CompareProductsTest extends TestCase
             ->method('getItemCollection')
             ->willReturn($itemCollectionMock);
 
-        $this->helperMock->expects($this->once())
-            ->method('getListUrl')
+        $this->urlBuilder->expects($this->once())
+            ->method('getUrl')
             ->willReturn('http://list.url');
 
         $this->assertEquals(

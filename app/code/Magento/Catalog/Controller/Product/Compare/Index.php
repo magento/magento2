@@ -6,8 +6,8 @@
  */
 namespace Magento\Catalog\Controller\Product\Compare;
 
-use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\View\Result\PageFactory;
 
@@ -81,6 +81,8 @@ class Index extends \Magento\Catalog\Controller\Product\Compare implements HttpG
             $this->_catalogSession->setBeforeCompareUrl(
                 $this->urlDecoder->decode($beforeUrl)
             );
+        } else {
+            $this->_catalogSession->unsBeforeCompareUrl();
         }
         return $this->resultPageFactory->create();
     }
