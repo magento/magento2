@@ -6,14 +6,14 @@
 
 namespace Magento\Elasticsearch\Model\Adapter\BatchDataMapper;
 
+use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider;
+use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Model\Entity\Attribute;
+use Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\Document\Builder;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
-use Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldType\Date as DateFieldType;
-use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface;
-use Magento\Eav\Api\Data\AttributeOptionInterface;
 
 /**
  * Map product index data to search engine metadata
@@ -297,7 +297,7 @@ class ProductDataMapper implements BatchDataMapperInterface
         if (in_array($attribute->getFrontendInput(), $this->filterableAttributeTypes)) {
             $attributeValues = array_map(
                 function (string $valueId) {
-                    return (int)$valueId;
+                    return is_numeric($valueId) ? (int)$valueId : $valueId;
                 },
                 $attributeValues
             );
