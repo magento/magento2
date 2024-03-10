@@ -230,7 +230,7 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('value from the file', $config['system']['default']['web']['test']['test_value_3']);
         $this->assertEquals('GB', $config['system']['default']['general']['country']['default']);
         $this->assertEquals(
-            'HK,IE,MO,PA,GB',
+            'BS,HK,IE,LB,MO,PA,AE,GB',
             $config['system']['default']['general']['country']['optional_zip_countries']
         );
     }
