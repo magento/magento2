@@ -66,7 +66,7 @@
                 <storefront_checkout_index_index>
                     <scripts>
                         <inline>0</inline>
-                        <event-handler>1</event-handler>
+                        <event_handlers>1</event_handlers>
                     </scripts>
                 </storefront_checkout_index_index>
             </policies>
