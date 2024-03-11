@@ -6,6 +6,8 @@
 
 namespace Magento\Paypal\Model;
 
+use Magento\Csp\Helper\CspNonceProvider;
+use Magento\Framework\App\ObjectManager;
 use Magento\Payment\Helper\Formatter;
 
 /**
@@ -600,12 +602,18 @@ class Config extends AbstractConfig
     protected $_certFactory;
 
     /**
+     * @var CspNonceProvider
+     */
+    protected $cspNonceProvider;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Payment\Model\Source\CctypeFactory $cctypeFactory
      * @param CertFactory $certFactory
      * @param array $params
+     * @param CspNonceProvider|null $cspNonceProvider
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -613,7 +621,8 @@ class Config extends AbstractConfig
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Payment\Model\Source\CctypeFactory $cctypeFactory,
         \Magento\Paypal\Model\CertFactory $certFactory,
-        $params = []
+        $params = [],
+        CspNonceProvider $cspNonceProvider = null
     ) {
         parent::__construct($scopeConfig);
         $this->directoryHelper = $directoryHelper;
@@ -628,6 +637,8 @@ class Config extends AbstractConfig
                 $this->setStoreId($storeId);
             }
         }
+
+        $this->cspNonceProvider = $cspNonceProvider ?: ObjectManager::getInstance()->get(CspNonceProvider::class);
     }
 
     /**
@@ -1844,5 +1855,16 @@ class Config extends AbstractConfig
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->_storeId
         );
+    }
+
+    /**
+     * Get a cps nonce for the current request
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getCspNonce(): string
+    {
+        return $this->cspNonceProvider->generateNonce();
     }
 }
