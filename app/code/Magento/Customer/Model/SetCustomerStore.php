@@ -39,16 +39,17 @@ class SetCustomerStore
      */
     public function setStore(array|null $requestData = null): void
     {
-        $storeId = $requestData[CustomerInterface::STORE_ID] ?? null;
-        if (!$storeId) {
-            $websiteId = $requestData[CustomerInterface::WEBSITE_ID] ?? null;
-            try {
-                $website = $this->storeManager->getWebsite($websiteId);
-                $storeId = $website ? current($website->getStoreIds()) : null;
-            } catch (LocalizedException $e) {
-                $storeId = null;
-            }
+        $websiteId = $requestData[CustomerInterface::WEBSITE_ID] ?? null;
+        try {
+            $website = $this->storeManager->getWebsite($websiteId);
+            $storeId = $website ? current($website->getStoreIds()) : null;
+        } catch (LocalizedException $e) {
+            $storeId = null;
         }
+        if (!$storeId) {
+            $storeId = $requestData[CustomerInterface::STORE_ID] ?? null;
+        }
+
         $this->storeManager->setCurrentStore($storeId);
     }
 }
