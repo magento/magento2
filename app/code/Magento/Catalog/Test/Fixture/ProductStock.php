@@ -26,7 +26,8 @@ class ProductStock implements DataFixtureInterface
 {
     private const DEFAULT_DATA = [
         'prod_id' => null,
-        'prod_qty' => 1
+        'prod_qty' => 1,
+        'is_in_stock' => 1
     ];
 
     /**
@@ -67,8 +68,8 @@ class ProductStock implements DataFixtureInterface
     {
         $data = $this->dataMerger->merge(self::DEFAULT_DATA, $data);
         $stockItem = $this->stockRegistry->getStockItem($data['prod_id']);
-        $stockItem->setData('is_in_stock', 1);
-        $stockItem->setData('qty', 90);
+        $stockItem->setData('is_in_stock', $data['is_in_stock']);
+        $stockItem->setData('qty', $data['prod_qty']);
         $stockItem->setData('manage_stock', 1);
         $stockItem->save();
 

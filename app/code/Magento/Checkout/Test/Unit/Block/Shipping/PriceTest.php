@@ -18,8 +18,6 @@ use PHPUnit\Framework\TestCase;
 
 class PriceTest extends TestCase
 {
-    const SUBTOTAL = 10;
-
     /**
      * @var Price
      */
@@ -61,7 +59,7 @@ class PriceTest extends TestCase
 
         $shippingRateMock = $this->getMockBuilder(Rate::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPrice'])
+            ->addMethods(['getPrice'])
             ->getMock();
         $shippingRateMock->expects($this->once())
             ->method('getPrice')
