@@ -127,6 +127,8 @@ class Reorder
      * @param OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter
      * @param StoreManagerInterface|null $storeManager
      * @param bool $addToCartInvalidProduct
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         OrderFactory $orderFactory,
