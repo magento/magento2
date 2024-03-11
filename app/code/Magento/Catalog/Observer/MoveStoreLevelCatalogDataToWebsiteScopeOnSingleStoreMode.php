@@ -20,9 +20,9 @@ namespace Magento\Catalog\Observer;
 
 use Magento\Catalog\Model\Indexer\Category\Product;
 use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
-use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor as PriceIndexProcessor;
-use Magento\Catalog\Model\Product\CatalogCategoryAndProductResolverOnSingleStoreMode as Resolver;
+use Magento\Catalog\Model\ResourceModel\CatalogCategoryAndProductResolverOnSingleStoreMode as Resolver;
+use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;

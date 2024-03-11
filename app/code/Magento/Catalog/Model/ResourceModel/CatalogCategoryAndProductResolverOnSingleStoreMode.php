@@ -1,9 +1,6 @@
 <?php
 /************************************************************************
  *
- * ADOBE CONFIDENTIAL
- * ___________________
- *
  * Copyright 2024 Adobe
  * All Rights Reserved.
  *
@@ -19,11 +16,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Model\Product;
+namespace Magento\Catalog\Model\ResourceModel;
 
 use Exception;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\Store;
@@ -34,11 +30,9 @@ use Magento\Store\Model\Store;
 class CatalogCategoryAndProductResolverOnSingleStoreMode
 {
     /**
-     * @param MetadataPool $metadataPool
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        private readonly MetadataPool $metadataPool,
         private readonly ResourceConnection $resourceConnection
     ) {
     }
