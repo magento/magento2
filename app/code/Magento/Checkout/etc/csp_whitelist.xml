@@ -10,7 +10,7 @@
     <policies>
         <policy id="script-src">
             <values>
-                <value id="paypal-express" type="hash" algorithm="sha256">O2Z/Int2dnWQI+JpBc4hIRlC7oBedig41hu/v71CM38=</value>
+                <value id="paypal-express" type="hash" algorithm="sha256">2PH6WvtQ5GKdwsHsBabxq1cvLLEMllL/LQtPt+X/9IM=</value>
             </values>
         </policy>
     </policies>
