@@ -81,4 +81,7 @@
     <type name="Magento\Sales\Model\Order\Invoice">
         <plugin name="update_configurable_product_total_qty" type="Magento\ConfigurableProduct\Plugin\Model\Order\Invoice\UpdateConfigurableProductTotalQty"/>
     </type>
+    <type name="Magento\CatalogWidget\Block\Product\ProductsList">
+        <plugin name="configurable_product_widget_product_list" type="Magento\ConfigurableProduct\Plugin\CatalogWidget\Block\Product\ProductsListPlugin" sortOrder="2"/>
+    </type>
 </config>
