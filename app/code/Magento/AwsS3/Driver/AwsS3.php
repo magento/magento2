@@ -20,7 +20,7 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Phrase;
 use Magento\RemoteStorage\Driver\Adapter\MetadataProviderInterface;
 use Magento\RemoteStorage\Driver\DriverException;
-use Magento\RemoteStorage\Driver\RemoteDriverInterface;
+use Magento\RemoteStorage\Driver\ExtendedRemoteDriverInterface;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
@@ -30,7 +30,7 @@ use Throwable;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AwsS3 implements RemoteDriverInterface
+class AwsS3 implements ExtendedRemoteDriverInterface
 {
     public const TYPE_DIR = 'dir';
     public const TYPE_FILE = 'file';

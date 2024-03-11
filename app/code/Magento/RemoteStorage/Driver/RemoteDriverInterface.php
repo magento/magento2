@@ -21,12 +21,4 @@ interface RemoteDriverInterface extends ExtendedDriverInterface
      * @throws DriverException
      */
     public function test(): void;
-
-    /**
-     * To check if directory exists
-     *
-     * @param string $path
-     * @return bool
-     */
-    public function isDirectoryExists($path): bool;
 }

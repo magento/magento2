@@ -16,7 +16,7 @@ use Magento\RemoteStorage\Driver\Adapter\CachedAdapterInterfaceFactory;
 use Magento\RemoteStorage\Driver\Adapter\MetadataProviderInterfaceFactory;
 use Magento\RemoteStorage\Driver\DriverException;
 use Magento\RemoteStorage\Driver\DriverFactoryInterface;
-use Magento\RemoteStorage\Driver\RemoteDriverInterface;
+use Magento\RemoteStorage\Driver\ExtendedRemoteDriverInterface;
 use Magento\RemoteStorage\Model\Config;
 
 /**
@@ -90,7 +90,7 @@ class AwsS3Factory implements DriverFactoryInterface
     /**
      * @inheritDoc
      */
-    public function create(): RemoteDriverInterface
+    public function create(): ExtendedRemoteDriverInterface
     {
         try {
             return $this->createConfigured(
@@ -141,7 +141,7 @@ class AwsS3Factory implements DriverFactoryInterface
         string $prefix,
         string $cacheAdapter = '',
         array $cacheConfig = []
-    ): RemoteDriverInterface {
+    ): ExtendedRemoteDriverInterface {
         $config = $this->prepareConfig($config);
         $client = new S3Client($config);
         $adapter = new AwsS3V3Adapter($client, $config['bucket'], $prefix);

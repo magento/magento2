@@ -16,11 +16,11 @@ interface DriverFactoryInterface
     /**
      * Creates driver from stored config.
      *
-     * @return RemoteDriverInterface
+     * @return ExtendedRemoteDriverInterface
      *
      * @throws DriverException
      */
-    public function create(): RemoteDriverInterface;
+    public function create(): ExtendedRemoteDriverInterface;
 
     /**
      * Creates driver from config.
@@ -29,7 +29,7 @@ interface DriverFactoryInterface
      * @param string $prefix
      * @param string $cacheAdapter
      * @param array $cacheConfig
-     * @return RemoteDriverInterface
+     * @return ExtendedRemoteDriverInterface
      *
      * @throws DriverException
      */
@@ -38,5 +38,5 @@ interface DriverFactoryInterface
         string $prefix,
         string $cacheAdapter = '',
         array $cacheConfig = []
-    ): RemoteDriverInterface;
+    ): ExtendedRemoteDriverInterface;
 }
