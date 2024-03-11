@@ -115,9 +115,9 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function calculateUnitBasedDataProvider()
+    public static function calculateUnitBasedDataProvider()
     {
-        $baseQuote = $this->getBaseQuoteData();
+        $baseQuote = self::getBaseQuoteData();
         $oneProduct = $baseQuote;
         $oneProduct['items'][] = [
             'code' => 'sku_1',
@@ -1293,9 +1293,9 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function calculateTaxRowBasedDataProvider()
+    public static function calculateTaxRowBasedDataProvider()
     {
-        $baseQuote = $this->getBaseQuoteData();
+        $baseQuote = self::getBaseQuoteData();
 
         $oneProduct = $baseQuote;
         $oneProduct['items'][] = [

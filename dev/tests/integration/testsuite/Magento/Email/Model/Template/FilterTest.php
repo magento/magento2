@@ -190,7 +190,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function transDirectiveDataProvider()
+    public static function transDirectiveDataProvider()
     {
         return [
             [

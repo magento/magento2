@@ -649,7 +649,7 @@ class CreateAccountTest extends TestCase
      * @param int $length
      * @return string
      */
-    private function getRandomNumericString(int $length): string
+    private static function getRandomNumericString(int $length): string
     {
         $string = '';
         for ($i = 0; $i <= $length; $i++) {

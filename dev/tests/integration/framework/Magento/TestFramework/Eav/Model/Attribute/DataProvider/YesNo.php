@@ -64,9 +64,9 @@ class YesNo extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    public function getUpdateProvider(): array
+    public static function getUpdateProvider(): array
     {
-        $frontendInput = $this->getFrontendInput();
+        $frontendInput = self::getFrontendInput();
         return array_replace_recursive(
             parent::getUpdateProvider(),
             [
@@ -85,7 +85,7 @@ class YesNo extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    protected function getFrontendInput(): string
+    protected static function getFrontendInput(): string
     {
         return 'boolean';
     }
@@ -93,7 +93,7 @@ class YesNo extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    protected function getUpdatePostData(): array
+    protected static function getUpdatePostData(): array
     {
         return [
             'frontend_label' => [

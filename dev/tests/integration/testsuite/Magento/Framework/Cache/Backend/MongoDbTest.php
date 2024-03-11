@@ -156,8 +156,8 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
     public static function touchDataProvider()
     {
         return [
-            'not enough extra lifetime' => [0, $this->isFalse()],
-            'enough extra lifetime' => [1000, $this->logicalNot($this->isFalse())]
+            'not enough extra lifetime' => [0, self::isFalse()],
+            'enough extra lifetime' => [1000, self::logicalNot(self::isFalse())]
         ];
     }
 

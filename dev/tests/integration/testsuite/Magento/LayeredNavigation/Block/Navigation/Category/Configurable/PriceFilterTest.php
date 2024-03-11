@@ -61,7 +61,7 @@ class PriceFilterTest extends AbstractFiltersTest
     /**
      * @return array
      */
-    public function getFiltersDataProvider(): array
+    public static function getFiltersDataProvider(): array
     {
         return [
             'all_children_active' => [

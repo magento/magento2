@@ -152,7 +152,7 @@ class DynamicBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
      *
      * @return array
      */
-    private function getBundleConfiguration1()
+    private static function getBundleConfiguration1()
     {
         $optionsData = [
             [
@@ -183,7 +183,7 @@ class DynamicBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
      *
      * @return array
      */
-    private function getBundleConfiguration2()
+    private static function getBundleConfiguration2()
     {
         $optionsData = [
             [
@@ -226,7 +226,7 @@ class DynamicBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
      *
      * @return array
      */
-    private function getBundleConfiguration3()
+    private static function getBundleConfiguration3()
     {
         $optionsData = [
             [
@@ -268,7 +268,7 @@ class DynamicBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
      * Dynamic bundle with two non required options and special price
      * @return array
      */
-    private function getBundleConfiguration4()
+    private static function getBundleConfiguration4()
     {
         $optionsData = [
             [

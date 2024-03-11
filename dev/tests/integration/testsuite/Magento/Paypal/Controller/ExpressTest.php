@@ -175,7 +175,24 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
         ];
 
         $nvpMock = $this->getMockBuilder(Nvp::class)
-            ->onlyMethods($nvpMethods)
+            ->onlyMethods([
+                'setPaypalCart',
+                'callDoExpressCheckoutPayment',
+                'callGetExpressCheckoutDetails',
+            ])
+            ->addMethods([
+                'setToken',
+                'setPayerId',
+                'setAmount',
+                'setPaymentAction',
+                'setNotifyUrl',
+                'setInvNum',
+                'setCurrencyCode',
+                'setIsLineItemsEnabled',
+                'setAddress',
+                'setBillingAddress',
+                'getExportedBillingAddress'
+            ])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -196,7 +213,7 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_objectManager->addSharedInstance($apiFactoryMock, ApiFactory::class);
 
         $sessionMock = $this->getMockBuilder(GenericSession::class)
-            ->onlyMethods(['getExpressCheckoutToken'])
+            ->addMethods(['getExpressCheckoutToken'])
             ->setConstructorArgs(
                 [
                     $this->_objectManager->get(\Magento\Framework\App\Request\Http::class),

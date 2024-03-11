@@ -109,7 +109,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array|array[]
      */
-    public function groupFiltersDataProvider(): array
+    public static function groupFiltersDataProvider(): array
     {
 
         return [

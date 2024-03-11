@@ -240,7 +240,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getBaseUrlForCustomEntryPointDataProvider()
+    public static function getBaseUrlForCustomEntryPointDataProvider()
     {
         return [
             [UrlInterface::URL_TYPE_LINK, false, false, 'http://localhost/custom_entry.php/'],

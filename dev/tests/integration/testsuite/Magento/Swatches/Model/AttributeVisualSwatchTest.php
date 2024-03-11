@@ -48,7 +48,7 @@ class AttributeVisualSwatchTest extends AbstractAttributeTest
     /**
      * @inheritdoc
      */
-    public function productProvider(): array
+    public static function productProvider(): array
     {
         return [
             [

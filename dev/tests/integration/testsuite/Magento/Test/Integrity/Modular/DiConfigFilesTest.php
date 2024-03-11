@@ -113,7 +113,7 @@ class DiConfigFilesTest extends \PHPUnit\Framework\TestCase
     {
         $mapperMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Mapper\Dom::class);
         $fileResolverMock = $this->getMockBuilder(\Magento\Framework\Config\FileResolverInterface::class)
-            ->onlyMethods(['read'])
+            ->addMethods(['read'])
             ->getMockForAbstractClass();
         $fileResolverMock->expects($this->any())->method('read')->willReturn($files);
         $validationStateMock = $this->createPartialMock(

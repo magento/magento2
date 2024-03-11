@@ -111,7 +111,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
                 #4 Testing product price for dynamic bundle
                 with one required multi type option and tier price
             ' => [
-                'strategy' => $self::getBundleConfiguration4(),
+                'strategy' => self::getBundleConfiguration4(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
@@ -192,7 +192,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
      * Dynamic bundle with one required option and tier price
      * @return array
      */
-    private function getBundleConfiguration1()
+    private static function getBundleConfiguration1()
     {
         $optionsData = [
             [
@@ -231,7 +231,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
      * Dynamic bundle with one non required option and tier price
      * @return array
      */
-    private function getBundleConfiguration2()
+    private static function getBundleConfiguration2()
     {
         $optionsData = [
             [
@@ -270,7 +270,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
      * Dynamic bundle with one required checkbox type option and tier price
      * @return array
      */
-    private function getBundleConfiguration3()
+    private static function getBundleConfiguration3()
     {
         $optionsData = [
             [
@@ -313,7 +313,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
      * Dynamic bundle with one required multi type option and tier price
      * @return array
      */
-    private function getBundleConfiguration4()
+    private static function getBundleConfiguration4()
     {
         $optionsData = [
             [
@@ -399,7 +399,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
      * Dynamic bundle with two required options and tier price
      * @return array
      */
-    private function getBundleConfiguration6()
+    private static function getBundleConfiguration6()
     {
         $optionsData = [
             [
@@ -457,7 +457,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
      * Dynamic bundle with one required option, one non required option and tier price
      * @return array
      */
-    private function getBundleConfiguration7()
+    private static function getBundleConfiguration7()
     {
         $optionsData = [
             [
@@ -515,7 +515,7 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
      * Dynamic bundle with two non required options and tier price
      * @return array
      */
-    private function getBundleConfiguration8()
+    private static function getBundleConfiguration8()
     {
         $optionsData = [
             [

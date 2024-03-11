@@ -328,7 +328,7 @@ class HelperTest extends TestCase
      * @param array $imageNames
      * @return array
      */
-    private function getMediaGallery(array $imageNames): array
+    private static function getMediaGallery(array $imageNames): array
     {
         $images = [];
         foreach ($imageNames as $key => $item) {
