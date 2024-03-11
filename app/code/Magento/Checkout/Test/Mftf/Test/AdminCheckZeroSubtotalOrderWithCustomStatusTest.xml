@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCheckZeroSubtotalOrderWithCustomStatus">
+    <test name="AdminCheckZeroSubtotalOrderWithCustomStatusTest">
         <annotations>
             <features value="Checkout"/>
             <stories value="Zero Subtotal Checkout Order"/>
@@ -18,8 +18,6 @@
             <useCaseId value="ACP2E-1120"/>
             <severity value="AVERAGE"/>
             <group value="checkout"/>
-            <!-- @TODO: Remove "pr_exclude" group when issue ACQE-4977 is resolved -->
-            <group value="pr_exclude" />
         </annotations>
         <before>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
@@ -42,6 +40,12 @@
         </before>
 
         <after>
+            <!-- Assign default pending status to state new -->
+            <actionGroup ref="AdminOrderStatusToStateAssignActionGroup" stepKey="resetDefaultStatusToState">
+                <argument name="orderStatus" value="{{OrderStatus.pending}}" />
+                <argument name="orderState" value="{{defaultOrderStatus.label}}" />
+            </actionGroup>
+
             <magentoCLI command="config:set {{EnableFreeOrderStatusPending.path}} {{EnableFreeOrderStatusPending.value}}" stepKey="disablePaymentMethodsSettingConfig"/>
             <magentoCLI command="config:set {{EnableFreeOrderPaymentAutomaticInvoiceAction.path}} {{EnableFreeOrderPaymentAutomaticInvoiceAction.value}}" stepKey="enableFreeOrderPaymentAutomaticInvoiceAction"/>
             <actionGroup ref="CliDisableFreeShippingMethodActionGroup" stepKey="disableFreeShippingConfig"/>
@@ -77,14 +81,17 @@
         </actionGroup>
 
         <!-- Assign status to state -->
-        <click selector="{{AdminOrderStatusGridSection.assignStatusToStateBtn}}" stepKey="clickAssignStatusBtn"/>
-        <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderStatus}}" userInput="{{defaultOrderStatus.label}}" stepKey="selectOrderStatus"/>
-        <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderState}}" userInput="{{OrderState.new}}" stepKey="selectOrderState"/>
-        <checkOption selector="{{AdminAssignOrderStatusToStateSection.orderStatusAsDefault}}" stepKey="orderStatusAsDefault"/>
-        <uncheckOption selector="{{AdminAssignOrderStatusToStateSection.visibleOnStorefront}}" stepKey="visibleOnStorefront"/>
-        <click selector="{{AdminAssignOrderStatusToStateSection.saveStatusAssignment}}" stepKey="clickSaveStatus"/>
-        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccess">
-            <argument name="message" value="You assigned the order status." />
+        <comment userInput="BIC workaround" stepKey="clickAssignStatusBtn"/>
+        <comment userInput="BIC workaround" stepKey="selectOrderStatus"/>
+        <comment userInput="BIC workaround" stepKey="selectOrderState"/>
+        <comment userInput="BIC workaround" stepKey="orderStatusAsDefault"/>
+        <comment userInput="BIC workaround" stepKey="visibleOnStorefront"/>
+        <comment userInput="BIC workaround" stepKey="clickSaveStatus"/>
+        <comment userInput="BIC workaround" stepKey="seeSuccess"/>
+
+        <actionGroup ref="AdminOrderStatusToStateAssignActionGroup" stepKey="resetDefaultStatusToState">
+            <argument name="orderStatus" value="{{defaultOrderStatus.label}}" />
+            <argument name="orderState" value="{{OrderState.new}}" />
         </actionGroup>
 
         <!-- Prepare data for constraints -->
