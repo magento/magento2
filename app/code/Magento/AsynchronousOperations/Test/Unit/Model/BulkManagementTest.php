@@ -142,7 +142,9 @@ class BulkManagementTest extends TestCase
         $bulkSummary->expects($this->once())->method('setUserType')->with($userType)->willReturnSelf();
         $bulkSummary->expects($this->once())->method('getOperationCount')->willReturn(1);
         $bulkSummary->expects($this->once())->method('setOperationCount')->with(3)->willReturnSelf();
-        $this->entityManager->expects($this->once())->method('save')->with($bulkSummary)->willReturn($bulkSummary);
+        $this->entityManager->expects($this->exactly(3))->method('save')
+            ->withConsecutive([$bulkSummary], [$operation], [$operation])
+            ->will($this->onConsecutiveCalls($bulkSummary, $operation, $operation));
         $connection->expects($this->once())->method('commit')->willReturnSelf();
         $operation->expects($this->exactly(2))->method('getTopicName')
             ->willReturnOnConsecutiveCalls($topicNames[0], $topicNames[1]);
@@ -322,6 +324,7 @@ class BulkManagementTest extends TestCase
             ->willReturn(1);
         $connection->expects($this->once())->method('commit')->willReturnSelf();
         $this->publisher->expects($this->once())->method('publish')->with($topicName, [$operation])->willReturn(null);
+        $this->entityManager->expects($this->once())->method('save')->with($operation)->willReturn($operation);
         $this->assertEquals(1, $this->bulkManagement->retryBulk($bulkUuid, $errorCodes));
     }
 
