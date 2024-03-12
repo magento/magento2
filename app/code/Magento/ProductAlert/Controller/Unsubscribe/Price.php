@@ -13,6 +13,8 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Price
@@ -25,6 +27,11 @@ class Price extends UnsubscribeController implements HttpGetActionInterface
     protected $productRepository;
 
     /**
+     * @var StoreManagerInterface|null
+     */
+    private $storeManager;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
@@ -32,9 +39,12 @@ class Price extends UnsubscribeController implements HttpGetActionInterface
     public function __construct(
         Context $context,
         CustomerSession $customerSession,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->productRepository = $productRepository;
+        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
+
         parent::__construct($context, $customerSession);
     }
 
@@ -68,12 +78,10 @@ class Price extends UnsubscribeController implements HttpGetActionInterface
             $model = $this->_objectManager->create(\Magento\ProductAlert\Model\Price::class)
                 ->setCustomerId($this->customerSession->getCustomerId())
                 ->setProductId($product->getId())
-                ->setWebsiteId(
-                    $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
-                        ->getStore()
-                        ->getWebsiteId()
-                )
+                ->setWebsiteId($this->storeManager->getStore()->getWebsiteId())
+                ->setStoreId($this->storeManager->getStore()->getId())
                 ->loadByParam();
+
             if ($model->getId()) {
                 $model->delete();
             }
