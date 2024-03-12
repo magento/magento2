@@ -6,9 +6,18 @@
 
 namespace Magento\CatalogRule\Model\Indexer;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
+use Magento\Eav\Model\Config;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Store\Model\Group;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Zend_Db_Statement_Interface;
 
 /**
  * Build select for rule relation with product.
@@ -16,22 +25,22 @@ use Magento\Framework\App\ObjectManager;
 class RuleProductsSelectBuilder
 {
     /**
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var ResourceConnection
      */
     private $resource;
 
     /**
-     * @var \Magento\Eav\Model\Config
+     * @var Config
      */
     private $eavConfig;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool
+     * @var MetadataPool
      */
     private $metadataPool;
 
@@ -46,18 +55,18 @@ class RuleProductsSelectBuilder
     private $tableSwapper;
 
     /**
-     * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+     * @param ResourceConnection $resource
+     * @param Config $eavConfig
+     * @param StoreManagerInterface $storeManager
+     * @param MetadataPool $metadataPool
      * @param ActiveTableSwitcher $activeTableSwitcher
      * @param TableSwapper|null $tableSwapper
      */
     public function __construct(
-        \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
+        ResourceConnection $resource,
+        Config $eavConfig,
+        StoreManagerInterface $storeManager,
+        MetadataPool $metadataPool,
         ActiveTableSwitcher $activeTableSwitcher,
         TableSwapper $tableSwapper = null
     ) {
@@ -71,15 +80,18 @@ class RuleProductsSelectBuilder
     }
 
     /**
-     * Build select for indexer according passed parameters.
+     * Build multiple products select for indexer according passed parameters
      *
      * @param int $websiteId
-     * @param int|null $productId
+     * @param array $productIds
      * @param bool $useAdditionalTable
-     * @return \Zend_Db_Statement_Interface
+     * @return Zend_Db_Statement_Interface
      */
-    public function build(int $websiteId, ?int $productId = null, bool $useAdditionalTable = false)
-    {
+    public function buildSelect(
+        int $websiteId,
+        array $productIds,
+        bool $useAdditionalTable = false
+    ): Zend_Db_Statement_Interface {
         $connection = $this->resource->getConnection();
         $indexTable = $this->resource->getTableName('catalogrule_product');
         if ($useAdditionalTable) {
@@ -104,19 +116,19 @@ class RuleProductsSelectBuilder
             ['rp.website_id', 'rp.customer_group_id', 'rp.product_id', 'rp.sort_order', 'rp.rule_id']
         );
 
-        if ($productId) {
-            $select->where('rp.product_id=?', $productId);
+        if (!empty($productIds)) {
+            $select->where('rp.product_id IN (?)', $productIds);
         }
 
         /**
          * Join default price and websites prices to result
          */
-        $priceAttr = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'price');
+        $priceAttr = $this->eavConfig->getAttribute(Product::ENTITY, 'price');
         $priceTable = $priceAttr->getBackend()->getTable();
         $attributeId = $priceAttr->getId();
 
         $linkField = $this->metadataPool
-            ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->getMetadata(ProductInterface::class)
             ->getLinkField();
         $select->join(
             ['e' => $this->resource->getTableName('catalog_product_entity')],
@@ -129,16 +141,16 @@ class RuleProductsSelectBuilder
 
         $select->join(
             ['pp_default' => $priceTable],
-            sprintf($joinCondition, 'pp_default', \Magento\Store\Model\Store::DEFAULT_STORE_ID),
+            sprintf($joinCondition, 'pp_default', Store::DEFAULT_STORE_ID),
             []
         );
 
         $website = $this->storeManager->getWebsite($websiteId);
         $defaultGroup = $website->getDefaultGroup();
-        if ($defaultGroup instanceof \Magento\Store\Model\Group) {
+        if ($defaultGroup instanceof Group) {
             $storeId = $defaultGroup->getDefaultStoreId();
         } else {
-            $storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+            $storeId = Store::DEFAULT_STORE_ID;
         }
 
         $select->joinInner(
@@ -163,5 +175,18 @@ class RuleProductsSelectBuilder
         );
 
         return $connection->query($select);
+    }
+
+    /**
+     * Build select for indexer according passed parameters.
+     *
+     * @param int $websiteId
+     * @param int|null $productId
+     * @param bool $useAdditionalTable
+     * @return Zend_Db_Statement_Interface
+     */
+    public function build(int $websiteId, ?int $productId = null, bool $useAdditionalTable = false)
+    {
+        return $this->buildSelect($websiteId, $productId === null ? [] : [$productId], $useAdditionalTable);
     }
 }

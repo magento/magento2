@@ -53,7 +53,7 @@ class Product implements RevertibleDataFixtureInterface
         'media_gallery_entries' => [],
         'tier_prices' => [],
         'created_at' => null,
-        'updated_at' => null,
+        'updated_at' => null
     ];
 
     private const DEFAULT_PRODUCT_LINK_DATA = [
