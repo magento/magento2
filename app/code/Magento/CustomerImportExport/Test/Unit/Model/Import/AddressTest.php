@@ -169,7 +169,7 @@ class AddressTest extends TestCase
         $this->_stringLib = new StringUtils();
         $this->_storeManager = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWebsites'])
+            ->onlyMethods(['getWebsites'])
             ->getMock();
         $this->_storeManager
             ->method('getWebsites')
@@ -253,7 +253,7 @@ class AddressTest extends TestCase
     {
         $entityFactory = $this->createMock(EntityFactory::class);
         $attributeCollection = $this->getMockBuilder(Collection::class)
-            ->setMethods(['getEntityTypeCode'])
+            ->addMethods(['getEntityTypeCode'])
             ->setConstructorArgs([$entityFactory])
             ->getMock();
         foreach ($this->_attributes as $attributeData) {
@@ -377,6 +377,7 @@ class AddressTest extends TestCase
     protected function _getModelMock()
     {
         $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->_objectManagerMock->prepareObjectManager();
         $modelMock = new Address(
             $this->_stringLib,
             $scopeConfig,
@@ -415,7 +416,7 @@ class AddressTest extends TestCase
      *
      * @return array
      */
-    public function validateRowForUpdateDataProvider()
+    public static function validateRowForUpdateDataProvider()
     {
         return [
             'valid' => [
@@ -436,7 +437,7 @@ class AddressTest extends TestCase
      *
      * @return array
      */
-    public function validateRowForDeleteDataProvider()
+    public static function validateRowForDeleteDataProvider()
     {
         return [
             'valid' => [

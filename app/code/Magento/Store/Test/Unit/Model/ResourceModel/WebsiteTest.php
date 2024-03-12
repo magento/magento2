@@ -119,8 +119,10 @@ class WebsiteTest extends TestCase
 
         $this->resourceMock->expects($this->atLeastOnce())
             ->method('getTableName')
-            ->withConsecutive([$storeWebsiteTable], [$storeGroupTable])
-            ->willReturnOnConsecutiveCalls($storeWebsiteTable, $storeGroupTable);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$storeWebsiteTable] => $storeWebsiteTable,
+                [$storeGroupTable] => $storeGroupTable
+            });
 
         $this->select->expects($this->once())
             ->method('from')
