@@ -122,7 +122,7 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
      */
     public function xmlConfigFileProvider()
     {
-        $fileList = $this->getXmlConfigFiles();
+        $fileList = self::getXmlConfigFiles();
         $result = [];
         foreach ($fileList as $fileContent) {
             $result[] = [$fileContent];

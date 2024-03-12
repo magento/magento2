@@ -23,17 +23,17 @@ class FixedProductTax extends AbstractBaseAttributeData
     public function __construct()
     {
         parent::__construct();
-        $this->defaultAttributePostData['used_for_sort_by'] = '0';
+        self::$defaultAttributePostData['used_for_sort_by'] = '0';
     }
 
     /**
      * @inheritdoc
      */
-    public function getAttributeData(): array
+    public static function getAttributeData(): array
     {
         $result = parent::getAttributeData();
-        unset($result["{$this->getFrontendInput()}_with_default_value"]);
-        unset($result["{$this->getFrontendInput()}_without_default_value"]);
+        unset($result["{self::getFrontendInput()}_with_default_value"]);
+        unset($result["{self::getFrontendInput()}_without_default_value"]);
 
         return $result;
     }
@@ -41,11 +41,11 @@ class FixedProductTax extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    public function getAttributeDataWithCheckArray(): array
+    public static function getAttributeDataWithCheckArray(): array
     {
         $result = parent::getAttributeDataWithCheckArray();
-        unset($result["{$this->getFrontendInput()}_with_default_value"]);
-        unset($result["{$this->getFrontendInput()}_without_default_value"]);
+        unset($result["{self::getFrontendInput()}_with_default_value"]);
+        unset($result["{self::getFrontendInput()}_without_default_value"]);
 
         return $result;
     }
@@ -53,9 +53,9 @@ class FixedProductTax extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    public function getUpdateProvider(): array
+    public static function getUpdateProvider(): array
     {
-        $frontendInput = $this->getFrontendInput();
+        $frontendInput = self::getFrontendInput();
         return array_replace_recursive(
             parent::getUpdateProvider(),
             [
@@ -74,7 +74,7 @@ class FixedProductTax extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    protected function getFrontendInput(): string
+    protected static function getFrontendInput(): string
     {
         return 'weee';
     }
@@ -82,7 +82,7 @@ class FixedProductTax extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    protected function getUpdatePostData(): array
+    protected static function getUpdatePostData(): array
     {
         return [
             'frontend_label' => [
@@ -98,9 +98,9 @@ class FixedProductTax extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    protected function getUpdateExpectedData(): array
+    protected static function getUpdateExpectedData(): array
     {
-        $updatePostData = $this->getUpdatePostData();
+        $updatePostData = self::getUpdatePostData();
         return array_merge(
             $updatePostData,
             [

@@ -20,19 +20,19 @@ abstract class AbstractAttributeDataWithOptions extends AbstractBaseAttributeDat
     public function __construct()
     {
         parent::__construct();
-        $this->defaultAttributePostData['serialized_options_arr'] = $this->getOptionsDataArr();
-        $this->defaultAttributePostData['is_filterable'] = '0';
-        $this->defaultAttributePostData['is_filterable_in_search'] = '0';
+        self::$defaultAttributePostData['serialized_options_arr'] = self::getOptionsDataArr();
+        self::$defaultAttributePostData['is_filterable'] = '0';
+        self::$defaultAttributePostData['is_filterable_in_search'] = '0';
     }
 
     /**
      * @inheritdoc
      */
-    public function getAttributeData(): array
+    public static function getAttributeData(): array
     {
         $result = parent::getAttributeData();
-        unset($result["{$this->getFrontendInput()}_with_default_value"]);
-        unset($result["{$this->getFrontendInput()}_without_default_value"]);
+        unset($result["{self::getFrontendInput()}_with_default_value"]);
+        unset($result["{self::getFrontendInput()}_without_default_value"]);
 
         return $result;
     }
@@ -40,7 +40,7 @@ abstract class AbstractAttributeDataWithOptions extends AbstractBaseAttributeDat
     /**
      * @inheritdoc
      */
-    public function getAttributeDataWithErrorMessage(): array
+    public static function getAttributeDataWithErrorMessage(): array
     {
         $wrongSerializeMessage = 'The attribute couldn\'t be saved due to an error. Verify your information and ';
         $wrongSerializeMessage .= 'try again. If the error persists, please try again later.';
@@ -48,9 +48,9 @@ abstract class AbstractAttributeDataWithOptions extends AbstractBaseAttributeDat
         return array_replace_recursive(
             parent::getAttributeDataWithErrorMessage(),
             [
-                "{$this->getFrontendInput()}_with_wrong_serialized_options" => [
+                "{self::getFrontendInput()}_with_wrong_serialized_options" => [
                     array_merge(
-                        $this->defaultAttributePostData,
+                        self::$defaultAttributePostData,
                         [
                             'serialized_options_arr' => [],
                             'serialized_options' => '?.\\//',
@@ -65,11 +65,14 @@ abstract class AbstractAttributeDataWithOptions extends AbstractBaseAttributeDat
     /**
      * @inheritdoc
      */
-    public function getAttributeDataWithCheckArray(): array
+    public static function getAttributeDataWithCheckArray(): array
     {
         $result = parent::getAttributeDataWithCheckArray();
-        unset($result["{$this->getFrontendInput()}_with_default_value"]);
-        unset($result["{$this->getFrontendInput()}_without_default_value"]);
+        self::$defaultAttributePostData['serialized_options_arr'] = self::getOptionsDataArr();
+        self::$defaultAttributePostData['is_filterable'] = '0';
+        self::$defaultAttributePostData['is_filterable_in_search'] = '0';
+        unset($result["{self::getFrontendInput()}_with_default_value"]);
+        unset($result["{self::getFrontendInput()}_without_default_value"]);
 
         return $result;
     }
@@ -79,9 +82,12 @@ abstract class AbstractAttributeDataWithOptions extends AbstractBaseAttributeDat
      *
      * @return array
      */
-    public function getUpdateOptionsProvider(): array
+    public static function getUpdateOptionsProvider(): array
     {
-        $frontendInput = $this->getFrontendInput();
+        $frontendInput = static::getFrontendInput();
+        self::$defaultAttributePostData['serialized_options_arr'] = self::getOptionsDataArr();
+        self::$defaultAttributePostData['is_filterable'] = '0';
+        self::$defaultAttributePostData['is_filterable_in_search'] = '0';
         return [
             "{$frontendInput}_update_options" => [
                 'post_data' => [
@@ -140,7 +146,7 @@ abstract class AbstractAttributeDataWithOptions extends AbstractBaseAttributeDat
      *
      * @return array
      */
-    protected function getOptionsDataArr(): array
+    protected static function getOptionsDataArr(): array
     {
         return [
             [
