@@ -16,6 +16,8 @@
             <description value="Generate a partial refund for an order and verifying the transaction status after submit the credit memos."/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-5181"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
         </annotations>
         <before>
             <!-- Create Category and Product -->
@@ -31,7 +33,7 @@
                 <argument name="credentials" value="SamplePaypalExpressConfig2"/>
             </actionGroup>
             <!-- Changing PayPal Express Checkout Basic Settings -->
-            <actionGroup ref="AdminPayPalExpressCheckoutBasicSettingsActionGroup" stepKey="configBasicSettingPayPalExpress"/>
+            <magentoCLI command="config:set {{StorefrontPaypalExpressSalePaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressSalePaymentActionOptionConfigData.value}}" stepKey="changePaymentAction"/>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
                 <argument name="tags" value="config full_page"/>
             </actionGroup>
@@ -134,9 +136,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <!--  Disable PayPal Express Checkout and Basic setting change -->
             <actionGroup ref="AdminPayPalExpressCheckoutDisableActionGroup" stepKey="configPaypalExpressCheckoutDisable"/>
-            <actionGroup ref="AdminPayPalExpressCheckoutBasicSettingsActionGroup" stepKey="disableBasicSettingPayPalExpress">
-                <argument name="paymentAction" value="Authorization"/>
-            </actionGroup>
+            <magentoCLI command="config:set {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.value}}" stepKey="paymentActionChangeToAuthorization"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
     </test>
