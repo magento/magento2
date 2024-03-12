@@ -221,6 +221,7 @@ class ReportTest extends TestCase
         $localeEmulator = $this->getMockForAbstractClass(LocaleEmulatorInterface::class);
         $localeEmulator->method('emulate')
             ->willReturnCallback(fn (callable $callback) => $callback());
+        $this->objectManagerHelper->prepareObjectManager();
         $import = new Import(
             $logger,
             $filesystem,

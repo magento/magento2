@@ -39,6 +39,11 @@ use PHPUnit\Framework\TestCase;
 class StockItemRepositoryTest extends TestCase
 {
     /**
+     * @var string
+     */
+    private static $date = '2023-01-01 00:00:00';
+
+    /**
      * @var StockItemRepository
      */
     private $model;
@@ -304,7 +309,6 @@ class StockItemRepositoryTest extends TestCase
         array $existingStockItemMockConfig
     ) {
         $productId = 1;
-        $date = '2023-01-01 00:00:00';
         $stockStateProviderMockConfig += [
             'verifyStock' => ['expects' => $this->once(), 'with' => [$this->stockItemMock], 'willReturn' => true,],
             'verifyNotification' => [
@@ -331,7 +335,7 @@ class StockItemRepositoryTest extends TestCase
             'setStockId' => ['expects' => $this->once(), 'with' => [1], 'willReturnSelf' => true,],
             'setLowStockDate' => [
                 'expects' => $this->exactly(2),
-                'willReturnCallback' => [[null], [$date],],
+                'willReturnCallback' => [[null], [self::$date]],
                 'willReturnSelf' => true,
             ],
             'hasStockStatusChangedAutomaticallyFlag' => ['expects' => $this->once(), 'willReturn' => false,],
@@ -355,7 +359,7 @@ class StockItemRepositoryTest extends TestCase
             ->willReturn(true);
         $this->dateTime->expects($this->once())
             ->method('gmtDate')
-            ->willReturn($date);
+            ->willReturn(self::$date);
         $this->stockItemResourceMock->expects($this->once())
             ->method('save')
             ->with($this->stockItemMock)
@@ -507,7 +511,11 @@ class StockItemRepositoryTest extends TestCase
                 $mockMethod->with(...$config['with']);
             }
             if (isset($config['willReturnCallback'])) {
-                $mockMethod->willReturnCallback(...$config['willReturnCallback']);
+                $mockMethod->willReturnCallback(function ($config) {
+                    return match ($config) {
+                        [null], [self::$date] => true
+                    };
+                });
             }
             if (isset($config['willReturnSelf'])) {
                 $mockMethod->willReturnSelf();

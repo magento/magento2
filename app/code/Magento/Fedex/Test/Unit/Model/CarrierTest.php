@@ -945,7 +945,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function shipDateDataProvider(): array
+    public static function shipDateDataProvider(): array
     {
         return [
             'tracking1' => [
@@ -1111,6 +1111,7 @@ class CarrierTest extends TestCase
         $priceCurrency = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
         $rateMethod = $this->getMockBuilder(Method::class)
             ->setConstructorArgs(['priceCurrency' => $priceCurrency])
+            ->onlyMethods([])
             ->getMock();
         $rateMethodFactory = $this->getMockBuilder(MethodFactory::class)
             ->disableOriginalConstructor()
