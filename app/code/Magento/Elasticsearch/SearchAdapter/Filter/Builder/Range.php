@@ -33,10 +33,10 @@ class Range implements FilterInterface
     {
         $filterQuery = [];
         $fieldName = $this->fieldMapper->getFieldName($filter->getField());
-        if ($filter->getFrom()) {
+        if ($filter->getFrom() !== null) {
             $filterQuery['range'][$fieldName]['gte'] = $filter->getFrom();
         }
-        if ($filter->getTo()) {
+        if ($filter->getTo() !== null) {
             $filterQuery['range'][$fieldName]['lte'] = $filter->getTo();
         }
         return [$filterQuery];
