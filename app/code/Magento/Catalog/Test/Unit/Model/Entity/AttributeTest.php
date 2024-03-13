@@ -156,7 +156,7 @@ class AttributeTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
-            ->setMethods(['getCacheManager', 'getEventDispatcher'])
+            ->onlyMethods(['getCacheManager', 'getEventDispatcher'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->registryMock = $this->getMockBuilder(Registry::class)
@@ -174,7 +174,7 @@ class AttributeTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->typeFactoryMock = $this->getMockBuilder(TypeFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
@@ -187,7 +187,7 @@ class AttributeTest extends TestCase
             ->getMock();
         $this->attributeOptionFactoryMock =
             $this->getMockBuilder(AttributeOptionInterfaceFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->dataObjectProcessorMock = $this->getMockBuilder(DataObjectProcessor::class)
@@ -211,7 +211,8 @@ class AttributeTest extends TestCase
         );
 
         $this->resourceMock = $this->getMockBuilder(AbstractResource::class)
-            ->setMethods(['_construct', 'getConnection', 'getIdFieldName', 'saveInSetIncluding'])
+            ->addMethods(['getIdFieldName', 'saveInSetIncluding'])
+            ->onlyMethods(['_construct', 'getConnection'])
             ->getMockForAbstractClass();
         $this->cacheManager = $this->getMockBuilder(CacheInterface::class)
             ->getMock();
@@ -226,6 +227,7 @@ class AttributeTest extends TestCase
             ->method('getEventDispatcher')
             ->willReturn($this->eventDispatcher);
         $objectManagerHelper = new ObjectManagerHelper($this);
+        $objectManagerHelper->prepareObjectManager();
         $this->attribute = $objectManagerHelper->getObject(
             Attribute::class,
             [
