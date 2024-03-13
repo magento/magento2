@@ -20,8 +20,6 @@
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
-            <!-- Enabling Flat Rate -->
-            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!-- Creating subcategory -->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <!-- Creating Simple Product -->
@@ -88,8 +86,6 @@
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
-            <!-- Disable flat rate method -->
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
             <!-- Reset shipping origin -->
             <actionGroup ref="AdminResetShippingOriginConfigurationActionGroup" stepKey="ResetCaliforniaShippingOrigin"/>
             <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="shippingMethodConfigPage"/>
