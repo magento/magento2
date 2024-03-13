@@ -47,7 +47,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $this->session = $this->getMockBuilder(QuoteSession::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getCustomerId', 'getQuote', 'getStoreId', 'getStore', 'getQuoteId'])
+            ->addMethods(['getCustomerId', 'getStoreId', 'getQuoteId'])
+            ->onlyMethods(['getQuote', 'getStore'])
             ->getMock();
         $this->session->method('getCustomerId')
             ->willReturn(1);
