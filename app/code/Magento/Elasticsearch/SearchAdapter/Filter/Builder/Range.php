@@ -26,6 +26,8 @@ class Range implements FilterInterface
     }
 
     /**
+     * Add the range filters
+     *
      * @param RequestFilterInterface|RangeFilterRequest $filter
      * @return array
      */
