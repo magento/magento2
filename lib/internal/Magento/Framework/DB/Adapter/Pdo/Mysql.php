@@ -3595,7 +3595,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
             default:
                 $prefix = 'idx_';
         }
-        return strtoupper(ExpressionConverter::shortenEntityName($tableName . '_' . $fields, $prefix));
+        return strtoupper(ExpressionConverter::shortenEntityName($tableName . '_' . $fields . substr("_" . $prefix, 0, -1), $prefix));
     }
 
     /**
