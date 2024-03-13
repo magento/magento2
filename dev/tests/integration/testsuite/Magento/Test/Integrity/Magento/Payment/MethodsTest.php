@@ -107,11 +107,10 @@ class MethodsTest extends \PHPUnit\Framework\TestCase
         /** @var $helper \Magento\Payment\Helper\Data */
         $om = Bootstrap::getObjectManager();
         $helper = $om->get(\Magento\Payment\Helper\Data::class);
-        $messageManager = $om->get(\Magento\Framework\Message\ManagerInterface::class);
         $result = [];
         foreach ($helper->getPaymentMethods() as $code => $method) {
             if (!isset($method['model'])) {
-                $messageManager->addWarningMessage(
+                self::addWarning(
                     'The `model` node must be provided for payment method configuration with code: ' . $code
                 );
                 continue;

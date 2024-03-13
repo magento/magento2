@@ -120,7 +120,7 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function xmlConfigFileProvider()
+    public static function xmlConfigFileProvider()
     {
         $fileList = self::getXmlConfigFiles();
         $result = [];
@@ -135,14 +135,14 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
      *
      * @return \Magento\Framework\Config\FileIterator
      */
-    public function getXmlConfigFiles()
+    public static function getXmlConfigFiles()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $moduleDirSearch \Magento\Framework\Component\DirSearch */
         $moduleDirSearch = $objectManager->get(\Magento\Framework\Component\DirSearch::class);
 
         return $objectManager->get(\Magento\Framework\Config\FileIteratorFactory::class)
-            ->create($moduleDirSearch->collectFiles(ComponentRegistrar::MODULE, $this->_getConfigFilePathGlob()));
+            ->create($moduleDirSearch->collectFiles(ComponentRegistrar::MODULE, static::_getConfigFilePathGlob()));
     }
 
     /**
@@ -159,12 +159,12 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
      *
      * @return string
      */
-    abstract protected function _getConfigFilePathGlob();
+    abstract protected static function _getConfigFilePathGlob();
 
     /**
      * Returns an absolute path to the XSD file corresponding to the XML files specified in _getConfigFilePathGlob
      *
      * @return string
      */
-    abstract protected function _getXsdPath();
+    abstract protected static function _getXsdPath();
 }

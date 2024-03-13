@@ -26,7 +26,7 @@ class ThemeConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConfi
      *
      * @return string
      */
-    protected function _getConfigFilePathGlob()
+    protected static function _getConfigFilePathGlob()
     {
         return 'view/*/layouts.xml';
     }

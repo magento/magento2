@@ -31,6 +31,7 @@ class FixedProductTax extends AbstractBaseAttributeData
      */
     public static function getAttributeData(): array
     {
+        self::$defaultAttributePostData['used_for_sort_by'] = '0';
         $result = parent::getAttributeData();
         unset($result["{self::getFrontendInput()}_with_default_value"]);
         unset($result["{self::getFrontendInput()}_without_default_value"]);
@@ -43,6 +44,7 @@ class FixedProductTax extends AbstractBaseAttributeData
      */
     public static function getAttributeDataWithCheckArray(): array
     {
+        self::$defaultAttributePostData['used_for_sort_by'] = '0';
         $result = parent::getAttributeDataWithCheckArray();
         unset($result["{self::getFrontendInput()}_with_default_value"]);
         unset($result["{self::getFrontendInput()}_without_default_value"]);
@@ -55,6 +57,7 @@ class FixedProductTax extends AbstractBaseAttributeData
      */
     public static function getUpdateProvider(): array
     {
+        self::$defaultAttributePostData['used_for_sort_by'] = '0';
         $frontendInput = self::getFrontendInput();
         return array_replace_recursive(
             parent::getUpdateProvider(),
@@ -100,6 +103,7 @@ class FixedProductTax extends AbstractBaseAttributeData
      */
     protected static function getUpdateExpectedData(): array
     {
+        self::$defaultAttributePostData['used_for_sort_by'] = '0';
         $updatePostData = self::getUpdatePostData();
         return array_merge(
             $updatePostData,

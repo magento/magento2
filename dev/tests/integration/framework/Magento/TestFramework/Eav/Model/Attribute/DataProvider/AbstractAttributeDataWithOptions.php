@@ -30,9 +30,12 @@ abstract class AbstractAttributeDataWithOptions extends AbstractBaseAttributeDat
      */
     public static function getAttributeData(): array
     {
+        self::$defaultAttributePostData['serialized_options_arr'] = self::getOptionsDataArr();
+        self::$defaultAttributePostData['is_filterable'] = '0';
+        self::$defaultAttributePostData['is_filterable_in_search'] = '0';
         $result = parent::getAttributeData();
-        unset($result["{self::getFrontendInput()}_with_default_value"]);
-        unset($result["{self::getFrontendInput()}_without_default_value"]);
+        unset($result["{static::getFrontendInput()}_with_default_value"]);
+        unset($result["{static::getFrontendInput()}_without_default_value"]);
 
         return $result;
     }
@@ -44,11 +47,13 @@ abstract class AbstractAttributeDataWithOptions extends AbstractBaseAttributeDat
     {
         $wrongSerializeMessage = 'The attribute couldn\'t be saved due to an error. Verify your information and ';
         $wrongSerializeMessage .= 'try again. If the error persists, please try again later.';
-
+        self::$defaultAttributePostData['serialized_options_arr'] = self::getOptionsDataArr();
+        self::$defaultAttributePostData['is_filterable'] = '0';
+        self::$defaultAttributePostData['is_filterable_in_search'] = '0';
         return array_replace_recursive(
             parent::getAttributeDataWithErrorMessage(),
             [
-                "{self::getFrontendInput()}_with_wrong_serialized_options" => [
+                "{static::getFrontendInput()}_with_wrong_serialized_options" => [
                     array_merge(
                         self::$defaultAttributePostData,
                         [
@@ -67,12 +72,12 @@ abstract class AbstractAttributeDataWithOptions extends AbstractBaseAttributeDat
      */
     public static function getAttributeDataWithCheckArray(): array
     {
-        $result = parent::getAttributeDataWithCheckArray();
         self::$defaultAttributePostData['serialized_options_arr'] = self::getOptionsDataArr();
         self::$defaultAttributePostData['is_filterable'] = '0';
         self::$defaultAttributePostData['is_filterable_in_search'] = '0';
-        unset($result["{self::getFrontendInput()}_with_default_value"]);
-        unset($result["{self::getFrontendInput()}_without_default_value"]);
+        $result = parent::getAttributeDataWithCheckArray();
+        unset($result["{static::getFrontendInput()}_with_default_value"]);
+        unset($result["{static::getFrontendInput()}_without_default_value"]);
 
         return $result;
     }
@@ -84,10 +89,10 @@ abstract class AbstractAttributeDataWithOptions extends AbstractBaseAttributeDat
      */
     public static function getUpdateOptionsProvider(): array
     {
-        $frontendInput = static::getFrontendInput();
         self::$defaultAttributePostData['serialized_options_arr'] = self::getOptionsDataArr();
         self::$defaultAttributePostData['is_filterable'] = '0';
         self::$defaultAttributePostData['is_filterable_in_search'] = '0';
+        $frontendInput = static::getFrontendInput();
         return [
             "{$frontendInput}_update_options" => [
                 'post_data' => [

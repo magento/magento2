@@ -21,18 +21,18 @@ class DateTime extends AbstractBaseAttributeData
     public function __construct()
     {
         parent::__construct();
-        $this->defaultAttributePostData['used_for_sort_by'] = '0';
+        self::$defaultAttributePostData['used_for_sort_by'] = '0';
     }
 
     /**
      * @inheritdoc
      */
-    public function getAttributeData(): array
+    public static function getAttributeData(): array
     {
         return array_replace_recursive(
             parent::getAttributeData(),
             [
-                "{$this->getFrontendInput()}_with_default_value" => [
+                "{self::getFrontendInput()}_with_default_value" => [
                     [
                         'default_value_text' => '',
                         'default_value_datetime' => '02/4/2020 6:30 AM',
@@ -45,12 +45,12 @@ class DateTime extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    public function getAttributeDataWithCheckArray(): array
+    public static function getAttributeDataWithCheckArray(): array
     {
         return array_replace_recursive(
             parent::getAttributeDataWithCheckArray(),
             [
-                "{$this->getFrontendInput()}_with_default_value" => [
+                "{self::getFrontendInput()}_with_default_value" => [
                     1 => [
                         'default_value' => '2020-02-04 06:30:00',
                     ],
@@ -62,9 +62,9 @@ class DateTime extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    public function getUpdateProvider(): array
+    public static function getUpdateProvider(): array
     {
-        $frontendInput = $this->getFrontendInput();
+        $frontendInput = self::getFrontendInput();
         return array_replace_recursive(
             parent::getUpdateProvider(),
             [
@@ -83,9 +83,9 @@ class DateTime extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    public function getUpdateProviderWithErrorMessage(): array
+    public static function getUpdateProviderWithErrorMessage(): array
     {
-        $frontendInput = $this->getFrontendInput();
+        $frontendInput = self::getFrontendInput();
         return array_replace_recursive(
             parent::getUpdateProviderWithErrorMessage(),
             [
@@ -102,7 +102,7 @@ class DateTime extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    protected function getFrontendInput(): string
+    protected static function getFrontendInput(): string
     {
         return 'datetime';
     }
@@ -110,7 +110,7 @@ class DateTime extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    protected function getUpdatePostData(): array
+    protected static function getUpdatePostData(): array
     {
         return [
             'frontend_label' => [
@@ -139,9 +139,9 @@ class DateTime extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    protected function getUpdateExpectedData(): array
+    protected static function getUpdateExpectedData(): array
     {
-        $updatePostData = $this->getUpdatePostData();
+        $updatePostData = self::getUpdatePostData();
         unset($updatePostData['default_value_datetime']);
         return array_merge(
             $updatePostData,

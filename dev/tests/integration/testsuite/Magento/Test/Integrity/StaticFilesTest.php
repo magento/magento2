@@ -56,10 +56,6 @@ class StaticFilesTest extends \PHPUnit\Framework\TestCase
      */
     private $filesystem;
 
-    /**
-     * @var \Magento\Framework\Message\ManagerInterface
-     */
-    private static $messageManager;
 
     protected function setUp(): void
     {
@@ -76,7 +72,6 @@ class StaticFilesTest extends \PHPUnit\Framework\TestCase
         );
         $this->simpleFactory = $om->get(\Magento\Framework\View\Design\Fallback\Rule\SimpleFactory::class);
         $this->filesystem = $om->get(\Magento\Framework\Filesystem::class);
-        $this->messageManager = $om->get(\Magento\Framework\Message\ManagerInterface::class);
     }
 
     /**
@@ -313,7 +308,7 @@ class StaticFilesTest extends \PHPUnit\Framework\TestCase
             list($area, $themePath, , , $file) = array_pad($metaInfo, 5, null);
 
             if (!is_string($file)) {
-                self::$messageManager->addWarningMessage(
+                self::addWarning(
                     'Wrong layout file configuration provided. The `file` meta info must be the type of string'
                 );
                 continue;
