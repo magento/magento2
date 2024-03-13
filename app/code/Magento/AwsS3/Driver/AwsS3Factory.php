@@ -21,6 +21,7 @@ use Magento\RemoteStorage\Model\Config;
 
 /**
  * Creates a pre-configured instance of AWS S3 driver.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AwsS3Factory implements DriverFactoryInterface
 {
