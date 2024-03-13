@@ -35,7 +35,7 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
     /**
      * @var ComponentRegistrar
      */
-    protected $componentRegistrar;
+    protected static $componentRegistrar;
 
     protected function setUp(): void
     {

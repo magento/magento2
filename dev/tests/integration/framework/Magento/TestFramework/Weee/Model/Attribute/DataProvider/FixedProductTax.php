@@ -103,7 +103,6 @@ class FixedProductTax extends AbstractBaseAttributeData
      */
     protected static function getUpdateExpectedData(): array
     {
-        self::$defaultAttributePostData['used_for_sort_by'] = '0';
         $updatePostData = self::getUpdatePostData();
         return array_merge(
             $updatePostData,

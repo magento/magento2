@@ -60,7 +60,7 @@ class AttributeVisualSwatchTest extends AbstractAttributeTest
     /**
      * @inheritdoc
      */
-    public function uniqueAttributeValueProvider(): array
+    public static function uniqueAttributeValueProvider(): array
     {
         return [
             [

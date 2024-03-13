@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Product\Attribute\Frontend\Image;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Eav\Model\Attribute\DataProvider\AbstractBaseAttributeData;
+use tests\util\MftfStaticTestCase;
 
 /**
  * Product attribute data for attribute with input type media image.
@@ -53,9 +54,9 @@ class MediaImage extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    public function getUpdateProvider(): array
+    public static function getUpdateProvider(): array
     {
-        $frontendInput = $this->getFrontendInput();
+        $frontendInput = self::getFrontendInput();
         return array_replace_recursive(
             parent::getUpdateProvider(),
             [
@@ -74,7 +75,7 @@ class MediaImage extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    protected function getFrontendInput(): string
+    protected static function getFrontendInput(): string
     {
         return 'media_image';
     }
@@ -82,7 +83,7 @@ class MediaImage extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    protected function getUpdatePostData(): array
+    protected static function getUpdatePostData(): array
     {
         return [
             'frontend_label' => [
@@ -99,9 +100,9 @@ class MediaImage extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    protected function getUpdateExpectedData(): array
+    protected static function getUpdateExpectedData(): array
     {
-        $updatePostData = $this->getUpdatePostData();
+        $updatePostData = self::getUpdatePostData();
         return array_merge(
             $updatePostData,
             [
