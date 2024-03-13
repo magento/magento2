@@ -57,7 +57,7 @@ class SaveHandlerTest extends TestCase
     {
         $this->optionRepository = $this->getMockBuilder(OptionRepository::class)
             ->disableOriginalConstructor()
-            ->setMethods(['save', 'getList', 'deleteById'])
+            ->onlyMethods(['save', 'getList', 'deleteById'])
             ->getMock();
 
         $this->initConfigurableFactoryMock();
@@ -81,7 +81,7 @@ class SaveHandlerTest extends TestCase
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTypeId', 'getExtensionAttributes'])
+            ->onlyMethods(['getTypeId', 'getExtensionAttributes'])
             ->getMock();
 
         $product->expects(static::once())
@@ -104,7 +104,7 @@ class SaveHandlerTest extends TestCase
         $configurableProductLinks = [1, 2, 3];
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTypeId', 'getExtensionAttributes', 'getSku'])
+            ->onlyMethods(['getTypeId', 'getExtensionAttributes', 'getSku'])
             ->getMock();
 
         $product->expects(static::once())
@@ -115,7 +115,7 @@ class SaveHandlerTest extends TestCase
             ->willReturn($sku);
 
         $extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
-            ->setMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
+            ->addMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -155,7 +155,7 @@ class SaveHandlerTest extends TestCase
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTypeId', 'getSku', 'getData', 'getExtensionAttributes'])
+            ->onlyMethods(['getTypeId', 'getSku', 'getData', 'getExtensionAttributes'])
             ->getMock();
         $product->expects(static::once())
             ->method('getTypeId')
@@ -165,7 +165,7 @@ class SaveHandlerTest extends TestCase
             ->willReturn($sku);
 
         $extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
-            ->setMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
+            ->addMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -178,7 +178,7 @@ class SaveHandlerTest extends TestCase
 
         $attributeNew = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributeId', 'loadByProductAndAttribute', 'setId', 'getId'])
+            ->onlyMethods(['getAttributeId', 'loadByProductAndAttribute', 'setId', 'getId'])
             ->getMock();
         $attributeNew->expects(static::atLeastOnce())
             ->method('getAttributeId')
@@ -230,12 +230,11 @@ class SaveHandlerTest extends TestCase
     {
         $this->configurable = $this->getMockBuilder(Configurable::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->configurableFactory = $this->getMockBuilder(ConfigurableFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->configurableFactory->expects(static::any())

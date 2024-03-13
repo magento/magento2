@@ -95,10 +95,14 @@ class TemporaryTableStrategyTest extends TestCase
             ->method('getConnection')
             ->with('indexer')
             ->willReturn($connectionMock);
+
         $this->resourceMock
             ->method('getTableName')
-            ->withConsecutive([$expectedResult], [$tempTableName])
-            ->willReturnOnConsecutiveCalls($expectedResult, $tempTableName);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$expectedResult] => $expectedResult,
+                [$tempTableName] => $tempTableName,
+            });
+
         $connectionMock->expects($this->once())
             ->method('createTemporaryTableLike')
             ->with($expectedResult, $tempTableName, true);
