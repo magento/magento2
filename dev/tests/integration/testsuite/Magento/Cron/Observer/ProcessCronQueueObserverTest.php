@@ -86,7 +86,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
             ->method('lock')
             ->willReturnCallback(function (...$expectedLockData) {
                 if (!empty($expectedLockData)) {
-                    return null;
+                    return false;
                 }
             });
 

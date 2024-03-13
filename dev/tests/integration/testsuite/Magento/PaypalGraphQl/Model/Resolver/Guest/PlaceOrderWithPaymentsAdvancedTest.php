@@ -136,7 +136,7 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
                         'BUTTONSOURCE' => $button,
                         'tender' => 'C',
                     ],
-                    $this->returnSelf()
+                    []
                 ],
                 ['USER1', 1, $this->returnSelf()],
                 ['USER2', 'USER2SilentPostHash', $this->returnSelf()]
