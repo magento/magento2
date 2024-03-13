@@ -67,7 +67,7 @@ class BeforeAddressSaveObserverTest extends TestCase
 
         $observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods([
                 'getCustomerAddress',
             ])
             ->getMock();
@@ -106,7 +106,8 @@ class BeforeAddressSaveObserverTest extends TestCase
 
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getIsDefaultBilling', 'getIsDefaultShipping', 'setForceProcess'])
+            ->addMethods(['getIsDefaultBilling', 'getIsDefaultShipping', 'setForceProcess'])
+            ->onlyMethods(['getId'])
             ->getMock();
         $address->expects($this->once())
             ->method('getId')
@@ -124,7 +125,7 @@ class BeforeAddressSaveObserverTest extends TestCase
 
         $observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods([
                 'getCustomerAddress',
             ])
             ->getMock();
@@ -157,7 +158,7 @@ class BeforeAddressSaveObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderBeforeAddressSaveWithoutCustomerAddressId()
+    public static function dataProviderBeforeAddressSaveWithoutCustomerAddressId()
     {
         return [
             [

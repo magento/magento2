@@ -94,6 +94,7 @@ class RuleTest extends TestCase
      * Test populating acl rule from cache.
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testPopulateAclFromCache(): void
     {
@@ -117,17 +118,23 @@ class RuleTest extends TestCase
         $aclMock->method('hasResource')->willReturn(true);
         $aclMock
             ->method('allow')
-            ->withConsecutive(
-                ['1', null, null],
-                ['1', 'Magento_Backend::all', null],
-                ['2', 1, null]
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 == '1' && $arg2 === null && $arg3 === null) {
+                    return null;
+                } elseif ($arg1 == '1' && $arg2 == 'Magento_Backend::all' && $arg3 === null) {
+                    return null;
+                } elseif ($arg1 == '2' && $arg2 == 1 && $arg3 === null) {
+                    return null;
+                }
+            });
 
         $aclMock
             ->method('deny')
-            ->withConsecutive(
-                ['3', 1, null]
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 == '3' && $arg2 == 1 && is_null($arg3)) {
+                    return null;
+                }
+            });
 
         $aclMock
             ->method('getResources')
