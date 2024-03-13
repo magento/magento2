@@ -15,6 +15,7 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Quote\Model\Cart\Totals;
 use Magento\Quote\Model\Quote\Item;
 use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
+use Magento\QuoteGraphQl\Model\GetDiscounts;
 
 /**
  * @inheritdoc
@@ -22,24 +23,18 @@ use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
 class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
 {
     /**
-     * @var TotalsCollector
-     */
-    private $totalsCollector;
-
-    /**
      * @var Totals|null
      */
     private $totals;
 
     /**
-     * CartItemPrices constructor
-     *
      * @param TotalsCollector $totalsCollector
+     * @param GetDiscounts $getDiscounts
      */
     public function __construct(
-        TotalsCollector $totalsCollector
+        private readonly TotalsCollector $totalsCollector,
+        private readonly GetDiscounts $getDiscounts
     ) {
-        $this->totalsCollector = $totalsCollector;
     }
 
     /**
@@ -66,6 +61,17 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
             $this->totals = $this->totalsCollector->collectQuoteTotals($cartItem->getQuote());
         }
         $currencyCode = $cartItem->getQuote()->getQuoteCurrencyCode();
+
+        /** calculate bundle product discount */
+        if ($cartItem->getProductType() == 'bundle') {
+            $discounts = $cartItem->getExtensionAttributes()->getDiscounts() ?? [];
+            $discountAmount = 0;
+            foreach ($discounts as $discount) {
+                $discountAmount += $discount->getDiscountData()->getAmount();
+            }
+        } else {
+            $discountAmount = $cartItem->getDiscountAmount();
+        }
         return [
             'model' => $cartItem,
             'price' => [
@@ -86,38 +92,12 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
             ],
             'total_item_discount' => [
                 'currency' => $currencyCode,
-                'value' => $cartItem->getDiscountAmount(),
+                'value' => $discountAmount,
             ],
-            'discounts' => $this->getDiscountValues($cartItem, $currencyCode)
+            'discounts' => $this->getDiscounts->execute(
+                $cartItem->getQuote(),
+                $cartItem->getExtensionAttributes()->getDiscounts() ?? []
+            )
         ];
-    }
-
-    /**
-     * Get Discount Values
-     *
-     * @param Item $cartItem
-     * @param string $currencyCode
-     * @return array|null
-     */
-    private function getDiscountValues($cartItem, $currencyCode)
-    {
-        $itemDiscounts = $cartItem->getExtensionAttributes()->getDiscounts();
-        if ($itemDiscounts) {
-            $discountValues = [];
-            foreach ($itemDiscounts as $value) {
-                $discount = [];
-                $amount = [];
-                /* @var \Magento\SalesRule\Api\Data\DiscountDataInterface $discountData */
-                $discountData = $value->getDiscountData();
-                $discountAmount = $discountData->getAmount();
-                $discount['label'] = $value->getRuleLabel() ?: __('Discount');
-                $amount['value'] = $discountAmount;
-                $amount['currency'] = $currencyCode;
-                $discount['amount'] = $amount;
-                $discountValues[] = $discount;
-            }
-            return $discountValues;
-        }
-        return null;
     }
 }

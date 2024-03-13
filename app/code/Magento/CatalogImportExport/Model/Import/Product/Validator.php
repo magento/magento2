@@ -7,6 +7,8 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Validator\AbstractValidator;
 use Magento\Catalog\Model\Product\Attribute\Backend\Sku;
 
@@ -55,19 +57,28 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     private $uniqueAttributeValidator;
 
     /**
-     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @var TimezoneInterface
+     */
+    private $localeDate;
+
+    /**
+     * @param StringUtils $string
      * @param RowValidatorInterface[] $validators
+     * @param TimezoneInterface|null $localeDate
      * @param UniqueAttributeValidator|null $uniqueAttributeValidator
      */
     public function __construct(
         \Magento\Framework\Stdlib\StringUtils $string,
         $validators = [],
-        UniqueAttributeValidator $uniqueAttributeValidator = null
+        ?TimezoneInterface $localeDate = null,
+        ?UniqueAttributeValidator $uniqueAttributeValidator = null
     ) {
         $this->string = $string;
         $this->validators = $validators;
+        $this->localeDate = $localeDate ?: ObjectManager::getInstance()
+            ->get(TimezoneInterface::class);
         $this->uniqueAttributeValidator = $uniqueAttributeValidator
-            ?? ObjectManager::getInstance()->get(UniqueAttributeValidator::class);
+            ?: ObjectManager::getInstance()->get(UniqueAttributeValidator::class);
     }
 
     /**
@@ -319,7 +330,16 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     private function validateDateTime(string $rowData): bool
     {
         $val = trim($rowData);
-        $valid = strtotime($val) !== false;
+        try {
+            if (!date_create_from_format(DateTime::DATETIME_PHP_FORMAT, $val)
+                && !date_create_from_format(DateTime::DATE_PHP_FORMAT, $val)
+            ) {
+                $this->localeDate->date($val);
+            }
+            $valid = true;
+        } catch (\Exception $e) {
+            $valid = false;
+        }
         if (!$valid) {
             $this->_addMessages([RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_TYPE]);
         }
