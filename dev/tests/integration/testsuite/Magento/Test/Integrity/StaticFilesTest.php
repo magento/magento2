@@ -7,6 +7,7 @@
 namespace Magento\Test\Integrity;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use PHPUnit\Framework\TestStatus\TestStatus;
 
 /**
  * An integrity test that searches for references to static files and asserts that they are resolved via fallback
@@ -308,7 +309,7 @@ class StaticFilesTest extends \PHPUnit\Framework\TestCase
             list($area, $themePath, , , $file) = array_pad($metaInfo, 5, null);
 
             if (!is_string($file)) {
-                self::addWarning(
+                TestStatus::warning(
                     'Wrong layout file configuration provided. The `file` meta info must be the type of string'
                 );
                 continue;

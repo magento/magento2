@@ -11,7 +11,7 @@ namespace Magento\Test\Integrity\Magento\Payment;
 
 use Magento\Framework\App\State;
 use Magento\TestFramework\Helper\Bootstrap;
-
+use PHPUnit\Framework\TestStatus\TestStatus;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -110,7 +110,7 @@ class MethodsTest extends \PHPUnit\Framework\TestCase
         $result = [];
         foreach ($helper->getPaymentMethods() as $code => $method) {
             if (!isset($method['model'])) {
-                self::addWarning(
+                TestStatus::warning(
                     'The `model` node must be provided for payment method configuration with code: ' . $code
                 );
                 continue;
