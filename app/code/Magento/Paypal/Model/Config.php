@@ -16,6 +16,7 @@ use Magento\Payment\Helper\Formatter;
  * Works with PayPal-specific system configuration
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Config extends AbstractConfig
 {
