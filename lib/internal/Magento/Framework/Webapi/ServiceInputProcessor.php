@@ -38,12 +38,12 @@ use Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface;
  */
 class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAfterRequestInterface
 {
-    public const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
-
     /**
      *  Input param to be rejected when it contains xml content
      */
-    public const REJECTED_INPUT_PARAM_SOURCEDATA = 'sourcedata';
+    private const REJECTED_INPUT_PARAM_SOURCEDATA = 'sourcedata';
+
+    public const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
 
     /**
      * @var TypeProcessor
