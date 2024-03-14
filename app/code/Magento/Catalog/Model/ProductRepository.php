@@ -694,11 +694,13 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
+        $storeId = $this->storeManager->getStore()->getStoreId();
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
         $this->extensionAttributesJoinProcessor->process($collection);
 
         $collection->addAttributeToSelect('*');
+        $collection->addStoreFilter($storeId);
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
         $this->joinPositionField($collection, $searchCriteria);
