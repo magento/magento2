@@ -48,11 +48,11 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getTestCases()
+    public static function getTestCases()
     {
         return [
             '#1 Testing price for dynamic bundle with one required option' => [
-                'strategy' => $this->getBundleProductConfiguration1(),
+                'strategy' => self::getBundleProductConfiguration1(),
                 'expectedResults' => [
                     // 10 * 0.9
                     'minimalPrice' => 9,
@@ -63,7 +63,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
             ],
 
             '#3 Testing price for dynamic bundle with one non required option' => [
-                'strategy' => $this->getBundleProductConfiguration3(),
+                'strategy' => self::getBundleProductConfiguration3(),
                 'expectedResults' => [
                     // 0.9 * 2 * 10
                     'minimalPrice' => 18,
@@ -74,7 +74,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
             ],
 
             '#4 Testing price for dynamic bundle with one required checkbox type option and 2 simples' => [
-                'strategy' => $this->getBundleProductConfiguration4(),
+                'strategy' => self::getBundleProductConfiguration4(),
                 'expectedResults' => [
                     // 0.9 * 1 * 10
                     'minimalPrice' => 9,
@@ -85,7 +85,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
             ],
 
             '#5 Testing price for dynamic bundle with one required multi type option and 2 simples' => [
-                'strategy' => $this->getBundleProductConfiguration5(),
+                'strategy' => self::getBundleProductConfiguration5(),
                 'expectedResults' => [
                     // 0.9 * 1 * 10
                     'minimalPrice' => 9,
@@ -96,7 +96,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
             ],
 
             '#6 Testing price for dynamic bundle with one required radio type option and 2 simples' => [
-                'strategy' => $this->getBundleProductConfiguration6(),
+                'strategy' => self::getBundleProductConfiguration6(),
                 'expectedResults' => [
                     // 0.9 * 1 * 10
                     'minimalPrice' => 9,
@@ -107,7 +107,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
             ],
 
             '#7 Testing price for dynamic bundle with two required options' => [
-                'strategy' => $this->getBundleProductConfiguration7(),
+                'strategy' => self::getBundleProductConfiguration7(),
                 'expectedResults' => [
                     // 0.9 * 1 * 10 + 0.9 * 1 * 10
                     'minimalPrice' => 18,
@@ -118,7 +118,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
             ],
 
             '#8 Testing price for dynamic bundle with one required option and one non required' => [
-                'strategy' => $this->getBundleProductConfiguration8(),
+                'strategy' => self::getBundleProductConfiguration8(),
                 'expectedResults' => [
                     // 1 * 0.9 * 10
                     'minimalPrice' => 9,
@@ -129,7 +129,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
             ],
 
             '#9 Testing price for dynamic bundle with two non required options' => [
-                'strategy' => $this->getBundleProductConfiguration9(),
+                'strategy' => self::getBundleProductConfiguration9(),
                 'expectedResults' => [
                     // 0.9 * 1 * 10
                     'minimalPrice' => 9,
@@ -391,7 +391,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
      * Dynamic bundle with two non required options
      * @return array
      */
-    private function getBundleProductConfiguration9()
+    private static function getBundleProductConfiguration9()
     {
         $optionsData = [
             [

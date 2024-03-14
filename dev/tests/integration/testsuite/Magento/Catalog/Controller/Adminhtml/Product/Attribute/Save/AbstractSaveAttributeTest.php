@@ -73,7 +73,9 @@ abstract class AbstractSaveAttributeTest extends AbstractBackendController
         );
         try {
             $attribute = $this->productAttributeRepository->get($attributeCode);
+            echo "===";
             $this->assertAttributeData($attribute, $attributeData, $checkArray);
+            print_r("testing");
             $this->productAttributeRepository->delete($attribute);
         } catch (NoSuchEntityException $e) {
             $this->fail("Attribute with code {$attributeCode} was not created.");
@@ -154,6 +156,7 @@ abstract class AbstractSaveAttributeTest extends AbstractBackendController
         }
 
         //Additional asserts
+        print_r($checkData);
         foreach ($checkData as $valueKey => $value) {
             $this->assertEquals($value, $attribute->getDataUsingMethod($valueKey));
         }
