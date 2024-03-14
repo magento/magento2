@@ -11,15 +11,15 @@
         <annotations>
             <features value="Checkout"/>
             <stories value="Shipping rate in Guest Checkout"/>
-            <title value="Guest Checkout - guest should be able to see the change in the shipping rate on fly."/>
+            <title value="Available shipping rate is changed on fly according to inputed data"/>
             <description value="Should be able to change the shipping rate while changing the input data based on the specific country and zipcode."/>
             <severity value="CRITICAL"/>
             <testCaseId value="AC-6139"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
-            <!-- Enabling Flat Rate -->
-            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!-- Creating subcategory -->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <!-- Creating Simple Product -->
@@ -29,26 +29,16 @@
             <!-- Go to Store > Configuration > Sales > Shipping Methods -->
             <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
             <!-- Free Shipping Configuration -->
-            <actionGroup ref="AdminEnableFreeShippingActionGroup" stepKey="freeShippingConfig">
-                <argument name="allowSpecificCountry" value="Specific Countries"/>
-                <argument name="specificCountry" value="Afghanistan"/>
-            </actionGroup>
-            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
+            <magentoCLI command="config:set {{EnableFreeShippingConfigData.path}} {{EnableFreeShippingConfigData.value}}" stepKey="enableFreeShipping"/>
+            <magentoCLI command="config:set {{EnableFreeShippingToSpecificCountriesConfigData.path}} {{EnableFreeShippingToSpecificCountriesConfigData.value}}" stepKey="selectSpecificCountries"/>
+            <magentoCLI command="config:set {{EnableFreeShippingToAfghanistanConfigData.path}} {{EnableFreeShippingToAfghanistanConfigData.value}}" stepKey="selectCountry"/>
             <!-- DHL Shipping Configuration -->
-            <actionGroup ref="AdminEnableDHLConfigurationActionGroup" stepKey="dhlConfig">
-                <argument name="config" value="dhlConfigData"/>
-                <argument name="allowSpecificCountry" value="Specific Countries"/>
-                <argument name="specificCountry" value="United Kingdom"/>
-                <argument name="showMethod" value="Yes"/>
-                <argument name="debug" value="Yes"/>
-                <argument name="sandbox" value="Yes"/>
-            </actionGroup>
-            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigurationForDHL"/>
+            <actionGroup ref="AdminEnableDHLConfigurationActionGroup" stepKey="dhlConfig"/>
             <!--Set Shipping settings origin data-->
             <actionGroup ref="AdminSetShippingOriginConfigActionGroup" stepKey="setShippingOriginConfigurationData">
                 <argument name="country" value="United States"/>
                 <argument name="state" value="California"/>
-                <argument name="postcode" value="90034"/>
+                <argument name="postcode" value="90230"/>
             </actionGroup>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCachePostChangingConfigurationSettings">
                 <argument name="tags" value="config"/>
@@ -96,14 +86,12 @@
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
-            <!-- Disable flat rate method -->
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
             <!-- Reset shipping origin -->
             <actionGroup ref="AdminResetShippingOriginConfigurationActionGroup" stepKey="ResetCaliforniaShippingOrigin"/>
             <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="shippingMethodConfigPage"/>
             <!-- Reset free shipping origin -->
-            <actionGroup ref="AdminDisableFreeShippingActionGroup" stepKey="resetFreeShippingConfig"/>
-            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="resetSaveConfiguration"/>
+            <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
+            <magentoCLI command="config:set {{EnableFreeShippingToAllAllowedCountriesConfigData.path}} {{EnableFreeShippingToAllAllowedCountriesConfigData.value}}" stepKey="selectAllCountries"/>
             <!-- Reset dhl configuration origin -->
             <actionGroup ref="AdminDisableDHLConfigurationActionGroup" stepKey="resetDhlConfig"/>
             <actionGroup ref="AdminSaveConfigActionGroup" stepKey="resetSaveConfigurationForDHL"/>
