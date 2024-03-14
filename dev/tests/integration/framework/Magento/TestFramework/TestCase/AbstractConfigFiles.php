@@ -39,7 +39,7 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->componentRegistrar = new ComponentRegistrar();
+        self::$componentRegistrar = new ComponentRegistrar();
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $xmlFiles = $this->getXmlConfigFiles();
         if (!empty($xmlFiles)) {
