@@ -83,7 +83,7 @@ class ExportInfoFactory
      *
      * @param string $fileFormat
      * @param string $entity
-     * @param string $exportFilter
+     * @param array $exportFilter
      * @param array $skipAttr
      * @param string|null $locale
      * @param bool|null $fieldsEnclosure
