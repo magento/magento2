@@ -101,7 +101,8 @@ class PayflowTest extends \Magento\TestFramework\TestCase\AbstractController
         foreach ($this->getResponse()->getHeaders() as $header) {
             $headerConstraints[] = new \PHPUnit\Framework\Constraint\IsEqual($header->getFieldName());
         }
-        $constraint = new \PHPUnit\Framework\Constraint\LogicalOr();
+//        $constraint = new \PHPUnit\Framework\Constraint\LogicalOr();
+        $constraint = $this->_objectManager->get(\PHPUnit\Framework\Constraint\BinaryOperator::class);
         $constraint->setConstraints($headerConstraints);
         $this->assertThat('P3P', $constraint);
     }
