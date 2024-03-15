@@ -342,8 +342,7 @@ QRY;
         string $cartId,
         string $sku,
         string $optionUid
-    ): string
-    {
+    ): string {
         return <<<QRY
 mutation {
     addProductsToCart(
