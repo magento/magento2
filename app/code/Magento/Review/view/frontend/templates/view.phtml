@@ -43,15 +43,10 @@
                                     <div class="rating-summary item"
                                          id="rating-div-<?= $block->escapeHtml($ratingId) ?>">
                                         <div class="rating-result" title="<?= /* @noEscape */ $rating ?>%">
-                                            <span>
+                                            <span style="width: <?= /* @noEscape */ $rating ?>%;">
                                                 <span><?= /* @noEscape */ $rating ?>%</span>
                                             </span>
                                         </div>
-                                        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-                                            "width:" . /* @noEscape */ $rating . "%",
-                                            'div#rating-div-'.$_rating->getRatingId().
-                                            '>div.rating-result>span:first-child'
-                                        ) ?>
                                     </div>
                                 </td>
                             </tr>

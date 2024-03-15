@@ -19,12 +19,10 @@ $urlForm = $block->getReviewsUrl() . '#review-form';
             <div class="rating-result"
                  id="rating-result_<?= /* @noEscape */ $block->getProduct()->getId() ?>"
                  title="<?= $block->escapeHtmlAttr($rating) ?>%">
-                <span><span><?= $block->escapeHtml($rating) ?>%</span></span>
+                <span style="width: <?= $block->escapeHtmlAttr($rating) ?>%;">
+                    <span><?= $block->escapeHtml($rating) ?>%</span>
+                </span>
             </div>
-            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-                'width:' . $block->escapeHtmlAttr($rating) . '%',
-                '#rating-result_' . $block->getProduct()->getId() . ' span'
-            ) ?>
         </div>
         <?php endif;?>
         <div class="reviews-actions">

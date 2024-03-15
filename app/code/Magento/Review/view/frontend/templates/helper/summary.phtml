@@ -21,9 +21,8 @@ $urlForm = $block->getReviewsUrl() . '#review-form';
              <span class="label"><span><?= $block->escapeHtml(__('Rating')) ?>:</span></span>
              <div class="rating-result"
                   id="rating-result_<?= $block->escapeHtmlAttr($block->getProduct()->getId()) ?>"
-                  title="<?= $block->escapeHtmlAttr($rating) ?>%"
-             >
-                 <span>
+                  title="<?= $block->escapeHtmlAttr($rating); ?>%">
+                 <span style="width: <?= $block->escapeHtmlAttr($rating); ?>%;">
                      <span>
                          <span itemprop="ratingValue"><?= $block->escapeHtml($rating); ?>
                          </span>% of <span itemprop="bestRating">100</span>
@@ -31,11 +30,6 @@ $urlForm = $block->getReviewsUrl() . '#review-form';
                  </span>
              </div>
          </div>
-            <?= /* @noEscape */
-            $secureRenderer->renderStyleAsTag(
-                'width:' . $block->escapeHtmlAttr($rating) . '%',
-                '#rating-result_' . $block->getProduct()->getId() . ' span'
-            ) ?>
         <?php endif;?>
         <div class="reviews-actions">
             <a class="action view"
