@@ -29,7 +29,7 @@ require(['prototype'], function(){
             $('trackingC' + this.index).disabled = false;
             $('trackingT' + this.index).disabled = false;
             $('trackingN' + this.index).disabled = false;
-            this.bindCurrierOnchange();
+            this.bindCarrierOnchange();
         },
         deleteRow : function(event) {
             var row = Event.findElement(event, 'tr');
@@ -37,17 +37,17 @@ require(['prototype'], function(){
                 row.parentNode.removeChild(row)
             }
         },
-        bindCurrierOnchange : function() {
+        bindCarrierOnchange : function() {
             var elems = $('tracking_numbers_table').select('.select');
             elems.each(function (elem) {
                 if (!elem.onchangeBound) {
                     elem.onchangeBound = true;
                     elem.valueInput = $(elem.parentNode.parentNode).select('.number-title')[0];
-                    elem.observe('change', this.currierOnchange);
+                    elem.observe('change', this.carrierOnchange);
                 }
             }.bind(this));
         },
-        currierOnchange : function(event) {
+        carrierOnchange : function(event) {
             var elem = Event.element(event);
             var option = elem.options[elem.selectedIndex];
             if (option.value && option.value != 'custom') {
