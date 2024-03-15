@@ -279,7 +279,6 @@ class ConfigFixture
             $test->setData($dataSetName, ['']);
         }
 
-        $test->setData($dataSetName, ['']);
         $this->_currentTest = $test;
         $this->_assignConfigData($test);
     }
