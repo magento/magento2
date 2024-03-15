@@ -788,6 +788,6 @@ class HelperTest extends TestCase
 
         $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
         $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
+        $reflectionProperty->setValue($objectManagerMock, null);
     }
 }
