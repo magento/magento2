@@ -63,7 +63,7 @@ class UpdateCustomer
             $customerId === $customerSessionId
         ) {
             $customer = $this->getUpdatedCustomer($customerRepository->getById($customerId), $customer);
-        } elseif ($userType === UserContextInterface::USER_TYPE_ADMIN) {
+        } elseif ($userType === UserContextInterface::USER_TYPE_ADMIN && $customerId) {
             $customer = $this->getUpdatedCustomer($customerRepository->getById($customerId), $customer);
         }
 
