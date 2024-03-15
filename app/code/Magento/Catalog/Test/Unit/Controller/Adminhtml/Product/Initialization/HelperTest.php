@@ -151,7 +151,7 @@ class HelperTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $productExtensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->addMethods(['getCategoryLinks', 'setCategoryLinks'])
+            ->onlyMethods(['getCategoryLinks', 'setCategoryLinks'])
             ->getMockForAbstractClass();
         $this->productMock->setExtensionAttributes($productExtensionAttributes);
 
@@ -788,6 +788,6 @@ class HelperTest extends TestCase
 
         $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
         $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock, null);
+        $reflectionProperty->setValue($objectManagerMock, $objectManagerMock);
     }
 }
