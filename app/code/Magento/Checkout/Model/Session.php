@@ -273,7 +273,7 @@ class Session extends \Magento\Framework\Session\SessionManager
                     }
 
                     /**
-                     * If current currency code of quote is not equal current currency code of store,
+                     * If current currency code of quote is not equal to current currency code of store,
                      * need recalculate totals of quote. It is possible if customer use currency switcher or
                      * store switcher.
                      */
@@ -281,8 +281,8 @@ class Session extends \Magento\Framework\Session\SessionManager
                         $quote->setStore($this->_storeManager->getStore());
                         $this->quoteRepository->save($quote->collectTotals());
                         /*
-                         * We mast to create new quote object, because collectTotals()
-                         * can to create links with other objects.
+                         * We must to create new quote object, because collectTotals()
+                         * can create links with other objects.
                          */
                         $quote = $this->quoteRepository->get($this->getQuoteId());
                     }

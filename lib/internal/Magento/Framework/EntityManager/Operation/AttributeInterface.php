@@ -8,6 +8,7 @@ namespace Magento\Framework\EntityManager\Operation;
 
 /**
  * Interface AttributeInterface
+ * @deprecated
  */
 interface AttributeInterface
 {

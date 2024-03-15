@@ -9,6 +9,7 @@ use Magento\Framework\EntityManager\OperationInterface;
 
 /**
  * Interface for checking if entity exists
+ * @deprecated
  */
 interface CheckIfExistsInterface extends OperationInterface
 {
