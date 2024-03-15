@@ -21,8 +21,8 @@ class DropDown extends AbstractAttributeDataWithOptions
     public function __construct()
     {
         parent::__construct();
-        self::$defaultAttributePostData['used_for_sort_by'] = '0';
-        self::$defaultAttributePostData['swatch_input_type'] = 'dropdown';
+        static::$defaultAttributePostData['used_for_sort_by'] = '0';
+        static::$defaultAttributePostData['swatch_input_type'] = 'dropdown';
     }
 
     /**
@@ -30,7 +30,7 @@ class DropDown extends AbstractAttributeDataWithOptions
      */
     public static function getUpdateProvider(): array
     {
-        $frontendInput = self::getFrontendInput();
+        $frontendInput = static::getFrontendInput();
         return array_replace_recursive(
             parent::getUpdateProvider(),
             [
@@ -90,7 +90,7 @@ class DropDown extends AbstractAttributeDataWithOptions
      */
     protected static function getUpdateExpectedData(): array
     {
-        $updatePostData = self::getUpdatePostData();
+        $updatePostData = static::getUpdatePostData();
         return array_merge(
             $updatePostData,
             [

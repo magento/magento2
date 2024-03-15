@@ -20,7 +20,7 @@ class MultipleSelect extends AbstractAttributeDataWithOptions
      */
     public static function getUpdateProvider(): array
     {
-        $frontendInput = self::getFrontendInput();
+        $frontendInput = static::getFrontendInput();
         return array_replace_recursive(
             parent::getUpdateProvider(),
             [
@@ -79,7 +79,7 @@ class MultipleSelect extends AbstractAttributeDataWithOptions
      */
     protected static function getUpdateExpectedData(): array
     {
-        $updatePostData = self::getUpdatePostData();
+        $updatePostData = static::getUpdatePostData();
         return array_merge(
             $updatePostData,
             [

@@ -21,8 +21,8 @@ class Text extends AbstractBaseAttributeData
     public function __construct()
     {
         parent::__construct();
-        self::$defaultAttributePostData['frontend_class'] = '';
-        self::$defaultAttributePostData['used_for_sort_by'] = '0';
+        static::$defaultAttributePostData['frontend_class'] = '';
+        static::$defaultAttributePostData['used_for_sort_by'] = '0';
     }
 
     /**
@@ -33,11 +33,11 @@ class Text extends AbstractBaseAttributeData
         return array_replace_recursive(
             parent::getAttributeData(),
             [
-                "{self::getFrontendInput()}_with_input_validation" => [
-                    array_merge(self::$defaultAttributePostData, ['frontend_class' => 'validate-alpha']),
+                "{static::getFrontendInput()}_with_input_validation" => [
+                    array_merge(static::$defaultAttributePostData, ['frontend_class' => 'validate-alpha']),
                 ],
-                "{self::getFrontendInput()}_without_input_validation" => [
-                    self::$defaultAttributePostData,
+                "{static::getFrontendInput()}_without_input_validation" => [
+                    static::$defaultAttributePostData,
                 ],
             ]
         );
@@ -51,13 +51,13 @@ class Text extends AbstractBaseAttributeData
         return array_merge_recursive(
             parent::getAttributeDataWithCheckArray(),
             [
-                "{self::getFrontendInput()}_with_input_validation" => [
+                "{static::getFrontendInput()}_with_input_validation" => [
                     [
                         'attribute_code' => 'test_attribute_name',
                         'frontend_class' => 'validate-alpha',
                     ],
                 ],
-                "{self::getFrontendInput()}_without_input_validation" => [
+                "{static::getFrontendInput()}_without_input_validation" => [
                     [
                         'attribute_code' => 'test_attribute_name',
                         'frontend_class' => '',
@@ -72,7 +72,7 @@ class Text extends AbstractBaseAttributeData
      */
     public static function getUpdateProvider(): array
     {
-        $frontendInput = self::getFrontendInput();
+        $frontendInput = static::getFrontendInput();
         return array_replace_recursive(
             parent::getUpdateProvider(),
             [
@@ -130,7 +130,7 @@ class Text extends AbstractBaseAttributeData
      */
     protected static function getUpdateExpectedData(): array
     {
-        $updatePostData = self::getUpdatePostData();
+        $updatePostData = static::getUpdatePostData();
         unset($updatePostData['default_value_text']);
         return array_merge(
             $updatePostData,

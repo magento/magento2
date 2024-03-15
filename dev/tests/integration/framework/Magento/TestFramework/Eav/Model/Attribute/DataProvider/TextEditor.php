@@ -21,7 +21,7 @@ class TextEditor extends AbstractBaseAttributeData
     public function __construct()
     {
         parent::__construct();
-        self::$defaultAttributePostData['used_for_sort_by'] = '0';
+        static::$defaultAttributePostData['used_for_sort_by'] = '0';
     }
 
     /**
@@ -32,7 +32,7 @@ class TextEditor extends AbstractBaseAttributeData
         return array_replace_recursive(
             parent::getAttributeData(),
             [
-                "{self::getFrontendInput()}_with_default_value" => [
+                "{static::getFrontendInput()}_with_default_value" => [
                     [
                         'default_value_text' => '',
                         'default_value_textarea' => 'Default attribute value',
@@ -50,67 +50,67 @@ class TextEditor extends AbstractBaseAttributeData
         return array_replace_recursive(
             parent::getAttributeDataWithCheckArray(),
             [
-                "{self::getFrontendInput()}_with_required_fields" => [
+                "{static::getFrontendInput()}_with_required_fields" => [
                     1 => [
                         'frontend_input' => 'textarea',
                     ],
                 ],
-                "{self::getFrontendInput()}_with_store_view_scope" => [
+                "{static::getFrontendInput()}_with_store_view_scope" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{self::getFrontendInput()}_with_global_scope" => [
+                "{static::getFrontendInput()}_with_global_scope" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{self::getFrontendInput()}_with_website_scope" => [
+                "{static::getFrontendInput()}_with_website_scope" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{self::getFrontendInput()}_with_attribute_code" => [
+                "{static::getFrontendInput()}_with_attribute_code" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{self::getFrontendInput()}_with_default_value" => [
+                "{static::getFrontendInput()}_with_default_value" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{self::getFrontendInput()}_without_default_value" => [
+                "{static::getFrontendInput()}_without_default_value" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{self::getFrontendInput()}_with_unique_value" => [
+                "{static::getFrontendInput()}_with_unique_value" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{self::getFrontendInput()}_without_unique_value" => [
+                "{static::getFrontendInput()}_without_unique_value" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{self::getFrontendInput()}_with_enabled_add_to_column_options" => [
+                "{static::getFrontendInput()}_with_enabled_add_to_column_options" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{self::getFrontendInput()}_without_enabled_add_to_column_options" => [
+                "{static::getFrontendInput()}_without_enabled_add_to_column_options" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{self::getFrontendInput()}_with_enabled_use_in_filter_options" => [
+                "{static::getFrontendInput()}_with_enabled_use_in_filter_options" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{self::getFrontendInput()}_without_enabled_use_in_filter_options" => [
+                "{static::getFrontendInput()}_without_enabled_use_in_filter_options" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
@@ -124,7 +124,7 @@ class TextEditor extends AbstractBaseAttributeData
      */
     public static function getUpdateProvider(): array
     {
-        $frontendInput = self::getFrontendInput();
+        $frontendInput = static::getFrontendInput();
         return array_replace_recursive(
             parent::getUpdateProvider(),
             [
@@ -191,7 +191,7 @@ class TextEditor extends AbstractBaseAttributeData
      */
     protected static function getUpdateExpectedData(): array
     {
-        $updatePostData = self::getUpdatePostData();
+        $updatePostData = static::getUpdatePostData();
         unset($updatePostData['default_value_textarea']);
         return array_merge(
             $updatePostData,

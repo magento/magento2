@@ -23,7 +23,7 @@ class TextArea extends AbstractBaseAttributeData
         return array_replace_recursive(
             parent::getAttributeData(),
             [
-                "{self::getFrontendInput()}_with_default_value" => [
+                "{static::getFrontendInput()}_with_default_value" => [
                     [
                         'default_value_text' => '',
                         'default_value_textarea' => 'Default attribute value',
@@ -38,7 +38,7 @@ class TextArea extends AbstractBaseAttributeData
      */
     public static function getUpdateProvider(): array
     {
-        $frontendInput = self::getFrontendInput();
+        $frontendInput = static::getFrontendInput();
         return array_replace_recursive(
             parent::getUpdateProvider(),
             [
@@ -104,7 +104,7 @@ class TextArea extends AbstractBaseAttributeData
      */
     protected static function getUpdateExpectedData(): array
     {
-        $updatePostData = self::getUpdatePostData();
+        $updatePostData = static::getUpdatePostData();
         unset($updatePostData['default_value_textarea']);
         return array_merge(
             $updatePostData,

@@ -21,7 +21,7 @@ class Date extends AbstractBaseAttributeData
     public function __construct()
     {
         parent::__construct();
-        self::$defaultAttributePostData['used_for_sort_by'] = '0';
+        static::$defaultAttributePostData['used_for_sort_by'] = '0';
     }
 
     /**
@@ -29,11 +29,11 @@ class Date extends AbstractBaseAttributeData
      */
     public static function getAttributeData(): array
     {
-        self::$defaultAttributePostData['used_for_sort_by'] = '0';
+        static::$defaultAttributePostData['used_for_sort_by'] = '0';
         return array_replace_recursive(
             parent::getAttributeData(),
             [
-                "{self::getFrontendInput()}_with_default_value" => [
+                "{static::getFrontendInput()}_with_default_value" => [
                     [
                         'default_value_text' => '',
                         'default_value_date' => '10/29/2019',
@@ -48,11 +48,11 @@ class Date extends AbstractBaseAttributeData
      */
     public static function getAttributeDataWithCheckArray(): array
     {
-        self::$defaultAttributePostData['used_for_sort_by'] = '0';
+        static::$defaultAttributePostData['used_for_sort_by'] = '0';
         return array_replace_recursive(
             parent::getAttributeDataWithCheckArray(),
             [
-                "{self::getFrontendInput()}_with_default_value" => [
+                "{static::getFrontendInput()}_with_default_value" => [
                     1 => [
                         'default_value' => '2019-10-29 00:00:00',
                     ],
@@ -66,8 +66,8 @@ class Date extends AbstractBaseAttributeData
      */
     public static function getUpdateProvider(): array
     {
-        self::$defaultAttributePostData['used_for_sort_by'] = '0';
-        $frontendInput = self::getFrontendInput();
+        static::$defaultAttributePostData['used_for_sort_by'] = '0';
+        $frontendInput = static::getFrontendInput();
         return array_replace_recursive(
             parent::getUpdateProvider(),
             [
@@ -88,8 +88,8 @@ class Date extends AbstractBaseAttributeData
      */
     public static function getUpdateProviderWithErrorMessage(): array
     {
-        self::$defaultAttributePostData['used_for_sort_by'] = '0';
-        $frontendInput = self::getFrontendInput();
+        static::$defaultAttributePostData['used_for_sort_by'] = '0';
+        $frontendInput = static::getFrontendInput();
         return array_replace_recursive(
             parent::getUpdateProviderWithErrorMessage(),
             [
@@ -145,7 +145,7 @@ class Date extends AbstractBaseAttributeData
      */
     protected static function getUpdateExpectedData(): array
     {
-        $updatePostData = self::getUpdatePostData();
+        $updatePostData = static::getUpdatePostData();
         unset($updatePostData['default_value_date']);
         return array_merge(
             $updatePostData,

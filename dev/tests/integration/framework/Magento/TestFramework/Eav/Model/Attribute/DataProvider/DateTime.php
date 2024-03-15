@@ -21,7 +21,7 @@ class DateTime extends AbstractBaseAttributeData
     public function __construct()
     {
         parent::__construct();
-        self::$defaultAttributePostData['used_for_sort_by'] = '0';
+        static::$defaultAttributePostData['used_for_sort_by'] = '0';
     }
 
     /**
@@ -32,7 +32,7 @@ class DateTime extends AbstractBaseAttributeData
         return array_replace_recursive(
             parent::getAttributeData(),
             [
-                "{self::getFrontendInput()}_with_default_value" => [
+                "{static::getFrontendInput()}_with_default_value" => [
                     [
                         'default_value_text' => '',
                         'default_value_datetime' => '02/4/2020 6:30 AM',
@@ -50,7 +50,7 @@ class DateTime extends AbstractBaseAttributeData
         return array_replace_recursive(
             parent::getAttributeDataWithCheckArray(),
             [
-                "{self::getFrontendInput()}_with_default_value" => [
+                "{static::getFrontendInput()}_with_default_value" => [
                     1 => [
                         'default_value' => '2020-02-04 06:30:00',
                     ],
@@ -64,7 +64,7 @@ class DateTime extends AbstractBaseAttributeData
      */
     public static function getUpdateProvider(): array
     {
-        $frontendInput = self::getFrontendInput();
+        $frontendInput = static::getFrontendInput();
         return array_replace_recursive(
             parent::getUpdateProvider(),
             [
@@ -85,7 +85,7 @@ class DateTime extends AbstractBaseAttributeData
      */
     public static function getUpdateProviderWithErrorMessage(): array
     {
-        $frontendInput = self::getFrontendInput();
+        $frontendInput = static::getFrontendInput();
         return array_replace_recursive(
             parent::getUpdateProviderWithErrorMessage(),
             [
@@ -141,7 +141,7 @@ class DateTime extends AbstractBaseAttributeData
      */
     protected static function getUpdateExpectedData(): array
     {
-        $updatePostData = self::getUpdatePostData();
+        $updatePostData = static::getUpdatePostData();
         unset($updatePostData['default_value_datetime']);
         return array_merge(
             $updatePostData,
