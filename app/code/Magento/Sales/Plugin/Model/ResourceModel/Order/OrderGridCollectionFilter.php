@@ -55,7 +55,7 @@ class OrderGridCollectionFilter
                 }
             }
 
-            $fieldName = $subject->getConnection()->quoteIdentifier($field);
+            $fieldName = "main_table." . $subject->getConnection()->quoteIdentifier($field);
             $condition = $subject->getConnection()->prepareSqlCondition($fieldName, $condition);
             $subject->getSelect()->where($condition, null, Select::TYPE_CONDITION);
 
