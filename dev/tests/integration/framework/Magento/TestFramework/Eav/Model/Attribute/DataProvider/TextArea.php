@@ -20,6 +20,7 @@ class TextArea extends AbstractBaseAttributeData
      */
     public static function getAttributeData(): array
     {
+        unset(static::$defaultAttributePostData['serialized_options_arr']);
         return array_replace_recursive(
             parent::getAttributeData(),
             [
@@ -38,6 +39,7 @@ class TextArea extends AbstractBaseAttributeData
      */
     public static function getUpdateProvider(): array
     {
+        unset(static::$defaultAttributePostData['serialized_options_arr']);
         $frontendInput = static::getFrontendInput();
         return array_replace_recursive(
             parent::getUpdateProvider(),
