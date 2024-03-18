@@ -123,13 +123,12 @@ class TransparentTest extends TestCase
         }
 
         $gatewayToken = 'gateway_token';
-        $this->payment->expects($this->once())->method('getParentTransactionId')
-            ->willReturn($parentTransactionId);
-        $this->payment->expects($this->exactly($setParentTransactionIdCalls))
-            ->method('setParentTransactionId');
+        $this->payment->expects($this->once())->method('getParentTransactionId')->willReturn($parentTransactionId);
+        $this->payment->expects($this->exactly($setParentTransactionIdCalls))->method('setParentTransactionId');
         $this->payment->expects($this->exactly($setAdditionalInformationCalls))
-            ->method('setAdditionalInformation')->with(Payflowpro::PNREF, $gatewayToken);
-        $this->payment->expects($this->exactly(4))
+            ->method('setAdditionalInformation')
+            ->with(Payflowpro::PNREF, $gatewayToken);
+        $this->payment->expects($this->exactly(4))->method('getAdditionalInformation')
             ->method('getAdditionalInformation')->willReturnCallback(
                 function ($arg) {
                     if ($arg == 'result_code') {
@@ -140,9 +139,11 @@ class TransparentTest extends TestCase
                 }
             );
         $this->paymentExtensionAttributes->expects($this->once())
-            ->method('getVaultPaymentToken')->willReturn($this->paymentToken);
+            ->method('getVaultPaymentToken')
+            ->willReturn($this->paymentToken);
         $this->paymentToken->expects($this->exactly($getGatewayTokenCalls))
-            ->method('getGatewayToken')->willReturn($gatewayToken);
+            ->method('getGatewayToken')
+            ->willReturn($gatewayToken);
 
         $this->subject->capture($this->payment, 100);
     }
@@ -354,6 +355,23 @@ class TransparentTest extends TestCase
     {
         $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
+            ->addMethods(['getIsTransactionApproved'])
+            ->onlyMethods(
+                [
+                    'setTransactionId',
+                    'setIsTransactionClosed',
+                    'getCcExpYear',
+                    'getCcExpMonth',
+                    'getExtensionAttributes',
+                    'getOrder',
+                    'authorize',
+                    'canFetchTransactionInfo',
+                    'getParentTransactionId',
+                    'setParentTransactionId',
+                    'setAdditionalInformation',
+                    'getAdditionalInformation'
+                ]
+            )
             ->getMock();
         $this->order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
@@ -369,7 +387,16 @@ class TransparentTest extends TestCase
         $this->payment->method('getCcExpYear')->willReturn('2019');
         $this->payment->method('getCcExpMonth')->willReturn('05');
         $this->payment->method('getExtensionAttributes')->willReturn($this->paymentExtensionAttributes);
+        $this->payment->method('getIsTransactionApproved')->willReturn(true);
 
         return $this->payment;
+    }
+
+    public function testFetchTransactionInfo()
+    {
+        $this->payment->method('canFetchTransactionInfo')->willReturn(false);
+        $this->paymentConfig->method('getPaymentAction')->willReturn('authorize');
+        $this->payment->expects($this->never())->method('authorize');
+        $this->subject->fetchTransactionInfo($this->payment, '123');
     }
 }

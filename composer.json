@@ -211,6 +211,7 @@
         "magento/module-indexer": "*",
         "magento/module-instant-purchase": "*",
         "magento/module-integration": "*",
+        "magento/module-integration-graph-ql": "*",
         "magento/module-layered-navigation": "*",
         "magento/module-login-as-customer": "*",
         "magento/module-login-as-customer-admin-ui": "*",
