@@ -23,7 +23,8 @@ use Magento\Catalog\Model\ResourceModel\CatalogCategoryAndProductResolverOnSingl
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -39,17 +40,21 @@ class CatalogCategoryAndProductResolverOnSingleStoreModeTest extends TestCase
      */
     private $resourceConnectionMock;
 
+    /**
+     * @var MetadataPool|MockObject
+     */
+    private $metadataPoolMock;
+
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
-
-        $this->model = $objectManager->getObject(
-            Resolver::class,
-            [
-                'resourceConnection' => $this->resourceConnectionMock
-            ]
-        );
+        $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->model = new Resolver(
+                $this->resourceConnectionMock,
+                $this->metadataPoolMock
+            );
     }
 
     /**
@@ -78,7 +83,7 @@ class CatalogCategoryAndProductResolverOnSingleStoreModeTest extends TestCase
             ]
         ];
         $connection = $this->getConnection();
-        $connection->expects($this->any())->method('fetchCol')->willReturn($catalogProducts);
+        $connection->expects($this->any())->method('fetchAll')->willReturn($catalogProducts);
         $connection->expects($this->any())->method('delete')->willReturnSelf();
         $connection->expects($this->any())->method('update')->willReturnSelf();
         $connection->expects($this->any())->method('commit')->willReturnSelf();
@@ -94,7 +99,7 @@ class CatalogCategoryAndProductResolverOnSingleStoreModeTest extends TestCase
         $exceptionMessage = 'Exception message';
         $connection = $this->getConnection();
         $connection->expects($this->any())
-            ->method('fetchCol')
+            ->method('fetchAll')
             ->willThrowException(new Exception($exceptionMessage));
         $connection->expects($this->any())->method('rollBack')->willReturnSelf();
         $this->model->migrateCatalogCategoryAndProductTables(1);
@@ -108,6 +113,14 @@ class CatalogCategoryAndProductResolverOnSingleStoreModeTest extends TestCase
     private function getConnection(): MockObject
     {
         $connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
+        $this->metadataPoolMock->expects($this->any())
+            ->method('getMetadata')
+            ->willReturn($metadata);
+        $metadata
+            ->expects($this->any())
+            ->method('getLinkField')
+            ->willReturn('row_id');
         $this->resourceConnectionMock
             ->expects($this->any())
             ->method('getConnection')

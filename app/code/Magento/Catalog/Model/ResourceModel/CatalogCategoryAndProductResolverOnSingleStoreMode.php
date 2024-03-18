@@ -19,7 +19,10 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\ResourceModel;
 
 use Exception;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\Store;
@@ -31,9 +34,11 @@ class CatalogCategoryAndProductResolverOnSingleStoreMode
 {
     /**
      * @param ResourceConnection $resourceConnection
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
-        private readonly ResourceConnection $resourceConnection
+        private readonly ResourceConnection $resourceConnection,
+        private readonly MetadataPool $metadataPool
     ) {
     }
 
@@ -47,6 +52,8 @@ class CatalogCategoryAndProductResolverOnSingleStoreMode
      */
     private function process(int $storeId, string $table): void
     {
+        $productMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $productLinkField = $productMetadata->getLinkField();
         $catalogProductTable = $this->resourceConnection->getTableName($table);
 
         $catalogProducts = $this->getCatalogProducts($table, $storeId);
@@ -56,8 +63,8 @@ class CatalogCategoryAndProductResolverOnSingleStoreMode
         try {
             if ($catalogProducts) {
                 foreach ($catalogProducts as $catalogProduct) {
-                    $rowIds[] = $catalogProduct['row_id'];
-                    $attributeIds[] = $catalogProduct['attribute_id'];
+                    $rowIds[] = $catalogProduct[$productLinkField];
+                    $attributeIds[] = $catalogProduct[AttributeInterface::ATTRIBUTE_ID];
                     $valueIds[] = $catalogProduct['value_id'];
                 }
                 $this->massDelete($catalogProductTable, $attributeIds, $rowIds);
@@ -107,12 +114,12 @@ class CatalogCategoryAndProductResolverOnSingleStoreMode
     /**
      * Delete default store related products
      *
-     * @param $catalogProductTable
+     * @param string $catalogProductTable
      * @param array $attributeIds
      * @param array $rowIds
      * @return void
      */
-    private function massDelete($catalogProductTable, array $attributeIds, array $rowIds): void
+    private function massDelete(string $catalogProductTable, array $attributeIds, array $rowIds): void
     {
         $connection = $this->resourceConnection->getConnection();
 
@@ -129,11 +136,11 @@ class CatalogCategoryAndProductResolverOnSingleStoreMode
     /**
      * Update default store related products
      *
-     * @param $catalogProductTable
+     * @param string $catalogProductTable
      * @param array $valueIds
      * @return void
      */
-    private function massUpdate($catalogProductTable, array $valueIds): void
+    private function massUpdate(string $catalogProductTable, array $valueIds): void
     {
         $connection = $this->resourceConnection->getConnection();
 
