@@ -256,6 +256,8 @@ class FilterTest extends TestCase
      */
     protected function getModel($mockedMethods = null)
     {
+        $this->objectManager->prepareObjectManager([]);
+
         return $this->getMockBuilder(Filter::class)
             ->setConstructorArgs(
                 [
@@ -280,7 +282,7 @@ class FilterTest extends TestCase
                     $this->storeInformation
                 ]
             )
-            ->setMethods($mockedMethods)
+            ->onlyMethods($mockedMethods ?? [])
             ->getMock();
     }
 
@@ -389,7 +391,7 @@ class FilterTest extends TestCase
     /**
      * @return array
      */
-    public function applyInlineCssDataProvider()
+    public static function applyInlineCssDataProvider()
     {
         return [
             'Ensure styles get inlined' => [
@@ -608,7 +610,7 @@ class FilterTest extends TestCase
     /**
      * @return array[]
      */
-    public function dataProviderUrlModelCompanyRedirect(): array
+    public static function dataProviderUrlModelCompanyRedirect(): array
     {
         return [
             [

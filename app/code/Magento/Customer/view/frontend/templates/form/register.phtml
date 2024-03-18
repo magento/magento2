@@ -14,9 +14,15 @@ use Magento\Directory\Helper\Data;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
-/** @var Register $block */
-/** @var Escaper $escaper */
-/** @var SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Customer\Block\Form\Register $block */
+if (!$block->getButtonLockManager()) {
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $block->setButtonLockManager(
+        $objectManager->get(\Magento\Framework\View\Element\ButtonLockManager::class)
+    );
+}
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 
 /** @var Magento\Customer\Helper\Address $addressHelper */
 $addressHelper = $block->getData('addressHelper');
