@@ -177,6 +177,16 @@ class CachedAdapter implements CachedAdapterInterface
 
         $exists = $this->adapter->directoryExists($path);
 
+        if (!$exists) {
+            try {
+                // check if target is a directory
+                $exists = iterator_count($this->adapter->listContents($path, false)) > 0;
+            } catch (\Throwable $e) {
+                // catch closed iterator
+                $exists = false;
+            }
+        }
+
         if ($exists) {
             $cacheEntry = ['type' => 'dir', 'path' => $path];
             $this->cache->updateMetadata($path, $cacheEntry, true);
