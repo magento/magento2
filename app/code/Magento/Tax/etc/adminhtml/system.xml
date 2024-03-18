@@ -71,6 +71,11 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>When catalog price includes tax, enable this setting to fix the price no matter what the customer's tax rate.</comment>
                 </field>
+                <field id="apply_tax_rounding" translate="label comment" type="select" sortOrder="80" showInDefault="1" showInWebsite="1">
+                    <label>Apply Tax Rounding</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>When catalog price includes tax, enable this setting to round tax amount.</comment>
+                </field>
             </group>
             <group id="defaults" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Default Tax Destination Calculation</label>

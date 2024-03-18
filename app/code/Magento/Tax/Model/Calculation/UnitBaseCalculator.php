@@ -133,6 +133,7 @@ class UnitBaseCalculator extends AbstractCalculator
         $appliedRates = $this->calculationTool->getAppliedRates($taxRateRequest);
 
         $applyTaxAfterDiscount = $this->config->applyTaxAfterDiscount($this->storeId);
+        $applyTaxRounding = $this->config->applyTaxRounding($this->storeId);
         $discountAmount = $item->getDiscountAmount();
         $discountTaxCompensationAmount = 0;
 
@@ -164,14 +165,17 @@ class UnitBaseCalculator extends AbstractCalculator
                     false,
                     false
                 );
-                $unitTaxAfterDiscount = $this->roundAmount(
-                    $unitTaxAfterDiscount,
-                    $taxId,
-                    false,
-                    self::KEY_REGULAR_DELTA_ROUNDING,
-                    $round,
-                    $item
-                );
+
+                if ($applyTaxRounding) {
+                    $unitTaxAfterDiscount = $this->roundAmount(
+                        $unitTaxAfterDiscount,
+                        $taxId,
+                        false,
+                        self::KEY_REGULAR_DELTA_ROUNDING,
+                        $round,
+                        $item
+                    );
+                }
             }
             $appliedTaxes[$taxId] = $this->getAppliedTax(
                 $unitTaxAfterDiscount * $quantity,

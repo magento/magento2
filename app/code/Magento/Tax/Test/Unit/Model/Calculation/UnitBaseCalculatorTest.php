@@ -203,6 +203,10 @@ class UnitBaseCalculatorTest extends TestCase
             ->method('applyTaxAfterDiscount')
             ->willReturn(true);
 
+        $this->mockConfig->expects($this->once())
+            ->method('applyTaxRounding')
+            ->willReturn(true);
+
         $this->mockCalculationTool->expects($this->once())
             ->method('getRate')
             ->with($this->addressRateRequest)
