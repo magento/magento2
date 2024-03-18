@@ -32,8 +32,8 @@
         </after>
         <amOnPage url="{{CmsBlocksPage.url}}?filters[title]=$$createBlock.title$$" stepKey="navigateToBlockGridWithFilters"/>
         <waitForPageLoad stepKey="waitForBlockGrid"/>
-        <see selector="{{BlockPageActionsSection.blockGridRowByTitle($$createBlock.title$$)}}" userInput="$$createBlock.title$$" stepKey="seeBlock"/>
-        <seeElement selector="{{BlockPageActionsSection.activeFilterDiv}}" stepKey="seeEnabledFilters"/>
-        <see selector="{{BlockPageActionsSection.activeFilterDiv}}" userInput="Title: $$createBlock.title$$" stepKey="seeBlockTitleFilter"/>
+        <waitForText selector="{{BlockPageActionsSection.blockGridRowByTitle($$createBlock.title$$)}}" userInput="$$createBlock.title$$" stepKey="seeBlock"/>
+        <waitForElementVisible selector="{{BlockPageActionsSection.activeFilterDiv}}" stepKey="seeEnabledFilters"/>
+        <waitForText selector="{{BlockPageActionsSection.activeFilterDiv}}" userInput="Title: $$createBlock.title$$" stepKey="seeBlockTitleFilter"/>
     </test>
 </tests>
