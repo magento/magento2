@@ -25,7 +25,7 @@ class Integer implements DbDefinitionProcessorInterface
     private $unsigned;
 
     /**
-     * @var \Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Boolean
+     * @var Boolean
      */
     private $boolean;
 
@@ -53,7 +53,7 @@ class Integer implements DbDefinitionProcessorInterface
      * Constructor.
      *
      * @param Unsigned $unsigned
-     * @param bool $boolean
+     * @param Boolean $boolean
      * @param Nullable $nullable
      * @param Identity $identity
      * @param Comment $comment
