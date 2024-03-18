@@ -14,7 +14,9 @@
 .lib-magento-reset() {
     body {
         margin: 0;
+        min-height: 100vh;
         padding: 0;
+        text-rendering: optimizeSpeed;
     }
 
     article,
@@ -48,15 +50,25 @@
     }
 
     img {
-        max-width: 100%;
-        height: auto;
         border: 0;
+        display: block;
+        height: auto;
+        max-width: 100%;
+    }
+
+    picture {
+        display: block;
+        max-width: 100%;
     }
 
     video,
     embed,
     object {
         max-width: 100%;
+    }
+
+    svg {
+        vertical-align: middle;
     }
 
     svg:not(:root) {
@@ -82,6 +94,7 @@
     }
 
     .lib-form-element-all();
+
     form {
         -webkit-tap-highlight-color: rgba(0,0,0,0);
     }
@@ -118,8 +131,8 @@
         font-family: sans-serif;
         -webkit-text-size-adjust: 100%;
             -ms-text-size-adjust: 100%;
-                font-size-adjust: 100%;
     }
+
     body {
         margin: 0;
     }
@@ -352,8 +365,8 @@
     menu, nav, output, ruby, section, summary,
     time, mark, audio, video {
         border: 0;
-        font-size: 100%;
         font: inherit;
+        font-size: 100%;
         margin: 0;
         padding: 0;
         vertical-align: baseline;
@@ -376,9 +389,10 @@
         quotes: none;
     }
 
-    blockquote:before, blockquote:after,
-    q:before, q:after {
-        content: '';
+    blockquote:before,
+    blockquote:after,
+    q:before,
+    q:after {
         content: none;
     }
 
@@ -449,9 +463,10 @@
         quotes: none;
     }
 
-    blockquote:before, blockquote:after,
-    q:before, q:after {
-        content: '';
+    blockquote:before,
+    blockquote:after,
+    q:before,
+    q:after {
         content: none;
     }
 
@@ -480,7 +495,8 @@
         text-decoration: line-through;
     }
 
-    abbr[title], dfn[title] {
+    abbr[title],
+    dfn[title] {
         border-bottom: 1px dotted;
         cursor: help;
     }
