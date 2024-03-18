@@ -41,8 +41,10 @@ class UploadCssTest extends ThemeTest
 
         $this->_objectManagerMock
             ->method('get')
-            ->withConsecutive([Service::class], [Data::class])
-            ->willReturnOnConsecutiveCalls($serviceModel, $jsonData);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Service::class] => $serviceModel,
+                [Data::class] => $jsonData
+            });
 
         $this->response
             ->expects($this->once())
@@ -72,9 +74,10 @@ class UploadCssTest extends ThemeTest
 
         $this->_objectManagerMock
             ->method('get')
-            ->withConsecutive([Service::class], [Data::class])
-            ->willReturnOnConsecutiveCalls($serviceModel, $jsonData);
-
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Service::class] => $serviceModel,
+                [Data::class] => $jsonData
+            });
         $this->_model->execute();
     }
 
@@ -102,9 +105,11 @@ class UploadCssTest extends ThemeTest
 
         $this->_objectManagerMock
             ->method('get')
-            ->withConsecutive([Service::class], [LoggerInterface::class], [Data::class])
-            ->willReturnOnConsecutiveCalls($serviceModel, $logger, $jsonData);
-
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Service::class] => $serviceModel,
+                [LoggerInterface::class] => $logger,
+                [Data::class] => $jsonData
+            });
         $this->_model->execute();
     }
 }
