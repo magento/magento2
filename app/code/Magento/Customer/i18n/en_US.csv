@@ -546,3 +546,6 @@ Addresses,Addresses
 "Partial Match","Partial Match"
 "Full Match","Full Match"
 "Prefix Match","Prefix Match"
+T,T
+F,F
+VAT,VAT
