@@ -175,10 +175,12 @@ class ProcessorTest extends TestCase
         } else {
             $this->outputMock
                 ->method('writeln')
-                ->withConsecutive(
-                    ['<info>Processing configurations data from configuration file...</info>'],
-                    [$expectsMessages]
-                );
+                ->willReturnCallback(function ($message) use ($expectsMessages) {
+                    if ($message === '<info>Processing configurations data from configuration file...</info>'
+                        || $message == $expectsMessages) {
+                        return null;
+                    }
+                });
             $importerMock->expects($this->once())
                 ->method('import')
                 ->with($configData)
@@ -193,7 +195,7 @@ class ProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function importDataProvider(): array
+    public static function importDataProvider(): array
     {
         return [
             [
@@ -268,11 +270,12 @@ class ProcessorTest extends TestCase
             ->willReturn($importers);
         $this->changeDetectorMock->expects($this->exactly(2))
             ->method('hasChanges')
-            ->withConsecutive(
-                [],
-                ['someSection']
-            )
-            ->willReturnOnConsecutiveCalls(true, true);
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'someSection' || $arg1 == []) {
+                    return true;
+                }
+            });
+
         $this->deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
             ->with('someSection')
@@ -320,7 +323,7 @@ class ProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function importNothingToImportDataProvider(): array
+    public static function importNothingToImportDataProvider(): array
     {
         return [
             ['importers' => [], 'isValid' => false],

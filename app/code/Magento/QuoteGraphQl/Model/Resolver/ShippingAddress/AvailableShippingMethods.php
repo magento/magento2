@@ -15,6 +15,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
 use Magento\Quote\Model\Cart\ShippingMethodConverter;
 use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
+use Magento\QuoteGraphQl\Model\FormatMoneyTypeData;
 
 /**
  * @inheritdoc
@@ -32,6 +33,11 @@ class AvailableShippingMethods implements ResolverInterface
     private $shippingMethodConverter;
 
     /**
+     * @var FormatMoneyTypeData
+     */
+    private FormatMoneyTypeData $formatMoneyTypeData;
+
+    /**
      * @var TotalsCollector
      */
     private $totalsCollector;
@@ -39,15 +45,18 @@ class AvailableShippingMethods implements ResolverInterface
     /**
      * @param ExtensibleDataObjectConverter $dataObjectConverter
      * @param ShippingMethodConverter $shippingMethodConverter
+     * @param FormatMoneyTypeData $formatMoneyTypeData
      * @param TotalsCollector $totalsCollector
      */
     public function __construct(
         ExtensibleDataObjectConverter $dataObjectConverter,
         ShippingMethodConverter $shippingMethodConverter,
-        TotalsCollector $totalsCollector
+        FormatMoneyTypeData $formatMoneyTypeData,
+        TotalsCollector $totalsCollector,
     ) {
         $this->dataObjectConverter = $dataObjectConverter;
         $this->shippingMethodConverter = $shippingMethodConverter;
+        $this->formatMoneyTypeData = $formatMoneyTypeData;
         $this->totalsCollector = $totalsCollector;
     }
 
@@ -79,38 +88,12 @@ class AvailableShippingMethods implements ResolverInterface
                     [],
                     ShippingMethodInterface::class
                 );
-                $methods[] = $this->processMoneyTypeData(
+                $methods[] = $this->formatMoneyTypeData->execute(
                     $methodData,
                     $cart->getQuoteCurrencyCode()
                 );
             }
         }
         return $methods;
-    }
-
-    /**
-     * Process money type data
-     *
-     * @param array $data
-     * @param string $quoteCurrencyCode
-     * @return array
-     */
-    private function processMoneyTypeData(array $data, string $quoteCurrencyCode): array
-    {
-        if (isset($data['amount'])) {
-            $data['amount'] = ['value' => $data['amount'], 'currency' => $quoteCurrencyCode];
-        }
-
-        /** @deprecated The field should not be used on the storefront */
-        $data['base_amount'] = null;
-
-        if (isset($data['price_excl_tax'])) {
-            $data['price_excl_tax'] = ['value' => $data['price_excl_tax'], 'currency' => $quoteCurrencyCode];
-        }
-
-        if (isset($data['price_incl_tax'])) {
-            $data['price_incl_tax'] = ['value' => $data['price_incl_tax'], 'currency' => $quoteCurrencyCode];
-        }
-        return $data;
     }
 }

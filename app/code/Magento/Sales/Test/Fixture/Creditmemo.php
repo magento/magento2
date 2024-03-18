@@ -62,10 +62,10 @@ class Creditmemo implements RevertibleDataFixtureInterface
      * @param array $data Parameters. Same format as Creditmemo::DEFAULT_DATA.
      * Fields structure fields:
      * - $data['items']: can be supplied in following formats:
-     *      - array of arrays [{"sku":"$product1.sku$","qty":1}, {"sku":"$product2.sku$","qty":1}]
-     *      - array of arrays [{"order_item_id":"$oItem1.sku$","qty":1}, {"order_item_id":"$oItem2.sku$","qty":1}]
-     *      - array of arrays [{"product_id":"$product1.id$","qty":1}, {"product_id":"$product2.id$","qty":1}]
-     *      - array of arrays [{"quote_item_id":"$qItem1.id$","qty":1}, {"quote_item_id":"$qItem2.id$","qty":1}]
+     *      - array of arrays [["sku":"$product1.sku$","qty":1], ["sku":"$product2.sku$","qty":1]]
+     *      - array of arrays [["order_item_id":"$oItem1.sku$","qty":1], ["order_item_id":"$oItem2.sku$","qty":1]]
+     *      - array of arrays [["product_id":"$product1.id$","qty":1], ["product_id":"$product2.id$","qty":1]]
+     *      - array of arrays [["quote_item_id":"$qItem1.id$","qty":1], ["quote_item_id":"$qItem2.id$","qty":1]]
      *      - array of SKUs ["$product1.sku$", "$product2.sku$"]
      *      - array of order items IDs ["$oItem1.id$", "$oItem2.id$"]
      *      - array of product instances ["$product1$", "$product2$"]
@@ -130,7 +130,7 @@ class Creditmemo implements RevertibleDataFixtureInterface
             } elseif ($itemToRefund instanceof ProductInterface) {
                 $creditmemoItem['order_item_id'] = $orderItemIdsBySku[$itemToRefund->getSku()];
             } else {
-                $creditmemoItem = array_intersect($itemToRefund, $creditmemoItem) + $creditmemoItem;
+                $creditmemoItem = array_intersect_key($itemToRefund, $creditmemoItem) + $creditmemoItem;
                 if (isset($itemToRefund['sku'])) {
                     $creditmemoItem['order_item_id'] = $orderItemIdsBySku[$itemToRefund['sku']];
                 } elseif (isset($itemToRefund['product_id'])) {
