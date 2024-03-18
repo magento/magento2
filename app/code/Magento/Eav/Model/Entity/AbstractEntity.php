@@ -12,6 +12,7 @@ use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
 use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
+use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\App\Config\Element;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
@@ -1036,6 +1037,7 @@ abstract class AbstractEntity extends AbstractResource implements
      * @param array|null $attributes
      * @return $this
      * @since 100.1.0
+     * @see not in use anymore
      */
     protected function loadAttributesMetadata($attributes)
     {
@@ -1262,6 +1264,45 @@ abstract class AbstractEntity extends AbstractResource implements
     }
 
     /**
+     * Prepare original data for save
+     *
+     * @param \Magento\Framework\Model\AbstractModel $newObject
+     * @param array $newData
+     * @return array
+     */
+    private function prepareOrigData($newObject, $newData)
+    {
+        $origData = $newObject->getOrigData();
+        /**
+         * get current data in db for this entity if original data is empty
+         */
+        if (empty($origData)) {
+            $origData = $this->_getOrigObject($newObject)->getOrigData();
+        }
+
+        if ($origData === null) {
+            $origData = [];
+        }
+
+        /**
+         * drop attributes that are unknown in new data
+         * not needed after introduction of partial entity loading
+         */
+        foreach ($origData as $k => $v) {
+            if ($k === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES) {
+                foreach ($v as $custom_attribute => $data) {
+                    $origData[$custom_attribute] = $data['value'] ?: '';
+                }
+            }
+            if (!array_key_exists($k, $newData)) {
+                unset($origData[$k]);
+            }
+        }
+
+        return $origData;
+    }
+
+    /**
      * Prepare entity object data for save
      *
      * Result array structure:
@@ -1286,27 +1327,7 @@ abstract class AbstractEntity extends AbstractResource implements
         $delete = [];
 
         if (!empty($entityId)) {
-            $origData = $newObject->getOrigData();
-            /**
-             * get current data in db for this entity if original data is empty
-             */
-            if (empty($origData)) {
-                $origData = $this->_getOrigObject($newObject)->getOrigData();
-            }
-
-            if ($origData === null) {
-                $origData = [];
-            }
-
-            /**
-             * drop attributes that are unknown in new data
-             * not needed after introduction of partial entity loading
-             */
-            foreach ($origData as $k => $v) {
-                if (!array_key_exists($k, $newData)) {
-                    unset($origData[$k]);
-                }
-            }
+            $origData = $this->prepareOrigData($newObject, $newData);
         } else {
             $origData = [];
         }
@@ -1950,6 +1971,7 @@ abstract class AbstractEntity extends AbstractResource implements
      * @deprecated 100.1.0
      * @see $attributeLoader
      * @since 100.1.0
+     * @see not in use anymore
      */
     protected function getAttributeLoader()
     {
