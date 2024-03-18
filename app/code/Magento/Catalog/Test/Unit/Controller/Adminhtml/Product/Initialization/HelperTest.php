@@ -151,7 +151,7 @@ class HelperTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $productExtensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->onlyMethods(['getCategoryLinks', 'setCategoryLinks'])
+            ->addMethods(['getCategoryLinks', 'setCategoryLinks'])
             ->getMockForAbstractClass();
         $this->productMock->setExtensionAttributes($productExtensionAttributes);
 
@@ -184,7 +184,7 @@ class HelperTest extends TestCase
                 $this->customOptionFactoryMock
             ]
         ];
-        $this->prepareObjectManager($objects);
+        $this->objectManager->prepareObjectManager($objects);
 
         $this->helper = $this->objectManager->getObject(
             Helper::class,
@@ -771,23 +771,5 @@ class HelperTest extends TestCase
         $this->productRepositoryMock->expects($this->any())
             ->method('getById')
             ->willReturnMap($repositoryReturnMap);
-    }
-
-    /**
-     * @param $map
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->addMethods(['getInstance'])
-            ->onlyMethods(['get'])
-            ->getMockForAbstractClass();
-
-        $objectManagerMock->method('getInstance')->willReturnSelf();
-        $objectManagerMock->method('get')->willReturnMap($map);
-
-        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock, $objectManagerMock);
     }
 }
