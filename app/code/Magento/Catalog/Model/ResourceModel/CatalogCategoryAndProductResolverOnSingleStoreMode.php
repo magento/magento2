@@ -47,29 +47,21 @@ class CatalogCategoryAndProductResolverOnSingleStoreMode
      */
     private function process(int $storeId, string $table): void
     {
-        $connection = $this->resourceConnection->getConnection();
         $catalogProductTable = $this->resourceConnection->getTableName($table);
-        $select = $connection->select()
-            ->from($catalogProductTable, ['value_id', 'attribute_id', 'row_id'])
-            ->where('store_id = ?', $storeId);
-        $catalogProducts = $connection->fetchAll($select);
+
+        $catalogProducts = $this->getCatalogProducts($table, $storeId);
+        $rowIds = [];
+        $attributeIds = [];
+        $valueIds = [];
         try {
             if ($catalogProducts) {
                 foreach ($catalogProducts as $catalogProduct) {
-                    $connection->delete(
-                        $table,
-                        [
-                            'store_id = ?' => Store::DEFAULT_STORE_ID,
-                            'attribute_id = ?' => $catalogProduct['attribute_id'],
-                            'row_id = ?' => $catalogProduct['row_id']
-                        ]
-                    );
-                    $connection->update(
-                        $table,
-                        ['store_id' => Store::DEFAULT_STORE_ID],
-                        ['value_id = ?' => $catalogProduct['value_id']]
-                    );
+                    $rowIds[] = $catalogProduct['row_id'];
+                    $attributeIds[] = $catalogProduct['attribute_id'];
+                    $valueIds[] = $catalogProduct['value_id'];
                 }
+                $this->massDelete($catalogProductTable, $attributeIds, $rowIds);
+                $this->massUpdate($catalogProductTable, $valueIds);
             }
         } catch (LocalizedException $e) {
             throw new CouldNotSaveException(
@@ -110,5 +102,62 @@ class CatalogCategoryAndProductResolverOnSingleStoreMode
         } catch (Exception $exception) {
             $connection->rollBack();
         }
+    }
+
+    /**
+     * Delete default store related products
+     *
+     * @param $catalogProductTable
+     * @param array $attributeIds
+     * @param array $rowIds
+     * @return void
+     */
+    private function massDelete($catalogProductTable, array $attributeIds, array $rowIds): void
+    {
+        $connection = $this->resourceConnection->getConnection();
+
+        $connection->delete(
+            $catalogProductTable,
+            [
+                'store_id = ?' => Store::DEFAULT_STORE_ID,
+                'attribute_id IN(?)' => $attributeIds,
+                'row_id IN(?)' => $rowIds
+            ]
+        );
+    }
+
+    /**
+     * Update default store related products
+     *
+     * @param $catalogProductTable
+     * @param array $valueIds
+     * @return void
+     */
+    private function massUpdate($catalogProductTable, array $valueIds): void
+    {
+        $connection = $this->resourceConnection->getConnection();
+
+        $connection->update(
+            $catalogProductTable,
+            ['store_id' => Store::DEFAULT_STORE_ID],
+            ['value_id IN(?)' => $valueIds]
+        );
+    }
+
+    /**
+     * Get list of products
+     *
+     * @param string $table
+     * @param int $storeId
+     * @return array
+     */
+    private function getCatalogProducts(string $table, int $storeId): array
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $catalogProductTable = $this->resourceConnection->getTableName($table);
+        $select = $connection->select()
+            ->from($catalogProductTable, ['value_id', 'attribute_id', 'row_id'])
+            ->where('store_id = ?', $storeId);
+        return $connection->fetchAll($select);
     }
 }
