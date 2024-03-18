@@ -413,6 +413,8 @@ class Filter extends Template
 
         if (isset($blockParameters['class'])) {
             $block = $this->_layout->createBlock($blockParameters['class'], null, ['data' => $blockParameters]);
+        } elseif (isset($blockParameters['template'])) {
+            $block = $this->_layout->createBlock(\Magento\Framework\View\Element\Template::class, null, ['data' => $blockParameters]);
         } elseif (isset($blockParameters['id'])) {
             $block = $this->_layout->createBlock(Block::class);
             if ($block) {
