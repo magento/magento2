@@ -52,9 +52,9 @@ class CatalogCategoryAndProductResolverOnSingleStoreModeTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = new Resolver(
-                $this->resourceConnectionMock,
-                $this->metadataPoolMock
-            );
+            $this->resourceConnectionMock,
+            $this->metadataPoolMock
+        );
     }
 
     /**
