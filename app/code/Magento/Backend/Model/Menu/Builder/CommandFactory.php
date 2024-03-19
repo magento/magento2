@@ -3,7 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Model\Menu\Builder;
+
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Menu builder command factory
@@ -13,14 +17,14 @@ namespace Magento\Backend\Model\Menu\Builder;
 class CommandFactory
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
+    public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -30,7 +34,7 @@ class CommandFactory
      *
      * @param string $commandName
      * @param array $data
-     * @return \Magento\Config\Model\Config
+     * @return AbstractCommand
      */
     public function create($commandName, array $data = [])
     {
