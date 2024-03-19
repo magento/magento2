@@ -375,12 +375,12 @@ class Renderer implements RendererInterface
     {
         switch ($contentType) {
             case 'js':
-                $groupTemplate = '<script ' . $attributes . ' src="%s"></script>' . "\n";
+                $groupTemplate = preg_replace('/\s+/', ' ','<script ' . $attributes . ' src="%s"></script>') . "\n";
                 break;
 
             case 'css':
             default:
-                $groupTemplate = '<link ' . $attributes . ' href="%s" />' . "\n";
+                $groupTemplate = preg_replace('/\s+/', ' ','<link ' . $attributes . ' href="%s" />') . "\n";
                 break;
         }
         return $groupTemplate;
