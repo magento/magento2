@@ -26,6 +26,8 @@ class CategoryLinkRepository implements CategoryLinkRepositoryInterface, Categor
     protected $categoryRepository;
 
     /**
+     * @deprecated
+     * @see Product use faster resource model
      * @var ProductRepositoryInterface
      */
     protected $productRepository;
@@ -56,9 +58,9 @@ class CategoryLinkRepository implements CategoryLinkRepositoryInterface, Categor
     public function save(\Magento\Catalog\Api\Data\CategoryProductLinkInterface $productLink)
     {
         $category = $this->categoryRepository->get($productLink->getCategoryId());
-        $product = $this->productRepository->get($productLink->getSku());
+        $productId = $this->productResource->getIdBySku($productLink->getSku());
         $productPositions = $category->getProductsPosition();
-        $productPositions[$product->getId()] = $productLink->getPosition();
+        $productPositions[$productId] = $productLink->getPosition();
         $category->setPostedProducts($productPositions);
         try {
             $category->save();
@@ -66,7 +68,7 @@ class CategoryLinkRepository implements CategoryLinkRepositoryInterface, Categor
             throw new CouldNotSaveException(
                 __(
                     'Could not save product "%1" with position %2 to category %3',
-                    $product->getId(),
+                    $productId,
                     $productLink->getPosition(),
                     $category->getId()
                 ),
@@ -90,15 +92,14 @@ class CategoryLinkRepository implements CategoryLinkRepositoryInterface, Categor
     public function deleteByIds($categoryId, $sku)
     {
         $category = $this->categoryRepository->get($categoryId);
-        $product = $this->productRepository->get($sku);
+        $productId = $this->productResource->getIdBySku($sku);
         $productPositions = $category->getProductsPosition();
 
-        $productID = $product->getId();
-        if (!isset($productPositions[$productID])) {
+        if (!isset($productPositions[$productId])) {
             throw new InputException(__("The category doesn't contain the specified product."));
         }
-        $backupPosition = $productPositions[$productID];
-        unset($productPositions[$productID]);
+        $backupPosition = $productPositions[$productId];
+        unset($productPositions[$productId]);
 
         $category->setPostedProducts($productPositions);
         try {
@@ -108,7 +109,7 @@ class CategoryLinkRepository implements CategoryLinkRepositoryInterface, Categor
                 __(
                     'Could not save product "%product" with position %position to category %category',
                     [
-                        "product" => $product->getId(),
+                        "product" => $productId,
                         "position" => $backupPosition,
                         "category" => $category->getId()
                     ]

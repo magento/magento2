@@ -37,8 +37,6 @@ class Category extends AbstractResource implements ResetAfterRequestInterface
     protected $_tree;
 
     /**
-     * Catalog products table name
-     *
      * @var string
      */
     protected $_categoryProductTable;
@@ -49,15 +47,11 @@ class Category extends AbstractResource implements ResetAfterRequestInterface
     private $entitiesWhereAttributesIs;
 
     /**
-     * Id of 'is_active' category attribute
-     *
      * @var int
      */
     protected $_isActiveAttributeId = null;
 
     /**
-     * Id of store
-     *
      * @var int
      */
     protected $_storeId = null;
@@ -455,7 +449,7 @@ class Category extends AbstractResource implements ResetAfterRequestInterface
                     'position' => (int)$position,
                 ];
             }
-            $connection->insertMultiple($this->getCategoryProductTable(), $data);
+            $connection->insertOnDuplicate($this->getCategoryProductTable(), $data, ['position']);
         }
 
         /**

@@ -376,8 +376,13 @@ class CategoryTest extends TestCase
      */
     public function testChildrenCountAfterDeleteParentCategory(): void
     {
+        $childrenCountInParent = $this->categoryResource->getChildrenCount(1);
+        $childrenCountInChild = $this->categoryResource->getChildrenCount(3);
+
         $this->categoryRepository->deleteByIdentifier(3);
-        $this->assertEquals(8, $this->categoryResource->getChildrenCount(1));
+
+        $expectedCountAfterDelete = $childrenCountInParent - $childrenCountInChild - 1;
+        $this->assertEquals($expectedCountAfterDelete, $this->categoryResource->getChildrenCount(1));
     }
 
     /**
