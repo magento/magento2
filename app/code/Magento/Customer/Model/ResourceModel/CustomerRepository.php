@@ -204,6 +204,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
             $prevCustomerDataArr = $this->prepareCustomerData($prevCustomerData->__toArray());
+            $customer->setCreatedAt($prevCustomerData->getCreatedAt());
         }
         /** @var $customer \Magento\Customer\Model\Data\Customer */
         $customerArr = $customer->__toArray();
@@ -219,7 +220,6 @@ class CustomerRepository implements CustomerRepositoryInterface
         /** @var CustomerModel $customerModel */
         $customerModel = $this->customerFactory->create(['data' => $customerData]);
         $this->populateWithOrigData($customerModel, $prevCustomerDataArr);
-
         //Model's actual ID field maybe different than "id" so "id" field from $customerData may be ignored.
         $customerModel->setId($customer->getId());
         $storeId = $customerModel->getStoreId();

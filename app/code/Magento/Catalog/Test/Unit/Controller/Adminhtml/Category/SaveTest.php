@@ -90,6 +90,27 @@ class SaveTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+
+        $objects = [
+            [
+                StoreManagerInterface::class,
+                $this->createMock(StoreManagerInterface::class)
+            ],
+            [
+                Registry::class,
+                $this->createMock(Registry::class)
+            ],
+            [
+                Config::class,
+                $this->createMock(Config::class)
+            ],
+            [
+                Session::class,
+                $this->createMock(Session::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
+
         $this->resultRedirectFactoryMock = $this->createPartialMock(
             RedirectFactory::class,
             ['create']

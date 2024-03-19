@@ -241,6 +241,6 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impl
      */
     public function _resetState(): void
     {
-        self::$_rateCache = [];
+        self::$_rateCache = null;
     }
 }

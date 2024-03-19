@@ -9,7 +9,11 @@ namespace Magento\Backend\Test\Unit\Block\Widget;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form;
+use Magento\Backend\Block\Widget\Form\Element\ElementCreator;
 use Magento\Framework\Data\Form as DataForm;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -28,18 +32,37 @@ class FormTest extends TestCase
     /** @var  UrlInterface|MockObject */
     protected $urlBuilder;
 
+    /** @var Data */
+    protected $jsonHelperMock;
+
+    /** @var  ElementCreator */
+    protected $creatorStub;
+
     protected function setUp(): void
     {
         $this->prepareContext();
 
         $this->dataForm = $this->getMockBuilder(\Magento\Framework\Data\Form::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods([
                 'setParent',
-                'setBaseUrl',
-                'addCustomAttribute',
+                'setBaseUrl'
             ])
+            ->onlyMethods(['addCustomAttribute'])
             ->getMock();
+
+        $this->jsonHelperMock = $this->getMockBuilder(Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        /** @var ObjectManagerInterface|MockObject $objectManagerMock */
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->exactly(3))
+            ->method('get')
+            ->willReturn($this->jsonHelperMock);
+        ObjectManager::setInstance($objectManagerMock);
+
+        $this->creatorStub = $this->createMock(ElementCreator::class);
 
         $this->model = new Form(
             $this->context
