@@ -1,16 +1,15 @@
 {
     "name": "magento/module-async-config",
     "description": "N/A",
+    "require": {
+        "php": "~8.1.0||~8.2.0||~8.3.0",
+        "magento/framework": "*",
+        "magento/module-config": "*"
+    },
     "type": "magento2-module",
     "license": [
         "proprietary"
     ],
-    "version": "100.4.0-beta3",
-    "require": {
-        "php": "~8.1.0||~8.2.0||~8.3.0",
-        "magento/framework": "103.0.*",
-        "magento/module-config": "101.2.*"
-    },
     "autoload": {
         "files": [
             "registration.php"
@@ -20,4 +19,3 @@
         }
     }
 }
-

@@ -1,20 +1,18 @@
 {
-    "name": "magento/module-application-performance-monitor",
-    "description": "Performance Monitor for Application",
-    "type": "magento2-module",
-    "license": "OSL-3.0",
-    "version": "100.4.0-beta3",
-    "require": {
-        "php": "~8.1.0||~8.2.0||~8.3.0",
-        "magento/framework": "103.0.*"
-    },
-    "autoload": {
-        "files": [
-            "registration.php"
-        ],
-        "psr-4": {
-            "Magento\\ApplicationPerformanceMonitor\\": ""
-        }
+  "name": "magento/module-application-performance-monitor",
+  "license": "OSL-3.0",
+  "type": "magento2-module",
+  "description": "Performance Monitor for Application",
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Magento\\ApplicationPerformanceMonitor\\": ""
     }
+  },
+  "require": {
+    "php": "~8.1.0||~8.2.0||~8.3.0",
+    "magento/framework": "*"
+  }
 }
-
