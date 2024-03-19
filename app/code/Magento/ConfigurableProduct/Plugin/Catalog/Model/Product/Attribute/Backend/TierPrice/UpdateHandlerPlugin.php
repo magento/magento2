@@ -20,7 +20,7 @@ class UpdateHandlerPlugin
     /**
      * @var ProductAttributeRepositoryInterface
      */
-    private $attributeRepository;
+    public readonly ProductAttributeRepositoryInterface $attributeRepository;
 
     /**
      * UpdateHandlerPlugin constructor.
@@ -40,7 +40,7 @@ class UpdateHandlerPlugin
      * @param array $arguments
      * @return array
      */
-    public function beforeExecute(UpdateHandler $subject, $entity, $arguments = [])
+    public function beforeExecute(UpdateHandler $subject, $entity, $arguments = []): array
     {
         $attribute = $this->attributeRepository->get('tier_price');
         $origPrices = $entity->getOrigData($attribute->getName());
