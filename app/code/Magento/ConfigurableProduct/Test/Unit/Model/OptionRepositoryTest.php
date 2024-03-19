@@ -356,7 +356,8 @@ class OptionRepositoryTest extends TestCase
         $this->expectException(InputException::class);
         $this->expectExceptionMessage($msg);
         $optionValueMock = $this->getMockBuilder(OptionValueInterface::class)
-            ->setMethods(['getValueIndex', 'getPricingValue', 'getIsPercent'])
+            ->addMethods(['getPricingValue', 'getIsPercent'])
+            ->onlyMethods(['getValueIndex'])
             ->getMockForAbstractClass();
         $optionValuesMock = [];
         if (!empty($optionValues)) {
@@ -389,7 +390,7 @@ class OptionRepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function validateOptionDataProvider()
+    public static function validateOptionDataProvider()
     {
         return [
             [null, '', ['v' => null, 'p' => null, 'r' => null], 'One or more input exceptions have occurred.'],

@@ -665,6 +665,7 @@ Comma-separated.,Comma-separated.
 "Page Title Separator","Page Title Separator"
 "Use Canonical Link Meta Tag For Categories","Use Canonical Link Meta Tag For Categories"
 "Use Canonical Link Meta Tag For Products","Use Canonical Link Meta Tag For Products"
+"Apply transliteration for product URL","Apply transliteration for product URL"
 "Catalog Price Scope","Catalog Price Scope"
 "This defines the base currency scope (""Currency Setup"" > ""Currency Options"" > ""Base Currency"").","This defines the base currency scope (""Currency Setup"" > ""Currency Options"" > ""Base Currency"")."
 "Category Top Navigation","Category Top Navigation"
