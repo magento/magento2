@@ -120,8 +120,12 @@ class CatalogCategoryAndProductResolverOnSingleStoreMode
      * @param array $linkFieldIds
      * @return void
      */
-    private function massDelete(string $catalogProductTable, string $linkField, array $attributeIds, array $linkFieldIds): void
-    {
+    private function massDelete(
+        string $catalogProductTable,
+        string $linkField,
+        array $attributeIds,
+        array $linkFieldIds
+    ): void {
         $connection = $this->resourceConnection->getConnection();
 
         $connection->delete(
