@@ -48,6 +48,7 @@ class GuestOrderByTokenTest extends GraphQlAbstract
       token: "%token"
   }) {
     number
+    email
     billing_address {
       firstname
       lastname
@@ -63,6 +64,7 @@ mutation {
   }) {
     orderV2 {
       number
+      email
       billing_address {
         firstname
         lastname
@@ -97,6 +99,7 @@ QUERY;
 
         $this->assertNotEmpty($placeOrderResponse['placeOrder']['orderV2']['number']);
         $this->assertNotEmpty($placeOrderResponse['placeOrder']['orderV2']['token']);
+        $this->assertNotEmpty($placeOrderResponse['placeOrder']['orderV2']['email']);
         $this->assertNotEmpty($placeOrderResponse['placeOrder']['orderV2']['billing_address']['firstname']);
         $this->assertNotEmpty($placeOrderResponse['placeOrder']['orderV2']['billing_address']['lastname']);
 
@@ -111,6 +114,7 @@ QUERY;
             [
                 'guestOrderByToken' => [
                     'number' => $placeOrderResponse['placeOrder']['orderV2']['number'],
+                    'email' => $placeOrderResponse['placeOrder']['orderV2']['email'],
                     'billing_address' => [
                         'firstname' => $placeOrderResponse['placeOrder']['orderV2']['billing_address']['firstname'],
                         'lastname' => $placeOrderResponse['placeOrder']['orderV2']['billing_address']['lastname']
