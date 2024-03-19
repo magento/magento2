@@ -57,6 +57,7 @@ class MoveStoreLevelCatalogDataToWebsiteScopeOnSingleStoreMode implements Observ
         $changedPaths = (array)$observer->getEvent()->getChangedPaths();
         if (in_array(StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED, $changedPaths, true)
             && $this->scopeConfig->getValue(StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED)
+            && $this->storeManager->hasSingleStore()
         ) {
             $store = $this->storeManager->getDefaultStoreView();
             if ($store) {
