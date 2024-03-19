@@ -69,7 +69,7 @@ class ResetQuoteAddressesTest extends TestCase
             'isVirtual',
         ]);
         $this->extensionAttributesMock = $this->getMockBuilder(CartExtensionInterface::class)
-            ->setMethods(
+            ->addMethods(
                 [
                     'getShippingAssignments',
                     'setShippingAssignments'
@@ -197,7 +197,7 @@ class ResetQuoteAddressesTest extends TestCase
      *
      * @return array
      */
-    public function quoteNoAddressesDataProvider(): array
+    public static function quoteNoAddressesDataProvider(): array
     {
         return [
             'Test case with virtual quote' => [
@@ -220,7 +220,7 @@ class ResetQuoteAddressesTest extends TestCase
      *
      * @return array
      */
-    public function quoteAddressesDataProvider(): array
+    public static function quoteAddressesDataProvider(): array
     {
         return [
             'Test case with a virtual quote and no shipping assignments' => [
