@@ -330,7 +330,7 @@ class Renderer implements RendererInterface
             if (is_array($attributes)) {
                 $attributesString = '';
                 foreach ($attributes as $name => $value) {
-                    $attributesString .= ' ' . $name . '="' . $this->escaper->escapeHtml($value) . '"';
+                    $attributesString .= ' ' . $name . '="' . $this->escaper->escapeHtmlAttr($value) . '"';
                 }
                 $attributes = $attributesString;
             } else {
@@ -344,43 +344,77 @@ class Renderer implements RendererInterface
      * Add default attributes
      *
      * @param string $contentType
-     * @param string $attributes
-     * @return string
+     * @param array|null $attributes
+     * @return array
      */
     protected function addDefaultAttributes($contentType, $attributes)
     {
+        $attributes = is_array($attributes)
+            ? $attributes
+            : [];
+        $defaultAttributes = [];
+
         if ($contentType === 'js') {
-            return ' type="text/javascript" ' . $attributes;
+            $defaultAttributes['type'] = 'text/javascript';
         }
 
         if ($contentType === 'css') {
-            return ' rel="stylesheet" type="text/css" ' . ($attributes ?: ' media="all"');
+            $defaultAttributes['rel'] = 'stylesheet';
+            $defaultAttributes['type'] = 'text/css';
+
+            if (empty($attributes)) {
+                $attributes['media'] = 'all';
+            }
+
+            // add defer attributes when defer parameter is exist
+            if (array_key_exists('defer', $attributes)) {
+                $defaultAttributes['rel'] = 'preload';
+                $defaultAttributes['as'] = 'style';
+                $defaultAttributes['onload'] = 'this.onload=null;this.rel=\'stylesheet\';';
+            }
         }
 
         if ($this->canTypeBeFont($contentType)) {
-            return 'rel="preload" as="font" crossorigin="anonymous"';
+            $defaultAttributes['rel'] = 'preload';
+            $defaultAttributes['as'] = 'font';
+            $defaultAttributes['crossorigin'] = 'anonymous';
         }
 
-        return $attributes;
+        return array_merge($defaultAttributes, $attributes);
     }
 
     /**
      * Returns assets template
      *
      * @param string $contentType
-     * @param string|null $attributes
+     * @param array|null $attributes
      * @return string
      */
     protected function getAssetTemplate($contentType, $attributes)
     {
+        $attributesString = '';
+        foreach ($attributes as $name => $value) {
+
+            // don't add defer attribute to css output
+            if ($contentType === 'css' && $name === 'defer') {
+                continue;
+            }
+
+            $attributesString .= ' ' . $name . '="' . $this->escaper->escapeHtmlAttr($value) . '"';
+        }
+
         switch ($contentType) {
             case 'js':
-                $groupTemplate = '<script ' . $attributes . ' src="%s"></script>' . "\n";
+                $groupTemplate = '<script ' . trim($attributesString) . ' src="%s"></script>' . "\n";
                 break;
 
             case 'css':
             default:
-                $groupTemplate = '<link ' . $attributes . ' href="%s" />' . "\n";
+                $groupTemplate = '<link ' . trim($attributesString) . ' href="%s" />' . "\n";
+
+                if (array_key_exists('defer', $attributes)) {
+                    $groupTemplate .= '<noscript><link rel="stylesheet" href="%1$s" /></noscript>' . "\n";
+                }
                 break;
         }
         return $groupTemplate;
@@ -411,7 +445,7 @@ class Renderer implements RendererInterface
     protected function renderAssetHtml(\Magento\Framework\View\Asset\PropertyGroup $group)
     {
         $assets = $this->processMerge($group->getAll(), $group);
-        $attributes = $this->getGroupAttributes($group);
+        $attributes = $group->getProperty('attributes');
 
         $result = '';
         $template = '';
