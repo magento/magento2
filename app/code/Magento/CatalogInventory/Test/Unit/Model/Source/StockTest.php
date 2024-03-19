@@ -54,8 +54,11 @@ class StockTest extends TestCase
         $collectionMock->expects($this->atLeastOnce())->method('getSelect')->willReturn($selectMock);
         $collectionMock->expects($this->atLeastOnce())->method('getTable')->willReturn('cataloginventory_stock_item');
         $collectionMock->expects($this->exactly(3))->method('joinField')
-            ->withConsecutive(['child_id'], ['child_stock'], ['parent_stock'])
-            ->willReturnSelf();
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['child_id'] => $collectionMock,
+                ['child_stock'] => $collectionMock,
+                ['parent_stock'] => $collectionMock
+            });
 
         $selectMock->expects($this->once())
             ->method('group')

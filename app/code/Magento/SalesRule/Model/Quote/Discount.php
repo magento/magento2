@@ -181,6 +181,7 @@ class Discount extends AbstractTotal
                     $child->setDiscountPercent(0);
                 }
             }
+            $item->getAddress()->setBaseDiscountAmount(0);
         }
         $this->calculator->initFromQuote($quote);
         $this->calculator->initTotals($items, $address);
@@ -193,9 +194,6 @@ class Discount extends AbstractTotal
         foreach ($rules as $rule) {
             /** @var Item $item */
             foreach ($itemsToApplyRules as $key => $item) {
-                if ($quote->getIsMultiShipping() && $item->getAddress()->getId() !== $address->getId()) {
-                    continue;
-                }
                 if ($item->getNoDiscount() || !$this->calculator->canApplyDiscount($item) || $item->getParentItem()) {
                     continue;
                 }

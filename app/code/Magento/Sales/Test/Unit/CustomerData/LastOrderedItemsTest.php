@@ -220,10 +220,15 @@ class LastOrderedItemsTest extends TestCase
             ->willReturn($visibleOnFrontStatuses);
         $this->orderCollectionFactoryMock->expects($this->once())->method('create')->willReturn($orderCollectionMock);
         $orderCollectionMock->method('addAttributeToFilter')
-            ->withConsecutive(
-                ['customer_id', $customerId],
-                ['status', ['in' => $visibleOnFrontStatuses]]
-            )->willReturnOnConsecutiveCalls($orderCollectionMock, $orderCollectionMock);
+            ->willReturnCallback(function ($arg1, $arg2)
+ use ($customerId, $visibleOnFrontStatuses, $orderCollectionMock) {
+                if ($arg1 == 'customer_id' && $arg2 == $customerId) {
+                    return $orderCollectionMock;
+                }
+                if ($arg1 == 'status' && $arg2 == ['in' => $visibleOnFrontStatuses]) {
+                    return $orderCollectionMock;
+                }
+            });
         $orderCollectionMock->expects($this->once())
             ->method('addAttributeToSort')
             ->willReturnSelf();
