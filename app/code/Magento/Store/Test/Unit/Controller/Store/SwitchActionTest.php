@@ -85,19 +85,21 @@ class SwitchActionTest extends TestCase
         $this->storeRepositoryMock =
             $this->getMockBuilder(StoreRepositoryInterface::class)
                 ->getMock();
-        $this->httpContextMock = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)->getMock();
+        $this->httpContextMock = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMock();
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setRedirect'])
+            ->addMethods(['setRedirect'])
             ->getMockForAbstractClass();
         $this->redirectMock =
             $this->getMockBuilder(RedirectInterface::class)
                 ->getMock();
         $this->storeSwitcher = $this->getMockBuilder(StoreSwitcher::class)
             ->disableOriginalConstructor()
-            ->setMethods(['switch'])
+            ->onlyMethods(['switch'])
             ->getMock();
 
         $this->model = (new ObjectManager($this))->getObject(
@@ -127,7 +129,7 @@ class SwitchActionTest extends TestCase
             ->getMock();
         $storeToSwitchToMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isUseStoreInUrl'])
+            ->addMethods(['isUseStoreInUrl'])
             ->getMockForAbstractClass();
 
         $this->requestMock->expects($this->any())->method('getParam')->willReturnMap(
