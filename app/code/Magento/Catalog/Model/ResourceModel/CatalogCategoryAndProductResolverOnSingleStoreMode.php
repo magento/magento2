@@ -52,22 +52,22 @@ class CatalogCategoryAndProductResolverOnSingleStoreMode
      */
     private function process(int $storeId, string $table): void
     {
-        $productMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
-        $productLinkField = $productMetadata->getLinkField();
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $linkField = $metadata->getLinkField();
         $catalogProductTable = $this->resourceConnection->getTableName($table);
 
-        $catalogProducts = $this->getCatalogProducts($table, $storeId);
-        $rowIds = [];
+        $catalogProducts = $this->getCatalogProducts($table, $linkField, $storeId);
+        $linkFieldIds = [];
         $attributeIds = [];
         $valueIds = [];
         try {
             if ($catalogProducts) {
                 foreach ($catalogProducts as $catalogProduct) {
-                    $rowIds[] = $catalogProduct[$productLinkField];
+                    $linkFieldIds[] = $catalogProduct[$linkField];
                     $attributeIds[] = $catalogProduct[AttributeInterface::ATTRIBUTE_ID];
                     $valueIds[] = $catalogProduct['value_id'];
                 }
-                $this->massDelete($catalogProductTable, $attributeIds, $rowIds);
+                $this->massDelete($catalogProductTable, $linkField, $attributeIds, $linkFieldIds);
                 $this->massUpdate($catalogProductTable, $valueIds);
             }
         } catch (LocalizedException $e) {
@@ -115,11 +115,12 @@ class CatalogCategoryAndProductResolverOnSingleStoreMode
      * Delete default store related products
      *
      * @param string $catalogProductTable
+     * @param string $linkField
      * @param array $attributeIds
-     * @param array $rowIds
+     * @param array $linkFieldIds
      * @return void
      */
-    private function massDelete(string $catalogProductTable, array $attributeIds, array $rowIds): void
+    private function massDelete(string $catalogProductTable, string $linkField, array $attributeIds, array $linkFieldIds): void
     {
         $connection = $this->resourceConnection->getConnection();
 
@@ -127,8 +128,8 @@ class CatalogCategoryAndProductResolverOnSingleStoreMode
             $catalogProductTable,
             [
                 'store_id = ?' => Store::DEFAULT_STORE_ID,
-                'attribute_id IN(?)' => $attributeIds,
-                'row_id IN(?)' => $rowIds
+                AttributeInterface::ATTRIBUTE_ID. ' IN(?)' => $attributeIds,
+                $linkField.' IN(?)' => $linkFieldIds
             ]
         );
     }
@@ -155,15 +156,16 @@ class CatalogCategoryAndProductResolverOnSingleStoreMode
      * Get list of products
      *
      * @param string $table
+     * @param string $linkField
      * @param int $storeId
      * @return array
      */
-    private function getCatalogProducts(string $table, int $storeId): array
+    private function getCatalogProducts(string $table, string $linkField, int $storeId): array
     {
         $connection = $this->resourceConnection->getConnection();
         $catalogProductTable = $this->resourceConnection->getTableName($table);
         $select = $connection->select()
-            ->from($catalogProductTable, ['value_id', 'attribute_id', 'row_id'])
+            ->from($catalogProductTable, ['value_id', AttributeInterface::ATTRIBUTE_ID, $linkField])
             ->where('store_id = ?', $storeId);
         return $connection->fetchAll($select);
     }
