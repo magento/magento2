@@ -27,6 +27,7 @@ use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
+use tests\verification\Tests\ActionGroupWithReturnGenerationTest;
 
 /**
  * TransportBuilder for Mail Templates
@@ -108,7 +109,7 @@ class TransportBuilder
     /**
      * @var array
      */
-    protected $attachments = [];
+    private $attachments = [];
 
     /**
      * Param that used for storing all message data until it will be used
@@ -357,7 +358,7 @@ class TransportBuilder
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function addAttachment(string $content, string $fileName, ?string $fileType = Mime::TYPE_OCTETSTREAM)
+    public function addAttachment(string $content, string $fileName, ?string $fileType = Mime::TYPE_OCTETSTREAM): TransportBuilder
     {
         $attachmentPart = new Part();
 
