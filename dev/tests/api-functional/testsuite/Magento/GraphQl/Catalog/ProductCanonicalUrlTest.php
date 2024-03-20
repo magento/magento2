@@ -7,6 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Catalog\Model\Indexer\Category\Product;
+use Magento\Catalog\Model\Indexer\Product\Category;
+use Magento\CatalogSearch\Model\Indexer\Fulltext as IndexerSearch;
+use Magento\Indexer\Model\Indexer;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -14,6 +20,17 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class ProductCanonicalUrlTest extends GraphQlAbstract
 {
+    /** @var ObjectManager */
+    private $objectManager;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        $this->objectManager = Bootstrap::getObjectManager();
+    }
+
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoConfigFixture default_store catalog/seo/product_canonical_tag 1
@@ -21,6 +38,7 @@ class ProductCanonicalUrlTest extends GraphQlAbstract
      */
     public function testProductWithCanonicalLinksMetaTagSettingsEnabled()
     {
+        $this->reindex();
         $productSku = 'simple';
         $query
             = <<<QUERY
@@ -70,5 +88,16 @@ QUERY;
             $response['products']['items'][0]['canonical_url']
         );
         $this->assertEquals('simple', $response['products']['items'][0]['sku']);
+    }
+
+    private function reindex()
+    {
+        $indexer = $this->objectManager->create(Indexer::class);
+        $indexer->load(Product::INDEXER_ID);
+        $indexer->reindexAll();
+        $indexer->load(Category::INDEXER_ID);
+        $indexer->reindexAll();
+        $indexer->load(IndexerSearch::INDEXER_ID);
+        $indexer->reindexAll();
     }
 }

@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Model\ResourceModel\Db\VersionControl;
 
+use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
@@ -48,6 +49,24 @@ class Snapshot implements ResetAfterRequestInterface
         $filteredData = array_intersect_key($entity->getData(), $metaData);
         $data = array_merge($metaData, $filteredData);
         $this->snapshotData[get_class($entity)][$entity->getId()] = $data;
+    }
+
+    /**
+     * Get snapshot data
+     *
+     * @param DataObject $entity
+     * @return array
+     */
+    public function getSnapshotData(DataObject $entity): array
+    {
+        $entityClass = get_class($entity);
+        $entityId = $entity->getId();
+
+        if (isset($this->snapshotData[$entityClass][$entityId])) {
+            return $this->snapshotData[$entityClass][$entityId];
+        }
+
+        return [];
     }
 
     /**
