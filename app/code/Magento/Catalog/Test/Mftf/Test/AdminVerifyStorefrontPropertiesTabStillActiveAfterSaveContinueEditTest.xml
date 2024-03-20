@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyStorefrontPropertiesTabStillActiveAfterSaveContinueEditTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Verify tab active after save form product attribute"/>
+            <title value="Activate Tab no longer works on legacy tabs/forms"/>
+            <description value="Admin should be able visible previous tab active after save product attribute"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-38658"/>
+            <group value="Catalog"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+
+        <after>
+            <!-- Delete created attribute -->
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteAttribute">
+                <argument name="ProductAttribute" value="productTextEditorAttribute"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+
+        <!-- Go to Stores > Product, click "Add New Attribute" -->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="openProductAttributePage"/>
+        <actionGroup ref="AdminClickCreateNewAttributeButtonActionGroup" stepKey="clickAddNewAttributeButton"/>
+
+        <!-- Fill attribute label name -->
+        <actionGroup ref="AdminFillProductAttributePropertiesActionGroup" stepKey="fillAttributeProperties">
+            <argument name="attributeName" value="{{productTextEditorAttribute.attribute_code}}"/>
+            <argument name="attributeType" value="{{productTextEditorAttribute.frontend_input}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminVerifyStorefrontPropertiesTabActiveActionGroup" stepKey="verifyStorefrontTabActive"/>
+
+    </test>
+</tests>
