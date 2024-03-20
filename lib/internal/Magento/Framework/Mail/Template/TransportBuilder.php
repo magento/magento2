@@ -27,7 +27,6 @@ use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
-use tests\verification\Tests\ActionGroupWithReturnGenerationTest;
 
 /**
  * TransportBuilder for Mail Templates
