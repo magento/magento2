@@ -75,6 +75,7 @@ class OrderFilter
         array $storeIds
     ): array {
         $filterGroups = [];
+        $filter = [];
         $this->filterGroupBuilder->setFilters(
             [$this->filterBuilder->setField('customer_id')->setValue($userId)->setConditionType('eq')->create()]
         );
