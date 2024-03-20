@@ -23,6 +23,7 @@ final class PhpUnitExtension implements Runner\Extension\Extension
         $facade->registerSubscribers(
             new TestSuitStartedSubscriber(),
             new TestSuitEndSubscriber(),
+            new TestPreparedSubscriber(),
             new PhpUnitExtensionSubscriber(),
             new PhpUnitExtensionSubscriberFinished(),
             new TestSkippedSubscriber(),

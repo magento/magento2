@@ -36,8 +36,8 @@ class SkipDataSetTest extends AbstractOverridesTest
     public static function testDataProvider(): array
     {
         return [
-            'first_data_set' => [],
-            'second_data_set' => [],
+            'first_data_set' => ['This test should be skipped via override config in data set node'],
+            'second_data_set' => ['This test should be skipped via override config in data set node'],
         ];
     }
 }
