@@ -16,9 +16,9 @@
             <argument name="orderStatus" type="string" defaultValue="Processing"/>
         </arguments>
                 <waitForElementClickable selector="{{AdminOrderDetailsMainActionsSection.authorize}}" stepKey="waitForAuthorizeButtonToBeClickable"/>
-                <click selector="{{AdminOrderDetailsMainActionsSection.authorize}}" stepKey="clickCancelOrder"/>
+                <click selector="{{AdminOrderDetailsMainActionsSection.authorize}}" stepKey="clickAuthorizeOrder"/>
                 <waitForText selector="{{AdminConfirmationModalSection.message}}" userInput="Are you sure you want to authorize full order amount?" stepKey="seeConfirmationMessage"/>
-                <waitForElementClickable selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForOkayButtonToAppeare"/>
+                <waitForElementClickable selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForOkayButtonToAppear"/>
                 <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmOrder"/>
                 <waitForText selector="{{AdminMessagesSection.success}}" userInput="Payment authorization has been successfully created." stepKey="seeAuthorizedSuccessMessage"/>
                 <waitForText selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{orderStatus}}" stepKey="seeOrderStatus"/>
