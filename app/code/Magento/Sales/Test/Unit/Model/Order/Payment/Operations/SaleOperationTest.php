@@ -49,7 +49,7 @@ class SaleOperationTest extends TestCase
     public function testExecute(Invoice $invoice)
     {
         $order = $this->getMockBuilder(Order::class)
-            ->setMethods(['prepareInvoice', 'addRelatedObject', 'setStatus'])
+            ->onlyMethods(['prepareInvoice', 'addRelatedObject', 'setStatus'])
             ->disableOriginalConstructor()
             ->getMock();
         $order->expects($this->once())
@@ -66,7 +66,8 @@ class SaleOperationTest extends TestCase
 
         /** @var Payment|MockObject  $orderPayment | */
         $orderPayment = $this->getMockBuilder(Payment::class)
-            ->setMethods(['setCreatedInvoice', 'getOrder', 'getMethodInstance', 'getIsFraudDetected'])
+            ->addMethods(['setCreatedInvoice'])
+            ->onlyMethods(['getOrder', 'getMethodInstance', 'getIsFraudDetected'])
             ->disableOriginalConstructor()
             ->getMock();
         $orderPayment->expects($this->once())
@@ -102,7 +103,8 @@ class SaleOperationTest extends TestCase
     private function getPaidInvoice(): MockObject
     {
         $invoice = $this->getMockBuilder(Invoice::class)
-            ->setMethods(['register', 'getIsPaid', 'pay'])
+            ->addMethods(['getIsPaid'])
+            ->onlyMethods(['register', 'pay'])
             ->disableOriginalConstructor()
             ->getMock();
         $invoice->expects($this->once())
@@ -121,7 +123,8 @@ class SaleOperationTest extends TestCase
     private function getUnpaidInvoice(): MockObject
     {
         $invoice = $this->getMockBuilder(Invoice::class)
-            ->setMethods(['register', 'getIsPaid', 'pay'])
+            ->addMethods(['getIsPaid'])
+            ->onlyMethods(['register', 'pay'])
             ->disableOriginalConstructor()
             ->getMock();
         $invoice->expects($this->once())

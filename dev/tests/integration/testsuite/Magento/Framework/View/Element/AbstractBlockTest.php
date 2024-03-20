@@ -26,6 +26,9 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
      */
     protected $_layout = null;
 
+    /**
+     * @var array
+     */
     protected static $_mocks = [];
 
     /**
@@ -573,7 +576,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEquals($name, $key);
 
         $block->setCacheKey('key');
-        $this->assertEquals(AbstractBlock::CACHE_KEY_PREFIX . 'key', $block->getCacheKey());
+        $this->assertEquals(AbstractBlock::CUSTOM_CACHE_KEY_PREFIX . 'key', $block->getCacheKey());
     }
 
     /**

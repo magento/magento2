@@ -24,13 +24,17 @@
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{PageTitle}}" stepKey="fillFieldTitle"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
+        <waitForElementVisible selector="{{CmsNewPagePageContentSection.contentHeading}}" stepKey="waitForContentHeading"/>
         <fillField selector="{{CmsNewPagePageContentSection.contentHeading}}" userInput="{{ContentHeading}}" stepKey="fillFieldContentHeading"/>
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimization"/>
+        <waitForElementVisible selector="{{CmsNewPagePageSeoSection.urlKey}}" stepKey="waitForURLKey"/>
         <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{URLKey}}" stepKey="fillFieldURLKey"/>
         <click selector="{{CmsNewPagePiwSection.header}}" stepKey="clickPageInWebsites"/>
         <waitForElementVisible selector="{{CmsNewPagePiwSection.selectStoreView(selectStoreViewOpt)}}" stepKey="waitForStoreGridReload"/>
         <clickWithLeftButton selector="{{CmsNewPagePiwSection.selectStoreView(selectStoreViewOpt)}}" stepKey="clickStoreView2"/>
+        <scrollTo selector="{{CmsNewPageHierarchySection.header}}" x="0" y="-100" stepKey="scrollToHierarchySection"/>
         <click selector="{{CmsNewPageHierarchySection.header}}" stepKey="clickHierarchy"/>
+        <waitForElementVisible selector="{{CmsNewPageHierarchySection.selectHierarchy(selectHierarchyOpt)}}" stepKey="waitForHierarchySection"/>
         <click selector="{{CmsNewPageHierarchySection.selectHierarchy(selectHierarchyOpt)}}" stepKey="clickPageCheckBoxes"/>
     </actionGroup>
 </actionGroups>
