@@ -15,11 +15,12 @@
         <arguments>
             <argument name="orderStatus" type="string" defaultValue="Processing"/>
         </arguments>
-        <click selector="{{AdminOrderDetailsMainActionsSection.authorize}}" stepKey="clickCancelOrder"/>
-        <waitForElement selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForCancelConfirmation"/>
-        <see selector="{{AdminConfirmationModalSection.message}}" userInput="Are you sure you want to authorize full order amount?" stepKey="seeConfirmationMessage"/>
-        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmOrderCancel"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="Payment authorization has been successfully created." stepKey="seeCancelSuccessMessage"/>
-        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{orderStatus}}" stepKey="seeOrderStatusCanceled"/>
+                <waitForElementClickable selector="{{AdminOrderDetailsMainActionsSection.authorize}}" stepKey="waitForAuthorizeButtonToBeClickable"/>
+                <click selector="{{AdminOrderDetailsMainActionsSection.authorize}}" stepKey="clickCancelOrder"/>
+                <waitForText selector="{{AdminConfirmationModalSection.message}}" userInput="Are you sure you want to authorize full order amount?" stepKey="seeConfirmationMessage"/>
+                <waitForElementClickable selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForOkayButtonToAppeare"/>
+                <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmOrder"/>
+                <waitForText selector="{{AdminMessagesSection.success}}" userInput="Payment authorization has been successfully created." stepKey="seeAuthorizedSuccessMessage"/>
+                <waitForText selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{orderStatus}}" stepKey="seeOrderStatus"/>
     </actionGroup>
 </actionGroups>
