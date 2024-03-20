@@ -77,26 +77,6 @@ class ParamsOverrider
     }
 
     /**
-     * Validates InputData
-     *
-     * @param array $inputData
-     * @return array
-     */
-    private function validateInputData(array $inputData): array
-    {
-        $result = [];
-
-        $data = array_filter($inputData, function ($k) use (&$result) {
-            $key = is_string($k) ? strtolower(str_replace('_', "", $k)) : $k;
-            return !isset($result[$key]) && ($result[$key] = true);
-        }, ARRAY_FILTER_USE_KEY);
-
-        return array_map(function ($value) {
-            return is_array($value) ? $this->validateInputData($value) : $value;
-        }, $data);
-    }
-
-    /**
      * Determine if a nested array value is set.
      *
      * @param array $nestedArray
