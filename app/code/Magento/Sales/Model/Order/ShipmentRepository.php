@@ -44,7 +44,7 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
     /**
      * @param Metadata $metadata
      * @param SearchResultFactory $searchResultFactory
-     * @param CollectionProcessorInterface $collectionProcessor
+     * @param CollectionProcessorInterface|null $collectionProcessor
      */
     public function __construct(
         Metadata $metadata,
@@ -53,7 +53,9 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
     ) {
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;
-        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
+        $this->collectionProcessor = $collectionProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+        );
     }
 
     /**
@@ -146,6 +148,8 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
         try {
             $this->metadata->getMapper()->save($entity);
             $this->registry[$entity->getEntityId()] = $entity;
+        } catch (\Magento\Framework\Validator\Exception $exception) {
+            throw new CouldNotSaveException(__($exception->getMessage()), $exception);
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__("The shipment couldn't be saved."), $e);
         }
@@ -161,21 +165,5 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
     public function create()
     {
         return $this->metadata->getNewInstance();
-    }
-
-    /**
-     * Retrieve collection processor
-     *
-     * @deprecated 101.0.0
-     * @return CollectionProcessorInterface
-     */
-    private function getCollectionProcessor()
-    {
-        if (!$this->collectionProcessor) {
-            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
-            );
-        }
-        return $this->collectionProcessor;
     }
 }

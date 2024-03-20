@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-94803"/>
             <group value="urlRewrite"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Set the configuration for Generate "category/product" URL Rewrites to Yes (default)-->

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AbandonedCartsReportMainSection">
+        <element name="customer" type="input" selector="#gridAbandoned_filter_customer_name"/>
+        <element name="email" type="input" selector="#gridAbandoned_filter_email"/>
+        <element name="searchButton" type="button" selector="//button/span[text()='Search']"/>
+        <element name="resetButton" type="button" selector="//button/span[text()='Reset Filter']"/>
+        <element name="recordsFound" type="text" selector="#gridAbandoned-total-count"/>
+    </section>
+</sections>

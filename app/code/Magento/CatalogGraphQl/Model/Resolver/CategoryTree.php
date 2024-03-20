@@ -24,7 +24,7 @@ class CategoryTree implements ResolverInterface
     /**
      * Name of type in GraphQL
      */
-    const CATEGORY_INTERFACE = 'CategoryInterface';
+    public const CATEGORY_INTERFACE = 'CategoryInterface';
 
     /**
      * @var CategoryTreeDataProvider
@@ -72,13 +72,13 @@ class CategoryTree implements ResolverInterface
             $this->checkCategoryIsActive->execute($rootCategoryId);
         }
         $store = $context->getExtensionAttributes()->getStore();
-        $categoriesTree = $this->categoryTree->getTree($info, $rootCategoryId, (int)$store->getId());
+        $categoriesTree = $this->categoryTree->getTreeCollection($info, $rootCategoryId, (int)$store->getId());
 
-        if (empty($categoriesTree) || ($categoriesTree->count() == 0)) {
+        if ($categoriesTree->count() == 0) {
             throw new GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
         }
 
-        $result = $this->extractDataFromCategoryTree->execute($categoriesTree);
+        $result = $this->extractDataFromCategoryTree->buildTree($categoriesTree, [$rootCategoryId]);
         return current($result);
     }
 }

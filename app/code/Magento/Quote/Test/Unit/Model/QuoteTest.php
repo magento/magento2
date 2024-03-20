@@ -30,6 +30,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Copy;
 use Magento\Framework\DataObject\Factory;
 use Magento\Framework\Event\Manager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Phrase;
@@ -1025,7 +1026,7 @@ class QuoteTest extends TestCase
 
         $productMock = $this->getMockBuilder(Product::class)
             ->addMethods(['getParentProductId', 'setStickWithinParent'])
-            ->onlyMethods(['__wakeup'])
+            ->onlyMethods(['__wakeup', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -1042,6 +1043,15 @@ class QuoteTest extends TestCase
         $collectionMock->expects($this->any())
             ->method('getIterator')
             ->willReturn($iterator);
+
+        $productMock->expects($this->any())
+            ->method('getId')
+            ->willReturn(123);
+
+        $collectionMock->expects($this->any())
+            ->method('getItemsByColumnValue')
+            ->with('product_id', 123)
+            ->willReturn([$itemMock]);
 
         $this->quoteItemCollectionFactoryMock->expects($this->once())
             ->method('create')
@@ -1063,17 +1073,28 @@ class QuoteTest extends TestCase
     }
 
     /**
+     * @param $request
+     * @param $hasError
      * @return void
+     * @throws LocalizedException
+     * @dataProvider dataProviderForTestAddProductItem
      */
-    public function testAddProductItemNew(): void
+    public function testAddProductItemNew($request, $hasError): void
     {
-        $itemMock = $this->createMock(Item::class);
+        $itemMock = $this->getMockBuilder(Item::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getHasError'])
+            ->onlyMethods(['representProduct', 'setProduct', 'setOptions', 'setQuote', 'getProduct'])
+            ->getMock();
+        $itemMock->expects($this->once())->method('getHasError')->willReturn($hasError);
+        $product = $this->createMock(Product::class);
+        $itemMock->expects($this->any())->method('getProduct')->willReturn($product);
 
         $expectedResult = $itemMock;
         $requestMock = $this->createMock(
             DataObject::class
         );
-        $this->objectFactoryMock->expects($this->once())
+        $this->objectFactoryMock->expects($this->any())
             ->method('create')
             ->with(['qty' => 1])
             ->willReturn($requestMock);
@@ -1087,7 +1108,7 @@ class QuoteTest extends TestCase
 
         $productMock = $this->getMockBuilder(Product::class)
             ->addMethods(['getParentProductId', 'setStickWithinParent'])
-            ->onlyMethods(['__wakeup'])
+            ->onlyMethods(['__wakeup', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -1101,6 +1122,15 @@ class QuoteTest extends TestCase
         $collectionMock->expects($this->any())
             ->method('getIterator')
             ->willReturn($iterator);
+
+        $productMock->expects($this->any())
+            ->method('getId')
+            ->willReturn(123);
+
+        $collectionMock->expects($this->any())
+            ->method('getItemsByColumnValue')
+            ->with('product_id', 123)
+            ->willReturn([$itemMock]);
 
         $this->quoteItemCollectionFactoryMock->expects($this->once())
             ->method('create')
@@ -1127,8 +1157,27 @@ class QuoteTest extends TestCase
             ->method('getTypeInstance')
             ->willReturn($typeInstanceMock);
 
-        $result = $this->quote->addProduct($this->productMock, null);
+        $result = $this->quote->addProduct($this->productMock, $request);
         $this->assertEquals($expectedResult, $result);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function dataProviderForTestAddProductItem(): array
+    {
+        return [
+            'not_invalid_product_add' => [null, false],
+            'invalid_product_add' => [
+                new DataObject(
+                    [
+                        'add_to_cart_invalid_product' => true,
+                        'qty' => 1
+                    ]
+                ),
+                true
+            ]
+        ];
     }
 
     /**

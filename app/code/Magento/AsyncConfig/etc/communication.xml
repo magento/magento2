@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
+    <topic name="async_config.saveConfig" request="Magento\AsyncConfig\Api\Data\AsyncConfigMessageInterface">
+        <handler name="saveConfigProcessor" type="Magento\AsyncConfig\Model\Consumer" method="process" />
+    </topic>
+</config>

@@ -6,6 +6,7 @@
 
 // phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
 /** @var $block \Magento\Backend\Block\Media\Uploader */
+/** @var \Magento\Framework\Escaper $escaper */
 ?>
 
 <div id="<?= $block->getHtmlId() ?>" class="uploader"
@@ -19,9 +20,8 @@
     }'
 >
     <div class="fileinput-button form-buttons button">
-        <span><?= $block->escapeHtml(__('Browse Files...')) ?></span>
-        <input id="fileupload" type="file" name="<?= $block->escapeHtmlAttr($block->getConfig()->getFileField()) ?>"
-            data-url="<?= $block->escapeHtmlAttr($block->getConfig()->getUrl()) ?>" multiple="multiple" />
+        <span><?= $escaper->escapeHtml(__('Browse Files...')) ?></span>
+        <div id="fileUploader" data-url="<?= $escaper->escapeHtmlAttr($block->getConfig()->getUrl()) ?>"></div>
     </div>
     <div class="clear"></div>
     <script id="<?= $block->getHtmlId() ?>-template" type="text/x-magento-template" data-template="uploader">
