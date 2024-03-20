@@ -443,4 +443,28 @@
         <data key="attribute_code">attribute</data>
         <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabelForExportImport</requiredEntity>
     </entity>
+
+    <!-- Product attributes for sorting in product listing as No -->
+    <entity name="textAttributeWithNoProductSortListing" extends="newProductAttribute" type="ProductAttribute">
+        <data key="used_for_sort_by">false</data>
+    </entity>
+    <entity name="dateAttributeWithNoProductSortListing" extends="productAttributeWysiwyg" type="ProductAttribute">
+        <data key="frontend_input">date</data>
+        <data key="used_for_sort_by">false</data>
+    </entity>
+    <entity name="yesNoAttributeWithNoProductSortListing" extends="productYesNoAttribute" type="ProductAttribute">
+        <data key="used_for_sort_by">false</data>
+    </entity>
+    <entity name="dropdownAttributeWithNoProductSortListing" extends="productAttributeWithDropdownTwoOptions" type="ProductAttribute">
+        <data key="used_for_sort_by">false</data>
+    </entity>
+    <entity name="multiSelectAttributeWithNoProductSortListing" extends="productDropDownAttribute" type="ProductAttribute">
+        <data key="frontend_input">multiselect</data>
+        <data key="used_for_sort_by">false</data>
+    </entity>
+    <entity name="priceAttributeWithNoProductSortListing" extends="newProductAttribute" type="ProductAttribute">
+        <data key="frontend_input">price</data>
+        <data key="used_for_sort_by">false</data>
+    </entity>
 </entities>
+
