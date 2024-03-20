@@ -18,5 +18,6 @@
         <element name="itemTotalPrice" type="text" selector=".col-total .price"/>
         <element name="totalTax" type="text" selector=".summary-total .price"/>
         <element name="backButton" type="button" selector="#back"/>
+        <element name="creditMemosButton" type="button" selector="#credit-memo"/>
     </section>
 </sections>

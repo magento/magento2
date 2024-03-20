@@ -42,8 +42,14 @@ class ConfigurableOptionsSelectionTest extends GraphQlAbstract
      */
     private $idEncoder;
 
+    /**
+     * @var AttributeInterface
+     */
     private $firstConfigurableAttribute;
 
+    /**
+     * @var AttributeInterface
+     */
     private $secondConfigurableAttribute;
 
     /**
@@ -338,6 +344,7 @@ QUERY;
     {
         $indexLists = [
             'catalog_category_product',
+            'catalog_product_category',
             'catalog_product_attribute',
             'cataloginventory_stock',
             'catalogsearch_fulltext',

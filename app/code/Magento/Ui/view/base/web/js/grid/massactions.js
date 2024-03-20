@@ -60,12 +60,14 @@ define([
                 return this;
             }
 
-            action   = this.getAction(actionIndex);
+            action = this.getAction(actionIndex);
             callback = this._getCallback(action, data);
 
             action.confirm ?
                 this._confirm(action, callback) :
                 callback();
+
+            this.close();
 
             return this;
         },
@@ -127,7 +129,7 @@ define([
          */
         _getCallback: function (action, selections) {
             var callback = action.callback,
-                args     = [action, selections];
+                args = [action, selections];
 
             if (utils.isObject(callback)) {
                 args.unshift(callback.target);
