@@ -190,7 +190,11 @@ class Curl implements AdapterInterface
         }
 
         if (is_array($headers)) {
-            curl_setopt($this->_getResource(), CURLOPT_HTTPHEADER, $headers);
+            $curlHeaders = [];
+            foreach ($headers as $key => $value) {
+                $curlHeaders[] = $key . ': ' . $value;
+            }
+            curl_setopt($this->_getResource(), CURLOPT_HTTPHEADER, $curlHeaders);
         }
 
         /**
