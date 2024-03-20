@@ -11,7 +11,10 @@
         <text args="address().company"></text><br>
     </if>
     <text args="_.values(_.compact(address().street)).join(', ')"></text><br>
-    <text args="address().city "></text>, <span text="address().region"></span> <text args="address().postcode"></text><br>
+    <if args="address().city">
+        <text args="address().city "></text>,
+    </if>
+    <span text="address().region"></span> <text args="address().postcode"></text><br>
     <text args="getCountryName(address().countryId)"></text><br>
     <a if="address().telephone" attr="'href': 'tel:' + address().telephone" text="address().telephone"></a><br>
     <if args="address().vatId">
