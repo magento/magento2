@@ -30,6 +30,7 @@
         <before>
             <!-- Enable configuration -->
             <magentoCLI command="config:set sales/cancellation/enabled 1" stepKey="EnablingSalesCancellation"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="_defaultProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -93,7 +94,6 @@
         <grabTextFrom selector="{{CustomerOrderCancellationSection.referenceToLatestOrderId}}" stepKey="getOrderId"/>
 
         <!--Go to Admin Sales Order View Page-->
-        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminSalesOrderViewPage.url({$getOrderId})}}" stepKey="navigateToSalesOrderViewPage"/>
         <waitForPageLoad stepKey="waitForAdminSalesOrderViewPageLoad"/>
 
