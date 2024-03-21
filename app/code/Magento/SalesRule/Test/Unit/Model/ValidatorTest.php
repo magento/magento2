@@ -313,7 +313,6 @@ class ValidatorTest extends TestCase
             ->with(
                 $this->item,
                 [$rule],
-                $this->anything(),
                 $this->anything()
             )
             ->willReturn($expectedRuleIds);
