@@ -14,9 +14,11 @@ use Magento\Authorization\Model\RulesFactory;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Integration\Api\AdminTokenServiceInterface;
 use Magento\Store\Model\Store;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -240,9 +242,9 @@ class CategoryRepositoryTest extends WebapiAbstract
             : $translatedMsg;
     }
 
-    /**
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category as:category
-     */
+    #[
+        DataFixture(CategoryFixture::class, as: 'category'),
+    ]
     public function testUpdate()
     {
         $categoryId = $this->fixtures->get('category')->getId();
@@ -295,9 +297,9 @@ class CategoryRepositoryTest extends WebapiAbstract
         $this->createdCategories = [$categoryId];
     }
 
-    /**
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category as:category
-     */
+    #[
+        DataFixture(CategoryFixture::class, as: 'category'),
+    ]
     public function testUpdateUrlKey()
     {
         $this->_markTestAsRestOnly('Functionality available in REST mode only.');
@@ -600,9 +602,10 @@ class CategoryRepositoryTest extends WebapiAbstract
 
     /**
      * Check if repository does not override default values for attributes out of request
-     *
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category as:category
      */
+    #[
+        DataFixture(CategoryFixture::class, as: 'category'),
+    ]
     public function testUpdateScopeAttribute()
     {
         $categoryId = $this->fixtures->get('category')->getId();

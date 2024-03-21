@@ -19,6 +19,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class used to execute test cases for update item quantity
+ */
 class UpdateItemQtyTest extends TestCase
 {
     /**
@@ -102,8 +105,13 @@ class UpdateItemQtyTest extends TestCase
     {
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['item_id', null], ['item_qty', null])
-            ->willReturnOnConsecutiveCalls('1', '2');
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'item_id' && $arg2 === null) {
+                    return '1';
+                } elseif ($arg1 == 'item_qty' && $arg2 === null) {
+                    return '2';
+                }
+            });
 
         $this->sidebarMock->expects($this->once())
             ->method('checkQuoteItem')
@@ -159,8 +167,13 @@ class UpdateItemQtyTest extends TestCase
     {
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['item_id', null], ['item_qty', null])
-            ->willReturnOnConsecutiveCalls('1', '2');
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'item_id' && $arg2 === null) {
+                    return '1';
+                } elseif ($arg1 == 'item_qty' && $arg2 === null) {
+                    return '2';
+                }
+            });
 
         $this->sidebarMock->expects($this->once())
             ->method('checkQuoteItem')
@@ -202,8 +215,13 @@ class UpdateItemQtyTest extends TestCase
     {
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['item_id', null], ['item_qty', null])
-            ->willReturnOnConsecutiveCalls('1', '2');
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'item_id' && $arg2 === null) {
+                    return '1';
+                } elseif ($arg1 == 'item_qty' && $arg2 === null) {
+                    return '2';
+                }
+            });
 
         $exception = new \Exception('Error!');
 
@@ -214,8 +232,7 @@ class UpdateItemQtyTest extends TestCase
 
         $this->loggerMock->expects($this->once())
             ->method('critical')
-            ->with($exception)
-            ->willReturn(null);
+            ->with($exception);
 
         $this->sidebarMock->expects($this->once())
             ->method('getResponseData')
@@ -243,5 +260,42 @@ class UpdateItemQtyTest extends TestCase
             ->willReturn('json represented');
 
         $this->assertEquals('json represented', $this->updateItemQty->execute());
+    }
+
+    /**
+     * @return void
+     */
+    public function testExecuteWithInvalidItemQty(): void
+    {
+        $error = [
+            'success' => false,
+            'error_message' => 'Invalid Item Quantity Requested.'
+        ];
+        $jsonResult = json_encode($error);
+        $this->requestMock
+            ->method('getParam')
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'item_id' && $arg2 === null) {
+                    return '1';
+                } elseif ($arg1 == 'item_qty' && $arg2 === null) {
+                    return '{{7+2}}';
+                }
+            });
+
+        $this->sidebarMock->expects($this->once())
+            ->method('getResponseData')
+            ->with('Invalid Item Quantity Requested.')
+            ->willReturn($error);
+
+        $this->jsonHelperMock->expects($this->once())
+            ->method('jsonEncode')
+            ->with($error)
+            ->willReturn($jsonResult);
+
+        $this->responseMock->expects($this->once())
+            ->method('representJson')
+            ->willReturn($jsonResult);
+
+        $this->assertEquals($jsonResult, $this->updateItemQty->execute());
     }
 }

@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
@@ -24,6 +25,9 @@
         <after>
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCreatedStore">
                 <argument name="storeGroupName" value="customStore.code"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
             </actionGroup>
             <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

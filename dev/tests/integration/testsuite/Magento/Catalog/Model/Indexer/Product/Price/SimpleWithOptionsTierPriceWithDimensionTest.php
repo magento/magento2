@@ -7,6 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
+use Magento\TestFramework\Fixture\IndexerDimensionMode;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\ScopedProductTierPriceManagementInterface;
@@ -45,13 +51,16 @@ class SimpleWithOptionsTierPriceWithDimensionTest extends \PHPUnit\Framework\Tes
         $this->productCollectionFactory = $this->objectManager->create(CollectionFactory::class);
     }
 
-    /**
-     * @magentoDbIsolation disabled
-     * @magentoIndexerDimensionMode catalog_product_price website_and_customer_group
-     * @magentoDataFixture Magento/Catalog/_files/category_product.php
-     */
+    #[
+        DbIsolation(false),
+        IndexerDimensionMode('catalog_product_price', 'website_and_customer_group'),
+        DataFixture(CategoryFixture::class, as: 'category'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$category.id$']], 'product'),
+    ]
     public function testTierPrice()
     {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $product = $fixtures->get('product');
         $tierPriceValue = 9.00;
 
         $tierPrice = $this->objectManager->create(ProductTierPriceInterfaceFactory::class)
@@ -60,10 +69,10 @@ class SimpleWithOptionsTierPriceWithDimensionTest extends \PHPUnit\Framework\Tes
         $tierPrice->setQty(1.00);
         $tierPrice->setValue($tierPriceValue);
         $tierPriceManagement = $this->objectManager->create(ScopedProductTierPriceManagementInterface::class);
-        $tierPriceManagement->add('simple333', $tierPrice);
+        $tierPriceManagement->add($product->getSku(), $tierPrice);
 
         $productCollection = $this->productCollectionFactory->create();
-        $productCollection->addIdFilter(333);
+        $productCollection->addIdFilter($product->getId());
         $productCollection->addPriceData();
         $productCollection->load();
         /** @var \Magento\Catalog\Model\Product $product */

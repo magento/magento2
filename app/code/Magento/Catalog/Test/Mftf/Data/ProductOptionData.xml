@@ -186,4 +186,13 @@
     <entity name="ProductOptionFileSecond" extends="ProductOptionFile">
         <data key="title" unique="suffix">fourth option</data>
     </entity>
+    <entity name="FieldProductOption" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">Optiontitle1</data>
+        <data key="sku">Optiontitle1</data>
+        <data key="type">field</data>
+        <data key="is_require">true</data>
+        <data key="price">250</data>
+        <data key="price_type">fixed</data>
+    </entity>
 </entities>

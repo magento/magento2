@@ -5,33 +5,35 @@
  */
 namespace Magento\Setup\Module\Di\App\Task\Operation;
 
+use Magento\Framework\Interception\Config\Config;
 use Magento\Setup\Module\Di\App\Task\OperationInterface;
+use Magento\Setup\Module\Di\Code\Reader\Decorator\Interceptions;
 
 class InterceptionCache implements OperationInterface
 {
     /**
      * @var array
      */
-    private $data = [];
+    private $data;
 
     /**
-     * @var \Magento\Framework\Interception\Config\Config
+     * @var Config
      */
     private $configInterface;
 
     /**
-     * @var \Magento\Setup\Module\Di\Code\Reader\Decorator\Interceptions
+     * @var Interceptions
      */
     private $interceptionsInstancesNamesList;
 
     /**
-     * @param \Magento\Framework\Interception\Config\Config $configInterface
-     * @param \Magento\Setup\Module\Di\Code\Reader\Decorator\Interceptions $interceptionsInstancesNamesList
+     * @param Config $configInterface
+     * @param Interceptions $interceptionsInstancesNamesList
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Interception\Config\Config $configInterface,
-        \Magento\Setup\Module\Di\Code\Reader\Decorator\Interceptions $interceptionsInstancesNamesList,
+        Config $configInterface,
+        Interceptions $interceptionsInstancesNamesList,
         array $data = []
     ) {
         $this->configInterface = $configInterface;
@@ -56,9 +58,11 @@ class InterceptionCache implements OperationInterface
                 $paths = (array)$paths;
             }
             foreach ($paths as $path) {
-                $definitions = array_merge($definitions, $this->interceptionsInstancesNamesList->getList($path));
+                $definitions[] = $this->interceptionsInstancesNamesList->getList($path);
             }
         }
+
+        $definitions = array_merge([], ...$definitions);
 
         $this->configInterface->initialize($definitions);
     }

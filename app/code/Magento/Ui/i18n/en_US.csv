@@ -105,6 +105,7 @@ Keyword,Keyword
 "Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.","Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed."
 "Please enter a valid date.","Please enter a valid date."
 "Please enter a valid URL Key (Ex: ""example-page"", ""example-page.html"" or ""anotherlevel/example-page"").","Please enter a valid URL Key (Ex: ""example-page"", ""example-page.html"" or ""anotherlevel/example-page"")."
+"Trailing hyphens are not allowed.","Trailing hyphens are not allowed."
 "Please enter a valid zip code.","Please enter a valid zip code."
 "Please select State/Province.","Please select State/Province."
 "Please enter a value less than or equal to {0}.","Please enter a value less than or equal to {0}."
@@ -193,3 +194,5 @@ CSV,CSV
 "Please enter a value between {0} and {1}.","Please enter a value between {0} and {1}."
 "was not uploaded","was not uploaded"
 "The file upload field is disabled.","The file upload field is disabled."
+"Please enter a number 0 or greater, without comma in this field.","Please enter a number 0 or greater, without comma in this field."
+"Please enter a number greater than 0, without comma in this field.","Please enter a number greater than 0, without comma in this field."

@@ -81,6 +81,18 @@ class NameTest extends TestCase
                 'middleName' => '',
                 'lastNameName' => 'O\'Doe',
                 'message' => 'Legacy straight apostrophe must be allowed in names'
+            ],
+            [
+                'firstName' => 'John',
+                'middleName' => '',
+                'lastNameName' => 'O`Doe',
+                'message' => 'Grave accent back quote character must be allowed in names'
+            ],
+            [
+                'firstName' => 'John & Smith',
+                'middleName' => '',
+                'lastNameName' => 'O`Doe',
+                'message' => 'Special character ampersand(&) must be allowed in names'
             ]
         ];
     }

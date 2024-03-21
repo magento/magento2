@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <group value="urlRewrite"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -32,6 +33,9 @@
             </actionGroup>
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteStore2">
                 <argument name="storeGroupName" value="customStoreGroup.name"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
             </actionGroup>
             <deleteData stepKey="deleteRootCategory" createDataKey="rootCategory"/>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
@@ -60,6 +64,9 @@
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
             <argument name="StoreGroup" value="customStoreGroup"/>
             <argument name="customStore" value="customStoreEN"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
         </actionGroup>
 
         <!-- Create simple product with categories created in create data -->

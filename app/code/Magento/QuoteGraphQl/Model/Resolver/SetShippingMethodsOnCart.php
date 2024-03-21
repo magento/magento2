@@ -69,7 +69,6 @@ class SetShippingMethodsOnCart implements ResolverInterface
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
         $this->checkCartCheckoutAllowance->execute($cart);
         $this->setShippingMethodsOnCart->execute($context, $cart, $shippingMethods);
-        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
 
         return [
             'cart' => [

@@ -45,4 +45,20 @@
         <data key="path">wishlist/general/show_in_sidebar</data>
         <data key="value">0</data>
     </entity>
+    <entity name="DisableRssConfig">
+        <data key="path">rss/config/active</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="DisableWishlistRssConfig">
+        <data key="path">rss/wishlist/active</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnableRssConfig">
+        <data key="path">rss/config/active</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="EnableWishlistRssConfig">
+        <data key="path">rss/wishlist/active</data>
+        <data key="value">1</data>
+    </entity>
 </entities>

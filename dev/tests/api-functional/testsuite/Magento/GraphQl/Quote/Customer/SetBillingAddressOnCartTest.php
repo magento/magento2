@@ -135,6 +135,68 @@ QUERY;
     }
 
     /**
+     * Tests setting the billing address on a guest's cart by providing new address input information.
+     *
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetNewBillingAddressOnGuest()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+         address: {
+          firstname: "test firstname"
+          lastname: "test lastname"
+          company: "test company"
+          street: ["test street 1", "test street 2"]
+          city: "test city"
+          region: "AZ"
+          postcode: "887766"
+          country_code: "US"
+          telephone: "88776655"
+          vat_id: "DE313215027"
+         }
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        vat_id
+        country {
+          code
+          label
+        }
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '');
+
+        self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
+        $cartResponse = $response['setBillingAddressOnCart']['cart'];
+        self::assertArrayHasKey('billing_address', $cartResponse);
+        $billingAddressResponse = $cartResponse['billing_address'];
+        self::assertArrayHasKey('vat_id', $billingAddressResponse);
+        $this->assertNewAddressFields($billingAddressResponse);
+    }
+
+    /**
      * Tests that the "use_for_shipping" option sets the provided billing address for shipping as well.
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
@@ -1149,13 +1211,13 @@ mutation {
       cart_id: "$maskedQuoteId"
       billing_address: {
           address: {
-            firstname: "Vasyl"
+            firstname: "John"
             lastname: "Doe"
-            street: ["1 Svobody"]
-            city: "Lviv"
-            region: "Lviv"
-            postcode: "00000"
-            country_code: "UA"
+            street: ["Via della Posta"]
+            city: "Vatican City"
+            region: "Vatican City"
+            postcode: "00120"
+            country_code: "VA"
             telephone: "555-555-55-55"
           }
         }
@@ -1177,8 +1239,8 @@ QUERY;
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
         self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
         $cartResponse = $response['setBillingAddressOnCart']['cart'];
-        self::assertEquals('UA', $cartResponse['billing_address']['country']['code']);
-        self::assertEquals('Lviv', $cartResponse['billing_address']['region']['label']);
+        self::assertEquals('VA', $cartResponse['billing_address']['country']['code']);
+        self::assertEquals('Vatican City', $cartResponse['billing_address']['region']['label']);
     }
 
     /**

@@ -1,7 +1,18 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/************************************************************************
+ *
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ***********************************************************************
  */
 
 namespace Magento\Fedex\Model;
@@ -9,11 +20,15 @@ namespace Magento\Fedex\Model;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Module\Dir;
+use Magento\Framework\HTTP\Client\CurlFactory;
+use Magento\Framework\Measure\Length;
+use Magento\Framework\Measure\Weight;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\Webapi\Soap\ClientFactory;
+use Magento\Framework\Url\DecoderInterface;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Sales\Model\Order;
+use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
 
@@ -31,21 +46,63 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @var string
      */
-    const CODE = 'fedex';
+    public const CODE = 'fedex';
 
     /**
      * Purpose of rate request
      *
      * @var string
      */
-    const RATE_REQUEST_GENERAL = 'general';
+    public const RATE_REQUEST_GENERAL = 'general';
 
     /**
      * Purpose of rate request
      *
      * @var string
      */
-    const RATE_REQUEST_SMARTPOST = 'SMART_POST';
+    public const RATE_REQUEST_SMARTPOST = 'SMART_POST';
+
+    /**
+     * Oauth End point to get Access Token
+     *
+     * @var string
+     */
+    public const OAUTH_REQUEST_END_POINT = 'oauth/token';
+
+    /**
+     * REST end point of Tracking API
+     *
+     * @var string
+     */
+    public const TRACK_REQUEST_END_POINT = 'track/v1/trackingnumbers';
+
+    /**
+     * REST end point for Rate API
+     *
+     * @var string
+     */
+    public const RATE_REQUEST_END_POINT = 'rate/v1/rates/quotes';
+
+    /**
+     * REST end point to Create Shipment
+     *
+     * @var string
+     */
+    public const SHIPMENT_REQUEST_END_POINT = '/ship/v1/shipments';
+
+    /**
+     * REST end point to cancel Shipment
+     *
+     * @var string
+     */
+    public const SHIPMENT_CANCEL_END_POINT = '/ship/v1/shipments/cancel';
+
+    /**
+     * Authentication Grant Type for REST end point
+     *
+     * @var string
+     */
+    public const AUTHENTICATION_GRANT_TYPE = 'client_credentials';
 
     /**
      * Code of the carrier
@@ -85,27 +142,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_result = null;
 
     /**
-     * Path to wsdl file of rate service
-     *
-     * @var string
-     */
-    protected $_rateServiceWsdl;
-
-    /**
-     * Path to wsdl file of ship service
-     *
-     * @var string
-     */
-    protected $_shipServiceWsdl = null;
-
-    /**
-     * Path to wsdl file of track service
-     *
-     * @var string
-     */
-    protected $_trackServiceWsdl = null;
-
-    /**
      * Container types that could be customized for FedEx carrier
      *
      * @var string[]
@@ -123,23 +159,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_productCollectionFactory;
 
     /**
-     * @inheritdoc
+     * @var string[]
      */
     protected $_debugReplacePrivateDataKeys = [
-        'Key', 'Password', 'MeterNumber',
+        'client_id', 'client_secret',
     ];
-
-    /**
-     * Version of tracking service
-     * @var int
-     */
-    private static $trackServiceVersion = 10;
-
-    /**
-     * List of TrackReply errors
-     * @var array
-     */
-    private static $trackingErrors = ['FAILURE', 'ERROR'];
 
     /**
      * @var Json
@@ -147,19 +171,19 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     private $serializer;
 
     /**
-     * @var ClientFactory
-     */
-    private $soapClientFactory;
-
-    /**
      * @var array
      */
     private $baseCurrencyRate;
 
     /**
-     * @var DataObject
+     * @var CurlFactory
      */
-    private $_rawTrackingRequest;
+    private $curlFactory;
+
+    /**
+     * @var DecoderInterface
+     */
+    private $decoderInterface;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -178,11 +202,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\Dir\Reader $configReader
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
+     * @param \Magento\Framework\HTTP\Client\CurlFactory $curlFactory
+     * @param \Magento\Framework\Url\DecoderInterface $decoderInterface
      * @param array $data
      * @param Json|null $serializer
-     * @param ClientFactory|null $soapClientFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -202,11 +226,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\Dir\Reader $configReader,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
+        CurlFactory $curlFactory,
+        DecoderInterface $decoderInterface,
         array $data = [],
-        Json $serializer = null,
-        ClientFactory $soapClientFactory = null
+        Json $serializer = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_productCollectionFactory = $productCollectionFactory;
@@ -228,61 +252,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $stockRegistry,
             $data
         );
-        $wsdlBasePath = $configReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Fedex') . '/wsdl/';
-        $this->_shipServiceWsdl = $wsdlBasePath . 'ShipService_v10.wsdl';
-        $this->_rateServiceWsdl = $wsdlBasePath . 'RateService_v10.wsdl';
-        $this->_trackServiceWsdl = $wsdlBasePath . 'TrackService_v' . self::$trackServiceVersion . '.wsdl';
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
-        $this->soapClientFactory = $soapClientFactory ?: ObjectManager::getInstance()->get(ClientFactory::class);
-    }
-
-    /**
-     * Create soap client with selected wsdl
-     *
-     * @param string $wsdl
-     * @param bool|int $trace
-     * @return \SoapClient
-     */
-    protected function _createSoapClient($wsdl, $trace = false)
-    {
-        $client = $this->soapClientFactory->create($wsdl, ['trace' => $trace]);
-        $client->__setLocation(
-            $this->getConfigFlag(
-                'sandbox_mode'
-            ) ? $this->getConfigData('sandbox_webservices_url') : $this->getConfigData('production_webservices_url')
-        );
-
-        return $client;
-    }
-
-    /**
-     * Create rate soap client
-     *
-     * @return \SoapClient
-     */
-    protected function _createRateSoapClient()
-    {
-        return $this->_createSoapClient($this->_rateServiceWsdl);
-    }
-
-    /**
-     * Create ship soap client
-     *
-     * @return \SoapClient
-     */
-    protected function _createShipSoapClient()
-    {
-        return $this->_createSoapClient($this->_shipServiceWsdl, 1);
-    }
-
-    /**
-     * Create track soap client
-     *
-     * @return \SoapClient
-     */
-    protected function _createTrackSoapClient()
-    {
-        return $this->_createSoapClient($this->_trackServiceWsdl, 1);
+        $this->curlFactory = $curlFactory;
+        $this->decoderInterface = $decoderInterface;
     }
 
     /**
@@ -329,13 +301,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
         $r->setAccount($account);
 
-        if ($request->getFedexDropoff()) {
-            $dropoff = $request->getFedexDropoff();
-        } else {
-            $dropoff = $this->getConfigData('dropoff');
-        }
-        $r->setDropoffType($dropoff);
-
         if ($request->getFedexPackaging()) {
             $packaging = $request->getFedexPackaging();
         } else {
@@ -381,14 +346,15 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $r->setDestCity($request->getDestCity());
         }
 
-        $weight = $this->getTotalNumOfBoxes($request->getPackageWeight());
-        $r->setWeight($weight);
         if ($request->getFreeMethodWeight() != $request->getPackageWeight()) {
             $r->setFreeMethodWeight($request->getFreeMethodWeight());
         }
 
+        $r->setWeight($request->getPackageWeight());
         $r->setValue($request->getPackagePhysicalValue());
         $r->setValueWithDiscount($request->getPackageValueWithDiscount());
+
+        $r->setPackages($this->createPackages((float) $request->getPackageWeight(), (array) $request->getPackages()));
 
         $r->setMeterNumber($this->getConfigData('meter_number'));
         $r->setKey($this->getConfigData('key'));
@@ -417,84 +383,82 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     }
 
     /**
-     * Get version of rates request
-     *
-     * @return array
-     */
-    public function getVersionInfo()
-    {
-        return ['ServiceId' => 'crs', 'Major' => '10', 'Intermediate' => '0', 'Minor' => '0'];
-    }
-
-    /**
      * Forming request for rate estimation depending to the purpose
      *
      * @param string $purpose
      * @return array
      */
-    protected function _formRateRequest($purpose)
+    protected function _formRateRequest($purpose): array
     {
         $r = $this->_rawRequest;
         $ratesRequest = [
-            'WebAuthenticationDetail' => [
-                'UserCredential' => ['Key' => $r->getKey(), 'Password' => $r->getPassword()],
+            'accountNumber' => [
+                'value' => $r->getAccount()
             ],
-            'ClientDetail' => ['AccountNumber' => $r->getAccount(), 'MeterNumber' => $r->getMeterNumber()],
-            'Version' => $this->getVersionInfo(),
-            'RequestedShipment' => [
-                'DropoffType' => $r->getDropoffType(),
-                'ShipTimestamp' => date('c'),
-                'PackagingType' => $r->getPackaging(),
-                'TotalInsuredValue' => ['Amount' => $r->getValue(), 'Currency' => $this->getCurrencyCode()],
-                'Shipper' => [
-                    'Address' => ['PostalCode' => $r->getOrigPostal(), 'CountryCode' => $r->getOrigCountry()],
+            'requestedShipment' => [
+                'pickupType' => $this->getConfigData('pickup_type'),
+                'packagingType' => $r->getPackaging(),
+                'shipper' => [
+                    'address' => ['postalCode' => $r->getOrigPostal(), 'countryCode' => $r->getOrigCountry()],
                 ],
-                'Recipient' => [
-                    'Address' => [
-                        'PostalCode' => $r->getDestPostal(),
-                        'CountryCode' => $r->getDestCountry(),
-                        'Residential' => (bool)$this->getConfigData('residence_delivery'),
+                'recipient' => [
+                    'address' => [
+                        'postalCode' => $r->getDestPostal(),
+                        'countryCode' => $r->getDestCountry(),
+                        'residential' => (bool)$this->getConfigData('residence_delivery'),
                     ],
                 ],
-                'ShippingChargesPayment' => [
-                    'PaymentType' => 'SENDER',
-                    'Payor' => ['AccountNumber' => $r->getAccount(), 'CountryCode' => $r->getOrigCountry()],
-                ],
-                'CustomsClearanceDetail' => [
-                    'CustomsValue' => ['Amount' => $r->getValue(), 'Currency' => $this->getCurrencyCode()],
-                ],
-                'RateRequestTypes' => 'LIST',
-                'PackageCount' => '1',
-                'PackageDetail' => 'INDIVIDUAL_PACKAGES',
-                'RequestedPackageLineItems' => [
-                    '0' => [
-                        'Weight' => [
-                            'Value' => (double)$r->getWeight(),
-                            'Units' => $this->getConfigData('unit_of_measure'),
+                'customsClearanceDetail' => [
+                    'dutiesPayment' => [
+                        'payor' => [
+                            'responsibleParty' => [
+                                'accountNumber' => [
+                                    'value' => $r->getAccount()
+                                ],
+                                'address' => [
+                                    'countryCode' => $r->getOrigCountry()
+                                ]
+                            ]
                         ],
-                        'GroupPackageCount' => 1,
+                        'paymentType' => 'SENDER',
                     ],
+                    'commodities' => [
+                        [
+                            'customsValue' => ['amount' => $r->getValue(), 'currency' => $this->getCurrencyCode()]
+                        ]
+                    ]
                 ],
-            ],
+                'rateRequestType' => ['LIST']
+            ]
         ];
 
-        if ($r->getDestCity()) {
-            $ratesRequest['RequestedShipment']['Recipient']['Address']['City'] = $r->getDestCity();
+        foreach ($r->getPackages() as $packageNum => $package) {
+            $ratesRequest['requestedShipment']['requestedPackageLineItems'][$packageNum]['subPackagingType'] =
+                'PACKAGE';
+            $ratesRequest['requestedShipment']['requestedPackageLineItems'][$packageNum]['groupPackageCount'] = 1;
+            $ratesRequest['requestedShipment']['requestedPackageLineItems'][$packageNum]['weight']['value']
+                = (double) $package['weight'];
+            $ratesRequest['requestedShipment']['requestedPackageLineItems'][$packageNum]['weight']['units']
+                = $this->getConfigData('unit_of_measure');
+            if (isset($package['price'])) {
+                $ratesRequest['requestedShipment']['requestedPackageLineItems'][$packageNum]['declaredValue']['amount']
+                    = (double) $package['price'];
+                $ratesRequest['requestedShipment']['requestedPackageLineItems'][$packageNum]['declaredValue']
+                ['currency'] = $this->getCurrencyCode();
+            }
         }
 
-        if ($purpose == self::RATE_REQUEST_GENERAL) {
-            $ratesRequest['RequestedShipment']['RequestedPackageLineItems'][0]['InsuredValue'] = [
-                'Amount' => $r->getValue(),
-                'Currency' => $this->getCurrencyCode(),
+        $ratesRequest['requestedShipment']['totalPackageCount'] = count($r->getPackages());
+        if ($r->getDestCity()) {
+            $ratesRequest['requestedShipment']['recipient']['address']['city'] = $r->getDestCity();
+        }
+
+        if ($purpose == self::RATE_REQUEST_SMARTPOST) {
+            $ratesRequest['requestedShipment']['serviceType'] = self::RATE_REQUEST_SMARTPOST;
+            $ratesRequest['requestedShipment']['smartPostInfoDetail'] = [
+                'indicia' => (double)$r->getWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
+                'hubId' => $this->getConfigData('smartpost_hubid'),
             ];
-        } else {
-            if ($purpose == self::RATE_REQUEST_SMARTPOST) {
-                $ratesRequest['RequestedShipment']['ServiceType'] = self::RATE_REQUEST_SMARTPOST;
-                $ratesRequest['RequestedShipment']['SmartPostDetail'] = [
-                    'Indicia' => (double)$r->getWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
-                    'HubId' => $this->getConfigData('smartpost_hubid'),
-                ];
-            }
         }
 
         return $ratesRequest;
@@ -506,29 +470,25 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string $purpose
      * @return mixed
      */
-    protected function _doRatesRequest($purpose)
+    protected function _doRatesRequest($purpose): mixed
     {
+        $response = null;
+        $accessToken = $this->_getAccessToken();
+        if (empty($accessToken)) {
+            return null;
+        }
+
         $ratesRequest = $this->_formRateRequest($purpose);
-        $ratesRequestNoShipTimestamp = $ratesRequest;
-        unset($ratesRequestNoShipTimestamp['RequestedShipment']['ShipTimestamp']);
-        $requestString = $this->serializer->serialize($ratesRequestNoShipTimestamp);
+        $requestString = $this->serializer->serialize($ratesRequest);
         $response = $this->_getCachedQuotes($requestString);
         $debugData = ['request' => $this->filterDebugData($ratesRequest)];
-        if ($response === null) {
-            try {
-                $client = $this->_createRateSoapClient();
-                $response = $client->getRates($ratesRequest);
-                $this->_setCachedQuotes($requestString, $response);
-                $debugData['result'] = $response;
-            } catch (\Exception $e) {
-                $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
-                $this->_logger->critical($e);
-            }
-        } else {
-            $debugData['result'] = $response;
-        }
-        $this->_debug($debugData);
 
+        if ($response === null) {
+            $response = $this->sendRequest(self::RATE_REQUEST_END_POINT, $requestString, $accessToken);
+            $this->_setCachedQuotes($requestString, $response);
+        }
+        $debugData['result'] = $response;
+        $this->_debug($debugData);
         return $response;
     }
 
@@ -569,26 +529,25 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @return Result
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _prepareRateResponse($response)
+    protected function _prepareRateResponse($response): Result
     {
         $costArr = [];
         $priceArr = [];
-        $errorTitle = 'For some reason we can\'t retrieve tracking info right now.';
+        $errorTitle = __('For some reason we can\'t retrieve tracking info right now.');
 
-        if (is_object($response)) {
-            if ($response->HighestSeverity == 'FAILURE' || $response->HighestSeverity == 'ERROR') {
-                if (is_array($response->Notifications)) {
-                    $notification = array_pop($response->Notifications);
-                    $errorTitle = (string)$notification->Message;
+        if (is_array($response)) {
+            if (!empty($response['errors'])) {
+                if (is_array($response['errors'])) {
+                    $notification = reset($response['errors']);
+                    $errorTitle = (string)$notification['message'];
                 } else {
-                    $errorTitle = (string)$response->Notifications->Message;
+                    $errorTitle = (string)$response['errors']['message'];
                 }
-            } elseif (isset($response->RateReplyDetails)) {
+            } elseif (isset($response['output']['rateReplyDetails'])) {
                 $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
-
-                if (is_array($response->RateReplyDetails)) {
-                    foreach ($response->RateReplyDetails as $rate) {
-                        $serviceName = (string)$rate->ServiceType;
+                if (is_array($response['output']['rateReplyDetails'])) {
+                    foreach ($response['output']['rateReplyDetails'] as $rate) {
+                        $serviceName = (string)$rate['serviceType'];
                         if (in_array($serviceName, $allowedMethods)) {
                             $amount = $this->_getRateAmountOriginBased($rate);
                             $costArr[$serviceName] = $amount;
@@ -596,14 +555,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         }
                     }
                     asort($priceArr);
-                } else {
-                    $rate = $response->RateReplyDetails;
-                    $serviceName = (string)$rate->ServiceType;
-                    if (in_array($serviceName, $allowedMethods)) {
-                        $amount = $this->_getRateAmountOriginBased($rate);
-                        $costArr[$serviceName] = $amount;
-                        $priceArr[$serviceName] = $this->getMethodPrice($amount, $serviceName);
-                    }
                 }
             }
         }
@@ -633,23 +584,61 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     }
 
     /**
+     * Get final price for shipping method with handling fee per package
+     *
+     * @param float $cost
+     * @param string $handlingType
+     * @param float $handlingFee
+     * @return float
+     */
+    protected function _getPerpackagePrice($cost, $handlingType, $handlingFee)
+    {
+        if ($handlingType == AbstractCarrier::HANDLING_TYPE_PERCENT) {
+            return $cost + $cost * $this->_numBoxes * $handlingFee / 100;
+        }
+
+        return $cost + $this->_numBoxes * $handlingFee;
+    }
+
+    /**
+     * Get final price for shipping method with handling fee per order
+     *
+     * @param float $cost
+     * @param string $handlingType
+     * @param float $handlingFee
+     * @return float
+     */
+    protected function _getPerorderPrice($cost, $handlingType, $handlingFee)
+    {
+        if ($handlingType == self::HANDLING_TYPE_PERCENT) {
+            return $cost + $cost * $handlingFee / 100;
+        }
+
+        return $cost + $handlingFee;
+    }
+
+    /**
      * Get origin based amount form response of rate estimation
      *
      * @param \stdClass $rate
      * @return null|float
      */
-    protected function _getRateAmountOriginBased($rate)
+    protected function _getRateAmountOriginBased($rate): null|float
     {
         $amount = null;
         $currencyCode = '';
         $rateTypeAmounts = [];
-        if (is_object($rate)) {
+
+        if (is_array($rate)) {
             // The "RATED..." rates are expressed in the currency of the origin country
-            foreach ($rate->RatedShipmentDetails as $ratedShipmentDetail) {
-                $netAmount = (string)$ratedShipmentDetail->ShipmentRateDetail->TotalNetCharge->Amount;
-                $currencyCode = (string)$ratedShipmentDetail->ShipmentRateDetail->TotalNetCharge->Currency;
-                $rateType = (string)$ratedShipmentDetail->ShipmentRateDetail->RateType;
-                $rateTypeAmounts[$rateType] = $netAmount;
+            foreach ($rate['ratedShipmentDetails'] as $ratedShipmentDetail) {
+                $netAmount = (string)$ratedShipmentDetail['totalNetCharge'];
+                $currencyCode = (string)$ratedShipmentDetail['shipmentRateDetail']['currency'];
+                if (!empty($ratedShipmentDetail['ratedPackages'])) {
+                    $rateType = (string)reset($ratedShipmentDetail['ratedPackages'])
+                                            ['packageRateDetail']['rateType'];
+                    $rateTypeAmounts[$rateType] = $netAmount;
+                }
             }
 
             foreach ($this->_ratesOrder as $rateType) {
@@ -659,8 +648,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 }
             }
 
-            if ($amount === null) {
-                $amount = (string)$rate->RatedShipmentDetails[0]->ShipmentRateDetail->TotalNetCharge->Amount;
+            if ($amount === null && !empty($rate['ratedShipmentDetails'][0]['totalNetCharge'])) {
+                $amount = (string)$rate['ratedShipmentDetails'][0]['totalNetCharge'];
             }
 
             $amount = (float)$amount * $this->getBaseCurrencyRate($currencyCode);
@@ -709,158 +698,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $r = $this->_rawRequest;
         $weight = $this->getTotalNumOfBoxes($r->getFreeMethodWeight());
         $r->setWeight($weight);
+        $r->setPackages($this->createPackages((float)$r->getFreeMethodWeight(), []));
         $r->setService($freeMethod);
-    }
-
-    /**
-     * Get xml quotes
-     *
-     * @return Result
-     */
-    protected function _getXmlQuotes()
-    {
-        $r = $this->_rawRequest;
-        $xml = $this->_xmlElFactory->create(
-            ['data' => '<?xml version = "1.0" encoding = "UTF-8"?><FDXRateAvailableServicesRequest/>']
-        );
-
-        $xml->addAttribute('xmlns:api', 'http://www.fedex.com/fsmapi');
-        $xml->addAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-        $xml->addAttribute('xsi:noNamespaceSchemaLocation', 'FDXRateAvailableServicesRequest.xsd');
-
-        $requestHeader = $xml->addChild('RequestHeader');
-        $requestHeader->addChild('AccountNumber', $r->getAccount());
-        $requestHeader->addChild('MeterNumber', '0');
-
-        $xml->addChild('ShipDate', date('Y-m-d'));
-        $xml->addChild('DropoffType', $r->getDropoffType());
-        if ($r->hasService()) {
-            $xml->addChild('Service', $r->getService());
-        }
-        $xml->addChild('Packaging', $r->getPackaging());
-        $xml->addChild('WeightUnits', 'LBS');
-        $xml->addChild('Weight', $r->getWeight());
-
-        $originAddress = $xml->addChild('OriginAddress');
-        $originAddress->addChild('PostalCode', $r->getOrigPostal());
-        $originAddress->addChild('CountryCode', $r->getOrigCountry());
-
-        $destinationAddress = $xml->addChild('DestinationAddress');
-        $destinationAddress->addChild('PostalCode', $r->getDestPostal());
-        $destinationAddress->addChild('CountryCode', $r->getDestCountry());
-
-        $payment = $xml->addChild('Payment');
-        $payment->addChild('PayorType', 'SENDER');
-
-        $declaredValue = $xml->addChild('DeclaredValue');
-        $declaredValue->addChild('Value', $r->getValue());
-        $declaredValue->addChild('CurrencyCode', $this->getCurrencyCode());
-
-        if ($this->getConfigData('residence_delivery')) {
-            $specialServices = $xml->addChild('SpecialServices');
-            $specialServices->addChild('ResidentialDelivery', 'true');
-        }
-
-        $xml->addChild('PackageCount', '1');
-
-        $request = $xml->asXML();
-
-        $responseBody = $this->_getCachedQuotes($request);
-        if ($responseBody === null) {
-            $debugData = ['request' => $this->filterDebugData($request)];
-            try {
-                $url = $this->getConfigData('gateway_url');
-
-                // phpcs:disable Magento2.Functions.DiscouragedFunction
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
-                $responseBody = curl_exec($ch);
-                curl_close($ch);
-                // phpcs:enable
-
-                $debugData['result'] = $this->filterDebugData($responseBody);
-                $this->_setCachedQuotes($request, $responseBody);
-            } catch (\Exception $e) {
-                $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
-                $responseBody = '';
-            }
-            $this->_debug($debugData);
-        }
-
-        return $this->_parseXmlResponse($responseBody);
-    }
-
-    /**
-     * Prepare shipping rate result based on response
-     *
-     * @param mixed $response
-     * @return Result
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    protected function _parseXmlResponse($response)
-    {
-        $costArr = [];
-        $priceArr = [];
-
-        if (strlen(trim($response)) > 0) {
-            $xml = $this->parseXml($response, \Magento\Shipping\Model\Simplexml\Element::class);
-            if (is_object($xml)) {
-                if (is_object($xml->Error) && is_object($xml->Error->Message)) {
-                    $errorTitle = (string)$xml->Error->Message;
-                } elseif (is_object($xml->SoftError) && is_object($xml->SoftError->Message)) {
-                    $errorTitle = (string)$xml->SoftError->Message;
-                } else {
-                    $errorTitle = 'Sorry, something went wrong. Please try again or contact us and we\'ll try to help.';
-                }
-
-                $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
-
-                foreach ($xml->Entry as $entry) {
-                    if (in_array((string)$entry->Service, $allowedMethods)) {
-                        $costArr[(string)$entry->Service] = (string)$entry
-                            ->EstimatedCharges
-                            ->DiscountedCharges
-                            ->NetCharge;
-                        $priceArr[(string)$entry->Service] = $this->getMethodPrice(
-                            (string)$entry->EstimatedCharges->DiscountedCharges->NetCharge,
-                            (string)$entry->Service
-                        );
-                    }
-                }
-
-                asort($priceArr);
-            } else {
-                $errorTitle = 'Response is in the wrong format.';
-            }
-        } else {
-            $errorTitle = 'For some reason we can\'t retrieve tracking info right now.';
-        }
-
-        $result = $this->_rateFactory->create();
-        if (empty($priceArr)) {
-            $error = $this->_rateErrorFactory->create();
-            $error->setCarrier('fedex');
-            $error->setCarrierTitle($this->getConfigData('title'));
-            $error->setErrorMessage($this->getConfigData('specificerrmsg'));
-            $result->append($error);
-        } else {
-            foreach ($priceArr as $method => $price) {
-                $rate = $this->_rateMethodFactory->create();
-                $rate->setCarrier('fedex');
-                $rate->setCarrierTitle($this->getConfigData('title'));
-                $rate->setMethod($method);
-                $rate->setMethodTitle($this->getCode('method', $method));
-                $rate->setCost($costArr[$method]);
-                $rate->setPrice($price);
-                $result->append($rate);
-            }
-        }
-
-        return $result;
     }
 
     /**
@@ -868,10 +707,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param string $type
      * @param string $code
-     * @return array|false
+     * @return \Magento\Framework\Phrase|array|false
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getCode($type, $code = '')
+    public function getCode($type, $code = ''): \Magento\Framework\Phrase|array|false
     {
         $codes = [
             'method' => [
@@ -1010,6 +849,15 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'LB' => __('Pounds'),
                 'KG' => __('Kilograms'),
             ],
+            'pickup_type' => [
+                'CONTACT_FEDEX_TO_SCHEDULE' => __('Contact Fedex to Schedule'),
+                'DROPOFF_AT_FEDEX_LOCATION' => __('DropOff at Fedex Location'),
+                'USE_SCHEDULED_PICKUP' => __('Use Scheduled Pickup'),
+                'ON_CALL' => __('On Call'),
+                'PACKAGE_RETURN_PROGRAM' => __('Package Return Program'),
+                'REGULAR_STOP' => __('Regular Stop'),
+                'TAG' => __('Tag'),
+            ]
         ];
 
         if (!isset($codes[$type])) {
@@ -1059,115 +907,172 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Get tracking
      *
      * @param string|string[] $trackings
-     * @return Result|null
+     * @return \Magento\Shipping\Model\Tracking\Result|null
      */
-    public function getTracking($trackings)
+    public function getTracking($trackings): \Magento\Shipping\Model\Tracking\Result|null
     {
-        $this->setTrackingReqeust();
-
         if (!is_array($trackings)) {
             $trackings = [$trackings];
         }
 
         foreach ($trackings as $tracking) {
-            $this->_getXMLTracking($tracking);
+            $this->_getTrackingInformation($tracking);
         }
 
         return $this->_result;
     }
 
     /**
-     * Set tracking request
+     * Get Url for REST API
      *
-     * @return void
+     * @param string|null $endpoint
+     * @return string
      */
-    protected function setTrackingReqeust()
+    protected function _getUrl($endpoint = null): string
     {
-        $r = new \Magento\Framework\DataObject();
+        $url = $this->getConfigFlag('sandbox_mode') ? $this->getConfigData('sandbox_webservices_url')
+            : $this->getConfigData('production_webservices_url');
 
-        $account = $this->getConfigData('account');
-        $r->setAccount($account);
+        return $endpoint ? $url  . $endpoint : $url;
+    }
+    /**
+     * Get Access Token for Rest API
+     *
+     * @return string|null
+     */
+    protected function _getAccessToken(): string|null
+    {
+        $apiKey = $this->getConfigData('api_key') ?? null;
+        $secretKey = $this->getConfigData('secret_key') ?? null;
 
-        $this->_rawTrackingRequest = $r;
+        if (!$apiKey || !$secretKey) {
+            $this->_debug(__('Authentication keys are missing.'));
+            return null;
+        }
+
+        $requestArray = [
+            'grant_type' => self::AUTHENTICATION_GRANT_TYPE,
+            'client_id' => $apiKey,
+            'client_secret' => $secretKey
+        ];
+
+        $request = http_build_query($requestArray);
+        $accessToken = null;
+        $response = $this->sendRequest(self::OAUTH_REQUEST_END_POINT, $request);
+
+        if (!empty($response['errors'])) {
+            $debugData = ['request_type' => 'Access Token Request', 'result' => $response];
+            $this->_debug($debugData);
+        } elseif (!empty($response['access_token'])) {
+            $accessToken = $response['access_token'];
+        }
+        return $accessToken;
+    }
+
+    /**
+     * Send Curl Request
+     *
+     * @param string $endpoint
+     * @param string $request
+     * @param string|null $accessToken
+     * @return array|bool
+     */
+    protected function sendRequest($endpoint, $request, $accessToken = null): array|bool
+    {
+        if ($accessToken) {
+            $headers = [
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer '.$accessToken,
+                'X-locale' => 'en_US',
+
+            ];
+        } else {
+            $headers = ['Content-Type' => 'application/x-www-form-urlencoded'];
+        }
+
+        $curlClient = $this->curlFactory->create();
+        $url = $this->_getUrl($endpoint);
+        try {
+            $curlClient->setHeaders($headers);
+            if ($endpoint == self::SHIPMENT_CANCEL_END_POINT) {
+                $curlClient->setOptions([CURLOPT_ENCODING => 'gzip,deflate,sdch', CURLOPT_CUSTOMREQUEST => 'PUT']);
+            } else {
+                $curlClient->setOptions([CURLOPT_ENCODING => 'gzip,deflate,sdch']);
+            }
+            $curlClient->post($url, $request);
+            $response = $curlClient->getBody();
+            $debugData = ['curl_response' => $response];
+            $this->_debug($debugData);
+            return $this->serializer->unserialize($response);
+        } catch (\Exception $e) {
+            $this->_logger->critical($e);
+        }
+        return false;
     }
 
     /**
      * Send request for tracking
      *
-     * @param string[] $tracking
+     * @param string $tracking
      * @return void
      */
-    protected function _getXMLTracking($tracking)
+    protected function _getTrackingInformation($tracking): void
     {
-        $trackRequest = [
-            'WebAuthenticationDetail' => [
-                'UserCredential' => [
-                    'Key' => $this->getConfigData('key'),
-                    'Password' => $this->getConfigData('password'),
-                ],
-            ],
-            'ClientDetail' => [
-                'AccountNumber' => $this->getConfigData('account'),
-                'MeterNumber' => $this->getConfigData('meter_number'),
-            ],
-            'Version' => [
-                'ServiceId' => 'trck',
-                'Major' => self::$trackServiceVersion,
-                'Intermediate' => '0',
-                'Minor' => '0',
-            ],
-            'SelectionDetails' => [
-                'PackageIdentifier' => ['Type' => 'TRACKING_NUMBER_OR_DOORTAG', 'Value' => $tracking],
-            ],
-            'ProcessingOptions' => 'INCLUDE_DETAILED_SCANS'
-        ];
-        $requestString = $this->serializer->serialize($trackRequest);
-        $response = $this->_getCachedQuotes($requestString);
-        $debugData = ['request' => $this->filterDebugData($trackRequest)];
-        if ($response === null) {
-            try {
-                $client = $this->_createTrackSoapClient();
-                $response = $client->track($trackRequest);
-                $this->_setCachedQuotes($requestString, $response);
-                $debugData['result'] = $response;
-            } catch (\Exception $e) {
-                $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
-                $this->_logger->critical($e);
-            }
-        } else {
-            $debugData['result'] = $response;
-        }
-        $this->_debug($debugData);
+        $accessToken = $this->_getAccessToken();
+        if (!empty($accessToken)) {
 
-        $this->_parseTrackingResponse($tracking, $response);
+            $trackRequest = [
+                'includeDetailedScans' => true,
+                'trackingInfo' => [
+                    [
+                        'trackingNumberInfo' => [
+                            'trackingNumber'=> $tracking
+                        ]
+                    ]
+                ]
+            ];
+
+            $requestString = $this->serializer->serialize($trackRequest);
+            $response = $this->_getCachedQuotes($requestString);
+            $debugData = ['request' => $trackRequest];
+
+            if ($response === null) {
+                $response = $this->sendRequest(self::TRACK_REQUEST_END_POINT, $requestString, $accessToken);
+                $this->_setCachedQuotes($requestString, $response);
+            }
+            $debugData['result'] = $response;
+
+            $this->_debug($debugData);
+            $this->_parseTrackingResponse($tracking, $response);
+        } else {
+            $this->appendTrackingError(
+                $tracking,
+                __('Authorization Error. No Access Token found with given credentials.')
+            );
+            return;
+        }
     }
 
     /**
      * Parse tracking response
      *
      * @param string $trackingValue
-     * @param \stdClass $response
+     * @param array $response
      * @return void
      */
-    protected function _parseTrackingResponse($trackingValue, $response)
+    protected function _parseTrackingResponse($trackingValue, $response): void
     {
-        if (!is_object($response) || empty($response->HighestSeverity)) {
+        if (!is_array($response) || empty($response['output'])) {
+            $this->_debug($response);
             $this->appendTrackingError($trackingValue, __('Invalid response from carrier'));
             return;
-        } elseif (in_array($response->HighestSeverity, self::$trackingErrors)) {
-            $this->appendTrackingError($trackingValue, (string) $response->Notifications->Message);
-            return;
-        } elseif (empty($response->CompletedTrackDetails) || empty($response->CompletedTrackDetails->TrackDetails)) {
+        } elseif (empty(reset($response['output']['completeTrackResults'])['trackResults'])) {
+            $this->_debug('No available tracking items');
             $this->appendTrackingError($trackingValue, __('No available tracking items'));
             return;
         }
 
-        $trackInfo = $response->CompletedTrackDetails->TrackDetails;
-
-        // Fedex can return tracking details as single object instead array
-        if (is_object($trackInfo)) {
-            $trackInfo = [$trackInfo];
-        }
+        $trackInfo = reset($response['output']['completeTrackResults'])['trackResults'];
 
         $result = $this->getResult();
         $carrierTitle = $this->getConfigData('title');
@@ -1212,6 +1117,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 }
             }
         }
+        // phpstan:ignore
         if (empty($statuses)) {
             $statuses = __('Empty response');
         }
@@ -1233,31 +1139,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
 
         return $arr;
-    }
-
-    /**
-     * Return array of authenticated information
-     *
-     * @return array
-     */
-    protected function _getAuthDetails()
-    {
-        return [
-            'WebAuthenticationDetail' => [
-                'UserCredential' => [
-                    'Key' => $this->getConfigData('key'),
-                    'Password' => $this->getConfigData('password'),
-                ],
-            ],
-            'ClientDetail' => [
-                'AccountNumber' => $this->getConfigData('account'),
-                'MeterNumber' => $this->getConfigData('meter_number'),
-            ],
-            'TransactionDetail' => [
-                'CustomerTransactionId' => '*** Express Domestic Shipping Request v9 using PHP ***',
-            ],
-            'Version' => ['ServiceId' => 'ship', 'Major' => '10', 'Intermediate' => '0', 'Minor' => '0'],
-        ];
     }
 
     /**
@@ -1284,22 +1165,23 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $height = $packageParams->getHeight();
         $width = $packageParams->getWidth();
         $length = $packageParams->getLength();
-        $weightUnits = $packageParams->getWeightUnits() == \Zend_Measure_Weight::POUND ? 'LB' : 'KG';
+        $weightUnits = $packageParams->getWeightUnits() == Weight::POUND ? 'LB' : 'KG';
         $unitPrice = 0;
         $itemsQty = 0;
         $itemsDesc = [];
         $countriesOfManufacture = [];
         $productIds = [];
         $packageItems = $request->getPackageItems();
-        foreach ($packageItems as $itemShipment) {
-            $item = new \Magento\Framework\DataObject();
-            $item->setData($itemShipment);
+        /** @var Order $order */
+        $order = $request->getOrderShipment()->getOrder();
+        foreach ($packageItems as $orderItemId => $itemShipment) {
+            if ($item = $order->getItemById($orderItemId)) {
+                $unitPrice += $item->getPrice();
+                $itemsQty += $itemShipment['qty'];
 
-            $unitPrice += $item->getPrice();
-            $itemsQty += $item->getQty();
-
-            $itemsDesc[] = $item->getName();
-            $productIds[] = $item->getProductId();
+                $itemsDesc[] = $item->getName();
+                $productIds[] = $item->getProductId();
+            }
         }
 
         // get countries of manufacture
@@ -1318,124 +1200,136 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $paymentType = $this->getPaymentType($request);
         $optionType = $request->getShippingMethod() == self::RATE_REQUEST_SMARTPOST
             ? 'SERVICE_DEFAULT' : $packageParams->getDeliveryConfirmation();
+
         $requestClient = [
-            'RequestedShipment' => [
-                'ShipTimestamp' => time(),
-                'DropoffType' => $this->getConfigData('dropoff'),
-                'PackagingType' => $request->getPackagingType(),
-                'ServiceType' => $request->getShippingMethod(),
-                'Shipper' => [
-                    'Contact' => [
-                        'PersonName' => $request->getShipperContactPersonName(),
-                        'CompanyName' => $request->getShipperContactCompanyName(),
-                        'PhoneNumber' => $request->getShipperContactPhoneNumber(),
+            'requestedShipment' => [
+                'shipDatestamp' => date('Y-m-d'),
+                'pickupType' => $this->getConfigData('pickup_type'),
+                'serviceType' => $request->getShippingMethod(),
+                'packagingType' => $request->getPackagingType(),
+                'shipper' => [
+                    'contact' => [
+                        'personName' => $request->getShipperContactPersonName(),
+                        'companyName' => $request->getShipperContactCompanyName(),
+                        'phoneNumber' => $request->getShipperContactPhoneNumber(),
                     ],
-                    'Address' => [
-                        'StreetLines' => [$request->getShipperAddressStreet()],
-                        'City' => $request->getShipperAddressCity(),
-                        'StateOrProvinceCode' => $request->getShipperAddressStateOrProvinceCode(),
-                        'PostalCode' => $request->getShipperAddressPostalCode(),
-                        'CountryCode' => $request->getShipperAddressCountryCode(),
+                    'address' => [
+                        'streetLines' => [$request->getShipperAddressStreet()],
+                        'city' => $request->getShipperAddressCity(),
+                        'stateOrProvinceCode' => $request->getShipperAddressStateOrProvinceCode(),
+                        'postalCode' => $request->getShipperAddressPostalCode(),
+                        'countryCode' => $request->getShipperAddressCountryCode(),
+                    ]
+                ],
+                'recipients' => [
+                    [
+                        'contact' => [
+                            'personName' => $request->getRecipientContactPersonName(),
+                            'companyName' => $request->getRecipientContactCompanyName(),
+                            'phoneNumber' => $request->getRecipientContactPhoneNumber()
+                        ],
+                        'address' => [
+                            'streetLines' => [$request->getRecipientAddressStreet()],
+                            'city' => $request->getRecipientAddressCity(),
+                            'stateOrProvinceCode' => $request->getRecipientAddressStateOrProvinceCode(),
+                            'postalCode' => $request->getRecipientAddressPostalCode(),
+                            'countryCode' => $request->getRecipientAddressCountryCode(),
+                            'residential' => (bool)$this->getConfigData('residence_delivery'),
+                        ]
                     ],
                 ],
-                'Recipient' => [
-                    'Contact' => [
-                        'PersonName' => $request->getRecipientContactPersonName(),
-                        'CompanyName' => $request->getRecipientContactCompanyName(),
-                        'PhoneNumber' => $request->getRecipientContactPhoneNumber(),
-                    ],
-                    'Address' => [
-                        'StreetLines' => [$request->getRecipientAddressStreet()],
-                        'City' => $request->getRecipientAddressCity(),
-                        'StateOrProvinceCode' => $request->getRecipientAddressStateOrProvinceCode(),
-                        'PostalCode' => $request->getRecipientAddressPostalCode(),
-                        'CountryCode' => $request->getRecipientAddressCountryCode(),
-                        'Residential' => (bool)$this->getConfigData('residence_delivery'),
+                'shippingChargesPayment' => [
+                    'paymentType' => $paymentType,
+                    'payor' => [
+                        'responsibleParty' => [
+                            'accountNumber' => ['value' => $this->getConfigData('account')]
+                        ],
                     ],
                 ],
-                'ShippingChargesPayment' => [
-                    'PaymentType' => $paymentType,
-                    'Payor' => [
-                        'AccountNumber' => $this->getConfigData('account'),
-                        'CountryCode' => $this->_scopeConfig->getValue(
-                            \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                            $request->getStoreId()
-                        ),
-                    ],
+                'labelSpecification' => [
+                    'labelFormatType' => 'COMMON2D',
+                    'imageType' => 'PNG',
+                    'labelStockType' => 'PAPER_85X11_TOP_HALF_LABEL',
                 ],
-                'LabelSpecification' => [
-                    'LabelFormatType' => 'COMMON2D',
-                    'ImageType' => 'PNG',
-                    'LabelStockType' => 'PAPER_8.5X11_TOP_HALF_LABEL',
-                ],
-                'RateRequestTypes' => ['ACCOUNT'],
-                'PackageCount' => 1,
-                'RequestedPackageLineItems' => [
-                    'SequenceNumber' => '1',
-                    'Weight' => ['Units' => $weightUnits, 'Value' => $request->getPackageWeight()],
-                    'CustomerReferences' => [
-                        'CustomerReferenceType' => 'CUSTOMER_REFERENCE',
-                        'Value' => $referenceData,
-                    ],
-                    'SpecialServicesRequested' => [
-                        'SpecialServiceTypes' => 'SIGNATURE_OPTION',
-                        'SignatureOptionDetail' => ['OptionType' => $optionType],
-                    ],
-                ],
+                'rateRequestType' => ['ACCOUNT'],
+                'totalPackageCount' => 1
             ],
+            'labelResponseOptions' => 'LABEL',
+            'accountNumber' => ['value' => $this->getConfigData('account')]
         ];
 
         // for international shipping
         if ($request->getShipperAddressCountryCode() != $request->getRecipientAddressCountryCode()) {
-            $requestClient['RequestedShipment']['CustomsClearanceDetail'] = [
-                'CustomsValue' => ['Currency' => $request->getBaseCurrencyCode(), 'Amount' => $customsValue],
-                'DutiesPayment' => [
-                    'PaymentType' => $paymentType,
-                    'Payor' => [
-                        'AccountNumber' => $this->getConfigData('account'),
-                        'CountryCode' => $this->_scopeConfig->getValue(
-                            \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                            $request->getStoreId()
-                        ),
+            $requestClient['requestedShipment']['customsClearanceDetail'] = [
+                'totalCustomsValue' => ['currency' => $request->getBaseCurrencyCode(), 'amount' => $customsValue],
+                'dutiesPayment' => [
+                    'paymentType' => $paymentType,
+                    'payor' => [
+                        'responsibleParty' => [
+                            'accountNumber' => ['value' => $this->getConfigData('account')],
+                            'address' => ['countryCode' => $this->_scopeConfig->getValue(
+                                \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
+                                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                                $request->getStoreId()
+                            )],
+                        ],
                     ],
                 ],
-                'Commodities' => [
-                    'Weight' => ['Units' => $weightUnits, 'Value' => $request->getPackageWeight()],
-                    'NumberOfPieces' => 1,
-                    'CountryOfManufacture' => implode(',', array_unique($countriesOfManufacture)),
-                    'Description' => implode(', ', $itemsDesc),
-                    'Quantity' => ceil($itemsQty),
-                    'QuantityUnits' => 'pcs',
-                    'UnitPrice' => ['Currency' => $request->getBaseCurrencyCode(), 'Amount' => $unitPrice],
-                    'CustomsValue' => ['Currency' => $request->getBaseCurrencyCode(), 'Amount' => $customsValue],
-                ],
+                'commodities' => [
+                    [
+                        'weight' => ['units' => $weightUnits, 'value' => $request->getPackageWeight()],
+                        'numberOfPieces' => 1,
+                        'countryOfManufacture' => implode(',', array_unique($countriesOfManufacture)),
+                        'description' => implode(', ', $itemsDesc),
+                        'quantity' => ceil($itemsQty),
+                        'quantityUnits' => 'pcs',
+                        'unitPrice' => ['currency' => $request->getBaseCurrencyCode(), 'amount' => $unitPrice],
+                        'customsValue' => ['currency' => $request->getBaseCurrencyCode(), 'amount' => $customsValue],
+                    ]
+                ]
             ];
         }
 
         if ($request->getMasterTrackingId()) {
-            $requestClient['RequestedShipment']['MasterTrackingId'] = $request->getMasterTrackingId();
+            $requestClient['requestedShipment']['masterTrackingId']['trackingNumber'] = $request->getMasterTrackingId();
         }
 
         if ($request->getShippingMethod() == self::RATE_REQUEST_SMARTPOST) {
-            $requestClient['RequestedShipment']['SmartPostDetail'] = [
-                'Indicia' => (double)$request->getPackageWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
-                'HubId' => $this->getConfigData('smartpost_hubid'),
+            $requestClient['requestedShipment']['smartPostInfoDetail'] = [
+                'indicia' => (double)$request->getPackageWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
+                'hubId' => $this->getConfigData('smartpost_hubid'),
             ];
         }
+
+        $requestedPackageLineItems = [
+            'sequenceNumber' => '1',
+            'weight' => ['units' => $weightUnits, 'value' => $request->getPackageWeight()],
+            'customerReferences' => [
+                [
+                    'customerReferenceType' => 'CUSTOMER_REFERENCE',
+                    'value' => $referenceData,
+                ]
+            ],
+            'packageSpecialServices' => [
+                'specialServiceTypes' => ['SIGNATURE_OPTION'],
+                'signatureOptionType' => $optionType
+
+            ]
+        ];
 
         // set dimensions
         if ($length || $width || $height) {
-            $requestClient['RequestedShipment']['RequestedPackageLineItems']['Dimensions'] = [
-                'Length' => $length,
-                'Width' => $width,
-                'Height' => $height,
-                'Units' => $packageParams->getDimensionUnits() == \Zend_Measure_Length::INCH ? 'IN' : 'CM',
+            $requestedPackageLineItems['dimensions'] = [
+                'length' => $length,
+                'width' => $width,
+                'height' => $height,
+                'units' => $packageParams->getDimensionUnits() == Length::INCH ? 'IN' : 'CM',
             ];
         }
 
-        return $this->_getAuthDetails() + $requestClient;
+        $requestClient['requestedShipment']['requestedPackageLineItems'] = [$requestedPackageLineItems];
+
+        return $requestClient;
     }
 
     /**
@@ -1444,57 +1338,74 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Framework\DataObject $request
      * @return \Magento\Framework\DataObject
      */
-    protected function _doShipmentRequest(\Magento\Framework\DataObject $request)
+    protected function _doShipmentRequest(\Magento\Framework\DataObject $request): \Magento\Framework\DataObject
     {
         $this->_prepareShipmentRequest($request);
         $result = new \Magento\Framework\DataObject();
-        $client = $this->_createShipSoapClient();
-        $requestClient = $this->_formShipmentRequest($request);
-        $debugData['request'] = $this->filterDebugData($requestClient);
-        $response = $client->processShipment($requestClient);
+        $accessToken = $this->_getAccessToken();
+        if (empty($accessToken)) {
+            return $result->setErrors(__('Authorization Error. No Access Token found with given credentials.'));
+        }
 
-        if ($response->HighestSeverity != 'FAILURE' && $response->HighestSeverity != 'ERROR') {
-            $shippingLabelContent = $response->CompletedShipmentDetail->CompletedPackageDetails->Label->Parts->Image;
-            $trackingNumber = $this->getTrackingNumber(
-                $response->CompletedShipmentDetail->CompletedPackageDetails->TrackingIds
+        $requestClient = $this->_formShipmentRequest($request);
+        $requestString = $this->serializer->serialize($requestClient);
+
+        $debugData = ['request' => $this->filterDebugData($requestClient)];
+
+        $response = $this->sendRequest(self::SHIPMENT_REQUEST_END_POINT, $requestString, $accessToken);
+
+        $debugData['result'] = $response;
+
+        if (!empty($response['output']['transactionShipments'])) {
+            $shippingLabelContent = $this->getPackagingLabel(
+                reset($response['output']['transactionShipments'])['pieceResponses']
             );
-            $result->setShippingLabelContent($shippingLabelContent);
-            $result->setTrackingNumber($trackingNumber);
-            $debugData['result'] = $client->__getLastResponse();
-            $this->_debug($debugData);
+
+            $trackingNumber = $this->getTrackingNumber(
+                reset($response['output']['transactionShipments'])['pieceResponses']
+            );
+                    $result->setShippingLabelContent($this->decoderInterface->decode($shippingLabelContent));
+                    $result->setTrackingNumber($trackingNumber);
         } else {
-            $debugData['result'] = ['error' => '', 'code' => '', 'xml' => $client->__getLastResponse()];
-            if (is_array($response->Notifications)) {
-                foreach ($response->Notifications as $notification) {
-                    $debugData['result']['code'] .= $notification->Code . '; ';
-                    $debugData['result']['error'] .= $notification->Message . '; ';
+            $debugData['result'] = ['error' => '', 'code' => '', 'message' => $response];
+            if (is_array($response['errors'])) {
+                foreach ($response['errors'] as $notification) {
+                    $debugData['result']['code'] .= $notification['code'] . '; ';
+                    $debugData['result']['error'] .= $notification['message'] . '; ';
                 }
             } else {
-                $debugData['result']['code'] = $response->Notifications->Code . ' ';
-                $debugData['result']['error'] = $response->Notifications->Message . ' ';
+                $debugData['result']['code'] = $response['errors']['code'] . ' ';
+                $debugData['result']['error'] = $response['errors']['message'] . ' ';
             }
-            $this->_debug($debugData);
-            $result->setErrors($debugData['result']['error']);
-        }
-        $result->setGatewayResponse($client->__getLastResponse());
 
+            $result->setErrors($debugData['result']['error'] . $debugData['result']['code']);
+        }
+
+        $this->_debug($debugData);
+        $result->setGatewayResponse($response);
         return $result;
     }
 
     /**
      * Return Tracking Number
      *
-     * @param array|object $trackingIds
+     * @param array $pieceResponses
      * @return string
      */
-    private function getTrackingNumber($trackingIds)
+    private function getTrackingNumber($pieceResponses): string
     {
-        return is_array($trackingIds) ? array_map(
-            function ($val) {
-                return $val->TrackingNumber;
-            },
-            $trackingIds
-        ) : $trackingIds->TrackingNumber;
+        return reset($pieceResponses)['trackingNumber'];
+    }
+
+    /**
+     * Return Packaging Label
+     *
+     * @param array|object $pieceResponses
+     * @return string
+     */
+    private function getPackagingLabel($pieceResponses): string
+    {
+        return reset(reset($pieceResponses)['packageDocuments'])['encodedLabel'];
     }
 
     /**
@@ -1504,16 +1415,27 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @return bool
      */
-    public function rollBack($data)
+    public function rollBack($data): bool
     {
-        $requestData = $this->_getAuthDetails();
-        $requestData['DeletionControl'] = 'DELETE_ONE_PACKAGE';
-        foreach ($data as &$item) {
-            $requestData['TrackingId'] = $item['tracking_number'];
-            $client = $this->_createShipSoapClient();
-            $client->deleteShipment($requestData);
+        $accessToken = $this->_getAccessToken();
+        if (empty($accessToken)) {
+            $this->_debug(__('Authorization Error. No Access Token found with given credentials.'));
+            return false;
         }
 
+        $requestData['accountNumber'] = ['value' => $this->getConfigData('account')];
+        $requestData['deletionControl'] = 'DELETE_ALL_PACKAGES';
+
+        foreach ($data as &$item) {
+            $requestData['trackingNumber'] = $item['tracking_number'];
+            $requestString = $this->serializer->serialize($requestData);
+
+            $debugData = ['request' => $requestData];
+            $response = $this->sendRequest(self::SHIPMENT_CANCEL_END_POINT, $requestString, $accessToken);
+            $debugData['result'] = $response;
+
+            $this->_debug($debugData);
+        }
         return true;
     }
 
@@ -1619,12 +1541,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Parse track details response from Fedex
      *
-     * @param \stdClass $trackInfo
+     * @param array $trackInfo
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    private function processTrackingDetails(\stdClass $trackInfo)
+    private function processTrackingDetails($trackInfo): array
     {
         $result = [
             'shippeddate' => null,
@@ -1635,20 +1557,31 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'progressdetail' => [],
         ];
 
-        $datetime = $this->parseDate(!empty($trackInfo->ShipTimestamp) ? $trackInfo->ShipTimestamp : null);
-        if ($datetime) {
-            $result['shippeddate'] = gmdate('Y-m-d', $datetime->getTimestamp());
+        if (!empty($trackInfo['dateAndTimes']) && is_array($trackInfo['dateAndTimes'])) {
+            $datetime = null;
+            foreach ($trackInfo['dateAndTimes'] as $dateAndTimeInfo) {
+                if (!empty($dateAndTimeInfo['type']) && $dateAndTimeInfo['type'] == 'SHIP') {
+                    $datetime = $this->parseDate($dateAndTimeInfo['dateTime']);
+                    break;
+                }
+            }
+
+            if ($datetime) {
+                $result['shippeddate'] = gmdate('Y-m-d', $datetime->getTimestamp());
+            }
         }
 
-        $result['signedby'] = !empty($trackInfo->DeliverySignatureName) ?
-            (string) $trackInfo->DeliverySignatureName :
+        $result['signedby'] = !empty($trackInfo['deliveryDetails']['receivedByName']) ?
+            (string) $trackInfo['deliveryDetails']['receivedByName'] :
             null;
 
-        $result['status'] = (!empty($trackInfo->StatusDetail) && !empty($trackInfo->StatusDetail->Description)) ?
-            (string) $trackInfo->StatusDetail->Description :
+        $result['status'] = (!empty($trackInfo['latestStatusDetail']) &&
+                                    !empty($trackInfo['latestStatusDetail']['description'])) ?
+            (string) $trackInfo['latestStatusDetail']['description'] :
             null;
-        $result['service'] = (!empty($trackInfo->Service) && !empty($trackInfo->Service->Description)) ?
-            (string) $trackInfo->Service->Description :
+        $result['service'] = (!empty($trackInfo['serviceDetail']) &&
+                                    !empty($trackInfo['serviceDetail']['description'])) ?
+            (string) $trackInfo['serviceDetail']['description'] :
             null;
 
         $datetime = $this->getDeliveryDateTime($trackInfo);
@@ -1658,28 +1591,37 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
 
         $address = null;
-        if (!empty($trackInfo->EstimatedDeliveryAddress)) {
-            $address = $trackInfo->EstimatedDeliveryAddress;
-        } elseif (!empty($trackInfo->ActualDeliveryAddress)) {
-            $address = $trackInfo->ActualDeliveryAddress;
+        if (!empty($trackInfo['deliveryDetails']['estimatedDeliveryAddress'])) {
+            $address = $trackInfo['deliveryDetails']['estimatedDeliveryAddress'];
+        } elseif (!empty($trackInfo['deliveryDetails']['actualDeliveryAddress'])) {
+            $address = $trackInfo['deliveryDetails']['actualDeliveryAddress'];
         }
 
         if (!empty($address)) {
             $result['deliverylocation'] = $this->getDeliveryAddress($address);
         }
 
-        if (!empty($trackInfo->PackageWeight)) {
+        if (!empty($trackInfo['packageDetails']['weightAndDimensions']['weight'])) {
+            $weightUnit = $this->getConfigData('unit_of_measure') ?? 'LB';
+            $weightValue = null;
+            foreach ($trackInfo['packageDetails']['weightAndDimensions']['weight'] as $weightInfo) {
+                if ($weightInfo['unit'] == $weightUnit) {
+                    $weightValue = $weightInfo['value'];
+                    break;
+                }
+            }
+
             $result['weight'] = sprintf(
                 '%s %s',
-                (string) $trackInfo->PackageWeight->Value,
-                (string) $trackInfo->PackageWeight->Units
+                (string) $weightValue,
+                (string) $weightUnit
             );
         }
 
-        if (!empty($trackInfo->Events)) {
-            $events = $trackInfo->Events;
-            if (is_object($events)) {
-                $events = [$trackInfo->Events];
+        if (!empty($trackInfo['scanEvents'])) {
+            $events = $trackInfo['scanEvents'];
+            if (is_object($trackInfo['scanEvents'])) {
+                $events = [$trackInfo['scanEvents']];
             }
             $result['progressdetail'] = $this->processTrackDetailsEvents($events);
         }
@@ -1690,41 +1632,47 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Parse delivery datetime from tracking details
      *
-     * @param \stdClass $trackInfo
+     * @param array $trackInfo
      * @return \Datetime|null
      */
-    private function getDeliveryDateTime(\stdClass $trackInfo)
+    private function getDeliveryDateTime($trackInfo): \Datetime|null
     {
         $timestamp = null;
-        if (!empty($trackInfo->EstimatedDeliveryTimestamp)) {
-            $timestamp = $trackInfo->EstimatedDeliveryTimestamp;
-        } elseif (!empty($trackInfo->ActualDeliveryTimestamp)) {
-            $timestamp = $trackInfo->ActualDeliveryTimestamp;
+        if (!empty($trackInfo['dateAndTimes']) && is_array($trackInfo['dateAndTimes'])) {
+            foreach ($trackInfo['dateAndTimes'] as $dateAndTimeInfo) {
+                if (!empty($dateAndTimeInfo['type']) &&
+                    ($dateAndTimeInfo['type'] == 'ESTIMATED_DELIVERY' || $dateAndTimeInfo['type'] == 'ACTUAL_DELIVERY')
+                    && !empty($dateAndTimeInfo['dateTime'])
+                ) {
+                    $timestamp = $this->parseDate($dateAndTimeInfo['dateTime']);
+                    break;
+                }
+            }
         }
 
-        return $timestamp ? $this->parseDate($timestamp) : null;
+        return $timestamp ?: null;
     }
 
     /**
      * Get delivery address details in string representation Return City, State, Country Code
      *
-     * @param \stdClass $address
+     * @param array $address
      * @return \Magento\Framework\Phrase|string
      */
-    private function getDeliveryAddress(\stdClass $address)
+    private function getDeliveryAddress($address): \Magento\Framework\Phrase|string
     {
         $details = [];
 
-        if (!empty($address->City)) {
-            $details[] = (string) $address->City;
+        if (!empty($address['city'])) {
+            $details[] = (string) $address['city'];
         }
 
-        if (!empty($address->StateOrProvinceCode)) {
-            $details[] = (string) $address->StateOrProvinceCode;
+        if (!empty($address['stateOrProvinceCode'])) {
+            $details[] = (string) $address['stateOrProvinceCode'];
         }
 
-        if (!empty($address->CountryCode)) {
-            $details[] = (string) $address->CountryCode;
+        if (!empty($address['countryCode'])) {
+            $details[] = (string) $address['countryCode'];
         }
 
         return implode(', ', $details);
@@ -1738,26 +1686,25 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param array $events
      * @return array
      */
-    private function processTrackDetailsEvents(array $events)
+    private function processTrackDetailsEvents(array $events): array
     {
         $result = [];
-        /** @var \stdClass $event */
         foreach ($events as $event) {
             $item = [
-                'activity' => (string) $event->EventDescription,
+                'activity' => (string) $event['eventDescription'],
                 'deliverydate' => null,
                 'deliverytime' => null,
                 'deliverylocation' => null
             ];
 
-            $datetime = $this->parseDate(!empty($event->Timestamp) ? $event->Timestamp : null);
+            $datetime = $this->parseDate(!empty($event['date']) ? $event['date'] : null);
             if ($datetime) {
                 $item['deliverydate'] = gmdate('Y-m-d', $datetime->getTimestamp());
                 $item['deliverytime'] = gmdate('H:i:s', $datetime->getTimestamp());
             }
 
-            if (!empty($event->Address)) {
-                $item['deliverylocation'] = $this->getDeliveryAddress($event->Address);
+            if (!empty($event['scanLocation'])) {
+                $item['deliverylocation'] = $this->getDeliveryAddress($event['scanLocation']);
             }
 
             $result[] = $item;
@@ -1820,5 +1767,25 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         return $request->getIsReturn() && $request->getShippingMethod() !== self::RATE_REQUEST_SMARTPOST
             ? 'RECIPIENT'
             : 'SENDER';
+    }
+
+    /**
+     * Creates packages for rate request.
+     *
+     * @param float $totalWeight
+     * @param array $packages
+     * @return array
+     */
+    private function createPackages(float $totalWeight, array $packages): array
+    {
+        if (empty($packages)) {
+            $dividedWeight = $this->getTotalNumOfBoxes($totalWeight);
+            for ($i=0; $i < $this->_numBoxes; $i++) {
+                $packages[$i]['weight'] = $dividedWeight;
+            }
+        }
+        $this->_numBoxes = count($packages);
+
+        return $packages;
     }
 }

@@ -14,11 +14,12 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Returns media url
  */
-class Url implements ResolverInterface
+class Url implements ResolverInterface, ResetAfterRequestInterface
 {
     /**
      * @var ImageFactory
@@ -99,5 +100,13 @@ class Url implements ResolverInterface
         }
 
         return $image->getUrl();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->placeholderCache = [];
     }
 }

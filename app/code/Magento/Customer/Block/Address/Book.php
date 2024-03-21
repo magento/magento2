@@ -13,7 +13,6 @@ use Magento\Customer\Block\Address\Grid as AddressesGrid;
  * Customer address book block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Book extends \Magento\Framework\View\Element\Template
@@ -167,6 +166,7 @@ class Book extends \Magento\Framework\View\Element\Template
         try {
             $addresses = $this->addressesGrid->getAdditionalAddresses();
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            return false;
         }
         return empty($addresses) ? false : $addresses;
     }
@@ -198,6 +198,7 @@ class Book extends \Magento\Framework\View\Element\Template
         try {
             $customer = $this->currentCustomer->getCustomer();
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            return null;
         }
         return $customer;
     }

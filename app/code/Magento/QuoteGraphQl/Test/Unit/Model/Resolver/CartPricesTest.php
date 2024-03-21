@@ -124,7 +124,6 @@ class CartPricesTest extends TestCase
             ->expects($this->once())
             ->method('getSubtotalInclTax');
         $this->totalMock
-            ->expects($this->once())
             ->method('getDiscountDescription')
             ->willReturn('Discount Description');
         $this->totalMock

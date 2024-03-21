@@ -23,160 +23,160 @@ class Config extends AbstractConfig
     /**
      * PayPal Express
      */
-    const METHOD_EXPRESS = 'paypal_express';
+    public const METHOD_EXPRESS = 'paypal_express';
 
     /**
      * PayPal Standard - alias METHOD_WPP_EXPRESS
      */
-    const METHOD_WPS_EXPRESS = 'wps_express';
+    public const METHOD_WPS_EXPRESS = 'wps_express';
 
     /**
      * PayPal Standard Bml - alias METHOD_WPP_BML
      */
-    const METHOD_WPS_BML = 'wps_express_bml';
+    public const METHOD_WPS_BML = 'wps_express_bml';
 
     /**
      * PayPal Bill Me Later - Express Checkout
      */
-    const METHOD_WPP_BML = 'paypal_express_bml';
+    public const METHOD_WPP_BML = 'paypal_express_bml';
 
     /**
      * PayPal Website Payments Pro - Direct Payments
      */
-    const METHOD_WPP_DIRECT = 'paypal_direct';
+    public const METHOD_WPP_DIRECT = 'paypal_direct';
 
     /**
      * PayPal Website Payments Pro - Direct Payments - alias METHOD_PAYFLOWPRO
      */
-    const METHOD_PAYMENT_PRO = 'paypal_payment_pro';
+    public const METHOD_PAYMENT_PRO = 'paypal_payment_pro';
 
     /**
      * Express Checkout (Payflow Edition)
      */
-    const METHOD_WPP_PE_EXPRESS = 'payflow_express';
+    public const METHOD_WPP_PE_EXPRESS = 'payflow_express';
 
     /**
      * PayPal Bill Me Later - Express Checkout (Payflow Edition)
      */
-    const METHOD_WPP_PE_BML = 'payflow_express_bml';
+    public const METHOD_WPP_PE_BML = 'payflow_express_bml';
 
     /**
      * Payflow Pro Gateway
      */
-    const METHOD_PAYFLOWPRO = 'payflowpro';
+    public const METHOD_PAYFLOWPRO = 'payflowpro';
 
-    const METHOD_PAYFLOWLINK = 'payflow_link';
+    public const METHOD_PAYFLOWLINK = 'payflow_link';
 
-    const METHOD_PAYFLOWADVANCED = 'payflow_advanced';
+    public const METHOD_PAYFLOWADVANCED = 'payflow_advanced';
 
-    const METHOD_HOSTEDPRO = 'hosted_pro';
+    public const METHOD_HOSTEDPRO = 'hosted_pro';
 
-    const METHOD_BILLING_AGREEMENT = 'paypal_billing_agreement';
+    public const METHOD_BILLING_AGREEMENT = 'paypal_billing_agreement';
 
     /**#@+
      * Buttons and images
      */
-    const EC_FLAVOR_DYNAMIC = 'dynamic';
+    public const EC_FLAVOR_DYNAMIC = 'dynamic';
 
-    const EC_FLAVOR_STATIC = 'static';
+    public const EC_FLAVOR_STATIC = 'static';
 
-    const EC_BUTTON_TYPE_SHORTCUT = 'ecshortcut';
+    public const EC_BUTTON_TYPE_SHORTCUT = 'ecshortcut';
 
-    const EC_BUTTON_TYPE_MARK = 'ecmark';
+    public const EC_BUTTON_TYPE_MARK = 'ecmark';
 
-    const PAYMENT_MARK_SMALL = 'small';
+    public const PAYMENT_MARK_SMALL = 'small';
 
-    const PAYMENT_MARK_MEDIUM = 'medium';
+    public const PAYMENT_MARK_MEDIUM = 'medium';
 
-    const PAYMENT_MARK_LARGE = 'large';
+    public const PAYMENT_MARK_LARGE = 'large';
 
     /**#@-*/
-    const DEFAULT_LOGO_TYPE = 'wePrefer_150x60';
+    public const DEFAULT_LOGO_TYPE = 'wePrefer_150x60';
 
     /**#@+
      * Payment actions
      */
-    const AUTHORIZATION_AMOUNT_ONE = 1;
+    public const AUTHORIZATION_AMOUNT_ONE = 1;
 
-    const AUTHORIZATION_AMOUNT_FULL = 2;
+    public const AUTHORIZATION_AMOUNT_FULL = 2;
 
     /**#@-*/
 
     /**#@+
      * Require Billing Address
      */
-    const REQUIRE_BILLING_ADDRESS_NO = 0;
+    public const REQUIRE_BILLING_ADDRESS_NO = 0;
 
-    const REQUIRE_BILLING_ADDRESS_ALL = 1;
+    public const REQUIRE_BILLING_ADDRESS_ALL = 1;
 
-    const REQUIRE_BILLING_ADDRESS_VIRTUAL = 2;
+    public const REQUIRE_BILLING_ADDRESS_VIRTUAL = 2;
 
     /**#@-*/
 
     /**#@+
      * Fraud management actions
      */
-    const FRAUD_ACTION_ACCEPT = 'Acept';
+    public const FRAUD_ACTION_ACCEPT = 'Acept';
 
-    const FRAUD_ACTION_DENY = 'Deny';
+    public const FRAUD_ACTION_DENY = 'Deny';
 
     /**#@-*/
 
     /**#@+
      * Refund types
      */
-    const REFUND_TYPE_FULL = 'Full';
+    public const REFUND_TYPE_FULL = 'Full';
 
-    const REFUND_TYPE_PARTIAL = 'Partial';
+    public const REFUND_TYPE_PARTIAL = 'Partial';
 
     /**#@-*/
 
     /**#@+
      * Express Checkout flows
      */
-    const EC_SOLUTION_TYPE_SOLE = 'Sole';
+    public const EC_SOLUTION_TYPE_SOLE = 'Sole';
 
-    const EC_SOLUTION_TYPE_MARK = 'Mark';
+    public const EC_SOLUTION_TYPE_MARK = 'Mark';
 
     /**#@-*/
 
     /**#@+
      * Payment data transfer methods (Standard)
      */
-    const WPS_TRANSPORT_IPN = 'ipn';
+    public const WPS_TRANSPORT_IPN = 'ipn';
 
-    const WPS_TRANSPORT_PDT = 'pdt';
+    public const WPS_TRANSPORT_PDT = 'pdt';
 
-    const WPS_TRANSPORT_IPN_PDT = 'ipn_n_pdt';
+    public const WPS_TRANSPORT_IPN_PDT = 'ipn_n_pdt';
 
     /**#@-*/
 
     /**#@+
      * Billing Agreement Signup type
      */
-    const EC_BA_SIGNUP_AUTO = 'auto';
+    public const EC_BA_SIGNUP_AUTO = 'auto';
 
-    const EC_BA_SIGNUP_ASK = 'ask';
+    public const EC_BA_SIGNUP_ASK = 'ask';
 
-    const EC_BA_SIGNUP_NEVER = 'never';
+    public const EC_BA_SIGNUP_NEVER = 'never';
 
     /**
      * Paypal setting
      */
-    const TRANSFER_CART_LINE_ITEMS = 'lineItemsEnabled';
-    const TRANSFER_SHIPPING_OPTIONS = 'transferShippingOptions';
+    public const TRANSFER_CART_LINE_ITEMS = 'lineItemsEnabled';
+    public const TRANSFER_SHIPPING_OPTIONS = 'transferShippingOptions';
 
     /**#@-*/
 
     /**
      * Config path for enabling/disabling order review step in express checkout
      */
-    const XML_PATH_PAYPAL_EXPRESS_SKIP_ORDER_REVIEW_STEP_FLAG = 'payment/paypal_express/skip_order_review_step';
+    public const XML_PATH_PAYPAL_EXPRESS_SKIP_ORDER_REVIEW_STEP_FLAG = 'payment/paypal_express/skip_order_review_step';
 
     /**
      * PayPal PayLater
      */
-    const PAYLATER = 'paypal_paylater';
+    public const PAYLATER = 'paypal_paylater';
 
     /**
      *
@@ -1058,7 +1058,7 @@ class Config extends AbstractConfig
         }
         return sprintf(
             'https://www.paypal.com/%s/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside',
-            strtolower($countryCode)
+            $countryCode !== null ? strtolower($countryCode) : ''
         );
     }
 

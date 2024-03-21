@@ -60,11 +60,12 @@ class QuoteItemProductOptionTest extends TestCase
             ->getMock();
         $this->quoteItemMock = $this->getMockBuilder(AbstractQuoteItem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOptions', 'getProduct'])
+            ->addMethods(['getOptions'])
+            ->onlyMethods(['getProduct'])
             ->getMockForAbstractClass();
         $this->quoteItemOptionMock = $this->getMockBuilder(QuoteItemOption::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCode'])
+            ->addMethods(['getCode'])
             ->getMock();
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
@@ -88,9 +89,9 @@ class QuoteItemProductOptionTest extends TestCase
         $this->quoteItemMock->expects(static::exactly(2))
             ->method('getOptions')
             ->willReturn([$this->quoteItemOptionMock, $this->quoteItemOptionMock]);
-        $this->quoteItemOptionMock->expects(static::exactly(2))
+        $this->quoteItemOptionMock->expects(static::exactly(4))
             ->method('getCode')
-            ->willReturnOnConsecutiveCalls('someText_8', 'not_int_text');
+            ->willReturnOnConsecutiveCalls('someText_8', 'someText_8', 'not_int_text', 'not_int_text');
         $this->productMock->expects(static::once())
             ->method('getOptionById')
             ->willReturn(new DataObject(['type' => ProductOption::OPTION_TYPE_FILE]));

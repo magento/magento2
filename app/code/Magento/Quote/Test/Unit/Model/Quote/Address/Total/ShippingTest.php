@@ -209,11 +209,16 @@ class ShippingTest extends TestCase
         $this->shippingAssignment->expects($this->atLeastOnce())
             ->method('getItems')
             ->willReturn([$this->cartItem]);
-        $this->freeShipping->method('isFreeShipping')
+        $isFreeShipping = true;
+        $this->freeShipping
+            ->expects($this->once())
+            ->method('isFreeShipping')
             ->with($this->quote, [$this->cartItem])
-            ->willReturn(true);
-        $this->address->method('setFreeShipping')
-            ->with(true);
+            ->willReturn($isFreeShipping);
+        $this->address
+            ->expects($this->once())
+            ->method('setFreeShipping')
+            ->with((int)$isFreeShipping);
         $this->total->expects($this->atLeastOnce())
             ->method('setTotalAmount');
         $this->total->expects($this->atLeastOnce())

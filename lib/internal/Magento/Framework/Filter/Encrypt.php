@@ -5,16 +5,21 @@
  */
 namespace Magento\Framework\Filter;
 
+use Laminas\Filter\Encrypt as LaminasEncrypt;
+use Magento\Framework\Filter\Encrypt\AdapterInterface;
+
 /**
  * Encrypt filter
  */
-class Encrypt extends \Zend_Filter_Encrypt
+class Encrypt extends LaminasEncrypt
 {
     /**
-     * @param \Magento\Framework\Filter\Encrypt\AdapterInterface $adapter
+     * @param AdapterInterface $adapter
      */
-    public function __construct(\Magento\Framework\Filter\Encrypt\AdapterInterface $adapter)
+    public function __construct(AdapterInterface $adapter)
     {
+        parent::__construct();
+
         $this->setAdapter($adapter);
     }
 }
