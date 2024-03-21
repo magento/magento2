@@ -56,27 +56,27 @@ class PaymentVaultConfigurationProcessTest extends TestCase
         $this->storeManager = $this
             ->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->getMockForAbstractClass();
         $this->store = $this
             ->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
         $this->vaultList = $this
             ->getMockBuilder(PaymentMethodListInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getActiveList'])
+            ->onlyMethods(['getActiveList'])
             ->getMockForAbstractClass();
         $this->paymentMethodList = $this
             ->getMockBuilder(\Magento\Payment\Api\PaymentMethodListInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getActiveList'])
+            ->onlyMethods(['getActiveList'])
             ->getMockForAbstractClass();
         $this->layoutProcessor =  $this
             ->getMockBuilder(LayoutProcessor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['process'])
+            ->onlyMethods(['process'])
             ->getMockForAbstractClass();
 
         $objectManagerHelper = new ObjectManager($this);
@@ -146,7 +146,7 @@ class PaymentVaultConfigurationProcessTest extends TestCase
         $vaultPaymentMethod = $this
             ->getMockBuilder(PaymentMethodListInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCode', 'getProviderCode'])
+            ->addMethods(['getCode', 'getProviderCode'])
             ->getMockForAbstractClass();
 
         $vaultPaymentMethod->expects($this->any())->method('getCode')->willReturn('payflowpro_cc_vault');
