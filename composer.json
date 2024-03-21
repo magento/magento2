@@ -80,6 +80,7 @@
         "php-amqplib/php-amqplib": "^3.2",
         "phpseclib/mcrypt_compat": "^2.0",
         "phpseclib/phpseclib": "^3.0",
+        "psr/log": "^2 || ^3",
         "ramsey/uuid": "^4.2",
         "symfony/console": "^6.4",
         "symfony/intl": "^6.4",
