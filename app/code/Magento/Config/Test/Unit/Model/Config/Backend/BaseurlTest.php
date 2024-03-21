@@ -64,8 +64,8 @@ class BaseurlTest extends TestCase
 
     /**
      * @dataProvider beforeSaveDataProvider
-     * @param string|null $value
-     * @param string|bool $expectedValue false if exception to be thrown
+     * @param string $value
+     * @param string $expectedValue
      * @return void
      */
     public function testBeforeSaveConvertLowerCase($value, $expectedValue)
