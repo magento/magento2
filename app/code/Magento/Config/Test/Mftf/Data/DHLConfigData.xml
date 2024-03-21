@@ -23,7 +23,7 @@
     <entity name="AdminCarriersDHLId">
         <data key="path">carriers/dhl/id</data>
         <data key="scope_id">1</data>
-        <data key="value">{{_CREDS.magento/carriers_dhl_access_id}}</data>
+        <data key="value">EvgeniyUSA</data>
     </entity>
     <entity name="AdminCarriersDHLPassword">
         <data key="path">carriers/dhl/password</data>
@@ -33,7 +33,7 @@
     <entity name="AdminCarriersDHLAccount">
         <data key="path">carriers/dhl/account</data>
         <data key="scope_id">1</data>
-        <data key="value">{{_CREDS.magento/carriers_dhl_account_number}}</data>
+        <data key="value">965269748</data>
     </entity>
     <entity name="AdminCarriersDHLAllowedAllCountries">
         <data key="path">carriers/dhl/sallowspecific</data>
