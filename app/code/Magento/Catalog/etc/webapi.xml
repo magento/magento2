@@ -503,7 +503,10 @@
     <route url="/V1/products-render-info" method="GET">
         <service class="Magento\Catalog\Api\ProductRenderListInterface" method="getList"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="self" />
         </resources>
+        <data>
+            <parameter name="customerGroupId" force="true">%customer_group_id%</parameter>
+        </data>
     </route>
 </routes>

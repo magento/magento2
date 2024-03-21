@@ -110,8 +110,10 @@ class ProductRenderListTest extends TestCase
     {
         $storeId = 1;
         $currencyCode = 'USD';
+        $customerGroupId = 1;
 
         $product = $this->getMockBuilder(ProductInterface::class)
+            ->addMethods(['setCustomerGroupId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $iterator = new \IteratorIterator(new \ArrayIterator([$product]));
@@ -145,6 +147,10 @@ class ProductRenderListTest extends TestCase
             ->method('addFinalPrice')
             ->willReturnSelf();
         $productCollection->expects($this->once())
+            ->method('addPriceData')
+            ->with($customerGroupId)
+            ->willReturnSelf();
+        $productCollection->expects($this->once())
             ->method('addTaxPercents')
             ->willReturnSelf();
         $this->collectionProcessorMock->expects($this->once())
@@ -162,6 +168,10 @@ class ProductRenderListTest extends TestCase
         $product->expects($this->once())
             ->method('getId')
             ->willReturn(1);
+        $product->expects($this->once())
+            ->method('setCustomerGroupId')
+            ->with($customerGroupId)
+            ->willReturnSelf();
         $this->productRenderFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($productRender);
@@ -189,6 +199,9 @@ class ProductRenderListTest extends TestCase
             ->method('setSearchCriteria')
             ->with($searchCriteria);
 
-        $this->assertEquals($searchResult, $this->model->getList($searchCriteria, $storeId, $currencyCode));
+        $this->assertEquals(
+            $searchResult,
+            $this->model->getList($searchCriteria, $storeId, $currencyCode, $customerGroupId)
+        );
     }
 }
