@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a990c4a6c8fb3aceae76364f742ec12f",
+    "content-hash": "b51a34214644ae13c3de0c65848483e7",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -5301,22 +5301,22 @@
         },
         {
             "name": "php-amqplib/php-amqplib",
-            "version": "v3.5.4",
+            "version": "v3.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-amqplib/php-amqplib.git",
-                "reference": "1aecbd182b35eb039667c50d7d92d71f105be779"
+                "reference": "76eee289e98b0b309a761787e65cbe1acbaf8c72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-amqplib/php-amqplib/zipball/1aecbd182b35eb039667c50d7d92d71f105be779",
-                "reference": "1aecbd182b35eb039667c50d7d92d71f105be779",
+                "url": "https://api.github.com/repos/php-amqplib/php-amqplib/zipball/76eee289e98b0b309a761787e65cbe1acbaf8c72",
+                "reference": "76eee289e98b0b309a761787e65cbe1acbaf8c72",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
                 "ext-sockets": "*",
-                "php": "^7.1||^8.0",
+                "php": "^7.2||^8.0",
                 "phpseclib/phpseclib": "^2.0|^3.0"
             },
             "conflict": {
@@ -5376,9 +5376,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-amqplib/php-amqplib/issues",
-                "source": "https://github.com/php-amqplib/php-amqplib/tree/v3.5.4"
+                "source": "https://github.com/php-amqplib/php-amqplib/tree/v3.6.1"
             },
-            "time": "2023-07-01T11:25:08+00:00"
+            "time": "2024-02-07T17:21:26+00:00"
         },
         {
             "name": "phpseclib/mcrypt_compat",
