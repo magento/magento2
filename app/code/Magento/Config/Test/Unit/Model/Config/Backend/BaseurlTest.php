@@ -61,4 +61,30 @@ class BaseurlTest extends TestCase
         $model->setValue('http://example.com/')->setPath(Store::XML_PATH_UNSECURE_BASE_URL);
         $model->afterSave();
     }
+
+    /**
+     * @dataProvider beforeSaveDataProvider
+     * @param string|null $value
+     * @param string|bool $expectedValue false if exception to be thrown
+     * @return void
+     */
+    public function testBeforeSaveConvertLowerCase($value, $expectedValue)
+    {
+        $model = (new ObjectManager($this))->getObject(Baseurl::class);
+        $model->setValue($value);
+        $model->beforeSave();
+        $this->assertEquals($expectedValue, $model->getValue());
+    }
+
+    /**
+     * @return array
+     */
+    public function beforeSaveDataProvider()
+    {
+        return [
+            ['https://Example1.com/', 'https://example1.com/'],
+            ['https://EXAMPLE2.COM/', 'https://example2.com/'],
+            ['HTtpS://ExamPLe3.COM/', 'https://example3.com/'],
+        ];
+    }
 }
