@@ -20,7 +20,7 @@ class UpdateHandlerPlugin
     /**
      * @var ProductAttributeRepositoryInterface
      */
-    public readonly ProductAttributeRepositoryInterface $attributeRepository;
+    private readonly ProductAttributeRepositoryInterface $attributeRepository;
 
     /**
      * UpdateHandlerPlugin constructor.
