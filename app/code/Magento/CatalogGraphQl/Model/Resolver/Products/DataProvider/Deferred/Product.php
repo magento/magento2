@@ -10,12 +10,13 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product as ProductDataProvider;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
  * Deferred resolver for product data.
  */
-class Product
+class Product implements ResetAfterRequestInterface
 {
     /**
      * @var ProductDataProvider
@@ -143,5 +144,15 @@ class Product
         foreach ($result->getItems() as $product) {
             $this->productList[$product->getSku()] = ['model' => $product];
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->productList = [];
+        $this->productSkus = [];
+        $this->attributeCodes = [];
     }
 }

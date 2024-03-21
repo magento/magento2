@@ -25,7 +25,7 @@
         <element name="addSwatch" type="button" selector="#add_new_swatch_text_option_button"/>
         <element name="dropdownAddOptions" type="button" selector="#add_new_option_button" timeout="30"/>
         <element name="storefrontProperties" type="text" selector="//*[@id='product_attribute_tabs_front']/span[1]"/>
-
+        <element name="useInSearchResultsLayeredNavigation" type="select" selector="#is_filterable_in_search"/>
         <!-- Manage Options nth child-->
         <element name="dropdownNthOptionIsDefault" type="checkbox" selector="tbody[data-role='options-container'] tr:nth-child({{var}}) .input-radio" parameterized="true"/>
         <element name="dropdownNthOptionAdmin" type="textarea" selector="tbody[data-role='options-container'] tr:nth-child({{var}}) td:nth-child(3) input" parameterized="true"/>

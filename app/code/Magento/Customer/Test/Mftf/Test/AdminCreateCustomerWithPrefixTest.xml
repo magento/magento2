@@ -16,12 +16,14 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-5308"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>

@@ -15,8 +15,8 @@
         <arguments>
             <argument name="productName" type="string"/>
         </arguments>
-
+        <conditionalClick selector="{{AdminCustomerActivitiesRecentlyViewedSection.selectStoreView}}" dependentSelector="{{AdminCustomerActivitiesRecentlyViewedSection.selectStoreView}}" visible="true" stepKey="selectDefaultStoreView"/>
+        <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
         <click selector="{{AdminCustomerActivitiesRecentlyViewedSection.addToOrderConfigure(productName)}}" stepKey="clickConfigureProduct"/>
- 
     </actionGroup>
 </actionGroups>

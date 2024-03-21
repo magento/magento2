@@ -2,9 +2,9 @@
 # See COPYING.txt for license details.
 
 type Query {
-    currency: Currency @resolver(class: "Magento\\DirectoryGraphQl\\Model\\Resolver\\Currency") @doc(description: "Return information about the store's currency.") @cache(cacheable: false)
-    countries: [Country] @resolver(class: "Magento\\DirectoryGraphQl\\Model\\Resolver\\Countries") @doc(description: "The countries query provides information for all countries.") @cache(cacheable: false)
-    country (id: String): Country @resolver(class: "Magento\\DirectoryGraphQl\\Model\\Resolver\\Country") @doc(description: "The countries query provides information for a single country.") @cache(cacheable: false)
+    currency: Currency @resolver(class: "Magento\\DirectoryGraphQl\\Model\\Resolver\\Currency") @doc(description: "Return information about the store's currency.") @cache(cacheIdentity: "Magento\\DirectoryGraphQl\\Model\\Resolver\\Currency\\Identity")
+    countries: [Country] @resolver(class: "Magento\\DirectoryGraphQl\\Model\\Resolver\\Countries") @doc(description: "The countries query provides information for all countries.") @cache(cacheIdentity: "Magento\\DirectoryGraphQl\\Model\\Resolver\\Country\\Identity")
+    country (id: String): Country @resolver(class: "Magento\\DirectoryGraphQl\\Model\\Resolver\\Country") @doc(description: "The countries query provides information for a single country.") @cache(cacheIdentity: "Magento\\DirectoryGraphQl\\Model\\Resolver\\Country\\Identity")
 }
 
 type Currency {

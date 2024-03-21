@@ -9,19 +9,22 @@ namespace Magento\Sales\Model\Reorder;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Cart\CustomerCartResolver;
-use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\GuestCart\GuestCartResolver;
+use Magento\Quote\Model\Quote;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Helper\Reorder as ReorderHelper;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\OrderFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ItemCollection;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -30,6 +33,11 @@ use Psr\Log\LoggerInterface;
  */
 class Reorder
 {
+    /**
+     * Forbidden reorder item properties
+     */
+    private const FORBIDDEN_REORDER_PROPERTIES = ['custom_price'];
+
     /**#@+
      * Error message codes
      */
@@ -99,6 +107,16 @@ class Reorder
     private $orderInfoBuyRequestGetter;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var bool
+     */
+    private bool $addToCartInvalidProduct;
+
+    /**
      * @param OrderFactory $orderFactory
      * @param CustomerCartResolver $customerCartProvider
      * @param GuestCartResolver $guestCartResolver
@@ -107,6 +125,10 @@ class Reorder
      * @param LoggerInterface $logger
      * @param ProductCollectionFactory $productCollectionFactory
      * @param OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter
+     * @param StoreManagerInterface|null $storeManager
+     * @param bool $addToCartInvalidProduct
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         OrderFactory $orderFactory,
@@ -116,7 +138,9 @@ class Reorder
         ReorderHelper $reorderHelper,
         LoggerInterface $logger,
         ProductCollectionFactory $productCollectionFactory,
-        OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter
+        OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter,
+        ?StoreManagerInterface   $storeManager = null,
+        bool $addToCartInvalidProduct = false
     ) {
         $this->orderFactory = $orderFactory;
         $this->cartRepository = $cartRepository;
@@ -126,6 +150,9 @@ class Reorder
         $this->guestCartResolver = $guestCartResolver;
         $this->productCollectionFactory = $productCollectionFactory;
         $this->orderInfoBuyRequestGetter = $orderInfoBuyRequestGetter;
+        $this->storeManager = $storeManager
+            ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->addToCartInvalidProduct = $addToCartInvalidProduct;
     }
 
     /**
@@ -158,6 +185,7 @@ class Reorder
             return $this->prepareOutput($cart);
         }
 
+        $storeId = (string) $this->storeManager->getStore()->getId();
         $this->addItemsToCart($cart, $order->getItemsCollection(), $storeId);
 
         try {
@@ -231,6 +259,7 @@ class Reorder
     {
         /** @var Collection $collection */
         $collection = $this->productCollectionFactory->create();
+        $collection->setFlag('has_stock_status_filter', true);
         $collection->setStore($storeId)
             ->addIdFilter($orderItemProductIds)
             ->addStoreFilter()
@@ -253,9 +282,11 @@ class Reorder
     private function addItemToCart(OrderItemInterface $orderItem, Quote $cart, ProductInterface $product): void
     {
         $infoBuyRequest = $this->orderInfoBuyRequestGetter->getInfoBuyRequest($orderItem);
+        $this->sanitizeBuyRequest($infoBuyRequest);
 
         $addProductResult = null;
         try {
+            $infoBuyRequest->setAddToCartInvalidProduct($this->addToCartInvalidProduct);
             $addProductResult = $cart->addProduct($product, $infoBuyRequest);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->addError($this->getCartItemErrorMessage($orderItem, $product, $e->getMessage()));
@@ -269,6 +300,21 @@ class Reorder
             $errors = array_unique(explode("\n", $addProductResult));
             foreach ($errors as $error) {
                 $this->addError($this->getCartItemErrorMessage($orderItem, $product, $error));
+            }
+        }
+    }
+
+    /**
+     * Removes forbidden reorder item properties
+     *
+     * @param DataObject $dataObject
+     * @return void
+     */
+    private function sanitizeBuyRequest(DataObject $dataObject): void
+    {
+        foreach (self::FORBIDDEN_REORDER_PROPERTIES as $forbiddenProp) {
+            if ($dataObject->hasData($forbiddenProp)) {
+                $dataObject->unsetData($forbiddenProp);
             }
         }
     }
