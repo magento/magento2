@@ -1,8 +1,9 @@
 <?php
 /**
+ * Copyright © Magento, Inc. All rights reserved.
+ *
  * Mail Template Transport Builder
  *
- * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -32,70 +33,53 @@ use Magento\Framework\Phrase;
  * TransportBuilder for Mail Templates
  *
  * @api
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
 class TransportBuilder
 {
     /**
-     * Template Identifier
-     *
      * @var string
      */
     protected $templateIdentifier;
 
     /**
-     * Template Model
-     *
      * @var string
      */
     protected $templateModel;
 
     /**
-     * Template Variables
-     *
      * @var array
      */
     protected $templateVars;
 
     /**
-     * Template Options
-     *
      * @var array
      */
     protected $templateOptions;
 
     /**
-     * Mail Transport
-     *
      * @var TransportInterface
      */
     protected $transport;
 
     /**
-     * Template Factory
-     *
      * @var FactoryInterface
      */
     protected $templateFactory;
 
     /**
-     * Object Manager
-     *
      * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
-     * Message
-     *
      * @var MessageInterface
      */
     protected $message;
 
     /**
-     * Sender resolver
-     *
      * @var SenderResolverInterface
      */
     protected $_senderResolver;
@@ -350,6 +334,8 @@ class TransportBuilder
     }
 
     /**
+     * Add attachment with mails
+     *
      * @param string $content
      * @param string $fileName
      * @param string|null $fileType
@@ -357,8 +343,11 @@ class TransportBuilder
      * @return $this
      * @throws InvalidArgumentException
      */
-    public function addAttachment(string $content, string $fileName, ?string $fileType = Mime::TYPE_OCTETSTREAM): TransportBuilder
-    {
+    public function addAttachment(
+        string $content,
+        string $fileName,
+        ?string $fileType = Mime::TYPE_OCTETSTREAM
+    ): TransportBuilder {
         $attachmentPart = new Part();
 
         $attachmentPart->setContent($content)
