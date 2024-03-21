@@ -141,7 +141,8 @@ class InputParamsResolver
         } else {
             $inputData = $this->request->getRequestData();
         }
-        $this->filterInputData($inputData);
+
+        $inputData = $this->filterInputData($inputData);
         $this->validateParameters($serviceClassName, $serviceMethodName, array_keys($route->getParameters()));
 
         return $this->paramsOverrider->override($inputData, $route->getParameters());
