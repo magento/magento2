@@ -1,7 +1,9 @@
 ---
 name: GraphQL Story
 about: User story for GraphQL project
-labels: 'Project: GraphQL'
+title: ''
+labels: ''
+assignees: ''
 
 ---
 
