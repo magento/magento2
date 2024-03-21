@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Webapi\Controller\Rest;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Rest\Request\ParamOverriderInterface;
 use Magento\Webapi\Model\Config\Converter;
 use Magento\Framework\Reflection\MethodsMap;
@@ -55,12 +54,9 @@ class ParamsOverrider
      * @param array $inputData Incoming data from request
      * @param array $parameters Contains parameters to replace or default
      * @return array Data in same format as $inputData with appropriate parameters added or changed
-     * @throws NoSuchEntityException
      */
     public function override(array $inputData, array $parameters)
     {
-        $inputData = $this->validateInputData($inputData);
-
         foreach ($parameters as $name => $paramData) {
             $arrayKeys = explode('.', $name);
             if ($paramData[Converter::KEY_FORCE] || !$this->isNestedArrayValueSet($inputData, $arrayKeys)) {
@@ -100,7 +96,6 @@ class ParamsOverrider
 
     /**
      * Set a nested array value.
-     * phpcs:disable Magento2.Annotation.MethodArguments.VisualAlignment
      *
      * @param array &$nestedArray
      * @param string[] $arrayKeys
@@ -243,7 +238,6 @@ class ParamsOverrider
      * @return \Magento\Framework\Reflection\MethodsMap
      *
      * @deprecated 100.1.0
-     * @see \Magento\Framework\Reflection\MethodsMap
      */
     private function getMethodsMap()
     {
