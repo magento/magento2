@@ -15,19 +15,17 @@
             <description value="Placing an order with paypal express checkout payment option and the payment action as Ordered and assert the data in order page of admin. "/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-6159"/>
-            <group value="3rd_party_integration" />
+            <group value="3rd_party_integration"/>
+            <group value="paypalExpress"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct" stepKey="simpleProduct"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <magentoCLI command="config:set {{StorefrontPaypalExpressOrderPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressOrderPaymentActionOptionConfigData.value}}" stepKey="setPaymentActionOrder"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
-                <argument name="credentials" value="SamplePaypalExpressConfig2"/>
-            </actionGroup>
         </before>
         <after>
-            <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
+            <magentoCLI command="config:set {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.value}}" stepKey="setPaymentActionBackToAuthorization"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
