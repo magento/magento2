@@ -22,54 +22,44 @@ abstract class AbstractCalculator
     /**#@+
      * Constants for delta rounding key
      */
-    const KEY_REGULAR_DELTA_ROUNDING = 'regular';
+    public const KEY_REGULAR_DELTA_ROUNDING = 'regular';
 
-    const KEY_APPLIED_TAX_DELTA_ROUNDING = 'applied_tax_amount';
+    public const KEY_APPLIED_TAX_DELTA_ROUNDING = 'applied_tax_amount';
 
-    const KEY_TAX_BEFORE_DISCOUNT_DELTA_ROUNDING = 'tax_before_discount';
+    public const KEY_TAX_BEFORE_DISCOUNT_DELTA_ROUNDING = 'tax_before_discount';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var TaxDetailsItemInterfaceFactory
+     */
     protected $taxDetailsItemDataObjectFactory;
 
     /**
-     * Tax calculation tool
-     *
      * @var Calculation
      */
     protected $calculationTool;
 
     /**
-     * Store id
-     *
      * @var int
      */
     protected $storeId;
 
     /**
-     * Customer tax class id
-     *
      * @var int
      */
     protected $customerTaxClassId;
 
     /**
-     * Customer id
-     *
      * @var int
      */
     protected $customerId;
 
     /**
-     * Shipping Address
-     *
      * @var CustomerAddress
      */
     protected $shippingAddress;
 
     /**
-     * Billing Address
-     *
      * @var CustomerAddress
      */
     protected $billingAddress;
@@ -276,7 +266,7 @@ abstract class AbstractCalculator
      */
     protected function isSameRateAsStore($rate, $storeRate)
     {
-        if ((bool)$this->config->crossBorderTradeEnabled($this->storeId)) {
+        if ((bool)$this->config->crossBorderTradeEnabled($this->storeId) && $rate > 0.0) {
             return true;
         } else {
             return (abs($rate - $storeRate) < 0.00001);
@@ -424,8 +414,9 @@ abstract class AbstractCalculator
     }
 
     /**
-     * Given a store price that includes tax at the store rate, this function will back out the store's tax, and add in
-     * the customer's tax.  Returns this new price which is the customer's price including tax.
+     * Given a store price that includes tax at the store rate, this function will back out the store's tax, ...
+     *
+     * ... and add in the customer's tax. Returns this new price which is the customer's price including tax.
      *
      * @param float $storePriceInclTax
      * @param float $storeRate
