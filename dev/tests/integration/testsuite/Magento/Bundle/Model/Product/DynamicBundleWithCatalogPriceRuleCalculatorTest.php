@@ -145,7 +145,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
      * Dynamic bundle with one required option
      * @return array
      */
-    private function getBundleProductConfiguration1()
+    private static function getBundleProductConfiguration1()
     {
         $optionsData = [
             [
@@ -173,7 +173,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
      * Dynamic bundle with one non required option
      * @return array
      */
-    private function getBundleProductConfiguration3()
+    private static function getBundleProductConfiguration3()
     {
         $optionsData = [
             [
@@ -201,7 +201,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
      * Dynamic bundle with one required checkbox type option and 2 simples
      * @return array
      */
-    private function getBundleProductConfiguration4()
+    private static function getBundleProductConfiguration4()
     {
         $optionsData = [
             [
@@ -233,7 +233,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
      * Dynamic bundle with one required multi type option and 2 simples
      * @return array
      */
-    private function getBundleProductConfiguration5()
+    private static function getBundleProductConfiguration5()
     {
         $optionsData = [
             [
@@ -265,7 +265,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
      * Dynamic bundle with one required radio type option and 2 simples
      * @return array
      */
-    private function getBundleProductConfiguration6()
+    private static function getBundleProductConfiguration6()
     {
         $optionsData = [
             [
@@ -297,7 +297,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
      * Dynamic bundle with two required options
      * @return array
      */
-    private function getBundleProductConfiguration7()
+    private static function getBundleProductConfiguration7()
     {
         $optionsData = [
             [
@@ -344,7 +344,7 @@ class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstrac
      * Dynamic bundle with one required option and one non required
      * @return array
      */
-    private function getBundleProductConfiguration8()
+    private static function getBundleProductConfiguration8()
     {
         $optionsData = [
             [
