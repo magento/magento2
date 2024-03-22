@@ -19,7 +19,7 @@ define([
     $(document).on('submit', function (event) {
         var sections;
 
-        if (event.target.method.match(/post|put|delete/i)) {
+        if (event.target.hasAttribute('method') && event.target.getAttribute('method').match(/post|put|delete/i)) {
             sections = sectionConfig.getAffectedSections(event.target.action);
 
             if (sections && window.localStorage) {
