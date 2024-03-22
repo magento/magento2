@@ -42,6 +42,7 @@
     margin-bottom: 2rem;
     max-width: 100%;
     padding-bottom: 1rem;
+    overflow-x: auto;
     padding-top: @data-grid-header-row__indent;
     overflow-x: auto
 }
@@ -430,7 +431,7 @@ body._in-resize {
     .data-grid-actions-cell {
         padding-left: @data-grid-cell__padding-horizontal * 2;
         padding-right: @data-grid-cell__padding-horizontal * 2;
-        position: relative;
+        position: inherit;
         text-align: center;
         width: 1%;
     }
