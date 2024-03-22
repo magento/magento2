@@ -464,9 +464,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->willReturnCallback(
                 function ($arg1) use ($singleStoreModeEnabled, $storeInUrl) {
-                    if ($arg1 == $this->stringContains(StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED)) {
+                    if ($arg1 == StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED) {
                         return $singleStoreModeEnabled;
-                    } elseif ($arg1 == $this->stringContains(Store::XML_PATH_STORE_IN_URL)) {
+                    } elseif ($arg1 == Store::XML_PATH_STORE_IN_URL) {
                         return $storeInUrl;
                     }
                 }
