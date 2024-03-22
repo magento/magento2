@@ -170,7 +170,7 @@ and not (@_message-border-style = false) {
                 @_icon-font-size: @message-icon__font-size,
                 @_icon-font-line-height: @message-icon__font-line-height,
                 @_icon-font-color: @_message-icon-color,
-                @_icon-font-margin: -@message-icon__font-size/2 0 0,
+                @_icon-font-margin: (-@message-icon__font-size/2) 0 0,
                 @_icon-font-vertical-align: @icon-font__vertical-align
             );
             .lib-css(bottom, @_message-icon-bottom);
@@ -267,7 +267,7 @@ and not (@_message-border-style = false) {
             @_icon-font-size: @message-icon__font-size,
             @_icon-font-line-height: @message-icon__font-line-height,
             @_icon-font-color: @_message-icon-color,
-            @_icon-font-margin: -@message-icon__font-size/2 0 0,
+            @_icon-font-margin: (-@message-icon__font-size/2) 0 0,
             @_icon-font-vertical-align: @icon-font__vertical-align
         );
         .lib-css(bottom, @_message-icon-bottom);

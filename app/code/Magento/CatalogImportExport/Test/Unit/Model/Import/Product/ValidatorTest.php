@@ -18,6 +18,9 @@ use Magento\ImportExport\Model\Import;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ValidatorTest extends TestCase
 {
     /** @var Validator */
@@ -62,13 +65,19 @@ class ValidatorTest extends TestCase
         );
 
         $this->validators = [$this->validatorOne, $this->validatorTwo];
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->validator = $this->objectManagerHelper->getObject(
-            Validator::class,
-            [
-                'string' => new StringUtils(),
-                'validators' => $this->validators
-            ]
+        $timezone = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $timezone->expects($this->any())
+            ->method('date')
+            ->willReturnCallback(
+                function ($date = null) {
+                    return new \DateTime($date);
+                }
+            );
+
+        $this->validator = new Validator(
+            new StringUtils(),
+            $this->validators,
+            $timezone
         );
         $this->validator->init($this->context);
     }

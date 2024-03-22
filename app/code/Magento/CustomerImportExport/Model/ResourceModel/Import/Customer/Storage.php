@@ -5,6 +5,7 @@
  */
 namespace Magento\CustomerImportExport\Model\ResourceModel\Import\Customer;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollection;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
 use Magento\Framework\DataObject;
@@ -28,6 +29,11 @@ class Storage
      * @var array
      */
     protected $_customerIds = [];
+
+    /**
+     * @var array
+     */
+    private $customerIdsByEmail = [];
 
     /**
      * Number of items to fetch from db in one query
@@ -61,11 +67,18 @@ class Storage
     private $customerStoreIds = [];
 
     /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
+    /**
      * @param CustomerCollectionFactory $collectionFactory
+     * @param CustomerRepositoryInterface $customerRepository
      * @param array $data
      */
     public function __construct(
         CustomerCollectionFactory $collectionFactory,
+        CustomerRepositoryInterface $customerRepository,
         array $data = []
     ) {
         $this->_customerCollection = isset(
@@ -73,6 +86,7 @@ class Storage
         ) ? $data['customer_collection'] : $collectionFactory->create();
         $this->_pageSize = isset($data['page_size']) ? (int) $data['page_size'] : 0;
         $this->customerCollectionFactory = $collectionFactory;
+        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -130,7 +144,8 @@ class Storage
     /**
      * Add customer to array
      *
-     * @deprecated 100.3.0 @see addCustomerByArray
+     * @deprecated 100.3.0
+     * @see addCustomerByArray
      * @param DataObject $customer
      * @return $this
      */
@@ -162,6 +177,25 @@ class Storage
         }
 
         return false;
+    }
+
+    /**
+     * Find customer ID by email.
+     *
+     * @param string $email
+     * @return bool|int
+     */
+    public function getCustomerIdByEmail(string $email)
+    {
+        if (!isset($this->customerIdsByEmail[$email])) {
+            try {
+                $this->customerIdsByEmail[$email] = $this->customerRepository->get($email)->getId();
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                $this->customerIdsByEmail[$email] = false;
+            }
+        }
+
+        return $this->customerIdsByEmail[$email];
     }
 
     /**
