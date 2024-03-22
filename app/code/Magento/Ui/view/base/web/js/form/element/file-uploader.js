@@ -310,12 +310,36 @@ define([
                 file.id = Base64.mageEncode(file.name);
             }
 
+            if ("size" in file && file.size === 0) {
+                file.size = this.getFileSize(file);
+            }
+
             this.observe.call(file, true, [
                 'previewWidth',
                 'previewHeight'
             ]);
 
             return file;
+        },
+
+        /**
+         * Get image size in bytes for the specified images.
+         *
+         * @param {Object} file
+         * @returns {Number}
+         */
+        getFileSize: function (file) {
+            if (!("url" in file) || file.url === "") {
+                return file.size
+            }
+
+            var request = new XMLHttpRequest();
+            request.open('HEAD', file.url, false);
+            request.send(null);
+
+            return request && request.getResponseHeader("Content-Length")
+                ? parseInt(request.getResponseHeader("Content-Length"))
+                : 0
         },
 
         /**
