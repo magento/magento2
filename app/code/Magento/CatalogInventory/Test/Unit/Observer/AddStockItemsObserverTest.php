@@ -29,16 +29,16 @@ class AddStockItemsObserverTest extends TestCase
      *
      * @var AddStockItemsObserver
      */
-    private $subject;
+    private AddStockItemsObserver $subject;
 
     /**
      * @var StockConfigurationInterface|MockObject
      */
-    private $stockConfigurationMock;
+    private StockConfigurationInterface $stockConfigurationMock;
     /**
      * @var StockRegistryPreloader|MockObject
      */
-    private $stockRegistryPreloader;
+    private StockRegistryPreloader $stockRegistryPreloader;
 
     /**
      * @inheritdoc
