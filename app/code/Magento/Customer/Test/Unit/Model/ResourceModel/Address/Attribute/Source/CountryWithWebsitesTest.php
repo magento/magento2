@@ -77,25 +77,65 @@ class CountryWithWebsitesTest extends TestCase
         );
     }
 
-    public function testGetAllOptions()
+    public function testGetAllOptionsWithNull()
+    {
+        $website1 = $this->getMockForAbstractClass(WebsiteInterface::class);
+
+        $website1->expects($this->any())
+            ->method('getId')
+            ->willReturn(1);
+        $collectionMock = $this->getMockBuilder(AbstractDb::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->allowedCountriesMock->expects($this->any())
+            ->method('getAllowedCountries')
+            ->withConsecutive(
+                ['website', null]
+            )
+            ->willReturnMap([
+                ['website', null, ['AM' => 'AM']]
+            ]);
+        $this->countriesFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($collectionMock);
+        $collectionMock->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with('country_id', ['in' => ['AM' => 'AM']])
+            ->willReturnSelf();
+        $collectionMock->expects($this->once())
+            ->method('toOptionArray')
+            ->willReturn([
+                ['value' => 'AM', 'label' => 'UZ']
+            ]);
+
+        $this->assertEquals([
+            ['value' => 'AM', 'label' => 'UZ']
+        ], $this->countryByWebsite->getAllOptions());
+    }
+
+    public function testGetAllOptionsWithoutNull()
     {
         $website1 = $this->getMockForAbstractClass(WebsiteInterface::class);
         $website2 = $this->getMockForAbstractClass(WebsiteInterface::class);
 
-        $website1->expects($this->atLeastOnce())
+        $website1->expects($this->any())
             ->method('getId')
             ->willReturn(1);
-        $website2->expects($this->atLeastOnce())
+        $website2->expects($this->any())
             ->method('getId')
             ->willReturn(2);
-        $this->storeManagerMock->expects($this->once())
+        $this->storeManagerMock->expects($this->any())
             ->method('getWebsites')
             ->willReturn([$website1, $website2]);
         $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->allowedCountriesMock->expects($this->exactly(2))
+        $this->shareConfigMock->expects($this->any())
+            ->method('isGlobalScope')->willReturn(1);
+
+        $this->allowedCountriesMock->expects($this->any())
             ->method('getAllowedCountries')
             ->withConsecutive(
                 ['website', 1],
@@ -105,14 +145,14 @@ class CountryWithWebsitesTest extends TestCase
                 ['website', 1, ['AM' => 'AM']],
                 ['website', 2, ['AM' => 'AM', 'DZ' => 'DZ']]
             ]);
-        $this->countriesFactoryMock->expects($this->once())
+        $this->countriesFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($collectionMock);
-        $collectionMock->expects($this->once())
+        $collectionMock->expects($this->any())
             ->method('addFieldToFilter')
             ->with('country_id', ['in' => ['AM' => 'AM', 'DZ' => 'DZ']])
             ->willReturnSelf();
-        $collectionMock->expects($this->once())
+        $collectionMock->expects($this->any())
             ->method('toOptionArray')
             ->willReturn([
                 ['value' => 'AM', 'label' => 'UZ']
