@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Weee\Model\Total\Quote\Weee" type="Magento\WeeeConfigurableProducts\Model\Total\Quote\Weee" />
+    <type name="Magento\Weee\Model\Tax">
+        <plugin type="Magento\WeeeConfigurableProducts\Plugin\WeeeTax" name="WeeeConfigurablesProducts_Tax" />
+    </type>
+</config>
