@@ -6,11 +6,15 @@
 
 namespace Magento\Downloadable\Helper;
 
+use Exception;
+use InvalidArgumentException;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\LocalizedException as CoreException;
+use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\Console\Cli;
 
 /**
  * Downloadable Products Download Helper
@@ -141,7 +145,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve Resource file handle (socket, file pointer etc)
      *
      * @return \Magento\Framework\Filesystem\File\ReadInterface
-     * @throws CoreException|\Exception
+     * @throws CoreException|Exception
      */
     protected function _getHandle()
     {
@@ -243,14 +247,14 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $resourceFile
      * @param string $linkType
      * @return $this
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setResource($resourceFile, $linkType = self::LINK_TYPE_FILE)
     {
         if (self::LINK_TYPE_FILE == $linkType) {
             //check LFI protection
             if ($resourceFile && preg_match('#\.\.[\\\/]#', $resourceFile)) {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     'Requested file may not include parent directory traversal ("../", "..\\" notation)'
                 );
             }
@@ -303,5 +307,48 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
+    }
+
+    /**
+     * Handle any exception thrown during command execution
+     *
+     * @param Exception $e
+     * @param OutputInterface $output
+     * @return int
+     */
+    public function handleException(Exception $e, OutputInterface $output): int
+    {
+        $output->writeln('<error>' . $e->getMessage() . '</error>');
+        if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+            $output->writeln($e->getTraceAsString());
+        }
+        return Cli::RETURN_FAILURE;
+    }
+
+    /**
+     * Validate the input domains array
+     *
+     * @param array $domains
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public function validateDomains(array $domains): void
+    {
+        if (empty($domains)) {
+            throw new InvalidArgumentException('Error: Domains parameter is missing.');
+        }
+    }
+
+    /**
+     * Handle the \InvalidArgumentException exception.
+     *
+     * @param InvalidArgumentException $e
+     * @param OutputInterface $output
+     * @return int
+     */
+    public function handleInvalidArgumentException(InvalidArgumentException $e, OutputInterface $output): int
+    {
+        $output->writeln('<error>' . $e->getMessage() . '</error>');
+        return Cli::RETURN_FAILURE;
     }
 }

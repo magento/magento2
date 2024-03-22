@@ -7,12 +7,14 @@
 namespace Magento\Downloadable\Console\Command;
 
 use Exception;
+use InvalidArgumentException;
 use Magento\Downloadable\Api\DomainManagerInterface as DomainManager;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Downloadable\Helper\Download as DownloadManager;
 
 /**
  * Class DomainsAddCommand
@@ -32,13 +34,21 @@ class DomainsAddCommand extends Command
     private $domainManager;
 
     /**
+     * @var DownloadManager
+     */
+    private $downloadManager;
+
+    /**
      * DomainsAddCommand constructor.
      * @param DomainManager $domainManager
+     * @param DownloadManager $downloadManager
      */
     public function __construct(
-        DomainManager $domainManager
+        DomainManager   $domainManager,
+        DownloadManager $downloadManager
     ) {
         $this->domainManager = $domainManager;
+        $this->downloadManager = $downloadManager;
         parent::__construct();
     }
 
@@ -69,27 +79,24 @@ class DomainsAddCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            if ($input->getArgument(self::INPUT_KEY_DOMAINS)) {
-                $whitelistBefore = $this->domainManager->getDomains();
-                $newDomains = $input->getArgument(self::INPUT_KEY_DOMAINS);
-                $newDomains = array_filter(array_map('trim', $newDomains), 'strlen');
+            $domains = $input->getArgument(self::INPUT_KEY_DOMAINS);
 
-                $this->domainManager->addDomains($newDomains);
+            $this->downloadManager->validateDomains($domains);
 
-                foreach (array_diff($this->domainManager->getDomains(), $whitelistBefore) as $newHost) {
-                    $output->writeln(
-                        $newHost . ' was added to the whitelist.' . PHP_EOL
-                    );
-                }
+            $whitelistBefore = $this->domainManager->getDomains();
+            $newDomains = array_filter(array_map('trim', $domains), 'strlen');
+
+            $this->domainManager->addDomains($newDomains);
+
+            foreach (array_diff($this->domainManager->getDomains(), $whitelistBefore) as $newHost) {
+                $output->writeln($newHost . ' was added to the whitelist.' . PHP_EOL);
             }
+
+            return Cli::RETURN_SUCCESS;
+        } catch (InvalidArgumentException $e) {
+            return $this->downloadManager->handleInvalidArgumentException($e, $output);
         } catch (Exception $e) {
-            $output->writeln('<error>' . $e->getMessage() . '</error>');
-            if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
-                $output->writeln($e->getTraceAsString());
-            }
-            return Cli::RETURN_FAILURE;
+            return $this->downloadManager->handleException($e, $output);
         }
-
-        return Cli::RETURN_SUCCESS;
     }
 }
