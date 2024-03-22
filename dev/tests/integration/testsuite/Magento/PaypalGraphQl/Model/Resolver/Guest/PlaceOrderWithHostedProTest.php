@@ -28,6 +28,7 @@ use Magento\Paypal\Model\Api\Type\Factory as ApiFactory;
  */
 class PlaceOrderWithHostedProTest extends TestCase
 {
+    /** @var string */
     private $paymentMethod = Config::METHOD_HOSTEDPRO;
 
     /** @var GraphQlRequest */
@@ -106,7 +107,7 @@ class PlaceOrderWithHostedProTest extends TestCase
               return_url:"paypal/hostedpro/customreturn"
           }
       }
-  }) {    
+  }) {
        cart {
           selected_payment_method {
           code
@@ -116,6 +117,10 @@ class PlaceOrderWithHostedProTest extends TestCase
     placeOrder(input: {cart_id: "$cartId"}) {
       order {
         order_number
+      }
+      errors {
+        message
+        code
       }
     }
 }
@@ -180,7 +185,7 @@ QUERY;
             return_url:"paypal/hostedpro/customReturnUrl"
           }
       }
-  }) {    
+  }) {
        cart {
           selected_payment_method {
           code
@@ -191,22 +196,25 @@ QUERY;
       order {
         order_number
       }
+      errors {
+        message
+        code
+      }
     }
 }
 QUERY;
 
         $exceptionMessage = 'Declined response message from PayPal gateway';
         $exception = new LocalizedException(__($exceptionMessage));
-        $expectedExceptionMessage = 'Unable to place order: ' . $exceptionMessage;
+        $expectedErrorCode = 'UNDEFINED';
 
         $this->nvpMock->method('call')->willThrowException($exception);
 
         $response = $this->graphQlRequest->send($query);
         $responseData = $this->json->unserialize($response->getContent());
-        $this->assertArrayHasKey('errors', $responseData);
-        $actualError = $responseData['errors'][0];
-        $this->assertEquals($expectedExceptionMessage, $actualError['message']);
-        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['extensions']['category']);
+        $this->assertArrayHasKey('errors', $responseData['data']['placeOrder']);
+        $actualError = $responseData['data']['placeOrder']['errors'][0];
+        $this->assertEquals($expectedErrorCode, $actualError['code']);
     }
 
     /**
@@ -241,7 +249,7 @@ QUERY;
             return_url:"http://mysite.com/paypal/hostedpro/customReturnUrl"
           }
       }
-  }) {    
+  }) {
        cart {
           selected_payment_method {
           code

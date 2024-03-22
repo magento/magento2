@@ -43,6 +43,9 @@ class AttributeTest extends TestCase
      */
     protected $relation;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->connection = $this->getMockBuilder(AdapterInterface::class)
@@ -61,7 +64,10 @@ class AttributeTest extends TestCase
         );
     }
 
-    public function testSaveNewLabel()
+    /**
+     * @return void
+     */
+    public function testSaveNewLabel(): void
     {
         $attributeId = 4354;
 
@@ -70,8 +76,9 @@ class AttributeTest extends TestCase
             ->getMock();
         $this->connection->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())->method('from')->willReturnSelf();
-        $select->expects($this->at(1))->method('where')->willReturnSelf();
-        $select->expects($this->at(2))->method('where')->willReturnSelf();
+        $select
+            ->method('where')
+            ->willReturnOnConsecutiveCalls($select, $select);
         $this->connection->expects($this->once())->method('fetchOne')->with(
             $select,
             [
@@ -90,9 +97,9 @@ class AttributeTest extends TestCase
             ]
         );
         $attributeMock = $this->getMockBuilder(AttributeModel::class)
-            ->setMethods(
-                ['getId', 'getUseDefault', 'getLabel']
-            )->disableOriginalConstructor()
+            ->onlyMethods(['getId', 'getLabel'])
+            ->addMethods(['getUseDefault'])
+            ->disableOriginalConstructor()
             ->getMock();
         $attributeMock->expects($this->atLeastOnce())->method('getId')->willReturn($attributeId);
         $attributeMock->expects($this->atLeastOnce())->method('getUseDefault')->willReturn(0);
@@ -100,22 +107,25 @@ class AttributeTest extends TestCase
         $this->assertEquals($this->attribute, $this->attribute->saveLabel($attributeMock));
     }
 
-    public function testSaveExistingLabel()
+    /**
+     * @return void
+     */
+    public function testSaveExistingLabel(): void
     {
         $attributeId = 4354;
-
         $select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->connection->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())->method('from')->willReturnSelf();
-        $select->expects($this->at(1))->method('where')->willReturnSelf();
-        $select->expects($this->at(2))->method('where')->willReturnSelf();
+        $select
+            ->method('where')
+            ->willReturnOnConsecutiveCalls($select, $select);
         $this->connection->expects($this->once())->method('fetchOne')->with(
             $select,
             [
                 'product_super_attribute_id' => $attributeId,
-                'store_id' => Store::DEFAULT_STORE_ID,
+                'store_id' => Store::DEFAULT_STORE_ID
             ]
         )->willReturn(1);
 
@@ -125,13 +135,13 @@ class AttributeTest extends TestCase
                 'product_super_attribute_id' => $attributeId,
                 'use_default' => 0,
                 'store_id' => 1,
-                'value' => 'test',
+                'value' => 'test'
             ]
         );
         $attributeMock = $this->getMockBuilder(AttributeModel::class)
-            ->setMethods(
-                ['getId', 'getUseDefault', 'getLabel', 'getStoreId']
-            )->disableOriginalConstructor()
+            ->onlyMethods(['getId', 'getLabel'])
+            ->addMethods(['getUseDefault', 'getStoreId'])
+            ->disableOriginalConstructor()
             ->getMock();
         $attributeMock->expects($this->atLeastOnce())->method('getId')->willReturn($attributeId);
         $attributeMock->expects($this->atLeastOnce())->method('getStoreId')->willReturn(1);

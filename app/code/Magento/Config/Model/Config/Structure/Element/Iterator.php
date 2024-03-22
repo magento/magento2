@@ -69,6 +69,7 @@ class Iterator implements \Iterator
      *
      * @return \Magento\Config\Model\Config\StructureElementInterface
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->_flyweight;
@@ -79,6 +80,7 @@ class Iterator implements \Iterator
      *
      * @return void Any returned value is ignored.
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         next($this->_elements);
@@ -106,6 +108,7 @@ class Iterator implements \Iterator
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         key($this->_elements);
@@ -117,6 +120,7 @@ class Iterator implements \Iterator
      * @return bool The return value will be casted to boolean and then evaluated.
      * Returns true on success or false on failure.
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return (bool)current($this->_elements);
@@ -127,6 +131,7 @@ class Iterator implements \Iterator
      *
      * @return void Any returned value is ignored.
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         reset($this->_elements);

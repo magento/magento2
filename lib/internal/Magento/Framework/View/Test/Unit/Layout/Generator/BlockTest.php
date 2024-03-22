@@ -74,9 +74,7 @@ class BlockTest extends TestCase
                         'actions' => [
                             [
                                 $methodName,
-                                [
-                                    'test_argument' => $argumentData
-                                ],
+                                [$argumentData],
                                 'config_path',
                                 'scope',
                             ],

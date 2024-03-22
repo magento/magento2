@@ -11,6 +11,7 @@ namespace Magento\Catalog\Api;
 use Magento\Authorization\Model\Role;
 use Magento\Authorization\Model\RoleFactory;
 use Magento\Authorization\Model\Rules;
+use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory;
 use Magento\Authorization\Model\RulesFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
@@ -34,6 +35,7 @@ use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
  * Test for \Magento\Catalog\Api\ProductRepositoryInterface
@@ -84,10 +86,16 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      * @var AdminTokenServiceInterface
      */
     private $adminTokens;
+
     /**
      * @var array
      */
     private $fixtureProducts = [];
+
+    /**
+     * @var UrlRewriteCollectionFactory
+     */
+    private $urlRewriteCollectionFactory;
 
     /**
      * @inheritDoc
@@ -96,11 +104,13 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         parent::setUp();
 
-        $this->roleFactory = Bootstrap::getObjectManager()->get(RoleFactory::class);
-        $this->rulesFactory = Bootstrap::getObjectManager()->get(RulesFactory::class);
-        $this->adminTokens = Bootstrap::getObjectManager()->get(AdminTokenServiceInterface::class);
+        $objectManager = Bootstrap::getObjectManager();
+        $this->roleFactory = $objectManager->get(RoleFactory::class);
+        $this->rulesFactory = $objectManager->get(RulesFactory::class);
+        $this->adminTokens = $objectManager->get(AdminTokenServiceInterface::class);
+        $this->urlRewriteCollectionFactory = $objectManager->get(UrlRewriteCollectionFactory::class);
         /** @var DomainManagerInterface $domainManager */
-        $domainManager = Bootstrap::getObjectManager()->get(DomainManagerInterface::class);
+        $domainManager = $objectManager->get(DomainManagerInterface::class);
         $domainManager->addDomains(['example.com']);
     }
 
@@ -2154,6 +2164,32 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($img1, $imageRolesPerStore[$defaultScope]['image']);
         $this->assertEquals($img2, $imageRolesPerStore[$defaultScope]['small_image']);
         $this->assertEquals($img2, $imageRolesPerStore[$defaultScope]['thumbnail']);
+    }
+
+    /**
+     * Update url_key attribute and check it in url_rewrite collection
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoConfigFixture default_store general/single_store_mode/enabled 1
+     *
+     * @return void
+     */
+    public function testUpdateUrlKeyAttribute(): void
+    {
+        $newUrlKey = 'my-new-url';
+
+        $productData = [
+            ProductInterface::SKU => 'simple',
+            'custom_attributes' => [['attribute_code' => 'url_key', 'value' => $newUrlKey]],
+        ];
+
+        $this->updateProduct($productData);
+
+        $urlRewriteCollection = $this->urlRewriteCollectionFactory->create();
+        $urlRewriteCollection->addFieldToFilter(UrlRewrite::ENTITY_TYPE, 'product')
+            ->addFieldToFilter('request_path', $newUrlKey . '.html');
+
+        $this->assertCount(1, $urlRewriteCollection);
     }
 
     /**

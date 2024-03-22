@@ -8,14 +8,18 @@ declare(strict_types=1);
 namespace Magento\Catalog\Controller;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager;
 use Magento\Catalog\Model\Product\ProductList\Toolbar as ToolbarModel;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Catalog\Model\Session;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Store\Model\Store;
 use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractController;
@@ -54,6 +58,11 @@ class CategoryTest extends AbstractController
     private $httpContext;
 
     /**
+     * @var CollectionFactory
+     */
+    private $categoryCollectionFactory;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -64,6 +73,8 @@ class CategoryTest extends AbstractController
         $this->objectManager->configure([
             'preferences' => [LayoutUpdateManager::class => CategoryLayoutUpdateManager::class]
         ]);
+
+        $this->categoryCollectionFactory = $this->objectManager->create(CollectionFactory::class);
         $this->registry = $this->objectManager->get(Registry::class);
         $this->layout = $this->objectManager->get(LayoutInterface::class);
         $this->session = $this->objectManager->get(Session::class);
@@ -232,5 +243,51 @@ class CategoryTest extends AbstractController
         $this->assertEquals($newPaginationValue, $block->getLimit());
         $this->assertEquals($newPaginationValue, $this->session->getData(ToolbarModel::LIMIT_PARAM_NAME));
         $this->assertEquals($newPaginationValue, $this->httpContext->getValue(ToolbarModel::LIMIT_PARAM_NAME));
+    }
+
+    /**
+     * Test to generate category page without duplicate html element ids
+     *
+     * @magentoDataFixture Magento/Catalog/_files/category_with_three_products.php
+     * @magentoDataFixture Magento/Catalog/_files/catalog_category_product_reindex_all.php
+     * @magentoDataFixture Magento/Catalog/_files/catalog_product_category_reindex_all.php
+     * @magentoDbIsolation disabled
+     */
+    public function testViewWithoutDuplicateHmlElementIds(): void
+    {
+        $category = $this->loadCategory('Category 999', Store::DEFAULT_STORE_ID);
+        $this->dispatch('catalog/category/view/id/' . $category->getId());
+
+        $responseHtml = $this->getResponse()->getBody();
+        $htmlElementIds = ['modes-label', 'mode-list', 'toolbar-amount', 'sorter', 'limiter'];
+        foreach ($htmlElementIds as $elementId) {
+            $matches = [];
+            $idAttribute = "id=\"$elementId\"";
+            preg_match_all("/$idAttribute/mx", $responseHtml, $matches);
+            $this->assertCount(1, $matches[0]);
+            $this->assertEquals($idAttribute, $matches[0][0]);
+        }
+    }
+
+    /**
+     * Loads category by id
+     *
+     * @param string $categoryName
+     * @param int $storeId
+     * @return CategoryInterface
+     */
+    private function loadCategory(string $categoryName, int $storeId): CategoryInterface
+    {
+        /** @var Collection $categoryCollection */
+        $categoryCollection = $this->categoryCollectionFactory->create();
+        /** @var CategoryInterface $category */
+        $category = $categoryCollection->setStoreId($storeId)
+            ->addAttributeToSelect('display_mode', 'left')
+            ->addAttributeToFilter(CategoryInterface::KEY_NAME, $categoryName)
+            ->setPageSize(1)
+            ->getFirstItem();
+        $category->setStoreId($storeId);
+
+        return $category;
     }
 }

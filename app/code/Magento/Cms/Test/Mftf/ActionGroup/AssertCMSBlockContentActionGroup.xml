@@ -12,7 +12,7 @@
         <annotations>
             <description>Validates that the Block details are present and correct. PLEASE NOTE: The Block data is Hardcoded, using '_defaultBlock'.</description>
         </annotations>
-        
+
         <grabValueFrom selector="{{BlockNewPageBasicFieldsSection.blockTitle}}"  stepKey="grabTextFromTitle"/>
         <assertEquals stepKey="assertTitle" message="pass">
             <expectedResult type="string">{{_defaultBlock.title}}</expectedResult>
@@ -20,7 +20,7 @@
         </assertEquals>
         <executeJS function="(el = document.querySelector('[name=\'identifier\']')) &amp;&amp; el['se' + 'tAt' + 'tribute']('data-value', el.value.split('-')[0]);" stepKey="setAttribute"/>
         <seeElement selector="{{BlockNewPageBasicFieldsSection.duplicatedIdentifier(_defaultBlock.identifier)}}" stepKey="see"/>
-        <grabValueFrom selector="{{BlockContentSection.TextArea}}"  stepKey="grabTextFromContent"/>
+        <grabValueFrom selector="{{TinyMCESection.Content}}"  stepKey="grabTextFromContent"/>
         <assertEquals stepKey="assertContent" message="pass">
             <expectedResult type="string">{{_defaultBlock.content}}</expectedResult>
             <actualResult type="variable">grabTextFromContent</actualResult>

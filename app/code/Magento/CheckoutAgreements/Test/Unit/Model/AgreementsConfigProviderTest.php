@@ -53,7 +53,7 @@ class AgreementsConfigProviderTest extends TestCase
     private $agreementsFilterMock;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -84,7 +84,7 @@ class AgreementsConfigProviderTest extends TestCase
      *
      * @return void
      */
-    public function testGetConfigIfContentIsHtml()
+    public function testGetConfigIfContentIsHtml(): void
     {
         $content = 'content';
         $checkboxText = 'checkbox_text';
@@ -102,9 +102,9 @@ class AgreementsConfigProviderTest extends TestCase
                         'mode' => $mode,
                         'agreementId' => $agreementId,
                         'contentHeight' => $contentHeight
-                    ],
-                ],
-            ],
+                    ]
+                ]
+            ]
         ];
 
         $this->scopeConfigMock->expects($this->once())
@@ -142,7 +142,7 @@ class AgreementsConfigProviderTest extends TestCase
      *
      * @return void
      */
-    public function testGetConfigIfContentIsNotHtml()
+    public function testGetConfigIfContentIsNotHtml(): void
     {
         $content = 'content';
         $escapedContent = 'escaped_content';
@@ -161,9 +161,9 @@ class AgreementsConfigProviderTest extends TestCase
                         'mode' => $mode,
                         'agreementId' => $agreementId,
                         'contentHeight' => $contentHeight
-                    ],
-                ],
-            ],
+                    ]
+                ]
+            ]
         ];
 
         $this->scopeConfigMock->expects($this->once())
@@ -181,11 +181,12 @@ class AgreementsConfigProviderTest extends TestCase
             ->with($searchCriteriaMock)
             ->willReturn([$agreement]);
 
-        $this->escaperMock->expects($this->at(0))->method('escapeHtml')->with($content)->willReturn($escapedContent);
-        $this->escaperMock->expects($this->at(1))
+        $this->escaperMock
             ->method('escapeHtml')
-            ->with($checkboxText)
-            ->willReturn($escapedCheckboxText);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$content] => $escapedContent,
+                [$checkboxText] => $escapedCheckboxText
+            });
         $agreement->expects($this->once())->method('getIsHtml')->willReturn(false);
         $agreement->expects($this->once())->method('getContent')->willReturn($content);
         $agreement->expects($this->once())->method('getCheckboxText')->willReturn($checkboxText);

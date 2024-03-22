@@ -46,7 +46,7 @@
         <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearSimpleProductFilters"/>
         <!--Assert simple product on storefront-->
         <comment userInput="Assert simple product on storefront" stepKey="commentAssertSimpleProductOnStorefront"/>
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="openSimpleProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="openSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForStorefrontSimpleProductPageLoad"/>
         <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertSimpleProductInStock"/>
         <dontSeeElement selector="{{StorefrontDownloadableProductSection.downloadableLinkLabel(downloadableLinkWithMaxDownloads.title)}}" stepKey="dontSeeDownloadableLink"/>

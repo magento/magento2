@@ -63,7 +63,10 @@ class CspWhitelistXmlCollectorTest extends TestCase
                 $objectSrcChecked = true;
             } elseif ($policy->getId() === 'media-src') {
                 $this->assertInstanceOf(FetchPolicy::class, $policy);
-                $this->assertEquals(['https://magento.com', 'https://devdocs.magento.com'], $policy->getHostSources());
+                $this->assertEquals(
+                    ['*.adobe.com', 'https://magento.com', 'https://devdocs.magento.com'],
+                    $policy->getHostSources()
+                );
                 $this->assertEmpty($policy->getHashes());
                 $mediaSrcChecked = true;
             }
@@ -116,6 +119,7 @@ class CspWhitelistXmlCollectorTest extends TestCase
                 $this->assertInstanceOf(FetchPolicy::class, $policy);
                 $this->assertEquals(
                     [
+                        '*.adobe.com',
                         'https://admin.magento.com',
                         'https://devdocs.magento.com',
                         'example.magento.com'

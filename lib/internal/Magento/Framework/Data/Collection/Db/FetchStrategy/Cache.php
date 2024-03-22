@@ -99,6 +99,8 @@ class Cache implements \Magento\Framework\Data\Collection\Db\FetchStrategyInterf
      */
     protected function _getSelectCacheId($select)
     {
+        // md5() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         return $this->_cacheIdPrefix . md5((string)$select);
     }
 }

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCustomerAddressAttributeWebsiteScopeTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Customer and multiple website setup"/>
+            <title value="Admin should be able to configure different address attributes requirement settings for each website"/>
+            <description value="Admin should be able to configure different address attributes requirement settings for each website"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-2708"/>
+            <useCaseId value="ACP2E-675"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <!-- Login to admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <!-- Create a second website -->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <!-- Create a store group and assign to second website -->
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <!-- Create a store view and assign to new store group -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <!-- Navigate to the new website page -->
+            <actionGroup ref="AdminGoCreatedWebsitePageActionGroup" stepKey="openWebsiteToGetId">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <!-- Get the website ID -->
+            <grabFromCurrentUrl regex="~/website_id/(\d+)/~" stepKey="grabWebsiteIdFromURL"/>
+            <!-- Navigate to customer configuration page -->
+            <actionGroup ref="AdminNavigateToCustomerConfigurationActionGroup" stepKey="gotoCustomerConfiguration"/>
+            <!-- Expand "Name and Address Option" section -->
+            <actionGroup ref="AdminExpandConfigSectionActionGroup" stepKey="expandConfigSectionDefaultScope">
+                <argument name="sectionName" value="{{CustomerConfigurationSectionNameAndAddressOptions.title}}"/>
+            </actionGroup>
+            <!-- Set "Show Telephone" to Optional and save in default config scope -->
+            <actionGroup ref="AdminCustomerShowTelephoneActionGroup" stepKey="setShowTelephoneOptionalDefaultScope">
+                <argument name="value" value="{{ShowTelephone.no}}"/>
+            </actionGroup>
+            <!-- Change scope to main website -->
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreView">
+                <argument name="website" value="_defaultWebsite"/>
+            </actionGroup>
+            <!-- Expand "Name and Address Option" section -->
+            <actionGroup ref="AdminExpandConfigSectionActionGroup" stepKey="expandConfigSectionMainWebsite">
+                <argument name="sectionName" value="{{CustomerConfigurationSectionNameAndAddressOptions.title}}"/>
+            </actionGroup>
+            <!-- Set "Show Telephone" to Required and save in main website scope -->
+            <actionGroup ref="AdminCustomerShowTelephoneActionGroup" stepKey="setShowTelephoneRequiredMainWebsite">
+                <argument name="value" value="{{ShowTelephone.required}}"/>
+            </actionGroup>
+            <!-- Create a customer and assign it to new website -->
+            <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer">
+                <field key="website_id">$grabWebsiteIdFromURL</field>
+            </createData>
+        </before>
+        <after>
+            <!-- Navigate to customer configuration page -->
+            <actionGroup ref="AdminNavigateToCustomerConfigurationActionGroup" stepKey="gotoCustomerConfiguration"/>
+            <!-- Expand "Name and Address Option" section -->
+            <actionGroup ref="AdminExpandConfigSectionActionGroup" stepKey="expandConfigSectionDefaultScope">
+                <argument name="sectionName" value="{{CustomerConfigurationSectionNameAndAddressOptions.title}}"/>
+            </actionGroup>
+            <!-- Check "use system" near "Show Telephone" and save in default config scope -->
+            <actionGroup ref="AdminCustomerShowTelephoneUseDefaultActionGroup" stepKey="checkUseSystemDefaultScope"/>
+            <!-- Change scope to main website -->
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreView">
+                <argument name="website" value="_defaultWebsite"/>
+            </actionGroup>
+            <!-- Expand "Name and Address Option" section -->
+            <actionGroup ref="AdminExpandConfigSectionActionGroup" stepKey="expandConfigSectionMainWebsite">
+                <argument name="sectionName" value="{{CustomerConfigurationSectionNameAndAddressOptions.title}}"/>
+            </actionGroup>
+            <!-- Check "use default" near "Show Telephone" and save in main website scope -->
+            <actionGroup ref="AdminCustomerShowTelephoneUseDefaultActionGroup" stepKey="checkUseDefaultMainWebsite"/>
+            <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Delete the new website -->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <!-- Logout from admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Open the customer edit page -->
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="goToCustomerEditPage">
+            <argument name="customerId" value="$createCustomer.id$"/>
+        </actionGroup>
+        <!-- Switch the addresses tab -->
+        <actionGroup ref="AdminOpenAddressesTabFromCustomerEditPageActionGroup" stepKey="openAddressesTab"/>
+        <!-- Click "Add New Address" -->
+        <actionGroup ref="AdminClickAddNewAddressButtonOnCustomerAddressesTabActionGroup" stepKey="clickAddNewAddressButton"/>
+        <!-- Fill the address without telephone and save the address -->
+        <actionGroup ref="AdminFillAndSaveCustomerAddressInformationActionGroup" stepKey="fillAndSaveCustomerAddressInformationActionGroup">
+            <argument name="address" value="US_Address_TX_Without_Default_And_Telephone"/>
+        </actionGroup>
+        <!-- Assert that the address is successfully added -->
+        <actionGroup ref="AssertAdminCustomerAddressInAddressGridActionGroup" stepKey="assertThatAddressIsAdded">
+            <argument name="text" value="{{US_Address_TX_Without_Default_And_Telephone.street[0]}}"/>
+        </actionGroup>
+    </test>
+</tests>

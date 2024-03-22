@@ -81,6 +81,7 @@ class Options implements \JsonSerializable
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         if ($this->options === null) {

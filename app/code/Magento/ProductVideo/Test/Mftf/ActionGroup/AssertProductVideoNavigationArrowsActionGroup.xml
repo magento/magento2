@@ -18,7 +18,7 @@
         </arguments>
 
         <dontSeeElement selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="dontSeePrevButton"/>
-        <moveMouseOver selector="{{StorefrontProductMediaSection.mainImageForJsActions}}" stepKey="hoverOverImage"/>
+        <moveMouseOver selector="{{StorefrontProductInfoMainSection.clickPlayVideo}}" stepKey="hoverOverImage"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="seeNextButton"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickNextButton"/>
         <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productVideo(videoType)}}" stepKey="seeProductVideoDataType"/>
@@ -38,7 +38,7 @@
         <moveMouseOver selector="{{StorefrontCMSPageSection.mainTitle}}" stepKey="unFocusVideo"/>
         <waitForElement selector="{{StorefrontProductMediaSection.galleryNoControlsElement}}" stepKey="waitForVideoUnFocus"/>
 
-        <moveMouseOver selector="{{StorefrontProductMediaSection.mainImageForJsActions}}" stepKey="hoverOverImageSecond"/>
+        <moveMouseOver selector="{{StorefrontProductInfoMainSection.clickPlayVideo}}" stepKey="hoverOverImageSecond"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="seePrevButton"/>
         <click selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="clickPrevButton"/>
     </actionGroup>

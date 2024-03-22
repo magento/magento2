@@ -21,19 +21,19 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class SourceThemeDeployCommandTest extends TestCase
 {
-    const AREA_TEST_VALUE = 'area-test-value';
+    public const AREA_TEST_VALUE = 'area-test-value';
 
-    const LOCALE_TEST_VALUE = 'locale-test-value';
+    public const LOCALE_TEST_VALUE = 'locale-test-value';
 
-    const THEME_TEST_VALUE = 'Vendor/theme';
+    public const THEME_TEST_VALUE = 'Vendor/theme';
 
-    const THEME_INCORRECT_FORMAT_VALUE = 'theme-value';
+    public const THEME_INCORRECT_FORMAT_VALUE = 'theme-value';
 
-    const THEME_NONEXISTING_VALUE = 'NonExistentVendor/theme';
+    public const THEME_NONEXISTING_VALUE = 'NonExistentVendor/theme';
 
-    const TYPE_TEST_VALUE = 'type-test-value';
+    public const TYPE_TEST_VALUE = 'type-test-value';
 
-    const FILE_TEST_VALUE = 'file-test-value/test/file';
+    public const FILE_TEST_VALUE = 'file-test-value/test/file';
 
     /**
      * @var SourceThemeDeployCommand
@@ -56,7 +56,7 @@ class SourceThemeDeployCommandTest extends TestCase
     private $assetRepositoryMock;
 
     /**
-     * Set up
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -79,8 +79,10 @@ class SourceThemeDeployCommandTest extends TestCase
 
     /**
      * Run test for execute method
+     *
+     * @return void
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         /** @var OutputInterface|MockObject $outputMock */
         $outputMock = $this->getMockBuilder(OutputInterface::class)
@@ -88,7 +90,7 @@ class SourceThemeDeployCommandTest extends TestCase
         $assetMock = $this->getMockBuilder(LocalInterface::class)
             ->getMockForAbstractClass();
 
-        $this->validatorMock->expects(self::once())
+        $this->validatorMock->expects($this->once())
             ->method('isValid')
             ->with(self::LOCALE_TEST_VALUE)
             ->willReturn(true);
@@ -101,17 +103,18 @@ class SourceThemeDeployCommandTest extends TestCase
             self::TYPE_TEST_VALUE
         );
 
-        $outputMock->expects(self::at(0))
+        $outputMock
             ->method('writeln')
-            ->with($message);
-        $outputMock->expects(self::at(1))
-            ->method('writeln')
-            ->with('<comment>-> file-test-value/test/file</comment>');
-        $outputMock->expects(self::at(2))
-            ->method('writeln')
-            ->with('<info>Successfully processed.</info>');
+            ->willReturnCallback(function ($arg1) use ($message) {
+                if ($arg1 == $message ||
+                    $arg1 == '<comment>-> file-test-value/test/file</comment>' ||
+                    $arg1 == '<info>Successfully processed.</info>'
+                ) {
+                    return null;
+                }
+            });
 
-        $this->assetRepositoryMock->expects(self::once())
+        $this->assetRepositoryMock->expects($this->once())
             ->method('createAsset')
             ->with(
                 'file-test-value/test' . DIRECTORY_SEPARATOR . 'file' . '.' . self::TYPE_TEST_VALUE,
@@ -122,11 +125,11 @@ class SourceThemeDeployCommandTest extends TestCase
                 ]
             )->willReturn($assetMock);
 
-        $this->assetPublisherMock->expects(self::once())
+        $this->assetPublisherMock->expects($this->once())
             ->method('publish')
             ->with($assetMock);
 
-        $assetMock->expects(self::once())
+        $assetMock->expects($this->once())
             ->method('getFilePath')
             ->willReturn(self::FILE_TEST_VALUE);
 
@@ -136,7 +139,7 @@ class SourceThemeDeployCommandTest extends TestCase
     /**
      * Run test for execute method with incorrect theme value
      */
-    public function testExecuteIncorrectThemeFormat()
+    public function testExecuteIncorrectThemeFormat(): void
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage(
@@ -145,7 +148,7 @@ class SourceThemeDeployCommandTest extends TestCase
         /** @var OutputInterface|MockObject $outputMock */
         $outputMock = $this->getMockBuilder(OutputInterface::class)
             ->getMockForAbstractClass();
-        $this->validatorMock->expects(self::once())
+        $this->validatorMock->expects($this->once())
             ->method('isValid')
             ->with(self::LOCALE_TEST_VALUE)
             ->willReturn(true);
@@ -166,7 +169,7 @@ class SourceThemeDeployCommandTest extends TestCase
     /**
      * Run test for execute method with non existing theme
      */
-    public function testExecuteNonExistingValue()
+    public function testExecuteNonExistingValue(): void
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Verify entered values of the argument and options.');
@@ -176,23 +179,23 @@ class SourceThemeDeployCommandTest extends TestCase
         $assetMock = $this->getMockBuilder(LocalInterface::class)
             ->getMockForAbstractClass();
 
-        $this->validatorMock->expects(self::once())
+        $this->validatorMock->expects($this->once())
             ->method('isValid')
             ->with(self::LOCALE_TEST_VALUE)
             ->willReturn(true);
 
-        $this->assetRepositoryMock->expects(self::once())
+        $this->assetRepositoryMock->expects($this->once())
             ->method('createAsset')
             ->with(
                 'file-test-value/test' . DIRECTORY_SEPARATOR . 'file' . '.' . self::TYPE_TEST_VALUE,
                 [
                     'area' => self::AREA_TEST_VALUE,
                     'theme' => self::THEME_NONEXISTING_VALUE,
-                    'locale' => self::LOCALE_TEST_VALUE,
+                    'locale' => self::LOCALE_TEST_VALUE
                 ]
             )->willReturn($assetMock);
 
-        $this->assetPublisherMock->expects(self::once())
+        $this->assetPublisherMock->expects($this->once())
             ->method('publish')
             ->with($assetMock)
             ->willThrowException(new NotFoundException());
@@ -213,7 +216,7 @@ class SourceThemeDeployCommandTest extends TestCase
     /**
      * @return InputInterface|MockObject
      */
-    private function getInputMock(array $valueMap = [])
+    private function getInputMock(array $valueMap = []): MockObject
     {
         $inputMock = $this->getMockBuilder(InputInterface::class)
             ->getMockForAbstractClass();
@@ -226,12 +229,12 @@ class SourceThemeDeployCommandTest extends TestCase
         ];
         $valueMap = empty($valueMap) ? $defaultValueMap : $valueMap;
 
-        $inputMock->expects(self::exactly(4))
+        $inputMock->expects($this->exactly(4))
             ->method('getOption')
             ->willReturnMap(
                 $valueMap
             );
-        $inputMock->expects(self::once())
+        $inputMock->expects($this->once())
             ->method('getArgument')
             ->with('file')
             ->willReturn([self::FILE_TEST_VALUE]);

@@ -8,28 +8,28 @@
     <div class="data-grid-filters-action-wrap">
         <button class="action-default" data-action="grid-filter-expand" disable="!hasVisible()" translate="'Filters'"
             css="_active: hasVisible() && $collapsible.opened()"
-            toggleCollapsible/>
+            toggleCollapsible></button>
     </div>
 </div>
 
-<scope args="chips" render=""/>
+<scope args="chips" render=""></scope>
 
 <div class="admin__data-grid-filters-wrap" data-part="filter-form" css="_show: hasVisible() && $collapsible.opened()" keyboard="{ 13: apply }">
     <fieldset class="admin__fieldset admin__data-grid-filters">
         <legend class="admin__filters-legend">
-            <span translate="'Advanced filter'"/>
+            <span translate="'Advanced filter'"></span>
         </legend>
-        <fieldset class="admin__form-field" outereach="getRanges()" visible="$parent.isFilterVisible($data)" render=""/>
-        <div class="admin__form-field" outereach="getPlain()" visible="$parent.isFilterVisible($data)" render=""/>
+        <fieldset class="admin__form-field" outereach="getRanges()" visible="$parent.isFilterVisible($data)" render=""></fieldset>
+        <div class="admin__form-field" outereach="getPlain()" visible="$parent.isFilterVisible($data)" render=""></div>
     </fieldset>
 
     <div class="admin__data-grid-filters-footer">
         <div class="admin__footer-main-actions">
             <button class="action-tertiary" type="button" data-action="grid-filter-cancel" click="cancel" closeCollapsible>
-                <span translate="'Cancel'"/>
+                <span translate="'Cancel'"></span>
             </button>
             <button class="action-secondary" type="button" data-action="grid-filter-apply" click="apply" closeCollapsible>
-                <span translate="'Apply Filters'"/>
+                <span translate="'Apply Filters'"></span>
             </button>
         </div>
     </div>

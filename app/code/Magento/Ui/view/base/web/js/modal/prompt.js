@@ -206,7 +206,7 @@ define([
             }
 
             this.options.actions.always();
-            this.element.bind('promptclosed', _.bind(this._remove, this));
+            this.element.on('promptclosed', _.bind(this._remove, this));
 
             return this._super();
         }

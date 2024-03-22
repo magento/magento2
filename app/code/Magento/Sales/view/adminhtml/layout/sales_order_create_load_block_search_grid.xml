@@ -10,5 +10,10 @@
         <referenceContainer name="content">
             <block class="Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid" name="serach.grid" as="grid"/>
         </referenceContainer>
+        <referenceBlock name="serach.grid">
+            <arguments>
+                <argument name="view_model" xsi:type="object">Magento\Backend\ViewModel\LimitTotalNumberOfProductsInGrid</argument>
+            </arguments>
+        </referenceBlock>
     </body>
 </page>

@@ -17,6 +17,7 @@
             <testCaseId value="MC-17386"/>
             <useCaseId value="MC-15341"/>
             <group value="catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Login as Admin -->
@@ -192,7 +193,7 @@
 
         <!-- Open storefront on the category page -->
         <comment userInput="Open storefront on the category page" stepKey="commentOpenStorefront"/>
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="goToStorefrontCreatedCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="goToStorefrontCreatedCategoryPage"/>
         <!-- Check the drop-down at the bottom of page contains options -->
         <comment userInput="Check the drop-down at the bottom of page contains options" stepKey="commentCheckOptions"/>
         <scrollTo  selector="{{StorefrontCategoryBottomToolbarSection.perPage}}" stepKey="scrollToBottomToolbarSection"/>

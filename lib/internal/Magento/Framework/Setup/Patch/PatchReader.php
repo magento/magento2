@@ -19,7 +19,7 @@ class PatchReader
     /**
      * Folder name, where patches are
      */
-    const SETUP_PATCH_FOLDER = 'Patch';
+    public const SETUP_PATCH_FOLDER = 'Patch';
 
     /**
      * @var ComponentRegistrar
@@ -63,7 +63,7 @@ class PatchReader
      */
     private function getModuleNameForNamespace($moduleName)
     {
-        return str_replace('_', '\\', $moduleName);
+        return $moduleName !== null ? str_replace('_', '\\', $moduleName) : '';
     }
 
     /**
@@ -102,6 +102,8 @@ class PatchReader
     }
 
     /**
+     * Method to read.
+     *
      * @param string $moduleName
      * @return array
      */

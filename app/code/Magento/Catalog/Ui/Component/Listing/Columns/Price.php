@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Ui\Component\Listing\Columns;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
@@ -17,12 +19,22 @@ class Price extends \Magento\Ui\Component\Listing\Columns\Column
     /**
      * Column name
      */
-    const NAME = 'column.price';
+    public const NAME = 'column.price';
 
     /**
      * @var \Magento\Framework\Locale\CurrencyInterface
      */
     protected $localeCurrency;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var PriceCurrencyInterface
+     */
+    private $priceCurrency;
 
     /**
      * @param ContextInterface $context
@@ -31,6 +43,7 @@ class Price extends \Magento\Ui\Component\Listing\Columns\Column
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $components
      * @param array $data
+     * @param PriceCurrencyInterface|null $priceCurrency
      */
     public function __construct(
         ContextInterface $context,
@@ -38,11 +51,13 @@ class Price extends \Magento\Ui\Component\Listing\Columns\Column
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         array $components = [],
-        array $data = []
+        array $data = [],
+        ?PriceCurrencyInterface $priceCurrency = null
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
         $this->localeCurrency = $localeCurrency;
         $this->storeManager = $storeManager;
+        $this->priceCurrency = $priceCurrency ?? ObjectManager::getInstance()->get(PriceCurrencyInterface::class);
     }
 
     /**
@@ -57,12 +72,16 @@ class Price extends \Magento\Ui\Component\Listing\Columns\Column
             $store = $this->storeManager->getStore(
                 $this->context->getFilterParam('store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
             );
-            $currency = $this->localeCurrency->getCurrency($store->getBaseCurrencyCode());
 
             $fieldName = $this->getData('name');
             foreach ($dataSource['data']['items'] as & $item) {
                 if (isset($item[$fieldName])) {
-                    $item[$fieldName] = $currency->toCurrency(sprintf("%f", $item[$fieldName]));
+                    $item[$fieldName] = $this->priceCurrency->format(
+                        sprintf("%F", $item[$fieldName]),
+                        false,
+                        PriceCurrencyInterface::DEFAULT_PRECISION,
+                        $store
+                    );
                 }
             }
         }

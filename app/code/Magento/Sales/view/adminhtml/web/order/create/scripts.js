@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-define([
+ define([
     'jquery',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/alert',
@@ -157,7 +157,14 @@ define([
             this.sidebarShow();
             //this.loadArea(['header', 'sidebar','data'], true);
             this.dataShow();
-            this.loadArea(['header', 'data'], true);
+            this.loadArea(
+                ['header', 'data'],
+                true,
+                null,
+                function () {
+                    location.reload();
+                }
+            );
         },
 
         setCurrencyId: function (id) {
@@ -184,7 +191,7 @@ define([
             }
             this.selectAddressEvent = false;
 
-            var data = this.serializeData(container);
+            let data = this.serializeData(container).toObject();
             data[el.name] = id;
 
             this.resetPaymentMethod();
@@ -272,6 +279,14 @@ define([
 
             if (resetShipping) {
                 data['reset_shipping'] = true;
+            }
+
+            if (name !== 'customer_address_id' && this.selectAddressEvent === false) {
+                if (this.shippingAsBilling) {
+                    $('order-shipping_address_customer_address_id').value = '';
+                }
+
+                $('order-' + type + '_address_customer_address_id').value = '';
             }
 
             data['order[' + type + '_address][customer_address_id]'] = null;
@@ -418,6 +433,9 @@ define([
             data = data.toObject();
             data['shipping_as_billing'] = flag ? 1 : 0;
             data['reset_shipping'] = 1;
+            // set customer_address_id to null for shipping address in order to treat it as new from backend
+            // Checkbox(Same As Billing Address) uncheck event
+            data['order[shipping_address][customer_address_id]'] = null;
             this.loadArea(areasToLoad, true, data);
         },
 
@@ -574,7 +592,20 @@ define([
         applyCoupon: function (code) {
             this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {
                 'order[coupon][code]': code,
-                reset_shipping: 0
+                'order[coupon][append]': code,
+                reset_shipping: true
+            });
+            this.orderItemChanged = false;
+            jQuery('html, body').animate({
+                scrollTop: 0
+            });
+        },
+
+        removeCoupon: function (code) {
+            this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {
+                'order[coupon][code]': '',
+                'order[coupon][remove]': code,
+                reset_shipping: true
             });
             this.orderItemChanged = false;
             jQuery('html, body').animate({
@@ -1152,7 +1183,7 @@ define([
             }
         },
 
-        loadArea: function (area, indicator, params) {
+        loadArea: function (area, indicator, params, callback) {
             var deferred = new jQuery.Deferred();
             var url = this.loadBaseUrl;
             if (area) {
@@ -1171,6 +1202,9 @@ define([
                     onSuccess: function (transport) {
                         var response = transport.responseText.evalJSON();
                         this.loadAreaResponseHandler(response);
+                        if (callback instanceof Function) {
+                            callback();
+                        }
                         deferred.resolve();
                     }.bind(this)
                 });

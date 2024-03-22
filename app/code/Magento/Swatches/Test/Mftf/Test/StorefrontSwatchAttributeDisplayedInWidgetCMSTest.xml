@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSwatchAttributeDisplayedInWidgetCMSTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Swatches in CMS Widget"/>
+            <title value="Swatch Attribute is displayed in the Widget CMS"/>
+            <description value="Swatch Attribute is displayed in the Widget CMS"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-28607"/>
+            <group value="configurableProduct"/>
+            <group value="cms"/>
+            <group value="widget"/>
+            <group value="swatch"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <before>
+            <!-- Create Configurable product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create product swatch attribute with 1 variations -->
+            <createData entity="VisualSwatchProductAttributeForm" stepKey="createVisualSwatchAttribute"/>
+            <createData entity="SwatchProductAttributeOption1" stepKey="swatchAttributeOption">
+                <requiredEntity createDataKey="createVisualSwatchAttribute"/>
+            </createData>
+
+            <!-- Create CMS Page -->
+            <createData entity="_defaultCmsPage" stepKey="createCmsPage"/>
+
+            <!-- Login to Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Open configurable product edit page -->
+            <amOnPage url="{{AdminProductEditPage.url($createConfigurableProduct.id$)}}" stepKey="goToConfigurableProduct"/>
+
+            <!-- Add attributes to configurable product-->
+            <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="openConfigurationSection"/>
+            <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="openConfigurationPanel"/>
+
+            <!-- Find Swatch attribute in grid and select it -->
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearAttributeGridFiltersToFindSwatchAttribute"/>
+            <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersPaneForSwatchAttribute"/>
+            <fillField selector="{{AdminDataGridHeaderSection.attributeCodeFilterInput}}" userInput="$createVisualSwatchAttribute.attribute_code$" stepKey="fillAttributeCodeFilterFieldForSwatchAttribute"/>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickApplyFiltersButtonForSwatchAttribute"/>
+            <click selector="{{AdminDataGridTableSection.rowCheckbox('1')}}" stepKey="selectSwatchAttribute"/>
+
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextToSelectOptions"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute($createVisualSwatchAttribute.frontend_label[0]$)}}" stepKey="selectAllSwatchAttributeOptions"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextToApplyQuantity"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+            <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="100" stepKey="enterAttributeQuantity"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextToProceedToSummary"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickGenerateProductsButton"/>
+
+            <!-- Save Product -->
+            <actionGroup ref="SaveConfigurableProductAddToCurrentAttributeSetActionGroup" stepKey="saveConfigurableProduct"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
+            <!-- Open edit CMS Page -->
+            <actionGroup ref="AdminOpenCmsPageActionGroup" stepKey="openEditCmsPage">
+                <argument name="page_id" value="$createCmsPage.id$"/>
+            </actionGroup>
+
+            <conditionalClick selector="{{CmsNewPagePageActionsSection.contentSectionName}}" dependentSelector="{{CmsNewPagePageActionsSection.showHideEditor}}" visible="false" stepKey="expandContentSectionIfNotVisible"/>
+            <waitForPageLoad stepKey="waitForPageLoadContentSection"/>
+            <conditionalClick selector="{{CmsNewPagePageActionsSection.showHideEditor}}" dependentSelector="{{CatalogWidgetSection.insertWidgetButton}}" visible="false" stepKey="clickNextShowHideEditorIfVisible"/>
+
+            <!-- Insert Widget -->
+            <actionGroup ref="AdminInsertWidgetToCmsPageContentActionGroup" stepKey="insertWidgetToCmsPageContent">
+                <argument name="widgetType" value="Catalog Products List"/>
+            </actionGroup>
+            <actionGroup ref="AdminFillCatalogProductsListWidgetCategoryActionGroup" stepKey="fillCatalogProductsListWidgetOptions">
+                <argument name="categoryName" value="$createCategory.name$"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidgetButton"/>
+
+            <!-- Save CMS Page -->
+            <actionGroup ref="AdminSaveAndContinueEditCmsPageActionGroup" stepKey="saveCmsPage"/>
+        </before>
+
+        <after>
+            <!-- Delete Category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Delete Configurable Product -->
+            <deleteData createDataKey="createConfigurableProduct" stepKey="deleteConfigurableProduct"/>
+            <!-- Delete Attribute -->
+            <deleteData createDataKey="createVisualSwatchAttribute" stepKey="deleteVisualSwatchAttribute"/>
+            <!-- Delete CMS Page -->
+            <deleteData createDataKey="createCmsPage" stepKey="deleteCmsPage"/>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <!-- Logout from Admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <conditionalClick selector="{{CmsNewPagePageSeoSection.header}}" dependentSelector="{{CmsNewPagePageSeoSection.urlKey}}" visible="false" stepKey="clickToExpandSeoSection"/>
+        <scrollTo selector="{{CmsNewPagePageSeoSection.urlKey}}" stepKey="scrollToUrlKey"/>
+        <grabValueFrom selector="{{CmsNewPagePageSeoSection.urlKey}}"  stepKey="grabTextFromUrlKey"/>
+
+        <!-- Open Storefront CMS page -->
+        <amOnPage url="{{StorefrontHomePage.url}}$grabTextFromUrlKey" stepKey="gotToCreatedCmsPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productSwatch($swatchAttributeOption.option[store_labels][0][label]$)}}" stepKey="seeAddedWidget"/>
+    </test>
+</tests>

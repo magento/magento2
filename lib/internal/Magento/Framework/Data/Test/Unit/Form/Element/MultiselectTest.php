@@ -73,6 +73,7 @@ class MultiselectTest extends TestCase
         $fieldId = 'fieldId';
         $this->_model->setCanBeEmpty(true);
         $this->_model->setName($fieldName);
+        $this->_model->setValue('');
         $this->_model->setId($fieldId);
         $elementHtml = $this->_model->getElementHtml();
         $this->assertStringContainsString(
@@ -91,6 +92,7 @@ class MultiselectTest extends TestCase
         $fieldName = 'fieldName';
         $this->_model->setDisabled(true);
         $this->_model->setName($fieldName);
+        $this->_model->setValue('');
         $elementHtml = $this->_model->getElementHtml();
         $this->assertStringContainsString('<input type="hidden" name="' . $fieldName . '_disabled"', $elementHtml);
     }
@@ -106,6 +108,7 @@ class MultiselectTest extends TestCase
         $fieldName = 'fieldName';
         $this->_model->setDisabled(false);
         $this->_model->setName($fieldName);
+        $this->_model->setValue('');
         $elementHtml = $this->_model->getElementHtml();
         $this->assertStringNotContainsString('<input type="hidden" name="' . $fieldName . '_disabled"', $elementHtml);
     }

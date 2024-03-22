@@ -16,13 +16,18 @@ use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
+use Magento\TestFramework\Store\ExecuteInStoreContext;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Tests Address Edit Block
  *
+ * @see \Magento\Customer\Block\Address\Edit
+ *
  * @magentoAppArea frontend
  * @magentoAppIsolation enabled
+ *
+ * @magentoDataFixture Magento/Customer/_files/customer.php
  */
 class EditTest extends TestCase
 {
@@ -41,8 +46,11 @@ class EditTest extends TestCase
     /** @var CustomerRegistry */
     private $customerRegistry;
 
-     /** @var RequestInterface */
+    /** @var RequestInterface */
     private $request;
+
+    /** @var ExecuteInStoreContext */
+    private $executeInStoreContext;
 
     /**
      * @inheritdoc
@@ -62,6 +70,7 @@ class EditTest extends TestCase
         $this->block = $page->getLayout()->getBlock('customer_address_edit');
         $this->addressRegistry = $this->objectManager->get(AddressRegistry::class);
         $this->customerRegistry = $this->objectManager->get(CustomerRegistry::class);
+        $this->executeInStoreContext = $this->objectManager->get(ExecuteInStoreContext::class);
     }
 
     /**
@@ -173,5 +182,40 @@ class EditTest extends TestCase
         $this->assertEquals(0, Xpath::getElementsCountForXpath(sprintf($labelXpath, __('VAT Number')), $html));
         $inputXpath = "//div[contains(@class, 'taxvat')]//div/input[contains(@id,'vat_id') and @type='text']";
         $this->assertEquals(0, Xpath::getElementsCountForXpath($inputXpath, $html));
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/attribute_postcode_store_label_address.php
+     *
+     * @return void
+     */
+    public function testCheckPostCodeLabels(): void
+    {
+        $html = $this->executeInStoreContext->execute('default', [$this->block, 'toHtml']);
+        $this->assertEquals(
+            1,
+            Xpath::getElementsCountForXpath(
+                sprintf(
+                    "//form[contains(@class, 'form-address-edit')]//label[@for='zip']/span[contains(text(), '%s')]",
+                    'default store postcode label'
+                ),
+                $html
+            )
+        );
+    }
+
+    /**
+     * Check that submit button is disabled
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @return void
+     */
+    public function testSubmitButtonIsDisabled(): void
+    {
+        $html = $this->block->toHtml();
+        $buttonXpath = "//form[contains(@class, 'form-address-edit')]//button[@type='submit' and @disabled='disabled']";
+        $this->assertEquals(1, Xpath::getElementsCountForXpath($buttonXpath, $html));
     }
 }

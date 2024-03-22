@@ -76,6 +76,13 @@
                             <argument name="index" xsi:type="string">email</argument>
                         </arguments>
                     </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="permission.user.grid.columnSet.logdate" as="logdate">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Last Logged in</argument>
+                            <argument name="type" xsi:type="string">datetime</argument>
+                            <argument name="index" xsi:type="string">logdate</argument>
+                        </arguments>
+                    </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" name="permission.user.grid.columnSet.role_name" as="role_name">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Role</argument>
