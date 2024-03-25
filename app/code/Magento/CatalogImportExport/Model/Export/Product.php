@@ -369,6 +369,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     private $stockConfiguration;
 
     /**
+     * @var array
+     */
+    private array $attributeFrontendTypes = [];
+
+    /**
      * Product constructor.
      *
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -1062,7 +1067,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
                     if ($this->_attributeTypes[$code] == 'datetime') {
                         if (in_array($code, $this->dateAttrCodes)
-                            || in_array($code, $this->userDefinedAttributes)
+                            || $this->attributeFrontendTypes[$code] === 'date'
                         ) {
                             $attrValue = $this->_localeDate->formatDateTime(
                                 new \DateTime($attrValue),
@@ -1657,6 +1662,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $this->_attributeValues[$attribute->getAttributeCode()] = $this->getAttributeOptions($attribute);
             $this->_attributeTypes[$attribute->getAttributeCode()] =
                 \Magento\ImportExport\Model\Import::getAttributeType($attribute);
+            $this->attributeFrontendTypes[$attribute->getAttributeCode()] = $attribute->getFrontendInput();
             if ($attribute->getIsUserDefined()) {
                 $this->userDefinedAttributes[] = $attribute->getAttributeCode();
             }
