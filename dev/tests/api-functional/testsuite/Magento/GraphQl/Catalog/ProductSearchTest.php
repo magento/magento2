@@ -365,6 +365,54 @@ QUERY;
     }
 
     /**
+     * Verify that products returned in a correct order
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testSortMultipleFields(): void
+    {
+        $query = <<<QUERY
+query products {
+  products(currentPage: 1
+      pageSize: 10
+      filter: {
+        category_id: {
+          eq :"333"
+        }
+      }
+      sort: { price: DESC, name: ASC}
+      ) {
+
+    items {
+      name
+    }
+    total_count
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(5, $response['products']['total_count']);
+        $prod1 = $this->productRepository->get('search_product_5');
+        $prod2 = $this->productRepository->get('search_product_4');
+        $prod3 = $this->productRepository->get('search_product_3');
+        $prod4 = $this->productRepository->get('search_product_1');
+        $prod5 = $this->productRepository->get('search_product_2');
+
+        $filteredProducts = [$prod1, $prod2, $prod3, $prod4, $prod5];
+        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
+        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
+            $this->assertNotEmpty($itemArray);
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                [
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                ]
+            );
+        }
+    }
+
+    /**
      * Compare arrays by value in 'name' field.
      *
      * @param array $a
@@ -2158,9 +2206,9 @@ QUERY;
       }
 }
 QUERY;
-        $prod1 = $this->productRepository->get('blue_briefs');
+        $prod1 = $this->productRepository->get('navy-striped-shoes');
         $prod2 = $this->productRepository->get('grey_shorts');
-        $prod3 = $this->productRepository->get('navy-striped-shoes');
+        $prod3 = $this->productRepository->get('blue_briefs');
         $response = $this->graphQlQuery($query);
         $this->assertEquals(3, $response['products']['total_count']);
 
