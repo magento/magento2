@@ -447,6 +447,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             }
         } elseif (is_string($region)) {
             $this->setData('region_code', $region);
+        } elseif (is_array($region) && isset($region['region_code'])) {
+            $this->setData('region_code', $region['region_code']);
         }
         return $this->getData('region_code');
     }

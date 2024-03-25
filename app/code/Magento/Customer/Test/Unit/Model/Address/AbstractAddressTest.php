@@ -211,6 +211,19 @@ class AbstractAddressTest extends TestCase
         $this->assertEquals('UK', $this->model->getRegionCode());
     }
 
+    public function testGetRegionCodeWithRegionArray()
+    {
+        $this->regionFactoryMock->expects($this->never())->method('create');
+
+        $this->model->setData('region_id', '');
+        $this->model->setData('region', [
+            'region' => 'Essex',
+            'region_code' => 'Essex',
+            'region_id' => 0
+        ]);
+        $this->assertEquals('Essex', $this->model->getRegionCode());
+    }
+
     public function testGetRegionCodeWithoutRegion()
     {
         $this->regionFactoryMock->expects($this->never())->method('create');
