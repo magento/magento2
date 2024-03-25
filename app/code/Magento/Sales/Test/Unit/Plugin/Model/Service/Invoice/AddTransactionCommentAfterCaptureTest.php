@@ -67,8 +67,10 @@ class AddTransactionCommentAfterCaptureTest extends TestCase
         $transactionMock = $this->createMock(Transaction::class);
         $transactionMock
             ->method('addObject')
-            ->withConsecutive([$invoiceMock], [$orderMock])
-            ->willReturnOnConsecutiveCalls($transactionMock, $transactionMock);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$invoiceMock] => $transactionMock,
+                [$orderMock] => $transactionMock
+            });
         $transactionMock->expects($this->once())->method('save');
         $this->transactionFactory->method('create')->willReturn($transactionMock);
 

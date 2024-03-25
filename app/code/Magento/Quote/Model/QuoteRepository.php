@@ -56,7 +56,7 @@ class QuoteRepository implements CartRepositoryInterface, ResetAfterRequestInter
     protected $storeManager;
 
     /**
-     * @var QuoteCollection
+     * @var QuoteCollection|null
      * @deprecated 101.0.0
      * @see $quoteCollectionFactory
      */
@@ -146,6 +146,7 @@ class QuoteRepository implements CartRepositoryInterface, ResetAfterRequestInter
     {
         $this->quotesById = [];
         $this->quotesByCustomerId = [];
+        $this->quoteCollection = null;
     }
 
     /**
