@@ -801,7 +801,7 @@ define([
             var max = 0,
                 pos;
 
-            this.elems.each(function (record) {
+            this.recordData.each(function (record) {
                 pos = ~~record.position;
                 pos > max ? max = pos : false;
             });

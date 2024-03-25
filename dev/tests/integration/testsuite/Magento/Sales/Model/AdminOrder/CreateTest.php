@@ -17,8 +17,11 @@ use Magento\Sales\Api\Data\OrderAddressExtensionInterface;
 use Magento\Sales\Api\Data\OrderAddressExtensionInterfaceFactory;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\AdminOrder\EmailSender;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -38,6 +41,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     private $messageManager;
 
     /**
+     * @var EmailSender|MockObject
+     */
+    private $emailSenderMock;
+
+    /**
      * @var ObjectManager
      */
     private $objectManager;
@@ -46,7 +54,13 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->messageManager = $this->objectManager->get(ManagerInterface::class);
-        $this->model =$this->objectManager->create(Create::class, ['messageManager' => $this->messageManager]);
+        $this->emailSenderMock = $this->getMockBuilder(EmailSender::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->model =$this->objectManager->create(
+            Create::class,
+            ['messageManager' => $this->messageManager, 'emailSender' => $this->emailSenderMock]
+        );
     }
 
     /**
@@ -84,6 +98,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $order->loadByIncrementId('100000001');
 
         /** @var $orderCreate \Magento\Sales\Model\AdminOrder\Create */
+        $order->setReordered(true);
         $orderCreate = $this->model->initFromOrder($order);
 
         $quoteItems = $orderCreate->getQuote()->getItemsCollection();
@@ -129,6 +144,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ['additional_option_key' => 'additional_option_value'],
             $newOrderItem->getProductOptionByCode('additional_options')
         );
+        Response::closeOutputBuffers(1, false);
     }
 
     /**
@@ -631,6 +647,13 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $this->model->getQuote()->setCustomer($customerMock);
         $order = $this->model->createOrder();
+        if ($this->model->getSendConfirmation() && !$order->getEmailSent()) {
+            $this->emailSenderMock->expects($this->once())
+                ->method('send')
+                ->willReturn(true);
+        } else {
+            $this->emailSenderMock->expects($this->never())->method('send');
+        }
         $this->verifyCreatedOrder($order, $shippingMethod);
     }
 
@@ -676,6 +699,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         /** @var SessionQuote $session */
         $session = $this->objectManager->create(SessionQuote::class);
         $session->setCustomerId($fixtureCustomerId);
+        $session->setTransferredItems(['cart' => [124]]);
         /** @var $quoteFixture Quote */
         $quoteFixture = $this->objectManager->create(Quote::class);
         $quoteFixture->load('test01', 'reserved_order_id');
@@ -687,6 +711,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $this->model->moveQuoteItem($item, 'cart', 3);
         self::assertEquals(4, $item->getQty(), 'Number of Qty isn\'t correct for Quote item.');
         self::assertEquals(3, $item->getQtyToAdd(), 'Number of added qty isn\'t correct for Quote item.');
+        self::assertEquals($session->getTransferredItems(), ['cart' => []]);
     }
 
     /**

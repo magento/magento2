@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-6844"/>
             <group value="urlRewrite"/>
+            <group value="cloud"/>
         </annotations>
 
         <!-- Preconditions-->

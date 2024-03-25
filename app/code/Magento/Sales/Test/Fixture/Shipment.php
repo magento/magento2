@@ -64,10 +64,13 @@ class Shipment implements RevertibleDataFixtureInterface
      * @param array $data Parameters. Same format as Shipment::DEFAULT_DATA.
      * Fields structure fields:
      * - $data['items']: can be supplied in following formats:
-     *      - array of arrays [{"sku":"$product1.sku","qty":1}, {"sku":"$product2.sku","qty":1}]
-     *      - array of SKUs ["$product1.sku", "$product2.sku"]
-     *      - array of order items IDs ["$item1.id", "$item2.id"]
-     *      - array of product instances ["$product1", "$product2"]
+     *      - array of arrays [{"sku":"$product1.sku$","qty":1}, {"sku":"$product2.sku$","qty":1}]
+     *      - array of arrays [{"order_item_id":"$oItem1.sku$","qty":1}, {"order_item_id":"$oItem2.sku$","qty":1}]
+     *      - array of arrays [{"product_id":"$product1.id$","qty":1}, {"product_id":"$product2.id$","qty":1}]
+     *      - array of arrays [{"quote_item_id":"$qItem1.id$","qty":1}, {"quote_item_id":"$qItem2.id$","qty":1}]
+     *      - array of SKUs ["$product1.sku$", "$product2.sku$"]
+     *      - array of order items IDs ["$oItem1.id$", "$oItem2.id$"]
+     *      - array of product instances ["$product1$", "$product2$"]
      */
     public function apply(array $data = []): ?DataObject
     {
@@ -112,29 +115,33 @@ class Shipment implements RevertibleDataFixtureInterface
         $shipmentItems = [];
         $order = $this->orderRepository->get($data['order_id']);
         $orderItemIdsBySku = [];
+        $orderItemIdsByProductIds = [];
+        $orderItemIdsByQuoteItemIds = [];
         foreach ($order->getItems() as $item) {
             $orderItemIdsBySku[$item->getSku()] = $item->getItemId();
+            $orderItemIdsByQuoteItemIds[$item->getQuoteItemId()] = $item->getItemId();
+            $orderItemIdsByProductIds[$item->getProductId()] = $item->getItemId();
         }
 
         foreach ($data['items'] as $itemToShip) {
-            $qty = 1;
-            $orderItemId = 1;
-            $sku = null;
+            $shipmentItem = ['order_item_id' => null, 'qty' => 1];
             if (is_numeric($itemToShip)) {
-                $orderItemId = $itemToShip;
+                $shipmentItem['order_item_id'] = $itemToShip;
             } elseif (is_string($itemToShip)) {
-                $sku = $itemToShip;
+                $shipmentItem['order_item_id'] = $orderItemIdsBySku[$itemToShip];
             } elseif ($itemToShip instanceof ProductInterface) {
-                $sku = $itemToShip->getSku();
+                $shipmentItem['order_item_id'] = $orderItemIdsBySku[$itemToShip->getSku()];
             } else {
-                $qty = $itemToShip['qty'] ?? $qty;
-                $orderItemId = $itemToShip['order_item_id'] ?? $qty;
-                $sku = $itemToShip['sku'] ?? $sku;
+                $shipmentItem = array_intersect($itemToShip, $shipmentItem) + $shipmentItem;
+                if (isset($itemToShip['sku'])) {
+                    $shipmentItem['order_item_id'] = $orderItemIdsBySku[$itemToShip['sku']];
+                } elseif (isset($itemToShip['product_id'])) {
+                    $shipmentItem['order_item_id'] = $orderItemIdsByProductIds[$itemToShip['product_id']];
+                } elseif (isset($itemToShip['quote_item_id'])) {
+                    $shipmentItem['order_item_id'] = $orderItemIdsByQuoteItemIds[$itemToShip['quote_item_id']];
+                }
             }
-            if (!$orderItemId && $sku) {
-                $orderItemId = $orderItemIdsBySku[$sku];
-            }
-            $shipmentItems[] = ['order_item_id' => $orderItemId, 'qty' => $qty];
+            $shipmentItems[] = $shipmentItem;
         }
 
         return $shipmentItems;

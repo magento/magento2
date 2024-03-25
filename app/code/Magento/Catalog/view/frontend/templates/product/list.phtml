@@ -86,6 +86,7 @@ $_helper = $block->getData('outputHelper');
                                         <form data-role="tocart-form"
                                               data-product-sku="<?= $escaper->escapeHtml($_product->getSku()) ?>"
                                               action="<?= $escaper->escapeUrl($postParams['action']) ?>"
+                                              data-mage-init='{"catalogAddToCart": {}}'
                                               method="post">
                                             <?php $options = $block->getData('viewModel')->getOptionsData($_product); ?>
                                             <?php foreach ($options as $optionItem): ?>
@@ -161,13 +162,4 @@ $_helper = $block->getData('outputHelper');
     </div>
     <?= $block->getChildBlock('toolbar')->setIsBottom(true)->toHtml() ?>
     <?php // phpcs:ignore Magento2.Legacy.PhtmlTemplate ?>
-    <script type="text/x-magento-init">
-    {
-        "[data-role=tocart-form], .form.map.checkout": {
-            "catalogAddToCart": {
-                "product_sku": "<?= $escaper->escapeJs($_product->getSku()) ?>"
-            }
-        }
-    }
-    </script>
 <?php endif; ?>

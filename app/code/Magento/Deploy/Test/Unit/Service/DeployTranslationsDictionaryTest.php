@@ -76,6 +76,8 @@ class DeployTranslationsDictionaryTest extends TestCase
                     $this->assertEquals($area, $params['area']);
                     $this->assertEquals($theme, $params['theme']);
                     $this->assertEquals($locale, $params['locale']);
+
+                    return $dictionary;
                 }
             );
 

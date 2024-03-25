@@ -5,7 +5,9 @@
  */
 namespace Magento\Framework\Filter;
 
-class SplitWords implements \Zend_Filter_Interface
+use Laminas\Filter\FilterInterface;
+
+class SplitWords implements FilterInterface
 {
     /**
      * @var bool

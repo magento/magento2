@@ -25,7 +25,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Store\Model\StoreManagerInterface;
-use Zend_Filter_Input;
+use Magento\Framework\Filter\FilterInput;
 
 /**
  * Product helper
@@ -60,6 +60,7 @@ class Helper
     /**
      * @var Date
      * @deprecated 101.0.0
+     * @see we don't recommend this approach anymore
      */
     protected $dateFilter;
 
@@ -120,24 +121,6 @@ class Helper
      * @var CategoryLinkInterfaceFactory
      */
     private $categoryLinkFactory;
-
-    /**
-     * @var array
-     */
-    private $productDataKeys = [
-        'weight',
-        'special_price',
-        'cost',
-        'country_of_manufacture',
-        'description',
-        'short_description',
-        'meta_description',
-        'meta_keyword',
-        'meta_title',
-        'page_layout',
-        'custom_design',
-        'gift_wrapping_price'
-    ];
 
     /**
      * Constructor
@@ -221,12 +204,6 @@ class Helper
             $productData['product_has_weight'] = 0;
         }
 
-        foreach ($productData as $key => $value) {
-            if (in_array($key, $this->productDataKeys) && $value === '') {
-                $productData[$key] = null;
-            }
-        }
-
         foreach (['category_ids', 'website_ids'] as $field) {
             if (!isset($productData[$field])) {
                 $productData[$field] = [];
@@ -250,7 +227,7 @@ class Helper
             }
         }
 
-        $inputFilter = new Zend_Filter_Input($dateFieldFilters, [], $productData);
+        $inputFilter = new FilterInput($dateFieldFilters, [], $productData);
         $productData = $inputFilter->getUnescaped();
 
         if (isset($productData['options'])) {
@@ -435,6 +412,7 @@ class Helper
      *
      * @return LinkResolver
      * @deprecated 102.0.0
+     * @see we don't recommend this approach anymore
      */
     private function getLinkResolver()
     {
@@ -446,9 +424,9 @@ class Helper
     }
 
     /**
-     * Remove ids of non selected websites from $websiteIds array and return filtered data
+     * Remove ids of non-selected websites from $websiteIds array and return filtered data
      *
-     * $websiteIds parameter expects array with website ids as keys and 1 (selected) or 0 (non selected) as values
+     * $websiteIds parameter expects array with website ids as keys and id (selected) or 0 (non-selected) as values
      * Only one id (default website ID) will be set to $websiteIds array when the single store mode is turned on
      *
      * @param array $websiteIds
@@ -459,7 +437,8 @@ class Helper
         if (!$this->storeManager->isSingleStoreMode()) {
             $websiteIds = array_filter((array) $websiteIds);
         } else {
-            $websiteIds[$this->storeManager->getWebsite(true)->getId()] = 1;
+            $websiteId = $this->storeManager->getWebsite(true)->getId();
+            $websiteIds[$websiteId] = $websiteId;
         }
 
         return $websiteIds;

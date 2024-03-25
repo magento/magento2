@@ -5,10 +5,12 @@
  */
 namespace Magento\Framework\Filter;
 
+use Laminas\Filter\FilterInterface;
+
 /**
  * Filter for standard strip_tags() function with extra functionality for html entities
  */
-class StripTags implements \Zend_Filter_Interface
+class StripTags implements FilterInterface
 {
     /**
      * @var \Magento\Framework\Escaper

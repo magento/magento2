@@ -18,6 +18,7 @@
             <testCaseId value="MC-37121"/>
             <group value="Catalog"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>

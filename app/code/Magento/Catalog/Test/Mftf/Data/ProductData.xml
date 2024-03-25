@@ -22,6 +22,20 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+    <entity name="productA" type="product">
+        <data key="name" unique="suffix">productA</data>
+        <data key="sku" unique="suffix">productAfortest</data>
+        <data key="urlKey" unique="suffix">simple-product-for-producta</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="price">123.00</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
     <entity name="SimpleProductQty100" type="product">
         <data key="name" unique="suffix">testProductName</data>
         <data key="sku" unique="suffix">testSku</data>
@@ -1470,5 +1484,39 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
-
+    <entity name="ProductWithSpecialCharsInSKU" extends="SimpleProduct" type="product">
+        <data key="name">Simple Product with special characters in SKU</data>
+        <data key="sku">s000&amp;01</data>
+    </entity>
+    <entity name="simpleProductwithTaxNone" type="product">
+        <data key="name" unique="suffix">Product1</data>
+        <data key="sku" unique="suffix">product-1</data>
+        <data key="urlKey" unique="suffix">product1</data>
+        <data key="price">200.00</data>
+        <data key="quantity">100</data>
+        <data key="status">1</data>
+        <data key="cost">150.00</data>
+        <data key="productTaxClass">None</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="simpleProductwithTaxGoods" type="product">
+        <data key="urlKey" unique="suffix">product2</data>
+        <data key="name" unique="suffix">Product2</data>
+        <data key="sku" unique="suffix">product-2</data>
+        <data key="price">300.00</data>
+        <data key="quantity">300</data>
+        <data key="status">1</data>
+        <data key="storefrontStatus">IN STOCK</data>
+        <data key="cost">250.00</data>
+        <data key="productTaxClass">Taxable Goods</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
 </entities>

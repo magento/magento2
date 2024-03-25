@@ -6,6 +6,7 @@
 
 namespace Magento\Paypal\Model;
 
+use Laminas\Http\Exception\RuntimeException;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
@@ -612,7 +613,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     {
         try {
             return $this->gateway->postRequest($request, $config);
-        } catch (\Zend_Http_Client_Exception $e) {
+        } catch (RuntimeException $e) {
             throw new ClientException(
                 __('Payment Gateway is unreachable at the moment. Please use another payment option.'),
                 $e

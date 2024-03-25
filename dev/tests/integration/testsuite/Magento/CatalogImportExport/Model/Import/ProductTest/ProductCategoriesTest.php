@@ -15,15 +15,21 @@ use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Indexer\Test\Fixture\ScheduleMode;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\DataFixtureBeforeTransaction;
 
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
- *
- * @magentoAppIsolation enabled
- * @magentoAppArea adminhtml
- * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
- * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
  */
+#[
+    AppIsolation(true),
+    AppArea('adminhtml'),
+    DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => 'catalogsearch_fulltext']),
+    DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => 'catalog_category_product']),
+    DataFixtureBeforeTransaction(ScheduleMode::class, ['indexer' => 'catalog_product_category']),
+]
 class ProductCategoriesTest extends ProductTestBase
 {
     /**
@@ -45,19 +51,15 @@ class ProductCategoriesTest extends ProductTestBase
                 'directory' => $directory
             ]
         );
-        $errors = $this->_model->setSource(
-            $source
-        )->setParameters(
-            [
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
-                'entity' => 'catalog_product',
-                Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR => $separator
-            ]
-        )->validateData();
-
+        $this->_model->setSource($source);
+        $this->_model->setParameters([
+            'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+            'entity' => 'catalog_product',
+            Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR => $separator
+        ]);
+        $errors = $this->_model->validateData();
         $this->assertTrue($errors->getErrorsCount() == 0);
         $this->_model->importData();
-
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $resource = $objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productId = $resource->getIdBySku('simple1');
@@ -83,10 +85,8 @@ class ProductCategoriesTest extends ProductTestBase
         $collection->addNameToResult()->load();
         /** @var Category $category */
         $category = $collection->getItemByColumnValue('name', 'Category 1');
-
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
-
         $categoryProducts = [];
         $i = 51;
         foreach (['simple1', 'simple2', 'simple3'] as $sku) {
@@ -94,11 +94,9 @@ class ProductCategoriesTest extends ProductTestBase
         }
         $category->setPostedProducts($categoryProducts);
         $category->save();
-
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\Filesystem::class
         );
-
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
             \Magento\ImportExport\Model\Import\Source\Csv::class,
@@ -107,18 +105,14 @@ class ProductCategoriesTest extends ProductTestBase
                 'directory' => $directory
             ]
         );
-        $errors = $this->_model->setSource(
-            $source
-        )->setParameters(
-            [
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
-                'entity' => 'catalog_product'
-            ]
-        )->validateData();
-
+        $this->_model->setSource($source);
+        $this->_model->setParameters([
+            'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+            'entity' => 'catalog_product'
+        ]);
+        $errors = $this->_model->validateData();
         $this->assertTrue($errors->getErrorsCount() == 0);
         $this->_model->importData();
-
         /** @var \Magento\Framework\App\ResourceConnection $resourceConnection */
         $resourceConnection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\App\ResourceConnection::class

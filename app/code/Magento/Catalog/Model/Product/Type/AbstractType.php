@@ -7,8 +7,9 @@
 namespace Magento\Catalog\Model\Product\Type;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\File\Http;
 use Magento\Framework\File\UploaderFactory;
 
 /**
@@ -493,7 +494,7 @@ abstract class AbstractType
                     case 'receive_uploaded_file':
                         $src = $queueOptions['src_name'] ?? '';
                         $dst = $queueOptions['dst_name'] ?? '';
-                        /** @var $uploader \Zend_File_Transfer_Adapter_Http */
+                        /** @var $uploader Http */
                         $uploader = $queueOptions['uploader'] ?? null;
                         $isUploaded = false;
                         if ($uploader && $uploader->isValid($src)) {
@@ -591,14 +592,16 @@ abstract class AbstractType
 
                     if ($product->getSkipCheckRequiredOption() !== true) {
                         $group->validateUserValue($optionsFromRequest);
-                    } elseif ($optionsFromRequest !== null && isset($optionsFromRequest[$option->getId()])) {
+                    } elseif ($optionsFromRequest !== null
+                        && isset($optionsFromRequest[$option->getId()])
+                        && $optionsFromRequest[$option->getId()] !== ''
+                    ) {
                         if (is_array($optionsFromRequest[$option->getId()])) {
                             $group->validateUserValue($optionsFromRequest);
                         } else {
                             $transport->options[$option->getId()] = $optionsFromRequest[$option->getId()];
                         }
                     }
-
                 } catch (LocalizedException $e) {
                     $results[] = $e->getMessage();
                     continue;

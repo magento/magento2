@@ -56,6 +56,8 @@
             <deleteData createDataKey="simpleProduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
             <deleteData createDataKey="createSubCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>
+            <executeJS function="window.localStorage.clear();" stepKey="clearLocalStorage"/>
         </after>
 
         <!--Open Product page in StoreFront -->

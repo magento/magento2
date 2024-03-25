@@ -14,12 +14,19 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\CatalogInventory\Model\Configuration;
 use Magento\ConfigurableProduct\Api\LinkManagementInterface;
 use Magento\ConfigurableProduct\Model\LinkManagement;
+use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
 use Magento\Customer\Model\Group;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\GraphQl\Customer\LockCustomer;
 use Magento\Framework\ObjectManager\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -30,6 +37,11 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class ProductPriceTest extends GraphQlAbstract
 {
+    /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
     /** @var ObjectManager $objectManager */
     private $objectManager;
 
@@ -361,14 +373,14 @@ class ProductPriceTest extends GraphQlAbstract
                     "simple1" => [
                         0 => [
                             'discount' =>['amount_off' => 1, 'percent_off' => 10],
-                            'final_price' =>['value'=> 9],
+                            'final_price' =>['value'=> 9 * 2],
                             'quantity' => 2
                         ]
                     ],
                     "simple2" => [
                         0 => [
                             'discount' =>['amount_off' => 2, 'percent_off' => 10],
-                            'final_price' =>['value'=> 18],
+                            'final_price' =>['value'=> 18 * 2],
                             'quantity' => 2
                         ]
                     ]
@@ -407,14 +419,14 @@ class ProductPriceTest extends GraphQlAbstract
                     "simple1" => [
                         0 => [
                             'discount' =>['amount_off' => 1, 'percent_off' => 10],
-                            'final_price' =>['value'=> 9],
+                            'final_price' =>['value'=> 9 * 2 ],
                             'quantity' => 2
                         ]
                     ],
                     "simple2" => [
                         0 => [
                             'discount' =>['amount_off' => 2, 'percent_off' => 10],
-                            'final_price' =>['value'=> 18],
+                            'final_price' =>['value'=> 18 * 2],
                             'quantity' => 2
                         ]
                     ]
@@ -594,7 +606,7 @@ class ProductPriceTest extends GraphQlAbstract
                         'amount_off' => 1,
                         'percent_off' => 10
                     ],
-                    'final_price' =>['value'=> 9],
+                    'final_price' =>['value'=> 9 * 2],
                     'quantity' => 2
                 ]
             ]
@@ -685,7 +697,7 @@ class ProductPriceTest extends GraphQlAbstract
                 'customer_group_id' => Group::CUST_GROUP_ALL,
                 'percentage_value'=> null,
                 'qty'=> 2,
-                'value'=> 20
+                'value'=> 20,
             ]
         ];
         foreach ($configurableProductVariants as $configurableProductVariant) {
@@ -765,7 +777,7 @@ class ProductPriceTest extends GraphQlAbstract
                         "value" => round((float) $configurableProductVariants[$key]->getSpecialPrice(), 2)
                     ],
                     "discount" => [
-                        "amount_off" => ($regularPrice[$key] - $finalPrice[$key]),
+                        "amount_off" => round($regularPrice[$key] - $finalPrice[$key], 2),
                         "percent_off" => round(($regularPrice[$key] - $finalPrice[$key])*100/$regularPrice[$key], 2)
                     ]
                 ],
@@ -777,7 +789,7 @@ class ProductPriceTest extends GraphQlAbstract
                         "value" => round((float) $configurableProductVariants[$key]->getSpecialPrice(), 2)
                     ],
                     "discount" => [
-                        "amount_off" => $regularPrice[$key] - $finalPrice[$key],
+                        "amount_off" => round($regularPrice[$key] - $finalPrice[$key], 2),
                         "percent_off" => round(($regularPrice[$key] - $finalPrice[$key])*100/$regularPrice[$key], 2)
                     ]
                 ]
@@ -797,7 +809,7 @@ class ProductPriceTest extends GraphQlAbstract
                                 2
                             )
                         ],
-                        'final_price' =>['value'=> $tierPriceData[0]['value']],
+                        'final_price' =>['value'=> $tierPriceData[0]['value'] * 2],
                         'quantity' => 2
                     ]
                 ]
@@ -875,7 +887,7 @@ class ProductPriceTest extends GraphQlAbstract
                          'amount_off' => 3,
                          'percent_off' => 30
                     ],
-                    'final_price' =>['value'=> 7],
+                    'final_price' =>['value'=> 7 * 2],
                     'quantity' => 2
                 ]
             ]
@@ -1206,13 +1218,26 @@ QUERY;
                 $expected['regular_price']['currency'] ?? $currency,
                 $actual['regular_price']['currency']
             );
-            $this->assertEquals($expected['final_price']['value'], $actual['final_price']['value']);
+            $this->assertEquals($expected['final_price']['value'], round($actual['final_price']['value'], 2));
             $this->assertEquals(
                 $expected['final_price']['currency'] ?? $currency,
                 $actual['final_price']['currency']
             );
-            $this->assertEquals($expected['discount']['amount_off'], $actual['discount']['amount_off']);
-            $this->assertEquals($expected['discount']['percent_off'], $actual['discount']['percent_off']);
+            $this->assertEqualsWithDelta(
+                $expected['discount']['amount_off'],
+                ($actual['regular_price']['value'] - round($actual['final_price']['value'], 2)),
+                self::EPSILON
+            );
+            $this->assertEqualsWithDelta(
+                $expected['discount']['percent_off'],
+                round(
+                    (
+                        $actual['regular_price']['value'] - round($actual['final_price']['value'], 2)
+                    ) * 100 / $actual['regular_price']['value'],
+                    2
+                ),
+                self::EPSILON
+            );
         }
     }
 
@@ -1272,14 +1297,19 @@ QUERY;
     /**
      * Check pricing for Configurable product with "Display Out of Stock Products" enabled
      *
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product with:{"price":10, "special_price":7} as:p1
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product with:{"price":18, "special_price":12.6} as:p2
-     * @magentoApiDataFixture Magento\ConfigurableProduct\Test\Fixture\Attribute as:attr
-     * @magentoApiDataFixture Magento\ConfigurableProduct\Test\Fixture\Product as:conf1
-     * @magentoDataFixtureDataProvider {"conf1":{"_options":["$attr$"],"_links":["$p1$","$p2$"]}}
-     * @magentoConfigFixture default_store cataloginventory/options/show_out_of_stock 1
      * @dataProvider configurableProductPriceRangeWithDisplayOutOfStockProductsEnabledDataProvider
      */
+    #[
+        Config(Configuration::XML_PATH_SHOW_OUT_OF_STOCK, 1, ScopeInterface::SCOPE_STORE, 'default'),
+        DataFixture(ProductFixture::class, ['price' => 10, 'special_price' => 7], 'p1'),
+        DataFixture(ProductFixture::class, ['price' => 18, 'special_price' => 12.6], 'p2'),
+        DataFixture(AttributeFixture::class, as: 'attr'),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            ['_options' => ['$attr$'],'_links' => ['$p1$','$p2$']],
+            'conf1'
+        ),
+    ]
     public function testConfigurableProductPriceRangeWithDisplayOutOfStockProductsEnabled(
         array $productsConfiguration,
         array $expected

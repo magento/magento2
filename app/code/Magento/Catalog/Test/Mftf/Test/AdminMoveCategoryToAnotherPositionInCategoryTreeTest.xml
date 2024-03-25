@@ -17,6 +17,7 @@
             <severity value="BLOCKER"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

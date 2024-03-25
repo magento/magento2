@@ -23,6 +23,7 @@ use Magento\Framework\Oauth\ConsumerInterface;
  * @method string getRejectedCallbackUrl()
  * @method Consumer setRejectedCallbackUrl(string $rejectedCallbackUrl)
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class Consumer extends \Magento\Framework\Model\AbstractModel implements ConsumerInterface
 {
@@ -89,6 +90,7 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
      * @return \Magento\Framework\Stdlib\DateTime\DateTime
      *
      * @deprecated 100.0.6
+     * @see we don't recommend this approach anymore
      */
     private function getDateHelper()
     {
