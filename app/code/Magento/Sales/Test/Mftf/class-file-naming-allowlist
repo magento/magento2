@@ -5,3 +5,5 @@ AssertOrderStatusFormSaveSuccess
 AssertSalesPrintOrderBillingAddress
 AdminFilterOrderByPurchaseDateReset
 StorefrontReorderAsCustomerCustomPrice
+addBundleProductToOrder
+addDownloadableProductToOrder
