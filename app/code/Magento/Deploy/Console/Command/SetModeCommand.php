@@ -23,12 +23,12 @@ class SetModeCommand extends Command
     /**
      * Name of "target application mode" input argument
      */
-    const MODE_ARGUMENT = 'mode';
+    public const MODE_ARGUMENT = 'mode';
 
     /**
      * Name of "skip compilation" input option
      */
-    const SKIP_COMPILATION_OPTION = 'skip-compilation';
+    public const SKIP_COMPILATION_OPTION = 'skip-compilation';
 
     /**
      * Object manager factory
@@ -61,7 +61,7 @@ class SetModeCommand extends Command
                 new InputArgument(
                     self::MODE_ARGUMENT,
                     InputArgument::REQUIRED,
-                    'The application mode to set. Available options are "developer" or "production"'
+                    'The application mode to set. Available options are "developer", "production", or "default".'
                 ),
                 new InputOption(
                     self::SKIP_COMPILATION_OPTION,
