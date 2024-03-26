@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4a1d1326b3706ac6eae29aed522ef8e2",
+    "content-hash": "7093048314262a0005a7637367da2b24",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -10148,16 +10148,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "4.7.0",
+            "version": "4.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "9b979d2a302800ffdda1a53b4e92c1b523da522d"
+                "reference": "036c0db03e6d602d89d31b71c91297015e390b9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/9b979d2a302800ffdda1a53b4e92c1b523da522d",
-                "reference": "9b979d2a302800ffdda1a53b4e92c1b523da522d",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/036c0db03e6d602d89d31b71c91297015e390b9f",
+                "reference": "036c0db03e6d602d89d31b71c91297015e390b9f",
                 "shasum": ""
             },
             "require": {
@@ -10178,9 +10178,9 @@
                 "ext-openssl": "*",
                 "guzzlehttp/guzzle": "^7.3.0",
                 "laminas/laminas-diactoros": "^3.0",
-                "monolog/monolog": "^2.3",
+                "monolog/monolog": "^2.3||^3.0",
                 "mustache/mustache": "~2.5",
-                "nikic/php-parser": "^4.4",
+                "nikic/php-parser": "^4.4||^5.0",
                 "php": ">=8.1",
                 "php-webdriver/webdriver": "^1.14.0",
                 "spomky-labs/otphp": "^10.0||^11.0",
@@ -10202,11 +10202,9 @@
             },
             "require-dev": {
                 "brainmaestro/composer-git-hooks": "^2.8.5",
-                "codacy/coverage": "^1.4",
                 "php-coveralls/php-coveralls": "^1.0||^2.2",
                 "phpmd/phpmd": "^2.8.0",
                 "phpunit/phpunit": "^9.5",
-                "sebastian/phpcpd": "~6.0.0",
                 "squizlabs/php_codesniffer": "~3.7.0"
             },
             "suggest": {
@@ -10243,9 +10241,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/4.7.0"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/4.7.1"
             },
-            "time": "2024-01-10T06:53:44+00:00"
+            "time": "2024-03-18T13:33:48+00:00"
         },
         {
             "name": "magento/php-compatibility-fork",

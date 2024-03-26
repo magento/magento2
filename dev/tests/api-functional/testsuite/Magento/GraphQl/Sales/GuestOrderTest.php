@@ -47,6 +47,7 @@ class GuestOrderTest extends GraphQlAbstract
       postcode: "%postcode"
   }) {
     number
+    email
     billing_address {
       firstname
       lastname
@@ -83,6 +84,7 @@ QUERY;
             [
                 'guestOrder' => [
                     'number' => $order->getIncrementId(),
+                    'email' => $order->getBillingAddress()->getEmail(),
                     'billing_address' => [
                         'firstname' => $order->getBillingAddress()->getFirstname(),
                         'lastname' => $order->getBillingAddress()->getLastname()

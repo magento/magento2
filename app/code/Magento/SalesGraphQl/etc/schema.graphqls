@@ -74,6 +74,7 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     grand_total: Float  @deprecated(reason: "Use the `totals.grand_total` field instead.")
     token: String! @doc(description: "The token that can be used to retrieve the order using order query.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Token")
     applied_coupons: [AppliedCoupon!]! @doc(description: "Coupons applied to the order.")
+    email: String @doc(description: "Order customer email.")
 }
 
 type OrderAddress @doc(description: "Contains detailed information about an order's billing and shipping addresses."){

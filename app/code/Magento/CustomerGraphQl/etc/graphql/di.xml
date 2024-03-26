@@ -37,6 +37,7 @@
                 <item name="required_character_classes_number" xsi:type="string">customer/password/required_character_classes_number</item>
                 <item name="minimum_password_length" xsi:type="string">customer/password/minimum_password_length</item>
                 <item name="autocomplete_on_storefront" xsi:type="string">customer/password/autocomplete_on_storefront</item>
+                <item name="create_account_confirmation" xsi:type="string">customer/create_account/confirm</item>
             </argument>
         </arguments>
     </type>
