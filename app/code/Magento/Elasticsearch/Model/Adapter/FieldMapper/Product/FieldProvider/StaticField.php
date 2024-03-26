@@ -119,6 +119,10 @@ class StaticField implements FieldProviderInterface
             'index' => $this->indexTypeConverter->convert(IndexTypeConverterInterface::INTERNAL_NO_INDEX_VALUE),
         ];
 
+        $allAttributes['entity_id'] = [
+            'type' => $this->fieldTypeConverter->convert(FieldTypeConverterInterface::INTERNAL_DATA_TYPE_INT),
+            'index' => $this->indexTypeConverter->convert(IndexTypeConverterInterface::INTERNAL_NO_INDEX_VALUE),
+        ];
         return $allAttributes;
     }
 

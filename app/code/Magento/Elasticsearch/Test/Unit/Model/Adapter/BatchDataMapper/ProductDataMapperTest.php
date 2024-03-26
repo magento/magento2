@@ -101,9 +101,9 @@ class ProductDataMapperTest extends TestCase
         $storeId = 1;
         $productId = 42;
         $additionalFields = ['some data'];
-        $this->builderMock->expects($this->once())
+        $this->builderMock->expects($this->exactly(2))
             ->method('addField')
-            ->with('store_id', $storeId);
+            ->withConsecutive(['store_id', $storeId], ['entity_id', $productId]);
 
         $this->builderMock->expects($this->any())
             ->method('addFields')
@@ -169,7 +169,7 @@ class ProductDataMapperTest extends TestCase
             $productId => [$attributeId => $attributeValue],
         ];
         $documents = $this->model->map($documentData, $storeId, $context);
-        $returnAttributeData = ['store_id' => $storeId] + $returnAttributeData;
+        $returnAttributeData = ['store_id' => $storeId] + ['entity_id' => $productId] +  $returnAttributeData;
         $this->assertSame($returnAttributeData, $documents[$productId]);
     }
 
@@ -185,6 +185,7 @@ class ProductDataMapperTest extends TestCase
         $returnAttributeData = [
             'store_id' => $storeId,
             'options' => $attributeValue,
+            'entity_id' => 10,
         ];
 
         $this->dataProvider->expects($this->never())

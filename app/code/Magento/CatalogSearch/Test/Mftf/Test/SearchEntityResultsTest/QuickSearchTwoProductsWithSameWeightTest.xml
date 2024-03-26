@@ -85,11 +85,11 @@
             <argument name="phrase" value="{{_defaultProduct.name}}"/>
         </actionGroup>
         <actionGroup ref="StorefrontQuickSearchCheckProductNameInGridActionGroup" stepKey="assertProduct1Position">
-            <argument name="productName" value="$product1.name$"/>
+            <argument name="productName" value="$product2.name$"/>
             <argument name="index" value="1"/>
         </actionGroup>
         <actionGroup ref="StorefrontQuickSearchCheckProductNameInGridActionGroup" stepKey="assertProduct2Position">
-            <argument name="productName" value="$product2.name$"/>
+            <argument name="productName" value="$product1.name$"/>
             <argument name="index" value="2"/>
         </actionGroup>
     </test>
