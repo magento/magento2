@@ -38,6 +38,10 @@ define(['Magento_Bundle/js/components/bundle-user-defined-checkbox'], function (
                 BundleUserDefinedCheckboxObj.onInputTypeChange('checkbox');
                 expect(BundleUserDefinedCheckboxObj.reset).toHaveBeenCalled();
                 expect(BundleUserDefinedCheckboxObj.visible()).toBe(false);
+
+                BundleUserDefinedCheckboxObj.onInputTypeChange('multi');
+                expect(BundleUserDefinedCheckboxObj.reset.calls.count()).toBe(2);
+                expect(BundleUserDefinedCheckboxObj.visible()).toBe(false);
             });
 
             it('the element should be visible when the input type is not a checkbox or multi-line.', function () {
