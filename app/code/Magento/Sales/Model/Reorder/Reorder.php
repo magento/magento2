@@ -188,11 +188,13 @@ class Reorder
         $storeId = (string) $this->storeManager->getStore()->getId();
         $this->addItemsToCart($cart, $order->getItemsCollection(), $storeId);
 
-        try {
-            $this->cartRepository->save($cart);
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            // handle exception from \Magento\Quote\Model\QuoteRepository\SaveHandler::save
-            $this->addError($e->getMessage());
+        if (!$cart->getHasError()) {
+            try {
+                $this->cartRepository->save($cart);
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                // handle exception from \Magento\Quote\Model\QuoteRepository\SaveHandler::save
+                $this->addError($e->getMessage());
+            }
         }
 
         $savedCart = $this->cartRepository->get($cart->getId());
