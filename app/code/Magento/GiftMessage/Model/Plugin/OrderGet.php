@@ -90,8 +90,7 @@ class OrderGet
         if (null !== $orderItems) {
             foreach ($orderItems as $orderItem) {
                 $extensionAttributes = $orderItem->getExtensionAttributes();
-                if (
-                    ($extensionAttributes && $extensionAttributes->getGiftMessage()) ||
+                if (($extensionAttributes && $extensionAttributes->getGiftMessage()) ||
                     !$orderItem->getGiftMessageId()
                 ) {
                     continue;
