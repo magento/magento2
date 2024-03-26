@@ -41,18 +41,4 @@ class Collection extends AbstractCollection implements OrderAddressSearchResultI
             AddressResource::class
         );
     }
-
-    /**
-     * Redeclare after load method for dispatch event
-     *
-     * @return $this
-     */
-    protected function _afterLoad()
-    {
-        parent::_afterLoad();
-
-        $this->_eventManager->dispatch($this->_eventPrefix . '_load_after', [$this->_eventObject => $this]);
-
-        return $this;
-    }
 }
