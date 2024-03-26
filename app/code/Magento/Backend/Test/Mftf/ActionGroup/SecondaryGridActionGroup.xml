@@ -20,6 +20,7 @@
         </arguments>
 
         <!-- search for the name -->
+        <waitForElementClickable selector="{{AdminSecondaryGridSection.resetFilters}}" stepKey="waitForFiltersReset"/>
         <click stepKey="resetFilters" selector="{{AdminSecondaryGridSection.resetFilters}}"/>
         <fillField stepKey="fillIdentifier" selector="{{searchInput}}" userInput="{{name}}"/>
         <click stepKey="searchForName" selector="{{AdminSecondaryGridSection.searchButton}}"/>
