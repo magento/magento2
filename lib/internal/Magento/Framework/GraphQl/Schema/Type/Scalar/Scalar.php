@@ -16,6 +16,10 @@ use Magento\Framework\GraphQl\Schema\Type\CustomScalarType;
  */
 class Scalar extends CustomScalarType
 {
+    /**
+     * @param ScalarElement $configElement
+     * @param ScalarRegistry $scalarRegistry
+     */
     public function __construct(
         ScalarElement $configElement,
         ScalarRegistry $scalarRegistry
@@ -25,15 +29,18 @@ class Scalar extends CustomScalarType
             'name' => $configElement->getName(),
             'description' => $configElement->getDescription(),
             'serialize' =>
-                static function($value) use ($scalar) {return $scalar->serialize($value);},
+                static function ($value) use ($scalar) {
+                    return $scalar->serialize($value);
+                },
             'parseValue' =>
-                static function($value) use ($scalar) {return $scalar->parseValue($value);},
+                static function ($value) use ($scalar) {
+                    return $scalar->parseValue($value);
+                },
             'parseLiteral' =>
-                static function(Node $valueNode, ?array $variables = null) use ($scalar) {
+                static function (Node $valueNode, ?array $variables = null) use ($scalar) {
                     return $scalar->parseLiteral($valueNode, $variables);
                 },
         ];
         parent::__construct($config);
     }
-
 }

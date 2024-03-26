@@ -15,7 +15,7 @@ interface CustomScalarInterface
     /**
      * Serialize Value
      *
-     * @param $value
+     * @param mixed $value
      * @return mixed
      */
     public function serialize($value);
@@ -23,7 +23,7 @@ interface CustomScalarInterface
     /**
      * Parse Value
      *
-     * @param $value
+     * @param mixed $value
      * @return mixed
      */
     public function parseValue($value);
@@ -31,7 +31,7 @@ interface CustomScalarInterface
     /**
      * Parse literal
      *
-     * @param $valueNode
+     * @param mixed $valueNode
      * @param array|null $variables
      * @return mixed
      */

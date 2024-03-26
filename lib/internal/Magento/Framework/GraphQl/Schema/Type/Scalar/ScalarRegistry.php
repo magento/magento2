@@ -11,7 +11,7 @@ use Magento\Framework\GraphQl\Config\Element\Scalar as ScalarElement;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- *
+ * It provides method to retrieve custom scalar implementations
  */
 class ScalarRegistry
 {

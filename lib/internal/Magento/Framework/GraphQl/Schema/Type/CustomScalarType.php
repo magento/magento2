@@ -10,7 +10,9 @@ namespace Magento\Framework\GraphQl\Schema\Type;
 /**
  * Wrapper for CustomScalarType
  */
-class CustomScalarType extends \GraphQL\Type\Definition\CustomScalarType implements InputTypeInterface, OutputTypeInterface
+class CustomScalarType extends \GraphQL\Type\Definition\CustomScalarType implements
+    InputTypeInterface,
+    OutputTypeInterface
 {
 
 }

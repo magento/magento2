@@ -57,8 +57,9 @@ class ScalarType implements TypeMetaReaderInterface
         }
     }
 
-
     /**
+     * Retrieve the type resolver class name
+     *
      * @param \GraphQL\Type\Definition\Type $interfaceTypeMeta
      * @return string
      */

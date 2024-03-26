@@ -46,6 +46,8 @@ class Scalar implements ConfigElementInterface
     }
 
     /**
+     * Returns scalar element name
+     *
      * @return string
      */
     public function getName(): string
@@ -54,6 +56,8 @@ class Scalar implements ConfigElementInterface
     }
 
     /**
+     * Returns scalar element description
+     *
      * @return string
      */
     public function getDescription(): string
@@ -62,6 +66,8 @@ class Scalar implements ConfigElementInterface
     }
 
     /**
+     * Returns scalar element implementation
+     *
      * @return string
      */
     public function getImplementation(): string

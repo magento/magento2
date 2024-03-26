@@ -216,7 +216,7 @@ class GraphQl implements FrontControllerInterface
         $jsonResult->renderResult($this->httpResponse);
 
         // log information about the query, unless it is an introspection query
-        if (!isset($query) || strpos($query, 'IntrospectionQuery') === false) {
+        if (strpos($query, 'IntrospectionQuery') === false) {
             $queryInformation = $this->logDataHelper->getLogData($request, $data, $schema, $this->httpResponse);
             $this->loggerPool->execute($queryInformation);
         }
