@@ -186,6 +186,7 @@ class GraphQl implements FrontControllerInterface
         $data = $this->getDataFromRequest($request);
         $result = [];
 
+        $schema = null;
         $query = $data['query'] ?? '';
         try {
             /** @var Http $request */
