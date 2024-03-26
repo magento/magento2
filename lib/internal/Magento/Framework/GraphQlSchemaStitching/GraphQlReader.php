@@ -193,7 +193,7 @@ class GraphQlReader implements ReaderInterface
 
         foreach ($schema->getTypeMap() as $typeName => $typeMeta) {
             // Only process custom types and skip built-in object types
-            if (!\GraphQL\Type\Definition\Type::isBuiltInType($typeMeta)) {
+            if (!in_array($typeMeta, \GraphQL\Type\Definition\Type::builtInTypes())) {
                 $type = $this->typeReader->read($typeMeta);
                 if (!empty($type)) {
                     $partialResults[$typeName] = $type;
