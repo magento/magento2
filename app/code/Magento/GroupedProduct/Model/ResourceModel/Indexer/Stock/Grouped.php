@@ -6,8 +6,6 @@
 
 /**
  * Grouped Products Stock Status Indexer Resource Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\GroupedProduct\Model\ResourceModel\Indexer\Stock;
 

@@ -6,8 +6,6 @@
 
 /**
  * Adminhtml system templates page content block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Email\Block\Adminhtml;
 

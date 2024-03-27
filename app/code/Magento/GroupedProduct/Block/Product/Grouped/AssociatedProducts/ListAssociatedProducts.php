@@ -6,8 +6,6 @@
 
 /**
  * Products in grouped grid
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts;
 

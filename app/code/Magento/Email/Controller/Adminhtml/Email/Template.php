@@ -7,8 +7,6 @@ namespace Magento\Email\Controller\Adminhtml\Email;
 
 /**
  * System Template admin controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class Template extends \Magento\Backend\App\Action
 {
