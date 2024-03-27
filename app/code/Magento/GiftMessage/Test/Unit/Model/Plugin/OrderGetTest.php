@@ -191,8 +191,6 @@ class OrderGetTest extends TestCase
      */
     public function testGetAfterWhenMessagesAreNotSet(): void
     {
-        $orderId = 1;
-        $orderItemId = 2;
         //set Gift Message for Order
         $this->orderMock->expects($this->never())->method('getEntityId');
         $this->orderItemMock->expects($this->never())->method('getItemId');

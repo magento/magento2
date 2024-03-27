@@ -120,7 +120,7 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getOrderTaxDetails($orderId)
     {

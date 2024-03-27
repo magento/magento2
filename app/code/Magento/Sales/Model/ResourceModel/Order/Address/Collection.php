@@ -16,15 +16,11 @@ use Magento\Sales\Model\ResourceModel\Order\Address as AddressResource;
 class Collection extends AbstractCollection implements OrderAddressSearchResultInterface
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_address_collection';
 
     /**
-     * Event object
-     *
      * @var string
      */
     protected $_eventObject = 'order_address_collection';
