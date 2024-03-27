@@ -201,6 +201,7 @@ class Vat
             // Send request to service
             $result = $soapClient->checkVatApprox($requestParams);
 
+            $gatewayResponse->addData($this->extractValidationResultData($result));
             $gatewayResponse->setIsValid((bool)$result->valid);
             $gatewayResponse->setRequestDate((string)$result->requestDate);
             $gatewayResponse->setRequestIdentifier((string)$result->requestIdentifier);
@@ -223,6 +224,38 @@ class Vat
         }
 
         return $gatewayResponse;
+    }
+
+    /**
+     * @param \stdClass $object
+     * @return array
+     */
+    protected function extractValidationResultData($object)
+    {
+        $data = [];
+        $keys = [
+            'traderName',
+            'traderCompanyType',
+            'traderAddress',
+            'traderStreet',
+            'traderPostcode',
+            'traderCity',
+            'traderNameMatch',
+            'traderCompanyTypeMatch',
+            'traderStreetMatch',
+            'traderPostcodeMatch',
+            'traderCityMatch',
+        ];
+
+        foreach ($keys as $key) {
+            if (!property_exists($object, $key)) {
+                continue;
+            }
+
+            $data[$key] = (string) $object->{$key};
+        }
+
+        return $data;
     }
 
     /**
