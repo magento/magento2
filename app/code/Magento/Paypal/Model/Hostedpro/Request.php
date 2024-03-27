@@ -15,8 +15,6 @@ use Magento\Tax\Helper\Data;
 
 /**
  *  Website Payments Pro Hosted Solution request model to get token.
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Request extends DataObject
 {

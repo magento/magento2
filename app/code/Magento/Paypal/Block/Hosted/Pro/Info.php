@@ -6,8 +6,6 @@
 
 /**
  * Hosted Pro link infoblock
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Paypal\Block\Hosted\Pro;
 
