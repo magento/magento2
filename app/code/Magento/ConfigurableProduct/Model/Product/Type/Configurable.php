@@ -1275,12 +1275,13 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param array $requiredAttributeIds Attributes to include in the select; one-dimensional array
+     * @param bool $includeOutOfStockProducts Should products which are out of stock be included in the result
      * @return ProductInterface[]
      */
-    public function getUsedProducts($product, $requiredAttributeIds = null)
+    public function getUsedProducts($product, $requiredAttributeIds = null, bool $includeOutOfStockProducts = false)
     {
         if (!$product->hasData($this->_usedProducts)) {
-            $collection = $this->getConfiguredUsedProductCollection($product, false, $requiredAttributeIds);
+            $collection = $this->getConfiguredUsedProductCollection($product, $includeOutOfStockProducts, $requiredAttributeIds);
             $usedProducts = array_values($collection->getItems());
             $product->setData($this->_usedProducts, $usedProducts);
         }
@@ -1297,11 +1298,12 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param array|null $requiredAttributeIds
+     * @param bool $includeOutOfStockProducts Should products which are out of stock be included in the result
      * @return ProductInterface[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @since 100.1.3
      */
-    public function getSalableUsedProducts(\Magento\Catalog\Model\Product $product, $requiredAttributeIds = null)
+    public function getSalableUsedProducts(\Magento\Catalog\Model\Product $product, $requiredAttributeIds = null, bool $includeOutOfStockProducts = false)
     {
         $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $keyParts = [
@@ -1312,7 +1314,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
         ];
         $cacheKey = $this->getUsedProductsCacheKey($keyParts);
 
-        return $this->loadUsedProducts($product, $cacheKey, true);
+        return $this->loadUsedProducts($product, $cacheKey, true, $includeOutOfStockProducts);
     }
 
     /**
@@ -1329,15 +1331,16 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
      * @param \Magento\Catalog\Model\Product $product
      * @param string $cacheKey
      * @param bool $salableOnly
+     * @param bool $includeOutOfStockProducts Should products which are out of stock be included in the result
      * @return ProductInterface[]
      */
-    private function loadUsedProducts(\Magento\Catalog\Model\Product $product, $cacheKey, $salableOnly = false)
+    private function loadUsedProducts(\Magento\Catalog\Model\Product $product, $cacheKey, $salableOnly = false, bool $includeOutOfStockProducts = false)
     {
         $dataFieldName = $salableOnly ? $this->usedSalableProducts : $this->_usedProducts;
         if (!$product->hasData($dataFieldName)) {
             $usedProducts = $this->readUsedProductsCacheData($cacheKey);
             if ($usedProducts === null) {
-                $collection = $this->getConfiguredUsedProductCollection($product, false);
+                $collection = $this->getConfiguredUsedProductCollection($product, $includeOutOfStockProducts);
                 if ($salableOnly) {
                     $collection = $this->salableProcessor->process($collection);
                 }
