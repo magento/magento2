@@ -9,7 +9,8 @@ namespace Magento\Config\Block\System\Config\Form\Field\FieldArray;
 /**
  * Backend system config array field renderer
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedFunction
+ * phpcs:ignore Magento2.Classes.AbstractApi.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -281,6 +282,8 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
     }
 
     /**
+     * Retrieve the label for the 'add' button
+     *
      * @return string
      * @since 101.0.0
      */

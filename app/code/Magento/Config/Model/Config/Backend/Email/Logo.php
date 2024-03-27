@@ -6,8 +6,6 @@
 
 /**
  * Backend model for uploading transactional emails custom logo image
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Config\Model\Config\Backend\Email;
 
@@ -19,7 +17,7 @@ class Logo extends \Magento\Config\Model\Config\Backend\Image
     /**
      * The tail part of directory path for uploading
      */
-    const UPLOAD_DIR = 'email/logo';
+    public const UPLOAD_DIR = 'email/logo';
 
     /**
      * Upload max file size in kilobytes
@@ -49,12 +47,16 @@ class Logo extends \Magento\Config\Model\Config\Backend\Image
     }
 
     /**
+     * Return temporary name of file
+     *
      * @return string|null
      */
     protected function getTmpFileName()
     {
         $tmpName = null;
+        // @phpcs:ignore Magento2.Security.Superglobal.SuperglobalUsageError
         if (isset($_FILES['groups'])) {
+            // @phpcs:ignore Magento2.Security.Superglobal.SuperglobalUsageError
             $tmpName = $_FILES['groups']['tmp_name'][$this->getGroupId()]['fields'][$this->getField()]['value'];
         } else {
             $tmpName = is_array($this->getValue()) ? $this->getValue()['tmp_name'] : null;

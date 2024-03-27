@@ -6,12 +6,11 @@
 
 /**
  * Currency controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System;
 
 /**
+ * @phpcs:ignore Magento2.Classes.AbstractApi.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -22,11 +21,9 @@ abstract class Currency extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_CurrencySymbol::currency_rates';
+    public const ADMIN_RESOURCE = 'Magento_CurrencySymbol::currency_rates';
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
