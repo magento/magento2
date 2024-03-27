@@ -7,8 +7,6 @@ namespace Magento\Customer\Model\Customer\Attribute\Backend;
 
 /**
  * Store attribute backend
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Store extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {

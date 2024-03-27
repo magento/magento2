@@ -8,7 +8,6 @@ namespace Magento\Customer\Model\ResourceModel\Customer;
 /**
  * Customers collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\AbstractCollection
@@ -16,7 +15,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
     /**
      * Name of collection model
      */
-    const CUSTOMER_MODEL_NAME = \Magento\Customer\Model\Customer::class;
+    public const CUSTOMER_MODEL_NAME = \Magento\Customer\Model\Customer::class;
 
     /**
      * @var \Magento\Framework\DataObject\Copy\Config

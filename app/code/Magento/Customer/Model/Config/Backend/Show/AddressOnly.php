@@ -9,8 +9,6 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 /**
  * Customer Show Address Model
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class AddressOnly extends Customer
 {
