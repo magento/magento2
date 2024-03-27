@@ -7,21 +7,15 @@ namespace Magento\Catalog\Model\Config\Backend;
 
 /**
  * Config category field backend
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Category extends \Magento\Framework\App\Config\Value
 {
     /**
-     * Catalog category
-     *
      * @var \Magento\Catalog\Model\Category
      */
     protected $_catalogCategory;
 
     /**
-     * Constructor
-     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
@@ -46,7 +40,7 @@ class Category extends \Magento\Framework\App\Config\Value
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function afterSave()
     {
