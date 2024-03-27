@@ -63,7 +63,6 @@ class NameTest extends TestCase
         $isValid = $this->nameValidator->isValid($this->customerMock);
         $this->assertTrue($isValid, $message);
     }
-
     /**
      * @return array
      */
@@ -93,6 +92,49 @@ class NameTest extends TestCase
                 'middleName' => '',
                 'lastNameName' => 'O`Doe',
                 'message' => 'Special character ampersand(&) must be allowed in names'
+            ]
+        ];
+    }
+    /**
+     * Test for Not allowed spical characters in customer names
+     *
+     * @param string $firstName
+     * @param string $middleName
+     * @param string $lastName
+     * @param string $message
+     * @return void
+     * @dataProvider unexpectedPunctuationInNamesDataProvider
+     */
+    public function testValidateInCorrectPunctuationInNames(
+        string $firstName,
+        string $middleName,
+        string $lastName,
+        string $message
+    ) {
+        $this->customerMock->expects($this->once())->method('getFirstname')->willReturn($firstName);
+        $this->customerMock->expects($this->once())->method('getMiddlename')->willReturn($middleName);
+        $this->customerMock->expects($this->once())->method('getLastname')->willReturn($lastName);
+
+        $isValid = $this->nameValidator->isValid($this->customerMock);
+
+        $this->assertFalse($isValid, $message);
+    }
+    /**
+     * @return array
+     */
+    public function unexpectedPunctuationInNamesDataProvider() {
+        return [
+            [
+                'firstName' => 'John @ Smith',
+                'middleName' => '',
+                'lastNameName' => 'O`Doe',
+                'message' => 'Not allowed Special character(@) in names'
+            ],
+            [
+                'firstName' => '!@#$%',
+                'middleName' => '',
+                'lastNameName' => 'O`Doe',
+                'message' => 'Only Special character not allowed in names'
             ]
         ];
     }
