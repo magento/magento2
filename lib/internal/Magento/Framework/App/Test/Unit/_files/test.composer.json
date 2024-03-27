@@ -22,7 +22,7 @@
     },
     "replace": {
         "magento/module-marketplace": "100.0.2",
-        "tinymce/tinymce": "3.4.7"
+        "tinymce/tinymce": "5.10.2"
     },
     "extra": {
         "component_paths": {
