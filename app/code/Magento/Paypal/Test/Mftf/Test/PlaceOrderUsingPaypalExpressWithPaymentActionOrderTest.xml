@@ -48,7 +48,7 @@
         </actionGroup>
         <!-- Go to Order review -->
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentPage"/>
-        <waitForElement selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('PayPal Express Checkout')}}" stepKey="waitForPayPalExpressCheckoutIsPresent"/>
+        <waitForElementClickable selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('PayPal Express Checkout')}}" stepKey="waitForPayPalExpressCheckoutIsPresent"/>
         <click selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('PayPal Express Checkout')}}" stepKey="clickPayPalExpressCheckout"/>
         <waitForPageLoad stepKey="waitForPaypalExpressCheckoutToBeLoaded"/>
         <!-- Click on Paypal paypal button-->
@@ -88,11 +88,9 @@
         <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClicked"/>
         <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButton"/>
         <!--Hold and unhold the order-->
-        <waitForElementClickable selector="{{AdminOrderDetailsMainActionsSection.hold}}" stepKey="waitForHoldButtonToBeClickable"/>
-        <click selector="{{AdminOrderDetailsMainActionsSection.hold}}" stepKey="clickHoldButton"/>
+        <actionGroup ref="AdminClicksHoldButtonActionGroup" stepKey="clickOnHoldButton"/>
         <dontSee selector="{{AdminOrderDetailsMainActionsSection.authorize}}" stepKey="dontSeeAuthorizationButton"/>
-        <waitForElementClickable selector="{{AdminOrderDetailsMainActionsSection.unhold}}" stepKey="waitForUnHoldButtonToBeClickable"/>
-        <click selector="{{AdminOrderDetailsMainActionsSection.unhold}}" stepKey="clickUnHoldButton"/>
+        <actionGroup ref="AdminClicksUnHoldButtonActionGroup" stepKey="clickUnHoldButton"/>
         <actionGroup ref="AdminAssertAuthorizeButtonOnOrderPageActionGroup" stepKey="assertAuthorizeButtonIsPresentAfterUnHolding"/>
         <!--Authorize the order-->
         <actionGroup ref="AdminAuthorizeAnOrderActionGroup" stepKey="authorizeTheOrder"/>
