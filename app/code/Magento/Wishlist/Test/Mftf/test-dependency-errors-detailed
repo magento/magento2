@@ -1,0 +1,34 @@
+
+File "/var/www/html/app/code/Magento/Wishlist/Test/Mftf/Test/ConfProdAddToCartWishListWithUnselectedAttrTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 colorProductAttribute from module(s): magento/module-configurable-product
+	 colorProductAttribute1 from module(s): magento/module-configurable-product
+	 colorProductAttribute2 from module(s): magento/module-configurable-product
+	 CreateConfigurableProductActionGroup from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Wishlist/Test/Mftf/Test/ConfigurableProductChildImageShouldBeShownOnWishListTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 colorProductAttribute from module(s): magento/module-configurable-product
+	 colorProductAttribute1 from module(s): magento/module-configurable-product
+	 CreateConfigurableProductActionGroup from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Wishlist/Test/Mftf/Test/StorefrontCheckOptionsConfigurableProductInWishlistTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 visualSwatchAttribute from module(s): magento/module-inventory-admin-ui, magento/module-swatches
+	 visualSwatchOption1 from module(s): magento/module-swatches
+	 AddVisualSwatchToProductWithStorefrontConfigActionGroup from module(s): magento/module-swatches
+	 AddVisualSwatchToProductWithOutCreatedActionGroup from module(s): magento/module-swatches
+	 StorefrontSelectVisualSwatchOptionOnCategoryPageActionGroup from module(s): magento/module-swatches
+
+File "/var/www/html/app/code/Magento/Wishlist/Test/Mftf/Test/StorefrontDisabledWishlistInSidebarFunctionalityTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCheckQuickSearchActionGroup from module(s): magento/module-catalog-search
+
+File "/var/www/html/app/code/Magento/Wishlist/Test/Mftf/ActionGroup/StorefrontCustomerAddProductToWishlistCategoryPageActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCategoryPageProductInfoSection from module(s): magento/module-swatches

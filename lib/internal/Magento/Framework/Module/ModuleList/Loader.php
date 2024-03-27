@@ -6,11 +6,13 @@
 
 namespace Magento\Framework\Module\ModuleList;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Module\Declaration\Converter\Dom;
 use Magento\Framework\Xml\Parser;
-use Magento\Framework\Component\ComponentRegistrarInterface;
-use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Xml\ParserFactory;
 
 /**
  * Loader of module list information from the filesystem
@@ -27,15 +29,13 @@ class Loader
     private $converter;
 
     /**
-     * Parser
-     *
      * @var \Magento\Framework\Xml\Parser
+     * @deprecated
+     * @see $parserFactory
      */
     private $parser;
 
     /**
-     * Module registry
-     *
      * @var ComponentRegistrarInterface
      */
     private $moduleRegistry;
@@ -48,24 +48,33 @@ class Loader
     private $filesystemDriver;
 
     /**
+     * @var ParserFactory
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
+    private readonly ParserFactory $parserFactory;
+
+    /**
      * Constructor
      *
      * @param Dom $converter
-     * @param Parser $parser
+     * @param Parser $parser @deprecated, @see $parserFactory
      * @param ComponentRegistrarInterface $moduleRegistry
      * @param DriverInterface $filesystemDriver
+     * @param ParserFactory|null $parserFactory
      */
     public function __construct(
         Dom $converter,
         Parser $parser,
         ComponentRegistrarInterface $moduleRegistry,
-        DriverInterface $filesystemDriver
+        DriverInterface $filesystemDriver,
+        ?ParserFactory $parserFactory = null,
     ) {
         $this->converter = $converter;
         $this->parser = $parser;
-        $this->parser->initErrorHandler();
         $this->moduleRegistry = $moduleRegistry;
         $this->filesystemDriver = $filesystemDriver;
+        $this->parserFactory = $parserFactory ?? ObjectManager::getInstance()->get(ParserFactory::class);
     }
 
     /**
@@ -82,7 +91,9 @@ class Loader
 
         foreach ($this->getModuleConfigs() as list($file, $contents)) {
             try {
-                $this->parser->loadXML($contents);
+                $parser = $this->parserFactory->create();
+                $parser->initErrorHandler();
+                $parser->loadXML($contents);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     new \Magento\Framework\Phrase(
@@ -93,7 +104,7 @@ class Loader
                 );
             }
 
-            $data = $this->converter->convert($this->parser->getDom());
+            $data = $this->converter->convert($parser->getDom());
             $name = key($data);
             if (!isset($excludeSet[$name])) {
                 $result[$name] = $data[$name];
@@ -202,7 +213,7 @@ class Loader
     private function expandSequence(
         array $list,
         string $name,
-        array& $sequenceCache,
+        array &$sequenceCache,
         array $accumulated = [],
         string $parentName = ''
     ) {
@@ -211,7 +222,6 @@ class Loader
             throw new \LogicException("Circular sequence reference from '{$parentName}' to '{$name}'.");
         }
         $accumulated[$name] = true;
-
         // Checking if we already computed the full sequence for this module
         if (!isset($sequenceCache[$name])) {
             $sequence = $list[$name]['sequence'] ?? [];
@@ -222,13 +232,8 @@ class Loader
                 $allSequences[] = $relatedSequence;
             }
             $allSequences[] = $sequence;
-
-            // Caching the full sequence list
-            if (!empty($allSequences)) {
-                $sequenceCache[$name] = array_unique(array_merge(...$allSequences));
-            }
+            $sequenceCache[$name] = array_unique(array_merge(...$allSequences));
         }
-
         return $sequenceCache[$name] ?? [];
     }
 }
