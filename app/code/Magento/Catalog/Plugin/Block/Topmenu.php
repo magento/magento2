@@ -1,15 +1,20 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Catalog\Plugin\Block;
 
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\MenuCategoryData;
+use Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Tree\Node;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Plugin that enhances the top menu block by building and managing the category tree
@@ -18,35 +23,15 @@ use Magento\Framework\Data\Tree\Node;
 class Topmenu
 {
     /**
-     * @var \Magento\Catalog\Helper\Category
-     */
-    protected $catalogCategory;
-
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * Initialize dependencies.
-     *
-     * @param \Magento\Catalog\Helper\Category $catalogCategory
-     * @param \Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory $categoryCollectionFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StateDependentCollectionFactory $collectionFactory
+     * @param MenuCategoryData $menuCategoryData
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Catalog\Helper\Category $catalogCategory,
-        \Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory $categoryCollectionFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        private readonly StateDependentCollectionFactory $collectionFactory,
+        private readonly MenuCategoryData $menuCategoryData,
+        private readonly StoreManagerInterface $storeManager,
     ) {
-        $this->catalogCategory = $catalogCategory;
-        $this->collectionFactory = $categoryCollectionFactory;
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -56,15 +41,17 @@ class Topmenu
      * @param string $outermostClass
      * @param string $childrenWrapClass
      * @param int $limit
+     *
      * @return void
+     *
      * @SuppressWarnings("PMD.UnusedFormalParameter")
      */
     public function beforeGetHtml(
         \Magento\Theme\Block\Html\Topmenu $subject,
-        $outermostClass = '',
-        $childrenWrapClass = '',
-        $limit = 0
-    ) {
+        string $outermostClass = '',
+        string $childrenWrapClass = '',
+        int $limit = 0
+    ): void {
         $rootId = $this->storeManager->getStore()->getRootCategoryId();
         $storeId = $this->storeManager->getStore()->getId();
         /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
@@ -103,9 +90,10 @@ class Topmenu
      * Add list of associated identities to the top menu block for caching purposes.
      *
      * @param \Magento\Theme\Block\Html\Topmenu $subject
+     *
      * @return void
      */
-    public function beforeGetIdentities(\Magento\Theme\Block\Html\Topmenu $subject)
+    public function beforeGetIdentities(\Magento\Theme\Block\Html\Topmenu $subject): void
     {
         $subject->addIdentity(Category::CACHE_TAG);
         $rootId = $this->storeManager->getStore()->getRootCategoryId();
@@ -117,6 +105,7 @@ class Topmenu
             if (!isset($mapping[$category->getParentId()])) {
                 continue;
             }
+
             $subject->addIdentity(Category::CACHE_TAG . '_' . $category->getId());
         }
     }
@@ -126,18 +115,17 @@ class Topmenu
      *
      * @param Category $category
      * @param bool $isParentActive
+     *
      * @return array
      */
-    private function getCategoryAsArray($category, $isParentActive): array
+    private function getCategoryAsArray(Category $category, bool $isParentActive): array
     {
-        $categoryId = $category->getId();
-        return [
-            'name' => $category->getName(),
-            'id' => 'category-node-' . $categoryId,
-            'url' => $this->catalogCategory->getCategoryUrl($category),
+        $menuData = $this->menuCategoryData->getMenuCategoryData($category);
+        $localData = [
             'is_category' => true,
             'is_parent_active' => $isParentActive
         ];
+        return array_merge($localData, $menuData);
     }
 
     /**
@@ -145,10 +133,12 @@ class Topmenu
      *
      * @param int $storeId
      * @param int $rootId
+     *
      * @return \Magento\Catalog\Model\ResourceModel\Category\Collection
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function getCategoryTree($storeId, $rootId)
+    protected function getCategoryTree(int $storeId, int $rootId)
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
         $collection = $this->collectionFactory->create();
