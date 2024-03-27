@@ -19,6 +19,11 @@ class TransportInterfaceMock implements \Magento\Framework\Mail\TransportInterfa
     private $message;
 
     /**
+     * @var int
+     */
+    private static $sentMsgCount = 0;
+
+    /**
      * TransportInterfaceMock constructor.
      *
      * @param null|EmailMessageInterface $message
@@ -35,6 +40,7 @@ class TransportInterfaceMock implements \Magento\Framework\Mail\TransportInterfa
      */
     public function sendMessage()
     {
+        self::$sentMsgCount++;
         //phpcs:ignore Squiz.PHP.NonExecutableCode.ReturnNotRequired
         return;
     }
@@ -47,5 +53,26 @@ class TransportInterfaceMock implements \Magento\Framework\Mail\TransportInterfa
     public function getMessage()
     {
         return $this->message;
+    }
+
+    /**
+     * Returns count of sent messages
+     *
+     * @return int
+     */
+    public function getSentMsgCount(): int
+    {
+        return self::$sentMsgCount;
+    }
+
+    /**
+     * Reset amount of sent message
+     *
+     * @param int $count
+     * @return void
+     */
+    public function resetSentMsgCount($count = 0): void
+    {
+        self::$sentMsgCount = $count;
     }
 }

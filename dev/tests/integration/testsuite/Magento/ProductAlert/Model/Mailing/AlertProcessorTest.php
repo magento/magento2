@@ -12,7 +12,9 @@ use Magento\Catalog\Model\ResourceModel\Product as ProductResourceModel;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
 use Magento\Framework\Mail\EmailMessage;
+use Magento\ProductAlert\Model\ResourceModel\Stock\CollectionFactory as StockCollectionFactory;
 use Magento\ProductAlert\Test\Fixture\PriceAlert as PriceAlertFixture;
+use Magento\ProductAlert\Test\Fixture\StockAlert as StockAlertFixture;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
@@ -26,6 +28,7 @@ use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
+use Magento\TestFramework\Mail\TransportInterfaceMock;
 use Magento\TestFramework\ObjectManager;
 use Magento\Translation\Test\Fixture\Translation as TranslationFixture;
 use PHPUnit\Framework\TestCase;
@@ -44,19 +47,24 @@ class AlertProcessorTest extends TestCase
     private $objectManager;
 
     /**
-     * @var Publisher
-     */
-    private $publisher;
-
-    /**
      * @var AlertProcessor
      */
     private $alertProcessor;
 
     /**
+     * @var StockCollectionFactory
+     */
+    private $stockCollectionFactory;
+
+    /**
      * @var TransportBuilderMock
      */
     private $transportBuilder;
+
+    /**
+     * @var TransportInterfaceMock
+     */
+    private $transportInterface;
 
     /**
      * @var DataFixtureStorage
@@ -69,8 +77,11 @@ class AlertProcessorTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->publisher = $this->objectManager->get(Publisher::class);
         $this->alertProcessor = $this->objectManager->get(AlertProcessor::class);
+        $this->stockCollectionFactory = $this->objectManager->get(StockCollectionFactory::class);
+
+        $this->transportInterface = $this->objectManager->get(TransportInterfaceMock::class);
+        $this->transportInterface->resetSentMsgCount();
 
         $this->transportBuilder = $this->objectManager->get(TransportBuilderMock::class);
         $this->fixtures = DataFixtureStorageManager::getStorage();
@@ -241,6 +252,38 @@ class AlertProcessorTest extends TestCase
             '/frontend\/Magento\/luma\/.+\/thumbnail.jpg$/',
             $img->item(0)->getAttribute('src')
         );
+    }
+
+    #[
+        DbIsolation(false),
+        Config('catalog/productalert/allow_stock', 1),
+        DataFixture(CustomerFixture::class, as: 'customer'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(StoreFixture::class, ['store_group_id' => 1, 'code' => 'pt_br_store'], 'store2'),
+        DataFixture(
+            StockAlertFixture::class,
+            [
+                'customer_id' => '$customer.id$',
+                'product_id' => '$product.id$',
+                'website_id' => 1,
+                'store_id' => 1,
+            ]
+        ),
+        DataFixture(
+            StockAlertFixture::class,
+            [
+                'customer_id' => '$customer.id$',
+                'product_id' => '$product.id$',
+                'website_id' => 1,
+                'store_id' => '$store2.id$',
+            ]
+        ),
+    ]
+    public function testCustomerShouldGetEmailForEveryStoreView()
+    {
+        $customerId = (int) $this->fixtures->get('customer')->getId();
+        $this->processAlerts($customerId, 1, AlertProcessor::ALERT_TYPE_STOCK);
+        $this->assertEquals(2, $this->transportInterface->getSentMsgCount());
     }
 
     /**
