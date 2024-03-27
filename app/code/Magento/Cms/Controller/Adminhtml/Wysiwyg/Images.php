@@ -7,8 +7,6 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg;
 
 /**
  * Images manage controller for Cms WYSIWYG editor
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class Images extends \Magento\Backend\App\Action
 {
@@ -17,11 +15,9 @@ abstract class Images extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
+    public const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;

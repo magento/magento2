@@ -6,8 +6,6 @@
 
 /**
  * Captcha helper for adminhtml area
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Captcha\Helper\Adminhtml;
 
