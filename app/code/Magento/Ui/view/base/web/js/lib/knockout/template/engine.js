@@ -7,9 +7,8 @@ define([
     'ko',
     'underscore',
     './observable_source',
-    './renderer',
-    '../../logger/console-logger'
-], function ($, ko, _, Source, renderer, consoleLogger) {
+    './renderer'
+], function ($, ko, _, Source, renderer) {
     'use strict';
 
     var RemoteTemplateEngine,
@@ -70,13 +69,14 @@ define([
                 }
 
                 if (!options.name) {
-                    consoleLogger.error('Could not find template name', options);
+                    console.error('Could not find template name', options);
                 }
+
                 templateName = options.name;
             } else if (typeof options === 'string') {
                 templateName = options;
             } else {
-                consoleLogger.error('Could not build a template binding', options);
+                console.error('Could not build a template binding', options);
             }
             engine._trackRender(templateName);
             isSync = engine._hasTemplateLoaded(templateName);
@@ -184,20 +184,21 @@ define([
                 source.requestedBy = bindingContext.$data.name;
                 sources[templateId] = source;
 
-                consoleLogger.info('templateStartLoading', {
+                console.info('templateStartLoading', {
                     template: templateId,
                     component: bindingContext.$data.name
                 });
 
                 renderer.render(template).then(function (rendered) {
-                    consoleLogger.info('templateLoadedFromServer', {
+                    console.info('templateLoadedFromServer', {
                         template: templateId,
                         component: bindingContext.$data.name
                     });
+
                     source.nodes(rendered);
                     engine._releaseRender(templateId, 'async');
                 }).fail(function () {
-                    consoleLogger.error('templateLoadingFail', {
+                    console.error('templateLoadingFail', {
                         template: templateId,
                         component: bindingContext.$data.name
                     });
@@ -205,7 +206,7 @@ define([
             }
 
             if (source.requestedBy !== bindingContext.$data.name) {
-                consoleLogger.info('templateLoadedFromCache', {
+                console.info('templateLoadedFromCache', {
                     template: templateId,
                     component: bindingContext.$data.name
                 });
