@@ -230,7 +230,7 @@
     display: inline-block;
 
     input[type='text'] {
-        .lib-css(appearance, none, 1);
+        .lib-vendor-prefix-appearance(none);
         border: 0;
         display: inline;
         margin: 0;
@@ -320,10 +320,7 @@
     }
 
     li {
-        .lib-vendor-prefix-display(flex);
-        .lib-vendor-prefix-flex-direction(row);
         display: flex;
-        flex-direction: row;
         transition: background .2s linear;
 
         &:hover {
@@ -370,7 +367,7 @@
 }
 
 .selectmenu-item-action {
-    .lib-css(appearance, none, 1);
+    .lib-vendor-prefix-appearance(none);
     background: transparent;
     border: 0;
     color: @text__color;
