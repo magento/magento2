@@ -86,7 +86,10 @@ class OrderGetTest extends TestCase
             ->disableOriginalConstructor()
             ->addMethods(['getGiftMessageId'])
             ->getMockForAbstractClass();
-        $this->orderExtensionMock = $this->createMock(OrderExtension::class);
+        $this->orderExtensionMock = $this->getMockBuilder(OrderExtension::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getGiftMessage', 'setGiftMessage'])
+            ->getMock();
         $this->giftMessageMock = $this->createMock(
             MessageInterface::class
         );
@@ -94,7 +97,10 @@ class OrderGetTest extends TestCase
             ->disableOriginalConstructor()
             ->addMethods(['getGiftMessageId'])
             ->getMockForAbstractClass();
-        $this->orderItemExtensionMock = $this->createMock(OrderItemExtension::class);
+        $this->orderItemExtensionMock = $this->getMockBuilder(OrderItemExtension::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getGiftMessage', 'setGiftMessage'])
+            ->getMock();
         $this->orderRepositoryMock = $this->createMock(
             \Magento\Sales\Api\OrderRepositoryInterface::class
         );
