@@ -9,8 +9,6 @@ use Magento\Quote\Model\Quote\Item;
 
 /**
  * Item option collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

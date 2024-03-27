@@ -7,8 +7,6 @@ namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
 
 /**
  * Adminhtml Report Customers Reviews renderer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Customer extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {

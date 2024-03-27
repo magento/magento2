@@ -7,8 +7,6 @@ namespace Magento\Reports\Block\Adminhtml\Grid;
 
 /**
  * Adminhtml shopping carts report grid block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Shopcart extends \Magento\Backend\Block\Widget\Grid\Extended
 {
