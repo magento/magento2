@@ -7,8 +7,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer;
 
 /**
  * Renderer for Qty field in sales create new order search grid
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Qty extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Input
 {

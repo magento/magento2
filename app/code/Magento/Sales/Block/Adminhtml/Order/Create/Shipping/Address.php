@@ -11,7 +11,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Shipping;
  * Adminhtml sales order create shipping address block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @since 100.0.2
  */
