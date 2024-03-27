@@ -36,21 +36,21 @@ define([
     return function (config) {
 
         let options = {
-            dataUrl: config.dataUrl,
-            divId: config.divId,
-            rootVisible: config.rootVisible,
-            useAjax: config.useAjax,
-            currentNodeId: config.currentNodeId,
-            jsFormObject: window[config.jsFormObject],
-            name: config.name,
-            checked: config.checked,
-            allowDrop: config.allowDrop,
-            rootId: config.rootId,
-            expanded: config.expanded,
-            categoryId: config.categoryId,
-            treeJson: addLastNodeProperty(config.treeJson)
-        },
-        checkedNodes = [];
+                dataUrl: config.dataUrl,
+                divId: config.divId,
+                rootVisible: config.rootVisible,
+                useAjax: config.useAjax,
+                currentNodeId: config.currentNodeId,
+                jsFormObject: window[config.jsFormObject],
+                name: config.name,
+                checked: config.checked,
+                allowDrop: config.allowDrop,
+                rootId: config.rootId,
+                expanded: config.expanded,
+                categoryId: config.categoryId,
+                treeJson: addLastNodeProperty(config.treeJson)
+            },
+            checkedNodes = [];
 
         /**
          * Get the jstree element by its ID
