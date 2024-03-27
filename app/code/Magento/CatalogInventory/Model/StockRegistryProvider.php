@@ -15,7 +15,6 @@ use Magento\CatalogInventory\Api\Data\StockStatusInterfaceFactory;
 use Magento\CatalogInventory\Api\StockCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class StockRegistryProvider

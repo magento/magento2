@@ -6,7 +6,6 @@
 namespace Magento\CatalogInventory\Model;
 
 use Magento\Catalog\Model\CollectionConditionInterface;
-use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Data\CollectionModifierInterface;
 
