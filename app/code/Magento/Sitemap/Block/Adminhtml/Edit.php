@@ -7,8 +7,6 @@ namespace Magento\Sitemap\Block\Adminhtml;
 
 /**
  * Sitemap edit form container
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {

@@ -16,8 +16,6 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Sitemap module observer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Observer
 {

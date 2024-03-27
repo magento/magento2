@@ -7,8 +7,6 @@ namespace Magento\SalesRule\Model\ResourceModel\Rule\Customer;
 
 /**
  * SalesRule Model Resource Rule Customer_Collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

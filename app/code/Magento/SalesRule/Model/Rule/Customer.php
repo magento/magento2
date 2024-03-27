@@ -14,8 +14,6 @@ namespace Magento\SalesRule\Model\Rule;
  * @method \Magento\SalesRule\Model\Rule\Customer setCustomerId(int $value)
  * @method int getTimesUsed()
  * @method \Magento\SalesRule\Model\Rule\Customer setTimesUsed(int $value)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Customer extends \Magento\Framework\Model\AbstractModel
 {
