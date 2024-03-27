@@ -6,8 +6,6 @@
 
 /**
  * Adminhtml JavaScript helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Backend\Helper;
 
@@ -39,6 +37,7 @@ class Js
     {
         $isSimplified = false === strpos($encoded, '=');
         $result = [];
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction.Discouraged
         parse_str($encoded, $decoded);
         foreach ($decoded as $key => $value) {
             if (is_numeric($key)) {
@@ -46,6 +45,7 @@ class Js
                     $result[] = $key;
                 } else {
                     $result[$key] = null;
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction.Discouraged
                     parse_str(base64_decode($value), $result[$key]);
                 }
             }

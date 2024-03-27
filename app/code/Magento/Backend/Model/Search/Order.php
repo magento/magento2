@@ -8,15 +8,12 @@ namespace Magento\Backend\Model\Search;
 /**
  * Search Order Model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  */
 class Order extends \Magento\Framework\DataObject
 {
     /**
-     * Adminhtml data
-     *
      * @var \Magento\Backend\Helper\Data
      */
     protected $_adminhtmlData = null;

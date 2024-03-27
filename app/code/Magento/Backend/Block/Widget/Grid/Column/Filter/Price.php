@@ -8,8 +8,6 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 /**
  * Range grid column filter
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter

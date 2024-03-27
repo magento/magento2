@@ -7,8 +7,6 @@ namespace Magento\Backend\Block\System\Store;
 
 /**
  * Store / store view / website delete form container
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Delete extends \Magento\Backend\Block\Widget\Form\Container
 {
