@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDisableDHLConfigurationActionGroup">
+        <magentoCLI command="config:set {{AdminDHLDisableConfigData.path}} {{AdminDHLDisableConfigData.value}}" stepKey="disableDHL"/>
+        <magentoCLI command="config:set {{AdminCarriersDHLAllowedAllCountries.path}} {{AdminCarriersDHLAllowedAllCountries.value}}" stepKey="DHLAllowedAllCountries"/>
+        <magentoCLI command="config:set {{AdminDisableDHLShowMethod.path}} {{AdminDisableDHLShowMethod.value}}" stepKey="disableDHLShowMethod"/>
+        <magentoCLI command="config:set {{AdminDisableDHLDebug.path}} {{AdminDisableDHLDebug.value}}" stepKey="disableDHLDebug"/>
+        <magentoCLI command="config:set {{AdminDisableSandboxMode.path}} {{AdminDisableSandboxMode.value}}" stepKey="disableSandboxMode"/>
+    </actionGroup>
+</actionGroups>

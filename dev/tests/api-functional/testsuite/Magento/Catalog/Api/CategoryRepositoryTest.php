@@ -269,12 +269,13 @@ class CategoryRepositoryTest extends WebapiAbstract
         $this->createdCategories = [$categoryId];
     }
 
-    /**
-     * @magentoApiDataFixture Magento/Catalog/_files/category.php
-     */
+    #[
+        DataFixture(CategoryFixture::class, as: 'category')
+    ]
     public function testUpdateWithDefaultSortByAttribute()
     {
-        $categoryId = 333;
+        $category = $this->fixtures->get('category');
+        $categoryId = $category->getId();
         $categoryData = [
             'name' => 'Update Category Test With default_sort_by Attribute',
             'is_active' => true,
@@ -282,7 +283,7 @@ class CategoryRepositoryTest extends WebapiAbstract
             'custom_attributes' => [
                 [
                     'attribute_code' => 'default_sort_by',
-                    'value' => ["name"],
+                    'value' => "price"
                 ],
             ],
         ];
@@ -293,7 +294,7 @@ class CategoryRepositoryTest extends WebapiAbstract
         $category = $model->load($categoryId);
         $this->assertTrue((bool)$category->getIsActive(), 'Category "is_active" must equal to true');
         $this->assertEquals("Update Category Test With default_sort_by Attribute", $category->getName());
-        $this->assertEquals("name", $category->getDefaultSortBy());
+        $this->assertEquals("price", $category->getDefaultSortBy());
         $this->createdCategories = [$categoryId];
     }
 

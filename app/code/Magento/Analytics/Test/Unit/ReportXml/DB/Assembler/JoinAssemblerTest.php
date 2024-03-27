@@ -134,14 +134,13 @@ class JoinAssemblerTest extends TestCase
 
         $this->nameResolverMock
             ->method('getAlias')
-            ->withConsecutive(
-                [$queryConfigMock['source']],
-                [$queryConfigMock['source']['link-source'][0]]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $queryConfigMock['source']['alias'],
-                $queryConfigMock['source']['link-source'][0]['alias']
-            );
+            ->willReturnCallback(function ($arg1) use ($queryConfigMock) {
+                if ($arg1 == $queryConfigMock['source']) {
+                    return $queryConfigMock['source']['alias'];
+                } elseif ($arg1 == $queryConfigMock['source']['link-source'][0]) {
+                    return $queryConfigMock['source']['link-source'][0]['alias'];
+                }
+            });
         $this->nameResolverMock->expects($this->once())
             ->method('getName')
             ->with($queryConfigMock['source']['link-source'][0])
@@ -192,8 +191,12 @@ class JoinAssemblerTest extends TestCase
         }
         $this->conditionResolverMock
             ->method('getFilter')
-            ->withConsecutive(...$withArgs)
-            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+            ->willReturnCallback(function ($withArgs) use ($willReturnArgs) {
+                static $callCount = 0;
+                $returnValue = $willReturnArgs[$callCount] ?? null;
+                $callCount++;
+                return $returnValue;
+            });
 
         $this->selectBuilderMock->expects($this->once())
             ->method('setFilters')
@@ -211,7 +214,7 @@ class JoinAssemblerTest extends TestCase
     /**
      * @return array
      */
-    public function assembleNotEmptyDataProvider(): array
+    public static function assembleNotEmptyDataProvider(): array
     {
         return [
             [
