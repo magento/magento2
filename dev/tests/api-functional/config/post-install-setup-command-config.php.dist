@@ -15,6 +15,14 @@ return [
             '--remote-storage-bucket' => 'myBucket',
             '--remote-storage-region' => 'us-east-1',
         ]
-    ]
+    ],
     */
+    [
+        // Indexers start in 'schedule' mode, but many of our tests assume that
+        // indexers are up to date. Because we don't run cron in our testsuite,
+        // we need to ensure that the indexers are up to date before we run our
+        // tests.
+        'command' => 'indexer:reindex',
+        'config' => [],
+    ],
 ];

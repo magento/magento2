@@ -9,6 +9,7 @@ namespace Magento\Indexer\Test\Unit\Model\Mview\View;
 
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\Context;
+use Magento\Framework\Mview\View\StateInterface;
 use Magento\Framework\Registry;
 use Magento\Indexer\Model\Mview\View\State;
 use Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection;
@@ -157,5 +158,14 @@ class StateTest extends TestCase
         $this->lockManagerMock->expects($this->once())->method($lock);
         $this->model->setStatus($setStatus);
         $this->assertEquals($getStatus, $this->model->getStatus());
+    }
+
+    public function testDefaultValues(): void
+    {
+        $this->assertEquals(StateInterface::MODE_ENABLED, $this->model->getMode());
+        $this->assertEquals(StateInterface::STATUS_IDLE, $this->model->getStatus());
+        $this->assertNull($this->model->getUpdated());
+        $this->assertNull($this->model->getVersionId());
+        $this->assertNull($this->model->getViewId());
     }
 }
