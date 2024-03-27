@@ -9,8 +9,6 @@ use Magento\Framework\App\RequestInterface;
 
 /**
  * EAV Entity Attribute Date Data Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
 {
@@ -28,6 +26,7 @@ class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
 
     /**
      * Validate data
+     *
      * Return true or array of errors
      *
      * @param array|string $value

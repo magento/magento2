@@ -7,8 +7,6 @@ namespace Magento\Eav\Model\ResourceModel;
 
 /**
  * Eav Resource Config model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

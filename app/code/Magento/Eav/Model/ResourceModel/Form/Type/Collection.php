@@ -6,8 +6,6 @@
 
 /**
  * Eav Form Type Resource Collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Eav\Model\ResourceModel\Form\Type;
 
