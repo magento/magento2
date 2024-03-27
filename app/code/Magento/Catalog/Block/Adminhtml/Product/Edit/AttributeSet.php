@@ -4,24 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Create product attribute set selector
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 
 /**
- * Admin AttributeSet block
+ * Create product attribute set selector
  */
 class AttributeSet extends \Magento\Backend\Block\Widget\Form
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;

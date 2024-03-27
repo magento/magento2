@@ -4,13 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * customers defined options
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type;
 
+/**
+ * Customers defined options
+ */
 class Select extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\AbstractType
 {
     /**
@@ -19,7 +17,7 @@ class Select extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\T
     protected $_template = 'Magento_Catalog::catalog/product/edit/options/type/select.phtml';
 
     /**
-     * Class constructor
+     * Initialise the block
      *
      * @return void
      */
@@ -32,6 +30,8 @@ class Select extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\T
     }
 
     /**
+     * Prepare the layout
+     *
      * @return $this
      */
     protected function _prepareLayout()
@@ -60,6 +60,8 @@ class Select extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\T
     }
 
     /**
+     * Return the HTML for the add button
+     *
      * @return string
      */
     public function getAddButtonHtml()
@@ -68,6 +70,8 @@ class Select extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\T
     }
 
     /**
+     * Return the HTML for the delete button
+     *
      * @return string
      */
     public function getDeleteButtonHtml()

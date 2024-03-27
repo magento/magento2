@@ -7,7 +7,6 @@
 /**
  * Customer edit block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 namespace Magento\Catalog\Block\Adminhtml\Product;
@@ -32,8 +31,6 @@ class Edit extends \Magento\Backend\Block\Widget
     protected $_template = 'Magento_Catalog::catalog/product/edit.phtml';
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;

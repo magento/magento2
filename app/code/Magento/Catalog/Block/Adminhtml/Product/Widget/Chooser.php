@@ -4,11 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Product Chooser for "Product Link" Cms Widget Plugin
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Widget;
 
 use Magento\Backend\Block\Widget\Grid;
@@ -16,6 +11,9 @@ use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+/**
+ * Product Chooser for "Product Link" Cms Widget Plugin
+ */
 class Chooser extends Extended
 {
     /**
@@ -149,6 +147,8 @@ class Chooser extends Extended
                 $(grid.containerId).fire('product:changed', {element: element});
             }";
         }
+
+        return '';
     }
 
     /**
@@ -185,6 +185,8 @@ class Chooser extends Extended
                 }
             ';
         }
+
+        return '';
     }
 
     /**
@@ -240,7 +242,6 @@ class Chooser extends Extended
         if ($categoryId = $this->getCategoryId()) {
             $category = $this->_categoryFactory->create()->load($categoryId);
             if ($category->getId()) {
-                // $collection->addCategoryFilter($category);
                 $productIds = $category->getProductsPosition();
                 $productIds = array_keys($productIds);
                 if (empty($productIds)) {
