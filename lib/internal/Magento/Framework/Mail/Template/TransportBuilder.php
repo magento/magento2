@@ -1,14 +1,17 @@
 <?php
 /**
+ * Copyright © Magento, Inc. All rights reserved.
+ *
  * Mail Template Transport Builder
  *
- * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Mail\Template;
 
+use Laminas\Mime\Mime;
+use Laminas\Mime\Part;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\MailException;
@@ -30,70 +33,53 @@ use Magento\Framework\Phrase;
  * TransportBuilder for Mail Templates
  *
  * @api
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
 class TransportBuilder
 {
     /**
-     * Template Identifier
-     *
      * @var string
      */
     protected $templateIdentifier;
 
     /**
-     * Template Model
-     *
      * @var string
      */
     protected $templateModel;
 
     /**
-     * Template Variables
-     *
      * @var array
      */
     protected $templateVars;
 
     /**
-     * Template Options
-     *
      * @var array
      */
     protected $templateOptions;
 
     /**
-     * Mail Transport
-     *
      * @var TransportInterface
      */
     protected $transport;
 
     /**
-     * Template Factory
-     *
      * @var FactoryInterface
      */
     protected $templateFactory;
 
     /**
-     * Object Manager
-     *
      * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
-     * Message
-     *
      * @var MessageInterface
      */
     protected $message;
 
     /**
-     * Sender resolver
-     *
      * @var SenderResolverInterface
      */
     protected $_senderResolver;
@@ -102,6 +88,11 @@ class TransportBuilder
      * @var TransportInterfaceFactory
      */
     protected $mailTransportFactory;
+
+    /**
+     * @var array
+     */
+    private $attachments = [];
 
     /**
      * Param that used for storing all message data until it will be used
@@ -343,6 +334,34 @@ class TransportBuilder
     }
 
     /**
+     * Add attachment with mails
+     *
+     * @param string $content
+     * @param string $fileName
+     * @param string|null $fileType
+     *
+     * @return $this
+     * @throws InvalidArgumentException
+     */
+    public function addAttachment(
+        string $content,
+        string $fileName,
+        ?string $fileType = Mime::TYPE_OCTETSTREAM
+    ): TransportBuilder {
+        $attachmentPart = new Part();
+
+        $attachmentPart->setContent($content)
+            ->setType($fileType)
+            ->setFileName($fileName)
+            ->setDisposition(Mime::DISPOSITION_ATTACHMENT)
+            ->setEncoding(Mime::ENCODING_BASE64);
+
+        $this->attachments[] = $attachmentPart;
+
+        return $this;
+    }
+
+    /**
      * Reset object state
      *
      * @return $this
@@ -353,6 +372,8 @@ class TransportBuilder
         $this->templateIdentifier = null;
         $this->templateVars = null;
         $this->templateOptions = null;
+        $this->attachments = [];
+
         return $this;
     }
 
@@ -401,9 +422,12 @@ class TransportBuilder
                 'type' => $partType
             ]
         );
+
+        $parts = count($this->attachments) ? array_merge([$mimePart], $this->attachments) : [$mimePart];
+
         $this->messageData['encoding'] = $mimePart->getCharset();
         $this->messageData['body'] = $this->mimeMessageInterfaceFactory->create(
-            ['parts' => [$mimePart]]
+            ['parts' => $parts]
         );
 
         $this->messageData['subject'] = html_entity_decode(

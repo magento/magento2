@@ -76,6 +76,12 @@ class TransportBuilderTest extends TestCase
         $options = ['area' => 'frontend', 'store' => 1];
         $this->builder->setTemplateIdentifier($templateId)->setTemplateVars($vars)->setTemplateOptions($options);
 
+        if (isset($email['attachment']) && $email['attachment'] === true) {
+            $sampleAttachmentFixturePath = __DIR__ . '/_files/sample.pdf';
+            $this->builder->addAttachment(file_get_contents($sampleAttachmentFixturePath), 'attachment1.pdf');
+            $templateType = 'multipart/mixed';
+        }
+
         $this->builder->addTo($email);
 
         /** @var EmailMessage $emailMessage */
@@ -113,6 +119,11 @@ class TransportBuilderTest extends TestCase
                     'billy.everything@someserver.com',
                     'john.doe@someserver.com',
                 ]
+            ],
+            [
+                'billy.everything@someserver.com',
+                'attachment' => true,
+                'templateType' => "multipart/mixed"
             ]
         ];
     }
