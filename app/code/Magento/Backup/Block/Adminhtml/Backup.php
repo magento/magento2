@@ -11,20 +11,19 @@ use Magento\Framework\View\Element\AbstractBlock;
  * Adminhtml backup page content block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Backup extends \Magento\Backend\Block\Template
 {
     /**
-     * Block's template
-     *
      * @var string
      */
     protected $_template = 'Magento_Backup::backup/list.phtml';
 
     /**
-     * @return AbstractBlock|void
+     * Prepare the layout
+     *
+     * @return void
      */
     protected function _prepareLayout()
     {
@@ -62,6 +61,8 @@ class Backup extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return HTML for the backups grid
+     *
      * @return string
      */
     public function getGridHtml()
