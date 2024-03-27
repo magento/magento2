@@ -35,7 +35,6 @@ use Magento\Store\Model\Website;
 /**
  * ProductAlert Email processor
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api

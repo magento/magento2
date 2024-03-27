@@ -7,8 +7,6 @@ namespace Magento\ProductAlert\Model\ResourceModel\Stock\Customer;
 
 /**
  * ProductAlert Stock Customer collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collection
 {

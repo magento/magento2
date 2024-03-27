@@ -7,8 +7,6 @@ namespace Magento\Quote\Model\ResourceModel\Quote\Address\Attribute;
 
 /**
  * Quote address attribute frontend resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Frontend extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
 {

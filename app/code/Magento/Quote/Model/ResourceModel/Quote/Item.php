@@ -11,8 +11,6 @@ use Magento\Quote\Model\Quote\Item\Option;
 
 /**
  * Quote resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Item extends AbstractDb
 {

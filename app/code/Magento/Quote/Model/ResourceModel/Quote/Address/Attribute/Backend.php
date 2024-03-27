@@ -7,8 +7,6 @@ namespace Magento\Quote\Model\ResourceModel\Quote\Address\Attribute;
 
 /**
  * Quote address attribute backend resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Backend extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
