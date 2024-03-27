@@ -6,8 +6,6 @@
 
 /**
  * Catalog downloadable product part block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Downloadable\Block\Catalog\Product\View;
 

@@ -7,8 +7,6 @@ namespace Magento\Downloadable\Controller\Adminhtml\Downloadable;
 
 /**
  * Downloadable File upload controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class File extends \Magento\Backend\App\Action
 {
@@ -17,5 +15,5 @@ abstract class File extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Catalog::products';
+    public const ADMIN_RESOURCE = 'Magento_Catalog::products';
 }
