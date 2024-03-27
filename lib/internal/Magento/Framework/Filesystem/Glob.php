@@ -20,6 +20,16 @@ class Glob extends LaminasGlob
     private static $cache = [];
 
     /**
+     * Clear the cache.
+     *
+     * @return void
+     */
+    public static function clearCache(): void
+    {
+        self::$cache = [];
+    }
+
+    /**
      * Find path names matching a pattern.
      *
      * @param string $pattern
