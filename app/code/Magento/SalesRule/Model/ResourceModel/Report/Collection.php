@@ -7,8 +7,6 @@ namespace Magento\SalesRule\Model\ResourceModel\Report;
 
 /**
  * Sales report coupons collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\AbstractCollection
 {

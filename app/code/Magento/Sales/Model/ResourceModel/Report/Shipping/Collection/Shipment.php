@@ -7,8 +7,6 @@ namespace Magento\Sales\Model\ResourceModel\Report\Shipping\Collection;
 
 /**
  * Sales report shipping collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Shipment extends Order
 {

@@ -7,8 +7,6 @@ namespace Magento\Sales\Model\ResourceModel\Order;
 
 /**
  * Order Tax Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Tax extends \Magento\Sales\Model\ResourceModel\EntityAbstract
 {

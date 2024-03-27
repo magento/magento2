@@ -7,8 +7,6 @@ namespace Magento\Sales\Model\ResourceModel;
 
 /**
  * Sales report resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Report extends \Magento\Sales\Model\ResourceModel\EntityAbstract
 {

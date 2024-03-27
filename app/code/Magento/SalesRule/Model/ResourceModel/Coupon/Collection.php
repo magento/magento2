@@ -11,8 +11,6 @@ use Magento\SalesRule\Model\Rule;
 
 /**
  * SalesRule Model Resource Coupon_Collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends AbstractCollection
 {

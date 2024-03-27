@@ -7,8 +7,6 @@ namespace Magento\Sales\Model\ResourceModel\Report\Order;
 
 /**
  * Order entity resource model with aggregation by created at
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Createdat extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
 {
