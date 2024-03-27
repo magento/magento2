@@ -25,7 +25,7 @@ interface ItemInterface
      * Get item option by code
      *
      * @param   string $code
-     * @return  \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface
+     * @return  \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface|null
      */
     public function getOptionByCode($code);
 
