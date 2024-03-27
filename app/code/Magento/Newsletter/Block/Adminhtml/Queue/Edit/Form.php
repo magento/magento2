@@ -10,8 +10,6 @@ use Magento\Newsletter\Model\Queue;
 
 /**
  * Newsletter queue edit form
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {

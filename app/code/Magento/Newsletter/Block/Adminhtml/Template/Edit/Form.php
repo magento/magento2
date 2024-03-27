@@ -6,8 +6,6 @@
 
 /**
  * Newsletter Template Edit Form Block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Newsletter\Block\Adminhtml\Template\Edit;
 

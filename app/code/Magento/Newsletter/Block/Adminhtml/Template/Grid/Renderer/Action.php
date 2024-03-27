@@ -6,8 +6,6 @@
 
 /**
  * Newsletter templates grid block action item renderer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Newsletter\Block\Adminhtml\Template\Grid\Renderer;
 

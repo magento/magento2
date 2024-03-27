@@ -6,8 +6,6 @@
 
 /**
  * Multishipping checkout success information
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Multishipping\Block\Checkout;
 

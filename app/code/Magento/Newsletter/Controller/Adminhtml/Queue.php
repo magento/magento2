@@ -6,8 +6,6 @@
 
 /**
  * Newsletter queue controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Newsletter\Controller\Adminhtml;
 

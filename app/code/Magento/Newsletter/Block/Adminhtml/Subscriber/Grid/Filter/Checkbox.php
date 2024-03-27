@@ -6,8 +6,6 @@
 
 /**
  * Newsletter subscribers grid filter checkbox
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Newsletter\Block\Adminhtml\Subscriber\Grid\Filter;
 

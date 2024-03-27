@@ -33,7 +33,6 @@ use Magento\Framework\Validator\IntUtils;
  * @method string getModifiedAt()
  * @method \Magento\Newsletter\Model\Template setModifiedAt(string $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api

@@ -6,8 +6,6 @@
 
 /**
  * Newsletter Queue statuses option array
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Newsletter\Model\Queue\Options;
 
