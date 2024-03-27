@@ -11,8 +11,7 @@ $customerAddressView = $block->getData('customer_address');
 <div class="block block-addresses-list">
     <div class="block-title"><strong><?= $block->escapeHtml(__('Additional Address Entries')) ?></strong></div>
     <div class="block-content">
-        <?php if ($_pAddsses = $block->getAdditionalAddresses()) : ?>
-
+        <?php if ($additionalAddresses = $block->getAdditionalAddresses()): ?>
             <div class="table-wrapper additional-addresses">
                 <table class="data table table-additional-addresses-items history" id="additional-addresses-table">
                     <caption class="table-caption"><?= $block->escapeHtml(__('Additional addresses')) ?></caption>
@@ -30,7 +29,7 @@ $customerAddressView = $block->getData('customer_address');
                     </tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($_pAddsses as $address) : ?>
+                    <?php foreach ($additionalAddresses as $address): ?>
                         <tr>
                             <td data-th="<?= $block->escapeHtml(__('First Name')) ?>" class="col firstname"><?= $block->escapeHtml($address->getFirstname()) ?></td>
                             <td data-th="<?= $block->escapeHtml(__('Last Name')) ?>" class="col lastname"><?= $block->escapeHtml($address->getLastname()) ?></td>
