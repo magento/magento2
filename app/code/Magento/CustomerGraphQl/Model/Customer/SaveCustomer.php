@@ -14,9 +14,6 @@ use Magento\Framework\GraphQl\Exception\GraphQlAlreadyExistsException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Customer\Api\Data\CustomerInterface;
 
-/**
- * Save customer
- */
 class SaveCustomer
 {
     /**
@@ -46,7 +43,10 @@ class SaveCustomer
             $this->customerRepository->save($customer);
         } catch (AlreadyExistsException $e) {
             throw new GraphQlAlreadyExistsException(
-                __('A customer with the same email address already exists in an associated website.'),
+                __(
+                    'A customer with the same email address (%1) already exists in an associated website.',
+                    $customer->getEmail()
+                ),
                 $e
             );
         } catch (LocalizedException $e) {

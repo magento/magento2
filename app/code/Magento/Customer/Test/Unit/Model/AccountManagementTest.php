@@ -481,7 +481,7 @@ class AccountManagementTest extends TestCase
         $customer->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
-        $customer->expects($this->once())
+        $customer->expects($this->atLeastOnce())
             ->method('getEmail')
             ->willReturn($customerEmail);
         $customer->expects($this->atLeastOnce())

@@ -921,7 +921,10 @@ class AccountManagement implements AccountManagementInterface
             $customer = $this->customerRepository->save($customer, $hash);
         } catch (AlreadyExistsException $e) {
             throw new InputMismatchException(
-                __('A customer with the same email address already exists in an associated website.')
+                __(
+                    'A customer with the same email address (%1) already exists in an associated website.',
+                    $customer->getEmail()
+                )
             );
         } catch (LocalizedException $e) {
             throw $e;
