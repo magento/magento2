@@ -9,8 +9,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\GroupPrice\Abs
 
 /**
  * Catalog product tier price backend attribute model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Tierprice extends AbstractGroupPrice
 {

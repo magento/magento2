@@ -15,10 +15,8 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 /**
  * Catalog Product Indexer Abstract Resource Model
  *
- * phpcs:disable Magento2.Classes.AbstractApi
+ * @phpcs:ignore Magento2.Classes.AbstractApi.AbstractApi
  * @api
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\AbstractResource
@@ -35,8 +33,6 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
     protected $metadataPool;
 
     /**
-     * Class constructor
-     *
      * @param Context $context
      * @param StrategyInterface $tableStrategy
      * @param Config $eavConfig
@@ -68,8 +64,8 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
     }
 
     /**
-     * Add attribute join condition to select and return \Zend_Db_Expr
-     * attribute value definition
+     * Add attribute join condition to select and return \Zend_Db_Expr attribute value definition
+     *
      * If $condition is not empty apply limitation for select
      *
      * @param \Magento\Framework\DB\Select $select
@@ -131,6 +127,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
 
     /**
      * Add website data join to select
+     *
      * If add default store join also limitation of only has default store website
      * Joined table has aliases
      *  cw for website table,

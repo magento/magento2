@@ -10,21 +10,15 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Product image attribute backend
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Image extends AbstractBackend
 {
     /**
-     * Filesystem facade
-     *
      * @var \Magento\Framework\Filesystem
      */
     protected $_filesystem;
 
     /**
-     * File Uploader factory
-     *
      * @var \Magento\MediaStorage\Model\File\UploaderFactory
      */
     protected $_fileUploaderFactory;

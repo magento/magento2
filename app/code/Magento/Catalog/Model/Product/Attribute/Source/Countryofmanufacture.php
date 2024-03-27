@@ -4,11 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Catalog product country attribute source
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Model\Product\Attribute\Source;
 
 use Magento\Directory\Model\CountryFactory;
@@ -19,6 +14,9 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Catalog product country attribute source
+ */
 class Countryofmanufacture extends AbstractSource implements OptionSourceInterface
 {
     /**
@@ -47,8 +45,6 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
     private $localeResolver;
 
     /**
-     * Construct
-     *
      * @param CountryFactory $countryFactory
      * @param StoreManagerInterface $storeManager
      * @param Config $configCacheType
