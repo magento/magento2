@@ -1,9 +1,11 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/************************************************************************
+ * 
+ *  Copyright 2008 Adobe
+ *  All Rights Reserved.
+ *
+ ************************************************************************
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdminAnalytics\Model\ResourceModel\Viewer;
@@ -17,7 +19,7 @@ use Magento\Framework\App\ResourceConnection;
  *
  * Saves and retrieves release notification viewer log data.
  */
-class Logger
+class LoggerNew
 {
     /**
      * Admin Analytics usage version log table name
