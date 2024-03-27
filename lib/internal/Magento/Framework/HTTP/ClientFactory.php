@@ -8,8 +8,6 @@ namespace Magento\Framework\HTTP;
 
 /**
  * Factory for HTTP client classes
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class ClientFactory
 {
