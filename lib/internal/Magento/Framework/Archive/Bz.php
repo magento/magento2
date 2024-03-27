@@ -6,8 +6,6 @@
 
 /**
  * Class to work with bzip2 archives
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\Archive;
 
