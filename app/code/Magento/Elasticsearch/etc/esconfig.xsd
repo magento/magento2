@@ -11,14 +11,21 @@
 <xs:element name="config" type="configType" />
 <xs:complexType name="configType" mixed="true">
     <xs:choice maxOccurs="unbounded" minOccurs="1">
-        <xs:element name="stemmer" type="mixedDataType" />
-        <xs:element name="stopwords_file" type="mixedDataType" />
+        <xs:element name="stemmer" type="stemmerDataType" />
+        <xs:element name="stopwords_file" type="stopwordsDataType" />
     </xs:choice>
 </xs:complexType>
-<xs:complexType name="mixedDataType">
-    <xs:choice maxOccurs="unbounded" minOccurs="1">
-        <xs:element type="xs:string" name="default" minOccurs="1" maxOccurs="1" />
-        <xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded" />
-    </xs:choice>
+<xs:complexType name="stemmerDataType">
+    <xs:sequence>
+        <xs:element type="xs:string" name="type" minOccurs="1" maxOccurs="1"/>
+        <xs:element type="xs:string" name="default" minOccurs="1" maxOccurs="1"/>
+        <xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+</xs:complexType>
+<xs:complexType name="stopwordsDataType">
+    <xs:sequence>
+        <xs:element type="xs:string" name="default" minOccurs="1" maxOccurs="1"/>
+        <xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
 </xs:complexType>
 </xs:schema>
