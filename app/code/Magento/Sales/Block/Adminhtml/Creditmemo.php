@@ -7,8 +7,6 @@ namespace Magento\Sales\Block\Adminhtml;
 
 /**
  * Adminhtml sales creditmemos block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Creditmemo extends \Magento\Backend\Block\Widget\Grid\Container
 {

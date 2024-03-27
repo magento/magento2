@@ -9,7 +9,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Billing\Method;
  * Adminhtml sales order create payment method form block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Form extends \Magento\Payment\Block\Form\Container

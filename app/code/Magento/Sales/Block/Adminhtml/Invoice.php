@@ -7,8 +7,6 @@ namespace Magento\Sales\Block\Adminhtml;
 
 /**
  * Adminhtml sales invoices block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Invoice extends \Magento\Backend\Block\Widget\Grid\Container
 {

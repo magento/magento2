@@ -6,8 +6,6 @@
 
 /**
  * Product Low Stock Report Collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\ResourceModel\Product\Lowstock;
 
