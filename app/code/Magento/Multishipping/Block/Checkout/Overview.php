@@ -19,7 +19,6 @@ use Magento\Store\Model\ScopeInterface;
  * Multishipping checkout overview information
  *
  * @api
- * @author Magento Core Team <core@magentocommerce.com>
  * @since  100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

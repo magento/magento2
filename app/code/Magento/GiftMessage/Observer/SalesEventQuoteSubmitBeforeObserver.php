@@ -9,8 +9,6 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Gift Message Observer Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class SalesEventQuoteSubmitBeforeObserver implements ObserverInterface
 {
