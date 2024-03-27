@@ -32,6 +32,11 @@ class InvokerDefault implements \Magento\Framework\Event\InvokerInterface
     protected $_appState;
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -39,15 +44,18 @@ class InvokerDefault implements \Magento\Framework\Event\InvokerInterface
     /**
      * @param \Magento\Framework\Event\ObserverFactory $observerFactory
      * @param State $appState
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param LoggerInterface $logger
      */
     public function __construct(
         \Magento\Framework\Event\ObserverFactory $observerFactory,
         State $appState,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         LoggerInterface $logger = null
     ) {
         $this->_observerFactory = $observerFactory;
         $this->_appState = $appState;
+        $this->scopeConfig = $scopeConfig;
         $this->logger = $logger ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(LoggerInterface::class);
     }
@@ -63,6 +71,10 @@ class InvokerDefault implements \Magento\Framework\Event\InvokerInterface
     {
         /** Check whether event observer is disabled */
         if (isset($configuration['disabled']) && true === $configuration['disabled']) {
+            return;
+        }
+
+        if (isset($configuration['ifconfig']) && $this->scopeConfig->isSetFlag($configuration['ifconfig']) === false) {
             return;
         }
 

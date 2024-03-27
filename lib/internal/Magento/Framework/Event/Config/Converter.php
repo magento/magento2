@@ -77,6 +77,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $output['shared'] = false;
         }
 
+        /** Parse condition configuration */
+        $ifconfigAttribute = $observerConfig->attributes->getNamedItem('ifconfig');
+        if ($ifconfigAttribute && !empty($ifconfigAttribute->nodeValue)) {
+            $output['ifconfig'] = $ifconfigAttribute->nodeValue;
+        }
+
         return $output;
     }
 }
