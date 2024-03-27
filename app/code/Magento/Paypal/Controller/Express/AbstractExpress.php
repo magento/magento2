@@ -91,7 +91,7 @@ abstract class AbstractExpress extends AppAction implements
     protected $_paypalSession;
 
     /**
-     * @var \Magento\Framework\Url\Helper
+     * @var \Magento\Framework\Url\Helper\Data
      */
     protected $_urlHelper;
 
