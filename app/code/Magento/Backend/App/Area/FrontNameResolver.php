@@ -121,8 +121,8 @@ class FrontNameResolver implements FrontNameResolverInterface
      */
     public function isHostBackend()
     {
-        if ($this->scopeConfig->getValue(self::XML_PATH_USE_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE)) {
-            $backendUrl = $this->scopeConfig->getValue(self::XML_PATH_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE);
+        if ($this->scopeConfig->isSetFlag(self::XML_PATH_USE_CUSTOM_ADMIN_URL)) {
+            $backendUrl = $this->scopeConfig->getValue(self::XML_PATH_CUSTOM_ADMIN_URL);
         } else {
             $backendUrl = $this->config->getValue(Store::XML_PATH_UNSECURE_BASE_URL);
             if ($backendUrl === null) {
