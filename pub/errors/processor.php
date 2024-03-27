@@ -198,6 +198,15 @@ class Processor
         $this->_indexDir = $this->_getIndexDir();
         $this->_root  = is_dir($this->_indexDir . 'app');
         $this->_prepareConfig();
+
+        if (isset($_ENV['MAGE_RUN_CODE'])) {
+            $this->_setSkin($_ENV['MAGE_RUN_CODE']);
+
+            if (isset($_ENV['MAGE_RUN_TYPE'])) {
+                $this->_setSkin($ENV_['MAGE_RUN_TYPE'] . '-' . $_ENV['MAGE_RUN_CODE']);
+            }
+        }
+
         if (isset($_GET['skin'])) {
             $this->_setSkin($_GET['skin']);
         }
@@ -741,7 +750,7 @@ class Processor
      */
     protected function _setSkin($value, \stdClass $config = null)
     {
-        if (preg_match('/^[a-z0-9_]+$/i', $value) && is_dir($this->_errorDir . $value)) {
+        if (preg_match('/^[a-z0-9_-]+$/i', $value) && is_dir($this->_errorDir . $value)) {
             if (!$config) {
                 if ($this->_config) {
                     $config = $this->_config;
