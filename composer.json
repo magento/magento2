@@ -89,7 +89,7 @@
         "tubalmartin/cssmin": "^4.1",
         "web-token/jwt-framework": "^3.1",
         "webonyx/graphql-php": "^15.0",
-        "wikimedia/less.php": "^3.2"
+        "wikimedia/less.php": "^4.1"
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "^2",
