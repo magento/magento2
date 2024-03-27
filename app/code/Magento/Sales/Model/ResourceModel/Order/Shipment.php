@@ -13,8 +13,6 @@ use Magento\Sales\Model\Spi\ShipmentResourceInterface;
 
 /**
  * Flat sales order shipment resource
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Shipment extends SalesResource implements ShipmentResourceInterface
 {

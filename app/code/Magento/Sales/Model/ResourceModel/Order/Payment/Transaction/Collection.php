@@ -10,8 +10,6 @@ use Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
 
 /**
  * Payment transactions collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends AbstractCollection implements TransactionSearchResultInterface
 {

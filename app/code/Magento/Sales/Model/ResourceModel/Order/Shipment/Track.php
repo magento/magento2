@@ -11,8 +11,6 @@ use Magento\Sales\Model\Spi\ShipmentTrackResourceInterface;
 
 /**
  * Flat sales order shipment comment resource
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Track extends SalesResource implements ShipmentTrackResourceInterface
 {

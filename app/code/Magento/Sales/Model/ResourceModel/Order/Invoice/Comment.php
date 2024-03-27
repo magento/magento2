@@ -11,8 +11,6 @@ use Magento\Sales\Model\Spi\InvoiceCommentResourceInterface;
 
 /**
  * Flat sales order invoice comment resource
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Comment extends EntityAbstract implements InvoiceCommentResourceInterface
 {

@@ -7,8 +7,6 @@ namespace Magento\Sales\Model\ResourceModel\Order\Shipment\Item;
 
 /**
  * Flat sales order shipment items collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection
 {

@@ -12,8 +12,6 @@ use Magento\Sales\Model\Spi\OrderStatusHistoryResourceInterface;
 
 /**
  * Flat sales order status history resource
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class History extends EntityAbstract implements OrderStatusHistoryResourceInterface
 {

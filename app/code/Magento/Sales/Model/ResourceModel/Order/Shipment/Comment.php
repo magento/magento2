@@ -11,8 +11,6 @@ use Magento\Sales\Model\Spi\ShipmentCommentResourceInterface;
 
 /**
  * Flat sales order shipment comment resource
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Comment extends EntityAbstract implements ShipmentCommentResourceInterface
 {

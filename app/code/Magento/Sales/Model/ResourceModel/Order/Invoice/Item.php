@@ -10,8 +10,6 @@ use Magento\Sales\Model\Spi\InvoiceItemResourceInterface;
 
 /**
  * Flat sales order invoice item resource
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Item extends SalesResource implements InvoiceItemResourceInterface
 {

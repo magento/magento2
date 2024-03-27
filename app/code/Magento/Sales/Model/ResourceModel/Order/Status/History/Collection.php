@@ -12,8 +12,6 @@ use Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
 
 /**
  * Flat sales order status history collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends AbstractCollection implements OrderStatusHistorySearchResultInterface
 {
