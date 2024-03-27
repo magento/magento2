@@ -5,19 +5,20 @@
  */
 
 /** @var \Magento\Vault\Block\Customer\AccountTokens $block */
+/** @var $escaper \Magento\Framework\Escaper */
 $tokens = $block->getPaymentTokens();
 ?>
-<?php if (count($tokens) !== 0) : ?>
+<?php if (count($tokens) !== 0): ?>
     <div class="table-wrapper my-credit-cards">
         <table class="data table table-credit-cards" id="token-list-table">
             <thead>
             <tr>
-                <th scope="col" class="col"><?= $block->escapeHtml(__('PayPal Account')) ?></th>
+                <th scope="col" class="col"><?= $escaper->escapeHtml(__('Account')) ?></th>
                 <th scope="col" class="col actions">&nbsp;</th>
             </tr>
             </thead>
             <tbody>
-            <?php foreach ($tokens as $token) : ?>
+            <?php foreach ($tokens as $token): ?>
                 <?= /* @noEscape */ $block->renderTokenHtml($token) ?>
             <?php endforeach; ?>
             </tbody>
