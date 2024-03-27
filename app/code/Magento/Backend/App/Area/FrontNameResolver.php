@@ -107,11 +107,10 @@ class FrontNameResolver implements FrontNameResolverInterface
         if ($checkHost && !$this->isHostBackend()) {
             return false;
         }
-        $isCustomPathUsed = (bool)(string)$this->config->getValue(self::XML_PATH_USE_CUSTOM_ADMIN_PATH);
-        if ($isCustomPathUsed) {
-            return (string)$this->config->getValue(self::XML_PATH_CUSTOM_ADMIN_PATH);
-        }
-        return $this->defaultFrontName;
+
+        return $this->config->isSetFlag(self::XML_PATH_USE_CUSTOM_ADMIN_PATH)
+            ? (string)$this->config->getValue(self::XML_PATH_CUSTOM_ADMIN_PATH)
+            : $this->defaultFrontName;
     }
 
     /**
