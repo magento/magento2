@@ -7,8 +7,6 @@ namespace Magento\Reports\Block\Adminhtml\Shopcart;
 
 /**
  * Adminhtml Shopping cart products report page content block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Product extends \Magento\Backend\Block\Widget\Grid\Container
 {

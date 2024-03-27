@@ -6,8 +6,6 @@
 
 /**
  * Customers by totals Report collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\ResourceModel\Accounts\Collection;
 

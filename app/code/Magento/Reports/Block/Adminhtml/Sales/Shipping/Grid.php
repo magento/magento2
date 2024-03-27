@@ -9,7 +9,6 @@ namespace Magento\Reports\Block\Adminhtml\Sales\Shipping;
 /**
  * Adminhtml shipping report grid block
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid

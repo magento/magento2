@@ -16,7 +16,6 @@ namespace Magento\Reports\Model\Product\Index;
  * @method string getAddedAt()
  * @method \Magento\Reports\Model\Product\Index\Compared setAddedAt(string $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  */

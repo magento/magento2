@@ -6,8 +6,6 @@
 
 /**
  * Shopping Cart reports admin controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 declare(strict_types=1);
 

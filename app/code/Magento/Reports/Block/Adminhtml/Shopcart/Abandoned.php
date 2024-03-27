@@ -7,8 +7,6 @@ namespace Magento\Reports\Block\Adminhtml\Shopcart;
 
 /**
  * Adminhtml abandoned shopping cart report page content block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Abandoned extends \Magento\Backend\Block\Widget\Grid\Container
 {
