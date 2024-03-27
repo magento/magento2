@@ -2006,4 +2006,11 @@
     <preference for="Magento\Framework\Filter\Input\PurifierInterface" type="Magento\Framework\Filter\Input\Purifier"/>
     <preference for="Magento\Framework\App\PageCache\IdentifierInterface" type="Magento\Framework\App\PageCache\Identifier"/>
     <preference for="Magento\Framework\App\State\ReloadProcessorInterface" type="Magento\Framework\App\State\ReloadProcessorComposite" />
+
+    <!-- @api -->
+    <virtualType name="shellBackground" type="Magento\Framework\Shell">
+        <arguments>
+            <argument name="commandRenderer" xsi:type="object">Magento\Framework\Shell\CommandRendererBackground</argument>
+        </arguments>
+    </virtualType>
 </config>
