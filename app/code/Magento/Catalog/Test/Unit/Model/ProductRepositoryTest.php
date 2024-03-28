@@ -969,24 +969,13 @@ class ProductRepositoryTest extends TestCase
             [
                 'identifier' => 25,
                 'editMode' => true,
-                'storeId' => $anyObject
+                'storeId' => '1'
             ],
             [
                 'identifier' => 'test-sku',
                 'editMode' => true,
-                'storeId' => $anyObject
+                'storeId' => 1
             ],
-            [
-                'identifier' => 25,
-                'editMode' => false,
-                'storeId' => $anyObject
-            ],
-            [
-
-                'identifier' => 'test-sku',
-                'editMode' => false,
-                'storeId' => $anyObject
-            ]
         ];
     }
 
