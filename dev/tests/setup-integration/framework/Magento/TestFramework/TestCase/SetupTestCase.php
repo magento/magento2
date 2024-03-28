@@ -58,6 +58,14 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
     /**
      * @inheritdoc
      */
+    public function setData(array $data)
+    {
+        $this->data = $data;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function flushData()
     {
         $this->data = [];
