@@ -89,6 +89,7 @@
 
         <!--Place the order-->
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
         <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder">
             <argument name="shippingMethod" value="Flat Rate"/>
         </actionGroup>
