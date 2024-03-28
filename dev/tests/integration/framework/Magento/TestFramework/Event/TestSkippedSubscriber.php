@@ -21,11 +21,13 @@ final class TestSkippedSubscriber implements SkippedSubscriber
         $className = $event->test()->className();
         $methodName = $event->test()->methodName();
 
-        $objectManager = Bootstrap::getObjectManager();
-        $assetRepo = $objectManager->create($className, ['name' => $methodName]);
+        if(!in_array($methodName, ['testAclHasAccess', 'testAclNoAccess'])) {
+            $objectManager = Bootstrap::getObjectManager();
+            $assetRepo = $objectManager->create($className, ['name' => $methodName]);
 
-        $mageEvent = Magento::getDefaultEventManager();
-        $mageEvent->fireEvent('endTest', [$assetRepo], true);
-        Magento::setCurrentEventObject(null);
+            $mageEvent = Magento::getDefaultEventManager();
+            $mageEvent->fireEvent('endTest', [$assetRepo], true);
+            Magento::setCurrentEventObject(null);
+        }
     }
 }
