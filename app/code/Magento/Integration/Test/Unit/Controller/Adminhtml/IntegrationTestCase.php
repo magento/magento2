@@ -47,7 +47,7 @@ use Psr\Log\LoggerInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class IntegrationTest extends TestCase
+abstract class IntegrationTestCase extends TestCase
 {
     /** @var \Magento\Integration\Controller\Adminhtml\Integration */
     protected $_controller;

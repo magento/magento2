@@ -11,7 +11,7 @@ use Magento\Framework\Event\ManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
 
-abstract class AbstractCacheManageCommandTest extends AbstractCacheCommandTest
+abstract class AbstractCacheManageCommandTestCase extends AbstractCacheCommandTestCase
 {
     /** @var  string */
     protected $cacheEventName;

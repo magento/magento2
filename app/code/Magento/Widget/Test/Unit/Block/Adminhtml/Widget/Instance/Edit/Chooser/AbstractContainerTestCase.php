@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractContainerTest extends TestCase
+abstract class AbstractContainerTestCase extends TestCase
 {
     /**
      * @var Manager|MockObject

@@ -15,7 +15,7 @@ use Magento\Ui\Component\Listing\Columns\Column;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-abstract class AbstractColumnTest extends TestCase
+abstract class AbstractColumnTestCase extends TestCase
 {
     /**
      * @var Column

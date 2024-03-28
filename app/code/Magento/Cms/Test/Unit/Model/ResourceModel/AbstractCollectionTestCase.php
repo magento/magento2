@@ -14,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-abstract class AbstractCollectionTest extends TestCase
+abstract class AbstractCollectionTestCase extends TestCase
 {
     /**
      * @var Select|MockObject

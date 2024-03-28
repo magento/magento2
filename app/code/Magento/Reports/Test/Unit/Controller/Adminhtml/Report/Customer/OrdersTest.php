@@ -11,9 +11,9 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
 use Magento\Framework\View\Page\Title;
 use Magento\Reports\Controller\Adminhtml\Report\Customer\Orders;
-use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest;
+use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTestCase;
 
-class OrdersTest extends AbstractControllerTest
+class OrdersTest extends AbstractControllerTestCase
 {
     /**
      * @var Orders

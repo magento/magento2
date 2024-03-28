@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractControllerTest extends TestCase
+abstract class AbstractControllerTestCase extends TestCase
 {
     /**
      * @var Context|MockObject

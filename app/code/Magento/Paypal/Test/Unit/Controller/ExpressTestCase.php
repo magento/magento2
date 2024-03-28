@@ -27,7 +27,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class ExpressTest extends TestCase
+abstract class ExpressTestCase extends TestCase
 {
     /** @var Express */
     protected $model;

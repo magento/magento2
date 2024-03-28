@@ -13,9 +13,9 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout\Element as LayoutElement;
 use Magento\Integration\Controller\Adminhtml\Integration;
-use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest;
+use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTestCase;
 
-class PermissionsDialogTest extends IntegrationTest
+class PermissionsDialogTest extends IntegrationTestCase
 {
     public function testPermissionsDialog()
     {

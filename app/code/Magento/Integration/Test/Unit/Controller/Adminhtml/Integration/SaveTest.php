@@ -19,10 +19,10 @@ use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
 use Magento\Integration\Controller\Adminhtml\Integration\Save;
 use Magento\Integration\Model\Integration as IntegrationModel;
-use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest;
+use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTestCase;
 use Magento\Security\Model\AdminSessionsManager;
 
-class SaveTest extends IntegrationTest
+class SaveTest extends IntegrationTestCase
 {
     public function testSaveAction()
     {

@@ -13,7 +13,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Tests for command `sampledata:remove`
  */
-class SampleDataRemoveCommandTest extends AbstractSampleDataCommandTest
+class SampleDataRemoveCommandTest extends AbstractSampleDataCommandTestCase
 {
     /**
      * @param array $sampleDataPackages

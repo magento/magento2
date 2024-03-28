@@ -14,7 +14,7 @@ use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Paypal\Model\Api\ProcessableException;
 use Magento\Paypal\Test\Unit\Controller\ExpressTest;
 
-class PlaceOrderTest extends ExpressTest
+class PlaceOrderTest extends ExpressTestCase
 {
     protected $name = 'PlaceOrder';
 

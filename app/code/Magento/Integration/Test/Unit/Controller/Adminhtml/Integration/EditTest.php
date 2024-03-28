@@ -13,9 +13,9 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Controller\Adminhtml\Integration;
-use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest;
+use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTestCase;
 
-class EditTest extends IntegrationTest
+class EditTest extends IntegrationTestCase
 {
     public function testEditAction()
     {

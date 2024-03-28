@@ -12,7 +12,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Ui\Component\Listing\Columns\StatusText;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class StatusTextTest extends AbstractColumnTest
+class StatusTextTest extends AbstractColumnTestCase
 {
     const STATUS_ID = 1;
     const STATUS_TEXT = 'Enabled';

@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Backend\Test\Unit\Console\Command;
 
-abstract class AbstractCacheSetCommandTest extends AbstractCacheManageCommandTest
+abstract class AbstractCacheSetCommandTestCase extends AbstractCacheManageCommandTestCase
 {
     /**
      * @return array

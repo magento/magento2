@@ -12,7 +12,7 @@ use Magento\Framework\App\Cache\Manager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-abstract class AbstractCacheCommandTest extends TestCase
+abstract class AbstractCacheCommandTestCase extends TestCase
 {
     /**
      * @var Manager|MockObject

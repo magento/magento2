@@ -10,7 +10,7 @@ namespace Magento\Paypal\Test\Unit\Controller\Express;
 
 use Magento\Paypal\Test\Unit\Controller\ExpressTest;
 
-class ReturnActionTest extends ExpressTest
+class ReturnActionTest extends ExpressTestCase
 {
     protected $name = 'ReturnAction';
 

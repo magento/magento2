@@ -15,7 +15,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * @method System getModel
  */
-class SystemTest extends AbstractModifierTest
+class SystemTest extends AbstractModifierTestCase
 {
     /**
      * @var UrlInterface|MockObject

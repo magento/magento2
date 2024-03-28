@@ -19,7 +19,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * Test for Magento\Sales\Model\Order\Email\Sender\CreditmemoSender class.
  */
-class CreditmemoSenderTest extends AbstractSenderTest
+class CreditmemoSenderTest extends AbstractSenderTestCase
 {
     private const CREDITMEMO_ID = 1;
 

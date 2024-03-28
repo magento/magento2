@@ -11,7 +11,7 @@ namespace Magento\Paypal\Test\Unit\Controller\Express;
 use Magento\Paypal\Model\Express\Checkout;
 use Magento\Paypal\Test\Unit\Controller\ExpressTest;
 
-class StartTest extends ExpressTest
+class StartTest extends ExpressTestCase
 {
     /**
      * @var string

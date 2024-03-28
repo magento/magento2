@@ -19,7 +19,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * Test for Magento\Sales\Model\Order\Email\Sender\InvoiceSender class.
  */
-class InvoiceSenderTest extends AbstractSenderTest
+class InvoiceSenderTest extends AbstractSenderTestCase
 {
     private const INVOICE_ID = 1;
 

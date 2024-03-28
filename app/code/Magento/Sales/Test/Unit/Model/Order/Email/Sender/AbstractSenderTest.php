@@ -29,7 +29,7 @@ use Psr\Log\LoggerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractSenderTest extends TestCase
+abstract class AbstractSenderTestCase extends TestCase
 {
     /**
      * @var Sender|MockObject

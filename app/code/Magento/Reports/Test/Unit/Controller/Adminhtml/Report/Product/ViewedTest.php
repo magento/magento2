@@ -21,14 +21,14 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Page\Title;
 use Magento\Reports\Controller\Adminhtml\Report\Product\Viewed;
 use Magento\Reports\Model\Flag;
-use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest;
+use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ViewedTest extends AbstractControllerTest
+class ViewedTest extends AbstractControllerTestCase
 {
     /**
      * @var \Magento\Reports\Controller\Adminhtml\Report\Product\Viewed

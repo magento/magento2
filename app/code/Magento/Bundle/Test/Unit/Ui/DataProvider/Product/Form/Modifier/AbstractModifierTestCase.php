@@ -15,7 +15,7 @@ use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-abstract class AbstractModifierTest extends TestCase
+abstract class AbstractModifierTestCase extends TestCase
 {
     /**
      * @var ModifierInterface

@@ -26,7 +26,7 @@ use Magento\Catalog\Helper\Product\Edit\Action\Attribute as AttributeHelper;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MassStatusTest extends ProductTest
+class MassStatusTest extends ProductTestCase
 {
     /**
      * @var Processor|MockObject

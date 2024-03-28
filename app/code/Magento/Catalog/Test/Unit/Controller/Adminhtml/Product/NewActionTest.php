@@ -23,7 +23,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Result\PageFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class NewActionTest extends ProductTest
+class NewActionTest extends ProductTestCase
 {
     /** @var NewAction */
     protected $action;

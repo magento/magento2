@@ -16,9 +16,9 @@ use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Controller\Adminhtml\Integration\Delete;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Integration\Model\Integration as IntegrationModel;
-use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest;
+use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTestCase;
 
-class DeleteTest extends IntegrationTest
+class DeleteTest extends IntegrationTestCase
 {
     /**
      * @var Delete

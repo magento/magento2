@@ -12,7 +12,7 @@ use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeSetInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class AttributeSetTextTest extends AbstractColumnTest
+class AttributeSetTextTest extends AbstractColumnTestCase
 {
     const ATTRIBUTE_SET_ID = 4;
     const ATTRIBUTE_SET_NAME = 'Default';

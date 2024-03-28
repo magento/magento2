@@ -19,7 +19,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  * @method \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AttributeSet getModel
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AttributeSetTest extends AbstractModifierTest
+class AttributeSetTest extends AbstractModifierTestCase
 {
     /**
      * @var CollectionFactory|MockObject

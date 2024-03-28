@@ -28,7 +28,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ValidateTest extends ProductTest
+class ValidateTest extends ProductTestCase
 {
     /** @var Validate */
     protected $action;

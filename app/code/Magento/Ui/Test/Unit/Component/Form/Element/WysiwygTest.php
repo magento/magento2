@@ -16,7 +16,7 @@ use Magento\Ui\Component\Form\Element\Wysiwyg;
 use Magento\Ui\Component\Wysiwyg\ConfigInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class WysiwygTest extends AbstractElementTest
+class WysiwygTest extends AbstractElementTestCase
 {
     /**
      * @var FormFactory|MockObject

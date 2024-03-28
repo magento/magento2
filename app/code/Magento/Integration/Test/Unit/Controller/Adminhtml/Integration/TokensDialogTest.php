@@ -11,9 +11,9 @@ use Magento\Backend\Model\Menu\Item\Factory;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Integration\Controller\Adminhtml\Integration;
-use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest;
+use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTestCase;
 
-class TokensDialogTest extends IntegrationTest
+class TokensDialogTest extends IntegrationTestCase
 {
     public function testTokensDialog()
     {

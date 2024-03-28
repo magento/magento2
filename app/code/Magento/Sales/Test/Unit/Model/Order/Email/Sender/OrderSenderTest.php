@@ -15,7 +15,7 @@ use Magento\Sales\Model\ResourceModel\EntityAbstract;
 use Magento\Sales\Model\ResourceModel\Order;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class OrderSenderTest extends AbstractSenderTest
+class OrderSenderTest extends AbstractSenderTestCase
 {
     private const ORDER_ID = 1;
 

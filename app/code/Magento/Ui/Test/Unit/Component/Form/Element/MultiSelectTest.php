@@ -13,7 +13,7 @@ use Magento\Ui\Component\Form\Element\MultiSelect;
 /**
  * @method MultiSelect getModel
  */
-class MultiSelectTest extends AbstractElementTest
+class MultiSelectTest extends AbstractElementTestCase
 {
     /**
      * @inheritdoc

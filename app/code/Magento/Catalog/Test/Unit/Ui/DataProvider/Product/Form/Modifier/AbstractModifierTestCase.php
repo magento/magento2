@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractModifierTest extends TestCase
+abstract class AbstractModifierTestCase extends TestCase
 {
     /**
      * @var ModifierInterface

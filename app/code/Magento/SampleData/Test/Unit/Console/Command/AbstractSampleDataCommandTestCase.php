@@ -24,7 +24,7 @@ use Symfony\Component\Console\Input\ArrayInputFactory;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractSampleDataCommandTest extends TestCase
+abstract class AbstractSampleDataCommandTestCase extends TestCase
 {
     /**
      * @var ReadInterface|MockObject

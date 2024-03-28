@@ -17,7 +17,10 @@ use Magento\Framework\App\PageCache\Kernel;
 use Magento\Framework\App\PageCache\NotCacheableInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Response\HttpFactory;
+use Magento\Framework\App\State as AppState;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Stdlib\CookieDisablerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\Cache\Type;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -99,6 +102,23 @@ class KernelTest extends TestCase
         $this->contextFactoryMock = $this->createPartialMock(ContextFactory::class, ['create']);
         $this->httpFactoryMock = $this->createPartialMock(HttpFactory::class, ['create']);
         $this->responseMock->expects($this->any())->method('getHeaders')->willReturn($headersMock);
+
+        $objectManagerHelper = new ObjectManager($this);
+        $objects = [
+            [
+                CookieDisablerInterface::class,
+                $this->createMock(CookieDisablerInterface::class)
+            ],
+            [
+                AppState::class,
+                $this->createMock(AppState::class)
+            ],
+            [
+                \Magento\Framework\App\PageCache\IdentifierInterface::class,
+                $this->createMock(\Magento\Framework\App\PageCache\IdentifierInterface::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
 
         $this->kernel = new Kernel(
             $this->cacheMock,

@@ -14,7 +14,7 @@ use Magento\Ui\Component\Form\Element\AbstractElement;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-abstract class AbstractElementTest extends TestCase
+abstract class AbstractElementTestCase extends TestCase
 {
     /**
      * @var ObjectManager

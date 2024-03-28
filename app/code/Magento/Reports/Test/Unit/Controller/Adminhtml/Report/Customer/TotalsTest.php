@@ -11,9 +11,9 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
 use Magento\Framework\View\Page\Title;
 use Magento\Reports\Controller\Adminhtml\Report\Customer\Totals;
-use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest;
+use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTestCase;
 
-class TotalsTest extends AbstractControllerTest
+class TotalsTest extends AbstractControllerTestCase
 {
     /**
      * @var Totals

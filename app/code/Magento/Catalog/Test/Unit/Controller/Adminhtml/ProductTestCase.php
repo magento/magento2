@@ -26,7 +26,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class ProductTest extends TestCase
+abstract class ProductTestCase extends TestCase
 {
     /** @var MockObject */
     protected $context;

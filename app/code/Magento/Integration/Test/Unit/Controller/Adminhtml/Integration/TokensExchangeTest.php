@@ -12,9 +12,9 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Integration\Controller\Adminhtml\Integration;
 use Magento\Integration\Model\Oauth\Consumer;
-use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest;
+use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTestCase;
 
-class TokensExchangeTest extends IntegrationTest
+class TokensExchangeTest extends IntegrationTestCase
 {
     public function testTokensExchangeReauthorize()
     {

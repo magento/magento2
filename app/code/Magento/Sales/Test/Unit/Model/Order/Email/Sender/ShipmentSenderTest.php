@@ -22,7 +22,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  * @deprecated since ShipmentSender is deprecated
  * @see \Magento\Sales\Model\Order\Email\Sender\ShipmentSender
  */
-class ShipmentSenderTest extends AbstractSenderTest
+class ShipmentSenderTest extends AbstractSenderTestCase
 {
     private const SHIPMENT_ID = 1;
 

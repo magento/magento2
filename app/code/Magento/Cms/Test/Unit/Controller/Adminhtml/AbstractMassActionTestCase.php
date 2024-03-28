@@ -16,7 +16,7 @@ use Magento\Ui\Component\MassAction\Filter;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-abstract class AbstractMassActionTest extends TestCase
+abstract class AbstractMassActionTestCase extends TestCase
 {
     /**
      * @var ObjectManager

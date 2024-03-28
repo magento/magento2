@@ -29,7 +29,7 @@ use PHPUnit\Framework\TestCase;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class ThemeTest extends TestCase
+abstract class ThemeTestCase extends TestCase
 {
     /**
      * @var string

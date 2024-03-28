@@ -27,7 +27,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SaveTest extends ProductTest
+class SaveTest extends ProductTestCase
 {
     /** @var Save */
     protected $action;
