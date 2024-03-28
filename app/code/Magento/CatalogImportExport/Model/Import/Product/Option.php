@@ -1912,9 +1912,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if (!isset($existingOptionIds[$optionId]) && count($storeInfo) > 0) {
                 $storeInfo = [Store::DEFAULT_STORE_ID => reset($storeInfo)] + $storeInfo;
             }
-            //for use default
-            $uniqStoreInfo = array_unique($storeInfo);
-            foreach ($uniqStoreInfo as $storeId => $title) {
+            foreach ($storeInfo as $storeId => $title) {
                 $titleRows[] = ['option_id' => $optionId, 'store_id' => $storeId, 'title' => $title];
             }
         }
