@@ -141,7 +141,7 @@ class Topmenu extends Template implements IdentityInterface
     {
         $total = $this->_countItems($items);
         if ($total <= $limit) {
-            return;
+            return [];
         }
 
         $result[] = ['total' => $total, 'max' => (int)ceil($total / ceil($total / $limit))];
@@ -151,12 +151,9 @@ class Topmenu extends Template implements IdentityInterface
 
         foreach ($items as $item) {
             $place = $this->_countItems($item->getChildren()) + 1;
-            $count += $place;
+            $count++;
 
-            if ($place >= $limit) {
-                $colbrake = !$firstCol;
-                $count = 0;
-            } elseif ($count >= $limit) {
+            if ($count > $limit) {
                 $colbrake = !$firstCol;
                 $count = $place;
             } else {
@@ -242,7 +239,7 @@ class Topmenu extends Template implements IdentityInterface
             }
 
             if ($this->shouldAddNewColumn($colBrakes, $counter)) {
-                $html .= '</ul></li><li class="column"><ul>';
+                continue;
             }
 
             $html .= '<li ' . $this->_getRenderedMenuItemAttributes($child) . '>';
@@ -255,10 +252,6 @@ class Topmenu extends Template implements IdentityInterface
                 $limit
             ) . '</li>';
             $counter++;
-        }
-
-        if (is_array($colBrakes) && !empty($colBrakes) && $limit) {
-            $html = '<li class="column"><ul>' . $html . '</ul></li>';
         }
 
         return $html;
