@@ -1,7 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ *  ADOBE CONFIDENTIAL
+ *  ___________________
+ *
+ *  Copyright 2013 Adobe
+ *  All Rights Reserved.
  */
 declare(strict_types=1);
 
