@@ -49,8 +49,17 @@
         </arguments>
         <plugin name="orderGridExportFilterColumnPlugin" type="Magento\Sales\Plugin\Model\Export\OrderGridExportFilterColumn"/>
     </type>
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+    <type name="Magento\Sales\Model\ResourceModel\Order\Grid\Collection">
         <plugin name="orderGridCollectionFilterPlugin" type="Magento\Sales\Plugin\Model\ResourceModel\Order\OrderGridCollectionFilter"/>
+    </type>
+    <type name="Magento\Sales\Model\ResourceModel\Order\Invoice\Grid\Collection">
+        <plugin name="invoiceGridCollectionFilterPlugin" type="Magento\Sales\Plugin\Model\ResourceModel\Order\OrderGridCollectionFilter"/>
+    </type>
+    <type name="Magento\Sales\Model\ResourceModel\Order\Creditmemo\Order\Grid\Collection">
+        <plugin name="creditmemoGridCollectionFilterPlugin" type="Magento\Sales\Plugin\Model\ResourceModel\Order\OrderGridCollectionFilter"/>
+    </type>
+    <type name="Magento\Sales\Model\ResourceModel\Order\Shipment\Order\Grid\Collection">
+        <plugin name="shipmentGridCollectionFilterPlugin" type="Magento\Sales\Plugin\Model\ResourceModel\Order\OrderGridCollectionFilter"/>
     </type>
     <type name="Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\DataProvider\ProductCollection">
         <arguments>
