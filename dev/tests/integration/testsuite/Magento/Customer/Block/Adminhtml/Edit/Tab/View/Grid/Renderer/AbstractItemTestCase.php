@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Base class for testing \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item block
  */
-abstract class AbstractItemTest extends TestCase
+abstract class AbstractItemTestCase extends TestCase
 {
     /** @var ObjectManager */
     protected $objectManager;

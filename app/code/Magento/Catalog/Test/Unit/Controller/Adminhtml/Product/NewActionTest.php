@@ -15,7 +15,7 @@ use Magento\Catalog\Controller\Adminhtml\Product\Builder;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\Catalog\Controller\Adminhtml\Product\NewAction;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTest;
+use Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTestCase;
 use Magento\Framework\RegexValidator;
 use Magento\Framework\Validator\Regex;
 use Magento\Framework\Validator\RegexFactory;

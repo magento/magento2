@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Controller\Express;
 
-use Magento\Paypal\Test\Unit\Controller\ExpressTest;
+use Magento\Paypal\Test\Unit\Controller\ExpressTestCase;
 
 class ReturnActionTest extends ExpressTestCase
 {

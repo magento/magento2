@@ -12,7 +12,7 @@ namespace Magento\Test\Integrity\Phrase\Legacy;
 use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer;
 use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector;
 
-class SignatureTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
+class SignatureTest extends \Magento\Test\Integrity\Phrase\AbstractTest
 {
     /**
      * @var \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector

@@ -12,7 +12,7 @@ use Magento\CheckoutAgreements\Model\AgreementsValidator;
 use Magento\Framework\DataObject;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Paypal\Model\Api\ProcessableException;
-use Magento\Paypal\Test\Unit\Controller\ExpressTest;
+use Magento\Paypal\Test\Unit\Controller\ExpressTestCase;
 
 class PlaceOrderTest extends ExpressTestCase
 {

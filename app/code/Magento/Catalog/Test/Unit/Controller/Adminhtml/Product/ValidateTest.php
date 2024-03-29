@@ -17,7 +17,7 @@ use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\Catalog\Controller\Adminhtml\Product\Validate;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTest;
+use Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTestCase;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;

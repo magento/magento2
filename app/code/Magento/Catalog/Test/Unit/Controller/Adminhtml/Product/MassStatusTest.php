@@ -16,7 +16,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Action;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTest;
+use Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTestCase;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Ui\Component\MassAction\Filter;

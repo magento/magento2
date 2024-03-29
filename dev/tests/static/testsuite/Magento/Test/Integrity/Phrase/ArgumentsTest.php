@@ -12,7 +12,7 @@ use Magento\Framework\Component\ComponentRegistrar;
  * Scan source code for detects invocations of __() function or Phrase object, analyzes placeholders with arguments
  * and see if they not equal
  */
-class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
+class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTest
 {
     /**
      * @var \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector

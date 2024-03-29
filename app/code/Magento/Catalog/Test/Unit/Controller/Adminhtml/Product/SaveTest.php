@@ -16,7 +16,7 @@ use Magento\Catalog\Controller\Adminhtml\Product\Builder;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\Catalog\Controller\Adminhtml\Product\Save;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTest;
+use Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTestCase;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
