@@ -156,7 +156,7 @@
         <fillField selector="{{AdminProductFormSection.customTextAttribute('$$createTextProductAttribute.attribute_code$$')}}" userInput="Second Product" stepKey="setValueForCustomTextAttributeForSimpleProduct2"/>
         <fillField selector="{{AdminProductFormSection.customTextAttribute('$$createDateProductAttribute.attribute_code$$')}}" userInput="{$generateYesterdayDate}" stepKey="setValueForCustomDateAttributeForSimpleProduct2"/>
         <fillField selector="{{AdminProductFormSection.customTextAttribute('$$createPriceProductAttribute.attribute_code$$')}}" userInput="456" stepKey="setValueForCustomPriceAttributeForSimpleProduct2"/>
-        <conditionalClick selector="{{AdminProductFormSection.customSwitcherAttribute('$$createYesNoProductAttribute.attribute_code$$','0')}}" dependentSelector="{{AdminProductFormSection.customSwitcherAttribute('$$createYesNoProductAttribute.attribute_code$$','1')}}" visible="true" stepKey="selectNoForCustomYesNoAttributeForSimpleProduct2"/>
+        <conditionalClick selector="{{AdminProductFormSection.customSwitcherAttribute('$$createYesNoProductAttribute.attribute_code$$','1')}}" dependentSelector="{{AdminProductFormSection.customSwitcherAttribute('$$createYesNoProductAttribute.attribute_code$$','1')}}" visible="true" stepKey="selectNoForCustomYesNoAttributeForSimpleProduct2"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct2"/>
         <!-- Clear index and flush cache -->
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex1">
