@@ -80,8 +80,7 @@
         <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
 
         <!--Click PayPal button and go back to Magento site-->
-        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoActionGroup" stepKey="goBackToMagentoSite"/>
-
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="goBackToMagentoSite"/>
         <actionGroup ref="StorefrontSelectShippingMethodOnOrderReviewPageActionGroup" stepKey="selectShippingMethod"/>
 
         <!--SubmitOrder-->
