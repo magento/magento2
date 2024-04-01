@@ -146,7 +146,6 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
                     __('We don\'t have enough information to save the parent transaction ID.')
                 );
             }
-            $parentId = (int)$this->_lookupByTxnId($orderId, $paymentId, $parentTxnId, $idFieldName);
         }
 
         // make sure unique key won't cause trouble
