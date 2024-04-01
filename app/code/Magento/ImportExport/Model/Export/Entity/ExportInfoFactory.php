@@ -10,6 +10,7 @@ namespace Magento\ImportExport\Model\Export\Entity;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\ImportExport\Api\Data\ExportInfoInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\ImportExport\Api\Data\FieldsEnclosureAwareExportInfoInterface;
 use \Psr\Log\LoggerInterface;
 use Magento\ImportExport\Model\Export\ConfigInterface;
 use Magento\ImportExport\Model\Export\Entity\Factory as EntityFactory;
@@ -18,6 +19,8 @@ use Magento\ImportExport\Model\Export\AbstractEntity;
 
 /**
  * Factory for Export Info
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ExportInfoFactory
 {
@@ -83,11 +86,18 @@ class ExportInfoFactory
      * @param string $exportFilter
      * @param array $skipAttr
      * @param string|null $locale
+     * @param bool|null $fieldsEnclosure
      * @return ExportInfoInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function create($fileFormat, $entity, $exportFilter, $skipAttr = [], ?string $locale = null)
-    {
+    public function create(
+        $fileFormat,
+        $entity,
+        $exportFilter,
+        $skipAttr = [],
+        ?string $locale = null,
+        ?bool $fieldsEnclosure = null
+    ) {
         $writer = $this->getWriter($fileFormat);
         $entityAdapter = $this->getEntityAdapter(
             $entity,
@@ -97,8 +107,8 @@ class ExportInfoFactory
             $writer->getContentType()
         );
         $fileName = $this->generateFileName($entity, $entityAdapter, $writer->getFileExtension());
-        /** @var ExportInfoInterface $exportInfo */
-        $exportInfo = $this->objectManager->create(ExportInfoInterface::class);
+        /** @var FieldsEnclosureAwareExportInfoInterface $exportInfo */
+        $exportInfo = $this->objectManager->create(FieldsEnclosureAwareExportInfoInterface::class);
         $exportInfo->setExportFilter($this->serializer->serialize($exportFilter));
         $exportInfo->setSkipAttr($skipAttr);
         $exportInfo->setFileName($fileName);
@@ -107,6 +117,9 @@ class ExportInfoFactory
         $exportInfo->setContentType($writer->getContentType());
         if ($locale) {
             $exportInfo->setLocale($locale);
+        }
+        if ($fieldsEnclosure !== null) {
+            $exportInfo->setFieldsEnclosure($fieldsEnclosure);
         }
 
         return $exportInfo;
