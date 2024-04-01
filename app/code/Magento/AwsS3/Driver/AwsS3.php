@@ -20,7 +20,7 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Phrase;
 use Magento\RemoteStorage\Driver\Adapter\MetadataProviderInterface;
 use Magento\RemoteStorage\Driver\DriverException;
-use Magento\RemoteStorage\Driver\ExtendedRemoteDriverInterface;
+use Magento\RemoteStorage\Driver\RemoteDriverInterface;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
@@ -30,7 +30,7 @@ use Throwable;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AwsS3 implements ExtendedRemoteDriverInterface
+class AwsS3 implements RemoteDriverInterface
 {
     public const TYPE_DIR = 'dir';
     public const TYPE_FILE = 'file';
@@ -152,35 +152,6 @@ class AwsS3 implements ExtendedRemoteDriverInterface
             $this->logger->error($e->getMessage());
             return false;
         }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function isDirectoryExists($path): bool
-    {
-        if ($path === '/') {
-            return true;
-        }
-
-        $path = $this->normalizeRelativePath($path, true);
-
-        if (!$path) {
-            return true;
-        }
-
-        $pathStats = $this->stat($path);
-
-        if ($pathStats['type'] == self::TYPE_DIR) {
-            try {
-                return $this->adapter->directoryExists($path);
-            } catch (FlysystemFilesystemException $e) {
-                $this->logger->error($e->getMessage());
-                return false;
-            }
-        }
-
-        return false; // Return false if the path is not a directory
     }
 
     /**

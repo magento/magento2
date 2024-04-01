@@ -10,7 +10,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\RemoteStorage\Driver\DriverFactoryInterface;
 use Magento\RemoteStorage\Driver\DriverFactoryPool;
-use Magento\RemoteStorage\Driver\ExtendedRemoteDriverInterface;
+use Magento\RemoteStorage\Driver\RemoteDriverInterface;
 use Magento\RemoteStorage\Setup\ConfigOptionsList;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -86,7 +86,7 @@ class ConfigOptionsListTest extends TestCase
                 ->with($input['remote-storage-driver'])
                 ->willReturn($driverFactoryMock);
 
-            $remoteDriverMock = $this->getMockBuilder(ExtendedRemoteDriverInterface::class)
+            $remoteDriverMock = $this->getMockBuilder(RemoteDriverInterface::class)
                 ->disableOriginalConstructor()
                 ->getMock();
 
