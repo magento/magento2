@@ -146,6 +146,15 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
                     __('We don\'t have enough information to save the parent transaction ID.')
                 );
             }
+            /*$parentId = (int)$this->_lookupByTxnId($orderId, $paymentId, $parentTxnId, $idFieldName);
+            if ($parentId) {
+                $transaction->setData('parent_id', $parentId);
+            }*/
+        } else {
+            $oldParentTxnId = $this->getParentTxnId($orderId);
+            if($oldParentTxnId) {
+                $transaction->setData('parent_txn_id', $oldParentTxnId);
+            }
         }
 
         // make sure unique key won't cause trouble
@@ -206,5 +215,20 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
             'txn_id = ?',
             $txnId
         );
+    }
+    /**
+     * Retrieve transaction by the unique key of order_id
+     * @param int $orderId
+     */
+    protected function getParentTxnId($orderId) {
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
+            $this->getMainTable(),
+            ['parent_txn_id']
+        )->where(
+            'order_id = ?',
+            $orderId
+        );
+        return $connection->fetchOne($select);
     }
 }
