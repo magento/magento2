@@ -148,7 +148,7 @@ class QuoteAddressValidator
         // check if address belongs to quote.
         if ($address->getId() !== null) {
             $old = $cart->getAddressById($address->getId());
-            if ($old === false) {
+            if (empty($old)) {
                 throw new NoSuchEntityException(
                     __('Invalid quote address id %1', $address->getId())
                 );
