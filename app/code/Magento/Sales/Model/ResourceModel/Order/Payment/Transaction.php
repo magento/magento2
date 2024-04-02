@@ -11,7 +11,6 @@ use Magento\Sales\Model\Spi\TransactionResourceInterface;
 /**
  * Sales transaction resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Transaction extends EntityAbstract implements TransactionResourceInterface
 {
@@ -152,7 +151,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
             }*/
         } else {
             $oldParentTxnId = $this->getParentTxnId($orderId);
-            if($oldParentTxnId) {
+            if ($oldParentTxnId) {
                 $transaction->setData('parent_txn_id', $oldParentTxnId);
             }
         }
@@ -220,7 +219,8 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
      * Retrieve transaction by the unique key of order_id
      * @param int $orderId
      */
-    protected function getParentTxnId($orderId) {
+    protected function getParentTxnId($orderId)
+    {
         $connection = $this->getConnection();
         $select = $connection->select()->from(
             $this->getMainTable(),
