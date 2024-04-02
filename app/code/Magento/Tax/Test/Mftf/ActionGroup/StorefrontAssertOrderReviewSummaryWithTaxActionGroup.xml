@@ -8,8 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="
-    StorefrontAssertOrderReviewSummaryWithTaxActionGroup" extends="VerifyCheckoutPaymentOrderSummaryActionGroup">
+    <actionGroup name="StorefrontAssertOrderReviewSummaryWithTaxActionGroup" extends="VerifyCheckoutPaymentOrderSummaryActionGroup">
         <annotations>
             <description>Validates that the provided Subtotal, Shipping Total and Summary Total prices are present and correct on the Storefront Checkout page.</description>
         </annotations>
