@@ -98,6 +98,8 @@
         <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeAdminOrderStatus">
             <argument name="status" value="Processing"/>
         </actionGroup>
+        <!--Authorize the order-->
+        <actionGroup ref="AdminAuthorizeAnOrderActionGroup" stepKey="authorizeTheOrder"/>
         <!--Create Invoice for this Order-->
         <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="createInvoice"/>
         <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
