@@ -32,9 +32,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
     }
 
     /**
-     * Update transactions in database using provided transaction as parent for them
-     * have to repeat the business logic to avoid accidental injection of wrong transactions
-     *
+     * Update transactions in database using provided transaction as parent for them have to repeat the business logic to avoid accidental injection of wrong transactions
      * @param \Magento\Sales\Model\Order\Payment\Transaction $transaction
      * @return void
      */
@@ -125,6 +123,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
 
     /**
      * Lookup for parent_id in already saved transactions of this payment by the order_id
+     *
      * Also serialize additional information, if any
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Sales\Model\Order\Payment\Transaction $transaction
@@ -173,7 +172,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
      * @param int $orderId
      * @param int $paymentId
      * @param string $txnId
-     * @param mixed (array|string|object) $columns
+     * @param mixed $columns (array|string|object) $columns
      * @param bool $isRow
      * @param string $txnType
      * @return array|string
@@ -217,6 +216,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
     }
     /**
      * Retrieve transaction by the unique key of order_id
+     *
      * @param int $orderId
      */
     protected function getParentTxnId($orderId)
