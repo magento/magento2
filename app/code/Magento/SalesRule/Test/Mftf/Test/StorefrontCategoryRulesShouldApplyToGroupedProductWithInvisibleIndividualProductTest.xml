@@ -16,9 +16,16 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-31863"/>
             <group value="SalesRule"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <createData entity="ApiCategory" stepKey="createCategoryOne"/>
             <createData entity="ApiSimpleProduct" stepKey="createFirstSimpleProduct">
                 <field key ="price">100</field>
@@ -74,11 +81,12 @@
             <deleteData createDataKey="createSecondGroupedProduct" stepKey="deleteSecondGroupedProduct"/>
             <deleteData createDataKey="createCategoryOne" stepKey="deleteCategoryOne"/>
             <deleteData createDataKey="createCategoryTwo" stepKey="deleteCategoryTwo"/>
-            <actionGroup ref="AdminDeleteCartPriceRuleActionGroup" stepKey="deleteCartPriceRule">
-                <argument name="ruleName" value="TestSalesRule"/>
-            </actionGroup>
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteCartPriceRule"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <!-- Start to create new cart price rule via Category conditions -->
         <actionGroup ref="AdminCreateCartPriceRuleWithConditionIsCategoryActionGroup" stepKey="createCartPriceRuleWithCondition">
@@ -108,9 +116,10 @@
         </actionGroup>
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="openTheCartWithFirstAndSecondGroupedProducts"/>
         <waitForPageLoad stepKey="waitForGrandTotalToLoad"/>
-        <waitForElement time="30" selector="{{CheckoutCartSummarySection.estimateShippingAndTaxForm}}" stepKey="waitForEstimateShippingAndTaxForm"/>
-        <waitForElement time="30" selector="{{CheckoutCartSummarySection.shippingMethodForm}}" stepKey="waitForShippingMethodForm"/>
+        <waitForElementVisible time="30" selector="{{CheckoutCartSummarySection.estimateShippingAndTaxForm}}" stepKey="waitForEstimateShippingAndTaxForm"/>
+        <waitForElementVisible time="30" selector="{{CheckoutCartSummarySection.shippingMethodForm}}" stepKey="waitForShippingMethodForm"/>
         <waitForElementVisible time="30" selector="{{CheckoutCartSummarySection.total}}" stepKey="waitForTotalElement"/>
+        <actionGroup ref="StorefrontCartEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxSection" />
         <!-- Discount amount is applied for product from first category only -->
         <actionGroup ref="StorefrontCheckCartTotalWithDiscountCategoryActionGroup" stepKey="checkDiscountIsApplied">
             <argument name="subtotal" value="$1,000.00"/>

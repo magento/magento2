@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-34953"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -106,7 +107,7 @@
         </before>
 
         <after>
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+            <comment userInput="BIC workaround" stepKey="disableFlatRate"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="Product" stepKey="deleteProduct"/>
             <deleteData createDataKey="Customer" stepKey="deleteCustomer"/>

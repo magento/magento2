@@ -100,8 +100,9 @@ class BooleanTest extends TestCase
         }
         $selectMock
             ->method('joinLeft')
-            ->withConsecutive(...$withArgs)
-            ->willReturnSelf();
+            ->willReturnCallback(function (...$withArgs) use ($selectMock) {
+                return $selectMock;
+            });
 
         $selectMock->expects($this->once())->method('order')->with($expectedOrder);
 
@@ -112,7 +113,7 @@ class BooleanTest extends TestCase
     /**
      * @return array
      */
-    public function addValueSortToCollectionDataProvider(): array
+    public static function addValueSortToCollectionDataProvider(): array
     {
         return  [
             [

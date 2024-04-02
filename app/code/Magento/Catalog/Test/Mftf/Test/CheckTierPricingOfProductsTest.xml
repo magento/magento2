@@ -55,7 +55,9 @@
         </actionGroup>
         <!--Set Configuration-->
         <createData entity="CatalogPriceScopeWebsite" stepKey="paymentMethodsSettingConfig"/>
-        <magentoCron groups="index" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
         <!--Set advanced pricing for all 4 products-->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct1">
             <argument name="product" value="$$product1$$"/>
@@ -147,8 +149,10 @@
         <see userInput="You saved the rule." stepKey="RuleSaved"/>
 
         <!--Create new order-->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="CreateNewOrder">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="CreateNewOrder">
             <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectStoreDuringOrderCreationActionGroup" stepKey="selectCustomStore">
             <argument name="storeView" value="customStore"/>
         </actionGroup>
 
@@ -318,6 +322,7 @@
             <deleteData createDataKey="product3" stepKey="deleteProduct3"/>
             <deleteData createDataKey="product4" stepKey="deleteProduct4"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
             <createData entity="DefaultConfigCatalogPrice" stepKey="defaultConfigCatalogPrice"/>
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="cleanUpRule">
@@ -329,7 +334,9 @@
             <createData entity="CustomerAccountSharingDefault" stepKey="setConfigCustomerAccountDefault"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </after>
     </test>

@@ -19,6 +19,7 @@
             <severity value="MAJOR"/>
             <group value="sales"/>
             <group value="catalogInventory"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="simpleCustomer"/>
@@ -32,7 +33,7 @@
         </after>
 
         <!-- Initiate create new order -->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderPageWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderPageWithExistingCustomer">
             <argument name="customer" value="$simpleCustomer$"/>
         </actionGroup>
         <!-- Add to order maximum available quantity - 1 -->

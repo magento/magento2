@@ -65,7 +65,7 @@ class NoCookiesObserverTest extends TestCase
             ->getMock();
         $this->eventMock = $this
             ->getMockBuilder(Event::class)
-            ->setMethods(
+            ->addMethods(
                 [
                     'getStatus',
                     'getRedirect',
@@ -75,7 +75,7 @@ class NoCookiesObserverTest extends TestCase
             ->getMock();
         $this->objectMock = $this
             ->getMockBuilder(DataObject::class)
-            ->setMethods(
+            ->addMethods(
                 [
                     'setLoaded',
                     'setForwardModule',
@@ -154,7 +154,7 @@ class NoCookiesObserverTest extends TestCase
     /**
      * @return array
      */
-    public function noCookiesDataProvider()
+    public static function noCookiesDataProvider()
     {
         return [
             'url IS empty' => ['pageUrl' => ''],

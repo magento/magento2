@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,6 +8,8 @@
 namespace Magento\CatalogRule\Model\ResourceModel;
 
 use Magento\Catalog\Model\Product;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
@@ -70,7 +73,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Framework\EntityManager\EntityManager
+     * @var EntityManager
      */
     protected $entityManager;
 
@@ -85,7 +88,9 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param PriceCurrencyInterface $priceCurrency
-     * @param string $connectionName
+     * @param string|null $connectionName
+     * @param EntityManager|null $entityManager
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -99,7 +104,8 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         PriceCurrencyInterface $priceCurrency,
-        $connectionName = null
+        $connectionName = null,
+        ?EntityManager $entityManager = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_conditionFactory = $conditionFactory;
@@ -110,7 +116,11 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         $this->_logger = $logger;
         $this->dateTime = $dateTime;
         $this->priceCurrency = $priceCurrency;
-        $this->_associatedEntitiesMap = $this->getAssociatedEntitiesMap();
+        $this->entityManager = $entityManager ?? ObjectManager::getInstance()->get(EntityManager::class);
+        $this->_associatedEntitiesMap = ObjectManager::getInstance()
+            // phpstan:ignore this is a virtual class
+            ->get(\Magento\CatalogRule\Model\ResourceModel\Rule\AssociatedEntityMap::class)
+            ->getData();
         parent::__construct($context, $connectionName);
     }
 
@@ -126,32 +136,13 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
-     * After delete
-     *
-     * @param \Magento\Framework\Model\AbstractModel $rule
-     * @return $this
-     */
-    protected function _afterDelete(\Magento\Framework\Model\AbstractModel $rule)
-    {
-        $connection = $this->getConnection();
-        $connection->delete(
-            $this->getTable('catalogrule_product'),
-            ['rule_id=?' => $rule->getId()]
-        );
-        $connection->delete(
-            $this->getTable('catalogrule_group_website'),
-            ['rule_id=?' => $rule->getId()]
-        );
-        return parent::_afterDelete($rule);
-    }
-
-    /**
      * Get catalog rules product price for specific date, website and customer group
      *
      * @param \DateTimeInterface $date
      * @param int $wId
      * @param int $gId
      * @param int $pId
+     *
      * @return float|false
      */
     public function getRulePrice($date, $wId, $gId, $pId)
@@ -173,6 +164,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param int $websiteId
      * @param int $customerGroupId
      * @param array $productIds
+     *
      * @return array
      */
     public function getRulePrices(\DateTimeInterface $date, $websiteId, $customerGroupId, $productIds)
@@ -195,6 +187,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param int $websiteId
      * @param int $customerGroupId
      * @param int $productId
+     *
      * @return array
      */
     public function getRulesFromProduct($date, $websiteId, $customerGroupId, $productId)
@@ -203,6 +196,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         if (is_string($date)) {
             $date = strtotime($date);
         }
+
         $select = $connection->select()
             ->from($this->getTable('catalogrule_product'))
             ->where('website_id = ?', $websiteId)
@@ -215,30 +209,28 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
-     * Load rule from the database into the specified object
+     * Load an object
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @param mixed $value
      * @param string $field
+     *
      * @return $this
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
     {
-        $this->getEntityManager()->load($object, $value);
+        $this->entityManager->load($object, $value);
         return $this;
     }
 
     /**
-     * Save the specified object to the database
-     *
-     * @param AbstractModel $object
-     * @return $this
-     * @throws \Exception
+     * @inheritdoc
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
-        $this->getEntityManager()->save($object);
+        $this->entityManager->save($object);
         return $this;
     }
 
@@ -246,43 +238,39 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * Delete the object
      *
      * @param \Magento\Framework\Model\AbstractModel $object
+     *
      * @return $this
+     *
      * @throws \Exception
      */
     public function delete(AbstractModel $object)
     {
-        $this->getEntityManager()->delete($object);
+        $this->entityManager->delete($object);
         return $this;
     }
 
     /**
-     * Return associated entity map
+     * Get product ids matching specified rules
+     *
+     * @param array $ruleIds
      *
      * @return array
-     * @deprecated 100.1.0
      */
-    private function getAssociatedEntitiesMap()
+    public function getProductIdsByRuleIds(array $ruleIds): array
     {
-        if (!$this->_associatedEntitiesMap) {
-            $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\CatalogRule\Model\ResourceModel\Rule\AssociatedEntityMap::class)
-                ->getData();
-        }
-        return $this->_associatedEntitiesMap;
-    }
-
-    /**
-     * Return entity manager
-     *
-     * @return \Magento\Framework\EntityManager\EntityManager
-     * @deprecated 100.1.0
-     */
-    private function getEntityManager()
-    {
-        if (null === $this->entityManager) {
-            $this->entityManager = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\EntityManager::class);
-        }
-        return $this->entityManager;
+        $connection = $this->getConnection();
+        $select = $connection->select()
+            ->from(
+                $this->getTable('catalogrule_product'),
+                ['product_id']
+            )
+            ->where(
+                'rule_id IN (?)',
+                array_map('intval', $ruleIds)
+            )
+            ->distinct(
+                true
+            );
+        return array_map('intval', $connection->fetchCol($select));
     }
 }
