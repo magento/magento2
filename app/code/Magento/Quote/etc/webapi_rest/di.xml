@@ -22,4 +22,7 @@
     <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
         <plugin name="validateQuoteData" type="Magento\Quote\Plugin\Webapi\Controller\Rest\ValidateQuoteData" sortOrder="1" disabled="false" />
     </type>
+    <type name="Magento\Quote\Api\CartRepositoryInterface">
+        <plugin name="quoteValidateOrderId" type="Magento\Quote\Plugin\ValidateQuoteOrigOrder"/>
+    </type>
 </config>
