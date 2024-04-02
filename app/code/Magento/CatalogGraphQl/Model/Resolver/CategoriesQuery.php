@@ -98,7 +98,7 @@ class CategoriesQuery implements ResolverInterface
 
         $rootCategoryIds = $filterResult['category_ids'] ?? [];
 
-        $filterResult['items'] = $this->fetchCategories($rootCategoryIds, $info, $store, $context);
+        $filterResult['items'] = $this->fetchCategories($rootCategoryIds, $info, $context);
         return $filterResult;
     }
 
@@ -107,31 +107,22 @@ class CategoriesQuery implements ResolverInterface
      *
      * @param array $categoryIds
      * @param ResolveInfo $info
-     * @param StoreInterface $store
      * @param ContextInterface $context
      * @return array
      */
     private function fetchCategories(
         array $categoryIds,
         ResolveInfo $info,
-        StoreInterface $store,
         ContextInterface $context
     ) {
-        $fetchedCategories = [];
-        foreach ($categoryIds as $categoryId) {
-            /* Search Criteria is created for compatibility */
-            $searchCriteria = $this->searchCriteriaFactory->create();
-            $categoryTree = $this->categoryTree->getFilteredTree(
-                $info,
-                $categoryId,
-                $searchCriteria,
-                $store,
-                [],
-                $context
-            );
-            $fetchedCategories[] = current($this->extractDataFromCategoryTree->execute($categoryTree));
-        }
-
-        return $fetchedCategories;
+        $searchCriteria = $this->searchCriteriaFactory->create();
+        $categoryCollection = $this->categoryTree->getFlatCategoriesByRootIds(
+            $info,
+            $categoryIds,
+            $searchCriteria,
+            [],
+            $context
+        );
+        return $this->extractDataFromCategoryTree->buildTree($categoryCollection, $categoryIds);
     }
 }

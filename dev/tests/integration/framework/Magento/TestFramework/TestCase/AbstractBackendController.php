@@ -107,7 +107,7 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
     public function testAclHasAccess()
     {
         if ($this->uri === null) {
-            $this->markTestIncomplete('AclHasAccess test is not complete');
+            $this->markTestSkipped('AclHasAccess test is not complete');
         }
         if ($this->httpMethod) {
             $this->getRequest()->setMethod($this->httpMethod);
@@ -123,7 +123,7 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
     public function testAclNoAccess()
     {
         if ($this->resource === null || $this->uri === null) {
-            $this->markTestIncomplete('Acl test is not complete');
+            $this->markTestSkipped('Acl test is not complete');
         }
         if ($this->httpMethod) {
             $this->getRequest()->setMethod($this->httpMethod);

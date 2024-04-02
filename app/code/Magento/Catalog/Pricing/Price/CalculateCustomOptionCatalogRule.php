@@ -68,8 +68,7 @@ class CalculateCustomOptionCatalogRule
                 $regularPrice + $optionPrice,
                 $product
             );
-            $finalOptionPrice = $totalCatalogRulePrice - $catalogRulePrice;
-            return $this->priceCurrency->convertAndRound($finalOptionPrice);
+            return $totalCatalogRulePrice - $catalogRulePrice;
         }
 
         return null;

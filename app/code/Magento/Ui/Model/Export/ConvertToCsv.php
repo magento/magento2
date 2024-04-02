@@ -11,9 +11,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Ui\Component\MassAction\Filter;
 
-/**
- * Class ConvertToCsv
- */
 class ConvertToCsv
 {
     /**
@@ -85,14 +82,17 @@ class ConvertToCsv
             ->setCurrentPage($i)
             ->setPageSize($this->pageSize);
         $totalCount = (int) $dataProvider->getSearchResult()->getTotalCount();
-        while ($totalCount > 0) {
-            $items = $dataProvider->getSearchResult()->getItems();
+        $totalPagesCount = (int) ceil($totalCount / $this->pageSize);
+        while ($i <= $totalPagesCount) {
+            // setTotalCount to prevent total count from being calculated in loop
+            $searchResult = $dataProvider->getSearchResult();
+            $searchResult->setTotalCount($totalCount);
+            $items = $searchResult->getItems();
             foreach ($items as $item) {
                 $this->metadataProvider->convertDate($item, $component->getName());
                 $stream->writeCsv($this->metadataProvider->getRowData($item, $fields, $options));
             }
             $searchCriteria->setCurrentPage(++$i);
-            $totalCount = $totalCount - $this->pageSize;
         }
         $stream->unlock();
         $stream->close();

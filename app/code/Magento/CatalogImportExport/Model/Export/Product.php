@@ -117,13 +117,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $_productTypeModels = [];
 
     /**
-     * Array of pairs store ID to its code.
-     *
-     * @var array
-     */
-    protected $_storeIdToCode = [];
-
-    /**
      * Array of Website ID-to-code.
      *
      * @var array
@@ -374,6 +367,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @var StockConfigurationInterface
      */
     private $stockConfiguration;
+
+    /**
+     * @var array
+     */
+    private array $attributeFrontendTypes = [];
 
     /**
      * Product constructor.
@@ -640,10 +638,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             if ($stockItemRow['use_config_max_sale_qty']) {
                 $stockItemRow['max_sale_qty'] = $this->stockConfiguration->getMaxSaleQty();
             }
-
             if ($stockItemRow['use_config_min_sale_qty']) {
                 $stockItemRow['min_sale_qty'] = $this->stockConfiguration->getMinSaleQty();
             }
+            if ($stockItemRow['use_config_manage_stock']) {
+                $stockItemRow['manage_stock'] = $this->stockConfiguration->getManageStock();
+            }
+
             $stockItemRows[$productId] = $stockItemRow;
         }
         return $stockItemRows;
@@ -1066,7 +1067,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
                     if ($this->_attributeTypes[$code] == 'datetime') {
                         if (in_array($code, $this->dateAttrCodes)
-                            || in_array($code, $this->userDefinedAttributes)
+                            || $this->attributeFrontendTypes[$code] === 'date'
                         ) {
                             $attrValue = $this->_localeDate->formatDateTime(
                                 new \DateTime($attrValue),
@@ -1086,7 +1087,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
                     if ($storeId != Store::DEFAULT_STORE_ID
                         && isset($data[$itemId][Store::DEFAULT_STORE_ID][$fieldName])
-                        && $data[$itemId][Store::DEFAULT_STORE_ID][$fieldName] == htmlspecialchars_decode($attrValue)
+                        && $data[$itemId][Store::DEFAULT_STORE_ID][$fieldName] == $attrValue
                     ) {
                         continue;
                     }
@@ -1097,7 +1098,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                                 $additionalAttributes[$fieldName] = $fieldName .
                                     ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $this->wrapValue($attrValue);
                             }
-                            $data[$itemId][$storeId][$fieldName] = htmlspecialchars_decode($attrValue);
+                            $data[$itemId][$storeId][$fieldName] = $attrValue;
                         }
                     } else {
                         $this->collectMultiselectValues($item, $code, $storeId);
@@ -1112,7 +1113,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 }
 
                 if (!empty($additionalAttributes)) {
-                    $additionalAttributes = array_map('htmlspecialchars_decode', $additionalAttributes);
                     $data[$itemId][$storeId][self::COL_ADDITIONAL_ATTRIBUTES] =
                         implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalAttributes);
                 } else {
@@ -1123,7 +1123,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $data[$itemId][$storeId][self::COL_STORE] = $storeCode;
                 $data[$itemId][$storeId][self::COL_ATTR_SET] = $this->_attrSetIdToName[$attrSetId];
                 $data[$itemId][$storeId][self::COL_TYPE] = $item->getTypeId();
-                $data[$itemId][$storeId][self::COL_SKU] = htmlspecialchars_decode($item->getSku());
+                $data[$itemId][$storeId][self::COL_SKU] = $item->getSku();
                 $data[$itemId][$storeId]['store_id'] = $storeId;
                 $data[$itemId][$storeId]['product_id'] = $itemId;
                 $data[$itemId][$storeId]['product_link_id'] = $productLinkId;
@@ -1662,6 +1662,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $this->_attributeValues[$attribute->getAttributeCode()] = $this->getAttributeOptions($attribute);
             $this->_attributeTypes[$attribute->getAttributeCode()] =
                 \Magento\ImportExport\Model\Import::getAttributeType($attribute);
+            $this->attributeFrontendTypes[$attribute->getAttributeCode()] = $attribute->getFrontendInput();
             if ($attribute->getIsUserDefined()) {
                 $this->userDefinedAttributes[] = $attribute->getAttributeCode();
             }

@@ -16,6 +16,7 @@
             <description value="Placing the order for out of stock products and zero quantity"/>
             <severity value="CRITICAL"/>
             <testCaseId value="AC-5262"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -38,8 +39,8 @@
         </before>
         <!-- Delete the Data after execution-->
         <after>
-            <deleteData createDataKey="createCategory" stepKey="deleteProduct"/>
-            <deleteData createDataKey="simpleProductOne" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleProductOne" stepKey="deleteProduct"/>
             <magentoCLI command="config:set {{EnableInventoryCheckOnCartLoad.path}} {{EnableInventoryCheckOnCartLoad.value}}" stepKey="enableCartLoad"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
@@ -61,8 +62,9 @@
         <!-- Mouse Hover Product On Category Page-->
         <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct"/>
         <!-- Select Add to cart-->
-        <click selector="{{StorefrontCategoryMainSection.addToCartButtonProductInfoHover}}" stepKey="toCategory"/>
-        <waitForPageLoad stepKey="wait"/>
+        <waitForElementClickable selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="waitForAddToCartButton"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="toCategory"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.errorMsg}}" stepKey="wait"/>
         <!-- Assert the Error Message-->
         <see selector="{{StorefrontProductPageSection.errorMsg}}" userInput="Product that you are trying to add is not available." stepKey="seeErrorMessage"/>
     </test>

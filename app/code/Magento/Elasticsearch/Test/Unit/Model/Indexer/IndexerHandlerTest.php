@@ -108,7 +108,7 @@ class IndexerHandlerTest extends TestCase
 
         $this->adapterFactory = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\ElasticsearchFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->adapterFactory->expects($this->any())
@@ -130,7 +130,8 @@ class IndexerHandlerTest extends TestCase
             ->getMock();
 
         $this->client = $this->getMockBuilder(ClientInterface::class)
-            ->setMethods(['ping', 'testConnection','prepareDocsPerStore','addDocs', 'cleanIndex'])
+            ->addMethods(['ping', 'prepareDocsPerStore','addDocs', 'cleanIndex'])
+            ->onlyMethods(['testConnection'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -178,6 +179,27 @@ class IndexerHandlerTest extends TestCase
             $this->cacheContext,
             $this->processor
         );
+    }
+
+    public function testDisableStackedActions(): void
+    {
+        $this->adapter->expects($this->once())->method('disableStackQueriesMode');
+        $this->model->disableStackedActions();
+    }
+
+    public function testEnableStackedActions(): void
+    {
+        $this->adapter->expects($this->once())->method('enableStackQueriesMode');
+        $this->model->enableStackedActions();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testTriggerStackedActions(): void
+    {
+        $this->adapter->expects($this->once())->method('triggerStackedQueries');
+        $this->model->triggerStackedActions();
     }
 
     public function testIsAvailable()

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="EnablePaypalExpressCheckoutAndSubmitAnOrderUsingPaypalExpressCheckoutTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Enable paypal express checkout and validate the customer checkout payment works with paypal express"/>
+            <title value="Enable paypal express checkout and validate the customer checkout payment works with paypal express"/>
+            <description value="Enable paypal express checkout and validate the customer checkout payment works with paypal express"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-6951"/>
+        </annotations>
+        <before>
+            <!--Enable free shipping method -->
+            <magentoCLI command="config:set {{EnableFreeShippingConfigData.path}} {{EnableFreeShippingConfigData.value}}" stepKey="enableFreeShipping"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- New Customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer">
+                <field key="firstname">John1</field>
+                <field key="lastname">Doe1</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct">
+                <field key="price">1</field>
+            </createData>
+            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
+                <argument name="credentials" value="SamplePaypalExpressConfig2"/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
+            <magentoCLI command="config:set paypal/general/merchant_country US" stepKey="setMerchantCountry"/>
+            <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
+            <magentoCLI command="config:set payment/wps_express/active 0" stepKey="disableWPSExpress"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUpNewUser">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$simpleProduct$"/>
+        </actionGroup>
+        <!--Go to cart page-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="gotoCart"/>
+        <!-- Click on Paypal paypal button-->
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn">
+            <argument name="elementNumber" value="1"/>
+        </actionGroup>
+        <!--Login to Paypal in-context-->
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="LoginToPayPal"/>
+        <!--Transfer Cart Line and Shipping Method assertion-->
+        <actionGroup ref="PayPalAssertTransferLineAndShippingMethodNotExistActionGroup" stepKey="assertPayPalSettings"/>
+        <!--Click PayPal button and go back to Magento site-->
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="goBackToMagentoSite"/>
+        <actionGroup ref="StorefrontSelectShippingMethodOnOrderReviewPageActionGroup" stepKey="selectShippingMethod">
+            <argument name="shippingMethod" value="Free - $0.00"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontPlaceOrderOnOrderReviewPageActionGroup" stepKey="clickPlaceOrderBtn"/>
+        <!-- I see order successful Page instead of Order Review Page -->
+        <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertCheckoutSuccess"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <!--Go to Admin and check order information-->
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGrid">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+        <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelOrder"/>
+    </test>
+</tests>

@@ -16,6 +16,7 @@
             <description value="Test whenever HTML tags are allowed for a product attribute label"/>
             <severity value="CRITICAL"/>
             <group value="catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

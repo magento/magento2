@@ -34,6 +34,8 @@ class DataProvider
     }
 
     /**
+     * Updates metadata.
+     *
      * @param \Magento\Catalog\Model\Category\DataProvider $subject
      * @param array $result
      * @return array
@@ -45,6 +47,7 @@ class DataProvider
             !$this->_helper->isGoogleExperimentActive();
         $result['category_view_optimization']['arguments']['data']['config']['componentType'] =
             \Magento\Ui\Component\Form\Fieldset::NAME;
+        $result['category_view_optimization']['arguments']['data']['config']['label'] = '';
 
         return $result;
     }

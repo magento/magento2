@@ -95,36 +95,36 @@ class WebsitesTest extends AbstractModifierTest
         $this->assignedWebsites = [self::SECOND_WEBSITE_ID];
         $this->productId = self::PRODUCT_ID;
         $this->websiteMock = $this->getMockBuilder(Website::class)
-            ->setMethods(['getId', 'getName'])
+            ->onlyMethods(['getId', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->websiteMock->method('getName')->willReturn('Unit test');
         $this->secondWebsiteMock = $this->getMockBuilder(Website::class)
-            ->setMethods(['getId', 'getName'])
+            ->onlyMethods(['getId', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->secondWebsiteMock->method('getName')->willReturn('Unit test');
         $this->websitesList = [$this->websiteMock, $this->secondWebsiteMock];
         $this->websiteRepositoryMock = $this->getMockBuilder(WebsiteRepositoryInterface::class)
-            ->setMethods(['getList'])
+            ->onlyMethods(['getList'])
             ->getMockForAbstractClass();
         $this->websiteRepositoryMock->expects($this->any())
             ->method('getDefault')
             ->willReturn($this->websiteMock);
         $this->groupRepositoryMock = $this->getMockBuilder(GroupRepositoryInterface::class)
-            ->setMethods(['getList'])
+            ->onlyMethods(['getList'])
             ->getMockForAbstractClass();
         $this->storeRepositoryMock = $this->getMockBuilder(StoreRepositoryInterface::class)
-            ->setMethods(['getList'])
+            ->onlyMethods(['getList'])
             ->getMockForAbstractClass();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->setMethods(['isSingleStoreMode', 'getWebsites'])
+            ->onlyMethods(['isSingleStoreMode', 'getWebsites'])
             ->getMockForAbstractClass();
         $this->storeManagerMock->expects($this->any())
             ->method('isSingleStoreMode')
             ->willReturn(false);
         $this->groupMock = $this->getMockBuilder(Collection::class)
-            ->setMethods(['getId', 'getName', 'getWebsiteId'])
+            ->addMethods(['getId', 'getName', 'getWebsiteId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->groupMock->expects($this->any())
@@ -137,7 +137,7 @@ class WebsitesTest extends AbstractModifierTest
             ->method('getList')
             ->willReturn([$this->groupMock]);
         $this->storeViewMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
-            ->setMethods(['getName', 'getId', 'getStoreGroupId'])
+            ->onlyMethods(['getName', 'getId', 'getStoreGroupId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeViewMock->expects($this->any())

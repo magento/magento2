@@ -74,7 +74,8 @@ class OptionsTest extends TestCase
             ['resource' => $this->_optionResource, 'optionValueFactory' => $optValFactoryMock]
         );
         $dateBlock = $this->getMockBuilder(ProductOptions::class)
-            ->setMethods(['setProduct', 'setOption'])
+            ->addMethods(['setOption'])
+            ->onlyMethods(['setProduct'])
             ->setConstructorArgs(['context' => $context, 'option' => $option])
             ->disableOriginalConstructor()
             ->getMock();

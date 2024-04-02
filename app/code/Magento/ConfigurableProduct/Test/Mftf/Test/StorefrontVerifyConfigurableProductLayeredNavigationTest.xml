@@ -17,6 +17,7 @@
             <severity value="BLOCKER"/>
             <group value="ConfigurableProduct"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -119,7 +120,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Open Product Index Page and Filter First Child product -->
@@ -134,7 +137,7 @@
         <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToProductQuantity"/>
         <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="disableProduct">
            <argument name="stockStatus" value="Out of Stock"/>
-        </actionGroup>   
+        </actionGroup>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
 

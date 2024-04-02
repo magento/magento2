@@ -67,7 +67,7 @@
             <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="delete"/>
         </after>
 
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
         </actionGroup>
         <actionGroup ref="AddBundleProductToOrderAndCheckPriceInGridActionGroup" stepKey="addBundleProductToOrder">
@@ -94,11 +94,16 @@
 
         <actionGroup ref="AdminOpenCreditMemoFromOrderPageActionGroup" stepKey="openCreditMemo" />
         <scrollTo selector="{{AdminCreditMemoViewTotalSection.subtotal}}" stepKey="scrollToTotal"/>
+
+        <!-- Perform asserts -->
         <actionGroup ref="AssertAdminCreditMemoViewPageTotalsActionGroup" stepKey="assertCreditMemoViewPageTotals">
             <argument name="subtotal" value="$0.00"/>
             <argument name="adjustmentRefund" value="$10.00"/>
             <argument name="adjustmentFee" value="$0.00"/>
             <argument name="grandTotal" value="$10.00"/>
+        </actionGroup>
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="AssertAdminOrderStatus">
+            <argument name="status" value="{{OrderStatus.processing}}"/>
         </actionGroup>
     </test>
 </tests>

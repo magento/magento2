@@ -7,12 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Api;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * Base Builder Class for simple data Objects
- * @deprecated 103.0.0 Every builder should have their own implementation of \Magento\Framework\Api\SimpleBuilderInterface
+ * @deprecated 103.0.0 Every builder should have own implementation of \Magento\Framework\Api\SimpleBuilderInterface
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractSimpleObjectBuilder implements SimpleBuilderInterface
+abstract class AbstractSimpleObjectBuilder implements SimpleBuilderInterface, ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -84,5 +86,13 @@ abstract class AbstractSimpleObjectBuilder implements SimpleBuilderInterface
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->data = [];
     }
 }
