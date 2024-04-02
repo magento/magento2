@@ -858,6 +858,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
         if ($this->_customer) {
             $this->setCustomerId($this->_customer->getId());
+            $this->setCustomerIsGuest(false);
         }
 
         //mark quote if it has virtual products only
@@ -996,6 +997,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         /* @TODO: Remove the method after all external usages are refactored in MAGETWO-19930 */
         $this->_customer = $customer;
         $this->setCustomerId($customer->getId());
+        $this->setCustomerIsGuest(false);
         $origAddresses = $customer->getAddresses();
         $customer->setAddresses([]);
         $customerDataFlatArray = $this->objectFactory->create(
