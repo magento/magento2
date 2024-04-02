@@ -176,7 +176,7 @@ class AbstractResourceTest extends TestCase
     /**
      * @return array
      */
-    public function insertFromTableData()
+    public static function insertFromTableData()
     {
         return [[false], [true]];
     }

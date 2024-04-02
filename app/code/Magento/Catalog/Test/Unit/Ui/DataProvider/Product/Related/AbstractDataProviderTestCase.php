@@ -15,13 +15,14 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Ui\DataProvider\Product\Related\AbstractDataProvider;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractDataProviderTest extends TestCase
+abstract class AbstractDataProviderTestCase extends TestCase
 {
     /**
      * @var ObjectManager
@@ -65,6 +66,14 @@ abstract class AbstractDataProviderTest extends TestCase
 
     protected function setUp(): void
     {
+        $helper = new ObjectManager($this);
+        $objects = [
+            [
+                PoolInterface::class,
+                $this->createMock(PoolInterface::class)
+            ]
+        ];
+        $helper->prepareObjectManager($objects);
         $this->objectManager = new ObjectManager($this);
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();

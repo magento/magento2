@@ -13,7 +13,7 @@ use Magento\Backend\Controller\Adminhtml\Dashboard\CustomersMost;
 /**
  * Test for \Magento\Backend\Controller\Adminhtml\Dashboard\CustomersMost
  */
-class CustomersMostTest extends AbstractTest
+class CustomersMostTest extends AbstractTestCase
 {
     public function testExecute()
     {

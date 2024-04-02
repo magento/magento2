@@ -214,7 +214,7 @@ class IndexerTest extends TestCase
     /**
      * @return array
      */
-    public function getLatestUpdatedDataProvider()
+    public static function getLatestUpdatedDataProvider()
     {
         return [
             [false, '06-Jan-1944', '06-Jan-1944'],
@@ -535,7 +535,7 @@ class IndexerTest extends TestCase
     /**
      * @return array
      */
-    public function setScheduledDataProvider()
+    public static function setScheduledDataProvider()
     {
         return [
             [true, 'subscribe'],
@@ -570,7 +570,7 @@ class IndexerTest extends TestCase
     /**
      * @return array
      */
-    public function statusDataProvider()
+    public static function statusDataProvider()
     {
         return [
             ['isValid', StateInterface::STATUS_VALID],

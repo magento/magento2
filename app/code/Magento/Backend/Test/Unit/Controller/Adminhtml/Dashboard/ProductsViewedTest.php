@@ -13,7 +13,7 @@ use Magento\Backend\Controller\Adminhtml\Dashboard\ProductsViewed;
 /**
  * Test for \Magento\Backend\Controller\Adminhtml\Dashboard\ProductViewed
  */
-class ProductsViewedTest extends AbstractTest
+class ProductsViewedTest extends AbstractTestCase
 {
     public function testExecute()
     {

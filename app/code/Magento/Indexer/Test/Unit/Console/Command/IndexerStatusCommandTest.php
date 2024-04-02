@@ -178,7 +178,7 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
     /**
      * @return array
      */
-    public function executeAllDataProvider()
+    public static function executeAllDataProvider()
     {
         return [
             [

@@ -13,7 +13,7 @@ use Magento\Backend\Controller\Adminhtml\Dashboard\CustomersNewest;
 /**
  * Test for \Magento\Backend\Controller\Adminhtml\Dashboard\CustomersNewest
  */
-class CustomersNewestTest extends AbstractTest
+class CustomersNewestTest extends AbstractTestCase
 {
     public function testExecute()
     {

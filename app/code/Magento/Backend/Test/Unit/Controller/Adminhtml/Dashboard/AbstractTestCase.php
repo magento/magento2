@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Abstract test class
  */
-class AbstractTest extends TestCase
+class AbstractTestCase extends TestCase
 {
     /**
      * Assertions for controller execute method

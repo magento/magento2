@@ -422,7 +422,7 @@ class ProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function suspendedIndexDataProvider(): array
+    public static function suspendedIndexDataProvider(): array
     {
         return [
             'Indexers' => [
@@ -464,9 +464,9 @@ class ProcessorTest extends TestCase
                     ]
                 ],
                 'expected_reindex_all_calls' => [
-                    'indexer_1' => $this->once(),
-                    'indexer_2' => $this->never(),
-                    'indexer_3' => $this->never()
+                    'indexer_1' => self::once(),
+                    'indexer_2' => self::never(),
+                    'indexer_3' => self::never()
                 ]
             ]
         ];
@@ -496,12 +496,11 @@ class ProcessorTest extends TestCase
         $indexerRegistryMock
             ->expects($this->exactly(count($executedSharedIndexers)))
             ->method('get')
-            ->willReturnCallback(function ($executedSharedIndexers) use ($emptyIndexer) {
-                if (!empty($executedSharedIndexers)) {
-                    static $callCount = 0;
-                    $returnValue = $emptyIndexer[$callCount] ?? null;
+            ->willReturnCallback(function ($arg1) use ($emptyIndexer, $executedSharedIndexers) {
+                static $callCount = 0;
+                if (in_array($arg1, $executedSharedIndexers[$callCount])) {
                     $callCount++;
-                    return $returnValue;
+                    return $emptyIndexer;
                 }
             });
 
