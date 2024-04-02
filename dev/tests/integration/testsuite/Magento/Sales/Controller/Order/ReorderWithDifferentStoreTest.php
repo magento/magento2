@@ -117,7 +117,7 @@ class ReorderWithDifferentStoreTest extends AbstractController
         $this->dispatch('sales/order/reorder/');
         $this->assertRedirect($this->stringContains('checkout/cart'));
         $this->quote = $this->checkoutSession->getQuote();
-        $quoteItemsCollection = $this->quote->getAllItems();
-        $this->assertCount(0, $quoteItemsCollection);
+
+        $this->assertCount(1, $this->quote->getErrors());
     }
 }
