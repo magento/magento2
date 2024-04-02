@@ -156,7 +156,7 @@ class QuoteAddressValidator
         if ($cart->getCustomerIsGuest()) {
             $this->doValidateForGuestQuoteAddress($address, $cart);
         }
-        $this->doValidate($address, $cart->getCustomerIsGuest() ? null : (int) $cart->getCustomer()->getId());
+        $this->doValidate($address, $cart->getCustomerId() ? (int) $cart->getCustomer()->getId() : null);
     }
 
     /**
