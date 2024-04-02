@@ -32,7 +32,10 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
     }
 
     /**
-     * Update transactions in database using provided transaction as parent for them have to repeat the business logic to avoid accidental injection of wrong transactions
+     * Update transactions in database using provided transaction as parent for them
+     *
+     * Have to repeat the business logic to avoid accidental injection of wrong transactions
+     *
      * @param \Magento\Sales\Model\Order\Payment\Transaction $transaction
      * @return void
      */
