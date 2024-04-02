@@ -13,7 +13,7 @@
             <title value="Enable Paypal Express Checkout with Transfer Shipping Options and PalPal Smart Button Flow."/>
             <description value="Enable Paypal Express Checkout with Transfer Shipping Options and PalPal Smart Button Flow."/>
             <severity value="MAJOR"/>
-            <testCaseId value="AC-5206"/>
+            <testCaseId value="AC-4462"/>
             <group value="3rd_party_integration"/>
         </annotations>
         <before>
@@ -99,9 +99,6 @@
             <argument name="status" value="Processing"/>
         </actionGroup>
 
-        <!--Create Invoice for this Order-->
-        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="createInvoice"/>
-        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
         <!--Open created Invoice-->
         <actionGroup ref="AdminOpenInvoiceFromOrderPageActionGroup" stepKey="openInvoiceFromOrder"/>
     </test>
