@@ -191,7 +191,7 @@ class AddCommentTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->escaper = $this->createPartialMock(Escaper::class, ['escapeHtmlAttr']);
+        $this->escaper = $this->createPartialMock(Escaper::class, ['escapeHtml']);
 
         $this->controller = $objectManager->getObject(
             AddComment::class,
@@ -277,7 +277,7 @@ class AddCommentTest extends TestCase
             ->with($invoiceMock, false, $data['comment']);
 
         $this->escaper->expects($this->any())
-            ->method('escapeHtmlAttr')
+            ->method('escapeHtml')
             ->willReturn($data['comment']);
 
         $resultRaw = $this->getMockBuilder(Raw::class)

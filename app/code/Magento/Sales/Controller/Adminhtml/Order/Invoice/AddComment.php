@@ -104,7 +104,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
             if (empty($data['comment'])) {
                 throw new LocalizedException(__('The comment is missing. Enter and try again.'));
             }
-            $comment = $this->escaper->escapeHtmlAttr($data['comment']);
+            $comment = $this->escaper->escapeHtml($data['comment']);
 
             $invoice = $this->getInvoice();
             if (!$invoice) {
