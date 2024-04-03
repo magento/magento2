@@ -6,7 +6,7 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="EnablePaypalExpressCheckoutandValidateTransferShippingOptionsWorksWithPayPalSmartButtonFlow">
+    <test name="EnablePaypalExpressCheckoutandValidateTransferShippingOptionsWorksWithPayPalSmartButtonFlowTest">
         <annotations>
             <features value="PayPal"/>
             <stories value="Payment methods"/>
@@ -24,16 +24,12 @@
             <magentoCLI command="config:set {{StorefrontPaypalEnableTransferShippingOptionConfigData.path}} {{StorefrontPaypalEnableTransferShippingOptionConfigData.value}}" stepKey="enableTransferShippingOption"/>
             <magentoCLI command="config:set {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <!-- Enable flat rate method -->
-            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="configPayPalExpress">
                 <argument name="credentials" value="SamplePaypalExpressConfig2"/>
             </actionGroup>
         </before>
 
         <after>
-            <!-- Disable flat rate method -->
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
             <magentoCLI command="config:set {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.value}}" stepKey="setPaymentActionBackToAuthorization"/>
             <magentoCLI command="config:set {{StorefrontPaypalDisableTransferCartLineConfigData.path}} {{StorefrontPaypalDisableTransferCartLineConfigData.value}}" stepKey="disableTransferCartLine"/>
             <magentoCLI command="config:set {{StorefrontPaypalDisableTransferShippingOptionConfigData.path}} {{StorefrontPaypalDisableTransferShippingOptionConfigData.value}}" stepKey="disableTransferShippingOption"/>
