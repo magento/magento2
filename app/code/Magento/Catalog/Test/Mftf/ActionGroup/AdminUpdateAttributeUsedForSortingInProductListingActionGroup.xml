@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUpdateAttributeUsedForSortingInProductListingActionGroup">
+        <annotations>
+            <description>Admin selects the values for "Use For Sorting in Product Listing" for created attribute </description>
+        </annotations>
+        <arguments>
+            <argument name="usedForSortingInProductListing" type="string" defaultValue="Yes"/>
+        </arguments>
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="navigateToStorefrontPropertiesTab"/>
+        <waitForElementVisible selector="{{StorefrontPropertiesSection.PageTitle}}" stepKey="waitForStorefrontPropertiesTabLoad"/>
+        <selectOption selector="{{StorefrontPropertiesSection.usedForSortingInProductListing}}" userInput="{{usedForSortingInProductListing}}" stepKey="setValueForSortingInProductListing"/>
+    </actionGroup>
+</actionGroups>
