@@ -24,8 +24,6 @@ class DeferCacheCleaningUntilImportIsComplete
     private $cacheCleaner;
 
     /**
-     * TypeListInterface
-     *
      * @var TypeListInterface
      */
     private $cacheTypeList;
