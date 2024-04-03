@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\ImportExport\Plugin;
 
 use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Indexer\DeferredCacheCleanerInterface;
 use Magento\ImportExport\Model\Import;
 
@@ -30,15 +31,23 @@ class DeferCacheCleaningUntilImportIsComplete
     private $cacheTypeList;
 
     /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
      * @param DeferredCacheCleanerInterface $cacheCleaner
      * @param TypeListInterface $cacheTypeList
+     * @param RequestInterface $request
      */
     public function __construct(
         DeferredCacheCleanerInterface $cacheCleaner,
-        TypeListInterface $cacheTypeList
+        TypeListInterface $cacheTypeList,
+        RequestInterface $request
     ) {
         $this->cacheCleaner = $cacheCleaner;
         $this->cacheTypeList = $cacheTypeList;
+        $this->request = $request;
     }
 
     /**
@@ -63,8 +72,8 @@ class DeferCacheCleaningUntilImportIsComplete
      */
     public function afterImportSource(Import $subject, bool $result): bool
     {
-        $behavior = $this->request->getParam('behavior');
-        $entity = $this->request->getParam('entity');
+        $behavior = $this->request->getPost('behavior');
+        $entity = $this->request->getPost('entity');
         $files = $this->request->getFiles();
 
         if ($behavior === self::BEHAVIOR_ADD_UPDATE &&
