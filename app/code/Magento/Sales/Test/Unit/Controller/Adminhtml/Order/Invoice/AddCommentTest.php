@@ -105,7 +105,7 @@ class AddCommentTest extends TestCase
     /**
      * @var Escaper|MockObject
      */
-    protected $escaper;
+    private $escaper;
 
     /**
      * SetUp method
