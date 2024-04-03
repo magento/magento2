@@ -997,7 +997,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         /* @TODO: Remove the method after all external usages are refactored in MAGETWO-19930 */
         $this->_customer = $customer;
         $this->setCustomerId($customer->getId());
-        $this->setCustomerIsGuest(false);
         $origAddresses = $customer->getAddresses();
         $customer->setAddresses([]);
         $customerDataFlatArray = $this->objectFactory->create(
