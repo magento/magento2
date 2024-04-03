@@ -43,7 +43,7 @@ class AddCommentTest extends AbstractInvoiceControllerTest
         $escaper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\Escaper::class);
 
-        $this->assertStringContainsString($escaper->escapeHtml($comment), $html);
+        $this->assertStringContainsString($escaper->escapeHtmlAttr($comment), $html);
 
         $message = $this->transportBuilder->getSentMessage();
         $this->assertNotNull($message);
