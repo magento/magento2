@@ -4,7 +4,7 @@
         "deprecatedEntityUsage",
         "annotations",
         "pauseActionUsage",
-        "testDependencies",
-        "classFileNamingCheck"
+        "classFileNamingCheck",
+        "testDependencies"
     ]
 }
