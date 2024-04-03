@@ -11,7 +11,8 @@ define([
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/lib/validation/validator',
     'Magento_Ui/js/form/element/file-uploader',
-    'mage/adminhtml/browser'
+    'mage/adminhtml/browser',
+    'mage/cookies'
 ], function ($, _, utils, uiAlert, validator, Element, browser) {
     'use strict';
 
@@ -54,7 +55,22 @@ define([
                 fileSize = $buttonEl.data('size'),
                 fileMimeType = $buttonEl.data('mime-type'),
                 filePathname = $buttonEl.val(),
-                fileBasename = filePathname.split('/').pop();
+                fileBasename = filePathname.split('/').pop(),
+                deletedFilesCookie = $.mage.cookies.get('deleted_images');
+
+            if (deletedFilesCookie && deletedFilesCookie.indexOf(filePathname) !== -1) {
+                let deletedFiles = JSON.parse(deletedFilesCookie);
+
+                deletedFiles.forEach(function (deletedFile, index) {
+                    if (deletedFile.indexOf(filePathname) !== -1) {
+                        deletedFiles.splice(index, 1);
+                    }
+                }, deletedFiles);
+
+                $.mage.cookies.set('deleted_images', JSON.stringify(deletedFiles));
+
+                filePathname += '?rand=' + Date.now();
+            }
 
             this.addFile({
                 type: fileMimeType,

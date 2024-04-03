@@ -8,15 +8,16 @@ define([
     'mage/url',
     'Magento_MediaGalleryUi/js/grid/messages',
     'Magento_Ui/js/modal/confirm',
-    'mage/translate'
+    'mage/translate',
+    'mage/cookies'
 ], function ($, _, urlBuilder, messages, confirmation, $t) {
     'use strict';
 
     return function (ids, deleteUrl, confirmationContent) {
         var deferred = $.Deferred(),
-               title = $t('Delete assets'),
-               cancelText = $t('Cancel'),
-               deleteImageText = $t('Delete');
+            title = $t('Delete assets'),
+            cancelText = $t('Cancel'),
+            deleteImageText = $t('Delete');
 
         /**
          * Send deletion request with redords ids
@@ -25,6 +26,15 @@ define([
          * @param {String} serviceUrl
          */
         function sendRequest(recordIds, serviceUrl) {
+            let imageLinks = [];
+
+            Object.values(recordIds).forEach(function (recordId) {
+                if (typeof recordId === 'string') {
+                    imageLinks.push(
+                        $('div[data-id=' + recordId + ']').find('img').attr('src').replace('.thumbs', '')
+                    );
+                }
+            });
 
             $.ajax({
                 type: 'POST',
@@ -63,6 +73,15 @@ define([
                         code: 'success'
                     });
                     deferred.resolve(message);
+
+                    let options = {
+                        secure: window.cookiesConfig ? window.cookiesConfig.secure : false
+                    };
+
+                    if ($.mage.cookies.get('deleted_images')) {
+                        imageLinks = imageLinks.concat(JSON.parse($.mage.cookies.get('deleted_images')));
+                    }
+                    $.mage.cookies.set('deleted_images', JSON.stringify(imageLinks), options);
                 },
 
                 /**
