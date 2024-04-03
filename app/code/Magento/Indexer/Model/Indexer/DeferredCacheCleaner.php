@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Indexer\Model\Indexer;
 
-use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Event\Manager as EventManager;
 use Magento\Framework\Indexer\CacheContext;
@@ -39,31 +38,21 @@ class DeferredCacheCleaner implements DeferredCacheCleanerInterface
     private $cacheContext;
 
     /**
-     * TypeListInterface
-     *
-     * @var TypeListInterface
-     */
-    private $cacheTypeList;
-
-    /**
      * @param EventManager $eventManager
      * @param CacheInterface $appCache
      * @param DeferredCacheContext $deferredCacheContext
      * @param CacheContext $cacheContext
-     * @param TypeListInterface $cacheTypeList
      */
     public function __construct(
         EventManager $eventManager,
         CacheInterface $appCache,
         DeferredCacheContext $deferredCacheContext,
-        CacheContext $cacheContext,
-        TypeListInterface $cacheTypeList
+        CacheContext $cacheContext
     ) {
         $this->eventManager = $eventManager;
         $this->deferredCacheContext = $deferredCacheContext;
         $this->appCache = $appCache;
         $this->cacheContext = $cacheContext;
-        $this->cacheTypeList = $cacheTypeList;
     }
 
     /**
@@ -84,7 +73,6 @@ class DeferredCacheCleaner implements DeferredCacheCleanerInterface
         $this->deferredCacheContext->commit();
         $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
         $identities = $this->cacheContext->getIdentities();
-        $this->cacheTypeList->cleanType('graphql_query_resolver_result');
         if (!empty($identities)) {
             $this->appCache->clean($identities);
             $this->cacheContext->flush();
