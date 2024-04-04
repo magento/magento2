@@ -1,20 +1,21 @@
 {
     "name": "magento/module-amqp",
     "description": "N/A",
-    "config": {
-        "sort-packages": true
-    },
-    "require": {
-        "magento/framework": "*",
-        "magento/framework-amqp": "*",
-        "magento/framework-message-queue": "*",
-        "php": "~7.4.0||~8.1.0"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "config": {
+        "sort-packages": true
+    },
+    "version": "100.4.2",
+    "require": {
+        "magento/framework": "103.0.*",
+        "magento/framework-amqp": "100.4.*",
+        "magento/framework-message-queue": "100.4.*",
+        "php": "~7.4.0||~8.1.0"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -24,3 +25,4 @@
         }
     }
 }
+

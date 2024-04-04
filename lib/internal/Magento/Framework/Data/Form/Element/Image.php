@@ -9,9 +9,12 @@
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
 use Magento\Framework\Math\Random;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
@@ -36,7 +39,7 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
     /**
      * @param Factory $factoryElement
      * @param CollectionFactory $factoryCollection
-     * @param \Magento\Framework\Escaper $escaper
+     * @param Escaper $escaper
      * @param UrlInterface $urlBuilder
      * @param array $data
      * @param SecureHtmlRenderer|null $secureRenderer
@@ -45,7 +48,7 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
     public function __construct(
         Factory $factoryElement,
         CollectionFactory $factoryCollection,
-        \Magento\Framework\Escaper $escaper,
+        Escaper $escaper,
         UrlInterface $urlBuilder,
         $data = [],
         ?SecureHtmlRenderer $secureRenderer = null,
@@ -69,7 +72,7 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
     {
         $html = '';
 
-        if ((string)$this->getValue()) {
+        if ((string)$this->getEscapedValue()) {
             $url = $this->_getUrl();
 
             if (!preg_match("/^http\:\/\/|https\:\/\//", $url)) {
@@ -89,10 +92,10 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
                 '" id="' .
                 $this->getHtmlId() .
                 '_image" title="' .
-                $this->getValue() .
+                $this->getEscapedValue() .
                 '"' .
                 ' alt="' .
-                $this->getValue() .
+                $this->getEscapedValue() .
                 '" height="22" width="22" class="small-image-preview v-middle"  ' .
                 $this->_getUiId() .
                 ' />' .
@@ -118,7 +121,7 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
     protected function _getDeleteCheckbox()
     {
         $html = '';
-        if ($this->getValue()) {
+        if ($this->getEscapedValue()) {
             $label = (string)new \Magento\Framework\Phrase('Delete Image');
             $html .= '<span class="delete-image">';
             $html .= '<input type="checkbox"' .
@@ -151,7 +154,8 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
      */
     protected function _getHiddenInput()
     {
-        return '<input type="hidden" name="' . parent::getName() . '[value]" value="' . $this->getValue() . '" />';
+        return '<input type="hidden" name="' . parent::getName() .
+            '[value]" value="' . $this->getEscapedValue() . '" />';
     }
 
     /**
@@ -161,7 +165,7 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
      */
     protected function _getUrl()
     {
-        return $this->getValue();
+        return $this->getEscapedValue();
     }
 
     /**

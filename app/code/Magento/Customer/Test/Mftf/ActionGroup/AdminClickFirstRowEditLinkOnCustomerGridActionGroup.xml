@@ -12,7 +12,6 @@
         <annotations>
             <description>Click edit link for first row on the grid.</description>
         </annotations>
-
         <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickOnEditLink"/>
         <waitForPageLoad stepKey="waitForPageLoading"/>
     </actionGroup>
