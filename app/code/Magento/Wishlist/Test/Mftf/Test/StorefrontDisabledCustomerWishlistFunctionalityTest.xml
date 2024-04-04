@@ -26,7 +26,9 @@
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexer">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
         </before>
         <after>

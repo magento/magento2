@@ -25,7 +25,9 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -34,7 +36,9 @@
             <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
             <argument name="websiteCode" value="{{customWebsite.code}}"/>
         </actionGroup>
-        <magentoCron groups="index" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!--Search created website in grid and verify AssertWebsiteInGrid-->
         <actionGroup ref="AssertWebsiteInGridActionGroup" stepKey="seeWebsiteInGrid">

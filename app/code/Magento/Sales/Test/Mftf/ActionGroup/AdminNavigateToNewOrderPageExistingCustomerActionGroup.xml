@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminNavigateToNewOrderPageExistingCustomerActionGroup">
+        <annotations>
+            <description>Goes to the Admin Orders grid page. Clicks on 'Create New Order'. Filters the grid for the provided Customer. Clicks on the Customer. Validates that the Page Title is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="customer"/>
+        </arguments>
+
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
+        <waitForPageLoad stepKey="waitForIndexPageLoad"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
+        <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
+        <waitForPageLoad stepKey="waitForCustomerGridLoad"/>
+
+        <!--Clear grid filters-->
+        <conditionalClick selector="{{AdminOrderCustomersGridSection.resetButton}}" dependentSelector="{{AdminOrderCustomersGridSection.resetButton}}" visible="true" stepKey="clearExistingCustomerFilters"/>
+        <fillField userInput="{{customer.email}}" selector="{{AdminOrderCustomersGridSection.emailInput}}" stepKey="filterEmail"/>
+        <click selector="{{AdminOrderCustomersGridSection.apply}}" stepKey="applyFilter"/>
+        <waitForPageLoad stepKey="waitForFilteredCustomerGridLoad"/>
+        <click selector="{{AdminOrderCustomersGridSection.firstRow}}" stepKey="clickOnCustomer"/>
+        <waitForPageLoad stepKey="waitForCreateOrderPageLoad"/>
+    </actionGroup>
+</actionGroups>

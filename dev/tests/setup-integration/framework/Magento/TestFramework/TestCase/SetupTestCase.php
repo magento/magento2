@@ -110,6 +110,12 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
             if ($this->sqlVersionProvider->isMysqlGte8029()) {
                 $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[SqlVersionProvider::MYSQL_8_0_29_VERSION];
                 break;
+            } elseif ($this->sqlVersionProvider->isMariaDBGte10427()) {
+                $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[SqlVersionProvider::MARIA_DB_10_4_27_VERSION];
+                break;
+            } elseif ($this->sqlVersionProvider->isMariaDBGte10611()) {
+                $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[SqlVersionProvider::MARIA_DB_10_6_11_VERSION];
+                break;
             } elseif (strpos($this->getDatabaseVersion(), (string)$possibleVersion) !== false) {
                 $this->dbKey = $suffix;
                 break;

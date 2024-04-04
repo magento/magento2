@@ -19,6 +19,8 @@
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="navigateToTaxRatesPage"/>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
             <createData entity="VirtualProduct" stepKey="virtualProduct1"/>
 
             <!-- Fill in rules to display tax in the cart -->
@@ -79,7 +81,8 @@
 
             <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="ChangeToDefaultTaxConfigurationUIActionGroup" stepKey="changeToDefaultTaxConfiguration"/>
-
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="navigateToTaxRatesPage"/>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="virtualProduct1" stepKey="deleteVirtualProduct1"/>
         </after>
