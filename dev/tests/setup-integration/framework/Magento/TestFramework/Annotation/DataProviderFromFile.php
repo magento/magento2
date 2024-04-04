@@ -61,10 +61,7 @@ class DataProviderFromFile
      */
     public function startTest(\PHPUnit\Framework\TestCase $test)
     {
-        $annotations = TestUtil::parseTestMethodAnnotations(
-            get_class($test),
-            $test->getName(false)
-        );
+        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
         //This annotation can be declared only on method level
         if (isset($annotations['method']['dataProviderFromFile']) && $test instanceof MutableDataInterface) {
             $test->setData(

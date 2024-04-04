@@ -20,14 +20,22 @@ final class PhpUnitExtension implements Runner\Extension\Extension
         Runner\Extension\ParameterCollection $parameters
     ): void
     {
-        $facade->registerSubscribers(
-            new TestSuitStartedSubscriber(),
-            new TestSuitEndSubscriber(),
-            new TestPreparedSubscriber(),
-            new PhpUnitExtensionSubscriber(),
-            new PhpUnitExtensionSubscriberFinished(),
-            new TestSkippedSubscriber(),
-            new TestErroredSubscriber()
-        );
+        if($configuration->hasConfigurationFile() &&
+            str_contains($configuration->configurationFile(), 'setup-integration')){
+            $facade->registerSubscribers(
+                new PhpUnitExtensionSubscriber(),
+                new PhpUnitExtensionSubscriberFinished()
+            );
+        }else{
+            $facade->registerSubscribers(
+                new TestSuitStartedSubscriber(),
+                new TestSuitEndSubscriber(),
+                new TestPreparedSubscriber(),
+                new PhpUnitExtensionSubscriber(),
+                new PhpUnitExtensionSubscriberFinished(),
+                new TestSkippedSubscriber(),
+                new TestErroredSubscriber()
+            );
+        }
     }
 }
