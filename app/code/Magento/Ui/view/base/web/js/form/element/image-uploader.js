@@ -12,7 +12,7 @@ define([
     'Magento_Ui/js/lib/validation/validator',
     'Magento_Ui/js/form/element/file-uploader',
     'mage/adminhtml/browser',
-    'mage/cookies'
+    'jquery/jquery-storageapi'
 ], function ($, _, utils, uiAlert, validator, Element, browser) {
     'use strict';
 
@@ -56,19 +56,10 @@ define([
                 fileMimeType = $buttonEl.data('mime-type'),
                 filePathname = $buttonEl.val(),
                 fileBasename = filePathname.split('/').pop(),
-                deletedFilesCookie = $.mage.cookies.get('deleted_images');
+                deletedFiles = $.localStorage.get('deleted_images');
 
-            if (deletedFilesCookie && deletedFilesCookie.indexOf(filePathname) !== -1) {
-                let deletedFiles = JSON.parse(deletedFilesCookie);
-
-                deletedFiles.forEach(function (deletedFile, index) {
-                    if (deletedFile.indexOf(filePathname) !== -1) {
-                        deletedFiles.splice(index, 1);
-                    }
-                }, deletedFiles);
-
-                $.mage.cookies.set('deleted_images', JSON.stringify(deletedFiles));
-
+            if (deletedFiles.includes(filePathname)) {
+                $.localStorage.set('deleted_images', deletedFiles.splice(deletedFiles.indexOf(filePathname), 1));
                 filePathname += '?rand=' + Date.now();
             }
 
