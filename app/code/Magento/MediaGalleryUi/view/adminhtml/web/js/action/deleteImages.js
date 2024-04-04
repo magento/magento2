@@ -9,7 +9,7 @@ define([
     'Magento_MediaGalleryUi/js/grid/messages',
     'Magento_Ui/js/modal/confirm',
     'mage/translate',
-    'mage/cookies'
+    'jquery/jquery-storageapi'
 ], function ($, _, urlBuilder, messages, confirmation, $t) {
     'use strict';
 
@@ -30,9 +30,11 @@ define([
 
             Object.values(recordIds).forEach(function (recordId) {
                 if (typeof recordId === 'string') {
-                    imageLinks.push(
+                    let imageUrl = new URL(
                         $('div[data-id=' + recordId + ']').find('img').attr('src').replace('.thumbs', '')
                     );
+
+                    imageLinks.push(imageUrl.pathname);
                 }
             });
 
@@ -74,14 +76,10 @@ define([
                     });
                     deferred.resolve(message);
 
-                    let options = {
-                        secure: window.cookiesConfig ? window.cookiesConfig.secure : false
-                    };
-
-                    if ($.mage.cookies.get('deleted_images')) {
-                        imageLinks = imageLinks.concat(JSON.parse($.mage.cookies.get('deleted_images')));
+                    if ($.localStorage.get('deleted_images')) {
+                        imageLinks = imageLinks.concat($.localStorage.get('deleted_images'));
                     }
-                    $.mage.cookies.set('deleted_images', JSON.stringify(imageLinks), options);
+                    $.localStorage.set('deleted_images', [...new Set(imageLinks)]);
                 },
 
                 /**
