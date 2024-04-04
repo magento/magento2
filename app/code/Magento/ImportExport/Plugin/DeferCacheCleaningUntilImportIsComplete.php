@@ -70,13 +70,11 @@ class DeferCacheCleaningUntilImportIsComplete
      */
     public function afterImportSource(Import $subject, bool $result): bool
     {
-        $behavior = $this->request->getPost('behavior');
-        $entity = $this->request->getPost('entity');
-        $files = $this->request->getFiles();
+        $behavior = $this->request->getParam('behavior');
+        $entity = $this->request->getParam('entity');
 
         if ($behavior === self::BEHAVIOR_ADD_UPDATE &&
-            $entity === self::ENTITY_CUSTOMER &&
-            !empty($files)) {
+            $entity === self::ENTITY_CUSTOMER) {
             $this->cacheTypeList->cleanType(self::CACHE_TYPE_GRAPHQL_QUERY_RESOLVER_RESULT);
         }
         $this->cacheCleaner->flush();
