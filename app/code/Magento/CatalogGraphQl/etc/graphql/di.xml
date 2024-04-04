@@ -283,4 +283,12 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Products">
+        <plugin name="originalProductSortOrder" type="Magento\CatalogGraphQl\Plugin\ProductAttributeSortInput" />
+    </type>
+
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Category\Products">
+        <plugin name="originalCategoryProductSortOrder" type="Magento\CatalogGraphQl\Plugin\ProductAttributeSortInput" />
+    </type>
 </config>

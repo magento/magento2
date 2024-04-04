@@ -26,5 +26,7 @@
         <element name="orderId" type="text" selector="|Order # (\d+)|"/>
         <element name="orderStatusUnderViewM" type="text" selector="//td//div[contains(text(),'{{product}}')]/../..//td[@class='col-status' and contains(text(),'{{status}}')]" parameterized="true" timeout="30"/>
         <element name="orderStatusUnderViewS" type="text" selector="//tr//div[contains(text(),'{{product}}')]/../../..//td[@class='col-status' and contains(text(),'{{status}}')]" parameterized="true" timeout="30"/>
+        <element name="paymentInformationField" type="text" selector="//*[contains(text(),'{{paymentInformationField}}')]/following-sibling::td" parameterized="true"/>
+        <element name="rateValue" type="text" selector="//table[contains(@class, 'order-information-table')]//th[contains(text(), 'rate:')]/following-sibling::td"/>
     </section>
 </sections>
