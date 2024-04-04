@@ -58,7 +58,7 @@ define([
                 fileBasename = filePathname.split('/').pop(),
                 deletedFiles = $.localStorage.get('deleted_images');
 
-            if (deletedFiles.includes(filePathname)) {
+            if (deletedFiles && deletedFiles.toString().indexOf(filePathname) !== -1) {
                 $.localStorage.set('deleted_images', deletedFiles.splice(deletedFiles.indexOf(filePathname), 1));
                 filePathname += '?rand=' + Date.now();
             }
