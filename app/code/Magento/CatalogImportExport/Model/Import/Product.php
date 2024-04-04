@@ -47,6 +47,7 @@ use Magento\Store\Model\Store;
  */
 class Product extends AbstractEntity
 {
+    private const COL_NAME_FORMAT = '/[\x00-\x1F\x7F]/';
     private const DEFAULT_GLOBAL_MULTIPLE_VALUE_SEPARATOR = ',';
     public const CONFIG_KEY_PRODUCT_TYPES = 'global/importexport/import_product_types';
     private const HASH_ALGORITHM = 'sha256';
@@ -227,6 +228,7 @@ class Product extends AbstractEntity
      * Links attribute name-to-link type ID.
      *
      * @deprecated 101.1.0 use DI for LinkProcessor class if you want to add additional types
+     * @see LinkProcessor::fetchProductLinks
      *
      * @var array
      */
@@ -548,6 +550,7 @@ class Product extends AbstractEntity
     /**
      * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory
      * @deprecated 101.0.0 this variable isn't used anymore.
+     * @see 101.0.0
      */
     protected $_stockResItemFac;
 
@@ -612,6 +615,7 @@ class Product extends AbstractEntity
     /**
      * @var array
      * @deprecated 100.0.3
+     * @see 100.0.3
      * @since 100.0.3
      */
     protected $productUrlKeys = [];
@@ -1280,6 +1284,7 @@ class Product extends AbstractEntity
      * Must be called after ALL products saving done.
      *
      * @deprecated 101.1.0 use linkProcessor Directly
+     * @see LinkProcessor::saveLinks
      *
      * @return $this
      */
@@ -1489,6 +1494,7 @@ class Product extends AbstractEntity
      * @return void
      * @since 100.0.4
      * @deprecated 100.2.3
+     * @see 100.2.3
      */
     protected function initMediaGalleryResources()
     {
@@ -1609,6 +1615,11 @@ class Product extends AbstractEntity
                     // be setteed. In case when url_key is generating from name column we have to ensure that the bunch
                     // of products will pass for the event with url_key column.
                     $bunch[$rowNum][self::URL_KEY] = $rowData[self::URL_KEY] = $urlKey;
+                }
+
+                if (!empty($rowData[self::COL_NAME])) {
+                    // remove null byte character
+                    $rowData[self::COL_NAME] = preg_replace(self::COL_NAME_FORMAT, '', $rowData[self::COL_NAME]);
                 }
 
                 $rowSku = $rowData[self::COL_SKU];

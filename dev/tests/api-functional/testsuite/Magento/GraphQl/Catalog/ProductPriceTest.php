@@ -58,6 +58,11 @@ class ProductPriceTest extends GraphQlAbstract
      */
     private $fixtures;
 
+    /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -761,9 +766,7 @@ class ProductPriceTest extends GraphQlAbstract
             //validate that the tier prices and price range for each configurable variants are not empty
             $this->assertNotEmpty($configurableVariantPriceData[0]['product']['price_range']);
             $this->assertNotEmpty($configurableVariantPriceData[0]['product']['price_tiers']);
-            $this->assertResponseFields(
-                $configurableVariantsInResponse[$key][0]['product']['price_range'],
-                [
+            $assertionMap = [
                 "minimum_price" => [
                     "regular_price" => [
                         "value" => $configurableProductVariants[$key]->getPrice()
@@ -788,8 +791,38 @@ class ProductPriceTest extends GraphQlAbstract
                         "percent_off" => round(($regularPrice[$key] - $finalPrice[$key])*100/$regularPrice[$key], 2)
                     ]
                 ]
-                ]
-            );
+            ];
+
+            $configVariantsInResponse = $configurableVariantsInResponse[$key][0]['product']['price_range'];
+            foreach ($assertionMap as $mapKey => $assertionData) {
+                $expectedValue = isset($assertionData['expected_value'])
+                    ? $assertionData['expected_value']
+                    : $assertionData;
+                $responseField = isset($assertionData['response_field']) ? $assertionData['response_field'] : $mapKey;
+
+                self::assertNotNull(
+                    $expectedValue,
+                    "Value of '{$responseField}' field must not be NULL"
+                );
+                self::assertArrayHasKey(
+                    $responseField,
+                    $configVariantsInResponse,
+                    "Response array does not contain key '{$responseField}'"
+                );
+
+                self::assertEqualsWithDelta(
+                    array_slice($expectedValue, 2),
+                    array_slice($configVariantsInResponse[$responseField], 2),
+                    self::EPSILON
+                );
+                self::assertEquals(
+                    array_slice($expectedValue, 0, 2),
+                    array_slice($configVariantsInResponse[$responseField], 0, 2),
+                    "Value of '{$responseField}' field in response does not match expected value: "
+                    . var_export($expectedValue, true)
+                );
+
+            }
 
             $this->assertResponseFields(
                 $configurableVariantsInResponse[$key][0]['product']['price_tiers'],
@@ -1218,7 +1251,11 @@ QUERY;
                 $expected['final_price']['currency'] ?? $currency,
                 $actual['final_price']['currency']
             );
-            $this->assertEquals($expected['discount']['amount_off'], $actual['discount']['amount_off']);
+            $this->assertEqualsWithDelta(
+                $expected['discount']['amount_off'],
+                $actual['discount']['amount_off'],
+                self::EPSILON
+            );
             $this->assertEquals($expected['discount']['percent_off'], $actual['discount']['percent_off']);
         }
     }

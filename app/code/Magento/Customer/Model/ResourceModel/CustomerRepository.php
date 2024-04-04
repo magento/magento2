@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
@@ -28,6 +30,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
@@ -196,12 +199,19 @@ class CustomerRepository implements CustomerRepositoryInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function save(CustomerInterface $customer, $passwordHash = null)
     {
         /** @var NewOperation|null $delegatedNewOperation */
         $delegatedNewOperation = !$customer->getId() ? $this->delegatedStorage->consumeNewOperation() : null;
         $prevCustomerData = $prevCustomerDataArr = null;
+        if ($customer->getDefaultBilling()) {
+            $this->validateDefaultAddress($customer, CustomerInterface::DEFAULT_BILLING);
+        }
+        if ($customer->getDefaultShipping()) {
+            $this->validateDefaultAddress($customer, CustomerInterface::DEFAULT_SHIPPING);
+        }
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
             $prevCustomerDataArr = $prevCustomerData->__toArray();
@@ -229,7 +239,7 @@ class CustomerRepository implements CustomerRepositoryInterface
                 $prevCustomerData ? $prevCustomerData->getStoreId() : $this->storeManager->getStore()->getId()
             );
         }
-        $this->validateGroupId($customer->getGroupId());
+        $this->validateGroupId((int)$customer->getGroupId());
         $this->setCustomerGroupId($customerModel, $customerArr, $prevCustomerDataArr);
         // Need to use attribute set or future updates can cause data loss
         if (!$customerModel->getAttributeSetId()) {
@@ -485,6 +495,7 @@ class CustomerRepository implements CustomerRepositoryInterface
      * Helper function that adds a FilterGroup to the collection.
      *
      * @deprecated 101.0.0
+     * @see no alternative
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
@@ -526,6 +537,36 @@ class CustomerRepository implements CustomerRepositoryInterface
     {
         if (!isset($customerArr['group_id']) && $prevCustomerDataArr && isset($prevCustomerDataArr['group_id'])) {
             $customerModel->setGroupId($prevCustomerDataArr['group_id']);
+        }
+    }
+
+    /**
+     * To validate default address
+     *
+     * @param CustomerInterface $customer
+     * @param string $defaultAddressType
+     * @return void
+     * @throws InputException
+     */
+    private function validateDefaultAddress(
+        CustomerInterface $customer,
+        string $defaultAddressType
+    ): void {
+        $addressId = $defaultAddressType === CustomerInterface::DEFAULT_BILLING ? $customer->getDefaultBilling()
+            : $customer->getDefaultShipping();
+        if ($customer->getAddresses()) {
+            foreach ($customer->getAddresses() as $address) {
+                if ((int) $addressId === (int) $address->getId()) {
+                    return;
+                }
+            }
+
+            throw new InputException(
+                __(
+                    'The %fieldName value is invalid. Set the correct value and try again.',
+                    ['fieldName' => $defaultAddressType]
+                )
+            );
         }
     }
 }

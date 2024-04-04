@@ -21,7 +21,16 @@ use Magento\Backend\Controller\Adminhtml\Auth;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
 
+/**
+ * Class ImsCallback is responsible to get the Access Token, User Profile,
+ * check if the assigned organization is valid, And Check if user exists and then do the login
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ImsCallback extends Auth implements HttpGetActionInterface
 {
     public const ACTION_NAME = 'imscallback';
@@ -73,6 +82,28 @@ class ImsCallback extends Auth implements HttpGetActionInterface
         $this->adminOrganizationService = $adminOrganizationService;
         $this->adminLoginProcessService = $adminLoginProcessService;
         $this->logger = $logger;
+    }
+
+    /**
+     * Validate IMS state is valid
+     *
+     * @param RequestInterface $request
+     * @return ResponseInterface
+     */
+    public function dispatch(RequestInterface $request)
+    {
+        $request->setParam('form_key', $request->getParam('state', null));
+        if (!$this->_formKeyValidator->validate($request)) {
+            $this->logger->critical(__('Invalid state returned in callback from IMS.'));
+            $this->imsErrorMessage(
+                'Error signing in',
+                'Something went wrong and we could not sign you in. ' .
+                'Please try again or contact your administrator.'
+            );
+            $this->_actionFlag->set('', ActionInterface::FLAG_NO_DISPATCH, true);
+            return $this->_redirect($this->_helper->getHomePageUrl());
+        }
+        return parent::dispatch($request);
     }
 
     /**
