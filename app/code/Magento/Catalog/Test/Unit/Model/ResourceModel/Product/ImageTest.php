@@ -240,8 +240,8 @@ class ImageTest extends TestCase
                 'batchSize' => $batchSize
             ]
         );
-
-        $this->assertCount($imagesCount, iterator_to_array($imageModel->getAllProductImages(), false));
+        $resultImagesCount = iterator_to_array($imageModel->getAllProductImages(), false);
+        $this->assertCount($imagesCount, $resultImagesCount);
     }
 
     /**
@@ -251,6 +251,7 @@ class ImageTest extends TestCase
      */
     public function testGetUsedProductImages(int $imagesCount, int $batchSize): void
     {
+        echo $imagesCount;
         $this->connectionMock->expects($this->once())
             ->method('select')
             ->willReturn($this->getUsedImagesSelectMock());
@@ -287,7 +288,8 @@ class ImageTest extends TestCase
             ]
         );
 
-        $this->assertCount($imagesCount, iterator_to_array($imageModel->getUsedProductImages()));
+        $resultImagesCount = iterator_to_array($imageModel->getUsedProductImages(), false);
+        $this->assertCount($imagesCount,$resultImagesCount);
     }
 
     /**

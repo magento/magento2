@@ -67,14 +67,14 @@ class ConfiguredPriceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
-        $objects = [
-            [
-                ConfiguredOptions::class,
-                $this->createMock(ConfiguredOptions::class)
-            ]
-        ];
-        $objectManager->prepareObjectManager($objects);
+//        $objectManager = new ObjectManager($this);
+//        $objects = [
+//            [
+//                ConfiguredOptions::class,
+//                $this->createMock(ConfiguredOptions::class)
+//            ]
+//        ];
+//        $objectManager->prepareObjectManager($objects);
 
         $basePrice = $this->getMockForAbstractClass(PriceInterface::class);
         $basePrice->expects($this->any())->method('getValue')->willReturn($this->basePriceValue);
@@ -96,8 +96,6 @@ class ConfiguredPriceTest extends TestCase
 
         $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
 
-        $this->model = new ConfiguredPrice($this->product, 1, $this->calculator, $this->priceCurrencyMock);
-        $this->model->setItem($this->item);
     }
 
     /**
@@ -128,7 +126,12 @@ class ConfiguredPriceTest extends TestCase
             return $optionsList[$code];
         });
         $this->item->expects($this->atLeastOnce())->method('getOptionByCode')->will($optionsGetterByCode);
-
+        $configuredOptions = $this->getMockBuilder(ConfiguredOptions::class)
+                                ->disableOriginalConstructor()
+                                ->onlyMethods([])
+                                ->getMock();
+        $this->model = new ConfiguredPrice($this->product, 1, $this->calculator, $this->priceCurrencyMock, $this->item, $configuredOptions);
+        $this->model->setItem($this->item);
         $this->assertEquals(830., $this->model->getValue());
     }
 
@@ -153,7 +156,8 @@ class ConfiguredPriceTest extends TestCase
     protected function createOptionTypeStub(Option $option)
     {
         $optionType = $this->getMockBuilder(DefaultType::class)
-            ->onlyMethods(['setOption', 'setConfigurationItem', 'setConfigurationItemOption', 'getOptionPrice'])
+            ->addMethods(['setConfigurationItem', 'setConfigurationItemOption'])
+            ->onlyMethods(['setOption', 'getOptionPrice'])
             ->disableOriginalConstructor()
             ->getMock();
         $optionType->expects($this->atLeastOnce())->method('setOption')->with($option)->willReturnSelf();

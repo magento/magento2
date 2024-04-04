@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model\Payflow;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Payment\Model\Method\ConfigInterface as PaymentConfigInterface;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory as PaymentConfigInterfaceFactory;
@@ -85,6 +87,14 @@ class TransparentTest extends TestCase
 
     protected function setUp(): void
     {
+        $helper = new ObjectManager($this);
+        $objects = [
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $helper->prepareObjectManager($objects);
         $this->initPayment();
 
         $this->subject = (new ObjectManagerHelper($this))
@@ -128,16 +138,24 @@ class TransparentTest extends TestCase
         $this->payment->expects($this->exactly($setAdditionalInformationCalls))
             ->method('setAdditionalInformation')
             ->with(Payflowpro::PNREF, $gatewayToken);
-        $this->payment->expects($this->exactly(4))->method('getAdditionalInformation')
-            ->method('getAdditionalInformation')->willReturnCallback(
-                function ($arg) {
-                    if ($arg == 'result_code') {
-                        return 0;
-                    } elseif ($arg == Payflowpro::PNREF) {
-                        return Payflowpro::PNREF;
-                    }
+        $this->payment->expects($this->exactly(4))
+            ->method('getAdditionalInformation')
+            ->willReturnCallback(function ($args) {
+                static $callCount = 0;
+                if ($callCount == 0 && $args == 'result_code') {
+                    $callCount++;
+                    return 0;
+                } elseif ($callCount == 1 && $args == Payflowpro::PNREF) {
+                    $callCount++;
+                    return '';
+                } elseif ($callCount == 2 && $args == Payflowpro::PNREF) {
+                    $callCount++;
+                    return Payflowpro::PNREF;
+                } elseif ($callCount == 3 && $args == Payflowpro::PNREF) {
+                    $callCount++;
+                    return Payflowpro::PNREF;
                 }
-            );
+            });
         $this->paymentExtensionAttributes->expects($this->once())
             ->method('getVaultPaymentToken')
             ->willReturn($this->paymentToken);
@@ -245,7 +263,7 @@ class TransparentTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->paymentConfig = $this->getMockBuilder(PaymentConfigInterface::class)
-            ->onlyMethods(['setStoreId', 'setMethodInstance', 'setMethod', 'getBuildNotationCode'])
+            ->addMethods(['setStoreId', 'setMethodInstance', 'setMethod', 'getBuildNotationCode', 'getPaymentAction'])
             ->getMockForAbstractClass();
 
         $paymentConfigInterfaceFactory->method('create')->willReturn($this->paymentConfig);
@@ -263,7 +281,7 @@ class TransparentTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $orderPaymentExtension = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->onlyMethods(
+            ->addMethods(
                 ['setVaultPaymentToken', 'getVaultPaymentToken', 'setNotificationMessage', 'getNotificationMessage']
             )
             ->disableOriginalConstructor()
@@ -377,7 +395,7 @@ class TransparentTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->paymentExtensionAttributes = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->onlyMethods(
+            ->addMethods(
                 ['setVaultPaymentToken', 'getVaultPaymentToken', 'setNotificationMessage', 'getNotificationMessage']
             )
             ->getMockForAbstractClass();
