@@ -108,6 +108,7 @@ class AfterPaymentSaveObserverTest extends TestCase
             ->getMock();
 
         $this->paymentTokenMock = $this->getMockBuilder(PaymentToken::class)
+            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 
