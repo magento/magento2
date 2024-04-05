@@ -17,7 +17,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\ImportExport\Helper\Data as ImportExportConfig;
-use Magento\ImportExport\Model\Import;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
@@ -1044,13 +1043,16 @@ class ProductOptionsTest extends ProductTestBase
      */
     #[
         Config(CatalogConfig::XML_PATH_PRICE_SCOPE, CatalogConfig::PRICE_SCOPE_WEBSITE, ScopeInterface::SCOPE_STORE),
-        DataFixture(StoreFixture::class, ['code' => 'secondstore']),
     ]
-    public function testImportProductCustomOptionsOnMultipleUploads(string $importFile, string $sku, int $uploadCount): void
+    public function testImportProductCustomOptionsOnMultipleUploads(
+        string $importFile,
+        string $sku,
+        int $uploadCount
+    ): void
     {
         $pathToFile = __DIR__ . '/../_files/' . $importFile;
 
-        for($count = 0; $count < $uploadCount; $count++) {
+        for ($count = 0; $count < $uploadCount; $count++) {
             $productImportModel = $this->createImportModel($pathToFile);
             $errors = $productImportModel->validateData();
             $this->assertTrue($errors->getErrorsCount() == 0);
@@ -1066,7 +1068,7 @@ class ProductOptionsTest extends ProductTestBase
         $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $product);
         $options = $product->getOptionInstance()->getProductOptions($product);
 
-        $expectedData = $this->getExpectedOptionsData($pathToFile, 'secondstore');
+        $expectedData = $this->getExpectedOptionsData($pathToFile, 'default');
         $expectedOptions = $expectedData['options'];
 
         $this->assertCount(count($expectedOptions), $options);
@@ -1086,7 +1088,7 @@ class ProductOptionsTest extends ProductTestBase
         return [
             [
                 'importFile' => 'product_with_custom_options_and_multiple_uploads.csv',
-                'sku' => 'simple',
+                'sku' => 'p1',
                 'uploadCount' => 2,
             ],
         ];
