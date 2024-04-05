@@ -91,7 +91,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
         if ($this->_getData('main_fieldset') instanceof \Magento\Framework\Data\Form\Element\Fieldset) {
             return $this->_getData('main_fieldset');
         }
-        $mainFieldsetHtmlId = 'options_fieldset' . hash('sha256', $this->getWidgetType());
+        $mainFieldsetHtmlId = 'options_fieldset' . hash('xxh128', $this->getWidgetType());
         $this->setMainFieldsetHtmlId($mainFieldsetHtmlId);
         $fieldset = $this->getForm()->addFieldset(
             $mainFieldsetHtmlId,
@@ -160,7 +160,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
 
         //prepare unique id value
         if ($fieldName == 'unique_id' && $data['value'] == '') {
-            $data['value'] = hash('sha256', microtime(1));
+            $data['value'] = hash('xxh128', microtime(1));
         }
 
         if (is_array($data['value'])) {

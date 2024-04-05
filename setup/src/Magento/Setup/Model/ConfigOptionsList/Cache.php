@@ -322,6 +322,6 @@ class Cache implements ConfigOptionsListInterface
     private function generateCachePrefix(): string
     {
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        return substr(\hash('sha256', dirname(__DIR__, 6)), 0, 3) . '_';
+        return substr(\hash('xxh128', dirname(__DIR__, 6)), 0, 3) . '_';
     }
 }

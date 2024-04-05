@@ -282,6 +282,6 @@ class CacheTest extends TestCase
      */
     private function expectedIdPrefix(): string
     {
-        return substr(\hash('sha256', dirname(__DIR__, 8)), 0, 3) . '_';
+        return substr(\hash('xxh128', dirname(__DIR__, 8)), 0, 3) . '_';
     }
 }

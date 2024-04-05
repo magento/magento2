@@ -218,7 +218,7 @@ class ValidatorFile extends Validator
                 }
             }
 
-            $fileHash = hash('sha256', $tmpDirectory->readFile($tmpDirectory->getRelativePath($fileInfo['tmp_name'])));
+            $fileHash = hash('xxh128', $tmpDirectory->readFile($tmpDirectory->getRelativePath($fileInfo['tmp_name'])));
 
             $userValue = [
                 'type' => $fileInfo['type'],

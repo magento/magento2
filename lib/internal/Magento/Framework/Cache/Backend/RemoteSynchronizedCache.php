@@ -147,7 +147,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     private function getDataVersion(string $data)
     {
-        return \hash('sha256', $data);
+        return \hash('xxh128', $data);
     }
 
     /**
