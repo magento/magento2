@@ -70,10 +70,10 @@
                     <?php endif; ?>
                 </span>
                 <div class="note-list-comment">
-                    <?= /* @noEscape */ $escaper->escapeHtml(
+                    <?= /* @noEscape */ nl2br($escaper->escapeHtml(
                         $_comment->getComment(),
                         ['b', 'br', 'strong', 'i', 'u', 'a']
-                    ) ?>
+                    ))?>
                 </div>
             </li>
         <?php endforeach; ?>
