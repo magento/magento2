@@ -1048,8 +1048,7 @@ class ProductOptionsTest extends ProductTestBase
         string $importFile,
         string $sku,
         int $uploadCount
-    ): void
-    {
+    ): void {
         $pathToFile = __DIR__ . '/../_files/' . $importFile;
 
         for ($count = 0; $count < $uploadCount; $count++) {
