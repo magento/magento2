@@ -9,8 +9,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
 use PHPUnit\Framework\Constraint\RegularExpression;
 use PHPUnit\Framework\Constraint\StringContains;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\Escaper;
 
 /**
  * Class verifies invoice add comment functionality.
@@ -41,11 +39,7 @@ class AddCommentTest extends AbstractInvoiceControllerTest
         $this->dispatch('backend/sales/order_invoice/addComment');
 
         $html = $this->getResponse()->getBody();
-
-        $escaper = Bootstrap::getObjectManager()
-            ->get(Escaper::class);
-
-        $this->assertStringContainsString($escaper->escapeHtml($comment), $html);
+        $this->assertStringContainsString($comment, $html);
 
         $message = $this->transportBuilder->getSentMessage();
         $this->assertNotNull($message);

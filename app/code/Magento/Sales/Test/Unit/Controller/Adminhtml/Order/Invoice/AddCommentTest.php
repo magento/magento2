@@ -15,7 +15,6 @@ use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\Result\RawFactory;
-use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout;
@@ -103,11 +102,6 @@ class AddCommentTest extends TestCase
     protected $invoiceRepository;
 
     /**
-     * @var Escaper|MockObject
-     */
-    private $escaper;
-
-    /**
      * SetUp method
      *
      * @return void
@@ -191,8 +185,6 @@ class AddCommentTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->escaper = $this->createPartialMock(Escaper::class, ['escapeHtml']);
-
         $this->controller = $objectManager->getObject(
             AddComment::class,
             [
@@ -201,8 +193,7 @@ class AddCommentTest extends TestCase
                 'resultPageFactory' => $this->resultPageFactoryMock,
                 'resultRawFactory' => $this->resultRawFactoryMock,
                 'resultJsonFactory' => $this->resultJsonFactoryMock,
-                'escaper' => $this->escaper,
-                'invoiceRepository' => $this->invoiceRepository,
+                'invoiceRepository' => $this->invoiceRepository
             ]
         );
 
@@ -275,10 +266,6 @@ class AddCommentTest extends TestCase
         $this->commentSenderMock->expects($this->once())
             ->method('send')
             ->with($invoiceMock, false, $data['comment']);
-
-        $this->escaper->expects($this->any())
-            ->method('escapeHtml')
-            ->willReturn($data['comment']);
 
         $resultRaw = $this->getMockBuilder(Raw::class)
             ->disableOriginalConstructor()

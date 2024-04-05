@@ -19,11 +19,9 @@ use Magento\Framework\Registry;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\Result\RawFactory;
-use Magento\Framework\Escaper;
 
 /**
- * Action Controller for adding Comment to Invoice of an order
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Class AddComment
  */
 class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View implements
     HttpPostActionInterface
@@ -54,11 +52,6 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
     protected $invoiceRepository;
 
     /**
-     * @var Escaper
-     */
-    private Escaper $escaper;
-
-    /**
      * @param Context $context
      * @param Registry $registry
      * @param ForwardFactory $resultForwardFactory
@@ -66,8 +59,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
      * @param JsonFactory $resultJsonFactory
      * @param PageFactory $resultPageFactory
      * @param RawFactory $resultRawFactory
-     * @param InvoiceRepositoryInterface|null $invoiceRepository
-     * @param Escaper|null $escaper
+     * @param InvoiceRepositoryInterface $invoiceRepository
      */
     public function __construct(
         Context $context,
@@ -77,8 +69,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
         JsonFactory $resultJsonFactory,
         PageFactory $resultPageFactory,
         RawFactory $resultRawFactory,
-        InvoiceRepositoryInterface $invoiceRepository = null,
-        Escaper $escaper = null,
+        InvoiceRepositoryInterface $invoiceRepository = null
     ) {
         $this->invoiceCommentSender = $invoiceCommentSender;
         $this->resultJsonFactory = $resultJsonFactory;
@@ -86,8 +77,6 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
         $this->resultRawFactory = $resultRawFactory;
         $this->invoiceRepository = $invoiceRepository ?:
             ObjectManager::getInstance()->get(InvoiceRepositoryInterface::class);
-        $this->escaper = $escaper ?:
-            ObjectManager::getInstance()->get(Escaper::class);
         parent::__construct($context, $registry, $resultForwardFactory, $invoiceRepository);
     }
 
@@ -104,8 +93,6 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
             if (empty($data['comment'])) {
                 throw new LocalizedException(__('The comment is missing. Enter and try again.'));
             }
-            $comment = $this->escaper->escapeHtml($data['comment']);
-
             $invoice = $this->getInvoice();
             if (!$invoice) {
                 /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
@@ -113,12 +100,12 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
                 return $resultForward->forward('noroute');
             }
             $invoice->addComment(
-                $comment,
+                $data['comment'],
                 isset($data['is_customer_notified']),
                 isset($data['is_visible_on_front'])
             );
 
-            $this->invoiceCommentSender->send($invoice, !empty($data['is_customer_notified']), $comment);
+            $this->invoiceCommentSender->send($invoice, !empty($data['is_customer_notified']), $data['comment']);
             $this->invoiceRepository->save($invoice);
 
             /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
