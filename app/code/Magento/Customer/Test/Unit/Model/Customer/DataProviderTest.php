@@ -77,14 +77,6 @@ class DataProviderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $objectManagerHelper = new ObjectManagerHelper($this);
-        $objects = [
-            [
-                FileUploaderDataResolver::class,
-                $this->createMock(FileUploaderDataResolver::class)
-            ]
-        ];
-        $objectManagerHelper->prepareObjectManager($objects);
         $this->eavConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -945,7 +937,8 @@ class DataProviderTest extends TestCase
                 'requestFieldName' => 'request-field-name',
                 'eavValidationRules' => $this->eavValidationRulesMock,
                 'customerCollectionFactory' => $this->customerCollectionFactoryMock,
-                'eavConfig' => $this->eavConfigMock
+                'eavConfig' => $this->eavConfigMock,
+                'fileUploaderDataResolver' => $this->fileUploaderDataResolver
             ]
         );
 

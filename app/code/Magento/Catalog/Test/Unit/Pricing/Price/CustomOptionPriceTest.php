@@ -65,14 +65,6 @@ class CustomOptionPriceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
-        $objects = [
-            [
-                CustomOptionPriceCalculator::class,
-                $this->createMock(CustomOptionPriceCalculator::class)
-            ]
-        ];
-        $objectManager->prepareObjectManager($objects);
         $this->product = $this->createPartialMock(
             Product::class,
             ['getOptionById', 'getPriceInfo', 'getOptions']
@@ -90,11 +82,17 @@ class CustomOptionPriceTest extends TestCase
 
         $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
 
+        $customOptionPriceCalculator = $this->getMockBuilder(CustomOptionPriceCalculator::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([])
+            ->getMock();
         $this->object = new CustomOptionPrice(
             $this->product,
             PriceInfoInterface::PRODUCT_QUANTITY_DEFAULT,
             $this->calculator,
-            $this->priceCurrencyMock
+            $this->priceCurrencyMock,
+            null,
+            $customOptionPriceCalculator
         );
     }
 
@@ -303,7 +301,7 @@ class CustomOptionPriceTest extends TestCase
         $this->priceCurrencyMock
             ->method('convertAndRound')
             ->willReturnCallback(function ($arg1)
- use ($option1MinPrice, $convertMinValue, $optionMaxValue, $convertedMaxValue) {
+            use ($option1MinPrice, $convertMinValue, $optionMaxValue, $convertedMaxValue) {
                 if ($arg1 == $option1MinPrice) {
                     return $convertMinValue;
                 } elseif ($arg1 == $optionMaxValue) {
