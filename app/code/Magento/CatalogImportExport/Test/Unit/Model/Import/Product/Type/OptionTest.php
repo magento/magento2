@@ -251,7 +251,7 @@ class OptionTest extends AbstractImportTestCase
 
         $addExpectations = false;
         $deleteBehavior = false;
-        $testName = $this->name(true);
+        $testName = $this->name() . $this->dataSetAsString();
         if ($testName == 'testImportDataAppendBehavior' || $testName == 'testImportDataDeleteBehavior') {
             $addExpectations = true;
             $deleteBehavior = $this->name() == 'testImportDataDeleteBehavior' ? true : false;

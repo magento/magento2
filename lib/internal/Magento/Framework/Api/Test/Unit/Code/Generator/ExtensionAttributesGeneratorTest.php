@@ -42,6 +42,7 @@ class ExtensionAttributesGeneratorTest extends TestCase
 
         $this->typeProcessorMock = $this->getMockBuilder(TypeProcessor::class)
             ->disableOriginalConstructor()
+            ->onlyMethods([])
             ->getMock();
 
         $objectManager = new ObjectManager($this);
