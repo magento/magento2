@@ -26,7 +26,7 @@ class Option
     /**
      * @var PriceCurrencyInterface
      */
-    protected $priceCurrency;
+    private $priceCurrency;
 
     /**
      * @param Json $serializer
