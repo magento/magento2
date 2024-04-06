@@ -16,6 +16,7 @@ use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionsCollect
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -34,8 +35,22 @@ class OptionTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(
+                ['convert','convertAndRound', 'format','convertAndFormat','getCurrencySymbol','getCurrency', 'round']
+            )
+            ->getMock();
+        $priceCurrency->method('convert')
+            ->willReturnCallback(
+                function ($price, $scope) {
+                    return $price;
+                }
+            );
+
         $this->model = new Option(
-            new Json()
+            new Json(),
+            $priceCurrency
         );
     }
 
@@ -48,7 +63,7 @@ class OptionTest extends TestCase
     {
         $bundleProduct = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getTypeInstance', 'getPriceModel'])
+            ->onlyMethods(['getTypeInstance', 'getPriceModel', 'getStore'])
             ->getMock();
 
         $typeInstance = $this->createMock(Type::class);
