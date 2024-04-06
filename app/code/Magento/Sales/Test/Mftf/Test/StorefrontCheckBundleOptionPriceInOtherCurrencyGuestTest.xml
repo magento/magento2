@@ -10,6 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontCheckBundleOptionPriceInOtherCurrencyGuestTest">
         <annotations>
+            <stories value="Order bundle"/>
             <title value="Bundle option price in order on Storefront"/>
             <description value="Checks bundle option price in other currency in order on Storefront"/>
             <severity value="MAJOR"/>
