@@ -168,12 +168,12 @@ class CarrierTest extends TestCase
 
         $this->trackErrorFactory = $this->getMockBuilder(ErrorFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->statusFactory = $this->getMockBuilder(StatusFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $elementFactory = $this->getMockBuilder(ElementFactory::class)
@@ -208,21 +208,21 @@ class CarrierTest extends TestCase
 
         $this->curlFactory = $this->getMockBuilder(CurlFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->curlClient = $this->getMockBuilder(Curl::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setHeaders', 'getBody', 'post'])
+            ->onlyMethods(['setHeaders', 'getBody', 'post'])
             ->getMock();
 
         $this->decoderInterface = $this->getMockBuilder(DecoderInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['decode'])
+            ->onlyMethods(['decode'])
             ->getMock();
 
         $this->carrier = $this->getMockBuilder(Carrier::class)
-            ->setMethods(['rateRequest'])
+            ->addMethods(['rateRequest'])
             ->setConstructorArgs(
                 [
                     'scopeConfig' => $this->scope,
@@ -368,7 +368,7 @@ class CarrierTest extends TestCase
     {
         $request = $this->getMockBuilder(RateRequest::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDestCity'])
+            ->addMethods(['getDestCity'])
             ->getMock();
         $request->expects($this->once())
             ->method('getDestCity')
@@ -380,7 +380,7 @@ class CarrierTest extends TestCase
     {
         $request = $this->getMockBuilder(RateRequest::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDestCity'])
+            ->addMethods(['getDestCity'])
             ->getMock();
         $request->expects($this->exactly(2))
             ->method('getDestCity')
@@ -462,7 +462,7 @@ class CarrierTest extends TestCase
             ->willReturn($baseCurrencyCode);
 
         $request = $this->getMockBuilder(RateRequest::class)
-            ->setMethods(['getBaseCurrency'])
+            ->addMethods(['getBaseCurrency'])
             ->disableOriginalConstructor()
             ->getMock();
         $request->method('getBaseCurrency')
@@ -485,7 +485,7 @@ class CarrierTest extends TestCase
      * Get list of rates variations
      * @return array
      */
-    public function collectRatesDataProvider(): array
+    public static function collectRatesDataProvider(): array
     {
         return [
             [10.0, 'USD', 'EUR', 'RATED_ACCOUNT_PACKAGE', 7.5],
@@ -551,7 +551,7 @@ class CarrierTest extends TestCase
     /**
      * Get list of variations
      */
-    public function logDataProvider(): array
+    public static function logDataProvider(): array
     {
         return [
             [
@@ -573,7 +573,7 @@ class CarrierTest extends TestCase
      * @param string $tracking
      * @return array
      */
-    public function getTrackRequest(string $tracking): array
+    public static function getTrackRequest(string $tracking): array
     {
         return [
             'includeDetailedScans' => true,
@@ -1009,11 +1009,11 @@ class CarrierTest extends TestCase
     {
         $this->error = $this->getMockBuilder(RateResultError::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
+            ->addMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
             ->getMock();
         $this->errorFactory = $this->getMockBuilder(RateErrorFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->errorFactory->expects($this->any())
             ->method('create')
@@ -1028,11 +1028,11 @@ class CarrierTest extends TestCase
     {
         $rate = $this->getMockBuilder(RateResult::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getError'])
+            ->onlyMethods(['getError'])
             ->getMock();
         $rateFactory = $this->getMockBuilder(RateResultFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $rateFactory->expects($this->any())
             ->method('create')
@@ -1049,7 +1049,7 @@ class CarrierTest extends TestCase
     {
         $country = $this->getMockBuilder(Country::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getData'])
+            ->onlyMethods(['load', 'getData'])
             ->getMock();
         $country->expects($this->any())
             ->method('load')
@@ -1057,7 +1057,7 @@ class CarrierTest extends TestCase
 
         $countryFactory = $this->getMockBuilder(CountryFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $countryFactory->expects($this->any())
             ->method('create')
@@ -1074,7 +1074,7 @@ class CarrierTest extends TestCase
     {
         $resultFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->result = $this->helper->getObject(Result::class);
         $resultFactory->expects($this->any())
@@ -1092,7 +1092,7 @@ class CarrierTest extends TestCase
     {
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBaseCurrencyCode'])
+            ->onlyMethods(['getBaseCurrencyCode'])
             ->getMock();
         $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $storeManager->expects($this->any())
@@ -1111,11 +1111,11 @@ class CarrierTest extends TestCase
         $priceCurrency = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
         $rateMethod = $this->getMockBuilder(Method::class)
             ->setConstructorArgs(['priceCurrency' => $priceCurrency])
-            ->setMethods(null)
+            ->onlyMethods([])
             ->getMock();
         $rateMethodFactory = $this->getMockBuilder(MethodFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $rateMethodFactory->expects($this->any())
             ->method('create')
