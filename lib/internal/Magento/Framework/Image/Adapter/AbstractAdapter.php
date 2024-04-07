@@ -8,11 +8,14 @@ declare(strict_types=1);
 namespace Magento\Framework\Image\Adapter;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
+use Psr\Log\LoggerInterface;
 
 /**
  * Image abstract adapter
  *
- * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
 abstract class AbstractAdapter implements AdapterInterface
@@ -150,17 +153,17 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Filesystem instance
      *
-     * @var \Magento\Framework\Filesystem
+     * @var Filesystem
      */
     protected $_filesystem;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Write
+     * @var Write
      */
     protected $directoryWrite;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -267,14 +270,14 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Initialize default values
      *
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param array $data
+     * @param Filesystem $filesystem
+     * @param LoggerInterface $logger
+     * @throws FileSystemException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        \Magento\Framework\Filesystem $filesystem,
-        \Psr\Log\LoggerInterface $logger
+        Filesystem      $filesystem,
+        LoggerInterface $logger
     ) {
         $this->_filesystem = $filesystem;
         $this->logger = $logger;
@@ -686,7 +689,7 @@ abstract class AbstractAdapter implements AdapterInterface
         if (!is_writable($destination)) {
             try {
                 $this->directoryWrite->create($this->directoryWrite->getRelativePath($destination));
-            } catch (\Magento\Framework\Exception\FileSystemException $e) {
+            } catch (FileSystemException $e) {
                 $this->logger->critical($e);
                 //phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \DomainException(
