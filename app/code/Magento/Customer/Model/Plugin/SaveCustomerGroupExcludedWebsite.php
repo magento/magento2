@@ -145,5 +145,4 @@ class SaveCustomerGroupExcludedWebsite
         return !($currentValues === array_intersect($currentValues, $newValues)
             && $newValues === array_intersect($newValues, $currentValues));
     }
-
 }

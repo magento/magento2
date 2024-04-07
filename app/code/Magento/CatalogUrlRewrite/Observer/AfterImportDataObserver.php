@@ -6,6 +6,8 @@
 
 namespace Magento\CatalogUrlRewrite\Observer;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
@@ -14,11 +16,13 @@ use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollectio
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
 use Magento\CatalogUrlRewrite\Model\ObjectRegistry;
 use Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
+use Magento\Eav\Model\ResourceModel\AttributeValue;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
@@ -40,6 +44,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class AfterImportDataObserver implements ObserverInterface
 {
@@ -188,6 +193,21 @@ class AfterImportDataObserver implements ObserverInterface
     private $productCollectionFactory;
 
     /**
+     * @var AttributeValue
+     */
+    private $attributeValue;
+
+    /**
+     * @var null|array
+     */
+    private $cachedValues = null;
+
+    /**
+     * @var SkuStorage
+     */
+    private SkuStorage $skuStorage;
+
+    /**
      * @param ProductFactory $catalogProductFactory
      * @param ObjectRegistryFactory $objectRegistryFactory
      * @param ProductUrlPathGenerator $productUrlPathGenerator
@@ -200,6 +220,8 @@ class AfterImportDataObserver implements ObserverInterface
      * @param CategoryCollectionFactory|null $categoryCollectionFactory
      * @param ScopeConfigInterface|null $scopeConfig
      * @param CollectionFactory|null $collectionFactory
+     * @param AttributeValue|null $attributeValue
+     * @param SkuStorage|null $skuStorage
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -215,7 +237,9 @@ class AfterImportDataObserver implements ObserverInterface
         MergeDataProviderFactory $mergeDataProviderFactory = null,
         CategoryCollectionFactory $categoryCollectionFactory = null,
         ScopeConfigInterface $scopeConfig = null,
-        CollectionFactory $collectionFactory = null
+        CollectionFactory $collectionFactory = null,
+        AttributeValue $attributeValue = null,
+        SkuStorage $skuStorage = null
     ) {
         $this->urlPersist = $urlPersist;
         $this->catalogProductFactory = $catalogProductFactory;
@@ -234,6 +258,10 @@ class AfterImportDataObserver implements ObserverInterface
             ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         $this->productCollectionFactory = $collectionFactory ?:
             ObjectManager::getInstance()->get(CollectionFactory::class);
+        $this->attributeValue = $attributeValue ?:
+            ObjectManager::getInstance()->get(AttributeValue::class);
+        $this->skuStorage = $skuStorage ?:
+            ObjectManager::getInstance()->get(SkuStorage::class);
     }
 
     /**
@@ -298,8 +326,7 @@ class AfterImportDataObserver implements ObserverInterface
     private function populateForUrlGeneration(array $rowData, array &$products)
     {
         $newSku = $this->import->getNewSku($rowData[ImportProduct::COL_SKU]);
-        $oldSku = $this->import->getOldSku();
-        if (!$this->isNeedToPopulateForUrlGeneration($rowData, $newSku, $oldSku)) {
+        if (!$this->isNeedToPopulateForUrlGeneration($rowData, $newSku)) {
             return null;
         }
         $rowData['entity_id'] = $newSku['entity_id'];
@@ -331,19 +358,18 @@ class AfterImportDataObserver implements ObserverInterface
      *
      * @param array $rowData
      * @param array $newSku
-     * @param array $oldSku
      * @return bool
      */
-    private function isNeedToPopulateForUrlGeneration($rowData, $newSku, $oldSku): bool
+    private function isNeedToPopulateForUrlGeneration($rowData, $newSku): bool
     {
         if ((
             (empty($newSku) || !isset($newSku['entity_id']))
                 || ($this->import->getRowScope($rowData) == ImportProduct::SCOPE_STORE
                     && empty($rowData[self::URL_KEY_ATTRIBUTE_CODE]))
-                || (array_key_exists(strtolower($rowData[ImportProduct::COL_SKU] ?? ''), $oldSku)
+                || ($this->skuStorage->has($rowData[ImportProduct::COL_SKU] ?? '')
                     && !isset($rowData[self::URL_KEY_ATTRIBUTE_CODE])
                     && $this->import->getBehavior() === ImportExport::BEHAVIOR_APPEND)
-            )
+        )
             && !isset($rowData["categories"])
         ) {
             return false;
@@ -446,16 +472,88 @@ class AfterImportDataObserver implements ObserverInterface
         foreach ($products as $productId => $productsByStores) {
             foreach ($productsByStores as $storeId => $product) {
                 if ($this->productUrlPathGenerator->getUrlPath($product)) {
+                    $reqPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId);
+                    $targetPath = $this->productUrlPathGenerator->getCanonicalUrlPath($product);
+                    if ((int) $storeId !== (int) $product->getStoreId()
+                        && $this->isGlobalScope($product->getStoreId())) {
+                        $this->initializeCacheForProducts($products);
+                        $reqPath = $this->getReqPath((int)$productId, (int)$storeId, $product);
+                    }
                     $urls[] = $this->urlRewriteFactory->create()
                         ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
                         ->setEntityId($productId)
-                        ->setRequestPath($this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId))
-                        ->setTargetPath($this->productUrlPathGenerator->getCanonicalUrlPath($product))
+                        ->setRequestPath($reqPath)
+                        ->setTargetPath($targetPath)
                         ->setStoreId($storeId);
                 }
             }
         }
         return $urls;
+    }
+
+    /**
+     * Initialization for cache with scop based values
+     *
+     * @param array $products
+     * @return void
+     */
+    private function initializeCacheForProducts(array $products) : void
+    {
+        if ($this->cachedValues === null) {
+            $this->cachedValues = $this->getScopeBasedUrlKeyValues($products);
+        }
+    }
+
+    /**
+     * Get request path for the selected scope
+     *
+     * @param int $productId
+     * @param int $storeId
+     * @param Product $product
+     * @param Category|null $category
+     * @return string
+     */
+    private function getReqPath(int $productId, int $storeId, Product $product, ?Category $category = null) : string
+    {
+        $reqPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category);
+        if (!empty($this->cachedValues) && isset($this->cachedValues[$productId][$storeId])) {
+            $storeProduct = clone $product;
+            $storeProduct->setStoreId($storeId);
+            $storeProduct->setUrlKey($this->cachedValues[$productId][$storeId]);
+            $reqPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($storeProduct, $storeId, $category);
+        }
+        return $reqPath;
+    }
+
+    /**
+     * Get url key attribute values for the specified scope
+     *
+     * @param array $products
+     * @return array
+     */
+    private function getScopeBasedUrlKeyValues(array $products) : array
+    {
+        $values = [];
+        $productIds = [];
+        $storeIds = [];
+        foreach ($products as $productId => $productsByStores) {
+            $productIds[] = (int) $productId;
+            foreach (array_keys($productsByStores) as $id) {
+                $storeIds[] = (int) $id;
+            }
+        }
+        $productIds = array_unique($productIds);
+        $storeIds = array_unique($storeIds);
+        if (!empty($productIds) && !empty($storeIds)) {
+            $values = $this->attributeValue->getValuesMultiple(
+                ProductInterface::class,
+                $productIds,
+                [ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY],
+                $storeIds
+            );
+        }
+
+        return $values;
     }
 
     /**
@@ -476,12 +574,18 @@ class AfterImportDataObserver implements ObserverInterface
                         continue;
                     }
                     $requestPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category);
+                    $targetPath = $this->productUrlPathGenerator->getCanonicalUrlPath($product, $category);
+                    if ((int) $storeId !== (int) $product->getStoreId()
+                        && $this->isGlobalScope($product->getStoreId())) {
+                        $this->initializeCacheForProducts($products);
+                        $requestPath = $this->getReqPath((int)$productId, (int)$storeId, $product, $category);
+                    }
                     $urls[] = [
                             $this->urlRewriteFactory->create()
                             ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
                             ->setEntityId($productId)
                             ->setRequestPath($requestPath)
-                            ->setTargetPath($this->productUrlPathGenerator->getCanonicalUrlPath($product, $category))
+                            ->setTargetPath($targetPath)
                             ->setStoreId($storeId)
                             ->setMetadata(['category_id' => $category->getId()])
                     ];
@@ -570,6 +674,7 @@ class AfterImportDataObserver implements ObserverInterface
      * @param Category|null $category
      * @param Product[] $products
      * @return UrlRewrite[]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function generateForCustom(UrlRewrite $url, ?Category $category, array $products) : array
     {
@@ -580,6 +685,18 @@ class AfterImportDataObserver implements ObserverInterface
             $targetPath = $url->getRedirectType()
                 ? $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category)
                 : $url->getTargetPath();
+            if ((int) $storeId !== (int) $product->getStoreId()
+                && $this->isGlobalScope($product->getStoreId())) {
+                $this->initializeCacheForProducts($products);
+                if (!empty($this->cachedValues) && isset($this->cachedValues[$productId][$storeId])) {
+                    $storeProduct = clone $product;
+                    $storeProduct->setStoreId($storeId);
+                    $storeProduct->setUrlKey($this->cachedValues[$productId][$storeId]);
+                    $targetPath = $url->getRedirectType()
+                        ? $this->productUrlPathGenerator->getUrlPathWithSuffix($storeProduct, $storeId, $category)
+                        : $url->getTargetPath();
+                }
+            }
             if ($url->getRequestPath() === $targetPath) {
                 return [];
             }
