@@ -212,14 +212,14 @@ class ImageMagick extends AbstractAdapter
 
         $newImage = new \Imagick();
         $newImage->newImage(
-            floor($dims['frame']['width']),
-            floor($dims['frame']['height']),
+            $dims['frame']['width'],
+            $dims['frame']['height'],
             $this->_imageHandler->getImageBackgroundColor()
         );
 
         $this->_imageHandler->resizeImage(
-            floor($dims['dst']['width']),
-            floor($dims['dst']['height']),
+            $dims['dst']['width'],
+            $dims['dst']['height'],
             \Imagick::FILTER_CUBIC,
             self::BLUR_FACTOR
         );
