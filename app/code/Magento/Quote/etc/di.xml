@@ -160,4 +160,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Quote\Model\Quote\Item\Repository">
+        <arguments>
+            <argument name="quoteMutex" xsi:type="object">Magento\Quote\Model\QuoteIdMutex</argument>
+        </arguments>
+    </type>
 </config>

@@ -68,7 +68,7 @@ class HideUnsupportedAttributeTypesTest extends TestCase
     private function createRequestMock($popup, $productTab = 'variations')
     {
         $request = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods(['getParam'])
+            ->onlyMethods(['getParam'])
             ->getMockForAbstractClass();
         $request->method('getParam')
             ->willReturnCallback(
@@ -94,7 +94,7 @@ class HideUnsupportedAttributeTypesTest extends TestCase
     private function createEventMock(MockObject $form = null)
     {
         $event = $this->getMockBuilder(EventObserver::class)
-            ->setMethods(['getForm', 'getBlock'])
+            ->addMethods(['getForm', 'getBlock'])
             ->disableOriginalConstructor()
             ->getMock();
         $event->expects($this->any())
@@ -170,11 +170,11 @@ class HideUnsupportedAttributeTypesTest extends TestCase
     private function createForm(array $originalValues = [], array $expectedValues = [])
     {
         $form = $this->getMockBuilder(Form::class)
-            ->setMethods(['getElement'])
+            ->onlyMethods(['getElement'])
             ->disableOriginalConstructor()
             ->getMock();
         $frontendInput = $this->getMockBuilder(Select::class)
-            ->setMethods(['getValues', 'setValues'])
+            ->addMethods(['getValues', 'setValues'])
             ->disableOriginalConstructor()
             ->getMock();
         $frontendInput->expects($this->once())

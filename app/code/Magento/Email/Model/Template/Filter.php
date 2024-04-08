@@ -82,11 +82,6 @@ class Filter extends Template
     protected $_modifiers = ['nl2br' => ''];
 
     /**
-     * @var string
-     */
-    private const CACHE_KEY_PREFIX = "EMAIL_FILTER_";
-
-    /**
      * @var bool
      */
     private $isChildTemplate = false;
@@ -413,10 +408,6 @@ class Filter extends Template
     {
         $skipParams = ['class', 'id', 'output'];
         $blockParameters = $this->getParameters($construction[2]);
-
-        if (isset($blockParameters['cache_key'])) {
-            $blockParameters['cache_key'] = self::CACHE_KEY_PREFIX . $blockParameters['cache_key'];
-        }
 
         $block = null;
 

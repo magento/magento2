@@ -183,8 +183,10 @@ class AgreementsConfigProviderTest extends TestCase
 
         $this->escaperMock
             ->method('escapeHtml')
-            ->withConsecutive([$content], [$checkboxText])
-            ->willReturnOnConsecutiveCalls($escapedContent, $escapedCheckboxText);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$content] => $escapedContent,
+                [$checkboxText] => $escapedCheckboxText
+            });
         $agreement->expects($this->once())->method('getIsHtml')->willReturn(false);
         $agreement->expects($this->once())->method('getContent')->willReturn($content);
         $agreement->expects($this->once())->method('getCheckboxText')->willReturn($checkboxText);

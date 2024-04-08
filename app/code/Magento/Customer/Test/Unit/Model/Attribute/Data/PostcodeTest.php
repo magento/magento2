@@ -56,7 +56,7 @@ class PostcodeTest extends TestCase
             ->getMock();
         $this->attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStoreLabel'])
+            ->addMethods(['getStoreLabel'])
             ->getMock();
     }
 
@@ -97,7 +97,7 @@ class PostcodeTest extends TestCase
     /**
      * @return array
      */
-    public function validateValueDataProvider()
+    public static function validateValueDataProvider()
     {
         return [
             ['', ['"Zip/Postal Code" is a required value.'], 'US', false],
