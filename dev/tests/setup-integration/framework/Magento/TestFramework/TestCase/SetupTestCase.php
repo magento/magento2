@@ -55,20 +55,13 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
         $this->resourceConnection = $resourceConnection ?? $objectManager->get(ResourceConnection::class);
     }
 
-//    /**
-//     * @inheritdoc
-//     */
-//    public function setData(array $data)
-//    {
-//        $this->data = $data;
-//    }
-
     /**
      * @inheritdoc
      */
     public function flushData()
     {
         $this->data = [];
+        DataProviderFromFile::setTestObject([]);
     }
 
     /**
@@ -76,6 +69,11 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
      */
     public function getData()
     {
+        if(empty($this->data)){
+            $testDataObj = DataProviderFromFile::getTestObject();
+            $this->data = $testDataObj->providedData();
+        }
+
         if (array_key_exists($this->getDbKey(), $this->data)) {
             return $this->data[$this->getDbKey()];
         }
