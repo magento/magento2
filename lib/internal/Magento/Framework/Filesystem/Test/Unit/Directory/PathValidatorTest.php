@@ -77,6 +77,7 @@ class PathValidatorTest extends TestCase
         return [
             ['/directory/path/', '/directory/path/', '/', false, '/://'],
             ['/directory/path/', '/var/.regenerate', null, false, ''],
+            ['/directory/path/', '/var/image - 1.jpg', null, false, ''],
         ];
     }
 }
