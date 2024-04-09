@@ -12,6 +12,7 @@ use Magento\Framework\File\Pdf\Image;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Sales\Model\RtlTextHandler;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * Sales Order PDF abstract model
@@ -132,6 +133,11 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     protected $addressRenderer;
 
     /**
+     * @var Magento\Tax\Helper\Data
+     */
+    protected $taxHelper;
+
+    /**
      * @var array $pageSettings
      */
     private $pageSettings;
@@ -152,6 +158,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
+     * @param TaxHelper $taxHelper
      * @param array $data
      * @param Database $fileStorageDatabase
      * @param RtlTextHandler|null $rtlTextHandler
@@ -169,6 +176,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
+        TaxHelper $taxHelper,
         array $data = [],
         Database $fileStorageDatabase = null,
         ?RtlTextHandler $rtlTextHandler = null,
@@ -185,6 +193,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         $this->_pdfTotalFactory = $pdfTotalFactory;
         $this->_pdfItemsFactory = $pdfItemsFactory;
         $this->inlineTranslation = $inlineTranslation;
+        $this->taxHelper = $taxHelper;
         $this->fileStorageDatabase = $fileStorageDatabase ?: ObjectManager::getInstance()->get(Database::class);
         $this->rtlTextHandler = $rtlTextHandler ?: ObjectManager::getInstance()->get(RtlTextHandler::class);
         $this->image = $image ?: ObjectManager::getInstance()->get(Image::class);
@@ -604,11 +613,17 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             }
 
             $yShipments = $this->y;
-            $totalShippingChargesText = "("
-                . __('Total Shipping Charges')
-                . " "
-                . $order->formatPriceTxt($order->getShippingAmount())
-                . ")";
+            $totalShippingChargesText = "(" . __('Total Shipping Charges') . " ";
+            if ($this->taxHelper->displayShippingPriceIncludingTax()) {
+                $totalShippingChargesText .= $order->formatPriceTxt($order->getShippingInclTax());
+            } else {
+                $totalShippingChargesText .= $order->formatPriceTxt($order->getShippingAmount());
+            }
+
+            if($this->taxHelper->displayShippingBothPrices() && $order->getShippingInclTax() != $order->getShippingAmount()) {
+                $totalShippingChargesText .= "(Incl. Tax " . $order->getShippingInclTax() . ")";
+            }
+            $totalShippingChargesText .= ")";
 
             $page->drawText($totalShippingChargesText, 285, $yShipments - $topMargin, 'UTF-8');
             $yShipments -= $topMargin + 10;

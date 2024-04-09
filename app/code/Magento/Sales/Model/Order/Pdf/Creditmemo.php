@@ -36,6 +36,7 @@ class Creditmemo extends AbstractPdf
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
+     * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Store\Model\App\Emulation|null $appEmulation
      * @param array $data
@@ -54,6 +55,7 @@ class Creditmemo extends AbstractPdf
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
+        \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Store\Model\App\Emulation $appEmulation,
         array $data = []
@@ -71,6 +73,7 @@ class Creditmemo extends AbstractPdf
             $localeDate,
             $inlineTranslation,
             $addressRenderer,
+            $taxHelper,
             $data
         );
     }
