@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SelectShippingAddressOnPayPalPaymentPageActionGroup">
+        <annotations>
+            <description>Select shipping address on paypal account payment page</description>
+        </annotations>
+        <arguments>
+            <argument name="shippingAddress" type="string" />
+            <argument name="selectedShippingAddress" type="string" />
+        </arguments>
+        <waitForElementClickable selector="{{PayPalPaymentSection.changeShippingAddressButton}}" stepKey="waitForChangeShippingAddressButton"/>
+        <click selector="{{PayPalPaymentSection.changeShippingAddressButton}}" stepKey="clickChangeShippingAddressButton"/>
+        <waitForElementVisible selector="{{PayPalPaymentSection.ShippingAddressDropdown}}"  stepKey="waitForAddressDropdown"/>
+        <selectOption selector ="{{PayPalPaymentSection.ShippingAddressDropdown}}" userInput="{{shippingAddress}}" stepKey="selectShippingAddress"/>
+        <waitForElementVisible selector="{{PayPalPaymentSection.selectedShippingAddress(selectedShippingAddress)}}"  stepKey="verifyAddressIsSelected"/>
+    </actionGroup>
+</actionGroups>

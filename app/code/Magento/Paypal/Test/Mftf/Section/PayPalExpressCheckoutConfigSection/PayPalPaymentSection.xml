@@ -26,5 +26,10 @@
         <element name="paypalCart" type="text" selector="#transactionCart"/>
         <element name="productNamePosition" type="text" selector=".itemName"/>
         <element name="orderTotalOnPaypalCheckout" type="text" selector="//div[@id='cart']//span[contains(text(),'$')]"/>
+        <element name="changeShippingAddressButton" type="button" selector="#change-shipping"/>
+        <element name="ShippingAddressDropdown" type="select" selector="#shippingDropdown"/>
+        <element name="selectedShippingAddress" type="text" selector="//div/p[contains(text(), '{{selectedAddress}}')]" parameterized="true"/>
+
+
     </section>
 </sections>
