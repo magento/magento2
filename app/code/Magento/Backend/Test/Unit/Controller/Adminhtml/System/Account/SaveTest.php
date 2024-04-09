@@ -233,8 +233,11 @@ class SaveTest extends TestCase
 
         $this->objectManagerMock
             ->method('get')
-            ->withConsecutive([Session::class], [Locale::class], [Manager::class])
-            ->willReturnOnConsecutiveCalls($this->authSessionMock, $this->validatorMock, $this->managerMock);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Session::class] => $this->authSessionMock,
+                [Locale::class] => $this->validatorMock,
+                [Manager::class] => $this->managerMock
+            });
         $this->objectManagerMock
             ->method('create')
             ->with(User::class)

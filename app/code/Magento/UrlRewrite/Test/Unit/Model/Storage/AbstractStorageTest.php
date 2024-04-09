@@ -69,13 +69,15 @@ class AbstractStorageTest extends TestCase
             ->with($data)
             ->willReturn($rows);
 
-        $this->dataObjectHelper
-            ->method('populateWithArray')
-            ->withConsecutive(
-                [$urlRewrites[0], $rows[0], UrlRewrite::class],
-                [$urlRewrites[1], $rows[1], UrlRewrite::class]
-            )
-            ->willReturnOnConsecutiveCalls($this->dataObjectHelper, $this->dataObjectHelper);
+            $this->dataObjectHelper
+                ->method('populateWithArray')
+                ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($urlRewrites, $rows) {
+                    if ($arg1 === $urlRewrites[0] && $arg2 === $rows[0] && $arg3 === UrlRewrite::class) {
+                        return $this->dataObjectHelper;
+                    } elseif ($arg1 === $urlRewrites[1] && $arg2 === $rows[1] && $arg3 === UrlRewrite::class) {
+                        return $this->dataObjectHelper;
+                    }
+                });
 
         $this->urlRewriteFactory
             ->method('create')
