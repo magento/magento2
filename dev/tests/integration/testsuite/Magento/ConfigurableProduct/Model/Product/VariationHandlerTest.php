@@ -110,6 +110,20 @@ class VariationHandlerTest extends TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @dataProvider generateSimpleProductsWithPartialDataDataProvider
+     * @param array $productsData
+     * @return void
+     */
+    public function testGeneratedSimpleProductInheritTaxClassFromParent(array $productsData): void
+    {
+        $this->product->setTaxClassId(2);
+        $generatedProduct = $this->variationHandler->generateSimpleProducts($this->product, $productsData);
+        $product = $this->productRepository->getById(reset($generatedProduct));
+        $this->assertEquals(2, $product->getTaxClassId());
+    }
+
+    /**
      * @return array
      */
     public function generateSimpleProductsDataProvider(): array

@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Filter\Template;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * Provider of a signature.
  *
@@ -14,7 +16,7 @@ namespace Magento\Framework\Filter\Template;
  * (directives that should be processed in scope of a parent template
  * instead of own scope, e.g. {{inlinecss}}).
  */
-class SignatureProvider
+class SignatureProvider implements ResetAfterRequestInterface
 {
     /**
      * @var string|null
@@ -47,7 +49,14 @@ class SignatureProvider
         if ($this->signature === null) {
             $this->signature = $this->random->getRandomString(32);
         }
-
         return $this->signature;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->signature = null;
     }
 }

@@ -123,6 +123,11 @@ class PoolTest extends TestCase
                 [Pool::DEFAULT_FRONTEND_ID => ['default_option' => 'default_value']],
                 ['default_option' => 'default_value']
             ],
+            'deployment config, default settings but no frontend cache' => [
+                [],
+                [Pool::DEFAULT_FRONTEND_ID => ['default_option' => 'default_value']],
+                ['default_option' => 'default_value']
+            ],
             'deployment config, default settings' => [
                 ['frontend' => [Pool::DEFAULT_FRONTEND_ID => ['configured_option' => 'configured_value']]],
                 [Pool::DEFAULT_FRONTEND_ID => ['default_option' => 'default_value']],

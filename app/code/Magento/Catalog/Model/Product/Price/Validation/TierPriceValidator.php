@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Model\Product\Price\Validation;
 
 use Magento\Catalog\Api\Data\TierPriceInterface;
-use Magento\Catalog\Model\Product\Price\TierPricePersistence;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ProductIdLocatorInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
@@ -16,6 +16,11 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Catalog\Helper\Data;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Validate Tier Price and check duplication
@@ -55,11 +60,6 @@ class TierPriceValidator implements ResetAfterRequestInterface
     private $validationResult;
 
     /**
-     * @var TierPricePersistence
-     */
-    private $tierPricePersistence;
-
-    /**
      * Groups by code cache.
      *
      * @var array
@@ -87,6 +87,21 @@ class TierPriceValidator implements ResetAfterRequestInterface
     private $allowedProductTypes = [];
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @var array
+     */
+    private $productsCacheBySku = [];
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * TierPriceValidator constructor.
      *
      * @param ProductIdLocatorInterface $productIdLocator
@@ -94,31 +109,35 @@ class TierPriceValidator implements ResetAfterRequestInterface
      * @param FilterBuilder $filterBuilder
      * @param GroupRepositoryInterface $customerGroupRepository
      * @param WebsiteRepositoryInterface $websiteRepository
-     * @param TierPricePersistence $tierPricePersistence
      * @param Result $validationResult
      * @param InvalidSkuProcessor $invalidSkuProcessor
+     * @param ProductRepositoryInterface $productRepository
      * @param array $allowedProductTypes [optional]
+     * @param ScopeConfigInterface|null $scopeConfig
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        ProductIdLocatorInterface          $productIdLocator,
-        SearchCriteriaBuilder              $searchCriteriaBuilder,
-        FilterBuilder                      $filterBuilder,
-        GroupRepositoryInterface            $customerGroupRepository,
-        WebsiteRepositoryInterface             $websiteRepository,
-        TierPricePersistence $tierPricePersistence,
-        Result                                                    $validationResult,
-        InvalidSkuProcessor                                       $invalidSkuProcessor,
-        array                                                     $allowedProductTypes = []
+        ProductIdLocatorInterface $productIdLocator,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        FilterBuilder $filterBuilder,
+        GroupRepositoryInterface $customerGroupRepository,
+        WebsiteRepositoryInterface $websiteRepository,
+        Result $validationResult,
+        InvalidSkuProcessor $invalidSkuProcessor,
+        ProductRepositoryInterface $productRepository,
+        array $allowedProductTypes = [],
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         $this->productIdLocator = $productIdLocator;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->customerGroupRepository = $customerGroupRepository;
         $this->websiteRepository = $websiteRepository;
-        $this->tierPricePersistence = $tierPricePersistence;
         $this->validationResult = $validationResult;
         $this->invalidSkuProcessor = $invalidSkuProcessor;
+        $this->productRepository = $productRepository;
         $this->allowedProductTypes = $allowedProductTypes;
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -310,7 +329,16 @@ class TierPriceValidator implements ResetAfterRequestInterface
      */
     private function checkQuantity(TierPriceInterface $price, $key, Result $validationResult)
     {
-        if ($price->getQuantity() < 1) {
+        $sku = $price->getSku();
+        if (isset($this->productsCacheBySku[$sku])) {
+            $product = $this->productsCacheBySku[$sku];
+        } else {
+            $product = $this->productRepository->get($price->getSku());
+            $this->productsCacheBySku[$sku] = $product;
+        }
+
+        $canUseQtyDecimals = $product->getTypeInstance()->canUseQtyDecimals();
+        if ($price->getQuantity() <= 0 || $price->getQuantity() < 1 && !$canUseQtyDecimals) {
             $validationResult->addFailedItem(
                 $key,
                 __(
@@ -341,10 +369,19 @@ class TierPriceValidator implements ResetAfterRequestInterface
      * @param Result $validationResult
      * @return void
      */
-    private function checkWebsite(TierPriceInterface $price, $key, Result $validationResult)
+    private function checkWebsite(TierPriceInterface $price, $key, Result $validationResult): void
     {
         try {
             $this->websiteRepository->getById($price->getWebsiteId());
+            $isWebsiteScope = $this->scopeConfig
+                ->isSetFlag(
+                    Data::XML_PATH_PRICE_SCOPE,
+                    ScopeInterface::SCOPE_STORE,
+                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+                );
+            if (!$isWebsiteScope && (int) $this->allWebsitesValue !== $price->getWebsiteId()) {
+                throw NoSuchEntityException::singleField('website_id', $price->getWebsiteId());
+            }
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             $validationResult->addFailedItem(
                 $key,
@@ -476,10 +513,19 @@ class TierPriceValidator implements ResetAfterRequestInterface
             $item = array_shift($items);
 
             if (!$item) {
+                $this->customerGroupsByCode[$code] = false;
                 return false;
             }
 
-            $this->customerGroupsByCode[strtolower($item->getCode())] = $item->getId();
+            $itemCode = $item->getCode();
+            $itemId = $item->getId();
+
+            if (strtolower($itemCode) !== $code) {
+                $this->customerGroupsByCode[$code] = false;
+                return false;
+            }
+
+            $this->customerGroupsByCode[strtolower($itemCode)] = $itemId;
         }
 
         return $this->customerGroupsByCode[$code];

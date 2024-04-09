@@ -27,5 +27,11 @@
         <element name="expandPriceLayeredNavigationButton" type="button" selector="//div[@class='filter-options-title'][text()='Price']"/>
         <element name="seeLayeredNavigationFirstPriceRange" type="button" selector="//a//span[@class='price' and text()='${{minPrice}}']/..//span[@class='price' and text()='${{maxPrice}}']/..//span[@class='count' and text()=({{count}})]" parameterized="true"/>
         <element name="seeLayeredNavigationSecondPriceRange" type="button" selector="//a//span[@class='price' and text()='${{minPrice2}}']/../..//a[text()='{{maxPrice2}}']/..//span[@class='count' and text()=({{count}})]" parameterized="true"/>
+        <element name="seeLayeredNavigationCategoryTextSwatch" type="text" selector="//div[@class='filter-options-title' and contains(text(),'TextSwatch')]"/>
+        <element name="seeLayeredNavigationCategoryVisualSwatch" type="text" selector="//div[@class='filter-options-title' and contains(text(),'attribute')]"/>
+        <element name="seeTextSwatchOption" type="text" selector="//div[@class='swatch-option text ' and contains(text(),'textSwatchOption1')]"/>
+        <element name="seeVisualSwatchOption" type="text" selector="//div[@class='swatch-option image ']/..//div[@data-option-label='visualSwatchOption2']"/>
+        <element name="expandLayeredNavigationAttribute" type="button" selector="//div[@class='filter-options-title' and text()='{{AttributeName}}']" parameterized="true"/>
+        <element name="layeredNavigationAttributeOptions" type="button" selector="//div[@class='filter-options-title' and text()='{{AttributeName}}']/following-sibling::div//a[text()='{{arg}}']" parameterized="true"/>
     </section>
 </sections>
