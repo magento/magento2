@@ -62,6 +62,7 @@ class SendOrderNotificationTest extends TestCase
 
         $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
+            ->onlyMethods([])
             ->getMock();
 
         $event = $this->getMockBuilder(Event::class)
@@ -92,6 +93,7 @@ class SendOrderNotificationTest extends TestCase
 
         $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
+            ->onlyMethods([])
             ->getMock();
 
         $event = $this->getMockBuilder(Event::class)

@@ -122,29 +122,21 @@ class FreeshippingTest extends TestCase
             ->getMock();
         $this->scopeConfigMock
             ->method('isSetFlag')
-            ->willReturnCallback(
-                function ($arg1, $arg2) use ($subtotalInclTax) {
-                    if (empty($arg1)) {
-                        return true;
-                    } elseif (
-                        $arg2 === ['carriers/freeshipping/tax_including',
-                            ScopeInterface::SCOPE_STORE, null
-                        ]) {
-                        return $subtotalInclTax;
-                    }
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($subtotalInclTax) {
+                if ($arg1 == 'carriers/freeshipping/tax_including' &&
+                    $arg2 == ScopeInterface::SCOPE_STORE && $arg3 == null) {
+                    return $subtotalInclTax;
+                } else {
+                    return true;
                 }
-            );
+            });
 
         $this->scopeConfigMock
             ->method('getValue')
             ->willReturnCallback(
-                function ($arg1) use ($minOrderAmount) {
-                    if ($arg1 ===
-                        [
-                            'carriers/freeshipping/free_shipping_subtotal',
-                            ScopeInterface::SCOPE_STORE,
-                            null
-                        ]) {
+                function ($arg1,$arg2,$arg3) use ($minOrderAmount) {
+                    if ($arg1 == 'carriers/freeshipping/free_shipping_subtotal' &&
+                        $arg2 == ScopeInterface::SCOPE_STORE && $arg3 == null) {
                         return $minOrderAmount;
                     }
                 }
@@ -188,7 +180,7 @@ class FreeshippingTest extends TestCase
     /**
      * @return array
      */
-    public function freeShippingWithSubtotalTaxDataProvider(): array
+    public static function freeShippingWithSubtotalTaxDataProvider(): array
     {
         return [
             [
@@ -196,7 +188,7 @@ class FreeshippingTest extends TestCase
                 'minOrderAmount' => 10,
                 'packageValueWithDiscount' => 8,
                 'baseSubtotalWithDiscountInclTax' => 15,
-                'expectedCallAppend' => $this->once()
+                'expectedCallAppend' => self::once()
 
             ],
             [
@@ -204,7 +196,7 @@ class FreeshippingTest extends TestCase
                 'minOrderAmount' => 20,
                 'packageValueWithDiscount' => 8,
                 'baseSubtotalWithDiscountInclTax' => 15,
-                'expectedCallAppend' => $this->never()
+                'expectedCallAppend' => self::never()
 
             ],
             [
@@ -212,7 +204,7 @@ class FreeshippingTest extends TestCase
                 'minOrderAmount' => 10,
                 'packageValueWithDiscount' => 8,
                 'baseSubtotalWithDiscountInclTax' => 15,
-                'expectedCallAppend' => $this->never()
+                'expectedCallAppend' => self::never()
 
             ]
         ];

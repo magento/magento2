@@ -25,7 +25,6 @@ use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
@@ -929,6 +928,10 @@ class DataProviderTest extends TestCase
             );
 
         $objectManager = new ObjectManager($this);
+        $this->fileUploaderDataResolver = $this->getMockBuilder(FileUploaderDataResolver::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([])
+            ->getMock();
         $dataProvider = $objectManager->getObject(
             CustomerDataProvider::class,
             [

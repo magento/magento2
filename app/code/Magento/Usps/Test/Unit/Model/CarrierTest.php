@@ -104,13 +104,6 @@ class CarrierTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $objects = [
-            [
-                DataHelper::class,
-                $this->createMock(DataHelper::class)
-            ]
-        ];
-        $this->objectManager->prepareObjectManager($objects);
 
         $this->scope = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
@@ -143,6 +136,11 @@ class CarrierTest extends TestCase
         $carrierHelper = $this->getCarrierHelper();
         $productCollectionFactory = $this->getProductCollectionFactory();
         $this->proxyDeferredFactory = $this->createMock(ProxyDeferredFactory::class);
+
+        $this->dataHelper = $this->getMockBuilder(DataHelper::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['displayGirthValue'])
+            ->getMock();
         $arguments = [
             'scopeConfig' => $this->scope,
             'xmlSecurity' => new Security(),
@@ -157,12 +155,6 @@ class CarrierTest extends TestCase
             'dataHelper' => $this->dataHelper,
             'proxyDeferredFactory' => $this->proxyDeferredFactory
         ];
-
-        $this->dataHelper = $this->getMockBuilder(DataHelper::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['displayGirthValue'])
-            ->getMock();
-
         $this->carrier = $this->objectManager->getObject(Carrier::class, $arguments);
     }
 
@@ -246,7 +238,7 @@ class CarrierTest extends TestCase
     /**
      * @return array
      */
-    public function codeDataProvider()
+    public static function codeDataProvider()
     {
         return [['container'], ['machinable'], ['method'], ['size']];
     }
@@ -291,7 +283,7 @@ class CarrierTest extends TestCase
     /**
      * Get list of variations
      */
-    public function logDataProvider()
+    public static function logDataProvider()
     {
         return [
             [
@@ -331,7 +323,7 @@ class CarrierTest extends TestCase
     /**
      * @return array
      */
-    public function isGirthAllowedDataProvider()
+    public static function isGirthAllowedDataProvider()
     {
         return [
             ['US', 'usps_1', true, false],
@@ -382,7 +374,7 @@ class CarrierTest extends TestCase
         $this->assertEquals($expected, $rates);
     }
 
-    public function updateFreeMethodQuoteDataProvider(): array
+    public static function updateFreeMethodQuoteDataProvider(): array
     {
         $result1 = [
             ['method' => '1', 'method_title' => 'Priority Mail 3-Day', 'cost' => 70, 'price' => 70],
