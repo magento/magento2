@@ -35,18 +35,10 @@ class OptionTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                ['convert','convertAndRound', 'format','convertAndFormat','getCurrencySymbol','getCurrency', 'round']
-            )
-            ->getMock();
+        $priceCurrency = $this->createMock(PriceCurrencyInterface::class);
+
         $priceCurrency->method('convert')
-            ->willReturnCallback(
-                function ($price, $scope) {
-                    return $price;
-                }
-            );
+            ->willReturnArgument(0);
 
         $this->model = new Option(
             new Json(),

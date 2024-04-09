@@ -10,6 +10,7 @@ namespace Magento\Bundle\Model\Quote\Item;
 use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
@@ -34,10 +35,10 @@ class Option
      */
     public function __construct(
         Json $serializer,
-        PriceCurrencyInterface $priceCurrency,
+        ?PriceCurrencyInterface $priceCurrency = null,
     ) {
         $this->serializer = $serializer;
-        $this->priceCurrency = $priceCurrency;
+        $this->priceCurrency = $priceCurrency ?? ObjectManager::getInstance()->get(PriceCurrencyInterface::class);
     }
 
     /**
