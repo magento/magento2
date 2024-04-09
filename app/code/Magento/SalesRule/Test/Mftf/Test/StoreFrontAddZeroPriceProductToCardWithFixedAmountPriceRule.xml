@@ -18,6 +18,7 @@
             <testCaseId value="AC-1618"/>
             <useCaseId value="ACP2E-285"/>
             <group value="SalesRule"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

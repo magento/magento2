@@ -153,8 +153,16 @@ class FilterTest extends TestCase
         $this->setUpApplySelection($filterExpected, $conditionExpected);
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive([Filter::SELECTED_PARAM], [Filter::EXCLUDED_PARAM])
-            ->willReturnOnConsecutiveCalls($selectedIds, $excludedIds);
+            ->willReturnCallback(function ($param) use ($selectedIds, $excludedIds) {
+                switch ($param) {
+                    case Filter::SELECTED_PARAM:
+                        return $selectedIds;
+                    case Filter::EXCLUDED_PARAM:
+                        return $excludedIds;
+                    default:
+                        return '';
+                }
+            });
         $this->filter->applySelectionOnTargetProvider();
     }
 
@@ -163,7 +171,7 @@ class FilterTest extends TestCase
      *
      * @return array
      */
-    public function applySelectionOnTargetProviderDataProvider(): array
+    public static function applySelectionOnTargetProviderDataProvider(): array
     {
         return [
             [[1, 2, 3], 'false', 0, 'in'],
@@ -203,8 +211,14 @@ class FilterTest extends TestCase
             ->willReturn($this->filterBuilderMock);
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive([Filter::SELECTED_PARAM], [Filter::EXCLUDED_PARAM])
-            ->willReturnOnConsecutiveCalls([1], []);
+            ->willReturnCallback(function ($param) {
+                switch ($param) {
+                    case Filter::SELECTED_PARAM:
+                        return [1];
+                    case Filter::EXCLUDED_PARAM:
+                        return [];
+                }
+            });
         $this->dataProviderMock->expects($this->any())
             ->method('addFilter')
             ->with($filterMock)
@@ -225,17 +239,21 @@ class FilterTest extends TestCase
      */
     public function testGetCollection($selectedIds, $excludedIds, $filterExpected, $conditionExpected): void
     {
+      //  print_r([Filter::SELECTED_PARAM]);
         $this->setUpApplySelection($filterExpected, $conditionExpected);
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(
-                [Filter::SELECTED_PARAM],
-                [Filter::EXCLUDED_PARAM],
-                [Filter::SELECTED_PARAM],
-                [Filter::EXCLUDED_PARAM],
-                ['namespace']
-            )
-            ->willReturnOnConsecutiveCalls($selectedIds, $excludedIds, $selectedIds, $excludedIds, '');
+            ->willReturnCallback(function ($param) use ($selectedIds, $excludedIds) {
+                switch ($param) {
+                    case Filter::SELECTED_PARAM:
+                        return $selectedIds;
+                    case Filter::EXCLUDED_PARAM:
+                        return $excludedIds;
+                    default:
+                        return '';
+                }
+            });
+
         $this->abstractDbMock->expects($this->once())
             ->method('getResource')
             ->willReturn($this->resourceAbstractDbMock);

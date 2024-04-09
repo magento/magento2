@@ -129,27 +129,23 @@ class PoisonPillApplyDuringSetupUpgradeTest extends TestCase
         $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
         $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
         $this->deploymentConfig->method('get')->willReturn(['host'=>'localhost', 'dbname' => 'magento']);
-        $this->objectManagerMock->method('get')->withConsecutive(
-            [SchemaPersistor::class],
-            [TriggerCleaner::class],
-            [Registry::class],
-            [DeclarationInstaller::class],
-        )->willReturnOnConsecutiveCalls(
-            $this->schemaPersistor,
-            $this->triggerCleaner,
-            $this->registry,
-            $this->declarationInstaller,
-        );
+        $this->objectManagerMock->method('get')
+        ->willReturnCallback(fn($param) => match ([$param]) {
+            [SchemaPersistor::class] => $this->schemaPersistor,
+            [TriggerCleaner::class] => $this->triggerCleaner,
+            [Registry::class] => $this->registry,
+            [DeclarationInstaller::class] => $this->declarationInstaller
+        });
+
         $this->poisonPillPut = $this->createMock(\Magento\MessageQueue\Model\ResourceModel\PoisonPill::class);
         $this->recurring = new Recurring($this->poisonPillPut);
 
-        $this->objectManagerMock->method('create')->withConsecutive(
-            [PatchApplierFactory::class],
-            [Recurring::class],
-        )->willReturnOnConsecutiveCalls(
-            $this->patchApplierFactory,
-            $this->recurring,
-        );
+        $this->objectManagerMock->method('create')
+        ->willReturnCallback(fn($param) => match ([$param]) {
+            [PatchApplierFactory::class] => $this->patchApplierFactory,
+            [Recurring::class] => $this->recurring
+        });
+
         $this->objectManagerProvider->method('get')->willReturn($this->objectManagerMock);
         $this->adapterInterface = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
         $this->adapterInterface->method('isTableExists')->willReturn(true);
@@ -161,19 +157,13 @@ class PoisonPillApplyDuringSetupUpgradeTest extends TestCase
         $this->schemaSetupInterface->method('getConnection')->willReturn($this->adapterInterface);
         $this->schemaSetupInterface
             ->method('getTable')
-            ->withConsecutive(
-                ['setup_module'],
-                ['session'],
-                ['cache'],
-                ['cache_tag'],
-                ['flag']
-            )->willReturnOnConsecutiveCalls(
-                'setup_module',
-                'session',
-                'cache',
-                'cache_tag',
-                'flag'
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['setup_module'] => 'setup_module',
+                ['session'] => 'session',
+                ['cache'] => 'cache',
+                ['cache_tag'] => 'cache_tag',
+                ['flag'] => 'flag'
+            });
         $this->setupFactory = $this->createMock(SetupFactory::class);
         $this->setupFactory->method('create')->willReturn($this->schemaSetupInterface);
         $this->installer = $objectManager->getObject(

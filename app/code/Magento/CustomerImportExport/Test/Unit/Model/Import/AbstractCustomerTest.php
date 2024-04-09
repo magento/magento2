@@ -84,10 +84,10 @@ class AbstractCustomerTest extends AbstractImportTestCase
 
         $modelMock = $this->getMockBuilder(AbstractCustomer::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['_getCustomerCollection'])
+            ->onlyMethods(
                 [
                     'getErrorAggregator',
-                    '_getCustomerCollection',
                     '_validateRowForUpdate',
                     '_validateRowForDelete'
                 ]
@@ -114,7 +114,7 @@ class AbstractCustomerTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function checkUniqueKeyDataProvider()
+    public static function checkUniqueKeyDataProvider()
     {
         return [
             'valid' => [

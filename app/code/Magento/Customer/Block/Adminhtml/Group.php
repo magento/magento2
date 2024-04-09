@@ -6,8 +6,6 @@
 
 /**
  * Adminhtml customers group page content block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Customer\Block\Adminhtml;
 

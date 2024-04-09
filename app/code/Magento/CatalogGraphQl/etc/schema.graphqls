@@ -125,6 +125,7 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     categories: [CategoryInterface] @doc(description: "The categories assigned to a product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Categories") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity")
     canonical_url: String @doc(description: "The relative canonical URL. This value is returned only if the system setting 'Use Canonical Link Meta Tag For Products' is enabled.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CanonicalUrl")
     media_gallery: [MediaGalleryInterface] @doc(description: "An array of media gallery objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGallery")
+    custom_attributesV2(filters: AttributeFilterInput): ProductCustomAttributes @doc(description: "Product custom attributes.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductCustomAttributes")
 }
 
 interface PhysicalProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "Contains attributes specific to tangible products.") {
@@ -344,6 +345,7 @@ type CategoryProducts @doc(description: "Contains details about the products ass
 input ProductAttributeFilterInput @doc(description: "Defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.") {
     category_id: FilterEqualTypeInput @deprecated(reason: "Use `category_uid` instead.") @doc(description: "Deprecated: use `category_uid` to filter product by category ID.")
     category_uid: FilterEqualTypeInput @doc(description: "Filter product by the unique ID for a `CategoryInterface` object.")
+    category_url_path: FilterEqualTypeInput @doc(description: "Filter product by category URL path.")
 }
 
 input CategoryFilterInput  @doc(description: "Defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.")
@@ -530,4 +532,39 @@ type SimpleWishlistItem implements WishlistItemInterface @doc(description: "Cont
 }
 
 type VirtualWishlistItem implements WishlistItemInterface @doc(description: "Contains a virtual product wish list item.") {
+}
+
+enum AttributeEntityTypeEnum {
+    CATALOG_PRODUCT
+    CATALOG_CATEGORY
+}
+
+type CatalogAttributeMetadata implements CustomAttributeMetadataInterface @doc(description: "Catalog attribute metadata.") {
+    apply_to: [CatalogAttributeApplyToEnum] @doc(description: "To which catalog types an attribute can be applied.")
+    is_comparable: Boolean @doc(description: "Whether a product or category attribute can be compared against another or not.")
+    is_filterable: Boolean @doc(description: "Whether a product or category attribute can be filtered or not.")
+    is_filterable_in_search: Boolean @doc(description: "Whether a product or category attribute can be filtered in search or not.")
+    is_html_allowed_on_front: Boolean @doc(description: "Whether a product or category attribute can use HTML on front or not.")
+    is_searchable: Boolean @doc(description: "Whether a product or category attribute can be searched or not.")
+    is_used_for_price_rules: Boolean @doc(description: "Whether a product or category attribute can be used for price rules or not.")
+    is_used_for_promo_rules: Boolean @doc(description: "Whether a product or category attribute is used for promo rules or not.")
+    is_visible_in_advanced_search: Boolean @doc(description: "Whether a product or category attribute is visible in advanced search or not.")
+    is_visible_on_front: Boolean @doc(description: "Whether a product or category attribute is visible on front or not.")
+    is_wysiwyg_enabled: Boolean @doc(description: "Whether a product or category attribute has WYSIWYG enabled or not.")
+    used_in_product_listing: Boolean @doc(description: "Whether a product or category attribute is used in product listing or not.")
+}
+
+enum CatalogAttributeApplyToEnum {
+    SIMPLE
+    VIRTUAL
+    BUNDLE
+    DOWNLOADABLE
+    CONFIGURABLE
+    GROUPED
+    CATEGORY
+}
+
+type ProductCustomAttributes @doc(description: "Product custom attributes") {
+    items: [AttributeValueInterface!]! @doc(description: "Requested custom attributes")
+    errors: [AttributeMetadataError!]! @doc(description: "Errors when retrieving custom attributes metadata.")
 }

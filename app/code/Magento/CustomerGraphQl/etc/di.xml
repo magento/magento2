@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\TagResolver">
+        <arguments>
+            <argument name="invalidatableObjectTypes" xsi:type="array">
+                <item name="Magento\Customer\Model\Customer" xsi:type="string">
+                    Magento\Customer\Model\Customer
+                </item>
+                <item name="Magento\Customer\Model\Address" xsi:type="string">
+                    Magento\Customer\Model\Address
+                </item>
+                <item name="Magento\Newsletter\Model\Subscriber" xsi:type="string">
+                    Magento\Newsletter\Model\Subscriber
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Cache\Tag\Strategy\Factory">
+        <arguments>
+            <argument name="customStrategies" xsi:type="array">
+                <item name="Magento\Customer\Model\Customer" xsi:type="object">
+                    Magento\CustomerGraphQl\Model\Resolver\Cache\Customer\TagsStrategy
+                </item>
+                <item name="Magento\Customer\Model\Address" xsi:type="object">
+                    Magento\CustomerGraphQl\Model\Resolver\Cache\Customer\Address\TagsStrategy
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>
