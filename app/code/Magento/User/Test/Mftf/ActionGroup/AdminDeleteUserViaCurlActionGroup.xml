@@ -14,12 +14,13 @@
         </arguments>
         <amOnPage stepKey="amOnAdminUsersPage" url="{{AdminUsersPage.url}}"/>
         <waitForPageLoad stepKey="waitForAdminUserPageLoad"/>
+        <waitForElementClickable selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="WaitForresetFiltersElementToBeClickable"/>
         <click selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="resetFilters" />
         <waitForPageLoad stepKey="waitForFiltersToReset" />
         <waitForElementVisible selector="{{AdminLegacyDataGridTableSection.columnTemplateStrict(user.username, 'user_id')}}" stepKey="waitForUserIdVisible" />
         <scrollTo  selector="{{AdminLegacyDataGridTableSection.columnTemplateStrict(user.username, 'user_id')}}" stepKey="scrollToUserId" />
+        <waitForElementVisible selector="{{AdminLegacyDataGridTableSection.columnTemplateStrict(user.username, 'user_id')}}" stepKey="waitForUserIdVisibleBeforeElementIsGrabbed" />
         <grabTextFrom selector="{{AdminLegacyDataGridTableSection.columnTemplateStrict(user.username, 'user_id')}}" stepKey="userId" />
-
         <createData entity="deleteUser" stepKey="deleteUser">
             <field key="user_id">{$userId}</field>
             <field key="current_password">{{adminPassword}}</field>
