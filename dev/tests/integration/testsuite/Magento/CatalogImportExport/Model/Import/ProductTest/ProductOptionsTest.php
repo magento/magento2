@@ -1041,9 +1041,6 @@ class ProductOptionsTest extends ProductTestBase
      * @throws NoSuchEntityException
      * @throws StateException
      */
-    #[
-        Config(CatalogConfig::XML_PATH_PRICE_SCOPE, CatalogConfig::PRICE_SCOPE_WEBSITE, ScopeInterface::SCOPE_STORE),
-    ]
     public function testImportProductCustomOptionsOnMultipleUploads(
         string $importFile,
         string $sku,
