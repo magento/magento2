@@ -15,6 +15,7 @@ use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Catalog\ViewModel\Product\OptionsData;
 use Magento\CatalogWidget\Model\Rule;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
@@ -84,6 +85,11 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     protected $productCollectionFactory;
 
     /**
+     * @var OptionsData
+     */
+    protected $optionsDataViewModel;
+
+    /**
      * @var SqlBuilder
      */
     protected $sqlBuilder;
@@ -134,6 +140,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      * @param Context $context
      * @param CollectionFactory $productCollectionFactory
      * @param Visibility $catalogProductVisibility
+     * @param OptionsData $optionsDataViewModel
      * @param HttpContext $httpContext
      * @param SqlBuilder $sqlBuilder
      * @param Rule $rule
@@ -150,6 +157,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         Context $context,
         CollectionFactory $productCollectionFactory,
         Visibility $catalogProductVisibility,
+        OptionsData $optionsDataViewModel,
         HttpContext $httpContext,
         SqlBuilder $sqlBuilder,
         Rule $rule,
@@ -162,6 +170,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;
+        $this->optionsDataViewModel = $optionsDataViewModel;
         $this->httpContext = $httpContext;
         $this->sqlBuilder = $sqlBuilder;
         $this->rule = $rule;
