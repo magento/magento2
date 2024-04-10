@@ -32,13 +32,13 @@ class DependencyChecker
      *
      * @param ModuleList $list
      * @param ModuleList\Loader $loader
-     * @param PackageInfo $packageInfo
+     * @param PackageInfoFactory $packageInfoFactory
      */
-    public function __construct(ModuleList $list, ModuleList\Loader $loader, PackageInfo $packageInfo)
+    public function __construct(ModuleList $list, ModuleList\Loader $loader, PackageInfoFactory $packageInfoFactory)
     {
         $this->list = $list;
         $this->loader = $loader;
-        $this->packageInfo = $packageInfo;
+        $this->packageInfo = $packageInfoFactory->create();
     }
 
     /**
