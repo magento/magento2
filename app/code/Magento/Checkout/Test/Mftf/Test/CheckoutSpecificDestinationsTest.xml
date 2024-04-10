@@ -76,6 +76,7 @@
         </actionGroup>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="defaultCategory" stepKey="deleteCategory"/>
         </after>
