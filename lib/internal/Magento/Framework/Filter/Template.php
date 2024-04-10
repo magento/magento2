@@ -7,6 +7,7 @@
 namespace Magento\Framework\Filter;
 
 use InvalidArgumentException;
+use Laminas\Filter\AbstractFilter;
 use Laminas\Filter\FilterInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filter\DirectiveProcessor\DependDirective;
@@ -26,7 +27,7 @@ use Magento\Framework\Filter\Template\FilteringDepthMeter;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Template implements FilterInterface
+class Template extends AbstractFilter implements FilterInterface
 {
     /**
      * Construction regular expression

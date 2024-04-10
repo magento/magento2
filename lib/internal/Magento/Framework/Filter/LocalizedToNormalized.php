@@ -9,9 +9,10 @@ use Exception;
 use IntlDateFormatter;
 use Laminas\Filter\FilterInterface;
 use Laminas\I18n\Filter\NumberParse;
+use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use NumberFormatter;
 
-class LocalizedToNormalized implements FilterInterface
+class LocalizedToNormalized extends AbstractFilter implements FilterInterface
 {
     /**
      * @var array
@@ -21,16 +22,6 @@ class LocalizedToNormalized implements FilterInterface
         'date_format' => null,
         'precision'   => null
     ];
-
-    /**
-     * @param array|null $options
-     */
-    public function __construct($options = null)
-    {
-        if (null !== $options) {
-            $this->setOptions($options);
-        }
-    }
 
     /**
      * Returns the set options

@@ -5,13 +5,14 @@
  */
 namespace Magento\Framework\Filter;
 
+use Laminas\Filter\AbstractFilter;
 use Laminas\Filter\FilterInterface;
 
 /**
  * @deprecated As money_format() was removed in PHP 8.0
  * @see https://www.php.net/manual/en/function.money-format.php
  */
-class Money implements FilterInterface
+class Money extends AbstractFilter implements FilterInterface
 {
     /**
      * @var string

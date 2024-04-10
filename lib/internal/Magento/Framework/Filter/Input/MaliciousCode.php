@@ -7,10 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Filter\Input;
 
+use Laminas\Filter\AbstractFilter;
 use Laminas\Filter\FilterInterface;
 use Magento\Framework\App\ObjectManager;
 
-class MaliciousCode implements FilterInterface
+class MaliciousCode extends AbstractFilter implements FilterInterface
 {
     /**
      * @var PurifierInterface|null $purifier

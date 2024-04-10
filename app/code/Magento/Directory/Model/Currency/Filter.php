@@ -9,10 +9,11 @@
  */
 namespace Magento\Directory\Model\Currency;
 
+use Laminas\Filter\AbstractFilter;
 use Laminas\Filter\FilterInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
-class Filter implements FilterInterface
+class Filter extends AbstractFilter implements FilterInterface
 {
     /**
      * Rate value

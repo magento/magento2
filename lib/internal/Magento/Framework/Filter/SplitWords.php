@@ -5,9 +5,10 @@
  */
 namespace Magento\Framework\Filter;
 
+use Laminas\Filter\AbstractFilter;
 use Laminas\Filter\FilterInterface;
 
-class SplitWords implements FilterInterface
+class SplitWords extends AbstractFilter implements FilterInterface
 {
     /**
      * @var bool

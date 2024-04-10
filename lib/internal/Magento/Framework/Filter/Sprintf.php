@@ -5,9 +5,10 @@
  */
 namespace Magento\Framework\Filter;
 
+use Laminas\Filter\AbstractFilter;
 use Laminas\Filter\FilterInterface;
 
-class Sprintf implements FilterInterface
+class Sprintf extends AbstractFilter implements FilterInterface
 {
     /**
      * @var string

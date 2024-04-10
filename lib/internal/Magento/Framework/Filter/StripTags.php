@@ -6,11 +6,12 @@
 namespace Magento\Framework\Filter;
 
 use Laminas\Filter\FilterInterface;
+use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 
 /**
  * Filter for standard strip_tags() function with extra functionality for html entities
  */
-class StripTags implements FilterInterface
+class StripTags extends AbstractFilter implements FilterInterface
 {
     /**
      * @var \Magento\Framework\Escaper

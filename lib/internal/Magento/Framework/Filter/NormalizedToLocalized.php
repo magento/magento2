@@ -7,11 +7,12 @@ namespace Magento\Framework\Filter;
 
 use Exception;
 use IntlDateFormatter;
+use Laminas\Filter\AbstractFilter;
 use Laminas\Filter\FilterInterface;
 use Laminas\I18n\Filter\NumberParse;
 use NumberFormatter;
 
-class NormalizedToLocalized implements FilterInterface
+class NormalizedToLocalized extends AbstractFilter implements FilterInterface
 {
     /**
      * @var array

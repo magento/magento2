@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Filter;
 
+use Laminas\Filter\AbstractFilter;
 use Laminas\Filter\FilterInterface;
 use Magento\Framework\Stdlib\StringUtils;
 
@@ -17,7 +18,7 @@ use Magento\Framework\Stdlib\StringUtils;
  * @deprecated 101.0.7
  * @see \Magento\Framework\Filter\TruncateFilter
  */
-class Truncate implements FilterInterface
+class Truncate extends AbstractFilter implements FilterInterface
 {
     /**
      * @var int

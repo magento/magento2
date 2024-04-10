@@ -47,4 +47,13 @@ class Simple extends \Magento\Framework\DataObject implements FilterInterface
         $expression = '#' . preg_quote($this->_startTag, '#') . '(.*?)' . preg_quote($this->_endTag, '#') . '#';
         return preg_replace_callback($expression, $callback, $value);
     }
+
+    /**
+     * @param mixed $value
+     * @return string
+     */
+    public function __invoke(mixed $value)
+    {
+        return $this->filter($value);
+    }
 }

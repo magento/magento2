@@ -6,6 +6,7 @@
 namespace Magento\Framework\Stdlib\DateTime\Filter;
 
 use Exception;
+use Laminas\Filter\AbstractFilter;
 use Laminas\Filter\FilterInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filter\LocalizedToNormalized;
@@ -18,7 +19,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
  * @api
  * @since 100.0.2
  */
-class Date implements FilterInterface
+class Date extends AbstractFilter implements FilterInterface
 {
     /**
      * Filter that converts localized input into normalized format

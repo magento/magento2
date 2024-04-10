@@ -5,12 +5,13 @@
  */
 namespace Magento\Framework\Filter;
 
+use Laminas\Filter\AbstractFilter;
 use Laminas\Filter\FilterInterface;
 
 /**
  * Remove tags from string
  */
-class RemoveTags implements FilterInterface
+class RemoveTags extends AbstractFilter implements FilterInterface
 {
     /**
      * Convert html entities

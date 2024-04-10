@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Filter;
 
+use Laminas\Filter\AbstractFilter;
 use Laminas\Filter\FilterInterface;
 
 /**
@@ -12,7 +13,7 @@ use Laminas\Filter\FilterInterface;
  *
  * Process string based on convertation table
  */
-class Translit implements FilterInterface
+class Translit extends AbstractFilter implements FilterInterface
 {
     /**
      * Symbol convert table

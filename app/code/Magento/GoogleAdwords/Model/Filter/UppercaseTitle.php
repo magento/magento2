@@ -5,13 +5,14 @@
  */
 namespace Magento\GoogleAdwords\Model\Filter;
 
+use Laminas\Filter\AbstractFilter;
 use Laminas\Filter\FilterInterface;
 
 /**
  * @api
  * @since 100.0.2
  */
-class UppercaseTitle implements FilterInterface
+class UppercaseTitle extends AbstractFilter implements FilterInterface
 {
     /**
      * Convert title to uppercase

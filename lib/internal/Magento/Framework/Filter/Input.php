@@ -6,6 +6,7 @@
 namespace Magento\Framework\Filter;
 
 use Exception;
+use Laminas\Filter\AbstractFilter;
 use Laminas\Filter\FilterInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\ObjectManagerInterface;
@@ -13,7 +14,7 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Filter data collector
  */
-class Input implements FilterInterface
+class Input extends AbstractFilter implements FilterInterface
 {
     private const CHAIN_APPEND  = 'append';
     private const CHAIN_PREPEND = 'prepend';

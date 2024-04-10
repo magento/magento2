@@ -5,9 +5,10 @@
  */
 namespace Magento\Framework\Filter;
 
+use Laminas\Filter\AbstractFilter;
 use Laminas\Filter\FilterInterface;
 
-class Email implements FilterInterface
+class Email extends AbstractFilter implements FilterInterface
 {
     /**
      * Returns the result of filtering $value.
