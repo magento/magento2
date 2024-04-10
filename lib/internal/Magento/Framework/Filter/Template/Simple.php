@@ -49,8 +49,12 @@ class Simple extends \Magento\Framework\DataObject implements FilterInterface
     }
 
     /**
-     * @param mixed $value
-     * @return string
+     * Invoke filter as a command
+     *
+     * Proxies to {@link filter()}
+     *
+     * @throws \Laminas\Filter\Exception\ExceptionInterface If filtering $value is impossible.
+     * @return mixed
      */
     public function __invoke(mixed $value)
     {

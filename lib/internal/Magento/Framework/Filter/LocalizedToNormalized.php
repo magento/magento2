@@ -7,9 +7,9 @@ namespace Magento\Framework\Filter;
 
 use Exception;
 use IntlDateFormatter;
+use Laminas\Filter\AbstractFilter;
 use Laminas\Filter\FilterInterface;
 use Laminas\I18n\Filter\NumberParse;
-use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use NumberFormatter;
 
 class LocalizedToNormalized extends AbstractFilter implements FilterInterface
@@ -39,7 +39,7 @@ class LocalizedToNormalized extends AbstractFilter implements FilterInterface
      * @param array|null $options
      * @return LocalizedToNormalized
      */
-    public function setOptions(array $options = null)
+    public function setOptions($options)
     {
         $this->_options = $options + $this->_options;
 
