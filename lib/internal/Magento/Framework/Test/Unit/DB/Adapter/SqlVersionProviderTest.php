@@ -107,7 +107,7 @@ class SqlVersionProviderTest extends TestCase
     {
         return [
             'MariaDB-10.6' => [
-                ['version' => '10.6.10-MariaDB'],
+                ['version' => '10.6.12-MariaDB'],
                 '10.6.'
             ],
             'MariaDB-10.4' => [

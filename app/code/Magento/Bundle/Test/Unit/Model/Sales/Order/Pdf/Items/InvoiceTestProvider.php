@@ -24,7 +24,7 @@ class InvoiceTestProvider
             'display_both' => [
                 'expected' => [
                     1 => [
-                        'height' => 15,
+                        'height' => 20,
                         'lines' => [
                             [
                                 [
@@ -176,7 +176,7 @@ class InvoiceTestProvider
             'including_tax' => [
                 'expected' => [
                     1 => [
-                        'height' => 15,
+                        'height' => 20,
                         'lines' => [
                             [
                                 [
@@ -251,7 +251,7 @@ class InvoiceTestProvider
             'excluding_tax' => [
                 'expected' => [
                     1 => [
-                        'height' => 15,
+                        'height' => 20,
                         'lines' => [
                             [
                                 [

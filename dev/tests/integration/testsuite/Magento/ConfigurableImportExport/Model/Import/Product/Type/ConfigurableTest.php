@@ -8,9 +8,12 @@ namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
+use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -20,7 +23,10 @@ use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
+use Magento\ImportExport\Test\Fixture\CsvFile as CsvFileFixture;
 use Magento\Store\Model\Store;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -250,6 +256,60 @@ class ConfigurableTest extends TestCase
         $stockItemCollection = $stockItemRepository->getList($criteria);
         $stockItems = $stockItemCollection->getItems();
         return reset($stockItems);
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'cp1-10,2cm'], as: 'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'cp1-15,5cm'], as: 'p2'),
+        DataFixture(
+            AttributeFixture::class,
+            [
+                'attribute_code' => 'size',
+                'options' => [['label' => '10,2cm'], ['label' => '15,5cm']],
+            ],
+            as: 'attr'
+        ),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            ['_options' => ['$attr$'], '_links' => ['$p1$', '$p2$']],
+            'cp1'
+        ),
+        DataFixture(
+            CsvFileFixture::class,
+            [
+                'rows' => [
+                    ['sku', 'configurable_variations'],
+                    ['$cp1.sku$', 'sku=cp1-10,2cm,size=10,2cm|sku=cp1-15,5cm,size=15,5cm'],
+                ]
+            ],
+            'file'
+        )
+    ]
+    public function testSpecialCharactersInConfigurableVariations(): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $attrId = $fixtures->get('attr')->getId();
+        $sku = $fixtures->get('cp1')->getSku();
+        $p1Id = $fixtures->get('p1')->getId();
+        $p2Id = $fixtures->get('p2')->getId();
+        $pathToFile = $fixtures->get('file')->getAbsolutePath();
+        $errors = $this->doImport($pathToFile, Import::BEHAVIOR_APPEND);
+        $this->assertEquals(
+            0,
+            $errors->getErrorsCount(),
+            implode(PHP_EOL, array_map(fn ($error) => $error->getErrorMessage(), $errors->getAllErrors()))
+        );
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        /** @var ProductInterface $product */
+        $product = $productRepository->get($sku, forceReload: true);
+        $options = $product->getExtensionAttributes()->getConfigurableProductOptions();
+        $this->assertCount(1, $options);
+        $this->assertEquals($attrId, reset($options)->getAttributeId());
+        $childIds = $product->getExtensionAttributes()->getConfigurableProductLinks();
+        $this->assertCount(2, $childIds);
+        $this->assertContains($p1Id, $childIds);
+        $this->assertContains($p2Id, $childIds);
     }
 
     /**

@@ -23,6 +23,7 @@ class Review implements RevertibleDataFixtureInterface
         'detail' => 'Review detail',
         'status_id' => ReviewModel::STATUS_APPROVED,
         'store_id' => 1,
+        'customer_id' => null,
     ];
 
     /**

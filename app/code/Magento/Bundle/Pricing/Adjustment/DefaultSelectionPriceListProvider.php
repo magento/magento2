@@ -11,13 +11,14 @@ use Magento\Bundle\Pricing\Price\BundleSelectionFactory;
 use Magento\Catalog\Model\Product;
 use Magento\Bundle\Model\Product\Price;
 use Magento\Catalog\Helper\Data as CatalogData;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 
 /**
  * Provide lightweight implementation which uses price index
  */
-class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInterface
+class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInterface, ResetAfterRequestInterface
 {
     /**
      * @var BundleSelectionFactory
@@ -84,8 +85,11 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
                 [(int)$option->getOptionId()],
                 $bundleProduct
             );
+
+            if ((int)$bundleProduct->getPriceType() !== Price::PRICE_TYPE_FIXED) {
+                $selectionsCollection->setFlag('has_stock_status_filter', true);
+            }
             $selectionsCollection->removeAttributeToSelect();
-            $selectionsCollection->addQuantityFilter();
 
             if (!$useRegularPrice) {
                 $selectionsCollection->addAttributeToSelect('special_price');
@@ -140,6 +144,9 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
     private function addMiniMaxPriceList(Product $bundleProduct, $selectionsCollection, $searchMin, $useRegularPrice)
     {
         $selectionsCollection->addPriceFilter($bundleProduct, $searchMin, $useRegularPrice);
+        if ($bundleProduct->isSalable()) {
+            $selectionsCollection->addQuantityFilter();
+        }
         $selectionsCollection->setPage(0, 1);
 
         $selection = $selectionsCollection->getFirstItem();
@@ -241,5 +248,13 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
     private function getBundleOptions(Product $saleableItem)
     {
         return $saleableItem->getTypeInstance()->getOptionsCollection($saleableItem);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->priceList = null;
     }
 }

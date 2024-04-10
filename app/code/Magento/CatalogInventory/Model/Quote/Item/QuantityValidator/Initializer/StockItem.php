@@ -35,6 +35,8 @@ class StockItem
 
     /**
      * @var StockStateProviderInterface
+     * @deprecated
+     * @see was overriding ItemBackorders value with the Default Scope value; caused discrepancy in multistock config
      */
     private $stockStateProvider;
 
@@ -121,11 +123,6 @@ class StockItem
         if ($result->getHasError() === true && in_array($result->getErrorCode(), ['qty_available', 'out_stock'])) {
             $quoteItem->setHasError(true);
         }
-
-        /* We need to ensure that any possible plugin will not erase the data */
-        $backOrdersQty = $this->stockStateProvider->checkQuoteItemQty($stockItem, $rowQty, $qtyForCheck, $qty)
-            ->getItemBackorders();
-        $result->setItemBackorders($backOrdersQty);
 
         if ($stockItem->hasIsChildItem()) {
             $stockItem->unsIsChildItem();

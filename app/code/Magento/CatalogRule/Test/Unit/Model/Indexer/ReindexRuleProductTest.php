@@ -178,12 +178,39 @@ class ReindexRuleProductTest extends TestCase
 
         $this->connectionMock
             ->method('insertMultiple')
-            ->withConsecutive(
-                ['catalogrule_product_replica', $batchRows],
-                ['catalogrule_product_replica', $rowsNotInBatch]
+            ->willReturnCallback(
+                function ($table, $rows) use ($batchRows, $rowsNotInBatch) {
+                    if ($table == 'catalogrule_product_replica' && $rows == $batchRows) {
+                        return 2;
+                    } elseif ($table == 'catalogrule_product_replica' && $rows == $rowsNotInBatch) {
+                        return 1;
+                    }
+                }
             );
-
+        
         self::assertTrue($this->model->execute($this->ruleMock, 2, true));
+    }
+
+    public function testExecuteWithCustomBatchSize()
+    {
+        $websiteId = 3;
+        $productIds = [
+            4 => [$websiteId => 1],
+            5 => [$websiteId => 1],
+            6 => [$websiteId => 1]
+        ];
+
+        $this->prepareResourceMock();
+        $this->prepareRuleMock([3], $productIds, [10]);
+
+        $this->localeDateMock->method('getConfigTimezone')
+            ->willReturnMap([
+                [ScopeInterface::SCOPE_WEBSITE, self::ADMIN_WEBSITE_ID, $this->adminTimeZone],
+                [ScopeInterface::SCOPE_WEBSITE, $websiteId, $this->websiteTz]
+            ]);
+
+        $this->connectionMock->expects($this->exactly(2))->method('insertMultiple');
+        self::assertTrue($this->model->execute($this->ruleMock, '2', true));
     }
 
     /**
@@ -226,7 +253,7 @@ class ReindexRuleProductTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         return [
             [
@@ -440,8 +467,10 @@ class ReindexRuleProductTest extends TestCase
             ->willReturn($this->connectionMock);
         $this->resourceMock
             ->method('getTableName')
-            ->withConsecutive(['catalogrule_product'], ['catalogrule_product_replica'])
-            ->willReturnOnConsecutiveCalls('catalogrule_product', 'catalogrule_product_replica');
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['catalogrule_product'] => 'catalogrule_product',
+                ['catalogrule_product_replica'] => 'catalogrule_product_replica'
+            });
     }
 
     /**

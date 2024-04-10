@@ -20,6 +20,7 @@
             <group value="checkout"/>
             <group value="shoppingCart"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleTwo" stepKey="simpleProduct"/>

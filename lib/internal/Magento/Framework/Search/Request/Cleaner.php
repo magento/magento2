@@ -7,29 +7,30 @@
 namespace Magento\Framework\Search\Request;
 
 use Magento\Framework\Exception\StateException;
-use Magento\Framework\Search\Request\Aggregation\StatusInterface as AggregationStatus;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Phrase;
+use Magento\Framework\Search\Request\Aggregation\StatusInterface as AggregationStatus;
 
 /**
  * @api
  * @since 100.0.2
  */
-class Cleaner
+class Cleaner implements ResetAfterRequestInterface
 {
     /**
      * @var array
      */
-    private $requestData;
+    private $requestData = [];
 
     /**
      * @var array
      */
-    private $mappedQueries;
+    private $mappedQueries = [];
 
     /**
      * @var array
      */
-    private $mappedFilters;
+    private $mappedFilters = [];
 
     /**
      * @var AggregationStatus
@@ -83,6 +84,7 @@ class Cleaner
     private function cleanQuery($queryName)
     {
         if (!isset($this->requestData['queries'][$queryName])) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Query ' . $queryName . ' does not exist');
         } elseif (in_array($queryName, $this->mappedQueries)) {
             throw new StateException(
@@ -119,6 +121,7 @@ class Cleaner
                         unset($this->requestData['queries'][$queryName]);
                     }
                 } else {
+                    // phpcs:ignore Magento2.Exceptions.DirectThrow
                     throw new \Exception('Reference is not provided');
                 }
                 break;
@@ -131,6 +134,8 @@ class Cleaner
      * Clean aggregations if we don't need to process them
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     private function cleanAggregations()
     {
@@ -173,6 +178,7 @@ class Cleaner
     private function cleanFilter($filterName)
     {
         if (!isset($this->requestData['filters'][$filterName])) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Filter ' . $filterName . ' does not exist');
         } elseif (in_array($filterName, $this->mappedFilters)) {
             throw new StateException(
@@ -260,5 +266,13 @@ class Cleaner
         $this->mappedQueries = [];
         $this->mappedFilters = [];
         $this->requestData = [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->clear();
     }
 }

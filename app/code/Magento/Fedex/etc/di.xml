@@ -10,9 +10,8 @@
         <arguments>
             <argument name="sensitive" xsi:type="array">
                 <item name="carriers/fedex/account" xsi:type="string">1</item>
-                <item name="carriers/fedex/key" xsi:type="string">1</item>
-                <item name="carriers/fedex/meter_number" xsi:type="string">1</item>
-                <item name="carriers/fedex/password" xsi:type="string">1</item>
+                <item name="carriers/fedex/api_key" xsi:type="string">1</item>
+                <item name="carriers/fedex/secret_key" xsi:type="string">1</item>
                 <item name="carriers/fedex/production_webservices_url" xsi:type="string">1</item>
                 <item name="carriers/fedex/sandbox_webservices_url" xsi:type="string">1</item>
                 <item name="carriers/fedex/smartpost_hubid" xsi:type="string">1</item>

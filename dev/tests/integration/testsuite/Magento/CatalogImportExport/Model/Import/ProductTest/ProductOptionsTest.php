@@ -958,4 +958,71 @@ class ProductOptionsTest extends ProductTestBase
         }
         return $expected;
     }
+
+    /**
+     * Tests import products with custom options.
+     *
+     * @dataProvider getCustomOptionDataProvider
+     * @param string $importFile
+     * @param string $sku1
+     * @param string $sku2
+     *
+     * @return void
+     */
+    #[
+        Config(CatalogConfig::XML_PATH_PRICE_SCOPE, CatalogConfig::PRICE_SCOPE_WEBSITE, ScopeInterface::SCOPE_STORE),
+        DataFixture(StoreFixture::class, ['code' => 'secondstore']),
+    ]
+    public function testImportCustomOptions(string $importFile, string $sku1, string $sku2): void
+    {
+        $pathToFile = __DIR__ . '/../_files/' . $importFile;
+        $importModel = $this->createImportModel($pathToFile);
+        $errors = $importModel->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $importModel->importData();
+
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
+        );
+        $product1 = $productRepository->get($sku1);
+
+        $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $product1);
+        $options = $product1->getOptionInstance()->getProductOptions($product1);
+
+        $expectedData = $this->getExpectedOptionsData($pathToFile);
+        $expectedData = $this->mergeWithExistingData($expectedData, $options);
+        $actualData = $this->getActualOptionsData($options);
+
+        // assert of equal type+titles
+        $expectedOptions = $expectedData['options'];
+        // we need to save key values
+        $actualOptions = $actualData['options'];
+        sort($expectedOptions);
+        sort($actualOptions);
+        $this->assertSame($expectedOptions, $actualOptions);
+
+        // assert of options data
+        $this->assertCount(count($expectedData['data']), $actualData['data']);
+        $this->assertCount(count($expectedData['values']), $actualData['values']);
+
+        $this->productRepository->delete($product1);
+        $product2 = $productRepository->get($sku2);
+        $this->productRepository->delete($product2);
+    }
+
+    /**
+     * @return array
+     */
+    public function getCustomOptionDataProvider(): array
+    {
+        return [
+            [
+                'importFile' => 'multi_store_products_with_custom_options.csv',
+                'sku1' => 'simple',
+                'sku2' => 'simple2',
+            ],
+        ];
+    }
 }

@@ -24,6 +24,7 @@ use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\DB\Sql\Expression;
 use Magento\Framework\DB\Statement\Parameter;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Setup\SchemaListener;
@@ -44,7 +45,7 @@ use Zend_Db_Statement_Exception;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
+class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, ResetAfterRequestInterface
 {
     // @codingStandardsIgnoreEnd
 
@@ -194,7 +195,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     protected $_queryHook = null;
 
     /**
-     * @var String
+     * @var StringUtils
      */
     protected $string;
 
@@ -237,6 +238,20 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     private $schemaListener;
 
     /**
+     * Process id that the connection is associated with
+     *
+     * @var int|null
+     */
+    private ?int $pid = null;
+
+    /**
+     * Parent process's database connection
+     *
+     * @var array
+     */
+    private $parentConnections = [];
+
+    /**
      * Constructor
      *
      * @param StringUtils $string
@@ -254,6 +269,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         array $config = [],
         SerializerInterface $serializer = null
     ) {
+        $this->pid = getmypid();
         $this->string = $string;
         $this->dateTime = $dateTime;
         $this->logger = $logger;
@@ -281,6 +297,24 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function _resetState() : void
+    {
+        $this->_transactionLevel = 0;
+        $this->_isRolledBack = false;
+        $this->_connectionFlagsSet = false;
+        $this->_ddlCache = [];
+        $this->_bindParams = [];
+        $this->_bindIncrement = 0;
+        $this->_isDdlCacheAllowed = true;
+        $this->isMysql8Engine = null;
+        $this->_queryHook = null;
+        $this->avoidReusingParentProcessConnection();
+        $this->closeConnection();
+    }
+
+    /**
      * Begin new DB transaction for connection
      *
      * @return $this
@@ -294,8 +328,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         }
         if ($this->_transactionLevel === 0) {
             $this->logger->startTimer();
-            parent::beginTransaction();
-            $this->logger->logStats(LoggerInterface::TYPE_TRANSACTION, 'BEGIN');
+            try {
+                $this->performQuery(function () {
+                    parent::beginTransaction();
+                });
+            } finally {
+                $this->logger->logStats(LoggerInterface::TYPE_TRANSACTION, 'BEGIN');
+            }
         }
         ++$this->_transactionLevel;
         return $this;
@@ -380,6 +419,23 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     }
 
     /**
+     * If the connection is associated to a different process id, then we need to not use it.
+     *
+     * @return void
+     */
+    private function avoidReusingParentProcessConnection()
+    {
+        if (getmypid() != $this->pid) {
+            // Note: we hide parent's connection into parentConnections so that the destructor isn't called on it.
+            // Because if destructor is called, it causes parent's connection to die
+            // We store in array, if parent is also hiding its parent's connection
+            $this->parentConnections[] = $this->_connection;
+            $this->_connection = null;
+            $this->pid = getmypid();
+        }
+    }
+
+    /**
      * Creates a PDO object and connects to the database.
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -391,6 +447,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     protected function _connect()
     {
+        $this->avoidReusingParentProcessConnection();
         if ($this->_connection) {
             return;
         }
@@ -546,9 +603,30 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @return \Zend_Db_Statement_Pdo|void
      * @throws Zend_Db_Adapter_Exception To re-throw \PDOException.
      * @throws Zend_Db_Statement_Exception
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _query($sql, $bind = [])
+    {
+        $result = null;
+        try {
+            $this->_checkDdlTransaction($sql);
+            $this->_prepareQuery($sql, $bind);
+            $this->logger->startTimer();
+            $result = $this->performQuery(fn () => parent::query($sql, $bind));
+        } finally {
+            $this->logger->logStats(LoggerInterface::TYPE_QUERY, $sql, $bind, $result);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Execute query and reconnect if needed.
+     *
+     * @param callable $queryExecutor
+     * @return \Zend_Db_Statement_Pdo|void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function performQuery(callable $queryExecutor)
     {
         $connectionErrors = [
             2006, // SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
@@ -557,22 +635,15 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $triesCount = 0;
         do {
             $retry = false;
-            $this->logger->startTimer();
             try {
-                $this->_checkDdlTransaction($sql);
-                $this->_prepareQuery($sql, $bind);
-                $result = parent::query($sql, $bind);
-                $this->logger->logStats(LoggerInterface::TYPE_QUERY, $sql, $bind, $result);
-                return $result;
+                return $queryExecutor();
             } catch (\Exception $e) {
                 // Finalize broken query
                 $profiler = $this->getProfiler();
                 if ($profiler instanceof Profiler) {
-                    /** @var Profiler $profiler */
                     $profiler->queryEndLast();
                 }
 
-                /** @var $pdoException \PDOException */
                 $pdoException = null;
                 if ($e instanceof \PDOException) {
                     $pdoException = $e;
@@ -589,12 +660,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                     $retry = true;
                     $triesCount++;
                     $this->closeConnection();
-
                     $this->_connect();
                 }
 
                 if (!$retry) {
-                    $this->logger->logStats(LoggerInterface::TYPE_QUERY, $sql, $bind);
                     $this->logger->critical($e);
                     // rethrow custom exception if needed
                     if ($pdoException && isset($this->exceptionMap[$pdoException->errorInfo[1]])) {
@@ -1518,7 +1587,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     /**
      * Quotes a value and places into a piece of text at a placeholder.
      *
-     * Method revrited for handle empty arrays in value param
+     * Method rewrited for handle empty arrays in value param
      *
      * @param string $text The text with a placeholder.
      * @param array|null|int|string|float|Expression|Select|\DateTimeInterface $value The value to quote.
@@ -1717,18 +1786,39 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $cacheKey = $this->_getTableName($tableName, $schemaName);
         $ddl = $this->loadDdlCache($cacheKey, self::DDL_DESCRIBE);
         if ($ddl === false) {
-            $ddl = parent::describeTable($tableName, $schemaName);
-            /**
-             * Remove bug in some MySQL versions, when int-column without default value is described as:
-             * having default empty string value
-             */
-            $affected = ['tinyint', 'smallint', 'mediumint', 'int', 'bigint'];
-            foreach ($ddl as $key => $columnData) {
-                if (($columnData['DEFAULT'] === '') && (array_search($columnData['DATA_TYPE'], $affected) !== false)) {
-                    $ddl[$key]['DEFAULT'] = null;
-                }
-            }
+            $ddl = $this->prepareColumnData(parent::describeTable($tableName, $schemaName));
             $this->saveDdlCache($cacheKey, self::DDL_DESCRIBE, $ddl);
+        }
+
+        return $ddl;
+    }
+
+    /**
+     * Prepares column data for describeTable() method
+     *
+     * @param array $ddl
+     * @return array
+     */
+    private function prepareColumnData(array $ddl): array
+    {
+        /**
+         * Remove bug in some MySQL versions, when int-column without default value is described as:
+         * having default empty string value
+         */
+        $affected = ['tinyint', 'smallint', 'mediumint', 'int', 'bigint'];
+        foreach ($ddl as $key => $columnData) {
+            if (($columnData['DEFAULT'] === '') && (array_search($columnData['DATA_TYPE'], $affected) !== false)) {
+                $ddl[$key]['DEFAULT'] = null;
+            }
+        }
+
+        /**
+         * Starting from MariaDB 10.5.1 columns with old temporal formats are marked with a \/* mariadb-5.3 *\/
+         * comment in the output of SHOW CREATE TABLE, SHOW COLUMNS, DESCRIBE statements,
+         * as well as in the COLUMN_TYPE column of the INFORMATION_SCHEMA.COLUMNS Table.
+         */
+        foreach ($ddl as $key => $columnData) {
+            $ddl[$key]['DATA_TYPE'] = str_replace(' /* mariadb-5.3 */', '', $columnData['DATA_TYPE']);
         }
 
         return $ddl;
@@ -2239,10 +2329,14 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function createTemporaryTableLike($temporaryTableName, $originTableName, $ifNotExists = false)
     {
-        $ifNotExistsSql = ($ifNotExists ? 'IF NOT EXISTS' : '');
+        $ifNotExistsSql = ($ifNotExists ? ' IF NOT EXISTS' : '');
         $temporaryTable = $this->quoteIdentifier($this->_getTableName($temporaryTableName));
         $originTable = $this->quoteIdentifier($this->_getTableName($originTableName));
-        $sql = sprintf('CREATE TEMPORARY TABLE %s %s LIKE %s', $ifNotExistsSql, $temporaryTable, $originTable);
+        $originCreate = $this->fetchPairs("SHOW CREATE TABLE {$originTable}");
+        $sql = reset($originCreate);
+        $sql = preg_replace('/\/\*!50100 TABLESPACE [^\s]+ \*\//', '', $sql);
+        $sql = str_replace('CREATE TABLE', 'CREATE TEMPORARY TABLE' . $ifNotExistsSql, $sql);
+        $sql = str_replace($originTable, $temporaryTable, $sql);
 
         return $this->query($sql);
     }
@@ -4143,5 +4237,16 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             unset($this->_config['port']);
         }
         parent::closeConnection();
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }
