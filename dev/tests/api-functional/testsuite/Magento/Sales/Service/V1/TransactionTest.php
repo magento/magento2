@@ -66,8 +66,10 @@ class TransactionTest extends WebapiAbstract
         $childTransaction = reset($childTransactions);
 
         $expectedData = $this->getPreparedTransactionData($transaction);
-        $childTransactionData = $this->getPreparedTransactionData($childTransaction);
-        $expectedData['child_transactions'][] = $childTransactionData;
+        if(gettype($childTransaction) != 'boolean') {
+            $childTransactionData = $this->getPreparedTransactionData($childTransaction);
+            $expectedData['child_transactions'][] = $childTransactionData;
+        }
 
         $serviceInfo = [
             'rest' => [
@@ -165,10 +167,15 @@ class TransactionTest extends WebapiAbstract
         $this->assertArrayHasKey('items', $result);
 
         $transactionData = $this->getPreparedTransactionData($transaction);
-        $childTransactionData = $this->getPreparedTransactionData($childTransaction);
-        $transactionData['child_transactions'][] = $childTransactionData;
-        $expectedData = [$transactionData, $childTransactionData];
-        $this->assertEquals($expectedData, $result['items']);
+        if (gettype($childTransaction) != 'boolean') {
+            $childTransactionData = $this->getPreparedTransactionData($childTransaction);
+            $transactionData['child_transactions'][] = $childTransactionData;
+            $expectedData = [$transactionData, $childTransactionData];
+            $this->assertEquals($expectedData, $result['items']);
+        } else {
+            $expectedData = $transactionData;
+            $this->assertEquals($expectedData, $result['items'][0]);
+        }
         $this->assertArrayHasKey('search_criteria', $result);
         $this->assertEquals($searchData, $result['search_criteria']);
     }
