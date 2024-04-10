@@ -19,17 +19,17 @@ class TransactionTest extends WebapiAbstract
     /**
      * Service read name
      */
-    const SERVICE_READ_NAME = 'salesTransactionRepositoryV1';
+    public const SERVICE_READ_NAME = 'salesTransactionRepositoryV1';
 
     /**
      * Resource path for REST
      */
-    const RESOURCE_PATH = '/V1/transactions';
+    public const RESOURCE_PATH = '/V1/transactions';
 
     /**
      * Service version
      */
-    const SERVICE_VERSION = 'V1';
+    public const SERVICE_VERSION = 'V1';
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -66,7 +66,7 @@ class TransactionTest extends WebapiAbstract
         $childTransaction = reset($childTransactions);
 
         $expectedData = $this->getPreparedTransactionData($transaction);
-        if(gettype($childTransaction) != 'boolean') {
+        if (gettype($childTransaction) != 'boolean') {
             $childTransactionData = $this->getPreparedTransactionData($childTransaction);
             $expectedData['child_transactions'][] = $childTransactionData;
         }
