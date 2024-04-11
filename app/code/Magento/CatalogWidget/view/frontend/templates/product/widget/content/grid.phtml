@@ -74,12 +74,13 @@ use Magento\Wishlist\Helper\Data;
                                                     <?php if ($_item->isSaleable()): ?>
                                                         <?php $postParams = $block->getAddToCartPostParams($_item); ?>
                                                         <form data-role="tocart-form" data-product-sku="<?= $escaper->escapeHtml($_item->getSku()) ?>" action="<?= $escaper->escapeUrl($postParams['action']) ?>" method="post">
-                                                            <?php $options = $block->getViewModel()->getOptionsData($_item); ?>
-                                                            <?php foreach ($options as $optionItem): ?>
-                                                                <input type="hidden"
-                                                                    name="<?= $escaper->escapeHtml($optionItem['name']) ?>"
-                                                                    value="<?= $escaper->escapeHtml($optionItem['value']) ?>">
-                                                            <?php endforeach; ?>
+                                                            <?php if($options = $block->getViewModel()?->getOptionsData($_item)) : ?>
+                                                                <?php foreach ($options as $optionItem): ?>
+                                                                    <input type="hidden"
+                                                                        name="<?= $escaper->escapeHtml($optionItem['name']) ?>"
+                                                                        value="<?= $escaper->escapeHtml($optionItem['value']) ?>">
+                                                                <?php endforeach; ?>
+                                                            <?php endif; ?>
                                                             <input type="hidden" name="product" value="<?= $escaper->escapeHtmlAttr($postParams['data']['product']) ?>">
                                                             <input type="hidden" name="<?= /* @noEscape */ Action::PARAM_NAME_URL_ENCODED ?>" value="<?= /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED] ?>">
                                                             <?= $block->getBlockHtml('formkey') ?>
