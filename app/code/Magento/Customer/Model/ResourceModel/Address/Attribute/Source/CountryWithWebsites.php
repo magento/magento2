@@ -104,7 +104,7 @@ class CountryWithWebsites extends Table
         if (!$this->options) {
             $websiteIds = [];
 
-            if (!$this->shareConfig->isGlobalScope()) {
+            if ($this->shareConfig->isGlobalScope()) {
                 $allowedCountries = [];
 
                 foreach ($this->storeManager->getWebsites() as $website) {
