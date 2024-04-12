@@ -11,6 +11,7 @@ use Magento\TestFramework\SkippableInterface;
 use Magento\TestFramework\Workaround\Override\Config;
 use Magento\TestFramework\Workaround\Override\WrapperGenerator;
 use PHPUnit\Framework\TestSuite;
+use PHPUnit\Framework\TestCase;
 use PHPUnit\TextUI\XmlConfiguration\TestSuiteMapper;
 use PHPUnit\TextUI\XmlConfiguration\Configuration;
 use PHPUnit\TextUI\XmlConfiguration\Loader;
@@ -20,7 +21,7 @@ use PHPUnit\TextUI\Configuration\TestSuiteCollection;
 /**
  * Integration tests wrapper.
  */
-class IntegrationTest extends TestSuite
+class IntegrationTest extends TestCase
 {
     /**
      * @param string $className
@@ -29,8 +30,9 @@ class IntegrationTest extends TestSuite
      * @throws \ReflectionException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public static function suite($className)
+    public function testCustomSuite($className = null)
     {
+        $this->markTestSkipped('Skipping test because of suite method has been depreciated in phpunit10.');
         $generator = new WrapperGenerator();
         $overrideConfig = Config::getInstance();
         $configuration = self::getConfiguration();
