@@ -17,6 +17,7 @@
             <testCaseId value="MC-10022"/>
             <useCaseId value="MAGETWO-89248"/>
             <group value="category"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simpleSubCategoryOne"/>
@@ -30,7 +31,9 @@
             <createData entity="_defaultProduct" stepKey="productTwo">
                 <requiredEntity createDataKey="simpleSubCategoryOne"/>
             </createData>
-            <magentoCron groups="index" stepKey="RunToScheduleJobs"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="RunToScheduleJobs">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 

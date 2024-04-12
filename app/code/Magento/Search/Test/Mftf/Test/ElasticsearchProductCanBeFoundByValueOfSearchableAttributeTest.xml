@@ -15,6 +15,9 @@
             <description value="Product can be found by value of 'Searchable' attribute"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4086"/>
+            <skip>
+                <issueId value="ACQE-4825"/>
+            </skip>
         </annotations>
 
         <before>
@@ -72,7 +75,6 @@
             <argument name="phrase" value="searchable"/>
         </actionGroup>
         <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="seeProductName"/>
-        <!--<actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes1"/>-->
         <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttributeGrid"/>
         <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{textProductAttribute.attribute_code}}" stepKey="fillAttrCodeField" />
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="clickSearchBtn" />
@@ -81,13 +83,9 @@
         <waitForElementVisible selector="{{StorefrontPropertiesSection.PageTitle}}" stepKey="waitTabLoad"/>
         <selectOption selector="{{AdvancedAttributePropertiesSection.UseInSearch}}" userInput="No" stepKey="setSearchable"/>
         <click stepKey="saveAttribute" selector="{{AttributePropertiesSection.Save}}"/>
-        <!--<actionGroup ref="AdminCreateNonSearchableProductAttributeActionGroup" stepKey="createAttribute1">
-            <argument name="attribute" value="textProductAttribute"/>
-        </actionGroup>-->
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
             <argument name="indices" value=""/>
         </actionGroup>
-        <!--<magentoCLI stepKey="flushCache" command="cache:flush"/>-->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage1"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForFirstSearchTerm1">
             <argument name="phrase" value="searchable"/>

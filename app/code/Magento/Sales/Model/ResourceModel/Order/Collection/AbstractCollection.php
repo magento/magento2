@@ -7,8 +7,6 @@ namespace Magento\Sales\Model\ResourceModel\Order\Collection;
 
 /**
  * Flat sales order collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class AbstractCollection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection
 {

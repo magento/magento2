@@ -8,14 +8,13 @@ namespace Magento\Setup\Model;
 
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Framework\App\Cache\Manager;
-use Magento\Framework\App\Cache\Manager as CacheManager;
-use Magento\Framework\App\Cache\Type\Block as BlockCache;
 use Magento\Framework\App\Cache\Type\Config as ConfigCache;
-use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\ConfigOptionsListConstants;
@@ -27,6 +26,8 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
@@ -46,7 +47,7 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Validation\ValidationException;
-use Magento\PageCache\Model\Cache\Type as PageCache;
+use Magento\Indexer\Model\Indexer\Collection;
 use Magento\RemoteStorage\Driver\DriverException;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Controller\ResponseTypeInterface;
@@ -175,9 +176,14 @@ class Installer
     private $installInfo = [];
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig
+     * @var DeploymentConfig
      */
     private $deploymentConfig;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $firstDeploymentConfig;
 
     /**
      * @var ObjectManagerProvider
@@ -327,6 +333,11 @@ class Installer
         $this->phpReadinessCheck = $phpReadinessCheck;
         $this->schemaPersistor = $this->objectManagerProvider->get()->get(SchemaPersistor::class);
         $this->triggerCleaner = $this->objectManagerProvider->get()->get(TriggerCleaner::class);
+        /* Note: Because this class is dependency injected with Laminas ServiceManager, but our plugins, and some
+         * other classes also use the App\ObjectManager instead, we have to make sure that the DeploymentConfig object
+         * from that ObjectManager gets reset as different steps in the installer will write to the deployment config.
+         */
+        $this->firstDeploymentConfig = ObjectManager::getInstance()->get(DeploymentConfig::class);
     }
 
     /**
@@ -337,6 +348,8 @@ class Installer
      * @throws FileSystemException
      * @throws LocalizedException
      * @throws RuntimeException
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function install($request)
     {
@@ -355,7 +368,7 @@ class Installer
             [$request]
         ];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
-        $script[] = ['Enabling caches:', 'updateCaches', [true]];
+        $script[] = ['Enabling caches:', 'enableCaches', [true]];
         $script[] = ['Installing data...', 'installDataFixtures', [$request]];
         if (!empty($request[InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX])) {
             $script[] = [
@@ -374,6 +387,9 @@ class Installer
         $script[] = ['Disabling Maintenance Mode:', 'setMaintenanceMode', [0]];
         $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
         $script[] = ['Write installation date...', 'writeInstallationDate', []];
+        if (empty($request['magento-init-params'])) {
+            $script[] = ['Enabling Update by Schedule Indexer Mode...', 'setIndexerModeSchedule', []];
+        }
         $estimatedModules = $this->createModulesConfig($request, true);
         $total = count($script) + 4 * count(array_filter($estimatedModules));
         $this->progress = new Installer\Progress($total, 0);
@@ -381,6 +397,9 @@ class Installer
         $this->log->log('Starting Magento installation:');
 
         foreach ($script as $item) {
+            /* Note: Because the $this->DeploymentConfig gets written to, but plugins use $this->firstDeploymentConfig,
+             * we have to reset this one after each item of $script so the plugins will see the config updates. */
+            $this->firstDeploymentConfig->resetData();
             list($message, $method, $params) = $item;
             $this->log->log($message);
             try {
@@ -924,25 +943,14 @@ class Installer
      * Installs data fixtures
      *
      * @param array $request
-     * @param boolean $keepCacheStatuses
+     *
      * @return void
+     *
      * @throws Exception
      * @throws \Magento\Framework\Setup\Exception
      */
-    public function installDataFixtures(array $request = [], $keepCacheStatuses = false)
+    public function installDataFixtures(array $request = [])
     {
-        $frontendCaches = [
-            PageCache::TYPE_IDENTIFIER,
-            BlockCache::TYPE_IDENTIFIER,
-            LayoutCache::TYPE_IDENTIFIER,
-        ];
-
-        if ($keepCacheStatuses) {
-            $disabledCaches = $this->getDisabledCacheTypes($frontendCaches);
-
-            $frontendCaches = array_diff($frontendCaches, $disabledCaches);
-        }
-
         /** @var \Magento\Framework\Registry $registry */
         $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
         //For backward compatibility in install and upgrade scripts with enabled parallelization.
@@ -954,19 +962,7 @@ class Installer
         $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
 
-        if ($frontendCaches) {
-            $this->log->log('Disabling caches:');
-            $this->updateCaches(false, $frontendCaches);
-        }
-
-        try {
-            $this->handleDBSchemaData($setup, 'data', $request);
-        } finally {
-            if ($frontendCaches) {
-                $this->log->log('Enabling caches:');
-                $this->updateCaches(true, $frontendCaches);
-            }
-        }
+        $this->handleDBSchemaData($setup, 'data', $request);
 
         $registry->unregister('setup-mode-enabled');
     }
@@ -1419,39 +1415,27 @@ class Installer
     }
 
     /**
-     * Enable or disable caches for specific types that are available
+     * Enable caches for after installing application
      *
-     * If no types are specified then it will enable or disable all available types
      * Note this is called by install() via callback.
      *
-     * @param bool $isEnabled
-     * @param array $types
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     *
      * @return void
+     *
      * @throws Exception
      */
-    private function updateCaches($isEnabled, $types = [])
+    private function enableCaches()
     {
         /** @var Manager $cacheManager */
         $cacheManager = $this->objectManagerProvider->get()->create(Manager::class);
 
-        $availableTypes = $cacheManager->getAvailableTypes();
-        $types = empty($types) ? $availableTypes : array_intersect($availableTypes, $types);
-        $enabledTypes = $cacheManager->setEnabled($types, $isEnabled);
-        if ($isEnabled) {
-            $cacheManager->clean($enabledTypes);
-        }
-
-        // Only get statuses of specific cache types
-        $cacheStatus = array_filter(
-            $cacheManager->getStatus(),
-            function (string $key) use ($types) {
-                return in_array($key, $types);
-            },
-            ARRAY_FILTER_USE_KEY
-        );
+        $types = $cacheManager->getAvailableTypes();
+        $enabledTypes = $cacheManager->setEnabled($types, true);
+        $cacheManager->clean($enabledTypes);
 
         $this->log->log('Current status:');
-        foreach ($cacheStatus as $cache => $status) {
+        foreach ($cacheManager->getStatus() as $cache => $status) {
             $this->log->log(sprintf('%s: %d', $cache, $status));
         }
     }
@@ -1802,29 +1786,6 @@ class Installer
     }
 
     /**
-     * Returns list of disabled cache types
-     *
-     * @param array $cacheTypesToCheck
-     * @return array
-     */
-    private function getDisabledCacheTypes(array $cacheTypesToCheck): array
-    {
-        $disabledCaches = [];
-
-        /** @var CacheManager $cacheManager */
-        $cacheManager = $this->objectManagerProvider->get()->create(CacheManager::class);
-        $cacheStatus = $cacheManager->getStatus();
-
-        foreach ($cacheTypesToCheck as $cacheType) {
-            if (isset($cacheStatus[$cacheType]) && $cacheStatus[$cacheType] === 0) {
-                $disabledCaches[] = $cacheType;
-            }
-        }
-
-        return $disabledCaches;
-    }
-
-    /**
      * Revert remote storage configuration back to local file driver
      */
     private function revertRemoteStorageConfiguration()
@@ -1837,5 +1798,33 @@ class Installer
         $remoteStorageData->set('remote_storage', ['driver' => 'file']);
         $configData = [$remoteStorageData->getFileKey() => $remoteStorageData->getData()];
         $this->deploymentConfigWriter->saveConfig($configData, true);
+    }
+
+    /**
+     * Set Index mode as 'Update by Schedule'
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
+     * @throws LocalizedException
+     * @throws \Exception
+     */
+    private function setIndexerModeSchedule(): void
+    {
+        /** @var Collection $indexCollection */
+        $indexCollection = $this->objectManagerProvider->get()->get(Collection::class);
+        $indexerIds = $indexCollection->getAllIds();
+        try {
+            foreach ($indexerIds as $indexerId) {
+                /** @var IndexerInterface $model */
+                $model = $this->objectManagerProvider->get()->get(IndexerRegistry::class)
+                    ->get($indexerId);
+                $model->setScheduled(true);
+            }
+            $this->log->log(__('%1 indexer(s) are in "Update by Schedule" mode.', count($indexerIds)));
+        } catch (LocalizedException $e) {
+            $this->log->log($e->getMessage());
+        } catch (\Exception $e) {
+            $this->log->log(__("We couldn't change indexer(s)' mode because of an error: ".$e->getMessage()));
+        }
     }
 }

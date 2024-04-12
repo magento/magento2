@@ -7,22 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Fixture;
 
+use Magento\Catalog\Test\Fixture\SelectAttribute;
 use Magento\Framework\DataObject;
 
-class Attribute extends \Magento\Catalog\Test\Fixture\Attribute
+class Attribute extends SelectAttribute
 {
     private const DEFAULT_DATA = [
-        'frontend_input' => 'select',
-        'options' => [
-            [
-                'label' => 'option1%uniqid%',
-                'sort_order' => 0,
-            ],
-            [
-                'label' => 'option2%uniqid%',
-                'sort_order' => 1,
-            ]
-        ],
         'scope' => 'global',
     ];
 

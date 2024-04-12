@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14211"/>
             <group value="wishlist"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -31,6 +32,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteFirstProducts">
                 <argument name="sku" value="$$createFirstConfigProduct.sku$$"/>

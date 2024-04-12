@@ -29,6 +29,7 @@ use Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Locale\Format;
 use Magento\Framework\Locale\FormatInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -125,38 +126,38 @@ class HelperTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->productLinkFactoryMock = $this->getMockBuilder(ProductLinkInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productRepositoryMock = $this->createMock(ProductRepository::class);
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods(['getPost'])
+            ->addMethods(['getPost'])
             ->getMockForAbstractClass();
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->stockFilterMock = $this->createMock(StockDataFilter::class);
 
         $this->productMock = $this->getMockBuilder(Product::class)
-            ->setMethods(
+            ->addMethods(['getOptionsReadOnly'])
+            ->onlyMethods(
                 [
                     'getId',
                     'isLockedAttribute',
                     'lockAttribute',
                     'getAttributes',
                     'unlockAttribute',
-                    'getOptionsReadOnly',
                     'getSku',
                 ]
             )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $productExtensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->setMethods(['getCategoryLinks', 'setCategoryLinks'])
+            ->addMethods(['getCategoryLinks', 'setCategoryLinks'])
             ->getMockForAbstractClass();
         $this->productMock->setExtensionAttributes($productExtensionAttributes);
 
         $this->customOptionFactoryMock = $this->getMockBuilder(ProductCustomOptionInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->productLinksMock = $this->createMock(ProductLinks::class);
         $this->linkTypeProviderMock = $this->createMock(LinkTypeProvider::class);
@@ -169,13 +170,21 @@ class HelperTest extends TestCase
         $this->dateTimeFilterMock = $this->createMock(DateTime::class);
 
         $categoryLinkFactoryMock = $this->getMockBuilder(CategoryLinkInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $categoryLinkFactoryMock->method('create')
             ->willReturnCallback(function () {
                 return $this->createMock(CategoryLinkInterface::class);
             });
+
+        $objects = [
+            [
+                ProductCustomOptionInterfaceFactory::class,
+                $this->customOptionFactoryMock
+            ]
+        ];
+        $this->prepareObjectManager($objects);
 
         $this->helper = $this->objectManager->getObject(
             Helper::class,
@@ -280,7 +289,7 @@ class HelperTest extends TestCase
 
         $customOptionMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
-            ->setMethods(null)
+            ->onlyMethods([])
             ->getMock();
         $firstExpectedCustomOption = clone $customOptionMock;
         $firstExpectedCustomOption->setData($optionsData['option2']);
@@ -316,7 +325,7 @@ class HelperTest extends TestCase
             ->willReturnCallback(
                 function () {
                     return $this->getMockBuilder(ProductLink::class)
-                        ->setMethods(null)
+                        ->onlyMethods([])
                         ->disableOriginalConstructor()
                         ->getMock();
                 }
@@ -383,13 +392,13 @@ class HelperTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function initializeDataProvider()
+    public static function initializeDataProvider()
     {
         return [
             [
                 'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 1],
-                'expected_website_ids' => ['1' => 1, '2' => 1],
+                'website_ids' => ['1' => 1, '2' => 2],
+                'expected_website_ids' => ['1' => 1, '2' => 2],
                 'links' => [],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
                 'expected_links' => [],
@@ -423,8 +432,8 @@ class HelperTest extends TestCase
             // Related links
             [
                 'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 1],
-                'expected_website_ids' => ['1' => 1, '2' => 1],
+                'website_ids' => ['1' => 1, '2' => 2],
+                'expected_website_ids' => ['1' => 1, '2' => 2],
                 'links' => [
                     'related' => [
                         0 => [
@@ -449,8 +458,8 @@ class HelperTest extends TestCase
             // Custom link
             [
                 'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 1],
-                'expected_website_ids' => ['1' => 1, '2' => 1],
+                'website_ids' => ['1' => 1, '2' => 2],
+                'expected_website_ids' => ['1' => 1, '2' => 2],
                 'links' => [
                     'customlink' => [
                         0 => [
@@ -475,8 +484,8 @@ class HelperTest extends TestCase
             // Both links
             [
                 'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 1],
-                'expected_website_ids' => ['1' => 1, '2' => 1],
+                'website_ids' => ['1' => 1, '2' => 2],
+                'expected_website_ids' => ['1' => 1, '2' => 2],
                 'links' => [
                     'related' => [
                         0 => [
@@ -515,8 +524,8 @@ class HelperTest extends TestCase
             // Undefined link type
             [
                 'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 1],
-                'expected_website_ids' => ['1' => 1, '2' => 1],
+                'website_ids' => ['1' => 1, '2' => 2],
+                'expected_website_ids' => ['1' => 1, '2' => 2],
                 'links' => [
                     'related' => [
                         0 => [
@@ -559,7 +568,7 @@ class HelperTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function mergeProductOptionsDataProvider()
+    public static function mergeProductOptionsDataProvider()
     {
         return [
             'options are not array, empty array is returned' => [
@@ -762,5 +771,23 @@ class HelperTest extends TestCase
         $this->productRepositoryMock->expects($this->any())
             ->method('getById')
             ->willReturnMap($repositoryReturnMap);
+    }
+
+    /**
+     * @param $map
+     */
+    private function prepareObjectManager($map)
+    {
+        $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->addMethods(['getInstance'])
+            ->onlyMethods(['get'])
+            ->getMockForAbstractClass();
+
+        $objectManagerMock->method('getInstance')->willReturnSelf();
+        $objectManagerMock->method('get')->willReturnMap($map);
+
+        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($objectManagerMock);
     }
 }

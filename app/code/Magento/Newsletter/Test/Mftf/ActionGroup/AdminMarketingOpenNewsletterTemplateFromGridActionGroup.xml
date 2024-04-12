@@ -9,6 +9,8 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminMarketingOpenNewsletterTemplateFromGridActionGroup">
+        <waitForElementClickable selector="{{AdminNewsletterGridMainActionsSection.searchResultFirstRow}}" stepKey="waitForElementToBeClickable"/>
         <click stepKey="openTemplate" selector="{{AdminNewsletterGridMainActionsSection.searchResultFirstRow}}"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterClick"/>
     </actionGroup>
 </actionGroups>

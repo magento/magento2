@@ -34,7 +34,7 @@ use Psr\Log\LoggerInterface;
  */
 class DirectiveTest extends TestCase
 {
-    const IMAGE_PATH = 'pub/media/wysiwyg/image.jpg';
+    public const IMAGE_PATH = 'pub/media/wysiwyg/image.jpg';
 
     /**
      * @var Directive
@@ -264,8 +264,11 @@ class DirectiveTest extends TestCase
             ->willReturn($placeholderPath);
         $this->imageAdapterMock
             ->method('open')
-            ->withConsecutive([self::IMAGE_PATH])
-            ->willThrowException($exception);
+            ->willReturnCallback(function ($arg1) use ($exception) {
+                if ($arg1 === self::IMAGE_PATH) {
+                    throw $exception;
+                }
+            });
         $this->imageAdapterMock->expects($this->atLeastOnce())
             ->method('getMimeType')
             ->willReturn($mimeType);

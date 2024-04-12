@@ -42,9 +42,9 @@ class StorageTest extends TestCase
     /**
      * Directory paths samples
      */
-    const STORAGE_ROOT_DIR = '/storage/root/dir/';
+    private const STORAGE_ROOT_DIR = '/storage/root/dir/';
 
-    const INVALID_DIRECTORY_OVER_ROOT = '/storage/some/another/dir';
+    private const INVALID_DIRECTORY_OVER_ROOT = '/storage/some/another/dir';
 
     /**
      * @var Storage
@@ -165,7 +165,7 @@ class StorageTest extends TestCase
         $this->objectManagerHelper = new ObjectManager($this);
         $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->driverMock = $this->getMockBuilder(DriverInterface::class)
-            ->setMethods(['getRealPathSafety'])
+            ->onlyMethods(['getRealPathSafety'])
             ->getMockForAbstractClass();
 
         $this->directoryMock = $this->createPartialMock(
@@ -238,9 +238,9 @@ class StorageTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods(
+            ->addMethods(['getCurrentPath'])
+            ->onlyMethods(
                 [
-                    'getCurrentPath',
                     'getName',
                     'getSessionId',
                     'getCookieLifetime',
@@ -383,7 +383,7 @@ class StorageTest extends TestCase
     /**
      * @return array
      */
-    public function dirsCollectionDataProvider()
+    public static function dirsCollectionDataProvider()
     {
         return [
             [
@@ -476,7 +476,7 @@ class StorageTest extends TestCase
         ];
         $uploader = $this->getMockBuilder(Uploader::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setAllowedExtensions',
                     'setAllowRenameFiles',
@@ -526,7 +526,8 @@ class StorageTest extends TestCase
 
         $image = $this->getMockBuilder(Image::class)
             ->disableOriginalConstructor()
-            ->setMethods(['open', 'keepAspectRatio', 'resize', 'save'])
+            ->addMethods(['open', 'keepAspectRatio'])
+            ->onlyMethods(['resize', 'save'])
             ->getMock();
         $image->expects($this->atLeastOnce())->method('open')->with($realPath);
         $image->expects($this->atLeastOnce())->method('keepAspectRatio')->with(true);
