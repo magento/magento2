@@ -439,8 +439,8 @@ class AwsS3Test extends TestCase
         $this->metadataProviderMock->expects(self::any())->method('getMetadata')
             ->willReturnMap([
                 ['path', ['type' => AwsS3::TYPE_DIR]],
-                ['path/1', ['type' => AwsS3::TYPE_FILE]],
-                ['path/2', ['type' => AwsS3::TYPE_FILE]],
+                ['path/1', ['type' => AwsS3::TYPE_DIR]],
+                ['path/2', ['type' => AwsS3::TYPE_DIR]],
             ]);
         $this->adapterMock->expects(self::atLeastOnce())->method('listContents')
             ->willReturn(new \ArrayIterator($subPaths));

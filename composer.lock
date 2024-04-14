@@ -4077,39 +4077,47 @@
         },
         {
             "name": "league/flysystem",
-            "version": "2.5.0",
+            "version": "3.23.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "8aaffb653c5777781b0f7f69a5d937baf7ab6cdb"
+                "reference": "d4ad81e2b67396e33dc9d7e54ec74ccf73151dcc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/8aaffb653c5777781b0f7f69a5d937baf7ab6cdb",
-                "reference": "8aaffb653c5777781b0f7f69a5d937baf7ab6cdb",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/d4ad81e2b67396e33dc9d7e54ec74ccf73151dcc",
+                "reference": "d4ad81e2b67396e33dc9d7e54ec74ccf73151dcc",
                 "shasum": ""
             },
             "require": {
-                "ext-json": "*",
+                "league/flysystem-local": "^3.0.0",
                 "league/mime-type-detection": "^1.0.0",
-                "php": "^7.2 || ^8.0"
+                "php": "^8.0.2"
             },
             "conflict": {
-                "guzzlehttp/ringphp": "<1.1.1"
+                "async-aws/core": "<1.19.0",
+                "async-aws/s3": "<1.14.0",
+                "aws/aws-sdk-php": "3.209.31 || 3.210.0",
+                "guzzlehttp/guzzle": "<7.0",
+                "guzzlehttp/ringphp": "<1.1.1",
+                "phpseclib/phpseclib": "3.0.15",
+                "symfony/http-client": "<5.2"
             },
             "require-dev": {
-                "async-aws/s3": "^1.5",
-                "async-aws/simple-s3": "^1.0",
-                "aws/aws-sdk-php": "^3.132.4",
+                "async-aws/s3": "^1.5 || ^2.0",
+                "async-aws/simple-s3": "^1.1 || ^2.0",
+                "aws/aws-sdk-php": "^3.220.0",
                 "composer/semver": "^3.0",
                 "ext-fileinfo": "*",
                 "ext-ftp": "*",
-                "friendsofphp/php-cs-fixer": "^3.2",
+                "ext-zip": "*",
+                "friendsofphp/php-cs-fixer": "^3.5",
                 "google/cloud-storage": "^1.23",
-                "phpseclib/phpseclib": "^2.0",
-                "phpstan/phpstan": "^0.12.26",
-                "phpunit/phpunit": "^8.5 || ^9.4",
-                "sabre/dav": "^4.1"
+                "microsoft/azure-storage-blob": "^1.1",
+                "phpseclib/phpseclib": "^3.0.34",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^9.5.11|^10.0",
+                "sabre/dav": "^4.3.1"
             },
             "type": "library",
             "autoload": {
@@ -4143,7 +4151,7 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/flysystem/issues",
-                "source": "https://github.com/thephpleague/flysystem/tree/2.5.0"
+                "source": "https://github.com/thephpleague/flysystem/tree/3.23.0"
             },
             "funding": [
                 {
@@ -4153,35 +4161,32 @@
                 {
                     "url": "https://github.com/frankdejonge",
                     "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/league/flysystem",
-                    "type": "tidelift"
                 }
             ],
-            "time": "2022-09-17T21:02:32+00:00"
+            "time": "2023-12-04T10:16:17+00:00"
         },
         {
             "name": "league/flysystem-aws-s3-v3",
-            "version": "2.5.0",
+            "version": "3.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem-aws-s3-v3.git",
-                "reference": "2ae435f7177fd5d3afc0090bc7f849093d8361e8"
+                "reference": "9808919ee5d819730d9582d4e1673e8d195c38d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/2ae435f7177fd5d3afc0090bc7f849093d8361e8",
-                "reference": "2ae435f7177fd5d3afc0090bc7f849093d8361e8",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/9808919ee5d819730d9582d4e1673e8d195c38d8",
+                "reference": "9808919ee5d819730d9582d4e1673e8d195c38d8",
                 "shasum": ""
             },
             "require": {
-                "aws/aws-sdk-php": "^3.132.4",
-                "league/flysystem": "^2.0.0",
+                "aws/aws-sdk-php": "^3.220.0",
+                "league/flysystem": "^3.10.0",
                 "league/mime-type-detection": "^1.0.0",
-                "php": "^7.2 || ^8.0"
+                "php": "^8.0.2"
             },
             "conflict": {
+                "guzzlehttp/guzzle": "<7.0",
                 "guzzlehttp/ringphp": "<1.1.1"
             },
             "type": "library",
@@ -4212,7 +4217,7 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/flysystem-aws-s3-v3/issues",
-                "source": "https://github.com/thephpleague/flysystem-aws-s3-v3/tree/2.5.0"
+                "source": "https://github.com/thephpleague/flysystem-aws-s3-v3/tree/3.22.0"
             },
             "funding": [
                 {
@@ -4222,13 +4227,69 @@
                 {
                     "url": "https://github.com/frankdejonge",
                     "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/league/flysystem",
-                    "type": "tidelift"
                 }
             ],
-            "time": "2022-09-09T19:33:51+00:00"
+            "time": "2023-11-18T14:03:37+00:00"
+        },
+        {
+            "name": "league/flysystem-local",
+            "version": "3.23.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/flysystem-local.git",
+                "reference": "5cf046ba5f059460e86a997c504dd781a39a109b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-local/zipball/5cf046ba5f059460e86a997c504dd781a39a109b",
+                "reference": "5cf046ba5f059460e86a997c504dd781a39a109b",
+                "shasum": ""
+            },
+            "require": {
+                "ext-fileinfo": "*",
+                "league/flysystem": "^3.0.0",
+                "league/mime-type-detection": "^1.0.0",
+                "php": "^8.0.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "League\\Flysystem\\Local\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Frank de Jonge",
+                    "email": "info@frankdejonge.nl"
+                }
+            ],
+            "description": "Local filesystem adapter for Flysystem.",
+            "keywords": [
+                "Flysystem",
+                "file",
+                "files",
+                "filesystem",
+                "local"
+            ],
+            "support": {
+                "issues": "https://github.com/thephpleague/flysystem-local/issues",
+                "source": "https://github.com/thephpleague/flysystem-local/tree/3.23.0"
+            },
+            "funding": [
+                {
+                    "url": "https://ecologi.com/frankdejonge",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/frankdejonge",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-12-04T10:14:46+00:00"
         },
         {
             "name": "league/mime-type-detection",
