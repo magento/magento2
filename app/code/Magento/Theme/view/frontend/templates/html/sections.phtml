@@ -34,7 +34,7 @@ $groupCss = $block->getGroupCss();
                 </div>
                 <div class="section-item-content <?= $block->escapeHtmlAttr($groupCss) ?>-item-content"
                      id="<?= $block->escapeHtmlAttr($alias) ?>"
-                     data-role="content">
+                     role="tab">
                     <?= /* @noEscape */ $html ?>
                 </div>
             <?php endforeach;?>
