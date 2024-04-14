@@ -65,6 +65,7 @@ class S3FileAssertions extends Helper
         $s3Driver = new AwsS3($adapter, new MockTestLogger(), $objectUrl, $metadataProvider);
 
         $this->driver = $s3Driver;
+        $this->adapter = $adapter;
     }
 
     /**
@@ -196,10 +197,11 @@ class S3FileAssertions extends Helper
      * @return void
      *
      * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \League\Flysystem\FilesystemException
      */
     public function assertDirectoryExists($path, $message = ''): void
     {
-        $this->assertTrue($this->driver->isDirectory($path), "Failed asserting $path exists. " . $message);
+        $this->assertTrue($this->adapter->directoryExists($path), "Failed asserting $path exists. " . $message);
     }
 
     /**
