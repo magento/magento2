@@ -63,7 +63,7 @@ class InvalidateGraphQlResolverCacheObserver implements ObserverInterface
             return;
         }
 
-        if(isset($object['staging']['mode']) && $object['staging']['mode'] == 'save'){
+        if($object->getData('staging') !== null){
             return;
         }
 
