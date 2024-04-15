@@ -29,6 +29,11 @@ use PHPUnit\Framework\TestCase;
 class TaxManagementTest extends TestCase
 {
     /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
+    /**
      * @var TaxManagement
      */
     private $taxManagement;
@@ -134,8 +139,16 @@ class TaxManagementTest extends TestCase
         $this->assertEquals($expected['code'], $this->appliedTaxDataObject->getCode());
         $this->assertEquals($expected['title'], $this->appliedTaxDataObject->getTitle());
         $this->assertEquals($expected['tax_percent'], $this->appliedTaxDataObject->getPercent());
-        $this->assertEquals($expected['real_amount'], $this->appliedTaxDataObject->getAmount());
-        $this->assertEquals($expected['real_base_amount'], $this->appliedTaxDataObject->getBaseAmount());
+        $this->assertEqualsWithDelta(
+            $expected['real_amount'],
+            $this->appliedTaxDataObject->getAmount(),
+            self::EPSILON
+        );
+        $this->assertEqualsWithDelta(
+            $expected['real_base_amount'],
+            $this->appliedTaxDataObject->getBaseAmount(),
+            self::EPSILON
+        );
     }
 
     /**

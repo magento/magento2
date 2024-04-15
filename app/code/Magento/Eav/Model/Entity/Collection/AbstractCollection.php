@@ -19,6 +19,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @since 100.0.2
  */
 abstract class AbstractCollection extends AbstractDb implements SourceProviderInterface
@@ -178,6 +179,27 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      */
     protected function _construct()
     {
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_itemsById = [];
+        $this->_staticFields = [];
+        $this->_entity = null;
+        $this->_selectEntityTypes = [];
+        $this->_selectAttributes = [];
+        $this->_filterAttributes = [];
+        $this->_joinEntities = [];
+        $this->_joinAttributes = [];
+        $this->_joinFields = [];
+        parent::_resetState();
+        $this->_construct();
+        $this->setConnection($this->getEntity()->getConnection());
+        $this->_prepareStaticFields();
+        $this->_initSelect();
     }
 
     /**
@@ -1597,14 +1619,12 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     protected function _reset()
     {
         parent::_reset();
-
         $this->_selectEntityTypes = [];
         $this->_selectAttributes = [];
         $this->_filterAttributes = [];
         $this->_joinEntities = [];
         $this->_joinAttributes = [];
         $this->_joinFields = [];
-
         return $this;
     }
 

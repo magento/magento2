@@ -638,6 +638,6 @@ class SessionManager implements SessionManagerInterface, ResetAfterRequestInterf
      */
     public function _resetState(): void
     {
-        session_write_close();
+        static::$urlHostCache = [];
     }
 }
