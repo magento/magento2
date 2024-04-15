@@ -234,7 +234,7 @@ class OrderRepositoryTest extends TestCase
         $orderExtension = $this->getOrderExtensionMock();
         $orderExtension->expects($this->once())->method('getShippingAssignments')->willReturn(null);
         $orderExtension->expects($this->once())->method('setAppliedTaxes')->with($appliedTaxes);
-        $orderExtension->expects($this->once())->method('setConvertingFromQuote')->with(true);
+        $orderExtension->expects($this->once())->method('setConvertingFromQuote')->with(false);
         $orderExtension->expects($this->once())->method('setItemAppliedTaxes')->with($items);
         $orderExtension->expects($this->once())->method('setPaymentAdditionalInfo')->with($paymentInfo);
         $this->orderExtensionFactoryMock->expects($this->once())->method('create')->willReturn($orderExtension);
