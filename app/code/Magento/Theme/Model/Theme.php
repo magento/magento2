@@ -216,7 +216,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      */
     public function hasChildThemes()
     {
-        return (bool)$this->getCcllection()->addTypecFilter(
+        return (bool)$this->getCollection()->addTypeFilter(
             self::TYPE_VIRTUAL
         )->addFieldToFilter(
             'parent_id',

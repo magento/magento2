@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace Magento\Theme\Test\Unit\Model;
 
 use Magento\Framework\App\State;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\TestFramework\Unit\Listener\ReplaceObjectManager\TestProvidesServiceInterface;
 use Magento\Framework\View\Design\Theme\CustomizationFactory;
 use Magento\Framework\View\Design\Theme\CustomizationInterface;
 use Magento\Framework\View\Design\Theme\Domain\Factory;
@@ -30,7 +30,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ThemeTest extends TestCase implements TestProvidesServiceInterface
+class ThemeTest extends TestCase
 {
     /**
      * @var Theme|MockObject
@@ -118,18 +118,28 @@ class ThemeTest extends TestCase implements TestProvidesServiceInterface
                 'themeModelFactory' => $this->themeModelFactory
             ]
         );
+        $this->getServicesForObjMap();
         $this->_model = $objectManagerHelper->getObject(Theme::class, $arguments);
+
     }
 
     /**
-     * @inheritdoc
+     * Replace Object Manager/Object Mapping
+     * @return void
      */
-    public function getServiceForObjectManager(string $type) : ?object
+    public function getServicesForObjMap()
     {
-        if (Collection::class == $type) {
-            return $this->resourceCollection;
-        }
-        return null;
+        $value = $this->resourceCollection;
+        $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->getMockForAbstractClass();
+        $objectManagerMock->method('create')->willReturnCallback(function () use ($value){
+            return $value;
+        });
+        $objectManagerMock->method('get')->willReturnCallback(function () use ($value){
+            return $value;
+        });
+
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 
     /**
