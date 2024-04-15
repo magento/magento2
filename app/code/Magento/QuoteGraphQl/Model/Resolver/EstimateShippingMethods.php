@@ -76,7 +76,7 @@ class EstimateShippingMethods implements ResolverInterface
                 )
             );
         }
-        return $this->getAvailableShippingMethodsForAddress($args, $cart);
+        return $this->getAvailableShippingMethodsForAddress($args['input']['address'], $cart);
     }
 
     /**
@@ -91,23 +91,12 @@ class EstimateShippingMethods implements ResolverInterface
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
 
-        if (empty($args['input'][AddressInterface::KEY_COUNTRY_ID])) {
-            throw new GraphQlInputException(
-                __(
-                    'Required parameter "%country_id" is missing',
-                    [
-                        'country_id' => AddressInterface::KEY_COUNTRY_ID
-                    ]
-                )
-            );
-        }
-
-        if (isset($args['input']['address']) && empty($args['input']['address'])) {
-            throw new GraphQlInputException(__('Parameter(s) for address are missing'));
+        if (empty($args['input']['address']['country_code'])) {
+            throw new GraphQlInputException(__('Required parameter "country_code" is missing'));
         }
 
         if (isset($args['input']['address']['region']) && empty($args['input']['address']['region'])) {
-            throw new GraphQlInputException(__('Parameter(s) for region are missing'));
+            throw new GraphQlInputException(__('Missing parameter(s) for region input'));
         }
     }
 
@@ -120,38 +109,18 @@ class EstimateShippingMethods implements ResolverInterface
      */
     private function getAvailableShippingMethodsForAddress(array $args, CartInterface $cart): array
     {
-        /** @var $address AddressInterface */
-        $address = $this->addressFactory->create();
-        $shippingMethods = [];
+        $data = [
+            AddressInterface::KEY_COUNTRY_ID => $args['country_code'],
+            AddressInterface::KEY_REGION => $args['region'][AddressInterface::KEY_REGION] ?? null,
+            AddressInterface::KEY_REGION_ID => $args['region'][AddressInterface::KEY_REGION_ID] ?? null,
+            AddressInterface::KEY_REGION_CODE => $args['region'][AddressInterface::KEY_REGION_CODE] ?? null,
+            AddressInterface::KEY_POSTCODE => $args[AddressInterface::KEY_POSTCODE] ?? null,
+        ];
 
-        $address->addData([
-            AddressInterface::KEY_COUNTRY_ID => $args['input'][AddressInterface::KEY_COUNTRY_ID]
-        ]);
-        if (!empty($args['input']['address'])) {
-            $data = $args['input']['address'];
-            if (!empty($data['region'])) {
-                $address->addData([
-                    AddressInterface::KEY_REGION => $data['region'][AddressInterface::KEY_REGION] ?? '',
-                    AddressInterface::KEY_REGION_ID => $data['region'][AddressInterface::KEY_REGION_ID] ?? '',
-                    AddressInterface::KEY_REGION_CODE => $data['region'][AddressInterface::KEY_REGION_CODE] ?? ''
-                ]);
-            }
-            $address->addData([
-                AddressInterface::KEY_FIRSTNAME => $data[AddressInterface::KEY_FIRSTNAME] ?? '',
-                AddressInterface::KEY_LASTNAME => $data[AddressInterface::KEY_LASTNAME] ?? '',
-                AddressInterface::KEY_MIDDLENAME => $data[AddressInterface::KEY_MIDDLENAME] ?? '',
-                AddressInterface::KEY_PREFIX => $data[AddressInterface::KEY_PREFIX] ?? '',
-                AddressInterface::KEY_SUFFIX => $data[AddressInterface::KEY_SUFFIX] ?? '',
-                AddressInterface::KEY_VAT_ID => $data[AddressInterface::KEY_VAT_ID] ?? '',
-                AddressInterface::KEY_COMPANY => $data[AddressInterface::KEY_COMPANY] ?? '',
-                AddressInterface::KEY_TELEPHONE => $data[AddressInterface::KEY_TELEPHONE] ?? '',
-                AddressInterface::KEY_CITY => $data[AddressInterface::KEY_CITY] ?? '',
-                AddressInterface::KEY_STREET => $data[AddressInterface::KEY_STREET] ?? '',
-                AddressInterface::KEY_POSTCODE => $data[AddressInterface::KEY_POSTCODE] ?? '',
-                AddressInterface::KEY_FAX => $data[AddressInterface::KEY_FAX] ?? '',
-                AddressInterface::CUSTOM_ATTRIBUTES => $data[AddressInterface::CUSTOM_ATTRIBUTES] ?? ''
-            ]);
-        }
+        /** @var $address AddressInterface */
+        $address = $this->addressFactory->create(['data' => array_filter($data)]);
+        $shippingMethods = [];
+        
         foreach ($this->shipmentEstimation->estimateByExtendedAddress($cart->getId(), $address) as $method) {
             $shippingMethods[] = $this->formatMoneyTypeData->execute(
                 $this->dataObjectConverter->toFlatArray($method, [], ShippingMethodInterface::class),
