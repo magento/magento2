@@ -96,7 +96,7 @@ Basic implementation is a good start point but it's recommended to provide own i
 
 The `Magento_InstantPurchase` module does not introduce backward incompatible changes.
 
-You can track [backward incompatible changes in patch releases](https://developer.adobe.com/commerce/php/development/backward-incompatible-changes/highlights/reference.html).
+You can track [backward incompatible changes in patch releases](https://developer.adobe.com/commerce/php/development/backward-incompatible-changes/highlights/).
 
 ***
 
