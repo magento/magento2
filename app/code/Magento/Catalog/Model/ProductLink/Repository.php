@@ -134,13 +134,13 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     public function save(\Magento\Catalog\Api\Data\ProductLinkInterface $entity)
     {
         if (!$entity->getSku()) {
-            throw new NoSuchEntityException(__(
+            throw new CouldNotSaveException(__(
                 'The parent product SKU is required for linking child products. '
                 . 'Please ensure the parent product SKU is provided and try again.'
             ));
         }
         if (!$entity->getLinkedProductSku()) {
-            throw new NoSuchEntityException(__('The linked product SKU is invalid. Verify the data and try again.'));
+            throw new CouldNotSaveException(__('The linked product SKU is invalid. Verify the data and try again.'));
         }
         $linkedProduct = $this->productRepository->get($entity->getLinkedProductSku());
         $product = $this->productRepository->get($entity->getSku());

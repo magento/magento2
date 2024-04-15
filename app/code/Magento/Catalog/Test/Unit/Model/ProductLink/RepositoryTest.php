@@ -192,7 +192,7 @@ class RepositoryTest extends TestCase
 
     public function testSaveWithoutProductSku()
     {
-        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
         $this->expectExceptionMessage(
             'The parent product SKU is required for linking child products. '
             . 'Please ensure the parent product SKU is provided and try again.'
