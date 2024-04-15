@@ -193,7 +193,10 @@ class RepositoryTest extends TestCase
     public function testSaveWithoutProductSku()
     {
         $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
-        $this->expectExceptionMessage('ProductSku should be specified');
+        $this->expectExceptionMessage(
+            'The parent product SKU is required for linking child products. '
+            . 'Please ensure the parent product SKU is provided and try again.'
+        );
         $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
         $entityMock->expects($this->any())->method('getSku')->willReturn('');
         $entityMock->expects($this->any())->method('getLinkedProductSku')->willReturn('linkedProductSku');
