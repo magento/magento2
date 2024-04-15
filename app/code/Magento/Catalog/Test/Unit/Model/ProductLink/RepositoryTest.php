@@ -182,7 +182,7 @@ class RepositoryTest extends TestCase
 
     public function testSaveWithoutLinkedProductSku()
     {
-        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
         $this->expectExceptionMessage('The linked product SKU is invalid. Verify the data and try again.');
         $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
         $entityMock->expects($this->any())->method('getSku')->willReturn('sku1');
