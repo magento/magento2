@@ -307,6 +307,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     public function getById($productId, $editMode = false, $storeId = null, $forceReload = false)
     {
+        if ($storeId === null) {
+            $storeId = (int) $this->storeManager->getStore()->getId();
+        }
         $cacheKey = $this->getCacheKey([$editMode, $storeId]);
         if (!isset($this->instancesById[$productId][$cacheKey]) || $forceReload) {
             $product = $this->productFactory->create();
