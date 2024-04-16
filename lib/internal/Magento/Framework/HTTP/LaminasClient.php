@@ -44,6 +44,9 @@ class LaminasClient extends Client implements ResetAfterRequestInterface
     public function _resetState(): void
     {
         $this->reset();
+        // Note: added these because LaminasClient doesn't properly reset them.
+        $this->request = null;
+        $this->encType = '';
     }
 
     /**
