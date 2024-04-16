@@ -298,6 +298,16 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     }
 
     /**
+     * Get the view model.
+     *
+     * @return OptionsData
+     */
+    public function getViewModel()
+    {
+        return $this->optionsDataViewModel;
+    }
+
+    /**
      * Get post parameters.
      *
      * @param Product $product
