@@ -201,7 +201,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
             $result = mb_decode_numericentity(
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 html_entity_decode(
-                    $domDocument->saveHTML(),
+                    htmlentities($domDocument->saveHTML()),
                     ENT_QUOTES|ENT_SUBSTITUTE,
                     'UTF-8'
                 ),
