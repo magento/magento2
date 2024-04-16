@@ -55,13 +55,13 @@
                 <argument name="product" value="$createSimpleProduct$"/>
             </actionGroup>
             <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="goToShippingPage"/>
-            <!-- Guest checkout -->
+            <!-- Guest checkout for US address -->
             <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="goToShippingAndFillDetails">
-                <argument name="customerAddress" value="US_CA_Address"/>
+                <argument name="customerAddress" value="US_Address_CA"/>
             </actionGroup>
             <selectOption selector="{{CheckoutShippingSection.region}}" userInput="California" stepKey="fillStateField"/>
             <waitForPageLoad stepKey="waitForChangeAfterStateLoad"/>
-            <actionGroup ref="CheckForFlatRateShippingMethodAvailabilityActionGroup" stepKey="verifyShippingMethod"/>
+            <actionGroup ref="StorefrontCheckForFlatRateShippingMethodAvailabilityActionGroup" stepKey="verifyShippingMethod"/>
             <waitForElementVisible selector="{{CheckoutShippingMethodsSection.shippingMethodDhlLabel}}" stepKey="waitForDHLLabelVisible"/>
             <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodDhlWorldWideExpress}}" stepKey="waitForDHLPriceNotVisibleAfterStateChange"/>
             <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShipping}}" stepKey="waitForFreeShippingNotVisible"/>
@@ -69,7 +69,7 @@
             <!-- Change country value -->
             <selectOption selector="{{CheckoutShippingSection.country}}" userInput="Afghanistan" stepKey="fillCountryField"/>
             <waitForPageLoad stepKey="waitForChangeAfterCountryLoad"/>
-            <actionGroup ref="CheckForFlatRateShippingMethodAvailabilityActionGroup" stepKey="verifyShippingMethodAfterCountryChange"/>
+            <actionGroup ref="StorefrontCheckForFlatRateShippingMethodAvailabilityActionGroup" stepKey="verifyShippingMethodAfterCountryChange"/>
             <waitForElementVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShipping}}" stepKey="waitForFreeShippingVisibleAfterCountryChange"/>
             <waitForElementVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShippingLabel}}" stepKey="waitForFreeShippingLabelVisibleAfterCountryChange"/>
             <waitForElementVisible selector="{{CheckoutShippingMethodsSection.shippingMethodDhlLabel}}" stepKey="waitForDHLLabelVisibleAfterCountryChange"/>
@@ -79,10 +79,10 @@
             <selectOption selector="{{CheckoutShippingSection.country}}" userInput="United Kingdom" stepKey="fillCountry"/>
             <fillField selector="{{CheckoutShippingSection.city}}" userInput="London" stepKey="fillCity"/>
             <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="N14 5JP" stepKey="fillPostcode"/>
-            <actionGroup ref="CheckForFlatRateShippingMethodAvailabilityActionGroup" stepKey="verifyShippingMethodAfterNewData"/>
+            <actionGroup ref="StorefrontCheckForFlatRateShippingMethodAvailabilityActionGroup" stepKey="verifyShippingMethodAfterNewData"/>
             <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShipping}}" stepKey="waitForFreeShippingVisibleAfterNewFormData"/>
             <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShippingLabel}}" stepKey="waitForFreeShippingLabelVisibleAfterNewFormData"/>
-            <actionGroup ref="VerifyDHLShippingMethodIsVisibilityActionGroup" stepKey="dhlShippingVisibility"/>
+            <actionGroup ref="StorefrontVerifyDHLShippingMethodIsVisibilityActionGroup" stepKey="dhlShippingVisibility"/>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
@@ -99,3 +99,4 @@
         </after>
     </test>
 </tests>
+
