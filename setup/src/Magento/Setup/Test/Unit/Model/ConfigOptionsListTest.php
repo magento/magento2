@@ -57,49 +57,35 @@ class ConfigOptionsListTest extends TestCase
      */
     private $driverOptionsMock;
 
+    /**
+     * @var array
+     */
+    private $configOptionsListClasses = [
+        \Magento\Setup\Model\ConfigOptionsList\Session::class,
+        \Magento\Setup\Model\ConfigOptionsList\Cache::class,
+        \Magento\Setup\Model\ConfigOptionsList\PageCache::class,
+        \Magento\Setup\Model\ConfigOptionsList\Lock::class,
+        \Magento\Setup\Model\ConfigOptionsList\Directory::class,
+        \Magento\Setup\Model\ConfigOptionsList\BackpressureLogger::class,
+    ];
+
     protected function setUp(): void
     {
-        $objectManagerHelper = new ObjectManager($this);
-        $objects = [
-            [
-                \Magento\Setup\Model\ConfigOptionsList\Session::class,
-                $this->createMock(\Magento\Setup\Model\ConfigOptionsList\Session::class)
-            ],
-            [
-                \Magento\Setup\Model\ConfigOptionsList\Cache::class,
-                $this->createMock(\Magento\Setup\Model\ConfigOptionsList\Cache::class)
-            ],
-            [
-                \Magento\Setup\Model\ConfigOptionsList\PageCache::class,
-                $this->createMock(\Magento\Setup\Model\ConfigOptionsList\PageCache::class)
-            ],
-            [
-                \Magento\Setup\Model\ConfigOptionsList\Lock::class,
-                $this->createMock(\Magento\Setup\Model\ConfigOptionsList\Lock::class)
-            ],
-            [
-                \Magento\Setup\Model\ConfigOptionsList\Directory::class,
-                $this->createMock(\Magento\Setup\Model\ConfigOptionsList\Directory::class)
-            ],
-            [
-                \Magento\Setup\Model\ConfigOptionsList\BackpressureLogger::class,
-                $this->createMock(\Magento\Setup\Model\ConfigOptionsList\BackpressureLogger::class)
-            ],
-            [
-                KeyValidator::class,
-                $this->createMock(KeyValidator::class)
-            ],
-            [
-                DriverOptions::class,
-                $this->createMock(DriverOptions::class)
-            ]
-        ];
-        $objectManagerHelper->prepareObjectManager($objects);
         $this->generator = $this->createMock(ConfigGenerator::class);
         $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
         $this->dbValidator = $this->createMock(DbValidator::class);
         $this->encryptionKeyValidator = $this->createMock(KeyValidator::class);
         $this->driverOptionsMock = $this->createMock(DriverOptions::class);
+        $objectManagerHelper = new ObjectManager($this);
+        $objects = [];
+        foreach ($this->configOptionsListClasses as $className) {
+            $configOptionClassMock = $this->getMockBuilder($className)
+                ->disableOriginalConstructor()
+                ->onlyMethods([])
+                ->getMock();
+            $objects[] = [$className,$configOptionClassMock];
+        }
+        $objectManagerHelper->prepareObjectManager($objects);
         $this->object = new ConfigOptionsList(
             $this->generator,
             $this->dbValidator,
@@ -258,7 +244,7 @@ class ConfigOptionsListTest extends TestCase
     /**
      * @return array
      */
-    public function validateCacheHostsDataProvider()
+    public static function validateCacheHostsDataProvider()
     {
         return [
             ['localhost', false],

@@ -43,6 +43,7 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Framework\Setup\Patch\PatchApplierFactory;
     use Magento\Framework\Setup\SampleData\State;
     use Magento\Framework\Setup\SchemaListener;
+    use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
     use Magento\Framework\Validation\ValidationException;
     use Magento\Indexer\Model\Indexer\Collection;
     use Magento\RemoteStorage\Driver\DriverException;
@@ -76,7 +77,7 @@ namespace Magento\Setup\Test\Unit\Model {
         /**
          * @var array
          */
-        private $request = [
+        private static $request = [
             ConfigOptionsListConstants::INPUT_KEY_DB_HOST => '127.0.0.1',
             ConfigOptionsListConstants::INPUT_KEY_DB_NAME => 'magento',
             ConfigOptionsListConstants::INPUT_KEY_DB_USER => 'magento',
@@ -245,6 +246,14 @@ namespace Magento\Setup\Test\Unit\Model {
          */
         protected function setUp(): void
         {
+            $objectManagerHelper = new ObjectManager($this);
+            $objects = [
+                [
+                    DeploymentConfig::class,
+                    $this->createMock(DeploymentConfig::class)
+                ]
+            ];
+            $objectManagerHelper->prepareObjectManager($objects);
             $this->filePermissions = $this->createMock(FilePermissions::class);
             $this->configWriter = $this->createMock(Writer::class);
             $this->configReader = $this->createMock(Reader::class);
@@ -498,11 +507,11 @@ namespace Magento\Setup\Test\Unit\Model {
          * @return array
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
-        public function installDataProvider()
+        public static function installDataProvider()
         {
             return [
                 [
-                    'request' => $this->request,
+                    'request' => self::$request,
                     'logMessages' => [
                         ['Starting Magento installation:'],
                         ['File permissions check...'],
@@ -841,7 +850,7 @@ namespace Magento\Setup\Test\Unit\Model {
          */
         public function testInstallWithInvalidRemoteStorageConfiguration(bool $isDeploymentConfigWritable)
         {
-            $request = $this->request;
+            $request = self::$request;
 
             $logMessages = [
                 ['Starting Magento installation:'],
@@ -1030,7 +1039,7 @@ namespace Magento\Setup\Test\Unit\Model {
          */
         public function testInstallWithUnresolvableRemoteStorageValidator()
         {
-            $request = $this->request;
+            $request = self::$request;
 
             // every log message call is expected
             $logMessages = $this->installDataProvider()[0]['logMessages'];
@@ -1239,7 +1248,7 @@ namespace Magento\Setup\Test\Unit\Model {
          */
         public function testInstallWithInvalidRemoteStorageConfigurationWithEarlyException(\Exception $exception)
         {
-            $request = $this->request;
+            $request = self::$request;
 
             $logMessages = [
                 ['Starting Magento installation:'],
@@ -1433,7 +1442,7 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->method('create')
                 ->willReturn($dataSetup);
 
-            $this->object->installDataFixtures($this->request);
+            $this->object->installDataFixtures(self::$request);
         }
 
         public function testCheckInstallationFilePermissions()
