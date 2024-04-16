@@ -452,6 +452,7 @@ type CartItemPrices @doc(description: "Contains details about the price of the i
     row_total_including_tax: Money! @doc(description: "The value of `row_total` plus the tax applied to the item.")
     discounts: [Discount] @doc(description: "An array of discounts to be applied to the cart item.")
     total_item_discount: Money @doc(description: "The total of all discounts applied to the item.")
+    original_row_total: Money! @doc(description: "The value of the original price multiplied by the quantity of the item.")
 }
 
 type SelectedCustomizableOption @doc(description: "Identifies a customized product that has been placed in a cart.") {
