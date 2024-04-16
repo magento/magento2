@@ -67,6 +67,7 @@
         <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
 
         <!--Uncheck billing and shipping addresses are same-->
+        <waitForElementVisible selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="waitForuncheckSameBillingAndShippingAddress"/>
         <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="uncheckSameBillingAndShippingAddress"/>
 
         <!--Select another existing address option from dropdown-->
