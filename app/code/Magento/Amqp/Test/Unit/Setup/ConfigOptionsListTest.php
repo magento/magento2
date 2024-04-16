@@ -58,12 +58,11 @@ class ConfigOptionsListTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->connectionValidatorMock = $this->getMockBuilder(ConnectionValidator::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->model = $this->objectManager->getObject(
@@ -171,7 +170,7 @@ class ConfigOptionsListTest extends TestCase
     /**
      * @return array
      */
-    public function getCreateConfigDataProvider()
+    public static function getCreateConfigDataProvider()
     {
         return [
             [
