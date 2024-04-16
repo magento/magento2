@@ -63,7 +63,16 @@ class InvalidateGraphQlResolverCacheObserver implements ObserverInterface
             return;
         }
 
-        if($object->getData('staging') !== null){
+        $allowedClasses = [
+            \Magento\Cms\Model\Block::class,
+            \Magento\Cms\Model\Page::class,
+            \Magento\Catalog\Model\Product::class,
+            \Magento\Catalog\Model\Category::class,
+            \Magento\CatalogRule\Model\Rule::class,
+            \Magento\SalesRule\Model\Rule::class
+        ];
+
+        if (in_array(get_class($object), $allowedClasses) && $object->getData('staging') !== null) {
             return;
         }
 
