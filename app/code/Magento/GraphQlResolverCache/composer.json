@@ -5,7 +5,11 @@
     "require": {
         "php": "~8.1.0||~8.2.0||~8.3.0",
         "magento/framework": "*",
-        "magento/module-graph-ql": "*"
+        "magento/module-graph-ql": "*",
+        "magento/module-cms": "*",
+        "magento/module-catalog": "*",
+        "magento/module-catalog-rule": "*",
+        "magento/module-sales-rule": "*"
     },
     "license": [
         "OSL-3.0",
