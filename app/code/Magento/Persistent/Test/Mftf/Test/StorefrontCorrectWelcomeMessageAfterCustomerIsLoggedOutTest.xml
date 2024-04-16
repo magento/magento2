@@ -18,6 +18,7 @@
             <testCaseId value="MC-10800"/>
             <group value="persistent"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Enable Persistence-->
@@ -39,6 +40,7 @@
             <!-- Logout customer on Storefront-->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
             <!--Delete customers-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCustomerForPersistent" stepKey="deleteCustomerForPersistent"/>
         </after>

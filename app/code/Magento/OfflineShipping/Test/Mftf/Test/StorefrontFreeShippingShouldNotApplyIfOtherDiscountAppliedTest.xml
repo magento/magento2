@@ -67,6 +67,8 @@
         </actionGroup>
         <waitForElement time="30" selector="{{CheckoutCartSummarySection.estimateShippingAndTaxForm}}" stepKey="waitForEstimateShippingAndTaxFormAfterCouponApplied"/>
         <waitForElement time="30" selector="{{CheckoutCartSummarySection.shippingMethodForm}}" stepKey="waitForShippingMethodFormAfterCouponApplied"/>
+        <!-- Sometimes the shipping loading masks are not done loading -->
+        <waitForPageLoad stepKey="waitForShippingLoaded"/>
         <see selector="{{CheckoutCartSummarySection.shippingPrice}}" userInput="$5.00" stepKey="seeFlatShippingPrice"/>
     </test>
 </tests>

@@ -8,12 +8,10 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Customer\Attribute;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
-use Magento\Eav\Api\Data\AttributeInterface;
-use Magento\Eav\Test\Fixture\Attribute;
-use Magento\EavGraphQl\Model\Uid;
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Customer\Test\Fixture\CustomerAttribute;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -23,9 +21,8 @@ class TextareaTest extends GraphQlAbstract
 {
     private const QUERY = <<<QRY
 {
-  attributesMetadata(input: {uids: ["%s"]}) {
+  customAttributeMetadataV2(attributes: [{attribute_code: "%s", entity_type: "%s"}]) {
     items {
-      uid
       code
       label
       entity_type
@@ -33,6 +30,10 @@ class TextareaTest extends GraphQlAbstract
       is_required
       default_value
       is_unique
+      ... on CustomerAttributeMetadata {
+        input_filter
+        sort_order
+      }
     }
     errors {
       type
@@ -44,7 +45,7 @@ QRY;
 
     #[
         DataFixture(
-            Attribute::class,
+            CustomerAttribute::class,
             [
                 'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
                 'frontend_input' => 'textarea',
@@ -54,39 +55,37 @@ QRY;
                     'sit amet scelerisque nibh scelerisque. Nulla sed tellus eget tellus volutpat ' .
                     'vestibulum. Mauris molestie erat sed odio maximus accumsan. Morbi velit felis, ' .
                     'tristique et lectus sollicitudin, laoreet aliquam nisl. Suspendisse vel ante at ' .
-                    'metus mattis ultrices non nec libero. Cras odio nunc, eleifend vitae interdum a, '.
+                    'metus mattis ultrices non nec libero. Cras odio nunc, eleifend vitae interdum a, ' .
                     'porttitor a dolor. Praesent mi odio, hendrerit quis consequat nec, vestibulum ' .
                     'vitae justo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin auctor' .
-                    'ac quam id rhoncus. Proin vel orci eu justo cursus vestibulum.'
+                    'ac quam id rhoncus. Proin vel orci eu justo cursus vestibulum.',
+                'input_filter' => 'ESCAPEHTML',
+                'sort_order' => 4,
             ],
             'attribute'
         )
     ]
     public function testMetadata(): void
     {
-        /** @var AttributeInterface $attribute */
+        /** @var AttributeMetadataInterface $attribute */
         $attribute = DataFixtureStorageManager::getStorage()->get('attribute');
 
-        $uid = Bootstrap::getObjectManager()->get(Uid::class)->encode(
-            'customer',
-            $attribute->getAttributeCode()
-        );
-
-        $result = $this->graphQlQuery(sprintf(self::QUERY, $uid));
+        $result = $this->graphQlQuery(sprintf(self::QUERY, $attribute->getAttributeCode(), 'customer'));
 
         $this->assertEquals(
             [
-                'attributesMetadata' => [
+                'customAttributeMetadataV2' => [
                     'items' => [
                         [
-                            'uid' => $uid,
                             'code' => $attribute->getAttributeCode(),
-                            'label' => $attribute->getDefaultFrontendLabel(),
+                            'label' => $attribute->getFrontendLabel(),
                             'entity_type' => 'CUSTOMER',
                             'frontend_input' => 'TEXTAREA',
                             'is_required' => false,
                             'default_value' => $attribute->getDefaultValue(),
                             'is_unique' => false,
+                            'input_filter' => $attribute->getInputFilter(),
+                            'sort_order' => $attribute->getSortOrder(),
                         ]
                     ],
                     'errors' => []

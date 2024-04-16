@@ -7,49 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver;
 
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface;
-
 /**
- * Integer type resolver.
+ * @deprecated Handle the Backward Compatibility issue with ES7 and ES8
+ * @see AC-10652
+ * phpcs:disable Generic.Files.LineLength.TooLong
  */
-class IntegerType implements ResolverInterface
+class IntegerType extends \Magento\Elasticsearch\ElasticAdapter\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\IntegerType
 {
-    /**
-     * @var ConverterInterface
-     */
-    private $fieldTypeConverter;
-
-    /**
-     * @var array
-     */
-    private $integerTypeAttributes;
-
-    /**
-     * @param ConverterInterface $fieldTypeConverter
-     * @param array $integerTypeAttributes
-     */
-    public function __construct(ConverterInterface $fieldTypeConverter, $integerTypeAttributes = ['category_ids'])
-    {
-        $this->fieldTypeConverter = $fieldTypeConverter;
-        $this->integerTypeAttributes = $integerTypeAttributes;
-    }
-
-    /**
-     * Get integer field type.
-     *
-     * @param AttributeAdapter $attribute
-     * @return string
-     */
-    public function getFieldType(AttributeAdapter $attribute): ?string
-    {
-        if (in_array($attribute->getAttributeCode(), $this->integerTypeAttributes, true)
-            || ($attribute->isIntegerType() || $attribute->isBooleanType())
-        ) {
-            return $this->fieldTypeConverter->convert(ConverterInterface::INTERNAL_DATA_TYPE_INT);
-        }
-
-        return null;
-    }
 }

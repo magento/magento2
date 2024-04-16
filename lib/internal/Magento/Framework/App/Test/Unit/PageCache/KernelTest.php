@@ -14,6 +14,7 @@ use Magento\Framework\App\Http\ContextFactory;
 use Magento\Framework\App\PageCache\Cache;
 use Magento\Framework\App\PageCache\Identifier;
 use Magento\Framework\App\PageCache\Kernel;
+use Magento\Framework\App\PageCache\NotCacheableInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Response\HttpFactory;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -327,5 +328,29 @@ class KernelTest extends TestCase
             ['public, max-age=100, s-maxage=100', 500, true, true],
             ['public, max-age=100, s-maxage=100', 200, false, true]
         ];
+    }
+
+    public function testProcessNotSaveCacheForNotCacheableResponse(): void
+    {
+        $header = CacheControl::fromString("Cache-Control: public, max-age=100, s-maxage=100");
+        $notCacheableResponse = $this->getMockBuilder(\Magento\Framework\App\Response\File::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $notCacheableResponse->expects($this->once())
+            ->method('getHeader')
+            ->with('Cache-Control')
+            ->willReturn($header);
+        $notCacheableResponse->expects($this->any())
+            ->method('getHttpResponseCode')
+            ->willReturn(200);
+        $notCacheableResponse->expects($this->once())
+            ->method('setNoCacheHeaders');
+        $this->requestMock
+            ->expects($this->any())->method('isGet')
+            ->willReturn(true);
+        $this->fullPageCacheMock->expects($this->never())
+            ->method('save');
+        $this->kernel->process($notCacheableResponse);
     }
 }

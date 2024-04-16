@@ -8,9 +8,8 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Customer\Attribute;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
-use Magento\Eav\Api\Data\AttributeInterface;
-use Magento\Eav\Test\Fixture\Attribute;
-use Magento\EavGraphQl\Model\Uid;
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Customer\Test\Fixture\CustomerAttribute;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -23,9 +22,8 @@ class FileTest extends GraphQlAbstract
 {
     private const QUERY = <<<QRY
 {
-  attributesMetadata(input: {uids: ["%s"]}) {
+  customAttributeMetadataV2(attributes: [{attribute_code: "%s", entity_type: "%s"}]) {
     items {
-      uid
       code
       label
       entity_type
@@ -33,6 +31,12 @@ class FileTest extends GraphQlAbstract
       is_required
       default_value
       is_unique
+      ... on CustomerAttributeMetadata {
+        validate_rules {
+          name
+          value
+        }
+      }
     }
     errors {
       type
@@ -44,39 +48,39 @@ QRY;
 
     #[
         DataFixture(
-            Attribute::class,
+            CustomerAttribute::class,
             [
                 'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
-                'frontend_input' => 'file'
+                'frontend_input' => 'file',
+                'validate_rules' => '{"MAX_FILE_SIZE":"10000000","FILE_EXTENSIONS":"PDF"}'
             ],
             'attribute'
         )
     ]
     public function testMetadata(): void
     {
-        /** @var AttributeInterface $attribute */
+        /** @var AttributeMetadataInterface $attribute */
         $attribute = DataFixtureStorageManager::getStorage()->get('attribute');
 
-        $uid = Bootstrap::getObjectManager()->get(Uid::class)->encode(
-            'customer',
-            $attribute->getAttributeCode()
+        $formattedValidationRules = Bootstrap::getObjectManager()->get(FormatValidationRulesCommand::class)->execute(
+            $attribute->getValidationRules()
         );
 
-        $result = $this->graphQlQuery(sprintf(self::QUERY, $uid));
+        $result = $this->graphQlQuery(sprintf(self::QUERY, $attribute->getAttributeCode(), 'customer'));
 
         $this->assertEquals(
             [
-                'attributesMetadata' => [
+                'customAttributeMetadataV2' => [
                     'items' => [
                         [
-                            'uid' => $uid,
                             'code' => $attribute->getAttributeCode(),
-                            'label' => $attribute->getDefaultFrontendLabel(),
+                            'label' => $attribute->getFrontendLabel(),
                             'entity_type' => 'CUSTOMER',
                             'frontend_input' => 'FILE',
                             'is_required' => false,
                             'default_value' => $attribute->getDefaultValue(),
                             'is_unique' => false,
+                            'validate_rules' => $formattedValidationRules
                         ]
                     ],
                     'errors' => []

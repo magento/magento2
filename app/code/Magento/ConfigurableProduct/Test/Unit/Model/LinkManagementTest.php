@@ -135,8 +135,11 @@ class LinkManagementTest extends TestCase
 
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
-            ->with($productMock, ['store_id' => 1, 'code' => 10], ProductInterface::class)
-            ->willReturnSelf();
+            ->with(
+                $productMock,
+                ['store_id' => 1, 'code' => 10, 'media_gallery_entries' => []],
+                ProductInterface::class
+            )->willReturnSelf();
 
         $this->productFactory->expects($this->once())
             ->method('create')
@@ -231,8 +234,10 @@ class LinkManagementTest extends TestCase
 
         $this->productRepository
             ->method('get')
-            ->withConsecutive([$productSku], [$childSku])
-            ->willReturnOnConsecutiveCalls($configurable, $simple);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$productSku] => $configurable,
+                [$childSku] => $simple
+            });
 
         $this->configurableType->expects($this->once())->method('getChildrenIds')->with(666)
             ->willReturn(
@@ -289,8 +294,10 @@ class LinkManagementTest extends TestCase
 
         $this->productRepository
             ->method('get')
-            ->withConsecutive([$productSku], [$childSku])
-            ->willReturnOnConsecutiveCalls($configurable, $simple);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$productSku] => $configurable,
+                [$childSku] => $simple
+            });
 
         $this->configurableType->expects($this->once())->method('getChildrenIds')->with(666)
             ->willReturn(

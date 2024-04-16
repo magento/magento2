@@ -12,6 +12,7 @@
         <arguments>
             <argument name="email" type="string"/>
         </arguments>
+        <waitForElementVisible  selector="{{BasicFrontendNewsletterFormSection.newsletterEmail}}" stepKey="waitForElementEmailVisible"></waitForElementVisible>
         <fillField stepKey="fillEmailField" selector="{{BasicFrontendNewsletterFormSection.newsletterEmail}}" userInput="{{email}}"/>
         <click selector="{{BasicFrontendNewsletterFormSection.subscribeButton}}" stepKey="submitForm"/>
     </actionGroup>
