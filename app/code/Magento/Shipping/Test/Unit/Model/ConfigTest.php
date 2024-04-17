@@ -92,15 +92,15 @@ class ConfigTest extends TestCase
 
         $this->scopeConfigMock->expects($this->exactly(2))
             ->method('isSetFlag')
-            ->withConsecutive(
-                ['carriers/flatrate/active', ScopeInterface::SCOPE_STORE, self::STUB_STORE_CODE],
-                ['carriers/tablerate/active', ScopeInterface::SCOPE_STORE, self::STUB_STORE_CODE],
-            )
-            ->willReturnOnConsecutiveCalls(
-                true,
-                false,
-            );
-
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 == 'carriers/flatrate/active' && $arg2 == ScopeInterface::SCOPE_STORE &&
+                $arg3 ==  self::STUB_STORE_CODE) {
+                    return true;
+                } elseif ($arg1 == 'carriers/flatrate/active' && $arg2 == ScopeInterface::SCOPE_STORE &&
+                    $arg3 ==  self::STUB_STORE_CODE) {
+                    return false;
+                }
+            });
         $this->carrierFactoryMock->expects($this->once())
             ->method('create')
             ->with('flatrate', self::STUB_STORE_CODE)
@@ -138,14 +138,13 @@ class ConfigTest extends TestCase
 
         $this->carrierFactoryMock->expects($this->exactly(2))
             ->method('create')
-            ->withConsecutive(
-                ['flatrate', self::STUB_STORE_CODE],
-                ['tablerate', self::STUB_STORE_CODE],
-            )
-            ->willReturnOnConsecutiveCalls(
-                true,
-                false,
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'flatrate' && $arg2 == self::STUB_STORE_CODE) {
+                    return true;
+                } elseif ($arg1 == 'tablerate' && $arg2 == self::STUB_STORE_CODE) {
+                    return false;
+                }
+            });
 
         $this->assertEquals(['flatrate' => true], $this->model->getAllCarriers(self::STUB_STORE_CODE));
     }

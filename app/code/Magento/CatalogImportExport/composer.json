@@ -17,7 +17,8 @@
         "magento/module-media-storage": "*",
         "magento/module-store": "*",
         "magento/module-tax": "*",
-        "magento/module-authorization": "*"
+        "magento/module-authorization": "*",
+        "magento/module-aws-s3": "*"
     },
     "type": "magento2-module",
     "license": [

@@ -12,7 +12,7 @@
         <element name="sectionHeader" type="button" selector="div[data-index='content']" timeout="30"/>
         <element name="uploadButton" type="button" selector="//*[@class='file-uploader-area']/label[text()='Upload']"/>
         <element name="selectFromGalleryButton" type="button" selector="//*[@class='file-uploader-area']/label[text()='Select from Gallery']"/>
-        <element name="uploadImageFile" type="input" selector=".file-uploader-area>input"/>
+        <element name="uploadImageFile" type="input" selector=".file-uploader-area .uppy-Dashboard-input"/>
         <element name="imageFileName" type="text" selector=".file-uploader-filename"/>
         <element name="imageFileMeta" type="text" selector=".file-uploader-meta"/>
         <element name="removeImageButton" type="button" selector=".file-uploader-summary .action-remove"/>
