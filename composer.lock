@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a76964f28e6affcccf75e2a6a329147b",
+    "content-hash": "7093048314262a0005a7637367da2b24",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -303,16 +303,16 @@
         },
         {
             "name": "colinmollenhour/cache-backend-redis",
-            "version": "1.16.0",
+            "version": "1.17.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis.git",
-                "reference": "3fc3e9149097f67cded1c425088e37d7fa8083ed"
+                "reference": "d403f4473e1b3cc616fa59d187e817543b6620c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_Redis/zipball/3fc3e9149097f67cded1c425088e37d7fa8083ed",
-                "reference": "3fc3e9149097f67cded1c425088e37d7fa8083ed",
+                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_Redis/zipball/d403f4473e1b3cc616fa59d187e817543b6620c1",
+                "reference": "d403f4473e1b3cc616fa59d187e817543b6620c1",
                 "shasum": ""
             },
             "require": {
@@ -342,22 +342,22 @@
             "homepage": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis",
             "support": {
                 "issues": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis/issues",
-                "source": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis/tree/1.16.0"
+                "source": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis/tree/1.17.1"
             },
-            "time": "2023-01-18T03:00:27+00:00"
+            "time": "2023-12-21T21:56:18+00:00"
         },
         {
             "name": "colinmollenhour/credis",
-            "version": "v1.15.0",
+            "version": "v1.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/credis.git",
-                "reference": "28810439de1d9597b7ba11794ed9479fb6f3de7c"
+                "reference": "5641140e14a9679f5a6f66c97268727f9558b881"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/credis/zipball/28810439de1d9597b7ba11794ed9479fb6f3de7c",
-                "reference": "28810439de1d9597b7ba11794ed9479fb6f3de7c",
+                "url": "https://api.github.com/repos/colinmollenhour/credis/zipball/5641140e14a9679f5a6f66c97268727f9558b881",
+                "reference": "5641140e14a9679f5a6f66c97268727f9558b881",
                 "shasum": ""
             },
             "require": {
@@ -389,9 +389,9 @@
             "homepage": "https://github.com/colinmollenhour/credis",
             "support": {
                 "issues": "https://github.com/colinmollenhour/credis/issues",
-                "source": "https://github.com/colinmollenhour/credis/tree/v1.15.0"
+                "source": "https://github.com/colinmollenhour/credis/tree/v1.16.0"
             },
-            "time": "2023-04-18T15:34:23+00:00"
+            "time": "2023-10-26T17:02:51+00:00"
         },
         {
             "name": "colinmollenhour/php-redis-session-abstract",
@@ -10148,16 +10148,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "4.7.0",
+            "version": "4.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "9b979d2a302800ffdda1a53b4e92c1b523da522d"
+                "reference": "352d35f79509d40348e94ad2c74c0e87c5d4cf9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/9b979d2a302800ffdda1a53b4e92c1b523da522d",
-                "reference": "9b979d2a302800ffdda1a53b4e92c1b523da522d",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/352d35f79509d40348e94ad2c74c0e87c5d4cf9b",
+                "reference": "352d35f79509d40348e94ad2c74c0e87c5d4cf9b",
                 "shasum": ""
             },
             "require": {
@@ -10178,9 +10178,9 @@
                 "ext-openssl": "*",
                 "guzzlehttp/guzzle": "^7.3.0",
                 "laminas/laminas-diactoros": "^3.0",
-                "monolog/monolog": "^2.3",
+                "monolog/monolog": "^2.3||^3.0",
                 "mustache/mustache": "~2.5",
-                "nikic/php-parser": "^4.4",
+                "nikic/php-parser": "^4.4||^5.0",
                 "php": ">=8.1",
                 "php-webdriver/webdriver": "^1.14.0",
                 "spomky-labs/otphp": "^10.0||^11.0",
@@ -10202,11 +10202,9 @@
             },
             "require-dev": {
                 "brainmaestro/composer-git-hooks": "^2.8.5",
-                "codacy/coverage": "^1.4",
                 "php-coveralls/php-coveralls": "^1.0||^2.2",
                 "phpmd/phpmd": "^2.8.0",
                 "phpunit/phpunit": "^9.5",
-                "sebastian/phpcpd": "~6.0.0",
                 "squizlabs/php_codesniffer": "~3.7.0"
             },
             "suggest": {
@@ -10243,9 +10241,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/4.7.0"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/4.7.2"
             },
-            "time": "2024-01-10T06:53:44+00:00"
+            "time": "2024-04-02T16:43:22+00:00"
         },
         {
             "name": "magento/php-compatibility-fork",
@@ -10838,16 +10836,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.28",
+            "version": "1.10.59",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "e4545b55904ebef470423d3ddddb74fa7325497a"
+                "reference": "e607609388d3a6d418a50a49f7940e8086798281"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e4545b55904ebef470423d3ddddb74fa7325497a",
-                "reference": "e4545b55904ebef470423d3ddddb74fa7325497a",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e607609388d3a6d418a50a49f7940e8086798281",
+                "reference": "e607609388d3a6d418a50a49f7940e8086798281",
                 "shasum": ""
             },
             "require": {
@@ -10896,7 +10894,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-08-08T12:33:42+00:00"
+            "time": "2024-02-20T13:59:13+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
