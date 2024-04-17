@@ -8,20 +8,26 @@
 ?>
 <section class="admin__page-section edit-order-comments">
     <ul class="note-list">
-    <?php foreach ($block->getFullHistory() as $_item) : ?>
+    <?php foreach ($block->getFullHistory() as $_item): ?>
         <li class="note-list-item">
             <span class="note-list-date"><?= /* @noEscape */ $block->getItemCreatedAt($_item) ?></span>
             <span class="note-list-time"><?= /* @noEscape */ $block->getItemCreatedAt($_item, 'time') ?></span>
             <span class="note-list-status"><?= /* @noEscape */ $block->getItemTitle($_item) ?></span>
-            <?php if ($block->isItemNotified($_item, false)) : ?>
+            <?php if ($block->isItemNotified($_item, false)): ?>
                 <span class="note-list-customer">
                     <?= $block->escapeHtml(__('Customer')) ?>
-                    <?php if ($block->isCustomerNotificationNotApplicable($_item)) : ?>
-                        <span class="note-list-customer-notapplicable"><?= $block->escapeHtml(__('Notification Not Applicable')) ?></span>
-                    <?php elseif ($block->isItemNotified($_item)) : ?>
-                        <span class="note-list-customer-notified"><?= $block->escapeHtml(__('Notified')) ?></span>
-                    <?php else : ?>
-                        <span class="note-list-customer-not-notified"><?= $block->escapeHtml(__('Not Notified')) ?></span>
+                    <?php if ($block->isCustomerNotificationNotApplicable($_item)): ?>
+                        <span class="note-list-customer-notapplicable">
+                            <?= $block->escapeHtml(__('Notification Not Applicable')) ?>
+                        </span>
+                    <?php elseif ($block->isItemNotified($_item)): ?>
+                        <span class="note-list-customer-notified">
+                            <?= $block->escapeHtml(__('Notified')) ?>
+                        </span>
+                    <?php else: ?>
+                        <span class="note-list-customer-not-notified">
+                            <?= $block->escapeHtml(__('Not Notified')) ?>
+                        </span>
                     <?php endif; ?>
                 </span>
             <?php endif; ?>
@@ -32,11 +38,11 @@
         <div class="edit-order-comments-block-title">
             <?= $block->escapeHtml(__('Notes for this Order')) ?>
         </div>
-        <?php foreach ($block->getFullHistory() as $_item) : ?>
-            <?php if ($_comment = $block->getItemComment($_item)) : ?>
+        <?php foreach ($block->getFullHistory() as $_item): ?>
+            <?php if ($_comment = $block->getItemComment($_item)): ?>
                 <div class="comments-block-item">
                     <div class="comments-block-item-comment">
-                        <?= /* @noEscape */ $_comment ?>
+                        <?= /* @noEscape */ $block->escapeHtml($_comment) ?>
                     </div>
                     <span class="comments-block-item-date-time">
                         <?= $block->escapeHtml(__('Comment added')) ?>
