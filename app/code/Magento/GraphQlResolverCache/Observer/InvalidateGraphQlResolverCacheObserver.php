@@ -65,7 +65,8 @@ class InvalidateGraphQlResolverCacheObserver implements ObserverInterface
 
         if (($object instanceof  \Magento\Cms\Model\Block
             || $object instanceof \Magento\Cms\Model\Page)
-            && $object->getData('staging') !== null) {
+            && $object->getData('staging') !== null
+        ) {
             return;
         }
 
