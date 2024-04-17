@@ -15,7 +15,7 @@ use Magento\Framework\MessageQueue\ConsumerInterface;
 class ConsumerInstance implements ValidatorInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validate($configData)
     {
@@ -43,7 +43,6 @@ class ConsumerInstance implements ValidatorInterface
                     "'%s' does not exist and thus cannot be used as 'consumerInstance' for '%s' consumer.",
                     $consumerInstance,
                     $consumerConfig['name'],
-                    ConsumerInterface::class
                 )
             );
         }
