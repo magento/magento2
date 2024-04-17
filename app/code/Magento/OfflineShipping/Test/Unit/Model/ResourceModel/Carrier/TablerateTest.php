@@ -74,10 +74,15 @@ class TablerateTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
+        $configOptionClassMock = $this->getMockBuilder(IoFile::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([])
+            ->getMock();
+
         $objects = [
             [
                 IoFile::class,
-                $this->createMock(IoFile::class)
+                $configOptionClassMock
             ]
         ];
         $objectManagerHelper->prepareObjectManager($objects);
