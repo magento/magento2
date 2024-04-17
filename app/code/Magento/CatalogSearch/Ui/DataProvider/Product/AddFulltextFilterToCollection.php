@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogSearch\Ui\DataProvider\Product;
 
-use Magento\CatalogSearch\Model\ResourceModel\Search\Collection as SearchCollection;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\BackendCollection;
 use Magento\Framework\Data\Collection;
 use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
 
@@ -14,19 +14,15 @@ use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
  */
 class AddFulltextFilterToCollection implements AddFilterToCollectionInterface
 {
-    /**
-     * Search Collection
-     *
-     * @var SearchCollection
-     */
-    private $searchCollection;
+    private BackendCollection $backendCollection;
 
     /**
-     * @param SearchCollection $searchCollection
+     * @param BackendCollection $backendCollection
      */
-    public function __construct(SearchCollection $searchCollection)
-    {
-        $this->searchCollection = $searchCollection;
+    public function __construct(
+        BackendCollection $backendCollection
+    ) {
+        $this->backendCollection = $backendCollection;
     }
 
     /**
@@ -38,8 +34,8 @@ class AddFulltextFilterToCollection implements AddFilterToCollectionInterface
     {
         /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
         if (isset($condition['fulltext']) && (string)$condition['fulltext'] !== '') {
-            $this->searchCollection->addBackendSearchFilter($condition['fulltext']);
-            $productIds = $this->searchCollection->load()->getAllIds();
+            $this->backendCollection->addSearchFilter($condition['fulltext']);
+            $productIds = $this->backendCollection->load()->getAllIds();
             if (empty($productIds)) {
                 //add dummy id to prevent returning full unfiltered collection
                 $productIds = -1;
