@@ -32,12 +32,6 @@ class SearchCriteriaValidatorTest extends TestCase
 
     protected function setUp(): void
     {
-        set_error_handler(
-            static function ( $errno, $errstr ) {
-                throw new \Exception( $errstr, $errno );
-            },
-            E_ALL
-        );
         $this->config = self::getMockBuilder(IOLimitConfigProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
