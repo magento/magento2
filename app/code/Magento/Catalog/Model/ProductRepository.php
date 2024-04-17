@@ -717,18 +717,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $searchResult->setItems($collection->getItems());
         $searchResult->setTotalCount($collection->getSize());
 
-        foreach ($collection->getItems() as $product) {
-            $this->cacheProduct(
-                $this->getCacheKey(
-                    [
-                        false,
-                        $product->getStoreId()
-                    ]
-                ),
-                $product
-            );
-        }
-
         return $searchResult;
     }
 
