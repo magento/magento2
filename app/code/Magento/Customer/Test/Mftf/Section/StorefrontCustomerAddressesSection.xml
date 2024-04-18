@@ -22,5 +22,7 @@
         <element name="numberOfAddresses" type="text" selector=".toolbar-number"/>
         <element name="shippingAddress" type="text" selector="//div[contains(@class,'box box-shipping-address')]//div/address"/>
         <element name="billingAddress" type="text" selector="//div[contains(@class,'box box-billing-address')]//div/address"/>
+        <element name="changeBillingAddress" type="button" selector="//div[@class='box box-address-billing']//div[@class='box-actions']//a"/>
+        <element name="changeShippingAddress" type="button" selector="//div[@class='box box-address-shipping']//div[@class='box-actions']//a"/>
     </section>
 </sections>
