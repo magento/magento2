@@ -55,14 +55,10 @@ class ValidateQuoteOrigOrder
         $params = $this->request->getBodyParams();
         if (!empty($params) && isset($params['quote']['orig_order_id'])) {
             $orderId = $params['quote']['orig_order_id'];
-            try {
-                $order = $this->orderRepository->get($orderId);
-                $orderCustomer = (int)$order->getCustomerId();
-                if ($quote->getCustomerId() !== $orderCustomer) {
-                    throw new NoSuchEntityException(__('Please check input parameters.'));
-                }
-            } catch (\Exception $e) {
-                throw new NoSuchEntityException(__('Please check input parameters.'), $e);
+            $order = $this->orderRepository->get($orderId);
+            $orderCustomer = (int)$order->getCustomerId();
+            if ($quote->getCustomerId() !== $orderCustomer) {
+                throw new NoSuchEntityException(__('Please check input parameters.'));
             }
         }
     }
