@@ -51,6 +51,9 @@ class UserExpirationTest extends TestCase
             \IntlDateFormatter::MEDIUM,
             \IntlDateFormatter::MEDIUM
         );
+        if (version_compare(PHP_VERSION, '8.3', '>=') && $locale === 'uk_UA') {
+            $expireDate = str_replace(' р.', ' р.', $expireDate);
+        }
         $userExpirationFactory = Bootstrap::getObjectManager()->get(UserExpirationFactory::class);
         $userExpiration = $userExpirationFactory->create();
         $userExpiration->setExpiresAt($expireDate);

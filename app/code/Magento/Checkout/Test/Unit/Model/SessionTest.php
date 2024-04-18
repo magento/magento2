@@ -13,6 +13,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\CollectionFactory;
+use Magento\Framework\Session\SessionStartChecker;
 use Magento\Framework\Session\Storage;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -51,6 +52,13 @@ class SessionTest extends TestCase
     protected function setUp(): void
     {
         $this->helper = new ObjectManager($this);
+        $objects = [
+            [
+                SessionStartChecker::class,
+                $this->createMock(SessionStartChecker::class)
+            ]
+        ];
+        $this->helper->prepareObjectManager($objects);
     }
 
     /**

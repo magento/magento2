@@ -16,7 +16,6 @@ use Magento\Store\Model\ScopeInterface;
  * Category resource collection
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
@@ -568,8 +567,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     private function getProductsCountQuery(array $categoryIds, $addVisibilityFilter = true): Select
     {
-        $connections = $this->_resource->getConnection();
-        $categoryTable = $connections->getTableName('catalog_category_product_index');
+        $categoryTable = $this->_resource->getTableName('catalog_category_product_index');
         $select = $this->_conn->select()
             ->from(
                 ['cat_index' => $categoryTable],

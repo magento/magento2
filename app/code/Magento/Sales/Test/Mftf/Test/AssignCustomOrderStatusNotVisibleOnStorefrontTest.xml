@@ -104,6 +104,7 @@
             <argument name="tags" value="config full_page"/>
         </actionGroup>
 
+        <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatusPageToAssertChanges"/>
         <!-- Assert order status in grid -->
         <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterOrderStatusGrid">
             <argument name="statusLabel" value="{{defaultOrderStatus.label}}"/>

@@ -47,10 +47,13 @@
             <argument name="keyword" value="api-simple-product"/>
         </actionGroup>
         <actionGroup ref="SortProductsByIdDescendingActionGroup" stepKey="sortProductsByIdDescending"/>
+        <waitForElementClickable selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="waitForFirstCheckboxClickable" />
         <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="clickCheckbox1"/>
         <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="clickCheckbox2"/>
         <!-- Mass update attributes -->
+        <waitForElementClickable selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="waitForDropdownClickable" />
         <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickDropdown"/>
+        <waitForElementClickable selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="waitForOptionClickable" />
         <click selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="clickOption"/>
         <waitForPageLoad stepKey="waitForBulkUpdatePage"/>
         <seeInCurrentUrl stepKey="seeInUrl" url="catalog/product_action_attribute/edit/"/>
