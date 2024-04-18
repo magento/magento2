@@ -20,7 +20,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 class ValidateQuoteOrigOrder
 {
     /**
-     * @var OrderRepositoryInterface|null
+     * @var OrderRepositoryInterface
      */
     private $orderRepository;
 
