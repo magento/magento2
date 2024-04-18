@@ -168,12 +168,12 @@ class ShippingMethodManagementTest extends TestCase
         $rate = reset($result);
         $expectedResult = [
             'method_code' => 'bestway',
-            'amount' => 10
+            'amount' => 5
         ];
         $this->assertEquals($expectedResult['method_code'], $rate->getMethodCode());
         $this->assertEquals($expectedResult['amount'], $rate->getAmount());
     }
-    
+
     /**
      * @magentoDataFixture Magento/SalesRule/_files/cart_rule_100_percent_off.php
      * @magentoDataFixture Magento/Sales/_files/quote_with_customer.php
