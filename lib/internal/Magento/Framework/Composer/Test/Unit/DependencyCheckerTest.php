@@ -36,7 +36,6 @@ class DependencyCheckerTest extends TestCase
 
         $this->composerApp = $this->getMockBuilder(Application::class)
             ->onlyMethods(['setAutoExit', 'resetComposer', 'run','__destruct'])
-            ->disableOriginalConstructor()
             ->getMock();
         $this->composerFactory->method('create')->willReturn($this->composerApp);
         parent::setUp();
@@ -48,11 +47,9 @@ class DependencyCheckerTest extends TestCase
      */
     public function testCheckDependencies(): void
     {
-
         $directoryList = $this->createMock(DirectoryList::class);
         $directoryList->expects($this->exactly(2))->method('getRoot');
         $this->composerApp->expects($this->once())->method('setAutoExit')->with(false);
-        $this->composerApp->expects($this->any())->method('__destruct');
 
         $this->composerApp
             ->method('run')
@@ -97,7 +94,6 @@ class DependencyCheckerTest extends TestCase
         $directoryList = $this->createMock(DirectoryList::class);
         $directoryList->expects($this->exactly(3))->method('getRoot');
         $this->composerApp->expects($this->once())->method('setAutoExit')->with(false);
-        $this->composerApp->expects($this->any())->method('__destruct');
 
         $this->composerApp
             ->method('run')

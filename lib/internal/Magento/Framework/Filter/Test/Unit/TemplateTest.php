@@ -42,28 +42,27 @@ class TemplateTest extends TestCase
      */
     protected $filteringDepthMeter;
 
+    /**
+     * @var array
+     */
+    private $listClasses = [
+        DependDirective::class,
+        IfDirective::class,
+        TemplateDirective::class,
+        LegacyDirective::class
+    ];
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-
-        $objects = [
-            [
-                DependDirective::class,
-                $this->createMock(DependDirective::class)
-            ],
-            [
-                IfDirective::class,
-                $this->createMock(IfDirective::class)
-            ],
-            [
-                TemplateDirective::class,
-                $this->createMock(TemplateDirective::class)
-            ],
-            [
-                LegacyDirective::class,
-                $this->createMock(LegacyDirective::class)
-            ]
-        ];
+        $objects = [];
+        foreach ($this->listClasses as $className) {
+            $classMock = $this->getMockBuilder($className)
+                ->disableOriginalConstructor()
+                ->onlyMethods([])
+                ->getMock();
+            $objects[] = [$className,$classMock];
+        }
         $objectManager->prepareObjectManager($objects);
 
         $this->store = $objectManager->getObject(Store::class);
