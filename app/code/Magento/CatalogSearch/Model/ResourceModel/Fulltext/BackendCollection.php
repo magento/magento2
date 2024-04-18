@@ -43,12 +43,22 @@ use Psr\Log\LoggerInterface;
 
 class BackendCollection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
+    /**
+     * @var FilterBuilder
+     */
     private FilterBuilder $filterBuilder;
+    /**
+     * @var SortOrderBuilder
+     */
     private SortOrderBuilder $sortOrderBuilder;
-    private FilterGroupBuilder $filterGroupBuilder;
+    /**
+     * @var SearchCriteriaBuilder
+     */
     private SearchCriteriaBuilder $searchCriteriaBuilder;
+    /**
+     * @var SearchResultApplierFactory
+     */
     private SearchResultApplierFactory $searchResultApplierFactory;
-    private $hasFilter = false;
 
     /**
      * @param EntityFactory $entityFactory
@@ -115,8 +125,15 @@ class BackendCollection extends \Magento\Catalog\Model\ResourceModel\Product\Col
         private readonly Search   $search,
         \Magento\Framework\DB\Adapter\AdapterInterface      $connection = null,
         ProductLimitationFactory $productLimitationFactory = null,
-        MetadataPool $metadataPool = null, TableMaintainer $tableMaintainer = null, PriceTableResolver $priceTableResolver = null, DimensionFactory $dimensionFactory = null, Category $categoryResourceModel = null, DbStorage $urlFinder = null, GalleryReadHandler $productGalleryReadHandler = null, \Magento\Catalog\Model\ResourceModel\Product\Gallery $mediaGalleryResource = null)
-    {
+        MetadataPool $metadataPool = null,
+        TableMaintainer $tableMaintainer = null,
+        PriceTableResolver $priceTableResolver = null,
+        DimensionFactory $dimensionFactory = null,
+        Category $categoryResourceModel = null,
+        DbStorage $urlFinder = null,
+        GalleryReadHandler $productGalleryReadHandler = null,
+        \Magento\Catalog\Model\ResourceModel\Product\Gallery $mediaGalleryResource = null
+    ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $eavConfig, $resource, $eavEntityFactory, $resourceHelper, $universalFactory, $storeManager, $moduleManager, $catalogProductFlatState, $scopeConfig, $productOptionFactory, $catalogUrl, $localeDate, $customerSession, $dateTime, $groupManagement, $connection, $productLimitationFactory, $metadataPool, $tableMaintainer, $priceTableResolver, $dimensionFactory, $categoryResourceModel, $urlFinder, $productGalleryReadHandler, $mediaGalleryResource);
         $this->filterBuilder = $filterBuilder;
         $this->sortOrderBuilder = $sortOrderBuilder;
@@ -125,8 +142,11 @@ class BackendCollection extends \Magento\Catalog\Model\ResourceModel\Product\Col
     }
 
     /**
-     * @param $attribute
-     * @param $condition
+     * Add a filter onto the collection
+     *
+     * @param string $attribute
+     * @param mixed $condition
+     *
      * @return void
      */
     public function addFieldToFilter($attribute, $condition = null): void
@@ -137,7 +157,10 @@ class BackendCollection extends \Magento\Catalog\Model\ResourceModel\Product\Col
     }
 
     /**
+     * Setup a search term filter and submit the search to ElasticSearch
+     *
      * @param string $fulltext
+     *
      * @return void
      */
     public function addSearchFilter(string $fulltext): void
@@ -147,20 +170,24 @@ class BackendCollection extends \Magento\Catalog\Model\ResourceModel\Product\Col
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $searchCriteria->setRequestName('admin_search_container');
 
-        $sort = $this->sortOrderBuilder->setField('relevance')->setAscendingDirection()->create();
+        $sort = $this->sortOrderBuilder->setField('relevance')->setDescendingDirection()->create();
         $searchCriteria->setSortOrders([$sort]);
         $result = $this->search->search($searchCriteria);
         $this->getSearchResultApplier($result, $searchCriteria)->apply();
     }
 
     /**
-     * Get search result applier.
+     * Assign the result from ElasticSearch to the collection
      *
      * @param SearchResultInterface $searchResult
+     * @param SearchCriteriaInterface $searchCriteria
+     *
      * @return SearchResultApplierInterface
      */
-    private function getSearchResultApplier(SearchResultInterface $searchResult, SearchCriteriaInterface $searchCriteria): SearchResultApplierInterface
-    {
+    private function getSearchResultApplier(
+        SearchResultInterface $searchResult,
+        SearchCriteriaInterface $searchCriteria
+    ): SearchResultApplierInterface {
         $sort = current($searchCriteria->getSortOrders());
 
         return $this->searchResultApplierFactory->create(
