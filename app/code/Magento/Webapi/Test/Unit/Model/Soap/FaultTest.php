@@ -50,7 +50,8 @@ class FaultTest extends TestCase
         $objects = [
             [
                 Escaper::class,
-                $this->createMock(Escaper::class)
+                $this->getMockBuilder(Escaper::class)
+                ->disableOriginalConstructor()->onlyMethods([])->getMock()
             ]
         ];
         $objectManager->prepareObjectManager($objects);
@@ -176,7 +177,7 @@ XML;
      *
      * @return array
      */
-    public function dataProviderForGetSoapFaultMessageTest()
+    public static function dataProviderForGetSoapFaultMessageTest()
     {
         /** Include file with all expected SOAP fault XMLs. */
         $expectedXmls = include __DIR__ . '/../../_files/soap_fault/soap_fault_expected_xmls.php';
