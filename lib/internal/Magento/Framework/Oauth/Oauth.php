@@ -6,10 +6,14 @@
 
 namespace Magento\Framework\Oauth;
 
+use GuzzleHttp\Subscriber\Oauth\Oauth1;
 use Laminas\OAuth\Http\Utility;
+use GuzzleHttp\Psr7\Request;
+use Psr\Http\Message\RequestInterface;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Phrase;
 use Magento\Framework\Oauth\Exception as AuthException;
+use Magento\Framework\App\RequestInterface as AppRequest;
 
 /**
  * Authorization service.
@@ -37,20 +41,33 @@ class Oauth implements OauthInterface
     protected $_tokenProvider;
 
     /**
+     * @var AppRequest
+     */
+    private AppRequest $request;
+
+    /**
+     * @var Oauth1|null
+     */
+    private ?Oauth1 $oauth1Helper = null;
+
+    /**
      * @param Helper\Oauth $oauthHelper
      * @param NonceGeneratorInterface $nonceGenerator
      * @param TokenProviderInterface $tokenProvider
-     * @param \Zend_Oauth_Http_Utility $httpUtility
+     * @param AppRequest $request
+     * @param Utility|null $httpUtility
      */
     public function __construct(
         Helper\Oauth $oauthHelper,
         NonceGeneratorInterface $nonceGenerator,
         TokenProviderInterface $tokenProvider,
+        AppRequest $request,
         Utility $httpUtility = null
     ) {
         $this->_oauthHelper = $oauthHelper;
         $this->_nonceGenerator = $nonceGenerator;
         $this->_tokenProvider = $tokenProvider;
+        $this->request = $request;
         // null default to prevent ObjectManagerFactory from injecting, see MAGETWO-30809
         $this->_httpUtility = $httpUtility ?: new Utility();
     }
@@ -203,7 +220,23 @@ class Oauth implements OauthInterface
             $requestUrl
         );
 
-        if (!Security::compareStrings($calculatedSign, $params['oauth_signature'])) {
+        $calculatedSign2 = $this->getOauthHelper(
+            [
+                'consumer_key'    => $params['oauth_consumer_key'],
+                'consumer_secret' => $consumerSecret,
+                'token'           => $params['oauth_token'],
+                'token_secret'    => $tokenSecret
+            ]
+        )->getSignature($this->getRequestFromArray(
+            [
+                'method' => $httpMethod,
+                'uri' => $requestUrl,
+                'headers' => $this->request->getHeaders()->toArray(),
+                'body' => $httpMethod == 'GET' ? null : json_encode($this->request->getParams()) //this does not cover all cases request type
+            ]
+        ), $params);
+
+        if (!Security::compareStrings($calculatedSign2, $params['oauth_signature'])) {
             throw new AuthException(new Phrase('The signature is invalid. Verify and try again.'));
         }
     }
@@ -294,5 +327,32 @@ class Oauth implements OauthInterface
         if ($exception->wasErrorAdded()) {
             throw $exception;
         }
+    }
+
+    /**
+     * @param array $params
+     * @return Oauth1
+     */
+    private function getOauthHelper(array $params): Oauth1
+    {
+        if (!$this->oauth1Helper) {
+            $this->oauth1Helper = new Oauth1($params);
+        }
+
+        return $this->oauth1Helper;
+    }
+
+    /**
+     * @param array $data
+     * @return RequestInterface
+     */
+    private function getRequestFromArray(array $data): RequestInterface
+    {
+        $method = $data['method'] ?? 'GET';
+        $uri = $data['uri'] ?? '';
+        $headers = $data['headers'] ?? [];
+        $body = $data['body'] ?? '';
+
+        return new Request($method, $uri, $headers, $body);
     }
 }
