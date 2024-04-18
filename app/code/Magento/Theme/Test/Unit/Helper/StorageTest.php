@@ -146,9 +146,6 @@ class StorageTest extends TestCase
             ->method('getCustomization')
             ->willReturn($this->customization);
 
-//        $objectManager = new ObjectManager($this);
-//        $objectManager->prepareObjectManager();
-
         $this->helper = new Storage(
             $this->contextHelper,
             $this->filesystem,
@@ -208,9 +205,6 @@ class StorageTest extends TestCase
             '/',
             ['root', 'image', \Magento\Theme\Model\Wysiwyg\Storage::THUMBNAIL_DIRECTORY]
         );
-
-
-
         $this->assertEquals($thumbnailDir, $this->helper->getThumbnailDirectory($imagePath));
     }
 
@@ -433,7 +427,6 @@ class StorageTest extends TestCase
     public function testGetStorageTypeName($type, $name): void
     {
         $this->resetRequestMock([[Storage::PARAM_CONTENT_TYPE]], [$type]);
-
         $this->assertEquals($name, $this->helper->getStorageTypeName());
     }
 
@@ -457,16 +450,20 @@ class StorageTest extends TestCase
         $this->initializeDefaultRequestMock();
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Theme was not found');
+
         $this->themeFactory->expects($this->once())
-            ->method('create')
-            ->willReturn(null);
+        ->method('create')
+        ->willReturn(null);
+
         $helper = new Storage(
             $this->contextHelper,
             $this->filesystem,
             $this->session,
             $this->themeFactory,
-            $this->file
+            $this->file,
+            $this->filesystemDriver
         );
+
         $helper->getStorageRoot();
     }
 
@@ -541,12 +538,15 @@ class StorageTest extends TestCase
     {
         $this->request
             ->method('getParam')
-            ->willReturnCallback(function ($param) {
-                return match ($param) {
-                    Storage::PARAM_THEME_ID => 6,
-                    Storage::PARAM_CONTENT_TYPE => \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE,
-                    default => '',
-                };
+            ->willReturnCallback(function ($arg1) {
+                static $callCount = 0;
+                if ($arg1 == Storage::PARAM_THEME_ID && $callCount == 0) {
+                    $callCount++;
+                    return 6;
+                } elseif ($arg1 == Storage::PARAM_CONTENT_TYPE && $callCount == 1) {
+                    $callCount++;
+                    return \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE;
+                }
             });
     }
 
@@ -567,12 +567,7 @@ class StorageTest extends TestCase
         $this->contextHelper->expects($this->any())->method('getRequest')->willReturn($this->request);
         $this->request
             ->method('getParam')
-            ->willReturnCallback(function ($withArgs) use ($willReturnArgs) {
-                static $callCount = 0;
-                $returnValue = $willReturnArgs[$callCount] ?? null;
-                $callCount++;
-                return $returnValue;
-            });
+            ->will($this->onConsecutiveCalls(...$willReturnArgs));
 
         $this->helper = new Storage(
             $this->contextHelper,
