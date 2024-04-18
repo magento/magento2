@@ -1,10 +1,7 @@
 <?php
 /************************************************************************
  *
- * ADOBE CONFIDENTIAL
- * ___________________
- *
- * Copyright 2023 Adobe
+ * Copyright 2024 Adobe
  * All Rights Reserved.
  *
  * NOTICE: All information contained herein is, and remains
@@ -24,35 +21,60 @@ namespace Magento\Framework\Oauth\Helper;
 use Laminas\Crypt\Hmac as HMACEncryption;
 use Laminas\OAuth\Http\Utility as HTTPUtility;
 
-class HmacSignature
+class Utility extends HTTPUtility
 {
-    private const HMAC_ALGO = '256';
-
     /**
      * @param array $params
+     * @param $signatureMethod
      * @param string $consumerSecret
-     * @param string|null $tokenSecret
-     * @param string|null $method
-     * @param string|null $url
+     * @param null $tokenSecret
+     * @param null $method
+     * @param null $url
      * @return string
      */
     public function sign(
         array $params,
-        string $consumerSecret,
-        ?string $tokenSecret = null,
-        ?string $method = null,
-        ?string $url = null
+        $signatureMethod,
+        $consumerSecret,
+        $tokenSecret = null,
+        $method = null,
+        $url = null
     ): string {
         unset($params['oauth_signature']);
 
         $binaryHash = HMACEncryption::compute(
             $this->assembleKey($consumerSecret, $tokenSecret),
-            self::HMAC_ALGO,
+            $signatureMethod,
             $this->getBaseSignatureString($params, $method, $url),
             HMACEncryption::OUTPUT_BINARY
         );
 
         return base64_encode($binaryHash);
+    }
+
+    /**
+     * Cast to authorization header
+     *
+     * @param array $params
+     * @param null $realm
+     * @param bool $excludeCustomParams
+     * @return string
+     */
+    public function toAuthorizationHeader(array $params, $realm = null, $excludeCustomParams = true)
+    {
+        $headerValue = [];
+        foreach ($params as $key => $value) {
+            if ($excludeCustomParams) {
+                if (! preg_match("/^oauth_/", $key)) {
+                    continue;
+                }
+            }
+            $headerValue[] = $this->urlEncode($key)
+                . '="'
+                . $this->urlEncode($value) . '"';
+        }
+
+        return implode(",", $headerValue);
     }
 
     /**
@@ -69,7 +91,7 @@ class HmacSignature
             $parts[] = $tokenSecret;
         }
         foreach ($parts as $key => $secret) {
-            $parts[$key] = HTTPUtility::urlEncode($secret);
+            $parts[$key] = self::urlEncode($secret);
         }
 
         return implode('&', $parts);
@@ -87,21 +109,20 @@ class HmacSignature
     {
         $encodedParams = [];
         foreach ($params as $key => $value) {
-            $encodedParams[HTTPUtility::urlEncode($key)] =
-                HTTPUtility::urlEncode($value);
+            $encodedParams[self::urlEncode($key)] =
+                self::urlEncode($value);
         }
         $baseStrings = [];
         if (isset($method)) {
             $baseStrings[] = strtoupper($method);
         }
         if (isset($url)) {
-            // should normalise later. here is the problem
-            $baseStrings[] = HTTPUtility::urlEncode($url);
+            $baseStrings[] = self::urlEncode($url);
         }
         if (isset($encodedParams['oauth_signature'])) {
             unset($encodedParams['oauth_signature']);
         }
-        $baseStrings[] = HTTPUtility::urlEncode(
+        $baseStrings[] = self::urlEncode(
             $this->toByteValueOrderedQueryString($encodedParams)
         );
 

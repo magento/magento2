@@ -6,14 +6,10 @@
 
 namespace Magento\Framework\Oauth;
 
-use GuzzleHttp\Subscriber\Oauth\Oauth1;
-use Laminas\OAuth\Http\Utility;
-use GuzzleHttp\Psr7\Request;
-use Psr\Http\Message\RequestInterface;
+use Magento\Framework\Oauth\Helper\Utility;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Phrase;
 use Magento\Framework\Oauth\Exception as AuthException;
-use Magento\Framework\App\RequestInterface as AppRequest;
 
 /**
  * Authorization service.
@@ -26,11 +22,6 @@ class Oauth implements OauthInterface
     protected $_oauthHelper;
 
     /**
-     * @var  Utility
-     */
-    protected $_httpUtility;
-
-    /**
      * @var \Magento\Framework\Oauth\NonceGeneratorInterface
      */
     protected $_nonceGenerator;
@@ -41,35 +32,26 @@ class Oauth implements OauthInterface
     protected $_tokenProvider;
 
     /**
-     * @var AppRequest
+     * @var Utility
      */
-    private AppRequest $request;
-
-    /**
-     * @var Oauth1|null
-     */
-    private ?Oauth1 $oauth1Helper = null;
+    private Utility $hmacSignatureHelper;
 
     /**
      * @param Helper\Oauth $oauthHelper
      * @param NonceGeneratorInterface $nonceGenerator
      * @param TokenProviderInterface $tokenProvider
-     * @param AppRequest $request
-     * @param Utility|null $httpUtility
+     * @param Utility $utility
      */
     public function __construct(
         Helper\Oauth $oauthHelper,
         NonceGeneratorInterface $nonceGenerator,
         TokenProviderInterface $tokenProvider,
-        AppRequest $request,
-        Utility $httpUtility = null
+        Utility $utility
     ) {
         $this->_oauthHelper = $oauthHelper;
         $this->_nonceGenerator = $nonceGenerator;
         $this->_tokenProvider = $tokenProvider;
-        $this->request = $request;
-        // null default to prevent ObjectManagerFactory from injecting, see MAGETWO-30809
-        $this->_httpUtility = $httpUtility ?: new Utility();
+        $this->hmacSignatureHelper = $utility;
     }
 
     /**
@@ -172,18 +154,16 @@ class Oauth implements OauthInterface
             'oauth_version' => '1.0',
         ];
         $headerParameters = array_merge($headerParameters, $params);
-        $headerParameters['oauth_signature'] = $this->_httpUtility->sign(
+        $headerParameters['oauth_signature'] = $this->hmacSignatureHelper->sign(
             $params,
-            $signatureMethod,
+            'SHA256',
             $headerParameters['oauth_consumer_secret'],
             $headerParameters['oauth_token_secret'],
             $httpMethod,
             $requestUrl
         );
-        $authorizationHeader = $this->_httpUtility->toAuthorizationHeader($headerParameters);
-        // toAuthorizationHeader adds an optional realm="" which is not required for now.
-        // http://tools.ietf.org/html/rfc2617#section-1.2
-        return str_replace('realm="",', '', $authorizationHeader);
+
+        return $this->hmacSignatureHelper->toAuthorizationHeader($headerParameters);
     }
 
     /**
@@ -208,35 +188,16 @@ class Oauth implements OauthInterface
             );
         }
 
-        $allowedSignParams = $params;
-        unset($allowedSignParams['oauth_signature']);
-
-        $calculatedSign = $this->_httpUtility->sign(
-            $allowedSignParams,
-            $params['oauth_signature_method'],
+        $calculatedSign = $this->hmacSignatureHelper->sign(
+            $params,
+            'SHA256',
             $consumerSecret,
             $tokenSecret,
             $httpMethod,
             $requestUrl
         );
 
-        $calculatedSign2 = $this->getOauthHelper(
-            [
-                'consumer_key'    => $params['oauth_consumer_key'],
-                'consumer_secret' => $consumerSecret,
-                'token'           => $params['oauth_token'],
-                'token_secret'    => $tokenSecret
-            ]
-        )->getSignature($this->getRequestFromArray(
-            [
-                'method' => $httpMethod,
-                'uri' => $requestUrl,
-                'headers' => $this->request->getHeaders()->toArray(),
-                'body' => $httpMethod == 'GET' ? null : json_encode($this->request->getParams()) //this does not cover all cases request type
-            ]
-        ), $params);
-
-        if (!Security::compareStrings($calculatedSign2, $params['oauth_signature'])) {
+        if (!Security::compareStrings($calculatedSign, $params['oauth_signature'])) {
             throw new AuthException(new Phrase('The signature is invalid. Verify and try again.'));
         }
     }
@@ -327,32 +288,5 @@ class Oauth implements OauthInterface
         if ($exception->wasErrorAdded()) {
             throw $exception;
         }
-    }
-
-    /**
-     * @param array $params
-     * @return Oauth1
-     */
-    private function getOauthHelper(array $params): Oauth1
-    {
-        if (!$this->oauth1Helper) {
-            $this->oauth1Helper = new Oauth1($params);
-        }
-
-        return $this->oauth1Helper;
-    }
-
-    /**
-     * @param array $data
-     * @return RequestInterface
-     */
-    private function getRequestFromArray(array $data): RequestInterface
-    {
-        $method = $data['method'] ?? 'GET';
-        $uri = $data['uri'] ?? '';
-        $headers = $data['headers'] ?? [];
-        $body = $data['body'] ?? '';
-
-        return new Request($method, $uri, $headers, $body);
     }
 }
