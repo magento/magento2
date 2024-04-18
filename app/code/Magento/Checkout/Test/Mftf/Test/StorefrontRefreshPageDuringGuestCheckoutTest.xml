@@ -56,6 +56,7 @@
         <reloadPage stepKey="refreshPage"/>
 
         <!-- Click Place Order and assert order is placed -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 

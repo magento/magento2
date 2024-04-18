@@ -249,7 +249,7 @@ class DataTest extends TestCase
     public function testGetGalleryImages()
     {
         $productMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['getMediaGalleryImages'])
+            ->addMethods(['getMediaGalleryImages'])
             ->getMockForAbstractClass();
         $productMock->expects($this->once())
             ->method('getMediaGalleryImages')

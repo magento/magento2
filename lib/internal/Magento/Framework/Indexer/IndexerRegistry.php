@@ -5,11 +5,13 @@
  */
 namespace Magento\Framework\Indexer;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * @api Retrieve indexer by id, for example when indexer need to be invalidated
  * @since 100.0.2
  */
-class IndexerRegistry
+class IndexerRegistry implements ResetAfterRequestInterface
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -27,6 +29,14 @@ class IndexerRegistry
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->indexers = [];
     }
 
     /**

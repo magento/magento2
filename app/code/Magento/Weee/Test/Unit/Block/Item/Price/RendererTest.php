@@ -38,8 +38,8 @@ class RendererTest extends TestCase
      */
     protected $item;
 
-    const STORE_ID = 'store_id';
-    const ZONE = 'zone';
+    private const STORE_ID = 'store_id';
+    private const ZONE = 'zone';
 
     protected function setUp(): void
     {
@@ -47,7 +47,7 @@ class RendererTest extends TestCase
 
         $this->weeeHelper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'isEnabled',
                 'typeOfDisplay',
                 'getWeeeTaxInclTax',
@@ -59,17 +59,16 @@ class RendererTest extends TestCase
 
         $this->priceCurrency = $this->getMockBuilder(PriceCurrency::class)
             ->disableOriginalConstructor()
-            ->setMethods(['format'])
+            ->onlyMethods(['format'])
             ->getMock();
 
         $this->item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods([
                 'getWeeeTaxAppliedAmount',
                 'getPriceInclTax',
-                'getRowTotalInclTax',
-                'getCalculationPrice',
                 'getRowTotal',
+                'getRowTotalInclTax',
                 'getWeeeTaxAppliedRowAmount',
                 'getStoreId',
                 'getBaseRowTotalInclTax',
@@ -81,6 +80,7 @@ class RendererTest extends TestCase
                 'getBasePriceInclTax',
                 'getQtyOrdered'
             ])
+            ->onlyMethods(['getCalculationPrice'])
             ->getMock();
 
         $this->item->expects($this->any())
@@ -133,7 +133,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function displayPriceWithWeeeDetailsDataProvider()
+    public static function displayPriceWithWeeeDetailsDataProvider()
     {
         $data = [
             'weee_disabled_true_true' => [
@@ -486,7 +486,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function getDisplayPriceDataProvider()
+    public static function getDisplayPriceDataProvider()
     {
         $data = [
             'weee_disabled_true' => [
@@ -756,7 +756,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function getFinalDisplayPriceDataProvider()
+    public static function getFinalDisplayPriceDataProvider()
     {
         $data = [
             'weee_disabled_true' => [
@@ -787,7 +787,7 @@ class RendererTest extends TestCase
 
         $itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getRowTotal',
                     'getTaxAmount',
@@ -834,7 +834,7 @@ class RendererTest extends TestCase
 
         $itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getBaseRowTotal',
                     'getBaseTaxAmount',

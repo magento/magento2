@@ -90,6 +90,7 @@ class ExportTest extends AbstractBackendController
                 [
                     'entity' => ProductAttributeInterface::ENTITY_TYPE_CODE,
                     'file_format' => $fileFormat,
+                    'fields_enclosure' => '1'
                 ]
             );
         $this->dispatch('backend/admin/export/export');
@@ -107,5 +108,7 @@ class ExportTest extends AbstractBackendController
         $this->assertEquals($filter, reset($actualFilter));
         $this->assertNotEmpty($body['locale']);
         $this->assertEquals($locale, $body['locale']);
+        $this->assertArrayHasKey('fields_enclosure', $body);
+        $this->assertTrue($body['fields_enclosure']);
     }
 }
