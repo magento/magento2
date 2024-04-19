@@ -13,7 +13,7 @@ use Magento\Framework\Exception\ValidatorException;
 
 require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Three/Test.php';
 require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Two/Test.php';
-require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/One/Test.php';
+require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/One/TestFinal.php';
 require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Four/Test.php';
 require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Five/Test.php';
 require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Six/Test.php';
@@ -34,7 +34,7 @@ class ConstructorIntegrityTest extends TestCase
 
     public function testValidateIfParentClassExist()
     {
-        $this->assertTrue($this->_model->validate(\Magento\SomeModule\Model\One\Test::class));
+        $this->assertTrue($this->_model->validate(\Magento\SomeModule\Model\One\TestFinal::class));
     }
 
     public function testValidateIfClassHasParentConstructCall()

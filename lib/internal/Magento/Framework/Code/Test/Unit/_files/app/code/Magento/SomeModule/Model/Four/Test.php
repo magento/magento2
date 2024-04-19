@@ -5,10 +5,10 @@
  */
 namespace Magento\SomeModule\Model\Four;
 
-require_once __DIR__ . '/../One/Test.php';
+require_once __DIR__ . '/../One/TestFinal.php';
 require_once __DIR__ . '/../ElementFactory.php';
 require_once __DIR__ . '/../Proxy.php';
-class Test extends \Magento\SomeModule\Model\One\Test
+class Test extends \Magento\SomeModule\Model\One\TestFinal
 {
     /**
      * @var \Magento\SomeModule\Model\ElementFactory
