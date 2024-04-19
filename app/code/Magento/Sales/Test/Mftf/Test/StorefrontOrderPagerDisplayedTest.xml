@@ -17,9 +17,10 @@
             <testCaseId value="MC-16167"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
-            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="LoginAsAdmin"/>
+            <comment userInput="BIC workaround" stepKey="LoginAsAdmin"/>
             <!-- Enable Flat rate-->
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -89,12 +90,18 @@
 
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
-            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
-            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <comment userInput="BIC workaround" stepKey="reindex"/>
+            <comment userInput="BIC workaround" stepKey="flushCache"/>
         </before>
         <after>
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+            <comment userInput="BIC workaround" stepKey="disableFlatRate"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
             <deleteData createDataKey="createProduct01" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct02" stepKey="deleteProduct2"/>
             <deleteData createDataKey="createProduct03" stepKey="deleteProduct3"/>
@@ -117,20 +124,21 @@
             <deleteData createDataKey="createProduct20" stepKey="deleteProduct20"/>
             <deleteData createDataKey="createProduct21" stepKey="deleteProduct21"/>
 
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="logout"/>
+            <comment userInput="BIC workaround" stepKey="logout"/>
         </after>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
             <argument name="Customer" value="$$createCustomer$$" />
         </actionGroup>
 
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onCategoryPage"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToLimiter"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectLimitOnPage"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoadProducts"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToTopOfPage"/>
+        <comment userInput="BIC workaround" stepKey="onCategoryPage"/>
+        <comment userInput="BIC workaround" stepKey="waitForPageLoad"/>
+        <comment userInput="BIC workaround" stepKey="scrollToLimiter"/>
+        <comment userInput="BIC workaround" stepKey="selectLimitOnPage"/>
+        <comment userInput="BIC workaround" stepKey="waitForLoadProducts"/>
+        <comment userInput="BIC workaround" stepKey="scrollToTopOfPage"/>
 
         <createData entity="CustomerCart" stepKey="createCustomerCart">
             <requiredEntity createDataKey="createCustomer"/>
@@ -220,9 +228,9 @@
             <requiredEntity createDataKey="createProduct21"/>
         </createData>
 
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onCheckout"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="see21Products"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickNextButton"/>
+        <comment userInput="BIC workaround" stepKey="onCheckout"/>
+        <comment userInput="BIC workaround" stepKey="see21Products"/>
+        <comment userInput="BIC workaround" stepKey="clickNextButton"/>
 
         <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
             <requiredEntity createDataKey="createCustomerCart"/>
@@ -232,13 +240,13 @@
             <requiredEntity createDataKey="createCustomerCart"/>
         </updateData>
 
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSuccess"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabOrderNumber"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onMyAccount"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnMyOrders"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrdersLoad"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOrderView"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderPageLoad"/>
+        <comment userInput="BIC workaround" stepKey="waitForSuccess"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <comment userInput="BIC workaround" stepKey="onMyAccount"/>
+        <comment userInput="BIC workaround" stepKey="clickOnMyOrders"/>
+        <comment userInput="BIC workaround" stepKey="waitForOrdersLoad"/>
+        <comment userInput="BIC workaround" stepKey="clickOrderView"/>
+        <comment userInput="BIC workaround" stepKey="waitForOrderPageLoad"/>
 
         <getData entity="GetOrderData" stepKey="getOrderData">
             <requiredEntity createDataKey="createCustomerCart"/>

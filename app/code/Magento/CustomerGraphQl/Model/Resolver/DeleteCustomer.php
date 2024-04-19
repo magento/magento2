@@ -65,7 +65,6 @@ class DeleteCustomer implements ResolverInterface
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
-
         $isSecure = $this->registry->registry('isSecureArea');
 
         $this->registry->unregister('isSecureArea');

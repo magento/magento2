@@ -15,6 +15,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-37450"/>
             <group value="ui"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -43,7 +44,9 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStoreEN"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData stepKey="deleteRootCategory" createDataKey="rootCategory"/>
@@ -74,7 +77,9 @@
         <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
             <argument name="websiteName" value="{{customWebsite.name}}"/>
         </actionGroup>
-        <magentoCron groups="index" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!--Go to grid page and verify AssertErrorMessage-->
         <actionGroup ref="AssertErrorMessageAfterDeletingWebsiteActionGroup" stepKey="verifyErrorMessage">

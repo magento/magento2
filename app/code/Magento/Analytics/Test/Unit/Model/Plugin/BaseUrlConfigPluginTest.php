@@ -47,7 +47,8 @@ class BaseUrlConfigPluginTest extends TestCase
         $this->subscriptionUpdateHandlerMock = $this->createMock(SubscriptionUpdateHandler::class);
         $this->configValueMock = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isValueChanged', 'getPath', 'getScope', 'getOldValue'])
+            ->addMethods(['getPath', 'getScope'])
+            ->onlyMethods(['isValueChanged', 'getOldValue'])
             ->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->plugin = $this->objectManagerHelper->getObject(
@@ -88,7 +89,7 @@ class BaseUrlConfigPluginTest extends TestCase
     /**
      * @return array
      */
-    public function afterSavePluginIsNotApplicableDataProvider()
+    public static function afterSavePluginIsNotApplicableDataProvider()
     {
         return [
             'Value has not been changed' => [

@@ -11,7 +11,6 @@ use Elasticsearch\Common\Exceptions\BadRequest400Exception;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\Model\DataProvider\Base\Suggestions;
-use Magento\Elasticsearch\Model\DataProvider\Suggestions as SuggestionsDataProvider;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Elasticsearch7\Model\Client\Elasticsearch;
@@ -32,7 +31,7 @@ use Psr\Log\LoggerInterface;
 class SuggestionsTest extends TestCase
 {
     /**
-     * @var SuggestionsDataProvider
+     * @var Suggestions
      */
     private $model;
 
@@ -226,7 +225,7 @@ class SuggestionsTest extends TestCase
      */
     public function testGetItemsException(): void
     {
-        if (!class_exists(\Elasticsearch\Client::class)) {
+        if (!class_exists(\Elasticsearch\ClientBuilder::class)) { /** @phpstan-ignore-line */
             $this->markTestSkipped('AC-6597: Skipped as Elasticsearch 8 is configured');
         }
 

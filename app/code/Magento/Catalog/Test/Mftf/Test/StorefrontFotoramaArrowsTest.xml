@@ -15,6 +15,7 @@
             <description value="Check arrows next to the thumbs are not visible than there is room for all pictures."/>
             <severity value="BLOCKER"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -28,7 +29,6 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
-
         <!-- Open Product for edit -->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="findCreatedProductInGrid">
             <argument name="product" value="$$createProduct$$"/>
