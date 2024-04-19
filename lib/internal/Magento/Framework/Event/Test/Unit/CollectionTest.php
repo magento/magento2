@@ -22,7 +22,7 @@ class CollectionTest extends TestCase
      */
     protected $collection;
 
-    /*
+    /**
      * Array of events in the collection
      *
      * @var array
