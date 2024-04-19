@@ -9,8 +9,9 @@ declare(strict_types=1);
 namespace Magento\Csp\Helper;
 
 use Magento\Csp\Api\InlineUtilInterface;
-use Magento\Csp\Model\Collector\ConfigCollector;
 use Magento\Csp\Model\Collector\DynamicCollector;
+use Magento\Csp\Model\InlineUtil\HashGenerator;
+use Magento\Csp\Model\InlineUtil\InlineWhitelistStategy;
 use Magento\Csp\Model\Policy\FetchPolicy;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Helper\SecureHtmlRender\EventHandlerData;
@@ -40,11 +41,6 @@ class InlineUtil implements InlineUtilInterface, SecurityProcessorInterface
      */
     private $htmlRenderer;
 
-    /**
-     * @var ConfigCollector
-     */
-    private $configCollector;
-
     private static $tagMeta = [
         'script' => ['id' => 'script-src', 'remote' => ['src'], 'hash' => true],
         'style' => ['id' => 'style-src', 'remote' => [], 'hash' => true],
@@ -63,32 +59,33 @@ class InlineUtil implements InlineUtilInterface, SecurityProcessorInterface
     ];
 
     /**
+     * @var InlineWhitelistStategy
+     */
+    private InlineWhitelistStategy $inlineWhitelistStategy;
+
+    /**
+     * @var HashGenerator
+     */
+    private HashGenerator $hashGenerator;
+
+    /**
      * @param DynamicCollector $dynamicCollector
+     * @param InlineWhitelistStategy $inlineWhitelistStategy
      * @param bool $useUnsafeHashes Use 'unsafe-hashes' policy (not supported by CSP v2).
      * @param HtmlRenderer|null $htmlRenderer
-     * @param ConfigCollector|null $configCollector
      */
     public function __construct(
-        DynamicCollector $dynamicCollector,
-        bool $useUnsafeHashes = false,
-        ?HtmlRenderer $htmlRenderer = null,
-        ?ConfigCollector $configCollector = null
+        DynamicCollector       $dynamicCollector,
+        InlineWhitelistStategy $inlineWhitelistStategy,
+        HashGenerator $hashGenerator,
+        bool                   $useUnsafeHashes = false,
+        ?HtmlRenderer          $htmlRenderer = null
     ) {
         $this->dynamicCollector = $dynamicCollector;
         $this->useUnsafeHashes = $useUnsafeHashes;
         $this->htmlRenderer = $htmlRenderer ?? ObjectManager::getInstance()->get(HtmlRenderer::class);
-        $this->configCollector = $configCollector ?? ObjectManager::getInstance()->get(ConfigCollector::class);
-    }
-
-    /**
-     * Generate fetch policy hash for some content.
-     *
-     * @param string $content
-     * @return array Hash data to insert into a FetchPolicy.
-     */
-    private function generateHashValue(string $content): array
-    {
-        return [base64_encode(hash('sha256', $content, true)) => 'sha256'];
+        $this->inlineWhitelistStategy = $inlineWhitelistStategy;
+        $this->hashGenerator = $hashGenerator;
     }
 
     /**
@@ -196,23 +193,8 @@ class InlineUtil implements InlineUtilInterface, SecurityProcessorInterface
                     new FetchPolicy($policyId, false, $remotes)
                 );
             }
-            if ($tagData->getContent()
-                && !empty(self::$tagMeta[$tagData->getTag()]['hash'])
-                && $this->isInlineDisabled(self::$tagMeta[$tagData->getTag()]['id'])
-            ) {
-                $this->dynamicCollector->add(
-                    new FetchPolicy(
-                        $policyId,
-                        false,
-                        [],
-                        [],
-                        false,
-                        false,
-                        false,
-                        [],
-                        $this->generateHashValue($tagData->getContent())
-                    )
-                );
+            if (!empty(self::$tagMeta[$tagData->getTag()]['hash'])) {
+                $tagData = $this->inlineWhitelistStategy->getSanitisedTag($tagData, $policyId);
             }
         }
 
@@ -234,7 +216,7 @@ class InlineUtil implements InlineUtilInterface, SecurityProcessorInterface
                 false,
                 false,
                 [],
-                $this->generateHashValue($eventHandlerData->getCode()),
+                $this->hashGenerator->generateHashValue($eventHandlerData->getCode()),
                 false,
                 true
             );
@@ -244,22 +226,5 @@ class InlineUtil implements InlineUtilInterface, SecurityProcessorInterface
         $this->dynamicCollector->add($policy);
 
         return $eventHandlerData;
-    }
-
-    /**
-     * Check if inline sources are prohibited.
-     *
-     * @param string $policyId
-     * @return bool
-     */
-    private function isInlineDisabled(string $policyId): bool
-    {
-        foreach ($this->configCollector->collect() as $policy) {
-            if ($policy->getId() === $policyId && $policy instanceof FetchPolicy) {
-                return !$policy->isInlineAllowed();
-            }
-        }
-
-        return false;
     }
 }
