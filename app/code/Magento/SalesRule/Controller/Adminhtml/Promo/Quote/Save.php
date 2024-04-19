@@ -64,7 +64,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
     {
         $data = $this->getRequest()->getPostValue();
         if ($data) {
-            $data['simple_free_shipping'] = ($data['simple_free_shipping'] === '')
+            $data['simple_free_shipping'] = (($data['simple_free_shipping'] ?? '') === '')
                     ? null : $data['simple_free_shipping'];
 
             try {

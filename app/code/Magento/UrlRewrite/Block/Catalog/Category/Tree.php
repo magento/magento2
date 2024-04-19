@@ -12,8 +12,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Categories tree block for URL rewrites editing process
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 {

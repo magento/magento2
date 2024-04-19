@@ -75,7 +75,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <!-- Go to Stores > Attributes > Products. Search and select the product attribute that was used to create the configurable product-->
         <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">

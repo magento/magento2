@@ -12,6 +12,7 @@
     <preference for="Magento\ImportExport\Model\Report\ReportProcessorInterface" type="Magento\ImportExport\Model\Report\Csv" />
     <preference for="Magento\ImportExport\Api\Data\ExportInfoInterface" type="Magento\ImportExport\Model\Export\Entity\ExportInfo" />
     <preference for="Magento\ImportExport\Api\Data\LocalizedExportInfoInterface" type="Magento\ImportExport\Model\Export\Entity\ExportInfo" />
+    <preference for="Magento\ImportExport\Api\Data\FieldsEnclosureAwareExportInfoInterface" type="Magento\ImportExport\Model\Export\Entity\ExportInfo" />
     <preference for="Magento\ImportExport\Api\ExportManagementInterface" type="Magento\ImportExport\Model\Export\ExportManagement" />
     <preference for="Magento\ImportExport\Model\LocaleEmulatorInterface" type="Magento\ImportExport\Model\LocaleEmulator\Proxy" />
     <type name="Magento\Framework\Module\Setup\Migration">
@@ -50,5 +51,8 @@
         <arguments>
             <argument name="defaultLocaleResolver" xsi:type="object">Magento\ImportExport\Model\DefaultLocaleResolver</argument>
         </arguments>
+    </type>
+    <type name="Magento\ImportExport\Model\Import">
+        <plugin name="import_defer_cache" type="Magento\ImportExport\Plugin\DeferCacheCleaningUntilImportIsComplete" sortOrder="1"/>
     </type>
 </config>

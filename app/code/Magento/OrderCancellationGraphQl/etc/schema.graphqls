@@ -1,0 +1,24 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+type StoreConfig {
+    order_cancellation_enabled: Boolean! @doc(description: "Indicates whether orders can be cancelled by customers or not.")
+    order_cancellation_reasons: [CancellationReason!]! @resolver(class: "Magento\\OrderCancellationGraphQl\\Model\\Resolver\\CancellationReasons") @doc(description: "An array containing available cancellation reasons.")
+}
+
+type CancellationReason {
+    description: String! @resolver(class: "Magento\\OrderCancellationGraphQl\\Model\\Resolver\\CancellationReason")
+}
+
+type Mutation {
+    cancelOrder(input: CancelOrderInput!): CancelOrderOutput @resolver(class: "Magento\\OrderCancellationGraphQl\\Model\\Resolver\\CancelOrder") @doc(description: "Cancel the specified customer order.")
+}
+
+input CancelOrderInput @doc(description: "Defines the order to cancel.") {
+    order_id: ID! @doc(description: "Order ID.")
+    reason: String! @doc(description: "Cancellation reason.")
+}
+
+type CancelOrderOutput @doc(description: "Contains the updated customer order and error message if any.") {
+    error: String @doc(description: "Error encountered while cancelling the order.")
+    order: CustomerOrder @doc(description: "Updated customer order.")
+}

@@ -181,7 +181,7 @@ class TypeTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->serializer = $this->getMockBuilder(Json::class)
-            ->setMethods(null)
+            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
         $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
@@ -1573,8 +1573,10 @@ class TypeTest extends TestCase
             ->getMock();
         $productMock
             ->method('getData')
-            ->withConsecutive(['sku'], ['sku_type'])
-            ->willReturnOnConsecutiveCalls($sku, 'some_data');
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['sku'] => $sku,
+                ['sku_type'] => 'some_data'
+            });
 
         $this->assertEquals($sku, $this->model->getSku($productMock));
     }
@@ -1607,8 +1609,10 @@ class TypeTest extends TestCase
             ->willReturn(true);
         $productMock
             ->method('getCustomOption')
-            ->withConsecutive(['option_ids'], ['bundle_selection_ids'])
-            ->willReturnOnConsecutiveCalls(false, $customOptionMock);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['option_ids'] => false,
+                ['bundle_selection_ids'] => $customOptionMock
+            });
         $customOptionMock->expects($this->any())
             ->method('getValue')
             ->willReturn($serializeIds);
@@ -1617,18 +1621,12 @@ class TypeTest extends TestCase
             ->getMock();
         $productMock
             ->method('getData')
-            ->withConsecutive(
-                ['sku'],
-                ['sku_type'],
-                ['_cache_instance_used_selections'],
-                ['_cache_instance_used_selections_ids']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $sku,
-                null,
-                $selectionMock,
-                $selectionIds
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['sku'] => $sku,
+                ['sku_type'] => null,
+                ['_cache_instance_used_selections'] => $selectionMock,
+                ['_cache_instance_used_selections_ids'] => $selectionIds
+            });
         $selectionMock->expects(($this->any()))
             ->method('getItemByColumnValue')
             ->willReturn($selectionItemMock);
@@ -1655,8 +1653,10 @@ class TypeTest extends TestCase
 
         $productMock
             ->method('getData')
-            ->withConsecutive(['weight_type'], ['weight'])
-            ->willReturnOnConsecutiveCalls(true, $weight);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['weight_type'] => true,
+                ['weight'] => $weight
+            });
 
         $this->assertEquals($weight, $this->model->getWeight($productMock));
     }
@@ -1694,12 +1694,11 @@ class TypeTest extends TestCase
         ->getMock();
         $productMock
             ->method('getData')
-            ->withConsecutive(
-                ['weight_type'],
-                ['_cache_instance_used_selections'],
-                ['_cache_instance_used_selections_ids']
-            )
-            ->willReturnOnConsecutiveCalls(false, $selectionMock, $selectionIds);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['weight_type'] => false,
+                ['_cache_instance_used_selections'] => $selectionMock,
+                ['_cache_instance_used_selections_ids'] => $selectionIds
+            });
         $selectionMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$selectionItemMock]);
@@ -1708,11 +1707,10 @@ class TypeTest extends TestCase
             ->willReturn('id');
         $productMock
             ->method('getCustomOption')
-            ->withConsecutive(
-                ['bundle_selection_ids'],
-                ['selection_qty_' . 'id']
-            )
-            ->willReturnOnConsecutiveCalls($customOptionMock, null);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['bundle_selection_ids'] => $customOptionMock,
+                ['selection_qty_' . 'id'] => null
+            });
         $selectionItemMock->expects($this->once())
             ->method('getWeight')
             ->willReturn($weight);
@@ -1760,12 +1758,11 @@ class TypeTest extends TestCase
         ->getMock();
         $productMock
             ->method('getData')
-            ->withConsecutive(
-                ['weight_type'],
-                ['_cache_instance_used_selections'],
-                ['_cache_instance_used_selections_ids']
-            )
-            ->willReturnOnConsecutiveCalls(false, $selectionMock, $selectionIds);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['weight_type'] => false,
+                ['_cache_instance_used_selections'] => $selectionMock,
+                ['_cache_instance_used_selections_ids'] => $selectionIds
+            });
         $selectionMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$selectionItemMock]);
@@ -1774,8 +1771,10 @@ class TypeTest extends TestCase
             ->willReturn('id');
         $productMock
             ->method('getCustomOption')
-            ->withConsecutive(['bundle_selection_ids'], ['selection_qty_' . 'id'])
-            ->willReturnOnConsecutiveCalls($customOptionMock, $qtyOptionMock);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['bundle_selection_ids'] => $customOptionMock,
+                ['selection_qty_' . 'id'] => $qtyOptionMock
+            });
         $qtyOptionMock->expects($this->once())
             ->method('getValue')
             ->willReturn($qtyOption);
@@ -1839,11 +1838,10 @@ class TypeTest extends TestCase
             ->getMock();
         $productMock
             ->method('getData')
-            ->withConsecutive(
-                ['_cache_instance_used_selections'],
-                ['_cache_instance_used_selections_ids']
-            )
-            ->willReturnOnConsecutiveCalls($selectionMock, $selectionIds);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['_cache_instance_used_selections'] => $selectionMock,
+                ['_cache_instance_used_selections_ids'] => $selectionIds
+            });
         $selectionMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$selectionItemMock]);
@@ -1926,7 +1924,7 @@ class TypeTest extends TestCase
     /**
      * @return array
      */
-    public function shakeSelectionsDataProvider(): array
+    public static function shakeSelectionsDataProvider(): array
     {
         return [
             [0, 0, 0],
@@ -2059,7 +2057,7 @@ class TypeTest extends TestCase
             ->getMock();
         $resourceClassName = AbstractCollection::class;
         $dbResourceMock = $this->getMockBuilder($resourceClassName)
-            ->setMethods(['setProductIdFilter', 'setPositionOrder', 'joinValues', 'setIdFilter'])
+            ->addMethods(['setProductIdFilter', 'setPositionOrder', 'joinValues', 'setIdFilter'])
             ->disableOriginalConstructor()
             ->getMock();
         $storeMock = $this->getMockBuilder(Store::class)
@@ -2326,7 +2324,7 @@ class TypeTest extends TestCase
         $this->expectProductEntityMetadata();
         $resourceClassName = AbstractCollection::class;
         $dbResourceMock = $this->getMockBuilder($resourceClassName)
-            ->setMethods(['getItems'])
+            ->onlyMethods(['getItems'])
             ->disableOriginalConstructor()
             ->getMock();
         $item = $this->getMockBuilder(DataObject::class)

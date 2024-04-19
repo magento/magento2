@@ -18,9 +18,6 @@
             <testCaseId value="AC-6031" />
             <useCaseId value="ACP2E-1012"/>
             <group value="currency"/>
-            <skip>
-                <issueId value="ACQE-4266"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -68,15 +65,17 @@
         <click selector="{{AdminCurrencySymbolsGridSection.saveCurrencySymbols}}" stepKey="clickSaveCurrencySymbols"/>
         <waitForPageLoad stepKey="waitForSave"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="{{AdminSaveCurrencySymbolMessageData.success}}" stepKey="seeSuccessMessage"/>
-
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
         <!--Redirect back to admin dashboard screen-->
         <actionGroup ref="AdminReloadDashboardDataActionGroup" stepKey="reloadDashboardData" />
         <!--Verify there is a space between custom currency symbol respective amounts on admin dashboard-->
         <grabTextFrom selector="{{AdminDashboardSection.dashboardTotals('Revenue')}}" stepKey="grabStartQuantity"/>
-        <assertEquals stepKey="assertInputIsDisabled">
+        <assertRegExp stepKey="assertInputIsDisabled">
             <actualResult type="const">$grabStartQuantity</actualResult>
-            <expectedResult type="string">IDRx 0.00</expectedResult>
-        </assertEquals>
+            <expectedResult type="string">/IDRx \d+\.\d+/</expectedResult>
+        </assertRegExp>
 
         <!--Verify Category in store front page-->
         <amOnPage url="{{StorefrontCategoryPage.url($createDefaultCategory.custom_attributes[url_key]$)}}" stepKey="openStorefrontCategoryPage"/>

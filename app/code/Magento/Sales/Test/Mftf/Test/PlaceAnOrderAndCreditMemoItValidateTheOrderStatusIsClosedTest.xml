@@ -15,6 +15,7 @@
             <testCaseId value="AC-1577"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 1" stepKey="EnablingGuestCheckoutLogin"/>
             <!-- Add downloadable domains -->
             <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add example.com static.magento.com"/>
 
@@ -82,6 +83,7 @@
             <!-- Logout User and Admin -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 0" stepKey="DisablingGuestCheckoutLogin"/>
         </after>
 
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="navigateToProductPage">
@@ -101,7 +103,8 @@
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="gotoPaymentStep"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="gotoPaymentStep"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
 
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="customerPlaceOrder">
             <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
