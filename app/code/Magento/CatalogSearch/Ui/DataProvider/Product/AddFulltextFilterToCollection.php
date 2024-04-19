@@ -6,6 +6,7 @@
 namespace Magento\CatalogSearch\Ui\DataProvider\Product;
 
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\BackendCollection;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory as ConfigurableCollectionFactory;
 use Magento\Framework\Data\Collection;
 use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
 
@@ -15,14 +16,17 @@ use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
 class AddFulltextFilterToCollection implements AddFilterToCollectionInterface
 {
     private BackendCollection $backendCollection;
+    private ConfigurableCollectionFactory $linkCollectionFactory;
 
     /**
      * @param BackendCollection $backendCollection
      */
     public function __construct(
-        BackendCollection $backendCollection
+        BackendCollection $backendCollection,
+        ConfigurableCollectionFactory $linkCollectionFactory
     ) {
         $this->backendCollection = $backendCollection;
+        $this->linkCollectionFactory = $linkCollectionFactory;
     }
 
     /**
@@ -34,13 +38,30 @@ class AddFulltextFilterToCollection implements AddFilterToCollectionInterface
     {
         /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
         if (isset($condition['fulltext']) && (string)$condition['fulltext'] !== '') {
-            $this->backendCollection->addSearchFilter($condition['fulltext']);
+            $this->backendCollection->addSearchFilter((string) $condition['fulltext']);
             $productIds = $this->backendCollection->load()->getAllIds();
+            $simpleProductIds = [];
             if (empty($productIds)) {
                 //add dummy id to prevent returning full unfiltered collection
                 $productIds = -1;
+            } else {
+                $simpleProductIds = $this->getSimpleProductIds($this->backendCollection->getItems());
             }
-            $collection->addIdFilter($productIds);
+            $collection->addIdFilter(array_merge($simpleProductIds, $productIds));
         }
+    }
+
+    /**
+     * @param array $products
+     * @return array
+     */
+    private function getSimpleProductIds(array $products): array
+    {
+        /** @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection $collection */
+        $collection = $this->linkCollectionFactory->create();
+        $collection->setProductListFilter($products);
+        $productIds = $collection->load()->getAllIds();
+
+        return $productIds;
     }
 }

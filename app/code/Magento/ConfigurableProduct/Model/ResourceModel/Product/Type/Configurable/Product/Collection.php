@@ -70,6 +70,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         return $this;
     }
 
+    public function setProductListFilter(array $products)
+    {
+        $this->products = $products;
+        return $this;
+    }
+
     /**
      * Add parent ids to `in` filter before load.
      *
