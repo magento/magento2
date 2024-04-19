@@ -16,7 +16,6 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class ScalarFactory implements ConfigElementFactoryInterface
 {
-
     /**
      * @var ObjectManagerInterface
      */
