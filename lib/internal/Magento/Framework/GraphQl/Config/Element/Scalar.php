@@ -14,7 +14,6 @@ use Magento\Framework\GraphQl\Config\ConfigElementInterface;
  */
 class Scalar implements ConfigElementInterface
 {
-
     /**
      * @var string
      */
