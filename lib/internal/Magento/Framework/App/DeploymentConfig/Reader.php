@@ -94,31 +94,43 @@ class Reader
      */
     public function load($fileKey = null)
     {
+        static $cache = [];
+
         $path = $this->dirList->getPath(DirectoryList::CONFIG);
         $fileDriver = $this->driverPool->getDriver(DriverPool::FILE);
         $result = [];
+
         if ($fileKey) {
             $filePath = $path . '/' . $this->configFilePool->getPath($fileKey);
-            if ($fileDriver->isExists($filePath)) {
-                $result = include $filePath;
-                if (!is_array($result)) {
-                    throw new RuntimeException(new Phrase("Invalid configuration file: '%1'", [$filePath]));
+            if (!isset($cache[$filePath])) {  // Check if the file data is already cached
+                if ($fileDriver->isExists($filePath)) {
+                    $fileData = include $filePath;
+                    if (!is_array($fileData)) {
+                        throw new RuntimeException(new Phrase("Invalid configuration file: '%1'", [$filePath]));
+                    }
+                    $cache[$filePath] = $fileData;  // Cache the file data
+                } else {
+                    $cache[$filePath] = null;  // Cache that the file does not exist or is invalid
                 }
             }
+            $result = $cache[$filePath] ?: [];
         } else {
             $configFiles = $this->getFiles();
             foreach ($configFiles as $file) {
                 $configFile = $path . '/' . $file;
-                if ($fileDriver->isExists($configFile)) {
-                    $fileData = include $configFile;
-                    if (!is_array($fileData)) {
-                        throw new RuntimeException(new Phrase("Invalid configuration file: '%1'", [$configFile]));
+                if (!isset($cache[$configFile])) {  // Check cache first
+                    if ($fileDriver->isExists($configFile)) {
+                        $fileData = include $configFile;
+                        if (!is_array($fileData)) {
+                            throw new RuntimeException(new Phrase("Invalid configuration file: '%1'", [$configFile]));
+                        }
+                        $cache[$configFile] = $fileData;  // Cache the file data
+                    } else {
+                        $cache[$configFile] = null;  // Cache that the file does not exist or is invalid
                     }
-                } else {
-                    continue;
                 }
-                if ($fileData) {
-                    $result = array_replace_recursive($result, $fileData);
+                if ($cache[$configFile]) {
+                    $result = array_replace_recursive($result, $cache[$configFile]);
                 }
             }
         }
