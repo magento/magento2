@@ -5,8 +5,10 @@
  */
 namespace Magento\SomeModule\Model\One;
 
+use PHPUnit\Framework\TestCase;
+
 require_once __DIR__ . '/../Proxy.php';
-class Test
+class Test extends TestCase
 {
     /**
      * @var \Magento\SomeModule\Model\Proxy
