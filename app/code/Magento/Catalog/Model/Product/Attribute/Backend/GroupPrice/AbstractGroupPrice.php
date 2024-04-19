@@ -472,10 +472,10 @@ abstract class AbstractGroupPrice extends Price implements ResetAfterRequestInte
     /**
      * Check if data consists of percentage value
      *
-     * @param $data
+     * @param array $data
      * @return bool
      */
-    private function isPercentageValue($data): bool
+    private function isPercentageValue(array $data): bool
     {
         return (array_key_exists('percentage_value', $data) && $data['percentage_value'] === null);
     }
