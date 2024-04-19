@@ -81,16 +81,10 @@ class Reader
     }
 
     /**
-     * Method loads merged configuration within all configuration files.
-     * To retrieve specific file configuration, use FileReader.
-     * $fileKey option is deprecated since version 2.2.0.
-     *
-     * @param string $fileKey The file key (deprecated)
-     * @return array
-     * @throws FileSystemException If file can not be read
-     * @throws RuntimeException If file is invalid
-     * @throws \Exception If file key is not correct
-     * @see FileReader
+     * @param $fileKey
+     * @return array|mixed
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function load($fileKey = null)
     {
@@ -102,38 +96,42 @@ class Reader
 
         if ($fileKey) {
             $filePath = $path . '/' . $this->configFilePool->getPath($fileKey);
-            if (!isset($cache[$filePath])) {  // Check if the file data is already cached
-                if ($fileDriver->isExists($filePath)) {
-                    $fileData = include $filePath;
-                    if (!is_array($fileData)) {
-                        throw new RuntimeException(new Phrase("Invalid configuration file: '%1'", [$filePath]));
-                    }
-                    $cache[$filePath] = $fileData;  // Cache the file data
-                } else {
-                    $cache[$filePath] = null;  // Cache that the file does not exist or is invalid
-                }
-            }
+            $cache = $this->getFileCache($cache, $filePath, $fileDriver);
             $result = $cache[$filePath] ?: [];
         } else {
             $configFiles = $this->getFiles();
             foreach ($configFiles as $file) {
                 $configFile = $path . '/' . $file;
-                if (!isset($cache[$configFile])) {  // Check cache first
-                    if ($fileDriver->isExists($configFile)) {
-                        $fileData = include $configFile;
-                        if (!is_array($fileData)) {
-                            throw new RuntimeException(new Phrase("Invalid configuration file: '%1'", [$configFile]));
-                        }
-                        $cache[$configFile] = $fileData;  // Cache the file data
-                    } else {
-                        $cache[$configFile] = null;  // Cache that the file does not exist or is invalid
-                    }
-                }
+                $cache = $this->getFileCache($cache, $configFile, $fileDriver);
                 if ($cache[$configFile]) {
                     $result = array_replace_recursive($result, $cache[$configFile]);
                 }
             }
         }
         return $result ?: [];
+    }
+
+    /**
+     * @param array $cache
+     * @param string $filePath
+     * @param \Magento\Framework\Filesystem\DriverInterface $fileDriver
+     * @return array
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
+     */
+    public function getFileCache(array $cache, string $filePath, \Magento\Framework\Filesystem\DriverInterface $fileDriver): array
+    {
+        if (!isset($cache[$filePath])) {
+            if ($fileDriver->isExists($filePath)) {
+                $fileData = include $filePath;
+                if (!is_array($fileData)) {
+                    throw new RuntimeException(new Phrase("Invalid configuration file: '%1'", [$filePath]));
+                }
+                $cache[$filePath] = $fileData;
+            } else {
+                $cache[$filePath] = null;
+            }
+        }
+        return $cache;
     }
 }
