@@ -14,7 +14,6 @@ use Magento\Store\Model\Store;
 /**
  * Catalog product custom option resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
@@ -25,15 +24,11 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $metadataPool;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Currency factory
-     *
      * @var \Magento\Directory\Model\CurrencyFactory
      */
     protected $_currencyFactory;
@@ -262,9 +257,10 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     if (($storeId == Store::DEFAULT_STORE_ID && !$existInDefaultStore) ||
                         (
                             $storeId != Store::DEFAULT_STORE_ID &&
-                            !$existInCurrentStore &&
-                            !$isDeleteStoreTitle
-                        )
+                            !$isDeleteStoreTitle &&
+                            ($object->getDefaultTitle() != null && $object->getTitle() !== $object->getDefaultTitle())
+                        ) ||
+                        ($object->getIsUseDefault() != null && !(int)$object->getIsUseDefault())
                     ) {
                         $data = $this->_prepareDataForTable(
                             new \Magento\Framework\DataObject(

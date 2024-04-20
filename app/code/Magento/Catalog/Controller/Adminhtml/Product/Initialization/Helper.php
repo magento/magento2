@@ -20,6 +20,7 @@ use Magento\Catalog\Model\Product\Filter\DateTime as DateTimeFilter;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
 use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Locale\FormatInterface;
@@ -400,6 +401,9 @@ class Helper
                     if ('title' == $fieldName) {
                         $option['is_delete_store_title'] = 1;
                     }
+                }
+                if (CustomOptions::FIELD_TITLE_NAME == $fieldName) {
+                    $option[CustomOptions::FIELD_IS_USE_DEFAULT] = $overwrite;
                 }
             }
         }
