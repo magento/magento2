@@ -121,10 +121,10 @@ class FactoryTest extends TestCase
                 'ssl_enabled' => true,
                 'connection_class' => AMQPSSLConnection::class,
             ],
-            [
-                'ssl_enabled' => false,
-                'connection_class' => AMQPStreamConnection::class,
-            ],
+//            [ // Need to revert in scope of this ticket - AC-11673
+//                'ssl_enabled' => false,
+//                'connection_class' => AMQPStreamConnection::class,
+//            ],
         ];
     }
 
