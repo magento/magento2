@@ -228,10 +228,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
     private function getConstructorData(string $className, array $data): array
     {
         $preferenceClass = $this->config->getPreference($className);
-        if (is_subclass_of($preferenceClass, \SimpleXMLElement::class)
-            || is_subclass_of($preferenceClass, \DOMElement::class)) {
-            return [];
-        }
         $class = new ClassReflection($preferenceClass ?: $className);
 
         try {
@@ -270,7 +266,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
      *
      * @param string $className
      * @param array $data
-     * @return object the newly created and populated object
+     * @return object|null the newly created and populated object
      * @throws \Exception
      * @throws SerializationException
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -282,6 +278,10 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
         // convert to string directly to avoid situations when $className is object
         // which implements __toString method like \ReflectionObject
         $className = (string) $className;
+        if (is_subclass_of($className, \SimpleXMLElement::class)
+            || is_subclass_of($className, \DOMElement::class)) {
+            return null;
+        }
         $class = new ClassReflection($className);
         if (is_subclass_of($className, self::EXTENSION_ATTRIBUTES_TYPE)) {
             $className = substr($className, 0, -strlen('Interface'));
