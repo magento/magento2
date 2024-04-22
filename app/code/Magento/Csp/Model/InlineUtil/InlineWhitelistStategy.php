@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Magento\Csp\Model\InlineUtil;
 
+use Magento\Csp\Helper\CspNonceProvider;
 use Magento\Csp\Model\Collector\ConfigCollector;
 use Magento\Csp\Model\Collector\DynamicCollector;
 use Magento\Csp\Model\Policy\FetchPolicy;
