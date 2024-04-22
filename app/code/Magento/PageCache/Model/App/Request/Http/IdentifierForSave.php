@@ -23,9 +23,10 @@ class IdentifierForSave implements IdentifierInterface
      * @param Json $serializer
      */
     public function __construct(
-        private Http $request,
-        private Context $context,
-        private Json $serializer
+        private Http                  $request,
+        private Context               $context,
+        private Json                  $serializer,
+        private IdentifierStoreReader $identifierStoreReader,
     ) {
     }
 
@@ -41,6 +42,8 @@ class IdentifierForSave implements IdentifierInterface
             $this->request->getUriString(),
             $this->context->getVaryString()
         ];
+
+        $data = $this->identifierStoreReader->getPageTagsWithStoreCacheTags($data);
 
         return sha1($this->serializer->serialize($data));
     }

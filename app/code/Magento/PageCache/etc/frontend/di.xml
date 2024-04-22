@@ -31,4 +31,15 @@
             <argument name="identifierForSave" xsi:type="object">Magento\PageCache\Model\App\Request\Http\IdentifierForSave</argument>
         </arguments>
     </type>
+
+    <type name="Magento\PageCache\Model\App\Request\Http\IdentifierForSave">
+        <arguments>
+            <argument name="identifierStoreReader" xsi:type="object">Magento\PageCache\Model\App\Request\Http\IdentifierStoreReader</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\PageCache\Identifier">
+        <arguments>
+            <argument name="identifierStoreReader" xsi:type="object">Magento\PageCache\Model\App\Request\Http\IdentifierStoreReader</argument>
+        </arguments>
+    </type>
 </config>
