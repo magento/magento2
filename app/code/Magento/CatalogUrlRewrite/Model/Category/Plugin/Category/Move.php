@@ -74,7 +74,7 @@ class Move
     ) {
         $categoryStoreId = $category->getStoreId();
         foreach ($category->getStoreIds() as $storeId) {
-            $category->setStoreId($storeId);
+            $category->setStoreId($categoryStoreId == $storeId ? $storeId : $categoryStoreId);
             $this->removeObsoleteUrlPathEntries($category);
             $this->updateCategoryUrlKeyForStore($category);
             $category->unsUrlPath();
