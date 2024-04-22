@@ -193,7 +193,7 @@ class TypeLocatorTest extends \PHPUnit\Framework\TestCase
                     'custom_design_to' => 'string',
                     'available_sort_by' => 'string[]',
                     'page_layout' => 'string',
-                    'default_sort_by' => 'string[]',
+                    'default_sort_by' => 'string',
                     'filter_price_range' => 'double',
                     'custom_layout_update' => 'string',
                 ]

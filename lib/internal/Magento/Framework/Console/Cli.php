@@ -91,8 +91,10 @@ class Cli extends Console\Application
             $output->writeln(
                 '<error>' . $exception->getMessage() . '</error>'
             );
+            // phpcs:disable
             // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
             exit(static::RETURN_FAILURE);
+            // phpcs:enable
         }
 
         if ($version == 'UNKNOWN') {
@@ -134,7 +136,7 @@ class Cli extends Console\Application
     /**
      * @inheritdoc
      */
-    protected function getDefaultCommands()
+    protected function getDefaultCommands():array
     {
         return array_merge(parent::getDefaultCommands(), $this->getApplicationCommands());
     }
