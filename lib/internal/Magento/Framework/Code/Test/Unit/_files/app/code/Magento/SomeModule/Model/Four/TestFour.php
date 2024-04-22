@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SomeModule\Model\Six;
+namespace Magento\SomeModule\Model\Four;
 
-require_once __DIR__ . '/../One/TestFinal.php';
-require_once __DIR__ . '/../Proxy.php';
+require_once __DIR__ . '/../One/TestOne.php';
 require_once __DIR__ . '/../ElementFactory.php';
-class Test extends \Magento\SomeModule\Model\One\TestFinal
+require_once __DIR__ . '/../Proxy.php';
+class TestFour extends \Magento\SomeModule\Model\One\TestOne
 {
     /**
      * @var \Magento\SomeModule\Model\ElementFactory
@@ -25,6 +25,6 @@ class Test extends \Magento\SomeModule\Model\One\TestFinal
         \Magento\SomeModule\Model\ElementFactory $factory
     ) {
         $this->_factory = $factory;
-        parent::__construct($factory);
+        parent::__construct($proxy, $factory);
     }
 }

@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SomeModule\Model\NamedArguments;
 
-class ParentClassTest
+class TestParentClass
 {
     /**
      * @var \stdClass

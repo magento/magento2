@@ -5,9 +5,9 @@
  */
 namespace Magento\SomeModule\Model\Two;
 
-require_once __DIR__ . '/../One/TestFinal.php';
+require_once __DIR__ . '/../One/TestOne.php';
 require_once __DIR__ . '/../Proxy.php';
-class Test extends \Magento\SomeModule\Model\One\TestFinal
+class TestTwo extends \Magento\SomeModule\Model\One\TestOne
 {
     /**
      * @var \Magento\SomeModule\Model\Proxy

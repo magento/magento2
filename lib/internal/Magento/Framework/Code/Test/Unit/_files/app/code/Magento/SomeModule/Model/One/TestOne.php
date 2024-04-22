@@ -8,7 +8,7 @@ namespace Magento\SomeModule\Model\One;
 use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/../Proxy.php';
-class TestFinal
+class TestOne
 {
     /**
      * @var \Magento\SomeModule\Model\Proxy

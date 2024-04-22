@@ -12,7 +12,7 @@ use Magento\SomeModule\ElementFactory;
 /**
  * @SuppressWarnings(PHPMD.ConstructorWithNameAsEnclosingClass)
  */
-class Test
+class TestHelper
 {
     /**
      * @var \Magento\SomeModule\ElementFactory\Proxy
