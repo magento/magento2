@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Oauth;
 
-use Laminas\OAuth\Http\Utility;
+use Magento\Framework\Oauth\Helper\Utility;
 use Magento\Framework\DataObject;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Oauth\Helper\Oauth;
@@ -56,7 +56,7 @@ class OauthTest extends TestCase
     private $_oauth;
 
     /** @var  \Zend_Oauth_Http_Utility */
-    private $_httpUtilityMock;
+    private $utility;
 
     /** @var DateTime */
     private $_dateMock;
@@ -160,7 +160,7 @@ class OauthTest extends TestCase
         $this->_oauthHelperMock = $this->getMockBuilder(Oauth::class)
             ->setConstructorArgs([new Random()])
             ->getMock();
-        $this->_httpUtilityMock = $this->getMockBuilder(Utility::class)
+        $this->utility = $this->getMockBuilder(Utility::class)
             ->onlyMethods(['sign'])
             ->getMock();
         $this->_dateMock = $this->getMockBuilder(DateTime::class)
@@ -190,24 +190,13 @@ class OauthTest extends TestCase
             $this->_oauthHelperMock,
             $nonceGenerator,
             $tokenProvider,
-            $this->_httpUtilityMock
+            $this->utility
         );
         $this->_oauthToken = $this->_generateRandomString(Oauth::LENGTH_TOKEN);
         $this->_oauthSecret = $this->_generateRandomString(Oauth::LENGTH_TOKEN_SECRET);
         $this->_oauthVerifier = $this->_generateRandomString(
             Oauth::LENGTH_TOKEN_VERIFIER
         );
-    }
-
-    protected function tearDown(): void
-    {
-        unset($this->_consumerFactory);
-        unset($this->_nonceFactory);
-        unset($this->_tokenFactory);
-        unset($this->_oauthHelperMock);
-        unset($this->_httpUtilityMock);
-        unset($this->_dateMock);
-        unset($this->_oauth);
     }
 
     /**
@@ -477,7 +466,7 @@ class OauthTest extends TestCase
         $this->_setupToken(false);
 
         $signature = 'valid_signature';
-        $this->_httpUtilityMock->expects($this->any())->method('sign')->willReturn($signature);
+        $this->utility->expects($this->any())->method('sign')->willReturn($signature);
 
         $this->_oauth->getRequestToken(
             $this->_getRequestTokenParams(['oauth_signature' => $signature]),
@@ -498,7 +487,7 @@ class OauthTest extends TestCase
         // wrong type
 
         $signature = 'valid_signature';
-        $this->_httpUtilityMock->expects($this->any())->method('sign')->willReturn($signature);
+        $this->utility->expects($this->any())->method('sign')->willReturn($signature);
 
         $this->_oauth->getRequestToken(
             $this->_getRequestTokenParams(['oauth_signature' => $signature]),
@@ -548,7 +537,7 @@ class OauthTest extends TestCase
         $this->_setupToken();
 
         $signature = 'valid_signature';
-        $this->_httpUtilityMock->expects($this->any())->method('sign')->willReturn($signature);
+        $this->utility->expects($this->any())->method('sign')->willReturn($signature);
 
         $requestToken = $this->_oauth->getRequestToken(
             $this->_getRequestTokenParams(['oauth_signature' => $signature]),
@@ -802,7 +791,7 @@ class OauthTest extends TestCase
     public function testBuildAuthorizationHeader()
     {
         $signature = 'valid_signature';
-        $this->_httpUtilityMock->expects($this->any())->method('sign')->willReturn($signature);
+        $this->utility->expects($this->any())->method('sign')->willReturn($signature);
 
         $this->_setupConsumer(false);
         $this->_oauthHelperMock->expects(

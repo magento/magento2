@@ -24,12 +24,14 @@ use Laminas\OAuth\Http\Utility as HTTPUtility;
 class Utility extends HTTPUtility
 {
     /**
+     * Generate signature string
+     *
      * @param array $params
-     * @param $signatureMethod
+     * @param string $signatureMethod
      * @param string $consumerSecret
-     * @param null $tokenSecret
-     * @param null $method
-     * @param null $url
+     * @param string|null $tokenSecret
+     * @param string|null $method
+     * @param string|null $url
      * @return string
      */
     public function sign(
@@ -50,31 +52,6 @@ class Utility extends HTTPUtility
         );
 
         return base64_encode($binaryHash);
-    }
-
-    /**
-     * Cast to authorization header
-     *
-     * @param array $params
-     * @param null $realm
-     * @param bool $excludeCustomParams
-     * @return string
-     */
-    public function toAuthorizationHeader(array $params, $realm = null, $excludeCustomParams = true)
-    {
-        $headerValue = [];
-        foreach ($params as $key => $value) {
-            if ($excludeCustomParams) {
-                if (! preg_match("/^oauth_/", $key)) {
-                    continue;
-                }
-            }
-            $headerValue[] = $this->urlEncode($key)
-                . '="'
-                . $this->urlEncode($value) . '"';
-        }
-
-        return implode(",", $headerValue);
     }
 
     /**
