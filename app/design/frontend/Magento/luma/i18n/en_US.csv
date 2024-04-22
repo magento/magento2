@@ -472,7 +472,6 @@
 "Your Shipment #%shipment_id for Order #%order_id","Your Shipment #%shipment_id for Order #%order_id"
 "Your shipping confirmation is below. Thank you again for your business.","Your shipping confirmation is below. Thank you again for your business."
 "Zookeeper connection timed out!","Zookeeper connection timed out!"
-"Invalid input.","Invalid input."
 CSV,CSV
 dummy,dummy
 Email:,Email:

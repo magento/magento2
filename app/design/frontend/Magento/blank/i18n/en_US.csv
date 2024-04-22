@@ -423,7 +423,6 @@
 "You need write permissions for: %1","You need write permissions for: %1"
 "Your operating system is not supported to work with this command","Your operating system is not supported to work with this command"
 "Zookeeper connection timed out!","Zookeeper connection timed out!"
-"Invalid input.","Invalid input."
 Account,Account
 CSV,CSV
 dummy,dummy

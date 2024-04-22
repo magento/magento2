@@ -22,7 +22,6 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
-use Magento\Framework\Simplexml\Element as SimplexmlElement;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Webapi\CustomAttribute\PreprocessorInterface;
 use Laminas\Code\Reflection\ClassReflection;
@@ -38,11 +37,6 @@ use Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface;
  */
 class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAfterRequestInterface
 {
-    /**
-     *  Input param to be rejected when it contains xml content
-     */
-    private const REJECTED_INPUT_PARAM_SOURCEDATA = 'sourcedata';
-
     public const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
 
     /**
@@ -235,6 +229,9 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
     {
         $preferenceClass = $this->config->getPreference($className);
         $class = new ClassReflection($preferenceClass ?: $className);
+        if ($class->isSubclassOf(\SimpleXMLElement::class) || $class->isSubclassOf( \DOMNode::class)) {
+            return [];
+        }
 
         try {
             $constructor = $class->getMethod('__construct');
@@ -253,11 +250,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
                 $parameterType = $this->typeProcessor->getParamType($parameter);
 
                 try {
-                    if (ltrim($parameterType, "\\") === SimplexmlElement::Class &&
-                        strtolower($parameter->getName()) === self::REJECTED_INPUT_PARAM_SOURCEDATA) {
-                        throw new InputException(new Phrase('Invalid input.'));
-                    }
-
                     $res[$parameter->getName()] = $this->convertValue($data[$parameter->getName()], $parameterType);
                 } catch (\ReflectionException $e) {
                     // Parameter was not correclty declared or the class is uknown.
