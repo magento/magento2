@@ -228,10 +228,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
     private function getConstructorData(string $className, array $data): array
     {
         $preferenceClass = $this->config->getPreference($className);
-        $class = new ClassReflection($preferenceClass ?: $className);
-        if ($class->isSubclassOf(\SimpleXMLElement::class) || $class->isSubclassOf( \DOMNode::class)) {
+        if (is_subclass_of($preferenceClass, \SimpleXMLElement::class)
+            || is_subclass_of($preferenceClass, \DOMElement::class)) {
             return [];
         }
+        $class = new ClassReflection($preferenceClass ?: $className);
 
         try {
             $constructor = $class->getMethod('__construct');
