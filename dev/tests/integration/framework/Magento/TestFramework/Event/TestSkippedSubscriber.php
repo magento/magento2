@@ -21,7 +21,12 @@ final class TestSkippedSubscriber implements SkippedSubscriber
         $className = $event->test()->className();
         $methodName = $event->test()->methodName();
 
-        if(!in_array($methodName, ['testAclHasAccess', 'testAclNoAccess', 'testCreateInvalidPriceFormat'])) {
+        $skipMethods = [
+            'testAclHasAccess', 'testAclNoAccess', 'testCreateInvalidPriceFormat', 'testGetListWithAdditionalParams',
+            'testImageRolesWithMultipleStores', 'testResetSpecialPrice'
+        ];
+
+        if(!in_array($methodName, $skipMethods)) {
             $objectManager = Bootstrap::getObjectManager();
             $assetRepo = $objectManager->create($className, ['name' => $methodName]);
 
