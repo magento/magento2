@@ -29,7 +29,7 @@ class BillingTest extends TestCase
     {
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDefaultBilling', 'unsetDefaultBilling'])
+            ->addMethods(['getDefaultBilling', 'unsetDefaultBilling'])
             ->getMock();
 
         $object->expects($this->once())->method('getDefaultBilling')->willReturn(null);
@@ -45,21 +45,21 @@ class BillingTest extends TestCase
         $defaultBilling = 'default billing address';
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDefaultBilling', 'getAddresses', 'setDefaultBilling'])
+            ->addMethods(['getDefaultBilling', 'getAddresses', 'setDefaultBilling'])
             ->getMock();
 
         $address = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPostIndex', 'getId'])
+            ->addMethods(['getPostIndex', 'getId'])
             ->getMock();
 
         $attribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['__wakeup', 'getEntity', 'getAttributeCode'])
+            ->onlyMethods(['__wakeup', 'getEntity', 'getAttributeCode'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $entity = $this->getMockBuilder(AbstractEntity::class)
-            ->setMethods(['saveAttribute'])
+            ->onlyMethods(['saveAttribute'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
