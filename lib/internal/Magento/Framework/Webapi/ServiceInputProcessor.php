@@ -266,7 +266,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
      *
      * @param string $className
      * @param array $data
-     * @return object|null the newly created and populated object
+     * @return object the newly created and populated object
      * @throws \Exception
      * @throws SerializationException
      * @SuppressWarnings(PHPMD.NPathComplexity)
