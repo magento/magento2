@@ -62,5 +62,6 @@
             <!-- Path to config file (default is config/allure.config.php) -->
             <parameter name="config" value="allure/allure.config.php" />
         </bootstrap>
+        <bootstrap class="Magento\TestFramework\Event\PhpUnitExtension"/>
 	</extensions>
 </phpunit>

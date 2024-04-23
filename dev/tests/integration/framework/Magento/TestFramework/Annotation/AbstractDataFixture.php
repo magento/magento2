@@ -222,7 +222,7 @@ abstract class AbstractDataFixture
      */
     private function getTestKey(TestCase $test): string
     {
-        return sprintf('%s::%s', get_class($test), $test->name());
+        return sprintf('%s::%s', get_class($test), $test->nameWithDataSet());
     }
 
     /**

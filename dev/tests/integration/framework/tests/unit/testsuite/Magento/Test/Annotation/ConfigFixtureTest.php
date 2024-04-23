@@ -16,7 +16,6 @@ use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Metadata\Annotation\Parser\Registry;
-use PHPUnit\Util\Test as TestUtil;
 
 /**
  * Test class for \Magento\TestFramework\Annotation\ConfigFixture.

@@ -706,7 +706,7 @@ class ProcessCronQueueObserverTest extends TestCase
             ->with('cron_job_run', ['job_name' => 'cron/test_group/test_job1']);
 
         $dateScheduledAt = date('Y-m-d H:i:s', $this->time - 86400);
-        $addScheduleMethods = [
+        $scheduleMethods = [
             'getJobCode',
             'getScheduledAt',
             'setStatus',

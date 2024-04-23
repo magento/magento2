@@ -136,7 +136,7 @@ class ResetPasswordTest extends TestCase
     /**
      * @return array
      */
-    public function passwordResetErrorsProvider(): array
+    public static function passwordResetErrorsProvider(): array
     {
         return [
             'wrong_email' => [

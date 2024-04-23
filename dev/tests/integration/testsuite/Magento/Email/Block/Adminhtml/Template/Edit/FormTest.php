@@ -85,5 +85,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
             $this->assertNotNull($form->getElement($key));
         }
         $this->assertGreaterThan(0, strpos($form->getElement('insert_variable')->getData('text'), 'Insert Variable'));
+        return $form;
     }
 }

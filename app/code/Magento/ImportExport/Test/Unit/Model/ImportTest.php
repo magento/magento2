@@ -254,7 +254,6 @@ class ImportTest extends AbstractImportTestCase
         $this->randomMock = $this->getMockForAbstractClass(Random::class);
         $this->upload = $this->createMock(Upload::class);
         $this->localeEmulator = $this->getMockForAbstractClass(LocaleEmulatorInterface::class);
-
         $this->import = $this->getMockBuilder(Import::class)
             ->setConstructorArgs(
                 [

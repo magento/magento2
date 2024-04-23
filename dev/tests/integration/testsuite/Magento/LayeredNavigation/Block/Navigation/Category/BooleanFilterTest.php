@@ -37,7 +37,7 @@ class BooleanFilterTest extends AbstractFiltersTest
     /**
      * @return array
      */
-    public function getFiltersWithCustomAttributeDataProvider(): array
+    public static function getFiltersWithCustomAttributeDataProvider(): array
     {
         return [
             'not_used_in_navigation' => [
@@ -91,7 +91,7 @@ class BooleanFilterTest extends AbstractFiltersTest
     /**
      * @return array
      */
-    public function getActiveFiltersWithCustomAttributeDataProvider(): array
+    public static function getActiveFiltersWithCustomAttributeDataProvider(): array
     {
         return [
             'selected_yes_option_in_all_products' => [

@@ -209,7 +209,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function runLockDataProvider()
+    public static function runLockDataProvider()
     {
         return [
             ['general/region/display_all', '1'],
@@ -306,9 +306,9 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function runExtendedDataProvider()
+    public static function runExtendedDataProvider()
     {
-        return $this->runLockDataProvider();
+        return self::runLockDataProvider();
     }
 
     /**
@@ -335,7 +335,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function configSetValidationErrorDataProvider()
+    public static function configSetValidationErrorDataProvider()
     {
         return [
             //wrong value for URL - checked by backend model of URL field
@@ -439,7 +439,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function configSetValidDataProvider()
+    public static function configSetValidDataProvider()
     {
         return [
             [Custom::XML_PATH_UNSECURE_BASE_URL, 'http://magento2.local/'],

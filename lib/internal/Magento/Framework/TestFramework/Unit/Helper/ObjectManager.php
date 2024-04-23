@@ -364,7 +364,7 @@ class ObjectManager
     }
 
     /**
-     * Prepare getInstance for mock objects in array $map
+     * Helper method to get mock of ObjectManagerInterface
      *
      * @param array $map
      */

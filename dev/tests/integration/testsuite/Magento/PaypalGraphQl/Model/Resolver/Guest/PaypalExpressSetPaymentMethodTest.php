@@ -208,7 +208,7 @@ QUERY;
      *
      * @return array
      */
-    public function getPaypalCodesProvider(): array
+    public static function getPaypalCodesProvider(): array
     {
         return [
             ['paypal_express'],
