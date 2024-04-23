@@ -14,15 +14,11 @@ namespace Magento\Sales\Block\Adminhtml\Order\View;
 class History extends \Magento\Backend\Block\Template
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Sales data
-     *
      * @var \Magento\Sales\Helper\Data
      */
     protected $_salesData = null;
@@ -63,7 +59,7 @@ class History extends \Magento\Backend\Block\Template
         $button = $this->getLayout()->createBlock(
             \Magento\Backend\Block\Widget\Button::class
         )->setData(
-            ['label' => __('Submit Comment'), 'class' => 'action-save action-secondary', 'onclick' => $onclick]
+            ['label' => __('Update'), 'class' => 'action-save action-secondary', 'onclick' => $onclick]
         );
         $this->setChild('submit_button', $button);
         return parent::_prepareLayout();
