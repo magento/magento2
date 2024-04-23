@@ -138,7 +138,7 @@ class RecollectQuoteOnCustomerGroupChange
         $allStores = $this->storeManager->getStores();
         foreach ($allStores as $store) {
             /** @var Quote $quote */
-            $quote = $this->cartRepository->getActive($store->getId());
+            $quote = $this->cartRepository->getActiveForCustomer($customer->getId(), [$store->getId()]);
             if ($quote) {
                 $quote->setCustomerGroupId($customer->getGroupId());
                 $quote->collectTotals();
