@@ -12,8 +12,10 @@ use Magento\Csp\Model\Mode\ConfigManager;
 use Magento\Csp\Model\Mode\Data\ModeConfigured;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\State;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -45,6 +47,11 @@ class ConfigManagerTest extends TestCase
     private $stateMock;
 
     /**
+     * @var Http|MockObject
+     */
+    private $requestMock;
+
+    /**
      * Set Up
      */
     protected function setUp(): void
@@ -54,13 +61,15 @@ class ConfigManagerTest extends TestCase
         $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->storeMock = $this->createMock(Store::class);
         $this->stateMock = $this->createMock(State::class);
+        $this->requestMock = $this->createMock(Http::class);
 
         $this->model = $objectManager->getObject(
             ConfigManager::class,
             [
                 'config' => $this->scopeConfigMock,
                 'storeModel' => $this->storeMock,
-                'state' => $this->stateMock
+                'state' => $this->stateMock,
+                'request' => $this->requestMock,
             ]
         );
     }
@@ -101,5 +110,74 @@ class ConfigManagerTest extends TestCase
         $result = $this->model->getConfigured();
 
         $this->assertInstanceOf(ModeConfigured::class, $result);
+    }
+
+    /**
+     * Test storefront checkout page CSP config.
+     *
+     * @return void
+     *
+     */
+    public function testCheckoutPageReportOnly(): void
+    {
+        $this->requestMock->expects($this->exactly(2))
+            ->method('getFullActionName')
+            ->willReturn('checkout_index_index');
+
+        $this->stateMock->expects($this->once())
+            ->method('getAreaCode')
+            ->willReturn(Area::AREA_FRONTEND);
+
+        $matcher = $this->exactly(2);
+        $this->scopeConfigMock->expects($matcher)
+            ->method('getValue')
+            ->willReturnCallback(function () use ($matcher) {
+                return match ($matcher->getInvocationCount()) {
+                    1 => ['csp/mode/checkout_index_index/report_only', ScopeInterface::SCOPE_STORE, null],
+                    2 => ['csp/mode/checkout_index_index/report_uri', ScopeInterface::SCOPE_STORE, null],
+                };
+            })
+            ->willReturnOnConsecutiveCalls(true, 'testReportUri');
+
+        $result = $this->model->getConfigured();
+
+        $this->assertInstanceOf(ModeConfigured::class, $result);
+        $this->assertTrue($result->isReportOnly());
+        $this->assertEquals($result->getReportUri(), 'testReportUri');
+    }
+
+    /**
+     * Test non checkout page CSP config.
+     *
+     * @return void
+     */
+    public function testNonCheckoutPageReportOnly(): void
+    {
+        $this->requestMock->expects($this->exactly(2))
+            ->method('getFullActionName')
+            ->willReturn('dashboard_index_index');
+
+        $this->stateMock->expects($this->once())
+            ->method('getAreaCode')
+            ->willReturn(Area::AREA_ADMINHTML);
+
+        $matcher = $this->exactly(4);
+        $this->scopeConfigMock->expects($matcher)
+            ->method('getValue')
+            ->willReturnCallback(function () use ($matcher) {
+                return match ($matcher->getInvocationCount()) {
+                    1 => ['csp/mode/dashboard_index_index/report_only', ScopeInterface::SCOPE_STORE, null],
+                    2 => ['csp/mode/admin/report_only', ScopeInterface::SCOPE_STORE, null],
+                    3 => ['csp/mode/dashboard_index_index/report_uri', ScopeInterface::SCOPE_STORE, null],
+                    4 => ['csp/mode/admin/report_uri', ScopeInterface::SCOPE_STORE, null],
+                };
+            })
+            ->willReturnOnConsecutiveCalls(null, true, null, 'testPageReportUri');
+
+        $result = $this->model->getConfigured();
+
+        $this->assertInstanceOf(ModeConfigured::class, $result);
+        $this->assertTrue($result->isReportOnly());
+        $this->assertEquals($result->getReportUri(), 'testPageReportUri');
     }
 }
