@@ -205,6 +205,19 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
+     * Get list of stores values possible
+     *
+     * @return array
+     */
+    public function storeDataProvider(): array
+    {
+        return [
+            ['storeId' => null],
+            ['storeId' => 'default'],
+        ];
+    }
+
+    /**
      * Test save product with gallery image
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_image.php
@@ -515,6 +528,70 @@ class ProductRepositoryTest extends TestCase
                 'value' => $product2->getTierPrices()[0]->getValue()
             ]
         );
+    }
+
+    /**
+     * Test get and getById methods share the ProductRepository cache in both cases with a storeId null or not
+     *
+     * @return void
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @dataProvider skuDataProvider
+     */
+     public function testConsecutiveCallToGetAndGetByIdShareCache(?string $storeId): void
+     {
+        $sku = 'simple';
+
+        /** @var ProductRepositoryInterface $productRepository */
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
+
+        $product = $this->productRepository->get($sku, false, $storeId);
+        $product2 = $this->productRepository->getById($product->getId(), false, $storeId);
+        $this->assertSame($product->getName(), $product2->getName());
+
+        $reflection = new \ReflectionClass($this->productRepository);
+        $reflection_property = $reflection->getProperty('instancesById');
+        $reflection_property->setAccessible(true);
+        $cacheIdContent = $reflection_property->getValue($this->productRepository);
+
+        $reflection = new \ReflectionClass($this->productRepository);
+        $reflection_property = $reflection->getProperty('instances');
+        $reflection_property->setAccessible(true);
+        $cacheSkuContent = $reflection_property->getValue($this->productRepository);
+
+        $this->assertEquals(1, count($cacheIdContent[$product->getId()]));
+        $this->assertEquals(1, count($cacheSkuContent[$sku]));
+    }
+
+    /**
+     * Test getList method does not store the result in the ProductRepository cache
+     *
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     * @return void
+     */
+    public function testGetListDoesNoUseCache(): void
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
+
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $list = $this->productRepository->getList($searchCriteria);
+        $count = $list->getTotalCount();
+        $this->assertGreaterThanOrEqual(1, $count);
+
+        $reflection = new \ReflectionClass($this->productRepository);
+        $reflection_property = $reflection->getProperty('instancesById');
+        $reflection_property->setAccessible(true);
+        $cacheIdContent = $reflection_property->getValue($this->productRepository);
+
+        $reflection = new \ReflectionClass($this->productRepository);
+        $reflection_property = $reflection->getProperty('instances');
+        $reflection_property->setAccessible(true);
+        $cacheSkuContent = $reflection_property->getValue($this->productRepository);
+
+        $this->assertEmpty($cacheIdContent);
+        $this->assertEmpty($cacheSkuContent);
     }
 
     /**
