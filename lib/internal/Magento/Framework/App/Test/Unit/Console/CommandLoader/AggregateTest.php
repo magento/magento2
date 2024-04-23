@@ -71,10 +71,16 @@ class AggregateTest extends TestCase
     {
         $firstHas = (bool)$firstCmd;
         $secondHas = (bool)$secondCmd;
+
         $this->firstMockCommandLoader->method('has')->with('foo')->willReturn($firstHas);
-        $this->firstMockCommandLoader->method('get')->with('foo')->willReturn($firstCmd);
+        if ($firstHas) {
+            $this->firstMockCommandLoader->method('get')->with('foo')->willReturn($firstCmd);
+        }
+
         $this->secondMockCommandLoader->method('has')->with('foo')->willReturn($secondHas);
-        $this->secondMockCommandLoader->method('get')->with('foo')->willReturn($secondCmd);
+        if ($secondHas) {
+            $this->secondMockCommandLoader->method('get')->with('foo')->willReturn($secondCmd);
+        }
 
         $this->assertInstanceOf(Command::class, $this->aggregateCommandLoader->get('foo'));
     }
