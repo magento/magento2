@@ -281,7 +281,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
         if (is_subclass_of($className, \SimpleXMLElement::class)
             || is_subclass_of($className, \DOMElement::class)) {
             throw new SerializationException(
-                new Phrase('Invalid data type.')
+                new Phrase('Invalid data type')
             );
         }
         $class = new ClassReflection($className);
