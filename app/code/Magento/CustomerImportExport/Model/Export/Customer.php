@@ -27,8 +27,6 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 
     const COLUMN_STORE = '_store';
 
-    const COLUMN_CREATED_AT = 'created_at';
-
     /**
      * Attribute collection name
      */
@@ -160,11 +158,6 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
         $row = $this->_addAttributeValuesToRow($item);
         $row[self::COLUMN_WEBSITE] = $this->_websiteIdToCode[$item->getWebsiteId()];
         $row[self::COLUMN_STORE] = $this->_storeIdToCode[$item->getStoreId()];
-        $row[self::COLUMN_CREATED_AT] = $this->_localeDate->formatDate(
-            $row[self::COLUMN_CREATED_AT],
-            \IntlDateFormatter::MEDIUM,
-            true
-        );
 
         $this->getWriter()->writeRow($row);
     }
