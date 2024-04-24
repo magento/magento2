@@ -45,7 +45,7 @@ class Request
         );
         foreach ($oauthParams as $key => $value) {
             if ($key !== 'oauth_signature') {
-                $oauthParams[rawurlencode($key)] = rawurlencode($value);
+                $oauthParams[$key] = rawurlencode($value);
             }
         }
         return $oauthParams;
