@@ -150,7 +150,7 @@ class ValidatorInfo extends Validator
             $pathInfo = $this->ioFile->getPathInfo($path);
 
             if (isset($pathInfo['extension'])
-                && ($pathInfo['extension'] === '' || !$this->fileValidator->isValid($pathInfo['extension']))
+                && (empty($pathInfo['extension']) || !$this->fileValidator->isValid($pathInfo['extension']))
             ) {
                 return false;
             }
