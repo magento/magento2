@@ -43,9 +43,6 @@ class Utility extends HTTPUtility
         $url = null
     ): string {
         unset($params['oauth_signature']);
-        if (strtoupper($method) === 'GET') {
-            return parent::sign($params, $params['oauth_signature_method'], $consumerSecret, $tokenSecret, $method, $url);
-        }
 
         $binaryHash = HMACEncryption::compute(
             $this->assembleKey($consumerSecret, $tokenSecret),

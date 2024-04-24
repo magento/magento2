@@ -6,6 +6,7 @@
 
 namespace Magento\TestFramework\Authentication\Rest;
 
+use Magento\Framework\Oauth\Helper\Utility;
 use Magento\TestFramework\Helper\Bootstrap;
 use OAuth\Common\Consumer\Credentials;
 use OAuth\Common\Http\Client\ClientInterface;
@@ -37,13 +38,15 @@ class OauthClient extends AbstractService
      * @param TokenStorageInterface|null $storage
      * @param SignatureInterface|null $signature
      * @param UriInterface|null $baseApiUri
+     * @param Utility|null $helper
      */
     public function __construct(
         Credentials $credentials,
         ClientInterface $httpClient = null,
         TokenStorageInterface $storage = null,
         SignatureInterface $signature = null,
-        UriInterface $baseApiUri = null
+        UriInterface $baseApiUri = null,
+        Utility $helper = null
     ) {
         if (!isset($httpClient)) {
             $httpClient = new \Magento\TestFramework\Authentication\Rest\CurlClient();
@@ -52,8 +55,11 @@ class OauthClient extends AbstractService
         if (!isset($storage)) {
             $storage = new \OAuth\Common\Storage\Memory();
         }
+        if (!isset($helper)) {
+            $helper = new Utility();
+        }
         if (!isset($signature)) {
-            $signature = new \Magento\TestFramework\Authentication\Rest\OauthClient\Signature($credentials);
+            $signature = new \Magento\TestFramework\Authentication\Rest\OauthClient\Signature($helper, $credentials);
         }
         parent::__construct($credentials, $httpClient, $storage, $signature, $baseApiUri);
     }
