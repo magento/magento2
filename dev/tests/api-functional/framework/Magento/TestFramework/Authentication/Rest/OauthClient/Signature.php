@@ -19,7 +19,7 @@ class Signature extends \OAuth\OAuth1\Signature\Signature
      * @param Utility $helper
      * @param CredentialsInterface $credentials
      */
-    public function __construct(readonly Utility $helper, CredentialsInterface $credentials)
+    public function __construct(private readonly Utility $helper, CredentialsInterface $credentials)
     {
         parent::__construct($credentials);
     }
