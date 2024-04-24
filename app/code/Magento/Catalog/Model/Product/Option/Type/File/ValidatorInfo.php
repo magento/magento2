@@ -21,11 +21,6 @@ use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
 class ValidatorInfo extends Validator
 {
     /**
-     * @var string
-     */
-    private const PATH_PREFIX = 'custom_options';
-
-    /**
      * @var Database
      */
     protected $coreFileStorageDatabase;
@@ -152,10 +147,6 @@ class ValidatorInfo extends Validator
     private function validatePath(array $optionValuePath): bool
     {
         foreach ([$optionValuePath['quote_path'], $optionValuePath['order_path']] as $path) {
-            if (strpos($path, self::PATH_PREFIX) !== 0) {
-                return false;
-            }
-
             $pathInfo = $this->ioFile->getPathInfo($path);
 
             if (isset($pathInfo['extension'])
