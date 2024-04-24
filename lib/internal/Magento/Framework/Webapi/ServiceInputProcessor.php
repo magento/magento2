@@ -356,11 +356,12 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
         $dataObjectClassName = ltrim($dataObjectClassName, '\\');
 
         foreach ($customAttributesValueArray as $key => $customAttribute) {
-            $this->runCustomAttributePreprocessors($key, $customAttribute);
             if (!is_array($customAttribute)) {
                 $customAttribute = [AttributeValue::ATTRIBUTE_CODE => $key, AttributeValue::VALUE => $customAttribute];
             }
-            list($customAttributeCode, $customAttributeValue) = $this->processCustomAttribute($customAttribute);
+            $customAttributeCode = $this->processCustomAttributeCode($customAttribute);
+            $this->runCustomAttributePreprocessors($customAttributeCode, $customAttribute);
+            $customAttributeValue = $customAttribute[AttributeValue::VALUE];
             $entityType = $this->serviceTypeToEntityTypeMap->getEntityType($dataObjectClassName);
             if ($entityType) {
                 $type = $this->customAttributeTypeLocator->getType(
@@ -406,8 +407,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
     {
         if (!$this->attributesPreprocessorsMap) {
             foreach ($this->customAttributePreprocessors as $attributePreprocessor) {
-                foreach ($attributePreprocessor->getAffectedAttributes() as $attributeKey) {
-                    $this->attributesPreprocessorsMap[$attributeKey][] = $attributePreprocessor;
+                foreach ($attributePreprocessor->getAffectedAttributes() as $attributeCode) {
+                    $this->attributesPreprocessorsMap[$attributeCode][] = $attributePreprocessor;
                 }
             }
         }
@@ -418,17 +419,17 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
     /**
      * Prepare attribute value by loaded attribute preprocessors
      *
-     * @param mixed $key
+     * @param mixed $attributeCode
      * @param mixed $customAttribute
      */
-    private function runCustomAttributePreprocessors($key, &$customAttribute)
+    private function runCustomAttributePreprocessors($attributeCode, &$customAttribute)
     {
         $preprocessorsMap = $this->getAttributesPreprocessorsMap();
-        if ($key && is_array($customAttribute) && array_key_exists($key, $preprocessorsMap)) {
-            $preprocessorsList = $preprocessorsMap[$key];
+        if ($attributeCode && is_array($customAttribute) && array_key_exists($attributeCode, $preprocessorsMap)) {
+            $preprocessorsList = $preprocessorsMap[$attributeCode];
             foreach ($preprocessorsList as $attributePreprocessor) {
-                if ($attributePreprocessor->shouldBeProcessed($key, $customAttribute)) {
-                    $attributePreprocessor->process($key, $customAttribute);
+                if ($attributePreprocessor->shouldBeProcessed($attributeCode, $customAttribute)) {
+                    $attributePreprocessor->process($attributeCode, $customAttribute);
                 }
             }
         }
@@ -438,10 +439,10 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
      * Derive the custom attribute code and value.
      *
      * @param string[] $customAttribute
-     * @return string[]
+     * @return string
      * @throws SerializationException
      */
-    private function processCustomAttribute($customAttribute)
+    private function processCustomAttributeCode($customAttribute)
     {
         $camelCaseAttributeCodeKey = lcfirst(
             SimpleDataObjectConverter::snakeCaseToUpperCamelCase(AttributeValue::ATTRIBUTE_CODE)
@@ -474,7 +475,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
             );
         }
 
-        return [$customAttributeCode, $customAttribute[AttributeValue::VALUE]];
+        return $customAttributeCode;
     }
 
     /**
