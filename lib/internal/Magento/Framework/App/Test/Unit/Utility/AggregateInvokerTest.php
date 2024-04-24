@@ -12,7 +12,7 @@ use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\IncompleteTestError;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\SkippedTestSuiteError as SkippedTestError;
+use PHPUnit\Framework\SkippedWithMessageException as SkippedTestError;
 use PHPUnit\Framework\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -65,7 +65,7 @@ class AggregateInvokerTest extends TestCase
     /**
      * @return array
      */
-    public function callbackDataProvider()
+    public static function callbackDataProvider()
     {
         return [
             [

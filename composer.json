@@ -108,8 +108,8 @@
     },
     "repositories": [
         {
-            "type" : "vcs",
-            "url" : "git@github.com:magento-gl/magento2-functional-testing-framework.git"
+            "type": "vcs",
+            "url": "git@github.com:magento-gl/magento2-functional-testing-framework.git"
         }
     ],
     "suggest": {
