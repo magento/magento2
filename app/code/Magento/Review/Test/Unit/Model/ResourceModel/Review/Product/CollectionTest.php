@@ -132,7 +132,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function addAttributeToFilterDataProvider(): array
+    public static function addAttributeToFilterDataProvider(): array
     {
         return [
             ['rt.review_id'],
@@ -196,7 +196,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function addAttributeToFilterWithAttributeTypeDataProvider(): array
+    public static function addAttributeToFilterWithAttributeTypeDataProvider(): array
     {
         $exprNull = new \Zend_Db_Expr('NULL');
         $defaultStore = Store::DEFAULT_STORE_ID;

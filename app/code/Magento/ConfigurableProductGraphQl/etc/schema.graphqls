@@ -56,13 +56,13 @@ type AddConfigurableProductsToCartOutput @doc(description: "Contains details abo
 
 input ConfigurableProductCartItemInput {
     data: CartItemInput! @doc(description: "The quantity and SKU of the configurable product.")
-    variant_sku: String @doc(description: "Deprecated. Use `CartItemInput.sku` instead.")
+    variant_sku: String @deprecated(reason: "Use `CartItemInput.sku` instead.")
     parent_sku: String @doc(description: "The SKU of the parent configurable product.")
     customizable_options:[CustomizableOptionInput!] @doc(description: "The ID and value of the option.")
 }
 
 type ConfigurableCartItem implements CartItemInterface @doc(description: "An implementation for configurable product cart items.") {
-    customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions") @doc(description: "An array containing the customizable options the shopper selected.")
+    customizable_options: [SelectedCustomizableOption]! @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions") @doc(description: "An array containing the customizable options the shopper selected.")
     configurable_options: [SelectedConfigurableOption!]! @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\ConfigurableCartItemOptions") @doc(description: "An array containing the configuranle options the shopper selected.")
     configured_variant: ProductInterface! @doc(description: "Product details of the cart item.") @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\ProductResolver")
 }

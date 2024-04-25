@@ -8,13 +8,13 @@ declare(strict_types=1);
 namespace Magento\Bundle\Ui\DataProvider\Product\Modifier;
 
 use Magento\Bundle\Model\Product\Type;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Directory\Model\Currency as DirectoryCurrency;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\NumberFormatterFactory;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use NumberFormatter;
-use Zend_Currency;
-use Zend_Currency_Exception;
 
 /**
  * Modify product listing special price attributes
@@ -32,9 +32,9 @@ class SpecialPriceAttributes implements ModifierInterface
     private $priceAttributeList;
 
     /**
-     * @var DirectoryCurrency
+     * @var NumberFormatterFactory
      */
-    private $directoryCurrency;
+    private $numberFormatterFactory;
 
     /**
      * PriceAttributes constructor.
@@ -42,42 +42,38 @@ class SpecialPriceAttributes implements ModifierInterface
      * @param DirectoryCurrency $directoryCurrency
      * @param ResolverInterface $localeResolver
      * @param array $priceAttributeList
+     * @param NumberFormatterFactory|null $numberFormatterFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         DirectoryCurrency $directoryCurrency,
         ResolverInterface $localeResolver,
-        array $priceAttributeList = []
+        array $priceAttributeList = [],
+        ?NumberFormatterFactory $numberFormatterFactory = null
     ) {
-        $this->directoryCurrency = $directoryCurrency;
         $this->localeResolver = $localeResolver;
         $this->priceAttributeList = $priceAttributeList;
+        $this->numberFormatterFactory = $numberFormatterFactory
+            ?? ObjectManager::getInstance()->get(NumberFormatterFactory::class);
     }
 
     /**
      * @inheritdoc
-     * @throws NoSuchEntityException
-     * @throws Zend_Currency_Exception
      */
     public function modifyData(array $data): array
     {
         if (empty($data) || empty($this->priceAttributeList)) {
             return $data;
         }
-        $numberFormatter = new NumberFormatter(
-            $this->localeResolver->getLocale(),
-            NumberFormatter::PERCENT
-        );
-        $numberFormatter->setAttribute(NumberFormatter::MIN_FRACTION_DIGITS, 2);
+        $numberFormatter = $this->numberFormatterFactory->create([
+            'locale' => $this->localeResolver->getLocale(),
+            'style' => NumberFormatter::PERCENT
+        ]);
+        $numberFormatter->setAttribute(NumberFormatter::MIN_FRACTION_DIGITS, 6);
         foreach ($data['items'] as &$item) {
             foreach ($this->priceAttributeList as $priceAttribute) {
-                if (isset($item[$priceAttribute]) && $item['type_id'] == Type::TYPE_CODE) {
-                    $item[$priceAttribute] =
-                        $this->directoryCurrency->format(
-                            $item[$priceAttribute],
-                            ['display' => Zend_Currency::NO_SYMBOL],
-                            false
-                        );
-                    $item[$priceAttribute] = $numberFormatter->format($item[$priceAttribute] / 100);
+                if (isset($item[$priceAttribute]) && $item[ProductInterface::TYPE_ID] === Type::TYPE_CODE) {
+                    $item[$priceAttribute] = $numberFormatter->format((float) $item[$priceAttribute] / 100);
                 }
             }
         }

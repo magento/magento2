@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCustomerAddGroupedProductQuantityAndAddToWishListActionGroup" extends="StorefrontCustomerAddProductToWishlistActionGroup">
+        <annotations>
+            <description>Fills in the provided Grouped Product Quantity on a Storefront product page. Clicks on Add to Wish List.</description>
+        </annotations>
+        <arguments>
+            <argument name="quantity" defaultValue="0" type="string"/>
+            <argument name="index" defaultValue="1" type="string"/>
+        </arguments>
+
+        <clearField selector="{{StorefrontProductInfoMainSection.groupedProductsAssociatedProductQuantity(index)}}" stepKey="clearTheQuantityField" before="WaitForWishList"/>
+        <fillField selector="{{StorefrontProductInfoMainSection.groupedProductsAssociatedProductQuantity(index)}}" userInput="{{quantity}}" stepKey="fillTheProductQuantity" after="clearTheQuantityField"/>
+    </actionGroup>
+</actionGroups>

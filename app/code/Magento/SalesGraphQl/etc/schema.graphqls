@@ -3,6 +3,8 @@
 
 type Query {
     customerOrders: CustomerOrders @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Orders") @deprecated(reason: "Use the `customer` query instead.") @cache(cacheable: false)
+    guestOrder(input: OrderInformationInput!): CustomerOrder! @doc(description:"Retrieve guest order details based on number, email and postcode.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\GuestOrder") @cache(cacheable: false)
+    guestOrderByToken(input: OrderTokenInput!): CustomerOrder! @doc(description:"Retrieve guest order details based on token.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\GuestOrder") @cache(cacheable: false)
 }
 
 type Mutation {
@@ -25,11 +27,23 @@ type Customer {
         filter: CustomerOrdersFilterInput @doc(description: "Defines the filter to use for searching customer orders."),
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
         pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. The default value is 20."),
+        sort: CustomerOrderSortInput @doc(description: "Specifies which field to sort on, and whether to return the results in ascending or descending order.")
+        scope: ScopeTypeEnum @doc(description: "Specifies the scope to search for customer orders. The Store request header identifies the customer's store view code. The default value of STORE limits the search to the value specified in the header. Specify WEBSITE to expand the search to include all customer orders assigned to the website that is defined in the header, or specify GLOBAL to include all customer orders across all websites and stores."),
     ): CustomerOrders @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CustomerOrders") @cache(cacheable: false)
 }
 
 input CustomerOrdersFilterInput @doc(description: "Identifies the filter to use for filtering orders.") {
     number: FilterStringTypeInput @doc(description: "Filters by order number.")
+}
+
+input CustomerOrderSortInput @doc(description: "CustomerOrderSortInput specifies the field to use for sorting search results and indicates whether the results are sorted in ascending or descending order.") {
+    sort_field: CustomerOrderSortableField! @doc(description: "Specifies the field to use for sorting")
+    sort_direction: SortEnum! @doc(description: "This enumeration indicates whether to return results in ascending or descending order")
+}
+
+enum CustomerOrderSortableField @doc(description: "Specifies the field to use for sorting") {
+    NUMBER @doc(description: "Sorts customer orders by number")
+    CREATED_AT @doc(description: "Sorts customer orders by created_at field")
 }
 
 type CustomerOrders @doc(description: "The collection of orders that match the conditions defined in the filter.") {
@@ -58,6 +72,9 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     order_number: String! @deprecated(reason: "Use the `number` field instead.")
     created_at: String @deprecated(reason: "Use the `order_date` field instead.")
     grand_total: Float  @deprecated(reason: "Use the `totals.grand_total` field instead.")
+    token: String! @doc(description: "The token that can be used to retrieve the order using order query.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Token")
+    applied_coupons: [AppliedCoupon!]! @doc(description: "Coupons applied to the order.")
+    email: String @doc(description: "Order customer email.")
 }
 
 type OrderAddress @doc(description: "Contains detailed information about an order's billing and shipping addresses."){
@@ -95,6 +112,7 @@ interface OrderItemInterface @doc(description: "Order item details.") @typeResol
     quantity_invoiced: Float @doc(description: "The number of invoiced items.")
     quantity_canceled: Float @doc(description: "The number of canceled items.")
     quantity_returned: Float @doc(description: "The number of returned items.")
+    product: ProductInterface @doc(description: "The ProductInterface object, which contains details about the base product") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\ProductResolver")
 }
 
 type OrderItem implements OrderItemInterface {
@@ -247,4 +265,20 @@ enum CheckoutUserInputErrorCodes {
     NOT_SALABLE
     INSUFFICIENT_STOCK
     UNDEFINED
+}
+
+enum ScopeTypeEnum @doc(description: "This enumeration defines the scope type for customer orders.") {
+    GLOBAL
+    WEBSITE
+    STORE
+}
+
+input OrderTokenInput @doc(description: "Input to retrieve an order based on token.") {
+    token: String! @doc(description: "Order token.")
+}
+
+input OrderInformationInput @doc(description: "Input to retrieve an order based on details.") {
+    number: String! @doc(description: "Order number.")
+    email: String! @doc(description: "Order billing address email.")
+    postcode: String! @doc(description: "Order billing address postcode.")
 }

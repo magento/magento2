@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="sales.order.history">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Magento_OrderCancellationUi::order/history.phtml</argument>
+            </action>
+            <arguments>
+                <argument name="view_model" xsi:type="object">Magento\OrderCancellationUi\ViewModel\Config</argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

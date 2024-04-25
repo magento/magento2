@@ -18,7 +18,7 @@
             <testCaseId value="MC-40416"/>
             <group value="searchFrontend"/>
             <group value="mtf_migrated"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
             <group value="pr_exclude"/>
         </annotations>
         <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="search">

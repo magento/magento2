@@ -29,6 +29,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSimpleProduct">
                 <argument name="sku" value="Simple"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 

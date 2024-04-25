@@ -64,10 +64,48 @@ class AttributeValue
         $metadata = $this->metadataPool->getMetadata($entityType);
         $connection = $metadata->getEntityConnection();
         $selects = [];
+        $attributeTables = $this->prepareAttributeTables($entityType, $attributeCodes);
+        foreach ($attributeTables as $attributeTable => $attributeIds) {
+            $select = $connection->select()
+                ->from(
+                    ['t' => $attributeTable],
+                    ['*']
+                )
+                ->where('attribute_id IN (?)', $attributeIds);
+
+            $select->where($metadata->getLinkField() . ' = ?', $entityId);
+
+            if (!empty($storeIds)) {
+                $select->where(
+                    'store_id IN (?)',
+                    $storeIds
+                );
+            }
+            $selects[] = $select;
+        }
+
+        if (count($selects) > 1) {
+            $select = $connection->select();
+            $select->from(['u' => new UnionExpression($selects, Select::SQL_UNION_ALL, '( %s )')]);
+        } else {
+            $select = reset($selects);
+        }
+
+        return $connection->fetchAll($select);
+    }
+
+    /**
+     * Fill the attribute tables array
+     *
+     * @param string $entityType
+     * @param array $attributeCodes
+     * @return array
+     */
+    private function prepareAttributeTables(string $entityType, array $attributeCodes) : array
+    {
         $attributeTables = [];
         $attributes = [];
         $allAttributes = $this->getEntityAttributes($entityType);
-        $result = [];
         if ($attributeCodes) {
             foreach ($attributeCodes as $attributeCode) {
                 $attributes[$attributeCode] = $allAttributes[$attributeCode];
@@ -81,6 +119,29 @@ class AttributeValue
                 $attributeTables[$attribute->getBackend()->getTable()][] = $attribute->getAttributeId();
             }
         }
+        return $attributeTables;
+    }
+
+    /**
+     * Bulk version of the getValues() for several entities
+     *
+     * @param string $entityType
+     * @param int[] $entityIds
+     * @param string[] $attributeCodes
+     * @param int[] $storeIds
+     * @return array
+     */
+    public function getValuesMultiple(
+        string $entityType,
+        array $entityIds,
+        array $attributeCodes = [],
+        array $storeIds = []
+    ) : array {
+        $metadata = $this->metadataPool->getMetadata($entityType);
+        $connection = $metadata->getEntityConnection();
+        $selects = [];
+        $result = [];
+        $attributeTables = $this->prepareAttributeTables($entityType, $attributeCodes);
 
         if ($attributeTables) {
             foreach ($attributeTables as $attributeTable => $attributeIds) {
@@ -89,8 +150,16 @@ class AttributeValue
                         ['t' => $attributeTable],
                         ['*']
                     )
-                    ->where($metadata->getLinkField() . ' = ?', $entityId)
                     ->where('attribute_id IN (?)', $attributeIds);
+
+                $linkField = $metadata->getLinkField();
+                $select->joinInner(
+                    ['e_t' => $metadata->getEntityTable()],
+                    't.' . $linkField . ' = e_t.' . $linkField,
+                    [$metadata->getIdentifierField()]
+                );
+                $select->where('e_t.' . $metadata->getIdentifierField() . ' IN(?)', $entityIds, \Zend_Db::INT_TYPE);
+
                 if (!empty($storeIds)) {
                     $select->where(
                         'store_id IN (?)',
@@ -107,7 +176,9 @@ class AttributeValue
                 $select = reset($selects);
             }
 
-            $result = $connection->fetchAll($select);
+            foreach ($connection->fetchAll($select) as $row) {
+                $result[$row[$metadata->getIdentifierField()]][$row['store_id']] = $row['value'];
+            }
         }
 
         return $result;

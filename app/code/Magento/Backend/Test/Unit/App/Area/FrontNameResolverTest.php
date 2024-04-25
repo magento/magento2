@@ -84,8 +84,10 @@ class FrontNameResolverTest extends TestCase
     {
         $this->configMock
             ->method('getValue')
-            ->withConsecutive(['admin/url/use_custom_path'], ['admin/url/custom_path'])
-            ->willReturnOnConsecutiveCalls(true, 'expectedValue');
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['admin/url/use_custom_path'] => true,
+                ['admin/url/custom_path'] => 'expectedValue'
+            });
         $this->assertEquals('expectedValue', $this->model->getFrontName());
     }
 
@@ -108,7 +110,7 @@ class FrontNameResolverTest extends TestCase
 
     /**
      * @param string $url
-     * @param string $host
+     * @param string|null $host
      * @param string $useCustomAdminUrl
      * @param string $customAdminUrl
      * @param bool $expectedValue
@@ -118,7 +120,7 @@ class FrontNameResolverTest extends TestCase
      */
     public function testIsHostBackend(
         string $url,
-        string $host,
+        ?string $host,
         string $useCustomAdminUrl,
         string $customAdminUrl,
         bool $expectedValue
@@ -181,9 +183,26 @@ class FrontNameResolverTest extends TestCase
     }
 
     /**
+     * Test the case when backend url is not set.
+     *
+     * @return void
+     */
+    public function testIsHostBackendWithEmptyHost(): void
+    {
+        $this->request->expects($this->any())
+            ->method('getServer')
+            ->willReturn('magento2.loc');
+        $this->uri->expects($this->once())
+            ->method('getHost')
+            ->willReturn(null);
+
+        $this->assertEquals($this->model->isHostBackend(), false);
+    }
+
+    /**
      * @return array
      */
-    public function hostsDataProvider(): array
+    public static function hostsDataProvider(): array
     {
         return [
             'withoutPort' => [
@@ -240,6 +259,13 @@ class FrontNameResolverTest extends TestCase
                 'host' => 'SomeOtherHost.loc',
                 'useCustomAdminUrl' => '1',
                 'customAdminUrl' => 'https://myhost.loc/',
+                'expectedValue' => false
+            ],
+            'withEmptyHost' => [
+                'url' => 'http://magento2.loc/',
+                'host' => null,
+                'useCustomAdminUrl' => '0',
+                'customAdminUrl' => '',
                 'expectedValue' => false
             ]
         ];

@@ -16,6 +16,7 @@
             <testCaseId value="MC-38683"/>
             <useCaseId value="MC-37663"/>
             <group value="Bundle"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before>
             <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
@@ -54,6 +55,7 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProductForBundleItem"/>
             <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProductForBundleItem"/>
             <deleteData createDataKey="createFixedBundleProduct" stepKey="deleteBundleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductsGridFilters"/>
             <waitForPageLoad stepKey="waitForClearProductsGridFilters"/>

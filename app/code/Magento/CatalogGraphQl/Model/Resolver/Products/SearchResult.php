@@ -11,6 +11,8 @@ use Magento\Framework\Api\Search\AggregationInterface;
 
 /**
  * Container for a product search holding the item result and the array in the GraphQL-readable product type format.
+ *
+ * @api
  */
 class SearchResult
 {

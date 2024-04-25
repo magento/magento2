@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Framework\GraphQl\Query\Uid;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -14,6 +17,20 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
 {
+    /** @var ObjectManager */
+    private $objectManager;
+
+    /** @var Uid */
+    private $uid;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->uid = $this->objectManager->get(Uid::class);
+    }
     /**
      * Test category_id aggregation on filter by "eq" category ID condition.
      *
@@ -57,7 +74,7 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
         return array_filter(
             $result['products']['aggregations'],
             function ($a) {
-                return $a['attribute_code'] == 'category_id';
+                return $a['attribute_code'] == 'category_uid';
             }
         );
     }
@@ -84,12 +101,13 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
     {
         $query = $this->getGraphQlQuery($filterValue, $includeDirectChildrenOnly);
         $result = $this->graphQlQuery($query);
+
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertArrayHasKey('aggregations', $result['products']);
         $categoryAggregation = array_filter(
             $result['products']['aggregations'],
             function ($a) {
-                return $a['attribute_code'] == 'category_id';
+                return $a['attribute_code'] == 'category_uid';
             }
         );
         $this->assertNotEmpty($categoryAggregation);
@@ -99,7 +117,7 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
         foreach ($categoryAggregation['options'] as $option) {
             $this->assertNotEmpty($option['value']);
             $this->assertNotEmpty($option['label']);
-            $categoryAggregationIdsLabel[(int)$option['value']] = $option['label'];
+            $categoryAggregationIdsLabel[$this->uid->decode($option['value'])] = $option['label'];
         }
         return $categoryAggregationIdsLabel;
     }
@@ -201,6 +219,92 @@ QUERY;
       label
       options {
         count
+        label
+        value
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * Test the categories that appear in aggregation Layered Navigation > Display Category Filter => Yes (default).
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @throws \Exception
+     */
+    public function testFetchCategoriesWhenDisplayCategoryEnabled(): void
+    {
+        $result = $this->aggregationWithDisplayCategorySetting();
+        $aggregationAttributeCode = [];
+        foreach ($result['products']['aggregations'] as $aggregation) {
+            $this->assertArrayHasKey('attribute_code', $aggregation);
+            $aggregationAttributeCode[] = $aggregation['attribute_code'];
+        }
+        $this->assertTrue(in_array('category_uid', $aggregationAttributeCode));
+    }
+
+    /**
+     * Test the categories not in aggregation when Layered Navigation > Display Category Filter => No.
+     *
+     * @magentoConfigFixture catalog/layered_navigation/display_category 0
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @throws \Exception
+     */
+    public function testDontFetchCategoriesWhenDisplayCategoryDisabled(): void
+    {
+        $result = $this->aggregationWithDisplayCategorySetting();
+        $aggregationAttributeCode = [];
+        foreach ($result['products']['aggregations'] as $aggregation) {
+            $this->assertArrayHasKey('attribute_code', $aggregation);
+            $aggregationAttributeCode[] = $aggregation['attribute_code'];
+        }
+        $this->assertFalse(in_array('category_uid', $aggregationAttributeCode));
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    private function aggregationWithDisplayCategorySetting(): array
+    {
+        $query = $this->getGraphQlQueryProductSearch();
+        $result = $this->graphQlQuery($query);
+
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertArrayHasKey('aggregations', $result['products']);
+        return $result;
+    }
+
+    /**
+     * Get graphQl query.
+     *
+     * @return string
+     */
+    private function getGraphQlQueryProductSearch(): string
+    {
+        return <<<QUERY
+{
+  products(
+    search: "simple"
+    pageSize: 20
+    currentPage: 1
+    sort: {  }
+  ) {
+    items {
+      sku
+      canonical_url
+      categories{
+        name
+        path
+      }
+}
+    aggregations (filter: {category: {includeDirectChildrenOnly: true}}) {
+      attribute_code
+      count
+      label
+      options {
         label
         value
       }

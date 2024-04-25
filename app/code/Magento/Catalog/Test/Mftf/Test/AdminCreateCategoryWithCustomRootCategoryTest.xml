@@ -24,6 +24,9 @@
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStore">
                 <argument name="storeGroupName" value="customStoreGroup.name"/>
             </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCreatedNewRootCategory">
                 <argument name="categoryEntity" value="NewRootCategory"/>
             </actionGroup>
@@ -52,6 +55,9 @@
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
             <argument name="StoreGroup" value="customStoreGroup"/>
             <argument name="customStore" value="customStore"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
         </actionGroup>
         <!--Go to store front page-->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomepage"/>

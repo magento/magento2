@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\DB\Sql;
 
 /**
@@ -11,11 +13,15 @@ namespace Magento\Framework\DB\Sql;
  * Defines interface was implemented in Zend_Db_Expr.
  * Interface for SQL Expressions for DB Adapter/Select.
  * By using this interface a developer can strictly control type for code that manages an Expression directly.
+ *
+ * @api
  */
 interface ExpressionInterface
 {
     /**
-     * @return string The string of the SQL expression stored in this object.
+     * The string of the SQL expression stored in this object.
+     *
+     * @return string
      */
     public function __toString();
 }

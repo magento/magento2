@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontReorderVirtualProductAsCustomerTest" >
+        <annotations>
+            <stories value="Reorder on Storefront for Virtual product"/>
+            <title value="Reorder on Storefront for Virtual product"/>
+            <description value="Verify customer able to reorder on Storefront for simple products."/>
+            <testCaseId value="MC-26873"/>
+            <severity value="MAJOR"/>
+            <group value="Reorder_Product"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+
+            <!-- create default category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+
+            <!-- create virtual product -->
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct">
+            <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- assign virtual product to default category -->
+            <createData entity="AssignProductToCategory" stepKey="assignCategoryToVirtualProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <requiredEntity createDataKey="createVirtualProduct"/>
+            </createData>
+
+            <!-- create customer -->
+            <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
+        </before>
+
+        <after>
+            <!-- delete category,product,customer -->
+            <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteSimpleCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Customer placed order from storefront with payment method -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createVirtualProduct$$"/>
+        </actionGroup>
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+
+        <!-- order number is captured for future validation -->
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="getOrderNumber"/>
+
+        <!-- Log in as admin-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <!-- Go to orders page and validate the order details -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="addFilterToGridAndOpenOrder">
+            <argument name="orderId" value="{$getOrderNumber}"/>
+        </actionGroup>
+
+        <!--Create Invoice-->
+        <actionGroup ref="AdminCreateInvoiceActionGroup" stepKey="createInvoice"/>
+
+        <!-- Open My Account Page from Customer dropdown -->
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage"/>
+
+        <!-- Goto Orders tab from Sidebar menu in Storefront page -->
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToSidebarMenu">
+            <argument name="menu" value="My Orders"/>
+        </actionGroup>
+
+        <!-- Clicking View Order from My Orders Grid -->
+        <actionGroup ref="StorefrontClickViewOrderLinkOnMyOrdersPageActionGroup" stepKey="clickViewOrder"/>
+
+        <!-- Clicking on Reorder link from Order Details Tab -->
+        <click selector="{{StorefrontCustomerOrderViewSection.reorder}}" stepKey="clickReorder"/>
+
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCart"/>
+
+        <!-- Reordering the virtual product -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder2"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="reorderVirtualProduct">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+
+    </test>
+</tests>

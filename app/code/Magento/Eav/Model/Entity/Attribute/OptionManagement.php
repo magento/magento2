@@ -135,10 +135,11 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         AttributeOptionInterface $option,
         $optionId
     ): AttributeOptionInterface {
-        $optionLabel = trim($option->getLabel());
+        $optionLabel = $option->getLabel() !== null ? trim($option->getLabel()) : '';
         $options = [];
         $options['value'][$optionId][0] = $optionLabel;
         $options['order'][$optionId] = $option->getSortOrder();
+        $options['is_default'][$optionId] = $option->getIsDefault();
         if (is_array($option->getStoreLabels())) {
             foreach ($option->getStoreLabels() as $label) {
                 $options['value'][$optionId][$label->getStoreId()] = $label->getLabel();
@@ -275,7 +276,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         EavAttributeInterface $attribute,
         AttributeOptionInterface $option
     ) : string {
-        $label = trim($option->getLabel());
+        $label = $option->getLabel() !== null ? trim($option->getLabel()) : '';
         $optionId = $attribute->getSource()->getOptionId($label);
         if ($optionId) {
             $option->setValue($optionId);

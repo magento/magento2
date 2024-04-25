@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="VerifyTheProductAttributeOnStoreFrontActionGroup">
+        <annotations>
+            <description>Verifies the Added attribute to the product on the StoreFront</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeLabel" type="string" defaultValue="Test Attribute"/>
+            <argument name="adminOption1Value" type="string" defaultValue="value1"/>
+        </arguments>
+
+        <click selector="{{AdminGlobalSearchSection.globalSearchSuggestedCategoryText}}" stepKey="clickTheSubCategory" />
+        <waitForPageLoad stepKey="waitForProductToBeLoadedInGrid"/>
+
+        <!-- Verify the product attribute on Storefront-->
+        <click selector="{{StorefrontCategoryMainSection.productName}}" stepKey="clickTheProduct" />
+        <waitForPageLoad stepKey="waitForProductToBeLoadedInGridPostClicking"/>
+
+        <!-- Verify the More Information tab -->
+        <click selector="{{StorefrontProductMoreInformationSection.moreInformation}}" stepKey="clickTheMoreInformationTab" />
+        <scrollTo selector="{{StorefrontProductMoreInformationSection.customAttributeLabel(attributeLabel)}}" stepKey="scrollToAdditionalInformation"/>
+        <seeElement selector="{{StorefrontProductMoreInformationSection.customAttributeLabel(attributeLabel)}}" stepKey="verifyMoreInfoCustomAttribute"/>
+        <seeElement selector="{{StorefrontProductMoreInformationSection.customAttributeValueCheck(adminOption1Value)}}" stepKey="verifyMoreInfoCustomAttributeValue"/>
+
+        <!-- Navigate back to Subcategory created -->
+        <click selector="{{AdminGlobalSearchSection.globalSearchSuggestedCategoryText}}" stepKey="NavigateBackToSubCategory" />
+        <waitForPageLoad stepKey="waitForProductToBeLoadedInGrid1"/>
+
+        <!-- Verify the Layered Navigation tab -->
+        <click selector="{{StorefrontLayeredNavigationSection.shoppingOptionsByName(attributeLabel)}}" stepKey="clickTheAttributeFromShoppingOptions"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.shoppingOptionsExpanded(adminOption1Value)}}"  stepKey="verifyFromShoppingOptionsExpanded"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.shoppingOptionsExpandedCount(adminOption1Value,'1')}}"  stepKey="verifyFromShoppingOptionsExpandedCount"/>
+
+        <!-- Click on the attribute -->
+        <click selector="{{StorefrontLayeredNavigationSection.shoppingOptionsExpanded(adminOption1Value)}}"  stepKey="clickOnAttributeValue"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.nowShoppingBy}}" stepKey="seeNowShoppingBy"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.actionRemove}}" stepKey="seeX"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.nowShoppingByAttribute(attributeLabel)}}" stepKey="seeNowShoppingByAttribute"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.nowShoppingByAttributeValue(adminOption1Value)}}" stepKey="seeNowShoppingByAttributeValue"/>
+    </actionGroup>
+</actionGroups>

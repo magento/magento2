@@ -97,15 +97,15 @@ class BuilderTest extends TestCase
         $methods = ['setStoreId', 'setData', 'load', 'setAttributeSetId', 'setTypeId'];
         $this->productMock = $this->createPartialMock(Product::class, $methods);
         $this->storeFactoryMock = $this->getMockBuilder(StoreFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['load'])
+            ->addMethods(['load'])
             ->getMockForAbstractClass();
 
         $this->productRepositoryMock = $this->getMockBuilder(ProductRepositoryInterface::class)
-            ->setMethods(['getById'])
+            ->onlyMethods(['getById'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
