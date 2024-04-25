@@ -42,12 +42,13 @@ class Signature extends \OAuth\OAuth1\Signature\Signature
             []
         );
 
-        foreach ($params as $key => $value) {
-            $queryStringData[rawurlencode($key)] = rawurlencode($value);
+        $signatureData = [];
+        foreach (array_merge($queryStringData, $params) as $key => $value) {
+            $signatureData[rawurldecode($key)] = rawurlencode($value);
         }
 
         return $this->helper->sign(
-            $queryStringData,
+            $signatureData,
             'SHA256',
             $this->credentials->getConsumerSecret(),
             $this->tokenSecret,
