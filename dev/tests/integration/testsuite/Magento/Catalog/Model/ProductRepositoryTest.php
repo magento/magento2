@@ -585,6 +585,18 @@ class ProductRepositoryTest extends TestCase
      * @return void
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
+    public function testConsecutiveCallToGetAndGetByIdShareCacheInEdgeCaseWithEditMode(): void
+    {
+        $this->testConsecutiveCallToGetAndGetByIdShareCacheInEdgeCase(false);
+        $this->testConsecutiveCallToGetAndGetByIdShareCacheInEdgeCase(true);
+    }
+
+    /**
+     * Test get and getById methods share the ProductRepository cache in both cases with when storeId is not passed and with editMode values
+     *
+     * @return void
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
     public function testConsecutiveCallToGetAndGetByIdShareCacheInEdgeCase(): void
     {
         $sku = 'simple';
@@ -595,6 +607,8 @@ class ProductRepositoryTest extends TestCase
 
         $product = $this->productRepository->get($sku);
         $product2 = $this->productRepository->getById($product->getId());
+        $product3 = $this->productRepository->get($sku, false);
+        $product4 = $this->productRepository->getById($product->getId(), false);
         $this->assertSame($product->getName(), $product2->getName());
 
         $reflection = new \ReflectionClass($this->productRepository);
@@ -607,6 +621,13 @@ class ProductRepositoryTest extends TestCase
         $reflection_property->setAccessible(true);
         $cacheSkuContent = $reflection_property->getValue($this->productRepository);
 
+        $this->assertEquals(1, count($cacheIdContent[$product->getId()]));
+        $this->assertEquals(1, count($cacheSkuContent[$sku]));
+
+        $product3 = $this->productRepository->get($sku, true);
+        $this->assertEquals(1, count($cacheIdContent[$product->getId()]));
+        $this->assertEquals(1, count($cacheSkuContent[$sku]));
+        $product4 = $this->productRepository->getById($product->getId(), true);
         $this->assertEquals(1, count($cacheIdContent[$product->getId()]));
         $this->assertEquals(1, count($cacheSkuContent[$sku]));
     }
