@@ -585,18 +585,6 @@ class ProductRepositoryTest extends TestCase
      * @return void
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
-    public function testConsecutiveCallToGetAndGetByIdShareCacheInEdgeCaseWithEditMode(): void
-    {
-        $this->testConsecutiveCallToGetAndGetByIdShareCacheInEdgeCase(false);
-        $this->testConsecutiveCallToGetAndGetByIdShareCacheInEdgeCase(true);
-    }
-
-    /**
-     * Test get and getById methods share the ProductRepository cache in both cases with when storeId is not passed and with editMode values
-     *
-     * @return void
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     */
     public function testConsecutiveCallToGetAndGetByIdShareCacheInEdgeCase(): void
     {
         $sku = 'simple';
