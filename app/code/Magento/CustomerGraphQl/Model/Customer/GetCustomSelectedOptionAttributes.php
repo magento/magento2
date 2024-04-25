@@ -55,7 +55,7 @@ class GetCustomSelectedOptionAttributes implements GetAttributeSelectedOptionInt
                 continue;
             }
             $result[] = [
-                'uid' => $this->uid->encode($option->getValue()),
+                'uid' => $this->uid->encode((string) $option->getValue()),
                 'value' => $option->getValue(),
                 'label' => $option->getLabel()
             ];
