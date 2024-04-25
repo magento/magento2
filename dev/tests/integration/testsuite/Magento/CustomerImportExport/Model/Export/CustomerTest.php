@@ -17,6 +17,7 @@ use Magento\ImportExport\Model\Export\Adapter\Csv;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\ResourceModel\Attribute\Collection;
 use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollection;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Tests for customer export model.
@@ -51,6 +52,11 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     private $attributeCollection;
 
     /**
+     * @var TimezoneInterface
+     */
+    private $localeDate;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -58,6 +64,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->_model = $this->objectManager->create(Customer::class);
         $this->attributeCollection = $this->objectManager->create(Collection::class);
+        $this->localeDate = $this->objectManager->create(TimezoneInterface::class);
     }
 
     /**
@@ -153,6 +160,11 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $customers = $this->objectManager->create(CustomerCollection::class);
         foreach ($customers as $customer) {
             $data = $this->processCustomerData($customer, $expectedAttributes);
+            $data['created_at'] = $this->localeDate->formatDate(
+                $data['created_at'],
+                \IntlDateFormatter::MEDIUM,
+                true
+            );
             $exportData = $lines['data'][$data['email']];
             $exportData = $this->unsetDuplicateData($exportData);
 

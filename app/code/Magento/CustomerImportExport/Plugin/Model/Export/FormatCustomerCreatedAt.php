@@ -36,14 +36,17 @@ class FormatCustomerCreatedAt
     }
 
     /**
+     * Format the created_at column based on the timezone configuration.
+     *
      * @param Customer $subject
      * @param Item $item
-     * @return Item
+     * @return void
      */
     public function beforeExportItem(
         Customer $subject,
         Item $item
-    ) {
+    ): void
+    {
         $item->setData(
             self::COLUMN_CREATED_AT,
             $this->localeDate->formatDate(
