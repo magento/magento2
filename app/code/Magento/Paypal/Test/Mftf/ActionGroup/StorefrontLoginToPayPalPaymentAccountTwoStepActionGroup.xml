@@ -18,7 +18,7 @@
         <conditionalClick selector="{{PayPalPaymentSection.notYouLink}}" dependentSelector="{{PayPalPaymentSection.notYouLink}}" visible="true" stepKey="selectNotYouSection"/>
         <conditionalClick selector="{{PayPalPaymentSection.existingAccountLoginBtn}}" dependentSelector="{{PayPalPaymentSection.existingAccountLoginBtn}}" visible="true" stepKey="skipAccountCreationAndLogin"/>
         <waitForPageLoad stepKey="waitForLoginPageLoad"/>
-        <waitForElementClickable selector="{{PayPalPaymentSection.email}}" stepKey="waitToFocusOnEmailField"/>
+        <waitForElementClickable selector="{{PayPalPaymentSection.email}}" stepKey="waitForLoginForm"/>
         <click selector="{{PayPalPaymentSection.email}}" stepKey="focusOnEmailField"/>
         <clearField selector="{{PayPalPaymentSection.email}}" stepKey="clearEmailField"/>
         <waitForElementVisible selector="{{PayPalPaymentSection.email}}" stepKey="waitForLoginField"/>
