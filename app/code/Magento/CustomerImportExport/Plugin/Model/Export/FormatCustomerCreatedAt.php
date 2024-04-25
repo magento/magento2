@@ -13,6 +13,8 @@
  * from Adobe.
  * ***********************************************************************
  */
+declare(strict_types=1);
+
 namespace Magento\CustomerImportExport\Plugin\Model\Export;
 
 use Magento\CustomerImportExport\Model\Export\Customer;
@@ -45,8 +47,7 @@ class FormatCustomerCreatedAt
     public function beforeExportItem(
         Customer $subject,
         Item $item
-    ): void
-    {
+    ): void {
         $item->setData(
             self::COLUMN_CREATED_AT,
             $this->localeDate->formatDate(

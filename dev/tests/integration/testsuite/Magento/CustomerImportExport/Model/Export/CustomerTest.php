@@ -23,6 +23,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
  * Tests for customer export model.
  *
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerTest extends \PHPUnit\Framework\TestCase
 {
