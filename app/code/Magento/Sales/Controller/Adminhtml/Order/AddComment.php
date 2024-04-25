@@ -6,7 +6,7 @@
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Sales\Model\Order;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 
 /**
@@ -45,7 +45,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
                     throw new \Magento\Framework\Exception\LocalizedException(__($error));
                 }
 
-                $orderStatus = $this->getOrderStatus($order->getDataByKey('status'), $data['status']);
+                $orderStatus = $this->getOrderStatus($order, $data['status']);
                 $order->setStatus($orderStatus);
                 $notify = $data['is_customer_notified'] ?? false;
                 $visible = $data['is_visible_on_front'] ?? false;
@@ -89,9 +89,13 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
      * @param string $historyStatus
      * @return string
      */
-    private function getOrderStatus(string $orderStatus, string $historyStatus): string
+    private function getOrderStatus(OrderInterface $order, string $historyStatus): string
     {
-        return ($orderStatus === Order::STATE_PROCESSING || $orderStatus === Order::STATUS_FRAUD) ? $historyStatus
-            : $orderStatus;
+        $statuses = $order->getConfig()->getStateStatuses($order->getState());
+        
+        if (!in_array($historyStatus, array_keys($statuses))) {
+            return $order->getDataByKey('status');
+        }
+        return $historyStatus;
     }
 }
