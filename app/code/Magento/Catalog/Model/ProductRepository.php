@@ -278,9 +278,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     public function get($sku, $editMode = false, $storeId = null, $forceReload = false)
     {
         if ($storeId === null) {
-            $storeId = (int) $this->storeManager->getStore()->getId();
+            $storeId = $this->storeManager->getStore()->getId();
         }
-        $cacheKey = $this->getCacheKey([$editMode, $storeId]);
+        $cacheKey = $this->getCacheKey([$editMode, (int) $storeId]);
         $cachedProduct = $this->getProductFromLocalCache($sku, $cacheKey);
         if ($cachedProduct === null || $forceReload) {
             $product = $this->productFactory->create();
@@ -308,16 +308,13 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     public function getById($productId, $editMode = false, $storeId = null, $forceReload = false)
     {
         if ($storeId === null) {
-            $storeId = (int) $this->storeManager->getStore()->getId();
+            $storeId = $this->storeManager->getStore()->getId();
         }
-        $cacheKey = $this->getCacheKey([$editMode, $storeId]);
+        $cacheKey = $this->getCacheKey([$editMode, (int) $storeId]);
         if (!isset($this->instancesById[$productId][$cacheKey]) || $forceReload) {
             $product = $this->productFactory->create();
             if ($editMode) {
                 $product->setData('_edit_mode', true);
-            }
-            if ($storeId !== null) {
-                $product->setData('store_id', $storeId);
             }
             $product->load($productId);
             if (!$product->getId()) {

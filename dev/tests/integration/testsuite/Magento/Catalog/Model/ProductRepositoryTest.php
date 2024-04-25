@@ -214,6 +214,8 @@ class ProductRepositoryTest extends TestCase
         return [
             ['storeId' => null],
             ['storeId' => 'default'],
+            ['storeId' => '0'],
+            ['storeId' => '1'],
         ];
     }
 
@@ -535,18 +537,64 @@ class ProductRepositoryTest extends TestCase
      *
      * @return void
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @dataProvider skuDataProvider
+     * @dataProvider storeDataProvider
      */
-     public function testConsecutiveCallToGetAndGetByIdShareCache(?string $storeId): void
+     public function testConsecutiveCallToGetAndGetByIdShareCacheWithEditMode(?string $storeId): void
      {
+        $this->testConsecutiveCallToGetAndGetByIdShareCache($storeId, false);
+        $this->testConsecutiveCallToGetAndGetByIdShareCache($storeId, true);
+     }
+
+    /**
+     * Test get and getById methods share the ProductRepository cache
+     */
+    public function testConsecutiveCallToGetAndGetByIdShareCache(?string $storeId, bool $editMode): void
+    {
         $sku = 'simple';
 
         /** @var ProductRepositoryInterface $productRepository */
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
 
-        $product = $this->productRepository->get($sku, false, $storeId);
-        $product2 = $this->productRepository->getById($product->getId(), false, $storeId);
+        $product = $this->productRepository->get($sku, $editMode, $storeId);
+        if ($storeId!== null && (int) $storeId == $storeId) { // this will be testing the use case where storeId is a string such as '0', '1', '2'..
+            $product3 = $this->productRepository->get($sku, $editMode, (int) $storeId);
+            $product4 = $this->productRepository->getById($product->getId(), $editMode, (int) $storeId);
+        }
+
+        $product2 = $this->productRepository->getById($product->getId(), $editMode, $storeId);
+        $this->assertSame($product->getName(), $product2->getName());
+
+        $reflection = new \ReflectionClass($this->productRepository);
+        $reflection_property = $reflection->getProperty('instancesById');
+        $reflection_property->setAccessible(true);
+        $cacheIdContent = $reflection_property->getValue($this->productRepository);
+
+        $reflection = new \ReflectionClass($this->productRepository);
+        $reflection_property = $reflection->getProperty('instances');
+        $reflection_property->setAccessible(true);
+        $cacheSkuContent = $reflection_property->getValue($this->productRepository);
+
+        $this->assertEquals(1, count($cacheIdContent[$product->getId()]));
+        $this->assertEquals(1, count($cacheSkuContent[$sku]));
+    }
+
+    /**
+     * Test get and getById methods share the ProductRepository cache in both cases with when storeId is not passed and with editMode values
+     *
+     * @return void
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testConsecutiveCallToGetAndGetByIdShareCacheInEdgeCase(): void
+    {
+        $sku = 'simple';
+
+        /** @var ProductRepositoryInterface $productRepository */
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
+
+        $product = $this->productRepository->get($sku);
+        $product2 = $this->productRepository->getById($product->getId());
         $this->assertSame($product->getName(), $product2->getName());
 
         $reflection = new \ReflectionClass($this->productRepository);
