@@ -54,7 +54,7 @@ class GetUtilityPageIdentifiersTest extends TestCase
      *
      * @dataProvider webDefaultPages
      */
-    public function testExecute(string $cmsHomePage, string $cmsNoRoute, string $cmsNoCookies): void
+    public function testExecute(array $configValues, array $identifiers): void
     {
         $this->scopeConfig->expects($this->exactly(3))
             ->method('getValue')
@@ -62,19 +62,15 @@ class GetUtilityPageIdentifiersTest extends TestCase
                 [$this->identicalTo('web/default/cms_home_page'), $this->identicalTo(ScopeInterface::SCOPE_STORE)],
                 [$this->identicalTo('web/default/cms_no_route'), $this->identicalTo(ScopeInterface::SCOPE_STORE)],
                 [$this->identicalTo('web/default/cms_no_cookies'), $this->identicalTo(ScopeInterface::SCOPE_STORE)]
-            )->willReturnOnConsecutiveCalls(
-                $cmsHomePage,
-                $cmsNoRoute,
-                $cmsNoCookies
-            );
-        $this->assertSame([$cmsHomePage, $cmsNoRoute, $cmsNoCookies], $this->model->execute());
+            )->willReturnOnConsecutiveCalls(...$configValues);
+        $this->assertSame($identifiers, $this->model->execute());
     }
 
     public function webDefaultPages(): array
     {
         return [
-            ['testCmsHomePage', 'testCmsNoRoute', 'testCmsNoCookies'],
-            ['testCmsHomePage|1', 'testCmsNoRoute|1', 'testCmsNoCookies|1']
+            [['testCmsHomePage', 'testCmsNoRoute', 'testCmsNoCookies'], ['testCmsHomePage', 'testCmsNoRoute', 'testCmsNoCookies']],
+            [['testCmsHomePage|1', 'testCmsNoRoute|1', 'testCmsNoCookies|1'], ['testCmsHomePage', 'testCmsNoRoute', 'testCmsNoCookies']]
         ];
     }
 }
