@@ -50,6 +50,6 @@ class GetUtilityPageIdentifiers implements GetUtilityPageIdentifiersInterface
             ScopeInterface::SCOPE_STORE
         );
 
-        return [$homePageIdentifier, $noRouteIdentifier, $noCookieIdentifier];
+        return [strtok($homePageIdentifier, '|'), strtok($noRouteIdentifier, '|'), strtok($noCookieIdentifier, '|')];
     }
 }
