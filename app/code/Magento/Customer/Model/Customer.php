@@ -357,7 +357,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel implements ResetAf
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
         $customerDataObject->setAddresses($addressesData)
-            ->setId($this->getId());
+            ->setId($this->getId() ? (int) $this->getId() : null);
         return $customerDataObject;
     }
 
