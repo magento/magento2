@@ -52,13 +52,10 @@ class GetUtilityPageIdentifiersTest extends TestCase
     /**
      * Test GetUtilityPageIdentifiers::execute() will read config for getting correct routes.
      *
-     * @return void
+     * @dataProvider webDefaultPages
      */
-    public function testExecute()
+    public function testExecute(string $cmsHomePage, string $cmsNoRoute, string $cmsNoCookies): void
     {
-        $cmsHomePage = 'testCmsHomePage';
-        $cmsNoRoute = 'testCmsNoRoute';
-        $cmsNoCookies = 'testCmsNoCookies';
         $this->scopeConfig->expects($this->exactly(3))
             ->method('getValue')
             ->withConsecutive(
@@ -71,5 +68,13 @@ class GetUtilityPageIdentifiersTest extends TestCase
                 $cmsNoCookies
             );
         $this->assertSame([$cmsHomePage, $cmsNoRoute, $cmsNoCookies], $this->model->execute());
+    }
+
+    public function webDefaultPages(): array
+    {
+        return [
+            ['testCmsHomePage', 'testCmsNoRoute', 'testCmsNoCookies'],
+            ['testCmsHomePage|1', 'testCmsNoRoute|1', 'testCmsNoCookies|1']
+        ];
     }
 }
