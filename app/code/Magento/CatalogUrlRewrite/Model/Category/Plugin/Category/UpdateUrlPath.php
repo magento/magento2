@@ -74,19 +74,19 @@ class UpdateUrlPath
         AbstractModel $category
     ): CategoryResource {
         $parentCategoryId = $category->getParentId();
-        if ($category->isObjectNew()
-            && !$category->isInRootCategoryList()
+        if (!$category->isInRootCategoryList()
             && !empty($parentCategoryId)
         ) {
             foreach ($category->getStoreIds() as $storeId) {
-                if (!$this->isGlobalScope((int)$storeId)
-                    && $this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
+                if ($this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
                         $storeId,
                         $parentCategoryId,
                         Category::ENTITY
                     )
                 ) {
-                    $category->setStoreId($storeId);
+                    if (!$this->isGlobalScope((int)$storeId)) {
+                        $category->setStoreId($storeId);
+                    }
                     $this->updateUrlPathForCategory($category, $subject);
                     $this->urlPersist->replace($this->categoryUrlRewriteGenerator->generate($category));
                 }
