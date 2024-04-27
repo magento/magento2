@@ -24,6 +24,9 @@ use Magento\Persistent\Model\QuoteManager;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteManagement;
 
+/**
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class ConvertCustomerCartToGuest
 {
     /**

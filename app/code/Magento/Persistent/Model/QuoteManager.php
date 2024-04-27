@@ -23,22 +23,16 @@ use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor;
 class QuoteManager
 {
     /**
-     * Persistent session
-     *
      * @var \Magento\Persistent\Helper\Session
      */
     protected $persistentSession;
 
     /**
-     * Checkout session
-     *
      * @var \Magento\Checkout\Model\Session
      */
     protected $checkoutSession;
 
     /**
-     * Persistent data
-     *
      * @var Data
      */
     protected $persistentData;
