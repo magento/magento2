@@ -431,7 +431,16 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         } else {
             $unit = $this->getConfigData('unit_of_measure');
         }
+
         $rowRequest->setUnitMeasure($unit);
+        if ($rowRequest->getUnitMeasure() == 'LBS') {
+            $rowRequest->setUnitDimensions('IN');
+            $rowRequest->setUnitDimensionsDescription('Inches');
+        } else {
+            $rowRequest->setUnitDimensions('CM');
+            $rowRequest->setUnitDimensionsDescription('Centimeters');
+        }
+
         $rowRequest->setIsReturn($request->getIsReturn());
         $rowRequest->setBaseSubtotalInclTax($request->getBaseSubtotalInclTax());
 
@@ -1142,8 +1151,8 @@ XMLRequest;
                 ],
                 "Dimensions" => [
                     "UnitOfMeasurement" => [
-                        "Code" => "IN",
-                        "Description" => "Inches"
+                        "Code" => "{$rowRequest->getUnitDimensions()}",
+                        "Description" => "{$rowRequest->getUnitDimensionsDescription()}"
                     ],
                     "Length" => "5",
                     "Width" => "5",
