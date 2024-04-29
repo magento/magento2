@@ -93,6 +93,25 @@ class UpdateUrlPath
             }
         }
 
+        if (!$category->isObjectNew()
+            && !empty($parentCategoryId)
+        ) {
+            foreach ($category->getStoreIds() as $storeId) {
+                if ($this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
+                        $storeId,
+                        $parentCategoryId,
+                        Category::ENTITY
+                    )
+                ) {
+                    if (!$this->isGlobalScope((int)$storeId)) {
+                        $category->setStoreId($storeId);
+                    }
+                    $this->updateUrlPathForCategory($category, $subject);
+                    $this->urlPersist->replace($this->categoryUrlRewriteGenerator->generate($category));
+                }
+            }
+        }
+
         return $result;
     }
 
