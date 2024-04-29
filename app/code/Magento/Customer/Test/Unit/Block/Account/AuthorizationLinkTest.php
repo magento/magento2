@@ -26,7 +26,7 @@ class AuthorizationLinkTest extends TestCase
     protected $_objectManager;
 
     /**
-     * \Magento\Framework\App\Http\Context
+     * @var \Magento\Framework\App\Http\Context
      */
     protected $httpContext;
 

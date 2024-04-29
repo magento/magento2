@@ -18,7 +18,6 @@ use Magento\Framework\Pricing\Adjustment\Calculator;
 use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -95,7 +94,6 @@ class ConfiguredPriceTest extends TestCase
         $this->calculator = $this->createMock(Calculator::class);
 
         $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
-
     }
 
     /**
@@ -130,7 +128,14 @@ class ConfiguredPriceTest extends TestCase
                                 ->disableOriginalConstructor()
                                 ->onlyMethods([])
                                 ->getMock();
-        $this->model = new ConfiguredPrice($this->product, 1, $this->calculator, $this->priceCurrencyMock, $this->item, $configuredOptions);
+        $this->model = new ConfiguredPrice(
+            $this->product,
+            1,
+            $this->calculator,
+            $this->priceCurrencyMock,
+            $this->item,
+            $configuredOptions
+        );
         $this->model->setItem($this->item);
         $this->assertEquals(830., $this->model->getValue());
     }

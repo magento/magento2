@@ -17,6 +17,7 @@ use Magento\Store\Model\Website;
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SwitcherTest extends TestCase
@@ -26,6 +27,9 @@ class SwitcherTest extends TestCase
      */
     private $switcherBlock;
 
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
     private $storeManagerMock;
 
     /**

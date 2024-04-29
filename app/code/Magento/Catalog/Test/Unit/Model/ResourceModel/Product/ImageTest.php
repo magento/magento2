@@ -251,7 +251,6 @@ class ImageTest extends TestCase
      */
     public function testGetUsedProductImages(int $imagesCount, int $batchSize): void
     {
-        echo $imagesCount;
         $this->connectionMock->expects($this->once())
             ->method('select')
             ->willReturn($this->getUsedImagesSelectMock());
@@ -289,7 +288,7 @@ class ImageTest extends TestCase
         );
 
         $resultImagesCount = iterator_to_array($imageModel->getUsedProductImages(), false);
-        $this->assertCount($imagesCount,$resultImagesCount);
+        $this->assertCount($imagesCount, $resultImagesCount);
     }
 
     /**

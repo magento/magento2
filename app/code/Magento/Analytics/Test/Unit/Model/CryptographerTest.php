@@ -51,9 +51,8 @@ class CryptographerTest extends TestCase
      * @var array
      */
     private $initializationVectors;
-
     /**
-     * @var
+     * @var string
      */
     private $source;
 

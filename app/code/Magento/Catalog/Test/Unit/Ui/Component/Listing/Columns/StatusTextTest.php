@@ -14,8 +14,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 class StatusTextTest extends AbstractColumnTestCase
 {
-    const STATUS_ID = 1;
-    const STATUS_TEXT = 'Enabled';
+    public const STATUS_ID = 1;
+    public const STATUS_TEXT = 'Enabled';
 
     /**
      * @var Status|MockObject
