@@ -100,4 +100,10 @@
         <data key="customer_group">General</data>
         <data key="quantity">3</data>
     </entity>
+    <entity name="tierPriceForSimpleProduct" type="data">
+        <data key="website">All Websites [USD]</data>
+        <data key="customer_group">ALL GROUPS</data>
+        <data key="price">70.00</data>
+        <data key="qty">10</data>
+    </entity>
 </entities>

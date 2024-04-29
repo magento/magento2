@@ -1527,4 +1527,11 @@
         <data key="weight">1</data>
         <data key="price">10</data>
     </entity>
+    <entity name="productWithMultiCustomOption" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <data key="file">magento.jpg</data>
+        <requiredEntity type="product_option">ProductOptionDropDownFor2</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionCheckboxFor2</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionNewField</requiredEntity>
+    </entity>
 </entities>
