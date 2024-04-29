@@ -402,7 +402,7 @@ class Helper
                         $option['is_delete_store_title'] = 1;
                     }
                 }
-                if (CustomOptions::FIELD_TITLE_NAME == $fieldName) {
+                if (CustomOptions::FIELD_TITLE_NAME === $fieldName) {
                     $option[CustomOptions::FIELD_IS_USE_DEFAULT] = $overwrite;
                 }
             }

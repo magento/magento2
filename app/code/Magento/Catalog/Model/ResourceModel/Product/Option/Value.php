@@ -284,12 +284,12 @@ class Value extends AbstractDb
                         Store::DEFAULT_STORE_ID
                     );
                     // we should insert record into not default store only of if it does not exist in default store
-                    if (($storeId == Store::DEFAULT_STORE_ID && !$existInDefaultStore) ||
+                    if (((int)$storeId === Store::DEFAULT_STORE_ID && !$existInDefaultStore) ||
                         (
-                            $storeId != Store::DEFAULT_STORE_ID &&
-                            ($object->getDefaultTitle() != null && $object->getTitle() !== $object->getDefaultTitle())
+                            (int)$storeId !== Store::DEFAULT_STORE_ID &&
+                            ($object->getDefaultTitle() !== null && $object->getTitle() !== $object->getDefaultTitle())
                         ) ||
-                        ($object->getIsUseDefault() != null && !(int)$object->getIsUseDefault())
+                        ($object->getIsUseDefault() !== null && !(int)$object->getIsUseDefault())
                     ) {
                         $bind = [
                             'option_type_id' => (int)$object->getId(),

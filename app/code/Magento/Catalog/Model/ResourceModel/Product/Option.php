@@ -254,13 +254,13 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     }
                 } else {
                     // we should insert record into not default store only of if it does not exist in default store
-                    if (($storeId == Store::DEFAULT_STORE_ID && !$existInDefaultStore) ||
+                    if (((int)$storeId === Store::DEFAULT_STORE_ID && !$existInDefaultStore) ||
                         (
-                            $storeId != Store::DEFAULT_STORE_ID &&
+                            (int)$storeId !== Store::DEFAULT_STORE_ID &&
                             !$isDeleteStoreTitle &&
-                            ($object->getDefaultTitle() != null && $object->getTitle() !== $object->getDefaultTitle())
+                            ($object->getDefaultTitle() !== null && $object->getTitle() !== $object->getDefaultTitle())
                         ) ||
-                        ($object->getIsUseDefault() != null && !(int)$object->getIsUseDefault())
+                        ($object->getIsUseDefault() !== null && !(int)$object->getIsUseDefault())
                     ) {
                         $data = $this->_prepareDataForTable(
                             new \Magento\Framework\DataObject(
