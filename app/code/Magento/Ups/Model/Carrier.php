@@ -437,6 +437,14 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         $rowRequest->setPackageWidth($request->getPackageWidth());
         $rowRequest->setPackageDepth($request->getPackageDepth());
 
+        if ($rowRequest->getUnitMeasure() == 'KGS') {
+            $rowRequest->setUnitDimensions('CM');
+            $rowRequest->setUnitDimensionsDescription('Centimeter');
+        } else {
+            $rowRequest->setUnitDimensions('IN');
+            $rowRequest->setUnitDimensionsDescription('Inches');
+        }
+
         $rowRequest->setIsReturn($request->getIsReturn());
         $rowRequest->setBaseSubtotalInclTax($request->getBaseSubtotalInclTax());
 
@@ -1139,13 +1147,6 @@ XMLRequest;
             $rateParams['RateRequest']['Shipment']['Service']['Description'] = $serviceDescription;
         }
 
-        if ($rowRequest->getUnitMeasure() == 'KGS') {
-            $dimensionUnit = 'CM';
-            $dimensionUnitDescription = 'Centimeter';
-        } else {
-            $dimensionUnit = 'IN';
-            $dimensionUnitDescription = 'Inches';
-        }
         $height = $rowRequest->getPackageHeight() ?? 0;
         $width = $rowRequest->getPackageWidth() ?? 0;
         $length = $rowRequest->getPackageDepth() ?? 0;
@@ -1158,8 +1159,8 @@ XMLRequest;
                 ],
                 "Dimensions" => [
                     "UnitOfMeasurement" => [
-                        "Code" => "{$dimensionUnit}",
-                        "Description" => "{$dimensionUnitDescription}"
+                        "Code" => "{$rowRequest->getUnitDimensions()}",
+                        "Description" => "{$rowRequest->getUnitDimensionsDescription()}"
                     ],
                     "Length" => "{$length}",
                     "Width" => "{$width}",
