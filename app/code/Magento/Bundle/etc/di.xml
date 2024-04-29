@@ -277,13 +277,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier">
-        <arguments>
-            <argument name="priceModifiers" xsi:type="array">
-                <item name="DisabledProductOptionPriceModifier" xsi:type="object">Magento\Bundle\Model\ResourceModel\Indexer\Price\DisabledProductOptionPriceModifier</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\CatalogInventory\Observer\SaveInventoryDataObserver">
         <arguments>
             <argument name="parentItemProcessorPool" xsi:type="array">

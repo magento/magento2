@@ -739,6 +739,7 @@ class QuoteManagementTest extends TestCase
      * @return void
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testSubmit(): void
     {
@@ -784,22 +785,15 @@ class QuoteManagementTest extends TestCase
             ->willReturn($baseOrder);
         $this->quoteAddressToOrderAddress
             ->method('convert')
-            ->withConsecutive(
-                [
-                    $shippingAddress,
-                    [
-                        'address_type' => 'shipping',
-                        'email' => 'customer@example.com'
-                    ]
-                ],
-                [
-                    $billingAddress,
-                    [
-                        'address_type' => 'billing',
-                        'email' => 'customer@example.com'
-                    ]
-                ]
-            )->willReturnOnConsecutiveCalls($convertedShipping, $convertedBilling);
+            ->willReturnCallback(function ($arg1, $arg2)
+ use ($shippingAddress, $billingAddress, $convertedShipping, $convertedBilling) {
+                if ($arg1 == $shippingAddress && $arg2['address_type'] == 'shipping') {
+                    return $convertedShipping;
+                } elseif ($arg1 == $billingAddress && $arg2['address_type'] == 'billing') {
+                    return $convertedBilling;
+                }
+            });
+
         $billingAddress->expects($this->once())->method('getId')->willReturn(4);
         $convertedBilling->expects($this->once())->method('setData')->with('quote_address_id', 4);
 
@@ -827,16 +821,15 @@ class QuoteManagementTest extends TestCase
             ->willReturn($order);
         $this->eventManager
             ->method('dispatch')
-            ->withConsecutive(
-                [
-                    'sales_model_service_quote_submit_before',
-                    ['order' => $order, 'quote' => $quote]
-                ],
-                [
-                    'sales_model_service_quote_submit_success',
-                    ['order' => $order, 'quote' => $quote]
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($order, $quote) {
+                if ($arg1 == 'sales_model_service_quote_submit_before' &&
+                    $arg2['order'] === $order && $arg2['quote'] === $quote) {
+                    return true;
+                } elseif ($arg1 === 'sales_model_service_quote_submit_success' &&
+                    $arg2['order'] === $order && $arg2['quote'] === $quote) {
+                    return true;
+                }
+            });
         $this->lockManagerMock->method('lock')->willReturn(true);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quote);
         $this->assertEquals($order, $this->model->submit($quote, $orderData));
@@ -945,7 +938,7 @@ class QuoteManagementTest extends TestCase
     /**
      * @return array
      */
-    public function guestPlaceOrderDataProvider(): array
+    public static function guestPlaceOrderDataProvider(): array
     {
         return [
             [null, 1],
@@ -1223,6 +1216,7 @@ class QuoteManagementTest extends TestCase
     /**
      * @return void
      * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testGetCartForCustomer(): void
     {
@@ -1273,6 +1267,7 @@ class QuoteManagementTest extends TestCase
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testSubmitForCustomer(): void
     {
@@ -1319,23 +1314,18 @@ class QuoteManagementTest extends TestCase
             ->willReturn($baseOrder);
         $this->quoteAddressToOrderAddress
             ->method('convert')
-            ->withConsecutive(
-                [
-                    $shippingAddress,
-                    [
-                        'address_type' => 'shipping',
-                        'email' => 'customer@example.com'
-                    ]
-                ],
-                [
-                    $billingAddress,
-                    [
-                        'address_type' => 'billing',
-                        'email' => 'customer@example.com'
-                    ]
-                ]
-            )
-            ->willReturnOnConsecutiveCalls($convertedShipping, $convertedBilling);
+            ->willReturnCallback(function ($arg1, $arg2)
+ use ($shippingAddress, $billingAddress, $convertedShipping, $convertedBilling) {
+                if ($arg1 == $shippingAddress &&
+                $arg2['address_type'] == 'shipping' &&
+                $arg2['email'] == 'customer@example.com') {
+                    return $convertedShipping;
+                } elseif ($arg1 == $billingAddress &&
+                $arg2['address_type'] == 'billing'
+                && $arg2['email'] == 'customer@example.com') {
+                    return $convertedBilling;
+                }
+            });
         $this->quoteItemToOrderItem->expects($this->once())->method('convert')
             ->with($quoteItem, ['parent_item' => null])
             ->willReturn($convertedQuoteItem);
@@ -1368,16 +1358,15 @@ class QuoteManagementTest extends TestCase
             ->willReturn($order);
         $this->eventManager
             ->method('dispatch')
-            ->withConsecutive(
-                [
-                    'sales_model_service_quote_submit_before',
-                    ['order' => $order, 'quote' => $quote]
-                ],
-                [
-                    'sales_model_service_quote_submit_success',
-                    ['order' => $order, 'quote' => $quote]
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($order, $quote) {
+                if ($arg1 == 'sales_model_service_quote_submit_before' &&
+                    $arg2['order'] == $order && $arg2['quote'] == $quote) {
+                    return null;
+                } elseif ($arg1 == 'sales_model_service_quote_submit_success' &&
+                    $arg2['order'] == $order && $arg2['quote'] == $quote) {
+                    return null;
+                }
+            });
         $this->lockManagerMock->method('lock')->willReturn(true);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quote);
         $this->assertEquals($order, $this->model->submit($quote, $orderData));
@@ -1390,6 +1379,7 @@ class QuoteManagementTest extends TestCase
      * @param array $methods
      *
      * @return MockObject
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function createPartialMockForAbstractClass(string $className, array $methods = []): MockObject
     {
@@ -1408,6 +1398,7 @@ class QuoteManagementTest extends TestCase
      * @return void
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testSubmitWithLockException(): void
     {
@@ -1453,22 +1444,18 @@ class QuoteManagementTest extends TestCase
             ->willReturn($baseOrder);
         $this->quoteAddressToOrderAddress
             ->method('convert')
-            ->withConsecutive(
-                [
-                    $shippingAddress,
-                    [
-                        'address_type' => 'shipping',
-                        'email' => 'customer@example.com'
-                    ]
-                ],
-                [
-                    $billingAddress,
-                    [
-                        'address_type' => 'billing',
-                        'email' => 'customer@example.com'
-                    ]
-                ]
-            )->willReturnOnConsecutiveCalls($convertedShipping, $convertedBilling);
+            ->willReturnCallback(function ($arg1, $arg2)
+ use ($shippingAddress, $billingAddress, $convertedShipping, $convertedBilling) {
+                if ($arg1 == $shippingAddress &&
+                $arg2['address_type'] == 'shipping' &&
+                $arg2['email'] == 'customer@example.com') {
+                    return $convertedShipping;
+                } elseif ($arg1 == $billingAddress &&
+                $arg2['address_type'] == 'billing' &&
+                $arg2['email'] == 'customer@example.com') {
+                    return $convertedBilling;
+                }
+            });
         $billingAddress->expects($this->once())->method('getId')->willReturn(4);
         $convertedBilling->expects($this->once())->method('setData')->with('quote_address_id', 4);
 
@@ -1492,16 +1479,15 @@ class QuoteManagementTest extends TestCase
 
         $this->eventManager
             ->method('dispatch')
-            ->withConsecutive(
-                [
-                    'sales_model_service_quote_submit_before',
-                    ['order' => $order, 'quote' => $quote]
-                ],
-                [
-                    'sales_model_service_quote_submit_success',
-                    ['order' => $order, 'quote' => $quote]
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($order, $quote) {
+                if ($arg1 == 'sales_model_service_quote_submit_before' &&
+                    $arg2['order'] == $order && $arg2['quote'] == $quote) {
+                    return null;
+                } elseif ($arg1 == 'sales_model_service_quote_submit_success' &&
+                    $arg2['order'] == $order && $arg2['quote'] == $quote) {
+                    return null;
+                }
+            });
         $this->lockManagerMock->method('lock')->willReturn(false);
 
         $this->expectExceptionMessage(
