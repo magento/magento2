@@ -36,9 +36,6 @@
             </createData>
         </before>
         <after>
-            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
-                <argument name="sku" value="{{GiftCard.sku}}"/>
-            </actionGroup>
             <magentoCLI command="config:set paypal/general/merchant_country US" stepKey="setMerchantCountry"/>
             <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
@@ -59,10 +56,6 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUpNewUser">
             <argument name="Customer" value="$$createCustomer$$"/>
-        </actionGroup>
-        <!-- Quick search gift card product -->
-        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="quickSearchForGiftCardProduct">
-            <argument name="phrase" value="GiftCard.sku"/>
         </actionGroup>
         <!-- Go to gift card product page on storefront -->
         <seeElement selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="seeProductsInCategory"/>
