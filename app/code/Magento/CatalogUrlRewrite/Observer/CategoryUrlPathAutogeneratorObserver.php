@@ -289,7 +289,6 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
         if ($category->getStoreId()=== Store::DEFAULT_STORE_ID && $parentCategory->getUrlKey() === null) {
             $category->setStoreId(Store::DEFAULT_STORE_ID)->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category, $parentCategory));
             $category->getResource()->saveAttribute($category, 'url_path');
-
         }
         if ($category->getStoreId()!== Store::DEFAULT_STORE_ID && $parentCategory->getUrlKey() === null) {
             $category->getResource()->saveAttribute($category, 'url_path');

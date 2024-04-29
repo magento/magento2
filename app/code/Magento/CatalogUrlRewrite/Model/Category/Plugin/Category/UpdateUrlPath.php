@@ -135,8 +135,10 @@ class UpdateUrlPath
      */
     private function updateUrlPathForCategory(Category $category, CategoryResource $categoryResource): void
     {
-        $category->unsUrlPath();
-        $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
-        $categoryResource->saveAttribute($category, 'url_path');
+        if ($category->getStoreId()!== Store::DEFAULT_STORE_ID) {
+            $category->unsUrlPath();
+            $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
+            $categoryResource->saveAttribute($category, 'url_path');
+        }
     }
 }
