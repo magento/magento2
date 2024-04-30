@@ -120,7 +120,7 @@
         </actionGroup>
         <!--Navigate to cart page-->
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage" />
-        <!--Assert currency of order total-->
+        <!--Assert currency symbol of order total-->
         <waitForText selector="{{CheckoutCartSummarySection.orderTotal}}" userInput="QAR" stepKey="assertOrderTotalCurrencySymbol"/>
     </test>
 </tests>
