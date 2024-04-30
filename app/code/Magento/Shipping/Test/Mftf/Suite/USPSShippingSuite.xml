@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!--
+     /**
+      * Copyright © Magento, Inc. All rights reserved.
+      * See COPYING.txt for license details.
+      */
+    -->
+<suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
+    <suite name="USPSShippingSuite">
+        <before>
+            <!--Login as Admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Navigate to shipping method configuration-->
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPageToEnableUSPS"/>
+            <!--Configure USPS shipping method-->
+            <actionGroup ref="AdminEnableUSPSActionGroup" stepKey="configureUSPSShippingMethod">
+                <argument name="shipping" value="USPSShippingMethodConfig"/>
+            </actionGroup>
+            <!--Cache flush-->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCachePostConfiguring">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Navigate to shipping method configuration-->
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPageToDisableUSPS"/>
+            <!--Disable USPS shipping carrier-->
+            <actionGroup ref="AdminDisableUSPSActionGroup" stepKey="disableUSPS"/>
+        </after>
+        <include>
+            <group name="EnableUSPSShippingSuite"/>
+        </include>
+    </suite>
+</suites>
