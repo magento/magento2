@@ -35,7 +35,7 @@
                 <argument name="tags" value=""/>
             </actionGroup>
             <!-- Paypal Payflow -->
-            <actionGroup ref="AdminPayPalPayflowProActionGroup" stepKey="ConfigPayflow">
+            <actionGroup ref="AdminConfigurePayPalPayflowProActionGroup" stepKey="ConfigPayflow">
                 <argument name="credentials" value="SamplePaypalPaymentsProConfig"/>
             </actionGroup>
         </before>
@@ -65,7 +65,7 @@
         </actionGroup>
         <!-- Place Order and assert the url -->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-        <wait time="6" stepKey="waitForPageLoad" />
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <seeCurrentUrlMatches regex="~\/checkout/#payment~" stepKey="seeCurrentUrl"/>
     </test>
 </tests>
