@@ -50,9 +50,7 @@
         <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="openProductFillForm">
             <argument name="productType" value="giftcard"/>
         </actionGroup>
-        <!-- Add gift card product to category -->
-        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory" after="addAmountToGiftCard"/>
-        <!-- Save gift card product -->
+         <!-- Save gift card product -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUpNewUser">
             <argument name="Customer" value="$$createCustomer$$"/>
