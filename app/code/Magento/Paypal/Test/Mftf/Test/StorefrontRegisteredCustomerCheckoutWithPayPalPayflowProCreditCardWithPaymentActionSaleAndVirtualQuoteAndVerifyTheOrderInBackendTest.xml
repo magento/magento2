@@ -7,12 +7,12 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="RegisteredCheckoutWithPayPalPayflowProCreditCardWithPaymentActionSaleAndVirtualQuoteTest">
+    <test name="StorefrontRegisteredCustomerCheckoutWithPayPalPayflowProCreditCardWithPaymentActionSaleAndVirtualQuoteAndVerifyTheOrderInBackendTest">
         <annotations>
             <features value="PayPal"/>
             <stories value="Paypal Payments Pro"/>
             <title value="Registered Checkout with PayPal Payflow Pro credit card (Payment Action = Sale) and Virtual quote"/>
-            <description value="Registered Checkout with PayPal Payflow Pro credit card (Payment Action = Sale) with Virtual Product and assert the details in order view page."/>
+            <description value="Storefront Registered Customer Checkout with PayPal Payflow Pro credit card (Payment Action = Sale) with Virtual Product and assert the details in order view page."/>
             <severity value="CRITICAL"/>
             <testCaseId value="AC-5685"/>
             <group value="paypalPayflowPro"/>
