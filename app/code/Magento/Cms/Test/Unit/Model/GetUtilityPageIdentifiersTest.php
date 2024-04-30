@@ -19,17 +19,9 @@ use PHPUnit\Framework\TestCase;
  */
 class GetUtilityPageIdentifiersTest extends TestCase
 {
-    /**
-     * Test subject.
-     *
-     * @var GetUtilityPageIdentifiers
-     */
-    private $model;
+    private GetUtilityPageIdentifiers $model;
 
-    /**
-     * @var ScopeConfigInterface|MockObject
-     */
-    private $scopeConfig;
+    private ScopeConfigInterface|MockObject $scopeConfig;
 
     /**
      * @inheritdoc
@@ -41,12 +33,7 @@ class GetUtilityPageIdentifiersTest extends TestCase
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->model = $objectManager->getObject(
-            GetUtilityPageIdentifiers::class,
-            [
-                'scopeConfig' => $this->scopeConfig,
-            ]
-        );
+        $this->model = new GetUtilityPageIdentifiers($this->scopeConfig);
     }
 
     /**
