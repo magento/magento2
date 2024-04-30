@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="CatalogPurchaseProductWithSeveralCustomOptionsAndPriceModificationsTest">
+    <test name="StorefrontCatalogPurchaseProductWithSeveralCustomOptionsAndPriceModificationsTest">
         <annotations>
             <stories value="Pricing"/>
             <title value="Purchase a product with several Custom Options and price modifications"/>
@@ -90,7 +90,7 @@
             <actualResult type="variable">miniCartSubtotalValidation</actualResult>
         </assertEquals>
         <!--Remove 9 product form mini cart and Validate 1 product price in mini cart .-->
-        <actionGroup ref="RemoveProductFromMiniCartPopupActionGroup" stepKey="removeProductFromMiniCartPopup">
+        <actionGroup ref="StorefrontRemoveProductFromMiniCartPopupActionGroup" stepKey="removeProductFromMiniCartPopup">
             <argument name="qty" value="9"/>
         </actionGroup>
         <grabTextFrom selector="{{StorefrontMinicartSection.miniCartSubtotalField}}" stepKey="subtotalValidationInMiniCart"/>
@@ -122,7 +122,7 @@
             <actualResult type="variable">subtotalValidation</actualResult>
         </assertEquals>
         <!--Remove 10 product from cart .-->
-        <actionGroup ref="RemoveProductFromMiniCartPopupActionGroup" stepKey="removeProductFromMiniCart">
+        <actionGroup ref="StorefrontRemoveProductFromMiniCartPopupActionGroup" stepKey="removeProductFromMiniCart">
             <argument name="qty" value="10"/>
         </actionGroup>
         <actionGroup ref="StorefrontCloseMiniCartActionGroup" stepKey="closeMiniCarAgain"/>
@@ -178,10 +178,10 @@
             <actualResult type="variable">grabMiniCartSubtotalValidationForTenQtyProduct</actualResult>
         </assertEquals>
         <!--Remove 10 product from cart product qty wise and close the mini cart  .-->
-        <actionGroup ref="RemoveProductFromMiniCartPopupActionGroup" stepKey="removeNineProductFromMiniCardPopupAgain">
+        <actionGroup ref="StorefrontRemoveProductFromMiniCartPopupActionGroup" stepKey="removeNineProductFromMiniCardPopupAgain">
             <argument name="qty" value="9"/>
         </actionGroup>
-        <actionGroup ref="RemoveProductFromMiniCartPopupActionGroup" stepKey="removeOneProductFromMiniCardPopup">
+        <actionGroup ref="StorefrontRemoveProductFromMiniCartPopupActionGroup" stepKey="removeOneProductFromMiniCardPopup">
             <argument name="qty" value="1"/>
         </actionGroup>
         <actionGroup ref="StorefrontCloseMiniCartActionGroup" stepKey="miniCartClose"/>
